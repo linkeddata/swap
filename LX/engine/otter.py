@@ -61,6 +61,8 @@ def run(string, fileBase=",lx.engine.otter", includes=None, maxSeconds=1):
 
     #  this is needed for completeness, but slows things down a lot
     #f.write("clear(control_memory).\n")
+    # undocumented (as yet) otter feature to let SIGINT just kill it
+    f.write("clear(sigint_interact).\n")
 
     if includes:
         for i in includes:

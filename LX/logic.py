@@ -200,8 +200,10 @@ def ConstantForDatatypeValue(dtv, dtURI=None):
     Basically we'd like to handle python types and RDF/XSD types
     in the same place.  Hrm.
     """
-    if dtURI:
-        dtv = (dtv, dtURI)
+    if dtURI is None:
+        dtURI = "::native"
+
+    dtv = (dtv, dtURI)
     try:
         return constantsForDTVs[dtv]
     except KeyError:
@@ -238,7 +240,10 @@ def _test():
 if __name__ == "__main__": _test()
 
 # $Log$
-# Revision 1.3  2003-07-31 18:25:15  sandro
+# Revision 1.4  2003-08-01 15:27:21  sandro
+# kind of vaguely working datatype support (for xsd unsigned ints)
+#
+# Revision 1.3  2003/07/31 18:25:15  sandro
 # some unknown earlier changes...
 # PLUS increasing support for datatype values
 #

@@ -7,6 +7,9 @@ import re
 
 import LX
 
+class UnsupportedDatatype(RuntimeError):
+    pass
+
 defaultScope = {
     ("legal",): re.compile(r"^[a-zA-Z0-9_]+$"),
     ("hint",): re.compile(r"(?:\/|#)([a-zA-Z0-9_]*)/?$")
@@ -158,7 +161,9 @@ class KB(list):
         """
         if not term.isAtomic():
             for e in term.all:
-                self.addSupportingTheory(e)
+                # print 
+                assert(e != term)
+                #self.addSupportingTheory(e)
             return
         try:
             pair = LX.logic.valuesForConstants[term]
@@ -166,21 +171,29 @@ class KB(list):
             return
 
         (lexrep, dturi) = pair
+
         if pair in self.__datatypeValuesChecked: return
 
+        if dturi == "::native":
+            # ignore for now....
+            return
+        
         if dturi == "http://www.w3.org/2001/XMLSchema#nonNegativeInteger":
             val = int(lexrep)
             assert(val != 0)   # would have been handled in LX.logic
             assert(val > 0)
+            if val > 50:
+                raise UnsupportedDatatype, "Int %s too big" % val
             for n in range(1, val+1):
-                print n-1, "succ", n
+                # print "Describing",n,"via:", n-1, "succ", n
                 lesser = LX.logic.ConstantForDatatypeValue(str(n-1), dturi)
                 succ = LX.logic.ConstantForURI('foo:succ')
-                self.append(LX.logic.RDF(lesser,succ,term))
+                greater = LX.logic.ConstantForDatatypeValue(str(n), dturi)
+                self.append(LX.logic.RDF(lesser,succ,greater))
                 self.__datatypeValuesChecked[pair] = 1
             return
         
-        raise RuntimeError, ("unsupported datatype: "+lexrep+
+        raise UnsupportedDatatype, ("unsupported datatype: "+lexrep+
                              ", type "+dturi)
         
         
@@ -199,13 +212,19 @@ class KB(list):
             self.addSupportingTheory(p)
             self.addSupportingTheory(o)
             return
+
+        #print "KB adding: ",
+        #formula.dump()
+        #print
         
-        # assert(isinstance(formula, LX.Formula))
-        #####assert(LX.fol.isFirstOrderFormula(formula))
+        ##assert(isinstance(formula, LX.Formula))
+        ##assert(LX.fol.isFirstOrderFormula(formula))
         # could check that all its openVars are in are vars
         self.append(formula)
         self.addSupportingTheory(formula)
 
+    #def check(self, formula, ):
+        
     def addFrom(self, kb):
         for formula in kb:
             self.add(formula)
@@ -347,7 +366,10 @@ if __name__ == "__main__": _test()
 
  
 # $Log$
-# Revision 1.11  2003-07-31 18:25:15  sandro
+# Revision 1.12  2003-08-01 15:27:21  sandro
+# kind of vaguely working datatype support (for xsd unsigned ints)
+#
+# Revision 1.11  2003/07/31 18:25:15  sandro
 # some unknown earlier changes...
 # PLUS increasing support for datatype values
 #

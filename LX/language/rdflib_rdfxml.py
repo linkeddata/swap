@@ -29,6 +29,7 @@ class Parser(rdflib.syntax.parser.Parser):
         if isinstance(s, rdflib.URIRef.URIRef):
             return LX.logic.ConstantForURI(s)
         if isinstance(s, rdflib.Literal.Literal):
+            # print "LIT: ", str(s), s.datatype
             return LX.logic.ConstantForDatatypeValue(str(s), s.datatype)
         if isinstance(s, rdflib.BNode.BNode):
             try:
@@ -60,7 +61,10 @@ class Serializer:
         pass
 
 # $Log$
-# Revision 1.2  2003-07-31 18:26:02  sandro
+# Revision 1.3  2003-08-01 15:27:22  sandro
+# kind of vaguely working datatype support (for xsd unsigned ints)
+#
+# Revision 1.2  2003/07/31 18:26:02  sandro
 # unknown older stuff
 #
 # Revision 1.1  2003/07/19 12:00:46  sandro

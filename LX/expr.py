@@ -168,6 +168,19 @@ class CompoundExpr(Expr):
             names.append(arg.getNameInScope(nameTable))
         return names[0]+"("+", ".join(names[1:])+")"
 
+    def dump(self, levels=32):
+        """Like __str__ but it gives useful output before dying on
+        badly-formed structures."""
+        if levels <= 0:
+            print "<MAXDEPTH>"
+            return
+        print "(",
+        for arg in self.all:
+            #print str(type(arg))+":",
+            arg.dump(levels-1)
+            print " ",
+        print ")",
+        
     def serializeWithOperators(self, nameTable, operators,
                                parentLooseness=9999,
                                linePrefix="",
@@ -234,6 +247,9 @@ class AtomicExpr(Expr):
     def __str__(self):
         return self.suggestedName
 
+    def dump(self, levels):
+        print self.suggestedName,
+        
     def getNameInScope(self, nameTable):
         """return a string which names this thing unambiguously in
         some scoping context (the nameTable).
@@ -322,7 +338,10 @@ if __name__ == "__main__": _test()
 
 
 # $Log$
-# Revision 1.8  2003-07-31 18:25:15  sandro
+# Revision 1.9  2003-08-01 15:27:21  sandro
+# kind of vaguely working datatype support (for xsd unsigned ints)
+#
+# Revision 1.8  2003/07/31 18:25:15  sandro
 # some unknown earlier changes...
 # PLUS increasing support for datatype values
 #
