@@ -6,11 +6,26 @@
 </head>
 
 <body>
-<h1>Crytpography  example: delegated authenetication</h1>
+<h1>Crytpography  example: delegated authentication</h1>
 
-<p></p>
+<p>This example was inspired by, and roughly follows, Marja-Ritta's slide</p>
 
-<p></p>
+<p><img alt="example of trust processing" src="elisaaccess.png"></p>
+
+<p>in which access to a member area on the web site is granted to Tiina by
+authority delegated by Alan, in charge of the web site,  to Kari.  Public key
+tools are very flexible, and so one can make all kinds of system. Here is
+one.  The key document is <a href="access-rule.n3">access-rule.n3</a>, which
+defines the rule fro access being allowed to the site.  It defines what
+information is beleived and on what basis.</p>
+
+<p>The other files are listed below.  The  <a
+href="../../doc/Makefile">Makefile </a>describes how they used.  The .n3 file
+extension is used only for source rule files.  Files which are generated
+automatically are given other extensions, like .private, .public, .cert,
+.request, .response even though they are still all in n3.</p>
+
+<p> </p>
 
 <p>This is a hand-made file. See also up-to-date listings in order of: <a
 href="../../doc/?N=D">Name</a>       <a href="../../doc/?M=A">Last
