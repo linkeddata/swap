@@ -5,6 +5,7 @@ $ ID:   $
 
 """
 
+import string
 
 NCNameChar, NCNameStartChar, NameStartChar, NameChar, \
             Letter, Digit, CombiningChar, Extender, BaseChar, Ideographic = \
@@ -429,3 +430,6 @@ XMLVersion = '1.0'
 def setXMLVersion(ver):
     global XMLVersion
     XMLVersion = ver
+
+def getXMLVersion():
+    return XMLVersion

@@ -56,7 +56,7 @@ from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
 from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
 from RDFSink import Logic_NS, NODE_MERGE_URI
 
-from isXML import isXMLChar, NCNameChar, NCNameStartChar
+from isXML import isXMLChar, NCNameChar, NCNameStartChar, setXMLVersion, getXMLVersion
 
 N3_forSome_URI = RDFSink.forSomeSym
 N3_forAll_URI = RDFSink.forAllSym
@@ -128,6 +128,9 @@ class ToRDF(RDFSink.RDFStructuredOutput):
 	self._nodeID = {}
 	self._nextnodeID = 0
 	self._docOpen = 0  # Delay doc open <rdf:RDF .. till after binds
+        def doNothing():
+            pass
+	self._toDo = doNothing
 
     #@@I18N
     _rdfns = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
@@ -159,7 +162,14 @@ z  - Allow relative URIs for namespaces
 	self._xwr.endDocument()
 
     def makeComment(self, str):
-        self._xwr.makeComment(str)
+        if self._docOpen:
+            self._xwr.makeComment(str)
+            return
+        toDo = self._toDo
+        def toDoMore():
+            toDo()
+            self._xwr.makeComment(str)
+        self._toDo = toDoMore
 
     def referenceTo(self, uri):
 	"Conditional relative URI"
@@ -169,6 +179,9 @@ z  - Allow relative URIs for namespaces
 
     def flushStart(self):
         if not self._docOpen:
+            if getXMLVersion() != '1.0':
+                self._xwr.makePI('xml version="%s"' % getXMLVersion())
+            self._toDo()
             if self.prefixes.get(RDF_NS_URI, ":::") == ":::":
                 if self.namespaces.get("rdf", ":::") ==":::":
                     self.bind("rdf", RDF_NS_URI)
@@ -386,7 +399,7 @@ class XMLWriter:
     Takes as argument a writer which does the (eg utf-8) encoding
     """
 
-    def __init__(self, encodingWriter, counter, squeaky=0):
+    def __init__(self, encodingWriter, counter, squeaky=0, version='1.0'):
 #	self._outFp = outFp
 	self._encwr = encodingWriter
 	self._elts = []
@@ -396,6 +409,7 @@ class XMLWriter:
         self.noWS = 0       # 1 Means we cant use white space for prettiness
         self.currentNS = None # @@@ Hack
 	self.counter = counter
+	self.version = version
         
     #@@ on __del__, close all open elements?
 
@@ -440,6 +454,13 @@ class XMLWriter:
                 i = i+1
             else:
                 break
+        else:
+#            raise RuntimeError
+            if self.version == '1.0':
+                self.version = '1.1'
+                setXMLVersion('1.1')
+                return self.figurePrefix(uriref, rawAttrs, prefixes)
+            raise RuntimeError("this graph cannot be serialized in RDF/XML")
 	ln = uriref[i:]
 	ns = uriref[:i]
 	self.counter.countNamespace(ns)
@@ -495,6 +516,9 @@ class XMLWriter:
     def makeComment(self, str):
         self.newline()
         self._encwr("<!-- " + str + "-->") # @@
+
+    def makePI(self, str):
+        self._encwr('<?' + str + '?>')
         
     def startElement(self, n, attrs = [], prefixes={}):
         oldNS = self.currentNS
