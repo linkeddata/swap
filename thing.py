@@ -86,10 +86,10 @@ def symbol(uri):
     and return it for future use"""
     return _checkStore().newSymbol(uri)
     
-def literal(str):
+def literal(str, dt=None, lang=None):
     """Create or reuse, in the default store, an interned version of the given literal string
     and return it for future use"""
-    return _checkStore().newLiteral(str)
+    return _checkStore().newLiteral(str, dt, lang)
 
 def formula():
     """Create or reuse, in the default store, a new empty formula (triple people think: triple store)
@@ -99,19 +99,19 @@ def formula():
 def bNode(str, context):
     """Create or reuse, in the default store, a new unnamed node within the given
     formula as context, and return it for future use"""
-    return _checkStore().newLiteral(context)
+    return _checkStore().newBlankNode(context)
 
 def existential(str, context, uri):
     """Create or reuse, in the default store, a new named variable
     existentially qualified within the given
     formula as context, and return it for future use"""
-    return _checkStore().newLiteral(context)
+    return _checkStore().newExistential(context, uri)
 
 def universal(str, context, uri):
     """Create or reuse, in the default store, a named variable
     universally qualified within the given
     formula as context, and return it for future use"""
-    return _checkStore().newLiteral(context)
+    return _checkStore().newUniversal(context, uri)
 
 def load(uri=None, contentType=None, formulaURI=None, remember=1):
     """Get and parse document.  Guesses format if necessary.
@@ -124,9 +124,8 @@ def load(uri=None, contentType=None, formulaURI=None, remember=1):
     """
     return _checkStore().load(uri, contentType, formulaURI, remember)
 
-import string, sys
-version = string.split(string.split(sys.version)[0], ".")
-if map(int, version) < [2, 2, 0]:
+import sys
+if sys.hexversion < 0x02020000:
     raise RuntimeError("Sorry, this software requires python2.2 or newer.")
     
 class Namespace(object):
@@ -371,9 +370,11 @@ class Literal(Term):
     """
 
 
-    def __init__(self, store, string):
+    def __init__(self, store, string, dt=None, lang=None):
         Term.__init__(self, store)
         self.string = string    #  n3 notation EXcluding the "  "
+	self.datatype = dt
+	self.lang=None
 
     def __str__(self):
         return self.string
@@ -386,7 +387,7 @@ class Literal(Term):
 #        return self.string
 
     def asPair(self):
-        return (LITERAL, self.string)
+        return (LITERAL, self.string)  # obsolete
 
     def asHashURI(self):
         """return a md5: URI for this literal.
@@ -408,7 +409,25 @@ class Literal(Term):
         return self.asHashURI() #something of a kludge?
         #return  LITERAL_URI_prefix + uri_encode(self.representation())    # tbl preferred
 
+class Integer(Literal):
+    def __init__(self, store, str):
+        Term.__init__(self, store)
+#        self.string = string    #  n3 notation EXcluding the "  "
+	self.datatype = store.integer
+	self.lang=None
+	self.value = int(str)
 
+    def __int__(self):
+	return self.value
+
+    def __str__(self):
+        return str(self.value)
+
+    def __repr__(self):
+        return str(self.value)
+
+    def representation(self, base=None):
+        return str(self.value)
      
 def uri_encode(str):
         """ untested - this must be in a standard library somewhere
