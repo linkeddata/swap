@@ -38,7 +38,7 @@ this log:forAll :WORK, :WORK2, :GENERIC, :P, :X, :P2.
   :P2 a trp:Interesting;
      log:notEqualTo <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>.
 
-  :WORK :P [:P2 :X], is trp:latestVersion of [].
+  :WORK :P [:P2 :X]; is trp:latestVersion of [].
 
 }
   log:implies { :WORK :P [ :P2 :X]}.

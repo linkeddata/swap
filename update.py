@@ -28,8 +28,8 @@ def patch(workingContext, patchFormula):
     true = store.newFormula().close()  #   {}
     universals = []
     lhs_done = []
-    insertions = patchFormula.statementsMatching(pred=store.insertion)[:]
-    deletions = patchFormula.statementsMatching(pred=store.deletion)[:]
+    insertions = patchFormula.statementsMatching(pred=store.insertion).keys()
+    deletions = patchFormula.statementsMatching(pred=store.deletion).keys()
 
     for st in insertions + deletions:
 	lhs = st.subject()
@@ -49,7 +49,7 @@ def patch(workingContext, patchFormula):
 		As of 2003/07/28 forAll x ...x cannot be on left hand side of rule.
 		This/these were: %s\n""" % lhs.universals())
 	
-	    unmatched = lhs.statements[:]
+	    unmatched = lhs.statements.keys()
 	    templateExistentials = lhs.existentials()[:]
 	    _substitute({lhs: workingContext}, unmatched)
 	
@@ -123,8 +123,8 @@ class UpdateQuery(Query):
 		    raise RuntimeError(
 			"Error: %i matches removing statement {%s %s %s} from %s:\n%s" %
 			 (len(ss),s,p,o,self.workingContext, ss))
-		if diag.chatty_flag > 25: progress("Deleting %s" % ss[0])
-		self.workingContext.removeStatement(ss[0])
+		if diag.chatty_flag > 25: progress("Deleting %s" % iter(ss).next())
+		self.workingContext.removeStatement(iter(ss).next())
 	self.justOne = 1  # drop out of here when done
 	return 1     # Success -- no behave as a test and drop out
 

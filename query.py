@@ -377,7 +377,7 @@ class Rule:
 	self.statement = statement      #  original statement
 	self.number = nextRule = nextRule+1
 	self.meta = self.conclusion.contains(pred=self.conclusion.store.implies) #generate rules?
-	if task.repeat: self.already = []
+	if task.repeat: self.already = {}
 	else: self.already = None
 	self.affects = {}
 	self.indirectlyAffects = []
@@ -396,7 +396,7 @@ class Rule:
 	    As of 2003/07/28 forAll x ...x cannot be on left hand side of rule.
 	    This/these were: %s\n""" % self.template.universals())
     
-	self.unmatched = self.template.statements[:]
+	self.unmatched = self.template.statements.keys()
 	self.templateExistentials = self.template.existentials()[:]
 	_substitute({self.template: task.workingContext}, self.unmatched)
     
@@ -471,7 +471,7 @@ def testIncludes(f, g, _variables=[],  bindings={}):
     assert f.canonical is f
     assert g.canonical is g
 
-    unmatched = g.statements[:]
+    unmatched = g.statements.keys()
     templateExistentials = g.existentials()
     _substitute({g: f}, unmatched)
     
@@ -605,67 +605,80 @@ class Query:
 	"""When a match found in a query, add conclusions to target formula.
 
 	Returns the number of statements added."""
+	hbindings = hashable_dict(bindings)
 	if self.justOne: return 1   # If only a test needed
 
         if diag.chatty_flag >60: progress( "Concluding tentatively...%r" % bindings)
-        if self.already != None:
+        if self.already is not None:
 	    self.checkRedirectsInAlready() # @@@ KLUDGE - use delegation and notification systme instead
-            if bindings in self.already:
+	    if diag.chatty_flag > 30: progress("size of self.already: %i" % len(self.already))
+            if hbindings in self.already:  ##@@@@ uh oh. How big is self.already?
                 if diag.chatty_flag > 30: progress("@@ Duplicate result: %r" %  bindings)
                 return 0
             if diag.chatty_flag > 30: progress("Not duplicate: %r" % bindings)
-            self.already.append(bindings)
+            self.already[hbindings] = 1
 
 	if diag.tracking:
 	    reason = BecauseOfRule(self.rule, bindings=bindings, evidence=evidence)
 	    progress("We have a reason for %s of %s with bindings %s" % (self.rule, reason, bindings))
 	else:
 	    reason = None
+#        def internalFunction():
+        es, exout = self.workingContext.existentials(alwaysDict=1), []
+        #if diag.chatty_flag > 0: progress("length of es is: %i, type of es is: %s. bindings.items is %s" % (len(es), type(es), bindings.items()))
+        for var, val in bindings.items():
+#            def internalFunction3():
+            try:
+                es[val]
+            except KeyError:
+                pass
+            else:
+            #if val in es:   #  Take time for large number of bnodes? -- not if we are careful
+                exout.append(val)
+                if diag.chatty_flag > 25:
+                    progress("Match found to that which is only an existential: %s -> %s" % (var, val))
+                if self.workingContext is not self.targetContext:
+                    self.targetContext.declareExistential(val)
+#            internalFunction3()
 
-	es, exout = self.workingContext.existentials(), []
-	for var, val in bindings.items():
-	    if val in es:   #  Take time for large number of bnodes?
-		exout.append(val)
-		if diag.chatty_flag > 25:
-		    progress("Match found to that which is only an existential: %s -> %s" % (var, val))
-		if self.workingContext is not self.targetContext:
-		    self.targetContext.declareExistential(val)
-
+#        def internalFunction2():
+        #b2 = hbindings
         b2 = bindings.copy()
-	b2[self.conclusion] = self.targetContext
+        b2[self.conclusion] = self.targetContext
         ok = self.targetContext.universals()  # It is actually ok to share universal variables with other stuff
         poss = self.conclusion.universals()[:]
         for x in poss[:]:
-            if x in ok: poss.remove(x)
-
+            if x in ok: poss.remove(x)  ###@@@@this looks really bad --- but doesn't seem to be.
 #        vars = self.conclusion.existentials() + poss  # Terms with arbitrary identifiers
 #        clashes = self.occurringIn(targetContext, vars)    Too slow to do every time; play safe
-	if diag.chatty_flag > 25:
-	    s=""
-	for v in poss:
-	    v2 = self.targetContext.newUniversal()
-	    b2[v] =v2   # Regenerate names to avoid clash
-	    if diag.chatty_flag > 25: s = s + ",uni %s -> %s" %(v, v2)
-	for v in self.conclusion.existentials():
-	    if v not in exout:
-		v2 = self.targetContext.newBlankNode()
-		b2[v] =v2   # Regenerate names to avoid clash
-		if diag.chatty_flag > 25: s = s + ",exi %s -> %s" %(v, v2)
-	    else:
-		if diag.chatty_flag > 25: s = s + (", (%s is existential in kb)"%v)
-	if diag.chatty_flag > 25:
-	    progress("Variables regenerated: universal " + `poss`
-		+ " existential: " +`self.conclusion.existentials()` + s)
-	
+        if diag.chatty_flag > 25:
+            s=""
+        for v in poss:
+            v2 = self.targetContext.newUniversal()
+            b2[v] =v2   # Regenerate names to avoid clash
+            if diag.chatty_flag > 25: s = s + ",uni %s -> %s" %(v, v2)
+        for v in self.conclusion.existentials():
+            if v not in exout:  ###@@@ how big is exout? looks like 0. I won't worry about it.
+                v2 = self.targetContext.newBlankNode()
+                b2[v] =v2   # Regenerate names to avoid clash
+                if diag.chatty_flag > 25: s = s + ",exi %s -> %s" %(v, v2)
+            else:
+                if diag.chatty_flag > 25: s = s + (", (%s is existential in kb)"%v)
+        if diag.chatty_flag > 25:
+            progress("Variables regenerated: universal " + `poss`
+                + " existential: " +`self.conclusion.existentials()` + s)
+        
 
         if diag.chatty_flag>19:
             progress("Concluding DEFINITELY" + bindingsToString(b2) )
         before = self.store.size
         delta = self.targetContext.loadFormulaWithSubsitution(
-		    self.conclusion, b2, why=reason)
+                    self.conclusion, b2, why=reason)
         if diag.chatty_flag>30:
             progress("Added %i, nominal size of store changed from %i to %i."%(delta, before, self.store.size))
         return delta #  self.store.size - before
+#        return internalFunction2()
+#        return internalFunction()
 
 
 ##################################################################################
@@ -744,11 +757,12 @@ class Query:
             state = item.state
             if state == S_DONE:
                 return total # Forget it -- must be impossible
+            #def internalFunction4():
             if state == S_LIGHT_UNS_GO:
-		item.state = S_LIGHT_EARLY   # Unsearched, try builtin
+                item.state = S_LIGHT_EARLY   # Unsearched, try builtin
                 nbs = item.tryBuiltin(queue, bindings, heavy=0, evidence=evidence)
             elif state == S_LIGHT_GO:
-		item.state = S_DONE   # Searched.
+                item.state = S_DONE   # Searched.
                 nbs = item.tryBuiltin(queue, bindings, heavy=0, evidence=evidence)
             elif state == S_LIGHT_EARLY or state == S_NOT_LIGHT or state == S_NEED_DEEP: #  Not searched yet
                 nbs = item.tryDeepSearch()
@@ -757,13 +771,13 @@ class Query:
                     if (isinstance(subj, Formula)
                         and isinstance(obj, Formula)):
 
-                        more_unmatched = obj.statements[:]
-			more_variables = obj.variables()[:]
+                        more_unmatched = obj.statements.keys()
+                        more_variables = obj.variables()[:]
 
-			if obj.universals() != []:
-			    raise RuntimeError("""Cannot query for universally quantified things.
-	    As of 2003/07/28 forAll x ...x cannot be on object of log:includes.
-	    This/these were: %s\n""" % obj.universals())
+                        if obj.universals() != []:
+                            raise RuntimeError("""Cannot query for universally quantified things.
+            As of 2003/07/28 forAll x ...x cannot be on object of log:includes.
+            This/these were: %s\n""" % obj.universals())
 
 
                         _substitute({obj: subj}, more_unmatched)
@@ -774,7 +788,7 @@ class Query:
                             newItem = QueryItem(query, quad)
                             queue.append(newItem)
                             newItem.setup(allvars, smartIn = query.smartIn + [subj],
-				    unmatched=more_unmatched, mode=query.mode)
+                                    unmatched=more_unmatched, mode=query.mode)
                         if diag.chatty_flag > 40:
                                 progress("**** Includes: Adding %i new terms and %s as new existentials."%
                                           (len(more_unmatched),
@@ -785,16 +799,16 @@ class Query:
                         item.state = S_DONE
                     nbs = []
                 else:
-		    item.state = S_HEAVY_WAIT  # Assume can't resolve
+                    item.state = S_HEAVY_WAIT  # Assume can't resolve
                     nbs = item.tryBuiltin(queue, bindings, heavy=1, evidence=evidence)
             elif state == S_REMOTE: # Remote query -- need to find all of them for the same service
-		items = [item]
-		for i in queue[:]:
-		    if i.state == S_REMOTE and i.service is item.service: #@@ optimize which group is done first!
-			items.append(i)
-			queue.remove(i)
-		nbs = query.remoteQuery(items)
-		item.state = S_SATISFIED  # do not put back on list
+                items = [item]
+                for i in queue[:]:
+                    if i.state == S_REMOTE and i.service is item.service: #@@ optimize which group is done first!
+                        items.append(i)
+                        queue.remove(i)
+                nbs = query.remoteQuery(items)
+                item.state = S_SATISFIED  # do not put back on list
             elif state ==S_HEAVY_WAIT or state == S_LIGHT_WAIT: # Can't
                 if diag.chatty_flag > 49 :
                     progress("@@@@ Warning: query can't find term which will work.")
@@ -809,31 +823,32 @@ class Query:
             if nbs == 0: return total
             elif nbs != []:
 #		if nbs != 0 and nbs != []: pass
-		# progress("llyn.py 2738:   nbs = %s" % nbs)
+                # progress("llyn.py 2738:   nbs = %s" % nbs)
                 for nb, reason in nbs:
-		    assert type(nb) is types.DictType, nb
+                    assert type(nb) is types.DictType, nb
                     q2 = []
                     for i in queue:
                         newItem = i.clone()
                         q2.append(newItem)  #@@@@@@@@@@  If exactly 1 binding, loop (tail recurse)
-		    
+                    
                     found = query.unify(q2, variables[:], existentials[:],
                                           bindings.copy(), nb, evidence = evidence + [reason])
-		    if diag.chatty_flag > 80: progress(
-			"Nested query returns %i fo %r" % (found, nb))
+                    if diag.chatty_flag > 80: progress(
+                        "Nested query returns %i fo %r" % (found, nb))
                     total = total + found
-		    if query.justOne and total:
+                    if query.justOne and total:
                         return total
 # NO - more to do return total # The called recursive calls above will have generated the output @@@@ <====XXXX
-	    if diag.chatty_flag > 80: progress("Item state %i, returning total %i" % (item.state, total))
+            if diag.chatty_flag > 80: progress("Item state %i, returning total %i" % (item.state, total))
             if item.state == S_DONE:
-		return total
+                return total
             if item.state != S_SATISFIED:   # state 0 means leave me off the list
                 queue.append(item)
             # And loop back to take the next item
 
         if diag.chatty_flag>50: progress("QUERY MATCH COMPLETE with bindings: " + `bindings`)
         return query.conclude(bindings,  evidence=evidence)  # No terms left .. success!
+#        return internalFunction4()
 
 
 
@@ -1317,5 +1332,8 @@ class BuiltInFailed(Exception):
             `reason`))
     
 
+class hashable_dict(dict):
+    def __hash__(self):
+        return hash(tuple(self.items()))
 
 # ends

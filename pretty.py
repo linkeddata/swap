@@ -244,11 +244,11 @@ class Serializer:
 	if sorting:
 	    uv = context.universals()[:]
 	    uv.sort(Term.compareAnyTerm)
-	    ev = context.existentials()[:]
+	    ev = context._existentialVariables #context.existentials()
 	    ev.sort(Term.compareAnyTerm)
 	else:
 	    uv = context.universals()
-	    ev = context.existentials()
+	    ev = context._existentialVariables #context.existentials()
 	if not dataOnly:
 	    for v in uv:
 		self._outputStatement(sink, (context, self.store.forAll, context, v))
@@ -274,7 +274,7 @@ class Serializer:
 	self.dumpVariables(context, sink, sorting)
 	self.dumpLists()
 
-	ss = context.statements[:]
+	ss = context.statements.keys()
 	ss.sort(StoredStatement.compareSubjPredObj)
         for s in ss:
 	    for p in SUBJ, PRED, OBJ:
@@ -393,7 +393,7 @@ class Serializer:
 ##            pass
 #	progress("&&&&&&&&& ", `self`,  self._occurringAs)
 #        _isExistential = x in context.existentials()
-        _isExistential = context.existentialDict.get(x,0)
+        _isExistential = context._existentialDict.get(x,0)
 #        return (0, 2)
         _loop = context.any(subj=x, obj=x)  # does'nt count as incomming
 	_asPred = self._occurringAs[PRED].get(x, 0)
@@ -448,7 +448,7 @@ class Serializer:
         for each subject.
         """
 
-	allStatements = context.statements[:]
+	allStatements = context.statements.keys()
 	if equals:
 	    for x, y in context._redirections.items():
 		if not x.generated() and x not in context.variables():
@@ -570,7 +570,7 @@ class Serializer:
         _anon, _incoming = self._topology(obj, context)
         if _anon and _incoming == 1:  # Embedded anonymous node in N3
 	    sink.startAnonymous(self.extern(triple))
-	    ss = context.statementsMatching(subj=obj)
+	    ss = context.statementsMatching(subj=obj).keys()
 	    if sorting: ss.sort(StoredStatement.comparePredObj)
 	    for t in ss:
 		self.dumpStatement(sink, t.quad, sorting)

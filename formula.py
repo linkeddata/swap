@@ -94,8 +94,9 @@ class Formula(AnonymousNode, CompoundTerm):
     def __init__(self, store, uri=None):
         AnonymousNode.__init__(self, store, uri)
         self.canonical = None # Set to self if this has been canonicalized
-	self.statements = []
+	self.statements = {}
 	self._existentialVariables = []
+        self._existentialDict = {}
 	self._universalVariables = []
 
 
@@ -107,8 +108,8 @@ class Formula(AnonymousNode, CompoundTerm):
 	for f in self, other:
 	    if f.canonical is not f:
 		progress("@@@@@ Comparing formula NOT canonical", `f`)
-	s = self.statements
-	o = other.statements
+	s = self.statements.keys()
+	o = other.statements.keys()
 	ls = len(s)
 	lo = len(o)
 	if ls > lo: return 1
@@ -137,11 +138,13 @@ class Formula(AnonymousNode, CompoundTerm):
 		    ls, `s`, self.debugString(), other.debugString()))
 
 
-    def existentials(self):
+    def existentials(self, alwaysDict=0):
         """Return a list of existential variables with this formula as scope.
 	
 	Implementation:
 	we may move to an internal storage rather than these pseudo-statements"""
+        if self.canonical is None or alwaysDict:
+            return self._existentialDict
         return self._existentialVariables
 
 
@@ -196,7 +199,7 @@ class Formula(AnonymousNode, CompoundTerm):
 	The URI is typically omitted, and the system will make up an internal idnetifier.
         If given is used as the (arbitrary) internal identifier of the node."""
 	x = AnonymousExistential(self, uri)
-	self._existentialVariables.append(x)
+	self._existentialDict[x] = 1
 	return x
 
     
@@ -207,8 +210,9 @@ class Formula(AnonymousNode, CompoundTerm):
 	
     def declareExistential(self, v):
 	if verbosity() > 90: progress("Declare existential:", v)
-	if v not in self._existentialVariables:  # Takes time
-	    self._existentialVariables.append(v)
+	self._existentialDict[v] = 1
+#	if v not in self._existentialVariables:  # Takes time
+#	    self._existentialVariables.append(v)
 #	else:
 #	    raise RuntimeError("Redeclared %s in %s -- trying to erase that" %(v, self)) 
 	
@@ -360,7 +364,7 @@ class Formula(AnonymousNode, CompoundTerm):
 	    self.declareExistential(bindings.get(v, v))
 	bindings2 = bindings.copy()
 	bindings2[old] = self
-        for s in old.statements[:] :   # Copy list!
+        for s in old.statements.keys() :   # Copy list!
 	    total += self.add(subj=s[SUBJ].substitution(bindings2),
 		    pred=s[PRED].substitution(bindings2),
 		    obj=s[OBJ].substitution(bindings2),
@@ -394,8 +398,8 @@ class Formula(AnonymousNode, CompoundTerm):
 	if not isinstance(other, Formula): return 0
 	if self is other: return [({}, None)]
 	if (len(self) != len(other)
-	    or self. _existentialVariables != other._existentialVariables
-	    or self. _universalVariables != other._existentialVariables
+	    or self. _existentialDict != other._existentialDict
+	    or self. _universalVariables != other._universalVariables
 	    ): return 0
 #	raise RuntimeError("Not implemented unification method on formulae")
 	return 0    # @@@@@@@   FINISH THIS
@@ -525,17 +529,17 @@ class Formula(AnonymousNode, CompoundTerm):
 
     def subjects(self, pred=None, obj=None):
         """Obsolete - use each(pred=..., obj=...)"""
-	for s in self.statementsMatching(pred=pred, obj=obj)[:]:
+	for s in self.statementsMatching(pred=pred, obj=obj).keys():
 	    yield s[SUBJ]
 
     def predicates(self, subj=None, obj=None):
         """Obsolete - use each(subj=..., obj=...)"""
-	for s in self.statementsMatching(subj=subj, obj=obj)[:]:
+	for s in self.statementsMatching(subj=subj, obj=obj).keys():
 	    yield s[PRED]
 
     def objects(self, pred=None, subj=None):
         """Obsolete - use each(subj=..., pred=...)"""
-	for s in self.statementsMatching(pred=pred, subj=subj)[:]:
+	for s in self.statementsMatching(pred=pred, subj=subj).keys():
 	    yield s[OBJ]
 
     def reification(self, sink, bnodeMap={}, why=None):
@@ -543,6 +547,9 @@ class Formula(AnonymousNode, CompoundTerm):
 	
 	
 	"""
+	#assert self.canonical is not None
+	#qq = self.existentials()[:]
+	#self.existentials().sort(Term.compareAnyTerm)
 	try:
 	    return bnodeMap[self]
 	except KeyError:
@@ -564,7 +571,9 @@ class Formula(AnonymousNode, CompoundTerm):
 
 	#The great list of statements
         statementList = []
-        for s in self.statements:
+        ssk = self.statements.keys()
+        ssk.sort(StoredStatement.compareSubjPredObj)
+        for s in ssk:
             subj = sink.newBlankNode()
 	    sink.add(subj, rei["subject"], s[SUBJ].reification(sink, myMap, why)) 
 	    sink.add(subj, rei["predicate"], s[PRED].reification(sink, myMap, why) )
@@ -616,6 +625,9 @@ class StoredStatement:
 
     def __repr__(self):
         return "{"+`self[CONTEXT]`+":: "+`self[SUBJ]`+" "+`self[PRED]`+" "+`self[OBJ]`+"}"
+#
+#    def __hash__(self):
+#        return hash((self[SUBJ], self[PRED], self[OBJ]))
 
 #   The order of statements is only for canonical output
 #   We cannot override __cmp__ or the object becomes unhashable, and can't be put into a dictionary.

@@ -555,7 +555,7 @@ class List(CompoundTerm):
             else:
                 pass
             if val == 1:
-                print 'I won!'
+                #print 'I won!'
                 return 1
         return 0
             

@@ -28,7 +28,7 @@ def flatten(formula):
     flattening a flattened formula should thus be the unity
     """
     store = formula.store
-    valid_triples = formula.statements[:]
+    valid_triples = formula.statements.keys()
     for triple in valid_triples:
         for part in SUBJ, PRED, OBJ:
             try:
@@ -78,7 +78,7 @@ def flatten(formula):
         returnFormula.add(triple[SUBJ].flatten(returnFormula),
                         triple[PRED].flatten(returnFormula),
                         triple[OBJ].flatten(returnFormula))
-    if tempformula.statements != []:
+    if tempformula.statements != {}:
         x = tempformula.reification(returnFormula)
         returnFormula.add(x, store.type, store.Truth)
     return returnFormula.close()
@@ -104,7 +104,8 @@ def reify(formula):
 
     Returns an RDF formula with the same semantics
     as the given formula
-    """ 
+    """
+    formula = formula.close()
     a = formula.newFormula()
     x = formula.reification(a)
     a.add(x, a.store.type, a.store.Truth)
