@@ -359,10 +359,17 @@ class SinkParser:
 
     def node(self, str, i, res, subjectAlready=None):
         subj = subjectAlready
+
+        j = self.tok('this', str, i)   # This context
+        if j>=0:
+            res.append(self._context)
+            return j
+
 	if subj is None:   # If this can be a named node, then check for a name.
             j = self.uri_ref2(str, i, res)
             if j >= 0:
                 return j
+
 
         j = self.tok('[', str, i)
         if j>=0:
@@ -627,22 +634,22 @@ class SinkParser:
     def operator(self, str, i, res):
 	j = self.tok('+', str, i)
 	if j >= 0:
-	    res.append('+') #@@ convert to operator:plus and then to URI
+	    res.append((RESOURCE, '+')) #@@ convert to operator:plus and then to URI
 	    return j
 
 	j = self.tok('-', str, i)
 	if j >= 0:
-	    res.append('-') #@@
+	    res.append((RESOURCE,'-')) #@@
 	    return j
 
 	j = self.tok('*', str, i)
 	if j >= 0:
-	    res.append('*') #@@
+	    res.append((RESOURCE,'*')) #@@
 	    return j
 
 	j = self.tok('/', str, i)
 	if j >= 0:
-	    res.append('/') #@@
+	    res.append((RESOURCE,'/')) #@@
 	    return j
 	else:
 	    return -1
@@ -1085,7 +1092,7 @@ class ToN3(RDFSink):
     def makeStatement(self, triple):
         if self.stack[-1]:
             if triple[PRED] == N3_first:
-                self._write(self.representationOf(triple[OBJ])+" ")
+                self._write(self.representationOf(triple[CONTEXT], triple[OBJ])+" ")
             elif triple[PRED] == RDF_type and triple[OBJ] == N3_List:
                 pass  # We knew
             elif triple[PRED] == RDF_type and triple[OBJ] == N3_Empty:
@@ -1095,8 +1102,8 @@ class ToN3(RDFSink):
                 print "####@@@@@@ ooops:", triple
                 raise intenalError # Should only see first and rest in list mode
             return
-        self._makeSubjPred(triple[SUBJ], triple[PRED])        
-        self._write(self.representationOf(triple[OBJ]))
+        self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])        
+        self._write(self.representationOf(triple[CONTEXT], triple[OBJ]))
 #        self._write(" (in %s) " % `context`)    #@@@@
         
 # Below is for writing an anonymous node which is the object of only one arc        
@@ -1107,13 +1114,13 @@ class ToN3(RDFSink):
                 self.stack.append(2)    # just a rest - no parens
                 self._subj = triple[OBJ]
             else:
-                self._makeSubjPred(triple[SUBJ], triple[PRED])
+                self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])
                 self.stack.append(1)    # New list
                 self._write(" (")
                 self.indent = self.indent + 1
             self._pred = N3_first
         else:
-            self._makeSubjPred(triple[SUBJ], triple[PRED])
+            self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])
             self.stack.append(0)
             self._write(" [")
             self.indent = self.indent + 1
@@ -1177,18 +1184,18 @@ class ToN3(RDFSink):
         self._pred = None
         self.indent = self.indent - 1
      
-    def startBagNamed(self, subj):
+    def startBagNamed(self, context, subj):
 	if self._subj != subj:
 	    self._endStatement()
 	    if self.indent == 1:  # Top level only - extra newline
                 self._newline()
-	    self._write(self.representationOf(subj))
+	    self._write(self.representationOf(context, subj))
 	    self._subj = subj
 	    self._pred = None
 
         if self._pred is not None:
             self._write(";")
- #       self._makeSubjPred(subj, ( RESOURCE,  DAML_equivalentTo_URI ))
+ #       self._makeSubjPred(somecontext, subj, ( RESOURCE,  DAML_equivalentTo_URI ))
         self.stack.append(0)
         self.indent = self.indent + 1
         self._write(" :- {")
@@ -1206,7 +1213,7 @@ class ToN3(RDFSink):
         self.indent = self.indent - 1
      
     def startBagObject(self, triple):
-        self._makeSubjPred(triple[SUBJ], triple[PRED])
+        self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])
         self.stack.append(0)
         self.indent = self.indent + 1
         self._write("{")
@@ -1222,7 +1229,7 @@ class ToN3(RDFSink):
         self._subj = subj
         self._pred = pred
      
-    def _makeSubjPred(self, subj, pred):
+    def _makeSubjPred(self, context, subj, pred):
 
         if self.stack[-1]: return  # If we are in list mode, don't need to.
         
@@ -1230,7 +1237,7 @@ class ToN3(RDFSink):
 	    self._endStatement()
 	    if self.indent == 1:  # Top level only - extra newline
                 self._newline()
-	    self._write(self.representationOf(subj))
+	    self._write(self.representationOf(context, subj))
 	    self._subj = subj
 	    self._pred = None
 
@@ -1245,8 +1252,8 @@ class ToN3(RDFSink):
             elif pred == ( RESOURCE, RDF_type_URI ) :
                 self._write(" a ")
             else :
-#	        self._write( " >- %s -> " % self.representationOf(pred))
-                self._write( " %s " % self.representationOf(pred))
+#	        self._write( " >- %s -> " % self.representationOf(context, pred))
+                self._write( " %s " % self.representationOf(context, pred))
                 
 	    self._pred = pred
 	else:
@@ -1259,7 +1266,7 @@ class ToN3(RDFSink):
             self._newline()
             self._subj = None
 
-    def representationOf(self, pair):
+    def representationOf(self, context, pair):
         """  Representation of a thing in the output stream
 
         Regenerates genids and variable names if required.
@@ -1267,6 +1274,8 @@ class ToN3(RDFSink):
         """
 
 #        print "# Representation of ", `pair`
+        if pair == context:
+            return "this"
         if pair == N3_nil and not self.noLists:
             return"()"
         type, value = pair
@@ -1279,10 +1288,7 @@ class ToN3(RDFSink):
                 if type == ANONYMOUS: return "<"+self.genPrefix + "g" + `i`+">"
                 else: return "<" + self.genPrefix + "v" + `i` + ">"   # variable
 
-        if type == LITERAL:
-            if string.find(value, "\n") >=0 or string.find(value, '"') >=0:
-                return '"""' + value + '"""'
-            return '"' + value + '"'   # @@@@ escaping, encoding !!!!!!
+        if type == LITERAL: return stringToN3(value)
 
         j = string.rfind(value, "#")
         if j>=0:
@@ -1293,6 +1299,28 @@ class ToN3(RDFSink):
                 return "<#" + relativeURI(self.base, value[j+1:]) + ">" #   use local frag id (@@ lone word?)
 
         return "<" + relativeURI(self.base, value) + ">"    # Everything else
+
+###################################################
+#
+#   Utilities
+#
+
+def stringToN3(str):
+	res = ""
+	if len(str) > 20 and string.find(str, "\n") >=0:
+		delim= '"""'
+		forbidden = "\\\"\a\b\f\r\t\v"
+	else:
+		delim = '"'
+		forbidden = "\\\"\a\b\f\r\t\v\n"
+	for i in range(len(str)):
+		ch = str[i]
+		j = string.find(forbidden, ch)
+		if j>=0: ch = "\\" + '\"abfrtvn'[j]
+		elif ch < " " or ch > "}" : ch= 'x'+`ch`[1:-1] # Use python
+		res = res + ch
+	return delim + res + delim
+
 
 #########################################################
 #
