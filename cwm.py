@@ -738,10 +738,16 @@ def getParser(format, inputURI, formulaURI, flags):
     if format == "rdf" :
         touch(_store)
 	if "l" in flags["rdf"]:
-	    return rdflib2rdf.RDFXMLParser(_store, inputURI, formulaURI=formulaURI,
-					flags=flags[format], why=r)
+	    from rdflib2rdf import RDFXMLParser
 	else:
-	    return sax2rdf.RDFXMLParser(_store, inputURI, formulaURI=formulaURI,
+	    rdfParserName = os.environ.get("CWM_RDF_PARSER", "sax2rdf")
+	    if rdfParserName == "rdflib2rdf":
+		from rdflib2rdf import RDFXMLParser
+	    elif rdfParserName == "sax2rdf":
+		from sax2rdf import RDFXMLParser
+	    else:
+		raise RuntimeError("Unknown RDF parser: " + rdfParserName)
+	return RDFXMLParser(_store, inputURI, formulaURI=formulaURI,
 					flags=flags[format], why=r)
     elif format == "n3":
         touch(_store)
