@@ -176,7 +176,7 @@ class SinkParser:
             i = self.directiveOrStatement(str,j)
             if i<0:
                 print "# next char: ", `str[j]` 
-                raise BadSyntax(self.lines, str, j, "expected directive or statement")
+                raise BadSyntax(self._thisDoc, self.lines, str, j, "expected directive or statement")
 
     def directiveOrStatement(self, str,h):
     
@@ -228,12 +228,12 @@ class SinkParser:
 	
 	t = []
 	i = self.qname(str, j, t)
-	if i<0: raise BadSyntax(self.lines, str, j, "expected qname after bind or prefix")
+	if i<0: raise BadSyntax(self._thisDoc, self.lines, str, j, "expected qname after bind or prefix")
 	j = self.uri_ref2(str, i, t)
-	if j<0: raise BadSyntax(self.lines, str, i, "expected uriref2 after bind _qname_")
+	if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected uriref2 after bind _qname_")
 
         ns = t[1][1] + delim
-        if string.find(ns,"##")>=0: raise BadSyntax(self.lines, str, j-2, "trailing # illegal on bind: use @prefix")
+        if string.find(ns,"##")>=0: raise BadSyntax(self._thisDoc, self.lines, str, j-2, "trailing # illegal on bind: use @prefix")
 	self._bindings[t[0][0]] = ns
 	self.bind(t[0][0], (RESOURCE, ns))
 	return j
@@ -263,7 +263,7 @@ class SinkParser:
 
 	j = self.property_list(str, i, r[0])
 
-	if j<0: raise BadSyntax(self.lines, str, i, "expected propertylist")
+	if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected propertylist")
 
 	return j
 
@@ -284,16 +284,16 @@ class SinkParser:
 	j = self.tok('has', str, i)
 	if j>=0:
 	    i = self.prop(str, j, r)
-	    if i < 0: raise BadSyntax(self.lines, str, j, "expected prop")
+	    if i < 0: raise BadSyntax(self._thisDoc, self.lines, str, j, "expected prop")
 	    res.append(('->', r[0]))
 	    return i
 	else:
 	    j = self.tok('is', str, i)
 	    if j>=0:
 		i = self.prop(str, j, r)
-		if i < 0: raise BadSyntax(self.lines, str, j, "expected prop")
+		if i < 0: raise BadSyntax(self._thisDoc, self.lines, str, j, "expected prop")
 		j = self.tok('of', str, i)
-		if j<0: raise BadSyntax(self.lines, str, i, "expected 'of' after prop")
+		if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected 'of' after prop")
 		res.append(('<-', r[0]))
 		return j
 	    else:
@@ -317,16 +317,16 @@ class SinkParser:
 			    if j>=0:
 				i = self.prop(str, j, r)
 				j = self.tok('->', str, i)
-				if j<0: raise BadSyntax(self.lines, str, i, "-> expected")
+				if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "-> expected")
 				res.append(('->', r[0]))
 				return j
 			    else:
 				j = self.tok('<-', str, i)
 				if j>=0:
 				    i = self.prop(str, j, r)
-				    if i<0: raise BadSyntax(self.lines, str, j, "bad verb syntax")
+				    if i<0: raise BadSyntax(self._thisDoc, self.lines, str, j, "bad verb syntax")
 				    j = self.tok('<-', str, i)
-				    if j<0: raise BadSyntax(self.lines, str, i, "<- expected")
+				    if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "<- expected")
 				    res.append(('<-', r[0]))
 				    return j
 				else:
@@ -373,14 +373,14 @@ class SinkParser:
                     i = self.tok(';', str, j)
                     if i>=0: j = i
                 else:
-                    raise BadSyntax(self.lines, str, i, "object_list expected after [ = ")
+                    raise BadSyntax(self._thisDoc, self.lines, str, i, "object_list expected after [ = ")
 
             if subj is None: subj=self.genid(RESOURCE)
 
             i = self.property_list(str, j, subj)
-            if i<0: raise BadSyntax(self.lines, str, j, "property_list expected")
+            if i<0: raise BadSyntax(self._thisDoc, self.lines, str, j, "property_list expected")
             j = self.tok(']', str, i)
-            if j<0: raise BadSyntax(self.lines, str, i, "']' expected")
+            if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "']' expected")
             res.append(subj)
             return j
 
@@ -392,13 +392,13 @@ class SinkParser:
             
             while 1:
                 i = self.skipSpace(str, j)
-                if i<0: raise BadSyntax(self.lines, str, i, "needed '}', found end.")
+                if i<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "needed '}', found end.")
                 
                 j = self.tok('}', str,i)
                 if j >=0: break
                 
                 j = self.directiveOrStatement(str,i)
-                if j<0: raise BadSyntax(self.lines, str, i, "expected statement or '}'")
+                if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected statement or '}'")
 
             self._context = oldContext # restore
             res.append(subj)
@@ -409,13 +409,13 @@ class SinkParser:
             previous = None  # remember value to return
             while 1:
                 i = self.skipSpace(str, j)
-                if i<0: raise BadSyntax(self.lines, str, i, "needed ')', found end.")                    
+                if i<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "needed ')', found end.")                    
                 j = self.tok(')', str,i)
                 if j >=0: break
 
                 item = []
                 j = self.object(str,i, item)
-                if j<0: raise BadSyntax(self.lines, str, i, "expected item in list or ')'")
+                if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected item in list or ')'")
                 this = self.genid(RESOURCE)
                 if DAML_LISTS:
                     if previous:
@@ -449,7 +449,7 @@ class SinkParser:
             if j >=0:
                 res = []
                 i = self.node(str, j, res, subj)
-                if i<0: raise BadSyntax(self.lines, str, j, "bad {} or () or [] node after :- ")
+                if i<0: raise BadSyntax(self._thisDoc, self.lines, str, j, "bad {} or () or [] node after :- ")
                 continue
                 
 	    v = []
@@ -459,7 +459,7 @@ class SinkParser:
 	    else:
 		objs = []
 		i = self.object_list(str, j, objs)
-		if i<0: raise BadSyntax(self.lines, str, j, "object_list expected")
+		if i<0: raise BadSyntax(self._thisDoc, self.lines, str, j, "object_list expected")
 		for obj in objs:
 		    dir, sym = v[0]
 		    if dir == '->':
@@ -489,7 +489,7 @@ class SinkParser:
             j = self.tok(']', str, i)
             if j>=0: return i # Can omit . before these
 
-            raise BadSyntax(self.lines, str, i, "expected '.' or '}' or ']' at end of statement")
+            raise BadSyntax(self._thisDoc, self.lines, str, i, "expected '.' or '}' or ']' at end of statement")
             return i
 
 
@@ -513,7 +513,7 @@ class SinkParser:
                     if pfx == "_":   # Magic prefix added 2001/05/30, can be overridden
                         res.append(( ANONYMOUS, ln))
                         return j
-		    raise BadSyntax(self.lines, str, i, "Prefix %s not bound" % (pfx))
+		    raise BadSyntax(self._thisDoc, self.lines, str, i, "Prefix %s not bound" % (pfx))
             res.append(( RESOURCE, ns + ln)) # @@@ "#" CONVENTION
             if not string.find(ns, "#"):print"Warning: no # on NS %s,"%(ns,)
 	    return j
@@ -541,7 +541,7 @@ class SinkParser:
                     res.append((RESOURCE , uref))
                     return i+1
                 i = i + 1
-            raise BadSyntax(self.lines, str, j, "unterminated URI reference")
+            raise BadSyntax(self._thisDoc, self.lines, str, j, "unterminated URI reference")
         else:
             return -1
 
@@ -639,17 +639,17 @@ class SinkParser:
 #                    uch = u""
                     uch = ""
                     if ch == "":
-                        raise BadSyntax(self.lines, str, i, "unterminated string literal")
+                        raise BadSyntax(self._thisDoc, self.lines, str, i, "unterminated string literal")
                     if ch == "\r": continue   # Strip carriage returns
                     if ch == "\n":
-                        if delim == '"': raise BadSyntax(startline, str, i, "newline found in string literal")
+                        if delim == '"': raise BadSyntax(self._thisDoc, startline, str, i, "newline found in string literal")
                         self.lines = self.lines + 1
                         
                     if ch == "\\":
                         ch = str[j:j+1]  # Will be empty if string ends
                         j = j + 1
                         if ch == "":
-                            raise BadSyntax(startline, str, i, "unterminated string literal (2)")
+                            raise BadSyntax(self._thisDoc, startline, str, i, "unterminated string literal (2)")
                         k = string.find('abfrtvn\\"', ch)
                         if k >= 0:
                             uch = '\a\b\f\r\t\v\n\\"'[k]
@@ -662,10 +662,10 @@ class SinkParser:
                                     ch = str[j:j+1]
                                     j = j + 1
                                     if ch == "":
-                                        raise BadSyntax(startline, str, i, "unterminated string literal")
+                                        raise BadSyntax(self._thisDoc, startline, str, i, "unterminated string literal")
                                     k = string.find("01234567", ch)
                                     if k <0:
-                                        raise BadSyntax(startline, str, i, "bad string literal octal escape")
+                                        raise BadSyntax(self._thisDoc, startline, str, i, "bad string literal octal escape")
                                     value = value * 8 + k
                                     count = count + 1
                                 uch = unichr(value)
@@ -677,10 +677,10 @@ class SinkParser:
                                         ch = str[j:j+1]
                                         j = j + 1
                                         if ch == "":
-                                            raise BadSyntax(startline, str, i, "unterminated string literal(3)")
+                                            raise BadSyntax(self._thisDoc, startline, str, i, "unterminated string literal(3)")
                                         k = string.find("0123456789abcdef", ch)
                                         if k <=0:
-                                            raise BadSyntax(startline, str, i, "bad string literal hex escape")
+                                            raise BadSyntax(self._thisDoc, startline, str, i, "bad string literal hex escape")
                                         value = value * 16 + k
                                         count = count + 1
                                     uch = unicode.ntou (value) # @@I18n Need n->unicode mapping @@@@
@@ -727,23 +727,24 @@ class SinkParser:
 	    return -1
 
 class BadSyntax(SyntaxError):
-    def __init__(self, lines, str, i, why):
+    def __init__(self, uri, lines, str, i, why):
 	self._str = str
 	self._i = i
 	self._why = why
 	self.lines = lines
+	self._uri = uri 
 
     def __str__(self):
 	str = self._str
 	i = self._i
 
-	if i>30: pre="..."
+	if i>40: pre="..."
 	else: pre=""
-	if len(str)-i > 30: post="..."
+	if len(str)-i > 40: post="..."
 	else: post=""
 
-	return 'Line %i: Bad syntax (%s) at ^ in: "%s%s^%s%s"' \
-	       % (self.lines +1, self._why, pre, str[i-40:i], str[i:i+40], post)
+	return 'Line %i of <%s>: Bad syntax (%s) at ^ in:\n"%s%s^%s%s"' \
+	       % (self.lines +1, self._uri, self._why, pre, str[i-40:i], str[i:i+40], post)
 
 
 def stripCR(str):

@@ -320,25 +320,27 @@ HTTP_Content_Type = 'content-type' #@@ belongs elsewhere?
 def loadToStore(store, addr):
     """raises IOError, SyntaxError
     """
-    
-    netStream = urllib.urlopen(addr)
-    ct=netStream.headers.get(HTTP_Content_Type, None)
-#    if chatty > 19: progress("HTTP Headers:" +`netStream.headers`)
-#    @@How to get at all headers??
-#    @@ Get sensible net errors and produce dignostics
-
-    guess = ct
-    if chatty > 29: progress("Content-type: " + ct)
-    if ct.find('text/plain') >=0 :   # Rats - nothing to go on
-        buffer = netStream.read(500)
-        netStream.close()
+    try:
         netStream = urllib.urlopen(addr)
-        if buffer.find('xmlns') >=0:
-            guess = 'application/xml'
-        elif buffer[0] == "#" or buffer[0:7] == "@prefix":
-            guess = 'application/n3'
-        if chatty > 29: progress("    guess " + guess)
-            
+        ct=netStream.headers.get(HTTP_Content_Type, None)
+    #    if chatty > 19: progress("HTTP Headers:" +`netStream.headers`)
+    #    @@How to get at all headers??
+    #    @@ Get sensible net errors and produce dignostics
+
+        guess = ct
+        if chatty > 29: progress("Content-type: " + ct)
+        if ct.find('text/plain') >=0 :   # Rats - nothing to go on
+            buffer = netStream.read(500)
+            netStream.close()
+            netStream = urllib.urlopen(addr)
+            if buffer.find('xmlns') >=0:
+                guess = 'application/xml'
+            elif buffer[0] == "#" or buffer[0:7] == "@prefix":
+                guess = 'application/n3'
+            if chatty > 29: progress("    guess " + guess)
+    except (IOError):
+        raise DocumentAccessError(addr, sys.exc_info() )
+        
     # Hmmm ... what about application/rdf; n3 or vice versa?
     if guess.find('xml') >= 0 or guess.find('rdf') >= 0:
         if chatty > 49: progress("Parsing as RDF")
@@ -352,6 +354,27 @@ def loadToStore(store, addr):
         p.feed(netStream.read())
         p.endDoc()
 
+def _indent(str):
+    """ Return a string indented by 4 spaces"""
+    s = "    "
+    for ch in str:
+        s = s + ch
+        if ch == "\n": s = s + "    "
+    if s.endswith("    "):
+        s = s[:-4]
+    return s
+
+class DocumentAccessError(IOError):
+
+    def __init__(self, uri, info):
+        self._uri = uri
+        self._info = info
+        
+    def __str__(self):
+        # See C:\Python16\Doc\ref\try.html or URI to that effect
+#        reason = `self._info[0]` + " with args: " + `self._info[1]`
+        reason = _indent(self._info[1].__str__())
+        return ("Unable to access document <%s>, because:\n%s" % ( self._uri, reason))
     
 class BI_hasContent(HeavyBuiltIn, Function): #@@DWC: Function?
     def evaluateObject2(self, store, subj):
