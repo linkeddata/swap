@@ -12,6 +12,7 @@ dc:relation <airportLookup.n3>.
 @prefix k: <http://opencyc.sourceforge.net/daml/cyc.daml#> .
 @prefix trav: <http://www.w3.org/2000/10/swap/pim/travelTerms#>.
 @prefix apt: <http://www.daml.org/2001/10/html/airport-ont#>.
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
 
 @prefix : <itinMarks#>.
 
@@ -47,8 +48,8 @@ k:Saturday
 { :P a :ArLv.
   [ k:subEvents [
       :P [
-        apt:latitude :LAT1;
-        apt:longitude :LON1;
+        geo:lat :LAT1;
+        geo:long :LON1;
         apt:iataCode :IATA;
       ]
   ] ].
@@ -65,8 +66,8 @@ k:Saturday
       :R [ a :DOW ];
       :Q :T1;
       :P [
-        apt:latitude :LAT1;
-        apt:longitude :LON1;
+        geo:lat :LAT1;
+        geo:long :LON1;
       ]
   ] ].
 
