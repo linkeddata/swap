@@ -167,12 +167,13 @@ def doCommand(year, inputURI="/dev/stdin"):
 
 # Load the data:
 
+#	print "Data from", inputURI
 	kb=store.load(inputURI)
 	
-	print "Size of kb: ", len(kb)
+#	print "Size of kb: ", len(kb)
 	
 	meta = store.loadMany(["categories.n3", "classify.n3"])  # Category names etc
-	print "Size of meta", len(meta)
+#	print "Size of meta", len(meta)
 	
 	qu_date = qu.date
 	qu_amount = qu.amount
@@ -196,10 +197,12 @@ def doCommand(year, inputURI="/dev/stdin"):
 	unclassified = kb.each(pred=rdf_type, obj=qu_Unclassified)
 	for t in classified: assert t not in unclassified, "Can't be classified and unclassified!"+`t`
 	for s in classified + unclassified:
+#	    print "Transaction ", `s`
 	    t_ok, c_ok = 0, 0
 	    date = kb.any(subj=s, pred=qu_date).__str__()
 	    year = int(date[0:4])
-	    if  year != yearInQuestion: continue
+#	    print year, yearInQuestion, `s`
+	    if  int(year) != int(yearInQuestion): continue
 	    month = int(date[5:7]) -1
 	    
 	    payees = kb.each(subj=s, pred=qu_payee)

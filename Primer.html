@@ -3,9 +3,11 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <title>Primer - Getting into the semantic web and RDF using N3</title>
   <link href="/People/Berners-Lee/general.css" rel="stylesheet"
   type="text/css" />
+  <link href="doc/primer.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body xml:lang="en" lang="en">
@@ -151,8 +153,8 @@ better defined statement if we say</p>
 
 <p>That of course would be a bit verbose - imagine using such long
 identifiers for everything like #age and #eyecolor above. So N3 allows you to
-set up a shorthand prefix for the long part. This is called a namespace
-identifier, and you set it up using "@prefix" like this:</p>
+set up a shorthand prefix for the long part - the part we call the
+<dfn>namespace</dfn>. You set it up using "@prefix" like this:</p>
 <pre>@prefix dc:  &lt;http://purl.org/dc/elements/1.1/&gt; .
 &lt;&gt; dc:title  "Primer - Getting into the semantic web and RDF using N3".</pre>
 
@@ -189,15 +191,12 @@ data in N3, you can start making up your own vocabularies, because they are
 just data themselves.</p>
 
 <h2>Making vocabularies</h2>
-<br />
-<br />
 
-
-<p>Things like dc:title above are RDF <dfn><a id="Properties"
-name="Properties">Properties</a></dfn>. When you want to define a new
+<p>Things like dc:title above are RDF <dfn><a id="Properties1"
+name="Properties1">Properties</a></dfn>. When you want to define a new
 vocabulary, or ontology, you define new classes of things and new properties.
-When you say what type of thing something is, you say a <dfn><a id="Class"
-name="Class">Class</a></dfn> it belongs to.</p>
+When you say what type of thing something is, you say a <dfn><a id="Class2"
+name="Class2">Class</a></dfn> it belongs to.</p>
 
 <p>The property which tells you what type something is is
 <code>rdf:type</code> which can be abbreviated to N3 to just <code>a</code>.
@@ -383,8 +382,7 @@ expect there will be many different engines which make those decisions
 differently. Check the documentation of software near you.</p>
 
 <p>One program I hacked together is called <em>cwm</em>, (pronounced as in
-the welsh word with a short "oo"). Further examples will use that.<br />
-</p>
+the welsh word with a short "oo"). Further examples will use that.</p>
 
 <h2>Practical rules: Query information using a Filter</h2>
 <address>
@@ -446,87 +444,11 @@ To give you some more ideas, though, there is a <a href="Examples">longer
 list of more complex and varied examples</a>. These come with less tutorial
 explanation.</p>
 
-<p>Have fun!</p>
+<p>Or, you can continue with a tutorial which goes into mroe features of the
+language, explaining how to process you data and involve other data on the
+Web. In that case, next bit is about: <a href="doc/Shortcuts.html">Shortcuts
+and long cuts</a></p>
 <hr />
-
-<h2>Glossary</h2>
-
-<p>These are not formal definitions - just phrases to help you get the hang
-of what these things mean. The definition terms are linked back to more
-information where available.</p>
-<dl>
-  <dt><a href="#Class" name="Class1" id="Class1">Class</a></dt>
-    <dd>A set of <a href="#Thing">Things</a>; a one-parameter predicate; a
-      unary relation.</dd>
-  <dt><a name="Domain" id="Domain" href="#domain">domain</a></dt>
-    <dd>For a <a href="#Property">Property</a>, a class of things which any
-      subject of the <a href="#Property">Property</a> must be in.</dd>
-  <dt><a href="#context" name="Formula" id="Formula">Formula</a></dt>
-    <dd>An (unordered) set of <a href="#Statement">statements</a>. You can
-      write one out in N3 using {braces}.</dd>
-  <dt><a name="context1" id="context1">context</a></dt>
-    <dd>The relationship between a statement and a formula containing it.</dd>
-  <dt><a href="doc/cwm" name="cwm" id="cwm">cwm</a></dt>
-    <dd>(From: Closed world machine; valley.) A bit of code for playing with
-      this stuff, as grep is for regular expressions. Sucks in RDF in XML or
-      N3, processes rules, and spits it out again.</dd>
-  <dt><a name="filter" id="filter" href="#filter1">filter</a></dt>
-    <dd>A set of <a href="#rule">rules</a> which are used to select certain
-      data from a larger amount of information.</dd>
-  <dt><a name="N3" id="N3" href="/DesignIssues/Notation3">N3</a></dt>
-    <dd>Notation3, a quick notation for jotting down or reading RDF semantic
-      web information, and experimenting with more advanced sematic web
-      features.</dd>
-  <dt><a name="object" id="object" href="#L553">object</a></dt>
-    <dd>Of the three parts of a statement, the object is one of the two
-      things related by the predicate. Often, it is the value of some
-      property, such as the color of a car. See also: subject, predicate.</dd>
-  <dt><a name="predicate" id="predicate">predicate</a></dt>
-    <dd>Of the three parts of a statement, the predicate, or verb, is the
-      resource, specifically the Property, which defines what the statement
-      means. See also: subject, object.</dd>
-  <dt><a href="#Properties" name="Property" id="Property">Property</a></dt>
-    <dd>A sort of relationship between two things; a binary relation. A
-      Property can be used as the <a href="#predicate">predicate</a> in a <a
-      href="#Statement">statement</a>.</dd>
-  <dt><a name="range1" id="range1" href="#range">range</a></dt>
-    <dd>For a <a href="#Property">Property</a>, its range is a class which
-      any <a href="#object">object</a> of that <a
-      href="#Property">Property</a> must be in.</dd>
-  <dt><a name="rule" id="rule">rule</a></dt>
-    <dd>A loose term for a Statement that an engine has been programmed to
-      process. Different engines have different sets of rules. <a
-      href="#cwm">cwm</a> rules are <a href="#Statement">statements</a> whose
-      verb is <code>log:implies</code>.</dd>
-  <dt><a name="Resource" id="Resource">Resource</a></dt>
-    <dd>That identified by a Universal Resource Identifier (without a "#").
-      If the URI starts "http:", then the resource is some form of generic
-      document.</dd>
-  <dt><a name="Statement" id="Statement">Statement</a></dt>
-    <dd>A subject, predicate and object which assert meaning defined by the
-      particular predicate used.</dd>
-  <dt><a name="subject" id="subject">subject</a></dt>
-    <dd>Of the three parts of a statement, the subject is one of the two
-      things related by the predicate. Often, it indicates the thing being
-      described, such as a car whos color and length are being given. See
-      also: object, predicate</dd>
-  <dt><a name="Thing" id="Thing">Thing</a></dt>
-    <dd>In DAML, a generic name for anything - abstract, animate, inanimate,
-      whatever. The class which anything is in. (In RDF parlance,
-      confusingly, rdf:Resource.) Identified by a URI with or without a "#"
-      in it.</dd>
-  <dt><a name="Truth" id="Truth">Truth</a></dt>
-    <dd>In the log: namespace, a Class of all formulae which are true.</dd>
-  <dt><a name="type" id="type">type</a></dt>
-    <dd>A particular property used to assert that a thing is in a certain
-      Class. The relationship between a thing and any Class it is in.</dd>
-  <dt><a name="URI" id="URI">URI</a></dt>
-    <dd>Universal Resource Identifier. The way of identifying anything
-      (including Classes, Properties or individual things of any sort). Not
-      everything has a URI, as you can talk about something by just using its
-      properties. But using a URI allows other documents and systems to
-      easily reuse your information.</dd>
-</dl>
 
 <h2 id="References">References</h2>
 <ul>

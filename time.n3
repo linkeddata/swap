@@ -45,7 +45,7 @@ time:year a rdf:Property,
 	ont:UniqueProperty;
     rdfs:label "year";
     rdfs:comment """
-For a date-time, its time:inSeconds is the (string reopresntation of)
+For a date-time, its time:inSeconds is the (string representation of)
 the four-digit year.
 
 Cwm implements this as a function.

@@ -737,8 +737,12 @@ def getParser(format, inputURI, formulaURI, flags):
     r = BecauseOfCommandLine(sys.argv[0]) # @@ add user, host, pid, date time? Privacy!
     if format == "rdf" :
         touch(_store)
-        return sax2rdf.RDFXMLParser(_store, inputURI, formulaURI=formulaURI,
-                                    flags=flags[format], why=r)
+	if "l" in flags["rdf"]:
+	    return rdflib2rdf.RDFXMLParser(_store, inputURI, formulaURI=formulaURI,
+					flags=flags[format], why=r)
+	else:
+	    return sax2rdf.RDFXMLParser(_store, inputURI, formulaURI=formulaURI,
+					flags=flags[format], why=r)
     elif format == "n3":
         touch(_store)
         return notation3.SinkParser(_store, inputURI, formulaURI=formulaURI, why=r)

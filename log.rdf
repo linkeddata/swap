@@ -46,7 +46,7 @@ of any identifiers used in the document.
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/log#conclusion">
         <rdfs:comment>All possible conclusions which can be drawn from a formula.
 
-The object of this function is the set of conclusions which can be
+The object of this function, a formula, is the set of conclusions which can be
 drawn from the subject formula, by successively applying any
 rules it contains to the data it contains. This is equivalent to
 cwm's "--think" command line function.  It does use built-ins, so
@@ -73,7 +73,9 @@ A cwm built-in function.
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/log#content">
         <rdfs:comment>This connects a document and a string that represents it.
-        Cwm knows how to go get a document in order to evaluate this.</rdfs:comment>
+(Cwm knows how to go get a document in order to evaluate this.)
+Note that the content-type of the information is not given and
+so must be known or guessed.</rdfs:comment>
         <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
         <rdfs:label>content</rdfs:label>
         <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/log#String"/>
@@ -114,7 +116,7 @@ in question.
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/log#equalTo">
         <rdfs:comment>Equality in this sense is actually the same URI.
 Do not confuse with daml:EquivalentTo.
-A cwm built-in logical operator.
+A cwm built-in logical operator, RDF graph level.
 </rdfs:comment>
     </rdf:Property>
 
@@ -132,15 +134,28 @@ A cwm built-in logical operator.
     </rdf:SyntaxArc>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/log#implies">
-        <rdfs:comment>Logical implication. Understood natively by cwm.</rdfs:comment>
+        <rdfs:comment>Logical implication. 
+This is the relation between the antecedent and conclusion of a rule.
+Used by cwm as the basic hook for adding inference to RDF.</rdfs:comment>
         <rdfs:isDefinedBy rdf:resource=""/>
         <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/log#Formula"/>
     </rdf:Property>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/log#includes">
-        <rdfs:comment>One formula is subset of other. Understood natively by cwm.</rdfs:comment>
+        <rdfs:comment>One formula is subset of other.
+That is, the two graphs can be matched by finding the
+mapping between blank nodes.
+The information in the subject formula supports the object formula.
+Understood natively by cwm in the antecendent of a rule.</rdfs:comment>
         <rdfs:isDefinedBy rdf:resource=""/>
         <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/log#Formula"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/log#n3String">
+        <rdfs:comment>The subject formula, expressed as N3, gives this string.</rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/log#Formula"/>
+        <rdfs:label>n3 string</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/log#String"/>
     </rdf:Property>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/log#notEqualTo">
@@ -151,7 +166,7 @@ A cwm built-in logical operator.
     </rdf:Property>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/log#notIncludes">
-        <rdfs:comment>One formula is NOT a subset of other. Understood natively by cwm.</rdfs:comment>
+        <rdfs:comment>The object formula is NOT a subset of subject. Understood natively by cwm.</rdfs:comment>
         <rdfs:isDefinedBy rdf:resource=""/>
         <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/log#Formula"/>
     </rdf:Property>
@@ -165,7 +180,7 @@ See cwm --strings in cwm --help.
     </rdf:Property>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/log#parsedAsN3">
-        <rdfs:comment>A string, parsed as N3, gives this formula.</rdfs:comment>
+        <rdfs:comment>The subject string, parsed as N3, gives this formula.</rdfs:comment>
         <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/log#String"/>
         <rdfs:label>parses to</rdfs:label>
         <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/log#Formula"/>
@@ -173,7 +188,8 @@ See cwm --strings in cwm --help.
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/log#racine">
         <rdfs:comment>For anything identified by a URI with a fragid, this is the
-        thing identified by the same URI without a hash or fragid</rdfs:comment>
+thing identified by the same URI without a hash or fragid.
+For anything else, it is itself.</rdfs:comment>
     </rdf:Property>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/log#rawType">
@@ -185,9 +201,19 @@ Example: semanticsOrError returns either a Formula or a String.
 </rdfs:comment>
     </rdf:Property>
 
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/log#rawUri">
+        <rdfs:comment>This allows one to look at the actual string of the URI which identifies this,
+for anything, even a blank node or a formula. This peeks into the internal
+workings of cwm, and so is not normally used. Use log:uri instead.
+</rdfs:comment>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/log#String"/>
+    </rdf:Property>
+
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/log#semantics">
-        <rdfs:comment>This connects a document and the formula it parses to.
-        Cwm knows how to go get a document and parse it in order to evaluate this.</rdfs:comment>
+        <rdfs:comment>The semantics of a document is the formula
+acheived by parsing representation of the document.
+
+(Cwm knows how to go get a document and parse it in order to evaluate this.)</rdfs:comment>
         <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
         <rdfs:label>semantics</rdfs:label>
         <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/log#Formula"/>
@@ -195,8 +221,9 @@ Example: semanticsOrError returns either a Formula or a String.
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/log#semanticsOrError">
         <rdfs:comment>This connects a document and either the formula it parses to,
-        or an error message explaining what went wromg with trying. See semantics.
-        Cwm knows how to go get a document and parse it in order to evaluate this.</rdfs:comment>
+or an error message explaining what went wromg with trying. See log:semantics.
+(Cwm knows how to go get a document and parse it in order to evaluate this.)
+</rdfs:comment>
         <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
         <rdfs:label>semantics or error message</rdfs:label>
     </rdf:Property>
@@ -204,9 +231,11 @@ Example: semanticsOrError returns either a Formula or a String.
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/log#uri">
         <rdfs:comment>This allows one to look at the actual string of the URI which identifies this.
 
-Cwm can get the URI of a resource or get the resource from the URI.
+(Cwm can get the URI of a resource or get the resource from the URI.)
 This is a level breaker, breaking the rule of not looking inside a
-URI.   Use (eg with  string:match) to replace RDF's old "aboutEach" functionality.</rdfs:comment>
+URI.   Use (eg with  string:match) to replace RDF's old "aboutEach"
+functionality. Use to implement the URI spec and protocol specs, etc.
+</rdfs:comment>
         <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/log#String"/>
     </rdf:Property>
 </rdf:RDF>

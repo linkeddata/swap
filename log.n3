@@ -32,7 +32,7 @@ log:equalTo a rdf:Property;
     rdfs:comment
 """Equality in this sense is actually the same URI.
 Do not confuse with daml:EquivalentTo.
-A cwm built-in logical operator.
+A cwm built-in logical operator, RDF graph level.
 """.
 
 log:notEqualTo a rdf:Property;
@@ -86,19 +86,25 @@ log:Truth a rdfs:Class;
 #
 
 log:implies a rdf:Property;
-    rdfs:comment "Logical implication. Understood natively by cwm.";
+    rdfs:comment """Logical implication. 
+This is the relation between the antecedent and conclusion of a rule.
+Used by cwm as the basic hook for adding inference to RDF.""";
     rdfs:range log:Formula;
     rdfs:isDefinedBy <>;
     rdfs:range log:Formula.
 
 log:includes a rdf:Property;
-    rdfs:comment "One formula is subset of other. Understood natively by cwm.";
+    rdfs:comment """One formula is subset of other.
+That is, the two graphs can be matched by finding the
+mapping between blank nodes.
+The information in the subject formula supports the object formula.
+Understood natively by cwm in the antecendent of a rule.""";
     rdfs:range log:Formula;
     rdfs:isDefinedBy <>;
     rdfs:range log:Formula.
 
 log:notIncludes a rdf:Property;
-    rdfs:comment "One formula is NOT a subset of other. Understood natively by cwm.";
+    rdfs:comment "The object formula is NOT a subset of subject. Understood natively by cwm.";
     rdfs:range log:Formula;
     rdfs:isDefinedBy <>;
     rdfs:range log:Formula.
@@ -108,31 +114,43 @@ log:notIncludes a rdf:Property;
 
 
 log:parsedAsN3 a rdf:Property;
-    rdfs:comment "A string, parsed as N3, gives this formula.";
+    rdfs:comment "The subject string, parsed as N3, gives this formula.";
     rdfs:label "parses to";
     rdfs:domain log:String;
     rdfs:range log:Formula.
+ 
+ log:n3String a rdf:Property;
+    rdfs:comment "The subject formula, expressed as N3, gives this string.";
+    rdfs:label "n3 string";
+    rdfs:domain log:Formula;
+    rdfs:range log:String.
+ 
  
 log:semantics a rdf:Property;
     rdfs:domain doc:Work;
     rdfs:range  log:Formula;
     rdfs:label  "semantics";
-    rdfs:comment """This connects a document and the formula it parses to.
-        Cwm knows how to go get a document and parse it in order to evaluate this.""".
+    rdfs:comment """The semantics of a document is the formula
+acheived by parsing representation of the document.
+
+(Cwm knows how to go get a document and parse it in order to evaluate this.)""".
 
 log:semanticsOrError a rdf:Property;
     rdfs:domain doc:Work;
     rdfs:label  "semantics or error message";
     rdfs:comment """This connects a document and either the formula it parses to,
-        or an error message explaining what went wromg with trying. See semantics.
-        Cwm knows how to go get a document and parse it in order to evaluate this.""".
+or an error message explaining what went wromg with trying. See log:semantics.
+(Cwm knows how to go get a document and parse it in order to evaluate this.)
+""".
 
 log:content a rdf:Property;   # (was hasContent but we use role nouns by preference)
     rdfs:domain doc:Work;
     rdfs:range  log:String;
     rdfs:label  "content";
     rdfs:comment """This connects a document and a string that represents it.
-        Cwm knows how to go get a document in order to evaluate this.""".
+(Cwm knows how to go get a document in order to evaluate this.)
+Note that the content-type of the information is not given and
+so must be known or guessed.""".
 
 #  Merge two formulae
 
@@ -156,7 +174,7 @@ log:conclusion a rdf:Property;
     rdfs:range log:Formula;
     rdfs:comment """All possible conclusions which can be drawn from a formula.
 
-The object of this function is the set of conclusions which can be
+The object of this function, a formula, is the set of conclusions which can be
 drawn from the subject formula, by successively applying any
 rules it contains to the data it contains. This is equivalent to
 cwm's "--think" command line function.  It does use built-ins, so
@@ -227,14 +245,25 @@ log:uri a rdf:Property;
     rdfs:comment 
 """This allows one to look at the actual string of the URI which identifies this.
 
-Cwm can get the URI of a resource or get the resource from the URI.
+(Cwm can get the URI of a resource or get the resource from the URI.)
 This is a level breaker, breaking the rule of not looking inside a
-URI.   Use (eg with  string:match) to replace RDF's old "aboutEach" functionality.""";
+URI.   Use (eg with  string:match) to replace RDF's old "aboutEach"
+functionality. Use to implement the URI spec and protocol specs, etc.
+""";
+    rdfs:range log:String.
+
+log:rawUri a rdf:Property;
+    rdfs:comment 
+"""This allows one to look at the actual string of the URI which identifies this,
+for anything, even a blank node or a formula. This peeks into the internal
+workings of cwm, and so is not normally used. Use log:uri instead.
+""";
     rdfs:range log:String.
 
 log:racine a rdf:Property;
     rdfs:comment """For anything identified by a URI with a fragid, this is the
-        thing identified by the same URI without a hash or fragid""".
+thing identified by the same URI without a hash or fragid.
+For anything else, it is itself.""".
 
 
 

@@ -45,69 +45,136 @@ math:TwoMemberedList a rdfs:Class; rdfs:label "TwoMemberedList";
    rdfs:comment 
      "This is the class of things that are math lists with only two members." .
 
-# Reverse functions:
+# Reverse functions:  (obsolete - we stdize on forwrad ones i think -tbl)
 
 math:differenceOf a math:ReverseFunction; rdfs:label "differenceOf"; 
    rdfs:domain math:Value; rdfs:range math:TwoMemberedList; 
-   rdfs:comment "The difference of the list members" .
+   rdfs:comment "The difference of the list members. (obsolete)" .
 
 math:factors a math:ReverseFunction; rdfs:label "factors"; 
    rdfs:domain math:Value; rdfs:range math:List;
    daml:inverse math:product; 
-   rdfs:comment "A list of values which multiply to produce the subject." .
+   rdfs:comment "A list of values which multiply to produce the subject. (obsolete)" .
 
 math:quotientOf a math:ReverseFunction; rdfs:label "quotientOf"; 
    rdfs:domain math:Value; rdfs:range math:TwoMemberedList; 
-   rdfs:comment "The quotient of the list members" .
+   rdfs:comment "The quotient of the list members (obsolete)" .
 
 math:remainderOf a math:ReverseFunction; rdfs:label "remainderOf"; 
    rdfs:domain math:Value; rdfs:range math:TwoMemberedList; 
-   rdfs:comment "The remainder of the list members" .
+   rdfs:comment "The remainder of the list members (obsolete)" .
 
 math:negationOf a math:Function, math:ReverseFunction;
    rdfs:label "negation"; 
    rdfs:domain math:Value; rdfs:range math:Value; 
-   rdfs:comment "The subject is the negotation of the object" .
+   rdfs:comment "The subject is the negotation of the object (obsolete)" .
 
 math:exponentiationOf a math:ReverseFunction; rdfs:label "exponentiationOf"; 
    rdfs:domain math:Value; rdfs:range math:TwoMemberedList; 
-   rdfs:comment "For exponOf(x, (y, z)), x = y^z" .
+   rdfs:comment "For exponOf(x, (y, z)), x = y^z   (obsolete)" .
+
+#  Forward function
 
 math:memberCount a math:Function; rdfs:label "memberCount"; 
    rdfs:domain math:List; rdfs:range math:Value; 
-   rdfs:comment "The number of items in a list" .
+   rdfs:comment """The number of items in a list. The subject is a list,
+the object is calculated as the number of members.""" .
 
 
 # Logical operators:
 
 math:greaterThan a math:StrictProperty; rdfs:label "greaterThan"; 
 #   rdfs:subPropertyOf string:greaterThan;     No, basically no relation - tbl
-   rdfs:comment "Is greater than";
+   rdfs:comment """True iff the subject is a string representation of a number which  is greater than the number of which the object is a string representation.""";
    rdfs:domain math:Value; rdfs:range math:Value .
 
 math:notGreaterThan a math:StrictProperty;
     rdfs:label "notGreaterThan"; 
 #   rdfs:subPropertyOf string:notGreaterThan;  No, basically no relation -tbl
-    rdfs:comment "Is not greater than";
+    rdfs:comment """True iff the subject is a string representation of a number which is NOT greater than the number of which the object is a string representation.""";
     rdfs:domain math:Value; rdfs:range math:Value .
 
 math:lessThan a math:StrictProperty; rdfs:label "lessThan"; 
 #   rdfs:subPropertyOf string:lessThan;   No, basically no relation
-   rdfs:comment "Numerically less than";
+   rdfs:comment """True iff the subject is a string representation of a number which  is LESS than a number of which the object is a string representation.""";
    rdfs:domain math:Value; rdfs:range math:Value .
 
 math:notlessThan a math:StrictProperty; rdfs:label "notlessThan"; 
    rdfs:subPropertyOf string:notlessThan; 
-   rdfs:comment "Is not less than";
+   rdfs:comment """True iff the subject is a string representation of a number which  is NOT LESS than a number of which the object is a string representation.""";
    rdfs:domain math:Value; rdfs:range math:Value .
 
 math:equalTo a math:StrictProperty; rdfs:label "equalTo"; 
-   rdfs:comment "Numerically equal to";
+   rdfs:comment """True iff the subject is a string representation of a number which  is EQUAL TO a number of which the object is a string representation.""";
    rdfs:domain math:Value; rdfs:range math:Value .
 
 math:notEqualTo a math:StrictProperty; rdfs:label "notEqualTo"; 
-   rdfs:comment "Not equal to";
+   rdfs:comment """True iff the subject is a string representation of a number which  is NOT EQUAL to a number of which the object is a string representation.""";
    rdfs:domain math:Value; rdfs:range math:Value .
+
+
+math:sum a rdf:Property;
+	rdfs:label "sum";
+	rdfs:range math:Value;
+	rdfs:comment
+"""The subject is a list of numbers.
+The object is calculated as the arithmentic sum of those numbers.
+""".
+
+math:difference a rdf:Property;
+	rdfs:label "difference";
+	rdfs:range math:Value;
+	rdfs:comment
+"""The subject is a pair of numbers. The object
+is calculated by subtracting the second number of the pair from the first.
+""".
+
+math:product a rdf:Property;
+	rdfs:label "product";
+	rdfs:range math:Value;
+	rdfs:comment
+"""The subject is a list of numbers.
+The object is calculated as the arithmentic product of those numbers.
+""".
+
+math:difference a rdf:Property;
+	rdfs:label "difference";
+	rdfs:range math:Value;
+	rdfs:comment
+"""The subject is a pair of numbers. The object
+is calculated by dividing the first number of the pair by the second.
+""".
+
+math:exponentiation a rdf:Property;
+	rdfs:label "exponentiation";
+	rdfs:range math:Value;
+	rdfs:comment
+"""The subject is a pair of numbers. The object
+is calculated by raising the first number of the power of the second.
+""".
+
+math:negation a rdf:Property;
+	rdfs:label "negation";
+	rdfs:range math:Value;
+	rdfs:domain math:Value;
+	rdfs:comment
+"""The subject or object is calculated to be the negation of the other.""".
+
+math:absoluteValue a rdf:Property;
+	rdfs:label "negation";
+	rdfs:range math:Value;
+	rdfs:domain math:Value;
+	rdfs:comment
+"""The object is calulated as the absolute value of the subject.""".
+
+math:rounded a rdf:Property;
+	rdfs:label "rounded";
+	rdfs:range math:Value;
+	rdfs:domain math:Value;
+	rdfs:comment
+"""The object is calulated as the subject rounded to the nearest integer.""".
+
+
 
 #ends
 
