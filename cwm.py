@@ -221,6 +221,7 @@ def compareURI(self, other):
         if s > o :
 #            print s, "GREATER THAN", o
             return 1
+        print "Error with '%s' being the same as '%s'" %(s,o)
         raise internalError # Strings should not match if not same object
 
 
@@ -400,6 +401,7 @@ class StoredStatement:
         for p in [CONTEXT, SUBJ, PRED, OBJ]: # Note NOT internal order
             if self.triple[p] is not other.triple[p]:
                 return compareURI(self.triple[p],other.triple[p])
+        progress("Problem with duplicates: '%s' and '%s'" % (quadToString(self.triple),quadToString(other.triple)))
         raise internalerror # SHould never have two identical distinct
         
 class RDFStore(notation3.RDFSink) :
@@ -857,16 +859,18 @@ class RDFStore(notation3.RDFSink) :
 
 
 ########1#########################  Manipulation methods:
-
+#
+#  Note when we move things, then the store may shrink as they may
+# move on top of existing entries and we don't allow duplicates.
+#
     def moveContext(self, old, new):
         for s in old.occursAs[CONTEXT][:] :   # Copy list!
-            con, pred, subj, obj = s.triple
+            self.removeStatement(s)
             for p in CONTEXT, PRED, SUBJ, OBJ:
                 x = s.triple[p]
                 if x is old:
                     s.triple = s.triple[:p] + (new,) + s.triple[p+1:]
-                    old.occursAs[p].remove(s)
-                    new.occursAs[p].append(s)
+            self.storeQuad(s.triple)
                 
 #  Clean up intermediate results:
 #
@@ -1708,11 +1712,17 @@ Examples:
                 _gotInput = _gotInput + 1  # input filename
             
 
+# Between passes, prepare for processing
+
 #  Base defauts
 
-        if option_baseURI == _baseURI:
-            if _gotInput == 1 and not option_test:
-                _baseURI = option_inputs[0]
+        if option_baseURI == _baseURI:  # Base not specified explicitly - special case
+            if _outURI == _baseURI:      # Output name not specified either
+                if _gotInput == 1 and not option_test:  # But input file *is*, 
+                    _outURI = option_inputs[0]        # Just output to same URI
+                    option_baseURI = _outURI          # using that as base.
+                    progress("unchanged base is " + _outURI)
+
 
 #  Metadata context - storing information about what we are doing
 
@@ -1720,13 +1730,12 @@ Examples:
 	_runURI = _metaURI+`time.time()`
 	history = None
 
-# Between passes, prepare for processing
-
-        _outURI = _baseURI
-        if option_baseURI == _baseURI: # If base not specified
-            if _gotInput == 1 and not option_test: # and only one input then relative to that
-                _outURI = option_inputs[0]
-        if option_outURI: _outURI = urlparse.urljoin(_outURI, option_outURI)
+#        _outURI = _baseURI
+#        if option_baseURI == _baseURI: # If base not specified
+#            if _gotInput == 1 and not option_test: # and only one input then relative to that
+#                _outURI = option_inputs[0]
+#                
+#        if option_outURI: _outURI = urlparse.urljoin(_outURI, option_outURI)
         
 	if option_rdf:
             _outSink = notation3.ToRDF(sys.stdout, _outURI, base=option_baseURI)
@@ -1734,7 +1743,7 @@ Examples:
             _outSink = notation3.ToN3(sys.stdout.write, _outURI, base=option_baseURI)
         version = "$Id$"
 	_outSink.makeComment("Processed by " + version[1:-1]) # Strip $ to disarm
-	_outSink.makeComment("    using base " + _baseURI)
+	_outSink.makeComment("    using base " + option_baseURI)
 
 
         if option_pipe:
