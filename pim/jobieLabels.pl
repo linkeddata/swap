@@ -60,7 +60,7 @@ sub readLabels{
 	     'deliveryAddress' => 2,
 	     'cityName' => 3,
 	     'stateAbbr' => 4,
-	     'zipCode' => 5 );
+	     'zip' => 5 );
 
   while(<>){
     if(/<(\w+:)?MailingLocation>/ #@@KLUDGE namespace prefix
@@ -83,7 +83,9 @@ sub readLabels{
 
       print STDERR "@@ $n `$d' [ $schema{$n} ]\n";
 
-      $fields[$schema{$n}] = $d;
+      if(defined($schema{$n})){
+	$fields[$schema{$n}] = $d;
+      }
     }
   }
 
@@ -91,7 +93,10 @@ sub readLabels{
 }
 
 # $Log$
-# Revision 1.1  2002-01-21 23:16:49  connolly
+# Revision 1.2  2002-06-12 15:41:05  connolly
+# tweak of 16 Apr
+#
+# Revision 1.1  2002/01/21 23:16:49  connolly
 # works in at least one test case
 #
 # Revision 1.3  2001/12/30 08:22:03  connolly
