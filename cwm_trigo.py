@@ -95,7 +95,7 @@ class BI_atan2(LightBuiltIn, Function):
 	"""
     def evaluateObject(self, subj_py): 
         if len(subj_py) == 2:
-	    return atan2(numeric(subj_py[0]) - numeric(subj_py[1]))
+	    return atan2(numeric(subj_py[0]),numeric(subj_py[1]))
 
 class BI_cos(LightBuiltIn, Function):
 	"""
