@@ -1,15 +1,15 @@
 # Test data in notation3 http://www.w3.org/DesignIssues/Notation3.html
 #    
 #
-bind x: <http://example.org/x-ns/> .
-bind dc: <http://purl.org/dc/elements/1.1/> .
+@prefix x: <http://example.org/x-ns/#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/#> .
 
 
 # 
 
    [ >- x:firstname -> "Ora" ] >- dc:wrote ->
     [ >- dc:title -> "Moby Dick" ] .
-     bind default <http://example.org/default>.
+     @prefix default <http://example.org/default#>.
      <uriPath> :localProp :defaultedName .
 
 # ENDS

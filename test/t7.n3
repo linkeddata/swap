@@ -2,15 +2,15 @@
 # Test data in notation3 http://www.w3.org/DesignIssues/Notation3.html
 #    
 # t0
-bind x: <http://example.org/x-ns/> .
-bind dc: <http://purl.org/dc/elements/1.1/> .
+@prefix x: <http://example.org/x-ns/#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/#> .
+@prefix : <http://example.org/default#>.
 
 
 # t1
 
    [ >- x:firstname -> "Ora" ] >- dc:wrote ->
     [ >- dc:title -> "Moby Dick" ] .
-     bind default <http://example.org/default>.
      <uriPath> :localProp :defaultedName .
      
 #    t2="""
@@ -44,8 +44,8 @@ bind dc: <http://purl.org/dc/elements/1.1/> .
  ].
 
 #    t3="""
-bind pp: <http://example.org/payPalStuff?>.
-bind default <http://example.org/payPalStuff?>.
+@prefix pp: <http://example.org/payPalStuff?#>.
+@prefix default <http://example.org/payPalStuff?#>.
 
 <> a pp:Check; pp:payee :tim; pp:amount "$10.00";
   dc:author :dan; dc:date "2000/10/7" ;
@@ -54,11 +54,11 @@ bind default <http://example.org/payPalStuff?>.
 
 # Janet's chart:
 #    t4="""
-bind q: <http://example.org/>.
-bind m: <>.
-bind n: <http://example.org/base/>.
-bind : <s1.n3>.   # Test schema 
-bind w3c: <http://www.w3.org/2000/10/org>.
+@prefix q: <http://example.org/#>.
+@prefix m: <#>.
+@prefix n: <http://example.org/base/#>.
+@prefix : <s1.n3#>.   # Test schema 
+@prefix w3c: <http://www.w3.org/2000/10/org#>.
 
 <#QA> :includes 
  [  = w3c:internal ; :includes <#TAB> , <#interoperability> ,

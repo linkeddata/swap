@@ -39,10 +39,11 @@
 #  Start notation3 generation
 #  $Id$
 
-     bind log: <http://www.w3.org/2000/10/swap/log> .
-     bind ont: <http://www.daml.org/2001/03/daml-ont> .
-     bind test: <file:/afs/w3.org/pub/WWW/2000/10/swap/test/s1.n3> .
-     bind : <http://www.example.org/> .
+    @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    @prefix ont: <http://www.daml.org/2001/03/daml-ont#> .
+    @prefix test: <file:/afs/w3.org/pub/WWW/2000/10/swap/test/s1.n3#> .
+    @prefix : <http://www.example.org/#> .
+
     :camshaft test:partOf :engine .
     :train test:includes :engine .
     :car test:includes :engine .

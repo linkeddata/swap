@@ -120,10 +120,12 @@ class SinkParser:
     	self._bindings = bindings
 	self._thisDoc = thisDoc
 #	self._context = SYMBOL , self._thisDoc    # For storing with triples @@@@ use stack
-        self._contextStack = []      # For nested conjunctions { ... }
+#        self._contextStack = []      # For nested conjunctions { ... }
 #        self._nextId = 0
         self.lines = 0              # for error handling
         self._genPrefix = genPrefix
+	self.keywords = ['a', 'this', 'bind', 'has', 'is', 'of' ]
+	self.keywordsSet = 0    # When and only when they have been set can others be considerd qnames
         self._anonymousNodes = []   # List of anon nodes already declared
 
         if baseURI: self._baseURI = baseURI
@@ -139,6 +141,7 @@ class SinkParser:
             formulaURI = formulaURI # Formula node is what the document parses to
 	self._formula = sink.newFormula(formulaURI)
         self._context = self._formula
+	self._parentContext = None
         
         if metaURI:
             self.makeStatement((SYMBOL, metaURI), # relate document to parse tree
@@ -204,19 +207,15 @@ class SinkParser:
     _namechars = string.lowercase + string.uppercase + string.digits + '_-'
 
     def tok(self, tok, str, i):
-        """tokenizer strips whitespace and comment"""
-        j = self.skipSpace(str,i)
-        if j<0: return j
-        i = j
-        
-#	while 1:
-#            while i<len(str) and str[i] in string.whitespace:
-#                i = i + 1
-#            if i == len(str): return -1
-#            if str[i] == N3CommentCharacter:     # "#"?
-#                while i<len(str) and str[i] != "\n":
-#                    i = i + 1
-#            else: break
+        """Check for keyword.  Space must have been stripped on entry and
+	we must not be at end of file."""
+
+	if str[i:i+1] == "@":
+	    i = i+1
+	else:
+	    if tok not in self.keywords:
+		return -1   # Nope, this has neither keywords declaration nor "@"
+
 	if (str[i:i+len(tok)] == tok
             and (tok[0] not in _namechars    # check keyword is not prefix
                 or str[i+len(tok)] in string.whitespace )):
@@ -226,12 +225,23 @@ class SinkParser:
 	    return -1
 
     def directive(self, str, i):
-        delim = "#"
+	j = self.skipSpace(str, i)
+	if j<0: return j # eof
+
 	j = self.tok('bind', str, i)        # implied "#". Obsolete.
-	if j<0:
-            j=self.tok('@prefix', str, i)   # no implied "#"
-            delim = ""
-            if j<0: return -1
+	if j>0: raise BadSyntax(self._thisDoc, self.lines, str, i, "keyword bind is obsolete: use @prefix")
+
+	j = self.tok('keywords', str, i)
+	if j>0:
+	    raise BadSyntax(self._thisDoc, self.lines, str, i, "Sorry, '@keywords' not implemented yet")
+
+	j = self.tok('from', str, i)
+	if j>0:
+	    raise BadSyntax(self._thisDoc, self.lines, str, i,
+		"Sorry, '@from <xxx> @import a, b, c.' not implemented yet")
+
+	j=self.tok('prefix', str, i)   # no implied "#"
+	if j<0: return -1
 	
 	t = []
 	i = self.qname(str, j, t)
@@ -239,8 +249,8 @@ class SinkParser:
 	j = self.uri_ref2(str, i, t)
 	if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected uriref2 after bind _qname_")
 
-        ns = t[1][1] + delim
-        if string.find(ns,"##")>=0: raise BadSyntax(self._thisDoc, self.lines, str, j-2, "trailing # illegal on bind: use @prefix")
+        ns = t[1][1]
+#        if string.find(ns,"##")>=0: raise BadSyntax(self._thisDoc, self.lines, str, j-2, "trailing # illegal on bind: use @prefix")
         ns = join(self._baseURI, ns)
         assert ':' in ns # must be absolute
 	self._bindings[t[0][0]] = ns
@@ -268,15 +278,12 @@ class SinkParser:
     def statement(self, str, i):
 	r = []
 
-	i = self.object(str, i, r)       #  Allow literal - This extends RDF model
-#	i = self.subject(str, i, r)        # Don't allow literal - according to RDF model.
-	if i<0:
-	    return -1
+	i = self.object(str, i, r)       #  Allow literal for subject - This extends RDF model
+	if i<0: return i
 
 	j = self.property_list(str, i, r[0])
 
 	if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected propertylist")
-
 	return j
 
     def subject(self, str, i, res):
@@ -292,88 +299,83 @@ class SinkParser:
 	<- prop -<
 	_operator_"""
 
+	j = self.skipSpace(str, i)
+	if j<0:return j # eof
+	
 	r = []
+
 	j = self.tok('has', str, i)
 	if j>=0:
 	    i = self.prop(str, j, r)
-	    if i < 0: raise BadSyntax(self._thisDoc, self.lines, str, j, "expected prop")
+	    if i < 0: raise BadSyntax(self._thisDoc, self.lines, str, j, "expected property after 'has'")
 	    res.append(('->', r[0]))
 	    return i
-	else:
-	    j = self.tok('is', str, i)
-	    if j>=0:
-		i = self.prop(str, j, r)
-		if i < 0: raise BadSyntax(self._thisDoc, self.lines, str, j, "expected prop")
-		j = self.tok('of', str, i)
-		if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected 'of' after prop")
-		res.append(('<-', r[0]))
-		return j
-	    else:
-		j = self.tok('a', str, i)
-		if j>=0:
-		    res.append(('->', RDF_type))
-		    return j
-		else:
-		    j = self.tok('=', str, i)
-		    if j>=0:
-			res.append(('->', DAML_equivalentTo))
-			return j
-		    else:
-			j = self.prop(str, i, r)
-			if j >= 0:
-			    res.append(('->', r[0]))
-			    return j
-			else:
+
+	j = self.tok('is', str, i)
+	if j>=0:
+	    i = self.prop(str, j, r)
+	    if i < 0: raise BadSyntax(self._thisDoc, self.lines, str, j, "expected <property> after 'is'")
+	    j = self.skipSpace(str, i)
+	    if j<0:
+		raise BadSyntax(self._thisDoc, self.lines, str, i, "EOF found, expected property after 'is'")
+		return j # eof
+	    i=j
+	    j = self.tok('of', str, i)
+	    if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected 'of' after 'is' <prop>")
+	    res.append(('<-', r[0]))
+	    return j
+
+	j = self.tok('a', str, i)
+	if j>=0:
+	    res.append(('->', RDF_type))
+	    return j
+
 	    
-			    j = self.tok('>-', str, i)
-			    if j>=0:
-				i = self.prop(str, j, r)
-				j = self.tok('->', str, i)
-				if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "-> expected")
-				res.append(('->', r[0]))
-				return j
-			    else:
-				j = self.tok('<-', str, i)
-				if j>=0:
-				    i = self.prop(str, j, r)
-				    if i<0: raise BadSyntax(self._thisDoc, self.lines, str, j, "bad verb syntax")
-				    j = self.tok('<-', str, i)
-				    if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "<- expected")
-				    res.append(('<-', r[0]))
-				    return j
-				else:
-				    return self.operator(str, i, res)
+	if str[i:i+2] == "<=":
+	    res.append(('<-', LOG_implies))
+	    return i+2
+
+	if str[i:i+1] == "=":
+	    if str[i+1:i+2] == ">":
+		res.append(('->', LOG_implies))
+		return i+2
+	    res.append(('->', DAML_equivalentTo))
+	    return i+1
+
+	if str[i:i+2] == ":=":
+	    res.append(('->', LOG_becomes))   # patch file relates two formulae, uses this
+	    return i+2
+
+	j = self.prop(str, i, r)
+	if j >= 0:
+	    res.append(('->', r[0]))
+	    return j
+
+	if str[i:i+2] == ">-" or str[i:i+2] == "<-":
+	    raise BadSyntax(self._thisDoc, self.lines, str, j, ">- ... -> syntax is obsolete.")
+
+	return -1
 
     def prop(self, str, i, res):
 	return self.node(str, i, res)
 
     def node(self, str, i, res, subjectAlready=None):
+	"""Parse the <node> production.
+	Space is now skipped once at the beginning
+	instead of in multipe calls to self.skipSpace().
+	"""
         subj = subjectAlready
 
-        j = self.tok('this', str, i)   # This context
-        if j>=0:
-            res.append(self._context)
-            return j
+	j = self.skipSpace(str,i)
+	if j<0: return j #eof
+	i=j
+	ch = str[i:i+1]  # Quick 1-character checks first:
 
-	if subj is None:   # If this can be a named node, then check for a name.
-            j = self.uri_ref2(str, i, res)
-            if j >= 0:
-                if res[0][0] == ANONYMOUS:
-                    x = SYMBOL , self._genPrefix + res[0][1] # ANONYMOUS node
-                    if x not in self._anonymousNodes:
-                        self._anonymousNodes.append(x)
-                        self.makeStatement((self._formula, # Make declaration at outermost level
-                            (SYMBOL, N3_forSome_URI), #pred
-                            self._formula,  #subj    Scope of universal quantification is whole document
-                            x))                      # declare it as anonymous only once
-                    res[0] = x
-                return j
-
-
-        j = self.tok('[', str, i)
-        if j>=0:
-            i = self.tok('=', str, j)
-            if i>=0:
+        if ch == "[":
+	    j=self.skipSpace(str,i+1)
+	    if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "EOF after '['")
+	    if str[j:j+1] == "=":     #   Hack for "is"  binding name to anon node
+		i = j+1
                 objs = []
                 j = self.object_list(str, i, objs);
                 if j>=0:
@@ -382,23 +384,31 @@ class SinkParser:
                         for obj in objs:
                             self.makeStatement((self._context,
                                                 DAML_equivalentTo, subj, obj))
-                    i = self.tok(';', str, j)
-                    if i>=0: j = i
+		    j = self.skipSpace(str, j)
+		    if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i,
+			"EOF when object_list expected after [ = ")
+		    if str[j:j+1] == ";":
+			j=j+1
                 else:
-                    raise BadSyntax(self._thisDoc, self.lines, str, i, "object_list expected after [ = ")
+                    raise BadSyntax(self._thisDoc, self.lines, str, i, "object_list expected after [= ")
 
             if subj is None: subj=self._sink.newBlankNode(self._context)
 
             i = self.property_list(str, j, subj)
             if i<0: raise BadSyntax(self._thisDoc, self.lines, str, j, "property_list expected")
-            j = self.tok(']', str, i)
-            if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "']' expected")
-            res.append(subj)
-            return j
 
-        j = self.tok('{', str, i)
-        if j>=0:
-            oldContext = self._context
+	    j = self.skipSpace(str, i)
+	    if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i,
+		"EOF when ']' expected after [ <propertyList>")
+	    if str[j:j+1] != "]":
+		raise BadSyntax(self._thisDoc, self.lines, str, j, "']' expected")
+            res.append(subj)
+            return j+1
+
+        if ch == "{":
+	    j=i+1
+            oldParentContext = self._parentContext
+	    self._parentContext = self._context
             if subj is None: subj = self._sink.newFormula()
             self._context = subj
             
@@ -406,24 +416,27 @@ class SinkParser:
                 i = self.skipSpace(str, j)
                 if i<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "needed '}', found end.")
                 
-                j = self.tok('}', str,i)
-                if j >=0: break
+		if str[i:i+1] == "}":
+		    j = i+1
+		    break
                 
                 j = self.directiveOrStatement(str,i)
                 if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected statement or '}'")
 
-            self._context = oldContext # restore
+            self._context = self._parentContext
+	    self._parentContext = oldParentContext
             res.append(subj)
             return j
 
-        j = self.tok('(', str, i)    # List abbreviated syntax?
-        if j>=0:
+        if ch == "(":
+	    j=i+1
             previous = None  # remember value to return
             while 1:
                 i = self.skipSpace(str, j)
                 if i<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "needed ')', found end.")                    
-                j = self.tok(')', str,i)
-                if j >=0: break
+                if str[i:i+1] == ')':
+		    j = i+1
+		    break
 
                 item = []
                 j = self.object(str,i, item)
@@ -453,55 +466,91 @@ class SinkParser:
             res.append(head)
             return j
 
+        j = self.tok('this', str, i)   # This context
+        if j>=0:
+            res.append(self._context)
+            return j
+
+	if subj is None:   # If this can be a named node, then check for a name.
+            j = self.uri_ref2(str, i, res)
+            if j >= 0:
+                if res[0][0] == ANONYMOUS:
+                    x = SYMBOL , self._genPrefix + res[0][1] # ANONYMOUS node
+                    if x not in self._anonymousNodes:
+                        self._anonymousNodes.append(x)
+                        self.makeStatement((self._formula, # Make declaration at outermost level
+                            (SYMBOL, N3_forSome_URI), #pred
+                            self._formula,  #subj    Scope of universal quantification is whole document
+                            x))                      # declare it as anonymous only once
+                    res[0] = x
+                return j
+
         return -1
         
     def property_list(self, str, i, subj):
+	"""Parse property list
+	Leaves the terminating punctuation in the buffer
+	"""
 	while 1:
-            j = self.tok(":-", str,i)
-            if j >=0:
+	    j = self.skipSpace(str, i)
+	    if j<0:
+		raise BadSyntax(self._thisDoc, self.lines, str, i, "EOF found when expected verb in property list")
+		return j #eof
+
+            if str[j:j+2] ==":-":
+		i = j + 2
                 res = []
-                i = self.node(str, j, res, subj)
-                if i<0: raise BadSyntax(self._thisDoc, self.lines, str, j, "bad {} or () or [] node after :- ")
+                j = self.node(str, i, res, subj)
+                if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "bad {} or () or [] node after :- ")
+		i=j
                 continue
-                
+	    i=j
 	    v = []
 	    j = self.verb(str, i, v)
             if j<=0:
-		return i # void
-	    else:
-		objs = []
-		i = self.object_list(str, j, objs)
-		if i<0: raise BadSyntax(self._thisDoc, self.lines, str, j, "object_list expected")
-		for obj in objs:
-		    dir, sym = v[0]
-		    if dir == '->':
-			self.makeStatement((self._context, sym, subj, obj))
-		    else:
-			self.makeStatement((self._context, sym, obj, subj))
+		return i # void but valid
 
-		j = self.tok(';', str, i)
-		if j<0:
-		    return i
-		i = j
+	    objs = []
+	    i = self.object_list(str, j, objs)
+	    if i<0: raise BadSyntax(self._thisDoc, self.lines, str, j, "object_list expected")
+	    for obj in objs:
+		dir, sym = v[0]
+		if dir == '->':
+		    self.makeStatement((self._context, sym, subj, obj))
+		else:
+		    self.makeStatement((self._context, sym, obj, subj))
+
+	    j = self.skipSpace(str, i)
+	    if j<0:
+		raise BadSyntax(self._thisDoc, self.lines, str, j, "EOF found in list of objects")
+		return j #eof
+	    if str[i:i+1] != ";":
+		return i
+	    i = i+1 # skip semicolon and continue
 
     def object_list(self, str, i, res):
 	i = self.object(str, i, res)
 	if i<0: return -1
 	while 1:
-	    j = self.tok(',', str, i)
-	    if j<0: return i    # Found something else!
-            i = self.object(str, j, res)
+	    j = self.skipSpace(str, i)
+	    if j<0:
+		raise BadSyntax(self._thisDoc, self.lines, str, j, "EOF found after object")
+		return j #eof
+	    if str[j:j+1] != ",":
+		return j    # Found something else!
+            i = self.object(str, j+1, res)
+	    if i<0: return i
 
     def checkDot(self, str, i):
-            j = self.tok('.', str, i)
-            if j >=0: return j
-            
-            j = self.tok('}', str, i)
-            if j>=0: return i # Can omit . before these
-            j = self.tok(']', str, i)
-            if j>=0: return i # Can omit . before these
-
-            raise BadSyntax(self._thisDoc, self.lines, str, i, "expected '.' or '}' or ']' at end of statement")
+	    j = self.skipSpace(str, i)
+	    if j<0: return j #eof
+	    if str[j:j+1] == ".":
+		return j+1  # skip
+	    if str[j:j+1] == "}":
+		return j     # don't skip it
+	    if str[j:j+1] == "]":
+		return j
+            raise BadSyntax(self._thisDoc, self.lines, str, j, "expected '.' or '}' or ']' at end of statement")
             return i
 
 
@@ -530,12 +579,11 @@ class SinkParser:
             if not string.find(ns, "#"):print"Warning: no # on NS %s,"%(ns,)
 	    return j
 
-#        v = []
-#        j = self.variable(str,i,v)
-#        if j>0:                    #Forget varibles as a class, only in context.
-#            res.append(internVariable(self._thisDoc,v[0]))
-#            res.append((VARIABLE, v[0]))
-#            return j
+        v = []
+        j = self.variable(str,i,v)
+        if j>0:                    #Forget varibles as a class, only in context.
+            res.append(v[0])
+            return j
         
         j = self.skipSpace(str, i)
         if j<0: return -1
@@ -573,7 +621,7 @@ class SinkParser:
 	return i
 
     def variable(self, str, i, res):
-	"""	?abc -> 'abc'
+	"""	?abc -> variable(:abc)
   	"""
 
 	j = self.skipSpace(str, i)
@@ -585,9 +633,9 @@ class SinkParser:
 	while i <len(str) and str[i] in _namechars: #@@ check for intial alpha
             i = i+1
 	if self._parentContext == None:
-	    raise BadSyntax(self._thisDoc, self.lines, str, i,
-			    "?xxx syntax used for variable in outermost level: impossible.")
-	var = self.sink.newUniversal(str[j:1], self._parentContext)
+	    raise BadSyntax(self._thisDoc, self.lines, str, j,
+			    "Can't use ?xxx syntax for variable in outermost level: %s" % str[j-1:i])
+	var = self.sink.newUniversal(str[j:i], self._parentContext)
         res.append( str[j:i])
 #        print "Variable found: <<%s>>" % str[j:i]
         return i
@@ -595,7 +643,7 @@ class SinkParser:
     def qname(self, str, i, res):
 	"""
 	xyz:def -> ('xyz', 'def')
-	# not any more: def -> ('', 'def')
+	If not in keywords and keywordsSet: def -> ('', 'def')
 	:def -> ('', 'def')    
 	"""
 
@@ -742,29 +790,9 @@ class SinkParser:
         return j, uch
 
 
+# If we are going to do operators then they should generate
+#  [  is  operator:plus  of (  \1  \2 ) ]
 
-    def operator(self, str, i, res):
-	j = self.tok('+', str, i)
-	if j >= 0:
-	    res.append((SYMBOL, '+')) #@@ convert to operator:plus and then to URI
-	    return j
-
-	j = self.tok('-', str, i)
-	if j >= 0:
-	    res.append((SYMBOL,'-')) #@@
-	    return j
-
-	j = self.tok('*', str, i)
-	if j >= 0:
-	    res.append((SYMBOL,'*')) #@@
-	    return j
-
-	j = self.tok('/', str, i)
-	if j >= 0:
-	    res.append((SYMBOL,'/')) #@@
-	    return j
-	else:
-	    return -1
 
 class BadSyntax(SyntaxError):
     def __init__(self, uri, lines, str, i, why):

@@ -1,9 +1,9 @@
 #    Test filter in N3
 #
-bind log: <http://www.w3.org/2000/10/swap/log> .
-bind mech: <s1.n3> .
-bind daml: <http://www.daml.org/2001/03/daml+oil> .
-bind : <> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix mech: <s1.n3#> .
+@prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
+@prefix : <#> .
 
 #  Simple one-triple template:
 #

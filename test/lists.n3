@@ -1,9 +1,9 @@
 # Test list syntax
 #
 
-bind t: <test> .
-bind : <test> .
-bind ont: <http://www.w3.org/2000/10/swap/log> .
+@prefix t: <test#> .
+@prefix : <test#> .
+@prefix ont: <http://www.w3.org/2000/10/swap/log#> .
 
 # Other interesting unimplemented syntaxes ...
 #[ log:first :a;

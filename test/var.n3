@@ -1,8 +1,8 @@
 #
 #   Notation 3 variables
 #
-bind logically: <http://www.example.org/logic> .
-bind : <> .
+@prefix logically: <http://www.example.org/logic#> .
+@prefix : <#> .
 
 #  not current syntax   -sandro
 #{  ?a :child ?b. }  logically:implies { ?b :parent ?b . }  .
