@@ -2692,31 +2692,37 @@ class Query:
 	
         import SqlDB
         from SqlDB import ResultSet, SqlDBAlgae, ShowStatement
-	# progress("Whee! time to call EricP's code!\nRemote Query:", items, variables, existentials)
 
+        # SqlDB stores results in a ResultSet.
         rs = ResultSet()
+        # QueryPiece qp stores query tree.
         qp = rs.buildQuerySetsFromCwm(items, query.variables, query.existentials)
+        # Extract access info from the first item.
         (user, password, host, database) = re.match("^sql://(?:([^@:]+)(?::([^@]+))?)@?([^/]+)/([^/]+)/$",
                                                     items[0].service.uri).groups()
+        # Look for one of a set of pre-compiled rdb schemas.
         HostDB2SchemeMapping = { "sql://root@localhost/w3c" : "AclSqlObjects" }
         if (HostDB2SchemeMapping.has_key(items[0].service.uri)):
-            cachedDetails = HostDB2SchemeMapping.get(items[0].service.uri)
+            cachedSchema = HostDB2SchemeMapping.get(items[0].service.uri)
         else:
-            cachedDetails = None
-        a = SqlDBAlgae(query.store.internURI(items[0].service.uri), cachedDetails, user, password, host, database, query.meta, query.store.pointsAt)
+            cachedSchema = None
+        # The SqlDBAlgae object knows how to compile SQL query from query tree qp.
+        a = SqlDBAlgae(query.store.internURI(items[0].service.uri), cachedSchema, user, password, host, database, query.meta, query.store.pointsAt)
+        # Execute the query.
         messages = []
         nextResults, nextStatements = a._processRow([], [], qp, rs, messages, {})
-        rs.results = nextResults
+        # rs.results = nextResults # Store results as initial state for next use of rs.
         if verbosity() > 90: progress(string.join(messages, "\n"))
         if verbosity() > 90: progress("query matrix \"\"\""+rs.toString({'dataFilter' : None})+"\"\"\" .\n")
 
 	bindings = []
-	reason = Because("Remote query") # @ add more info?
+	reason = Because("Remote query") # could be messages[0] which is the query
+        # Transform nextResults to format cwm expects.
         for resultsRow in nextResults:
             boundRow = []
             for i in range(len(query.variables)):
                 v = query.variables[i]
-                index = rs.getVarIndex(`v`) # @@@ may be in different, but equivilent, ns prefix
+                index = rs.getVarIndex(v)
                 interned = query.store.intern((LITERAL, `resultsRow[index]`))
                 boundRow = boundRow + [(v, interned)]
             bindings.append((boundRow, reason))

@@ -149,23 +149,21 @@ class ResultSet:
     def myIntern(self, q, index, variables, existentials):
         try:
             existentials.index(q)
-            symbol = q.fragid
             try:
-                index = self.varIndex[symbol]
+                index = self.varIndex[q]
             except KeyError, e:
-                index = self.varIndex[symbol] = len(self.indexVar)
-                self.indexVar.append(symbol)
-            return (VariableQueryPiece(symbol, index, 1))
+                index = self.varIndex[q] = len(self.indexVar)
+                self.indexVar.append(q)
+            return (VariableQueryPiece(q.fragid, index, 1)) # uri1#foo and uri2#foo may collide
         except ValueError, e:
             try:
                 variables.index(q)
-                symbol = q.fragid
                 try:
-                    index = self.varIndex[symbol]
+                    index = self.varIndex[q]
                 except KeyError, e:
-                    index = self.varIndex[symbol] = len(self.indexVar)
-                    self.indexVar.append(symbol)
-                return (VariableQueryPiece(symbol, index, 0))
+                    index = self.varIndex[q] = len(self.indexVar)
+                    self.indexVar.append(q)
+                return (VariableQueryPiece(q.fragid, index, 0))
             except ValueError, e:
                 try:
                     return (LiteralQueryPiece(q.string))
