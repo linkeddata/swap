@@ -39,6 +39,11 @@ def sniffLanguage(stream, baseURI=ianaBase):
     >>> sniff.sniffLanguage(f)
     'http://www.w3.org/1999/xhtml#html'
 
+    Note the first line still appears next...
+    
+    >>> f.readline().strip()
+    '<?xml version="1.0" encoding="UTF-8"?>'
+    
     Now try a few sniffs of text/plain documents.   This one has no
     override:
     
@@ -52,6 +57,15 @@ def sniffLanguage(stream, baseURI=ianaBase):
     >>> sniff.sniffLanguage(f)
     'http://www.isi.edu/in-notes/iana/assignments/media-types/application/octet-stream'
 
+    #>>> f=urllib.urlopen("file:/home/sandro/WWW/2000/10/swap/test/crypto/acc.n3")
+    #>>> sniff.sniffLanguage(f)
+    #'application/vnd.w3c.n3'
+
+    @@ still needs a way to handle suffixes: n3, nt, etc.
+    http://archive.ncsa.uiuc.edu/SDG/Software/Mosaic/Docs/extension-map.html
+    http://web.pydoc.org/2.2/mimetypes.html
+    use .mime.types
+    
     """
 
     lang = stream.info().type
@@ -151,7 +165,10 @@ class sniffXMLHandler(xml.sax.handler.ContentHandler):
     
 
 # $Log$
-# Revision 1.1  2003-01-10 21:33:18  sandro
+# Revision 1.2  2003-01-10 21:59:39  sandro
+# added notes about n3, a little more doctest
+#
+# Revision 1.1  2003/01/10 21:33:18  sandro
 # first version, trying to put down in code something that's been
 # bouncing around in my head (and various notes) for quite some time.
 #
