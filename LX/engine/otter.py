@@ -54,7 +54,7 @@ def run(string, fileBase=",lx.engine.otter"):
     f.write("formula_list(usable).\n")
     f.write(string)
     # if not string.endswith("."): f.write(".")
-    f.write("\nend_list.")
+    f.write("\nend_of_list.")
     f.close()
     return runOtter(filename, out)
 
