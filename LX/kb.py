@@ -6,6 +6,7 @@ __version__ = "$Revision$"
 import re
 
 import LX
+import LX.rdf
 
 class UnsupportedDatatype(RuntimeError):
     pass
@@ -42,41 +43,42 @@ class KB(list):
 
     (aka a sentence in "prenex" form.)
 
-    Meanwhile, we also can store information about fixed
-    interpretations of constant symbols.  If you want to say something
-    about the integer 57, you can make a symbol
-
-    >>> from LX.all import *
-    >>> my57 = Constant(suggestedName="the number fifty-seven")
-
-    and then tell your kb that that symbol actually MEANS what python
-    means by the number 57.
-    
-    >>> kb = KB()
-    >>> kb.interpret(my57, 57)
-    >>> print kb.getInterpretations(my57)
-    [57]
-
-    Now other bits of code using your kb can see and use that fact.
-    If you want to serialize the kb in a language that has integers,
-    it can just use that fact.  Alternatively, you could rewrite that
-    interpretation information into other information, perhaps using
-    URIs.
-
-    [ This information is lost in a plain
-    conversion of the KB to a Formula, unless there are describers
-    used/usable to encode it into more formulas.  Those describers
-    still need SOME fixed-interpretation objects (eg Zero and Succ,
-    for this example).
-
-    How exactly URIs fit into this story is still debatable.
-    Strictly, we should do it via something like...  strings and the
-    magic 'uri' function.  But what is that URI function?  Aint no
-    such thing, .. there's various ones.  Maybe the kburi function
-    works okay -- ie what KB is most strongly denoted by the URI?
-    (Sometimes I think we'd be better of with just a basis vocabulary
-    for describing strings, and an englishDenotation() function.)
-    ]
+    [ @@@OBSOLETE -- NEED TO WRITE ABOUT HOW WE NOW HANDLE DATATYPES ... ]
+    xMeanwhile, we also can store information about fixed
+    xinterpretations of constant symbols.  If you want to say something
+    xabout the integer 57, you can make a symbol
+    x
+    x>>> from LX.all import *
+    x>>> my57 = Constant(suggestedName="the number fifty-seven")
+    x
+    xand then tell your kb that that symbol actually MEANS what python
+    xmeans by the number 57.
+    x 
+    x>>> kb = KB()
+    x>>> kb.interpret(my57, 57)
+    x>>> print kb.getInterpretations(my57)
+    x[57]
+    x
+    xNow other bits of code using your kb can see and use that fact.
+    xIf you want to serialize the kb in a language that has integers,
+    xit can just use that fact.  Alternatively, you could rewrite that
+    xinterpretation information into other information, perhaps using
+    xURIs.
+    x 
+    x[ This information is lost in a plain
+    xconversion of the KB to a Formula, unless there are describers
+    xused/usable to encode it into more formulas.  Those describers
+    xstill need SOME fixed-interpretation objects (eg Zero and Succ,
+    xfor this example).
+    x
+    xHow exactly URIs fit into this story is still debatable.
+    xStrictly, we should do it via something like...  strings and the
+    xmagic 'uri' function.  But what is that URI function?  Aint no
+    xsuch thing, .. there's various ones.  Maybe the kburi function
+    xworks okay -- ie what KB is most strongly denoted by the URI?
+    x(Sometimes I think we'd be better of with just a basis vocabulary
+    xfor describing strings, and an englishDenotation() function.)
+    x]
     
     """
 
@@ -109,6 +111,7 @@ class KB(list):
         return result
     
     def interpret(self, term, object):
+        raise RuntimeError, "not anymore!   interface changed!"
         self.__interpretation.setdefault(term, []).append(object)
         self.__revInterpretation.setdefault(object, []).append(term)
 
@@ -316,8 +319,57 @@ class KB(list):
             return 1
         # ... just let other exceptions bubble up, for now
 
+    def gather(self, prefixMap={}):
+        """Fetch more knowledge associated with each term in the KB.
+
+        Basically do a web retrieval on each URI term and incorporate
+        the result.   This can be repeated if you want a broader
+        inclusion.
+
+        The prefixMap is used to override certain URI terms and point
+        them somewhere else, such as when the published content for
+        OWL doesn't contain the OWL axioms, you might use
+          { 'http://www.w3.org/2002/07/owl#':
+            'file:web-override/owl/' }
+
+        Mapping to None means no gathering should be done on that prefix.
+            
+        The actual retrieval and parsing is done by .load(...)
+        """
+        uris = { }
+        for formula in self:
+            LX.logic.gatherURIs(formula, uris)
+            #print "Did Formula", "Got", uris
+        loadable = { }
+        for uri in uris.keys():
+            #print "Do with: ", uri
+            for (key, value) in prefixMap.iteritems():
+                if uri.startswith(key):
+                    if value is None:
+                        uri = None
+                        #print " ... Dropped"
+                    else:
+                        uri = value + uri[len(key):]
+                        #print " ... prefix", value
+                    break
+            if uri is None: continue
+            try:
+                uri=uri[0:uri.index("#")]
+                #print "  ... chopped"
+            except ValueError:
+                pass
+            loadable[uri] = 1
+            #print "  ... done, as ", uri
+        for uri in loadable.keys():
+            self.load(uri)
+            
+
     def load(self, uri, allowedLanguages=["*"]):
-        """NOT IMPLEMENTED: Add the formal meaning of identified document.
+        """Add the formal meaning of identified document.
+
+        ONLY BARELY IMPLEMENTED.   Intended to work in a
+        blindfold-like manner; just works for hard coded languages
+        right now.
 
         @@@   languageOverrides={}
            a mapping from string->string, overriding self-identificat.
@@ -357,6 +409,9 @@ class KB(list):
                  expression's meaning and separable metadata. 
 
         """
+        print "LOADING ",uri,
+        print "  (not really...)"
+        
 
 def _test():
     import doctest, kb
@@ -366,7 +421,10 @@ if __name__ == "__main__": _test()
 
  
 # $Log$
-# Revision 1.12  2003-08-01 15:27:21  sandro
+# Revision 1.13  2003-08-20 09:26:48  sandro
+# update --flatten code path to work again, using newer URI strategy
+#
+# Revision 1.12  2003/08/01 15:27:21  sandro
 # kind of vaguely working datatype support (for xsd unsigned ints)
 #
 # Revision 1.11  2003/07/31 18:25:15  sandro

@@ -41,9 +41,9 @@ def toLX(store, formula, maxDepth=4, kb=None, kbMode=0, terms={}):
             return terms[formula]
         except KeyError:
             # then it's a constant!
-            toLXVar(store, formula, terms, makeWith=LX.logic.Constant)
-            kb.interpret(terms[formula],     ### bug:  need to know position in triple!
-                         LX.uri.DescribedThing(formula.uriref()))
+            toLXVar(store, formula, terms, makeWith=LX.logic.ConstantForURI)
+            #kb.interpret(terms[formula],     ### bug:  need to know position in triple!
+            #             LX.uri.DescribedThing(formula.uriref()))
             return terms[formula]
 
     #iTerms = terms.copy()
@@ -101,7 +101,7 @@ def toLXVar(store, term, vars, makeWith=0):
     try:
         return vars[term]
     except KeyError:
-        v = makeWith(suggestedName=term.uriref())
+        v = makeWith(term.uriref())
         vars[term] = v
         return v
 
@@ -166,12 +166,10 @@ def addLXFormula(store, context, expr, terms={}, kb=None):
                 sym = terms[term]
             except KeyError:
                 #print "What llyn tuple to use for", term, "index", index
-                uri = None
-                interps = kb.getInterpretations(term)
-                assert(len(interps) == 1)
-
-                #rint "... Interp:", interps[0]
-                uri = interps[0].uriOfDescription
+                try:
+                    uri = term.uri
+                except AttributeError:
+                    pass   # @@@@  No, really, what should we do here?
                 sym = store.intern((RDFSink.SYMBOL, uri),)
                     
 ##                 if isinstance(term, LX.URIRef):
@@ -192,7 +190,10 @@ def addLXFormula(store, context, expr, terms={}, kb=None):
 
 
 # $Log$
-# Revision 1.4  2003-02-14 22:21:10  sandro
+# Revision 1.5  2003-08-20 09:26:49  sandro
+# update --flatten code path to work again, using newer URI strategy
+#
+# Revision 1.4  2003/02/14 22:21:10  sandro
 # Got it mostly working again, so data can roundtrip between
 # llyn and lx.Exprs.  Still buggy about uris, rdf(s,p,o) vs p(s,o),
 # some logic constructs -> llyn, and multiple interpretations.

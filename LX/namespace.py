@@ -8,7 +8,8 @@ See modules defaultns.py for some uses.
 __version__ = "$Revision$"
 # $Id$
 
-import LX.uri
+#import LX.uri
+import LX.logic
 
 class Namespace:
     """
@@ -45,20 +46,25 @@ class Namespace:
             self.add(name)
 
     def add(self, name):
-        self.__dict__[name] = LX.uri.DescribedThing(self.uri + "#" + name)
+        # self.__dict__[name] = LX.uri.DescribedThing(self.uri + "#" + name)
+        self.__dict__[name] = LX.logic.ConstantForURI(self.uri + "#" + name)
 
     def __getattr__(self, name):
         if self.strict:
             msg = ("No name %s declared for namespace %s (in strict mode)" %
                    (name, self.uri))
             raise AttributeError, msg
-        result = LX.uri.DescribedThing(self.uri + "#" + name)
+        #result = LX.uri.DescribedThing(self.uri + "#" + name)
+        result = LX.logic.ConstantForURI(self.uri + "#" + name)
         self.__dict__[name] = result
         return result
 
 
 # $Log$
-# Revision 1.4  2003-02-14 19:39:03  sandro
+# Revision 1.5  2003-08-20 09:26:48  sandro
+# update --flatten code path to work again, using newer URI strategy
+#
+# Revision 1.4  2003/02/14 19:39:03  sandro
 # adopted smart <...> syntax
 #
 # Revision 1.3  2003/02/13 19:28:10  sandro

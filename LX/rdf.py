@@ -9,6 +9,8 @@ __version__ = "$Revision$"
 import LX
 from LX.ladder import Ladder
 from LX.defaultns import rdfns, lxns
+from LX.describer import CombinedDescriber, ListDescriber, DescriptionFailed
+import LX.logic
 
 def flatten(kb, toKB, indirect=0):
     """Return a formula which expresses the same knowledge, but using
@@ -18,12 +20,12 @@ def flatten(kb, toKB, indirect=0):
     otherwise they just get copied over.
     
     """
-    d = LX.CombinedDescriber([FormulaDescriber(), URIRefDescriber(),
-                              VariableDescriber(), LX.ListDescriber()])
+    d = CombinedDescriber([FormulaDescriber(), URIRefDescriber(),
+                              VariableDescriber(), ListDescriber()])
     ladder = Ladder(("kb", toKB))
     ladder = ladder.set("trace", 1)
     for f in kb:
-        if f.function is LX.RDF and not indirect:
+        if f.getFunction() is LX.logic.RDF and not indirect:
             toKB.add(f)
         else:
             term = d.describe(f, ladder)
@@ -44,15 +46,15 @@ def unflatten(f):
 class VariableDescriber:
 
     def describe(self, object, ladder):
-        if not isinstance(object, LX.Variable):
-            raise LX.DescriptionFailed, 'not a variable term'
+        if not isinstance(object, LX.logic.Variable):
+            raise DescriptionFailed, 'not a variable term'
         if ladder.has("term"):
             raise (DescriptionFailed,
                        'Cannot describe variable as some term w/out eq')
         else:
             #@@@   keep a global map to exivars?
-            #term = ladder.kb.newExistential()
-            term = object
+            term = ladder.kb.newExistential()
+            # term = object
             
         if ladder.has("verbose"):
             ladder.kb.add(term, rdfns.type, lxns.Variable)
@@ -65,8 +67,10 @@ class URIRefDescriber:
         #if isinstance(object, LX.Operator):
         #    print "Describing an operator...   Ignoring for now..."
         #    return ladder.kb.newExistential()
-        if not isinstance(object, LX.URIRef):
-            raise LX.DescriptionFailed, 'not a uriref term'
+        try:
+            uri=object.uri
+        except AttributeError:
+            raise DescriptionFailed, 'not a uriref term'
         if ladder.has("term"):
             term = ladder.term
         else:
@@ -91,14 +95,14 @@ class FormulaDescriber:
         }
     
     def describe(self, object, ladder):
-        if not isinstance(object, LX.expr.Expr):
-            raise LX.DescriptionFailed, 'not a formula'
+        if object.isAtomic():
+            raise DescriptionFailed, "atomic (can't be formula)"
         if ladder.has("term"):
             term = ladder.term
         else:
             term = ladder.kb.newExistential()
 
-        entry = self.nameTable[object.function]
+        entry = self.nameTable[object.getFunction()]
 
         if ladder.has("verbose"):
             ladder.kb.add(term, rdfns.type, entry[0])
@@ -128,7 +132,10 @@ def denotation(triple, index):
     return LX.uri.Resource(u)
     
 # $Log$
-# Revision 1.8  2003-02-14 17:21:59  sandro
+# Revision 1.9  2003-08-20 09:26:48  sandro
+# update --flatten code path to work again, using newer URI strategy
+#
+# Revision 1.8  2003/02/14 17:21:59  sandro
 # Switched to import-as-needed for LX languages and engines
 #
 # Revision 1.7  2003/02/13 19:49:30  sandro
