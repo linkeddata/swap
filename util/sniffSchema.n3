@@ -12,8 +12,8 @@ dc:relation <sniffSchema.rdf>, <sniffSchema.n3>.
 @prefix log:  <http://www.w3.org/2000/10/swap/log#> .
 @prefix str:  <http://www.w3.org/2000/10/swap/string#> .
 
-@prefix   : <sniffSchema#>.
-@prefix ss: <sniffSchema#>.
+@prefix   : <http://www.w3.org/2000/10/swap/util/sniffSchema#>.
+@prefix ss: <http://www.w3.org/2000/10/swap/util/sniffSchema#>.
 
 this log:forAll :P, :C, :X, :T.
 
