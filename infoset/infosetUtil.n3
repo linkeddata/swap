@@ -1,0 +1,140 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+
+<> dc:title "Infoset Utilites";
+ dc:source <http://www.w3.org/TR/2001/WD-xml-infoset-20010316/>;
+ dc:description """rules and such...""".
+
+@prefix iu: <infosetUtil#>.
+@prefix dl: <mid:damlList#>. #@@
+@prefix dpo:  <http://www.daml.org/2001/03/daml+oil#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log.n3#>.
+@prefix : <#>. #variables
+
+iu:propertyName rdfs:label "property name";
+  rdfs:subPropertyOf rdfs:label;
+  rdfs:comment "section 2. Information Items. @@isDefinedBy?";
+  rdfs:domain dpo:UniqueProperty. # all infoset properties are unique/many-to-one/functional.
+
+iu:itemName rdfs:label "item name";
+  rdfs:subPropertyOf rdfs:label;
+  rdfs:domain rdfs:Class.
+
+iu:listOf rdfs:label "list of";
+  rdfs:range rdfs:Class.
+iu:setOf rdfs:label "set of";
+  rdfs:comment "finite set of some class";
+  rdfs:range rdfs:Class;
+  rdfs:domain iu:Set;
+  a dpo:UniqueProperty, dpo:UnambiguousProperty.
+iu:Set rdfs:subClassOf rdfs:Bag;
+  rdfs:label "Set";
+  rdfs:comment "finite set";
+  a dpo:UniqueProperty, dpo:UnambiguousProperty.
+<> log:forAll :x, :C.
+{ :x dl:member [ a [ iu:listOf :C ] ]} log:implies { :x a :C }. #iff rule?@@
+{ :x a [ a [ iu:setOf :C ] ]} log:implies { :x a :C }. #iff rule?@@
+
+iu:AbsoluteURI   rdfs:label "Absolute URI";
+  rdfs:subClassOf rdfs:Literal;
+  rdfs:comment "@@connect with XML Schema data type and/or 03swell/URI stuff".
+
+iu:String  rdfs:label "String";
+  rdfs:subClassOf rdfs:Literal;
+  rdfs:comment "@@connect with XML Schema data type stuff".
+
+iu:Boolean rdfs:label "Boolean";
+  rdfs:subClassOf rdfs:Literal;
+  dpo:oneOf ( iu:true iu:false );
+  rdfs:comment "@@connect with XML Schema data type stuff".
+iu:true rdfs:label "true".
+iu:false rdfs:label "false".
+
+rdfs:Literal rdfs:label "Literal".
+
+iu:EncName rdfs:label "EncName";
+  iu:pattern "[A-Za-z][A-Za-z0-9._-]*"; #@@ double-check this.
+  rdfs:isDefinedBy <http://www.w3.org/TR/REC-xml#NT-EncName>;
+  rdfs:subClassOf iu:Name;
+  rdfs:comment"production [81] from the XML spec".
+
+iu:Name rdfs:label "Name";
+  iu:pattern "@@";
+  rdfs:subClassOf iu:String;
+  rdfs:comment"production [@@] from the XML spec".
+
+iu:NCName rdfs:label "NCName";
+  iu:pattern "@@";
+  rdfs:subClassOf iu:Name;
+  rdfs:comment"production [@@] from the Namespaces in XML spec".
+iu:Prefix rdfs:label "Prefix";
+  dpo:disjointUnionOf (iu:NoValue iu:NCName).
+
+iu:VersionNum rdfs:label "VersionNum";
+  iu:pattern "[a-zA-Z0-9_.:-]+";
+  rdfs:subClassOf iu:String;
+  rdfs:isDefinedBy <http://www.w3.org/TR/REC-xml#NT-VersionNum>.
+
+iu:pattern rdfs:label "pattern";
+  rdfs:comment "@@xml schema datatype facet";
+  rdfs:domain rdfs:Class.
+
+iu:StandAloneType rdfs:label "Standalone Type";
+  dpo:oneOf ( :yes :no ).
+iu:NoValue rdfs:label "No Value";
+  dpo:oneOf ( :noValue ). #@@ cf bottom in KIF v3
+
+## Set utilities...
+         
+iu:instance dpo:inverseOf rdf:type.
+
+dpo:toClass rdfs:domain rdfs:Class.
+
+# a theorem: if X subset Y, then PowerSet(X) subset PowerSet(Y)
+<> log:forAll :E1, :E2, :C1, :C2, :P, :Q.
+
+{ :C1 is iu:setOf of :C2 }
+   log:means { :C1 dpo:onProperty :instance; dpo:toClass :E1 }.
+iu:setOf a dpo:UnambiguousProperty.
+iu:setOf a dpo:UniqueProperty.
+{ :P log:means :Q } log:implies { :P log:implies :Q. :Q log:implies :P. }.
+
+{ :C1 is iu:setOf of :E1.
+  :C2 is iu:setOf of :E2.
+  :E1 rdfs:subClassOf :E2. }
+  log:implies { :C1 rdfs:subClassOf :C2. }.
+
+
+# explain a bit of daml...
+dpo:toClass rdfs:range rdfs:Class.
+
+<> log:forAll :C1, :x, :L, :C2.
+
+{ :L dpo:first :x } log:implies { :L dl:member :x }.
+{ :L dpo:rest [ dl:member :x ] } log:implies { :L dl:member :x }.
+
+{ :C1 dpo:disjointUnionOf :L.
+  :L dl:member :C2 }
+  log:implies { :C2 rdfs:subClassOf :C1 }.
+
+dpo:oneOf rdfs:domain rdfs:Class.
+
+{ :C1 dpo:oneOf :L.
+  :L dl:member :x.
+}
+  log:implies { :x a :L }.
+
+# some rdfs rules...
+rdfs:domain rdfs:domain rdfs:Class.
+rdfs:range rdfs:domain rdfs:Class.
+
+<> log:forAll :s, :p, :o, :p2.
+{ :s :p :o.
+  :p rdfs:subPropertyOf :p2 }
+log:implies { :s :p2 :o }.
+# (part of?) the definition of rdfs:domain...
+<> log:forAll :s, :p, :o, :C.
+{ :s :p :o.
+  :p rdfs:domain :C. } log:implies { :s a :C }.
+
