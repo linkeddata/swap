@@ -266,6 +266,7 @@ def doCommand():
 --rules     Apply rules in store to store, adding conclusions to store
 --think     as -rules but continue until no more rule matches (or forever!)
 --think=foo as -apply=foo but continue until no more rule matches (or forever!)
+--crypto    Enable processing of crypto builtin functions. Requires python crypto.
 --reify     Replace the statements in the store with statements describing them.
 --flat      Reify only nested subexpressions (not top level) so that no {} remain.
 --help      print this message
