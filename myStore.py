@@ -23,7 +23,10 @@ History:
     Spilt of from  thing.py 2003-08-19
 
 $Log$
-Revision 1.3  2004-01-28 23:03:00  connolly
+Revision 1.4  2004-01-29 21:10:39  timbl
+ooops - ref to SYMBOL
+
+Revision 1.3  2004/01/28 23:03:00  connolly
 - added unit tests to confirm that symbol functions take ustrings
 - wrapped some comments at 79 chars
   per http://www.python.org/doc/essays/styleguide.html
@@ -153,7 +156,7 @@ class Namespace(object):
     def sym(self, lname):
 	"""For getting a symbol for an expression, rather than a constant.
 	For, and from, pim/toIcal.py"""
-	return  _checkStore(self.store).intern((SYMBOL, self._name + lname))
+	return  _checkStore(self.store).symbol(self._name + lname)
 
 
 
