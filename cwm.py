@@ -226,8 +226,12 @@ class BI_EqualTo(LightBuiltIn,Function, ReverseFunction):
     def evaluateSubject(self, store, context, obj, obj_py):
         return obj
 
+class BI_notEqualTo(LightBuiltIn):
+    def evaluate(self, store, context, subj, subj_py, obj, obj_py):
+        return (subj is not obj)   # Assumes interning
+
+
 # Functions 
-    
     
 class BI_uri(LightBuiltIn, Function, ReverseFunction):
 
@@ -235,8 +239,25 @@ class BI_uri(LightBuiltIn, Function, ReverseFunction):
         return store.intern((LITERAL, subj.uriref()))
 
     def evaluateSubject(self, store, context, obj, obj_py):
-        if type(obj_py, ""):
+        if type(obj_py) == type(""):
             return store.intern((RESOURCE, obj_py))
+
+class BI_rawType(LightBuiltIn, Function):
+    """
+    The raw type is a type from the point of view of the langauge: is
+    it a forumla, list, and so on. Needed for test for formula in finding subformulae
+    eg see test/includes/check.n3 
+    """
+
+    def evaluateObject(self, store, context, subj, subj_py):
+        if isinstance(subj, Literal): y = store.Literal
+        elif isinstance(subj, Formula): y = store.Formula
+        elif subj.definedAsListIn(): y = store.List
+        else: y = store.Other  #  None?  store.Other?
+        if chatty > 91:
+            progress("%s  rawType %s." %(`subj`, y))
+        return y
+        
 
 class BI_racine(LightBuiltIn, Function):    # The resource whose URI is the same up to the "#" 
 
@@ -294,20 +315,19 @@ class BI_resolvesTo(HeavyBuiltIn, Function):
         
         if chatty > 10: progress("Reading and parsing " + `doc`)
         inputURI = doc.uriref()
+        loadToStore(store, inputURI)
+        if chatty>10: progress("resolvesTo FORMULA addr: %s" % (inputURI+ "#_formula"))
+        F = store.intern((FORMULA, inputURI+ "#_formula"))
+        return F
+    
+class BI_resolvesToIfPossible(HeavyBuiltIn, Function):
+    def evaluateObject2(self, store, subj):
         try:
-            loadToStore(store, inputURI)
+            return BI_resolvesTo.evaluateObject2(self, store, subj)
         except (IOError, SyntaxError):
             if chatty > 0: progress("Error trying to resolve <" + inputURI + ">") 
             return None
-        else:
-            if chatty>10: progress("resolvesTo FORMULA addr: %s" % (inputURI+ "#_formula"))
-            F = store.intern((FORMULA, inputURI+ "#_formula"))
-            return F
     
-    def evaluate2(self, store, subj, obj, variables, bindings):
-        F = self.evaluateObject2(store, subj)
-        return (F == obj) # @@@@@@@@@@@@@@@@@@@@@@@@@@@@ do structual equivalnce thing
-
 
 HTTP_Content_Type = 'content-type' #@@ belongs elsewhere?
 
@@ -317,12 +337,30 @@ def loadToStore(store, addr):
     
     netStream = urllib.urlopen(addr)
     ct=netStream.headers.get(HTTP_Content_Type, None)
+#    if chatty > 19: progress("HTTP Headers:" +`netStream.headers`)
+#    @@How to get at all headers??
+#    @@ Get sensible net errors and produce dignostics
 
-    if ct.find('xml') >= 0 or ct.find('rdf') >= 0:
+    guess = ct
+    if chatty > 29: progress("Content-type: " + ct)
+    if ct.find('text/plain') >=0 :   # Rats - nothing to go on
+        buffer = netStream.read(500)
+        netStream.close()
+        netStream = urllib.urlopen(addr)
+        if buffer.find('xmlns') >=0:
+            guess = 'application/xml'
+        elif buffer[0] == "#" or buffer[0:7] == "@prefix":
+            guess = 'application/n3'
+        if chatty > 29: progress("    guess " + guess)
+            
+    # Hmmm ... what about application/rdf; n3 or vice versa?
+    if guess.find('xml') >= 0 or guess.find('rdf') >= 0:
+        if chatty > 49: progress("Parsing as RDF")
         import sax2rdf, xml.sax._exceptions
         p = sax2rdf.RDFXMLParser(store, addr)
         p.loadStream(netStream)
     else:
+        if chatty > 49: progress("Parsing as N3")
         p = notation3.SinkParser(store, addr)
         p.startDoc()
         p.feed(netStream.read())
@@ -342,9 +380,6 @@ class BI_hasContent(HeavyBuiltIn, Function): #@@DWC: Function?
         C = store.intern((LITERAL, str))
         return C
 
-    def evaluate2(self, store, subj, obj, variables):
-        C = self.evaluateObject2(store, subj)
-        return (C == obj)
 
 class BI_n3ExprFor(HeavyBuiltIn, Function):
     def evaluateObject2(self, store, subj):
@@ -361,9 +396,6 @@ class BI_n3ExprFor(HeavyBuiltIn, Function):
             F = store.intern((FORMULA, inputURI+ "#_formula"))
             return F
     
-    def evaluate2(self, store, subj, obj, variables):
-        F = self.evaluateObject2(store, subj)
-        return (F == obj) # @@@@@@@@@@@@@@@@@@@@@@@@@@@@ do structual equivalnce thing
 
     
 ###################################################################################        
@@ -390,7 +422,7 @@ class RDFStore(notation3.RDFSink) :
         self.implies = self.internURI(Logic_NS + "implies")
         self.asserts = self.internURI(Logic_NS + "asserts")
         
-# Light Builtins:
+# Register Light Builtins:
         log = self.internURI(Logic_NS[:-1])   # The resource without the hash
         daml = self.internURI(notation3.DAML_NS[:-1])   # The resource without the hash
 
@@ -403,24 +435,32 @@ class RDFStore(notation3.RDFSink) :
 
 # Functions:        
 
-        self.racine =           log.internFrag("racine", BI_racine)  # Strip fragment identifier from string
+        log.internFrag("racine", BI_racine)  # Strip fragment identifier from string
+
+        self.rawType =          log.internFrag("rawType", BI_rawType) # syntactic type, oneOf:
+        self.Literal =          log.internFrag("Literal", Fragment) # syntactic type possible value - a class
+        self.List =             log.internFrag("List", Fragment) # syntactic type possible value - a class
+        self.Formula =          log.internFrag("Formula", Fragment) # syntactic type possible value - a class
+        self.Other =            log.internFrag("Other", Fragment) # syntactic type possible value - a class (Use?)
 
 # Bidirectional things:
-        self.uri =              log.internFrag("uri", BI_uri)
-        self.equalTo =     log.internFrag("equalTo", BI_EqualTo)
+        log.internFrag("uri", BI_uri)
+        log.internFrag("equalTo", BI_EqualTo)
+        log.internFrag("notEqualTo", BI_notEqualTo)
 
 # Heavy relational operators:
 
         self.includes =         log.internFrag( "includes", BI_includes)
-        self.directlyIncludes = log.internFrag("directlyIncludes", BI_directlyIncludes)
-        self.notIncludes =      log.internFrag("notIncludes", BI_notIncludes)
-        self.notDirectlyIncludes = log.internFrag("notDirectlyIncludes", BI_notDirectlyIncludes)
+        log.internFrag("directlyIncludes", BI_directlyIncludes)
+        log.internFrag("notIncludes", BI_notIncludes)
+        log.internFrag("notDirectlyIncludes", BI_notDirectlyIncludes)
 
 #Heavy functions:
 
-        self.resolvesTo =       log.internFrag("resolvesTo", BI_resolvesTo)
-        self.hasContent =       log.internFrag("hasContent", BI_hasContent)
-        self.n3ExprFor  =       log.internFrag("n3ExprFor",  BI_n3ExprFor)
+        self.resolvesTo = log.internFrag("resolvesTo", BI_resolvesTo)
+        log.internFrag("resolvesToIfPossible", BI_resolvesToIfPossible)
+        log.internFrag("hasContent", BI_hasContent)
+        log.internFrag("n3ExprFor",  BI_n3ExprFor)
         
 # Constants:
 

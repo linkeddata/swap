@@ -365,11 +365,18 @@ class Function:
     def __init__(self):
         pass
     
-    def evaluate(self, store, context,  subj, obj, subj_py, obj_py):    # For inheritance only
-        return (obj is self.evaluateObject( store, context, subj, subj_py))
+    def evaluate(self, store, context,  subj, subj_py, obj, obj_py):    # For inheritance only
+        x = self.evaluateObject( store, context, subj, subj_py)
+        return (obj is x)
 
     def evaluateObject(self, store, context, subj, subj_py):
         raise function_has_no_evaluate_object_method #  Ooops - you can't inherit this.
+
+# This version is used by heavy functions:
+
+    def evaluate2(self, store, subj, obj, variables, bindings):
+        F = self.evaluateObject2(store, subj)
+        return (F is obj) # @@@@@@@@@@@@@@@@@@@@@@@@@@@@ do structual equivalnce thing
 
 
 # A function can calculate its object from a given subject
@@ -379,6 +386,10 @@ class ReverseFunction:
 
     def evaluate(self, store, context, subj, subj_py, obj, obj_py):    # For inheritance only
         return (subj is self.evaluateSubject(store, context, obj, obj_py))
+
+    def evaluate2(self, store, subj, obj, variables, bindings):
+        F = self.evaluateObject2(store, obj)
+        return (F is subj) # @@@@@@@@@@@@@@@@@@@@@@@@@@@@ do structual equivalnce thing
 
     def evaluateSubject(self, store, context, obj, obj_py):
         raise reverse_function_has_no_evaluate_subject_method #  Ooops - you can't inherit this.
