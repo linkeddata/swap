@@ -1,0 +1,48 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#>.
+@prefix rcs: <http://www.w3.org/2001/03swell/rcs#>.
+
+<> dc:description """fiddling around with proof-checking""";
+  rcs:id "$Id$";
+  dc:creator [ 
+	contact:fullName "Dan Connolly";
+	contact:homePage <http://www.w3.org/People/Connolly/>;
+	contact:mailbox <mailto:connolly@w3.org>
+	];
+  dc:rights "copyright (c) 2001 W3C (MIT, Keio, INRIA)".
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+
+@prefix : <fido-proof#>.
+
+@prefix pf: <proof@@#>.
+@prefix ex: <http://example/vocab#>.
+
+:given1
+  pf:proves { this log:forAll :x.
+              { :x a ex:Dog } log:implies { :x ex:gets ex:Fleas } }.
+
+:given2
+  pf:proves { ex:fido a ex:Dog. }.
+
+this log:forAll :PfPthenQ, :PfPgnd, :A, :P, :Q, :F, :Pgnd, :v.
+{ :PfPgnd pf:proves :Pgnd.
+  :PfPthenQ pf:proves [ log:includes { :P log:implies :Q };
+                      ].
+}
+  log:implies {
+   [ a pf:GeneralizedModusPonens; pf:pfIfPthenQ :PfPthenQ; pf:pfP :PfPgnd;
+        :_pgnd :Pgnd;
+        :_p :P;
+        :_q :Q; ]
+  }.
+
+{ :PfPgnd pf:proves :Pgnd.
+  :PfPthenQ pf:proves :F.
+  :F log:includes { :P log:implies :Q }.
+  :P log:includes :Pgnd. #@@?@?@?
+}
+  log:implies {
+   [ a pf:GeneralizedModusPonens; pf:pfIfPthenQ :PfPthenQ; pf:pfP :PfPgnd ]
+     pf:proves :Qgnd
+  }.
