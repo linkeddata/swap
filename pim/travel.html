@@ -41,7 +41,7 @@ tasks:</p>
 <li><a href="#ckcn">check proposed work travel itineraries against family constraints</a></li>
 <li><a href="#pda-in">import travel itineraries into my PDA calendar</a></li>
 <li><a href="#fw">tell me when my travel schedule brings me unusually near a friend/colleague</a></li>
-<li><a href="#fw">produce animated views of my travel schedule or past trips</ap></li>
+<li><a href="#fw">produce animated views of my travel schedule or past trips</a></li>
 <li><a href="#fw">find conflicts between teleconferences and flights</a></li>
 </ul>
 
@@ -151,6 +151,9 @@ nicer. I drew it with dia; you can play <a
 href="travelFig.xml">travelFig.xml</a>, the source. I'm working on <a
 href="/2002/03owlt/umlp/dia2owl.xsl">dia2owl.xsl</a>, which converts it to
 RDF/S: <a href="travelFig.rdf">travelFig.rdf</a>.
+
+<p>TODO: more stuff in the diagram? socialParticipants, eventOccursAt, etc.</p>
+
 </div>
 </div>
 
@@ -252,7 +255,7 @@ machine a fairly deep understanding of the itinerary:</p>
 <p><img alt="MCI to YMX and back for Extreme 2002"
 src="../../../../2003/04dc-mia/itin-mia.png" /></p>
 
-<div class="noprint mechanics">more details are in the <a href="../../../../2003/04dc-mia/Makefile">Makefile</a></div>
+<div class="noprint mechanics">more details are in the <a href="../../../../2003/04dc-mia/Makefile">Apr 2003 trip Makefile</a></div>
 </div>
 
 
@@ -306,6 +309,12 @@ a number of interoperable tools, such as Ximian Evolution:</p>
 <img alt="evo screenshot" src="calIntShot.png" />
 </div>
 
+<div class="noprint mechanics">
+FYI: python/evolution stuff: <a
+    href="http://heddley.com/edd/2002/03/05/evocal.py">evocal.py</a> from
+    Edd. relies on debian package: evolution-dev. also: <a
+    href="http://heddley.com/edd/2002/03/05/python-libversit-0.1.tar.gz">python-libversit</a>
+</div>
 
 <h2 id="plain-text-sum">Plain Text Summaries</h2>
 
@@ -399,152 +408,44 @@ in the datebook]</em></div>
 <p>For the first few integration tasks, it might have been less work
 to just manually copy the data, field by field.  But the return on
 investment increases with each trip I take, each system we integrate
-with, and each collaborator who develops and interoperable tool.</p>
+with, and each collaborator who develops an interoperable tool.</p>
 
-<p>@@future work</p>
+<p>The DAML project is a source of not just airport lat/long data, but
+also tools such as <a
+href="http://www.daml.org/2001/06/itinerary/">DAML itinerary</a> by
+Mike Dean.</p>
 
-<div class="noprint">
-<hr />
-<h2>Fodder</h2>
+<p>Ideas for future work include:</p>
 
-<h2>Steps Toward Synchronization</h2>
-
-<p>@@"if it's in my HTML schedule but not in evo, print it out in evo format
-for import".</p>
-
-<p>Diagram with more stuff: socialParticipants, eventOccursAt, etc.</p>
-
-<p>details from <a href="/2002/08dc-ymx/Makefile">Makefile</a>:</p>
-
-<p>First, scrape a formal version of my HTML schedule:</p>
-<pre>status-formal.rdf: $(TEAM)/connolly.html $(SW)/schedScrape.xsl
-   $(XSLTPROC) --novalid $(SW)/schedScrape.xsl $(TEAM)/connolly.html &gt;$@</pre>
-
-<p>Then, convert evo ical to RDF:</p>
-<pre>,evocal.rdf: $(HOME)/evolution/local/Calendar/calendar.ics $(PIM)/ical2rdf.pl
-$(PERL) $(PIM)/ical2rdf.pl $(HOME)/evolution/local/Calendar/calendar.ics &gt;$@</pre>
-
-<p>Finally, check rules ala:</p>
-<pre>evoMissing.n3: status2evo.n3 status-formal.rdf ,evocal.rdf
-   $(PYTHON) $(CWM) status2evo.n3 --think &gt;$@</pre>
-
-<p>The rules look like <em>[@@TODO: update ical names w.r.t.
-capitalization]</em>:</p>
-<pre>{
-  :P s:subPropertyOf :cityName.
-&lt;status-formal.rdf&gt; log:semantics [
-  log:includes {
-    :E r:value :WHAT;
-      k:socialParticipants [ con:mailbox &lt;mailto:connolly@w3.org&gt; ];
-      k:eventOccursAt [ :P :CITYNAME; ];
-      k:startingDate [ dt:date :START ];
-      k:endingDate [ dt:date :END ];
-    
-  }].
-
-  # ... date conversion stuff...
-
-   &lt;,evocal.rdf&gt; log:semantics [ log:notIncludes {
-     [ ical:DTSTART [ ical:DATE :STARTi ];
-       ical:DTEND   [ ical:DATE :ENDi ];
-       ical:LOCATION :CITYNAME;
-     ]
-   }].
-} log:implies {
-   :SyncInfo :eg
-     [ ical:DTSTART [ ical:DATE :STARTi ];
-       ical:DTEND   [ ical:DATE :ENDi ];
-       ical:LOCATION :CITYNAME;
-       ical:UID :UID;
-       ical:DTSTAMP :STAMP;
-     ]
-}.</pre>
-
-<h2>Earlier work</h2>
-<ol>
-  <li><a href="../../atrip/Makefile">Oct 2000 Makefile</a> - n3 to RDF via
-    cwm, RDF to HTML via XSLT. some palm datebook integration.</li>
-  <li><a href="/2002/01dc-nj/notes">Jan 2002 NJ WebOnt trip</a>. <a
-    href="/2002/01dc-nj/itin2ical.n3">rules</a>, <a
-    href="http://lists.w3.org/Archives/Public/www-rdf-calendar/2002Jan/0002.html">iCal/evo
-    interop</a></li>
-  <li><a href="grokItinTable.xsl">grokItinTable.xsl</a> - convert AA.com
-    travel itinerary from (tidied) HTML to RDF</li>
-  <li><a href="/Talks/2002/10/09-swcal/all.htm">travel tools presentation</a>
-    at calendaring workshop</li>
-  <li><a href="/2002/10dc-uk/">Bristol trip stuff</a> Oct 2002
-  </li>
-  <li><a href="/2001/08swws67/">SWWS: An RDF Calendar Trial</a>, Aug 2001.
-    pathcross and such.</li>
-</ol>
-
-<h2>Related work</h2>
 <ul>
-  <li><a href="http://www.daml.org/2001/06/itinerary/">DAML itinerary</a> 
-    <p>hmm... flight numbers are numbers, not strings. interesting...</p>
-  </li>
-  <li>rdf-calendar forum@@</li>
-  <li>python/evolution stuff: <a
-    href="http://heddley.com/edd/2002/03/05/evocal.py">evocal.py</a> from
-    Edd. relies on debian package: evolution-dev. also: <a
-    href="http://heddley.com/edd/2002/03/05/python-libversit-0.1.tar.gz">python-libversit</a></li>
-  <li>'<a
-    href="http://lists.w3.org/Archives/Public/www-archive/2002Jun/0014">interview</a>'
-    in #rdfig 12Jun</li>
-  <li><a href="http://www.cyc.com/cycdoc/vocab/transportation-vocab.html">cyc
-    transportation vocab</a></li>
-  <li>lat/long source: <a
-    href="http://www.un.org/Depts/unsd/demog/ctry.htm">Capital cities and
-    cities of 100,000 and more inhabitants</a>; scraped it in <a
-    href="../../../04/mem-news/teamToGlobe.n3">team2Globe.n3</a>; hmm...
-    seems to cite NIMA's <a
-    href="http://www.nima.mil/gns/html/index.html">GEOnet Names Server</a> as
-    its source.</li>
-</ul>
 
+<li>animated views of my travel schedule or <a
+href="../../../../People/Connolly/events/">past trips</a></li>
 
-<p>Some principles:</p>
+<li>peer-to-peer synchronization, ala "if it's in this schedule
+scraped from an HTML page I maintain, but not in my evolution
+calendar, print it out in .ics format for import".
 
-<blockquote>
-  <ul>
-    <li>data that isn't consumed rots. 
-      <p>ergo</p>
-    </li>
-    <li>model only those distinctions that you can exploit.</li>
-  </ul>
-  <address>
-    -- <a
-    href="http://lists.w3.org/Archives/Public/www-rdf-calendar/2001Jul/0001.html">me,
-    Jul 2001 to rdf-calendar</a>
-  </address>
-</blockquote>
-
-<p>Possible venues to announce this work:</p>
-<ul>
-  <li>www-rdf-calendar</li>
-  <li>dia development list</li>
-  <li>WebOnt (interested in UML/OWL)</li>
-  <li>www-rdf-interest (for RDFS/UML stuff)</li>
-  <li>IETF calsched WG (working on XML versions of ical)</li>
-</ul>
-
-<ol>
-  <li>I'd probably make a mistake, so I'd never trust the results. I'd always
-    have to check the travel itinerary again. <em>Never mind the fact that I
-    can't make and follow links from calendar entries to mail messages;
-    that's for another day...</em></li>
-  <li>I might not agree to the proposed itinerary, in which case I'd have to
-    decline it and start over when the revision comes in. I might just be
-    able to key in the diffs, but that's even more error prone.</li>
-</ol>
+<div class="noprint mechanics">
+prototyped in <a href="/2002/08dc-ymx/Makefile">Aug 2002 trip Makefile</a>
 </div>
+
+</li>
+
+<li>based on my addressbook and my travel schedule (and the travel
+schedules of folks in my addressbook...) tell me when my travel
+schedule brings me unusually near a friend/colleague</li>
+
+<li>find conflicts between teleconferences and flights</li>
+
+</ul>
 
 <div class="noprint">
 <hr />
 <address>
   <a href="../../../../People/Connolly/">Dan Connolly</a> and friends<br />
   <small>started Jun 2002<br />
-  $Revision$ of $Date$ by $Author$
+  $Revision$ of $Date$ by $Author$</small>
 </address>
 </div>
 </body>
