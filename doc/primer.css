@@ -10,12 +10,26 @@ body {
   font-family: Trebuchet MS, Palatino, sans-serif;
   color: black;
   background: white;
+  margin-left: 3em;
+  margin-right: 2em;
 }
 
-p  { text-indent : 1em ;
-     margin-left: 3em  ; /* a bit of white space */ }
-pre { margin-left: 5em; }
+p  { /* text-indent : 1em ;  */
 
+     }
+
+/* pre is always an example, even if it doesn't say so? */
+
+/* pre { margin-left: 2em; } */
+
+pre, .example {
+  margin-left: 1em;
+  padding: 0.5em;
+  border-style: dotted;
+  border-width: 1px;
+  margin-right: 1em;
+  background: #f0f6f9;
+}
 
 h1 { text-align: center }
 h3 { font-style: italic }   /* distinguish from h2 */
