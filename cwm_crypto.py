@@ -2,32 +2,93 @@
 """
 Cryptographic Built-Ins for CWM/Llyn
 
-Since TimBL has dared me to start this on more-than-one occasions...
+The continuing story of cryptographic builtins.
 
 cf. http://www.w3.org/2000/10/swap/cwm.py
+& http://www.amk.ca/python/writing/pycrypt/node16.html
 """
 
 __author__ = 'Sean B. Palmer'
 __cvsid__ = '$Id$'
 __version__ = '$Revision$'
 
-import sys, string, re, urllib, md5, sha, binascii
-import thing, notation3
+import md5, sha, binascii, quopri, base64
+import thing
 
-# ToDo: RSA. This should be an option, because you don't want to require 
-# OpenSSL just to have CWM run properly...
-# from Crypto.Hash import MD5
-# from Crypto.PublicKey import RSA
+# from thing import * # nooooooo!
+LightBuiltIn = thing.LightBuiltIn
+Function = thing.Function
+ReverseFunction = thing.ReverseFunction
+LITERAL = thing.LITERAL
 
-from thing import *
+USE_PKC = 1
 
-LITERAL_URI_prefix = 'data:application/n3,'
-DAML_LISTS = notation3.DAML_LISTS
+if USE_PKC: 
+   import Crypto.Util.randpool as randpool
+   import Crypto.PublicKey.RSA as RSA
 
-RDF_type_URI = notation3.RDF_type_URI
-DAML_equivalentTo_URI = notation3.DAML_equivalentTo_URI
+# Some stuff that we need to know about
 
 CRYPTO_NS_URI = 'http://www.w3.org/2000/10/swap/crypto#'
+
+# A debugging function...
+
+def formatObject(obj): 
+   """Print the various bits found within a key (works on any object)."""
+   if ' ' in repr(obj): result = repr(obj)[1:].split(' ')[0]+'\n'
+   else: result = '\n'
+   for n in dir(obj): result += str(n)+' '+str(getattr(obj, n))+'\n'
+   return '[[[%s]]]' % result
+
+# Functions for constructing keys, and formatting them for use in text
+
+def newKey(e, n, d=None, p=None, q=None): 
+   """Create a new key."""
+   key = RSA.RSAobj() # Create a new empty RSA Key
+   key.e, key.n = e, n # Feed it the ee and modulus
+   if d is not None: 
+      key.d, key.p, key.q = d, p, q
+      return key
+   else: return key.publickey() # Return the public key variant
+
+def keyToQuo(key, joi='\n\n'): 
+   """Returns a quoted printable version of a key - ee then m.
+   Leading and trailing whitespace is allowed; stripped by quoToKey."""
+   e, n = str(key.e), str(key.n) # Convert the ee and mod to strings
+   if not 'd' in dir(key): strkey = base64.encodestring('%s%s%s' % (e, joi, n))
+   else: 
+      d, p, q = str(key.d), str(key.p), str(key.q)
+      strkey = base64.encodestring(joi.join([e, n, d, p, q]))
+   return '\n'+quopri.encodestring(strkey).strip()+'\n'
+
+def quoToKey(strkey, spl='\n\n'): 
+   """Returns a key from quopri (ee then m) version of a key."""
+   bunc = base64.decodestring(quopri.decodestring(strkey.strip()))
+   bits = bunc.split(spl)
+   if len(bits) == 2: return newKey(long(bits[0]), long(bits[1]))
+   else: 
+      e, n, d, p, q = bits
+      return newKey(long(e), long(n), long(d), long(p), long(q))
+
+# Signature encoding and decoding
+
+def baseEncode(s): 
+   s = base64.encodestring(s)
+   return '\n'+quopri.encodestring(s).strip()+'\n'
+
+def baseDecode(s): 
+   s = quopri.decodestring(s.strip())
+   return base64.decodestring(s)
+
+# Decimal to binary
+
+def decToBin(i): # int to string
+    result = ''
+    while i > 0: 
+        d = i % 2
+        result = str(d)+result
+        i /= 2
+    return result
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #
@@ -51,12 +112,77 @@ class BI_sha(LightBuiltIn, Function):
         m = sha.new(subj_py).digest() 
         return store._fromPython(context, binascii.hexlify(m))
 
+# Create a new RSA key
+
+class BI_keyLength(LightBuiltIn, Function, ReverseFunction):
+   def __init__(self, resource, fragid): 
+      LightBuiltIn.__init__(self, resource, fragid)
+      Function.__init__(self)
+      ReverseFunction.__init__(self)
+      self.do = 1
+
+   def evaluateSubject(self, store, context, obj, obj_py): 
+      """Generates an RSA keypair, and spews it out as plain text.
+         Has the limitation that it will *only* ever let you generate 
+         one key pair (per iteration), in order to work around a bug."""
+      if self.do: 
+         randfunc, self.do = randpool.RandomPool(int(obj_py)), 0
+         RSAKey = RSA.generate(int(obj_py), randfunc.getBytes)
+         # print formatObject(RSAKey)
+         TextKey = keyToQuo(RSAKey)
+         if TextKey != 'N.': return store._fromPython(context, TextKey)
+
+   def evaluateObject(self, store, context, subj, subj_py): 
+      RSAKey = quoToKey(subj_py)
+      size = str(len(decToBin(RSAKey.n)))
+      return store.intern((LITERAL, size))
+
+class BI_sign(LightBuiltIn, Function): 
+   def evaluateObject(self, store, context, subj, subj_py): 
+      """Sign a hash with a key, and get a signature back."""
+      import time
+      hash, keypair = subj_py
+      RSAKey = quoToKey(keypair)
+      signature = RSAKey.sign(hash, str(time.time())) # sign the hash with the key
+      signature = baseEncode(str(signature[0]))
+      return store.intern((LITERAL, signature))
+
+class BI_verify(LightBuiltIn): 
+   def evaluate(self, store, context, subj, subj_py, obj, obj_py): 
+      """Verify a hash/signature."""
+      keypair, (hash, signature) = subj_py, obj_py
+      RSAKey = quoToKey(keypair) # Dequote the key
+      signature = (long(baseDecode(signature)),) # convert the signature back
+      return RSAKey.verify(hash, signature)
+
+class BI_verifyBoolean(LightBuiltIn, Function): 
+   def evaluateObject(self, store, context, subj, subj_py): 
+      """Verify a hash/signature."""
+      keypair, hash, signature = subj_py
+      RSAKey = quoToKey(keypair) # Dequote the key
+      signature = (long(baseDecode(signature)),)
+      result = RSAKey.verify(hash, signature)
+      return store.intern((LITERAL, str(result)))
+
+class BI_publicKey(LightBuiltIn, Function): 
+   def evaluateObject(self, store, context, subj, subj_py): 
+      """Generate a quopri public key from a keypair."""
+      keypair = quoToKey(subj_py) # Dequote the key
+      publickey = keypair.publickey() # Get the public key
+      return store.intern((LITERAL, keyToQuo(publickey)))
+
 #  Register the string built-ins with the store
 
 def register(store):
-    str = store.internURI(CRYPTO_NS_URI[:-1])
-    str.internFrag('md5', BI_md5)
-    str.internFrag('sha', BI_sha)
+   str = store.internURI(CRYPTO_NS_URI[:-1])
+   str.internFrag('md5', BI_md5)
+   str.internFrag('sha', BI_sha)
+   if USE_PKC: 
+      str.internFrag('keyLength', BI_keyLength)
+      str.internFrag('sign', BI_sign)
+      str.internFrag('verify', BI_verify)
+      str.internFrag('verifyBoolean', BI_verifyBoolean)
+      str.internFrag('publicKey', BI_publicKey)
 
 if __name__=="__main__": 
-   print string.strip(__doc__)
+   print __doc__.strip()
