@@ -1,0 +1,79 @@
+# 
+#   See also lookout.py,v 1.8 2002/06/12 18:54:14 timbl Exp 
+#  abd the following schemas:
+#
+#  Note the namespaces have been hacked to remove  the ".n3".
+#  but not in lookout.py
+#
+# Alas lookout dowsn't seem to get the email address - they seem to be linked :-(
+#
+#  Use:  cwm  mso2vcard.n3 mycontacts.n3 --filter=mso2vcard.n3 --strings > new.vcf
+#
+#  If you are using Mac Address Book, make a new group to hold the
+# new items you are importing, and drag the new .vcf file onto it
+# in the Address book view of the list of groups.
+# 
+# Bugs: Commas and newlines in the output need to be escaped.
+
+@prefix ms: <http://www.w3.org/2000/10/swap/pim/mso#>.
+@prefix util: <http://www.w3.org/2000/10/swap/util#>.
+@prefix con: <http://www.w3.org/2000/10/swap/pim/contact#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix string: <http://www.w3.org/2000/10/swap/string#>.
+
+@prefix : <#>.
+
+ms:FullName :vCardEquivalent "FN:".
+ms:BusinessTelephoneNumber :vCardEquivalent "TEL;type=WORK:".
+ms:HomeTelephoneNumber :vCardEquivalent "TEL;type=HOME:".
+ms:MobileTelephoneNumber :vCardEquivalent "TEL;type=CELL:".
+
+# ms:Body :vCardEquivalent "NOTE:".   # Needs post-processing of newlines
+
+# Suite is first one?
+ms:BusinessAddressStreet  :vCardRecord "ADR;type=WORK:"; :vCardColumn 2.
+ms:BusinessAddressCity  :vCardRecord "ADR;type=WORK:"; :vCardColumn 3.
+ms:BusinessAddressState  :vCardRecord "ADR;type=WORK:"; :vCardColumn 4.
+ms:BusinessAddressPostalCode  :vCardRecord "ADR;type=WORK:"; :vCardColumn 5.
+ms:BusinessAddressCountry  :vCardRecord "ADR;type=WORK:"; :vCardColumn 6.
+
+ms:HomeAddressStreet  :vCardRecord "ADR;type=HOME:"; :vCardColumn 2.
+ms:HomeAddressCity  :vCardRecord "ADR;type=HOME:"; :vCardColumn 3.
+ms:HomeAddressState  :vCardRecord "ADR;type=HOME:"; :vCardColumn 4.
+ms:HomeAddressPostalCode  :vCardRecord "ADR;type=HOME:"; :vCardColumn 5.
+ms:HomeAddressCountry  :vCardRecord "ADR;type=HOME:"; :vCardColumn 6.
+
+{( ?p.:vCardEquivalent ?x.?p  "\n")
+	 string:concatenation ?s } => { ( ?x 5 ) log:outputString ?s }.
+
+
+{ 	?p :vCardRecord ?r; :vCardColumn ?n.
+	?x ?p  ?s.
+} => { 
+	( ?x 6 ?r ?n 1 ) log:outputString ?s.
+}.
+
+{ 	?p :vCardRecord ?r.
+	?x ?p  ?s.
+} => { 
+	( ?x 6 ?r 0 1 ) log:outputString ?r.
+	( ?x 6 ?r 1 2 ) log:outputString ";".
+	( ?x 6 ?r 2 2 ) log:outputString ";".
+	( ?x 6 ?r 3 2 ) log:outputString ";".
+	( ?x 6 ?r 4 2 ) log:outputString ";".
+	( ?x 6 ?r 5 2 ) log:outputString ";".
+	( ?x 6 ?r 9 1 ) log:outputString "\n".
+}.
+
+
+# Anything which has a full name gets a begin and end
+
+{
+	?x ms:FullName []
+} => {
+	( ?x 0 ) log:outputString "BEGIN:VCARD\nVERSION:3.0\n".
+	( ?x 9 ) log:outputString "END:VCARD\n".
+}.
+
+
+# ends
