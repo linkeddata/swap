@@ -49,8 +49,7 @@ log:implies {
   rec:prReviewsDue, rec:previousEdition, rec:supersedes, 
   contact:fullName, org:name, mat:hasTranslations, mat:hasErrata,
   rdf:type, contact:homePage, rec:minTimeCR, rec:sameWorkAs,
-  rec:perReviewsDue .
-:InterestingVector is rdf:type of rec:editor, org:deliveredBy.
+  rec:perReviewsDue, rec:editor, org:deliveredBy.
 
 # a tr present in the frozen state but not in new-tr is
 # still the latest version...

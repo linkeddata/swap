@@ -25,7 +25,7 @@ this log:forAll :WORK, :WORK2, :GENERIC, :P, :X, :P2.
 #  :GENERIC trp:latestVersion :WORK.
 
   :WORK :P :X;
-    is trp:latestVersion of :GENERIC.
+    is trp:latestVersion of [].
 
   :P a trp:Interesting.
 } log:implies { 
@@ -34,12 +34,11 @@ this log:forAll :WORK, :WORK2, :GENERIC, :P, :X, :P2.
 
 
 {
-  :P a trp:InterestingVector.
+  :P a trp:Interesting.
   :P2 a trp:Interesting;
      log:notEqualTo <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>.
-  :GENERIC trp:latestVersion :WORK.
 
-  :WORK :P [:P2 :X].
+  :WORK :P [:P2 :X], is trp:latestVersion of [].
 
 }
   log:implies { :WORK :P [ :P2 :X]}.
@@ -54,8 +53,7 @@ this log:forAll :WORK, :WORK2, :GENERIC, :P, :X, :P2.
 
 # Keep any interesting info about generic versions
 {
-:GENERIC trp:latestVersion :WORK.
-:GENERIC :P :X.
+:GENERIC trp:latestVersion []; :P :X.
 :P a trp:Interesting.
 } log:implies {
 :GENERIC :P :X.
@@ -73,8 +71,7 @@ this log:forAll :WORK, :WORK2, :GENERIC, :P, :X, :P2.
 
 # Keep any interesting info about submissions
 {
-:GENERIC trp:latestVersion :WORK.
-:WORK rec:fromSubmission :WORK2.
+:GENERIC trp:latestVersion [ rec:fromSubmission :WORK2].
 :WORK2 :P :X.
 :P a trp:Interesting.
 } log:implies {
