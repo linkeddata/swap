@@ -30,7 +30,10 @@
 
 []	bank:ssn "123456789";
 	bank:phoneNumber  "+1 202 555 1212";
-	bank:dateOfBirth "1966--6".
+	bank:dateOfBirth "1966--6";
+	bank:address [                   		# New
+		bank:street "77 Accacia Avenue";	# New
+		bank:city  "Anytown" ].			# New
 
 # Someone whose SSN the bank does not know:
 
