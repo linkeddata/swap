@@ -1,0 +1,19 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix db <http://localhost/SqlDB#>.
+@prefix : <#>.
+@prefix v: <#>.
+
+this log:forAll :urisRow, aacl, :acl, :access, :u1, :g1, :accessor .
+{
+ :urisRow db:uris.uri "http://www.w3.org/Member/Overview.html" .
+ :urisRow db:uris.acl :aacl .
+ :acl db:acls.acl :aacl .
+ :acl db:acls.access :access .
+ :u1 db:ids.value "eric" .
+ :g1 db:idInclusions.id :u1 .
+ :g1 db:idInclusions.groupId :accessor .
+ :acl db:acls.id :accessor .
+} log:implies {
+
+:aacl :RESULT :u1
+}.
