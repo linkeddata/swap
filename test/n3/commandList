@@ -7,4 +7,3 @@ python /home/syosi/tarballs/afon/afon.py %s
 python download.py %s | python /home/syosi/SWAP/n3spark.py /dev/stdin
 python download.py %s | /usr/java/jdk1.5.0/bin/java jena.n3 --rdf-nt /dev/stdin
 /bin/true %s
-
