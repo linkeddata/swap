@@ -58,13 +58,14 @@ h2  { margin-left: 12pt; background: #00eeee; color: black; font-size: 18pt;
 table { margin-left: 10em;  width: 85%;}
 table.wide { margin-left: 2em; font-size: 9pt; width: 95%;}
 
-.ns  { text-align: left;  font-family: monospace;  }
+.ns  { text-align: left;  font-family: monospace; vertical-align:top; }
 
 th { margin-left: 12pt; text-align: right; background: #ffffff; }
 td { margin-left: 12pt; border: 4pt; border-color: #555555;
- padding: 3pt; padding-color: #ffeeee;
- vertical-align: top; }
-td.ln { font-family: monospace; valign: top; }
+    padding: 3pt;
+ #    doiesn't exist: padding-color: #ffeeee;
+    vertical-align: top; }
+td.ln { font-family: monospace; vertical-align: top; }
 td.amount { width: 6em; text-align: right;  } /* font-family: monospace; */
 td.amt { text-align: right;  } /* font-family: monospace; */
 td.total { font-weight: bold; text-align: right;  } /* font-family: monospace; */
