@@ -29,19 +29,10 @@ CRLF = chr(13) + chr(10)
 
 ProdID = "-//w3.org/2002/01dc-nj/toICal.py//NONSGML v1.0/EN" #@@bogus?
 
-#class Namespace:
-#    """A collection of URIs witha common prefix.
-#
-#    ACK: AaronSw / #rdfig
-#    http://cvs.plexdev.org/viewcvs/viewcvs.cgi/plex/plex/plexrdf/rdfapi.py?rev=1.6&content-type=text/vnd.viewcvs-markup
-#    """
-#    def __init__(self, nsname): self.nsname = nsname
-#    def __getattr__(self, lname): return self.nsname + lname
-#    def sym(self, lname): return self.nsname + lname
 
 RDF = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
 
-ICAL = Namespace('http://www.w3.org/2000/10/swap/pim/ical#')
+ICAL = Namespace('http://www.w3.org/2002/12/cal/ical#')
 
 #@@owe update to these folks:
 # by Libby and company; e.g.
@@ -53,79 +44,118 @@ class CalWr:
     def __init__(self, writeFun):
         self._w = writeFun
         
-    def export(self, ctx, addr):
-        """export calendar objects from an RDF KB
-        in iCalendar syntax
+    def export(self, sts, addr):
+        """export calendar objects from an RDF graph in iCalendar syntax
         """
 
         w = self._w
-	kb = ctx.store
-	
+
+        for cal in sts.each(pred = RDF.type, obj = ICAL.Vcalendar):
+            # cf  4.4. iCalendar Object of
+            # http://www.ietf.org/rfc/rfc2445.txt
+
+            w("BEGIN:VCALENDAR" + CRLF) #hmm... SAX interface?
+            w("VERSION:2.0" + CRLF) #@@ grab these from the RDF?
+            w("PRODID:%s%s" % (ProdID, CRLF) ) #@@grab?
+            w("CALSCALE:GREGORIAN" +CRLF) #@@ grab?
+
+            #hmm... method? cf 3.2 Parameters
+
+
+            for comp in sts.each(subj = cal, pred = ICAL.component):
+                if sts.statementsMatching(RDF.type, comp, ICAL.Vevent):
+                    self.exportEvent(sts, comp)
+                elif sts.statementsMatching(RDF.type, comp, ICAL.Vtimezone):
+                    self.exportTimezone(sts, comp)
+                else:
+                    progress("@@skipping component with types: ",
+                             sts.each(subj = comp, pred = RDF.type))
         
-        # cf  4.4. iCalendar Object of
-        # http://www.ietf.org/rfc/rfc2445.txt
+            w("END:VCALENDAR" + CRLF)
 
-        w("BEGIN:VCALENDAR" + CRLF) #hmm... SAX interface?
-        w("VERSION:2.0" + CRLF) #hmm... SAX interface?
-        w("PRODID:%s%s" % (ProdID, CRLF) )#@@ bogus?
-        w("CALSCALE:GREGORIAN" +CRLF)
 
-        #hmm... method? cf 3.2 Parameters
+    def exportTimezone(self, sts, tz):
+        self.textProp(sts, "tzid", tz)
 
-        ty = RDF.type
+        for subcomp in sts.each(subj = tz, pred = ICAL.standard):
+            self.exportTZSub(sts, subcomp, 'standard')
+        for subcomp in sts.each(subj = tz, pred = ICAL.daylight):
+            self.exportTZSub(sts, subcomp, 'daylight')
 
-        progress("@@skipping timezones and lots of other component types")
-        progress("querying for type ", ICAL.Vevent, " in ", ctx )
-        eventHits = ctx.statementsMatching(ty,
-                                           None,
-                                           ICAL.Vevent)
-        
-        for hit in eventHits:
-            event = hit[SUBJ]
-            w("BEGIN:VEVENT"+CRLF)
-            txt = self.textProp(kb, ctx, "summary", event)
-            self.textProp(kb, ctx, "description", event)
-            self.textProp(kb, ctx, "location", event)
-            self.textProp(kb, ctx, "priority", event)
-            uid = self.textProp(kb, ctx, "uid", event)
+    def exportTZSub(self, sts, tzs, n):
+        w = self._w
 
-            # 4.8.2.4 Date/Time Start
-            self.timeProp(kb, ctx, "dtstart", event)
+        w("BEGIN:%s%s" % (n, CRLF))
+        self.textProp(sts, 'tzoffsetfrom', tzs)
+        self.textProp(sts, 'tzoffsetto', tzs)
+        self.textProp(sts, 'tzname', tzs)
+        self.timeProp(sts, "dtstart", tzs)
+        self.recurProp(sts, "rrule", tzs)
+        w("END:%s%s" % (n, CRLF))
 
-            self.timeProp(kb, ctx, "dtend", event)
 
-            other = ctx.statementsMatching(None, event, None)
-            for s in other:
-                if s[PRED] not in (ICAL.dtstart, ICAL.dtend, ICAL.uid, ICAL.summary,
-			ICAL.location, ICAL.priority, ICAL.description, RDF.type):
-                    progress("@@skipping ", s[PRED], " of [", txt, "] = [", \
-                             s[OBJ], "]")
-            w("END:VEVENT"+CRLF)
+    def exportEvent(self, sts, event):
+        w = self._w
+
+        w("BEGIN:VEVENT"+CRLF)
+        uid = self.textProp(sts, "uid", event)
+        # 4.8.2.4 Date/Time Start
+        self.timeProp(sts, "dtstart", event)
+        self.timeProp(sts, "dtend", event)
+        txt = self.textProp(sts, "summary", event)
+        self.textProp(sts, "description", event)
+        self.textProp(sts, "location", event)
+        self.textProp(sts, "priority", event)
+        self.recurProp(sts, "rrule", event)
+
+        other = sts.statementsMatching(None, event, None)
+        for s in other:
+            if s[PRED] not in (ICAL.dtstart, ICAL.dtend, ICAL.uid, ICAL.summary,
+                               ICAL.location, ICAL.priority, ICAL.description, RDF.type, ICAL.rrule):
+                progress("@@skipping ", s[PRED], " of [", txt, "] = [", \
+                                 s[OBJ], "]")
+        w("END:VEVENT"+CRLF)
             
-        w("END:VCALENDAR" + CRLF)
 
-    def textProp(self, kb, ctx, pn, subj):
+
+    def recurProp(self, sts, pn, subj):
+        r  = sts.any(subj, ICAL.sym(pn))
+        if r:
+            w = self._w
+            w("RRULE:")
+            freq = sts.any(r, ICAL.freq)
+            if freq: w("FREQ=%s;" % freq)
+            ival = sts.any(r, ICAL.interval)
+            if freq: w("INTERVAL=%s;" % ival)
+            by = sts.any(r, ICAL.byday)
+            if by: w("BYDAY=%s;" % by)
+            by = sts.any(r, ICAL.bymonth)
+            if by: w("BYMONTH=%s;" % by)
+            #@@ more
+            w(CRLF)
+
+
+    def textProp(self, sts, pn, subj):
         # "Property names, parameter names and enumerated parameter values are
         # case insensitive."
         #  -- 4.5 Property, http://www.ietf.org/rfc/rfc2445.txt
         w = self._w
-        txt  = ctx.any(subj, ICAL.sym(pn))
+        txt  = sts.any(subj, ICAL.sym(pn))
         if txt is None: return txt
         v = strip(str(txt))
         w("%s:%s%s" % (pn.upper(), v, CRLF)) #@@linebreaks?
         return v
     
-    def timeProp(self, kb, ctx, pn, subj):
+    def timeProp(self, sts, pn, subj):
         w = self._w
 	pni = ICAL.sym(pn)
-        when = ctx.any(subj, pni)
+        when = sts.any(subj, pni)
 #	progress("Time: %s is %s" % (pni, when)) 
-        whenV = ctx.any(when, ICAL.value) \
-                or ctx.any(when, ICAL.date) \
-                or ctx.any(when, ICAL.dateTime)
+        whenV = sts.any(when, ICAL.date) \
+                or sts.any(when, ICAL.dateTime)
         if not whenV:
             progress("@@no value for ", when)
-        whenTZ = ctx.any(when, ICAL.tzid)
+        whenTZ = sts.any(when, ICAL.tzid)
 
         whenV = translate(str(whenV), maketrans("", ""), "-:")
 	if whenTZ:
@@ -153,10 +183,10 @@ def main(args):
 #    kb = llyn.RDFStore()
 #    kb.reset("http://example/@@uuid-here#something")
     progress("loading...", addr)
-    k = load(addr)
+    sts = load(addr)
 
     progress("exporting...")
-    c.export(k, addr)
+    c.export(sts, addr)
 
 def progress(*args):
     for i in args:
@@ -171,7 +201,14 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.7  2003-01-13 19:48:23  timbl
+# Revision 1.8  2003-03-14 03:12:35  connolly
+# update to 2002/12 namespace
+# export timezones, at least well enough for one case
+# export rrules well enough for one test case
+# update to each()/any() API
+# kill dead (commented out) Namespace class code
+#
+# Revision 1.7  2003/01/13 19:48:23  timbl
 # Changed API, using thing.Namespace
 #
 # Revision 1.6  2002/12/12 22:58:07  timbl
