@@ -8,21 +8,6 @@ include('otter/owlAx-oneOf.otter').
 formula_list(usable).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 
-%   rdf lists = otter lists
-%
-
-all LIST HEAD TAIL (
-   rdf(LIST, rdf_first, HEAD) &
-   rdf(LIST, rdf_rest, TAIL)
-   <->
-   LIST=[HEAD|TAIL]
-).
-
-rdf_nil=[].
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 %   owl_cardinality
 %
@@ -51,7 +36,7 @@ all RESTRICTION PROPERTY MINCARDINALITY INST (
    % and it matches the values  of rdf(INST, PROPERTY...)
    ( exists LIST ( all VAL (
      ( rdf(INST, PROPERTY, VAL) -> inList(VAL, LIST) ) &
-     lteq(MINCARDINALITY, card(LIST))
+     $LE(MINCARDINALITY, card(LIST))
    )))
 ).
 
@@ -65,247 +50,28 @@ all RESTRICTION PROPERTY MAXCARDINALITY INST (
    % and it matches the values  of rdf(INST, PROPERTY...)
    ( exists LIST ( all VAL (
      ( rdf(INST, PROPERTY, VAL) -> inList(VAL, LIST) ) &
-     lteq(card(LIST), MAXCARDINALITY)
+     $LE(card(LIST), MAXCARDINALITY)
    )))
 ).
 
-
-%  define item(elem, list)
-
-all A -item(A, []).
-
-all ELEM LIST (
-  item(ELEM, LIST)
-  <->
-  ( exists HEAD TAIL (
-      LIST=[HEAD|TAIL] &
-      ( HEAD=ELEM  |
-        item(ELEM, TAIL) )
-   ))
-).
-
-
-%  define removed; the removed() of a list is 
-%  a copy of that list with that element not
-%  in it?    er, no.  No, with one copy removed.
-
-all A removed(A, []) = []
-
-all ELEM LIST HEAD TAIL (
-    LIST = [HEAD|TAIL] 
-    -> 
-      ( HEAD=ELEM -> removed(ELEM,LIST)=TAIL)
-      |
-      ( -HEAD=ELEM -> removed(ELEM,LIST)=removed(ELEM,TAIL)
-)).
-    
 all ELEM SET (
    item(ELEM, SET) 
   ->
    (exists SUBSET (
      -item(ELEM, SUBSET) &
-     card(SUBSET)=
-
-% the cardinality of a list is the number of DISTINCT members
-% in it.
-
-card([]) = 0.
-
-all A B LIST (
-   item(A, LIST) &
-   item(B, LIST) &
-   -(A=B)
-  ->
-   card(LIST) = card(removed(A, LIST))
-).
-
-all A B LIST (
-   inList(A, LIST) &
-   inList(B, LIST) &
-   A=B
-  ->
-   card(LIST) = card(removed(A, LIST))
-)
-   
-
-all LIST CARD HEAD (
-   ( cardinality(LIST, CARD) &
-     rdf(LIST, rdf_first, HEAD) )
-   ->
-    -rdf(CARD, owl_sameAs, 'foo:zero')
-).
-
-% if the first element is distinct from everything else in
-% the list, then the cardinality of the tail is one less than
-% the cardinality of the whole list; otherwise, the cardinalities
-% are the same.
-
-% AXIOM 1
-
-all LIST HEAD TAIL (
-   ( rdf(LIST, rdf_first, HEAD) &
-     rdf(LIST, rdf_rest, TAIL) )
-   ->
-   ( -inList(HEAD, TAIL) 
-     <->
-     ( all CARD CARDMINUSONE (
-         rdf(CARDMINUSONE, 'foo:succ', CARD)
-         -> 
-          ( cardinality(TAIL, CARDMINUSONE)
-            <-> 
-            cardinality(LIST, CARD)
-          )
-     ))
-   )
-).
-
-% AXIOM 2
-
-all LIST HEAD TAIL (
-   ( rdf(LIST, rdf_first, HEAD) &
-     rdf(LIST, rdf_rest, TAIL) )
-   ->
-   ( inList(HEAD, TAIL) 
-     <->
-     ( all CARD (
-         cardinality(TAIL, CARD)
-         <-> 
-         cardinality(LIST, CARD)
-     ))
-   )
-).
-
-% AXIOM 3
-% this bit is missing even from the backward implications of
-% the other axioms, although I'd think it would be there.  I should
-% look at the clausal forms.
-
-all LIST CARD CARDMINUSONE (
-   ( cardinality(LIST, CARD) &
-     lt('foo:zero', CARD) &
-     rdf(CARDMINUSONE, 'foo:succ', CARD) )
-   ->
-   (exists HEAD TAIL (
-      rdf(LIST, rdf_first, HEAD) &
-      rdf(LIST, rdf_rest, TAIL) &
-      (inList(HEAD, TAIL) -> cardinality(TAIL, CARD)) &
-      (-inList(HEAD, TAIL) -> cardinality(TAIL, CARDMINUSONE))
+     $SUM(card(SUBSET),1)=card(SET)
    ))
 ).
 
-all LIST A B (
-   inList(A, LIST) &
-   inList(B, LIST) & 
-   cardinality(LIST, one)
-   ->
-   rdf(A, owl_sameAs, B)
+all SET (
+    -(exists ELEM item(ELEM, SET))
+    <->
+    card(SET)=0
 ).
-
-%    very hard to generalize that.....
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-rdf('foo:zero', 'foo:succ', one).
-rdf(one, 'foo:succ', two).
-rdf(two, 'foo:succ', three).
-rdf(three, 'foo:succ', four).
-
-% The List-of-One Lemma:
-(all LIST HEAD (
-   ( rdf(LIST, rdf_first, HEAD) &
-     rdf(LIST, rdf_rest, rdf_nil) )
-   -> 
-   cardinality(LIST, one)
-)).
-
-% The List-of-Two Lemma:
-(all LIST L2 HEAD SECOND (
-   ( rdf(LIST, rdf_first, HEAD) &
-     rdf(LIST, rdf_rest, L2) &
-     rdf(L2, rdf_first, SECOND) &
-     rdf(L2, rdf_rest, rdf_nil) )
-   -> 
-   (
-     (cardinality(LIST, one) & rdf(HEAD, owl_sameAs, SECOND))
-     |
-     (cardinality(LIST, two) & -rdf(HEAD, owl_sameAs, SECOND))
-   )
-)).
-
-
-
-
-  
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%    integers
-%
-
-all I J K (
-   lt(I,J) & lt(J,K) -> lt(I,K)
-).
-all I J (
-   rdf(I, 'foo:succ', J) -> lt(I, J)
-).
-all I J (
-   lt(I, J) -> -rdf(I, owl_sameAs, J)
-).
-all I J K (
-   ( rdf(I, 'foo:succ', J) &
-     rdf(I, 'foo:succ', K) )
-   -> 
-   rdf(J, owl_sameAs, K)
-).
-all I J K (
-   ( rdf(I, 'foo:succ', J) &
-     rdf(K, 'foo:succ', J) )
-   -> 
-   rdf(I, owl_sameAs, K)
-).
-all I J (
-   (lt(I,J) | I=J) <-> lteq(I,J)
-).
-   
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%   owl_sameAs
-%
-
-% identity
-all X (
-   rdf(X, owl_sameAs, X)
-).
-
-% symmetry
-all X Y (
-   rdf(X, owl_sameAs, Y) -> rdf(Y, owl_sameAs, X)
-).
-all X Y (
-   -rdf(X, owl_sameAs, Y) -> -rdf(Y, owl_sameAs, X)
-).
-
-% transitivity
-all X Y Z (
-   (rdf(X, owl_sameAs, Y) & rdf(Y, owl_sameAs, Z))
-   -> 
-   rdf(X, owl_sameAs, Z)
-).
-
-% substitutivity
-all THING1 THING2 (
-   rdf(THING1, owl_sameAs, THING2) 
-   ->     % BIDIR   
-   (all X Y (
-      ( rdf(X, Y, THING1) <-> rdf(X, Y, THING2) ) &
-      ( rdf(X, THING1, Y) <-> rdf(X, THING2, Y) ) &
-      ( rdf(THING1, X, Y) <-> rdf(THING2, X, Y) ) 
-   ))
-).
-
 
 % $Log$
-% Revision 1.6  2003-08-08 15:01:17  sandro
-% a failed experiment
+% Revision 1.7  2003-08-08 15:01:28  sandro
+% a failed experiment #2
 %
 % Revision 1.4  2003/08/01 16:27:35  sandro
 % modified to run in swap/surnia instead of swap
