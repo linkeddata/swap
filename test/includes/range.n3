@@ -1,0 +1,21 @@
+# See http://www.w3.org/2003/05/27-sw-team-irc#T19-46-32
+#
+@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <#>.
+
+this log:forAll :P, :C.
+
+{
+    this log:forAll :Y .
+       { [] :P :Y } => { :Y a :C}
+
+} => { :P s:range :C }. 
+
+
+
+ this log:forAll :X, :Z.
+
+{  [] :sister :X } =>  { :X a :Woman }.
+
+#ends
