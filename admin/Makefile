@@ -1,7 +1,10 @@
 # $Id$
 
+W=../../../..
 PYTHON=python
 SWAP=..
+PIM=$(SWAP)/pim
+CAL=$W/2002/12/cal
 
 .SUFFIXES: .html .py .g .rdf .n3
 
@@ -21,7 +24,7 @@ bugstatus: N3-Bugs.ics
 CWM=PYTHONPATH=$(SWAP) $(PYTHON) $(SWAP)/cwm.py
 
 N3-Bugs.ics: ,bugsToDo.cal3 $(SWAP)/pim/toIcal.py
-	PYTHONPATH=$(SWAP) $(PYTHON) $(SWAP)/pim/toIcal.py ,bugsToDo.cal3 >$@
+	PYTHONPATH=$(SWAP):$(CAL) $(PYTHON) $(SWAP)/pim/toIcal.py ,bugsToDo.cal3 >$@
 
 # Make update means fteches new info from outside this directory.
 
