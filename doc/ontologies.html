@@ -43,148 +43,104 @@ Description Language 1.0: RDF Schema</a>, for which we use the
 "rdfs:" namespace abbreviation.   The others are part of the 
 <a href="http://www.w3.org/TR/owl-features/">OWL Web Ontology
 Language</a>.  
-All fifty are all listed and
+All fifty are listed and
 cross referenced in the <a
 href="http://www.w3.org/TR/owl-guide/#TermIndex">OWL Guide Appendix</a>
 .</p>
 
-<hr>
+<h2>Plain Documentation</h2>
 
-<strong>@@@ Old Material</strong>
+<p>Rdfs:comment is for providing unstructured documentation, while
+rdfs:label can give an easier-to-read name and rdfs:seeAlso gives
+untyped links.   This is a good start for unstructured
+documentation.</p>
 
+<pre>:CanisFamiliaris 
+  rdfs:comment """The class of animals designated 
+               Canis familiaris (domestic dog).  This
+	       includes all the dog breeds, but
+	       not wolves.""";
+  rdfs:label "Canis familiaris";
+  rdfs:seeAlso &lt;http://www.agrobiologicals.com/glossary/G3089.htm>.</pre>
 
+<h2>Equivalence</h2>
 
+<p>Our simplest machine-readable declaration is that two URIs mean the
+same thing:</p>
 
+<pre>:Pat owl:sameIndividualAs :Patrick.</pre>
 
+<p>Given this statement, a system which understands
+<code>owl:sameIndividualAs</code> would know that everything true of
+:Pat was also true of :Patrick and everything true of :Patrick was
+true of :Pat.  They are just synonyms: two names for the same thing.
+This is what N3 means with "=".   (Note that cwm does not
+understand any of these terms natively, but can be instructed
+to use them, via rules.)</p>
 
-<p>In RDF, URIs are used a lot like was use words and phrases in natural
-language.  Each URI has something it stands in place of, represents,
-refers to, or denotes.  
+<p>We could also say:</p>
 
-<p>Each URI 
+<pre>:Dog owl:equivalentClass :CanisFamiliaris.
+  # or 
+:Dog owl:sameIndividualAs :CanisFamiliaris.</pre>
 
-<p>An <em>ontology</em> or is a precise but sometimes incomplete
-specification of a vocabulary. It often consists of both human-readable
-documentation and machine-readable declarations.
+<p>These two are slightly different: equivalent classes have exactly
+the members, but may have a different intended meaning.  If we use
+owl:sameIndividualAs, then our label "Canis familiaris" would also
+apply to :Dog.</p>
 
-the set of vocabulary terms along with human-readable
-definitions of each term and machine-readable declarations about how the
-terms relate to each other. An ontology embodies a conceptualization of some
-subject area; to understand someone, you need to understand both their
-grammar and all the ontologies they are using.</p>
+<h2>Cardinality</h2>
 
-<p>The process of developing an ontology is usually similar to the process of
-object-oriented analysis and design: you figure out the classes of objects in
-some subject area, then consider how instances of those classes relate to
-each other (what is the class hierarchy?) and what they have in common
-(what are the properties of each instance?).</p>
+<p>In some cases equivalence and sameness can be inferred.  OWL has a
+vocabulary for talking about "cardinality" of properties, saying
+whether they map one-to-one, one-to-many, many-to-one, etc.  If we
+have a :mother property, we declare that it is many-to-one
+("functional"), indicating that people have at most one biological
+mother:</p>
 
-<p>With RDF ontologies, however, this analysis usually remains separated from
-any programming language. Features likes inheritence and type-checking
-remain, however, and can be of great value.</p>
+<pre>:mother a owl:FunctionalProperty</pre>
 
-<p>Historically, RDF has had a variety of ontology languages,
-including <a href="http://www.w3.org/TR/rdf-schema/">RDFS</a>, <a
-href="http://www.daml.org/2001/03/daml+oil-index.html">DAML+OIL</a>,
-and OWL with its <a
-href="http://www.w3.org/TR/2003/WD-owl-features-20030210/#s1.3">three
-different "species"</a>, <a
-href="http://www.w3.org/TR/2003/WD-owl-features-20030210/#s2.1">OWL
-Lite</a>, <a
-href="http://www.w3.org/TR/2003/WD-owl-features-20030210/#s2.2">OWL
-DL</a> and OWL Full.  However, with the exception of DAML+OIL which is
-obsolete, they all fit together in OWL Full.  So use OWL Full, and if
-you use only a restricted subset of the language, then you will have
-additional performance guarantees.
-</p>
+<p>This can be used to infer sameness, because if we say</p>
 
-<h2>Classes, Properties, Individuals, and Datatype Values</h2>
+<pre>:sam :mother :jackie.
+:sam :mother :jacqueline.</pre>
 
-<p>In designing an ontology, it can be useful to divide the world into four different
-kinds of things.  (Occasionally something will fit into more than one
-of the areas; that's okay with OWL Full.)
-</p>
-<ul>
-  <li>An <strong>individual</strong> is something in the domain of discourse,
-    like a specific person, an inventory item, or a city. This roughly
-    corresponds to "objects" in object-oriented programming. 
-    <ul class="example">
-      <li>Arnold Schwarzenegger</li>
-      <li>Budapest</li>
-      <li>The Sun</li>
-      <li>The French Revolution</li>
-      <li>http://www.w3.org/ (the W3C front page)</li>
-    </ul>
-  </li>
-  <li>A <strong>data value</strong> is something which can be fully
-    represented by a sequence of characters. These correspond to values of
-    primitive types in many programming languages. There is some flexibility
-    about whether to model some things as individuals or a data values,
-    especially when you have the option of defining a new datatype. 
-    <ul class="example">
-      <li>the integer 17</li>
-      <li>the string "Hello, World"</li>
-      <li>the floating point number 3.771</li>
-      <li>the date January 17, 1985</li>
-    </ul>
-  </li>
-  <li>A <strong>class</strong> is a grouping of individuals to reflect
-    something they have in common. Classes may overlap arbitrarily. In some
-    ontology languages classes may contain data values and other classes (or
-    even themselves!), but it usually makes sense to restrict ourselves to
-    classes of individuals as required by OWL DL and OWL Lite. 
-    <ul class="example">
-      <li>Human</li>
-      <li>Valid XHTML Document</li>
-      <li>Member of the United Nations</li>
-      <li>ActiveCustomer</li>
-    </ul>
-  </li>
-  <li>A <strong>property</strong> relates an individual to something else,
-    the value of that property for that individual. In the more restrictive
-    languages, we have "data-valued properties" which have values which are
-    datatype values, and "individual-valued properties" which have values
-    which are individuals. 
-    <ul class="example">
-      <li>date_of_birth</li>
-      <li>lastName</li>
-      <li>mayor</li>
-      <li>purchaseMade</li>
-    </ul>
-  </li>
-</ul>
+<p>a human or machine reader can figure out that ":jackie" and
+":jacqueline" must be names for the same individual.</p>
 
-<h2>What is it for?</h2>
+<h2>Different and Disjoint</h2>
 
-<p>An ontology can be used in several different ways:</p>
+<p>Of course it's possible that :jackie and :jacqueline are not the
+same person, and that one of the lines about :sam was a mistake!  OWL
+has several ways to say that things are not the same; the simplest
+would be:</p>
 
-<ul>
-<li>By ontology creators, to keep the ontology logically consistent.</li>
-<li>By data providers and consumers, to help communicate which
-information might be provided and what the terms mean.
-<li>By data providers and consumers, to help "validate" the 
-data, finding constructs which are definitely or probably errors</li>
-<li>By consumers, to license inferences, possibly from multiple
-data sources, supporting data "fusion"</li>
-</ul>
+<pre>:jackie owl:differentFrom :jacqueline.</pre>
 
+<p>Taken together, the three statements describe an impossible
+situation, and OWL software should be able to recognize and warn about
+this situation.</p>
 
-<h2>Subclass Reasoning</h2>
+<h2>Class Hierarchies</h2>
+
 <pre>:Man s:subclassOf :Human .
 :YoungMan s:subclassOf :Man .</pre>
 
-<h3>OWL Inference</h3>
-<pre>:Joe a :YoungMan --&gt;  :Joe a :Man. Joe a :Human.
+<pre>:CanisFamiliarisDingo 
+  owl:subClassOf :CanisFamiliaris;   # Dingos are Dogs!
+  rdfs:seeAlso &lt;http://www.naturalworlds.org/
+          wolf/canis/Canis_familiaris_dingo.htm>.
 
-Joe is a YoungMMMan --&gt;  [okay] </pre>
+:CanisRufus a owl:Class;
+  owl:subClassOf :Canis;
+  owl:disjointFrom :CanisFamiliaris;     # Wolves are not Dogs!
+  rdfs:label "Red Wolf";
+  rdfs:comment """As of 1999 there were about 300 individuals 
+               of this endangered species""";
+  rdfs:seeAlso &lt;http://druidry.org/obod/endangered/redwolf.html>.
+</pre>
 
-<h3>"Lint" Processing</h3>
-<pre>Joe is a YoungMan --&gt;  [okay]
-
-Joe is a YoungMMMan --&gt;  Warning: "YoungMMMan" used as a Class but
-                                   not mentioned in schema.</pre>
-
-<h2>Domain, Range, Cardinality</h2>
+<h2>Domain, Range</h2>
 
 <p></p>
 <pre>:father s:domain :Human; s:range :Man.
@@ -200,11 +156,19 @@ ___________________________________
 :Alan = :MrFoster.
 </pre>
 
-<h2>Sameness and Difference</h2>
 
-<p>@@@ owl:sameAs, sameIndividualAs, ...</p>
 
-<p>distinctFrom, disjointClass</p>
+<h2>OWL Inference</h2>
+<pre>:Joe a :YoungMan --&gt;  :Joe a :Man. Joe a :Human.
+
+Joe is a YoungMMMan --&gt;  [okay] </pre>
+
+<p>"Lint" Processing</p>
+
+<pre>Joe is a YoungMan --&gt;  [okay]
+
+Joe is a YoungMMMan --&gt;  Warning: "YoungMMMan" used as a Class but
+                                   not mentioned in schema.</pre>
 
 <div class="noprint">
 <hr />
