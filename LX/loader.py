@@ -191,7 +191,8 @@ class Loader:
         parser.parse(self.stream, tempKB)
         self.saveInCache(Meta(self.stream.info()), tempKB)
         self.kb.addFrom(tempKB)
-        self.reporter.end()
+        self.reporter.end()   # received data
+        self.reporter.end()   # loaded
 
     
     def openStream(self):
@@ -413,7 +414,10 @@ def __test1():
 
     
 # $Log$
-# Revision 1.2  2003-09-16 17:05:59  sandro
+# Revision 1.3  2003-10-02 18:35:57  sandro
+# fixed unbalanced messages when remote modified
+#
+# Revision 1.2  2003/09/16 17:05:59  sandro
 # improved docs
 # added a little proper testing
 # change output to use reporter
