@@ -50,7 +50,7 @@ formats-example1.svg: formats-example1.dot
 formats-example1.png: formats-example1.dot
 	dot -Tpng $< > $@
 formats-example1.ps: formats-example1.dot
-	dot -Tps $< > $@
+	dot -Tps $< | grep -v '^%%' | grep -v '^endpage' > $@
 
 
 states.svg: states.graph
