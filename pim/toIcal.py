@@ -314,7 +314,9 @@ class CalWr:
 
         w("BEGIN:VTODO"+CRLF)
         self.timeProp(sts, "dtstart", comp)
+        self.timeProp(sts, "dtstamp", comp)
         self.exportGeneral(E_PROP, sts, comp, ICAL.summary, "SUMMARY")
+        self.exportGeneral(E_PROP, sts, comp, ICAL.sequence, "SEQUENCE")
         self.exportGeneral(E_PROP, sts, comp, ICAL.uid, "UID")
         self.exportGeneral(E_PROP, sts, comp, ICAL.description, "DESCRIPTION")
         self.exportGeneral(E_PROP, sts, comp, ICAL.location, "LOCATION")
@@ -748,7 +750,13 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.11  2004-02-04 17:57:07  timbl
+# Revision 2.12  2004-02-05 17:21:58  charles
+# Added output of SEQUENCE and DTSTAMP to VTODO's. Still needs DUE - no luck with the naive
+#    self.exportGeneral(E_PROP, sts, comp, ICAL.due, "DUE")
+# But I am not sure if I should be getting the ical2rdf.pl to give it a date first and then use
+# the date thing that dtstart et al use. --CMN
+#
+# Revision 2.11  2004/02/04 17:57:07  timbl
 # Passes regresion tests. see admin/N3-Bugs.ics for oustanding bugs
 #
 # Revision 2.10  2004/02/03 22:55:33  timbl
