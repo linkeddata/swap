@@ -29,7 +29,7 @@ months18    a InterestingPeriod; start "2003-10-01".
   ?AUDITKB a AuditKB.
   PSHORT a InterestingPeriod.
 
-  <../../../../04/mem-news/groups.rdf>.log:semantics log:includes {
+  <http://www.w3.org/2000/04/mem-news/public-groups.rdf>.log:semantics log:includes {
    [ a org:WorkingGroup; contact:homePage PG ].
   }.
 
