@@ -1,0 +1,99 @@
+# $Id$
+#
+# why does this work:
+# python cwm.py test/tr-aut/heartbeat.n3 --think >,y.n3
+#
+# differently from this?
+#
+# python cwm.py test/tr-aut/heartbeat-all.n3 --think >,x.n3
+#
+# i.e. why cannot I replace
+# [ is log:semantics of <heartbeat-aux.n3> ]
+# with the actual contents of the file?
+#
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix str: <http://www.w3.org/2000/10/swap/string#>.
+
+@prefix : <heartbeat#>.
+@keywords is, of, a.
+
+@prefix org: <http://www.w3.org/2001/04/roadmap/org#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>. #@@ missing #
+@prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#>.
+
+months03    a InterestingPeriod; start "2005-01-01".
+months06    a InterestingPeriod; start "2004-10-01".
+months12    a InterestingPeriod; start "2004-04-01".
+months18    a InterestingPeriod; start "2003-10-01".
+
+{
+ <http://www.w3.org/2002/01/tr-automation/tr.rdf> log:semantics ?F
+} => { ?F a TRKB }.
+
+@forAll DOC, WHEN, PG, GROUP, PLONG, PSHORT.
+
+{
+  (
+{
+{
+ <http://www.w3.org/2002/01/tr-automation/tr.rdf> log:semantics ?F
+} => { ?F a TRKB }.
+
+#@@ dup...
+months03    a InterestingPeriod; start "2005-01-01".
+months06    a InterestingPeriod; start "2004-10-01".
+months12    a InterestingPeriod; start "2004-04-01".
+months18    a InterestingPeriod; start "2003-10-01".
+
+
+@forAll DOC, WHEN, PG, GROUP.
+
+{ ?F a TRKB;
+     log:includes {
+       [] org:deliveredBy [ contact:homePage PG ]
+  }
+} => {
+  [] contact:homePage PG
+}.
+
+{ ?F a TRKB;
+    log:includes {
+     DOC dc:date WHEN;
+           org:deliveredBy [ contact:homePage PG ]
+	 }.
+   ?GRP contact:homePage PG
+} => {
+   ?GRP published WHEN
+}.
+
+{
+      ?P a InterestingPeriod; start ?PS.
+      ?GRP published ?WHEN.
+      ?WHEN str:notLessThan ?PS.
+} => { ?GRP publishedInRecent ?P }.
+
+}
+
+  ) log:conjunction [ log:conclusion ?AUDITKB].
+} => { ?AUDITKB a AuditKB }.
+
+{
+  ?AUDITKB a AuditKB.
+  PSHORT a InterestingPeriod.
+
+  <../../../../04/mem-news/groups.rdf>.log:semantics log:includes {
+   [ a org:WorkingGroup; contact:homePage PG ].
+  }.
+
+  ?AUDITKB log:includes {
+    GROUP contact:homePage PG;
+  }.
+
+  ?AUDITKB log:notIncludes {
+   GROUP publishedInRecent PSHORT
+  }
+}
+ => { PSHORT noPub PG }.
+
+
