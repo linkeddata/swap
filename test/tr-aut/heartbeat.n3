@@ -9,10 +9,11 @@
 @prefix dc: <http://purl.org/dc/elements/1.1/>. #@@ missing #
 @prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#>.
 
-months03    a InterestingPeriod; start "2005-01-01".
-months06    a InterestingPeriod; start "2004-10-01".
-months12    a InterestingPeriod; start "2004-04-01".
-months18    a InterestingPeriod; start "2003-10-01".
+months03    a InterestingPeriod.
+months06    a InterestingPeriod.
+months12    a InterestingPeriod.
+months18    a InterestingPeriod.
+
 
 {
  <http://www.w3.org/2002/01/tr-automation/tr.rdf> log:semantics ?F
