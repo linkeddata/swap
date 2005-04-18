@@ -246,8 +246,9 @@ class CalWr:
                                ):
             v = sts.any(who, sym)
             if v:
-                v = str(v)
+                v = v.string.encode('utf-8')
                 if ';' in v or ' ' in v or ':' in v:
+                    #@@hmm... what if " in v?
                     w(";%s=\"%s\"" % (paramName, v))
                 else:
                     w(";%s=%s" % (paramName, v))
@@ -386,7 +387,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.27  2005-03-30 15:33:23  connolly
+# Revision 2.28  2005-04-18 13:21:37  connolly
+# handle non-ascii chars in attendee names
+#
+# Revision 2.27  2005/03/30 15:33:23  connolly
 # switched namespace name to stop abusing the old one
 #
 # Revision 2.26  2005/03/19 14:10:46  connolly
