@@ -255,8 +255,9 @@ class CalWr:
         address = str(sts.the(who, ICAL.calAddress, None))
 
         # MAILTO seems to be capitalized in the iCalendar world. odd.
-        if address.startswith("mailto:"):
-            address = "MAILTO:" + address[7:]
+	# hmm... perhaps not in apple's world
+        #if address.startswith("mailto:"):
+        #    address = "MAILTO:" + address[7:]
         w(":" + address + "\n")
 
 
@@ -387,7 +388,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.28  2005-04-18 13:21:37  connolly
+# Revision 2.29  2005-04-18 14:33:25  connolly
+# try not capitalizing mailto:
+#
+# Revision 2.28  2005/04/18 13:21:37  connolly
 # handle non-ascii chars in attendee names
 #
 # Revision 2.27  2005/03/30 15:33:23  connolly
