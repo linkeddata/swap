@@ -15,7 +15,7 @@ $Id$
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
 @prefix str: <http://www.w3.org/2000/10/swap/string#>.
 
-@prefix cal: <http://www.w3.org/2002/12/cal/ical#>.
+@prefix cal: <http://www.w3.org/2002/12/cal/icaltzd#>.
 @prefix t:   <http://www.w3.org/2000/10/swap/pim/travelTerms#> .
 @prefix apt: <http://www.daml.org/2001/10/html/airport-ont#>.
 
@@ -57,12 +57,28 @@ $Id$
   ?DTEND is str:concatenation of
     (?YYMMDD2 "T" ?HH_MM2 ":00") .
 
+  (?DTSTART ?TZ) log:dtlit ?STARTT.
+  (?DTEND ?TZ2) log:dtlit ?ENDT.
 }
  => {
   ?FLT a cal:Vevent;
-    cal:dtstart [ ?TZ ?DTSTART ];
-    cal:dtend [?TZ2 ?DTEND] .
+    cal:dtstart ?STARTT;
+    cal:dtend ?ENDT.
 }.
+
+# withZoneInfo.n3 used to do this, but can't with new timezone design
+{ ?CAL
+    k:containsInformationAbout-Focally [
+     k:subEvents ?E].
+
+  ?FLT
+    k:fromLocation [ k:inRegion ?TZ ];
+    k:toLocation [ k:inRegion ?TZ2 ].
+
+  ?TZ a cal:Vtimezone.
+  ?TZ2 a cal:Vtimezone.
+} => { ?CAL cal:component ?TZ, ?TZ2 }.
+
 
 
 { ?FLT
