@@ -7,7 +7,7 @@ def parse(s):
     """parse some sparql
 
     >>> parse('PREFIX dc:      <http://purl.org/dc/elements/1.1/> SELECT ?book ?title WHERE { ?book dc:title ?title }')
-    ({'dc:': 'http://purl.org/dc/elements/1.1/'}, ['book', 'title'], '{ ?book dc:title ?title }')
+    ({'dc': 'http://purl.org/dc/elements/1.1/'}, ['book', 'title'], '{ ?book dc:title ?title }')
     """
 
     ns = {}
@@ -18,7 +18,7 @@ def parse(s):
         if k == 'prefix':
             pfx, s = s.split(None, 1)
             utrm, s = s.split(None, 1)
-            ns[pfx] = utrm[1:-1] # remove <> around <foo>
+            ns[pfx[:-1]] = utrm[1:-1] # remove <> around <foo> and : from dc:
         elif k == 'select':
             vars = []
             while 1:
@@ -42,6 +42,9 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.1  2005-05-03 22:08:40  connolly
+# Revision 1.2  2005-05-03 22:10:34  connolly
+# knock colon off prefix
+#
+# Revision 1.1  2005/05/03 22:08:40  connolly
 # one test working
 #
