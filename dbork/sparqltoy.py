@@ -21,6 +21,8 @@ __version__ = "$Id$"
 
 from swap import llyn, notation3
 from swap.query import applyQueries
+from swap.webAccess import load
+from swap import toXML
 
 def selectParts(s):
     """break down SPARQL select into variables, ns bindings, and rule head
@@ -53,8 +55,9 @@ def selectParts(s):
 def constructParts(s):
     """break down SPARQL construct ns bindings, antecedent, and conclusion
 
-    >>> constructParts('PREFIX dc:      <http://purl.org/dc/elements/1.1/> CONSTRUCT { ?book dc:title ?title } WHERE { ?book dc:title ?title }')
-    ({'dc': 'http://purl.org/dc/elements/1.1/'}, '{ ?book dc:title ?title }', '{ ?book dc:title ?title }')
+    >>> constructParts('PREFIX dc:      <http://purl.org/dc/elements/1.1/> CONSTRUCT { ?book <data:title> ?title } WHERE { ?book dc:title ?title }')
+    ({'dc': 'http://purl.org/dc/elements/1.1/'}, '{ ?book dc:title ?title }', '{ ?book <data:title> ?title }')
+
     """
 
     ns = {}
@@ -70,15 +73,21 @@ def constructParts(s):
         elif k == 'construct':
             s = s.strip()
             if s[0] == '{':
-                ant, s = s.split("}", 1)
-                ant = ant + "}"
+                conc, s = s.split("}", 1)
+                conc += "}"
                 s = s.strip()
                 k, s = s.split(None, 1)
                 if k.lower() == 'where':
-                    return ns, ant, s
+                    return ns, s, conc
+                else:
+                    raise ValueError, "expecting 'where'; found " + s
+            else:
+                raise ValueError, "expecting '{'; found " + s
+        else:
+            raise ValueError, "expecting 'construct'; found " + s
+            
 
-
-def mkQueryFormula(vars, ns, ant, kb=None):
+def mkSelectFormula(vars, ns, ant, kb=None):
     """make a llyn Formula for an N3QL query
     vars - a list of variable names ("?foo", "?bar")
     ns - a dictionary of namespace bindings {"dc": "http://..."}
@@ -93,7 +102,27 @@ def mkQueryFormula(vars, ns, ant, kb=None):
     for p, u in ns.items():
         pfxDecls += ("@prefix %s: <%s>.\n" % (p, u))
 
-    r = pfxDecls + "[] <http://www.w3.org/2004/ql#where> " + ant + ("\n ; <http://www.w3.org/2004/ql#select> { (%s) a <#Answer> }." % (" ".join(vars)))
+    r = pfxDecls + "<> <http://www.w3.org/2004/ql#where> " + ant + ("\n ; <http://www.w3.org/2004/ql#select> { (%s) a <#Answer> }." % (" ".join(vars)))
+    return n3p.loadBuf(r).close()
+
+
+def mkConstructFormula(ns, ant, conc, kb=None):
+    """make a llyn Formula for an N3QL query
+    ns - a dictionary of namespace bindings {"dc": "http://..."}
+    ant - an antecedent "{ ?book dc:title ?title }"
+    conc - a conclusion
+    """
+
+    if kb is None: kb = llyn.RDFStore()
+    
+    n3p = notation3.SinkParser(kb, baseURI="file:/")
+
+    pfxDecls = ''
+    for p, u in ns.items():
+        pfxDecls += ("@prefix %s: <%s>.\n" % (p, u))
+
+    r = pfxDecls + "[] <http://www.w3.org/2004/ql#where> " + ant + \
+        "\n ; <http://www.w3.org/2004/ql#select> " + conc + "."
     return n3p.loadBuf(r).close()
 
 
@@ -104,7 +133,7 @@ def queryTriples(s):
     2
     """
     vars, ns, ant = selectParts(s)
-    f = mkQueryFormula(vars, ns, ant)
+    f = mkSelectFormula(vars, ns, ant)
     #print f.universals(), "@@vars"
     #for rule in mkQueryFormula(vars, ns, ant): # should be just one
     #    for st in rule.subject():
@@ -128,6 +157,7 @@ class SparqlServer(BaseHTTPServer.HTTPServer):
         BaseHTTPServer.HTTPServer.__init__(self, addr, handlerClass)
 
         self._kb = llyn.RDFStore()
+
 
 class SparqleHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     QPath = '/sq?'
@@ -156,15 +186,30 @@ class SparqleHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
         print "@@got query:", sparql
 
-        vars, ns, ant = constructParts(sparql)
-        qf = mkQueryFormula(vars, ns, ant, self._kb)
-        results = self._kb.newFormula()
-        applyQueries(dataSet, qf, results)
+        dataSet = kb.newFormula()
+        try:
+            ds = form['default-graph-uri']
+        except:
+            pass
+        else:
+            for d in ds:
+                load(kb, d, openFormula = dataSet)
+                print "@@loaded", d, "; size=", dataSet.size()
+
+        ns, ant, conc = constructParts(sparql) #@@ assume construct
+        qf = mkConstructFormula(ns, ant, conc, kb)
+        print "@@query:", qf.n3String()
         
-        self.send_response(200, "@@not sure you're winning yet, actually")
-        self.send_header("Content-type", RDF_MediaType) #@@ assume construct
+        results = kb.newFormula()
+        applyQueries(dataSet, qf, results)
+        results.canonicalize()
+
+        self.send_response(200, "result graph follows")
+        self.send_header("Content-type", RDF_MediaType)
         self.end_headers()
-        self.wfile.write("<tbd/>") #@@
+
+        sink = toXML.ToRDF(self.wfile, "bogus:@@")
+        kb.dumpNested(results, sink)
 
 
     def notFound(self):
@@ -194,7 +239,7 @@ def main(argv):
     hostPort = ('127.0.0.1', int(port))
     httpd = SparqlServer(hostPort, SparqleHandler)
 
-    print "Serving on port %s ..." % (port)
+    print "sparqltoy %s\nserving on port %s ..." % (__version__, port)
     httpd.serve_forever()
 
 
@@ -214,7 +259,14 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.5  2005-05-05 21:21:45  connolly
+# Revision 1.6  2005-05-05 22:08:07  connolly
+# - implemented construct, with RDF/XML output
+# - implemented default-graph-uri param (mouthful!)
+# - finished constructParts; got the order right
+# - added some else/exceptions to construct parsing code
+# - startup msg includes version
+#
+# Revision 1.5  2005/05/05 21:21:45  connolly
 # - starting HTTP interface
 # - mkQueryFormula takes a kb rather than making one
 # - parse a bit of CONSTRUCT as well as SELECT
