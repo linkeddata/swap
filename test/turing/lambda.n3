@@ -22,14 +22,15 @@
 # environment bindings
 #
 {(?X ?E) a NeedsFindBinding .
- ?E rdf:first (?X ?B) .
+ ?E rdf:first ?L . # (?X ?B) 
+ ?L rdf:first ?X; rdf:rest ?L2 .
+ ?L2 rdf:first ?B; rdf:rest rdf:nil .
  ?E rdf:rest ?R .
 }
 =>
 {(?X ?E) binds ?B } .
 
 {(?X ?E) a NeedsFindBinding .
- ?E rdf:first (?A ?B) .
  ?E rdf:rest ?R .
 }
 =>
@@ -81,6 +82,13 @@
 =>
 {(?F ?X) a NeedsApply} .
 
+{((?A ?B) ?E) a NeedsEval .
+ (?A ?E) eval ?F .
+ (?B ?E) eval ?X .
+ (?F ?X) apply ?R }
+=>
+{((?A ?B) ?E) eval ?R} .
+
 #
 # The apply part of the loop
 #  
@@ -89,6 +97,10 @@
 =>
 {(?Y [ rdf:first (?X ?A); rdf:rest ?E]) a NeedsEval } .
 
+{((function ?X ?Y ?E) ?A) a NeedsApply .
+ (?Y [ rdf:first (?X ?A); rdf:rest ?E]) eval ?R }
+=>
+{ ((function ?X ?Y ?E) ?A) apply ?R } .
 
 
 #
@@ -103,4 +115,4 @@
 =>
 {?X results ?R } .
 
-((lambda (x) x) (lambda (y) (y y))) a NeedsRun .
+((lambda (x) x) (lambda (y) y)) a NeedsRun .
