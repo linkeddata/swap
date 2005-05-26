@@ -698,11 +698,13 @@ class Query:
 	assert type(newBindings) is type({})
         if diag.chatty_flag > 59:
             progress( "QUERY2: called %i terms, %i bindings %s, (new: %s)" %
-                      (len(queue),len(bindings), `bindings`,
+                      (len(queue), len(bindings), `bindings`,
                        `newBindings`))
             if diag.chatty_flag > 90: progress( queueToString(queue))
 
-        for pair in newBindings.items():   # Take care of business left over from recursive call
+        newBindingItems = newBindings.items()
+        while newBindingItems:   # Take care of business left over from recursive call
+            pair = newBindingItems.pop(0)
             if diag.chatty_flag>95: progress("    new binding:  %s -> %s" % (`pair[0]`, `pair[1]`))
             if pair[0] in variables:
                 variables.remove(pair[0])
@@ -710,8 +712,15 @@ class Query:
             else:      # Formulae aren't needed as existentials, unlike lists. hmm.
 		if diag.tracking: raise Error #bindings.update({pair[0]: pair[1]})  # Record for proof only
 		if pair[0] not in existentials:
-		    progress("@@@  Not in existentials or variables but now bound:", `pair[0]`)
-                if not isinstance(pair[0], Formula): # Hack - else rules13.n3 fails @@
+                    if isinstance(pair[0], List):
+                        del newBindings[pair[0]]
+                        reallyNewBindings = pair[0].unify(
+                                pair[1], variables, existentials, bindings)[0][0]
+                        newBindingItems.extend(reallyNewBindings.items())
+                        newBindings.update(reallyNewBindings)
+                    else:
+                        progress("@@@  Not in existentials or variables but now bound:", `pair[0]`)
+                if not isinstance(pair[0], CompoundTerm): # Hack - else rules13.n3 fails @@
                     existentials.remove(pair[0]) # Can't match anything anymore, need exact match
 
         # Perform the substitution, noting where lists become boundLists.

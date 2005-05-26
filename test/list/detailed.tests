@@ -79,7 +79,6 @@
     test:description   "List unification 4 - nested lists";
     test:arguments     """list/unify4.n3 --think --data""".
 
-
 :t2005 a test:CwmTest;
     test:shortFileName "append-out.n3";
     test:description   "Iterative ops on lists";
@@ -92,5 +91,9 @@
     test:description   "last, in builtins on lists";
     test:arguments     """list/last.n3 --think --data""".
 
+:t2007 a test:CwmTest;
+    test:shortFileName "list-builtin_generated_match.n3";
+    test:description   "last, in builtins on lists";
+    test:arguments     """list/builtin_generated_match.n3 --think --data""".
 
 #ends
