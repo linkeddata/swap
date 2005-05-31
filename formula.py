@@ -481,7 +481,7 @@ class Formula(AnonymousNode, CompoundTerm):
         _outSink = notation3.ToN3(buffer.write,
                                       quiet=1, base=base, flags=flags)
         self.store.dumpNested(self, _outSink)
-        return buffer.getvalue()
+        return buffer.getvalue().decode('utf_8')
 
     def rdfString(self, base=None, flags=""):
         "Dump the formula to an absolute string in RDF/XML"

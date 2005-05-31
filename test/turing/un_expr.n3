@@ -16,7 +16,7 @@
 # or ((s ((s (k s)) k)) i)
 #
 #so our expression is -
-#((((s i) (k (s ((s (k s)) k)))) i) ((s ((s (k s)) k)) i)) a RootExpression . #1 + 2
+((((s i) (k (s ((s (k s)) k)))) i) ((s ((s (k s)) k)) i)) a RootExpression . #1 + 2
 #
 # here is 3 ``s``s`ksk``s``s`kski
 # or ((s ((s (k s)) k)) ((s ((s (k s)) k)) i))
@@ -24,4 +24,4 @@
 #
 #(((s ((s ((s i) i))(k i)))(k "*")) ((s ((s (k s)) ((s (k (s (k s)))) ((s ((s (k s)) ((s (k (s (k "\n")))) ((s (k (s i))) k)))) k)))) (k ((s (k s)) k)))) a RootExpression .
 #((((s "hello") "my") "\n") i) a RootExpression . #an infinite loop that's trying to print the fibbonocci numbers
-((((s ((s (k s)) ((s (k k)) ((s i) i)))) ((s ((s (k s)) ((s (k k)) (k (s ((s (k s)) k)))))) (k i))) ((s ((s (k s)) ((s (k k)) ((s i) i)))) ((s ((s (k s)) ((s (k k)) (k (s ((s (k s)) k)))))) (k i)))) (ki)) a RootExpression . #An inifinite loop that gets caught counting
+#((((s ((s (k s)) ((s (k k)) ((s i) i)))) ((s ((s (k s)) ((s (k k)) (k (s ((s (k s)) k)))))) (k i))) ((s ((s (k s)) ((s (k k)) ((s i) i)))) ((s ((s (k s)) ((s (k k)) (k (s ((s (k s)) k)))))) (k i)))) (ki)) a RootExpression . #An inifinite loop that gets caught counting

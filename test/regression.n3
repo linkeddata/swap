@@ -135,6 +135,11 @@
     test:description   "N3 string quoting with utf-8 literals";
     test:arguments     """-n3 strquot.n3""".
 
+:t1009ab a test:CwmTest;
+    test:referenceOutput <ref/n3string.n3>;
+    test:description   "log:n3string genertating utf-8 literals was double encoding";
+    test:arguments     """-n3 i18n/n3string.n3""".
+
 :t1009b a test:CwmTest;
     test:referenceOutput <xml-syntax/non-ascii-pred.rdf>;
     test:description   "XML to XML with utf-8 non-ascii characters";
