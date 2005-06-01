@@ -36,6 +36,12 @@
 =>
 {(?X ?R) a NeedsFindBinding} .
 
+{(?X ?E) a NeedsFindBinding .
+ ?E rdf:rest ?R .
+ (?X ?R) binds ?B .
+}
+=>
+{(?X ?E) binds ?B } .
 #
 # eval
 # every eval is of the form

@@ -4,4 +4,28 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix implies: <http://www.w3.org/2000/10/swap/log#implies> .
 
-((lambda (x) x) (lambda (y) y)) a NeedsRun .
+#((lambda (x) x) (lambda (y) y)) a NeedsRun .
+
+((lambda (0) 
+  ((lambda (1)
+     ((lambda (2)
+        ((lambda (3)
+           ((lambda (4)
+
+((lambda (inc)
+  ((lambda (add)
+     ((lambda (mul)
+        ((lambda (pow) 
+
+           ((add ((mul 2) 3)) ((pow 3) 3))
+
+        ) (lambda (m) (lambda (n) (m n))))
+     ) (lambda (m) (lambda (n) (lambda (f) (m (n f)))))) 
+  ) (lambda (m) (m inc)))
+) (lambda (n) (lambda (f) (lambda (x) (f ((n f) x))))))
+
+           ) (lambda (f) (lambda (x) (f (f (f (f x)))))))           
+        ) (lambda (f) (lambda (x) (f (f (f x))))))         
+     ) (lambda (f) (lambda (x) (f (f x)))))      
+  ) (lambda (f) (lambda (x) (f x))))
+) (lambda (f) (lambda (x) x))) a NeedsRun .
