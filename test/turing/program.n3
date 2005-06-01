@@ -6,6 +6,11 @@
 
 #((lambda (x) x) (lambda (y) y)) a NeedsRun .
 
+((lambda (I)
+  ((lambda (Y)
+    ((lambda (true)
+      ((lambda (false)
+
 ((lambda (0) 
   ((lambda (1)
      ((lambda (2)
@@ -17,7 +22,16 @@
      ((lambda (mul)
         ((lambda (pow) 
 
+
+((lambda (dec)
+  ((lambda (subtract)
+
            ((add ((mul 2) 3)) ((pow 3) 3))
+
+  ) (lambda (m) (m dec)))
+) (lambda (c) (c 
+   (lambda (z) (z I (inc z)))
+   (lambda (a) (lambda (x) 0)))))
 
         ) (lambda (m) (lambda (n) (m n))))
      ) (lambda (m) (lambda (n) (lambda (f) (m (n f)))))) 
@@ -28,4 +42,10 @@
         ) (lambda (f) (lambda (x) (f (f (f x))))))         
      ) (lambda (f) (lambda (x) (f (f x)))))      
   ) (lambda (f) (lambda (x) (f x))))
-) (lambda (f) (lambda (x) x))) a NeedsRun .
+) (lambda (f) (lambda (x) x))) 
+
+      ) (lambda (x) (lambda (y) y)))
+    ) (lambda (x) (lambda (y) x)))
+  ) (lambda (f) ((lambda (x) (f (x x))) (lambda (x) (f (x x))))))
+) (lambda (x) x))
+a NeedsRun .
