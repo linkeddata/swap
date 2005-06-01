@@ -1,4 +1,4 @@
-@keywords a, of, is, has, prefix .
+@keywords of, is, has, prefix .
 
 @prefix : <http://yosi.us/lambda#> . 
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -48,4 +48,4 @@
     ) (lambda (x) (lambda (y) x)))
   ) (lambda (f) ((lambda (x) (f (x x))) (lambda (x) (f (x x))))))
 ) (lambda (x) x))
-a NeedsRun .
+@a NeedsRun .
