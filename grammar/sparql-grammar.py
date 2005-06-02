@@ -131,6 +131,13 @@ def makeGrammar():
 
     regexp_rules = ['%s cfg:matches %s .' % a for a in regexps.iteritems()]
     retVal += '\n\n'.join(regexp_rules)
+    retVal += """#____________________________________________________
+
+#  Axioms reducing the shortcut CFG terms to cfg:musBeOneSequence.
+
+{ ?x cfg:zeroOrMore ?y } => {?x cfg:mustBeOneSequence ( () (?y ?x) ) }.
+
+"""
     return retVal
 
 def makeList(matchString):
