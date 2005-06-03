@@ -165,7 +165,11 @@ def doProduction(lhs):
     rhs = g.the(pred=BNF.matches, subj=lhs)
     if rhs != None:
 	if chatty_flag: progress( "\nToken %s matches regexp %s" %(lhs, rhs))
-	tokenRegexps[lhs] = re.compile(rhs.value(), re.U)
+	try:
+            tokenRegexps[lhs] = re.compile(rhs.value(), re.U)
+        except:
+            print rhs.value()
+            raise
 	cc = g.each(subj=lhs, pred=BNF.canStartWith)
 	if cc == []: progress (recordError(
 	    "No record of what token %s can start with" % `lhs`))
@@ -208,9 +212,8 @@ def doProduction(lhs):
 
     for str1 in branchDict:
 	for str2 in branchDict:
-	    
-	    s1 = str1.__str__()
-	    s2 = str2.__str__()
+	    s1 = unicode(str1)
+	    s2 = unicode(str2)
 # @@ check that selectors are distinct, not substrings
 	    if (s1.startswith(s2) or s2.startswith(s1)) and branchDict[str1] is not branchDict[str2]:
 		progress("WARNING: for %s, %s indicates %s, but  %s indicates %s" % (

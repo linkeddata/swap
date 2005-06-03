@@ -3,7 +3,7 @@
 
 """
 
-import re, traceback
+import re, traceback, string as string_stuff
 from set_importer import Set, ImmutableSet
 
 class ONCE(object): pass
@@ -27,47 +27,64 @@ class PatternList(object):
         self.things = []
         self.ors.append(self.things)
     def __repr__(self):
-        return '(%s, %s): %s' % (`self.type`, `self.repeat`, `self.things`)
+        return '(%s): %s' % (`self.repeat`, `self.things`)
 
     def __str__(self):
+        if len(self.ors) == 1 and len(self.ors[0]) == 1 and self.repeat != ONCE:
+            many = False
+        else:
+            many = True
+        
         level = len(traceback.extract_stack())
         retVal = ""
         if self.repeat == ONCE:
             retVal += ""
         elif self.repeat == STAR:
-            retVal += '\n' + "  "*level + " cfg:zeroOrMore ["
+            retVal += '\n' + "  "*level + " cfg:zeroOrMore "
         elif self.repeat == PLUS:
-            retVal += '\n' + "  "*level + " cfg:zeroOrMore ["
+            retVal += '\n' + "  "*level + " cfg:zeroOrMore "
         elif self.repeat == OPTIONAL:
-            retVal += '\n' + "  "*level + " cfg:mustBeOneSequence ( () ([ "
+            retVal += '\n' + "  "*level + " cfg:mustBeOneSequence ( () ( "
             level = level + 6
         else:
             raise RuntimeError('how did I get here? %s' & `self.repeat`)
-        
-        retVal += "cfg:mustBeOneSequence ( "
-            
-        for group in self.ors:
-            retVal += '\n   '
-            retVal += "  "*level
-            retVal += '('
-            for val in group:
-                if isinstance(val, self.__class__):
-                    retVal += '[ %s ]' % str(val)
-                else:
-                    retVal += ' %s ' % val            
-            retVal += ' ) '
-        retVal += '\n'
-        retVal += "  "*level
-        retVal += " ) "
 
+        if many and self.repeat != ONCE:
+            retVal += '\n   ' + "  "*level + '['
+        if many:
+            retVal += "cfg:mustBeOneSequence ( "
+            
+            for group in self.ors:
+                retVal += '\n   '
+                retVal += "  "*level
+                retVal += '('
+                for val in group:
+                    if isinstance(val, self.__class__):
+                        retVal += '[ %s ]' % str(val)
+                    else:
+                        retVal += ' %s ' % val            
+                retVal += ' ) '
+            retVal += '\n'
+            retVal += "  "*level
+            retVal += " ) "
+        else:
+            val = self.ors[0][0]
+            if isinstance(val, self.__class__):
+                retVal += '[ %s ]' % str(val)
+            else:
+                retVal += ' %s ' % val
+
+        if many and self.repeat != ONCE:
+            retVal += ']'
+            
         if self.repeat == ONCE:
             retVal += ""
         elif self.repeat == STAR:
-            retVal += "]"
+            retVal += ""
         elif self.repeat == PLUS:
-            retVal += "]"
+            retVal += ""
         elif self.repeat == OPTIONAL:
-            retVal += "] ) )"
+            retVal += " ) )"
 
         return retVal
 
@@ -88,34 +105,35 @@ def makeGrammar():
 @keywords a, is, of.
 
     """
-    regexps = {'EXPONENT': '"([eE][+-]?[0-9]+)"',
-           'STRING_LITERAL_LONG1': '"\\"\\"\\"([^\\"\\\\\\\\]|(\\\\\\\\[^\\\\n\\\\r])|(\\"[^\\"])|(\\"\\"[^\\"]))*\\"\\"\\""',
-           'NCCHAR1': '"[A-Za-z\\u00c0-\\u00d6\\u00d8-\\u00f6\\u00f8-\\u02ff' +
-               '\\u0370-\\u037d\\u037f-\\u1fff\\u200c-\\u200d\\u2070-\\u218f\\' +
-               'u2c00-\\u2fef\\u3001-\\ud7ff\\uf900-\\uffff\\U00010000-\\U000effff]"',
-           'DECIMAL': '"([0-9]+\\\\.[0-9]*)|(\\\\.[0-9]+)"',
-           'FLOATING_POINT': '"([0-9]+\\\\.[0-9]*([eE][+-]?[0-9]+)?)|' +
-               '(\\\\.([0-9])+([eE][+-]?[0-9]+)?)|(([0-9])+([eE][+-]?[0-9]+))"',
-           'QuotedIRIref': '"<[^>]*>"',
-           'STRING_LITERAL_LONG2': '"\'\'\'([^\'\\\\\\\\]|(\\\\\\\\[^\\\\n\\\\r])|(\'[^\'])|(\'\'[^\']))*\'\'\'"',
-           'INTEGER': '"[0-9]+"',
-            'LANGTAG': '"@[a-zA-Z]+(-[a-zA-Z0-9]+)*"',
-           'STRING_LITERAL2': '"\\"(([^\\"\\\\\\\\\\\\n\\\\r])|(\\\\\\\\[^\\\\n\\\\r]))*\\""',
-           'STRING_LITERAL1': '"\'(([^\'\\\\\\\\\\\\n\\\\r])|(\\\\\\\\[^\\\\n\\\\r]) )*\'"',
-           'DIGITS' : '"[0-9]"'}
-
-    canStartWith = {'EXPONENT': '"e", "E"',
-           'STRING_LITERAL_LONG1': '\"\\"\\"\\"\"',
-           'NCCHAR1': '"A"',
-           'DECIMAL': '"0", "+", "-"',
-           'FLOATING_POINT': '"0", "+", "-"',
-           'QuotedIRIref': "\"<\"",
-           'STRING_LITERAL_LONG2': "\"'''\"",
-           'INTEGER': '"0", "+", "-"',
-           'LANGTAG': '"@"',
-           'STRING_LITERAL2': r'"\""',
-           'STRING_LITERAL1': "\"'\"",
-           'DIGITS' : '"0"'}
+    regexps = {'QuotedIRIref': '"<[^>]*>"'}
+##    regexps = {'EXPONENT': '"([eE][+-]?[0-9]+)"',
+##           'STRING_LITERAL_LONG1': '"\\"\\"\\"([^\\"\\\\\\\\]|(\\\\\\\\[^\\\\n\\\\r])|(\\"[^\\"])|(\\"\\"[^\\"]))*\\"\\"\\""',
+##           'NCCHAR1': '"[A-Za-z\\u00c0-\\u00d6\\u00d8-\\u00f6\\u00f8-\\u02ff' +
+##               '\\u0370-\\u037d\\u037f-\\u1fff\\u200c-\\u200d\\u2070-\\u218f\\' +
+##               'u2c00-\\u2fef\\u3001-\\ud7ff\\uf900-\\uffff\\U00010000-\\U000effff]"',
+##           'DECIMAL': '"([0-9]+\\\\.[0-9]*)|(\\\\.[0-9]+)"',
+##           'FLOATING_POINT': '"([0-9]+\\\\.[0-9]*([eE][+-]?[0-9]+)?)|' +
+##               '(\\\\.([0-9])+([eE][+-]?[0-9]+)?)|(([0-9])+([eE][+-]?[0-9]+))"',
+##           'QuotedIRIref': '"<[^>]*>"',
+##           'STRING_LITERAL_LONG2': '"\'\'\'([^\'\\\\\\\\]|(\\\\\\\\[^\\\\n\\\\r])|(\'[^\'])|(\'\'[^\']))*\'\'\'"',
+##           'INTEGER': '"[0-9]+"',
+##            'LANGTAG': '"@[a-zA-Z]+(-[a-zA-Z0-9]+)*"',
+##           'STRING_LITERAL2': '"\\"(([^\\"\\\\\\\\\\\\n\\\\r])|(\\\\\\\\[^\\\\n\\\\r]))*\\""',
+##           'STRING_LITERAL1': '"\'(([^\'\\\\\\\\\\\\n\\\\r])|(\\\\\\\\[^\\\\n\\\\r]) )*\'"',
+##           'DIGITS' : '"[0-9]"'}
+##
+##    canStartWith = {'EXPONENT': '"e", "E"',
+##           'STRING_LITERAL_LONG1': '\"\\"\\"\\"\"',
+##           'NCCHAR1': '"A"',
+##           'DECIMAL': '"0", "+", "-"',
+##           'FLOATING_POINT': '"0", "+", "-"',
+##           'QuotedIRIref': "\"<\"",
+##           'STRING_LITERAL_LONG2': "\"'''\"",
+##           'INTEGER': '"0", "+", "-"',
+##           'LANGTAG': '"@"',
+##           'STRING_LITERAL2': r'"\""',
+##           'STRING_LITERAL1': "\"'\"",
+##           'DIGITS' : '"0"'}
     
     File = urllib.urlopen('http://www.w3.org/2005/01/yacker/uploads/sparqlTest/bnf')
 
@@ -135,7 +153,7 @@ def makeGrammar():
             for a in rules]
     rules = [tuple([b.strip() for b in a.split('::=')]) for a in rules]
     rules = rules[1:]
-    rules = [(a[0], makeList(a[1].split(' '))) for a in rules if a[0] not in regexps]
+    rules = [(a[0], makeList(a[1].split(' '), regexps, a[0])) for a in rules if a[0] not in regexps]
     retVal += '. \n\n'.join([b[0] + ' ' + str(b[1]) for b in rules])
 
     retVal += '. \n\n\n'
@@ -143,7 +161,7 @@ def makeGrammar():
     # Here comes the hard part. I gave up
     #
 
-    regexp_rules = ['%s cfg:matches %s; \n       cfg:canStartWith %s .' % (a, regexps[a], canStartWith[a]) for a in regexps]
+    regexp_rules = ['%s cfg:matches %s; \n       cfg:canStartWith "a" .' % a for a in regexps.iteritems()]
     retVal += '\n\n'.join(regexp_rules)
     retVal += """#____________________________________________________
 
@@ -154,47 +172,83 @@ def makeGrammar():
 """
     return retVal
 
-def makeList(matchString):
+def makeList(matchString, extras, ww):
     patterns = [PatternList()]
     for string in matchString:
+#        if ww == 'LANGTAG':
+#            print string
         if string == '': pass
-        elif string == '(':
-            newPattern = PatternList()
-            patterns[-1].things.append(newPattern)
-            patterns.append(newPattern)
-        elif string[0] == ')':
-            patterns[-1].repeat = times[string[1:]]
-            patterns.pop()
         elif string == '|':
-            patterns[-1].newOr()           
+            patterns[-1].newOr()
         else:
-            if string[0:2] == '#x':
-                string = '"\\u%s"' % string[2:]
-            if string == '[0-9]':
-                string = 'DIGITS'
-            string = string.replace("'", '"')
-            if string[-1] in '+?*':
+            if string[0:1] == '(':
                 newPattern = PatternList()
-                newPattern.things.append(string[:-1])
-                newPattern.repeat = times[string[-1]]
-                if newPattern.repeat == PLUS:
-                    patterns[-1].things.append(string[:-1])
                 patterns[-1].things.append(newPattern)
+                patterns.append(newPattern)
+                string = string[1:]
+            elif string[0:1] not in '"\'' + string_stuff.ascii_letters: #regexp
+                pass
+                #extras[name] = '"' + quote(string) + '"'
+
+            k = string.rfind(')')
+            r = None
+            if k >= 0 and string[k-1:k+2] != "')'":
+                string = string[:k]
+                r = string[k:]
+            if string[0:1] and string[0:1] not in '"\')' + string_stuff.ascii_letters: #regexp
+                name = newToken()
+                patterns[-1].things.append(name)
+                extras[name] = '"' + quote(string.replace('#x','\\u')) + '"'
             else:
-                patterns[-1].things.append(string)
+                string = string.replace("'", '"')
+                if string[:1] == '"' and string[-1:] == '"':
+                    string = '"' + quote(string[1:-1]) + '"'
+                if string[0:2] == '#x':
+                    string = '"\\u%s"' % string[2:]
+                if string[-1:] in '+?*':
+                    newPattern = PatternList()
+                    newPattern.things.append(string[:-1])
+                    newPattern.repeat = times[string[-1:]]
+                    if newPattern.repeat == PLUS:
+                        patterns[-1].things.append(string[:-1])
+                    patterns[-1].things.append(newPattern)
+                else:
+                    patterns[-1].things.append(string)
+            if r is not None:
+                #print 'I\'m here'
+                patterns[-1].repeat = times[r[1:]]
+                patterns.pop()
     if len(patterns) == 1:
         return patterns[0]
+    print patterns[1]
     return None
 
+class l(object): pass
+
 def counter():
+    m = l()
+    m.n = 0
     def f():
-        global n
-        n = n+1
-        return 'token%s' % n
-    n = 0
+        m.n += 1
+        return 'token%s' %m.n
     return f
 
 newToken = counter()
+
+r_unilower = re.compile(r'(?<=\\u)([0-9a-f]{4})|(?<=\\U)([0-9a-f]{8})')
+r_hibyte = re.compile(r'[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F-\xFF]')
+def quote(s): 
+   if not isinstance(s, unicode): 
+      s = unicode(s, 'utf-8') # @@ not required?
+   if not (u'\\'.encode('unicode-escape') == '\\\\'): 
+      s = s.replace('\\', r'\\')
+   s = s.replace('"', r'\"')
+   # s = s.replace(r'\\"', r'\"')
+   s = r_hibyte.sub(lambda m: '\\u00%02X' % ord(m.group(0)), s)
+   s = s.encode('unicode-escape')
+   s = r_unilower.sub(lambda m: (m.group(1) or m.group(2)).upper(), s)
+   return str(s)
+
 
 
 def writeGrammar():
