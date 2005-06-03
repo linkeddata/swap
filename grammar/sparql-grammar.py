@@ -98,10 +98,24 @@ def makeGrammar():
                '(\\\\.([0-9])+([eE][+-]?[0-9]+)?)|(([0-9])+([eE][+-]?[0-9]+))"',
            'QuotedIRIref': '"<[^>]*>"',
            'STRING_LITERAL_LONG2': '"\'\'\'([^\'\\\\\\\\]|(\\\\\\\\[^\\\\n\\\\r])|(\'[^\'])|(\'\'[^\']))*\'\'\'"',
-           'INTEGER': '"[0-9]+"', 'LANGTAG': '"@[a-zA-Z]+(-[a-zA-Z0-9]+)*"',
+           'INTEGER': '"[0-9]+"',
+            'LANGTAG': '"@[a-zA-Z]+(-[a-zA-Z0-9]+)*"',
            'STRING_LITERAL2': '"\\"(([^\\"\\\\\\\\\\\\n\\\\r])|(\\\\\\\\[^\\\\n\\\\r]))*\\""',
            'STRING_LITERAL1': '"\'(([^\'\\\\\\\\\\\\n\\\\r])|(\\\\\\\\[^\\\\n\\\\r]) )*\'"',
            'DIGITS' : '"[0-9]"'}
+
+    canStartWith = {'EXPONENT': '"e", "E"',
+           'STRING_LITERAL_LONG1': '\"\\"\\"\\"\"',
+           'NCCHAR1': '"A"',
+           'DECIMAL': '"0", "+", "-"',
+           'FLOATING_POINT': '"0", "+", "-"',
+           'QuotedIRIref': "\"<\"",
+           'STRING_LITERAL_LONG2': "\"'''\"",
+           'INTEGER': '"0", "+", "-"',
+           'LANGTAG': '"@"',
+           'STRING_LITERAL2': r'"\""',
+           'STRING_LITERAL1': "\"'\"",
+           'DIGITS' : '"0"'}
     
     File = urllib.urlopen('http://www.w3.org/2005/01/yacker/uploads/sparqlTest/bnf')
 
@@ -129,7 +143,7 @@ def makeGrammar():
     # Here comes the hard part. I gave up
     #
 
-    regexp_rules = ['%s cfg:matches %s .' % a for a in regexps.iteritems()]
+    regexp_rules = ['%s cfg:matches %s; \n       cfg:canStartWith %s .' % (a, regexps[a], canStartWith[a]) for a in regexps]
     retVal += '\n\n'.join(regexp_rules)
     retVal += """#____________________________________________________
 
