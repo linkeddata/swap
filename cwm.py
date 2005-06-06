@@ -562,6 +562,21 @@ rdf/xml files. Note that this requires rdflib.
             elif arg == "-think":  
                 think(workingContext, mode=option_flags["think"])
 
+            elif arg == '-pythink':
+                from swap import pycwmko
+                from pychinko import interpreter
+                from swap.set_importer import Set, ImmutableSet
+                pyf = pycwmko.N3Loader.N3Loader()
+                conv = pycwmko.ToPyStore(pyf)
+                conv.statements(workingContext)
+                interp = interpreter.Interpreter(pyf.rules[:])
+                interp.addFacts(Set(pyf.facts), initialSet=True)
+                interp.run()
+                pyf.facts = interp.totalFacts
+                workingContext = workingContext.store.newFormula()
+                reconv = pycwmko.FromPyStore(workingContext, pyf)
+                reconv.run()
+
             elif arg == "-lxkbdump":  # just for debugging
                 raise NotImplementedError
 

@@ -28,7 +28,25 @@
  ?E rdf:rest ?R .
 }
 =>
-{(?X ?E) binds ?B } .
+{(?X ?E) bindsThunked ?B .
+ ?B a NeedsUnthunk } .
+
+#case 5
+{(thunk ?A ?E) a NeedsUnthunk}
+=>
+{(?A ?E) a NeedsEval} .
+
+{(thunk ?A ?E) a NeedsUnthunk .
+ (?A ?E) eval ?R .
+}
+=>
+{(thunk ?A ?E) unthunk ?R} .
+
+{(?X ?E) bindsThunked ?B .
+ ?B unthunk ?R .
+}
+=>
+{(?X ?E) binds ?R} .
 
 {(?X ?E) a NeedsFindBinding .
  ?E rdf:rest ?R .
@@ -51,7 +69,6 @@
 # 2.  variable
 # 3.  existing function
 # 4.  application
-#
 
 
 #case 1.
@@ -80,20 +97,23 @@
 {((?A ?B) ?E) a NeedsEval}
 =>
 {(?A ?E) a NeedsEval .
- (?B ?E) a NeedsEval } .
+# (?B ?E) a NeedsEval 
+} .
 
 {((?A ?B) ?E) a NeedsEval .
  (?A ?E) eval ?F .
- (?B ?E) eval ?X }
+# (?B ?E) eval ?X 
+}
 =>
-{(?F ?X) a NeedsApply} .
+{(?F (thunk ?B ?E)) a NeedsApply} .
 
 {((?A ?B) ?E) a NeedsEval .
  (?A ?E) eval ?F .
- (?B ?E) eval ?X .
- (?F ?X) apply ?R }
+# (?B ?E) eval ?X .
+ (?F (thunk ?B ?E)) apply ?R }
 =>
 {((?A ?B) ?E) eval ?R} .
+
 
 #
 # The apply part of the loop
