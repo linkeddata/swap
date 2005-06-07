@@ -1,0 +1,39 @@
+@prefix rein: <http://yosi.us/rein#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+
+:UberPrint a :Printer .
+
+{?x a :GradStudent. ?y a :Printer} => {?x rein:permitted ?y}.
+
+{?x a :GradStudent} => {?x rein:prohibited
+:UberPrint}.
+
+@forAll :a, :b, :c, :d, :e, :f .
+
+#We want a rule saying: apply one, not the other. log:includes is too weak. Use log:filter?
+{?A log:implies ?B . ?C log:implies ?D .
+ ?A log:includes ?C . ?B log:notIncludes ?D .} => {((?A ?B) (?C ?D)) a :weCare1} .
+
+{?A log:implies ?B . ?C log:implies ?D .
+ ?A log:includes ?C . ?D log:notIncludes ?B .
+} => {((?A ?B) (?C ?D)) a :weCare2} .
+
+
+#log:filter time
+
+{((?t1 ?A) (?t2 ?B)) a :weCare2 . 
+ (?A  {{?q rein:permitted ?r} => {:l rein:p1 ?r}}) log:filter ?AA .
+ (?B  {{?q rein:prohibited ?r} => {:l rein:p1 ?r}}) log:filter ?BB . }
+=>
+{((?t1 ?A ?AA) (?t2 ?B ?BB)) a :weReallyCare} .
+
+{((?t1 ?A ?AA) (?t2 ?B ?BB)) a :weReallyCare .
+ (<>!log:semantics!log:vars ?AA {:BB => {:qq :qq :qq}})!log:conjunction!log:conclusion log:includes {:qq :qq :qq}}
+=> {(?t1 ?A) a :Wins} .
+
+
+
+{((?t1 ?A ?AA) (?t2 ?B ?BB)) a :weReallyCare .
+ (<>!log:semantics!log:vars ?BB {:AA => {:qq :qq :qq}})!log:conjunction!log:conclusion log:includes {:qq :qq :qq}}
+=> {(?t2 ?B) a :Wins} .
+
