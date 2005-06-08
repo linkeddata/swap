@@ -1,13 +1,6 @@
 @prefix rein: <http://yosi.us/rein#> .
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 
-:UberPrint a :Printer .
-
-{?x a :GradStudent. ?y a :Printer} => {?x rein:permitted ?y}.
-
-{?x a :GradStudent} => {?x rein:prohibited
-:UberPrint}.
-
 @forAll :a, :b, :c, :d, :e, :f .
 
 #We want a rule saying: apply one, not the other. log:includes is too weak. Use log:filter?
@@ -28,12 +21,11 @@
 {((?t1 ?A ?AA) (?t2 ?B ?BB)) a :weReallyCare} .
 
 {((?t1 ?A ?AA) (?t2 ?B ?BB)) a :weReallyCare .
- (<>!log:semantics!log:vars ?AA {:BB => {:qq :qq :qq}})!log:conjunction!log:conclusion log:includes {:qq :qq :qq}}
+ (?AA (<printer_data.n3>!log:semantics!log:vars {:BB => {:qq :qq :qq}})!log:conjunction)!log:filter log:includes {:qq :qq :qq}}
 => {(?t1 ?A) a :Wins} .
 
 
 
 {((?t1 ?A ?AA) (?t2 ?B ?BB)) a :weReallyCare .
- (<>!log:semantics!log:vars ?BB {:AA => {:qq :qq :qq}})!log:conjunction!log:conclusion log:includes {:qq :qq :qq}}
+ (?BB (<printer_data.n3>!log:semantics!log:vars{:AA => {:qq :qq :qq}})!log:conjunction)!log:filter log:includes {:qq :qq :qq}}
 => {(?t2 ?B) a :Wins} .
-

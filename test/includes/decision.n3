@@ -1,0 +1,14 @@
+@prefix rein: <http://yosi.us/rein#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix rule: <rule_rules.n3#> .
+@forAll :a, :b, :c, :A, :B .
+
+{( (<rule_rules.n3>!log:semantics <printer_data.n3>!log:semantics)!log:conjunction!log:conclusion
+   {{?e a rule:Wins} => {?e a :Wins}}) log:filter ?x } => {?x a :Result} .
+
+{?q a log:Truth; log:includes {:a :b :c}} => {:a :b :c} .
+
+{?a a :Result . (?a {@forAll :C, :D. {(:C :D) a :Wins} => {:C => :D}}) log:filter ?b} => {?b a :Rule} .
+
+{?a a :Rule . (<printer_data.n3>!log:semantics (<printer_data.n3>!log:semantics!log:vars ?a)!log:conjunction) log:filter ?c} => {?c a log:Truth} . 
+
