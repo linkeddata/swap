@@ -51,7 +51,7 @@ from diag import progress
 
 
 import sys
-if sys.hexversion < 0x02020000:
+if sys.hexversion < 0x02030000:
     raise RuntimeError("Sorry, this software requires python2.2 or newer.")
     
 REIFY_NS = "http://www.w3.org/2004/06/rei#"
@@ -81,7 +81,7 @@ REIFY_NS = "http://www.w3.org/2004/06/rei#"
 
 
         
-class Term:
+class Term(object):
     """The Term object represents an RDF term.
     
     It is interned for speed of processing by the store.
@@ -1045,15 +1045,19 @@ class BuiltIn(Fragment):
 	elif isinstance(self, ReverseFunction):
 		return ReverseFunction.eval(self, subj, obj, queue, bindings, proof, query)
 	raise RuntimeError("Instance %s of built-in has no eval() or subsititue for it" %`self`)
+
+class GenericBuiltIn(BuiltIn):
+    def __init__(self, resource, fragid):
+        Fragment.__init__(self, resource, fragid)
 	
-class LightBuiltIn(BuiltIn):
+class LightBuiltIn(GenericBuiltIn):
     """A light built-in is fast and is calculated immediately before searching the store.
     
     Make your built-in a subclass of either this or HeavyBultIn to tell cwm when to
     run it.  Going out onto the web or net counts as heavy."""
     pass
 
-class HeavyBuiltIn(BuiltIn):
+class HeavyBuiltIn(GenericBuiltIn):
     """A heavy built-in is fast and is calculated late, after searching the store
     to see if the answer is already in it.
     
@@ -1132,12 +1136,14 @@ class MultipleReverseFunction(ReverseFunction):
 #	results = self.store._fromPython(self.evaluateObject(obj.value()))
 #	return [ ({subj: x}, None) for x in results]
     
-class FiniteProperty(BuiltIn, Function, ReverseFunction):
+class FiniteProperty(GenericBuiltIn, Function, ReverseFunction):
     """A finite property has a finite set of pairs of (subj, object) values
     
     The built-in finite property can ennumerate them all if necessary.
     Argv is the only useful example I can think of right now.
     """
+#    def __init__(self, resource, fragid):
+#        Fragment.__init__(self, resource, fragid)
     
     def enn(self):
 	" Return list of pairs [(subj, obj)]"
