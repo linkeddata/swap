@@ -9,7 +9,7 @@
 
 :threeItems = {$ :b, :c, :d $} .
 
-:theeDistinctItems = {$  :b, :c, :d, :c, $}.
+:theeDistinctItems = {$  :b, :c, :d, :c $}.
 
 :nested ={$ :first, :second, {$ :left3, :right3 $}, :fourth $}  .
 

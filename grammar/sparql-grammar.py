@@ -144,13 +144,13 @@ def makeGrammar():
         this = this.replace('  ', ' ')
     i = this.find('@terminals')
     first_half = this[:i]
-    i2 = this.find('[', i+2)
+    i2 = this.find('\n', i+2)
     second_half = this[i2:]
     whole = first_half + second_half
-    next_rule = re.compile(r'\[\d+\]')
+    next_rule = re.compile(r'(?=[a-zA-Z_]+:)')
     rules = next_rule.split(whole)
     rules = [a.replace('\t', '').replace('\r', '')
-            for a in rules]
+            for a in rules if a and a[0] != '#']
     rules = [tuple([b.strip() for b in a.split('::=')]) for a in rules]
     rules = rules[1:]
     rules = [(a[0], makeList(a[1].split(' '), regexps, a[0])) for a in rules if a[0] not in regexps]

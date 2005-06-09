@@ -17,8 +17,8 @@ OFFLINETESTS=regression.n3 list/detailed.tests \
 	ntriples/detailed.tests \
 	delta/detailed.tests \
 	syntax/detailed.tests \
-	reify/detailed.tests \
 	testmeta.n3
+#	reify/detailed.tests \
 # 	i18n/detailed.tests \
 
 TESTS=online.tests n3parser.tests rdfcore-tests.n3 $(OFFLINETESTS)
