@@ -21,7 +21,7 @@ __version__ = '$Revision$'
 import sys, string, re, urllib
 
 from term import LightBuiltIn, Function, ReverseFunction
-from decimal import Decimal
+from local_decimal import Decimal
 import types
 
 # from RDFSink import DAML_LISTS, RDF_type_URI, DAML_sameAs_URI

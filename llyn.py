@@ -77,7 +77,7 @@ import reify
 from query import think, applyRules, testIncludes
 import webAccess
 from webAccess import DocumentAccessError
-from decimal import Decimal
+from local_decimal import Decimal
 
 from RDFSink import Logic_NS, RDFSink, forSomeSym, forAllSym
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4

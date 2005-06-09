@@ -85,7 +85,7 @@ N3_forAll_URI = RDFSink.forAllSym
 
 from RDFSink import RDF_type_URI, RDF_NS_URI, DAML_sameAs_URI, parsesTo_URI
 from RDFSink import RDF_spec, List_NS, uniqueURI
-from decimal import Decimal
+from local_decimal import Decimal
 
 ADDED_HASH = "#"  # Stop where we use this in case we want to remove it!
 # This is the hash on namespace URIs

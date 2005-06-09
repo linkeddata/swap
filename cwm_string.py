@@ -18,7 +18,7 @@ import urllib # for hasContent
 import md5, binascii  # for building md5 URIs
 
 from term import LightBuiltIn, ReverseFunction, Function
-from decimal import Decimal
+from local_decimal import Decimal
 
 LITERAL_URI_prefix = "data:text/rdf+n3;"
 

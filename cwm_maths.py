@@ -22,7 +22,7 @@ __version__ = '$Revision$'
 import sys, string, re, urllib
 
 from term import LightBuiltIn, Function, ReverseFunction
-from decimal import Decimal
+from local_decimal import Decimal
 
 MATHS_NS_URI = 'http://www.w3.org/2000/10/swap/maths#'
 

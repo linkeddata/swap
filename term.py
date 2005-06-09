@@ -34,7 +34,7 @@ import md5, binascii  # for building md5 URIs
 
 from uripath import refTo
 from RDFSink import runNamespace
-from decimal import Decimal  # for xsd:decimal
+from local_decimal import Decimal  # for xsd:decimal
 
 LITERAL_URI_prefix = "data:application/rdf+n3-literal;"
 
