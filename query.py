@@ -24,7 +24,6 @@ from formula import StoredStatement, Formula
 from why import Because, BecauseBuiltIn, BecauseOfRule, \
     BecauseOfExperience, becauseSubexpression, BecauseMerge ,report
 
-
 import types
 import sys
 # from sets import Set  # only in python 2.3 and following
@@ -98,7 +97,6 @@ class InferenceTask:
 	A rule here is defined by log:implies, which associates the template (premise, precondidtion,
 	antecedent) to the conclusion (postcondition).
 	"""
-	
 	if diag.chatty_flag >20:
 	    progress("New Inference task, rules from %s" % ruleFormula)
 	if targetContext is None: targetContext = workingContext # return new data to store

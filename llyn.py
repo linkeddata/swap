@@ -844,6 +844,34 @@ class BI_semantics(HeavyBuiltIn, Function):
 	if diag.tracking:
 	    proof.append(F.collector)
         return F.canonicalize()
+
+class BI_semanticsWithImportsClosure(HeavyBuiltIn, Function):
+
+    """ The semantics of a resource are its machine-readable meaning,
+    as an N3 forumula.  The URI is used to find a representation of
+    the resource in bits which is then parsed according to its content
+    type.  Extension : It also loads all imported URIs"""
+  
+    def evalObj(self, subj, queue, bindings, proof, query):
+        store = subj.store
+        if isinstance(subj, Fragment): doc = subj.resource
+        else: doc = subj
+        F = store.any((store._experience, store.semanticsWithImportsClosure, doc, None))
+        if F != None:
+            if diag.chatty_flag > 10: progress("Already read and parsed "+`doc`+" to "+ `F`)
+            return F
+  
+        if diag.chatty_flag > 10: progress("Reading and parsing with closure " + doc.uriref())
+        inputURI = doc.uriref()
+  
+  	F = store.newFormula()
+  	F.setClosureMode("i")
+  	F = store.load(uri=inputURI, openFormula=F)
+          
+        if diag.chatty_flag>10: progress("Reading and parsing with closure done.    semantics: %s" % (F))
+  	if diag.tracking:
+            proof.append(F.collector)
+        return F.close()
     
 class BI_semanticsOrError(BI_semantics):
     """ Either get and parse to semantics or return an error message on any error """
@@ -1111,6 +1139,7 @@ class RDFStore(RDFSink) :
         self.semantics = log.internFrag("semantics", BI_semantics)
         self.cufi = log.internFrag("conclusion", BI_conclusion)
         self.semanticsOrError = log.internFrag("semanticsOrError", BI_semanticsOrError)
+        self.semanticsWithImportsClosure = log.internFrag("semanticsWithImportsClosure", BI_semanticsWithImportsClosure)
         self.content = log.internFrag("content", BI_content)
         self.parsedAsN3 = log.internFrag("parsedAsN3",  BI_parsedAsN3)
         self.n3ExprFor = log.internFrag("n3ExprFor",  BI_parsedAsN3) ## Obsolete

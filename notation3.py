@@ -138,7 +138,6 @@ class SinkParser:
 	    assert ':' in thisDoc, "Document URI if any must be absolute: <%s>" % thisDoc
 	    self._bindings[""] = thisDoc + "#"  # default
 
-
         self._store = store
 	if genPrefix: store.setGenPrefix(genPrefix) # pass it on
 	

@@ -286,17 +286,18 @@ class Symbol(LabelledNode):
 	
 	Returns None if it cannot be retreived.
 	"""
-	if hasattr(self, "_semantics"): return self._semantics
-    
-	inputURI = self.uriref()
-	if diag.chatty_flag > 20: progress("Web: Looking up %s" % self)
-	if "E" not in mode: F = self.store.load(inputURI)
-	else:
-	    try:
-		F = self.store.load(inputURI)
-	    except:
-	    #except (IOError, SyntaxError, DocumentAccessError, xml.sax._exceptions.SAXParseException):
-		F = None
+	if hasattr(self, "_semantics"):
+            F = self._semantics
+        else:
+            inputURI = self.uriref()
+            if diag.chatty_flag > 20: progress("Web: Looking up %s" % self)
+            if "E" not in mode: F = self.store.load(inputURI)
+            else:
+                try:
+                    F = self.store.load(inputURI)
+                except:
+                #except (IOError, SyntaxError, DocumentAccessError, xml.sax._exceptions.SAXParseException):
+                    F = None
 	if F != None:
 	    if "m" in mode:
 		workingContext.reopen()
@@ -305,7 +306,8 @@ class Symbol(LabelledNode):
 		workingContext.store.copyFormula(F, workingContext)
 	    if "x" in mode:   # capture experience
 		workingContext.add(r, self.store.semantics, F)
-	setattr(self, "_semantics", F)
+	if not hasattr(self, "_semantics"):
+            setattr(self, "_semantics", F)
 	if diag.chatty_flag > 25: progress("Web: Dereferencing %s gave %s" %(self, F))
 	return F
 		
@@ -1001,17 +1003,19 @@ class Literal(Term):
 #    def value(self):
 #	return self._value
 
-def uri_encode(str):
-        """ untested - this must be in a standard library somewhere
-        """
-        result = ""
-        i=0
-        while i<len(str) :
-            if string.find('"\'><"', str[i]) <0 :   # @@@ etc
-                result.append("%%%2x" % (atoi(str[i])))
-            else:
-                result.append(str[i])
-        return result
+#I think I'll replace this with urllib.quote
+##def uri_encode(str):
+##        """ untested - this must be in a standard library somewhere
+##        """
+##        result = ""
+##        i=0
+##        while i<len(str) :
+##            if string.find('"\'><"', str[i]) <0 :   # @@@ etc
+##                result.append("%%%2x" % (atoi(str[i])))
+##            else:
+##                result.append(str[i])
+##        return result
+from urllib import quote as uri_encode
 
 
 

@@ -1,0 +1,41 @@
+     @prefix : <#> .
+     @prefix closure: <rules_closure.n3#> .
+     @prefix data: <data#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix owl: <http://www.w3.org/2002/07/owl#> .
+    
+     @forAll :A,
+                :B .
+    {
+        <rules_included.n3>     log:semanticsWithImportsClosure :A .
+        
+        }     log:implies {:A     :a :Step2 .
+        } .
+    {
+        <rules_included.n3>     log:semanticsWithImportsClosure :B .
+        
+        }     log:implies {:B     :a :Step22 .
+        } .
+    {
+         @forAll closure:x .
+        <rules_included.n3>     owl:imports <rules_closure.n3> .
+          [      a <rules_included.n3#Triple> ].
+        {
+            closure:x     a data:Query .
+            
+            }     log:implies {closure:x     a closure:Answer .
+            } .
+        
+        }     :a :Step2 .
+    {
+         @forAll closure:x .
+        <rules_included.n3>     owl:imports <rules_closure.n3> .
+          [      a <rules_included.n3#Triple> ].
+        {
+            closure:x     a data:Query .
+            
+            }     log:implies {closure:x     a closure:Answer .
+            } .
+        
+        }     :a :Step22 .
+    

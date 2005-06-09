@@ -1,0 +1,24 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix math: <http://www.w3.org/2000/10/swap/math#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+
+@prefix closure: <rules_closure.n3#> .
+
+#{(<data.n3>!log:semantics <rules_included.n3>!log:semanticsWithImportsClosure) log:conjunction ?A .
+# ?A log:conclusion ?B } 
+#=> {?B a :Step4} .
+
+#{(<data.n3>!log:semantics <rules_included.n3>!log:semanticsWithImportsClosure) log:conjunction ?A } 
+#=> {?A :a :Step3} .
+
+{<rules_included.n3> log:semanticsWithImportsClosure ?A } 
+=> {?A :a :Step2} .
+
+{<rules_included.n3> log:semanticsWithImportsClosure ?B } 
+=> {?B :a :Step22} .
+
+#{<data.n3> log:semantics  ?A } 
+#=> {?A a :Step1} .

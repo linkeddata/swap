@@ -25,6 +25,7 @@ def patch(workingContext, patchFormula):
     This is simpler than an Inference task, in that a patch is only done
     once, patches cannot lead to new patches, etc.
     """
+    import queryize
     if diag.chatty_flag >20:
 	progress("New Update task, patches from %s applied to %s" %
 		(patchFormula, workingContext))

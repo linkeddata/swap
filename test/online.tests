@@ -22,4 +22,9 @@
     test:description	"What happens when the document you want isn't there (ONLINE)";
     test:arguments	"--mode=rs includes/404.n3 --think".
 
+:t1105 a test:CwmTest;
+    test:referenceOutput	<imports/closure_ref.n3>;
+    test:description	"Test of log:semanticsImportsWithClosure";
+    test:arguments	"imports/rules_base.n3 --think".
+
 #ends

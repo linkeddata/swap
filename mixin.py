@@ -56,7 +56,7 @@ class mixinClass(object):
 ##                        if func not in operations:
 ##                            operations[func] = {}
 ##                        operations[func][base] = dict[func]
-                        base.func = dict[func]
+                        setattr(base, func, dict[func])
         return object.__new__(metacls)
 
 class Mixin:

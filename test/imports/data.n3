@@ -1,0 +1,4 @@
+
+"me" a :Query .
+"me2" a :Query .
+"you" a :Thing . 
