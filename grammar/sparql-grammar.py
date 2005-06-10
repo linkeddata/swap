@@ -153,6 +153,7 @@ def makeGrammar():
     whole = first_half # + second_half
     next_rule = re.compile(r';\s')
     rules = next_rule.split(whole)
+    rules[0] = rules[0] + ' cfg:eof'
     rules = [a.replace('\t', '').replace('\r', '').replace('\n', ' ').replace('  ', ' ') for a in rules]
     rules = [a for a in rules if a]
 ##    print "[" + ",\n".join(rules) + "]"

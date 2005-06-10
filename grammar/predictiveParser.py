@@ -231,14 +231,20 @@ notNameChars = notQNameChars + ":"  # Assume anything else valid name :-/
 class PredictiveParser:
     """A parser for N3 or derived languages"""
 
-    def __init__(parser, sink, top,  branchTable, tokenRegexps):
+    def __init__(parser, sink, top,  branchTable, tokenRegexps, keywords = None):
 	parser.sink = sink
 	parser.top = top    #  Initial production for whole document
 	parser.branchTable = branchTable
 	parser.tokenRegexps = tokenRegexps
 	parser.lineNumber = 1
 	parser.startOfLine = 0	# Offset in buffer
-	parser.keywords = [ "a", "is", "of", "this" ]
+	parser.atMode = True
+	if keywords:
+            parser.keywords = keywords
+            parser.atMode = False
+        else:
+            parser.keywords = [ "a", "is", "of", "this" ]
+        print parser.keywords
 	parser.verb = 0  # Verbosity
 	parser.keywordMode = 0  # In a keyword statement, adding keywords
 	
@@ -297,7 +303,9 @@ class PredictiveParser:
 	    if word == "keywords" :
 		parser.keywords = []	# Special
 		parser.keywordMode = 1
-	    return "@" + word, i  # implicit keyword
+	    if parser.atMode:
+                return "@" + word, i  # implicit keyword
+            return word, i
 	return "a", i    # qname, langcode, or barename
 
     def around(parser, str, here):
@@ -454,8 +462,10 @@ def main():
     
     str = ip.read().decode('utf_8')
     sink = g.newFormula()
+    keywords = g.each(pred=BNF.keywords, subj=document)
+    keywords = [a.value() for a in keywords]
     p = PredictiveParser(sink=sink, top=document, branchTable= branchTable,
-	    tokenRegexps= tokenRegexps)
+	    tokenRegexps= tokenRegexps, keywords =  keywords)
     p.verb = verbose
     start = clock()
     p.parse(str)
