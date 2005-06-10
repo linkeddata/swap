@@ -105,7 +105,7 @@ def makeGrammar():
 @keywords a, is, of.
 
     """
-    regexps = {'QuotedIRIref': '"<[^>]*>"'}
+##    regexps = {'QuotedIRIref': '"<[^>]*>"'}
 ##    regexps = {'EXPONENT': '"([eE][+-]?[0-9]+)"',
 ##           'STRING_LITERAL_LONG1': '"\\"\\"\\"([^\\"\\\\\\\\]|(\\\\\\\\[^\\\\n\\\\r])|(\\"[^\\"])|(\\"\\"[^\\"]))*\\"\\"\\""',
 ##           'NCCHAR1': '"[A-Za-z\\u00c0-\\u00d6\\u00d8-\\u00f6\\u00f8-\\u02ff' +
@@ -136,33 +136,40 @@ def makeGrammar():
 ##           'DIGITS' : '"0"'}
     
     File = urllib.urlopen('http://www.w3.org/2005/01/yacker/uploads/sparqlTest/bnf')
-
-    this = File.read().replace('\n', ' ')
+    this = ""
+    ws = re.compile(r'\S')
+    for string in File:
+        if ws.search(string) and string[0] != '#':
+            this += string
+    #this = File.read()#.replace('\n', ' ')
     that = None
     while that != this:
         that = this
         this = this.replace('  ', ' ')
     i = this.find('@terminals')
     first_half = this[:i]
-    i2 = this.find('\n', i+2)
-    second_half = this[i2:]
-    whole = first_half + second_half
-    next_rule = re.compile(r'(?=[a-zA-Z_]+:)')
+    #i2 = this.find('\n', i+2)
+    #second_half = this[i2:]
+    whole = first_half # + second_half
+    next_rule = re.compile(r';\s')
     rules = next_rule.split(whole)
-    rules = [a.replace('\t', '').replace('\r', '')
-            for a in rules if a and a[0] != '#']
-    rules = [tuple([b.strip() for b in a.split('::=')]) for a in rules]
-    rules = rules[1:]
-    rules = [(a[0], makeList(a[1].split(' '), regexps, a[0])) for a in rules if a[0] not in regexps]
+    rules = [a.replace('\t', '').replace('\r', '').replace('\n', ' ').replace('  ', ' ') for a in rules]
+    rules = [a for a in rules if a]
+##    print "[" + ",\n".join(rules) + "]"
+    rules = [tuple([b.strip() for b in a.split(': ')]) for a in rules]
+    rules = rules[:-1]
+##    print "[" + ",\n".join(["(" + `a` + ")" for a in rules]) + "]"
+##    return
+    rules = [(a[0], makeList(a[1].split(' '), a[0])) for a in rules]
     retVal += '. \n\n'.join([b[0] + ' ' + str(b[1]) for b in rules])
-
+    print "[" + ",\n".join(["(" + `a` + ")" for a in rules]) + "]"
     retVal += '. \n\n\n'
     #
     # Here comes the hard part. I gave up
     #
 
-    regexp_rules = ['%s cfg:matches %s; \n       cfg:canStartWith "a" .' % a for a in regexps.iteritems()]
-    retVal += '\n\n'.join(regexp_rules)
+    #regexp_rules = ['%s cfg:matches %s; \n       cfg:canStartWith "a" .' % a for a in regexps.iteritems()]
+    #retVal += '\n\n'.join(regexp_rules)
     retVal += """#____________________________________________________
 
 #  Axioms reducing the shortcut CFG terms to cfg:musBeOneSequence.
@@ -172,7 +179,7 @@ def makeGrammar():
 """
     return retVal
 
-def makeList(matchString, extras, ww):
+def makeList(matchString, ww):
     patterns = [PatternList()]
     for string in matchString:
 #        if ww == 'LANGTAG':
@@ -195,17 +202,18 @@ def makeList(matchString, extras, ww):
             if k >= 0 and string[k-1:k+2] != "')'":
                 string = string[:k]
                 r = string[k:]
-            if string[0:1] and string[0:1] not in '"\')' + string_stuff.ascii_letters: #regexp
+            if False: #string[0:1] and string[0:1] not in '"\')' + string_stuff.ascii_letters: #regexp
                 name = newToken()
                 patterns[-1].things.append(name)
                 extras[name] = '"' + quote(string.replace('#x','\\u')) + '"'
-            else:
+            elif string:
                 string = string.replace("'", '"')
                 if string[:1] == '"' and string[-1:] == '"':
                     string = '"' + quote(string[1:-1]) + '"'
                 if string[0:2] == '#x':
                     string = '"\\u%s"' % string[2:]
                 if string[-1:] in '+?*':
+                    if not string[:-1]: string = patterns[-1].things.pop() + string[-1:]
                     newPattern = PatternList()
                     newPattern.things.append(string[:-1])
                     newPattern.repeat = times[string[-1:]]
@@ -213,6 +221,7 @@ def makeList(matchString, extras, ww):
                         patterns[-1].things.append(string[:-1])
                     patterns[-1].things.append(newPattern)
                 else:
+                    if not string: raise RutimeError
                     patterns[-1].things.append(string)
             if r is not None:
                 #print 'I\'m here'
