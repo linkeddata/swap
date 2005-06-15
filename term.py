@@ -53,8 +53,6 @@ from diag import progress
 import sys
 if sys.hexversion < 0x02030000:
     raise RuntimeError("Sorry, this software requires python2.2 or newer.")
-    
-REIFY_NS = "http://www.w3.org/2004/06/rei#"
 
 ########################################  Storage URI Handling
 #
@@ -175,9 +173,6 @@ class Term(object):
 
     def doNodesAppear(self, symbols):
         return Set([a for a in symbols if a == self])
-        
-    def unflatten(self, sink, bNodes, why=None):
-        return self
 
     def unify(self, other, vars, existentials,  bindings):
 	"""Unify this which may contain variables with the other,
@@ -225,19 +220,6 @@ class LabelledNode(Node):
 	raise RuntimeError("""Internal error: URIref strings should not match if not same object,
 	comparing %s and %s""" % (s, o))
 
-    def reification(self, sink, bnodeMap={}, why=None):
-	"""Describe myself in RDF to the given context
-	
-	[ reify:uri "http://example.org/whatever"]
-	""" #"
-	b = sink.newBlankNode(why=why)
-	uri = sink.newSymbol(REIFY_NS + "uri")
-	sink.add(subj=b, pred=uri, obj=sink.newLiteral(self.uriref()), why=why)
-	return b
-
-    def flatten(self, sink, why=None):
-        return self
-                
     def classOrder(self):
 	return	6
 
@@ -385,32 +367,6 @@ class AnonymousNode(Node):
     def asPair(self):
         return (ANONYMOUS, self.uriref())
 
-    def reification(self, sink, bnodeMap={}, why=None):
-	"""Describe myself in RDF to the given context
-	
-	[ reify:items ( [ reify:value "foo"]  .... ) ]
-	"""
-	try:
-	    return bnodeMap[self]
-	except KeyError:
-	    b = sink.newBlankNode()
-	    bnodeMap[self] = b
-	q = sink.newSymbol(RDF_type_URI)
-	r = sink.newSymbol(REIFY_NS+"BlankNode")
-	sink.add(subj=b, pred=q, obj=r, why=why)
-	return b
-
-    def flatten(self, sink, why=None):
-        sink.declareExistential(self)
-        return self
-
-    def unflatten(self, sink, bNodes, why=None):
-        try:
-            return bNodes[self]
-        except KeyError:
-            bNodes[self] = sink.newBlankNode()
-            return bNodes[self]
-
 class AnonymousVariable(AnonymousNode):
     """An anonymous node which is existentially quantified in a given context.
     Also known as a Blank Node, or "bnode" in RDF parlance."""
@@ -498,27 +454,6 @@ class N3Set(ImmutableSet, CompoundTerm): #,
 
     def asSequence(self):
         return self
-
-    def reification(self, sink, bnodeMap={}, why=None):
-	"""Describe myself in RDF to the given context
-	
-	[ reify:items ( [ reify:value "foo"]  .... ) ]
-	"""
-	m = [x for x in self]
-	m.sort(Term.compareAnyTerm)
-	mm = [x.reification(sink, bnodeMap, why) for x in m]
-	elements = sink.store.newSet(mm)
-	b = sink.newBlankNode()
-	sink.add(subj=b, pred=sink.newSymbol(REIFY_NS+"items"), obj=elements, why=why)
-	return b
-
-    def flatten(self, sink, why=None):
-        newlist = sink.store.newSet([x.flatten(sink, why=why) for x in self])
-        return newlist
-
-    def unflatten(self, sink, bNodes, why=None):
-        newlist = sink.store.newSet([x.unflatten(sink, bNodes, why=why) for x in self])
-        return newlist
 
     def classOrder(self):
         return 10
@@ -626,24 +561,6 @@ class List(CompoundTerm):
 	    res.append(x.first)
 	    x = x.rest
 	return res
-
-    def reification(self, sink, bnodeMap={}, why=None):
-	"""Describe myself in RDF to the given context
-	
-	[ reify:items ( [ reify:value "foo"]  .... ) ]
-	"""
-	elements = sink.newList([ x.reification(sink, bnodeMap, why) for x in self])
-	b = sink.newBlankNode()
-	sink.add(subj=b, pred=sink.newSymbol(REIFY_NS+"items"), obj=elements, why=why)
-	return b
-
-    def flatten(self, sink, why=None):
-        newlist = sink.newList([x.flatten(sink, why=why) for x in self])
-        return newlist
-
-    def unflatten(self, sink, bNodes, why=None):
-        newlist = sink.newList([x.unflatten(sink, bNodes, why=why) for x in self])
-        return newlist
     
     def doesNodeAppear(self, symbol):
         """Does that particular node appear anywhere in this list
@@ -958,18 +875,6 @@ class Literal(Term):
         # used in test/sameTerm.n3 testing 2001/07/19
         return self.asHashURI() #something of a kludge?
         #return  LITERAL_URI_prefix + uri_encode(self.representation())    # tbl preferred
-
-    def reification(self, sink, bnodeMap={}, why=None):
-	"""Describe myself in RDF to the given context
-	
-	[ reify:value "un expression quelconque"@fr ]
-	"""
-	b = sink.newBlankNode(why=why)
-	sink.add(subj=b, pred=sink.newSymbol(REIFY_NS+"value"), obj=self, why=why)
-	return b
-
-    def flatten(self, sink, why=None):
-        return self
 
     def unify(self, other, vars, existentials, bindings):
 	"""Unify this which may contain variables with the other,
