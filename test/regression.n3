@@ -555,6 +555,12 @@ test:CwmTest;
     test:arguments     """os/argv.n3 --think --with boof""".
 
 
+:t1060 a test:CwmTest;
+    test:referenceOutput <ref/colon-no-qname.n3>;
+    test:description     "don't make QNames with more than 1 colon";
+    test:arguments       """syntax/colon-no-qname.n3""".
+
+
 #:t3001 a test:CwmTest;
 #    test:referenceOutput <ref/lbase-to-otter>;
 #    test:description   "Parse lbase, serialize as otter (no llyn involvement)";
