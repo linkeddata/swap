@@ -8,7 +8,7 @@ in the patch file.
 --to=uri      	-t uri     file against which to check for differences
 --meta=uri      -m uri     file with metadata to be assumed (in addition to schemas)
 --help    	-h         print this help message
---verbose 	-v         verbose mode (two for extra)
+--verbose= 	-v 1       verbose mode (can be 0 to 10, 0 is default)
 --granularity=  -g 0       g=0 - lots of little diffs.
 			   g=1, fewer diffs (default)
 
@@ -482,7 +482,7 @@ def main():
     verbose = 0
     lumped = 1
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hf:t:m:v:g",
+        opts, args = getopt.getopt(sys.argv[1:], "hf:t:m:v:g:",
 	    ["help", "from=", "to=", "meta=", "verbose=", "granularity="])
     except getopt.GetoptError:
         # print help information and exit:
@@ -496,8 +496,9 @@ def main():
         if o in ("-v", "--verbose"):
 	    try: verbose = int(a)
 	    except ValueError: verbose = 10
-        if o in ("-l", "--granularity"):
-	    lumped = int(a)
+        if o in ("-g", "--granularity"):
+	    try: lumped = int(a)
+	    except ValueError: lumped = 0
 	if o in ("-f", "--from"):
 	    testFiles.append(a)
 	if o in ("-t", "--to"):
