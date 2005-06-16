@@ -65,6 +65,14 @@ RDF = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
 
 branchTable = {}
 tokenSet = Set()
+class tokenHolder(object):
+    def __init__(self):
+        self.tok = None
+    def __call__(self, val=123):
+        if val != 123:
+            self.tok = val
+            return self
+        return self.tok
 
 def recordError(str):
     global errors
@@ -223,7 +231,7 @@ singleCharacterSelectors = u"\t\r\n !\"#$%&'()*.,+/;<=>?[\\]^`{|}~"
 notQNameChars = singleCharacterSelectors + "@"  # Assume anything else valid qname :-/
 notNameChars = notQNameChars + ":"  # Assume anything else valid name :-/
 
-class PredictiveParser:
+class PredictiveParser(object):
     """A parser for N3 or derived languages"""
 
     def __init__(parser, sink, top,  branchTable, tokenSet, keywords = None):
@@ -264,14 +272,14 @@ class PredictiveParser:
 	return ""
 	
     def parse(parser, tok):
-	token = parser.token(tok)
+	token = tokenHolder()(parser.token(tok))
 	return parser.parseProduction(parser.top, token, tok)
 	
     def parseProduction(parser, lhs, tok, stream):
 	"The parser itself."
 
-	if tok == None: return None
-	name, thing, line = tok
+	if tok() is None: return None
+	name, thing, line = tok()
 	lookupTable = parser.branchTable[lhs]
 	rhs = lookupTable.get(name, None)  # Predict branch from token
 	if rhs == None:
@@ -279,25 +287,26 @@ class PredictiveParser:
 \tsuch as %s\n\t%s"""  % (tok, lhs, lookupTable.keys(), parser.around(None, None)))
             raise SyntaxError("""Found %s when expecting some form of %s,
 \tsuch as %s\n\t%s"""  % (tok, lhs, lookupTable.keys(), parser.around(None, None)))
-	if parser.verb: progress( "%i  %s means expand %s as %s" %(parser.lineNumber,tok, lhs, rhs.value()))
+	if parser.verb: progress( "%i  %s means expand %s as %s" %(parser.lineNumber,tok(), lhs, rhs.value()))
+	tree = [lhs]
 	for term in rhs:
             lit = term.fragid
             if lit != name: # Not token
                 if lit in parser.tokenSet:
                     progress("Houston, we have a problem. %s is not equal to %s" % (lit, name))
-                progress("recursing on %s, which is not %s. Token is %s" % (lit, name, `tok`))
-                tok = parser.parseProduction(term, tok, stream)
-                if tok:
-                    name, thing, line = tok
-                else:
-                    name, thing = None, None
-                continue
-	    tok = parser.token(stream)  # Next token
-	    if tok:
-                name, thing, line = tok
+                progress("recursing on %s, which is not %s. Token is %s" % (lit, name, `tok()`))
+                tree.append(parser.parseProduction(term, tok, stream))
+            else:
+                progress("We found %s, which matches %s" % (lit, `tok()`))
+                tree.append(tok())
+                tok(parser.token(stream))  # Next token
+            if tok():
+                name, thing, line = tok()
             else:
                 name, thing = None, None
-	return tok
+        if hasattr(parser, "p_" + lhs.fragid):
+            return getattr(parser, "p_" + lhs.fragid)(tree)
+	return tree
 
 ###############################
 
@@ -414,7 +423,7 @@ def main():
     p.verb = 1
     start = clock()
     #print lexer.token()
-    p.parse(lexer.token)
+    print p.parse(lexer.token)
     taken = clock() - start + 1
 #    progress("Loaded %i chars in %fs, ie %f/s." %
 #	(len(str), taken, len(str)/taken))
