@@ -88,6 +88,7 @@ class PatternList(object):
 
         return retVal
 
+web = False
 
 def makeGrammar():
     import urllib
@@ -105,60 +106,49 @@ def makeGrammar():
 @keywords a, is, of.
 
     """
-##    regexps = {'QuotedIRIref': '"<[^>]*>"'}
-##    regexps = {'EXPONENT': '"([eE][+-]?[0-9]+)"',
-##           'STRING_LITERAL_LONG1': '"\\"\\"\\"([^\\"\\\\\\\\]|(\\\\\\\\[^\\\\n\\\\r])|(\\"[^\\"])|(\\"\\"[^\\"]))*\\"\\"\\""',
-##           'NCCHAR1': '"[A-Za-z\\u00c0-\\u00d6\\u00d8-\\u00f6\\u00f8-\\u02ff' +
-##               '\\u0370-\\u037d\\u037f-\\u1fff\\u200c-\\u200d\\u2070-\\u218f\\' +
-##               'u2c00-\\u2fef\\u3001-\\ud7ff\\uf900-\\uffff\\U00010000-\\U000effff]"',
-##           'DECIMAL': '"([0-9]+\\\\.[0-9]*)|(\\\\.[0-9]+)"',
-##           'FLOATING_POINT': '"([0-9]+\\\\.[0-9]*([eE][+-]?[0-9]+)?)|' +
-##               '(\\\\.([0-9])+([eE][+-]?[0-9]+)?)|(([0-9])+([eE][+-]?[0-9]+))"',
-##           'QuotedIRIref': '"<[^>]*>"',
-##           'STRING_LITERAL_LONG2': '"\'\'\'([^\'\\\\\\\\]|(\\\\\\\\[^\\\\n\\\\r])|(\'[^\'])|(\'\'[^\']))*\'\'\'"',
-##           'INTEGER': '"[0-9]+"',
-##            'LANGTAG': '"@[a-zA-Z]+(-[a-zA-Z0-9]+)*"',
-##           'STRING_LITERAL2': '"\\"(([^\\"\\\\\\\\\\\\n\\\\r])|(\\\\\\\\[^\\\\n\\\\r]))*\\""',
-##           'STRING_LITERAL1': '"\'(([^\'\\\\\\\\\\\\n\\\\r])|(\\\\\\\\[^\\\\n\\\\r]) )*\'"',
-##           'DIGITS' : '"[0-9]"'}
-##
-##    canStartWith = {'EXPONENT': '"e", "E"',
-##           'STRING_LITERAL_LONG1': '\"\\"\\"\\"\"',
-##           'NCCHAR1': '"A"',
-##           'DECIMAL': '"0", "+", "-"',
-##           'FLOATING_POINT': '"0", "+", "-"',
-##           'QuotedIRIref': "\"<\"",
-##           'STRING_LITERAL_LONG2': "\"'''\"",
-##           'INTEGER': '"0", "+", "-"',
-##           'LANGTAG': '"@"',
-##           'STRING_LITERAL2': r'"\""',
-##           'STRING_LITERAL1': "\"'\"",
-##           'DIGITS' : '"0"'}
-    
-    File = urllib.urlopen('http://www.w3.org/2005/01/yacker/uploads/sparqlTest/bnf')
-    this = ""
-    ws = re.compile(r'\S')
-    for string in File:
-        if ws.search(string) and string[0] != '#':
-            this += string
-    #this = File.read()#.replace('\n', ' ')
-    that = None
-    while that != this:
-        that = this
-        this = this.replace('  ', ' ')
-    i = this.find('@terminals')
-    first_half = this[:i]
-    #i2 = this.find('\n', i+2)
-    #second_half = this[i2:]
-    whole = first_half # + second_half
-    next_rule = re.compile(r';\s')
-    rules = next_rule.split(whole)
+    if web:
+        File = urllib.urlopen('http://www.w3.org/2005/01/yacker/uploads/sparqlTest/bnf')
+        this = ""
+        ws = re.compile(r'\S')
+        for string in File:
+            if ws.search(string) and string[0] != '#':
+                this += string
+        #this = File.read()#.replace('\n', ' ')
+        that = None
+        while that != this:
+            that = this
+            this = this.replace('  ', ' ')
+        i = this.find('@terminals')
+        first_half = this[:i]
+        #i2 = this.find('\n', i+2)
+        #second_half = this[i2:]
+        whole = first_half # + second_half
+        next_rule = re.compile(r';\s')
+        rules = next_rule.split(whole)
+        rules = rules[:-1]
+    else:
+        File = file('/home/syosi/CVS-local/perl/modules/W3C/Grammar/bin/bnf.out')
+        this = ""
+        ws = re.compile(r'\S')
+        for string in File:
+            if ws.search(string) and string[0] != '#':
+                this += string
+        #this = File.read()#.replace('\n', ' ')
+        that = None
+        while that != this:
+            that = this
+            this = this.replace('  ', ' ')
+        i = this.find('%%')
+        i2 = this.find('%%', i+5)
+        whole = this[i:i2]
+        next_rule = re.compile(ur'\n(?=\w)')
+        rules = next_rule.split(whole)
+        rules = rules[1:]
     rules[0] = rules[0] + ' cfg:eof'
     rules = [a.replace('\t', '').replace('\r', '').replace('\n', ' ').replace('  ', ' ') for a in rules]
     rules = [a for a in rules if a]
 ##    print "[" + ",\n".join(rules) + "]"
     rules = [tuple([b.strip() for b in a.split(': ')]) for a in rules]
-    rules = rules[:-1]
 ##    print "[" + ",\n".join(["(" + `a` + ")" for a in rules]) + "]"
 ##    return
     rules = [(a[0], makeList(a[1].split(' '), a[0])) for a in rules]

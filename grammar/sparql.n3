@@ -12,63 +12,100 @@
 @keywords a, is, of.
 
     Query cfg:mustBeOneSequence ( 
-           ( Prolog [ cfg:mustBeOneSequence ( 
-             ( SelectQuery  ) 
-             ( ConstructQuery  ) 
-             ( DescribeQuery  ) 
-             ( AskQuery  ) 
-           )  ] cfg:eof  ) 
+           ( Prolog  gen0  cfg:eof  ) 
+         ) . 
+
+gen0 cfg:mustBeOneSequence ( 
+           ( SelectQuery  ) 
+           ( ConstructQuery  ) 
+           ( DescribeQuery  ) 
+           ( AskQuery  ) 
          ) . 
 
 SelectQuery cfg:mustBeOneSequence ( 
-           ( "SELECT" [ 
-           cfg:mustBeOneSequence ( () (  "DISTINCT"  ) ) ][ cfg:mustBeOneSequence ( 
-             ( Var [ 
-             cfg:zeroOrMore  Var  ] ) 
-             ( "*"  ) 
-           )  ] DatasetClause  WherePattern  ResultsFilter  ) 
+           ( IT_SELECT  gen1  gen3  DatasetClause  WherePattern  ResultsFilter  ) 
+         ) . 
+
+gen1 cfg:mustBeOneSequence ( 
+           ( ) 
+           ( IT_DISTINCT  ) 
+         ) . 
+
+gen2 cfg:mustBeOneSequence ( 
+           ( ) 
+           ( Var gen2 ) 
+         ) . 
+
+gen3 cfg:mustBeOneSequence ( 
+           ( Var gen2  ) 
+           ( GT_TIMES  ) 
          ) . 
 
 ConstructQuery cfg:mustBeOneSequence ( 
-           ( "CONSTRUCT"  ConstructTemplate  DatasetClause  WherePattern  ResultsFilter  ) 
+           ( IT_CONSTRUCT  ConstructTemplate  DatasetClause  WherePattern  ResultsFilter  ) 
          ) . 
 
 DescribeQuery cfg:mustBeOneSequence ( 
-           ( "DESCRIBE" [ cfg:mustBeOneSequence ( 
-             ( VarOrIRIref [ 
-             cfg:zeroOrMore  VarOrIRIref  ] ) 
-             ( "*"  ) 
-           )  ] DatasetClause [ 
-           cfg:mustBeOneSequence ( () (  WherePattern  ) ) ] ResultsFilter  ) 
+           ( IT_DESCRIBE  gen5  DatasetClause  gen6  ResultsFilter  ) 
+         ) . 
+
+gen4 cfg:mustBeOneSequence ( 
+           ( ) 
+           ( VarOrIRIref  gen4 ) 
+         ) . 
+
+gen5 cfg:mustBeOneSequence ( 
+           ( VarOrIRIref  gen4  ) 
+           ( GT_TIMES  ) 
+         ) . 
+
+gen6 cfg:mustBeOneSequence ( 
+           ( ) 
+           ( WherePattern  ) 
          ) . 
 
 AskQuery cfg:mustBeOneSequence ( 
-           ( "ASK"  DatasetClause [ 
-           cfg:mustBeOneSequence ( () (  WherePattern  ) ) ] ) 
+           ( IT_ASK  DatasetClause  gen6  ) 
          ) . 
 
 Prolog cfg:mustBeOneSequence ( 
-           ([ 
-           cfg:mustBeOneSequence ( () (  BaseDecl  ) ) ][ 
-           cfg:zeroOrMore  PrefixDecl  ] ) 
+           ( gen8  gen9  ) 
+         ) . 
+
+gen8 cfg:mustBeOneSequence ( 
+           ( ) 
+           ( BaseDecl  ) 
+         ) . 
+
+gen9 cfg:mustBeOneSequence ( 
+           ( ) 
+           ( PrefixDecl  gen9 ) 
          ) . 
 
 BaseDecl cfg:mustBeOneSequence ( 
-           ( "BASE"  QuotedIRIref  ) 
+           ( IT_BASE  QuotedIRIref  ) 
          ) . 
 
 PrefixDecl cfg:mustBeOneSequence ( 
-           ( "PREFIX"  QNAME_NS  QuotedIRIref  ) 
+           ( IT_PREFIX  QNAME_NS  QuotedIRIref  ) 
          ) . 
 
 DatasetClause cfg:mustBeOneSequence ( 
-           ([ 
-           cfg:mustBeOneSequence ( () (  DefaultGraphClause  ) ) ][ 
-           cfg:zeroOrMore  NamedGraphClause  ] ) 
+           ( gen10  gen11  ) 
+         ) . 
+
+gen10 cfg:mustBeOneSequence ( 
+           ( ) 
+           ( DefaultGraphClause  ) 
+         ) . 
+
+gen11 cfg:mustBeOneSequence ( 
+           ( ) 
+           ( NamedGraphClause  gen11 ) 
          ) . 
 
 DefaultGraphClause cfg:mustBeOneSequence ( 
-           ( "FROM"  SourceSelector  ) 
+           ( IT_FROM  SourceSelector  ) 
          ) . 
 
 NamedGraphClause cfg:mustBeOneSequence ( 
@@ -80,86 +117,127 @@ SourceSelector cfg:mustBeOneSequence (
          ) . 
 
 WherePattern cfg:mustBeOneSequence ( 
-           ([ 
-           cfg:mustBeOneSequence ( () (  "WHERE"  ) ) ][ cfg:mustBeOneSequence ( 
-             ( EmptyPattern  ) 
-             ( GraphPattern  ) 
-           )  ] ) 
+           ( gen12  gen13  ) 
+         ) . 
+
+gen12 cfg:mustBeOneSequence ( 
+           ( ) 
+           ( IT_WHERE  ) 
+         ) . 
+
+gen13 cfg:mustBeOneSequence ( 
+           ( EmptyPattern  ) 
+           ( GraphPattern  ) 
          ) . 
 
 GraphPattern cfg:mustBeOneSequence ( 
-           ( "{"  Union  "}"  ) 
+           ( OpenCurly  Union  CloseCurly  ) 
          ) . 
 
 ConstructTemplate cfg:mustBeOneSequence ( 
-           ( "{"  SubjectStatements [ cfg:mustBeOneSequence ( 
-             ( "."  SubjectStatements  ) 
-           )  ] "}"  ) 
+           ( OpenCurly  SubjectStatements  gen14  CloseCurly  ) 
+         ) . 
+
+gen15 cfg:mustBeOneSequence ( 
+           ( Dot  SubjectStatements  ) 
+         ) . 
+
+gen14 cfg:mustBeOneSequence ( 
+           ( ) 
+           ( gen15  gen14  ) 
          ) . 
 
 ResultsFilter cfg:mustBeOneSequence ( 
-           ([ 
-           cfg:mustBeOneSequence ( () (  OrderClause  ) ) ][ 
-           cfg:mustBeOneSequence ( () (  LimitClause  ) ) ][ 
-           cfg:mustBeOneSequence ( () (  OffsetClause  ) ) ] ) 
+           ( gen16  gen17  gen18  ) 
+         ) . 
+
+gen16 cfg:mustBeOneSequence ( 
+           ( ) 
+           ( OrderClause  ) 
+         ) . 
+
+gen17 cfg:mustBeOneSequence ( 
+           ( ) 
+           ( LimitClause  ) 
+         ) . 
+
+gen18 cfg:mustBeOneSequence ( 
+           ( ) 
+           ( OffsetClause  ) 
          ) . 
 
 OrderClause cfg:mustBeOneSequence ( 
-           ( "ORDER"  "BY"  OrderCondition [ 
-           cfg:zeroOrMore  OrderCondition  ] ) 
+           ( IT_ORDER  IT_BY  OrderCondition  gen19  ) 
+         ) . 
+
+gen19 cfg:mustBeOneSequence ( 
+           (  ) 
+           ( OrderCondition  gen19  ) 
          ) . 
 
 OrderCondition cfg:mustBeOneSequence ( 
-           ([ cfg:mustBeOneSequence ( 
-             ( "ASC"  ) 
-             ( "DESC"  ) 
-           )  ] "("  Expression  ")"  ) 
+           ( gen20  GT_LPAREN  Expression  GT_RPAREN  ) 
            ( FunctionCall  ) 
            ( Var  ) 
-           ( "("  Expression  ")"  ) 
+           ( GT_LPAREN  Expression  GT_RPAREN  ) 
+         ) . 
+
+gen20 cfg:mustBeOneSequence ( 
+           ( IT_ASC  ) 
+           ( IT_DESC  ) 
          ) . 
 
 LimitClause cfg:mustBeOneSequence ( 
-           ( "LIMIT"  INTEGER  ) 
+           ( IT_LIMIT  INTEGER  ) 
          ) . 
 
 OffsetClause cfg:mustBeOneSequence ( 
-           ( "OFFSET"  INTEGER  ) 
+           ( IT_OFFSET  INTEGER  ) 
          ) . 
 
 Union cfg:mustBeOneSequence ( 
-           ( Pattern  "UNION"  Union  ) 
+           ( Pattern  IT_UNION  Union  ) 
            ( Pattern  ) 
          ) . 
 
 Optional cfg:mustBeOneSequence ( 
-           ( "OPTIONAL"  PatternElts  ) 
+           ( IT_OPTIONAL  PatternElts  ) 
          ) . 
 
 GraphConstraint cfg:mustBeOneSequence ( 
-           ( "GRAPH"  VarOrBlankNodeOrIRIref  PatternElts  ) 
+           ( IT_GRAPH  VarOrBlankNodeOrIRIref  PatternElts  ) 
+         ) . 
+
+PatternElts cfg:mustBeOneSequence ( 
+           ( NonSubjectPatternStarters  ) 
+           ( Filter  ) 
          ) . 
 
 Pattern cfg:mustBeOneSequence ( 
-           ( SubjectStatements [ 
-           cfg:zeroOrMore  AfterSubjectStatements  ][ 
-           cfg:mustBeOneSequence ( () (  TrailingDot  ) ) ] ) 
-           ( NonSubjectPatternStarters [ 
-           cfg:zeroOrMore  AfterNotSubject  ][ 
-           cfg:mustBeOneSequence ( () (  TrailingDot  ) ) ] ) 
+           ( SubjectStatements  AfterSubjectStatements  ) 
+           ( NonSubjectPatternElts  AfterNotSubject  ) 
          ) . 
 
 AfterSubjectStatements cfg:mustBeOneSequence ( 
-           ( "."  SubjectStatements  ) 
-           ([ 
-           cfg:mustBeOneSequence ( () (  TrailingDot  ) ) ] NonSubjectPatternElts  ) 
+           ( Dot  SubjectStatements  AfterSubjectStatements  ) 
+           ( gen21  NonSubjectPatternElts  AfterNotSubject  ) 
+           ( ) 
+         ) . 
+
+gen21 cfg:mustBeOneSequence ( 
+           ( ) 
+           ( OptDot  ) 
          ) . 
 
 AfterNotSubject cfg:mustBeOneSequence ( 
-           ([ 
-           cfg:mustBeOneSequence ( () (  "."  ) ) ] SubjectStatements  ) 
-           ([ 
-           cfg:mustBeOneSequence ( () (  TrailingDot  ) ) ] NonSubjectPatternElts  ) 
+           ( gen22  SubjectStatements  AfterSubjectStatements  ) 
+           ( gen21  NonSubjectPatternElts  AfterNotSubject  ) 
+           ( ) 
+         ) . 
+
+gen22 cfg:mustBeOneSequence ( 
+           ( ) 
+           ( Dot  ) 
          ) . 
 
 NonSubjectPatternStarters cfg:mustBeOneSequence ( 
@@ -173,30 +251,48 @@ NonSubjectPatternElts cfg:mustBeOneSequence (
            ( Filter  ) 
          ) . 
 
-PatternElts cfg:mustBeOneSequence ( 
-           ( NonSubjectPatternStarters  ) 
-           ( Filter  ) 
+Filter cfg:mustBeOneSequence ( 
+           ( IT_FILTER  gen24  ) 
          ) . 
 
-Filter cfg:mustBeOneSequence ( 
-           ( "FILTER"  "("  Expression  ")"  ) 
+gen24 cfg:mustBeOneSequence ( 
+           ( GT_LPAREN  Expression  GT_RPAREN  ) 
+           ( BuiltIns  ) 
          ) . 
 
 SubjectStatements cfg:mustBeOneSequence ( 
-           ( Subject [ 
-           cfg:mustBeOneSequence ( () (  PredicateObjectList  ) ) ] ) 
+           ( Subject  gen25  ) 
+         ) . 
+
+gen25 cfg:mustBeOneSequence ( 
+           ( ) 
+           ( PredicateObjectList  ) 
          ) . 
 
 PredicateObjectList cfg:mustBeOneSequence ( 
-           ( Predicate  ObjectList [ cfg:mustBeOneSequence ( 
-             ( ";"  Predicate  ObjectList  ) 
-           )  ] ) 
+           ( Predicate  ObjectList  gen26  ) 
+         ) . 
+
+gen27 cfg:mustBeOneSequence ( 
+           ( GT_SEMI  Predicate  ObjectList  ) 
+         ) . 
+
+gen26 cfg:mustBeOneSequence ( 
+           ( ) 
+           ( gen27  gen26  ) 
          ) . 
 
 ObjectList cfg:mustBeOneSequence ( 
-           ( Object [ cfg:mustBeOneSequence ( 
-             ( ","  Object  ) 
-           )  ] ) 
+           ( Object  gen28  ) 
+         ) . 
+
+gen29 cfg:mustBeOneSequence ( 
+           ( GT_COMMA  Object  ) 
+         ) . 
+
+gen28 cfg:mustBeOneSequence ( 
+           ( ) 
+           ( gen29  gen28  ) 
          ) . 
 
 Subject cfg:mustBeOneSequence ( 
@@ -205,7 +301,7 @@ Subject cfg:mustBeOneSequence (
 
 Predicate cfg:mustBeOneSequence ( 
            ( VarOrBlankNodeOrIRIref  ) 
-           ( "a"  ) 
+           ( IT_a  ) 
          ) . 
 
 Object cfg:mustBeOneSequence ( 
@@ -219,12 +315,16 @@ TriplesNode cfg:mustBeOneSequence (
          ) . 
 
 BlankNodePropertyList cfg:mustBeOneSequence ( 
-           ( "["  PredicateObjectList  "]"  ) 
+           ( OpenSquare  PredicateObjectList  CloseSquare  ) 
          ) . 
 
 Collection cfg:mustBeOneSequence ( 
-           ( "("  GraphNode [ 
-           cfg:zeroOrMore  GraphNode  ] ")"  ) 
+           ( GT_LPAREN  GraphNode  gen30  GT_RPAREN  ) 
+         ) . 
+
+gen30 cfg:mustBeOneSequence ( 
+           ( ) 
+           ( GraphNode  gen30  ) 
          ) . 
 
 GraphNode cfg:mustBeOneSequence ( 
@@ -255,7 +355,7 @@ Var cfg:mustBeOneSequence (
 
 GraphTerm cfg:mustBeOneSequence ( 
            ( RDFTerm  ) 
-           ( "("  ")"  ) 
+           ( GT_LPAREN  GT_RPAREN  ) 
          ) . 
 
 Expression cfg:mustBeOneSequence ( 
@@ -263,15 +363,29 @@ Expression cfg:mustBeOneSequence (
          ) . 
 
 ConditionalOrExpression cfg:mustBeOneSequence ( 
-           ( ConditionalAndExpression [ cfg:mustBeOneSequence ( 
-             ( "||"  ConditionalAndExpression  ) 
-           )  ] ) 
+           ( ConditionalAndExpression  gen31  ) 
+         ) . 
+
+gen32 cfg:mustBeOneSequence ( 
+           ( GT_OR  ConditionalAndExpression  ) 
+         ) . 
+
+gen31 cfg:mustBeOneSequence ( 
+           ( ) 
+           ( gen32  gen31  ) 
          ) . 
 
 ConditionalAndExpression cfg:mustBeOneSequence ( 
-           ( ValueLogical [ cfg:mustBeOneSequence ( 
-             ( "&&"  ValueLogical  ) 
-           )  ] ) 
+           ( ValueLogical  gen33  ) 
+         ) . 
+
+gen34 cfg:mustBeOneSequence ( 
+           ( GT_AND  ValueLogical  ) 
+         ) . 
+
+gen33 cfg:mustBeOneSequence ( 
+           ( ) 
+           ( gen34  gen33  ) 
          ) . 
 
 ValueLogical cfg:mustBeOneSequence ( 
@@ -279,14 +393,21 @@ ValueLogical cfg:mustBeOneSequence (
          ) . 
 
 RelationalExpression cfg:mustBeOneSequence ( 
-           ( NumericExpression [ cfg:mustBeOneSequence ( 
-             ( "="  NumericExpression  ) 
-             ( "!="  NumericExpression  ) 
-             ( "<"  NumericExpression  ) 
-             ( ">"  NumericExpression  ) 
-             ( "<="  NumericExpression  ) 
-             ( ">="  NumericExpression  ) 
-           )  ] ) 
+           ( NumericExpression  gen35  ) 
+         ) . 
+
+gen36 cfg:mustBeOneSequence ( 
+           ( GT_EQUAL  NumericExpression  ) 
+           ( GT_NEQUAL  NumericExpression  ) 
+           ( GT_LT  NumericExpression  ) 
+           ( GT_GT  NumericExpression  ) 
+           ( GT_LE  NumericExpression  ) 
+           ( GT_GE  NumericExpression  ) 
+         ) . 
+
+gen35 cfg:mustBeOneSequence ( 
+           ( ) 
+           ( gen36  ) 
          ) . 
 
 NumericExpression cfg:mustBeOneSequence ( 
@@ -294,47 +415,74 @@ NumericExpression cfg:mustBeOneSequence (
          ) . 
 
 AdditiveExpression cfg:mustBeOneSequence ( 
-           ( MultiplicativeExpression [ cfg:mustBeOneSequence ( 
-             ( "+"  MultiplicativeExpression  ) 
-             ( "-"  MultiplicativeExpression  ) 
-           )  ] ) 
+           ( MultiplicativeExpression  gen37  ) 
+         ) . 
+
+gen38 cfg:mustBeOneSequence ( 
+           ( GT_PLUS  MultiplicativeExpression  ) 
+           ( GT_MINUS  MultiplicativeExpression  ) 
+         ) . 
+
+gen37 cfg:mustBeOneSequence ( 
+           ( ) 
+           ( gen38  gen37  ) 
          ) . 
 
 MultiplicativeExpression cfg:mustBeOneSequence ( 
-           ( UnaryExpression [ cfg:mustBeOneSequence ( 
-             ( "*"  UnaryExpression  ) 
-             ( "/"  UnaryExpression  ) 
-           )  ] ) 
+           ( UnaryExpression  gen39  ) 
+         ) . 
+
+gen40 cfg:mustBeOneSequence ( 
+           ( GT_TIMES  UnaryExpression  ) 
+           ( GT_DIVIDE  UnaryExpression  ) 
+         ) . 
+
+gen39 cfg:mustBeOneSequence ( 
+           ( ) 
+           ( gen40  gen39  ) 
          ) . 
 
 UnaryExpression cfg:mustBeOneSequence ( 
-           ( "!"  CallExpression  ) 
-           ( "+"  CallExpression  ) 
-           ( "-"  CallExpression  ) 
+           ( GT_NOT  CallExpression  ) 
+           ( GT_PLUS  CallExpression  ) 
+           ( GT_MINUS  CallExpression  ) 
            ( CallExpression  ) 
          ) . 
 
 CallExpression cfg:mustBeOneSequence ( 
-           ( "STR"  "("  Expression  ")"  ) 
-           ( "LANG"  "("  Expression  ")"  ) 
-           ( "DATATYPE"  "("  Expression  ")"  ) 
-           ( "REGEX"  "("  Expression  ","  String [ cfg:mustBeOneSequence ( 
-             ( ","  String  ) 
-           )  ] ")"  ) 
-           ( "BOUND"  "("  Var  ")"  ) 
-           ( "isURI"  "("  Expression  ")"  ) 
-           ( "isBLANK"  "("  Expression  ")"  ) 
-           ( "isLITERAL"  "("  Expression  ")"  ) 
-           ( FunctionCall  ) 
+           ( BuiltIns  ) 
            ( PrimaryExpression  ) 
          ) . 
 
+BuiltIns cfg:mustBeOneSequence ( 
+           ( IT_STR  GT_LPAREN  Expression  GT_RPAREN  ) 
+           ( IT_LANG  GT_LPAREN  Expression  GT_RPAREN  ) 
+           ( IT_DATATYPE  GT_LPAREN  Expression  GT_RPAREN  ) 
+           ( IT_REGEX  GT_LPAREN  Expression  GT_COMMA  String  gen41  GT_RPAREN  ) 
+           ( IT_BOUND  GT_LPAREN  Var  GT_RPAREN  ) 
+           ( IT_isURI  GT_LPAREN  Expression  GT_RPAREN  ) 
+           ( IT_isBLANK  GT_LPAREN  Expression  GT_RPAREN  ) 
+           ( IT_isLITERAL  GT_LPAREN  Expression  GT_RPAREN  ) 
+           ( FunctionCall  ) 
+         ) . 
+
+gen42 cfg:mustBeOneSequence ( 
+           ( GT_COMMA  String  ) 
+         ) . 
+
+gen41 cfg:mustBeOneSequence ( 
+           ( ) 
+           ( gen42  ) 
+         ) . 
+
 PrimaryExpression cfg:mustBeOneSequence ( 
-           ([ cfg:mustBeOneSequence ( 
-             ( Var  ) 
-             ( RDFTerm  ) 
-             ( "("  Expression  ")"  ) 
-           )  ] ) 
+           ( gen43  ) 
+         ) . 
+
+gen43 cfg:mustBeOneSequence ( 
+           ( Var  ) 
+           ( RDFTerm  ) 
+           ( GT_LPAREN  Expression  GT_RPAREN  ) 
          ) . 
 
 FunctionCall cfg:mustBeOneSequence ( 
@@ -342,11 +490,25 @@ FunctionCall cfg:mustBeOneSequence (
          ) . 
 
 ArgList cfg:mustBeOneSequence ( 
-           ( "(" [ cfg:mustBeOneSequence ( 
-             ( Expression [ cfg:mustBeOneSequence ( 
-               ( ","  Expression  ) 
-             )  ] ) 
-           )  ] ")"  ) 
+           ( GT_LPAREN  gen44  GT_RPAREN  ) 
+         ) . 
+
+gen46 cfg:mustBeOneSequence ( 
+           ( GT_COMMA  Expression  ) 
+         ) . 
+
+gen45 cfg:mustBeOneSequence ( 
+           ( ) 
+           ( gen46  gen45  ) 
+         ) . 
+
+gen47 cfg:mustBeOneSequence ( 
+           ( Expression  gen45  ) 
+         ) . 
+
+gen44 cfg:mustBeOneSequence ( 
+           ( ) 
+           ( gen47  ) 
          ) . 
 
 RDFTerm cfg:mustBeOneSequence ( 
@@ -363,19 +525,26 @@ NumericLiteral cfg:mustBeOneSequence (
          ) . 
 
 RDFLiteral cfg:mustBeOneSequence ( 
-           ( String [ cfg:mustBeOneSequence ( 
-             ([ cfg:mustBeOneSequence ( 
-               ( LANGTAG  ) 
-             )  ] ) 
-             ([ cfg:mustBeOneSequence ( 
-               ( "^^"  IRIref  ) 
-             )  ] ) 
-           )  ] ) 
+           ( String  gen48  ) 
+         ) . 
+
+gen49 cfg:mustBeOneSequence ( 
+           ( GT_DTYPE  IRIref  ) 
+         ) . 
+
+gen50 cfg:mustBeOneSequence ( 
+           ( LANGTAG  ) 
+           ( gen49  ) 
+         ) . 
+
+gen48 cfg:mustBeOneSequence ( 
+           ( ) 
+           ( gen50  ) 
          ) . 
 
 BooleanLiteral cfg:mustBeOneSequence ( 
-           ( "true"  ) 
-           ( "false"  ) 
+           ( IT_true  ) 
+           ( IT_false  ) 
          ) . 
 
 String cfg:mustBeOneSequence ( 
@@ -397,7 +566,7 @@ QName cfg:mustBeOneSequence (
 
 BlankNode cfg:mustBeOneSequence ( 
            ( BNODE_LABEL  ) 
-           ( "["  "]"  ) 
+           ( OpenSquare  CloseSquare  ) 
          ) . 
 
 
