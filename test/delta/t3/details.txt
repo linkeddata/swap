@@ -1,0 +1,14 @@
+delta/detailed.tests#t3 -- exit status test
+
+delta should have similar exit statuses as standard UNIX diff. When there is
+a difference between the --from graph and the --to graph, delta should exit
+with status 1. If there are no differences, delta should exit with status 0.
+
+issue originally raised in the following bug:
+http://lists.w3.org/Archives/Public/public-cwm-bugs/2005Feb/0000
+
+options passed to cwm:
+delta/t3/test.n3 --think --with `../delta.py -f delta/t3/from.n3 -t delta/t3/to-same.n3 &> /dev/null; echo $?` `../delta.py -f delta/t3/from.n3 -t delta/t3/to-diff.n3 &> /dev/null; echo $?`
+
+reference output:
+delta/t3/output.n3

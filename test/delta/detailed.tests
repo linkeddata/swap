@@ -1,15 +1,10 @@
-# List of regression tests
+# delta/detailed.tests - tests of delta
 #
-#      Internationalization tests
-#
-# Note: Command lines must be for running in the directory above.
-#
+# N.B. Beware in writing test:arguments; all tests are run in the directory
+# above this one.
+
 @prefix : <#>.
-@prefix x: <#>.
 @prefix test: <http://www.w3.org/2000/10/swap/test.n3#>.
-
-
-
 
 :t001 a test:CwmTest;
 
@@ -17,4 +12,9 @@
     test:description   "Reconsitute file from patch.";
     test:arguments     "delta/t2/from-smushed.n3 --patch=delta/t2/smushed-patch.n3 --ntriples".
 	
-#ends
+:t3 a test:CwmTest ;
+    test:referenceOutput <t3/output.n3> ;
+    test:description     "exit status test" ;
+    test:arguments       "delta/t3/test.n3 --think --with `../delta.py -f delta/t3/from.n3 -t delta/t3/to-same.n3 &> /dev/null; echo $?` `../delta.py -f delta/t3/from.n3 -t delta/t3/to-diff.n3 &> /dev/null; echo $?`" .
+    
+#ENDS

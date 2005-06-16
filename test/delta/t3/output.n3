@@ -1,0 +1,21 @@
+     @prefix : <#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+    
+     @forAll :x,
+                :y .
+    
+    "0"     a :string_0 .
+    
+    "1"     a :string_1 .
+    {
+        "1"     os:argv :x .
+        
+        }     log:implies {:x     a :string_0 .
+        } .
+    {
+        "2"     os:argv :y .
+        
+        }     log:implies {:y     a :string_1 .
+        } .
+    
