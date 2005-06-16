@@ -561,6 +561,12 @@ test:CwmTest;
     test:arguments       """syntax/colon-no-qname.n3""".
 
 
+#:t1061 a test:CwmTest;
+#    test:referenceOutput <ref/bad-preds.n3>;
+#    test:description     "literals & formulae can't be predicates";
+#    test:arguments       """syntax/bad-preds.n3 --think""".
+
+
 #:t3001 a test:CwmTest;
 #    test:referenceOutput <ref/lbase-to-otter>;
 #    test:description   "Parse lbase, serialize as otter (no llyn involvement)";
