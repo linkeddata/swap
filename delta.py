@@ -524,7 +524,11 @@ def main():
     if verbose >1: print "# Differences by " + version
     print delta.close().n3String(base=base())
 #    sys.exit(len(delta))
-    sys.exit(0)   # didn't crash
+#    sys.exit(0)   # didn't crash
+    if delta.contains():        # Any statements in delta at all?
+        sys.exit(1)
+    else:
+        sys.exit(0)
     
 	
 		
