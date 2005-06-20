@@ -166,7 +166,8 @@ tokens = ('IT_SELECT',
         'GT_NOT',
         'Dot',
         'OpenCurly',
-        'OpenSquare' )
+        'OpenSquare',
+        'eof')
 
 class Lexer(object):
     def __init__(self):
@@ -214,7 +215,8 @@ class Lexer(object):
         try:
             return self.tokenStream.next()
         except:
-            return None
+            self.tokenStream = None
+            return ('eof', '', -1)
 
     def fixTokens(self):
         for f_name in dir(Tokens):
@@ -229,17 +231,18 @@ class Lexer(object):
         length = -1
         retVal = None
         for name in tokens:
-            pattern = getattr(Tokens, 'c_' + name)
-            r = pattern.match(string, offset)
-            if r:
-                if not tryLongest:
-                    return (name, r)
-                extra = 0
-                if r.lastindex:
-                    extra = r.end(1) - r.start(1)
-                if retVal is None or length < r.end() + extra:
-                    retVal = (name, r)
-                    length = r.end() + extra
+            if hasattr(Tokens, 'c_' + name):
+                pattern = getattr(Tokens, 'c_' + name)
+                r = pattern.match(string, offset)
+                if r:
+                    if not tryLongest:
+                        return (name, r)
+                    extra = 0
+                    if r.lastindex:
+                        extra = r.end(1) - r.start(1)
+                    if retVal is None or length < r.end() + extra:
+                        retVal = (name, r)
+                        length = r.end() + extra
                 
         return retVal
 

@@ -19,10 +19,6 @@ import sparql_tokens
 tokens = Set(sparql_tokens.tokens)
 import cPickle as pickle
 
-try: set()
-except NameError: 
-   from sets import Set as set
-
 try: 
    import sparql_table
    branches = sparql_table.branches
@@ -38,7 +34,6 @@ except ImportError:
          break
 
 start = 'http://www.w3.org/2000/10/swap/grammar/sparql#Query'
-
 
 def abbr(prodURI): 
    return prodURI.split('#').pop()
@@ -66,7 +61,11 @@ class N3Parser(object):
               if not tok: 
                  return tok # EOF
 
-              prodBranch = self.branches[todo_stack[-1][0]]
+              try:
+                  prodBranch = self.branches[todo_stack[-1][0]]
+              except:
+                  print todo_stack
+                  raise
               #print prodBranch
               sequence = prodBranch.get(tok[0], None)
               if sequence is None: 
@@ -86,7 +85,7 @@ class N3Parser(object):
              else:
                 todo_stack.append([term, None])
                 
-          while todo_stack[-1][1] == []:
+          while todo_stack and todo_stack[-1][1] == []:
               todo_stack.pop()
               self.onFinish()
       

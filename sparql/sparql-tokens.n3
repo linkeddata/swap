@@ -82,4 +82,4 @@ GT_DIVIDE a cfg:Token .
 GT_NOT a cfg:Token . 
 Dot a cfg:Token . 
 OpenCurly a cfg:Token . 
-OpenSquare a cfg:Token . 
+OpenSquare a cfg:Token .
