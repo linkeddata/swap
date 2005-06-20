@@ -1,27 +1,63 @@
+# Feed ,bugsToDo.cal3 and this file to cwm and tell it to --think to
+# generate HTML bug status pages. Tell cwm additionally to --purge to
+# get just the open bugs.
+
+
 @prefix cal: <http://www.w3.org/2002/12/cal/icaltzd#> .
 @prefix bst: <bugstatus#> .
 @prefix str: <http://www.w3.org/2000/10/swap/string#>.
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
 
-"0" log:outputString """<html xmlns="http://www.w3.org/1999/xhtml">
+
+"0 1" log:outputString """<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <link href="../doc/style.css" rel="stylesheet" type="text/css" />""".
+
+"0 2a" a log:Chaff; log:outputString """
     <title>Cwm Bug Status - Chronological</title>
-    <link href="../doc/style.css" rel="stylesheet" type="text/css" />
+    <!-- The following is an artifact of the way bug lists are generated.""".
+"0 2b" log:outputString """
+    <title>Cwm Open Bugs - Chronological</title>""".
+"0 2c" a log:Chaff; log:outputString "-->".
+
+"0 3" log:outputString """
 </head>
-<body>
+<body>""".
+
+"0 4a" a log:Chaff; log:outputString """
 <h1><a href="../../doc/cwm">Cwm</a> Bug Status</h1>
-<p>
-This is a chronological listing of known bugs, open or closed, in
-<a href="../../doc/cwm">Cwm</a>.  Bugs are registerd by sending mail to
-public-cwm-bugs@w3.org. Please use a good summary of the bug as
-a subject line. If replying, keep the same subject line ("Re:" is Ok).
-To close, reply to the raiser and the list,
-inserting "[closed] " at the front of the subject line.
-</p>
+
+<p>This is a chronological listing of known bugs, open or closed, in
+<a href="../../doc/cwm">Cwm</a>. A list of only the open bugs can be
+found on the <a href="openBugs.html">Cwm Open Bugs</a> page.</p>
+
+<!-- The following is an artifact of the way bug lists are generated.""".
+
+"0 4b" log:outputString """
+<h1><a href="../../doc/cwm">Cwm</a> Open Bugs</h1>
+
+<p>This is a chronological listing of open bug reports against
+<a href="../../doc/cwm">Cwm</a>. A list of all bugs, both open and
+closed, can be found on the <a href="bugStatus.html">Cwm Bug Status</a>
+page.</p>""".
+
+"0 4c" a log:Chaff; log:outputString "-->".
+
+"0 5" log:outputString """
+
+<p>Bugs are registerd by sending mail to
+<a href="mailto:public-cwm-bugs@w3.org">public-cwm-bugs@w3.org</a>.
+Please use a good summary of the bug as a subject line. If replying,
+keep the same subject line (adding "Re:" is okay). To close a bug, reply
+to the raiser and the list, inserting "[closed] " at the front of the
+subject line.</p>
+
 <ul>
 """.
 
-"99" log:outputString """</ul></body></html>""".
+"99" log:outputString """</ul>
+</body>
+</html>""".
 
 
 {
@@ -38,17 +74,6 @@ inserting "[closed] " at the front of the subject line.
  ?KE log:outputString "</li>\n".
  }.
 
-
-#{
-#  ?E cal:summary ?DESC;
-#    a cal:Vtodo;
-#    cal:url [ log:uri ?PGI];
-#    cal:completed ?WHEN.
-#  (?WHEN ?PGI "7") str:concatenation ?K.
-#  ("<li>" ?WHEN " <a href='" ?PGI
-#       "'>" ?DESC "</a> closed.</li>\n") str:concatenation ?TXT.
-#} => { ?K log:outputString ?TXT }.
-
 {
   ?E cal:summary ?DESC;
     a cal:Vtodo;
@@ -57,7 +82,18 @@ inserting "[closed] " at the front of the subject line.
     cal:completed ?WHEN2.
   (?WHEN1 ?PGI "2") str:concatenation ?K.
   ("<br /><b>closed: " ?WHEN2 "</b>") str:concatenation ?TXT.
-} => { ?K log:outputString ?TXT }.
+  (?WHEN1 ?PGI "1") str:concatenation ?KS.
+  (?WHEN1 ?PGI "5") str:concatenation ?KE.
+} => { ?K log:outputString ?TXT.
+       ?K a log:Chaff. ?KS a log:Chaff. ?KE a log:Chaff. }.
 
-
-
+# The following adds bug closings as separate items in the bug list.
+#{
+#  ?E cal:summary ?DESC;
+#    a cal:Vtodo;
+#    cal:url [ log:uri ?PGI];
+#    cal:completed ?WHEN.
+#  (?WHEN ?PGI "7") str:concatenation ?K.
+#  ("<li>" ?WHEN " <a href='" ?PGI
+#       "'>" ?DESC "</a> closed.</li>\n") str:concatenation ?TXT.
+#} => { ?K log:outputString ?TXT; a log:Chaff }.

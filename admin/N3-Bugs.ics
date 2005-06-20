@@ -1,5 +1,12 @@
 BEGIN:VCALENDAR
 BEGIN:VTODO
+COMPLETED:20040609T170102Z
+DTSTART:20040409T180748Z
+STATUS:COMPLETED
+SUMMARY:cwm serialization changes
+URL;VALUE=URI:http://www.w3.org/mid/87lll5qb2j.fsf@nwalsh.com
+END:VTODO
+BEGIN:VTODO
 DTSTART:20040730T135909Z
 SUMMARY:cwm bug: --rdf=T doesn't work?
 URL;VALUE=URI:http://www.w3.org/mid/87n01h38b6.fsf@nwalsh.com
@@ -160,6 +167,11 @@ DTSTART:20040123T071947Z
 STATUS:COMPLETED
 SUMMARY:new list
 URL;VALUE=URI:http://www.w3.org/mid/nm81xprcess.wl@natto.w3.mag.keio.ac.jp
+END:VTODO
+BEGIN:VTODO
+DTSTART:20050613T214313Z
+SUMMARY:delta verbose and granularity cmdline options broken
+URL;VALUE=URI:http://www.w3.org/mid/1118698993.6503.28.camel@localhost.localdomain
 END:VTODO
 BEGIN:VTODO
 COMPLETED:20040608T220923Z
@@ -393,7 +405,9 @@ SUMMARY:Bug: Grammar Files Disappeared
 URL;VALUE=URI:http://www.w3.org/mid/4117FC8B.70604@infomesh.net
 END:VTODO
 BEGIN:VTODO
+COMPLETED:20050620T012611Z
 DTSTART:20040923T160503Z
+STATUS:COMPLETED
 SUMMARY:cwm 0.8\, python 2.3+ (SuSE 9) woes
 URL;VALUE=URI:http://www.w3.org/mid/4152F42F.4000103@math.hu-berlin.de
 END:VTODO
@@ -530,13 +544,6 @@ BEGIN:VTODO
 DTSTART:20040126T175615Z
 SUMMARY:RDF encoding test case
 URL;VALUE=URI:http://www.w3.org/mid/87ektmd268.fsf@nwalsh.com
-END:VTODO
-BEGIN:VTODO
-COMPLETED:20040609T170102Z
-DTSTART:20040409T180748Z
-STATUS:COMPLETED
-SUMMARY:cwm serialization changes
-URL;VALUE=URI:http://www.w3.org/mid/87lll5qb2j.fsf@nwalsh.com
 END:VTODO
 BEGIN:VTODO
 DTSTART:20020302T173659Z
@@ -924,7 +931,9 @@ SUMMARY:string escapes reverted on purpose?
 URL;VALUE=URI:http://www.w3.org/mid/1108661843.4991.661.camel@localhost
 END:VTODO
 BEGIN:VTODO
+COMPLETED:20050620T010431Z
 DTSTART:20050401T184119Z
+STATUS:COMPLETED
 SUMMARY:RFE: built-in for making datatype literals
 URL;VALUE=URI:http://www.w3.org/mid/1112380879.15073.179.camel@localhost
 END:VTODO
@@ -941,11 +950,6 @@ SUMMARY:import queryize -- does queryize exist?
 URL;VALUE=URI:http://www.w3.org/mid/1118691636.6503.9.camel@localhost.localdomain
 END:VTODO
 BEGIN:VTODO
-DTSTART:20050613T214313Z
-SUMMARY:delta verbose and granularity cmdline options broken
-URL;VALUE=URI:http://www.w3.org/mid/1118698993.6503.28.camel@localhost.localdomain
-END:VTODO
-BEGIN:VTODO
 DTSTART:20011124T203500Z
 SUMMARY:Namespaces wihtout "#" Was: Few CWM Bugs
 URL;VALUE=URI:http://www.w3.org/mid/000101c1756a$b49aedc0$eb13940a@CREST
@@ -958,7 +962,9 @@ SUMMARY:Bug: w.r.t. bnode identification\, in converting from n3 to RDF/XML?
 URL;VALUE=URI:http://www.w3.org/mid/000501c4a205$d62c9a40$f1e41b85@steelball
 END:VTODO
 BEGIN:VTODO
+COMPLETED:20050620T013102Z
 DTSTART:20040829T104550Z
+STATUS:COMPLETED
 SUMMARY:search test
 URL;VALUE=URI:http://www.w3.org/mid/000c01c48db5$5a493280$2742a8c0@mz5newcity
 END:VTODO
