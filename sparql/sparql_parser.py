@@ -24,11 +24,11 @@ except NameError:
    from sets import Set as set
 
 try: 
-   import sparql
+   import sparql-table
    branches = sparql.branches
 except ImportError: 
    for path in sys.path: 
-      fn = os.path.join(path, 'n3meta.pkl')
+      fn = os.path.join(path, 'sparql.pkl')
       if os.path.isfile(fn): 
          f = open(fn, 'rb')
          n3meta = pickle.load(f)
