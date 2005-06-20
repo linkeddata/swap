@@ -39,15 +39,15 @@ inserting "[closed] " at the front of the subject line.
  }.
 
 
-{
-  ?E cal:summary ?DESC;
-    a cal:Vtodo;
-    cal:url [ log:uri ?PGI];
-    cal:completed ?WHEN.
-  (?WHEN ?PGI "7") str:concatenation ?K.
-  ("<li>" ?WHEN " <a href='" [is log:uri of ?PGI]
-       "'>" ?DESC "</a> closed.</li>\n") str:concatenation ?TXT.
-} => { ?K log:outputString ?TXT }.
+#{
+#  ?E cal:summary ?DESC;
+#    a cal:Vtodo;
+#    cal:url [ log:uri ?PGI];
+#    cal:completed ?WHEN.
+#  (?WHEN ?PGI "7") str:concatenation ?K.
+#  ("<li>" ?WHEN " <a href='" ?PGI
+#       "'>" ?DESC "</a> closed.</li>\n") str:concatenation ?TXT.
+#} => { ?K log:outputString ?TXT }.
 
 {
   ?E cal:summary ?DESC;
