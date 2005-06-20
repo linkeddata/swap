@@ -8,9 +8,7 @@
         :baz  )
          :prop2 :test6a .
       ( :foo  )
-         :prop2 :tes6b .
-    
-    :tes6b     a :SUCCESS .
+         :prop2 :test6b .
     
     :test1     a :SUCCESS .
     
@@ -33,6 +31,8 @@
     :test5c     a :SUCCESS .
     
     :test6a     a :SUCCESS .
+    
+    :test6b     a :SUCCESS .
     
     :thing1     :prop1  (
         :test5a 
