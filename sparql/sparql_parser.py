@@ -24,8 +24,8 @@ except NameError:
    from sets import Set as set
 
 try: 
-   import sparql-table
-   branches = sparql.branches
+   import sparql_table
+   branches = sparql_table.branches
 except ImportError: 
    for path in sys.path: 
       fn = os.path.join(path, 'sparql.pkl')
@@ -67,8 +67,8 @@ class N3Parser(object):
                  return tok # EOF
 
               prodBranch = self.branches[todo_stack[-1][0]]
-              print prodBranch
-              sequence = prodBranch.get(tok, None)
+              #print prodBranch
+              sequence = prodBranch.get(tok[0], None)
               if sequence is None: 
                  print >> sys.stderr, 'prodBranch', prodBranch
                  raise Exception("Found %s when expecting a %s . todo_stack=%s" % (tok, todo_stack[-1][0], `todo_stack`))
@@ -77,13 +77,12 @@ class N3Parser(object):
           while todo_stack[-1][1]:
              term = todo_stack[-1][1].pop(0)
              if abbr(term) in tokens: 
-                j = self.pos + len(term)
                 name, word, line = self.token
-                if name == term: 
+                if name == abbr(term): 
                    self.onToken(term, word)
                    self.newToken()
                 else: raise Exception("Found %s; %s expected" % \
-                             (self.data[self.pos:self.pos+10], term))
+                             (`self.token`, term))
              else:
                 todo_stack.append([term, None])
                 
@@ -96,18 +95,18 @@ class N3Parser(object):
       self.token = self.data()
 
    def onStart(self, prod): 
-      print (' ' * len(self.productions)) + prod
+      print (' ' * len(self.productions)) + `prod`
       self.productions.append([prod])
 
    def onFinish(self): 
       prod = self.productions.pop()
       if self.productions:
           self.productions[-1].append(prod)
-      print (' ' * len(self.productions)) + '/' + prod
+      print (' ' * len(self.productions)) + '/' + `prod`
 
    def onToken(self, prod, tok):
       self.productions[-1].append((prod, tok))
-      print (' ' * len(self.productions)) + prod, tok
+      print (' ' * len(self.productions)) + `(prod, tok)`
 
 def main(argv=None): 
    if argv is None: 
