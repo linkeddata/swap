@@ -1,18 +1,15 @@
 
 <!doctype html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html><head><title>Python: module llyn</title>
-<style type="text/css"><!--
-TT { font-family: lucidatypewriter, lucida console, courier }
---></style></head><body bgcolor="#f0f0f8">
+</head><body bgcolor="#f0f0f8">
 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
 <tr bgcolor="#7799ee">
 <td valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>llyn</strong></big></big></font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/devel/WWW/2000/10/swap/llyn.py">/devel/WWW/2000/10/swap/llyn.py</a></font></td></tr></table>
-    <p><tt><br>
-$Id$<br>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/espeoneefi/programming/w3ccvs/WWW/2000/10/swap/llyn.py">/home/espeoneefi/programming/w3ccvs/WWW/2000/10/swap/llyn.py</a></font></td></tr></table>
+    <p><tt>$Id$<br>
 &nbsp;<br>
 &nbsp;<br>
 RDF&nbsp;Store&nbsp;and&nbsp;Query&nbsp;engine<br>
@@ -49,33 +46,34 @@ Keio&nbsp;University).&nbsp;All&nbsp;Rights&nbsp;Reserved.&nbsp;This&nbsp;work&n
 W3C&nbsp;Software&nbsp;License&nbsp;[1]&nbsp;in&nbsp;the&nbsp;hope&nbsp;that&nbsp;it&nbsp;will&nbsp;be&nbsp;useful,&nbsp;but&nbsp;WITHOUT<br>
 ANY&nbsp;WARRANTY;&nbsp;without&nbsp;even&nbsp;the&nbsp;implied&nbsp;warranty&nbsp;of&nbsp;MERCHANTABILITY&nbsp;or&nbsp;FITNESS<br>
 &nbsp;FOR&nbsp;A&nbsp;PARTICULAR&nbsp;PURPOSE.</tt></p>
-
+<p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#aa55cc">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#fffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
     
-<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="StringIO.html">StringIO</a><br>
 <a href="binascii.html">binascii</a><br>
 <a href="diag.html">diag</a><br>
 <a href="md5.html">md5</a><br>
 </td><td width="25%" valign=top><a href="notation3.html">notation3</a><br>
 <a href="re.html">re</a><br>
+<a href="reify.html">reify</a><br>
 <a href="string.html">string</a><br>
-<a href="sys.html">sys</a><br>
-</td><td width="25%" valign=top><a href="time.html">time</a><br>
+</td><td width="25%" valign=top><a href="sys.html">sys</a><br>
+<a href="time.html">time</a><br>
 <a href="types.html">types</a><br>
 <a href="uripath.html">uripath</a><br>
-<a href="urllib.html">urllib</a><br>
-</td><td width="25%" valign=top><a href="webAccess.html">webAccess</a><br>
-</td></tr></table></td></tr></table>
+</td><td width="25%" valign=top><a href="urllib.html">urllib</a><br>
+<a href="webAccess.html">webAccess</a><br>
+</td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ee77aa">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
     
-<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><dl>
 <dt><font face="helvetica, arial"><a href="llyn.html#DataObject">DataObject</a>
 </font></dt><dt><font face="helvetica, arial"><a href="formula.html#Formula">formula.Formula</a>(<a href="term.html#AnonymousNode">term.AnonymousNode</a>, <a href="term.html#CompoundTerm">term.CompoundTerm</a>)
@@ -91,25 +89,30 @@ ANY&nbsp;WARRANTY;&nbsp;without&nbsp;even&nbsp;the&nbsp;implied&nbsp;warranty&nb
 </font></dt><dt><font face="helvetica, arial"><a href="llyn.html#BI_conclusion">BI_conclusion</a>(<a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a>, <a href="term.html#Function">term.Function</a>)
 </font></dt><dt><font face="helvetica, arial"><a href="llyn.html#BI_conjunction">BI_conjunction</a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>, <a href="term.html#Function">term.Function</a>)
 </font></dt><dt><font face="helvetica, arial"><a href="llyn.html#BI_content">BI_content</a>(<a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a>, <a href="term.html#Function">term.Function</a>)
+</font></dt><dt><font face="helvetica, arial"><a href="llyn.html#BI_dtlit">BI_dtlit</a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>, <a href="term.html#Function">term.Function</a>)
+</font></dt><dt><font face="helvetica, arial"><a href="llyn.html#BI_filter">BI_filter</a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>, <a href="term.html#Function">term.Function</a>)
 </font></dt><dt><font face="helvetica, arial"><a href="llyn.html#BI_n3String">BI_n3String</a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>, <a href="term.html#Function">term.Function</a>)
 </font></dt><dt><font face="helvetica, arial"><a href="llyn.html#BI_parsedAsN3">BI_parsedAsN3</a>(<a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a>, <a href="term.html#Function">term.Function</a>)
 </font></dt><dt><font face="helvetica, arial"><a href="llyn.html#BI_racine">BI_racine</a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>, <a href="term.html#Function">term.Function</a>)
 </font></dt><dt><font face="helvetica, arial"><a href="llyn.html#BI_rawType">BI_rawType</a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>, <a href="term.html#Function">term.Function</a>)
+</font></dt><dt><font face="helvetica, arial"><a href="llyn.html#BI_reification">BI_reification</a>(<a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a>, <a href="term.html#Function">term.Function</a>, <a href="term.html#ReverseFunction">term.ReverseFunction</a>)
 </font></dt><dt><font face="helvetica, arial"><a href="llyn.html#BI_semantics">BI_semantics</a>(<a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a>, <a href="term.html#Function">term.Function</a>)
 </font></dt><dd>
 <dl>
 <dt><font face="helvetica, arial"><a href="llyn.html#BI_semanticsOrError">BI_semanticsOrError</a>
 </font></dt></dl>
 </dd>
-<dt><font face="helvetica, arial"><a href="llyn.html#BI_uri">BI_uri</a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>, <a href="term.html#Function">term.Function</a>, <a href="term.html#ReverseFunction">term.ReverseFunction</a>)
+<dt><font face="helvetica, arial"><a href="llyn.html#BI_semanticsWithImportsClosure">BI_semanticsWithImportsClosure</a>(<a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a>, <a href="term.html#Function">term.Function</a>)
+</font></dt><dt><font face="helvetica, arial"><a href="llyn.html#BI_uri">BI_uri</a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>, <a href="term.html#Function">term.Function</a>, <a href="term.html#ReverseFunction">term.ReverseFunction</a>)
 </font></dt><dd>
 <dl>
 <dt><font face="helvetica, arial"><a href="llyn.html#BI_rawUri">BI_rawUri</a>
 </font></dt></dl>
 </dd>
-</dl>
+<dt><font face="helvetica, arial"><a href="llyn.html#BI_vars">BI_vars</a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>, <a href="term.html#Function">term.Function</a>)
+</font></dt></dl>
 </dd>
-<dt><font face="helvetica, arial"><a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a>(<a href="term.html#BuiltIn">term.BuiltIn</a>)
+<dt><font face="helvetica, arial"><a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a>(<a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a>)
 </font></dt><dd>
 <dl>
 <dt><font face="helvetica, arial"><a href="llyn.html#BI_conclusion">BI_conclusion</a>(<a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a>, <a href="term.html#Function">term.Function</a>)
@@ -117,19 +120,23 @@ ANY&nbsp;WARRANTY;&nbsp;without&nbsp;even&nbsp;the&nbsp;implied&nbsp;warranty&nb
 </font></dt><dt><font face="helvetica, arial"><a href="llyn.html#BI_includes">BI_includes</a>
 </font></dt><dt><font face="helvetica, arial"><a href="llyn.html#BI_notIncludes">BI_notIncludes</a>
 </font></dt><dt><font face="helvetica, arial"><a href="llyn.html#BI_parsedAsN3">BI_parsedAsN3</a>(<a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a>, <a href="term.html#Function">term.Function</a>)
+</font></dt><dt><font face="helvetica, arial"><a href="llyn.html#BI_reification">BI_reification</a>(<a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a>, <a href="term.html#Function">term.Function</a>, <a href="term.html#ReverseFunction">term.ReverseFunction</a>)
 </font></dt><dt><font face="helvetica, arial"><a href="llyn.html#BI_semantics">BI_semantics</a>(<a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a>, <a href="term.html#Function">term.Function</a>)
 </font></dt><dd>
 <dl>
 <dt><font face="helvetica, arial"><a href="llyn.html#BI_semanticsOrError">BI_semanticsOrError</a>
 </font></dt></dl>
 </dd>
-</dl>
+<dt><font face="helvetica, arial"><a href="llyn.html#BI_semanticsWithImportsClosure">BI_semanticsWithImportsClosure</a>(<a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a>, <a href="term.html#Function">term.Function</a>)
+</font></dt></dl>
 </dd>
-<dt><font face="helvetica, arial"><a href="term.html#LightBuiltIn">term.LightBuiltIn</a>(<a href="term.html#BuiltIn">term.BuiltIn</a>)
+<dt><font face="helvetica, arial"><a href="term.html#LightBuiltIn">term.LightBuiltIn</a>(<a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a>)
 </font></dt><dd>
 <dl>
 <dt><font face="helvetica, arial"><a href="llyn.html#BI_EqualTo">BI_EqualTo</a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>, <a href="term.html#Function">term.Function</a>, <a href="term.html#ReverseFunction">term.ReverseFunction</a>)
 </font></dt><dt><font face="helvetica, arial"><a href="llyn.html#BI_conjunction">BI_conjunction</a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>, <a href="term.html#Function">term.Function</a>)
+</font></dt><dt><font face="helvetica, arial"><a href="llyn.html#BI_dtlit">BI_dtlit</a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>, <a href="term.html#Function">term.Function</a>)
+</font></dt><dt><font face="helvetica, arial"><a href="llyn.html#BI_filter">BI_filter</a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>, <a href="term.html#Function">term.Function</a>)
 </font></dt><dt><font face="helvetica, arial"><a href="llyn.html#BI_n3String">BI_n3String</a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>, <a href="term.html#Function">term.Function</a>)
 </font></dt><dt><font face="helvetica, arial"><a href="llyn.html#BI_notEqualTo">BI_notEqualTo</a>
 </font></dt><dt><font face="helvetica, arial"><a href="llyn.html#BI_racine">BI_racine</a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>, <a href="term.html#Function">term.Function</a>)
@@ -140,7 +147,8 @@ ANY&nbsp;WARRANTY;&nbsp;without&nbsp;even&nbsp;the&nbsp;implied&nbsp;warranty&nb
 <dt><font face="helvetica, arial"><a href="llyn.html#BI_rawUri">BI_rawUri</a>
 </font></dt></dl>
 </dd>
-</dl>
+<dt><font face="helvetica, arial"><a href="llyn.html#BI_vars">BI_vars</a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>, <a href="term.html#Function">term.Function</a>)
+</font></dt></dl>
 </dd>
 <dt><font face="helvetica, arial"><a href="RDFSink.html#RDFSink">RDFSink.RDFSink</a>
 </font></dt><dd>
@@ -152,6 +160,7 @@ ANY&nbsp;WARRANTY;&nbsp;without&nbsp;even&nbsp;the&nbsp;implied&nbsp;warranty&nb
 </font></dt><dd>
 <dl>
 <dt><font face="helvetica, arial"><a href="llyn.html#BI_EqualTo">BI_EqualTo</a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>, <a href="term.html#Function">term.Function</a>, <a href="term.html#ReverseFunction">term.ReverseFunction</a>)
+</font></dt><dt><font face="helvetica, arial"><a href="llyn.html#BI_reification">BI_reification</a>(<a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a>, <a href="term.html#Function">term.Function</a>, <a href="term.html#ReverseFunction">term.ReverseFunction</a>)
 </font></dt><dt><font face="helvetica, arial"><a href="llyn.html#BI_uri">BI_uri</a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>, <a href="term.html#Function">term.Function</a>, <a href="term.html#ReverseFunction">term.ReverseFunction</a>)
 </font></dt><dd>
 <dl>
@@ -167,25 +176,25 @@ ANY&nbsp;WARRANTY;&nbsp;without&nbsp;even&nbsp;the&nbsp;implied&nbsp;warranty&nb
 </font></dt></dl>
 </dd>
 </dl>
- 
+ <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#000000" face="helvetica, arial"><a name="BI_EqualTo">class <strong>BI_EqualTo</strong></a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>, <a href="term.html#Function">term.Function</a>, <a href="term.html#ReverseFunction">term.ReverseFunction</a>)</font></td></tr>
     
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2>&nbsp;</td></tr>
-<tr><td>&nbsp;&nbsp;</td>
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="llyn.html#BI_EqualTo">BI_EqualTo</a></dd>
 <dd><a href="term.html#LightBuiltIn">term.LightBuiltIn</a></dd>
+<dd><a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a></dd>
+<dd><a href="term.html#Function">term.Function</a></dd>
+<dd><a href="term.html#ReverseFunction">term.ReverseFunction</a></dd>
 <dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">term.Fragment</a></dd>
 <dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
 <dd><a href="term.html#Node">term.Node</a></dd>
 <dd><a href="term.html#Term">term.Term</a></dd>
-<dd><a href="term.html#Function">term.Function</a></dd>
-<dd><a href="term.html#ReverseFunction">term.ReverseFunction</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
 </dl>
 <hr>
 Methods defined here:<br>
@@ -196,13 +205,7 @@ Methods defined here:<br>
 <dl><dt><a name="BI_EqualTo-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
-Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = None</dl>
-
-<dl><dt><strong>__module__</strong> = 'llyn'</dl>
-
-<hr>
-Methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
+Methods inherited from <a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a>:<br>
 <dl><dt><a name="BI_EqualTo-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
 <hr>
@@ -211,13 +214,13 @@ Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
 
-<dl><dt><a name="BI_EqualTo-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
+<dl><dt><a name="BI_EqualTo-generated"><strong>generated</strong></a>(self)</dt><dd><tt>A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
 
-<dl><dt><a name="BI_EqualTo-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
+<dl><dt><a name="BI_EqualTo-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
 <dl><dt><a name="BI_EqualTo-uriref"><strong>uriref</strong></a>(self)</dt></dl>
 
@@ -263,6 +266,8 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_EqualTo-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="BI_EqualTo-doNodesAppear"><strong>doNodesAppear</strong></a>(self, symbols)</dt></dl>
+
 <dl><dt><a name="BI_EqualTo-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
@@ -283,47 +288,47 @@ Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&n
 
 <dl><dt><a name="BI_EqualTo-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
-</td></tr></table> 
+<hr>
+Data and other attributes inherited from <a href="term.html#Term">term.Term</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dictproxy object&gt;<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;attribute '__weakref__' of 'Term' objects&gt;<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dl>
+
+</td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#000000" face="helvetica, arial"><a name="BI_conclusion">class <strong>BI_conclusion</strong></a>(<a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a>, <a href="term.html#Function">term.Function</a>)</font></td></tr>
     
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt>&nbsp;Deductive&nbsp;Closure<br>
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Deductive&nbsp;Closure<br>
 &nbsp;<br>
 Closure&nbsp;under&nbsp;Forward&nbsp;Inference,&nbsp;equivalent&nbsp;to&nbsp;cwm's&nbsp;--think&nbsp;function.<br>
 This&nbsp;is&nbsp;a&nbsp;function,&nbsp;so&nbsp;the&nbsp;object&nbsp;is&nbsp;calculated&nbsp;from&nbsp;the&nbsp;subject.<br>&nbsp;</tt></td></tr>
-<tr><td>&nbsp;&nbsp;</td>
+<tr><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="llyn.html#BI_conclusion">BI_conclusion</a></dd>
 <dd><a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a></dd>
+<dd><a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a></dd>
+<dd><a href="term.html#Function">term.Function</a></dd>
 <dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">term.Fragment</a></dd>
 <dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
 <dd><a href="term.html#Node">term.Node</a></dd>
 <dd><a href="term.html#Term">term.Term</a></dd>
-<dd><a href="term.html#Function">term.Function</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
 </dl>
 <hr>
 Methods defined here:<br>
 <dl><dt><a name="BI_conclusion-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
-Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = ' Deductive Closure<font color="#c040c0">\n\n</font>    Closure under Forward In...o the object is calculated from the subject.<font color="#c040c0">\n</font>    '</dl>
-
-<dl><dt><strong>__module__</strong> = 'llyn'</dl>
-
-<hr>
-Methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
+Methods inherited from <a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a>:<br>
 <dl><dt><a name="BI_conclusion-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_conclusion-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
-calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
-&nbsp;<br>
-To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
-use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+<hr>
+Methods inherited from <a href="term.html#Function">term.Function</a>:<br>
+<dl><dt><a name="BI_conclusion-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
@@ -331,13 +336,13 @@ Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
 
-<dl><dt><a name="BI_conclusion-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
+<dl><dt><a name="BI_conclusion-generated"><strong>generated</strong></a>(self)</dt><dd><tt>A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
 
-<dl><dt><a name="BI_conclusion-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
+<dl><dt><a name="BI_conclusion-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
 <dl><dt><a name="BI_conclusion-uriref"><strong>uriref</strong></a>(self)</dt></dl>
 
@@ -383,6 +388,8 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_conclusion-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="BI_conclusion-doNodesAppear"><strong>doNodesAppear</strong></a>(self, symbols)</dt></dl>
+
 <dl><dt><a name="BI_conclusion-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
@@ -403,46 +410,46 @@ Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&n
 
 <dl><dt><a name="BI_conclusion-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
-</td></tr></table> 
+<hr>
+Data and other attributes inherited from <a href="term.html#Term">term.Term</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dictproxy object&gt;<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;attribute '__weakref__' of 'Term' objects&gt;<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dl>
+
+</td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#000000" face="helvetica, arial"><a name="BI_conjunction">class <strong>BI_conjunction</strong></a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>, <a href="term.html#Function">term.Function</a>)</font></td></tr>
     
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt>&nbsp;The&nbsp;conjunction&nbsp;of&nbsp;a&nbsp;set&nbsp;of&nbsp;formulae&nbsp;is&nbsp;the&nbsp;set&nbsp;of&nbsp;statements&nbsp;which&nbsp;is<br>
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>The&nbsp;conjunction&nbsp;of&nbsp;a&nbsp;set&nbsp;of&nbsp;formulae&nbsp;is&nbsp;the&nbsp;set&nbsp;of&nbsp;statements&nbsp;which&nbsp;is<br>
 just&nbsp;the&nbsp;union&nbsp;of&nbsp;the&nbsp;sets&nbsp;of&nbsp;statements<br>
 modulo&nbsp;non-duplication&nbsp;of&nbsp;course<br>&nbsp;</tt></td></tr>
-<tr><td>&nbsp;&nbsp;</td>
+<tr><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="llyn.html#BI_conjunction">BI_conjunction</a></dd>
 <dd><a href="term.html#LightBuiltIn">term.LightBuiltIn</a></dd>
+<dd><a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a></dd>
+<dd><a href="term.html#Function">term.Function</a></dd>
 <dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">term.Fragment</a></dd>
 <dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
 <dd><a href="term.html#Node">term.Node</a></dd>
 <dd><a href="term.html#Term">term.Term</a></dd>
-<dd><a href="term.html#Function">term.Function</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
 </dl>
 <hr>
 Methods defined here:<br>
 <dl><dt><a name="BI_conjunction-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
-Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = ' The conjunction of a set of formulae is the set...f statements<font color="#c040c0">\n</font>    modulo non-duplication of course'</dl>
-
-<dl><dt><strong>__module__</strong> = 'llyn'</dl>
-
-<hr>
-Methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
+Methods inherited from <a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a>:<br>
 <dl><dt><a name="BI_conjunction-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_conjunction-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
-calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
-&nbsp;<br>
-To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
-use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+<hr>
+Methods inherited from <a href="term.html#Function">term.Function</a>:<br>
+<dl><dt><a name="BI_conjunction-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
@@ -450,13 +457,13 @@ Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
 
-<dl><dt><a name="BI_conjunction-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
+<dl><dt><a name="BI_conjunction-generated"><strong>generated</strong></a>(self)</dt><dd><tt>A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
 
-<dl><dt><a name="BI_conjunction-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
+<dl><dt><a name="BI_conjunction-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
 <dl><dt><a name="BI_conjunction-uriref"><strong>uriref</strong></a>(self)</dt></dl>
 
@@ -502,6 +509,8 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_conjunction-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="BI_conjunction-doNodesAppear"><strong>doNodesAppear</strong></a>(self, symbols)</dt></dl>
+
 <dl><dt><a name="BI_conjunction-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
@@ -522,44 +531,42 @@ Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&n
 
 <dl><dt><a name="BI_conjunction-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
-</td></tr></table> 
+<hr>
+Data and other attributes inherited from <a href="term.html#Term">term.Term</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dictproxy object&gt;<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;attribute '__weakref__' of 'Term' objects&gt;<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dl>
+
+</td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#000000" face="helvetica, arial"><a name="BI_content">class <strong>BI_content</strong></a>(<a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a>, <a href="term.html#Function">term.Function</a>)</font></td></tr>
     
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2>&nbsp;</td></tr>
-<tr><td>&nbsp;&nbsp;</td>
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="llyn.html#BI_content">BI_content</a></dd>
 <dd><a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a></dd>
+<dd><a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a></dd>
+<dd><a href="term.html#Function">term.Function</a></dd>
 <dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">term.Fragment</a></dd>
 <dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
 <dd><a href="term.html#Node">term.Node</a></dd>
 <dd><a href="term.html#Term">term.Term</a></dd>
-<dd><a href="term.html#Function">term.Function</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
 </dl>
 <hr>
 Methods defined here:<br>
 <dl><dt><a name="BI_content-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
-Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = None</dl>
-
-<dl><dt><strong>__module__</strong> = 'llyn'</dl>
-
-<hr>
-Methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
+Methods inherited from <a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a>:<br>
 <dl><dt><a name="BI_content-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_content-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
-calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
-&nbsp;<br>
-To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
-use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+<hr>
+Methods inherited from <a href="term.html#Function">term.Function</a>:<br>
+<dl><dt><a name="BI_content-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
@@ -567,13 +574,13 @@ Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
 
-<dl><dt><a name="BI_content-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
+<dl><dt><a name="BI_content-generated"><strong>generated</strong></a>(self)</dt><dd><tt>A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
 
-<dl><dt><a name="BI_content-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
+<dl><dt><a name="BI_content-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
 <dl><dt><a name="BI_content-uriref"><strong>uriref</strong></a>(self)</dt></dl>
 
@@ -619,6 +626,8 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_content-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="BI_content-doNodesAppear"><strong>doNodesAppear</strong></a>(self, symbols)</dt></dl>
+
 <dl><dt><a name="BI_content-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
@@ -639,38 +648,284 @@ Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&n
 
 <dl><dt><a name="BI_content-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
-</td></tr></table> 
+<hr>
+Data and other attributes inherited from <a href="term.html#Term">term.Term</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dictproxy object&gt;<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;attribute '__weakref__' of 'Term' objects&gt;<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dl>
+
+</td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#000000" face="helvetica, arial"><a name="BI_includes">class <strong>BI_includes</strong></a>(<a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a>)</font></td></tr>
+<font color="#000000" face="helvetica, arial"><a name="BI_dtlit">class <strong>BI_dtlit</strong></a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>, <a href="term.html#Function">term.Function</a>)</font></td></tr>
     
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt>Check&nbsp;that&nbsp;one&nbsp;formula&nbsp;does&nbsp;include&nbsp;the&nbsp;other.<br>
-This&nbsp;limits&nbsp;the&nbsp;ability&nbsp;to&nbsp;bind&nbsp;a&nbsp;variable&nbsp;by&nbsp;searching&nbsp;inside&nbsp;another<br>
-context.&nbsp;This&nbsp;is&nbsp;quite&nbsp;a&nbsp;limitation&nbsp;in&nbsp;some&nbsp;ways.&nbsp;@@&nbsp;fix<br>&nbsp;</tt></td></tr>
-<tr><td>&nbsp;&nbsp;</td>
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>built&nbsp;a&nbsp;datatype&nbsp;literal&nbsp;from&nbsp;a&nbsp;string&nbsp;and&nbsp;a&nbsp;uri<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
-<dd><a href="llyn.html#BI_includes">BI_includes</a></dd>
-<dd><a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a></dd>
+<dd><a href="llyn.html#BI_dtlit">BI_dtlit</a></dd>
+<dd><a href="term.html#LightBuiltIn">term.LightBuiltIn</a></dd>
+<dd><a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a></dd>
+<dd><a href="term.html#Function">term.Function</a></dd>
 <dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">term.Fragment</a></dd>
 <dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
 <dd><a href="term.html#Node">term.Node</a></dd>
 <dd><a href="term.html#Term">term.Term</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="BI_dtlit-evaluateObject"><strong>evaluateObject</strong></a>(self, subj_py)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a>:<br>
+<dl><dt><a name="BI_dtlit-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#Function">term.Function</a>:<br>
+<dl><dt><a name="BI_dtlit-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
+
+<dl><dt><a name="BI_dtlit-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;"evaluate",&nbsp;"subject",&nbsp;etc.</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_dtlit-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
+&nbsp;<br>
+Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
+
+<dl><dt><a name="BI_dtlit-generated"><strong>generated</strong></a>(self)</dt><dd><tt>A&nbsp;generated&nbsp;identifier?<br>
+This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
+name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
+It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
+context.</tt></dd></dl>
+
+<dl><dt><a name="BI_dtlit-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
+
+<dl><dt><a name="BI_dtlit-uriref"><strong>uriref</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BI_dtlit-uriref2"><strong>uriref2</strong></a>(self, base)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
+<dl><dt><a name="BI_dtlit-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BI_dtlit-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
+<dl><dt><a name="BI_dtlit-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="BI_dtlit-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/whatever">http://example.org/whatever</a>"]</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
+<dl><dt><a name="BI_dtlit-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
+&nbsp;<br>
+output&nbsp;as&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity.</tt></dd></dl>
+
+<dl><dt><a name="BI_dtlit-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
+&nbsp;<br>
+The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
+see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="BI_dtlit-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;Anonymous&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;<a href="formula.html#Formula">Formula</a>,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
+
+<dl><dt><a name="BI_dtlit-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+
+<dl><dt><a name="BI_dtlit-doNodesAppear"><strong>doNodesAppear</strong></a>(self, symbols)</dt></dl>
+
+<dl><dt><a name="BI_dtlit-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
+<dl><dt><a name="BI_dtlit-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
+
+<dl><dt><a name="BI_dtlit-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_dtlit-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_dtlit-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="BI_dtlit-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
+Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+
+<dl><dt><a name="BI_dtlit-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
+
+<hr>
+Data and other attributes inherited from <a href="term.html#Term">term.Term</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dictproxy object&gt;<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;attribute '__weakref__' of 'Term' objects&gt;<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="BI_filter">class <strong>BI_filter</strong></a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>, <a href="term.html#Function">term.Function</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Filtering&nbsp;of&nbsp;formulae<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="llyn.html#BI_filter">BI_filter</a></dd>
+<dd><a href="term.html#LightBuiltIn">term.LightBuiltIn</a></dd>
+<dd><a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a></dd>
+<dd><a href="term.html#Function">term.Function</a></dd>
+<dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
+<dd><a href="term.html#Fragment">term.Fragment</a></dd>
+<dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
+<dd><a href="term.html#Node">term.Node</a></dd>
+<dd><a href="term.html#Term">term.Term</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="BI_filter-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a>:<br>
+<dl><dt><a name="BI_filter-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#Function">term.Function</a>:<br>
+<dl><dt><a name="BI_filter-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_filter-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
+&nbsp;<br>
+Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
+
+<dl><dt><a name="BI_filter-generated"><strong>generated</strong></a>(self)</dt><dd><tt>A&nbsp;generated&nbsp;identifier?<br>
+This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
+name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
+It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
+context.</tt></dd></dl>
+
+<dl><dt><a name="BI_filter-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
+
+<dl><dt><a name="BI_filter-uriref"><strong>uriref</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BI_filter-uriref2"><strong>uriref2</strong></a>(self, base)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
+<dl><dt><a name="BI_filter-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BI_filter-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
+<dl><dt><a name="BI_filter-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="BI_filter-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/whatever">http://example.org/whatever</a>"]</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
+<dl><dt><a name="BI_filter-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
+&nbsp;<br>
+output&nbsp;as&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity.</tt></dd></dl>
+
+<dl><dt><a name="BI_filter-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
+&nbsp;<br>
+The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
+see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="BI_filter-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;Anonymous&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;<a href="formula.html#Formula">Formula</a>,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
+
+<dl><dt><a name="BI_filter-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+
+<dl><dt><a name="BI_filter-doNodesAppear"><strong>doNodesAppear</strong></a>(self, symbols)</dt></dl>
+
+<dl><dt><a name="BI_filter-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
+<dl><dt><a name="BI_filter-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
+
+<dl><dt><a name="BI_filter-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_filter-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_filter-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="BI_filter-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
+Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+
+<dl><dt><a name="BI_filter-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
+
+<hr>
+Data and other attributes inherited from <a href="term.html#Term">term.Term</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dictproxy object&gt;<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;attribute '__weakref__' of 'Term' objects&gt;<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="BI_includes">class <strong>BI_includes</strong></a>(<a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Check&nbsp;that&nbsp;one&nbsp;formula&nbsp;does&nbsp;include&nbsp;the&nbsp;other.<br>
+This&nbsp;limits&nbsp;the&nbsp;ability&nbsp;to&nbsp;bind&nbsp;a&nbsp;variable&nbsp;by&nbsp;searching&nbsp;inside&nbsp;another<br>
+context.&nbsp;This&nbsp;is&nbsp;quite&nbsp;a&nbsp;limitation&nbsp;in&nbsp;some&nbsp;ways.&nbsp;@@&nbsp;fix<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="llyn.html#BI_includes">BI_includes</a></dd>
+<dd><a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a></dd>
+<dd><a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a></dd>
+<dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
+<dd><a href="term.html#Fragment">term.Fragment</a></dd>
+<dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
+<dd><a href="term.html#Node">term.Node</a></dd>
+<dd><a href="term.html#Term">term.Term</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
 </dl>
 <hr>
 Methods defined here:<br>
 <dl><dt><a name="BI_includes-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
-Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = 'Check that one formula does include the other.<font color="#c040c0">\n</font> ...s is quite a limitation in some ways. @@ fix<font color="#c040c0">\n</font>    '</dl>
-
-<dl><dt><strong>__module__</strong> = 'llyn'</dl>
-
-<hr>
-Methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
+Methods inherited from <a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a>:<br>
 <dl><dt><a name="BI_includes-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
 <hr>
@@ -679,13 +934,13 @@ Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
 
-<dl><dt><a name="BI_includes-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
+<dl><dt><a name="BI_includes-generated"><strong>generated</strong></a>(self)</dt><dd><tt>A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
 
-<dl><dt><a name="BI_includes-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
+<dl><dt><a name="BI_includes-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
 <dl><dt><a name="BI_includes-uriref"><strong>uriref</strong></a>(self)</dt></dl>
 
@@ -731,6 +986,8 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_includes-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="BI_includes-doNodesAppear"><strong>doNodesAppear</strong></a>(self, symbols)</dt></dl>
+
 <dl><dt><a name="BI_includes-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
@@ -751,50 +1008,50 @@ Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&n
 
 <dl><dt><a name="BI_includes-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
-</td></tr></table> 
+<hr>
+Data and other attributes inherited from <a href="term.html#Term">term.Term</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dictproxy object&gt;<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;attribute '__weakref__' of 'Term' objects&gt;<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dl>
+
+</td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#000000" face="helvetica, arial"><a name="BI_n3String">class <strong>BI_n3String</strong></a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>, <a href="term.html#Function">term.Function</a>)</font></td></tr>
     
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt>&nbsp;The&nbsp;n3&nbsp;string&nbsp;for&nbsp;a&nbsp;formula&nbsp;is&nbsp;what&nbsp;you&nbsp;get&nbsp;when&nbsp;you<br>
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>The&nbsp;n3&nbsp;string&nbsp;for&nbsp;a&nbsp;formula&nbsp;is&nbsp;what&nbsp;you&nbsp;get&nbsp;when&nbsp;you<br>
 express&nbsp;it&nbsp;in&nbsp;the&nbsp;N3&nbsp;language&nbsp;without&nbsp;using&nbsp;any&nbsp;URIs.<br>
 Note&nbsp;that&nbsp;there&nbsp;is&nbsp;no&nbsp;guarantee&nbsp;that&nbsp;two&nbsp;implementations&nbsp;will<br>
 generate&nbsp;the&nbsp;same&nbsp;thing,&nbsp;but&nbsp;whatever&nbsp;they&nbsp;generate&nbsp;should<br>
 parse&nbsp;back&nbsp;using&nbsp;parsedAsN3&nbsp;to&nbsp;exaclty&nbsp;the&nbsp;same&nbsp;original&nbsp;formula.<br>
 If&nbsp;we&nbsp;*did*&nbsp;have&nbsp;a&nbsp;canonical&nbsp;form&nbsp;it&nbsp;would&nbsp;be&nbsp;great&nbsp;for&nbsp;signature<br>
 A&nbsp;canonical&nbsp;form&nbsp;is&nbsp;possisble&nbsp;but&nbsp;not&nbsp;simple.<br>&nbsp;</tt></td></tr>
-<tr><td>&nbsp;&nbsp;</td>
+<tr><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="llyn.html#BI_n3String">BI_n3String</a></dd>
 <dd><a href="term.html#LightBuiltIn">term.LightBuiltIn</a></dd>
+<dd><a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a></dd>
+<dd><a href="term.html#Function">term.Function</a></dd>
 <dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">term.Fragment</a></dd>
 <dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
 <dd><a href="term.html#Node">term.Node</a></dd>
 <dd><a href="term.html#Term">term.Term</a></dd>
-<dd><a href="term.html#Function">term.Function</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
 </dl>
 <hr>
 Methods defined here:<br>
 <dl><dt><a name="BI_n3String-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
-Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = ' The n3 string for a formula is what you get whe...    A canonical form is possisble but not simple.'</dl>
-
-<dl><dt><strong>__module__</strong> = 'llyn'</dl>
-
-<hr>
-Methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
+Methods inherited from <a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a>:<br>
 <dl><dt><a name="BI_n3String-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_n3String-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
-calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
-&nbsp;<br>
-To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
-use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+<hr>
+Methods inherited from <a href="term.html#Function">term.Function</a>:<br>
+<dl><dt><a name="BI_n3String-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
@@ -802,13 +1059,13 @@ Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
 
-<dl><dt><a name="BI_n3String-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
+<dl><dt><a name="BI_n3String-generated"><strong>generated</strong></a>(self)</dt><dd><tt>A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
 
-<dl><dt><a name="BI_n3String-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
+<dl><dt><a name="BI_n3String-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
 <dl><dt><a name="BI_n3String-uriref"><strong>uriref</strong></a>(self)</dt></dl>
 
@@ -854,6 +1111,8 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_n3String-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="BI_n3String-doNodesAppear"><strong>doNodesAppear</strong></a>(self, symbols)</dt></dl>
+
 <dl><dt><a name="BI_n3String-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
@@ -874,36 +1133,36 @@ Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&n
 
 <dl><dt><a name="BI_n3String-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
-</td></tr></table> 
+<hr>
+Data and other attributes inherited from <a href="term.html#Term">term.Term</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dictproxy object&gt;<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;attribute '__weakref__' of 'Term' objects&gt;<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dl>
+
+</td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#000000" face="helvetica, arial"><a name="BI_notEqualTo">class <strong>BI_notEqualTo</strong></a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>)</font></td></tr>
     
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2>&nbsp;</td></tr>
-<tr><td>&nbsp;&nbsp;</td>
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="llyn.html#BI_notEqualTo">BI_notEqualTo</a></dd>
 <dd><a href="term.html#LightBuiltIn">term.LightBuiltIn</a></dd>
+<dd><a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a></dd>
 <dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">term.Fragment</a></dd>
 <dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
 <dd><a href="term.html#Node">term.Node</a></dd>
 <dd><a href="term.html#Term">term.Term</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
 </dl>
 <hr>
 Methods defined here:<br>
 <dl><dt><a name="BI_notEqualTo-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
-Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = None</dl>
-
-<dl><dt><strong>__module__</strong> = 'llyn'</dl>
-
-<hr>
-Methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
+Methods inherited from <a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a>:<br>
 <dl><dt><a name="BI_notEqualTo-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
 <hr>
@@ -912,13 +1171,13 @@ Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
 
-<dl><dt><a name="BI_notEqualTo-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
+<dl><dt><a name="BI_notEqualTo-generated"><strong>generated</strong></a>(self)</dt><dd><tt>A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
 
-<dl><dt><a name="BI_notEqualTo-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
+<dl><dt><a name="BI_notEqualTo-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
 <dl><dt><a name="BI_notEqualTo-uriref"><strong>uriref</strong></a>(self)</dt></dl>
 
@@ -964,6 +1223,8 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_notEqualTo-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="BI_notEqualTo-doNodesAppear"><strong>doNodesAppear</strong></a>(self, symbols)</dt></dl>
+
 <dl><dt><a name="BI_notEqualTo-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
@@ -984,13 +1245,19 @@ Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&n
 
 <dl><dt><a name="BI_notEqualTo-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
-</td></tr></table> 
+<hr>
+Data and other attributes inherited from <a href="term.html#Term">term.Term</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dictproxy object&gt;<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;attribute '__weakref__' of 'Term' objects&gt;<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dl>
+
+</td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#000000" face="helvetica, arial"><a name="BI_notIncludes">class <strong>BI_notIncludes</strong></a>(<a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a>)</font></td></tr>
     
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
 <td colspan=2><tt>Check&nbsp;that&nbsp;one&nbsp;formula&nbsp;does&nbsp;not&nbsp;include&nbsp;the&nbsp;other.<br>
 &nbsp;<br>
 notIncludes&nbsp;is&nbsp;a&nbsp;heavy&nbsp;function&nbsp;not&nbsp;only&nbsp;because&nbsp;it&nbsp;may&nbsp;take&nbsp;more&nbsp;time&nbsp;than<br>
@@ -1004,28 +1271,24 @@ This&nbsp;means&nbsp;we&nbsp;have&nbsp;to&nbsp;know&nbsp;that&nbsp;the&nbsp;vari
 &nbsp;<br>
 As&nbsp;for&nbsp;the&nbsp;subject,&nbsp;it&nbsp;does&nbsp;make&nbsp;sense&nbsp;for&nbsp;the&nbsp;opposite&nbsp;reason.&nbsp;&nbsp;If&nbsp;F(x)<br>
 includes&nbsp;G&nbsp;for&nbsp;all&nbsp;x,&nbsp;then&nbsp;G&nbsp;would&nbsp;have&nbsp;to&nbsp;be&nbsp;infinite.<br>&nbsp;</tt></td></tr>
-<tr><td>&nbsp;&nbsp;</td>
+<tr><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="llyn.html#BI_notIncludes">BI_notIncludes</a></dd>
 <dd><a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a></dd>
+<dd><a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a></dd>
 <dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">term.Fragment</a></dd>
 <dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
 <dd><a href="term.html#Node">term.Node</a></dd>
 <dd><a href="term.html#Term">term.Term</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
 </dl>
 <hr>
 Methods defined here:<br>
 <dl><dt><a name="BI_notIncludes-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
-Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = 'Check that one formula does not include the othe...r all x, then G would have to be infinite.  <font color="#c040c0">\n</font>    '</dl>
-
-<dl><dt><strong>__module__</strong> = 'llyn'</dl>
-
-<hr>
-Methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
+Methods inherited from <a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a>:<br>
 <dl><dt><a name="BI_notIncludes-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
 <hr>
@@ -1034,13 +1297,13 @@ Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
 
-<dl><dt><a name="BI_notIncludes-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
+<dl><dt><a name="BI_notIncludes-generated"><strong>generated</strong></a>(self)</dt><dd><tt>A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
 
-<dl><dt><a name="BI_notIncludes-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
+<dl><dt><a name="BI_notIncludes-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
 <dl><dt><a name="BI_notIncludes-uriref"><strong>uriref</strong></a>(self)</dt></dl>
 
@@ -1086,6 +1349,8 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_notIncludes-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="BI_notIncludes-doNodesAppear"><strong>doNodesAppear</strong></a>(self, symbols)</dt></dl>
+
 <dl><dt><a name="BI_notIncludes-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
@@ -1106,44 +1371,42 @@ Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&n
 
 <dl><dt><a name="BI_notIncludes-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
-</td></tr></table> 
+<hr>
+Data and other attributes inherited from <a href="term.html#Term">term.Term</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dictproxy object&gt;<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;attribute '__weakref__' of 'Term' objects&gt;<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dl>
+
+</td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#000000" face="helvetica, arial"><a name="BI_parsedAsN3">class <strong>BI_parsedAsN3</strong></a>(<a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a>, <a href="term.html#Function">term.Function</a>)</font></td></tr>
     
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2>&nbsp;</td></tr>
-<tr><td>&nbsp;&nbsp;</td>
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="llyn.html#BI_parsedAsN3">BI_parsedAsN3</a></dd>
 <dd><a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a></dd>
+<dd><a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a></dd>
+<dd><a href="term.html#Function">term.Function</a></dd>
 <dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">term.Fragment</a></dd>
 <dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
 <dd><a href="term.html#Node">term.Node</a></dd>
 <dd><a href="term.html#Term">term.Term</a></dd>
-<dd><a href="term.html#Function">term.Function</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
 </dl>
 <hr>
 Methods defined here:<br>
 <dl><dt><a name="BI_parsedAsN3-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
-Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = None</dl>
-
-<dl><dt><strong>__module__</strong> = 'llyn'</dl>
-
-<hr>
-Methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
+Methods inherited from <a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a>:<br>
 <dl><dt><a name="BI_parsedAsN3-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_parsedAsN3-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
-calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
-&nbsp;<br>
-To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
-use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+<hr>
+Methods inherited from <a href="term.html#Function">term.Function</a>:<br>
+<dl><dt><a name="BI_parsedAsN3-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
@@ -1151,13 +1414,13 @@ Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
 
-<dl><dt><a name="BI_parsedAsN3-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
+<dl><dt><a name="BI_parsedAsN3-generated"><strong>generated</strong></a>(self)</dt><dd><tt>A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
 
-<dl><dt><a name="BI_parsedAsN3-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
+<dl><dt><a name="BI_parsedAsN3-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
 <dl><dt><a name="BI_parsedAsN3-uriref"><strong>uriref</strong></a>(self)</dt></dl>
 
@@ -1203,6 +1466,8 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_parsedAsN3-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="BI_parsedAsN3-doNodesAppear"><strong>doNodesAppear</strong></a>(self, symbols)</dt></dl>
+
 <dl><dt><a name="BI_parsedAsN3-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
@@ -1223,44 +1488,42 @@ Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&n
 
 <dl><dt><a name="BI_parsedAsN3-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
-</td></tr></table> 
+<hr>
+Data and other attributes inherited from <a href="term.html#Term">term.Term</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dictproxy object&gt;<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;attribute '__weakref__' of 'Term' objects&gt;<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dl>
+
+</td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#000000" face="helvetica, arial"><a name="BI_racine">class <strong>BI_racine</strong></a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>, <a href="term.html#Function">term.Function</a>)</font></td></tr>
     
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2>&nbsp;</td></tr>
-<tr><td>&nbsp;&nbsp;</td>
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="llyn.html#BI_racine">BI_racine</a></dd>
 <dd><a href="term.html#LightBuiltIn">term.LightBuiltIn</a></dd>
+<dd><a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a></dd>
+<dd><a href="term.html#Function">term.Function</a></dd>
 <dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">term.Fragment</a></dd>
 <dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
 <dd><a href="term.html#Node">term.Node</a></dd>
 <dd><a href="term.html#Term">term.Term</a></dd>
-<dd><a href="term.html#Function">term.Function</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
 </dl>
 <hr>
 Methods defined here:<br>
 <dl><dt><a name="BI_racine-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
-Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = None</dl>
-
-<dl><dt><strong>__module__</strong> = 'llyn'</dl>
-
-<hr>
-Methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
+Methods inherited from <a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a>:<br>
 <dl><dt><a name="BI_racine-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_racine-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
-calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
-&nbsp;<br>
-To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
-use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+<hr>
+Methods inherited from <a href="term.html#Function">term.Function</a>:<br>
+<dl><dt><a name="BI_racine-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
@@ -1268,13 +1531,13 @@ Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
 
-<dl><dt><a name="BI_racine-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
+<dl><dt><a name="BI_racine-generated"><strong>generated</strong></a>(self)</dt><dd><tt>A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
 
-<dl><dt><a name="BI_racine-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
+<dl><dt><a name="BI_racine-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
 <dl><dt><a name="BI_racine-uriref"><strong>uriref</strong></a>(self)</dt></dl>
 
@@ -1320,6 +1583,8 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_racine-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="BI_racine-doNodesAppear"><strong>doNodesAppear</strong></a>(self, symbols)</dt></dl>
+
 <dl><dt><a name="BI_racine-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
@@ -1340,46 +1605,46 @@ Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&n
 
 <dl><dt><a name="BI_racine-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
-</td></tr></table> 
+<hr>
+Data and other attributes inherited from <a href="term.html#Term">term.Term</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dictproxy object&gt;<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;attribute '__weakref__' of 'Term' objects&gt;<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dl>
+
+</td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#000000" face="helvetica, arial"><a name="BI_rawType">class <strong>BI_rawType</strong></a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>, <a href="term.html#Function">term.Function</a>)</font></td></tr>
     
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
 <td colspan=2><tt>The&nbsp;raw&nbsp;type&nbsp;is&nbsp;a&nbsp;type&nbsp;from&nbsp;the&nbsp;point&nbsp;of&nbsp;view&nbsp;of&nbsp;the&nbsp;langauge:&nbsp;is<br>
 it&nbsp;a&nbsp;formula,&nbsp;list,&nbsp;and&nbsp;so&nbsp;on.&nbsp;Needed&nbsp;for&nbsp;test&nbsp;for&nbsp;formula&nbsp;in&nbsp;finding&nbsp;subformulae<br>
 eg&nbsp;see&nbsp;test/includes/check.n3<br>&nbsp;</tt></td></tr>
-<tr><td>&nbsp;&nbsp;</td>
+<tr><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="llyn.html#BI_rawType">BI_rawType</a></dd>
 <dd><a href="term.html#LightBuiltIn">term.LightBuiltIn</a></dd>
+<dd><a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a></dd>
+<dd><a href="term.html#Function">term.Function</a></dd>
 <dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">term.Fragment</a></dd>
 <dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
 <dd><a href="term.html#Node">term.Node</a></dd>
 <dd><a href="term.html#Term">term.Term</a></dd>
-<dd><a href="term.html#Function">term.Function</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
 </dl>
 <hr>
 Methods defined here:<br>
 <dl><dt><a name="BI_rawType-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
-Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = '<font color="#c040c0">\n</font>    The raw type is a type from the point of vi...bformulae<font color="#c040c0">\n</font>    eg see test/includes/check.n3 <font color="#c040c0">\n</font>    '</dl>
-
-<dl><dt><strong>__module__</strong> = 'llyn'</dl>
-
-<hr>
-Methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
+Methods inherited from <a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a>:<br>
 <dl><dt><a name="BI_rawType-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_rawType-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
-calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
-&nbsp;<br>
-To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
-use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+<hr>
+Methods inherited from <a href="term.html#Function">term.Function</a>:<br>
+<dl><dt><a name="BI_rawType-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
@@ -1387,13 +1652,13 @@ Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
 
-<dl><dt><a name="BI_rawType-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
+<dl><dt><a name="BI_rawType-generated"><strong>generated</strong></a>(self)</dt><dd><tt>A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
 
-<dl><dt><a name="BI_rawType-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
+<dl><dt><a name="BI_rawType-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
 <dl><dt><a name="BI_rawType-uriref"><strong>uriref</strong></a>(self)</dt></dl>
 
@@ -1439,6 +1704,8 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_rawType-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="BI_rawType-doNodesAppear"><strong>doNodesAppear</strong></a>(self, symbols)</dt></dl>
+
 <dl><dt><a name="BI_rawType-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
@@ -1459,37 +1726,39 @@ Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&n
 
 <dl><dt><a name="BI_rawType-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
-</td></tr></table> 
+<hr>
+Data and other attributes inherited from <a href="term.html#Term">term.Term</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dictproxy object&gt;<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;attribute '__weakref__' of 'Term' objects&gt;<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dl>
+
+</td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#000000" face="helvetica, arial"><a name="BI_rawUri">class <strong>BI_rawUri</strong></a>(<a href="llyn.html#BI_uri">BI_uri</a>)</font></td></tr>
     
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
 <td colspan=2><tt>This&nbsp;is&nbsp;like&nbsp;&nbsp;uri&nbsp;except&nbsp;that&nbsp;it&nbsp;allows&nbsp;you&nbsp;to&nbsp;get&nbsp;the&nbsp;internal<br>
 identifiers&nbsp;for&nbsp;anonymous&nbsp;nodes&nbsp;and&nbsp;formuale&nbsp;etc.<br>&nbsp;</tt></td></tr>
-<tr><td>&nbsp;&nbsp;</td>
+<tr><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="llyn.html#BI_rawUri">BI_rawUri</a></dd>
 <dd><a href="llyn.html#BI_uri">BI_uri</a></dd>
 <dd><a href="term.html#LightBuiltIn">term.LightBuiltIn</a></dd>
+<dd><a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a></dd>
+<dd><a href="term.html#Function">term.Function</a></dd>
+<dd><a href="term.html#ReverseFunction">term.ReverseFunction</a></dd>
 <dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">term.Fragment</a></dd>
 <dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
 <dd><a href="term.html#Node">term.Node</a></dd>
 <dd><a href="term.html#Term">term.Term</a></dd>
-<dd><a href="term.html#Function">term.Function</a></dd>
-<dd><a href="term.html#ReverseFunction">term.ReverseFunction</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
 </dl>
 <hr>
 Methods defined here:<br>
 <dl><dt><a name="BI_rawUri-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt></dl>
-
-<hr>
-Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = 'This is like  uri except that it allows you to g...identifiers for anonymous nodes and formuale etc.'</dl>
-
-<dl><dt><strong>__module__</strong> = 'llyn'</dl>
 
 <hr>
 Methods inherited from <a href="llyn.html#BI_uri">BI_uri</a>:<br>
@@ -1501,14 +1770,17 @@ Note&nbsp;that&nbsp;relative&nbsp;URIs&nbsp;can&nbsp;be&nbsp;OK&nbsp;as&nbsp;the
 has&nbsp;a&nbsp;base,&nbsp;which&nbsp;may&nbsp;be&nbsp;irrelevant.&nbsp;Eg&nbsp;see&nbsp;roadmap-test&nbsp;in&nbsp;retest.sh</tt></dd></dl>
 
 <hr>
-Methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
+Methods inherited from <a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a>:<br>
 <dl><dt><a name="BI_rawUri-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_rawUri-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
-calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
-&nbsp;<br>
-To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
-use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+<hr>
+Methods inherited from <a href="term.html#Function">term.Function</a>:<br>
+<dl><dt><a name="BI_rawUri-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#ReverseFunction">term.ReverseFunction</a>:<br>
+<dl><dt><a name="BI_rawUri-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
@@ -1516,13 +1788,13 @@ Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
 
-<dl><dt><a name="BI_rawUri-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
+<dl><dt><a name="BI_rawUri-generated"><strong>generated</strong></a>(self)</dt><dd><tt>A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
 
-<dl><dt><a name="BI_rawUri-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
+<dl><dt><a name="BI_rawUri-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
 <dl><dt><a name="BI_rawUri-uriref"><strong>uriref</strong></a>(self)</dt></dl>
 
@@ -1568,6 +1840,8 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_rawUri-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="BI_rawUri-doNodesAppear"><strong>doNodesAppear</strong></a>(self, symbols)</dt></dl>
+
 <dl><dt><a name="BI_rawUri-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
@@ -1589,50 +1863,165 @@ Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&n
 <dl><dt><a name="BI_rawUri-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
 <hr>
-Methods inherited from <a href="term.html#ReverseFunction">term.ReverseFunction</a>:<br>
-<dl><dt><a name="BI_rawUri-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
-calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
+Data and other attributes inherited from <a href="term.html#Term">term.Term</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dictproxy object&gt;<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dl>
 
-</td></tr></table> 
+<dl><dt><strong>__weakref__</strong> = &lt;attribute '__weakref__' of 'Term' objects&gt;<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dl>
+
+</td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#000000" face="helvetica, arial"><a name="BI_semantics">class <strong>BI_semantics</strong></a>(<a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a>, <a href="term.html#Function">term.Function</a>)</font></td></tr>
+<font color="#000000" face="helvetica, arial"><a name="BI_reification">class <strong>BI_reification</strong></a>(<a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a>, <a href="term.html#Function">term.Function</a>, <a href="term.html#ReverseFunction">term.ReverseFunction</a>)</font></td></tr>
     
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt>&nbsp;The&nbsp;semantics&nbsp;of&nbsp;a&nbsp;resource&nbsp;are&nbsp;its&nbsp;machine-readable&nbsp;meaning,&nbsp;as&nbsp;an<br>
-N3&nbsp;forumula.&nbsp;&nbsp;The&nbsp;URI&nbsp;is&nbsp;used&nbsp;to&nbsp;find&nbsp;a&nbsp;represnetation&nbsp;of&nbsp;the&nbsp;resource&nbsp;in&nbsp;bits<br>
-which&nbsp;is&nbsp;then&nbsp;parsed&nbsp;according&nbsp;to&nbsp;its&nbsp;content&nbsp;type.<br>&nbsp;</tt></td></tr>
-<tr><td>&nbsp;&nbsp;</td>
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
-<dd><a href="llyn.html#BI_semantics">BI_semantics</a></dd>
+<dd><a href="llyn.html#BI_reification">BI_reification</a></dd>
 <dd><a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a></dd>
+<dd><a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a></dd>
+<dd><a href="term.html#Function">term.Function</a></dd>
+<dd><a href="term.html#ReverseFunction">term.ReverseFunction</a></dd>
 <dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">term.Fragment</a></dd>
 <dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
 <dd><a href="term.html#Node">term.Node</a></dd>
 <dd><a href="term.html#Term">term.Term</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="BI_reification-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt></dl>
+
+<dl><dt><a name="BI_reification-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings, proof, query)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a>:<br>
+<dl><dt><a name="BI_reification-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#Function">term.Function</a>:<br>
+<dl><dt><a name="BI_reification-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_reification-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
+&nbsp;<br>
+Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
+
+<dl><dt><a name="BI_reification-generated"><strong>generated</strong></a>(self)</dt><dd><tt>A&nbsp;generated&nbsp;identifier?<br>
+This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
+name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
+It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
+context.</tt></dd></dl>
+
+<dl><dt><a name="BI_reification-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
+
+<dl><dt><a name="BI_reification-uriref"><strong>uriref</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BI_reification-uriref2"><strong>uriref2</strong></a>(self, base)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
+<dl><dt><a name="BI_reification-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BI_reification-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
+<dl><dt><a name="BI_reification-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="BI_reification-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/whatever">http://example.org/whatever</a>"]</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
+<dl><dt><a name="BI_reification-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
+&nbsp;<br>
+output&nbsp;as&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity.</tt></dd></dl>
+
+<dl><dt><a name="BI_reification-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
+&nbsp;<br>
+The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
+see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="BI_reification-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;Anonymous&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;<a href="formula.html#Formula">Formula</a>,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
+
+<dl><dt><a name="BI_reification-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+
+<dl><dt><a name="BI_reification-doNodesAppear"><strong>doNodesAppear</strong></a>(self, symbols)</dt></dl>
+
+<dl><dt><a name="BI_reification-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
+<dl><dt><a name="BI_reification-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
+
+<dl><dt><a name="BI_reification-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_reification-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_reification-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="BI_reification-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
+Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+
+<dl><dt><a name="BI_reification-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
+
+<hr>
+Data and other attributes inherited from <a href="term.html#Term">term.Term</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dictproxy object&gt;<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;attribute '__weakref__' of 'Term' objects&gt;<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="BI_semantics">class <strong>BI_semantics</strong></a>(<a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a>, <a href="term.html#Function">term.Function</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>The&nbsp;semantics&nbsp;of&nbsp;a&nbsp;resource&nbsp;are&nbsp;its&nbsp;machine-readable&nbsp;meaning,&nbsp;as&nbsp;an<br>
+N3&nbsp;forumula.&nbsp;&nbsp;The&nbsp;URI&nbsp;is&nbsp;used&nbsp;to&nbsp;find&nbsp;a&nbsp;represnetation&nbsp;of&nbsp;the&nbsp;resource&nbsp;in&nbsp;bits<br>
+which&nbsp;is&nbsp;then&nbsp;parsed&nbsp;according&nbsp;to&nbsp;its&nbsp;content&nbsp;type.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="llyn.html#BI_semantics">BI_semantics</a></dd>
+<dd><a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a></dd>
+<dd><a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a></dd>
 <dd><a href="term.html#Function">term.Function</a></dd>
+<dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
+<dd><a href="term.html#Fragment">term.Fragment</a></dd>
+<dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
+<dd><a href="term.html#Node">term.Node</a></dd>
+<dd><a href="term.html#Term">term.Term</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
 </dl>
 <hr>
 Methods defined here:<br>
 <dl><dt><a name="BI_semantics-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
-Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = ' The semantics of a resource are its machine-rea...ich is then parsed according to its content type.'</dl>
-
-<dl><dt><strong>__module__</strong> = 'llyn'</dl>
-
-<hr>
-Methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
+Methods inherited from <a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a>:<br>
 <dl><dt><a name="BI_semantics-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_semantics-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
-calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
-&nbsp;<br>
-To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
-use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+<hr>
+Methods inherited from <a href="term.html#Function">term.Function</a>:<br>
+<dl><dt><a name="BI_semantics-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
@@ -1640,13 +2029,13 @@ Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
 
-<dl><dt><a name="BI_semantics-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
+<dl><dt><a name="BI_semantics-generated"><strong>generated</strong></a>(self)</dt><dd><tt>A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
 
-<dl><dt><a name="BI_semantics-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
+<dl><dt><a name="BI_semantics-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
 <dl><dt><a name="BI_semantics-uriref"><strong>uriref</strong></a>(self)</dt></dl>
 
@@ -1692,6 +2081,8 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_semantics-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="BI_semantics-doNodesAppear"><strong>doNodesAppear</strong></a>(self, symbols)</dt></dl>
+
 <dl><dt><a name="BI_semantics-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
@@ -1712,45 +2103,45 @@ Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&n
 
 <dl><dt><a name="BI_semantics-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
-</td></tr></table> 
+<hr>
+Data and other attributes inherited from <a href="term.html#Term">term.Term</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dictproxy object&gt;<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;attribute '__weakref__' of 'Term' objects&gt;<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dl>
+
+</td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#000000" face="helvetica, arial"><a name="BI_semanticsOrError">class <strong>BI_semanticsOrError</strong></a>(<a href="llyn.html#BI_semantics">BI_semantics</a>)</font></td></tr>
     
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt>&nbsp;Either&nbsp;get&nbsp;and&nbsp;parse&nbsp;to&nbsp;semantics&nbsp;or&nbsp;return&nbsp;an&nbsp;error&nbsp;message&nbsp;on&nbsp;any&nbsp;error<br>&nbsp;</tt></td></tr>
-<tr><td>&nbsp;&nbsp;</td>
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Either&nbsp;get&nbsp;and&nbsp;parse&nbsp;to&nbsp;semantics&nbsp;or&nbsp;return&nbsp;an&nbsp;error&nbsp;message&nbsp;on&nbsp;any&nbsp;error<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="llyn.html#BI_semanticsOrError">BI_semanticsOrError</a></dd>
 <dd><a href="llyn.html#BI_semantics">BI_semantics</a></dd>
 <dd><a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a></dd>
+<dd><a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a></dd>
+<dd><a href="term.html#Function">term.Function</a></dd>
 <dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">term.Fragment</a></dd>
 <dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
 <dd><a href="term.html#Node">term.Node</a></dd>
 <dd><a href="term.html#Term">term.Term</a></dd>
-<dd><a href="term.html#Function">term.Function</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
 </dl>
 <hr>
 Methods defined here:<br>
 <dl><dt><a name="BI_semanticsOrError-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
-Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = ' Either get and parse to semantics or return an error message on any error '</dl>
-
-<dl><dt><strong>__module__</strong> = 'llyn'</dl>
-
-<hr>
-Methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
+Methods inherited from <a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a>:<br>
 <dl><dt><a name="BI_semanticsOrError-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_semanticsOrError-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
-calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
-&nbsp;<br>
-To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
-use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+<hr>
+Methods inherited from <a href="term.html#Function">term.Function</a>:<br>
+<dl><dt><a name="BI_semanticsOrError-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
@@ -1758,13 +2149,13 @@ Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
 
-<dl><dt><a name="BI_semanticsOrError-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
+<dl><dt><a name="BI_semanticsOrError-generated"><strong>generated</strong></a>(self)</dt><dd><tt>A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
 
-<dl><dt><a name="BI_semanticsOrError-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
+<dl><dt><a name="BI_semanticsOrError-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
 <dl><dt><a name="BI_semanticsOrError-uriref"><strong>uriref</strong></a>(self)</dt></dl>
 
@@ -1810,6 +2201,8 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_semanticsOrError-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="BI_semanticsOrError-doNodesAppear"><strong>doNodesAppear</strong></a>(self, symbols)</dt></dl>
+
 <dl><dt><a name="BI_semanticsOrError-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
@@ -1830,25 +2223,153 @@ Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&n
 
 <dl><dt><a name="BI_semanticsOrError-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
-</td></tr></table> 
+<hr>
+Data and other attributes inherited from <a href="term.html#Term">term.Term</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dictproxy object&gt;<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;attribute '__weakref__' of 'Term' objects&gt;<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dl>
+
+</td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#000000" face="helvetica, arial"><a name="BI_uri">class <strong>BI_uri</strong></a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>, <a href="term.html#Function">term.Function</a>, <a href="term.html#ReverseFunction">term.ReverseFunction</a>)</font></td></tr>
+<font color="#000000" face="helvetica, arial"><a name="BI_semanticsWithImportsClosure">class <strong>BI_semanticsWithImportsClosure</strong></a>(<a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a>, <a href="term.html#Function">term.Function</a>)</font></td></tr>
     
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2>&nbsp;</td></tr>
-<tr><td>&nbsp;&nbsp;</td>
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>The&nbsp;semantics&nbsp;of&nbsp;a&nbsp;resource&nbsp;are&nbsp;its&nbsp;machine-readable&nbsp;meaning,<br>
+as&nbsp;an&nbsp;N3&nbsp;forumula.&nbsp;&nbsp;The&nbsp;URI&nbsp;is&nbsp;used&nbsp;to&nbsp;find&nbsp;a&nbsp;representation&nbsp;of<br>
+the&nbsp;resource&nbsp;in&nbsp;bits&nbsp;which&nbsp;is&nbsp;then&nbsp;parsed&nbsp;according&nbsp;to&nbsp;its&nbsp;content<br>
+type.&nbsp;&nbsp;Extension&nbsp;:&nbsp;It&nbsp;also&nbsp;loads&nbsp;all&nbsp;imported&nbsp;URIs<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
-<dd><a href="llyn.html#BI_uri">BI_uri</a></dd>
-<dd><a href="term.html#LightBuiltIn">term.LightBuiltIn</a></dd>
+<dd><a href="llyn.html#BI_semanticsWithImportsClosure">BI_semanticsWithImportsClosure</a></dd>
+<dd><a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a></dd>
+<dd><a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a></dd>
+<dd><a href="term.html#Function">term.Function</a></dd>
 <dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">term.Fragment</a></dd>
 <dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
 <dd><a href="term.html#Node">term.Node</a></dd>
 <dd><a href="term.html#Term">term.Term</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="BI_semanticsWithImportsClosure-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a>:<br>
+<dl><dt><a name="BI_semanticsWithImportsClosure-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#Function">term.Function</a>:<br>
+<dl><dt><a name="BI_semanticsWithImportsClosure-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_semanticsWithImportsClosure-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
+&nbsp;<br>
+Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
+
+<dl><dt><a name="BI_semanticsWithImportsClosure-generated"><strong>generated</strong></a>(self)</dt><dd><tt>A&nbsp;generated&nbsp;identifier?<br>
+This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
+name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
+It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
+context.</tt></dd></dl>
+
+<dl><dt><a name="BI_semanticsWithImportsClosure-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
+
+<dl><dt><a name="BI_semanticsWithImportsClosure-uriref"><strong>uriref</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BI_semanticsWithImportsClosure-uriref2"><strong>uriref2</strong></a>(self, base)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
+<dl><dt><a name="BI_semanticsWithImportsClosure-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BI_semanticsWithImportsClosure-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
+<dl><dt><a name="BI_semanticsWithImportsClosure-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="BI_semanticsWithImportsClosure-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/whatever">http://example.org/whatever</a>"]</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
+<dl><dt><a name="BI_semanticsWithImportsClosure-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
+&nbsp;<br>
+output&nbsp;as&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity.</tt></dd></dl>
+
+<dl><dt><a name="BI_semanticsWithImportsClosure-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
+&nbsp;<br>
+The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
+see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="BI_semanticsWithImportsClosure-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;Anonymous&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;<a href="formula.html#Formula">Formula</a>,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
+
+<dl><dt><a name="BI_semanticsWithImportsClosure-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+
+<dl><dt><a name="BI_semanticsWithImportsClosure-doNodesAppear"><strong>doNodesAppear</strong></a>(self, symbols)</dt></dl>
+
+<dl><dt><a name="BI_semanticsWithImportsClosure-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
+<dl><dt><a name="BI_semanticsWithImportsClosure-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
+
+<dl><dt><a name="BI_semanticsWithImportsClosure-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_semanticsWithImportsClosure-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_semanticsWithImportsClosure-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="BI_semanticsWithImportsClosure-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
+Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+
+<dl><dt><a name="BI_semanticsWithImportsClosure-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
+
+<hr>
+Data and other attributes inherited from <a href="term.html#Term">term.Term</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dictproxy object&gt;<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;attribute '__weakref__' of 'Term' objects&gt;<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="BI_uri">class <strong>BI_uri</strong></a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>, <a href="term.html#Function">term.Function</a>, <a href="term.html#ReverseFunction">term.ReverseFunction</a>)</font></td></tr>
+    
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="llyn.html#BI_uri">BI_uri</a></dd>
+<dd><a href="term.html#LightBuiltIn">term.LightBuiltIn</a></dd>
+<dd><a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a></dd>
 <dd><a href="term.html#Function">term.Function</a></dd>
 <dd><a href="term.html#ReverseFunction">term.ReverseFunction</a></dd>
+<dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
+<dd><a href="term.html#Fragment">term.Fragment</a></dd>
+<dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
+<dd><a href="term.html#Node">term.Node</a></dd>
+<dd><a href="term.html#Term">term.Term</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
 </dl>
 <hr>
 Methods defined here:<br>
@@ -1862,20 +2383,17 @@ Note&nbsp;that&nbsp;relative&nbsp;URIs&nbsp;can&nbsp;be&nbsp;OK&nbsp;as&nbsp;the
 has&nbsp;a&nbsp;base,&nbsp;which&nbsp;may&nbsp;be&nbsp;irrelevant.&nbsp;Eg&nbsp;see&nbsp;roadmap-test&nbsp;in&nbsp;retest.sh</tt></dd></dl>
 
 <hr>
-Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = None</dl>
-
-<dl><dt><strong>__module__</strong> = 'llyn'</dl>
-
-<hr>
-Methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
+Methods inherited from <a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a>:<br>
 <dl><dt><a name="BI_uri-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_uri-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
-calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
-&nbsp;<br>
-To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
-use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+<hr>
+Methods inherited from <a href="term.html#Function">term.Function</a>:<br>
+<dl><dt><a name="BI_uri-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#ReverseFunction">term.ReverseFunction</a>:<br>
+<dl><dt><a name="BI_uri-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
@@ -1883,13 +2401,13 @@ Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
 
-<dl><dt><a name="BI_uri-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
+<dl><dt><a name="BI_uri-generated"><strong>generated</strong></a>(self)</dt><dd><tt>A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
 
-<dl><dt><a name="BI_uri-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
+<dl><dt><a name="BI_uri-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
 <dl><dt><a name="BI_uri-uriref"><strong>uriref</strong></a>(self)</dt></dl>
 
@@ -1935,6 +2453,8 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_uri-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="BI_uri-doNodesAppear"><strong>doNodesAppear</strong></a>(self, symbols)</dt></dl>
+
 <dl><dt><a name="BI_uri-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
@@ -1956,17 +2476,137 @@ Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&n
 <dl><dt><a name="BI_uri-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
 <hr>
-Methods inherited from <a href="term.html#ReverseFunction">term.ReverseFunction</a>:<br>
-<dl><dt><a name="BI_uri-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
-calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
+Data and other attributes inherited from <a href="term.html#Term">term.Term</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dictproxy object&gt;<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dl>
 
-</td></tr></table> 
+<dl><dt><strong>__weakref__</strong> = &lt;attribute '__weakref__' of 'Term' objects&gt;<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="BI_vars">class <strong>BI_vars</strong></a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>, <a href="term.html#Function">term.Function</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Get&nbsp;only&nbsp;the&nbsp;variables&nbsp;from&nbsp;a&nbsp;formula<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="llyn.html#BI_vars">BI_vars</a></dd>
+<dd><a href="term.html#LightBuiltIn">term.LightBuiltIn</a></dd>
+<dd><a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a></dd>
+<dd><a href="term.html#Function">term.Function</a></dd>
+<dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
+<dd><a href="term.html#Fragment">term.Fragment</a></dd>
+<dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
+<dd><a href="term.html#Node">term.Node</a></dd>
+<dd><a href="term.html#Term">term.Term</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="BI_vars-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a>:<br>
+<dl><dt><a name="BI_vars-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#Function">term.Function</a>:<br>
+<dl><dt><a name="BI_vars-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_vars-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
+&nbsp;<br>
+Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
+
+<dl><dt><a name="BI_vars-generated"><strong>generated</strong></a>(self)</dt><dd><tt>A&nbsp;generated&nbsp;identifier?<br>
+This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
+name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
+It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
+context.</tt></dd></dl>
+
+<dl><dt><a name="BI_vars-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
+
+<dl><dt><a name="BI_vars-uriref"><strong>uriref</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BI_vars-uriref2"><strong>uriref2</strong></a>(self, base)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
+<dl><dt><a name="BI_vars-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BI_vars-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
+<dl><dt><a name="BI_vars-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="BI_vars-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/whatever">http://example.org/whatever</a>"]</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
+<dl><dt><a name="BI_vars-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
+&nbsp;<br>
+output&nbsp;as&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity.</tt></dd></dl>
+
+<dl><dt><a name="BI_vars-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
+&nbsp;<br>
+The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
+see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="BI_vars-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;Anonymous&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;<a href="formula.html#Formula">Formula</a>,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
+
+<dl><dt><a name="BI_vars-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+
+<dl><dt><a name="BI_vars-doNodesAppear"><strong>doNodesAppear</strong></a>(self, symbols)</dt></dl>
+
+<dl><dt><a name="BI_vars-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
+<dl><dt><a name="BI_vars-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
+
+<dl><dt><a name="BI_vars-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_vars-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_vars-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="BI_vars-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
+Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+
+<dl><dt><a name="BI_vars-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
+
+<hr>
+Data and other attributes inherited from <a href="term.html#Term">term.Term</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dictproxy object&gt;<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;attribute '__weakref__' of 'Term' objects&gt;<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dl>
+
+</td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#000000" face="helvetica, arial"><a name="DataObject">class <strong>DataObject</strong></a></font></td></tr>
     
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
 <td colspan=2><tt>The&nbsp;info&nbsp;about&nbsp;a&nbsp;term&nbsp;in&nbsp;the&nbsp;context&nbsp;of&nbsp;a&nbsp;specific&nbsp;formula<br>
 It&nbsp;is&nbsp;created&nbsp;by&nbsp;being&nbsp;passed&nbsp;the&nbsp;formula&nbsp;and&nbsp;the&nbsp;term,&nbsp;and&nbsp;is<br>
 then&nbsp;accessed&nbsp;like&nbsp;a&nbsp;python&nbsp;dictionary&nbsp;of&nbsp;sequences&nbsp;of&nbsp;values.&nbsp;Example:<br>
@@ -1974,25 +2614,19 @@ then&nbsp;accessed&nbsp;like&nbsp;a&nbsp;python&nbsp;dictionary&nbsp;of&nbsp;seq
 F&nbsp;=&nbsp;myWorkingFormula<br>
 x&nbsp;=&nbsp;F.theObject(pred=rdfType&nbsp;obj=fooCar)<br>
 for&nbsp;y&nbsp;in&nbsp;x[color][label]<br>&nbsp;</tt></td></tr>
-<tr><td>&nbsp;&nbsp;</td>
+<tr><td>&nbsp;</td>
 <td width="100%">Methods defined here:<br>
 <dl><dt><a name="DataObject-__getItem__"><strong>__getItem__</strong></a>(pred)</dt></dl>
 
 <dl><dt><a name="DataObject-__init__"><strong>__init__</strong></a>(context, term)</dt></dl>
 
-<hr>
-Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = 'The info about a term in the context of a specif...ype obj=fooCar)<font color="#c040c0">\n</font>    for y in x[color][label]<font color="#c040c0">\n</font>    '</dl>
-
-<dl><dt><strong>__module__</strong> = 'llyn'</dl>
-
-</td></tr></table> 
+</td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#000000" face="helvetica, arial"><a name="IndexedFormula">class <strong>IndexedFormula</strong></a>(<a href="formula.html#Formula">formula.Formula</a>)</font></td></tr>
     
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
 <td colspan=2><tt>A&nbsp;formula&nbsp;which&nbsp;has&nbsp;indexes&nbsp;to&nbsp;facilitate&nbsp;queries.<br>
 &nbsp;<br>
 A&nbsp;formula&nbsp;is&nbsp;either&nbsp;open&nbsp;or&nbsp;closed.&nbsp;&nbsp;Initially,&nbsp;it&nbsp;is&nbsp;open.&nbsp;In&nbsp;this<br>
@@ -2004,26 +2638,19 @@ Only&nbsp;closed&nbsp;formulae&nbsp;may&nbsp;be&nbsp;mentioned&nbsp;in&nbsp;stat
 &nbsp;<br>
 There&nbsp;is&nbsp;a&nbsp;<a href="#IndexedFormula-reopen">reopen</a>()&nbsp;method&nbsp;but&nbsp;it&nbsp;is&nbsp;not&nbsp;recommended,&nbsp;and&nbsp;if&nbsp;desperate&nbsp;should<br>
 only&nbsp;be&nbsp;used&nbsp;immediately&nbsp;after&nbsp;a&nbsp;<a href="#IndexedFormula-close">close</a>().<br>&nbsp;</tt></td></tr>
-<tr><td>&nbsp;&nbsp;</td>
+<tr><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="llyn.html#IndexedFormula">IndexedFormula</a></dd>
 <dd><a href="formula.html#Formula">formula.Formula</a></dd>
 <dd><a href="term.html#AnonymousNode">term.AnonymousNode</a></dd>
 <dd><a href="term.html#Node">term.Node</a></dd>
-<dd><a href="term.html#Term">term.Term</a></dd>
 <dd><a href="term.html#CompoundTerm">term.CompoundTerm</a></dd>
+<dd><a href="term.html#Term">term.Term</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
 </dl>
 <hr>
 Methods defined here:<br>
 <dl><dt><a name="IndexedFormula-__init__"><strong>__init__</strong></a>(self, store, uri<font color="#909090">=None</font>)</dt></dl>
-
-<dl><dt><a name="IndexedFormula-_noteNewList"><strong>_noteNewList</strong></a>(self, bnode, list, newBindings)</dt><dd><tt>Note&nbsp;that&nbsp;we&nbsp;have&nbsp;a&nbsp;new&nbsp;list.<br>
-&nbsp;<br>
-Check&nbsp;whether&nbsp;this&nbsp;new&nbsp;list&nbsp;(given&nbsp;as&nbsp;bnode)&nbsp;causes&nbsp;other&nbsp;things&nbsp;to&nbsp;become&nbsp;lists.<br>
-Set&nbsp;up&nbsp;redirection&nbsp;so&nbsp;the&nbsp;list&nbsp;is&nbsp;used&nbsp;from&nbsp;now&nbsp;on&nbsp;instead&nbsp;of&nbsp;the&nbsp;bnode.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
-Internal&nbsp;function.<br>
-&nbsp;<br>
-This&nbsp;function&nbsp;is&nbsp;extraordinarily&nbsp;slow,&nbsp;.08&nbsp;seconds&nbsp;per&nbsp;call&nbsp;on&nbsp;reify/reify3.n3</tt></dd></dl>
 
 <dl><dt><a name="IndexedFormula-add"><strong>add</strong></a>(self, subj, pred, obj, why<font color="#909090">=None</font>)</dt><dd><tt>Add&nbsp;a&nbsp;triple&nbsp;to&nbsp;the&nbsp;formula.<br>
 &nbsp;<br>
@@ -2133,17 +2760,11 @@ color&nbsp;=&nbsp;f.<a href="#IndexedFormula-the">the</a>(pred=pantoneColor,&nbs
 redCar&nbsp;=&nbsp;f.<a href="#IndexedFormula-the">the</a>(pred=pantoneColor,&nbsp;obj=red)</tt></dd></dl>
 
 <hr>
-Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = 'A formula which has indexes to facilitate querie...   only be used immediately after a close().<font color="#c040c0">\n</font>    '</dl>
-
-<dl><dt><strong>__module__</strong> = 'llyn'</dl>
-
-<hr>
 Methods inherited from <a href="formula.html#Formula">formula.Formula</a>:<br>
 <dl><dt><a name="IndexedFormula-__iter__"><strong>__iter__</strong></a>(self)</dt><dd><tt>The&nbsp;internal&nbsp;method&nbsp;which&nbsp;allows&nbsp;one&nbsp;to&nbsp;iterate&nbsp;over&nbsp;the&nbsp;statements<br>
 as&nbsp;though&nbsp;a&nbsp;formula&nbsp;were&nbsp;a&nbsp;sequence.</tt></dd></dl>
 
-<dl><dt><a name="IndexedFormula-__len__"><strong>__len__</strong></a>(self)</dt><dd><tt>&nbsp;How&nbsp;many&nbsp;statements?</tt></dd></dl>
+<dl><dt><a name="IndexedFormula-__len__"><strong>__len__</strong></a>(self)</dt><dd><tt>How&nbsp;many&nbsp;statements?</tt></dd></dl>
 
 <dl><dt><a name="IndexedFormula-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
 
@@ -2164,6 +2785,8 @@ NOTE&nbsp;You&nbsp;must&nbsp;now&nbsp;use&nbsp;the&nbsp;interned&nbsp;one,&nbsp;
 <dl><dt><a name="IndexedFormula-declareExistential"><strong>declareExistential</strong></a>(self, v)</dt></dl>
 
 <dl><dt><a name="IndexedFormula-declareUniversal"><strong>declareUniversal</strong></a>(self, v)</dt></dl>
+
+<dl><dt><a name="IndexedFormula-doNodesAppear"><strong>doNodesAppear</strong></a>(self, symbols)</dt></dl>
 
 <dl><dt><a name="IndexedFormula-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;particular&nbsp;node&nbsp;appear&nbsp;anywhere&nbsp;in&nbsp;this&nbsp;formula<br>
 &nbsp;<br>
@@ -2276,19 +2899,23 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="IndexedFormula-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
-</td></tr></table> 
+<hr>
+Data and other attributes inherited from <a href="term.html#Term">term.Term</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dictproxy object&gt;<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;attribute '__weakref__' of 'Term' objects&gt;<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dl>
+
+</td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#000000" face="helvetica, arial"><a name="RDFStore">class <strong>RDFStore</strong></a>(<a href="RDFSink.html#RDFSink">RDFSink.RDFSink</a>)</font></td></tr>
     
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt>&nbsp;Absorbs&nbsp;RDF&nbsp;stream&nbsp;and&nbsp;saves&nbsp;in&nbsp;triple&nbsp;store<br>&nbsp;</tt></td></tr>
-<tr><td>&nbsp;&nbsp;</td>
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Absorbs&nbsp;RDF&nbsp;stream&nbsp;and&nbsp;saves&nbsp;in&nbsp;triple&nbsp;store<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
 <td width="100%">Methods defined here:<br>
 <dl><dt><a name="RDFStore-__init__"><strong>__init__</strong></a>(self, genPrefix<font color="#909090">=None</font>, metaURI<font color="#909090">=None</font>, argv<font color="#909090">=None</font>, crypto<font color="#909090">=0</font>)</dt></dl>
-
-<dl><dt><a name="RDFStore-_fromPython"><strong>_fromPython</strong></a>(self, x, queue<font color="#909090">=None</font>)</dt><dd><tt>Takem&nbsp;a&nbsp;python&nbsp;string,&nbsp;seq&nbsp;etc&nbsp;and&nbsp;represent&nbsp;as&nbsp;a&nbsp;llyn&nbsp;object</tt></dd></dl>
 
 <dl><dt><a name="RDFStore-any"><strong>any</strong></a>(self, q)</dt><dd><tt>Query&nbsp;the&nbsp;store&nbsp;for&nbsp;the&nbsp;first&nbsp;match.<br>
 &nbsp;<br>
@@ -2307,11 +2934,11 @@ open&nbsp;to&nbsp;possibly&nbsp;clashing&nbsp;in&nbsp;pathalogical&nbsp;cases.</
 
 <dl><dt><a name="RDFStore-copyFormula"><strong>copyFormula</strong></a>(self, old, new, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="RDFStore-dumpBySubject"><strong>dumpBySubject</strong></a>(self, context, sink, sorting<font color="#909090">=1</font>)</dt><dd><tt>&nbsp;Dump&nbsp;by&nbsp;order&nbsp;of&nbsp;subject&nbsp;except&nbsp;forSome's&nbsp;first&nbsp;for&nbsp;n3=a&nbsp;mode</tt></dd></dl>
+<dl><dt><a name="RDFStore-dumpBySubject"><strong>dumpBySubject</strong></a>(self, context, sink, sorting<font color="#909090">=1</font>)</dt><dd><tt>Dump&nbsp;by&nbsp;order&nbsp;of&nbsp;subject&nbsp;except&nbsp;forSome's&nbsp;first&nbsp;for&nbsp;n3=a&nbsp;mode</tt></dd></dl>
 
 <dl><dt><a name="RDFStore-dumpChronological"><strong>dumpChronological</strong></a>(self, context, sink)</dt><dd><tt>Fast&nbsp;as&nbsp;possible.&nbsp;Only&nbsp;dumps&nbsp;data.&nbsp;No&nbsp;formulae&nbsp;or&nbsp;universals.</tt></dd></dl>
 
-<dl><dt><a name="RDFStore-dumpNested"><strong>dumpNested</strong></a>(self, context, sink)</dt><dd><tt>&nbsp;Iterates&nbsp;over&nbsp;all&nbsp;URIs&nbsp;ever&nbsp;seen&nbsp;looking&nbsp;for&nbsp;statements</tt></dd></dl>
+<dl><dt><a name="RDFStore-dumpNested"><strong>dumpNested</strong></a>(self, context, sink)</dt><dd><tt>Iterates&nbsp;over&nbsp;all&nbsp;URIs&nbsp;ever&nbsp;seen&nbsp;looking&nbsp;for&nbsp;statements</tt></dd></dl>
 
 <dl><dt><a name="RDFStore-endDoc"><strong>endDoc</strong></a>(self, rootFormulaPair)</dt></dl>
 
@@ -2360,9 +2987,11 @@ formula&nbsp;as&nbsp;context,&nbsp;and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&
 
 <dl><dt><a name="RDFStore-newFormula"><strong>newFormula</strong></a>(self, uri<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="RDFStore-newList"><strong>newList</strong></a>(self, value)</dt></dl>
+<dl><dt><a name="RDFStore-newList"><strong>newList</strong></a>(self, value, context<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="RDFStore-newLiteral"><strong>newLiteral</strong></a>(self, str, dt<font color="#909090">=None</font>, lang<font color="#909090">=None</font>)</dt><dd><tt>Interned&nbsp;version:&nbsp;generate&nbsp;new&nbsp;literal&nbsp;object&nbsp;as&nbsp;stored&nbsp;in&nbsp;this&nbsp;store</tt></dd></dl>
+
+<dl><dt><a name="RDFStore-newSet"><strong>newSet</strong></a>(self, iterator<font color="#909090">=[]</font>, context<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="RDFStore-newSymbol"><strong>newSymbol</strong></a>(self, uri)</dt></dl>
 
@@ -2385,19 +3014,13 @@ any&nbsp;mentions&nbsp;of&nbsp;that&nbsp;term&nbsp;to&nbsp;be&nbsp;removed&nbsp;
 
 <dl><dt><a name="RDFStore-startDoc"><strong>startDoc</strong></a>(self)</dt></dl>
 
-<dl><dt><a name="RDFStore-storeQuad"><strong>storeQuad</strong></a>(self, q, why<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;intern&nbsp;quads,&nbsp;in&nbsp;that&nbsp;dupliates&nbsp;are&nbsp;eliminated.<br>
+<dl><dt><a name="RDFStore-storeQuad"><strong>storeQuad</strong></a>(self, q, why<font color="#909090">=None</font>)</dt><dd><tt>intern&nbsp;quads,&nbsp;in&nbsp;that&nbsp;dupliates&nbsp;are&nbsp;eliminated.<br>
 &nbsp;<br>
 subject,&nbsp;predicate&nbsp;and&nbsp;object&nbsp;are&nbsp;terms&nbsp;-&nbsp;or&nbsp;atomic&nbsp;values&nbsp;to&nbsp;be&nbsp;interned.<br>
 Builds&nbsp;the&nbsp;indexes&nbsp;and&nbsp;does&nbsp;stuff&nbsp;for&nbsp;lists.<br>
 Deprocated:&nbsp;use&nbsp;<a href="formula.html#Formula">Formula</a>.add()</tt></dd></dl>
 
 <dl><dt><a name="RDFStore-symbol"><strong>symbol</strong></a>(self, str, why<font color="#909090">=None</font>)</dt><dd><tt>Intern&nbsp;a&nbsp;URI&nbsp;for&nbsp;a&nbsp;symvol,&nbsp;returning&nbsp;a&nbsp;symbol&nbsp;object</tt></dd></dl>
-
-<hr>
-Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = ' Absorbs RDF stream and saves in triple store<font color="#c040c0">\n</font>    '</dl>
-
-<dl><dt><strong>__module__</strong> = 'llyn'</dl>
 
 <hr>
 Methods inherited from <a href="RDFSink.html#RDFSink">RDFSink.RDFSink</a>:<br>
@@ -2415,27 +3038,21 @@ avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;ugly.</tt
 
 <dl><dt><a name="RDFStore-setGenPrefix"><strong>setGenPrefix</strong></a>(self, genPrefix)</dt></dl>
 
-</td></tr></table> 
+</td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#000000" face="helvetica, arial"><a name="URISyntaxError">class <strong>URISyntaxError</strong></a>(<a href="exceptions.html#ValueError">exceptions.ValueError</a>)</font></td></tr>
     
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
 <td colspan=2><tt>A&nbsp;parameter&nbsp;is&nbsp;passed&nbsp;to&nbsp;a&nbsp;routine&nbsp;that&nbsp;requires&nbsp;a&nbsp;URI&nbsp;reference<br>&nbsp;</tt></td></tr>
-<tr><td>&nbsp;&nbsp;</td>
+<tr><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="llyn.html#URISyntaxError">URISyntaxError</a></dd>
 <dd><a href="exceptions.html#ValueError">exceptions.ValueError</a></dd>
 <dd><a href="exceptions.html#StandardError">exceptions.StandardError</a></dd>
 <dd><a href="exceptions.html#Exception">exceptions.Exception</a></dd>
 </dl>
-<hr>
-Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = 'A parameter is passed to a routine that requires a URI reference'</dl>
-
-<dl><dt><strong>__module__</strong> = 'llyn'</dl>
-
 <hr>
 Methods inherited from <a href="exceptions.html#Exception">exceptions.Exception</a>:<br>
 <dl><dt><a name="URISyntaxError-__getitem__"><strong>__getitem__</strong></a>(...)</dt></dl>
@@ -2444,22 +3061,22 @@ Methods inherited from <a href="exceptions.html#Exception">exceptions.Exception<
 
 <dl><dt><a name="URISyntaxError-__str__"><strong>__str__</strong></a>(...)</dt></dl>
 
-</td></tr></table></td></tr></table>
+</td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#eeaa77">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
     
-<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><dl><dt><a name="-comparePair"><strong>comparePair</strong></a>(self, other)</dt><dd><tt>Used&nbsp;only&nbsp;in&nbsp;outputString</tt></dd></dl>
  <dl><dt><a name="-isString"><strong>isString</strong></a>(x)</dt></dl>
-</td></tr></table>
+</td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
     
-<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><strong>ALL4</strong> = (0, 1, 2, 3)<br>
 <strong>ANONYMOUS</strong> = 3<br>
 <strong>CONTEXT</strong> = 0<br>
@@ -2470,7 +3087,9 @@ Methods inherited from <a href="exceptions.html#Exception">exceptions.Exception<
 <strong>FORMULA</strong> = 1<br>
 <strong>INTEGER_DATATYPE</strong> = 'http://www.w3.org/2001/XMLSchema#integer'<br>
 <strong>LITERAL</strong> = 2<br>
-<strong>LITERAL_URI_prefix</strong> = 'data:text/rdf+n3;'<br>
+<strong>LITERAL_DT</strong> = 21<br>
+<strong>LITERAL_LANG</strong> = 22<br>
+<strong>LITERAL_URI_prefix</strong> = 'data:application/rdf+n3-literal;'<br>
 <strong>List_NS</strong> = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'<br>
 <strong>Logic_NS</strong> = 'http://www.w3.org/2000/10/swap/log#'<br>
 <strong>META_NS_URI</strong> = 'http://www.w3.org/2000/10/swap/meta#'<br>
@@ -2491,8 +3110,6 @@ Methods inherited from <a href="exceptions.html#Exception">exceptions.Exception<
 <strong>STRING_NS_URI</strong> = 'http://www.w3.org/2000/10/swap/string#'<br>
 <strong>SUBJ</strong> = 2<br>
 <strong>SYMBOL</strong> = 0<br>
-<strong>__file__</strong> = './llyn.pyc'<br>
-<strong>__name__</strong> = 'llyn'<br>
 <strong>becauseSubexpression</strong> = &lt;why.BecauseSubexpression instance&gt;<br>
 <strong>cvsRevision</strong> = '$Revision$'<br>
 <strong>doMeta</strong> = 0<br>

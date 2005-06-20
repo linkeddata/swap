@@ -753,6 +753,13 @@ class BI_uri(LightBuiltIn, Function, ReverseFunction):
         return store.intern((SYMBOL, object))
 
 
+class BI_dtlit(LightBuiltIn, Function):
+    """built a datatype literal from a string and a uri"""
+     
+    def evaluateObject(self, subj_py):
+	return self.store.newLiteral(subj_py[0], subj_py[1])
+
+
 class BI_rawUri(BI_uri):
     """This is like  uri except that it allows you to get the internal
     identifiers for anonymous nodes and formuale etc."""
@@ -1106,6 +1113,7 @@ class RDFStore(RDFSink) :
 # Functions:        
 
         log.internFrag("racine", BI_racine)  # Strip fragment identifier from string
+        log.internFrag("dtlit", BI_dtlit)
 
         self.rawType =  log.internFrag("rawType", BI_rawType) # syntactic type, oneOf:
         log.internFrag("rawUri", BI_rawUri)

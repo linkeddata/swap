@@ -103,6 +103,7 @@ know that it can help resolve a query by delegating it to the service
 in question.
 (Cwm will do this if its mode includes "r").
 </td></tr>
+  <tr><td class='ln'>dtlit</td><td class='comment'>Takes a list of a string and a URI and creates a datatyped literal. For example, { ("2005-03-30T11:00:00" :tz) log:dtlit ?X } => { ?X a :Answer } . will produce "2005-03-30T11:00:00"^^:tz a :Answer .</td></tr>
   <tr><td class='ln'>equalTo</td><td class='comment'>Equality in this sense is actually the same URI.
 Do not confuse with daml:EquivalentTo.
 A cwm built-in logical operator, RDF graph level.

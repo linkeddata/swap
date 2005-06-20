@@ -277,6 +277,8 @@ log:racine a rdf:Property;
 thing identified by the same URI without a hash or fragid.
 For anything else, it is itself.""".
 
+log:dtlit a rdf:Property;
+    rdfs:comment """Takes a list of a string and a URI and creates a datatyped literal. For example, { ("2005-03-30T11:00:00" :tz) log:dtlit ?X } => { ?X a :Answer } . will produce "2005-03-30T11:00:00"^^:tz a :Answer .""" .
 
 
 # ends

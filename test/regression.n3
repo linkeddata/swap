@@ -567,6 +567,12 @@ test:CwmTest;
 #    test:arguments       """syntax/bad-preds.n3 --think""".
 
 
+:t1062 a test:CwmTest;
+    test:referenceOutput <ref/dtlit1.n3>;
+    test:description     "simple test for log:dtlit";
+    test:arguments       """dt/dtlit1.n3 --think""".
+
+
 #:t3001 a test:CwmTest;
 #    test:referenceOutput <ref/lbase-to-otter>;
 #    test:description   "Parse lbase, serialize as otter (no llyn involvement)";
