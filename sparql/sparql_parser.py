@@ -39,7 +39,7 @@ def abbr(prodURI):
    return prodURI.split('#').pop()
 
 class N3Parser(object): 
-   def __init__(self, buffer, branches):
+   def __init__(self, buffer, branches, sink):
       lexer = sparql_tokens.Lexer()
       lexer.input(buffer)
       self.data = lexer.token
@@ -47,6 +47,7 @@ class N3Parser(object):
       self.branches = branches
       self.productions = []
       self.memo = {}
+      self.sink = sink
 
    def parse(self, prod):
       todo_stack = [[prod, None]]
@@ -98,7 +99,7 @@ class N3Parser(object):
       self.productions.append([prod])
 
    def onFinish(self): 
-      prod = self.productions.pop()
+      prod = self.sink.prod(self.productions.pop())
       if self.productions:
           self.productions[-1].append(prod)
       print (' ' * len(self.productions)) + '/' + `prod`
@@ -107,11 +108,13 @@ class N3Parser(object):
       self.productions[-1].append((prod, tok))
       print (' ' * len(self.productions)) + `(prod, tok)`
 
-def main(argv=None): 
+def main(argv=None):
    if argv is None: 
       argv = sys.argv
+   import sparql2cwm, myStore
+   sink = sparql2cwm.FromSparql(myStore._checkStore())
    if len(argv) == 2: 
-      p = N3Parser(file(argv[1], 'r'), branches)
+      p = N3Parser(file(argv[1], 'r'), branches, sink)
       p.parse(start)
 
 if __name__=="__main__": 
