@@ -1,0 +1,85 @@
+###
+# terminals
+###
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix cfg: <http://www.w3.org/2000/10/swap/grammar/bnf#>.
+@prefix rul: <http://www.w3.org/2000/10/swap/grammar/bnf-rules#>.
+@prefix : <http://www.w3.org/2000/10/swap/grammar/sparql#>.
+@prefix n3: <http://www.w3.org/2000/10/swap/grammar/n3#>.
+@prefix list: <http://www.w3.org/2000/10/swap/list#>.
+@prefix string: <http://www.w3.org/2000/10/swap/string#>.
+@keywords a, is, of.
+
+IT_SELECT a cfg:Token . 
+IT_DISTINCT a cfg:Token . 
+IT_CONSTRUCT a cfg:Token . 
+IT_DESCRIBE a cfg:Token . 
+IT_ASK a cfg:Token . 
+IT_BASE a cfg:Token . 
+IT_PREFIX a cfg:Token . 
+FROM_NAMED a cfg:Token . 
+IT_FROM a cfg:Token . 
+IT_WHERE a cfg:Token . 
+IT_ORDER a cfg:Token . 
+IT_BY a cfg:Token . 
+IT_ASC a cfg:Token . 
+IT_DESC a cfg:Token . 
+IT_LIMIT a cfg:Token . 
+IT_OFFSET a cfg:Token . 
+IT_UNION a cfg:Token . 
+IT_OPTIONAL a cfg:Token . 
+IT_GRAPH a cfg:Token . 
+IT_FILTER a cfg:Token . 
+IT_STR a cfg:Token . 
+IT_LANG a cfg:Token . 
+IT_DATATYPE a cfg:Token . 
+IT_REGEX a cfg:Token . 
+IT_BOUND a cfg:Token . 
+IT_isURI a cfg:Token . 
+IT_isBLANK a cfg:Token . 
+IT_isLITERAL a cfg:Token . 
+IT_true a cfg:Token . 
+IT_false a cfg:Token . 
+QuotedIRIref a cfg:Token . 
+FLOATING_POINT a cfg:Token . 
+DECIMAL a cfg:Token . 
+INTEGER a cfg:Token . 
+STRING_LITERAL_LONG1 a cfg:Token . 
+STRING_LITERAL_LONG2 a cfg:Token . 
+STRING_LITERAL1 a cfg:Token . 
+STRING_LITERAL2 a cfg:Token . 
+LANGTAG a cfg:Token . 
+BNODE_LABEL a cfg:Token . 
+QNAME a cfg:Token . 
+QNAME_NS a cfg:Token . 
+VAR2 a cfg:Token . 
+VAR1 a cfg:Token . 
+CloseSquare a cfg:Token . 
+CloseCurly a cfg:Token . 
+OptDot a cfg:Token . 
+EmptyPattern a cfg:Token . 
+PASSED_TOKENS a cfg:Token . 
+GT_OR a cfg:Token . 
+GT_AND a cfg:Token . 
+GT_NEQUAL a cfg:Token . 
+GT_LE a cfg:Token . 
+GT_GE a cfg:Token . 
+GT_DTYPE a cfg:Token . 
+GT_TIMES a cfg:Token . 
+GT_LPAREN a cfg:Token . 
+GT_RPAREN a cfg:Token . 
+GT_SEMI a cfg:Token . 
+GT_COMMA a cfg:Token . 
+IT_a a cfg:Token . 
+GT_EQUAL a cfg:Token . 
+GT_LT a cfg:Token . 
+GT_GT a cfg:Token . 
+GT_PLUS a cfg:Token . 
+GT_MINUS a cfg:Token . 
+GT_DIVIDE a cfg:Token . 
+GT_NOT a cfg:Token . 
+Dot a cfg:Token . 
+OpenCurly a cfg:Token . 
+OpenSquare a cfg:Token . 
