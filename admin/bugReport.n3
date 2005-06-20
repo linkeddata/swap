@@ -1,4 +1,4 @@
-@prefix cal: <http://www.w3.org/2002/12/cal/ical#> .
+@prefix cal: <http://www.w3.org/2002/12/cal/icaltzd#> .
 @prefix bst: <bugstatus#> .
 @prefix str: <http://www.w3.org/2000/10/swap/string#>.
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
@@ -28,7 +28,7 @@ inserting "[closed] " at the front of the subject line.
   ?E cal:summary ?DESC;
     a cal:Vtodo;
     cal:url [ log:uri ?PGI];
-    cal:dtstart [ cal:dateTime ?WHEN ].
+    cal:dtstart ?WHEN.
   (?WHEN ?PGI "1") str:concatenation ?KS.
   (?WHEN ?PGI "5") str:concatenation ?KE.
   ("<li>" ?WHEN " raised: <a href='" ?PGI
@@ -43,7 +43,7 @@ inserting "[closed] " at the front of the subject line.
   ?E cal:summary ?DESC;
     a cal:Vtodo;
     cal:url [ log:uri ?PGI];
-    cal:completed [ cal:dateTime ?WHEN ].
+    cal:completed ?WHEN.
   (?WHEN ?PGI "7") str:concatenation ?K.
   ("<li>" ?WHEN " <a href='" [is log:uri of ?PGI]
        "'>" ?DESC "</a> closed.</li>\n") str:concatenation ?TXT.
@@ -53,8 +53,8 @@ inserting "[closed] " at the front of the subject line.
   ?E cal:summary ?DESC;
     a cal:Vtodo;
     cal:url [ log:uri ?PGI];
-    cal:dtstart [ cal:dateTime ?WHEN1 ];
-    cal:completed [ cal:dateTime ?WHEN2 ].
+    cal:dtstart ?WHEN1;
+    cal:completed ?WHEN2.
   (?WHEN1 ?PGI "2") str:concatenation ?K.
   ("<br /><b>closed: " ?WHEN2 "</b>") str:concatenation ?TXT.
 } => { ?K log:outputString ?TXT }.
