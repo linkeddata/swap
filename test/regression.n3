@@ -573,6 +573,12 @@ test:CwmTest;
     test:arguments       """dt/dtlit1.n3 --think""".
 
 
+:t1063 a test:CwmTest;
+    test:referenceOutput <ref/xml-syntax-basic-serialization.rdf>;
+    test:description     "extremely basic RDF serialization test";
+    test:arguments       """xml-syntax/basic-serialization.n3 --rdf""".
+
+
 #:t3001 a test:CwmTest;
 #    test:referenceOutput <ref/lbase-to-otter>;
 #    test:description   "Parse lbase, serialize as otter (no llyn involvement)";
