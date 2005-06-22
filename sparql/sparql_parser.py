@@ -1,17 +1,21 @@
 #!/usr/bin/env python
 """
-N3P - An N3 Parser using n3.n3
-Author: Sean B. Palmer, inamidst.com
-Licence: GPL 2; share and enjoy!
-Documentation: http://inamidst.com/n3p/
-Derived from: 
-   http://www.w3.org/2000/10/swap/grammar/predictiveParser.py
-   - predictiveParser.py, Tim Berners-Lee, 2004
-Issues: 
-   http://lists.w3.org/Archives/Public/public-cwm-bugs/2005Jan/0006
-   http://lists.w3.org/Archives/Public/public-cwm-talk/2005JanMar/0015
+sparql_parser. A parser of SPARQL based on 
+    N3P - An N3 Parser using n3.n3
+    Author: Sean B. Palmer, inamidst.com
+    Licence: GPL 2; share and enjoy!
+    Documentation: http://inamidst.com/n3p/
+    Derived from: 
+       http://www.w3.org/2000/10/swap/grammar/predictiveParser.py
+       - predictiveParser.py, Tim Berners-Lee, 2004
+
+Sparql_parser is by Yosi Scharf, and quite hevily modified
+from n3p
 """
-from set_importer import Set
+try:
+    Set = set
+except NameError:
+    from sets import Set
 
 import sys, os, re, urllib
 import sparql_tokens
@@ -88,6 +92,8 @@ class N3Parser(object):
                 
           while todo_stack and todo_stack[-1][1] == []:
               todo_stack.pop()
+              if not todo_stack:
+                  return self.onFinish()
               self.onFinish()
       
 
@@ -103,6 +109,7 @@ class N3Parser(object):
       if self.productions:
           self.productions[-1].append(prod)
       print (' ' * len(self.productions)) + '/' + `prod`
+      return prod
 
    def onToken(self, prod, tok):
       self.productions[-1].append((prod, tok))
@@ -111,11 +118,14 @@ class N3Parser(object):
 def main(argv=None):
    if argv is None: 
       argv = sys.argv
-   import sparql2cwm, myStore
+   import sparql2cwm, myStore, notation3
+   _outSink = notation3.ToN3(sys.stdout.write,
+                                      quiet=1, flags='')
    sink = sparql2cwm.FromSparql(myStore._checkStore())
    if len(argv) == 2: 
       p = N3Parser(file(argv[1], 'r'), branches, sink)
-      p.parse(start)
+      f = p.parse(start).close()
+      myStore._checkStore().dumpNested(f, _outSink)
 
 if __name__=="__main__": 
    main()

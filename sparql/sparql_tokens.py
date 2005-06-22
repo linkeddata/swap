@@ -214,14 +214,14 @@ class Lexer(object):
         if not self.tokenStream: return None
         try:
             return self.tokenStream.next()
-        except:
+        except StopIteration:
             self.tokenStream = None
             return ('eof', '', -1)
 
     def fixTokens(self):
         for f_name in dir(Tokens):
             if f_name[:2] == 't_':
-                setattr(Tokens, 'c_' + f_name[2:], re.compile(getattr(Tokens, f_name)))
+                setattr(Tokens, 'c_' + f_name[2:], re.compile(getattr(Tokens, f_name), re.I))
         #print dir(Tokens)
 
     def match(self, string, offset):
@@ -243,7 +243,9 @@ class Lexer(object):
                     if retVal is None or length < r.end() + extra:
                         retVal = (name, r)
                         length = r.end() + extra
-                
+                        
+        if not retVal and offset<len(string):
+            raise RuntimeError(string[offset:])
         return retVal
 
 def runLexer():
