@@ -3,7 +3,8 @@ PREFIX dc11:  <http://purl.org/dc/elements/1.0/>
 PREFIX my: <http://www.example.org/my#>
 
 SELECT ?title ?author
-WHERE    { { ?book dc10:title ?title; dc10:creator1 ?author }
+WHERE  { ?person my:hates ?book .
+         { { ?book dc10:creator1 ?author }
          UNION
-         { ?book dc11:title ?title; dc11:creator2 ?author }
-       } 
+         { ?book dc11:creator2 ?author }
+       } }

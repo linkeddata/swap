@@ -61,6 +61,9 @@ class FromSparql(productionHandler):
         self.vars = Set()
         self.base = 'http://yosi.us/sparql#'
         self.sparql = store.newSymbol('http://yosi.us/2005/sparql')
+        self.xsd = store.newSymbol('http://www.w3.org/2001/XMLSchema')
+        self.true = store.newLiteral('TRUE', dt=self.xsd['boolean'])
+        self.false = store.newLiteral('FALSE', dt=self.xsd['boolean'])
         self.anonymous_counter = 0
 
     def new_bnode(self):
@@ -236,6 +239,8 @@ class FromSparql(productionHandler):
             return p[3] + p[2]
 
     def on_Pattern(self, p):
+        unions = []
+        alternates = []
         if p[1][0][0] == 'Triple':
             p[2] = p[1][1:] + p[2]
             p[1] = p[1][0]
@@ -243,21 +248,16 @@ class FromSparql(productionHandler):
             f = self.store.newFormula()
             triples = p[2] + [p[1]]
             for triple in triples:
+                if triple[0] == 'formula':
+                    unions.append(triple[1])
+                    continue
                 rest1 = triple[1]
                 subject = rest1[0]
                 predicateList = rest1[1][1]
                 for rest2 in predicateList:
                     predicate = rest2[0]
-                    try:
-                        objectList = rest2[1][1]
-                    except:
-                        print 'rest2 = ', rest2
-                        print 'rest2[1] = ', rest2[1]
-                        print 'subject = ', subject
-                        print 'triple = ', triple
-                        print 'p = ', p
-                        import sys
-                        sys.exit(2)
+                    objectList = rest2[1][1]
+                    
                     for object in objectList:
                         try:
                             subj = anonymize(f, subject[1])
@@ -269,13 +269,29 @@ class FromSparql(productionHandler):
                             print 'predicate= ', predicate
                             print 'object= ', object
                             raise
-                        f.add(subj, pred, obj)
+                        if pred is self.sparql['OPTIONAL']:
+                            alternates.append([obj, None])
+                        else:
+                            f.add(subj, pred, obj)
             f = f.close()
-            return ('formula', f)
-        elif p[1][0] == 'Graph':
+            if unions:
+                alternates.append(unions)
+            retVal = [('formula', f)]
+            for alternate in alternates:
+                oldRetVal = retVal
+                retVal = []
+                for formula1 in alternate:
+                    for ss, formula2 in oldRetVal:
+                        f = self.store.newFormula()
+                        if formula1:
+                            f.loadFormulaWithSubsitution(formula1)
+                        f.loadFormulaWithSubsitution(formula2)
+                        retVal.append(('formula', f.close()))
+            return retVal
+        elif p[1][0][0] == 'formula':
             if p[2]:
                 raise RuntimeError(`p`)
-            graphs = p[1][1][0]
+            graphs = p[1]
             return graphs
         else:
             raise RuntimeError(`p`)
@@ -286,12 +302,15 @@ class FromSparql(productionHandler):
         return p[2][1]
     
     def on_Union(self, p):
-        return ('Union', p[2] + [p[1]])
+        return ('Union', p[2] + p[1])
 
     def on_GraphPattern(self, p):
         return ('Graph', p[2][1])
 
     def on_NonSubjectPatternStarters(self, p):
+        if isinstance(p[1][0], (str, unicode)) and abbr(p[1][0]) == 'Graph':
+            print '======================hello'
+            return p[1][1]
         return p[1]
 
     def on_gen13(self, p):
@@ -324,7 +343,8 @@ class FromSparql(productionHandler):
         return self.on_AfterSubjectStatements(p)
 
     def on_Optional(self, p):
-        return [makeTriple(self.new_bnode(), ('symbol', self.sparql['OPTIONAL']), p[2][1][0])]
+        return [makeTriple(self.new_bnode(), ('symbol', self.sparql['OPTIONAL']), f) for f in p[2]]
+    
 ### Now for filter. Let's see how many builtins I need to make up for these
     def on_gen43(self, p): #Primary Expression should really be this
         if len(p) == 2:
@@ -476,12 +496,18 @@ class FromSparql(productionHandler):
     def on_gen31(self, p): #ouch! an or:
         if len(p) == 1:
             return []
-        return p[2] + [p[1]]
+        return ('or', p[2] + p[1])
+
+    def on_gen32(self, p):
+        return p[2]
 
     def on_ConditionalOrExpression(self, p):
         if not p[2]: #phew!
             return p[1]
         #I'll have to write some nasty code over here
+        print 'p[1] = ', p[1]
+        print 'p[2] = ', p[2]
+#        return p[1][0] + p[1][1] + p[2]
         raise RuntimeError(`p`)
     
     def on_Expression(self, p):
@@ -490,6 +516,7 @@ class FromSparql(productionHandler):
     def on_gen24(self, p):
         if len(p) == 4:
             return p[2]
+        return p[1]
         raise RuntimeError(`p`)
 
     def on_Filter(self, p):
@@ -507,6 +534,9 @@ class FromSparql(productionHandler):
 ##           ( IT_isLITERAL  GT_LPAREN  Expression  GT_RPAREN  ) 
 ##           ( FunctionCall  ) 
 ##         ) .
+        if abbr(p[1][0]) == 'IT_BOUND':
+            if isinstance(p[3][0], (str, unicode)):
+                return [makeTriple(p[3], ('symbol', self.sparql['bound']), ('symbol', self.sparql['true']))]
         raise RuntimeError(`p`)
 ##junk
     
