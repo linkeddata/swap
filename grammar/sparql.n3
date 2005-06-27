@@ -185,7 +185,7 @@ Query cfg:tokens ( IT_BASE
               cfg:eof) . 
 
 
-Query cfg:mustBeOneSequence (     ( Prolog _O_QSelectQuery_E__Or__QConstructQuery_E__Or__QDescribeQuery_E__Or__QAskQuery_E__C )  ) .
+Query cfg:mustBeOneSequence (     ( Prolog _O_QSelectQuery_E__Or__QConstructQuery_E__Or__QDescribeQuery_E__Or__QAskQuery_E__C cfg:eof)  ) .
 
 
 
