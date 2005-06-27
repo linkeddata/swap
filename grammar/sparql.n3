@@ -11,563 +11,746 @@
 @prefix string: <http://www.w3.org/2000/10/swap/string#>.
 @keywords a, is, of.
 
-    Query cfg:mustBeOneSequence ( 
-           ( Prolog  gen0  cfg:eof  ) 
-         ) . 
-
-gen0 cfg:mustBeOneSequence ( 
-           ( SelectQuery  ) 
-           ( ConstructQuery  ) 
-           ( DescribeQuery  ) 
-           ( AskQuery  ) 
-         ) . 
-
-SelectQuery cfg:mustBeOneSequence ( 
-           ( IT_SELECT  gen1  gen3  DatasetClause  WherePattern  ResultsFilter  ) 
-         ) . 
-
-gen1 cfg:mustBeOneSequence ( 
-           ( ) 
-           ( IT_DISTINCT  ) 
-         ) . 
-
-gen2 cfg:mustBeOneSequence ( 
-           ( ) 
-           ( Var gen2 ) 
-         ) . 
-
-gen3 cfg:mustBeOneSequence ( 
-           ( Var gen2  ) 
-           ( GT_TIMES  ) 
-         ) . 
-
-ConstructQuery cfg:mustBeOneSequence ( 
-           ( IT_CONSTRUCT  ConstructTemplate  DatasetClause  WherePattern  ResultsFilter  ) 
-         ) . 
-
-DescribeQuery cfg:mustBeOneSequence ( 
-           ( IT_DESCRIBE  gen5  DatasetClause  gen6  ResultsFilter  ) 
-         ) . 
-
-gen4 cfg:mustBeOneSequence ( 
-           ( ) 
-           ( VarOrIRIref  gen4 ) 
-         ) . 
-
-gen5 cfg:mustBeOneSequence ( 
-           ( VarOrIRIref  gen4  ) 
-           ( GT_TIMES  ) 
-         ) . 
-
-gen6 cfg:mustBeOneSequence ( 
-           ( ) 
-           ( WherePattern  ) 
-         ) . 
-
-AskQuery cfg:mustBeOneSequence ( 
-           ( IT_ASK  DatasetClause  gen6  ) 
-         ) . 
-
-Prolog cfg:mustBeOneSequence ( 
-           ( gen8  gen9  ) 
-         ) . 
-
-gen8 cfg:mustBeOneSequence ( 
-           ( ) 
-           ( BaseDecl  ) 
-         ) . 
-
-gen9 cfg:mustBeOneSequence ( 
-           ( ) 
-           ( PrefixDecl  gen9 ) 
-         ) . 
-
-BaseDecl cfg:mustBeOneSequence ( 
-           ( IT_BASE  QuotedIRIref  ) 
-         ) . 
-
-PrefixDecl cfg:mustBeOneSequence ( 
-           ( IT_PREFIX  QNAME_NS  QuotedIRIref  ) 
-         ) . 
-
-DatasetClause cfg:mustBeOneSequence ( 
-           ( gen10  gen11  ) 
-         ) . 
-
-gen10 cfg:mustBeOneSequence ( 
-           ( ) 
-           ( DefaultGraphClause  ) 
-         ) . 
-
-gen11 cfg:mustBeOneSequence ( 
-           ( ) 
-           ( NamedGraphClause  gen11 ) 
-         ) . 
-
-DefaultGraphClause cfg:mustBeOneSequence ( 
-           ( IT_FROM  SourceSelector  ) 
-         ) . 
-
-NamedGraphClause cfg:mustBeOneSequence ( 
-           ( FROM_NAMED  SourceSelector  ) 
-         ) . 
-
-SourceSelector cfg:mustBeOneSequence ( 
-           ( IRIref  ) 
-         ) . 
-
-WherePattern cfg:mustBeOneSequence ( 
-           ( gen12  gen13  ) 
-         ) . 
-
-gen12 cfg:mustBeOneSequence ( 
-           ( ) 
-           ( IT_WHERE  ) 
-         ) . 
-
-gen13 cfg:mustBeOneSequence ( 
-           ( EmptyPattern  ) 
-           ( GraphPattern  ) 
-         ) . 
-
-GraphPattern cfg:mustBeOneSequence ( 
-           ( OpenCurly  Union  CloseCurly  ) 
-         ) . 
-
-ConstructTemplate cfg:mustBeOneSequence ( 
-           ( OpenCurly  SubjectStatements  gen14  CloseCurly  ) 
-         ) . 
-
-gen15 cfg:mustBeOneSequence ( 
-           ( Dot  SubjectStatements  ) 
-         ) . 
-
-gen14 cfg:mustBeOneSequence ( 
-           ( ) 
-           ( gen15  gen14  ) 
-         ) . 
-
-ResultsFilter cfg:mustBeOneSequence ( 
-           ( gen16  gen17  gen18  ) 
-         ) . 
-
-gen16 cfg:mustBeOneSequence ( 
-           ( ) 
-           ( OrderClause  ) 
-         ) . 
-
-gen17 cfg:mustBeOneSequence ( 
-           ( ) 
-           ( LimitClause  ) 
-         ) . 
-
-gen18 cfg:mustBeOneSequence ( 
-           ( ) 
-           ( OffsetClause  ) 
-         ) . 
-
-OrderClause cfg:mustBeOneSequence ( 
-           ( IT_ORDER  IT_BY  OrderCondition  gen19  ) 
-         ) . 
-
-gen19 cfg:mustBeOneSequence ( 
-           (  ) 
-           ( OrderCondition  gen19  ) 
-         ) . 
-
-OrderCondition cfg:mustBeOneSequence ( 
-           ( gen20  GT_LPAREN  Expression  GT_RPAREN  ) 
-           ( FunctionCall  ) 
-           ( Var  ) 
-           ( GT_LPAREN  Expression  GT_RPAREN  ) 
-         ) . 
-
-gen20 cfg:mustBeOneSequence ( 
-           ( IT_ASC  ) 
-           ( IT_DESC  ) 
-         ) . 
-
-LimitClause cfg:mustBeOneSequence ( 
-           ( IT_LIMIT  INTEGER  ) 
-         ) . 
-
-OffsetClause cfg:mustBeOneSequence ( 
-           ( IT_OFFSET  INTEGER  ) 
-         ) . 
-
-Union cfg:mustBeOneSequence ( 
-           ( Pattern  IT_UNION  Union  ) 
-           ( Pattern  ) 
-         ) . 
-
-Optional cfg:mustBeOneSequence ( 
-           ( IT_OPTIONAL  PatternElts  ) 
-         ) . 
-
-GraphConstraint cfg:mustBeOneSequence ( 
-           ( IT_GRAPH  VarOrBlankNodeOrIRIref  PatternElts  ) 
-         ) . 
-
-PatternElts cfg:mustBeOneSequence ( 
-           ( NonSubjectPatternStarters  ) 
-           ( Filter  ) 
-         ) . 
-
-Pattern cfg:mustBeOneSequence ( 
-           ( SubjectStatements  AfterSubjectStatements  ) 
-           ( NonSubjectPatternElts  AfterNotSubject  ) 
-         ) . 
-
-AfterSubjectStatements cfg:mustBeOneSequence ( 
-           ( Dot  SubjectStatements  AfterSubjectStatements  ) 
-           ( gen21  NonSubjectPatternElts  AfterNotSubject  ) 
-           ( ) 
-         ) . 
-
-gen21 cfg:mustBeOneSequence ( 
-           ( ) 
-           ( OptDot  ) 
-         ) . 
-
-AfterNotSubject cfg:mustBeOneSequence ( 
-           ( gen22  SubjectStatements  AfterSubjectStatements  ) 
-           ( gen21  NonSubjectPatternElts  AfterNotSubject  ) 
-           ( ) 
-         ) . 
-
-gen22 cfg:mustBeOneSequence ( 
-           ( ) 
-           ( Dot  ) 
-         ) . 
-
-NonSubjectPatternStarters cfg:mustBeOneSequence ( 
-           ( Optional  ) 
-           ( GraphConstraint  ) 
-           ( GraphPattern  ) 
-         ) . 
-
-NonSubjectPatternElts cfg:mustBeOneSequence ( 
-           ( NonSubjectPatternStarters  ) 
-           ( Filter  ) 
-         ) . 
-
-Filter cfg:mustBeOneSequence ( 
-           ( IT_FILTER  gen24  ) 
-         ) . 
-
-gen24 cfg:mustBeOneSequence ( 
-           ( GT_LPAREN  Expression  GT_RPAREN  ) 
-           ( BuiltIns  ) 
-         ) . 
-
-SubjectStatements cfg:mustBeOneSequence ( 
-           ( Subject  gen25  ) 
-         ) . 
-
-gen25 cfg:mustBeOneSequence ( 
-           ( ) 
-           ( PredicateObjectList  ) 
-         ) . 
-
-PredicateObjectList cfg:mustBeOneSequence ( 
-           ( Predicate  ObjectList  gen26  ) 
-         ) . 
-
-gen27 cfg:mustBeOneSequence ( 
-           ( GT_SEMI  Predicate  ObjectList  ) 
-         ) . 
-
-gen26 cfg:mustBeOneSequence ( 
-           ( ) 
-           ( gen27  gen26  ) 
-         ) . 
-
-ObjectList cfg:mustBeOneSequence ( 
-           ( Object  gen28  ) 
-         ) . 
-
-gen29 cfg:mustBeOneSequence ( 
-           ( GT_COMMA  Object  ) 
-         ) . 
-
-gen28 cfg:mustBeOneSequence ( 
-           ( ) 
-           ( gen29  gen28  ) 
-         ) . 
-
-Subject cfg:mustBeOneSequence ( 
-           ( GraphNode  ) 
-         ) . 
-
-Predicate cfg:mustBeOneSequence ( 
-           ( VarOrBlankNodeOrIRIref  ) 
-           ( IT_a  ) 
-         ) . 
-
-Object cfg:mustBeOneSequence ( 
-           ( VarOrTerm  ) 
-           ( TriplesNode  ) 
-         ) . 
-
-TriplesNode cfg:mustBeOneSequence ( 
-           ( Collection  ) 
-           ( BlankNodePropertyList  ) 
-         ) . 
-
-BlankNodePropertyList cfg:mustBeOneSequence ( 
-           ( OpenSquare  PredicateObjectList  CloseSquare  ) 
-         ) . 
-
-Collection cfg:mustBeOneSequence ( 
-           ( GT_LPAREN  GraphNode  gen30  GT_RPAREN  ) 
-         ) . 
-
-gen30 cfg:mustBeOneSequence ( 
-           ( ) 
-           ( GraphNode  gen30  ) 
-         ) . 
-
-GraphNode cfg:mustBeOneSequence ( 
-           ( VarOrTerm  ) 
-           ( TriplesNode  ) 
-         ) . 
-
-VarOrTerm cfg:mustBeOneSequence ( 
-           ( Var  ) 
-           ( GraphTerm  ) 
-         ) . 
-
-VarOrIRIref cfg:mustBeOneSequence ( 
-           ( Var  ) 
-           ( IRIref  ) 
-         ) . 
-
-VarOrBlankNodeOrIRIref cfg:mustBeOneSequence ( 
-           ( Var  ) 
-           ( BlankNode  ) 
-           ( IRIref  ) 
-         ) . 
-
-Var cfg:mustBeOneSequence ( 
-           ( VAR1  ) 
-           ( VAR2  ) 
-         ) . 
-
-GraphTerm cfg:mustBeOneSequence ( 
-           ( RDFTerm  ) 
-           ( GT_LPAREN  GT_RPAREN  ) 
-         ) . 
-
-Expression cfg:mustBeOneSequence ( 
-           ( ConditionalOrExpression  ) 
-         ) . 
-
-ConditionalOrExpression cfg:mustBeOneSequence ( 
-           ( ConditionalAndExpression  gen31  ) 
-         ) . 
-
-gen32 cfg:mustBeOneSequence ( 
-           ( GT_OR  ConditionalAndExpression  ) 
-         ) . 
-
-gen31 cfg:mustBeOneSequence ( 
-           ( ) 
-           ( gen32  gen31  ) 
-         ) . 
-
-ConditionalAndExpression cfg:mustBeOneSequence ( 
-           ( ValueLogical  gen33  ) 
-         ) . 
-
-gen34 cfg:mustBeOneSequence ( 
-           ( GT_AND  ValueLogical  ) 
-         ) . 
-
-gen33 cfg:mustBeOneSequence ( 
-           ( ) 
-           ( gen34  gen33  ) 
-         ) . 
-
-ValueLogical cfg:mustBeOneSequence ( 
-           ( RelationalExpression  ) 
-         ) . 
-
-RelationalExpression cfg:mustBeOneSequence ( 
-           ( NumericExpression  gen35  ) 
-         ) . 
-
-gen36 cfg:mustBeOneSequence ( 
-           ( GT_EQUAL  NumericExpression  ) 
-           ( GT_NEQUAL  NumericExpression  ) 
-           ( GT_LT  NumericExpression  ) 
-           ( GT_GT  NumericExpression  ) 
-           ( GT_LE  NumericExpression  ) 
-           ( GT_GE  NumericExpression  ) 
-         ) . 
-
-gen35 cfg:mustBeOneSequence ( 
-           ( ) 
-           ( gen36  ) 
-         ) . 
-
-NumericExpression cfg:mustBeOneSequence ( 
-           ( AdditiveExpression  ) 
-         ) . 
-
-AdditiveExpression cfg:mustBeOneSequence ( 
-           ( MultiplicativeExpression  gen37  ) 
-         ) . 
-
-gen38 cfg:mustBeOneSequence ( 
-           ( GT_PLUS  MultiplicativeExpression  ) 
-           ( GT_MINUS  MultiplicativeExpression  ) 
-         ) . 
-
-gen37 cfg:mustBeOneSequence ( 
-           ( ) 
-           ( gen38  gen37  ) 
-         ) . 
-
-MultiplicativeExpression cfg:mustBeOneSequence ( 
-           ( UnaryExpression  gen39  ) 
-         ) . 
-
-gen40 cfg:mustBeOneSequence ( 
-           ( GT_TIMES  UnaryExpression  ) 
-           ( GT_DIVIDE  UnaryExpression  ) 
-         ) . 
-
-gen39 cfg:mustBeOneSequence ( 
-           ( ) 
-           ( gen40  gen39  ) 
-         ) . 
-
-UnaryExpression cfg:mustBeOneSequence ( 
-           ( GT_NOT  CallExpression  ) 
-           ( GT_PLUS  CallExpression  ) 
-           ( GT_MINUS  CallExpression  ) 
-           ( CallExpression  ) 
-         ) . 
-
-CallExpression cfg:mustBeOneSequence ( 
-           ( BuiltIns  ) 
-           ( PrimaryExpression  ) 
-         ) . 
-
-BuiltIns cfg:mustBeOneSequence ( 
-           ( IT_STR  GT_LPAREN  Expression  GT_RPAREN  ) 
-           ( IT_LANG  GT_LPAREN  Expression  GT_RPAREN  ) 
-           ( IT_DATATYPE  GT_LPAREN  Expression  GT_RPAREN  ) 
-           ( IT_REGEX  GT_LPAREN  Expression  GT_COMMA  String  gen41  GT_RPAREN  ) 
-           ( IT_BOUND  GT_LPAREN  Var  GT_RPAREN  ) 
-           ( IT_isURI  GT_LPAREN  Expression  GT_RPAREN  ) 
-           ( IT_isBLANK  GT_LPAREN  Expression  GT_RPAREN  ) 
-           ( IT_isLITERAL  GT_LPAREN  Expression  GT_RPAREN  ) 
-           ( FunctionCall  ) 
-         ) . 
-
-gen42 cfg:mustBeOneSequence ( 
-           ( GT_COMMA  String  ) 
-         ) . 
-
-gen41 cfg:mustBeOneSequence ( 
-           ( ) 
-           ( gen42  ) 
-         ) . 
-
-PrimaryExpression cfg:mustBeOneSequence ( 
-           ( gen43  ) 
-         ) . 
-
-gen43 cfg:mustBeOneSequence ( 
-           ( Var  ) 
-           ( RDFTerm  ) 
-           ( GT_LPAREN  Expression  GT_RPAREN  ) 
-         ) . 
-
-FunctionCall cfg:mustBeOneSequence ( 
-           ( IRIref  ArgList  ) 
-         ) . 
-
-ArgList cfg:mustBeOneSequence ( 
-           ( GT_LPAREN  gen44  GT_RPAREN  ) 
-         ) . 
-
-gen46 cfg:mustBeOneSequence ( 
-           ( GT_COMMA  Expression  ) 
-         ) . 
-
-gen45 cfg:mustBeOneSequence ( 
-           ( ) 
-           ( gen46  gen45  ) 
-         ) . 
-
-gen47 cfg:mustBeOneSequence ( 
-           ( Expression  gen45  ) 
-         ) . 
-
-gen44 cfg:mustBeOneSequence ( 
-           ( ) 
-           ( gen47  ) 
-         ) . 
-
-RDFTerm cfg:mustBeOneSequence ( 
-           ( IRIref  ) 
-           ( RDFLiteral  ) 
-           ( NumericLiteral  ) 
-           ( BooleanLiteral  ) 
-           ( BlankNode  ) 
-         ) . 
-
-NumericLiteral cfg:mustBeOneSequence ( 
-           ( INTEGER  ) 
-           ( FLOATING_POINT  ) 
-         ) . 
-
-RDFLiteral cfg:mustBeOneSequence ( 
-           ( String  gen48  ) 
-         ) . 
-
-gen49 cfg:mustBeOneSequence ( 
-           ( GT_DTYPE  IRIref  ) 
-         ) . 
-
-gen50 cfg:mustBeOneSequence ( 
-           ( LANGTAG  ) 
-           ( gen49  ) 
-         ) . 
-
-gen48 cfg:mustBeOneSequence ( 
-           ( ) 
-           ( gen50  ) 
-         ) . 
-
-BooleanLiteral cfg:mustBeOneSequence ( 
-           ( IT_true  ) 
-           ( IT_false  ) 
-         ) . 
-
-String cfg:mustBeOneSequence ( 
-           ( STRING_LITERAL1  ) 
-           ( STRING_LITERAL2  ) 
-           ( STRING_LITERAL_LONG1  ) 
-           ( STRING_LITERAL_LONG2  ) 
-         ) . 
-
-IRIref cfg:mustBeOneSequence ( 
-           ( QuotedIRIref  ) 
-           ( QName  ) 
-         ) . 
-
-QName cfg:mustBeOneSequence ( 
-           ( QNAME  ) 
-           ( QNAME_NS  ) 
-         ) . 
-
-BlankNode cfg:mustBeOneSequence ( 
-           ( BNODE_LABEL  ) 
-           ( OpenSquare  CloseSquare  ) 
-         ) . 
+
+ IT_BASE	cfg:matches	"BASE" . 
+ IT_PREFIX	cfg:matches	"PREFIX" . 
+ IT_SELECT	cfg:matches	"SELECT" . 
+ IT_DISTINCT	cfg:matches	"DISTINCT" . 
+ GT_TIMES	cfg:matches	"\\*" . 
+ IT_CONSTRUCT	cfg:matches	"CONSTRUCT" . 
+ IT_DESCRIBE	cfg:matches	"DESCRIBE" . 
+ IT_ASK	cfg:matches	"ASK" . 
+ IT_FROM	cfg:matches	"FROM" . 
+ IT_NAMED	cfg:matches	"NAMED" . 
+ IT_WHERE	cfg:matches	"WHERE" . 
+ IT_ORDER	cfg:matches	"ORDER" . 
+ IT_BY	cfg:matches	"BY" . 
+ IT_ASC	cfg:matches	"ASC" . 
+ IT_DESC	cfg:matches	"DESC" . 
+ IT_LIMIT	cfg:matches	"LIMIT" . 
+ IT_OFFSET	cfg:matches	"OFFSET" . 
+ IT_OPTIONAL	cfg:matches	"OPTIONAL" . 
+ IT_GRAPH	cfg:matches	"GRAPH" . 
+ IT_UNION	cfg:matches	"UNION" . 
+ IT_FILTER	cfg:matches	"FILTER" . 
+ GT_SEMI	cfg:matches	";" . 
+ GT_COMMA	cfg:matches	"," . 
+ IT_a	cfg:matches	"a" . 
+ GT_LPAREN	cfg:matches	"\\(" . 
+ GT_RPAREN	cfg:matches	"\\)" . 
+ GT_OR	cfg:matches	"\\|\\|" . 
+ GT_AND	cfg:matches	"&&" . 
+ GT_EQUAL	cfg:matches	"=" . 
+ GT_NEQUAL	cfg:matches	"!=" . 
+ GT_LT	cfg:matches	"<" . 
+ GT_GT	cfg:matches	">" . 
+ GT_LE	cfg:matches	"<=" . 
+ GT_GE	cfg:matches	">=" . 
+ GT_PLUS	cfg:matches	"\\+" . 
+ GT_MINUS	cfg:matches	"-" . 
+ GT_DIVIDE	cfg:matches	"/" . 
+ GT_NOT	cfg:matches	"!" . 
+ IT_STR	cfg:matches	"STR" . 
+ IT_LANG	cfg:matches	"LANG" . 
+ IT_DATATYPE	cfg:matches	"DATATYPE" . 
+ IT_BOUND	cfg:matches	"BOUND" . 
+ IT_isURI	cfg:matches	"isURI" . 
+ IT_isBLANK	cfg:matches	"isBLANK" . 
+ IT_isLITERAL	cfg:matches	"isLITERAL" . 
+ IT_REGEX	cfg:matches	"REGEX" . 
+ GT_DTYPE	cfg:matches	"\\^\\^" . 
+ IT_true	cfg:matches	"true" . 
+ IT_false	cfg:matches	"false" . 
+QuotedIRIref	cfg:matches	"<[^> ]*>";
+ . 
+LANGTAG	cfg:matches	"@[a-zA-Z]+(?:-[a-zA-Z0-9]+)*";
+ . 
+INTEGER	cfg:matches	"[0-9]+";
+ . 
+DECIMAL	cfg:matches	"(?:[0-9]+\\.[0-9]*)|(?:\\.[0-9]+)";
+ . 
+EXPONENT	cfg:matches	"[eE][\\+-]?[0-9]+";
+ . 
+FLOATING_POINT	cfg:matches	"(?:[0-9]+\\.[0-9]*(?:[eE][\\+-]?[0-9]+)?)|(?:(?:\\.[0-9]+(?:[eE][\\+-]?[0-9]+)?)|(?:[0-9]+(?:[eE][\\+-]?[0-9]+)))";
+ . 
+STRING_LITERAL1	cfg:matches	"'(?:(?:[^'\\\\\\n\\r])|(?:(?:\\\\[^\\r\\n])))*'";
+ . 
+STRING_LITERAL2	cfg:matches	"\"(?:(?:[^\"\\\\\\n\\r])|(?:(?:\\\\[^\\r\\n])))*\"";
+ . 
+STRING_LITERAL_LONG1	cfg:matches	"'''(?:(?:[^'\\\\])|(?:(?:(?:\\\\[^\\r\\n]))|(?:(?:(?:'[^']))|(?:(?:''[^'])))))*'''";
+ . 
+STRING_LITERAL_LONG2	cfg:matches	"\"\"\"(?:(?:[^\"\\\\])|(?:(?:(?:\\\\[^\\r\\n]))|(?:(?:(?:\"[^\"]))|(?:(?:\"\"[^\"])))))*\"\"\"";
+ . 
+NCCHAR1	cfg:matches	"(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF])))))))))))))";
+ . 
+NCCHAR	cfg:matches	"(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF])))))))))))))))|(?:(?:_)|(?:(?:-)|(?:(?:\\.)|(?:(?:[0-9])|(?:(?:\u00B7)|(?:(?:[\u0300-\u036F])|(?:[\u203F-\u2040])))))))";
+ . 
+NCNAME_PREFIX	cfg:matches	"(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF]))))))))))))))(?:(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF])))))))))))))))|(?:(?:_)|(?:(?:-)|(?:(?:\\.)|(?:(?:[0-9])|(?:(?:\u00B7)|(?:(?:[\u0300-\u036F])|(?:[\u203F-\u2040]))))))))*";
+ . 
+QNAME_NS	cfg:matches	"(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF]))))))))))))))(?:(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF])))))))))))))))|(?:(?:_)|(?:(?:-)|(?:(?:\\.)|(?:(?:[0-9])|(?:(?:\u00B7)|(?:(?:[\u0300-\u036F])|(?:[\u203F-\u2040]))))))))*)?:";
+ . 
+NCNAME	cfg:matches	"(?:(?:_)|(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF]))))))))))))))))(?:(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF])))))))))))))))|(?:(?:_)|(?:(?:-)|(?:(?:\\.)|(?:(?:[0-9])|(?:(?:\u00B7)|(?:(?:[\u0300-\u036F])|(?:[\u203F-\u2040]))))))))*";
+ . 
+BNODE_LABEL	cfg:matches	"_:(?:(?:(?:_)|(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF]))))))))))))))))(?:(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF])))))))))))))))|(?:(?:_)|(?:(?:-)|(?:(?:\\.)|(?:(?:[0-9])|(?:(?:\u00B7)|(?:(?:[\u0300-\u036F])|(?:[\u203F-\u2040]))))))))*)";
+ . 
+QNAME	cfg:matches	"(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF]))))))))))))))(?:(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF])))))))))))))))|(?:(?:_)|(?:(?:-)|(?:(?:\\.)|(?:(?:[0-9])|(?:(?:\u00B7)|(?:(?:[\u0300-\u036F])|(?:[\u203F-\u2040]))))))))*)?:(?:(?:(?:_)|(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF]))))))))))))))))(?:(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF])))))))))))))))|(?:(?:_)|(?:(?:-)|(?:(?:\\.)|(?:(?:[0-9])|(?:(?:\u00B7)|(?:(?:[\u0300-\u036F])|(?:[\u203F-\u2040]))))))))*)?";
+ . 
+VARNAME	cfg:matches	"(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF]))))))))))))))(?:(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF])))))))))))))))|(?:(?:_)|(?:(?:[0-9])|(?:(?:\u00B7)|(?:(?:[\u0300-\u036F])|(?:[\u203F-\u2040]))))))*";
+ . 
+VAR2	cfg:matches	"\\$(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF]))))))))))))))(?:(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF])))))))))))))))|(?:(?:_)|(?:(?:[0-9])|(?:(?:\u00B7)|(?:(?:[\u0300-\u036F])|(?:[\u203F-\u2040]))))))*)";
+ . 
+VAR1	cfg:matches	"\\?(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF]))))))))))))))(?:(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF])))))))))))))))|(?:(?:_)|(?:(?:[0-9])|(?:(?:\u00B7)|(?:(?:[\u0300-\u036F])|(?:[\u203F-\u2040]))))))*)";
+ . 
+SPACE	cfg:matches	"(?:\\t)|(?:(?:\\n)|(?:(?:\\r)|(?:(?: )|(?:(?:\u00A0)|(?:(?:[\u2000-\u200B])|(?:(?:\u202F)|(?:(?:\u205F)|(?:\u3000))))))))";
+ . 
+PASSED_TOKENS	cfg:matches	"(?:(?:(?:\\t)|(?:(?:\\n)|(?:(?:\\r)|(?:(?: )|(?:(?:\u00A0)|(?:(?:[\u2000-\u200B])|(?:(?:\u202F)|(?:(?:\u205F)|(?:\u3000)))))))))+)|(?:#[^\\n]*\\n)";
+ . 
+Dot	cfg:matches	"\\.";
+ . 
+OpenCurly	cfg:matches	"\\{";
+ . 
+CloseCurly	cfg:matches	"\\}";
+ . 
+OpenSquare	cfg:matches	"\\[";
+ . 
+CloseSquare	cfg:matches	"\\]";
+ . 
+Query cfg:tokens ( IT_BASE
+              IT_PREFIX
+              IT_SELECT
+              IT_DISTINCT
+              GT_TIMES
+              IT_CONSTRUCT
+              IT_DESCRIBE
+              IT_ASK
+              IT_FROM
+              IT_NAMED
+              IT_WHERE
+              IT_ORDER
+              IT_BY
+              IT_ASC
+              IT_DESC
+              IT_LIMIT
+              IT_OFFSET
+              IT_OPTIONAL
+              IT_GRAPH
+              IT_UNION
+              IT_FILTER
+              GT_SEMI
+              GT_COMMA
+              IT_a
+              GT_LPAREN
+              GT_RPAREN
+              GT_OR
+              GT_AND
+              GT_EQUAL
+              GT_NEQUAL
+              GT_LT
+              GT_GT
+              GT_LE
+              GT_GE
+              GT_PLUS
+              GT_MINUS
+              GT_DIVIDE
+              GT_NOT
+              IT_STR
+              IT_LANG
+              IT_DATATYPE
+              IT_BOUND
+              IT_isURI
+              IT_isBLANK
+              IT_isLITERAL
+              IT_REGEX
+              GT_DTYPE
+              IT_true
+              IT_false
+              QuotedIRIref
+              QNAME_NS
+              QNAME
+              BNODE_LABEL
+              VAR1
+              VAR2
+              LANGTAG
+              INTEGER
+              FLOATING_POINT
+              STRING_LITERAL1
+              STRING_LITERAL2
+              STRING_LITERAL_LONG1
+              STRING_LITERAL_LONG2
+              Dot
+              OpenCurly
+              CloseCurly
+              OpenSquare
+              CloseSquare 
+              cfg:eof) . 
+
+
+Query cfg:mustBeOneOf (     ( Prolog _O_QSelectQuery_E__Or__QConstructQuery_E__Or__QDescribeQuery_E__Or__QAskQuery_E__C )  ) .
+
+
+
+_O_QSelectQuery_E__Or__QConstructQuery_E__Or__QDescribeQuery_E__Or__QAskQuery_E__C cfg:mustBeOneOf (     ( SelectQuery ) 
+    ( ConstructQuery ) 
+    ( DescribeQuery ) 
+    ( AskQuery )  ) .
+
+
+
+Prolog cfg:mustBeOneOf (     ( _QBaseDecl_E_Opt _QPrefixDecl_E_Star )  ) .
+
+
+
+_QBaseDecl_E_Opt cfg:mustBeOneOf (     (  ) 
+    ( BaseDecl )  ) .
+
+
+
+_QPrefixDecl_E_Star cfg:mustBeOneOf (     (  ) 
+    ( PrefixDecl _QPrefixDecl_E_Star )  ) .
+
+
+
+BaseDecl cfg:mustBeOneOf (     ( IT_BASE QuotedIRIref )  ) .
+
+
+
+PrefixDecl cfg:mustBeOneOf (     ( IT_PREFIX QNAME_NS QuotedIRIref )  ) .
+
+
+
+SelectQuery cfg:mustBeOneOf (     ( IT_SELECT _QDISTINCT_E_Opt _O_QVar_E_Plus_Or__QTIMES_E__C _QDatasetClause_E_Star WhereClause SolutionModifier )  ) .
+
+
+
+_QDISTINCT_E_Opt cfg:mustBeOneOf (     (  ) 
+    ( IT_DISTINCT )  ) .
+
+
+
+_QVar_E_Plus cfg:mustBeOneOf (     (  ) 
+    ( Var _QVar_E_Plus )  ) .
+
+
+
+_O_QVar_E_Plus_Or__QTIMES_E__C cfg:mustBeOneOf (     ( Var _QVar_E_Plus ) 
+    ( GT_TIMES )  ) .
+
+
+
+_QDatasetClause_E_Star cfg:mustBeOneOf (     (  ) 
+    ( DatasetClause _QDatasetClause_E_Star )  ) .
+
+
+
+ConstructQuery cfg:mustBeOneOf (     ( IT_CONSTRUCT ConstructTemplate _QDatasetClause_E_Star WhereClause SolutionModifier )  ) .
+
+
+
+DescribeQuery cfg:mustBeOneOf (     ( IT_DESCRIBE _O_QVarOrIRIref_E_Plus_Or__QTIMES_E__C _QDatasetClause_E_Star _QWhereClause_E_Opt SolutionModifier )  ) .
+
+
+
+_QVarOrIRIref_E_Plus cfg:mustBeOneOf (     (  ) 
+    ( VarOrIRIref _QVarOrIRIref_E_Plus )  ) .
+
+
+
+_O_QVarOrIRIref_E_Plus_Or__QTIMES_E__C cfg:mustBeOneOf (     ( VarOrIRIref _QVarOrIRIref_E_Plus ) 
+    ( GT_TIMES )  ) .
+
+
+
+_QWhereClause_E_Opt cfg:mustBeOneOf (     (  ) 
+    ( WhereClause )  ) .
+
+
+
+AskQuery cfg:mustBeOneOf (     ( IT_ASK _QDatasetClause_E_Star WhereClause )  ) .
+
+
+
+DatasetClause cfg:mustBeOneOf (     ( IT_FROM _O_QDefaultGraphClause_E__Or__QNamedGraphClause_E__C )  ) .
+
+
+
+_O_QDefaultGraphClause_E__Or__QNamedGraphClause_E__C cfg:mustBeOneOf (     ( DefaultGraphClause ) 
+    ( NamedGraphClause )  ) .
+
+
+
+DefaultGraphClause cfg:mustBeOneOf (     ( SourceSelector )  ) .
+
+
+
+NamedGraphClause cfg:mustBeOneOf (     ( IT_NAMED SourceSelector )  ) .
+
+
+
+SourceSelector cfg:mustBeOneOf (     ( IRIref )  ) .
+
+
+
+WhereClause cfg:mustBeOneOf (     ( _QWHERE_E_Opt GroupGraphPattern )  ) .
+
+
+
+_QWHERE_E_Opt cfg:mustBeOneOf (     (  ) 
+    ( IT_WHERE )  ) .
+
+
+
+SolutionModifier cfg:mustBeOneOf (     ( _QOrderClause_E_Opt _QLimitClause_E_Opt _QOffsetClause_E_Opt )  ) .
+
+
+
+_QOrderClause_E_Opt cfg:mustBeOneOf (     (  ) 
+    ( OrderClause )  ) .
+
+
+
+_QLimitClause_E_Opt cfg:mustBeOneOf (     (  ) 
+    ( LimitClause )  ) .
+
+
+
+_QOffsetClause_E_Opt cfg:mustBeOneOf (     (  ) 
+    ( OffsetClause )  ) .
+
+
+
+OrderClause cfg:mustBeOneOf (     ( IT_ORDER IT_BY OrderCondition _QOrderCondition_E_Plus )  ) .
+
+
+
+_QOrderCondition_E_Plus cfg:mustBeOneOf (     (  ) 
+    ( OrderCondition _QOrderCondition_E_Plus )  ) .
+
+
+
+OrderCondition cfg:mustBeOneOf (     ( _O_QASC_E__Or__QDESC_E____QBrackettedExpression_E__C ) 
+    ( _O_QFunctionCall_E__Or__QVar_E__Or__QBrackettedExpression_E__C )  ) .
+
+
+
+_O_QASC_E__Or__QDESC_E__C cfg:mustBeOneOf (     ( IT_ASC ) 
+    ( IT_DESC )  ) .
+
+
+
+_O_QASC_E__Or__QDESC_E____QBrackettedExpression_E__C cfg:mustBeOneOf (     ( _O_QASC_E__Or__QDESC_E__C BrackettedExpression )  ) .
+
+
+
+_O_QFunctionCall_E__Or__QVar_E__Or__QBrackettedExpression_E__C cfg:mustBeOneOf (     ( FunctionCall ) 
+    ( Var ) 
+    ( BrackettedExpression )  ) .
+
+
+
+LimitClause cfg:mustBeOneOf (     ( IT_LIMIT INTEGER )  ) .
+
+
+
+OffsetClause cfg:mustBeOneOf (     ( IT_OFFSET INTEGER )  ) .
+
+
+
+GroupGraphPattern cfg:mustBeOneOf (     ( OpenCurly GraphPatternList CloseCurly )  ) .
+
+
+
+GraphPatternList cfg:mustBeOneOf (     ( _Q_O_QTriples1_E____QGraphPatternListTail_E__Or__QGraphPatternNotTriples_E____QGraphPatternNotTriplesTail_E__C_E_Opt )  ) .
+
+
+
+_O_QTriples1_E____QGraphPatternListTail_E__Or__QGraphPatternNotTriples_E____QGraphPatternNotTriplesTail_E__C cfg:mustBeOneOf (     ( Triples1 GraphPatternListTail ) 
+    ( GraphPatternNotTriples GraphPatternNotTriplesTail )  ) .
+
+
+
+_Q_O_QTriples1_E____QGraphPatternListTail_E__Or__QGraphPatternNotTriples_E____QGraphPatternNotTriplesTail_E__C_E_Opt cfg:mustBeOneOf (     (  ) 
+    ( _O_QTriples1_E____QGraphPatternListTail_E__Or__QGraphPatternNotTriples_E____QGraphPatternNotTriplesTail_E__C )  ) .
+
+
+
+GraphPatternListTail cfg:mustBeOneOf (     ( _Q_O_QDot_E____QGraphPatternList_E__C_E_Opt ) 
+    ( GraphPatternNotTriplesList )  ) .
+
+
+
+_O_QDot_E____QGraphPatternList_E__C cfg:mustBeOneOf (     ( Dot GraphPatternList )  ) .
+
+
+
+_Q_O_QDot_E____QGraphPatternList_E__C_E_Opt cfg:mustBeOneOf (     (  ) 
+    ( _O_QDot_E____QGraphPatternList_E__C )  ) .
+
+
+
+GraphPatternNotTriplesTail cfg:mustBeOneOf (     ( _O_QDot_E_Opt___QGraphPatternList_E__C )  ) .
+
+
+
+_QDot_E_Opt cfg:mustBeOneOf (     (  ) 
+    ( Dot )  ) .
+
+
+
+_O_QDot_E_Opt___QGraphPatternList_E__C cfg:mustBeOneOf (     ( _QDot_E_Opt GraphPatternList )  ) .
+
+
+
+GraphPatternNotTriplesList cfg:mustBeOneOf (     ( GraphPatternNotTriples GraphPatternNotTriplesTail )  ) .
+
+
+
+GraphPatternNotTriples cfg:mustBeOneOf (     ( OptionalGraphPattern ) 
+    ( GroupOrUnionGraphPattern ) 
+    ( GraphGraphPattern ) 
+    ( Constraint )  ) .
+
+
+
+OptionalGraphPattern cfg:mustBeOneOf (     ( IT_OPTIONAL GroupGraphPattern )  ) .
+
+
+
+GraphGraphPattern cfg:mustBeOneOf (     ( IT_GRAPH VarOrBlankNodeOrIRIref GroupGraphPattern )  ) .
+
+
+
+GroupOrUnionGraphPattern cfg:mustBeOneOf (     ( GroupGraphPattern _Q_O_QUNION_E____QGroupGraphPattern_E__C_E_Star )  ) .
+
+
+
+_O_QUNION_E____QGroupGraphPattern_E__C cfg:mustBeOneOf (     ( IT_UNION GroupGraphPattern )  ) .
+
+
+
+_Q_O_QUNION_E____QGroupGraphPattern_E__C_E_Star cfg:mustBeOneOf (     (  ) 
+    ( _O_QUNION_E____QGroupGraphPattern_E__C _Q_O_QUNION_E____QGroupGraphPattern_E__C_E_Star )  ) .
+
+
+
+Constraint cfg:mustBeOneOf (     ( IT_FILTER _O_QBrackettedExpression_E__Or__QCallExpression_E__C )  ) .
+
+
+
+_O_QBrackettedExpression_E__Or__QCallExpression_E__C cfg:mustBeOneOf (     ( BrackettedExpression ) 
+    ( CallExpression )  ) .
+
+
+
+ConstructTemplate cfg:mustBeOneOf (     ( OpenCurly _QTriples_E_Opt _QDot_E_Opt CloseCurly )  ) .
+
+
+
+_QTriples_E_Opt cfg:mustBeOneOf (     (  ) 
+    ( Triples )  ) .
+
+
+
+Triples1 cfg:mustBeOneOf (     ( VarOrTerm PropertyListNotEmpty ) 
+    ( TriplesNode PropertyList )  ) .
+
+
+
+PropertyList cfg:mustBeOneOf (     ( _QPropertyListNotEmpty_E_Opt )  ) .
+
+
+
+_QPropertyListNotEmpty_E_Opt cfg:mustBeOneOf (     (  ) 
+    ( PropertyListNotEmpty )  ) .
+
+
+
+PropertyListNotEmpty cfg:mustBeOneOf (     ( Verb ObjectList _Q_O_QSEMI_E____QPropertyList_E__C_E_Opt )  ) .
+
+
+
+_O_QSEMI_E____QPropertyList_E__C cfg:mustBeOneOf (     ( GT_SEMI PropertyList )  ) .
+
+
+
+_Q_O_QSEMI_E____QPropertyList_E__C_E_Opt cfg:mustBeOneOf (     (  ) 
+    ( _O_QSEMI_E____QPropertyList_E__C )  ) .
+
+
+
+ObjectList cfg:mustBeOneOf (     ( Object _Q_O_QCOMMA_E____QObjectList_E__C_E_Opt )  ) .
+
+
+
+_O_QCOMMA_E____QObjectList_E__C cfg:mustBeOneOf (     ( GT_COMMA ObjectList )  ) .
+
+
+
+_Q_O_QCOMMA_E____QObjectList_E__C_E_Opt cfg:mustBeOneOf (     (  ) 
+    ( _O_QCOMMA_E____QObjectList_E__C )  ) .
+
+
+
+Verb cfg:mustBeOneOf (     ( VarOrBlankNodeOrIRIref ) 
+    ( IT_a )  ) .
+
+
+
+Object cfg:mustBeOneOf (     ( VarOrTerm ) 
+    ( TriplesNode )  ) .
+
+
+
+TriplesNode cfg:mustBeOneOf (     ( Collection ) 
+    ( BlankNodePropertyList )  ) .
+
+
+
+BlankNodePropertyList cfg:mustBeOneOf (     ( OpenSquare PropertyListNotEmpty CloseSquare )  ) .
+
+
+
+Collection cfg:mustBeOneOf (     ( GT_LPAREN GraphNode _QGraphNode_E_Plus GT_RPAREN )  ) .
+
+
+
+_QGraphNode_E_Plus cfg:mustBeOneOf (     (  ) 
+    ( GraphNode _QGraphNode_E_Plus )  ) .
+
+
+
+GraphNode cfg:mustBeOneOf (     ( VarOrTerm ) 
+    ( TriplesNode )  ) .
+
+
+
+VarOrTerm cfg:mustBeOneOf (     ( Var ) 
+    ( GraphTerm )  ) .
+
+
+
+VarOrIRIref cfg:mustBeOneOf (     ( Var ) 
+    ( IRIref )  ) .
+
+
+
+VarOrBlankNodeOrIRIref cfg:mustBeOneOf (     ( Var ) 
+    ( BlankNode ) 
+    ( IRIref )  ) .
+
+
+
+Var cfg:mustBeOneOf (     ( VAR1 ) 
+    ( VAR2 )  ) .
+
+
+
+GraphTerm cfg:mustBeOneOf (     ( RDFTerm ) 
+    ( GT_LPAREN GT_RPAREN )  ) .
+
+
+
+Expression cfg:mustBeOneOf (     ( ConditionalOrExpression )  ) .
+
+
+
+ConditionalOrExpression cfg:mustBeOneOf (     ( ConditionalAndExpression _Q_O_QOR_E____QConditionalAndExpression_E__C_E_Star )  ) .
+
+
+
+_O_QOR_E____QConditionalAndExpression_E__C cfg:mustBeOneOf (     ( GT_OR ConditionalAndExpression )  ) .
+
+
+
+_Q_O_QOR_E____QConditionalAndExpression_E__C_E_Star cfg:mustBeOneOf (     (  ) 
+    ( _O_QOR_E____QConditionalAndExpression_E__C _Q_O_QOR_E____QConditionalAndExpression_E__C_E_Star )  ) .
+
+
+
+ConditionalAndExpression cfg:mustBeOneOf (     ( ValueLogical _Q_O_QAND_E____QValueLogical_E__C_E_Star )  ) .
+
+
+
+_O_QAND_E____QValueLogical_E__C cfg:mustBeOneOf (     ( GT_AND ValueLogical )  ) .
+
+
+
+_Q_O_QAND_E____QValueLogical_E__C_E_Star cfg:mustBeOneOf (     (  ) 
+    ( _O_QAND_E____QValueLogical_E__C _Q_O_QAND_E____QValueLogical_E__C_E_Star )  ) .
+
+
+
+ValueLogical cfg:mustBeOneOf (     ( RelationalExpression )  ) .
+
+
+
+RelationalExpression cfg:mustBeOneOf (     ( NumericExpression _Q_O_QEQUAL_E____QNumericExpression_E__Or__QNEQUAL_E____QNumericExpression_E__Or__QLT_E____QNumericExpression_E__Or__QGT_E____QNumericExpression_E__Or__QLE_E____QNumericExpression_E__Or__QGE_E____QNumericExpression_E__C_E_Opt )  ) .
+
+
+
+_O_QEQUAL_E____QNumericExpression_E__Or__QNEQUAL_E____QNumericExpression_E__Or__QLT_E____QNumericExpression_E__Or__QGT_E____QNumericExpression_E__Or__QLE_E____QNumericExpression_E__Or__QGE_E____QNumericExpression_E__C cfg:mustBeOneOf (     ( GT_EQUAL NumericExpression ) 
+    ( GT_NEQUAL NumericExpression ) 
+    ( GT_LT NumericExpression ) 
+    ( GT_GT NumericExpression ) 
+    ( GT_LE NumericExpression ) 
+    ( GT_GE NumericExpression )  ) .
+
+
+
+_Q_O_QEQUAL_E____QNumericExpression_E__Or__QNEQUAL_E____QNumericExpression_E__Or__QLT_E____QNumericExpression_E__Or__QGT_E____QNumericExpression_E__Or__QLE_E____QNumericExpression_E__Or__QGE_E____QNumericExpression_E__C_E_Opt cfg:mustBeOneOf (     (  ) 
+    ( _O_QEQUAL_E____QNumericExpression_E__Or__QNEQUAL_E____QNumericExpression_E__Or__QLT_E____QNumericExpression_E__Or__QGT_E____QNumericExpression_E__Or__QLE_E____QNumericExpression_E__Or__QGE_E____QNumericExpression_E__C )  ) .
+
+
+
+NumericExpression cfg:mustBeOneOf (     ( AdditiveExpression )  ) .
+
+
+
+AdditiveExpression cfg:mustBeOneOf (     ( MultiplicativeExpression _Q_O_QPLUS_E____QMultiplicativeExpression_E__Or__QMINUS_E____QMultiplicativeExpression_E__C_E_Star )  ) .
+
+
+
+_O_QPLUS_E____QMultiplicativeExpression_E__Or__QMINUS_E____QMultiplicativeExpression_E__C cfg:mustBeOneOf (     ( GT_PLUS MultiplicativeExpression ) 
+    ( GT_MINUS MultiplicativeExpression )  ) .
+
+
+
+_Q_O_QPLUS_E____QMultiplicativeExpression_E__Or__QMINUS_E____QMultiplicativeExpression_E__C_E_Star cfg:mustBeOneOf (     (  ) 
+    ( _O_QPLUS_E____QMultiplicativeExpression_E__Or__QMINUS_E____QMultiplicativeExpression_E__C _Q_O_QPLUS_E____QMultiplicativeExpression_E__Or__QMINUS_E____QMultiplicativeExpression_E__C_E_Star )  ) .
+
+
+
+MultiplicativeExpression cfg:mustBeOneOf (     ( UnaryExpression _Q_O_QTIMES_E____QUnaryExpression_E__Or__QDIVIDE_E____QUnaryExpression_E__C_E_Star )  ) .
+
+
+
+_O_QTIMES_E____QUnaryExpression_E__Or__QDIVIDE_E____QUnaryExpression_E__C cfg:mustBeOneOf (     ( GT_TIMES UnaryExpression ) 
+    ( GT_DIVIDE UnaryExpression )  ) .
+
+
+
+_Q_O_QTIMES_E____QUnaryExpression_E__Or__QDIVIDE_E____QUnaryExpression_E__C_E_Star cfg:mustBeOneOf (     (  ) 
+    ( _O_QTIMES_E____QUnaryExpression_E__Or__QDIVIDE_E____QUnaryExpression_E__C _Q_O_QTIMES_E____QUnaryExpression_E__Or__QDIVIDE_E____QUnaryExpression_E__C_E_Star )  ) .
+
+
+
+UnaryExpression cfg:mustBeOneOf (     ( GT_NOT PrimaryExpression ) 
+    ( GT_PLUS PrimaryExpression ) 
+    ( GT_MINUS PrimaryExpression ) 
+    ( PrimaryExpression )  ) .
+
+
+
+CallExpression cfg:mustBeOneOf (     ( IT_STR GT_LPAREN Expression GT_RPAREN ) 
+    ( IT_LANG GT_LPAREN Expression GT_RPAREN ) 
+    ( IT_DATATYPE GT_LPAREN Expression GT_RPAREN ) 
+    ( IT_BOUND GT_LPAREN Var GT_RPAREN ) 
+    ( IT_isURI GT_LPAREN Expression GT_RPAREN ) 
+    ( IT_isBLANK GT_LPAREN Expression GT_RPAREN ) 
+    ( IT_isLITERAL GT_LPAREN Expression GT_RPAREN ) 
+    ( RegexExpression ) 
+    ( FunctionCall )  ) .
+
+
+
+RegexExpression cfg:mustBeOneOf (     ( IT_REGEX GT_LPAREN Expression GT_COMMA Expression _Q_O_QCOMMA_E____QExpression_E__C_E_Opt GT_RPAREN )  ) .
+
+
+
+_O_QCOMMA_E____QExpression_E__C cfg:mustBeOneOf (     ( GT_COMMA Expression )  ) .
+
+
+
+_Q_O_QCOMMA_E____QExpression_E__C_E_Opt cfg:mustBeOneOf (     (  ) 
+    ( _O_QCOMMA_E____QExpression_E__C )  ) .
+
+
+
+FunctionCall cfg:mustBeOneOf (     ( IRIref ArgList )  ) .
+
+
+
+ArgList cfg:mustBeOneOf (     ( _O_QLPAREN_E____QRPAREN_E__Or__QLPAREN_E____QExpression_E____QCOMMA_E____QExpression_E_Star___QRPAREN_E__C )  ) .
+
+
+
+_Q_O_QCOMMA_E____QExpression_E__C_E_Star cfg:mustBeOneOf (     (  ) 
+    ( _O_QCOMMA_E____QExpression_E__C _Q_O_QCOMMA_E____QExpression_E__C_E_Star )  ) .
+
+
+
+_O_QLPAREN_E____QRPAREN_E__Or__QLPAREN_E____QExpression_E____QCOMMA_E____QExpression_E_Star___QRPAREN_E__C cfg:mustBeOneOf (     ( GT_LPAREN GT_RPAREN ) 
+    ( GT_LPAREN Expression _Q_O_QCOMMA_E____QExpression_E__C_E_Star GT_RPAREN )  ) .
+
+
+
+BrackettedExpression cfg:mustBeOneOf (     ( GT_LPAREN Expression GT_RPAREN )  ) .
+
+
+
+PrimaryExpression cfg:mustBeOneOf (     ( BrackettedExpression ) 
+    ( CallExpression ) 
+    ( Var ) 
+    ( RDFTerm )  ) .
+
+
+
+RDFTerm cfg:mustBeOneOf (     ( IRIref ) 
+    ( RDFLiteral ) 
+    ( NumericLiteral ) 
+    ( BooleanLiteral ) 
+    ( BlankNode )  ) .
+
+
+
+NumericLiteral cfg:mustBeOneOf (     ( INTEGER ) 
+    ( FLOATING_POINT )  ) .
+
+
+
+RDFLiteral cfg:mustBeOneOf (     ( String _Q_O_QLANGTAG_E__Or__QDTYPE_E____QIRIref_E__C_E_Opt )  ) .
+
+
+
+_O_QDTYPE_E____QIRIref_E__C cfg:mustBeOneOf (     ( GT_DTYPE IRIref )  ) .
+
+
+
+_O_QLANGTAG_E__Or__QDTYPE_E____QIRIref_E__C cfg:mustBeOneOf (     ( LANGTAG ) 
+    ( _O_QDTYPE_E____QIRIref_E__C )  ) .
+
+
+
+_Q_O_QLANGTAG_E__Or__QDTYPE_E____QIRIref_E__C_E_Opt cfg:mustBeOneOf (     (  ) 
+    ( _O_QLANGTAG_E__Or__QDTYPE_E____QIRIref_E__C )  ) .
+
+
+
+BooleanLiteral cfg:mustBeOneOf (     ( IT_true ) 
+    ( IT_false )  ) .
+
+
+
+String cfg:mustBeOneOf (     ( STRING_LITERAL1 ) 
+    ( STRING_LITERAL2 ) 
+    ( STRING_LITERAL_LONG1 ) 
+    ( STRING_LITERAL_LONG2 )  ) .
+
+
+
+IRIref cfg:mustBeOneOf (     ( QuotedIRIref ) 
+    ( QName )  ) .
+
+
+
+QName cfg:mustBeOneOf (     ( QNAME ) 
+    ( QNAME_NS )  ) .
+
+
+
+BlankNode cfg:mustBeOneOf (     ( BNODE_LABEL ) 
+    ( OpenSquare CloseSquare )  ) .
+
+
 
 
 #____________________________________________________
