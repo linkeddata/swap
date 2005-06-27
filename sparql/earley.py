@@ -169,7 +169,7 @@ def makeHistory(rule, loc, locEnd = None):
     return tuple(retVal)
 
 class Earley(object):
-    def __init__(self, start, productions, followers, null):
+    def __init__(self, start, followers, null):
         #self.productions = productions
         self.null = null
         self.followers = followers
@@ -331,19 +331,29 @@ def make_table(out, f, predict):
     print >> out, 'if __name__=="__main__": '
     print >> out, '   print __doc__'
 
-if __name__ == '__main__':
-    p = get_productions(sys.argv[1])
-    f = find_nulls(p)
-    
-    predict = find_null_connected(p, f)
 
-    out = file('earley_tables.py', 'w')
-    make_table(out, f, predict)
+def cache_get(uri):
+    try:
+        from earley_tables import null, predict
+        return null, predict
+    except ImportError:
+        p = get_productions(sys.argv[1])
+        f = find_nulls(p)
+        
+        predict = find_null_connected(p, f)
+
+        out = file('earley_tables.py', 'w')
+        make_table(out, f, predict)
+        
+
+if __name__ == '__main__':
+    f, predict = cache_get(sys.argv[1])
+
 ##    for m in sorted(predict.items()):
 ##        print '\t%s: %s\n' % m
 ##    sys.exit(0)
     print 'ready to lex'
-    results, t1, k2 = parse(sys.argv[3], sys.argv[2], p, predict, f)
+    results, t1, k2 = parse(sys.argv[3], sys.argv[2], predict, f)
     t2 = time.time() - k2
     
     #print '\n\n\t'.join([`a` for a in results])
