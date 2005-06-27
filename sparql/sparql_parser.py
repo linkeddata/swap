@@ -115,6 +115,10 @@ class N3Parser(object):
       self.productions[-1].append((prod, tok))
       print (' ' * len(self.productions)) + `(prod, tok)`
 
+class nullProductionHandler(object):
+    def prod(self, production):
+        return production
+
 def main(argv=None):
    if argv is None: 
       argv = sys.argv
@@ -122,6 +126,10 @@ def main(argv=None):
    _outSink = notation3.ToN3(sys.stdout.write,
                                       quiet=1, flags='')
    sink = sparql2cwm.FromSparql(myStore._checkStore())
+   if len(argv) == 3:
+       sink = nullProductionHandler()
+       p = N3Parser(file(argv[1], 'r'), branches, sink)
+       p.parse(start)
    if len(argv) == 2: 
       p = N3Parser(file(argv[1], 'r'), branches, sink)
       f = p.parse(start).close()

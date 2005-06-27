@@ -20,10 +20,6 @@ except ImportError:
 
 BNF = Namespace("http://www.w3.org/2000/10/swap/grammar/bnf#")
 
-def abbr(prodURI):
-   if prodURI is None: return None
-   return prodURI.split('#').pop()
-
 class Rule(object):
     def __init__(self, lhs, rhs):
         self.lhs = lhs
