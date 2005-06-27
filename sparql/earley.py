@@ -65,7 +65,7 @@ class Earley_Set(object):
         rule, loc, line, hist = item
         lhs = rule.lhs
         self.set.add(item)
-        tok = abbr(rule[loc])
+        tok = rule[loc]
         if tok not in self.tokens:
             self.tokens[tok] = set()
         self.tokens[tok].add(item)
@@ -232,7 +232,9 @@ class Earley(object):
             mSet = set()
             for rule, loc, num, hist in theSet.tokens[None]:
                 #print rule.lhs, num
-                for r2, l2, n2, h2 in self.sets[num].tokens[abbr(rule.lhs)]:
+                if rule.lhs not in self.sets[num].tokens:
+                    continue
+                for r2, l2, n2, h2 in self.sets[num].tokens[rule.lhs]:
                     #print '  ' + `(r2, l2)`
                     newSet.add((r2, l2+1, n2, h2 + ((rule.lhs,) + hist,)))
                     k = 1
