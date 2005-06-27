@@ -185,409 +185,409 @@ Query cfg:tokens ( IT_BASE
               cfg:eof) . 
 
 
-Query cfg:mustBeOneOf (     ( Prolog _O_QSelectQuery_E__Or__QConstructQuery_E__Or__QDescribeQuery_E__Or__QAskQuery_E__C )  ) .
+Query cfg:mustBeOneSequence (     ( Prolog _O_QSelectQuery_E__Or__QConstructQuery_E__Or__QDescribeQuery_E__Or__QAskQuery_E__C )  ) .
 
 
 
-_O_QSelectQuery_E__Or__QConstructQuery_E__Or__QDescribeQuery_E__Or__QAskQuery_E__C cfg:mustBeOneOf (     ( SelectQuery ) 
+_O_QSelectQuery_E__Or__QConstructQuery_E__Or__QDescribeQuery_E__Or__QAskQuery_E__C cfg:mustBeOneSequence (     ( SelectQuery ) 
     ( ConstructQuery ) 
     ( DescribeQuery ) 
     ( AskQuery )  ) .
 
 
 
-Prolog cfg:mustBeOneOf (     ( _QBaseDecl_E_Opt _QPrefixDecl_E_Star )  ) .
+Prolog cfg:mustBeOneSequence (     ( _QBaseDecl_E_Opt _QPrefixDecl_E_Star )  ) .
 
 
 
-_QBaseDecl_E_Opt cfg:mustBeOneOf (     (  ) 
+_QBaseDecl_E_Opt cfg:mustBeOneSequence (     (  ) 
     ( BaseDecl )  ) .
 
 
 
-_QPrefixDecl_E_Star cfg:mustBeOneOf (     (  ) 
+_QPrefixDecl_E_Star cfg:mustBeOneSequence (     (  ) 
     ( PrefixDecl _QPrefixDecl_E_Star )  ) .
 
 
 
-BaseDecl cfg:mustBeOneOf (     ( IT_BASE QuotedIRIref )  ) .
+BaseDecl cfg:mustBeOneSequence (     ( IT_BASE QuotedIRIref )  ) .
 
 
 
-PrefixDecl cfg:mustBeOneOf (     ( IT_PREFIX QNAME_NS QuotedIRIref )  ) .
+PrefixDecl cfg:mustBeOneSequence (     ( IT_PREFIX QNAME_NS QuotedIRIref )  ) .
 
 
 
-SelectQuery cfg:mustBeOneOf (     ( IT_SELECT _QDISTINCT_E_Opt _O_QVar_E_Plus_Or__QTIMES_E__C _QDatasetClause_E_Star WhereClause SolutionModifier )  ) .
+SelectQuery cfg:mustBeOneSequence (     ( IT_SELECT _QDISTINCT_E_Opt _O_QVar_E_Plus_Or__QTIMES_E__C _QDatasetClause_E_Star WhereClause SolutionModifier )  ) .
 
 
 
-_QDISTINCT_E_Opt cfg:mustBeOneOf (     (  ) 
+_QDISTINCT_E_Opt cfg:mustBeOneSequence (     (  ) 
     ( IT_DISTINCT )  ) .
 
 
 
-_QVar_E_Plus cfg:mustBeOneOf (     (  ) 
+_QVar_E_Plus cfg:mustBeOneSequence (     (  ) 
     ( Var _QVar_E_Plus )  ) .
 
 
 
-_O_QVar_E_Plus_Or__QTIMES_E__C cfg:mustBeOneOf (     ( Var _QVar_E_Plus ) 
+_O_QVar_E_Plus_Or__QTIMES_E__C cfg:mustBeOneSequence (     ( Var _QVar_E_Plus ) 
     ( GT_TIMES )  ) .
 
 
 
-_QDatasetClause_E_Star cfg:mustBeOneOf (     (  ) 
+_QDatasetClause_E_Star cfg:mustBeOneSequence (     (  ) 
     ( DatasetClause _QDatasetClause_E_Star )  ) .
 
 
 
-ConstructQuery cfg:mustBeOneOf (     ( IT_CONSTRUCT ConstructTemplate _QDatasetClause_E_Star WhereClause SolutionModifier )  ) .
+ConstructQuery cfg:mustBeOneSequence (     ( IT_CONSTRUCT ConstructTemplate _QDatasetClause_E_Star WhereClause SolutionModifier )  ) .
 
 
 
-DescribeQuery cfg:mustBeOneOf (     ( IT_DESCRIBE _O_QVarOrIRIref_E_Plus_Or__QTIMES_E__C _QDatasetClause_E_Star _QWhereClause_E_Opt SolutionModifier )  ) .
+DescribeQuery cfg:mustBeOneSequence (     ( IT_DESCRIBE _O_QVarOrIRIref_E_Plus_Or__QTIMES_E__C _QDatasetClause_E_Star _QWhereClause_E_Opt SolutionModifier )  ) .
 
 
 
-_QVarOrIRIref_E_Plus cfg:mustBeOneOf (     (  ) 
+_QVarOrIRIref_E_Plus cfg:mustBeOneSequence (     (  ) 
     ( VarOrIRIref _QVarOrIRIref_E_Plus )  ) .
 
 
 
-_O_QVarOrIRIref_E_Plus_Or__QTIMES_E__C cfg:mustBeOneOf (     ( VarOrIRIref _QVarOrIRIref_E_Plus ) 
+_O_QVarOrIRIref_E_Plus_Or__QTIMES_E__C cfg:mustBeOneSequence (     ( VarOrIRIref _QVarOrIRIref_E_Plus ) 
     ( GT_TIMES )  ) .
 
 
 
-_QWhereClause_E_Opt cfg:mustBeOneOf (     (  ) 
+_QWhereClause_E_Opt cfg:mustBeOneSequence (     (  ) 
     ( WhereClause )  ) .
 
 
 
-AskQuery cfg:mustBeOneOf (     ( IT_ASK _QDatasetClause_E_Star WhereClause )  ) .
+AskQuery cfg:mustBeOneSequence (     ( IT_ASK _QDatasetClause_E_Star WhereClause )  ) .
 
 
 
-DatasetClause cfg:mustBeOneOf (     ( IT_FROM _O_QDefaultGraphClause_E__Or__QNamedGraphClause_E__C )  ) .
+DatasetClause cfg:mustBeOneSequence (     ( IT_FROM _O_QDefaultGraphClause_E__Or__QNamedGraphClause_E__C )  ) .
 
 
 
-_O_QDefaultGraphClause_E__Or__QNamedGraphClause_E__C cfg:mustBeOneOf (     ( DefaultGraphClause ) 
+_O_QDefaultGraphClause_E__Or__QNamedGraphClause_E__C cfg:mustBeOneSequence (     ( DefaultGraphClause ) 
     ( NamedGraphClause )  ) .
 
 
 
-DefaultGraphClause cfg:mustBeOneOf (     ( SourceSelector )  ) .
+DefaultGraphClause cfg:mustBeOneSequence (     ( SourceSelector )  ) .
 
 
 
-NamedGraphClause cfg:mustBeOneOf (     ( IT_NAMED SourceSelector )  ) .
+NamedGraphClause cfg:mustBeOneSequence (     ( IT_NAMED SourceSelector )  ) .
 
 
 
-SourceSelector cfg:mustBeOneOf (     ( IRIref )  ) .
+SourceSelector cfg:mustBeOneSequence (     ( IRIref )  ) .
 
 
 
-WhereClause cfg:mustBeOneOf (     ( _QWHERE_E_Opt GroupGraphPattern )  ) .
+WhereClause cfg:mustBeOneSequence (     ( _QWHERE_E_Opt GroupGraphPattern )  ) .
 
 
 
-_QWHERE_E_Opt cfg:mustBeOneOf (     (  ) 
+_QWHERE_E_Opt cfg:mustBeOneSequence (     (  ) 
     ( IT_WHERE )  ) .
 
 
 
-SolutionModifier cfg:mustBeOneOf (     ( _QOrderClause_E_Opt _QLimitClause_E_Opt _QOffsetClause_E_Opt )  ) .
+SolutionModifier cfg:mustBeOneSequence (     ( _QOrderClause_E_Opt _QLimitClause_E_Opt _QOffsetClause_E_Opt )  ) .
 
 
 
-_QOrderClause_E_Opt cfg:mustBeOneOf (     (  ) 
+_QOrderClause_E_Opt cfg:mustBeOneSequence (     (  ) 
     ( OrderClause )  ) .
 
 
 
-_QLimitClause_E_Opt cfg:mustBeOneOf (     (  ) 
+_QLimitClause_E_Opt cfg:mustBeOneSequence (     (  ) 
     ( LimitClause )  ) .
 
 
 
-_QOffsetClause_E_Opt cfg:mustBeOneOf (     (  ) 
+_QOffsetClause_E_Opt cfg:mustBeOneSequence (     (  ) 
     ( OffsetClause )  ) .
 
 
 
-OrderClause cfg:mustBeOneOf (     ( IT_ORDER IT_BY OrderCondition _QOrderCondition_E_Plus )  ) .
+OrderClause cfg:mustBeOneSequence (     ( IT_ORDER IT_BY OrderCondition _QOrderCondition_E_Plus )  ) .
 
 
 
-_QOrderCondition_E_Plus cfg:mustBeOneOf (     (  ) 
+_QOrderCondition_E_Plus cfg:mustBeOneSequence (     (  ) 
     ( OrderCondition _QOrderCondition_E_Plus )  ) .
 
 
 
-OrderCondition cfg:mustBeOneOf (     ( _O_QASC_E__Or__QDESC_E____QBrackettedExpression_E__C ) 
+OrderCondition cfg:mustBeOneSequence (     ( _O_QASC_E__Or__QDESC_E____QBrackettedExpression_E__C ) 
     ( _O_QFunctionCall_E__Or__QVar_E__Or__QBrackettedExpression_E__C )  ) .
 
 
 
-_O_QASC_E__Or__QDESC_E__C cfg:mustBeOneOf (     ( IT_ASC ) 
+_O_QASC_E__Or__QDESC_E__C cfg:mustBeOneSequence (     ( IT_ASC ) 
     ( IT_DESC )  ) .
 
 
 
-_O_QASC_E__Or__QDESC_E____QBrackettedExpression_E__C cfg:mustBeOneOf (     ( _O_QASC_E__Or__QDESC_E__C BrackettedExpression )  ) .
+_O_QASC_E__Or__QDESC_E____QBrackettedExpression_E__C cfg:mustBeOneSequence (     ( _O_QASC_E__Or__QDESC_E__C BrackettedExpression )  ) .
 
 
 
-_O_QFunctionCall_E__Or__QVar_E__Or__QBrackettedExpression_E__C cfg:mustBeOneOf (     ( FunctionCall ) 
+_O_QFunctionCall_E__Or__QVar_E__Or__QBrackettedExpression_E__C cfg:mustBeOneSequence (     ( FunctionCall ) 
     ( Var ) 
     ( BrackettedExpression )  ) .
 
 
 
-LimitClause cfg:mustBeOneOf (     ( IT_LIMIT INTEGER )  ) .
+LimitClause cfg:mustBeOneSequence (     ( IT_LIMIT INTEGER )  ) .
 
 
 
-OffsetClause cfg:mustBeOneOf (     ( IT_OFFSET INTEGER )  ) .
+OffsetClause cfg:mustBeOneSequence (     ( IT_OFFSET INTEGER )  ) .
 
 
 
-GroupGraphPattern cfg:mustBeOneOf (     ( OpenCurly GraphPatternList CloseCurly )  ) .
+GroupGraphPattern cfg:mustBeOneSequence (     ( OpenCurly GraphPatternList CloseCurly )  ) .
 
 
 
-GraphPatternList cfg:mustBeOneOf (     ( _Q_O_QTriples1_E____QGraphPatternListTail_E__Or__QGraphPatternNotTriples_E____QGraphPatternNotTriplesTail_E__C_E_Opt )  ) .
+GraphPatternList cfg:mustBeOneSequence (     ( _Q_O_QTriples1_E____QGraphPatternListTail_E__Or__QGraphPatternNotTriples_E____QGraphPatternNotTriplesTail_E__C_E_Opt )  ) .
 
 
 
-_O_QTriples1_E____QGraphPatternListTail_E__Or__QGraphPatternNotTriples_E____QGraphPatternNotTriplesTail_E__C cfg:mustBeOneOf (     ( Triples1 GraphPatternListTail ) 
+_O_QTriples1_E____QGraphPatternListTail_E__Or__QGraphPatternNotTriples_E____QGraphPatternNotTriplesTail_E__C cfg:mustBeOneSequence (     ( Triples1 GraphPatternListTail ) 
     ( GraphPatternNotTriples GraphPatternNotTriplesTail )  ) .
 
 
 
-_Q_O_QTriples1_E____QGraphPatternListTail_E__Or__QGraphPatternNotTriples_E____QGraphPatternNotTriplesTail_E__C_E_Opt cfg:mustBeOneOf (     (  ) 
+_Q_O_QTriples1_E____QGraphPatternListTail_E__Or__QGraphPatternNotTriples_E____QGraphPatternNotTriplesTail_E__C_E_Opt cfg:mustBeOneSequence (     (  ) 
     ( _O_QTriples1_E____QGraphPatternListTail_E__Or__QGraphPatternNotTriples_E____QGraphPatternNotTriplesTail_E__C )  ) .
 
 
 
-GraphPatternListTail cfg:mustBeOneOf (     ( _Q_O_QDot_E____QGraphPatternList_E__C_E_Opt ) 
+GraphPatternListTail cfg:mustBeOneSequence (     ( _Q_O_QDot_E____QGraphPatternList_E__C_E_Opt ) 
     ( GraphPatternNotTriplesList )  ) .
 
 
 
-_O_QDot_E____QGraphPatternList_E__C cfg:mustBeOneOf (     ( Dot GraphPatternList )  ) .
+_O_QDot_E____QGraphPatternList_E__C cfg:mustBeOneSequence (     ( Dot GraphPatternList )  ) .
 
 
 
-_Q_O_QDot_E____QGraphPatternList_E__C_E_Opt cfg:mustBeOneOf (     (  ) 
+_Q_O_QDot_E____QGraphPatternList_E__C_E_Opt cfg:mustBeOneSequence (     (  ) 
     ( _O_QDot_E____QGraphPatternList_E__C )  ) .
 
 
 
-GraphPatternNotTriplesTail cfg:mustBeOneOf (     ( _O_QDot_E_Opt___QGraphPatternList_E__C )  ) .
+GraphPatternNotTriplesTail cfg:mustBeOneSequence (     ( _O_QDot_E_Opt___QGraphPatternList_E__C )  ) .
 
 
 
-_QDot_E_Opt cfg:mustBeOneOf (     (  ) 
+_QDot_E_Opt cfg:mustBeOneSequence (     (  ) 
     ( Dot )  ) .
 
 
 
-_O_QDot_E_Opt___QGraphPatternList_E__C cfg:mustBeOneOf (     ( _QDot_E_Opt GraphPatternList )  ) .
+_O_QDot_E_Opt___QGraphPatternList_E__C cfg:mustBeOneSequence (     ( _QDot_E_Opt GraphPatternList )  ) .
 
 
 
-GraphPatternNotTriplesList cfg:mustBeOneOf (     ( GraphPatternNotTriples GraphPatternNotTriplesTail )  ) .
+GraphPatternNotTriplesList cfg:mustBeOneSequence (     ( GraphPatternNotTriples GraphPatternNotTriplesTail )  ) .
 
 
 
-GraphPatternNotTriples cfg:mustBeOneOf (     ( OptionalGraphPattern ) 
+GraphPatternNotTriples cfg:mustBeOneSequence (     ( OptionalGraphPattern ) 
     ( GroupOrUnionGraphPattern ) 
     ( GraphGraphPattern ) 
     ( Constraint )  ) .
 
 
 
-OptionalGraphPattern cfg:mustBeOneOf (     ( IT_OPTIONAL GroupGraphPattern )  ) .
+OptionalGraphPattern cfg:mustBeOneSequence (     ( IT_OPTIONAL GroupGraphPattern )  ) .
 
 
 
-GraphGraphPattern cfg:mustBeOneOf (     ( IT_GRAPH VarOrBlankNodeOrIRIref GroupGraphPattern )  ) .
+GraphGraphPattern cfg:mustBeOneSequence (     ( IT_GRAPH VarOrBlankNodeOrIRIref GroupGraphPattern )  ) .
 
 
 
-GroupOrUnionGraphPattern cfg:mustBeOneOf (     ( GroupGraphPattern _Q_O_QUNION_E____QGroupGraphPattern_E__C_E_Star )  ) .
+GroupOrUnionGraphPattern cfg:mustBeOneSequence (     ( GroupGraphPattern _Q_O_QUNION_E____QGroupGraphPattern_E__C_E_Star )  ) .
 
 
 
-_O_QUNION_E____QGroupGraphPattern_E__C cfg:mustBeOneOf (     ( IT_UNION GroupGraphPattern )  ) .
+_O_QUNION_E____QGroupGraphPattern_E__C cfg:mustBeOneSequence (     ( IT_UNION GroupGraphPattern )  ) .
 
 
 
-_Q_O_QUNION_E____QGroupGraphPattern_E__C_E_Star cfg:mustBeOneOf (     (  ) 
+_Q_O_QUNION_E____QGroupGraphPattern_E__C_E_Star cfg:mustBeOneSequence (     (  ) 
     ( _O_QUNION_E____QGroupGraphPattern_E__C _Q_O_QUNION_E____QGroupGraphPattern_E__C_E_Star )  ) .
 
 
 
-Constraint cfg:mustBeOneOf (     ( IT_FILTER _O_QBrackettedExpression_E__Or__QCallExpression_E__C )  ) .
+Constraint cfg:mustBeOneSequence (     ( IT_FILTER _O_QBrackettedExpression_E__Or__QCallExpression_E__C )  ) .
 
 
 
-_O_QBrackettedExpression_E__Or__QCallExpression_E__C cfg:mustBeOneOf (     ( BrackettedExpression ) 
+_O_QBrackettedExpression_E__Or__QCallExpression_E__C cfg:mustBeOneSequence (     ( BrackettedExpression ) 
     ( CallExpression )  ) .
 
 
 
-ConstructTemplate cfg:mustBeOneOf (     ( OpenCurly _QTriples_E_Opt _QDot_E_Opt CloseCurly )  ) .
+ConstructTemplate cfg:mustBeOneSequence (     ( OpenCurly _QTriples_E_Opt _QDot_E_Opt CloseCurly )  ) .
 
 
 
-_QTriples_E_Opt cfg:mustBeOneOf (     (  ) 
+_QTriples_E_Opt cfg:mustBeOneSequence (     (  ) 
     ( Triples )  ) .
 
 
 
-Triples1 cfg:mustBeOneOf (     ( VarOrTerm PropertyListNotEmpty ) 
+Triples1 cfg:mustBeOneSequence (     ( VarOrTerm PropertyListNotEmpty ) 
     ( TriplesNode PropertyList )  ) .
 
 
 
-PropertyList cfg:mustBeOneOf (     ( _QPropertyListNotEmpty_E_Opt )  ) .
+PropertyList cfg:mustBeOneSequence (     ( _QPropertyListNotEmpty_E_Opt )  ) .
 
 
 
-_QPropertyListNotEmpty_E_Opt cfg:mustBeOneOf (     (  ) 
+_QPropertyListNotEmpty_E_Opt cfg:mustBeOneSequence (     (  ) 
     ( PropertyListNotEmpty )  ) .
 
 
 
-PropertyListNotEmpty cfg:mustBeOneOf (     ( Verb ObjectList _Q_O_QSEMI_E____QPropertyList_E__C_E_Opt )  ) .
+PropertyListNotEmpty cfg:mustBeOneSequence (     ( Verb ObjectList _Q_O_QSEMI_E____QPropertyList_E__C_E_Opt )  ) .
 
 
 
-_O_QSEMI_E____QPropertyList_E__C cfg:mustBeOneOf (     ( GT_SEMI PropertyList )  ) .
+_O_QSEMI_E____QPropertyList_E__C cfg:mustBeOneSequence (     ( GT_SEMI PropertyList )  ) .
 
 
 
-_Q_O_QSEMI_E____QPropertyList_E__C_E_Opt cfg:mustBeOneOf (     (  ) 
+_Q_O_QSEMI_E____QPropertyList_E__C_E_Opt cfg:mustBeOneSequence (     (  ) 
     ( _O_QSEMI_E____QPropertyList_E__C )  ) .
 
 
 
-ObjectList cfg:mustBeOneOf (     ( Object _Q_O_QCOMMA_E____QObjectList_E__C_E_Opt )  ) .
+ObjectList cfg:mustBeOneSequence (     ( Object _Q_O_QCOMMA_E____QObjectList_E__C_E_Opt )  ) .
 
 
 
-_O_QCOMMA_E____QObjectList_E__C cfg:mustBeOneOf (     ( GT_COMMA ObjectList )  ) .
+_O_QCOMMA_E____QObjectList_E__C cfg:mustBeOneSequence (     ( GT_COMMA ObjectList )  ) .
 
 
 
-_Q_O_QCOMMA_E____QObjectList_E__C_E_Opt cfg:mustBeOneOf (     (  ) 
+_Q_O_QCOMMA_E____QObjectList_E__C_E_Opt cfg:mustBeOneSequence (     (  ) 
     ( _O_QCOMMA_E____QObjectList_E__C )  ) .
 
 
 
-Verb cfg:mustBeOneOf (     ( VarOrBlankNodeOrIRIref ) 
+Verb cfg:mustBeOneSequence (     ( VarOrBlankNodeOrIRIref ) 
     ( IT_a )  ) .
 
 
 
-Object cfg:mustBeOneOf (     ( VarOrTerm ) 
+Object cfg:mustBeOneSequence (     ( VarOrTerm ) 
     ( TriplesNode )  ) .
 
 
 
-TriplesNode cfg:mustBeOneOf (     ( Collection ) 
+TriplesNode cfg:mustBeOneSequence (     ( Collection ) 
     ( BlankNodePropertyList )  ) .
 
 
 
-BlankNodePropertyList cfg:mustBeOneOf (     ( OpenSquare PropertyListNotEmpty CloseSquare )  ) .
+BlankNodePropertyList cfg:mustBeOneSequence (     ( OpenSquare PropertyListNotEmpty CloseSquare )  ) .
 
 
 
-Collection cfg:mustBeOneOf (     ( GT_LPAREN GraphNode _QGraphNode_E_Plus GT_RPAREN )  ) .
+Collection cfg:mustBeOneSequence (     ( GT_LPAREN GraphNode _QGraphNode_E_Plus GT_RPAREN )  ) .
 
 
 
-_QGraphNode_E_Plus cfg:mustBeOneOf (     (  ) 
+_QGraphNode_E_Plus cfg:mustBeOneSequence (     (  ) 
     ( GraphNode _QGraphNode_E_Plus )  ) .
 
 
 
-GraphNode cfg:mustBeOneOf (     ( VarOrTerm ) 
+GraphNode cfg:mustBeOneSequence (     ( VarOrTerm ) 
     ( TriplesNode )  ) .
 
 
 
-VarOrTerm cfg:mustBeOneOf (     ( Var ) 
+VarOrTerm cfg:mustBeOneSequence (     ( Var ) 
     ( GraphTerm )  ) .
 
 
 
-VarOrIRIref cfg:mustBeOneOf (     ( Var ) 
+VarOrIRIref cfg:mustBeOneSequence (     ( Var ) 
     ( IRIref )  ) .
 
 
 
-VarOrBlankNodeOrIRIref cfg:mustBeOneOf (     ( Var ) 
+VarOrBlankNodeOrIRIref cfg:mustBeOneSequence (     ( Var ) 
     ( BlankNode ) 
     ( IRIref )  ) .
 
 
 
-Var cfg:mustBeOneOf (     ( VAR1 ) 
+Var cfg:mustBeOneSequence (     ( VAR1 ) 
     ( VAR2 )  ) .
 
 
 
-GraphTerm cfg:mustBeOneOf (     ( RDFTerm ) 
+GraphTerm cfg:mustBeOneSequence (     ( RDFTerm ) 
     ( GT_LPAREN GT_RPAREN )  ) .
 
 
 
-Expression cfg:mustBeOneOf (     ( ConditionalOrExpression )  ) .
+Expression cfg:mustBeOneSequence (     ( ConditionalOrExpression )  ) .
 
 
 
-ConditionalOrExpression cfg:mustBeOneOf (     ( ConditionalAndExpression _Q_O_QOR_E____QConditionalAndExpression_E__C_E_Star )  ) .
+ConditionalOrExpression cfg:mustBeOneSequence (     ( ConditionalAndExpression _Q_O_QOR_E____QConditionalAndExpression_E__C_E_Star )  ) .
 
 
 
-_O_QOR_E____QConditionalAndExpression_E__C cfg:mustBeOneOf (     ( GT_OR ConditionalAndExpression )  ) .
+_O_QOR_E____QConditionalAndExpression_E__C cfg:mustBeOneSequence (     ( GT_OR ConditionalAndExpression )  ) .
 
 
 
-_Q_O_QOR_E____QConditionalAndExpression_E__C_E_Star cfg:mustBeOneOf (     (  ) 
+_Q_O_QOR_E____QConditionalAndExpression_E__C_E_Star cfg:mustBeOneSequence (     (  ) 
     ( _O_QOR_E____QConditionalAndExpression_E__C _Q_O_QOR_E____QConditionalAndExpression_E__C_E_Star )  ) .
 
 
 
-ConditionalAndExpression cfg:mustBeOneOf (     ( ValueLogical _Q_O_QAND_E____QValueLogical_E__C_E_Star )  ) .
+ConditionalAndExpression cfg:mustBeOneSequence (     ( ValueLogical _Q_O_QAND_E____QValueLogical_E__C_E_Star )  ) .
 
 
 
-_O_QAND_E____QValueLogical_E__C cfg:mustBeOneOf (     ( GT_AND ValueLogical )  ) .
+_O_QAND_E____QValueLogical_E__C cfg:mustBeOneSequence (     ( GT_AND ValueLogical )  ) .
 
 
 
-_Q_O_QAND_E____QValueLogical_E__C_E_Star cfg:mustBeOneOf (     (  ) 
+_Q_O_QAND_E____QValueLogical_E__C_E_Star cfg:mustBeOneSequence (     (  ) 
     ( _O_QAND_E____QValueLogical_E__C _Q_O_QAND_E____QValueLogical_E__C_E_Star )  ) .
 
 
 
-ValueLogical cfg:mustBeOneOf (     ( RelationalExpression )  ) .
+ValueLogical cfg:mustBeOneSequence (     ( RelationalExpression )  ) .
 
 
 
-RelationalExpression cfg:mustBeOneOf (     ( NumericExpression _Q_O_QEQUAL_E____QNumericExpression_E__Or__QNEQUAL_E____QNumericExpression_E__Or__QLT_E____QNumericExpression_E__Or__QGT_E____QNumericExpression_E__Or__QLE_E____QNumericExpression_E__Or__QGE_E____QNumericExpression_E__C_E_Opt )  ) .
+RelationalExpression cfg:mustBeOneSequence (     ( NumericExpression _Q_O_QEQUAL_E____QNumericExpression_E__Or__QNEQUAL_E____QNumericExpression_E__Or__QLT_E____QNumericExpression_E__Or__QGT_E____QNumericExpression_E__Or__QLE_E____QNumericExpression_E__Or__QGE_E____QNumericExpression_E__C_E_Opt )  ) .
 
 
 
-_O_QEQUAL_E____QNumericExpression_E__Or__QNEQUAL_E____QNumericExpression_E__Or__QLT_E____QNumericExpression_E__Or__QGT_E____QNumericExpression_E__Or__QLE_E____QNumericExpression_E__Or__QGE_E____QNumericExpression_E__C cfg:mustBeOneOf (     ( GT_EQUAL NumericExpression ) 
+_O_QEQUAL_E____QNumericExpression_E__Or__QNEQUAL_E____QNumericExpression_E__Or__QLT_E____QNumericExpression_E__Or__QGT_E____QNumericExpression_E__Or__QLE_E____QNumericExpression_E__Or__QGE_E____QNumericExpression_E__C cfg:mustBeOneSequence (     ( GT_EQUAL NumericExpression ) 
     ( GT_NEQUAL NumericExpression ) 
     ( GT_LT NumericExpression ) 
     ( GT_GT NumericExpression ) 
@@ -596,51 +596,51 @@ _O_QEQUAL_E____QNumericExpression_E__Or__QNEQUAL_E____QNumericExpression_E__Or__
 
 
 
-_Q_O_QEQUAL_E____QNumericExpression_E__Or__QNEQUAL_E____QNumericExpression_E__Or__QLT_E____QNumericExpression_E__Or__QGT_E____QNumericExpression_E__Or__QLE_E____QNumericExpression_E__Or__QGE_E____QNumericExpression_E__C_E_Opt cfg:mustBeOneOf (     (  ) 
+_Q_O_QEQUAL_E____QNumericExpression_E__Or__QNEQUAL_E____QNumericExpression_E__Or__QLT_E____QNumericExpression_E__Or__QGT_E____QNumericExpression_E__Or__QLE_E____QNumericExpression_E__Or__QGE_E____QNumericExpression_E__C_E_Opt cfg:mustBeOneSequence (     (  ) 
     ( _O_QEQUAL_E____QNumericExpression_E__Or__QNEQUAL_E____QNumericExpression_E__Or__QLT_E____QNumericExpression_E__Or__QGT_E____QNumericExpression_E__Or__QLE_E____QNumericExpression_E__Or__QGE_E____QNumericExpression_E__C )  ) .
 
 
 
-NumericExpression cfg:mustBeOneOf (     ( AdditiveExpression )  ) .
+NumericExpression cfg:mustBeOneSequence (     ( AdditiveExpression )  ) .
 
 
 
-AdditiveExpression cfg:mustBeOneOf (     ( MultiplicativeExpression _Q_O_QPLUS_E____QMultiplicativeExpression_E__Or__QMINUS_E____QMultiplicativeExpression_E__C_E_Star )  ) .
+AdditiveExpression cfg:mustBeOneSequence (     ( MultiplicativeExpression _Q_O_QPLUS_E____QMultiplicativeExpression_E__Or__QMINUS_E____QMultiplicativeExpression_E__C_E_Star )  ) .
 
 
 
-_O_QPLUS_E____QMultiplicativeExpression_E__Or__QMINUS_E____QMultiplicativeExpression_E__C cfg:mustBeOneOf (     ( GT_PLUS MultiplicativeExpression ) 
+_O_QPLUS_E____QMultiplicativeExpression_E__Or__QMINUS_E____QMultiplicativeExpression_E__C cfg:mustBeOneSequence (     ( GT_PLUS MultiplicativeExpression ) 
     ( GT_MINUS MultiplicativeExpression )  ) .
 
 
 
-_Q_O_QPLUS_E____QMultiplicativeExpression_E__Or__QMINUS_E____QMultiplicativeExpression_E__C_E_Star cfg:mustBeOneOf (     (  ) 
+_Q_O_QPLUS_E____QMultiplicativeExpression_E__Or__QMINUS_E____QMultiplicativeExpression_E__C_E_Star cfg:mustBeOneSequence (     (  ) 
     ( _O_QPLUS_E____QMultiplicativeExpression_E__Or__QMINUS_E____QMultiplicativeExpression_E__C _Q_O_QPLUS_E____QMultiplicativeExpression_E__Or__QMINUS_E____QMultiplicativeExpression_E__C_E_Star )  ) .
 
 
 
-MultiplicativeExpression cfg:mustBeOneOf (     ( UnaryExpression _Q_O_QTIMES_E____QUnaryExpression_E__Or__QDIVIDE_E____QUnaryExpression_E__C_E_Star )  ) .
+MultiplicativeExpression cfg:mustBeOneSequence (     ( UnaryExpression _Q_O_QTIMES_E____QUnaryExpression_E__Or__QDIVIDE_E____QUnaryExpression_E__C_E_Star )  ) .
 
 
 
-_O_QTIMES_E____QUnaryExpression_E__Or__QDIVIDE_E____QUnaryExpression_E__C cfg:mustBeOneOf (     ( GT_TIMES UnaryExpression ) 
+_O_QTIMES_E____QUnaryExpression_E__Or__QDIVIDE_E____QUnaryExpression_E__C cfg:mustBeOneSequence (     ( GT_TIMES UnaryExpression ) 
     ( GT_DIVIDE UnaryExpression )  ) .
 
 
 
-_Q_O_QTIMES_E____QUnaryExpression_E__Or__QDIVIDE_E____QUnaryExpression_E__C_E_Star cfg:mustBeOneOf (     (  ) 
+_Q_O_QTIMES_E____QUnaryExpression_E__Or__QDIVIDE_E____QUnaryExpression_E__C_E_Star cfg:mustBeOneSequence (     (  ) 
     ( _O_QTIMES_E____QUnaryExpression_E__Or__QDIVIDE_E____QUnaryExpression_E__C _Q_O_QTIMES_E____QUnaryExpression_E__Or__QDIVIDE_E____QUnaryExpression_E__C_E_Star )  ) .
 
 
 
-UnaryExpression cfg:mustBeOneOf (     ( GT_NOT PrimaryExpression ) 
+UnaryExpression cfg:mustBeOneSequence (     ( GT_NOT PrimaryExpression ) 
     ( GT_PLUS PrimaryExpression ) 
     ( GT_MINUS PrimaryExpression ) 
     ( PrimaryExpression )  ) .
 
 
 
-CallExpression cfg:mustBeOneOf (     ( IT_STR GT_LPAREN Expression GT_RPAREN ) 
+CallExpression cfg:mustBeOneSequence (     ( IT_STR GT_LPAREN Expression GT_RPAREN ) 
     ( IT_LANG GT_LPAREN Expression GT_RPAREN ) 
     ( IT_DATATYPE GT_LPAREN Expression GT_RPAREN ) 
     ( IT_BOUND GT_LPAREN Var GT_RPAREN ) 
@@ -652,49 +652,49 @@ CallExpression cfg:mustBeOneOf (     ( IT_STR GT_LPAREN Expression GT_RPAREN )
 
 
 
-RegexExpression cfg:mustBeOneOf (     ( IT_REGEX GT_LPAREN Expression GT_COMMA Expression _Q_O_QCOMMA_E____QExpression_E__C_E_Opt GT_RPAREN )  ) .
+RegexExpression cfg:mustBeOneSequence (     ( IT_REGEX GT_LPAREN Expression GT_COMMA Expression _Q_O_QCOMMA_E____QExpression_E__C_E_Opt GT_RPAREN )  ) .
 
 
 
-_O_QCOMMA_E____QExpression_E__C cfg:mustBeOneOf (     ( GT_COMMA Expression )  ) .
+_O_QCOMMA_E____QExpression_E__C cfg:mustBeOneSequence (     ( GT_COMMA Expression )  ) .
 
 
 
-_Q_O_QCOMMA_E____QExpression_E__C_E_Opt cfg:mustBeOneOf (     (  ) 
+_Q_O_QCOMMA_E____QExpression_E__C_E_Opt cfg:mustBeOneSequence (     (  ) 
     ( _O_QCOMMA_E____QExpression_E__C )  ) .
 
 
 
-FunctionCall cfg:mustBeOneOf (     ( IRIref ArgList )  ) .
+FunctionCall cfg:mustBeOneSequence (     ( IRIref ArgList )  ) .
 
 
 
-ArgList cfg:mustBeOneOf (     ( _O_QLPAREN_E____QRPAREN_E__Or__QLPAREN_E____QExpression_E____QCOMMA_E____QExpression_E_Star___QRPAREN_E__C )  ) .
+ArgList cfg:mustBeOneSequence (     ( _O_QLPAREN_E____QRPAREN_E__Or__QLPAREN_E____QExpression_E____QCOMMA_E____QExpression_E_Star___QRPAREN_E__C )  ) .
 
 
 
-_Q_O_QCOMMA_E____QExpression_E__C_E_Star cfg:mustBeOneOf (     (  ) 
+_Q_O_QCOMMA_E____QExpression_E__C_E_Star cfg:mustBeOneSequence (     (  ) 
     ( _O_QCOMMA_E____QExpression_E__C _Q_O_QCOMMA_E____QExpression_E__C_E_Star )  ) .
 
 
 
-_O_QLPAREN_E____QRPAREN_E__Or__QLPAREN_E____QExpression_E____QCOMMA_E____QExpression_E_Star___QRPAREN_E__C cfg:mustBeOneOf (     ( GT_LPAREN GT_RPAREN ) 
+_O_QLPAREN_E____QRPAREN_E__Or__QLPAREN_E____QExpression_E____QCOMMA_E____QExpression_E_Star___QRPAREN_E__C cfg:mustBeOneSequence (     ( GT_LPAREN GT_RPAREN ) 
     ( GT_LPAREN Expression _Q_O_QCOMMA_E____QExpression_E__C_E_Star GT_RPAREN )  ) .
 
 
 
-BrackettedExpression cfg:mustBeOneOf (     ( GT_LPAREN Expression GT_RPAREN )  ) .
+BrackettedExpression cfg:mustBeOneSequence (     ( GT_LPAREN Expression GT_RPAREN )  ) .
 
 
 
-PrimaryExpression cfg:mustBeOneOf (     ( BrackettedExpression ) 
+PrimaryExpression cfg:mustBeOneSequence (     ( BrackettedExpression ) 
     ( CallExpression ) 
     ( Var ) 
     ( RDFTerm )  ) .
 
 
 
-RDFTerm cfg:mustBeOneOf (     ( IRIref ) 
+RDFTerm cfg:mustBeOneSequence (     ( IRIref ) 
     ( RDFLiteral ) 
     ( NumericLiteral ) 
     ( BooleanLiteral ) 
@@ -702,52 +702,52 @@ RDFTerm cfg:mustBeOneOf (     ( IRIref )
 
 
 
-NumericLiteral cfg:mustBeOneOf (     ( INTEGER ) 
+NumericLiteral cfg:mustBeOneSequence (     ( INTEGER ) 
     ( FLOATING_POINT )  ) .
 
 
 
-RDFLiteral cfg:mustBeOneOf (     ( String _Q_O_QLANGTAG_E__Or__QDTYPE_E____QIRIref_E__C_E_Opt )  ) .
+RDFLiteral cfg:mustBeOneSequence (     ( String _Q_O_QLANGTAG_E__Or__QDTYPE_E____QIRIref_E__C_E_Opt )  ) .
 
 
 
-_O_QDTYPE_E____QIRIref_E__C cfg:mustBeOneOf (     ( GT_DTYPE IRIref )  ) .
+_O_QDTYPE_E____QIRIref_E__C cfg:mustBeOneSequence (     ( GT_DTYPE IRIref )  ) .
 
 
 
-_O_QLANGTAG_E__Or__QDTYPE_E____QIRIref_E__C cfg:mustBeOneOf (     ( LANGTAG ) 
+_O_QLANGTAG_E__Or__QDTYPE_E____QIRIref_E__C cfg:mustBeOneSequence (     ( LANGTAG ) 
     ( _O_QDTYPE_E____QIRIref_E__C )  ) .
 
 
 
-_Q_O_QLANGTAG_E__Or__QDTYPE_E____QIRIref_E__C_E_Opt cfg:mustBeOneOf (     (  ) 
+_Q_O_QLANGTAG_E__Or__QDTYPE_E____QIRIref_E__C_E_Opt cfg:mustBeOneSequence (     (  ) 
     ( _O_QLANGTAG_E__Or__QDTYPE_E____QIRIref_E__C )  ) .
 
 
 
-BooleanLiteral cfg:mustBeOneOf (     ( IT_true ) 
+BooleanLiteral cfg:mustBeOneSequence (     ( IT_true ) 
     ( IT_false )  ) .
 
 
 
-String cfg:mustBeOneOf (     ( STRING_LITERAL1 ) 
+String cfg:mustBeOneSequence (     ( STRING_LITERAL1 ) 
     ( STRING_LITERAL2 ) 
     ( STRING_LITERAL_LONG1 ) 
     ( STRING_LITERAL_LONG2 )  ) .
 
 
 
-IRIref cfg:mustBeOneOf (     ( QuotedIRIref ) 
+IRIref cfg:mustBeOneSequence (     ( QuotedIRIref ) 
     ( QName )  ) .
 
 
 
-QName cfg:mustBeOneOf (     ( QNAME ) 
+QName cfg:mustBeOneSequence (     ( QNAME ) 
     ( QNAME_NS )  ) .
 
 
 
-BlankNode cfg:mustBeOneOf (     ( BNODE_LABEL ) 
+BlankNode cfg:mustBeOneSequence (     ( BNODE_LABEL ) 
     ( OpenSquare CloseSquare )  ) .
 
 
