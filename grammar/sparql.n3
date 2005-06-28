@@ -156,7 +156,7 @@ VAR1	cfg:matches	"\\?(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[
 	a cfg:Token . 
 SPACE	cfg:matches	"(?:\\t)|(?:(?:\\n)|(?:(?:\\r)|(?:(?: )|(?:(?:\u00A0)|(?:(?:[\u2000-\u200B])|(?:(?:\u202F)|(?:(?:\u205F)|(?:\u3000))))))))";
 	a cfg:Token . 
-PASSED_TOKENS	cfg:matches	"(?:(?:(?:\\t)|(?:(?:\\n)|(?:(?:\\r)|(?:(?: )|(?:(?:\u00A0)|(?:(?:[\u2000-\u200B])|(?:(?:\u202F)|(?:(?:\u205F)|(?:\u3000)))))))))+)|(?:#[^\\n]*\\n)";
+cfg:PASSED_TOKENS	cfg:matches	"(?:(?:(?:\\t)|(?:(?:\\n)|(?:(?:\\r)|(?:(?: )|(?:(?:\u00A0)|(?:(?:[\u2000-\u200B])|(?:(?:\u202F)|(?:(?:\u205F)|(?:\u3000)))))))))+)|(?:#[^\\n]*\\n)";
 	a cfg:Token . 
 Dot	cfg:matches	"\\.";
 	a cfg:Token . 
@@ -230,7 +230,8 @@ Query cfg:tokens ( IT_BASE
               STRING_LITERAL_LONG2
               Dot
               OpenCurly
-              CloseCurly ) . 
+              CloseCurly 
+              cfg:eof) . 
 
 
 Query cfg:mustBeOneSequence (     ( Prolog _O_QSelectQuery_E__Or__QConstructQuery_E__Or__QDescribeQuery_E__Or__QAskQuery_E__C  cfg:eof )  ) .
