@@ -63,7 +63,7 @@ statements_optional cfg:mustBeOneSequence (() ( statement "." statements_optiona
 # Formula does NOT need period on last statement
 
 formulacontent cfg:mustBeOneSequence (
-		( ) 
+#		( ) 
 		( statementlist )
 	).
 

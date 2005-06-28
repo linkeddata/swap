@@ -12,109 +12,158 @@
 @keywords a, is, of.
 
 
- IT_BASE	cfg:matches	"BASE" . 
- IT_PREFIX	cfg:matches	"PREFIX" . 
- IT_SELECT	cfg:matches	"SELECT" . 
- IT_DISTINCT	cfg:matches	"DISTINCT" . 
- GT_TIMES	cfg:matches	"\\*" . 
- IT_CONSTRUCT	cfg:matches	"CONSTRUCT" . 
- IT_DESCRIBE	cfg:matches	"DESCRIBE" . 
- IT_ASK	cfg:matches	"ASK" . 
- IT_FROM	cfg:matches	"FROM" . 
- IT_NAMED	cfg:matches	"NAMED" . 
- IT_WHERE	cfg:matches	"WHERE" . 
- IT_ORDER	cfg:matches	"ORDER" . 
- IT_BY	cfg:matches	"BY" . 
- IT_ASC	cfg:matches	"ASC" . 
- IT_DESC	cfg:matches	"DESC" . 
- IT_LIMIT	cfg:matches	"LIMIT" . 
- IT_OFFSET	cfg:matches	"OFFSET" . 
- IT_OPTIONAL	cfg:matches	"OPTIONAL" . 
- IT_GRAPH	cfg:matches	"GRAPH" . 
- IT_UNION	cfg:matches	"UNION" . 
- IT_FILTER	cfg:matches	"FILTER" . 
- GT_SEMI	cfg:matches	";" . 
- GT_COMMA	cfg:matches	"," . 
- IT_a	cfg:matches	"a" . 
- GT_LPAREN	cfg:matches	"\\(" . 
- GT_RPAREN	cfg:matches	"\\)" . 
- GT_OR	cfg:matches	"\\|\\|" . 
- GT_AND	cfg:matches	"&&" . 
- GT_EQUAL	cfg:matches	"=" . 
- GT_NEQUAL	cfg:matches	"!=" . 
- GT_LT	cfg:matches	"<" . 
- GT_GT	cfg:matches	">" . 
- GT_LE	cfg:matches	"<=" . 
- GT_GE	cfg:matches	">=" . 
- GT_PLUS	cfg:matches	"\\+" . 
- GT_MINUS	cfg:matches	"-" . 
- GT_DIVIDE	cfg:matches	"/" . 
- GT_NOT	cfg:matches	"!" . 
- IT_STR	cfg:matches	"STR" . 
- IT_LANG	cfg:matches	"LANG" . 
- IT_DATATYPE	cfg:matches	"DATATYPE" . 
- IT_BOUND	cfg:matches	"BOUND" . 
- IT_isURI	cfg:matches	"isURI" . 
- IT_isBLANK	cfg:matches	"isBLANK" . 
- IT_isLITERAL	cfg:matches	"isLITERAL" . 
- IT_REGEX	cfg:matches	"REGEX" . 
- GT_DTYPE	cfg:matches	"\\^\\^" . 
- IT_true	cfg:matches	"true" . 
- IT_false	cfg:matches	"false" . 
+ IT_BASE	cfg:matches	"BASE";
+	a cfg:Token . 
+ IT_PREFIX	cfg:matches	"PREFIX";
+	a cfg:Token . 
+ IT_SELECT	cfg:matches	"SELECT";
+	a cfg:Token . 
+ IT_DISTINCT	cfg:matches	"DISTINCT";
+	a cfg:Token . 
+ GT_TIMES	cfg:matches	"\\*";
+	a cfg:Token . 
+ IT_CONSTRUCT	cfg:matches	"CONSTRUCT";
+	a cfg:Token . 
+ IT_DESCRIBE	cfg:matches	"DESCRIBE";
+	a cfg:Token . 
+ IT_ASK	cfg:matches	"ASK";
+	a cfg:Token . 
+ IT_FROM	cfg:matches	"FROM";
+	a cfg:Token . 
+ IT_NAMED	cfg:matches	"NAMED";
+	a cfg:Token . 
+ IT_WHERE	cfg:matches	"WHERE";
+	a cfg:Token . 
+ IT_ORDER	cfg:matches	"ORDER";
+	a cfg:Token . 
+ IT_BY	cfg:matches	"BY";
+	a cfg:Token . 
+ IT_ASC	cfg:matches	"ASC";
+	a cfg:Token . 
+ IT_DESC	cfg:matches	"DESC";
+	a cfg:Token . 
+ IT_LIMIT	cfg:matches	"LIMIT";
+	a cfg:Token . 
+ IT_OFFSET	cfg:matches	"OFFSET";
+	a cfg:Token . 
+ IT_OPTIONAL	cfg:matches	"OPTIONAL";
+	a cfg:Token . 
+ IT_GRAPH	cfg:matches	"GRAPH";
+	a cfg:Token . 
+ IT_UNION	cfg:matches	"UNION";
+	a cfg:Token . 
+ IT_FILTER	cfg:matches	"FILTER";
+	a cfg:Token . 
+ GT_LBRACKET	cfg:matches	"\\[";
+	a cfg:Token . 
+ GT_LPAREN	cfg:matches	"\\(";
+	a cfg:Token . 
+ GT_RBRACKET	cfg:matches	"\\]";
+	a cfg:Token . 
+ GT_RPAREN	cfg:matches	"\\)";
+	a cfg:Token . 
+ GT_SEMI	cfg:matches	";";
+	a cfg:Token . 
+ GT_COMMA	cfg:matches	",";
+	a cfg:Token . 
+ IT_a	cfg:matches	"a";
+	a cfg:Token . 
+ GT_OR	cfg:matches	"\\|\\|";
+	a cfg:Token . 
+ GT_AND	cfg:matches	"&&";
+	a cfg:Token . 
+ GT_EQUAL	cfg:matches	"=";
+	a cfg:Token . 
+ GT_NEQUAL	cfg:matches	"!=";
+	a cfg:Token . 
+ GT_LT	cfg:matches	"<";
+	a cfg:Token . 
+ GT_GT	cfg:matches	">";
+	a cfg:Token . 
+ GT_LE	cfg:matches	"<=";
+	a cfg:Token . 
+ GT_GE	cfg:matches	">=";
+	a cfg:Token . 
+ GT_PLUS	cfg:matches	"\\+";
+	a cfg:Token . 
+ GT_MINUS	cfg:matches	"-";
+	a cfg:Token . 
+ GT_DIVIDE	cfg:matches	"/";
+	a cfg:Token . 
+ GT_NOT	cfg:matches	"!";
+	a cfg:Token . 
+ IT_STR	cfg:matches	"STR";
+	a cfg:Token . 
+ IT_LANG	cfg:matches	"LANG";
+	a cfg:Token . 
+ IT_DATATYPE	cfg:matches	"DATATYPE";
+	a cfg:Token . 
+ IT_BOUND	cfg:matches	"BOUND";
+	a cfg:Token . 
+ IT_isURI	cfg:matches	"isURI";
+	a cfg:Token . 
+ IT_isBLANK	cfg:matches	"isBLANK";
+	a cfg:Token . 
+ IT_isLITERAL	cfg:matches	"isLITERAL";
+	a cfg:Token . 
+ IT_REGEX	cfg:matches	"REGEX";
+	a cfg:Token . 
+ GT_DTYPE	cfg:matches	"\\^\\^";
+	a cfg:Token . 
+ IT_true	cfg:matches	"true";
+	a cfg:Token . 
+ IT_false	cfg:matches	"false";
+	a cfg:Token . 
 QuotedIRIref	cfg:matches	"<[^> ]*>";
- . 
+	a cfg:Token . 
 LANGTAG	cfg:matches	"@[a-zA-Z]+(?:-[a-zA-Z0-9]+)*";
- . 
+	a cfg:Token . 
 INTEGER	cfg:matches	"[0-9]+";
- . 
+	a cfg:Token . 
 DECIMAL	cfg:matches	"(?:[0-9]+\\.[0-9]*)|(?:\\.[0-9]+)";
- . 
+	a cfg:Token . 
 EXPONENT	cfg:matches	"[eE][\\+-]?[0-9]+";
- . 
+	a cfg:Token . 
 FLOATING_POINT	cfg:matches	"(?:[0-9]+\\.[0-9]*(?:[eE][\\+-]?[0-9]+)?)|(?:(?:\\.[0-9]+(?:[eE][\\+-]?[0-9]+)?)|(?:[0-9]+(?:[eE][\\+-]?[0-9]+)))";
- . 
+	a cfg:Token . 
 STRING_LITERAL1	cfg:matches	"'(?:(?:[^'\\\\\\n\\r])|(?:(?:\\\\[^\\r\\n])))*'";
- . 
+	a cfg:Token . 
 STRING_LITERAL2	cfg:matches	"\"(?:(?:[^\"\\\\\\n\\r])|(?:(?:\\\\[^\\r\\n])))*\"";
- . 
+	a cfg:Token . 
 STRING_LITERAL_LONG1	cfg:matches	"'''(?:(?:[^'\\\\])|(?:(?:(?:\\\\[^\\r\\n]))|(?:(?:(?:'[^']))|(?:(?:''[^'])))))*'''";
- . 
+	a cfg:Token . 
 STRING_LITERAL_LONG2	cfg:matches	"\"\"\"(?:(?:[^\"\\\\])|(?:(?:(?:\\\\[^\\r\\n]))|(?:(?:(?:\"[^\"]))|(?:(?:\"\"[^\"])))))*\"\"\"";
- . 
+	a cfg:Token . 
 NCCHAR1	cfg:matches	"(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF])))))))))))))";
- . 
+	a cfg:Token . 
 NCCHAR	cfg:matches	"(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF])))))))))))))))|(?:(?:_)|(?:(?:-)|(?:(?:\\.)|(?:(?:[0-9])|(?:(?:\u00B7)|(?:(?:[\u0300-\u036F])|(?:[\u203F-\u2040])))))))";
- . 
+	a cfg:Token . 
 NCNAME_PREFIX	cfg:matches	"(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF]))))))))))))))(?:(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF])))))))))))))))|(?:(?:_)|(?:(?:-)|(?:(?:\\.)|(?:(?:[0-9])|(?:(?:\u00B7)|(?:(?:[\u0300-\u036F])|(?:[\u203F-\u2040]))))))))*";
- . 
+	a cfg:Token . 
 QNAME_NS	cfg:matches	"(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF]))))))))))))))(?:(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF])))))))))))))))|(?:(?:_)|(?:(?:-)|(?:(?:\\.)|(?:(?:[0-9])|(?:(?:\u00B7)|(?:(?:[\u0300-\u036F])|(?:[\u203F-\u2040]))))))))*)?:";
- . 
+	a cfg:Token . 
 NCNAME	cfg:matches	"(?:(?:_)|(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF]))))))))))))))))(?:(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF])))))))))))))))|(?:(?:_)|(?:(?:-)|(?:(?:\\.)|(?:(?:[0-9])|(?:(?:\u00B7)|(?:(?:[\u0300-\u036F])|(?:[\u203F-\u2040]))))))))*";
- . 
+	a cfg:Token . 
 BNODE_LABEL	cfg:matches	"_:(?:(?:(?:_)|(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF]))))))))))))))))(?:(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF])))))))))))))))|(?:(?:_)|(?:(?:-)|(?:(?:\\.)|(?:(?:[0-9])|(?:(?:\u00B7)|(?:(?:[\u0300-\u036F])|(?:[\u203F-\u2040]))))))))*)";
- . 
+	a cfg:Token . 
 QNAME	cfg:matches	"(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF]))))))))))))))(?:(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF])))))))))))))))|(?:(?:_)|(?:(?:-)|(?:(?:\\.)|(?:(?:[0-9])|(?:(?:\u00B7)|(?:(?:[\u0300-\u036F])|(?:[\u203F-\u2040]))))))))*)?:(?:(?:(?:_)|(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF]))))))))))))))))(?:(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF])))))))))))))))|(?:(?:_)|(?:(?:-)|(?:(?:\\.)|(?:(?:[0-9])|(?:(?:\u00B7)|(?:(?:[\u0300-\u036F])|(?:[\u203F-\u2040]))))))))*)?";
- . 
+	a cfg:Token . 
 VARNAME	cfg:matches	"(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF]))))))))))))))(?:(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF])))))))))))))))|(?:(?:_)|(?:(?:[0-9])|(?:(?:\u00B7)|(?:(?:[\u0300-\u036F])|(?:[\u203F-\u2040]))))))*";
- . 
+	a cfg:Token . 
 VAR2	cfg:matches	"\\$(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF]))))))))))))))(?:(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF])))))))))))))))|(?:(?:_)|(?:(?:[0-9])|(?:(?:\u00B7)|(?:(?:[\u0300-\u036F])|(?:[\u203F-\u2040]))))))*)";
- . 
+	a cfg:Token . 
 VAR1	cfg:matches	"\\?(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF]))))))))))))))(?:(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\u10000-\uEFFFF])))))))))))))))|(?:(?:_)|(?:(?:[0-9])|(?:(?:\u00B7)|(?:(?:[\u0300-\u036F])|(?:[\u203F-\u2040]))))))*)";
- . 
+	a cfg:Token . 
 SPACE	cfg:matches	"(?:\\t)|(?:(?:\\n)|(?:(?:\\r)|(?:(?: )|(?:(?:\u00A0)|(?:(?:[\u2000-\u200B])|(?:(?:\u202F)|(?:(?:\u205F)|(?:\u3000))))))))";
- . 
-cfg:PASSED_TOKENS	cfg:matches	"(?:(?:(?:\\t)|(?:(?:\\n)|(?:(?:\\r)|(?:(?: )|(?:(?:\u00A0)|(?:(?:[\u2000-\u200B])|(?:(?:\u202F)|(?:(?:\u205F)|(?:\u3000)))))))))+)|(?:#[^\\n]*\\n)";
- . 
+	a cfg:Token . 
+PASSED_TOKENS	cfg:matches	"(?:(?:(?:\\t)|(?:(?:\\n)|(?:(?:\\r)|(?:(?: )|(?:(?:\u00A0)|(?:(?:[\u2000-\u200B])|(?:(?:\u202F)|(?:(?:\u205F)|(?:\u3000)))))))))+)|(?:#[^\\n]*\\n)";
+	a cfg:Token . 
 Dot	cfg:matches	"\\.";
- . 
+	a cfg:Token . 
 OpenCurly	cfg:matches	"\\{";
- . 
+	a cfg:Token . 
 CloseCurly	cfg:matches	"\\}";
- . 
-OpenSquare	cfg:matches	"\\[";
- . 
-CloseSquare	cfg:matches	"\\]";
- . 
+	a cfg:Token . 
 Query cfg:tokens ( IT_BASE
               IT_PREFIX
               IT_SELECT
@@ -136,11 +185,13 @@ Query cfg:tokens ( IT_BASE
               IT_GRAPH
               IT_UNION
               IT_FILTER
+              GT_LBRACKET
+              GT_LPAREN
+              GT_RBRACKET
+              GT_RPAREN
               GT_SEMI
               GT_COMMA
               IT_a
-              GT_LPAREN
-              GT_RPAREN
               GT_OR
               GT_AND
               GT_EQUAL
@@ -179,13 +230,10 @@ Query cfg:tokens ( IT_BASE
               STRING_LITERAL_LONG2
               Dot
               OpenCurly
-              CloseCurly
-              OpenSquare
-              CloseSquare 
-              cfg:eof) . 
+              CloseCurly ) . 
 
 
-Query cfg:mustBeOneSequence (     ( Prolog _O_QSelectQuery_E__Or__QConstructQuery_E__Or__QDescribeQuery_E__Or__QAskQuery_E__C cfg:eof)  ) .
+Query cfg:mustBeOneSequence (     ( Prolog _O_QSelectQuery_E__Or__QConstructQuery_E__Or__QDescribeQuery_E__Or__QAskQuery_E__C  cfg:eof )  ) .
 
 
 
@@ -441,7 +489,7 @@ _O_QBrackettedExpression_E__Or__QCallExpression_E__C cfg:mustBeOneSequence (    
 
 
 
-ConstructTemplate cfg:mustBeOneSequence (     ( OpenCurly _QTriples_E_Opt _QDot_E_Opt CloseCurly )  ) .
+ConstructTemplate cfg:mustBeOneSequence (     ( OpenCurly _QTriples_E_Opt CloseCurly )  ) .
 
 
 
@@ -450,8 +498,42 @@ _QTriples_E_Opt cfg:mustBeOneSequence (     (  )
 
 
 
+Triples cfg:mustBeOneSequence (     ( Triples1 _Q_O_QDot_E____QTriples1_E_Opt_C_E_Opt )  ) .
+
+
+
+_QTriples1_E_Opt cfg:mustBeOneSequence (     (  ) 
+    ( Triples1 )  ) .
+
+
+
+_O_QDot_E____QTriples1_E_Opt_C cfg:mustBeOneSequence (     ( Dot _QTriples1_E_Opt )  ) .
+
+
+
+_Q_O_QDot_E____QTriples1_E_Opt_C_E_Opt cfg:mustBeOneSequence (     (  ) 
+    ( _O_QDot_E____QTriples1_E_Opt_C )  ) .
+
+
+
 Triples1 cfg:mustBeOneSequence (     ( VarOrTerm PropertyListNotEmpty ) 
-    ( TriplesNode PropertyList )  ) .
+    ( GT_LBRACKET Triples2 ) 
+    ( GT_LPAREN Triples3 )  ) .
+
+
+
+Triples2 cfg:mustBeOneSequence (     ( GT_RBRACKET PropertyListNotEmpty ) 
+    ( PropertyListNotEmpty GT_RBRACKET PropertyList )  ) .
+
+
+
+Triples3 cfg:mustBeOneSequence (     ( GT_RPAREN PropertyListNotEmpty ) 
+    ( GraphNode _QGraphNode_E_Plus GT_RPAREN PropertyList )  ) .
+
+
+
+_QGraphNode_E_Plus cfg:mustBeOneSequence (     (  ) 
+    ( GraphNode _QGraphNode_E_Plus )  ) .
 
 
 
@@ -505,16 +587,16 @@ TriplesNode cfg:mustBeOneSequence (     ( Collection )
 
 
 
-BlankNodePropertyList cfg:mustBeOneSequence (     ( OpenSquare PropertyListNotEmpty CloseSquare )  ) .
+BlankNodePropertyList cfg:mustBeOneSequence (     ( GT_LBRACKET PropertyList GT_RBRACKET )  ) .
 
 
 
-Collection cfg:mustBeOneSequence (     ( GT_LPAREN GraphNode _QGraphNode_E_Plus GT_RPAREN )  ) .
+Collection cfg:mustBeOneSequence (     ( GT_LPAREN _QGraphNode_E_Star GT_RPAREN )  ) .
 
 
 
-_QGraphNode_E_Plus cfg:mustBeOneSequence (     (  ) 
-    ( GraphNode _QGraphNode_E_Plus )  ) .
+_QGraphNode_E_Star cfg:mustBeOneSequence (     (  ) 
+    ( GraphNode _QGraphNode_E_Star )  ) .
 
 
 
@@ -535,7 +617,8 @@ VarOrIRIref cfg:mustBeOneSequence (     ( Var )
 
 VarOrBlankNodeOrIRIref cfg:mustBeOneSequence (     ( Var ) 
     ( BlankNode ) 
-    ( IRIref )  ) .
+    ( IRIref ) 
+    ( NamelessBlank )  ) .
 
 
 
@@ -544,8 +627,7 @@ Var cfg:mustBeOneSequence (     ( VAR1 )
 
 
 
-GraphTerm cfg:mustBeOneSequence (     ( RDFTerm ) 
-    ( GT_LPAREN GT_RPAREN )  ) .
+GraphTerm cfg:mustBeOneSequence (     ( RDFTerm )  ) .
 
 
 
@@ -640,15 +722,19 @@ UnaryExpression cfg:mustBeOneSequence (     ( GT_NOT PrimaryExpression )
 
 
 
-CallExpression cfg:mustBeOneSequence (     ( IT_STR GT_LPAREN Expression GT_RPAREN ) 
+CallExpression cfg:mustBeOneSequence (     ( BuiltinCallExpression ) 
+    ( FunctionCall )  ) .
+
+
+
+BuiltinCallExpression cfg:mustBeOneSequence (     ( IT_STR GT_LPAREN Expression GT_RPAREN ) 
     ( IT_LANG GT_LPAREN Expression GT_RPAREN ) 
     ( IT_DATATYPE GT_LPAREN Expression GT_RPAREN ) 
     ( IT_BOUND GT_LPAREN Var GT_RPAREN ) 
     ( IT_isURI GT_LPAREN Expression GT_RPAREN ) 
     ( IT_isBLANK GT_LPAREN Expression GT_RPAREN ) 
     ( IT_isLITERAL GT_LPAREN Expression GT_RPAREN ) 
-    ( RegexExpression ) 
-    ( FunctionCall )  ) .
+    ( RegexExpression )  ) .
 
 
 
@@ -669,7 +755,7 @@ FunctionCall cfg:mustBeOneSequence (     ( IRIref ArgList )  ) .
 
 
 
-ArgList cfg:mustBeOneSequence (     ( _O_QLPAREN_E____QRPAREN_E__Or__QLPAREN_E____QExpression_E____QCOMMA_E____QExpression_E_Star___QRPAREN_E__C )  ) .
+ArgList cfg:mustBeOneSequence (     ( GT_LPAREN _Q_O_QExpression_E____QCOMMA_E____QExpression_E_Star_C_E_Opt GT_RPAREN )  ) .
 
 
 
@@ -678,8 +764,12 @@ _Q_O_QCOMMA_E____QExpression_E__C_E_Star cfg:mustBeOneSequence (     (  )
 
 
 
-_O_QLPAREN_E____QRPAREN_E__Or__QLPAREN_E____QExpression_E____QCOMMA_E____QExpression_E_Star___QRPAREN_E__C cfg:mustBeOneSequence (     ( GT_LPAREN GT_RPAREN ) 
-    ( GT_LPAREN Expression _Q_O_QCOMMA_E____QExpression_E__C_E_Star GT_RPAREN )  ) .
+_O_QExpression_E____QCOMMA_E____QExpression_E_Star_C cfg:mustBeOneSequence (     ( Expression _Q_O_QCOMMA_E____QExpression_E__C_E_Star )  ) .
+
+
+
+_Q_O_QExpression_E____QCOMMA_E____QExpression_E_Star_C_E_Opt cfg:mustBeOneSequence (     (  ) 
+    ( _O_QExpression_E____QCOMMA_E____QExpression_E_Star_C )  ) .
 
 
 
@@ -688,9 +778,9 @@ BrackettedExpression cfg:mustBeOneSequence (     ( GT_LPAREN Expression GT_RPARE
 
 
 PrimaryExpression cfg:mustBeOneSequence (     ( BrackettedExpression ) 
-    ( CallExpression ) 
+    ( BuiltinCallExpression ) 
     ( Var ) 
-    ( RDFTerm )  ) .
+    ( RDFTermOrFunc )  ) .
 
 
 
@@ -699,6 +789,23 @@ RDFTerm cfg:mustBeOneSequence (     ( IRIref )
     ( NumericLiteral ) 
     ( BooleanLiteral ) 
     ( BlankNode )  ) .
+
+
+
+RDFTermOrFunc cfg:mustBeOneSequence (     ( IRIrefOrFunc ) 
+    ( RDFLiteral ) 
+    ( NumericLiteral ) 
+    ( BooleanLiteral ) 
+    ( BlankNode )  ) .
+
+
+
+IRIrefOrFunc cfg:mustBeOneSequence (     ( IRIref _QArgList_E_Opt )  ) .
+
+
+
+_QArgList_E_Opt cfg:mustBeOneSequence (     (  ) 
+    ( ArgList )  ) .
 
 
 
@@ -747,8 +854,13 @@ QName cfg:mustBeOneSequence (     ( QNAME )
 
 
 
-BlankNode cfg:mustBeOneSequence (     ( BNODE_LABEL ) 
-    ( OpenSquare CloseSquare )  ) .
+BlankNode cfg:mustBeOneSequence (     ( BNODE_LABEL )  ) .
+
+
+
+NamelessBlank cfg:mustBeOneSequence (     ( GT_LBRACKET GT_RBRACKET )  ) .
+
+
 
 
 
