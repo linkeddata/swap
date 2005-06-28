@@ -37,6 +37,8 @@
 
 { ?x bnf:mustBeOneSequence ?y} => { ?x optionTail ?y }.
 
+bnf:matches a log:Chaff .
+
 {?x optionTail [rdf:first ?y; rdf:rest ?z]} => {
 	?x 	bnf:branch [ bnf:sequence ?y];
 		optionTail ?z.

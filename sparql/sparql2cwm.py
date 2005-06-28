@@ -73,9 +73,6 @@ class FromSparql(productionHandler):
     def on_Query(self, p):
         return self.formula
 
-    def on_gen0(self, p):
-        return None
-
     def on_SelectQuery(self, p):
         sparql = self.sparql
         store = self.store
@@ -85,7 +82,7 @@ class FromSparql(productionHandler):
         q = f.newBlankNode()
         f.add(q, store.type, sparql['SelectQuery'])
         variable_results = store.newFormula()
-        for n, v in p[3][1]:
+        for v in p[3][1]:
             variable_results.add(v, store.type, sparql['result'])
             variable_results.add(v, sparql['id'], abbr(v.uriref()))
         f.add(q, sparql['select'], variable_results.close())
@@ -93,47 +90,242 @@ class FromSparql(productionHandler):
         if p[2]:
             f.add(q, store.type, sparql['Distinct'])
 
-        for pattern in p[5][1]:
+        for pattern in p[5]:
             f.add(q, sparql['where'], pattern[1])
 
         #TODO: I'm missing sorting and datasets
         return None
 
+    def on_WhereClause(self, p):
+        return p[2]
+
+    def on_SolutionModifier(self, p):
+        if len(p) == 1:
+            return None
+        return tuple(p[1:])
+
+    def on__QOrderClause_E_Opt(self, p):
+        if len(p) == 1:
+            return None
+        raise RuntimeError(`p`)
+
+    def on__QLimitClause_E_Opt(self, p):
+        if len(p) == 1:
+            return None
+        raise RuntimeError(`p`)
+
+    def on__QOffsetClause_E_Opt(self, p):
+        if len(p) == 1:
+            return None
+        raise RuntimeError(`p`)
+
+    def on__QBaseDecl_E_Opt(self, p):
+        if len(p) == 1:
+            return None
+        raise RuntimeError(`p`)
+
     def on_PrefixDecl(self, p):
         self.prefixes[p[2][1][:-1]] = p[3][1][1:-1]
         return None
+
+    def on__QDISTINCT_E_Opt(self, p):
+        if len(p) == 1:
+            return None
+        raise RuntimeError(`p`)
 
     def on_Var(self, p):
         var = self.store.newSymbol(self.base + p[1][1][1:])
         self.vars.add(var)
         return ('Var', var)
 
-    def on_gen1(self, p):
-        if len(p) == 2:
-            return "Distinct"
-        return None
-    
-    def on_gen2(self, p):
-        print p
+    def on__QVar_E_Plus(self, p):
         if len(p) == 1:
             return []
-        k = p[2]
-        k.append(p[1])
-        return k
+        return p[2] + [p[1]]
 
-    def on_gen3(self, p):
-##        self.returnType.type = 'vars'
-##        if len(p) == 3:
-##            varList = p[2] + [p[1]]
-##            self.returns = [v[1] for v in varList]
-##        else:
-##            self.returns = self.vars
-##        return None
+    def on__O_QVar_E_Plus_Or__QTIMES_E__C(self, p):
         if len(p) == 3:
-            varList = p[2] + [p[1]]
+            varList = [x[1] for x in p[2] + [p[1]]]
         else:
             varList = self.vars
         return ('SelectVars', varList)
+
+    def on__QDatasetClause_E_Star(self, p):
+        if len(p) == 1:
+            return None
+        raise RuntimeError(`p`)
+
+    def on_VarOrTerm(self, p):
+        return p[1]
+
+    def on_QName(self, p):
+        qn = p[1][1].split(':')
+        if len(qn) != 2:
+            raise RuntimeError
+        return ('QuotedIRIref', '<' + self.prefixes[qn[0]] + qn[1] + '>')
+
+    def on_IRIref(self, p):
+        return ('symbol', self.store.newSymbol(absolutize(p[1][1][1:-1])))
+
+    def on_VarOrBlankNodeOrIRIref(self, p):
+        return p[1]
+
+    def on_String(self, p):
+        return ('str', unEscape(p[1][1]))
+
+    def on_Verb(self, p):
+        return p[1]
+
+    def on__Q_O_QLANGTAG_E__Or__QDTYPE_E____QIRIref_E__C_E_Opt(self, p):
+        if len(p) == 1:
+            return (None, None)
+        raise RuntimeError(`p`)
+
+    def on_RDFLiteral(self, p):
+        return ('Literal', self.store.newLiteral(p[1][1], dt=p[2][0], lang=p[2][1]))
+
+    def on_RDFTerm(self, p):
+        return p[1]
+
+    def on_GraphTerm(self, p):
+        return p[1]
+
+    def on_Object(self, p):
+        return p[1]
+
+    def on__Q_O_QCOMMA_E____QObjectList_E__C_E_Opt(self, p):
+        if len(p) == 1:
+            return []
+        return p[1]
+
+    def on_ObjectList(self, p):
+        objects = p[2] + [p[1]]
+        return ('objectList', [k for k in objects])
+
+    def on__Q_O_QSEMI_E____QPropertyList_E__C_E_Opt(self, p):
+        if len(p) == 1:
+            return ('predicateList', [])
+        return p[1]
+
+    def on_PropertyListNotEmpty(self, p):
+        pred = (p[1], p[2])
+        preds = p[3][1] + [pred]
+        return ('predicateList', [k for k in preds])
+
+    def on_Triples1(self, p):
+        if abbr(p[1][0]) == 'GT_LBRACKET':
+            raise RuntimeError(`p`)
+        if abbr(p[1][0]) == 'GT_LPAREN':
+            raise RuntimeError(`p`)
+
+        return ('Triple', (p[1], p[2]))
+
+    def on_GraphPatternListTail(self, p):
+        if len(p) == 1:
+            return []
+        return p[1]
+
+    def  on__O_QTriples1_E____QGraphPatternListTail_E__Or__QGraphPatternNotTriples_E____QGraphPatternNotTriplesTail_E__C(self, p):
+        return p[2] + [p[1]]
+
+    def on__Q_O_QTriples1_E____QGraphPatternListTail_E__Or__QGraphPatternNotTriples_E____QGraphPatternNotTriplesTail_E__C_E_Opt(self, p):
+        if len(p) == 1:
+            return []
+        return p[1]
+
+    def on_GraphPatternList(self, p):
+        if len(p) == 2:
+            return p[1]
+        return p[1] + p[2]
+
+    def on__O_QDot_E____QGraphPatternList_E__C(self, p):
+        return p[1]
+
+    def on__Q_O_QDot_E____QGraphPatternList_E__C_E_Opt(self, p):
+        if len(p) == 2:
+            p.append([])
+        if len(p) == 1:
+            return []
+        return p[2]
+
+    def on_GroupGraphPattern(self, p):
+        triples = p[2]
+        unions = []
+        alternates = []
+        f = self.store.newFormula()
+        for triple in triples:
+            if triple[0] == 'formula':
+                unions.append(triple[1])
+                continue
+            rest1 = triple[1]
+            subject = rest1[0]
+            predicateList = rest1[1][1]
+            for rest2 in predicateList:
+                predicate = rest2[0]
+                objectList = rest2[1][1]
+                
+                for object in objectList:
+                    try:
+                        subj = anonymize(f, subject[1])
+                        pred = anonymize(f, predicate[1])
+                        obj = anonymize(f, object[1])
+                    except:
+                        print '================'
+                        print 'subject= ', subject
+                        print 'predicate= ', predicate
+                        print 'object= ', object
+                        raise
+                    if pred is self.sparql['OPTIONAL']:
+                        alternates.append([obj, None])
+                    else:
+                        f.add(subj, pred, obj)
+        f = f.close()
+        if unions:
+            alternates.append(unions)
+        retVal = [('formula', f)]
+        for alternate in alternates:
+            oldRetVal = retVal
+            retVal = []
+            for formula1 in alternate:
+                for ss, formula2 in oldRetVal:
+                    f = self.store.newFormula()
+                    if formula1:
+                        f.loadFormulaWithSubsitution(formula1)
+                    f.loadFormulaWithSubsitution(formula2)
+                    retVal.append(('formula', f.close()))
+        return retVal
+##        
+##        if len(p) == 2:
+##            p.append([])
+##        if p[1][0][0] == 'Triple':
+##            p[2] = p[1][1:] + p[2]
+##            p[1] = p[1][0]
+##        if p[1][0] == 'Triple':
+##            
+##            
+##        elif p[1][0][0] == 'formula':
+##            if p[2]:
+##                raise RuntimeError(`p`)
+##            graphs = p[1]
+##            return graphs
+##        else:
+##            raise RuntimeError(`p`)
+
+#useless
+    def on__QPrefixDecl_E_Star(self, p):
+        return None
+    def on_Prolog(self, p):
+        return None
+    def on__QWHERE_E_Opt(self, p):
+        return None
+    def on__O_QSelectQuery_E__Or__QConstructQuery_E__Or__QDescribeQuery_E__Or__QAskQuery_E__C(self, p):
+        return None
+
+class Null:
+
+    def on_gen0(self, p):
+        return None
+     
 
     def on_DatasetClause(self, p):
         #TODO: do this
@@ -162,52 +354,18 @@ class FromSparql(productionHandler):
             return None
         raise RuntimeError(`p`)
 
-    def on_VarOrTerm(self, p):
-        return p[1]
-
     def on_GraphNode(self, p):
         return p[1]
-
-    def on_QName(self, p):
-        qn = p[1][1].split(':')
-        if len(qn) != 2:
-            raise RuntimeError
-        return ('QuotedIRIref', '<' + self.prefixes[qn[0]] + qn[1] + '>')
-
-    def on_IRIref(self, p):
-        return ('symbol', self.store.newSymbol(absolutize(p[1][1][1:-1])))
-
-    def on_VarOrBlankNodeOrIRIref(self, p):
-        return p[1]
-
-    def on_String(self, p):
-        return ('str', unEscape(p[1][1]))
 
     def on_gen48(self, p):
         if len(p) == 1:
             return None
         return p[1]
 
-    def on_RDFLiteral(self, p):
-        if p[2] is not None: raise RuntimeError(`p`)
-        return ('Literal', self.store.newLiteral(p[1][1], None))
-
-    def on_RDFTerm(self, p):
-        return p[1]
-
-    def on_GraphTerm(self, p):
-        if len(p) == 3:
-            return ('List', self.store.nil)
-        return p[1]
-
     def on_gen28(self, p):
         if len(p) == 1:
             return []
         return p[2] + [p[1]]
-
-    def on_ObjectList(self, p):
-        objects = p[2] + [p[1]]
-        return ('objectList', [k[1] for k in objects])
 
     def on_gen26(self, p):
         if len(p) == 1:
@@ -217,19 +375,6 @@ class FromSparql(productionHandler):
     def on_gen27(self, p):
         return tuple(p[2]) + (p[3],)
 
-    def on_PredicateObjectList(self, p):
-        pred = tuple(p[1]) + (p[2],)
-        preds = p[3] + [pred]
-        return ('predicateList', [k[1:] for k in preds])
-
-    def on_gen25(self, p):
-        if len(p) == 1:
-            return ('predicateList', [])
-        return p[1]
-
-    def on_SubjectStatements(self, p):
-        return ('Triple', (p[1][1], p[2]))
-
     def on_AfterSubjectStatements(self, p):
         if len(p) == 1:
             return []
@@ -237,64 +382,6 @@ class FromSparql(productionHandler):
             return p[3] + [p[2]]
         else:
             return p[3] + p[2]
-
-    def on_Pattern(self, p):
-        unions = []
-        alternates = []
-        if p[1][0][0] == 'Triple':
-            p[2] = p[1][1:] + p[2]
-            p[1] = p[1][0]
-        if p[1][0] == 'Triple':
-            f = self.store.newFormula()
-            triples = p[2] + [p[1]]
-            for triple in triples:
-                if triple[0] == 'formula':
-                    unions.append(triple[1])
-                    continue
-                rest1 = triple[1]
-                subject = rest1[0]
-                predicateList = rest1[1][1]
-                for rest2 in predicateList:
-                    predicate = rest2[0]
-                    objectList = rest2[1][1]
-                    
-                    for object in objectList:
-                        try:
-                            subj = anonymize(f, subject[1])
-                            pred = anonymize(f, predicate[1])
-                            obj = anonymize(f, object[1])
-                        except:
-                            print '================'
-                            print 'subject= ', subject
-                            print 'predicate= ', predicate
-                            print 'object= ', object
-                            raise
-                        if pred is self.sparql['OPTIONAL']:
-                            alternates.append([obj, None])
-                        else:
-                            f.add(subj, pred, obj)
-            f = f.close()
-            if unions:
-                alternates.append(unions)
-            retVal = [('formula', f)]
-            for alternate in alternates:
-                oldRetVal = retVal
-                retVal = []
-                for formula1 in alternate:
-                    for ss, formula2 in oldRetVal:
-                        f = self.store.newFormula()
-                        if formula1:
-                            f.loadFormulaWithSubsitution(formula1)
-                        f.loadFormulaWithSubsitution(formula2)
-                        retVal.append(('formula', f.close()))
-            return retVal
-        elif p[1][0][0] == 'formula':
-            if p[2]:
-                raise RuntimeError(`p`)
-            graphs = p[1]
-            return graphs
-        else:
-            raise RuntimeError(`p`)
 
     def on_Union2(self, p):
         if len(p) == 1:
@@ -552,9 +639,6 @@ class FromSparql(productionHandler):
         return p
     
     def on_gen9(self, p):
-        return None
-
-    def on_Prolog(self, p):
         return None
 
     def on_gen12(self, p):

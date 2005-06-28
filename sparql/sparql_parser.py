@@ -20,7 +20,7 @@ except NameError:
 import sys, os, re, urllib
 import sparql_tokens
 
-tokens = Set(sparql_tokens.tokens)
+tokens = Set()
 import cPickle as pickle
 
 try: 
@@ -46,6 +46,7 @@ class N3Parser(object):
    def __init__(self, buffer, branches, sink):
       lexer = sparql_tokens.Lexer()
       lexer.input(buffer)
+      tokens.update(sparql_tokens.tokens)
       self.data = lexer.token
       self.newToken()
       self.branches = branches
@@ -70,6 +71,7 @@ class N3Parser(object):
                   prodBranch = self.branches[todo_stack[-1][0]]
               except:
                   print todo_stack
+                  print self.branches.keys()
                   raise
               #print prodBranch
               sequence = prodBranch.get(tok[0], None)
@@ -80,9 +82,9 @@ class N3Parser(object):
                  todo_stack[-1][1].append(term)
           while todo_stack[-1][1]:
              term = todo_stack[-1][1].pop(0)
-             if abbr(term) in tokens: 
+             if term in tokens: 
                 name, word, line = self.token
-                if name == abbr(term): 
+                if name == term: 
                    self.onToken(term, word)
                    self.newToken()
                 else: raise Exception("Found %s; %s expected" % \
@@ -117,7 +119,7 @@ class N3Parser(object):
 
 class nullProductionHandler(object):
     def prod(self, production):
-        return production
+        return production[0]
 
 def main(argv=None):
    if argv is None: 

@@ -77,7 +77,7 @@ class Earley_Set(object):
         return iter(self.set)
 
     def __repr__(self):
-        return 'EarleySet(%s)' % repr(list(self.set))
+        return 'Earley_Set(%s)' % repr(list(self.set))
 
 def find_nulls(rules):
     class internal(object):
@@ -234,14 +234,18 @@ class Earley(object):
                     #print '  ' + `(r2, l2)`
                     newSet.add((r2, l2+1, n2, h2 + ((rule.lhs,) + hist,)))
                     k = 1
+                    if r2.inrule(l2+1):
+                        if r2[l2+1] in self.followers:
+                            mSet.update([(r3, l3, now, makeHistory(r3, l3)) for r3, l3 in self.followers[r2[l2+1]]])
                     while self.null(r2[l2+k]):
                         newSet.add((r2, l2+k+1, n2, h2 + ((rule.lhs,) + hist,) + makeHistory(r2, l2+1, l2+1+k)))
-                        k += 1
                     #print '\nl2 = ' + `l2`
-                    if r2.inrule(l2+1):
-                        mSet.update([(r3, l3, now, makeHistory(r3, l3)) for r3, l3 in self.followers[(r2, l2+1)]])
+                        if r2.inrule(l2+k+1):
+                            mSet.update([(r3, l3, now, makeHistory(r3, l3)) for r3, l3 in self.followers[r2[l2+k+1]]])
+                        k += 1
             #print '%s: Added = %s' % (a, newSet.set)
             #print '%s: TheSet = %s' % (a, theSet.set)
+            #print '%s: mSet = %s' % (a, mSet)
             self.sets[-1].update(mSet)
             a += 1
             if theSet.set >= newSet.set:
@@ -253,9 +257,12 @@ class Earley(object):
 
 
 class AST(object):
-    def __init__(self, ast):
+    def __init__(self, ast, sink=None):
         self.ast = ast
-        self.sink = self
+        if sink:
+            self.sink = sink
+        else:
+            self.sink = self
     def prod(self, thing):
         return thing[0]
     def run(self):
@@ -266,7 +273,7 @@ class AST(object):
                 self.onToken(stack[-1][0][0], stack[-1][0][1])
                 stack.pop()
             elif stack[-1][1] >= len(stack[-1][0]):
-                self.onFinish()
+                k = self.onFinish()
                 stack.pop()
             else:
                 k = stack[-1][1]
@@ -275,6 +282,7 @@ class AST(object):
                     self.onStart(stack[-1][0][0])
                 else:
                     stack.append([stack[-1][0][k], 0])
+        return k
                 
         
 
@@ -335,16 +343,18 @@ def make_table(out, f, predict):
 
 def cache_get(uri):
     try:
+        #raise ImportError
         from earley_tables import null, predict
         return null, predict
     except ImportError:
-        p = get_productions(sys.argv[1])
+        p = get_productions(uri)
         f = find_nulls(p)
         
         predict = find_null_connected(p, f)
 
         out = file('earley_tables.py', 'w')
         make_table(out, f, predict)
+        return f, predict
         
 
 if __name__ == '__main__':
@@ -358,7 +368,12 @@ if __name__ == '__main__':
     t2 = time.time() - k2
     
     #print '\n\n\t'.join([`a` for a in results])
+    import sparql2cwm, myStore, notation3
+    _outSink = notation3.ToN3(sys.stdout.write,
+                                      quiet=1, flags='')
     for a in results:
-        AST((sys.argv[2],) + a[3]).run()
+        sink = sparql2cwm.FromSparql(myStore._checkStore())
+        f = AST((sys.argv[2],) + a[3], sink).run().close()
+        myStore._checkStore().dumpNested(f, _outSink)
     print t1,t2,t1+t2
     
