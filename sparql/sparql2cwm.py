@@ -13,8 +13,6 @@ from term import Term
 def abbr(prodURI): 
    return prodURI.split('#').pop()
 
-def absolutize(uri):
-    return uripath.join(uripath.base(), uri)
 
 def anonymize(self, formula, uri = None):
     if uri:
@@ -65,13 +63,20 @@ class FromSparql(productionHandler):
         self.true = store.newLiteral('TRUE', dt=self.xsd['boolean'])
         self.false = store.newLiteral('FALSE', dt=self.xsd['boolean'])
         self.anonymous_counter = 0
+        self.uribase = uripath.base()
 
     def new_bnode(self):
         self.anonymous_counter += 1
         return ('anonymous', '_:%s' % str(self.anonymous_counter))
 
+    def absolutize(self, uri):
+        return uripath.join(self.uribase, uri)
+
     def on_Query(self, p):
         return self.formula
+
+    def on_BaseDecl(self, p):
+        self.uribase = p[2][1][1:-1]
 
     def on_SelectQuery(self, p):
         sparql = self.sparql
@@ -120,9 +125,7 @@ class FromSparql(productionHandler):
         raise RuntimeError(`p`)
 
     def on__QBaseDecl_E_Opt(self, p):
-        if len(p) == 1:
-            return None
-        raise RuntimeError(`p`)
+        return None
 
     def on_PrefixDecl(self, p):
         self.prefixes[p[2][1][:-1]] = p[3][1][1:-1]
@@ -165,7 +168,7 @@ class FromSparql(productionHandler):
         return ('QuotedIRIref', '<' + self.prefixes[qn[0]] + qn[1] + '>')
 
     def on_IRIref(self, p):
-        return ('symbol', self.store.newSymbol(absolutize(p[1][1][1:-1])))
+        return ('symbol', self.store.newSymbol(self.absolutize(p[1][1][1:-1])))
 
     def on_VarOrBlankNodeOrIRIref(self, p):
         return p[1]
@@ -184,6 +187,13 @@ class FromSparql(productionHandler):
     def on_RDFLiteral(self, p):
         return ('Literal', self.store.newLiteral(p[1][1], dt=p[2][0], lang=p[2][1]))
 
+    def on_NumericLiteral(self, p):
+        if abbr(p[1][0]) == 'INTEGER':
+            return ('Literal', self.store.newLiteral(`int(p[1][1])`, dt=self.xsd['integer'], lang=None))
+        if abbr(p[1][0]) == 'FLOATING_POINT':
+            return ('Literal', self.store.newLiteral(`float(p[1][1])`, dt=self.xsd['double'], lang=None))
+        raise RuntimeError(`p`)
+
     def on_RDFTerm(self, p):
         return p[1]
 
@@ -191,34 +201,62 @@ class FromSparql(productionHandler):
         return p[1]
 
     def on_Object(self, p):
+        if p[1][0] != 'andExtra':
+            return ('andExtra', p[1], [])
         return p[1]
 
     def on__Q_O_QCOMMA_E____QObjectList_E__C_E_Opt(self, p):
         if len(p) == 1:
-            return []
+            return ('andExtra', [], [])
         return p[1]
 
     def on_ObjectList(self, p):
-        objects = p[2] + [p[1]]
-        return ('objectList', [k for k in objects])
+        extras = p[2][2] + p[1][2]
+        objects = p[2][1] + [p[1][1]]
+        return ('andExtra', ('objectList', [k for k in objects]), extras)
 
     def on__Q_O_QSEMI_E____QPropertyList_E__C_E_Opt(self, p):
         if len(p) == 1:
-            return ('predicateList', [])
+            return ('andExtra', ('predicateList', []), [])
         return p[1]
 
     def on_PropertyListNotEmpty(self, p):
-        pred = (p[1], p[2])
-        preds = p[3][1] + [pred]
-        return ('predicateList', [k for k in preds])
+        extra = p[2][2] + p[3][2]
+        pred = (p[1], p[2][1])
+        preds = p[3][1][1] + [pred]
+        return ('andExtra', ('predicateList', [k for k in preds]), extra)
 
     def on_Triples1(self, p):
         if abbr(p[1][0]) == 'GT_LBRACKET':
-            raise RuntimeError(`p`)
+            return p[2]
         if abbr(p[1][0]) == 'GT_LPAREN':
-            raise RuntimeError(`p`)
+            return p[2]
+        extra = p[2][2]
+        return [('Triple', (p[1], p[2][1]))] + extra
 
-        return ('Triple', (p[1], p[2]))
+    def on_Triples2(self, p):
+        if len(p) == 4:
+            predList = ('predicateList', p[1][1][1] + p[3][1][1])
+            extra = p[1][2] + p[3][2]
+        else:
+            predList = p[2][1]
+            extra = p[2][2]
+        return [('Triple', (self.new_bnode(), predList))] + extra
+
+
+    def on_Triples3(self, p):
+        store = self.store
+        if len(p) == 3:
+            return [('Triple', (store.nil, p[2][1]))] + p[2][2]
+        extra = p[1][2] + p[2][2] + p[4][2]
+        nodes = [p[1][1]] + p[2][1]
+        pred = p[4][1]
+        realPred = pred[1]
+        if realPred == []:
+            realPred.append((('symbol', store.type), ('objectList', [('Var', self.sparql['LameTriple'])])))
+        List = ('List', [k[1] for k in nodes])
+        return [('Triple', (List, pred))] + extra
+    
 
     def on_GraphPatternListTail(self, p):
         if len(p) == 1:
@@ -226,7 +264,7 @@ class FromSparql(productionHandler):
         return p[1]
 
     def  on__O_QTriples1_E____QGraphPatternListTail_E__Or__QGraphPatternNotTriples_E____QGraphPatternNotTriplesTail_E__C(self, p):
-        return p[2] + [p[1]]
+        return p[2] + p[1]
 
     def on__Q_O_QTriples1_E____QGraphPatternListTail_E__Or__QGraphPatternNotTriples_E____QGraphPatternNotTriplesTail_E__C_E_Opt(self, p):
         if len(p) == 1:
@@ -239,14 +277,12 @@ class FromSparql(productionHandler):
         return p[1] + p[2]
 
     def on__O_QDot_E____QGraphPatternList_E__C(self, p):
-        return p[1]
+        return p[2]
 
     def on__Q_O_QDot_E____QGraphPatternList_E__C_E_Opt(self, p):
-        if len(p) == 2:
-            p.append([])
         if len(p) == 1:
             return []
-        return p[2]
+        return p[1]
 
     def on_GroupGraphPattern(self, p):
         triples = p[2]
@@ -269,16 +305,17 @@ class FromSparql(productionHandler):
                         subj = anonymize(f, subject[1])
                         pred = anonymize(f, predicate[1])
                         obj = anonymize(f, object[1])
+                        if pred is self.sparql['OPTIONAL']:
+                            alternates.append([obj, None])
+                        else:
+                            f.add(subj, pred, obj)
                     except:
                         print '================'
                         print 'subject= ', subject
                         print 'predicate= ', predicate
                         print 'object= ', object
                         raise
-                    if pred is self.sparql['OPTIONAL']:
-                        alternates.append([obj, None])
-                    else:
-                        f.add(subj, pred, obj)
+
         f = f.close()
         if unions:
             alternates.append(unions)
@@ -311,6 +348,57 @@ class FromSparql(productionHandler):
 ##        else:
 ##            raise RuntimeError(`p`)
 
+    def on__QPropertyListNotEmpty_E_Opt(self, p):
+        if len(p) == 1:
+            return ('andExtra', ('predicateList', []), [])
+        return p[1]
+
+    def on_PropertyList(self, p):
+        return p[1]
+
+    def on_NamelessBlank(self, p):
+        return self.new_bnode()
+
+    def on_BlankNode(self, p):
+        return ('anonymous', p[1][1])
+
+    def on_BlankNodePropertyList(self, p):
+        extra = p[2][2]
+        preds = p[2][1]
+        anon = self.new_bnode()
+        extra.append(('Triple', (anon, preds)))
+        return  ('andExtra', anon, extra)
+
+    def on_TriplesNode(self, p):
+        return p[1]
+
+    def on__O_QSEMI_E____QPropertyList_E__C(self, p):
+        return p[2]
+
+
+    def on_GraphNode(self, p):
+        if p[1][0] != 'andExtra':
+            return ('andExtra', p[1], [])
+        return p[1]
+
+    def on__QGraphNode_E_Plus(self, p):
+        return self.on__QGraphNode_E_Star(p)
+
+
+    def on__QGraphNode_E_Star(self, p):
+        if len(p) == 1:
+            return ('andExtra', [], [])
+        nodes = [p[1][1]] + p[2][1]
+        extra = p[1][2] + p[2][2]
+        return ('andExtra', nodes, extra)
+
+    def on_Collection(self, p):
+        extra = p[2][2]
+        nodes = p[2][1]
+        List = ('List', [k[1] for k in nodes])
+        return ('andExtra', List, extra)
+
+
 #useless
     def on__QPrefixDecl_E_Star(self, p):
         return None
@@ -320,6 +408,236 @@ class FromSparql(productionHandler):
         return None
     def on__O_QSelectQuery_E__Or__QConstructQuery_E__Or__QDescribeQuery_E__Or__QAskQuery_E__C(self, p):
         return None
+
+### AutoGenerated
+    def on_ConstructQuery(self, p):
+        raise RuntimeError(`p`)
+
+    def on_DescribeQuery(self, p):
+        raise RuntimeError(`p`)
+
+    def on__QVarOrIRIref_E_Plus(self, p):
+        raise RuntimeError(`p`)
+
+    def on__O_QVarOrIRIref_E_Plus_Or__QTIMES_E__C(self, p):
+        raise RuntimeError(`p`)
+
+    def on__QWhereClause_E_Opt(self, p):
+        raise RuntimeError(`p`)
+
+    def on_AskQuery(self, p):
+        raise RuntimeError(`p`)
+
+    def on_DatasetClause(self, p):
+        raise RuntimeError(`p`)
+
+    def on__O_QDefaultGraphClause_E__Or__QNamedGraphClause_E__C(self, p):
+        raise RuntimeError(`p`)
+
+    def on_DefaultGraphClause(self, p):
+        raise RuntimeError(`p`)
+
+    def on_NamedGraphClause(self, p):
+        raise RuntimeError(`p`)
+
+    def on_SourceSelector(self, p):
+        raise RuntimeError(`p`)
+
+    def on_OrderClause(self, p):
+        raise RuntimeError(`p`)
+
+    def on__QOrderCondition_E_Plus(self, p):
+        raise RuntimeError(`p`)
+
+    def on_OrderCondition(self, p):
+        raise RuntimeError(`p`)
+
+    def on__O_QASC_E__Or__QDESC_E__C(self, p):
+        raise RuntimeError(`p`)
+
+    def on__O_QASC_E__Or__QDESC_E____QBrackettedExpression_E__C(self, p):
+        raise RuntimeError(`p`)
+
+    def on__O_QFunctionCall_E__Or__QVar_E__Or__QBrackettedExpression_E__C(self, p):
+        raise RuntimeError(`p`)
+
+    def on_LimitClause(self, p):
+        raise RuntimeError(`p`)
+
+    def on_OffsetClause(self, p):
+        raise RuntimeError(`p`)
+
+    def on_GraphPatternNotTriplesTail(self, p):
+        raise RuntimeError(`p`)
+
+    def on__QDot_E_Opt(self, p):
+        raise RuntimeError(`p`)
+
+    def on__O_QDot_E_Opt___QGraphPatternList_E__C(self, p):
+        raise RuntimeError(`p`)
+
+    def on_GraphPatternNotTriplesList(self, p):
+        raise RuntimeError(`p`)
+
+    def on_GraphPatternNotTriples(self, p):
+        raise RuntimeError(`p`)
+
+    def on_OptionalGraphPattern(self, p):
+        raise RuntimeError(`p`)
+
+    def on_GraphGraphPattern(self, p):
+        raise RuntimeError(`p`)
+
+    def on_GroupOrUnionGraphPattern(self, p):
+        raise RuntimeError(`p`)
+
+    def on__O_QUNION_E____QGroupGraphPattern_E__C(self, p):
+        raise RuntimeError(`p`)
+
+    def on__Q_O_QUNION_E____QGroupGraphPattern_E__C_E_Star(self, p):
+        raise RuntimeError(`p`)
+
+    def on_Constraint(self, p):
+        raise RuntimeError(`p`)
+
+    def on__O_QBrackettedExpression_E__Or__QCallExpression_E__C(self, p):
+        raise RuntimeError(`p`)
+
+    def on_ConstructTemplate(self, p):
+        raise RuntimeError(`p`)
+
+    def on__QTriples_E_Opt(self, p):
+        raise RuntimeError(`p`)
+
+    def on_Triples(self, p):
+        raise RuntimeError(`p`)
+
+    def on__QTriples1_E_Opt(self, p):
+        raise RuntimeError(`p`)
+
+    def on__O_QDot_E____QTriples1_E_Opt_C(self, p):
+        raise RuntimeError(`p`)
+
+    def on__Q_O_QDot_E____QTriples1_E_Opt_C_E_Opt(self, p):
+        raise RuntimeError(`p`)
+
+    def on__O_QCOMMA_E____QObjectList_E__C(self, p):
+        raise RuntimeError(`p`)
+
+    def on_VarOrIRIref(self, p):
+        raise RuntimeError(`p`)
+
+    def on_Expression(self, p):
+        raise RuntimeError(`p`)
+
+    def on_ConditionalOrExpression(self, p):
+        raise RuntimeError(`p`)
+
+    def on__O_QOR_E____QConditionalAndExpression_E__C(self, p):
+        raise RuntimeError(`p`)
+
+    def on__Q_O_QOR_E____QConditionalAndExpression_E__C_E_Star(self, p):
+        raise RuntimeError(`p`)
+
+    def on_ConditionalAndExpression(self, p):
+        raise RuntimeError(`p`)
+
+    def on__O_QAND_E____QValueLogical_E__C(self, p):
+        raise RuntimeError(`p`)
+
+    def on__Q_O_QAND_E____QValueLogical_E__C_E_Star(self, p):
+        raise RuntimeError(`p`)
+
+    def on_ValueLogical(self, p):
+        raise RuntimeError(`p`)
+
+    def on_RelationalExpression(self, p):
+        raise RuntimeError(`p`)
+
+    def on__O_QEQUAL_E____QNumericExpression_E__Or__QNEQUAL_E____QNumericExpression_E__Or__QLT_E____QNumericExpression_E__Or__QGT_E____QNumericExpression_E__Or__QLE_E____QNumericExpression_E__Or__QGE_E____QNumericExpression_E__C(self, p):
+        raise RuntimeError(`p`)
+
+    def on__Q_O_QEQUAL_E____QNumericExpression_E__Or__QNEQUAL_E____QNumericExpression_E__Or__QLT_E____QNumericExpression_E__Or__QGT_E____QNumericExpression_E__Or__QLE_E____QNumericExpression_E__Or__QGE_E____QNumericExpression_E__C_E_Opt(self, p):
+        raise RuntimeError(`p`)
+
+    def on_NumericExpression(self, p):
+        raise RuntimeError(`p`)
+
+    def on_AdditiveExpression(self, p):
+        raise RuntimeError(`p`)
+
+    def on__O_QPLUS_E____QMultiplicativeExpression_E__Or__QMINUS_E____QMultiplicativeExpression_E__C(self, p):
+        raise RuntimeError(`p`)
+
+    def on__Q_O_QPLUS_E____QMultiplicativeExpression_E__Or__QMINUS_E____QMultiplicativeExpression_E__C_E_Star(self, p):
+        raise RuntimeError(`p`)
+
+    def on_MultiplicativeExpression(self, p):
+        raise RuntimeError(`p`)
+
+    def on__O_QTIMES_E____QUnaryExpression_E__Or__QDIVIDE_E____QUnaryExpression_E__C(self, p):
+        raise RuntimeError(`p`)
+
+    def on__Q_O_QTIMES_E____QUnaryExpression_E__Or__QDIVIDE_E____QUnaryExpression_E__C_E_Star(self, p):
+        raise RuntimeError(`p`)
+
+    def on_UnaryExpression(self, p):
+        raise RuntimeError(`p`)
+
+    def on_CallExpression(self, p):
+        raise RuntimeError(`p`)
+
+    def on_BuiltinCallExpression(self, p):
+        raise RuntimeError(`p`)
+
+    def on_RegexExpression(self, p):
+        raise RuntimeError(`p`)
+
+    def on__O_QCOMMA_E____QExpression_E__C(self, p):
+        raise RuntimeError(`p`)
+
+    def on__Q_O_QCOMMA_E____QExpression_E__C_E_Opt(self, p):
+        raise RuntimeError(`p`)
+
+    def on_FunctionCall(self, p):
+        raise RuntimeError(`p`)
+
+    def on_ArgList(self, p):
+        raise RuntimeError(`p`)
+
+    def on__Q_O_QCOMMA_E____QExpression_E__C_E_Star(self, p):
+        raise RuntimeError(`p`)
+
+    def on__O_QExpression_E____QCOMMA_E____QExpression_E_Star_C(self, p):
+        raise RuntimeError(`p`)
+
+    def on__Q_O_QExpression_E____QCOMMA_E____QExpression_E_Star_C_E_Opt(self, p):
+        raise RuntimeError(`p`)
+
+    def on_BrackettedExpression(self, p):
+        raise RuntimeError(`p`)
+
+    def on_PrimaryExpression(self, p):
+        raise RuntimeError(`p`)
+
+    def on_RDFTermOrFunc(self, p):
+        raise RuntimeError(`p`)
+
+    def on_IRIrefOrFunc(self, p):
+        raise RuntimeError(`p`)
+
+    def on__QArgList_E_Opt(self, p):
+        raise RuntimeError(`p`)
+
+    def on__O_QDTYPE_E____QIRIref_E__C(self, p):
+        raise RuntimeError(`p`)
+
+    def on__O_QLANGTAG_E__Or__QDTYPE_E____QIRIref_E__C(self, p):
+        raise RuntimeError(`p`)
+
+    def on_BooleanLiteral(self, p):
+        raise RuntimeError(`p`)
+
 
 class Null:
 

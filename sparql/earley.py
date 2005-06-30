@@ -151,10 +151,10 @@ def find_null_connected(productions, null):
         for k in productions:
             obj.deepen(k)
 
-    for p in productions:
-        for r in productions[p].choices():
-            for n in range(len(r)):
-                obj.followers(r, n)
+##    for p in productions:
+##        for r in productions[p].choices():
+##            for n in range(len(r)):
+##                obj.followers(r, n)
     return obj.status
 
 def makeHistory(rule, loc, locEnd = None):
@@ -174,16 +174,23 @@ class Earley(object):
         self.null = null
         self.followers = followers
         self.start = start
+        self.sayAll = False
 
     def parse(self, tokenSource):
         self.tokens = tokenSource
         self.sets = []
         self.zeroset()
+        print "About to parse"
         tok = self.tokens()
         while tok:
+##            print tok
+##            if tok == (u'http://www.w3.org/2000/10/swap/grammar/sparql#QNAME', u'foaf:mbox', 10):
+##                self.sayAll = True
+##                self.tokens.im_self.sayAll = True
             self.scan(tok)
             self.predict()
             self.complete()
+##            print 'About to get next token'
             tok = self.tokens()
         return self.sets
 
@@ -200,9 +207,11 @@ class Earley(object):
         name, term, line = token
         oldSet = self.sets[-1]
         newSet = Earley_Set()
-        #print oldSet.set
-        #print "set " + `len(self.sets) -1` + ': ' + `oldSet.tokens.keys()`
-        #print '====='
+        if self.sayAll:
+            print "In SCAN...."
+            print oldSet.set
+            print "set " + `len(self.sets) -1` + ': ' + `oldSet.tokens.keys()`
+            print '====='
         for rule, loc, num, hist in oldSet.tokens[name]:
             newSet.add((rule, loc+1, num, hist + (token,)))
             #Here is where I call something for matching a token. A fourth piece of the
@@ -240,12 +249,13 @@ class Earley(object):
                     while self.null(r2[l2+k]):
                         newSet.add((r2, l2+k+1, n2, h2 + ((rule.lhs,) + hist,) + makeHistory(r2, l2+1, l2+1+k)))
                     #print '\nl2 = ' + `l2`
-                        if r2.inrule(l2+k+1):
+                        if r2.inrule(l2+k+1) and r2[l2+k+1] in self.followers:
                             mSet.update([(r3, l3, now, makeHistory(r3, l3)) for r3, l3 in self.followers[r2[l2+k+1]]])
                         k += 1
-            #print '%s: Added = %s' % (a, newSet.set)
-            #print '%s: TheSet = %s' % (a, theSet.set)
-            #print '%s: mSet = %s' % (a, mSet)
+            if self.sayAll:
+                print '%s: Added = %s' % (a, newSet.set)
+                print '%s: TheSet = %s' % (a, theSet.set)
+                print '%s: mSet = %s' % (a, mSet)
             self.sets[-1].update(mSet)
             a += 1
             if theSet.set >= newSet.set:
@@ -265,6 +275,8 @@ class AST(object):
             self.sink = self
     def prod(self, thing):
         return thing[0]
+    def abbr(self, prodURI): 
+        return prodURI.split('#').pop()
     def run(self):
         self.productions = []
         stack = [[self.ast, 0]]
@@ -290,11 +302,13 @@ class AST(object):
       print (' ' * len(self.productions)) + `prod`
       self.productions.append([prod])
 
-    def onFinish(self): 
-      prod = self.sink.prod(self.productions.pop())
+    def onFinish(self):
+      k = self.productions.pop()
+      prodName = self.abbr(k[0])
+      prod = self.sink.prod(k)
       if self.productions:
           self.productions[-1].append(prod)
-      print (' ' * len(self.productions)) + '/' + `prod`
+      print (' ' * len(self.productions)) + '/' + prodName + ': ' + `prod`
       return prod
 
     def onToken(self, prod, tok):

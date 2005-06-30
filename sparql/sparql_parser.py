@@ -134,6 +134,7 @@ def main(argv=None):
        p.parse(start)
    if len(argv) == 2: 
       p = N3Parser(file(argv[1], 'r'), branches, sink)
+      print "About to parse"
       f = p.parse(start).close()
       myStore._checkStore().dumpNested(f, _outSink)
 

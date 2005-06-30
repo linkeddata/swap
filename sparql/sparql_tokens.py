@@ -300,10 +300,13 @@ class Lexer(object):
         """try everything in the list ``tokens''
 
         """
+        sayAll = hasattr(self, 'sayAll')
         length = -1
         retVal = None
         for name in tokens:
             if hasattr(Tokens, 'c_' + name):
+                if sayAll:
+                    print "Trying to match ", name, " to ", string[offset:offset+10]
                 pattern = getattr(Tokens, 'c_' + name)
                 r = pattern.match(string, offset)
                 if r:
