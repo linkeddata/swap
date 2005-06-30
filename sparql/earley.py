@@ -263,7 +263,7 @@ class Earley(object):
                 return
             self.sets[-1].update(newSet)
             theSet = newSet
-            
+
 
 
 class AST(object):
@@ -314,6 +314,19 @@ class AST(object):
     def onToken(self, prod, tok):
       self.productions[-1].append((prod, tok))
       print (' ' * len(self.productions)) + `(prod, tok)`
+
+
+class productionHandler(object):
+    def prod(self, production):
+        if hasattr(self, 'on_' + abbr(production[0])):
+            try:
+                return getattr(self, 'on_' + abbr(production[0]))(production)
+            except:
+                print production
+                raise
+        if True: # len(production) > 1:
+            raise RuntimeError("why don't you define a %s function, to call on %s?" % ('on_' + abbr(production[0]), `production`))
+        return production
 
 def get_productions(uri):
     g = load(uri)

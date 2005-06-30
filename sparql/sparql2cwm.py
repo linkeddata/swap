@@ -42,6 +42,90 @@ def makeTripleObjList(subj, pred, obj):
                                          [(pred, ('objectList',
                                                   obj))])))
 
+def normalize(expr):
+    print expr
+    return Coerce()(expr)
+
+class Coerce(object):
+    def __call__(self, expr, coerce=True):
+        try:
+            return getattr(self, 'on_' + expr[0])(expr, coerce)
+        except AttributeError:
+             raise RuntimeError("why don't you define a %s function, to call on %s?" % ('on_' + expr[0], `expr`))
+
+    def on_Or(self, p, coerce):
+        if len(p) == 2:
+            return self(p[1], coerce)
+        return [p[0]] + [self(q, True) for q in p[1:]]
+
+    def on_And(self, p, coerce):
+        if len(p) == 2:
+            return self(p[1], coerce)
+        return [p[0]] + [self(q, True) for q in p[1:]]
+
+    def on_BoolVal(self, p, coerce):
+        if coerce:
+            return [p[0], self(p[1], False)]
+        return self(p[1], False)
+
+    def on_Var(self, p, coerce):
+        return p
+    def on_Literal(self, p, coerce):
+        return p
+
+    def on_Regex(self, p, coerce):
+        return [p[0]] + [self(q, False) for q in p[1:]]
+
+
+class AST(object):
+    def __init__(self, ast, sink=None):
+        self.ast = ast
+        if sink:
+            self.sink = sink
+        else:
+            self.sink = self
+    def prod(self, thing):
+        return thing[0]
+    def abbr(self, prodURI): 
+        return prodURI.split('#').pop()
+    def run(self):
+        self.productions = []
+        stack = [[self.ast, 0]]
+        while stack:
+            if not isinstance(stack[-1][0][1], (tuple, list)):
+                self.onToken(stack[-1][0][0], stack[-1][0][1])
+                stack.pop()
+            elif stack[-1][1] >= len(stack[-1][0]):
+                k = self.onFinish()
+                stack.pop()
+            else:
+                k = stack[-1][1]
+                stack[-1][1] = k + 1
+                if k == 0:
+                    self.onStart(stack[-1][0][0])
+                else:
+                    stack.append([stack[-1][0][k], 0])
+        return k
+                
+        
+
+    def onStart(self, prod): 
+      print (' ' * len(self.productions)) + `prod`
+      self.productions.append([prod])
+
+    def onFinish(self):
+      k = self.productions.pop()
+      prodName = self.abbr(k[0])
+      prod = self.sink.prod(k)
+      if self.productions:
+          self.productions[-1].append(prod)
+      print (' ' * len(self.productions)) + '/' + prodName + ': ' + `prod`
+      return prod
+
+    def onToken(self, prod, tok):
+      self.productions[-1].append((prod, tok))
+      print (' ' * len(self.productions)) + `(prod, tok)`
+
 
 class productionHandler(object):
     def prod(self, production):
@@ -55,6 +139,51 @@ class productionHandler(object):
             raise RuntimeError("why don't you define a %s function, to call on %s?" % ('on_' + abbr(production[0]), `production`))
         return production
 
+class FilterExpr(productionHandler):
+    def __init__(self, store, parent):
+        self.store = store
+        self.parent = parent
+        self.string = store.newSymbol('http://www.w3.org/2000/10/swap/string')
+
+    def on_BoolVal(self, p):
+        if p[1][0] == 'andExtra':
+            extra = p[1][2]
+            val = p[1][1]
+        else:
+            extra = []
+            val = p[1]
+        return [makeTriple(val, ('symbol', self.parent.sparql['truthValue']), ('symbol', self.parent.true))] + extra
+
+    def on_And(self, p):
+        vals = []
+        things = p[1:]
+        for thing in things:
+            vals.extend(thing)
+        return vals
+
+    def on_Or(self, p):
+        p = p[1:]
+        returns = []
+        for val in p:
+            returns.extend(self.parent.on_GroupGraphPattern([None, None, val, None]))
+        return returns
+
+    def on_Regex(self, p):
+        if str(p[3][1]):
+            raise RuntimeError('I don\'t know how to deal with flags. The flag is: %r' % p[3][1])
+        extra = []
+        if p[1][0] == 'andExtra':
+            string = p[1][1]
+            extra.extend(p[1][2])
+        else:
+            string = p[1]
+        if p[2][0] == 'andExtra':
+            regex = p[2][1]
+            extra.extend(p[2][2])
+        else:
+            regex = p[2]
+        return [makeTriple(string, ('symbol', self.string['matches']), regex)] + extra
+
 class FromSparql(productionHandler):
     def __init__(self, store):
         self.store = store
@@ -65,8 +194,8 @@ class FromSparql(productionHandler):
         self.sparql = store.newSymbol('http://yosi.us/2005/sparql')
         self.xsd = store.newSymbol('http://www.w3.org/2001/XMLSchema')
         self.math = store.newSymbol('http://www.w3.org/2000/10/swap/math')
-        self.true = store.newLiteral('TRUE', dt=self.xsd['boolean'])
-        self.false = store.newLiteral('FALSE', dt=self.xsd['boolean'])
+        self.true = store.newLiteral('1', dt=self.xsd['boolean'])
+        self.false = store.newLiteral('0', dt=self.xsd['boolean'])
         self.anonymous_counter = 0
         self.uribase = uripath.base()
 
@@ -439,6 +568,80 @@ class FromSparql(productionHandler):
     def on_GroupOrUnionGraphPattern(self, p):
         return p[1] + p[2]
 
+#FILTER
+    def on_PrimaryExpression(self, p):
+        return p[1]
+
+    def on_UnaryExpression(self, p):
+        if len(p) == 2:
+            return p[1]
+        raise RuntimeError(`p`)
+
+    def on__Q_O_QTIMES_E____QUnaryExpression_E__Or__QDIVIDE_E____QUnaryExpression_E__C_E_Star(self, p):
+        if len(p) == 1:
+            return []
+        raise RuntimeError(`p`)
+
+    def on_MultiplicativeExpression(self, p):
+        if p[2] == []:
+            return p[1]
+        raise RuntimeError(`p`)
+
+    def on__Q_O_QPLUS_E____QMultiplicativeExpression_E__Or__QMINUS_E____QMultiplicativeExpression_E__C_E_Star(self, p):
+        if len(p) == 1:
+            return []
+        raise RuntimeError(`p`)
+
+    def on_AdditiveExpression(self, p):
+        if p[2] == []:
+            return p[1]
+        raise RuntimeError(`p`)
+
+    def on_NumericExpression(self, p):
+        return p[1]
+
+    def on__Q_O_QEQUAL_E____QNumericExpression_E__Or__QNEQUAL_E____QNumericExpression_E__Or__QLT_E____QNumericExpression_E__Or__QGT_E____QNumericExpression_E__Or__QLE_E____QNumericExpression_E__Or__QGE_E____QNumericExpression_E__C_E_Opt(self, p):
+        if len(p) == 1:
+            return None
+        return p[1]
+
+
+    def on_RelationalExpression(self, p):
+        if p[2] is None:
+            return ('BoolVal', p[1])
+        return (p[2][0], p[1], p[2][1])
+
+    def on_ValueLogical(self, p):
+        return p[1]
+
+    def on__Q_O_QAND_E____QValueLogical_E__C_E_Star(self, p):
+        if len(p) == 1:
+            return []
+        raise RuntimeError(`p`)
+
+    def on_ConditionalAndExpression(self, p):
+        return ['And', p[1]] + p[2]
+
+    def on__Q_O_QOR_E____QConditionalAndExpression_E__C_E_Star(self, p):
+        if len(p) == 1:
+            return []
+        raise RuntimeError(`p`)
+
+    def on_ConditionalOrExpression(self, p):
+        return ['Or', p[1]] + p[2]
+
+    def on_Expression(self, p):
+        return p[1]
+
+    def on_BrackettedExpression(self, p):
+        return p[2]
+
+    def on__O_QBrackettedExpression_E__Or__QCallExpression_E__C(self, p):
+        return normalize(p[1])
+    
+    def on_Constraint(self, p):
+        return AST(p[2], FilterExpr(self.store, self)).run()
+
 #useless
     def on__QPrefixDecl_E_Star(self, p):
         return None
@@ -453,6 +656,9 @@ class FromSparql(productionHandler):
 
 ### AutoGenerated
     def on_ConstructQuery(self, p):
+        raise RuntimeError(`p`)
+
+    def on_OffsetClause(self, p):
         raise RuntimeError(`p`)
 
     def on_DescribeQuery(self, p):
@@ -506,15 +712,6 @@ class FromSparql(productionHandler):
     def on_LimitClause(self, p):
         raise RuntimeError(`p`)
 
-    def on_OffsetClause(self, p):
-        raise RuntimeError(`p`)
-
-    def on_Constraint(self, p):
-        raise RuntimeError(`p`)
-
-    def on__O_QBrackettedExpression_E__Or__QCallExpression_E__C(self, p):
-        raise RuntimeError(`p`)
-
     def on_ConstructTemplate(self, p):
         raise RuntimeError(`p`)
 
@@ -539,76 +736,40 @@ class FromSparql(productionHandler):
     def on_VarOrIRIref(self, p):
         raise RuntimeError(`p`)
 
-    def on_Expression(self, p):
-        raise RuntimeError(`p`)
-
-    def on_ConditionalOrExpression(self, p):
-        raise RuntimeError(`p`)
-
     def on__O_QOR_E____QConditionalAndExpression_E__C(self, p):
-        raise RuntimeError(`p`)
-
-    def on__Q_O_QOR_E____QConditionalAndExpression_E__C_E_Star(self, p):
-        raise RuntimeError(`p`)
-
-    def on_ConditionalAndExpression(self, p):
         raise RuntimeError(`p`)
 
     def on__O_QAND_E____QValueLogical_E__C(self, p):
         raise RuntimeError(`p`)
 
-    def on__Q_O_QAND_E____QValueLogical_E__C_E_Star(self, p):
-        raise RuntimeError(`p`)
-
-    def on_ValueLogical(self, p):
-        raise RuntimeError(`p`)
-
-    def on_RelationalExpression(self, p):
-        raise RuntimeError(`p`)
-
     def on__O_QEQUAL_E____QNumericExpression_E__Or__QNEQUAL_E____QNumericExpression_E__Or__QLT_E____QNumericExpression_E__Or__QGT_E____QNumericExpression_E__Or__QLE_E____QNumericExpression_E__Or__QGE_E____QNumericExpression_E__C(self, p):
-        raise RuntimeError(`p`)
-
-    def on__Q_O_QEQUAL_E____QNumericExpression_E__Or__QNEQUAL_E____QNumericExpression_E__Or__QLT_E____QNumericExpression_E__Or__QGT_E____QNumericExpression_E__Or__QLE_E____QNumericExpression_E__Or__QGE_E____QNumericExpression_E__C_E_Opt(self, p):
-        raise RuntimeError(`p`)
-
-    def on_NumericExpression(self, p):
-        raise RuntimeError(`p`)
-
-    def on_AdditiveExpression(self, p):
-        raise RuntimeError(`p`)
+        op = p[1][1]
+        opTable = { '>': 'greater', '<': 'less', '>=': 'notLess', '<=': 'notGreater', '=': 'equal'}
+        return (opTable[op], p[2])
 
     def on__O_QPLUS_E____QMultiplicativeExpression_E__Or__QMINUS_E____QMultiplicativeExpression_E__C(self, p):
-        raise RuntimeError(`p`)
-
-    def on__Q_O_QPLUS_E____QMultiplicativeExpression_E__Or__QMINUS_E____QMultiplicativeExpression_E__C_E_Star(self, p):
-        raise RuntimeError(`p`)
-
-    def on_MultiplicativeExpression(self, p):
         raise RuntimeError(`p`)
 
     def on__O_QTIMES_E____QUnaryExpression_E__Or__QDIVIDE_E____QUnaryExpression_E__C(self, p):
         raise RuntimeError(`p`)
 
-    def on__Q_O_QTIMES_E____QUnaryExpression_E__Or__QDIVIDE_E____QUnaryExpression_E__C_E_Star(self, p):
-        raise RuntimeError(`p`)
-
-    def on_UnaryExpression(self, p):
-        raise RuntimeError(`p`)
-
     def on_CallExpression(self, p):
-        raise RuntimeError(`p`)
+        return p[1]
 
     def on_BuiltinCallExpression(self, p):
+        if len(p) == 2:
+            return p[1]
         raise RuntimeError(`p`)
 
     def on_RegexExpression(self, p):
-        raise RuntimeError(`p`)
+        return ('Regex', p[3], p[5], p[6]) 
 
     def on__O_QCOMMA_E____QExpression_E__C(self, p):
         raise RuntimeError(`p`)
 
     def on__Q_O_QCOMMA_E____QExpression_E__C_E_Opt(self, p):
+        if len(p) == 1:
+            return ('Literal', self.store.newLiteral(''))
         raise RuntimeError(`p`)
 
     def on_FunctionCall(self, p):
@@ -626,14 +787,8 @@ class FromSparql(productionHandler):
     def on__Q_O_QExpression_E____QCOMMA_E____QExpression_E_Star_C_E_Opt(self, p):
         raise RuntimeError(`p`)
 
-    def on_BrackettedExpression(self, p):
-        raise RuntimeError(`p`)
-
-    def on_PrimaryExpression(self, p):
-        raise RuntimeError(`p`)
-
     def on_RDFTermOrFunc(self, p):
-        raise RuntimeError(`p`)
+        return p[1]
 
     def on_IRIrefOrFunc(self, p):
         raise RuntimeError(`p`)
