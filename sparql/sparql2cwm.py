@@ -9,15 +9,51 @@ $Id$
 from set_importer import Set
 import uripath
 from term import Term
+from formula import Formula
 
 def abbr(prodURI): 
    return prodURI.split('#').pop()
+
+class typedThing(unicode):
+    def __new__(cls, val, retType=None, ArgTypes=[]):
+        ret = unicode.__new__(cls, val)
+        ret.retType = retType
+        ret.argTypes = ArgTypes
+        return ret
+
+    def __call__(self):
+        return unicode(self) + '__' + unicode(self.retType) + '__' + '_'.join(self.argTypes)
+
+def getType(ex):
+    if isinstance(ex, typedThing):
+        return ex.retType
+    return None
+
+AND = typedThing('And', 'boolean')
+OR = typedThing('Or', 'boolean')
+NOT = typedThing('Not', 'boolean')
+
+class andExtra(tuple):
+    def __new__(cls, val, extra):
+        ret = tuple.__new__(cls, val)
+        ret.extra = extra
+        return ret
+
+    def __repr__(self):
+        return repr(tuple(self)) + '+' + repr(self.extra)
+
+def getExtra(ex):
+    if isinstance(ex, andExtra):
+        return ex.extra
+    return []
 
 
 def anonymize(self, formula, uri = None):
     if uri is not None:
         if isinstance(uri, list):
             return formula.newList([anonymize(formula, k) for k in uri])
+        if isinstance(uri, Formula):
+            return uri.close()
         if isinstance(uri, Term):
             return uri
         try:
@@ -44,14 +80,21 @@ def makeTripleObjList(subj, pred, obj):
 
 def normalize(expr):
     print expr
-    return Coerce()(expr)
+    step1 = Coerce()(expr)
+    return NotNot()(step1)
 
 class Coerce(object):
     def __call__(self, expr, coerce=True):
         try:
+            if expr[0] in ('Var', 'Literal', 'Number', 'String', 'symbol'):
+                return self.atom(expr, coerce)
+            if expr[0] in ('subtract', 'add', 'multiply', 'divide'):
+                return self.on_math(expr, coerce)
+            if expr[0] in ('less', 'equal'):
+                return self.on_pred(expr, coerce)
             return getattr(self, 'on_' + expr[0])(expr, coerce)
         except AttributeError:
-             raise RuntimeError("why don't you define a %s function, to call on %s?" % ('on_' + expr[0], `expr`))
+             raise RuntimeError("COERCE why don't you define a %s function, to call on %s?" % ('on_' + expr[0], `expr`))
 
     def on_Or(self, p, coerce):
         if len(p) == 2:
@@ -68,12 +111,75 @@ class Coerce(object):
             return [p[0], self(p[1], False)]
         return self(p[1], False)
 
-    def on_Var(self, p, coerce):
+    def atom(self, p, coerce):
+        if coerce:
+            return ('BoolVal', p)
         return p
-    def on_Literal(self, p, coerce):
+
+    def on_math(self, p, coerce):
+        retVal = [p[0]] + [self(q, False) for q in p[1:]]
+        if coerce:
+            return ('BoolVal', retVal)
+        return retVal
+
+    def on_Boolean(self, p, coerce):
+        return p
+    def on_Bound(self, p, coerce):
         return p
 
     def on_Regex(self, p, coerce):
+        return [p[0]] + [self(q, False) for q in p[1:]]
+
+    def on_pred(self, p, coerce):
+        return [p[0]] + [self(q, False) for q in p[1:]]
+
+    def on_Not(self, p, coerce):
+        return [p[0], self(p[1], True)]
+
+class NotNot(object):
+    inverse_operators = {'less' : 'notLess',
+                         'greater' : 'notGreater',
+                         'notLess' : 'less',
+                         'notGreater' : 'greater',
+                         'equal' : 'notEqual',
+                         'notEqual': 'equal',
+##                         'Not', 'BoolVal',
+##                         'BoolVal', 'Not',
+                         'Bound': 'notBound' }
+                         
+    
+    def __call__(self, expr, inv=False):
+        try:
+            if expr[0] in self.inverse_operators:
+                return self.expr(expr, inv)
+            if expr[0] in ('Var', 'Literal', 'Number', 'subtract', 'add', 'multiply', 'divide', 'String', 'symbol'):
+                return self.atom(expr, inv)
+            return getattr(self, 'on_' + expr[0])(expr, inv)
+        except AttributeError:
+             raise RuntimeError("NOTNOT why don't you define a %s function, to call on %s?" % ('on_' + expr[0], `expr`))
+
+    def expr(self, p, inv):
+        if inv:
+            return [typedThing(self.inverse_operators[p[0]], 'boolean')] + [self(q, False) for q in p[1:]]
+        return [p[0]] + [self(q, False) for q in p[1:]]
+
+    def atom(self, p, inv):
+        if inv:
+            return (NOT, p)
+        return p
+
+    def on_Not(self, p, inv):
+        if inv:
+            return self(p[1], False)
+        return self(p[1], True)
+
+    def on_Or(self, p, inv):
+        if inv:
+            return [AND] + [self(q, True) for q in p[1:]]
+        return [p[0]] + [self(q, False) for q in p[1:]]
+    def on_And(self, p, inv):
+        if inv:
+            return [OR] + [self(q, True) for q in p[1:]]
         return [p[0]] + [self(q, False) for q in p[1:]]
 
 
@@ -93,7 +199,9 @@ class AST(object):
         stack = [[self.ast, 0]]
         while stack:
             if not isinstance(stack[-1][0][1], (tuple, list)):
-                self.onToken(stack[-1][0][0], stack[-1][0][1])
+                a = self.onToken(stack[-1][0][0], stack[-1][0][1])
+                if a:
+                    return a
                 stack.pop()
             elif stack[-1][1] >= len(stack[-1][0]):
                 k = self.onFinish()
@@ -111,6 +219,8 @@ class AST(object):
 
     def onStart(self, prod): 
       print (' ' * len(self.productions)) + `prod`
+      #if callable(prod):
+      #    prod = prod()
       self.productions.append([prod])
 
     def onFinish(self):
@@ -123,7 +233,11 @@ class AST(object):
       return prod
 
     def onToken(self, prod, tok):
-      self.productions[-1].append((prod, tok))
+      k = self.sink.prod((prod, tok))
+      try:
+          self.productions[-1].append(k)
+      except IndexError:
+          return k
       print (' ' * len(self.productions)) + `(prod, tok)`
 
 
@@ -143,16 +257,15 @@ class FilterExpr(productionHandler):
     def __init__(self, store, parent):
         self.store = store
         self.parent = parent
+        self.bnode = parent.new_bnode
         self.string = store.newSymbol('http://www.w3.org/2000/10/swap/string')
+        self.anything = self.parent.sparql
+        self.math = self.parent.math
 
     def on_BoolVal(self, p):
-        if p[1][0] == 'andExtra':
-            extra = p[1][2]
-            val = p[1][1]
-        else:
-            extra = []
-            val = p[1]
-        return [makeTriple(val, ('symbol', self.parent.sparql['truthValue']), ('symbol', self.parent.true))] + extra
+        extra = getExtra(p[1])
+        val = tuple(p[1])
+        return [makeTriple(val, ('symbol', self.anything['truthValue']), ('symbol', self.parent.true))] + extra
 
     def on_And(self, p):
         vals = []
@@ -171,18 +284,56 @@ class FilterExpr(productionHandler):
     def on_Regex(self, p):
         if str(p[3][1]):
             raise RuntimeError('I don\'t know how to deal with flags. The flag is: %r' % p[3][1])
-        extra = []
-        if p[1][0] == 'andExtra':
-            string = p[1][1]
-            extra.extend(p[1][2])
-        else:
-            string = p[1]
-        if p[2][0] == 'andExtra':
-            regex = p[2][1]
-            extra.extend(p[2][2])
-        else:
-            regex = p[2]
+        extra = getExtra(p[1]) + getExtra(p[2])
+        string = tuple(p[1])
+        regex = tuple(p[2])
         return [makeTriple(string, ('symbol', self.string['matches']), regex)] + extra
+
+    def compare(self, p, op):
+        extra = getExtra(p[1]) + getExtra(p[2])
+        op1 = tuple(p[1])
+        op2 = tuple(p[2])
+        return [makeTriple(op1, ('symbol', op), op2)] + extra
+
+    def on_less(self, p):
+        return self.compare(p, self.anything['lessThan'])
+    def on_equal(self, p):
+        return self.compare(p, self.anything['equals'])
+
+    def arithmetic(self, p, op):
+        extra = getExtra(p[1]) + getExtra(p[2])
+        op1 = tuple(p[1])
+        op2 = tuple(p[2])
+        retVal = self.bnode()
+        return andExtra(retVal, [makeTriple(('List', [op1[1], op2[1]]), ('symbol', op), retVal)] + extra)
+    def on_subtract(self, p):
+        return self.arithmetic(p, self.math['difference'])
+    def on_add(self, p):
+        return self.arithmetic(p, self.math['sum'])
+    def on_multiply(self, p):
+        return self.arithmetic(p, self.math['product'])
+    def on_divide(self, p):
+        return self.arithmetic(p, self.math['quotient'])
+
+    def on_Var(self, p):
+        return p
+    def on_symbol(self, p):
+        return p
+    def on_Literal(self, p):
+        return p
+    def on_Boolean(self, p):
+        return p
+    def on_Number(self, p):
+        return p
+    def on_String(self, p):
+        return p
+
+    def on_notBound(self, var):
+        var = ('Literal', self.store.newLiteral(var[1][1].uriref()))
+        return [makeTriple(self.bnode(), ('symbol', self.parent.sparql['notBound']), var)]
+    def on_Bound(self, var):
+        var = ('Literal', self.store.newLiteral(var[1][1].uriref()))
+        return [makeTriple(self.bnode(), ('symbol', self.parent.sparql['bound']), var)]
 
 class FromSparql(productionHandler):
     def __init__(self, store):
@@ -194,6 +345,7 @@ class FromSparql(productionHandler):
         self.sparql = store.newSymbol('http://yosi.us/2005/sparql')
         self.xsd = store.newSymbol('http://www.w3.org/2001/XMLSchema')
         self.math = store.newSymbol('http://www.w3.org/2000/10/swap/math')
+        self.numTypes = Set([self.xsd[k] for k in ['unsignedShort', 'short', 'nonPositiveInteger', 'decimal', 'unsignedInt', 'long', 'nonNegativeInteger', 'int', 'unsignedByte', 'positiveInteger', 'integer', 'byte', 'negativeInteger', 'unsignedLong']])
         self.true = store.newLiteral('1', dt=self.xsd['boolean'])
         self.false = store.newLiteral('0', dt=self.xsd['boolean'])
         self.anonymous_counter = 0
@@ -236,7 +388,18 @@ class FromSparql(productionHandler):
         return None
 
     def on_WhereClause(self, p):
-        return p[2]
+        stuff2 = p[2]
+        stuff = []
+        for k in stuff2:
+            append = True
+            for triple in k[1].statementsMatching(pred=self.sparql['Bound']):
+                variable = self.store.newSymbol(str(triple.object()))
+                if not k[1].doesNodeAppear(variable):
+                    append = False
+            if append:
+                stuff.append(k)
+
+        return stuff
 
     def on_SolutionModifier(self, p):
         if len(p) == 1:
@@ -426,8 +589,8 @@ class FromSparql(productionHandler):
         alternates = []
         f = self.store.newFormula()
         for triple in triples:
-            if triple[0] == 'formula':
-                unions.append(triple[1])
+            if triple[0] == 'union':
+                triples.append([k[1] for k in triple[1]])
                 continue
             rest1 = triple[1]
             subject = rest1[0]
@@ -454,8 +617,6 @@ class FromSparql(productionHandler):
                         raise
 
         f = f.close()
-        if unions:
-            alternates.append(unions)
         retVal = [('formula', f)]
         for alternate in alternates:
             oldRetVal = retVal
@@ -541,7 +702,8 @@ class FromSparql(productionHandler):
 ### End Triples Stuff
 #GRAPH
     def on_GraphGraphPattern(self, p):
-        return [makeTripleObjList(p[2], ('symbol', self.store.includes), p[3])]
+        semantics = self.new_bnode()
+        return [makeTriple(p[2], ('symbol', self.store.semantics), semantics), makeTripleObjList(semantics, ('symbol', self.store.includes), p[3])]
 #OPTIONAL
     def on_GraphPatternNotTriples(self, p):
         return p[1]
@@ -566,7 +728,7 @@ class FromSparql(productionHandler):
         return p[1] + p[2]
 
     def on_GroupOrUnionGraphPattern(self, p):
-        return p[1] + p[2]
+        return [('union', p[1] + p[2])]
 
 #FILTER
     def on_PrimaryExpression(self, p):
@@ -575,27 +737,33 @@ class FromSparql(productionHandler):
     def on_UnaryExpression(self, p):
         if len(p) == 2:
             return p[1]
+        if abbr(p[1][0]) == 'GT_NOT':
+            return (typedThing('Not', 'boolean'), p[2])
         raise RuntimeError(`p`)
 
     def on__Q_O_QTIMES_E____QUnaryExpression_E__Or__QDIVIDE_E____QUnaryExpression_E__C_E_Star(self, p):
         if len(p) == 1:
             return []
-        raise RuntimeError(`p`)
+        if not p[2]:
+            return p[1]
+        return (p[1][0], (p[2][0], p[1][1], p[2][1]))
 
     def on_MultiplicativeExpression(self, p):
         if p[2] == []:
             return p[1]
-        raise RuntimeError(`p`)
+        return (p[2][0], p[1], p[2][1])
 
     def on__Q_O_QPLUS_E____QMultiplicativeExpression_E__Or__QMINUS_E____QMultiplicativeExpression_E__C_E_Star(self, p):
         if len(p) == 1:
             return []
-        raise RuntimeError(`p`)
+        if not p[2]:
+            return p[1]
+        return (p[1][0], (p[2][0], p[1][1], p[2][1]))
 
     def on_AdditiveExpression(self, p):
         if p[2] == []:
             return p[1]
-        raise RuntimeError(`p`)
+        return (p[2][0], p[1], p[2][1])
 
     def on_NumericExpression(self, p):
         return p[1]
@@ -608,8 +776,16 @@ class FromSparql(productionHandler):
 
     def on_RelationalExpression(self, p):
         if p[2] is None:
-            return ('BoolVal', p[1])
-        return (p[2][0], p[1], p[2][1])
+            return p[1]
+        if p[2][0] == 'equal':
+            t1, t2 = getType(p[1]), getType(p[2][1])
+            if t1 == 'boolean' or t2 == 'boolean':
+                return (OR, (AND, p[1], p[2][1]), (AND, (NOT, p[1]), (NOT, p[2][1])))
+        if p[2][0] == 'notEqual':
+            t1, t2 = getType(p[1]), getType(p[2][1])
+            if t1 == 'boolean' or t2 == 'boolean':
+                return (OR, (AND, (NOT, p[1]), p[2][1]), (AND, p[1], (NOT, p[2][1])))
+        return (typedThing(p[2][0], 'boolean'), p[1], p[2][1])
 
     def on_ValueLogical(self, p):
         return p[1]
@@ -620,15 +796,19 @@ class FromSparql(productionHandler):
         raise RuntimeError(`p`)
 
     def on_ConditionalAndExpression(self, p):
-        return ['And', p[1]] + p[2]
+        if p[2]:
+            return [AND, p[1]] + p[2]
+        return p[1]
 
     def on__Q_O_QOR_E____QConditionalAndExpression_E__C_E_Star(self, p):
         if len(p) == 1:
             return []
-        raise RuntimeError(`p`)
+        return [p[1]] + p[2]
 
     def on_ConditionalOrExpression(self, p):
-        return ['Or', p[1]] + p[2]
+        if p[2]:
+            return [OR, p[1]] + p[2]
+        return p[1]
 
     def on_Expression(self, p):
         return p[1]
@@ -737,21 +917,24 @@ class FromSparql(productionHandler):
         raise RuntimeError(`p`)
 
     def on__O_QOR_E____QConditionalAndExpression_E__C(self, p):
-        raise RuntimeError(`p`)
+        return p[2]
 
     def on__O_QAND_E____QValueLogical_E__C(self, p):
         raise RuntimeError(`p`)
 
     def on__O_QEQUAL_E____QNumericExpression_E__Or__QNEQUAL_E____QNumericExpression_E__Or__QLT_E____QNumericExpression_E__Or__QGT_E____QNumericExpression_E__Or__QLE_E____QNumericExpression_E__Or__QGE_E____QNumericExpression_E__C(self, p):
         op = p[1][1]
-        opTable = { '>': 'greater', '<': 'less', '>=': 'notLess', '<=': 'notGreater', '=': 'equal'}
+        opTable = { '>': 'greater',
+                    '<': 'less',
+                    '>=': 'notLess',
+                    '<=': 'notGreater', '=': 'equal', '!=': 'notEqual'}
         return (opTable[op], p[2])
 
     def on__O_QPLUS_E____QMultiplicativeExpression_E__Or__QMINUS_E____QMultiplicativeExpression_E__C(self, p):
-        raise RuntimeError(`p`)
+        return ({'+': typedThing('add', 'number'), '-': typedThing('subtract', 'number')}[p[1][1]], p[2])
 
     def on__O_QTIMES_E____QUnaryExpression_E__Or__QDIVIDE_E____QUnaryExpression_E__C(self, p):
-        raise RuntimeError(`p`)
+        return ({'*': typedThing('multiply', 'number'), '/': typedThing('divide', 'number')}[p[1][1]], p[2])
 
     def on_CallExpression(self, p):
         return p[1]
@@ -759,6 +942,8 @@ class FromSparql(productionHandler):
     def on_BuiltinCallExpression(self, p):
         if len(p) == 2:
             return p[1]
+        if abbr(p[1][0]) == 'IT_BOUND':
+            return (typedThing('Bound', 'boolean', ['variable']), p[3])
         raise RuntimeError(`p`)
 
     def on_RegexExpression(self, p):
@@ -788,6 +973,14 @@ class FromSparql(productionHandler):
         raise RuntimeError(`p`)
 
     def on_RDFTermOrFunc(self, p):
+        if p[1][0] == 'Literal':
+            lit = p[1][1]
+            if not lit.datatype:
+                return (typedThing('String', 'string'), lit)
+            if lit.datatype in self.numTypes:
+                return (typedThing('Number', 'number'), lit)
+            if lit.datatype == self.xsd['boolean']:
+                return (typedThing('Boolean', 'boolean'), lit)
         return p[1]
 
     def on_IRIrefOrFunc(self, p):
@@ -874,7 +1067,7 @@ class Null:
         return p[2][1]
     
     def on_Union(self, p):
-        return ('Union', p[2] + p[1])
+        return ('union', p[2] + p[1])
 
     def on_GraphPattern(self, p):
         return ('Graph', p[2][1])
