@@ -34,20 +34,21 @@ def importTokens():
             F = myStore.load('http://www.w3.org/2000/10/swap/grammar/sparql')
             BNF = myStore.Namespace("http://www.w3.org/2000/10/swap/grammar/bnf#")
             regexps = {}
-            for triple in F.statementsMatching(pred=BNF.matches):
-                s, p, o = triple.spo()
-                key = s.uriref()
-                val = o.value()
-                setattr(Tokens, 't_' + key, val)
-                regexps['t_' + key] = val
-                setattr(Tokens, 'c_' + key, re.compile(val, re.I))
-                regexps['c_' + key] = re.compile(val, re.I)
             k = F.statementsMatching(pred=BNF.tokens)
             if len(k) != 1:
                 raise RuntimeError
             for triple in k:
                 tokens = [x.uriref() for x in triple.object()]
             tokens.append(BNF.PASSED_TOKENS.uriref())
+            for triple in F.statementsMatching(pred=BNF.matches):
+                s, p, o = triple.spo()
+                key = s.uriref()
+                val = o.value()
+                if key in tokens:
+                    setattr(Tokens, 't_' + key, val)
+                    regexps['t_' + key] = val
+                    setattr(Tokens, 'c_' + key, re.compile(val, re.I))
+                    regexps['c_' + key] = re.compile(val, re.I)
             pklVal = {'tokens': tokens, 'regexps': regexps}
             try:
                 f = file('sparql_tokens_table.py', 'w')
