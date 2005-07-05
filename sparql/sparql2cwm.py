@@ -84,15 +84,23 @@ def normalize(expr):
     return NotNot()(step1)
 
 class Coerce(object):
+    def __init__(self):
+        self.k = 0
     def __call__(self, expr, coerce=True):
         try:
+            print '  ' * self.k, expr, coerce
+            self.k = self.k + 1
             if expr[0] in ('Var', 'Literal', 'Number', 'String', 'symbol'):
-                return self.atom(expr, coerce)
-            if expr[0] in ('subtract', 'add', 'multiply', 'divide'):
-                return self.on_math(expr, coerce)
-            if expr[0] in ('less', 'equal'):
-                return self.on_pred(expr, coerce)
-            return getattr(self, 'on_' + expr[0])(expr, coerce)
+                ww = self.atom(expr, coerce)
+            elif expr[0] in ('subtract', 'add', 'multiply', 'divide'):
+                ww = self.on_math(expr, coerce)
+            elif expr[0] in ('less', 'equal'):
+                ww = self.on_pred(expr, coerce)
+            else:
+                ww = getattr(self, 'on_' + expr[0])(expr, coerce)
+            self.k = self.k - 1
+            print '  ' * self.k, '/', ww
+            return ww
         except AttributeError:
              raise RuntimeError("COERCE why don't you define a %s function, to call on %s?" % ('on_' + expr[0], `expr`))
 
@@ -123,6 +131,8 @@ class Coerce(object):
         return retVal
 
     def on_Boolean(self, p, coerce):
+        if coerce:
+            return ('BoolVal', p)
         return p
     def on_Bound(self, p, coerce):
         return p
@@ -147,14 +157,22 @@ class NotNot(object):
 ##                         'BoolVal', 'Not',
                          'Bound': 'notBound' }
                          
+    def __init__(self):
+        self.k = 0
     
     def __call__(self, expr, inv=False):
         try:
+            print '  ' * self.k, expr, inv
+            self.k = self.k + 1
             if expr[0] in self.inverse_operators:
-                return self.expr(expr, inv)
-            if expr[0] in ('Var', 'Literal', 'Number', 'subtract', 'add', 'multiply', 'divide', 'String', 'symbol'):
-                return self.atom(expr, inv)
-            return getattr(self, 'on_' + expr[0])(expr, inv)
+                ww = self.expr(expr, inv)
+            elif expr[0] in ('Var', 'Literal', 'Number', 'subtract', 'add', 'multiply', 'divide', 'String', 'symbol'):
+                ww = self.atom(expr, inv)
+            else:
+                ww = getattr(self, 'on_' + expr[0])(expr, inv)
+            self.k = self.k - 1
+            print '  ' * self.k, '/', ww
+            return ww
         except AttributeError:
              raise RuntimeError("NOTNOT why don't you define a %s function, to call on %s?" % ('on_' + expr[0], `expr`))
 
@@ -181,6 +199,18 @@ class NotNot(object):
         if inv:
             return [OR] + [self(q, True) for q in p[1:]]
         return [p[0]] + [self(q, False) for q in p[1:]]
+    def on_BoolVal(self, p, inv):
+        if inv:
+            return ['Not', self(p[1], False)]
+        return [p[0], self(p[1], False)]
+        
+
+def on_Boolean_Gen(true, false):
+    def on_Boolean(self, p, inv):
+        if (inv and p[1] != false) or (not inv) and p[1] == false:
+            return (p[0], false)
+        return (p[0], true)
+    return on_Boolean
 
 
 class AST(object):
@@ -266,6 +296,10 @@ class FilterExpr(productionHandler):
         extra = getExtra(p[1])
         val = tuple(p[1])
         return [makeTriple(val, ('symbol', self.anything['truthValue']), ('symbol', self.parent.true))] + extra
+    def on_Not(self, p):
+        extra = getExtra(p[1])
+        val = tuple(p[1])
+        return [makeTriple(val, ('symbol', self.anything['truthValue']), ('symbol', self.parent.false))] + extra
 
     def on_And(self, p):
         vals = []
@@ -279,7 +313,7 @@ class FilterExpr(productionHandler):
         returns = []
         for val in p:
             returns.extend(self.parent.on_GroupGraphPattern([None, None, val, None]))
-        return returns
+        return [('union', returns)]
 
     def on_Regex(self, p):
         if str(p[3][1]):
@@ -297,8 +331,12 @@ class FilterExpr(productionHandler):
 
     def on_less(self, p):
         return self.compare(p, self.anything['lessThan'])
+    def on_notLess(self, p):
+        return self.compare(p, self.anything['notLessThan'])
     def on_equal(self, p):
         return self.compare(p, self.anything['equals'])
+    def on_notEqual(self, p):
+        return self.compare(p, self.anything['notEquals'])
 
     def arithmetic(self, p, op):
         extra = getExtra(p[1]) + getExtra(p[2])
@@ -350,6 +388,7 @@ class FromSparql(productionHandler):
         self.false = store.newLiteral('0', dt=self.xsd['boolean'])
         self.anonymous_counter = 0
         self.uribase = uripath.base()
+        NotNot.on_Boolean = on_Boolean_Gen(self.true, self.false)
 
     def new_bnode(self):
         self.anonymous_counter += 1
@@ -383,6 +422,8 @@ class FromSparql(productionHandler):
 
         for pattern in p[5]:
             f.add(q, sparql['where'], pattern[1])
+            for parent in pattern[2]:
+                f.add(pattern[1], sparql['parent'], parent)
 
         #TODO: I'm missing sorting and datasets
         return None
@@ -392,10 +433,11 @@ class FromSparql(productionHandler):
         stuff = []
         for k in stuff2:
             append = True
-            for triple in k[1].statementsMatching(pred=self.sparql['Bound']):
-                variable = self.store.newSymbol(str(triple.object()))
-                if not k[1].doesNodeAppear(variable):
-                    append = False
+            for pred, obj in k[3]:  # triple in k[1].statementsMatching(pred=self.sparql['bound']):
+                if pred is self.sparql['bound']:
+                    variable = self.store.newSymbol(str(obj))
+                    if not k[1].doesNodeAppear(variable):
+                        append = False
             if append:
                 stuff.append(k)
 
@@ -585,49 +627,73 @@ class FromSparql(productionHandler):
 
     def on_GroupGraphPattern(self, p):
         triples = p[2]
-        unions = []
+        options = []
         alternates = []
+        parents = []
+        bounds = []
         f = self.store.newFormula()
         for triple in triples:
-            if triple[0] == 'union':
-                triples.append([k[1] for k in triple[1]])
-                continue
-            rest1 = triple[1]
-            subject = rest1[0]
-            predicateList = rest1[1][1]
-            for rest2 in predicateList:
-                predicate = rest2[0]
-                objectList = rest2[1][1]
-                
-                for object in objectList:
-                    try:
-                        subj = anonymize(f, subject[1])
-                        pred = anonymize(f, predicate[1])
-                        obj = anonymize(f, object[1])
-                        if pred is self.sparql['OPTIONAL']:
-                            alternates.append([obj, None])
-                            #print alternates, object[1], isinstance(object[1], Term), anonymize(f, object[1])
-                        else:
-                            f.add(subj, pred, obj)
-                    except:
-                        print '================'
-                        print 'subject= ', subject
-                        print 'predicate= ', predicate
-                        print 'object= ', object
-                        raise
+            try:
+                if triple[0] == 'union':
+                    alternates.append([k[1:] for k in triple[1]])
+                    continue
+                rest1 = triple[1]
+                subject = rest1[0]
+                predicateList = rest1[1][1]
+                for rest2 in predicateList:
+                    predicate = rest2[0]
+                    objectList = rest2[1][1]
+                    
+                    for object in objectList:
+                        try:
+                            subj = anonymize(f, subject[1])
+                            pred = anonymize(f, predicate[1])
+                            if pred is self.sparql['OPTIONAL']:
+                                options.append(object)
+                            else:
+                                obj = anonymize(f, object[1])
+                                if pred is self.sparql['bound'] or pred is self.sparql['notBound']:
+                                    bounds.append((pred, obj))
+                                    
+                                    #print alternates, object[1], isinstance(object[1], Term), anonymize(f, object[1])
+                                else:
+                                    f.add(subj, pred, obj)
+                        except:
+                            print '================'
+                            print 'subject= ', subject
+                            print 'predicate= ', predicate
+                            print 'pred= ', pred is self.sparql['OPTIONAL'], id(pred), id(self.sparql['OPTIONAL'])
+                            print 'object= ', object
+                            raise
+            except:
+                print 'triples=',triples
+                print 'triple=',triple
+                raise
 
         f = f.close()
-        retVal = [('formula', f)]
+        retVal = [('formula', f, parents, bounds)]
         for alternate in alternates:
             oldRetVal = retVal
             retVal = []
-            for formula1 in alternate:
-                for ss, formula2 in oldRetVal:
+            for formula1, parents1, bounds1 in alternate:
+                for ss, formula2, parents2, bounds2 in oldRetVal:
                     f = self.store.newFormula()
                     if formula1:
                         f.loadFormulaWithSubsitution(formula1)
                     f.loadFormulaWithSubsitution(formula2)
-                    retVal.append(('formula', f.close()))
+                    retVal.append(('formula', f.close(), parents1 + parents2, bounds1 + bounds2))
+        for alternate in options:
+            oldRetVal = retVal
+            retVal = []
+            for ss, formula1, parents1, bounds1 in alternate:
+                for ss, formula2, parents2, bounds2 in oldRetVal:
+                    f1 = self.store.newFormula()
+                    f1.loadFormulaWithSubsitution(formula1)
+                    f1.loadFormulaWithSubsitution(formula2)
+                    f2 = self.store.newFormula()
+                    f2.loadFormulaWithSubsitution(formula2)
+                    retVal.append(('formula', f1.close(), parents1 + parents2, bounds1 + bounds2))
+                    retVal.append(('formula', f2.close(), [f1], bounds1 + bounds2))
         return retVal
 ##        
 ##        if len(p) == 2:
@@ -717,7 +783,7 @@ class FromSparql(productionHandler):
         return p[2]
 
     def on_OptionalGraphPattern(self, p):
-        return [makeTriple(self.new_bnode(), ('symbol', self.sparql['OPTIONAL']), f) for f in p[2]]
+        return [makeTriple(self.new_bnode(), ('symbol', self.sparql['OPTIONAL']), p[2])]
 #UNION
     def on__O_QUNION_E____QGroupGraphPattern_E__C(self, p):
         return p[2]
@@ -736,6 +802,8 @@ class FromSparql(productionHandler):
 
     def on_UnaryExpression(self, p):
         if len(p) == 2:
+##            if getType(p[1][0]) != 'boolean':
+##                return (typedThing('BoolVal', 'boolean'), p[1])
             return p[1]
         if abbr(p[1][0]) == 'GT_NOT':
             return (typedThing('Not', 'boolean'), p[2])
@@ -777,8 +845,10 @@ class FromSparql(productionHandler):
     def on_RelationalExpression(self, p):
         if p[2] is None:
             return p[1]
+##        if p[2][0] != 'less':
+##            raise RuntimeError(p[2], getType(p[2][1][0]))
         if p[2][0] == 'equal':
-            t1, t2 = getType(p[1]), getType(p[2][1])
+            t1, t2 = getType(p[1][0]), getType(p[2][1][0])
             if t1 == 'boolean' or t2 == 'boolean':
                 return (OR, (AND, p[1], p[2][1]), (AND, (NOT, p[1]), (NOT, p[2][1])))
         if p[2][0] == 'notEqual':
@@ -996,7 +1066,7 @@ class FromSparql(productionHandler):
         raise RuntimeError(`p`)
 
     def on_BooleanLiteral(self, p):
-        raise RuntimeError(`p`)
+        return ('Literal', (p[1] == 'true' and self.true or self.false))
 
 
 class Null:
