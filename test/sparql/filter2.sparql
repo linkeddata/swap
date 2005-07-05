@@ -4,4 +4,3 @@ SELECT ?name ?givenName
  WHERE { { ?x foaf:name  ?name } UNION { ?x foaf:givenName ?givenName; dc:created ?created } .
          FILTER ( bound(?name) || ?created < "2005-01-01T00:00:00Z" ) }
 
-?name :bound  :true. created math:lessThan 

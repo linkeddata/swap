@@ -1,0 +1,10 @@
+PREFIX dc10:  <http://purl.org/dc/elements/1.1/>
+PREFIX dc11:  <http://purl.org/dc/elements/1.0/>
+PREFIX my: <http://www.example.org/my#>
+
+SELECT ?title ?author
+WHERE  { ?person my:hates ?book .
+         OPTIONAL { { ?book dc10:creator1 ?author }
+         UNION
+         { ?book dc11:creator2 ?author }
+       } }
