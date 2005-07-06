@@ -65,8 +65,9 @@ class ToPyStore(object):
         return terms.Literal(string, lang, dt)
 
     def list(self, node):
+        newList = [].__class__
         next = NIL
-        for item in reversed(node.value()):
+        for item in reversed(newList(node)):
             bNode = BNode.BNode()
             self.pyStore.add((bNode, REST, next))
             self.pyStore.add((bNode, FIRST, self.lookup(item)))
@@ -117,7 +118,7 @@ class FromPyStore(object):
         raise RuntimeError(`node` + '  ' + `node.__class__`)
 
     def URI(self, node):
-        return self.store.newSymbol(node)
+        return self.formula.newSymbol(node)
 
     def variable(self, node):
         if self.pyStore.get_clause(node.name) is not None:
@@ -142,10 +143,10 @@ class FromPyStore(object):
         return bNodes[node]
 
     def literal(self, node):
-        return self.store.newLiteral(node, node.datatype or None, node.language or None)
+        return self.formula.newLiteral(node, node.datatype or None, node.language or None)
     
     def subStore(self, node):
-        f = self.store.newFormula()
+        f = self.formula.newFormula()
         self.__class__(f, node).run()
         return f.close()
 
