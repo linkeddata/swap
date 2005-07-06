@@ -94,7 +94,7 @@ class Coerce(object):
                 ww = self.atom(expr, coerce)
             elif expr[0] in ('subtract', 'add', 'multiply', 'divide'):
                 ww = self.on_math(expr, coerce)
-            elif expr[0] in ('less', 'equal'):
+            elif expr[0] in ('less', 'equal', 'greater', 'notLess', 'notGreater'):
                 ww = self.on_pred(expr, coerce)
             else:
                 ww = getattr(self, 'on_' + expr[0])(expr, coerce)
@@ -306,13 +306,16 @@ class FilterExpr(productionHandler):
         things = p[1:]
         for thing in things:
             vals.extend(thing)
+            if thing == ['Error']:
+                return ['Error']
         return vals
 
     def on_Or(self, p):
         p = p[1:]
         returns = []
         for val in p:
-            returns.extend(self.parent.on_GroupGraphPattern([None, None, val, None]))
+            if val != ['Error']:
+                returns.extend(self.parent.on_GroupGraphPattern([None, None, val, None]))
         return [('union', returns)]
 
     def on_Regex(self, p):
@@ -324,6 +327,8 @@ class FilterExpr(productionHandler):
         return [makeTriple(string, ('symbol', self.string['matches']), regex)] + extra
 
     def compare(self, p, op):
+        if not isinstance(p[1], tuple) or not isinstance(p[2], tuple):
+            return ['Error']
         extra = getExtra(p[1]) + getExtra(p[2])
         op1 = tuple(p[1])
         op2 = tuple(p[2])
@@ -337,8 +342,14 @@ class FilterExpr(productionHandler):
         return self.compare(p, self.anything['equals'])
     def on_notEqual(self, p):
         return self.compare(p, self.anything['notEquals'])
+    def on_greater(self, p):
+        return self.compare(p, self.anything['greaterThan'])
+    def on_notGreater(self, p):
+        return self.compare(p, self.anything['notGreaterThan'])
 
     def arithmetic(self, p, op):
+        if not isinstance(p[1], tuple) or not isinstance(p[2], tuple):
+            return ['Error']
         extra = getExtra(p[1]) + getExtra(p[2])
         op1 = tuple(p[1])
         op2 = tuple(p[2])
@@ -633,6 +644,8 @@ class FromSparql(productionHandler):
         bounds = []
         f = self.store.newFormula()
         for triple in triples:
+            if triple == 'Error':
+                return []
             try:
                 if triple[0] == 'union':
                     alternates.append([k[1:] for k in triple[1]])
@@ -863,7 +876,7 @@ class FromSparql(productionHandler):
     def on__Q_O_QAND_E____QValueLogical_E__C_E_Star(self, p):
         if len(p) == 1:
             return []
-        raise RuntimeError(`p`)
+        return [p[1]] + p[2]
 
     def on_ConditionalAndExpression(self, p):
         if p[2]:
@@ -990,7 +1003,7 @@ class FromSparql(productionHandler):
         return p[2]
 
     def on__O_QAND_E____QValueLogical_E__C(self, p):
-        raise RuntimeError(`p`)
+        return (AND, p[2])
 
     def on__O_QEQUAL_E____QNumericExpression_E__Or__QNEQUAL_E____QNumericExpression_E__Or__QLT_E____QNumericExpression_E__Or__QGT_E____QNumericExpression_E__Or__QLE_E____QNumericExpression_E__Or__QGE_E____QNumericExpression_E__C(self, p):
         op = p[1][1]
@@ -1066,7 +1079,7 @@ class FromSparql(productionHandler):
         raise RuntimeError(`p`)
 
     def on_BooleanLiteral(self, p):
-        return ('Literal', (p[1] == 'true' and self.true or self.false))
+        return ('Literal', (p[1][1] == u'true' and self.true or self.false))
 
 
 class Null:
