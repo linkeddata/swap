@@ -1138,7 +1138,7 @@ class RDFStore(RDFSink) :
 
         self.includes =         log.internFrag( "includes", BI_includes)
 #        log.internFrag("directlyIncludes", BI_directlyIncludes)
-        log.internFrag("notIncludes", BI_notIncludes)
+        self.notIncludes = log.internFrag("notIncludes", BI_notIncludes)
 #        log.internFrag("notDirectlyIncludes", BI_notDirectlyIncludes)
 
 #Heavy functions:

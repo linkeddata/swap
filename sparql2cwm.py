@@ -11,6 +11,8 @@ import uripath
 from term import Term, CompoundTerm
 from formula import Formula
 
+knownFunctions = {}
+
 def abbr(prodURI): 
    return prodURI.split('#').pop()
 
@@ -104,6 +106,11 @@ class Coerce(object):
         except AttributeError:
              raise RuntimeError("COERCE why don't you define a %s function, to call on %s?" % ('on_' + expr[0], `expr`))
 
+    def on_function(self, p, coerce):
+        if coerce:
+            return ('BoolVal', self(p, False))
+        return [p[0], p[1]] + [self(q, False) for q in p[2:]]
+
     def on_Or(self, p, coerce):
         if len(p) == 2:
             return self(p[1], coerce)
@@ -166,7 +173,7 @@ class NotNot(object):
             self.k = self.k + 1
             if expr[0] in self.inverse_operators:
                 ww = self.expr(expr, inv)
-            elif expr[0] in ('Var', 'Literal', 'Number', 'subtract', 'add', 'multiply', 'divide', 'String', 'symbol'):
+            elif expr[0] in ('Var', 'Literal', 'Number', 'subtract', 'add', 'multiply', 'divide', 'String', 'symbol', 'function'):
                 ww = self.atom(expr, inv)
             else:
                 ww = getattr(self, 'on_' + expr[0])(expr, inv)
@@ -190,6 +197,15 @@ class NotNot(object):
         if inv:
             return self(p[1], False)
         return self(p[1], True)
+
+    def on_Regex(self, p, inv):
+        if inv:
+            return ['notMatches'] + [self(q, False) for q in p[1:]]
+        return [p[0]] + [self(q, False) for q in p[1:]]
+    def on_notMatches(self, p, inv):
+        if inv:
+            return ['Regex'] + [self(q, False) for q in p[1:]]
+        return [p[0]] + [self(q, False) for q in p[1:]]
 
     def on_Or(self, p, inv):
         if inv:
@@ -292,6 +308,25 @@ class FilterExpr(productionHandler):
         self.anything = self.parent.sparql
         self.math = self.parent.math
 
+    def on_function(self, p):
+        args = []
+        extra = []
+        rawArgs = p[2:]
+        for rawArg in rawArgs:
+            if not isinstance(rawArg, tuple):
+                return ['Error']
+            extra.extend(getExtra(rawArg))
+            args.append(tuple(rawArg))
+        try:
+            node, triples = knownFunctions[p[1]](self, *args)
+            return andExtra(node, triples + extra)
+        except TypeError:
+            return ['Error']
+
+    def typeConvert(self, uri, val):
+        retVal = self.bnode()
+        return (retVal, [makeTriple(('List', [val[1], self.store.newSymbol(uri)]), ('symbol', self.anything['dtLit']), retVal)])
+
     def on_BoolVal(self, p):
         extra = getExtra(p[1])
         val = tuple(p[1])
@@ -376,6 +411,8 @@ class FilterExpr(productionHandler):
         return p
     def on_String(self, p):
         return p
+    def on_funcName(self, p):
+        return p[1]
 
     def on_notBound(self, var):
         var = ('Literal', self.store.newLiteral(var[1][1].uriref()))
@@ -419,7 +456,7 @@ class FromSparql(productionHandler):
         for pattern in patterns:
             f.add(node, sparql['where'], pattern[1])
             for parent in pattern[2]:
-                f.add(pattern[1], sparql['parent'], parent)
+                f.add(pattern[1], sparql['andNot'], parent)
 
     def on_SelectQuery(self, p):
         sparql = self.sparql
@@ -460,6 +497,36 @@ class FromSparql(productionHandler):
     def on_WhereClause(self, p):
         stuff2 = p[2]
         stuff = []
+        realNodeAppear = Formula.doesNodeAppear
+        def fakeDoesNodeAppear(self, symbol):
+            """Does that particular node appear anywhere in this formula as bound?
+
+            This function is necessarily recursive, and is useful for the pretty printer
+            It will also be useful for the flattener, when we write it.
+            """
+            for quad in self.statements:
+                if isinstance(quad.object(), Formula) and quad.predicate() is self.store.notIncludes:
+                    if symbol is self.store.notIncludes:
+                        return 1
+                    if isinstance(quad.subject(), CompoundTerm) and quad.subject().doesNodeAppear(symbol):
+                        return 1
+                    if quad.subject() == symbol:
+                        return 1
+                    continue
+                for node in quad.spo():
+                    val = 0
+                    if isinstance(node, CompoundTerm):
+                        val = val or node.doesNodeAppear(symbol)
+                    elif node == symbol:
+                        val = 1
+                    else:
+                        pass
+                    if val == 1:
+                        return 1
+            return 0
+        
+        Formula.doesNodeAppear = fakeDoesNodeAppear
+    
         for k in stuff2:
             append = True
             for pred, obj in k[3]:  # triple in k[1].statementsMatching(pred=self.sparql['bound']):
@@ -467,8 +534,14 @@ class FromSparql(productionHandler):
                     variable = self.store.newSymbol(str(obj))
                     if not k[1].doesNodeAppear(variable):
                         append = False
+                elif pred is self.sparql['notBound']:
+                    variable = self.store.newSymbol(str(obj))
+                    if k[1].doesNodeAppear(variable):
+                        append = False
             if append:
                 stuff.append(k)
+
+        Formula.doesNodeAppear = realNodeAppear
 
         return stuff
 
@@ -545,6 +618,8 @@ class FromSparql(productionHandler):
         return ('str', unEscape(p[1][1]))
 
     def on_Verb(self, p):
+        if abbr(p[1][0]) == 'IT_a':
+            return ('symbol', self.store.type)
         return p[1]
 
     def on__Q_O_QLANGTAG_E__Or__QDTYPE_E____QIRIref_E__C_E_Opt(self, p):
@@ -655,11 +730,13 @@ class FromSparql(productionHandler):
         return p[1]
 
     def on_GroupGraphPattern(self, p):
+        store = self.store
         triples = p[2]
         options = []
         alternates = []
         parents = []
         bounds = []
+        subGraphs = []
         f = self.store.newFormula()
         for triple in triples:
             if triple == 'Error':
@@ -667,6 +744,9 @@ class FromSparql(productionHandler):
             try:
                 if triple[0] == 'union':
                     alternates.append([k[1:] for k in triple[1]])
+                    continue
+                if triple[0] == 'SubGraph':
+                    subGraphs.append(triple[1:])
                     continue
                 rest1 = triple[1]
                 subject = rest1[0]
@@ -687,6 +767,9 @@ class FromSparql(productionHandler):
                                     bounds.append((pred, obj))
                                     
                                     #print alternates, object[1], isinstance(object[1], Term), anonymize(f, object[1])
+                                elif isinstance(obj, Formula):
+                                    options.extend(object[2])
+                                    f.add(subj, pred, obj)
                                 else:
                                     f.add(subj, pred, obj)
                         except:
@@ -703,6 +786,19 @@ class FromSparql(productionHandler):
 
         f = f.close()
         retVal = [('formula', f, parents, bounds)]
+        for nodeName, subGraphList in subGraphs:
+            oldRetVal = retVal
+            retVal = []
+            for _, f, p, b in oldRetVal:
+                node = anonymize(f, nodeName[1])
+                for __, subF, p2, b2 in subGraphList:
+                    #@@@@@  What do I do with b2?
+                    newF = f.newFormula()
+                    newF.loadFormulaWithSubsitution(f)
+                    newF.add(node, store.includes, subF)
+                    for evilF in p2:
+                        newF.add(node, store.notIncludes, evilF)
+                    retVal.append(('formula', newF.close(), p, b+b2))
         for alternate in alternates:
             oldRetVal = retVal
             retVal = []
@@ -721,6 +817,7 @@ class FromSparql(productionHandler):
                     f1 = self.store.newFormula()
                     f1.loadFormulaWithSubsitution(formula1)
                     f1.loadFormulaWithSubsitution(formula2)
+                    f1 = f1.close()
                     f2 = self.store.newFormula()
                     f2.loadFormulaWithSubsitution(formula2)
                     retVal.append(('formula', f1.close(), parents1 + parents2, bounds1 + bounds2))
@@ -800,7 +897,10 @@ class FromSparql(productionHandler):
 #GRAPH
     def on_GraphGraphPattern(self, p):
         semantics = self.new_bnode()
-        return [makeTriple(p[2], ('symbol', self.store.semantics), semantics), makeTripleObjList(semantics, ('symbol', self.store.includes), p[3])]
+        return [makeTriple(p[2], ('symbol', self.store.semantics), semantics),
+                ('SubGraph', semantics, p[3])
+#                makeTripleObjList(semantics, ('symbol', self.store.includes), p[3])
+                ]
 #OPTIONAL
     def on_GraphPatternNotTriples(self, p):
         return p[1]
@@ -1055,27 +1155,31 @@ class FromSparql(productionHandler):
         return ('Regex', p[3], p[5], p[6]) 
 
     def on__O_QCOMMA_E____QExpression_E__C(self, p):
-        raise RuntimeError(`p`)
+        return p[2]
 
     def on__Q_O_QCOMMA_E____QExpression_E__C_E_Opt(self, p):
         if len(p) == 1:
             return ('Literal', self.store.newLiteral(''))
-        raise RuntimeError(`p`)
+        return p[1]
 
     def on_FunctionCall(self, p):
         raise RuntimeError(`p`)
 
     def on_ArgList(self, p):
-        raise RuntimeError(`p`)
+        return p[2]
 
     def on__Q_O_QCOMMA_E____QExpression_E__C_E_Star(self, p):
-        raise RuntimeError(`p`)
+        if len(p) == 1:
+            return []
+        return [p[1]] + p[2]
 
     def on__O_QExpression_E____QCOMMA_E____QExpression_E_Star_C(self, p):
-        raise RuntimeError(`p`)
+        return [p[1]] + p[2]
 
     def on__Q_O_QExpression_E____QCOMMA_E____QExpression_E_Star_C_E_Opt(self, p):
-        raise RuntimeError(`p`)
+        if len(p) == 1:
+            return []
+        return p[1]
 
     def on_RDFTermOrFunc(self, p):
         if p[1][0] == 'Literal':
@@ -1089,10 +1193,14 @@ class FromSparql(productionHandler):
         return p[1]
 
     def on_IRIrefOrFunc(self, p):
-        raise RuntimeError(`p`)
+        if p[2] == 0:
+            return p[1]
+        return ['function', ("funcName", p[1][1].uriref(),)] + p[2]
 
     def on__QArgList_E_Opt(self, p):
-        raise RuntimeError(`p`)
+        if len(p) == 1:
+            return None
+        return p[1]
 
     def on__O_QDTYPE_E____QIRIref_E__C(self, p):
         raise RuntimeError(`p`)
@@ -1185,3 +1293,8 @@ def unEscape(string):
         
         
     return ret
+
+def intConvert(self, val):
+    return self.typeConvert('http://www.w3.org/2001/XMLSchema#integer', val)
+
+knownFunctions['http://www.w3.org/2001/XMLSchema#integer'] = intConvert
