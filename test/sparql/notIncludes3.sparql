@@ -1,0 +1,5 @@
+PREFIX : <http://example/>
+SELECT *
+WHERE { { GRAPH :one {:w :e :r OPTIONAL {GRAPH :two { ?x :b :c }}}} UNION { :y :e :r OPTIONAL {?x :r :e}}
+#        FILTER (!bound(?x)) 
+}

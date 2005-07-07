@@ -1,0 +1,5 @@
+PREFIX : <http://example#>
+SELECT *
+WHERE { GRAPH : {OPTIONAL {?x :b :c}}
+        FILTER (!bound(?x)) 
+}
