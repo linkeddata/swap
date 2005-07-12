@@ -319,7 +319,7 @@ def patches(delta, f, only_f, originalBnodes, definitions, deleting=0):
 	    if x in undefined:
 		if inverse: s, p, o = x, pred, y
 		else: s, p, o = y, pred, x
-		progress("Declaring variable %s" % x.uriref())
+		if verbose>2: progress("Declaring variable %s" % x.uriref())
 		if deleting:
 		    delta.declareUniversal(x)
 		    lhs.add(subj=s, pred=p, obj=o)
