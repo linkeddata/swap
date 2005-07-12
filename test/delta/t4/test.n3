@@ -1,0 +1,9 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix os: <http://www.w3.org/2000/10/swap/os#> .
+@prefix : <#> .
+
+{ "1" os:argv [ log:parsedAsN3 ?a ] } => { ?a a :default } .
+{ "2" os:argv [ log:parsedAsN3 ?b ] } => { ?b a :g1 } .
+{ "3" os:argv [ log:parsedAsN3 ?c ] } => { ?c a :granularity1 } .
+{ "4" os:argv [ log:parsedAsN3 ?d ] } => { ?d a :g0 } .
+{ "5" os:argv [ log:parsedAsN3 ?e ] } => { ?e a :granularity0 } .

@@ -1,0 +1,65 @@
+     @prefix : <#> .
+     @prefix delta: <http://www.w3.org/2004/delta#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+    
+     @forAll :a,
+                :b,
+                :c,
+                :d,
+                :e .
+    {
+        {
+            
+            }     delta:insertion {
+              [      <http://example.com/accountNumber> "1234568-0" ].
+            
+              [      <http://example.com/accountNumber> "2234568-0" ].
+            } .
+        
+        }     a :default,
+                :g1,
+                :granularity1 .
+    {
+        {
+            
+            }     delta:insertion {
+              [      <http://example.com/accountNumber> "1234568-0" ].
+            },
+                    {
+              [      <http://example.com/accountNumber> "2234568-0" ].
+            } .
+        
+        }     a :g0,
+                :granularity0 .
+    {
+        "1"     os:argv  [
+                 log:parsedAsN3 :a ] .
+        
+        }     log:implies {:a     a :default .
+        } .
+    {
+        "2"     os:argv  [
+                 log:parsedAsN3 :b ] .
+        
+        }     log:implies {:b     a :g1 .
+        } .
+    {
+        "3"     os:argv  [
+                 log:parsedAsN3 :c ] .
+        
+        }     log:implies {:c     a :granularity1 .
+        } .
+    {
+        "4"     os:argv  [
+                 log:parsedAsN3 :d ] .
+        
+        }     log:implies {:d     a :g0 .
+        } .
+    {
+        "5"     os:argv  [
+                 log:parsedAsN3 :e ] .
+        
+        }     log:implies {:e     a :granularity0 .
+        } .
+    

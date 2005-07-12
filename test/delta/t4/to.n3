@@ -1,0 +1,5 @@
+@prefix : <http://example.com/> .
+
+[] :accountNumber "1234568-0" .
+
+[] :accountNumber "2234568-0" .

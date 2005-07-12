@@ -1,0 +1,5 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+
+{ "<http://bob.com/> <http://loves.com/> <http://ann.com/> ." log:parsedAsN3
+  { <http://bob.com/> <http://loves.com/> <http://ann.com/> } }
+  => { <http://happy.com/> a <http://happy.com/happy> } .
