@@ -8,6 +8,10 @@
                 :c,
                 :d,
                 :e .
+    
+    :default_g1_granularity1_the_same     a :success .
+    
+    :g0_granularity0_the_same     a :success .
     {
         {
             
@@ -61,5 +65,27 @@
                  log:parsedAsN3 :e ] .
         
         }     log:implies {:e     a :granularity0 .
+        } .
+    {
+        
+          [      a :g0,
+                        :granularity0 ].
+        
+        }     log:implies {:g0_granularity0_the_same     a :success .
+        } .
+    {
+        
+          [      a :g0,
+                        :g1 ].
+        
+        }     log:implies {:g1_g0_different     a :failure .
+        } .
+    {
+        
+          [      a :default,
+                        :g1,
+                        :granularity1 ].
+        
+        }     log:implies {:default_g1_granularity1_the_same     a :success .
         } .
     
