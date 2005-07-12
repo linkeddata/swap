@@ -1,5 +1,5 @@
 @prefix os: <http://www.w3.org/2000/10/swap/os#> .
 @prefix : <#> .
 
-{ "1" os:argv ?x } => { ?x a :string_0 } .
-{ "2" os:argv ?y } => { ?y a :string_1 } .
+{ "1" os:argv "0" } => { :no_diff_return_zero a :success } .
+{ "2" os:argv "1" } => { :have_diffs_return_one a :success } .

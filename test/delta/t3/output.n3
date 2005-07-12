@@ -2,20 +2,17 @@
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
      @prefix os: <http://www.w3.org/2000/10/swap/os#> .
     
-     @forAll :x,
-                :y .
+    :have_diffs_return_one     a :success .
     
-    "0"     a :string_0 .
-    
-    "1"     a :string_1 .
+    :no_diff_return_zero     a :success .
     {
-        "1"     os:argv :x .
+        "1"     os:argv "0" .
         
-        }     log:implies {:x     a :string_0 .
+        }     log:implies {:no_diff_return_zero     a :success .
         } .
     {
-        "2"     os:argv :y .
+        "2"     os:argv "1" .
         
-        }     log:implies {:y     a :string_1 .
+        }     log:implies {:have_diffs_return_one     a :success .
         } .
     
