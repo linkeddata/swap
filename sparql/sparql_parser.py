@@ -103,19 +103,19 @@ class N3Parser(object):
       self.token = self.data()
 
    def onStart(self, prod): 
-      print (' ' * len(self.productions)) + `prod`
+#      print (' ' * len(self.productions)) + `prod`
       self.productions.append([prod])
 
    def onFinish(self): 
       prod = self.sink.prod(self.productions.pop())
       if self.productions:
           self.productions[-1].append(prod)
-      print (' ' * len(self.productions)) + '/' + `prod`
+#      print (' ' * len(self.productions)) + '/' + `prod`
       return prod
 
    def onToken(self, prod, tok):
       self.productions[-1].append((prod, tok))
-      print (' ' * len(self.productions)) + `(prod, tok)`
+#      print (' ' * len(self.productions)) + `(prod, tok)`
 
 class nullProductionHandler(object):
     def prod(self, production):

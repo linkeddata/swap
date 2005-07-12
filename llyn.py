@@ -355,7 +355,7 @@ class IndexedFormula(Formula):
 	if "T" in self._closureMode:
 	    if pred is store.type and obj is store.Truth:
 		assert isinstance(subj, Formula), "What are we doing concluding %s is true?" % subj
-		self.loadFormulaWithSubsitution(subj)
+		self.loadFormulaWithSubstitution(subj)
 
 #########
 	if newBindings != {}:

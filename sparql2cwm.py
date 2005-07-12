@@ -49,6 +49,34 @@ def getExtra(ex):
         return ex.extra
     return []
 
+class multimap(dict):
+    class innerSet(Set):
+        pass
+    def __init__(self, olddict={}, **values):
+        self.update(olddict)
+        self.update(values)
+    def __setitem__(self, key, value):
+        if not key in self:
+            dict.__setitem__(self, key, self.innerSet())
+        if isinstance(value, self.innerSet):
+            self[key].update(value)
+        else:
+            self[key].add(value)
+    def update(self, other={}, **values):
+        if values:
+            self.update(values)
+        for key, val in other.iteritems():
+            self[key] = val
+    def translate(self, fromkey, tokey):
+        m = self[fromkey]
+        del self[fromkey]
+        self[tokey] = m
+    def __add__(self, other):
+	k = self.__class__()
+	k.update(self)
+	k.update(other)
+	return k
+
 
 def anonymize(self, formula, uri = None):
     if uri is not None:
@@ -350,7 +378,7 @@ class FilterExpr(productionHandler):
         returns = []
         for val in p:
             if val != ['Error']:
-                returns.extend(self.parent.on_GroupGraphPattern([None, None, val, None]))
+                returns.extend(self.parent.on_GroupGraphPattern([None, None, val, None], True))
         return [('union', returns)]
 
     def on_Regex(self, p):
@@ -422,9 +450,12 @@ class FilterExpr(productionHandler):
         return [makeTriple(self.bnode(), ('symbol', self.parent.sparql['bound']), var)]
 
 class FromSparql(productionHandler):
-    def __init__(self, store):
+    def __init__(self, store, formula=None):
         self.store = store
-        self.formula = store.newFormula()
+        if formula is None:
+            self.formula = store.newFormula()
+        else:
+            self.formula = formula
         self.prefixes = {}
         self.vars = Set()
         self.base = 'http://yosi.us/sparql#'
@@ -436,6 +467,7 @@ class FromSparql(productionHandler):
         self.false = store.newLiteral('0', dt=self.xsd['boolean'])
         self.anonymous_counter = 0
         self.uribase = uripath.base()
+        self.dataSets = None
         NotNot.on_Boolean = on_Boolean_Gen(self.true, self.false)
 
     def new_bnode(self):
@@ -451,12 +483,54 @@ class FromSparql(productionHandler):
     def on_BaseDecl(self, p):
         self.uribase = p[2][1][1:-1]
 
-    def makePatterns(self, f, node, patterns):
+    def makePatterns(self, f, node, knowledge_base, patterns):
         sparql = self.sparql
+        if not self.dataSets:
+            f.add(self.uribase, sparql['data'], knowledge_base)
+        else:
+            sources = self.store.nil
+            for uri in self.dataSets:
+                stuff = f.newBlankNode
+                f.add(uri, self.store.semantics, stuff)
+                source = sources.prepend(stuff)
+            f.add(sources, self.store.conjunction, knowledge_base)
         for pattern in patterns:
-            f.add(node, sparql['where'], pattern[1])
-            for parent in pattern[2]:
-                f.add(pattern[1], sparql['andNot'], parent)
+            tail = f.newFormula()
+            tail.loadFormulaWithSubstitution(pattern[1])
+            
+            includedStuff = pattern[4]
+            notIncludedStuff = pattern[5]
+
+            for nodeName, graphIntersection in includedStuff.iteritems():
+                graph = f.newFormula()
+                for subGraph in graphIntersection:
+                    graph.loadFormulaWithSubstitution(subGraph)
+                graph = graph.close()
+                if nodeName is not None:
+                    nameNode = anonymize(tail, nodeName[1])
+                    semantics = tail.newBlankNode()
+                    tail.add(nameNode, self.store.semantics, semantics)
+                else:
+                    semantics = knowledge_base
+                tail.add(semantics, self.store.includes, graph)
+
+            for nodeName, graphIntersection in notIncludedStuff.iteritems():
+                graph = f.newFormula()
+                for subGraph in graphIntersection:
+                    graph.loadFormulaWithSubstitution(subGraph)
+                graph = graph.close()
+                if nodeName is not None:
+                    nameNode = anonymize(tail, nodeName[1])
+                    semantics = tail.newBlankNode()
+                    tail.add(nameNode, self.store.semantics, semantics)
+                else:
+                    semantics = knowledge_base
+                tail.add(semantics, self.store.notIncludes, graph)
+
+            
+            f.add(node, sparql['where'], tail.close())
+##            for parent in pattern[2]:
+##                f.add(pattern[1], sparql['andNot'], parent)
 
     def on_SelectQuery(self, p):
         sparql = self.sparql
@@ -475,7 +549,8 @@ class FromSparql(productionHandler):
         if p[2]:
             f.add(q, store.type, sparql['Distinct'])
 
-        self.makePatterns(f, q, p[5])
+        knowledge_base = f.newBlankNode()
+        self.makePatterns(f, q, knowledge_base, p[5])
         RulesMaker(self.sparql).implications(q, f, variable_results)
         #TODO: I'm missing sorting and datasets
         return None
@@ -497,51 +572,62 @@ class FromSparql(productionHandler):
     def on_WhereClause(self, p):
         stuff2 = p[2]
         stuff = []
-        realNodeAppear = Formula.doesNodeAppear
-        def fakeDoesNodeAppear(self, symbol):
-            """Does that particular node appear anywhere in this formula as bound?
+##        realNodeAppear = Formula.doesNodeAppear
+##        def fakeDoesNodeAppear(self, symbol):
+##            """Does that particular node appear anywhere in this formula as bound?
+##
+##            This function is necessarily recursive, and is useful for the pretty printer
+##            It will also be useful for the flattener, when we write it.
+##            """
+##            for quad in self.statements:
+##                if isinstance(quad.object(), Formula) and quad.predicate() is self.store.notIncludes:
+##                    if symbol is self.store.notIncludes:
+##                        return 1
+##                    if isinstance(quad.subject(), CompoundTerm) and quad.subject().doesNodeAppear(symbol):
+##                        return 1
+##                    if quad.subject() == symbol:
+##                        return 1
+##                    continue
+##                for node in quad.spo():
+##                    val = 0
+##                    if isinstance(node, CompoundTerm):
+##                        val = val or node.doesNodeAppear(symbol)
+##                    elif node == symbol:
+##                        val = 1
+##                    else:
+##                        pass
+##                    if val == 1:
+##                        return 1
+##            return 0
+##        
+##        Formula.doesNodeAppear = fakeDoesNodeAppear
 
-            This function is necessarily recursive, and is useful for the pretty printer
-            It will also be useful for the flattener, when we write it.
-            """
-            for quad in self.statements:
-                if isinstance(quad.object(), Formula) and quad.predicate() is self.store.notIncludes:
-                    if symbol is self.store.notIncludes:
-                        return 1
-                    if isinstance(quad.subject(), CompoundTerm) and quad.subject().doesNodeAppear(symbol):
-                        return 1
-                    if quad.subject() == symbol:
-                        return 1
-                    continue
-                for node in quad.spo():
-                    val = 0
-                    if isinstance(node, CompoundTerm):
-                        val = val or node.doesNodeAppear(symbol)
-                    elif node == symbol:
-                        val = 1
-                    else:
-                        pass
-                    if val == 1:
-                        return 1
-            return 0
-        
-        Formula.doesNodeAppear = fakeDoesNodeAppear
-    
+#        raise RuntimeError(`p`)
         for k in stuff2:
             append = True
-            for pred, obj in k[3]:  # triple in k[1].statementsMatching(pred=self.sparql['bound']):
+            positiveTriples = None
+            included = k[5]+{None: k[1]}
+            nones = multimap()
+            [nones.update({None: kk}) for kk in k[3]]
+            notIncluded =  nones + k[6]
+            for pred, obj in k[4]:
+                if positiveTriples is None:
+                    positiveTriples = self.store.newFormula()
+                    for uri, form in included:
+                        positiveTriples.loadFormulaWithSubstitution(form)
+                    positiveTriples = positiveTriples.close()
                 if pred is self.sparql['bound']:
                     variable = self.store.newSymbol(str(obj))
-                    if not k[1].doesNodeAppear(variable):
+                    if not positiveTriples.doesNodeAppear(variable):
                         append = False
                 elif pred is self.sparql['notBound']:
                     variable = self.store.newSymbol(str(obj))
-                    if k[1].doesNodeAppear(variable):
+                    if positiveTriples.doesNodeAppear(variable):
                         append = False
             if append:
-                stuff.append(k)
-
-        Formula.doesNodeAppear = realNodeAppear
+                stuff.append((k[0], k[2], k[3], k[4], included, notIncluded))
+##
+##        Formula.doesNodeAppear = realNodeAppear
 
         return stuff
 
@@ -570,6 +656,7 @@ class FromSparql(productionHandler):
 
     def on_PrefixDecl(self, p):
         self.prefixes[p[2][1][:-1]] = p[3][1][1:-1]
+        self.store.bind(p[2][1][:-1],p[3][1][1:-1])
         return None
 
     def on__QDISTINCT_E_Opt(self, p):
@@ -729,7 +816,7 @@ class FromSparql(productionHandler):
             return []
         return p[1]
 
-    def on_GroupGraphPattern(self, p):
+    def on_GroupGraphPattern(self, p, fromFilter = False):
         store = self.store
         triples = p[2]
         options = []
@@ -785,43 +872,62 @@ class FromSparql(productionHandler):
                 raise
 
         f = f.close()
-        retVal = [('formula', f, parents, bounds)]
+        if fromFilter:
+            retVal = [('formula', self.store.newFormula(), f, parents, bounds, multimap(), multimap())]
+        else:
+            retVal = [('formula', f, self.store.newFormula(), parents, bounds, multimap(), multimap())]
         for nodeName, subGraphList in subGraphs:
             oldRetVal = retVal
             retVal = []
-            for _, f, p, b in oldRetVal:
+            for _, f, filters, p, b, i, nI in oldRetVal:
                 node = anonymize(f, nodeName[1])
-                for __, subF, p2, b2 in subGraphList:
+                for __, subF, filters2, p2, b2, i2, nI2 in subGraphList:
                     #@@@@@  What do I do with b2?
                     newF = f.newFormula()
-                    newF.loadFormulaWithSubsitution(f)
-                    newF.add(node, store.includes, subF)
-                    for evilF in p2:
-                        newF.add(node, store.notIncludes, evilF)
-                    retVal.append(('formula', newF.close(), p, b+b2))
+                    newF.loadFormulaWithSubstitution(f)
+##                    newF.add(node, store.includes, subF)
+##                    for evilF in p2:
+##                        newF.add(node, store.notIncludes, evilF)
+                    newFilters =  f.newFormula()
+                    newFilters.loadFormulaWithSubstitution(filters)
+                    newFilters.loadFormulaWithSubstitution(filters2)
+                    evilFs = [(nodeName, evilF) for evilF in p2]
+                    retVal.append(('formula', newF.close(), newFilters.close(), p, b+b2, i + i2 + [(nodeName, subF)], nI + nI2 + evilFs))
         for alternate in alternates:
             oldRetVal = retVal
             retVal = []
-            for formula1, parents1, bounds1 in alternate:
-                for ss, formula2, parents2, bounds2 in oldRetVal:
+            for formula1, filters1, parents1, bounds1, include1, notInclude1 in alternate:
+                for ss, formula2, filters2, parents2, bounds2, include2, notInclude2 in oldRetVal:
                     f = self.store.newFormula()
                     if formula1:
-                        f.loadFormulaWithSubsitution(formula1)
-                    f.loadFormulaWithSubsitution(formula2)
-                    retVal.append(('formula', f.close(), parents1 + parents2, bounds1 + bounds2))
+                        f.loadFormulaWithSubstitution(formula1)
+                    f.loadFormulaWithSubstitution(formula2)
+                    
+                    newFilters =  f.newFormula()
+                    newFilters.loadFormulaWithSubstitution(filters1)
+                    newFilters.loadFormulaWithSubstitution(filters2)
+                    retVal.append(('formula', f.close(), newFilters.close(), parents1 + parents2, bounds1 + bounds2, include1 + include2, notInclude1 + notInclude2))
         for alternate in options:
             oldRetVal = retVal
             retVal = []
-            for ss, formula1, parents1, bounds1 in alternate:
-                for ss, formula2, parents2, bounds2 in oldRetVal:
+            for ss, formula1, filters1, parents1, bounds1, i1, nI1 in alternate:
+                for ss, formula2, filters2, parents2, bounds2, i2, nI2 in oldRetVal:
                     f1 = self.store.newFormula()
-                    f1.loadFormulaWithSubsitution(formula1)
-                    f1.loadFormulaWithSubsitution(formula2)
+                    f1.loadFormulaWithSubstitution(formula1)
+                    f1.loadFormulaWithSubstitution(formula2)
                     f1 = f1.close()
                     f2 = self.store.newFormula()
-                    f2.loadFormulaWithSubsitution(formula2)
-                    retVal.append(('formula', f1.close(), parents1 + parents2, bounds1 + bounds2))
-                    retVal.append(('formula', f2.close(), [f1], bounds1 + bounds2))
+                    f2.loadFormulaWithSubstitution(formula2)
+
+                    newFilters1 =  f1.newFormula()
+                    newFilters1.loadFormulaWithSubstitution(filters1)
+                    newFilters1.loadFormulaWithSubstitution(filters2)
+
+                    newFilters2 =  f2.newFormula()
+                    newFilters2.loadFormulaWithSubstitution(filters2)                    
+                    
+                    retVal.append(('formula', formula2.close(), newFilters1.close(), parents1 + parents2, bounds1 + bounds2, i1+i2+{None:formula1}, nI1+nI2))
+                    retVal.append(('formula', formula2.close(), newFilters2.close(), [formula1] + parents2, bounds1 + bounds2, i2, nI2))
         return retVal
 ##        
 ##        if len(p) == 2:
@@ -896,11 +1002,12 @@ class FromSparql(productionHandler):
 ### End Triples Stuff
 #GRAPH
     def on_GraphGraphPattern(self, p):
-        semantics = self.new_bnode()
-        return [makeTriple(p[2], ('symbol', self.store.semantics), semantics),
-                ('SubGraph', semantics, p[3])
-#                makeTripleObjList(semantics, ('symbol', self.store.includes), p[3])
-                ]
+        return [('SubGraph', p[2], p[3])]
+##        semantics = self.new_bnode()
+##        return [makeTriple(p[2], ('symbol', self.store.semantics), semantics),
+##                ('SubGraph', semantics, p[3])
+###                makeTripleObjList(semantics, ('symbol', self.store.includes), p[3])
+##                ]
 #OPTIONAL
     def on_GraphPatternNotTriples(self, p):
         return p[1]
@@ -1021,7 +1128,8 @@ class FromSparql(productionHandler):
         return normalize(p[1])
     
     def on_Constraint(self, p):
-        return AST(p[2], FilterExpr(self.store, self)).run()
+        val = AST(p[2], FilterExpr(self.store, self)).run()
+        return [('union', self.on_GroupGraphPattern([None, None, val, None], True))]
 
 #useless
     def on__QPrefixDecl_E_Star(self, p):

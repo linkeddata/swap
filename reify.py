@@ -300,7 +300,7 @@ def dereify(formula, sink=None, xList=[]):
     weKnowList = formula.each(pred=store.type, obj=store.Truth)
     for weKnow in weKnowList:
 	f = dereification(weKnow, formula, sink, xList=xList)
-	sink.loadFormulaWithSubsitution(f)
+	sink.loadFormulaWithSubstitution(f)
     return sink
 
 def dereification(x, f, sink, bnodes={}, xList=[]):

@@ -117,12 +117,16 @@ def load(store, uri=None, openFormula=None, asIfFrom=None, contentType=None,
 		guess = "application/rdf+xml"
 	    elif contentType.find('n3') >= 0:
 		guess = "text/rdf+n3"
+	    elif contentType.find('sparql') >= 0 or contentType.find('rq'):
+                guess = "x-application/sparql"
 	buffer = netStream.read()
 	if guess == None:
 
 	    # can't be XML if it starts with these...
 	    if buffer[0:1] == "#" or buffer[0:7] == "@prefix":
 		guess = 'text/rdf+n3'
+	    elif buffer[0:6] == 'PREFIX' or buffer[0:4] == 'BASE':
+                guess = "x-application/sparql"
 	    elif buffer.find('xmlns="') >=0 or buffer.find('xmlns:') >=0: #"
 		guess = 'application/rdf+xml'
 	    else:
@@ -138,7 +142,15 @@ def load(store, uri=None, openFormula=None, asIfFrom=None, contentType=None,
     else:
 	F = store.newFormula()
     import os
-    if guess == 'application/rdf+xml':
+    if guess == "x-application/sparql":
+        if diag.chatty_flag > 49: progress("Parsing as SPARQL")
+        from sparql import sparql_parser
+        import sparql2cwm
+        convertor = sparql2cwm.FromSparql(store, F)
+        import StringIO
+        p = sparql_parser.N3Parser(StringIO.StringIO(buffer), sparql_parser.branches, convertor)
+        F = p.parse(sparql_parser.start).close()
+    elif guess == 'application/rdf+xml':
 	if diag.chatty_flag > 49: progress("Parsing as RDF")
 #	import sax2rdf, xml.sax._exceptions
 #	p = sax2rdf.RDFXMLParser(store, F,  thisDoc=asIfFrom, flags=flags)

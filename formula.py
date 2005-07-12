@@ -359,10 +359,10 @@ class Formula(AnonymousNode, CompoundTerm):
 	y = store.newFormula()
 	if verbosity() > 90: progress("substitution: formula"+`self`+" becomes new "+`y`,
 				    " because of ", oc)
-	y.loadFormulaWithSubsitution(self, bindings, why=why)
+	y.loadFormulaWithSubstitution(self, bindings, why=why)
 	return y.canonicalize()
 
-    def loadFormulaWithSubsitution(self, old, bindings={}, why=None):
+    def loadFormulaWithSubstitution(self, old, bindings={}, why=None):
 	"""Load information from another formula, subsituting as we go
 	returns number of statements added (roughly)"""
         total = 0

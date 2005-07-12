@@ -56,6 +56,9 @@ class mixinClass(object):
 ##                        if func not in operations:
 ##                            operations[func] = {}
 ##                        operations[func][base] = dict[func]
+                        if func in base.__dict__:
+                            raise ValueError('''I can't let you override an existing method.
+Use real inheritance: %s.%s''' % (`base`, func))
                         setattr(base, func, dict[func])
         return object.__new__(metacls)
 

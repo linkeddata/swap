@@ -187,7 +187,7 @@ rdf/xml files. Note that this requires rdflib.
         option_outputStyle = "-best"
         _gotInput = 0     #  Do we not need to take input from stdin?
         option_meta = 0
-        option_flags = { "rdf":"", "n3":"", "think":"" }    # Random flags affecting parsing/output
+        option_flags = { "rdf":"", "n3":"", "think":"", "sparql":""}    # Random flags affecting parsing/output
         option_quiet = 0
         option_with = None  # Command line arguments made available to N3 processing
         option_engine = "llyn"
@@ -309,7 +309,7 @@ rdf/xml files. Note that this requires rdflib.
         #  Fix the output sink
         if option_format == "rdf":
             _outSink = toXML.ToRDF(sys.stdout, _outURI, base=option_baseURI, 						flags=option_flags["rdf"])
-        elif option_format == "n3":
+        elif option_format == "n3" or option_format == "sparql":
             _outSink = notation3.ToN3(sys.stdout.write, base=option_baseURI,
                                       quiet=option_quiet, flags=option_flags["n3"])
         elif option_format == "trace":
@@ -375,7 +375,7 @@ rdf/xml files. Note that this requires rdflib.
         #  Take commands from command line: Second Pass on command line:    - - - - - - - P A S S 2
 
         option_format = "n3"      # Use RDF/n3 rather than RDF/XML 
-        option_flags = { "rdf":"", "n3":"", "think": "" } 
+        option_flags = { "rdf":"", "n3":"", "think": "", "sparql":"" } 
         option_quiet = 0
         _outURI = _baseURI
         option_baseURI = _baseURI     # To start with
@@ -416,7 +416,8 @@ rdf/xml files. Note that this requires rdflib.
                 _inputURI = join(option_baseURI, arg)
                 assert ':' in _inputURI
 		ContentType={ "rdf": "application/xml+rdf", "n3":
-				"text/rdf+n3" }[option_format]
+				"text/rdf+n3",
+                              "sparql": "x-application/sparql"}[option_format]
 
 		if not option_pipe: workingContext.reopen()
 		load(_store, _inputURI,

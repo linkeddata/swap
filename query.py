@@ -665,7 +665,7 @@ class Query:
         if diag.chatty_flag>19:
             progress("Concluding DEFINITELY" + bindingsToString(b2) )
         before = self.store.size
-        delta = self.targetContext.loadFormulaWithSubsitution(
+        delta = self.targetContext.loadFormulaWithSubstitution(
 		    self.conclusion, b2, why=reason)
         if diag.chatty_flag>30:
             progress("Added %i, nominal size of store changed from %i to %i."%(delta, before, self.store.size))
