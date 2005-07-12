@@ -11,6 +11,8 @@ import uripath
 from term import Term, CompoundTerm
 from formula import Formula
 
+SPARQL_NS = 'http://yosi.us/2005/sparql'
+
 knownFunctions = {}
 
 def abbr(prodURI): 
@@ -56,11 +58,13 @@ class multimap(dict):
         self.update(olddict)
         self.update(values)
     def __setitem__(self, key, value):
+        if isinstance(value, tuple):
+            raise RuntimeError(key, value)
         if not key in self:
             dict.__setitem__(self, key, self.innerSet())
         if isinstance(value, self.innerSet):
             self[key].update(value)
-        else:
+        elif value:
             self[key].add(value)
     def update(self, other={}, **values):
         if values:
@@ -68,6 +72,8 @@ class multimap(dict):
         for key, val in other.iteritems():
             self[key] = val
     def translate(self, fromkey, tokey):
+        if fromkey not in self:
+            return
         m = self[fromkey]
         del self[fromkey]
         self[tokey] = m
@@ -76,6 +82,12 @@ class multimap(dict):
 	k.update(self)
 	k.update(other)
 	return k
+    def _fromTuples(cls, iterator):
+        m = cls()
+        for key, val in iterator:
+            m[key] = val
+        return m
+    fromTuples = classmethod(_fromTuples)
 
 
 def anonymize(self, formula, uri = None):
@@ -459,7 +471,7 @@ class FromSparql(productionHandler):
         self.prefixes = {}
         self.vars = Set()
         self.base = 'http://yosi.us/sparql#'
-        self.sparql = store.newSymbol('http://yosi.us/2005/sparql')
+        self.sparql = store.newSymbol(SPARQL_NS)
         self.xsd = store.newSymbol('http://www.w3.org/2001/XMLSchema')
         self.math = store.newSymbol('http://www.w3.org/2000/10/swap/math')
         self.numTypes = Set([self.xsd[k] for k in ['unsignedShort', 'short', 'nonPositiveInteger', 'decimal', 'unsignedInt', 'long', 'nonNegativeInteger', 'int', 'unsignedByte', 'positiveInteger', 'integer', 'byte', 'negativeInteger', 'unsignedLong']])
@@ -489,11 +501,13 @@ class FromSparql(productionHandler):
             f.add(self.uribase, sparql['data'], knowledge_base)
         else:
             sources = self.store.nil
+            #raise RuntimeError(self.dataSets)
             for uri in self.dataSets:
-                stuff = f.newBlankNode
-                f.add(uri, self.store.semantics, stuff)
-                source = sources.prepend(stuff)
-            f.add(sources, self.store.conjunction, knowledge_base)
+                stuff = f.newBlankNode()
+                uri2 = anonymize(f,uri[1])
+                f.add(uri2, self.store.semantics, stuff)
+                sources = sources.prepend(stuff)
+            f.add(sources, self.store.newSymbol('http://www.w3.org/2000/10/swap/log#conjunction'), knowledge_base)
         for pattern in patterns:
             tail = f.newFormula()
             tail.loadFormulaWithSubstitution(pattern[1])
@@ -502,6 +516,7 @@ class FromSparql(productionHandler):
             notIncludedStuff = pattern[5]
 
             for nodeName, graphIntersection in includedStuff.iteritems():
+                if not graphIntersection: continue
                 graph = f.newFormula()
                 for subGraph in graphIntersection:
                     graph.loadFormulaWithSubstitution(subGraph)
@@ -515,6 +530,7 @@ class FromSparql(productionHandler):
                 tail.add(semantics, self.store.includes, graph)
 
             for nodeName, graphIntersection in notIncludedStuff.iteritems():
+                if not graphIntersection: continue
                 graph = f.newFormula()
                 for subGraph in graphIntersection:
                     graph.loadFormulaWithSubstitution(subGraph)
@@ -572,49 +588,22 @@ class FromSparql(productionHandler):
     def on_WhereClause(self, p):
         stuff2 = p[2]
         stuff = []
-##        realNodeAppear = Formula.doesNodeAppear
-##        def fakeDoesNodeAppear(self, symbol):
-##            """Does that particular node appear anywhere in this formula as bound?
-##
-##            This function is necessarily recursive, and is useful for the pretty printer
-##            It will also be useful for the flattener, when we write it.
-##            """
-##            for quad in self.statements:
-##                if isinstance(quad.object(), Formula) and quad.predicate() is self.store.notIncludes:
-##                    if symbol is self.store.notIncludes:
-##                        return 1
-##                    if isinstance(quad.subject(), CompoundTerm) and quad.subject().doesNodeAppear(symbol):
-##                        return 1
-##                    if quad.subject() == symbol:
-##                        return 1
-##                    continue
-##                for node in quad.spo():
-##                    val = 0
-##                    if isinstance(node, CompoundTerm):
-##                        val = val or node.doesNodeAppear(symbol)
-##                    elif node == symbol:
-##                        val = 1
-##                    else:
-##                        pass
-##                    if val == 1:
-##                        return 1
-##            return 0
-##        
-##        Formula.doesNodeAppear = fakeDoesNodeAppear
 
 #        raise RuntimeError(`p`)
         for k in stuff2:
             append = True
             positiveTriples = None
-            included = k[5]+{None: k[1]}
-            nones = multimap()
-            [nones.update({None: kk}) for kk in k[3]]
-            notIncluded =  nones + k[6]
+            included = k[5]+k[3]+{None: k[1]}
+            notIncluded =  k[6]
+            print '+++++++++++++'
+            print 'included=', included
+            print 'notIncluded=', notIncluded
             for pred, obj in k[4]:
                 if positiveTriples is None:
                     positiveTriples = self.store.newFormula()
-                    for uri, form in included:
-                        positiveTriples.loadFormulaWithSubstitution(form)
+                    for formSet in included.values():
+                        for form in formSet:
+                            positiveTriples.loadFormulaWithSubstitution(form)
                     positiveTriples = positiveTriples.close()
                 if pred is self.sparql['bound']:
                     variable = self.store.newSymbol(str(obj))
@@ -628,7 +617,7 @@ class FromSparql(productionHandler):
                 stuff.append((k[0], k[2], k[3], k[4], included, notIncluded))
 ##
 ##        Formula.doesNodeAppear = realNodeAppear
-
+#        raise RuntimeError(stuff)
         return stuff
 
     def on_SolutionModifier(self, p):
@@ -682,9 +671,7 @@ class FromSparql(productionHandler):
         return ('SelectVars', varList)
 
     def on__QDatasetClause_E_Star(self, p):
-        if len(p) == 1:
-            return None
-        raise RuntimeError(`p`)
+        return None
 
     def on_VarOrTerm(self, p):
         return p[1]
@@ -821,7 +808,7 @@ class FromSparql(productionHandler):
         triples = p[2]
         options = []
         alternates = []
-        parents = []
+        parents = multimap()
         bounds = []
         subGraphs = []
         f = self.store.newFormula()
@@ -885,14 +872,13 @@ class FromSparql(productionHandler):
                     #@@@@@  What do I do with b2?
                     newF = f.newFormula()
                     newF.loadFormulaWithSubstitution(f)
-##                    newF.add(node, store.includes, subF)
-##                    for evilF in p2:
-##                        newF.add(node, store.notIncludes, evilF)
                     newFilters =  f.newFormula()
                     newFilters.loadFormulaWithSubstitution(filters)
                     newFilters.loadFormulaWithSubstitution(filters2)
-                    evilFs = [(nodeName, evilF) for evilF in p2]
-                    retVal.append(('formula', newF.close(), newFilters.close(), p, b+b2, i + i2 + [(nodeName, subF)], nI + nI2 + evilFs))
+                    i2.translate(None, nodeName)
+                    nI2.translate(None, nodeName)
+                    p2.translate(None, nodeName)
+                    retVal.append(('formula', newF.close(), newFilters.close(), p+p2, b+b2, i + i2 + {nodeName: subF}, nI + nI2))
         for alternate in alternates:
             oldRetVal = retVal
             retVal = []
@@ -926,8 +912,8 @@ class FromSparql(productionHandler):
                     newFilters2 =  f2.newFormula()
                     newFilters2.loadFormulaWithSubstitution(filters2)                    
                     
-                    retVal.append(('formula', formula2.close(), newFilters1.close(), parents1 + parents2, bounds1 + bounds2, i1+i2+{None:formula1}, nI1+nI2))
-                    retVal.append(('formula', formula2.close(), newFilters2.close(), [formula1] + parents2, bounds1 + bounds2, i2, nI2))
+                    retVal.append(('formula', formula2.close(), newFilters1.close(), parents1 + parents2+{None:formula1}, bounds1 + bounds2, i1+i2, nI1+nI2))
+                    retVal.append(('formula', formula2.close(), newFilters2.close(), parents2, bounds1 + bounds2, i2, nI2+i1+{None:formula1}))
         return retVal
 ##        
 ##        if len(p) == 2:
@@ -1164,19 +1150,22 @@ class FromSparql(productionHandler):
         raise RuntimeError(`p`)
 
     def on_DatasetClause(self, p):
-        raise RuntimeError(`p`)
+        return None
 
     def on__O_QDefaultGraphClause_E__Or__QNamedGraphClause_E__C(self, p):
-        raise RuntimeError(`p`)
+        return None
 
     def on_DefaultGraphClause(self, p):
-        raise RuntimeError(`p`)
+        if not self.dataSets:
+            self.dataSets = []
+        self.dataSets.append(p[1])
+        return None
 
     def on_NamedGraphClause(self, p):
-        raise RuntimeError(`p`)
+        return None
 
     def on_SourceSelector(self, p):
-        raise RuntimeError(`p`)
+        return p[1]
 
     def on_OrderClause(self, p):
         raise RuntimeError(`p`)

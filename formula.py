@@ -571,12 +571,6 @@ class Formula(AnonymousNode, CompoundTerm):
                     return 1
         return 0
 
-    def doNodesAppear(self, symbols):
-        val = Set()
-        for quad in self.statements:
-            for s in PRED, SUBJ, OBJ:
-                val.update(quad[s].doesNodeAppear(symbols))
-        return val
 
 #################################################################################
 

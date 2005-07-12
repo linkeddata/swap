@@ -4,6 +4,7 @@
 """
 
 QL_NS = "http://www.w3.org/2004/ql#"
+from sparql2cwm import SPARQL_NS
 
 from set_importer import Set, ImmutableSet
 
@@ -81,6 +82,17 @@ def applyQueries(
     del(t)
     return result
 
+
+def applySparqlQueries(
+		workingContext,    # Data we assume 
+		ruleFormula = None,    # Where to find the rules
+		targetContext = None):   # Where to put the conclusions
+    """Once, nothing recusive, for a N3QL query"""
+    t = InferenceTask(workingContext, ruleFormula, targetContext)
+    t.gatherSparqlQueries(t.ruleFormula)
+    result = t.runSmart()
+    del(t)
+    return result
 
 class InferenceTask:
     """A task of applying rules or filters to information"""
@@ -290,6 +302,34 @@ class InferenceTask:
 		if r.meta: self.hasMetaRule = 1
 		if (diag.chatty_flag >30):
 		    progress( "Found rule %r for statement %s " % (r, s))
+
+    def gatherSparqlQueries(self, ruleFormula):
+        "Find the rules in SPARQL"
+        store = self.store
+        sparql = store.newSymbol(SPARQL_NS)
+        
+        for from_statement in ruleFormula.statementsMatching(pred=sparql['data']):
+            working_context_stand_in = from_statement.object()
+            ruleFormula = ruleFormula.substitution({working_context_stand_in: self.workingContext})
+        query_root = ruleFormula.any(pred=store.type, obj=sparql['ConstructQuery'])
+        if not query_root:
+            # This is wrong
+            query_root = ruleFormula.any(pred=store.type, obj=sparql['SelectQuery'])
+        # query_root is a very boring bNode
+        if query_root:
+            #construct query
+            for where_triple in ruleFormula.statementsMatching(subj=query_root, pred=sparql['where']):
+                where_clause = where_triple.object()
+                #where_clause is the tail of the rule
+                implies_clause = ruleFormula.the(subj=where_clause, pred=sparql['implies'])
+                #implies_clause is the head of the rule
+                v2 = ruleFormula.universals().copy()
+                r = Rule(self, antecedent=where_clause, consequent=implies_clause,
+                         statement=where_triple, variables=v2)
+                self.ruleFor[where_triple] = r
+                if r.meta: self.hasMetaRule = 1
+		if (diag.chatty_flag >30):
+		    progress( "Found rule %r for statement %s " % (r, where_triple))
 
 
 def partialOrdered(cy1, pool):

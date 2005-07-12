@@ -170,9 +170,9 @@ class Term(object):
         This non-overloaded function will simply return if I'm equal to him
         """
         return self == symbol
-
-    def doNodesAppear(self, symbols):
-        return Set([a for a in symbols if a == self])
+##
+##    def doNodesAppear(self, symbols):
+##        return Set([a for a in symbols if a == self])
 
     def unify(self, other, vars, existentials,  bindings):
 	"""Unify this which may contain variables with the other,
@@ -580,12 +580,12 @@ class List(CompoundTerm):
                 print 'I won!'
                 return 1
         return 0
-            
-    def doNodesAppear(self, symbols):
-        val = Set()
-        for elt in self:
-            val.update(elt.doNodesAppear(symbols))
-        return val
+##            
+##    def doNodesAppear(self, symbols):
+##        val = Set()
+##        for elt in self:
+##            val.update(elt.doNodesAppear(symbols))
+##        return val
 
 class NonEmptyList(List):
 

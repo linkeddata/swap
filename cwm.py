@@ -56,7 +56,7 @@ from swap import  notation3    	# N3 parsers and generators
 from swap import  toXML 		#  RDF generator
 
 from swap.why import BecauseOfCommandLine
-from swap.query import think, applyRules, applyQueries, testIncludes
+from swap.query import think, applyRules, applyQueries, applySparqlQueries, testIncludes
 from swap.update import patch
 
 from swap import  uripath
@@ -516,6 +516,21 @@ rdf/xml files. Note that this requires rdflib.
 		if diag.tracking: proof = FormulaReason(_newContext)
                 applyQueries(workingContext, filterContext, _newContext)
 		workingContext.close()
+                workingContext = _newContext
+
+            elif _lhs == "-sparql":
+                workingContext.stayOpen = False
+		workingContext = workingContext.canonicalize()
+		if tracking: 
+		    r = BecauseOfCommandLine(sys.argv[0]) # @@ add user, host, pid, date time? Privacy!
+		else:
+		    r = None
+		filterContext = _store.load(_uri, why=r, referer="", contentType="x-application/sparql")
+		_newContext = _store.newFormula()
+		_newContext.stayOpen = True
+		if diag.tracking: proof = FormulaReason(_newContext)
+                applySparqlQueries(workingContext, filterContext, _newContext)
+#		workingContext.close()
                 workingContext = _newContext
 
             elif arg == "-why":
