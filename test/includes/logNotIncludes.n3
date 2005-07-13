@@ -1,0 +1,41 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@forAll :qq .
+
+{:a :b :c} a :T1 . 
+
+{[a :T1] log:notIncludes {:qq :qq :qq} } => {:We :Really :Won} .
+
+
+####
+####  What follows is better:notIncludes
+####
+@prefix better: <http://www.yosi.us/log#> .
+@forAll :X, :Y, Z
+.
+
+{:X better:notIncludes :Y}
+<=
+{
+@forSome :a, :b, :c .
+({} { {:X log:includes :Y} => {:a :b :c} }) log:filter :Z .
+:Z log:notIncludes {:a :b :c} .
+} .
+
+
+##
+## The above is still not good enough. We still need to save our variable bindings. 
+## Therefore, the below will still not work
+##
+@forAll :Q
+
+{:a1 :b1 :c1 . :a2 :b2 :c2 } a T2 .
+
+{?W a T2 . ?W log:notIncludes {:Q :b1 :c1} . ?W log:notIncludes {:Q :b2 :c2} => {:We :Won :Again } .
+
+###
+### The above should be equivilent to 
+#
+#
+# {?W a T2 . ?W log:notIncludes {:Q :b1 :c1 . :Q :b2 :c2} => {:We :Win :Now } .
+#
+### But isn't, even if we replace use the meaning in better:notIncludes.
