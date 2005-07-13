@@ -148,6 +148,8 @@ BNODE_LABEL	cfg:matches	"_:(?:(?:(?:_)|(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C
 	a cfg:Token . 
 QNAME	cfg:matches	"(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\U00010000-\U000EFFFF]))))))))))))))(?:(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\U00010000-\U000EFFFF])))))))))))))))|(?:(?:_)|(?:(?:-)|(?:(?:\\.)|(?:(?:[0-9])|(?:(?:\u00B7)|(?:(?:[\u0300-\u036F])|(?:[\u203F-\u2040]))))))))*)?:(?:(?:(?:_)|(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\U00010000-\U000EFFFF]))))))))))))))))(?:(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\U00010000-\U000EFFFF])))))))))))))))|(?:(?:_)|(?:(?:-)|(?:(?:\\.)|(?:(?:[0-9])|(?:(?:\u00B7)|(?:(?:[\u0300-\u036F])|(?:[\u203F-\u2040]))))))))*)?";
 	a cfg:Token . 
+### Could we say : QNAME cfg:matches "(?:[A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCFuFDF0-\uFFFD\U00010000-\U000EFFFF][_\\-\\.0-9A-Za-z\u00B7\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0300-\u036F\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u203F-\u2040\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCFuFDF0-\uFFFD\U00010000-\U000EFFFF]*)?:(?:[_A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCFuFDF0-\uFFFD\U00010000-\U000EFFFF][_\\-\\.0-9A-Za-z\u00B7\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0300-\u036F\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u203F-\u2040\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCFuFDF0-\uFFFD\U00010000-\U000EFFFF]*)?"
+
 VARNAME	cfg:matches	"(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\U00010000-\U000EFFFF]))))))))))))))(?:(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\U00010000-\U000EFFFF])))))))))))))))|(?:(?:_)|(?:(?:[0-9])|(?:(?:\u00B7)|(?:(?:[\u0300-\u036F])|(?:[\u203F-\u2040]))))))*";
 	a cfg:Token . 
 VAR2	cfg:matches	"\\$(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\U00010000-\U000EFFFF]))))))))))))))(?:(?:(?:(?:[A-Z])|(?:(?:[a-z])|(?:(?:[\u00C0-\u00D6])|(?:(?:[\u00D8-\u00F6])|(?:(?:[\u00F8-\u02FF])|(?:(?:[\u0370-\u037D])|(?:(?:[\u037F-\u1FFF])|(?:(?:[\u200C-\u200D])|(?:(?:[\u2070-\u218F])|(?:(?:[\u2C00-\u2FEF])|(?:(?:[\u3001-\uD7FF])|(?:(?:[\uF900-\uFDCF])|(?:(?:[\uFDF0-\uFFFD])|(?:[\U00010000-\U000EFFFF])))))))))))))))|(?:(?:_)|(?:(?:[0-9])|(?:(?:\u00B7)|(?:(?:[\u0300-\u036F])|(?:[\u203F-\u2040]))))))*)";
@@ -499,21 +501,21 @@ _QTriples_E_Opt cfg:mustBeOneSequence (     (  )
 
 
 
-Triples cfg:mustBeOneSequence (     ( Triples1 _Q_O_QDot_E____QTriples1_E_Opt_C_E_Opt )  ) .
+Triples cfg:mustBeOneSequence (     ( Triples1 _Q_O_QDot_E____QTriples_E_Opt_C_E_Opt )  ) .
 
 
 
-_QTriples1_E_Opt cfg:mustBeOneSequence (     (  ) 
-    ( Triples1 )  ) .
+_QTriples_E_Opt cfg:mustBeOneSequence (     (  ) 
+    ( Triples )  ) .
 
 
 
-_O_QDot_E____QTriples1_E_Opt_C cfg:mustBeOneSequence (     ( Dot _QTriples1_E_Opt )  ) .
+_O_QDot_E____QTriples_E_Opt_C cfg:mustBeOneSequence (     ( Dot _QTriples_E_Opt )  ) .
 
 
 
-_Q_O_QDot_E____QTriples1_E_Opt_C_E_Opt cfg:mustBeOneSequence (     (  ) 
-    ( _O_QDot_E____QTriples1_E_Opt_C )  ) .
+_Q_O_QDot_E____QTriples_E_Opt_C_E_Opt cfg:mustBeOneSequence (     (  ) 
+    ( _O_QDot_E____QTriples_E_Opt_C )  ) .
 
 
 

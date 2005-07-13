@@ -8,6 +8,7 @@ import sys
 #import lex
 
 bufsiz = 3
+tryLongest = True
 
 
 class Tokens(object):
@@ -225,15 +226,22 @@ class Lexer(object):
         """try everything in the list ``tokens''
 
         """
-        #print "Trying to match: " + string[offset:]
+        length = -1
+        retVal = None
         for name in tokens:
-            #print "trying " + name
             pattern = getattr(Tokens, 'c_' + name)
             r = pattern.match(string, offset)
             if r:
-                #print "success with: " + name + " matching ``" + string[r.start():r.end()] + "''"
-                return (name, r)
-        return None
+                if not tryLongest:
+                    return (name, r)
+                extra = 0
+                if r.lastindex:
+                    extra = r.end(1) - r.start(1)
+                if retVal is None or length < r.end() + extra:
+                    retVal = (name, r)
+                    length = r.end() + extra
+                
+        return retVal
 
 def runLexer():
     lexer = Lexer()

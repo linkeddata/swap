@@ -584,8 +584,8 @@ class FromSparql(productionHandler):
         q = f.newBlankNode()
         f.add(q, store.type, sparql['ConstructQuery'])
         f.add(q, sparql['construct'], p[2])
-        
-        self.makePatterns(f, q, p[4])
+        knowledge_base = f.newBlankNode()
+        self.makePatterns(f, q, knowledge_base, p[4])
         f3 = RulesMaker(self.sparql).implications(q, f, p[2])
         for triple in f3.statementsMatching(pred=sparql['implies']):
             f.add(triple.subject(), store.implies, triple.object())
@@ -601,9 +601,9 @@ class FromSparql(productionHandler):
             positiveTriples = None
             included = k[5]+k[3]+{None: k[1]}
             notIncluded =  k[6]
-            print '+++++++++++++'
-            print 'included=', included
-            print 'notIncluded=', notIncluded
+##            print '+++++++++++++'
+##            print 'included=', included
+##            print 'notIncluded=', notIncluded
             for pred, obj in k[4]:
                 if positiveTriples is None:
                     positiveTriples = self.store.newFormula()
@@ -1324,7 +1324,7 @@ class RulesMaker(object):
         for where in formula.each(subj=query, pred=self.ns['where']):
             F = formula.newFormula()
             F.existentials().update(totalResult.existentials())
-            bound_vars = self.find_vars(formula.universals(), where)
+            bound_vars = where.occurringIn(formula.universals())
             unbound_vars = formula.universals() - bound_vars
             self.matching_subformula(F, unbound_vars, totalResult)
             retFormula.add(where, self.ns['implies'], F.close())
