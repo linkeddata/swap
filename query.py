@@ -321,7 +321,7 @@ class InferenceTask:
             for where_triple in ruleFormula.statementsMatching(subj=query_root, pred=sparql['where']):
                 where_clause = where_triple.object()
                 #where_clause is the tail of the rule
-                implies_clause = ruleFormula.the(subj=where_clause, pred=sparql['implies'])
+                implies_clause = ruleFormula.the(subj=where_clause, pred=store.implies)
                 #implies_clause is the head of the rule
                 v2 = ruleFormula.universals().copy()
                 r = Rule(self, antecedent=where_clause, consequent=implies_clause,
@@ -506,6 +506,7 @@ def testIncludes(f, g, _variables=Set(),  bindings={}):
     """Return whether or nor f contains a top-level formula equvalent to g.
     Just a test: no bindings returned."""
     if diag.chatty_flag >30: progress("testIncludes ============")
+#    raise RuntimeError()
     if not(isinstance(f, Formula) and isinstance(g, Formula)): return 0
 
     assert f.canonical is f
@@ -811,12 +812,12 @@ class Query:
                         and isinstance(obj, Formula)):
 
                         more_unmatched = obj.statements[:]
-			more_variables = obj.variables().copy()
+                        more_variables = obj.variables().copy()
 
-			if obj.universals() != Set():
-			    raise RuntimeError("""Cannot query for universally quantified things.
-	    As of 2003/07/28 forAll x ...x cannot be on object of log:includes.
-	    This/these were: %s\n""" % obj.universals())
+                        if obj.universals() != Set():
+                            raise RuntimeError("""Cannot query for universally quantified things.
+            As of 2003/07/28 forAll x ...x cannot be on object of log:includes.
+            This/these were: %s\n""" % obj.universals())
 
 
                         _substitute({obj: subj}, more_unmatched)
@@ -827,7 +828,7 @@ class Query:
                             newItem = QueryItem(query, quad)
                             queue.append(newItem)
                             newItem.setup(allvars, smartIn = query.smartIn + [subj],
-				    unmatched=more_unmatched, mode=query.mode)
+                                    unmatched=more_unmatched, mode=query.mode)
                         if diag.chatty_flag > 40:
                                 progress("**** Includes: Adding %i new terms and %s as new existentials."%
                                           (len(more_unmatched),
@@ -849,6 +850,17 @@ class Query:
 		nbs = query.remoteQuery(items)
 		item.state = S_SATISFIED  # do not put back on list
             elif state ==S_HEAVY_WAIT or state == S_LIGHT_WAIT: # Can't
+                ## Is now the time to run log:notIncludes?
+                ## Looks better than anything else
+                ## let's see if this works
+                notIncludesStuff = []
+                if pred is query.store.notIncludes:
+                    notIncludesStuff.append(item)
+                for i in queue[:]:
+                    if i.quad[1] is query.store.notIncludes:
+                        notIncludesStuff.append(i)
+                if notIncludesStuff:
+                    raise RuntimeError(notIncludesStuff)
                 if diag.chatty_flag > 49 :
                     progress("@@@@ Warning: query can't find term which will work.")
                     progress( "   state is %s, queue length %i" % (state, len(queue)+1))
