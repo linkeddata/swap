@@ -30,7 +30,7 @@
 
 {:a1 :b1 :c1 . :a2 :b2 :c2 } a T2 .
 
-{?W a T2 . ?W log:notIncludes {:Q :b1 :c1} . ?W log:notIncludes {:Q :b2 :c2} => {:We :Won :Again } .
+{?W a T2 . ?W log:notIncludes {:Q :b1 :c1} . ?W log:notIncludes {:Q :b2 :c2}} => {:We :Won :Again } .
 
 ###
 ### The above should be equivilent to 
