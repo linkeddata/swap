@@ -859,15 +859,69 @@ class Query:
                 for i in queue[:]:
                     if i.quad[1] is query.store.notIncludes:
                         notIncludesStuff.append(i)
-                if notIncludesStuff:
-                    raise RuntimeError(notIncludesStuff)
-                if diag.chatty_flag > 49 :
-                    progress("@@@@ Warning: query can't find term which will work.")
-                    progress( "   state is %s, queue length %i" % (state, len(queue)+1))
-                    progress("@@ Current item: %s" % `item`)
-                    progress(queueToString(queue))
-#                    raise RuntimeError, "Insufficient clues"
-                return 0  # Forget it
+                        queue.remove(i)
+                if queue:
+                    queue.extend(notIncludesStuff)
+                    notIncludesStuff = []
+                elif notIncludesStuff:
+                    all_unmatched = []
+                    for con, pred, subj, obj in [s.quad for s in notIncludesStuff]:
+                        #I have stuff to do
+                        more_unmatched = obj.statements[:]
+                        more_variables = obj.variables().copy()
+
+                        if obj.universals() != Set():
+                            raise RuntimeError("""Cannot query for universally quantified things.
+            As of 2003/07/28 forAll x ...x cannot be on object of log:includes.
+            This/these were: %s\n""" % obj.universals())
+
+
+                        _substitute({obj: subj}, more_unmatched)
+                        _substitute(bindings, more_unmatched)
+                        existentials = existentials | more_variables
+                        allvars = variables | existentials
+                        if Query(query.store,
+                                 unmatched=more_unmatched,
+                                 template=subj,
+                                 variables=variables,
+                                 existentials=allvars,
+                                 justOne=1, mode=query.mode).resolve():
+                            return 0
+                    for item in notIncludesStuff:
+                        item.state = S_SATISFIED
+                    nbs = []
+##########  The following code ties together the results of the log:notincludes. This is wrong for what I need.
+##                        for quad in more_unmatched:
+##                            newItem = QueryItem(query, quad)
+##                            all_unmatched.append(newItem)
+##                            newItem.setup(allvars, smartIn = query.smartIn + [subj],
+##                                    unmatched=more_unmatched, mode=query.mode)
+##                    if diag.chatty_flag > 50 :
+##                        progress('we are about to start a notIncludes query on:',  all_unmatched)
+##                    q = Query(query.store,
+##                                unmatched=[],
+##                                template = subj,
+##                                variables=variables,
+##                                existentials=variables | existentials,
+##                                justOne=1, mode=query.mode)
+##                    q.queue = all_unmatched
+##                    success = q.resolve()
+##                    for item in notIncludesStuff:
+##                        item.state = S_SATISFIED
+##                    if success:
+##                        return 0
+##                    else:
+##                        nbs = []
+                        
+#                    raise RuntimeError(notIncludesStuff)
+                if not notIncludesStuff:
+                    if diag.chatty_flag > 49 :
+                        progress("@@@@ Warning: query can't find term which will work.")
+                        progress( "   state is %s, queue length %i" % (state, len(queue)+1))
+                        progress("@@ Current item: %s" % `item`)
+                        progress(queueToString(queue))
+    #                    raise RuntimeError, "Insufficient clues"
+                    return 0  # Forget it
             else:
                 raise RuntimeError, "Unknown state " + `state`
             if diag.chatty_flag > 90: progress("nbs=" + `nbs`)

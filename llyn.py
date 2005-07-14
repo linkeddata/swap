@@ -1188,6 +1188,7 @@ class RDFStore(RDFSink) :
         import cwm_maths   # Mathematics, perl/string style
 	import cwm_list	   # List handling operations
 	import cwm_set     # Set operations
+	import cwm_sparql  # builtins for sparql
         cwm_string.register(self)
         cwm_math.register(self)
         cwm_trigo.register(self)
@@ -1197,6 +1198,7 @@ class RDFStore(RDFSink) :
         cwm_times.register(self)
 	cwm_list.register(self)
 	cwm_set.register(self)
+	cwm_sparql.register(self)
         if crypto:
 	    import cwm_crypto  # Cryptography
 	    cwm_crypto.register(self)  # would like to anyway to catch bug if used but not available

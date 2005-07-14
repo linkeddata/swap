@@ -32,6 +32,17 @@ def toBool(val, dt=None):
         return bool(typeMap[dt](val))
     return bool(val)
 
+
+class BI_typeErrorIsTrue(LightBuiltIn):
+    def eval(self, subj, obj, queue, bindings, proof, query):
+        if len(obj) != 1:
+            raise TypeError
+        statement = obj.statements[0]
+        try:
+            return subj.eval(statement.subject(), statement.object(), queue, bindings, proof, query)
+        except TypeError:
+            return True
+
 class BI_equals(LightBuiltIn, Function, ReverseFunction):
     def eval(self, subj, obj, queue, bindings, proof, query):
         xsd = self.store.integer.resource
@@ -60,6 +71,33 @@ class BI_equals(LightBuiltIn, Function, ReverseFunction):
         return subj
 
 
+class BI_lessThan(LightBuiltIn):
+    def evaluate(self, subject, object):
+        return (subject < object)
+
+class BI_greaterThan(LightBuiltIn):
+    def evaluate(self, subject, object):
+        return (subject > object)
+
+class BI_notGreaterThan(LightBuiltIn):
+    def evaluate(self, subject, object):
+        return (subject <= object)
+
+class BI_notLessThan(LightBuiltIn):
+    def evaluate(self, subject, object):
+        return (subject >= object)
+
+
+class BI_notEquals(LightBuiltIn):
+    def eval(self, subj, obj, queue, bindings, proof, query):
+        return not BI_equals(self, subj, obj, queue, bindings, proof, query)
+
+
 def register(store):
     ns = store.newSymbol(SPARQL_NS)
     ns.internFrag('equals', BI_equals)
+    ns.internFrag('lessThan', BI_lessThan)
+    ns.internFrag('greaterThan', BI_greaterThan)
+    ns.internFrag('notGreaterThan', BI_notGreaterThan)
+    ns.internFrag('notLessThan', BI_notLessThan)
+    ns.internFrag('notEquals', BI_notEquals)

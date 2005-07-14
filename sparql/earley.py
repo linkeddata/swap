@@ -399,7 +399,7 @@ if __name__ == '__main__':
     _outSink = notation3.ToN3(sys.stdout.write,
                                       quiet=1, flags='')
     for a in results:
-        sink = sparql2cwm.FromSparql(myStore._checkStore())
+        sink = sparql2cwm.FromSparql(myStore._checkStore(), ve=1)
         f = AST((sys.argv[2],) + a[3], sink).run().close()
         myStore._checkStore().dumpNested(f, _outSink)
     print t1,t2,t1+t2

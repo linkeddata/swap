@@ -15,6 +15,12 @@ from cwm_sparql import SPARQL_NS
 
 knownFunctions = {}
 
+def verbose(self, newVal=None):
+    if newVal is not None:
+        self[0] = newVal
+    return self[0]
+verbose = verbose.__get__([0])
+
 def abbr(prodURI): 
    return prodURI.split('#').pop()
 
@@ -121,7 +127,7 @@ def makeTripleObjList(subj, pred, obj):
                                                   obj))])))
 
 def normalize(expr):
-    print expr
+    if verbose(): print expr
     step1 = Coerce()(expr)
     return NotNot()(step1)
 
@@ -130,7 +136,7 @@ class Coerce(object):
         self.k = 0
     def __call__(self, expr, coerce=True):
         try:
-            print '  ' * self.k, expr, coerce
+            if verbose(): print '  ' * self.k, expr, coerce
             self.k = self.k + 1
             if expr[0] in ('Var', 'Literal', 'Number', 'String', 'symbol'):
                 ww = self.atom(expr, coerce)
@@ -141,7 +147,7 @@ class Coerce(object):
             else:
                 ww = getattr(self, 'on_' + expr[0])(expr, coerce)
             self.k = self.k - 1
-            print '  ' * self.k, '/', ww
+            if verbose(): print '  ' * self.k, '/', ww
             return ww
         except AttributeError:
              raise RuntimeError("COERCE why don't you define a %s function, to call on %s?" % ('on_' + expr[0], `expr`))
@@ -209,7 +215,7 @@ class NotNot(object):
     
     def __call__(self, expr, inv=False):
         try:
-            print '  ' * self.k, expr, inv
+            if verbose(): print '  ' * self.k, expr, inv
             self.k = self.k + 1
             if expr[0] in self.inverse_operators:
                 ww = self.expr(expr, inv)
@@ -218,7 +224,7 @@ class NotNot(object):
             else:
                 ww = getattr(self, 'on_' + expr[0])(expr, inv)
             self.k = self.k - 1
-            print '  ' * self.k, '/', ww
+            if verbose(): print '  ' * self.k, '/', ww
             return ww
         except AttributeError:
              raise RuntimeError("NOTNOT why don't you define a %s function, to call on %s?" % ('on_' + expr[0], `expr`))
@@ -304,7 +310,7 @@ class AST(object):
         
 
     def onStart(self, prod): 
-      print (' ' * len(self.productions)) + `prod`
+      if verbose(): print (' ' * len(self.productions)) + `prod`
       #if callable(prod):
       #    prod = prod()
       self.productions.append([prod])
@@ -315,7 +321,7 @@ class AST(object):
       prod = self.sink.prod(k)
       if self.productions:
           self.productions[-1].append(prod)
-      print (' ' * len(self.productions)) + '/' + prodName + ': ' + `prod`
+      if verbose(): print (' ' * len(self.productions)) + '/' + prodName + ': ' + `prod`
       return prod
 
     def onToken(self, prod, tok):
@@ -324,7 +330,7 @@ class AST(object):
           self.productions[-1].append(k)
       except IndexError:
           return k
-      print (' ' * len(self.productions)) + `(prod, tok)`
+      if verbose(): print (' ' * len(self.productions)) + `(prod, tok)`
 
 
 class productionHandler(object):
@@ -462,7 +468,8 @@ class FilterExpr(productionHandler):
         return [makeTriple(self.bnode(), ('symbol', self.parent.sparql['bound']), var)]
 
 class FromSparql(productionHandler):
-    def __init__(self, store, formula=None):
+    def __init__(self, store, formula=None, ve=0):
+        verbose(ve)
         self.store = store
         if formula is None:
             self.formula = store.newFormula()
@@ -531,17 +538,17 @@ class FromSparql(productionHandler):
 
             for nodeName, graphIntersection in notIncludedStuff.iteritems():
                 if not graphIntersection: continue
-                graph = f.newFormula()
+##                graph = f.newFormula()
                 for subGraph in graphIntersection:
-                    graph.loadFormulaWithSubstitution(subGraph)
-                graph = graph.close()
-                if nodeName is not None:
-                    nameNode = anonymize(tail, nodeName[1])
-                    semantics = tail.newBlankNode()
-                    tail.add(nameNode, self.store.semantics, semantics)
-                else:
-                    semantics = knowledge_base
-                tail.add(semantics, self.store.notIncludes, graph)
+##                    graph.loadFormulaWithSubstitution(subGraph)
+##                graph = graph.close()
+                    if nodeName is not None:
+                        nameNode = anonymize(tail, nodeName[1])
+                        semantics = tail.newBlankNode()
+                        tail.add(nameNode, self.store.semantics, semantics)
+                    else:
+                        semantics = knowledge_base
+                    tail.add(semantics, self.store.notIncludes, subGraph)
 
             
             f.add(node, sparql['where'], tail.close())
@@ -911,6 +918,16 @@ class FromSparql(productionHandler):
                     f2 = self.store.newFormula()
                     f2.loadFormulaWithSubstitution(formula2)
 
+                    f3 = formula1.newFormula()
+                    f3.loadFormulaWithSubstitution(formula1)
+                    for document in i1:
+                        semantics = f3.newBlankNode()
+                        f3.add(document[1], self.store.semantics, semantics)
+                        totalFormula = f3.newFormula()
+                        for f4 in i1[document]:
+                            totalFormula.loadFormulaWithSubstitution(f4)
+                        f3.add(semantics, self.store.includes, totalFormula.close())
+                    f3 = f3.close()
                     newFilters1 =  f1.newFormula()
                     newFilters1.loadFormulaWithSubstitution(filters1)
                     newFilters1.loadFormulaWithSubstitution(filters2)
@@ -919,7 +936,7 @@ class FromSparql(productionHandler):
                     newFilters2.loadFormulaWithSubstitution(filters2)                    
                     
                     retVal.append(('formula', formula2.close(), newFilters1.close(), parents1 + parents2+{None:formula1}, bounds1 + bounds2, i1+i2, nI1+nI2))
-                    retVal.append(('formula', formula2.close(), newFilters2.close(), parents2, bounds1 + bounds2, i2, nI2+i1+{None:formula1}))
+                    retVal.append(('formula', formula2.close(), newFilters2.close(), parents2, bounds1 + bounds2, i2, nI2+{None:f3}))
         return retVal
 ##        
 ##        if len(p) == 2:
@@ -1324,28 +1341,35 @@ class RulesMaker(object):
         for where in formula.each(subj=query, pred=self.ns['where']):
             F = formula.newFormula()
             F.existentials().update(totalResult.existentials())
-            bound_vars = where.occurringIn(formula.universals())
+            bound_vars = self.find_vars(formula.universals(), where)
+#            print where, bound_vars
             unbound_vars = formula.universals() - bound_vars
             self.matching_subformula(F, unbound_vars, totalResult)
             retFormula.add(where, self.ns['implies'], F.close())
         return retFormula
 
     def find_vars(self, vars, f):
+#        print 'find_vars on:', f, vars
         retVal = Set()
         for var in vars:
-            if f.doesNodeAppear(var):
+            if f.contains(subj=var) or f.contains(pred=var) or f.contains(obj=var):
                 retVal.add(var)
+        for statement in f.statementsMatching(pred=f.store.includes):
+            retVal.update(self.find_vars(vars, statement.object()))
+#        print 'find_vars found:', retVal, ' on ', f, vars
         return retVal
 
     def matching_subformula(self, retF, illegals, F):
         def clear(node):
             return node not in illegals and not (isinstance(node, CompoundTerm) and
-                                             illegals.intersection(Set([a for a in node])))
+                                             False in [clear(a) for a in node])
         for triple in F:
             if (clear(triple.subject()) and
                 clear(triple.predicate()) and
                 clear(triple.object())):
                 retF.add(*triple.spo())
+#            else:
+#                print triple, illegals
 
 
 def unEscape(string):
