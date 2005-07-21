@@ -1,54 +1,22 @@
-#Processed by Id: cwm.py,v 1.149 2004/05/12 01:27:06 timbl Exp 
-        #    using base file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3
+#Processed by Id: cwm.py,v 1.171 2005/07/12 18:47:01 syosi Exp 
+        #    using base file:/home/syosi/CVS-local/WWW/2000/10/swap/test/crypto/access-rule.n3
         
 #  Notation3 generation by
-#       notation3.py,v 1.154 2004/05/12 01:27:08 timbl Exp
+#       notation3.py,v 1.180 2005/06/09 21:05:14 syosi Exp
 
-#   Base was: file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3
+#   Base was: file:/home/syosi/CVS-local/WWW/2000/10/swap/test/crypto/access-rule.n3
      @prefix : <#> .
      @prefix acc: <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
-     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
-    
-    this     log:forAll :F,
-                :G,
-                :d,
-                :k,
-                :k2,
-                :k3,
-                :kp,
-                :q,
-                :request,
-                :sig,
-                :str,
-                :x,
-                :y,
-                :z .
     
     """
-MTAyMTIxCgoyNjE5NzgxOTg0Mzg4MTk0OTAxMDgyNDIwNDM5NjcyMjYyMTU0MDk2MDM2Njk0NzA2
-MTAzMTYwODQxNjk4MjI4NTMyMjMxMDY5MjQ3NzI0NzMzMzc0MjYxMDQxMDc0MDA1MzkzNzgyMjc2
-ODcwMjI1MTE4NDEyNTU1MzczMzI1MzMwNDU5MzgwMDQ0OTY3MzI4MjcxMzY0NDkwNjM4NDI0MjQ4
-NTYxMTQxODE0MDIzMzYwOTcyNDk5MTMxMjIyNTcyNTE2Mzk3NDE5NzYyMzQ4NzQ3MzA0MTY3NDI4
-NDU1ODEwNjM0OTEwMjU5MzU4NDc1NDk3MzMyMzgyNzEyODM1OTc2NDMwMTIyNjIyMjEzMDEwNTEz
-MDA1NjUyNDU1NTI0Mzk5NDMzNTA3NDU5NDQ0OTgxODc=3D
+NjU1MzcKCjE0NTExMjQwNjAwMjk1MjUyOTY4ODUzOTAzNjM4NDY2NDQ5MzIwODQ2MTc3NjEyMDQ4
+NTIwNDY4NDg1NzM2MjQzNDgzNTc5NzY1NDY3ODkxMTg5NDg1NjY0OTM0NDkyMTU1Mjg4MTgxMjA3
+MDc1Mzc4NTY5MTA5MDgwMzExMjU2MjU5ODA4ODg0MzMyMTcwMjY3MTkwMjMzNjI5NTAxOTI3NTMz
+NzY0MjI0MjQ3MzgzODcyNTM1NDMwMTc2NjcwMTIxOTk3MjY4OTU1MzY0MjU1ODM1MDkwNjQ3NTE0
+OTIzNjg5Mzc2Mzc0ODQwMjY1NzY0Njc3MzgzMDg0NTk1MTg2ODM4MzUxOTYzMzQzODI0MjIzNjE1
+OTE3OTM3NDgxMDM3Mjk5OTk2NDQxMjAwNzM2MjY1Mw=3D=3D
 """     a acc:MasterKey .
     
     <>     :description <http://www.w3.org/2002/Talks/04-sweb/slide22-1.html> .
-    {
-        
-          [      acc:credential <access-elisa.cert>,
-                        <access-tiina.cert>;
-                 acc:forDocument <http://www.w3.org/Member>;
-                 acc:junk "32746213462187364732164732164321" ].
-        
-        }     acc:forDocument <http://www.w3.org/Member>;
-         acc:requestSupportedBy """
-MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
-NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
-NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
-Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
-MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
-OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
-""" .
     
 #ENDS

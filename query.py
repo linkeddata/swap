@@ -20,7 +20,7 @@ from diag import chatty_flag, tracking, progress
 from term import BuiltIn, LightBuiltIn, \
     HeavyBuiltIn, Function, ReverseFunction, MultipleFunction, MultipleReverseFunction, \
     Literal, Symbol, Fragment, FragmentNil,  Term, \
-    CompoundTerm, List, EmptyList, NonEmptyList
+    CompoundTerm, List, EmptyList, NonEmptyList, ErrorFlag
 from formula import StoredStatement, Formula
 from why import Because, BecauseBuiltIn, BecauseOfRule, \
     BecauseOfExperience, becauseSubexpression, BecauseMerge ,report
@@ -666,6 +666,8 @@ class Query:
 
 	es, exout = self.workingContext.existentials(), Set()
 	for var, val in bindings.items():
+            if isinstance(val, Exception):
+                return 0
 	    if val in es:   #  Take time for large number of bnodes?
 		exout.add(val)
 		if diag.chatty_flag > 25:
@@ -749,7 +751,7 @@ class Query:
                 variables.remove(pair[0])
                 bindings.update({pair[0]: pair[1]})  # Record for posterity
             else:      # Formulae aren't needed as existentials, unlike lists. hmm.
-		if diag.tracking: raise Error #bindings.update({pair[0]: pair[1]})  # Record for proof only
+#		if diag.tracking: raise RuntimeError(pair[0], pair[1]) #bindings.update({pair[0]: pair[1]})  # Record for proof only
 		if pair[0] not in existentials:
                     if isinstance(pair[0], List):
                         del newBindings[pair[0]]
@@ -759,6 +761,7 @@ class Query:
                         newBindings.update(reallyNewBindings)
                     else:
                         progress("@@@  Not in existentials or variables but now bound:", `pair[0]`)
+                elif diag.tracking: bindings.update({pair[0]: pair[1]})
                 if not isinstance(pair[0], CompoundTerm): # Hack - else rules13.n3 fails @@
                     existentials.remove(pair[0]) # Can't match anything anymore, need exact match
 
@@ -1128,26 +1131,35 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 	try:
 	    if self.neededToRun[SUBJ] == Set():
 		if self.neededToRun[OBJ] == Set():   # bound expression - we can evaluate it
-		    if pred.eval(subj, obj,  queue, bindings.copy(), proof, self.query):
-			self.state = S_SATISFIED # satisfied
-                        if diag.chatty_flag > 80: progress("Builtin buinary relation operator succeeds")
-			if diag.tracking:
-                            #raise Error
-			    rea = BecauseBuiltIn(subj, pred, obj, proof)
-			    evidence = evidence + [rea]
-#			    return [([], rea)]  # Involves extra recursion just to track reason
-			return []   # No new bindings but success in logical operator
-		    else: return 0   # We absoluteley know this won't match with this in it
+                    try:
+                        if pred.eval(subj, obj,  queue, bindings.copy(), proof, self.query):
+                            self.state = S_SATISFIED # satisfied
+                            if diag.chatty_flag > 80: progress("Builtin buinary relation operator succeeds")
+                            if diag.tracking:
+                                #raise Error
+                                rea = BecauseBuiltIn(subj, pred, obj, proof)
+                                evidence = evidence + [rea]
+    #			    return [([], rea)]  # Involves extra recursion just to track reason
+                            return []   # No new bindings but success in logical operator
+                        else: return 0   # We absoluteley know this won't match with this in it
+                    except:
+                        progress("You got a ``" + sys.exc_info()[0].__name__ + ':' + str(sys.exc_info()[1]) + "'' on " + `subj.value()` + ', ' + `obj.value()`)
+                        if "h" in self.query.mode:
+                            raise
+                        return 0
 		else: 
 		    if isinstance(pred, Function):
 			if diag.chatty_flag > 97: progress("Builtin function call %s(%s)"%(pred, subj))
 			try:
                             result = pred.evalObj(subj, queue, bindings.copy(), proof, self.query)
                         except:
-                            progress("You got a ``" + str(sys.exc_info()[1]) + "'' on " + `subj.value()`)
+                            progress("You got a ``" + sys.exc_info()[0].__name__ + ':' + str(sys.exc_info()[1]) + "'' on " + `subj.value()`)
                             if "h" in self.query.mode:
                                 raise
-                            result = None
+                            if isinstance(pred, MultipleFunction):
+                                result = [ErrorFlag()]
+                            else:
+                                result = ErrorFlag()
 			if result != None:
 			    self.state = S_DONE
 			    rea=None
@@ -1165,10 +1177,14 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                         try:
                             result = pred.evalSubj(obj, queue, bindings.copy(), proof, self.query)
                         except:
-                            progress("You got a ``" + str(sys.exc_info()[1]) + "'' on " + `subj.value()`)
+                            progress("You got a ``" + sys.exc_info()[0].__name__ + ':' + str(sys.exc_info()[1]) + "'' on " + `subj.value()`)
                             if "h" in self.query.mode:
                                 raise
-                            result = None                            
+                            if isinstance(pred, MultipleReverseFunction):
+                                result = [ErrorFlag()]
+                            else:
+                                result = ErrorFlag()
+#                            result = None
 			if result != None:
 			    self.state = S_DONE
 			    rea=None

@@ -151,24 +151,24 @@ class rFormula(Mixin, Formula):
 	    list = sink.store.nil.newList([sink.newLiteral(x.uriref()) for x in vars])
 	    klass = sink.newBlankNode()
             sink.add(klass, ooo, list)
-	    sink.add(F, vocab, klass) 
+	    sink.add(F, vocab, klass, why) 
 
 
 	#The great list of statements
         statementList = []
         for s in self.statements:
             subj = sink.newBlankNode()
-	    sink.add(subj, rei["subject"], s[SUBJ].reification(sink, myMap, why)) 
-	    sink.add(subj, rei["predicate"], s[PRED].reification(sink, myMap, why) )
-	    sink.add(subj, rei["object"], s[OBJ].reification(sink, myMap, why)) 
+	    sink.add(subj, rei["subject"], s[SUBJ].reification(sink, myMap, why), why) 
+	    sink.add(subj, rei["predicate"], s[PRED].reification(sink, myMap, why), why )
+	    sink.add(subj, rei["object"], s[OBJ].reification(sink, myMap, why), why) 
 	    statementList.append(subj)
             
     #The great class of statements
         StatementClass = sink.newBlankNode()
         realStatementList = sink.store.nil.newList(statementList)
-        sink.add(StatementClass, ooo, realStatementList)
+        sink.add(StatementClass, ooo, realStatementList,  why)
     #We now know something!
-        sink.add(F, rei["statements"], StatementClass)
+        sink.add(F, rei["statements"], StatementClass, why)
 	    
 	return F
 

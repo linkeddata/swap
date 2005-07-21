@@ -25,22 +25,30 @@ def abbr(prodURI):
    return prodURI.split('#').pop()
 
 class typedThing(unicode):
-    def __new__(cls, val, retType=None, ArgTypes=[]):
+    def __new__(cls, val, retType=None, ArgTypes=[], trueOnError=False):
         ret = unicode.__new__(cls, val)
         ret.retType = retType
         ret.argTypes = ArgTypes
+        ret.trueOnError = trueOnError
         return ret
 
     def __call__(self):
-        return unicode(self) + '__' + unicode(self.retType) + '__' + '_'.join(self.argTypes)
+        return unicode(self) + '__' + unicode(self.retType) + '__' + {False:'', True:'lenient__'}[self.trueOnError] + '_'.join(self.argTypes)
 
 def getType(ex):
     if isinstance(ex, typedThing):
         return ex.retType
     return None
 
+def getTrueOnError(ex):
+    if isinstance(ex, typedThing):
+        return ex.trueOnError
+    return False
+
+ORED_AND = typedThing('And', 'boolean', trueOnError=True)
 AND = typedThing('And', 'boolean')
 OR = typedThing('Or', 'boolean')
+ORED_NOT = typedThing('Not', 'Boolean', trueOnError=True)
 NOT = typedThing('Not', 'boolean')
 
 class andExtra(tuple):
@@ -98,6 +106,10 @@ class multimap(dict):
 
 def anonymize(self, formula, uri = None):
     if uri is not None:
+        if isinstance(uri, TripleHolder):
+            f = formula.newFormula()
+            f.add(*[anonymize(formula, k) for k in uri])
+            return f.close()
         if isinstance(uri, list):
             return formula.newList([anonymize(formula, k) for k in uri])
         if isinstance(uri, Formula):
@@ -117,10 +129,31 @@ def anonymize(self, formula, uri = None):
 
 anonymize = anonymize.__get__({})
 
-def makeTriple(subj, pred, obj):
+def makeTriple(subj, pred, obj, safeVersion=False):
+    if safeVersion:
+        store = pred[1].store
+        typeErrorIsTrue = store.newSymbol(SPARQL_NS + '#typeErrorIsTrue')
+        return ('Triple', (('Literal', store.intern(1)), ('predicateList',
+                                         [(('symbol', typeErrorIsTrue), ('objectList',
+                                                  [('formula', TripleHolder((subj[1], pred[1], obj[1])))]))])))
     return ('Triple', (subj, ('predicateList',
                                          [(pred, ('objectList',
                                                   [obj]))])))
+
+def makeSafeVal(val, (subj, pred, obj), safeVersion=False):
+    if safeVersion:
+        store = pred[1].store
+        typeErrorReturner = store.newSymbol(SPARQL_NS + '#typeErrorReturner')
+        replacement = ('Literal', store.intern(1))
+        if subj==val:
+            subj=replacement
+            return makeTriple(val, ('formula', TripleHolder((subj[1], pred[1], obj[1]))), ('symbol', typeErrorReturner))
+        if obj==val:
+            obj=replacement
+            return makeTriple(('formula', TripleHolder((subj[1], pred[1], obj[1]))), ('symbol', typeErrorReturner), val)
+    return makeTriple(subj, pred, obj)
+        
+
 def makeTripleObjList(subj, pred, obj):
     return ('Triple', (subj, ('predicateList',
                                          [(pred, ('objectList',
@@ -199,6 +232,13 @@ class Coerce(object):
     def on_Not(self, p, coerce):
         return [p[0], self(p[1], True)]
 
+    def on_isURI(self, p, coerce):
+        return [p[0], self(p[1], False)]
+    def on_isLiteral(self, p, coerce):
+        return [p[0], self(p[1], False)]
+    def on_isBlank(self, p, coerce):
+        return [p[0], self(p[1], False)]
+
 class NotNot(object):
     inverse_operators = {'less' : 'notLess',
                          'greater' : 'notGreater',
@@ -206,6 +246,12 @@ class NotNot(object):
                          'notGreater' : 'greater',
                          'equal' : 'notEqual',
                          'notEqual': 'equal',
+                         'isURI' : 'isNotURI',
+                         'isNotURI' : 'isURI',
+                         'isLiteral' : 'isNotLiteral',
+                         'isNotLiteral' : 'isLiteral',
+                         'isBlank' : 'isNotBlank',
+                         'isNotBlank' : 'isBlank',
 ##                         'Not', 'BoolVal',
 ##                         'BoolVal', 'Not',
                          'Bound': 'notBound' }
@@ -213,62 +259,72 @@ class NotNot(object):
     def __init__(self):
         self.k = 0
     
-    def __call__(self, expr, inv=False):
+    def __call__(self, expr, inv=False, Ored=False):
         try:
             if verbose(): print '  ' * self.k, expr, inv
             self.k = self.k + 1
+            if not isinstance(expr, (list, tuple)):
+                return expr
             if expr[0] in self.inverse_operators:
-                ww = self.expr(expr, inv)
+                ww = self.expr(expr, inv, Ored)
             elif expr[0] in ('Var', 'Literal', 'Number', 'subtract', 'add', 'multiply', 'divide', 'String', 'symbol', 'function'):
-                ww = self.atom(expr, inv)
+                ww = self.atom(expr, inv, Ored)
             else:
-                ww = getattr(self, 'on_' + expr[0])(expr, inv)
+                ww = getattr(self, 'on_' + expr[0])(expr, inv, Ored)
             self.k = self.k - 1
             if verbose(): print '  ' * self.k, '/', ww
             return ww
         except AttributeError:
              raise RuntimeError("NOTNOT why don't you define a %s function, to call on %s?" % ('on_' + expr[0], `expr`))
 
-    def expr(self, p, inv):
+    def expr(self, p, inv, ored):
         if inv:
-            return [typedThing(self.inverse_operators[p[0]], 'boolean')] + [self(q, False) for q in p[1:]]
-        return [p[0]] + [self(q, False) for q in p[1:]]
+            return [typedThing(self.inverse_operators[p[0]], 'boolean', trueOnError=ored)] + [self(q, False, ored) for q in p[1:]]
+        return [typedThing(p[0], trueOnError=ored)] + [self(q, False, ored) for q in p[1:]]
 
-    def atom(self, p, inv):
+    def atom(self, p, inv, ored):
+        if ored:
+            p = [typedThing(p[0], getType(p[0]), trueOnError=True)] + [self(q, False, True) for q in p[1:]]
+        if inv and ored:
+            return (ORED_NOT, p)
         if inv:
             return (NOT, p)
+##        if ored:
+##            return ('typesafe', p)
         return p
 
-    def on_Not(self, p, inv):
+    def on_Not(self, p, inv, ored):
         if inv:
-            return self(p[1], False)
-        return self(p[1], True)
+            return self(p[1], False, ored)
+        return self(p[1], True, ored)
 
-    def on_Regex(self, p, inv):
+    def on_Regex(self, p, inv, ored):
         if inv:
-            return ['notMatches'] + [self(q, False) for q in p[1:]]
-        return [p[0]] + [self(q, False) for q in p[1:]]
+            return [typedThing('notMatches', trueOnError=ored)] + [self(q, False, ored) for q in p[1:]]
+        return [typedThing(p[0], trueOnError=ored)] + [self(q, False, ored) for q in p[1:]]
     def on_notMatches(self, p, inv):
         if inv:
-            return ['Regex'] + [self(q, False) for q in p[1:]]
-        return [p[0]] + [self(q, False) for q in p[1:]]
+            return [typedThing('Regex', trueOnError=ored)] + [self(q, False, ored) for q in p[1:]]
+        return [typedThing(p[0], trueOnError=ored)] + [self(q, False, ored) for q in p[1:]]
 
-    def on_Or(self, p, inv):
+    def on_Or(self, p, inv, ored):
         if inv:
-            return [AND] + [self(q, True) for q in p[1:]]
-        return [p[0]] + [self(q, False) for q in p[1:]]
-    def on_And(self, p, inv):
+            return [ORED_AND] + [self(q, True, True) for q in p[1:]]
+        return [p[0]] + [self(q, False, False) for q in p[1:]]
+    def on_And(self, p, inv, ored):
         if inv:
-            return [OR] + [self(q, True) for q in p[1:]]
-        return [p[0]] + [self(q, False) for q in p[1:]]
-    def on_BoolVal(self, p, inv):
+            return [OR] + [self(q, True, ored) for q in p[1:]]
+        return [p[0]] + [self(q, False, ored) for q in p[1:]]
+    def on_BoolVal(self, p, inv, ored):
+        if inv and ored:
+            return [ORED_NOT, self(p[1], False)]
         if inv:
-            return ['Not', self(p[1], False)]
+            return [NOT, self(p[1], False)]
         return [p[0], self(p[1], False)]
         
 
 def on_Boolean_Gen(true, false):
-    def on_Boolean(self, p, inv):
+    def on_Boolean(self, p, inv, ored):
         if (inv and p[1] != false) or (not inv) and p[1] == false:
             return (p[0], false)
         return (p[0], true)
@@ -309,11 +365,15 @@ class AST(object):
                 
         
 
-    def onStart(self, prod): 
-      if verbose(): print (' ' * len(self.productions)) + `prod`
-      #if callable(prod):
-      #    prod = prod()
-      self.productions.append([prod])
+    def onStart(self, prod):
+        if verbose():
+            if callable(prod):
+                print (' ' * len(self.productions)) + prod()
+            else:
+                print (' ' * len(self.productions)) + `prod`
+        #if callable(prod):
+        #    prod = prod()
+        self.productions.append([prod])
 
     def onFinish(self):
       k = self.productions.pop()
@@ -345,6 +405,14 @@ class productionHandler(object):
             raise RuntimeError("why don't you define a %s function, to call on %s?" % ('on_' + abbr(production[0]), `production`))
         return production
 
+
+class TripleHolder(tuple):
+    def __new__(cls, *args, **keywords):
+        self = tuple.__new__(cls, *args, **keywords)
+        if len(self) != 3:
+            raise TypeError
+        return self
+
 class FilterExpr(productionHandler):
     def __init__(self, store, parent):
         self.store = store
@@ -353,42 +421,50 @@ class FilterExpr(productionHandler):
         self.string = store.newSymbol('http://www.w3.org/2000/10/swap/string')
         self.anything = self.parent.sparql
         self.math = self.parent.math
+        self.log = self.parent.store.newSymbol('http://www.w3.org/2000/10/swap/log')
 
     def on_function(self, p):
         args = []
         extra = []
+        keepGoing = getTrueOnError(p[0])
         rawArgs = p[2:]
         for rawArg in rawArgs:
             if not isinstance(rawArg, tuple):
                 return ['Error']
             extra.extend(getExtra(rawArg))
             args.append(tuple(rawArg))
+        if p[1] not in knownFunctions:
+            raise RuntimeError('''I don't support the ``%s'' function''' % p[1].uriref())
         try:
-            node, triples = knownFunctions[p[1]](self, *args)
+            node, triples = knownFunctions[p[1]](self, keepGoing, *args)
             return andExtra(node, triples + extra)
         except TypeError:
+            raise
             return ['Error']
 
-    def typeConvert(self, uri, val):
+    def typeConvert(self, keepGoing, uri, val):
         retVal = self.bnode()
-        return (retVal, [makeTriple(('List', [val[1], self.store.newSymbol(uri)]), ('symbol', self.anything['dtLit']), retVal)])
+        return (retVal, [makeSafeVal(retVal, (('List', [val[1], self.store.newSymbol(uri)]), ('symbol', self.anything['dtLit']), retVal), safeVersion=keepGoing)])
 
     def on_BoolVal(self, p):
         extra = getExtra(p[1])
         val = tuple(p[1])
-        return [makeTriple(val, ('symbol', self.anything['truthValue']), ('symbol', self.parent.true))] + extra
+        return [makeTriple(val, ('symbol', self.anything['truthValue']), ('symbol', self.parent.true), safeVersion=getTrueOnError(p[0]))] + extra
     def on_Not(self, p):
         extra = getExtra(p[1])
         val = tuple(p[1])
-        return [makeTriple(val, ('symbol', self.anything['truthValue']), ('symbol', self.parent.false))] + extra
+        return [makeTriple(val, ('symbol', self.anything['truthValue']), ('symbol', self.parent.false), safeVersion=getTrueOnError(p[0]))] + extra
 
     def on_And(self, p):
         vals = []
+        succeedAnyway = getTrueOnError(p[0])
         things = p[1:]
         for thing in things:
-            vals.extend(thing)
             if thing == ['Error']:
+                if succeedAnyway:
+                    continue
                 return ['Error']
+            vals.extend(thing)
         return vals
 
     def on_Or(self, p):
@@ -405,7 +481,7 @@ class FilterExpr(productionHandler):
         extra = getExtra(p[1]) + getExtra(p[2])
         string = tuple(p[1])
         regex = tuple(p[2])
-        return [makeTriple(string, ('symbol', self.string['matches']), regex)] + extra
+        return [makeTriple(string, ('symbol', self.string['matches']), regex, safeVersion=getTrueOnError(p[0]))] + extra
 
     def compare(self, p, op):
         if not isinstance(p[1], tuple) or not isinstance(p[2], tuple):
@@ -413,7 +489,7 @@ class FilterExpr(productionHandler):
         extra = getExtra(p[1]) + getExtra(p[2])
         op1 = tuple(p[1])
         op2 = tuple(p[2])
-        return [makeTriple(op1, ('symbol', op), op2)] + extra
+        return [makeTriple(op1, ('symbol', op), op2, safeVersion=getTrueOnError(p[0]))] + extra
 
     def on_less(self, p):
         return self.compare(p, self.anything['lessThan'])
@@ -435,7 +511,8 @@ class FilterExpr(productionHandler):
         op1 = tuple(p[1])
         op2 = tuple(p[2])
         retVal = self.bnode()
-        return andExtra(retVal, [makeTriple(('List', [op1[1], op2[1]]), ('symbol', op), retVal)] + extra)
+        triple = makeSafeVal(retVal, (('List', [op1[1], op2[1]]), ('symbol', op), retVal), safeVersion=getTrueOnError(p[0]))
+        return andExtra(retVal, [triple] + extra)
     def on_subtract(self, p):
         return self.arithmetic(p, self.math['difference'])
     def on_add(self, p):
@@ -466,6 +543,13 @@ class FilterExpr(productionHandler):
     def on_Bound(self, var):
         var = ('Literal', self.store.newLiteral(var[1][1].uriref()))
         return [makeTriple(self.bnode(), ('symbol', self.parent.sparql['bound']), var)]
+
+    def on_isURI(self, p):
+        return [makeTriple(p[1], ('symbol', self.log['rawType']), ('symbol', self.parent.store.Other), safeVersion=getTrueOnError(p[0]))]
+    def on_isNotURI(self, p):
+        k = self.bnode()
+        return [makeTriple(p[1], ('symbol', self.log['rawType']), k, safeVersion=getTrueOnError(p[0])),
+                makeTriple(k, ('symbol', self.log['notEqualTo']), ('symbol', self.parent.store.Other))]
 
 class FromSparql(productionHandler):
     def __init__(self, store, formula=None, ve=0):
@@ -854,9 +938,9 @@ class FromSparql(productionHandler):
                                     bounds.append((pred, obj))
                                     
                                     #print alternates, object[1], isinstance(object[1], Term), anonymize(f, object[1])
-                                elif isinstance(obj, Formula):
-                                    options.extend(object[2])
-                                    f.add(subj, pred, obj)
+##                                elif isinstance(obj, Formula):
+##                                    options.extend(object[2])
+##                                    f.add(subj, pred, obj)
                                 else:
                                     f.add(subj, pred, obj)
                         except:
@@ -1267,8 +1351,21 @@ class FromSparql(productionHandler):
     def on_BuiltinCallExpression(self, p):
         if len(p) == 2:
             return p[1]
-        if abbr(p[1][0]) == 'IT_BOUND':
+        funcName = abbr(p[1][0])
+        if funcName == 'IT_BOUND':
             return (typedThing('Bound', 'boolean', ['variable']), p[3])
+        if funcName == 'IT_isURI':
+            return (typedThing('isURI', 'boolean'), p[3])
+        if funcName == 'IT_STR':
+            return (typedThing('string', 'literal', ['literal', 'symbol']), p[3])
+        if funcName == 'IT_LANG':
+            return (typedThing('lang', 'literal', ['literal']), p[3])
+        if funcName == 'IT_DATATYPE':
+            return (typedThing('lang', 'symbol', ['literal']), p[3])
+        if funcName == 'IT_isBLANK':
+            return (typedThing('isBlank', 'boolean'), p[3])
+        if funcName == 'IT_isLITERAL':
+            return (typedThing('isLiteral', 'boolean'), p[3])
         raise RuntimeError(`p`)
 
     def on_RegexExpression(self, p):
@@ -1423,7 +1520,7 @@ def unEscape(string):
         
     return ret
 
-def intConvert(self, val):
-    return self.typeConvert('http://www.w3.org/2001/XMLSchema#integer', val)
+def intConvert(self, keepGoing, val):
+    return self.typeConvert(keepGoing, 'http://www.w3.org/2001/XMLSchema#integer', val)
 
 knownFunctions['http://www.w3.org/2001/XMLSchema#integer'] = intConvert

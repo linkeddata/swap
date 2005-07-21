@@ -194,6 +194,14 @@ class Term(object):
 		return [ ({self: other}, None) ]
 	    return 0
 	
+class ErrorFlag(TypeError, Term):
+    __init__ = TypeError.__init__
+    __repr__ = object.__repr__
+    __str__ = TypeError.__str__
+#    uriref = lambda s: ':'
+    value = lambda s: TypeError
+
+
 
 class Node(Term):
     """A node in the graph

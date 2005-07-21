@@ -1,49 +1,57 @@
-#Processed by Id: cwm.py,v 1.111 2002/12/07 01:16:18 timbl Exp 
-        #    using base file:/devel/WWW/2000/10/swap/test/crypto/
+#Processed by Id: cwm.py,v 1.171 2005/07/12 18:47:01 syosi Exp 
+        #    using base file:/home/syosi/CVS-local/WWW/2000/10/swap/test/crypto/
         
 #  Notation3 generation by
-#       notation3.py,v 1.123 2002/12/07 23:43:28 timbl Exp
+#       notation3.py,v 1.180 2005/06/09 21:05:14 syosi Exp
 
-#   Base was: file:/devel/WWW/2000/10/swap/test/crypto/
-     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
-     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
-     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
-     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
-     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+#   Base was: file:/home/syosi/CVS-local/WWW/2000/10/swap/test/crypto/
+     @prefix : <access-sign-cert.n3#> .
+     @prefix ac: <access-elisa.private#> .
+     @prefix acc: <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix acce: <access-tiina.private#> .
+    
+     @forAll ac:x,
+                ac:y,
+                <access-onlyPublic.n3#x>,
+                :k,
+                :kp,
+                :n,
+                :str,
+                :tk,
+                :tkp,
+                :z,
+                acce:x,
+                acce:y .
     
     """     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
-     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
-     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
-     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
-     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
     
     \"""
-MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
-NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
-NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
-Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
-MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
-OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+NjU1MzcKCjEyMjcxNTk2NjgwODU5MjE5NzcxMjkxMTk5NTE2MzExNzE0MjI5Mjk4OTczNjE1MDA5
+OTU3NDk3MzMxNTU3ODMzMzMxNjExNTgyMzAyNjYzMjczMTcyMzY5NTk4NjAwMDA4NTQzMTE4NjU1
+NDE4MTQwMjE4NjUyNDUwNTAyMjE5Nzk2ODg4NjMxMTg0MDUzMTIwMjEzNzExMzI0Njk5MzE4MTAy
+NDA1MDQ4NDE0OTgzMjIyMTk2MzQ5NTgzNzU3MDgwNjg5NjAxMzQyMzM4Njk5NDE4OTgxNjkxODM5
+ODEzNjAxNTM1NjU1MTYzNTY4NDc0Mjk2Mzk1MTIyNjcyNzA4NjMyMzg2MDkzMzA5MzQwNTU4OTE5
+NDc0NzU5MzQ1NTk0MTkzMjY5MzQyNTQyMDYwMDIyMQ=3D=3D
 \"""     a :RequestKey;
          :authorityName "Tiina";
          :junk "327462sjsdfjsakdhfkjsafd32164321" .
     
-"""     :endorsement  [
-             :key """
-ODQ2NzMKCjQ5OTUyNTIxNzk2OTU0OTA5Mzg2NzAwMjc5NzUwMDY3NDU5MDE5OTE3OTEyNzU1OTQx
-NTM3Mjg0NTAyMTQzOTY3OTk3ODM3NjQzODAzOTg3MDk2MzY5MTA2NDkzMjkxMzQwNjc0NzU5MDMx
-OTc0NTMyMDQxMzc1OTg3Mjk5OTA2NTQzNzQzOTI2MjY4NTY3OTg5OTY2NTAxNzk2NzkxOTk3NjUz
-MzMxNzkyMDg5NzE2OTY5ODEzODcwOTQ2NTEwODI2NjQwMzc1MzYzMTMwMzI2ODc1OTYyMzQzMTMw
-OTg2MDEwNzU0NDk2MzQzNDQwMzk1NzMyMDE3MjUyOTU4MTE2OTE5Nzk4MzEzMDA3ODY3Nzk4MzQw
-NDE3MjMyODE5NzExMjYyMjY0Nzg3NzUxMDcyNjc5Nw=3D=3D
+"""     acc:endorsement  [
+             acc:key """
+NjU1MzcKCjEzMTc4NTkyNzM4NDYzNTYyODExOTYwODA0MzI5ODc4MjcxMjA0ODEwMTg0MzAwNzUy
+NDA2MDkyNjc5MzA3MTg1NjYyMjA0NjA4ODY3NjU4MzIwMzkwNzU4NjM1ODQ1ODExMTk4MjgwMTAz
+MDI2NDM5MzY2ODg1MTE0MTMwMDg5MjQzMzEwNTI1OTMzMjQ4ODc2NTIxMDkwMzExNjk2ODMwMjcx
+ODAyNTAwNTgxODgzODc2ODM3NjczNzY1NzIyNjczMDk3MjkyMTI5MzI2NjIwMTQ1MTQwMzA0Nzcx
+OTA3MTg5MDc4OTE1NjY3NjAwNzA3NTcyMDU5MTcxMDg1MzA1ODY5MzQ4MDU1MTY1OTIxMDEwOTIy
+NjQ0MjI1MDc3NTI2MTMxNjY5ODk0NjExMjUxMzI1OQ=3D=3D
 """;
-             :signature """
-MjY1NDE3NTEzNzc2NDU1OTM2MDYzNDg0MzE5ODUzMDMyOTI2MDYxMzU0MDY2OTkwMjQwMjc1MTA2
-MTU4ODI4ODA2MzA1NzIxNjMxMzk5OTQ1ODU1NjU3OTAwMTk1NjIyMTYzMzU1MjU2MTAwMTU0NjU1
-MDQzMzUzODcxMzI4MTgwMTgwOTM2OTA5MDk5OTk3NDg4OTUxNzU5NTc2NDgyNjExMDkzNzA3NDkx
-MjM0MDU2MzAyMzk4ODkwOTM1ODI4Nzk5MDczNTI1OTM1ODk4MDQ4Njg4MTU1MjYxMDUxODM3MDc1
-MTcyMzcyODg5ODUxODg4NzUyMDEwMDYwMTAwODI0MTcxMTkzNTM1NzcwOTgzOTQ0MjAzMzcxNTc4
-MDE4NDMxMjUyMjg2MzkwMzc1NTkyNTg1
+             acc:signature """
+MzExMjgwMTc0NjE1MTEzMzE3NDcxODM0NDkzMTA3NzUxNzgxNjA4MTU5ODQ1MTUyNTI1NDI0NzYz
+NTIxNzQwNTQzOTMxODYyNDA2NjczNDYwNjg2NjQzNDk5OTc5NDA3ODMxMTc2MDg2NDY1NDIzNDE2
+NzgyODkyMDg0NDQwMTUwMzkxODA5NDczNzQxNTcyMTA4ODI0MTEzOTE0MjY4NDA3NjE4MDU4NDI5
+MDA2MDU0NDMxODExNDExMDQ3NDAzOTc0Mjg4NTY0MTA4OTE0MDQ5Nzk4NjgxNzU5OTYwMzAyMzg1
+MDQ0ODIzNTkyNjk1ODA4NDY2OTA0MzgwODcyMjM3MTIxNDE2NTE5NDAxNzEyODI4MjQzMzA1Njcy
+MjQ4NTU1ODAyNzc0NjIzODE5NDI3MzM=3D
 """ ] .
     
 #ENDS

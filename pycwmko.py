@@ -84,7 +84,10 @@ class ToPyStore(object):
             self.triple(statement)
     
     def triple(self, statement):
-        self.pyStore.add([self.lookup(item) for item in statement.spo()])
+        try:
+            self.pyStore.add([self.lookup(item) for item in statement.spo()])
+        except:
+            raise
 
 class FromPyStore(object):
     def __init__(self, formula, pyStore):

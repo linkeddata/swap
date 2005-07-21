@@ -23,6 +23,7 @@ if USE_PKC:
         import Crypto.PublicKey.RSA as RSA
     except ImportError:
         USE_PKC = 0
+#        'we failed')
 
 # Some stuff that we need to know about
 

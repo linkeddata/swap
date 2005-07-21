@@ -148,14 +148,16 @@ class FormulaReason(Reason):
 
 	for e in self.formula.existentials():
 	    ko.add(me, reason.existential, e.uriref(), why=dontAsk)
-
-	for s, rea in self.statementReasons:
-	    pred = s.predicate()
-	    if pred is not self.store.forAll and pred is not self.store.forSome:
-		si = describeStatement(s, ko)
-		ko.add(si, rdf.type, reason.Extraction, why=dontAsk)
-		ko.add(si, reason.because, rea.explain(ko), why=dontAsk)
-		ko.add(me, reason.component, si, why=dontAsk)
+	    
+        for s, rea in self.statementReasons:
+            if rea is self:
+                raise ValueError(self, id(self), s)
+            pred = s.predicate()
+            if pred is not self.store.forAll and pred is not self.store.forSome:
+                si = describeStatement(s, ko)
+                ko.add(si, rdf.type, reason.Extraction, why=dontAsk)
+                ko.add(si, reason.because, rea.explain(ko), why=dontAsk)
+                ko.add(me, reason.component, si, why=dontAsk)
 	return me
 
 class BecauseMerge(FormulaReason):

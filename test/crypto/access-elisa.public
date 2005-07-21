@@ -1,22 +1,24 @@
-#Processed by Id: cwm.py,v 1.93 2002/05/14 22:11:04 timbl Exp 
-        #    using base file:/devel/WWW/2000/10/swap/test/crypto/
+#Processed by Id: cwm.py,v 1.171 2005/07/12 18:47:01 syosi Exp 
+        #    using base file:/home/syosi/CVS-local/WWW/2000/10/swap/test/crypto/
         
 #  Notation3 generation by
-#       notation3.py,v 1.108 2002/05/15 00:38:10 timbl Exp
+#       notation3.py,v 1.180 2005/06/09 21:05:14 syosi Exp
 
-#   Base was: file:/devel/WWW/2000/10/swap/test/crypto/
-     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
-     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
-     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
-     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+#   Base was: file:/home/syosi/CVS-local/WWW/2000/10/swap/test/crypto/
+     @prefix : <access-elisa.private#> .
+     @prefix acc: <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+    
+     @forAll :x,
+                :y,
+                <access-onlyPublic.n3#x> .
     
     """
-ODQ2NzMKCjQ5OTUyNTIxNzk2OTU0OTA5Mzg2NzAwMjc5NzUwMDY3NDU5MDE5OTE3OTEyNzU1OTQx
-NTM3Mjg0NTAyMTQzOTY3OTk3ODM3NjQzODAzOTg3MDk2MzY5MTA2NDkzMjkxMzQwNjc0NzU5MDMx
-OTc0NTMyMDQxMzc1OTg3Mjk5OTA2NTQzNzQzOTI2MjY4NTY3OTg5OTY2NTAxNzk2NzkxOTk3NjUz
-MzMxNzkyMDg5NzE2OTY5ODEzODcwOTQ2NTEwODI2NjQwMzc1MzYzMTMwMzI2ODc1OTYyMzQzMTMw
-OTg2MDEwNzU0NDk2MzQzNDQwMzk1NzMyMDE3MjUyOTU4MTE2OTE5Nzk4MzEzMDA3ODY3Nzk4MzQw
-NDE3MjMyODE5NzExMjYyMjY0Nzg3NzUxMDcyNjc5Nw=3D=3D
-"""     a :MemberKey .
+NjU1MzcKCjEzMTc4NTkyNzM4NDYzNTYyODExOTYwODA0MzI5ODc4MjcxMjA0ODEwMTg0MzAwNzUy
+NDA2MDkyNjc5MzA3MTg1NjYyMjA0NjA4ODY3NjU4MzIwMzkwNzU4NjM1ODQ1ODExMTk4MjgwMTAz
+MDI2NDM5MzY2ODg1MTE0MTMwMDg5MjQzMzEwNTI1OTMzMjQ4ODc2NTIxMDkwMzExNjk2ODMwMjcx
+ODAyNTAwNTgxODgzODc2ODM3NjczNzY1NzIyNjczMDk3MjkyMTI5MzI2NjIwMTQ1MTQwMzA0Nzcx
+OTA3MTg5MDc4OTE1NjY3NjAwNzA3NTcyMDU5MTcxMDg1MzA1ODY5MzQ4MDU1MTY1OTIxMDEwOTIy
+NjQ0MjI1MDc3NTI2MTMxNjY5ODk0NjExMjUxMzI1OQ=3D=3D
+"""     a acc:MemberKey .
     
 #ENDS

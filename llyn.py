@@ -318,7 +318,7 @@ class IndexedFormula(Formula):
 		    first = s[OBJ]
 		    list = obj.prepend(first)
 		    self._noteNewList(subj, list, newBindings)
-		    self.substituteEqualsInPlace(newBindings)
+		    self.substituteEqualsInPlace(newBindings, why=why)
 		    return 1  # Added a statement but ... it is hidden in lists
     
 	elif pred is store.first  and  subj in self._existentialVariables:
@@ -665,7 +665,7 @@ class IndexedFormula(Formula):
         if diag.chatty_flag > 80: progress("...New set newBindings %s"%(`newBindings`))
         self._existentialVariables.discard(bnode)
 
-    def substituteEqualsInPlace(self, redirections):
+    def substituteEqualsInPlace(self, redirections, why=None):
 	"""Slow ... does not use indexes"""
 	bindings = redirections
 	while bindings != {}:
@@ -683,7 +683,7 @@ class IndexedFormula(Formula):
 			quad[p] = y
 		if changed:
 		    self.removeStatement(s)
-		    self.add(subj=quad[SUBJ], pred=quad[PRED], obj=quad[OBJ])
+		    self.add(subj=quad[SUBJ], pred=quad[PRED], obj=quad[OBJ], why=why)
 	    bindings = newBindings
 	    if diag.chatty_flag>70: progress("Substitions %s generated %s" %(bindings, newBindings))
 	return
@@ -781,6 +781,7 @@ class BI_rawType(LightBuiltIn, Function):
         if isinstance(subj, Literal): y = store.Literal
         elif isinstance(subj, Formula): y = store.Formula
         elif isinstance(subj, List): y = store.List
+        elif isinstance(subj, AnonymousNode): y = store.Blank
         #@@elif context.listValue.get(subj, None): y = store.List
         else: y = store.Other  #  None?  store.Other?
         if diag.chatty_flag > 91:
@@ -1120,6 +1121,7 @@ class RDFStore(RDFSink) :
         self.Literal =  log.internFrag("Literal", Fragment) # syntactic type possible value - a class
         self.List =     log.internFrag("List", Fragment) # syntactic type possible value - a class
         self.Formula =  log.internFrag("Formula", Fragment) # syntactic type possible value - a class
+        self.Blank   =  log.internFrag("Blank", Fragment)
         self.Other =    log.internFrag("Other", Fragment) # syntactic type possible value - a class
         self.filter  =  log.internFrag("filter", BI_filter) # equivilent of --filter
         self.vars    =  log.internFrag("vars", BI_vars) # variables of formula
