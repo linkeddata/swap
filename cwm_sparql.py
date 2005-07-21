@@ -9,7 +9,9 @@ $Id$
 from term import LightBuiltIn, Function, ReverseFunction, MultipleFunction,\
     MultipleReverseFunction, typeMap, LabelledNode, \
     CompoundTerm, N3Set, List, EmptyList, NonEmptyList, \
-    Symbol, Fragment, Literal, Term, AnonymousNode
+    Symbol, Fragment, Literal, Term, AnonymousNode, HeavyBuiltIn
+import diag
+progress = diag.progress
 
 from RDFSink import RDFSink
 from set_importer import Set
@@ -152,7 +154,7 @@ class BI_dtLit(LightBuiltIn, Function, ReverseFunction):
 class BI_query(LightBuiltIn, Function):
     def evalObj(self,subj, queue, bindings, proof, query):
         from query import applySparqlQueries
-        print 'I got here'
+        RESULTS_NS = 'http://www.w3.org/2005/06/sparqlResults#'
         ns = self.store.newSymbol(SPARQL_NS)
         assert isinstance(subj, List)
         subj = [a for a in subj]
@@ -167,7 +169,6 @@ class BI_query(LightBuiltIn, Function):
             print 'I got to here'
             outputList = []
             prefixTracker = RDFSink()
-            RESULTS_NS = 'http://www.w3.org/2005/06/sparqlResults#'
             prefixTracker.setDefaultNamespace(RESULTS_NS)
             prefixTracker.bind('', RESULTS_NS)
             xwr = XMLWriter(outputList.append, prefixTracker)
@@ -213,6 +214,54 @@ class BI_query(LightBuiltIn, Function):
             xwr.endElement()
             xwr.endDocument()
             return self.store.newLiteral(''.join(outputList))
+        if query.contains(obj=ns['AskQuery']):
+            node = query.the(pred=self.store.type, obj=ns['AskQuery'])
+            outputList = []
+            prefixTracker = RDFSink()
+            prefixTracker.setDefaultNamespace(RESULTS_NS)
+            prefixTracker.bind('', RESULTS_NS)
+            xwr = XMLWriter(outputList.append, prefixTracker)
+            xwr.makePI('xml version="%s"' % '1.0')
+            xwr.startElement(RESULTS_NS+'sparql', [], prefixTracker.prefixes)
+            xwr.startElement(RESULTS_NS+'head', [], prefixTracker.prefixes)
+            vars = []
+#            for triple in query.the(subj=node, pred=ns['select']):
+#                vars.append(triple.object())
+#                xwr.emptyElement(RESULTS_NS+'variable', [(RESULTS_NS+'name', str(triple.object()))], prefixTracker.prefixes)
+
+            xwr.endElement()
+            xwr.startElement(RESULTS_NS+'boolean', [], prefixTracker.prefixes)
+            if F.the(pred=self.store.type, obj=ns['Success']):
+                xwr.data('true')
+            else:
+                xwr.data('false')
+            xwr.endElement()
+                
+
+            xwr.endElement()
+            xwr.endDocument()
+            return self.store.newLiteral(''.join(outputList))
+
+class BI_semantics(HeavyBuiltIn, Function):
+    """ The semantics of a resource are its machine-readable meaning, as an
+    N3 forumula.  The URI is used to find a represnetation of the resource in bits
+    which is then parsed according to its content type."""
+    def evalObj(self, subj, queue, bindings, proof, query):
+        store = subj.store
+        if isinstance(subj, Fragment): doc = subj.resource
+        else: doc = subj
+        F = store.any((store._experience, store.semantics, doc, None))
+        if F != None:
+            if diag.chatty_flag > 10: progress("Already read and parsed "+`doc`+" to "+ `F`)
+            return F
+
+        if diag.chatty_flag > 10: progress("Reading and parsing " + doc.uriref())
+        inputURI = doc.uriref()
+        F = self.store.load(inputURI, contentType="x-application/sparql")
+        if diag.chatty_flag>10: progress("    semantics: %s" % (F))
+	if diag.tracking:
+	    proof.append(F.collector)
+        return F.canonicalize()
 
 def register(store):
     ns = store.newSymbol(SPARQL_NS)
@@ -226,3 +275,4 @@ def register(store):
     ns.internFrag('typeErrorReturner', BI_typeErrorReturner)
     ns.internFrag('truthValue', BI_truthValue)
     ns.internFrag('query', BI_query)
+    ns.internFrag('semantics', BI_semantics)

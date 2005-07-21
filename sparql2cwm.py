@@ -586,23 +586,26 @@ class FromSparql(productionHandler):
     def on_BaseDecl(self, p):
         self.uribase = p[2][1][1:-1]
 
-    def makePatterns(self, f, node, knowledge_base, patterns):
+    def makePatterns(self, f, node, patterns):
         sparql = self.sparql
+        knowledge_base_f = f.newFormula()
         if not self.dataSets:
+            knowledge_base = f.newBlankNode()
             f.add(self.uribase, sparql['data'], knowledge_base)
         else:
+            knowledge_base = knowledge_base_f.newBlankNode()
             sources = self.store.nil
             #raise RuntimeError(self.dataSets)
             for uri in self.dataSets:
-                stuff = f.newBlankNode()
-                uri2 = anonymize(f,uri[1])
-                f.add(uri2, self.store.semantics, stuff)
+                stuff = knowledge_base_f.newBlankNode()
+                uri2 = anonymize(knowledge_base_f,uri[1])
+                knowledge_base_f.add(uri2, self.store.semantics, stuff)
                 sources = sources.prepend(stuff)
-            f.add(sources, self.store.newSymbol('http://www.w3.org/2000/10/swap/log#conjunction'), knowledge_base)
+            knowledge_base_f.add(sources, self.store.newSymbol('http://www.w3.org/2000/10/swap/log#conjunction'), knowledge_base)
         for pattern in patterns:
             tail = f.newFormula()
             tail.loadFormulaWithSubstitution(pattern[1])
-            
+            tail.loadFormulaWithSubstitution(knowledge_base_f)
             includedStuff = pattern[4]
             notIncludedStuff = pattern[5]
 
@@ -656,8 +659,7 @@ class FromSparql(productionHandler):
         if p[2]:
             f.add(q, store.type, sparql['Distinct'])
 
-        knowledge_base = f.newBlankNode()
-        self.makePatterns(f, q, knowledge_base, p[5])
+        self.makePatterns(f, q, p[5])
         f3 = RulesMaker(self.sparql).implications(q, f, variable_results)
         for triple in f3.statementsMatching(pred=sparql['implies']):
             f4 = f3.newFormula()
@@ -675,11 +677,28 @@ class FromSparql(productionHandler):
         q = f.newBlankNode()
         f.add(q, store.type, sparql['ConstructQuery'])
         f.add(q, sparql['construct'], p[2])
-        knowledge_base = f.newBlankNode()
-        self.makePatterns(f, q, knowledge_base, p[4])
+        knowledge_base = f.newFormula()
+        self.makePatterns(f, q, p[4])
         f3 = RulesMaker(self.sparql).implications(q, f, p[2])
         for triple in f3.statementsMatching(pred=sparql['implies']):
             f.add(triple.subject(), store.implies, triple.object())
+        return None
+
+    def on_AskQuery(self, p):
+        sparql = self.sparql
+        store = self.store
+        f = self.formula
+        for v in self.vars:
+            f.declareUniversal(v)
+        q = f.newBlankNode()
+        f.add(q, store.type, sparql['AskQuery'])
+        only_result = store.newFormula()
+        only_result.add(q, store.type, sparql['Success'])
+        only_result = only_result.close()
+        self.makePatterns(f, q, p[3])
+        f3 = RulesMaker(self.sparql).implications(q, f, only_result)
+        for triple in f3.statementsMatching(pred=sparql['implies']):
+            f.add(triple.subject(), store.implies, only_result)
         return None
 
     def on_WhereClause(self, p):
@@ -1251,9 +1270,6 @@ class FromSparql(productionHandler):
         raise RuntimeError(`p`)
 
     def on__QWhereClause_E_Opt(self, p):
-        raise RuntimeError(`p`)
-
-    def on_AskQuery(self, p):
         raise RuntimeError(`p`)
 
     def on_DatasetClause(self, p):
