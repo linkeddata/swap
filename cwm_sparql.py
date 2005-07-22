@@ -166,7 +166,6 @@ class BI_query(LightBuiltIn, Function):
             return F
         if query.contains(obj=ns['SelectQuery']):
             node = query.the(pred=self.store.type, obj=ns['SelectQuery'])
-            print 'I got to here'
             outputList = []
             prefixTracker = RDFSink()
             prefixTracker.setDefaultNamespace(RESULTS_NS)

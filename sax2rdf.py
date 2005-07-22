@@ -362,7 +362,7 @@ class RDFHandler(xml.sax.ContentHandler):
 				
 	self._delayedStatement = None
 
-	self._base = attrs.get((XML_NS_URI, "base"), self._base)
+	self._base = uripath.join(self._base, attrs.get((XML_NS_URI, "base"), self._base))
 	x = self._base.find("#")
 	if x >= 0: self._base = self._base[:x] # See rdf-tests/rdfcore/xmlbase/test013.rdf
 	

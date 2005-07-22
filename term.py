@@ -52,7 +52,7 @@ from diag import progress
 
 import sys
 if sys.hexversion < 0x02030000:
-    raise RuntimeError("Sorry, this software requires python2.2 or newer.")
+    raise RuntimeError("Sorry, this software requires python2.3 or newer.")
 
 ########################################  Storage URI Handling
 #
@@ -115,7 +115,7 @@ class Term(object):
     def representation(self, base=None):
         """The string represnting this in N3 """
         return "<" + self.uriref(base) + ">"
-
+ 
     def generated(self):
         """Boolean Is this thing a genid - is its name arbitrary? """
         return 0    # unless overridden

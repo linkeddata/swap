@@ -24,7 +24,7 @@ def importTokens():
             t0 = time.time()
             from sparql_tokens_table import tokens as ts, regexps as rs
             t1 = time.time()
-            print 'loaded from file ', t1 - t0
+            print >> sys.stderr, 'loaded from file ', t1 - t0
             tokens = ts
             for k, v in rs.iteritems():
                 setattr(Tokens, k, v)
@@ -51,7 +51,12 @@ def importTokens():
                     regexps['c_' + key] = re.compile(val, re.I)
             pklVal = {'tokens': tokens, 'regexps': regexps}
             try:
-                f = file('sparql_tokens_table.py', 'w')
+                import imp, os.path
+                try:
+                    path = imp.find_module('sparql')[1]
+                except ImportError:
+                    path = ''
+                f = file(os.path.join(path, 'sparql_tokens_table.py'), 'w')
                 mkmodule(pklVal, f)
                 f.close()
             except:

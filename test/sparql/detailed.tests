@@ -1,0 +1,17 @@
+# List of regression tests
+#
+# - was in bash script retest.sh
+#
+@prefix : <#>.
+@prefix x: <#>.
+@prefix test: <http://www.w3.org/2000/10/swap/test.n3#>.
+
+
+
+:t1001 a test:CwmTest;
+    test:referenceOutput <query1_result.rl>;
+    test:description   "parsing of N3 set syntax";
+    test:arguments     """-n3 sparql/sparql_builtin1.n3 --think --strings""".
+
+
+#ends
