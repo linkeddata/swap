@@ -10,16 +10,19 @@ from set_importer import Set
 import uripath
 from term import Term, CompoundTerm
 from formula import Formula
+import diag
+from why import BecauseOfData
 
 from cwm_sparql import SPARQL_NS
 
 knownFunctions = {}
 
-def verbose(self, newVal=None):
+def value(self, newVal=None):
     if newVal is not None:
         self[0] = newVal
     return self[0]
-verbose = verbose.__get__([0])
+verbose = value.__get__([0])
+reason2 = value.__get__([0])
 
 def abbr(prodURI): 
    return prodURI.split('#').pop()
@@ -123,9 +126,9 @@ def anonymize(self, formula, uri = None):
             print uri
             print 'uri = ', uri
             raise
-        self[uri] = formula.newBlankNode()
+        self[uri] = formula.newBlankNode(why=reason2())
         return self[uri]
-    return formula.newBlankNode()
+    return formula.newBlankNode(why=reason2())
 
 anonymize = anonymize.__get__({})
 
@@ -552,7 +555,7 @@ class FilterExpr(productionHandler):
                 makeTriple(k, ('symbol', self.log['notEqualTo']), ('symbol', self.parent.store.Other))]
 
 class FromSparql(productionHandler):
-    def __init__(self, store, formula=None, ve=0):
+    def __init__(self, store, formula=None, ve=0, why=None):
         verbose(ve)
         self.store = store
         if formula is None:
@@ -572,6 +575,10 @@ class FromSparql(productionHandler):
         self.uribase = uripath.base()
         self.dataSets = None
         NotNot.on_Boolean = on_Boolean_Gen(self.true, self.false)
+        self._reason = why	# Why the parser w
+	_reason2 = None	# Why these triples
+	if diag.tracking: _reason2 = BecauseOfData(store.newSymbol(self.base), because=self._reason)
+	reason2(_reason2)
 
     def new_bnode(self):
         self.anonymous_counter += 1
@@ -591,21 +598,21 @@ class FromSparql(productionHandler):
         knowledge_base_f = f.newFormula()
         if not self.dataSets:
             knowledge_base = f.newBlankNode()
-            f.add(self.uribase, sparql['data'], knowledge_base)
+            f.add(self.uribase, sparql['data'], knowledge_base, why=reason2())
         else:
-            knowledge_base = knowledge_base_f.newBlankNode()
+            knowledge_base = knowledge_base_f.newBlankNode(why=reason2())
             sources = self.store.nil
             #raise RuntimeError(self.dataSets)
             for uri in self.dataSets:
-                stuff = knowledge_base_f.newBlankNode()
+                stuff = knowledge_base_f.newBlankNode(why=reason2())
                 uri2 = anonymize(knowledge_base_f,uri[1])
-                knowledge_base_f.add(uri2, self.store.semantics, stuff)
+                knowledge_base_f.add(uri2, self.store.semantics, stuff, why=reason2())
                 sources = sources.prepend(stuff)
             knowledge_base_f.add(sources, self.store.newSymbol('http://www.w3.org/2000/10/swap/log#conjunction'), knowledge_base)
         for pattern in patterns:
             tail = f.newFormula()
-            tail.loadFormulaWithSubstitution(pattern[1])
-            tail.loadFormulaWithSubstitution(knowledge_base_f)
+            tail.loadFormulaWithSubstitution(pattern[1], why=reason2())
+            tail.loadFormulaWithSubstitution(knowledge_base_f, why=reason2())
             includedStuff = pattern[4]
             notIncludedStuff = pattern[5]
 
@@ -613,15 +620,15 @@ class FromSparql(productionHandler):
                 if not graphIntersection: continue
                 graph = f.newFormula()
                 for subGraph in graphIntersection:
-                    graph.loadFormulaWithSubstitution(subGraph)
+                    graph.loadFormulaWithSubstitution(subGraph, why=reason2())
                 graph = graph.close()
                 if nodeName is not None:
                     nameNode = anonymize(tail, nodeName[1])
-                    semantics = tail.newBlankNode()
-                    tail.add(nameNode, self.store.semantics, semantics)
+                    semantics = tail.newBlankNode(why=reason2())
+                    tail.add(nameNode, self.store.semantics, semantics, why=reason2())
                 else:
                     semantics = knowledge_base
-                tail.add(semantics, self.store.includes, graph)
+                tail.add(semantics, self.store.includes, graph, why=reason2())
 
             for nodeName, graphIntersection in notIncludedStuff.iteritems():
                 if not graphIntersection: continue
@@ -631,14 +638,14 @@ class FromSparql(productionHandler):
 ##                graph = graph.close()
                     if nodeName is not None:
                         nameNode = anonymize(tail, nodeName[1])
-                        semantics = tail.newBlankNode()
-                        tail.add(nameNode, self.store.semantics, semantics)
+                        semantics = tail.newBlankNode(why=reason2())
+                        tail.add(nameNode, self.store.semantics, semantics, why=reason2())
                     else:
                         semantics = knowledge_base
-                    tail.add(semantics, self.store.notIncludes, subGraph)
+                    tail.add(semantics, self.store.notIncludes, subGraph, why=reason2())
 
             
-            f.add(node, sparql['where'], tail.close())
+            f.add(node, sparql['where'], tail.close(), why=reason2())
 ##            for parent in pattern[2]:
 ##                f.add(pattern[1], sparql['andNot'], parent)
 
@@ -649,12 +656,12 @@ class FromSparql(productionHandler):
         for v in self.vars:
             f.declareUniversal(v)
         q = f.newBlankNode()
-        f.add(q, store.type, sparql['SelectQuery'])
+        f.add(q, store.type, sparql['SelectQuery'], why=reason2())
         variable_results = store.newFormula()
         for v in p[3][1]:
 #            variable_results.add(v, store.type, sparql['Binding'])
-            variable_results.add(v, sparql['bound'], abbr(v.uriref()))
-        f.add(q, sparql['select'], variable_results.close())
+            variable_results.add(v, sparql['bound'], abbr(v.uriref()), why=reason2())
+        f.add(q, sparql['select'], variable_results.close(), why=reason2())
 
         if p[2]:
             f.add(q, store.type, sparql['Distinct'])
@@ -663,9 +670,20 @@ class FromSparql(productionHandler):
         f3 = RulesMaker(self.sparql).implications(q, f, variable_results)
         for triple in f3.statementsMatching(pred=sparql['implies']):
             f4 = f3.newFormula()
-            f4.add(triple.object(), store.type, sparql['Result'])
-            f.add(triple.subject(), store.implies, f4.close())
+            f4.add(triple.object(), store.type, sparql['Result'], why=reason2())
+            f.add(triple.subject(), store.implies, f4.close(), why=reason2())
         #TODO: I'm missing sorting and datasets
+        if p[6]:
+            raise NotImplementedError('Cwm does not support output modifiers yet')
+            sort, limit, offset = p[6]
+            if sort:
+                l = self.store.newList(sort)
+                f.add(q, sparql['sort'], l)
+            if limit:
+                f.add(q, sparql['limit'], limit)
+            if offset:
+                f.add(q, sparql['offset'], offset)
+#            raise RuntimeError(`p[6]`)
         return None
 
     def on_ConstructQuery(self, p):
@@ -744,17 +762,17 @@ class FromSparql(productionHandler):
     def on__QOrderClause_E_Opt(self, p):
         if len(p) == 1:
             return None
-        raise RuntimeError(`p`)
+        return p[1]
 
     def on__QLimitClause_E_Opt(self, p):
         if len(p) == 1:
             return None
-        raise RuntimeError(`p`)
+        return p[1]
 
     def on__QOffsetClause_E_Opt(self, p):
         if len(p) == 1:
             return None
-        raise RuntimeError(`p`)
+        return p[1]
 
     def on__QBaseDecl_E_Opt(self, p):
         return None
@@ -961,7 +979,7 @@ class FromSparql(productionHandler):
 ##                                    options.extend(object[2])
 ##                                    f.add(subj, pred, obj)
                                 else:
-                                    f.add(subj, pred, obj)
+                                    f.add(subj, pred, obj, why=reason2())
                         except:
                             print '================'
                             print 'subject= ', subject
@@ -1015,28 +1033,28 @@ class FromSparql(productionHandler):
             for ss, formula1, filters1, parents1, bounds1, i1, nI1 in alternate:
                 for ss, formula2, filters2, parents2, bounds2, i2, nI2 in oldRetVal:
                     f1 = self.store.newFormula()
-                    f1.loadFormulaWithSubstitution(formula1)
-                    f1.loadFormulaWithSubstitution(formula2)
+                    f1.loadFormulaWithSubstitution(formula1, why=reason2())
+                    f1.loadFormulaWithSubstitution(formula2, why=reason2())
                     f1 = f1.close()
                     f2 = self.store.newFormula()
-                    f2.loadFormulaWithSubstitution(formula2)
+                    f2.loadFormulaWithSubstitution(formula2, why=reason2())
 
                     f3 = formula1.newFormula()
-                    f3.loadFormulaWithSubstitution(formula1)
+                    f3.loadFormulaWithSubstitution(formula1, why=reason2())
                     for document in i1:
                         semantics = f3.newBlankNode()
                         f3.add(document[1], self.store.semantics, semantics)
                         totalFormula = f3.newFormula()
                         for f4 in i1[document]:
-                            totalFormula.loadFormulaWithSubstitution(f4)
+                            totalFormula.loadFormulaWithSubstitution(f4, why=reason2())
                         f3.add(semantics, self.store.includes, totalFormula.close())
                     f3 = f3.close()
                     newFilters1 =  f1.newFormula()
-                    newFilters1.loadFormulaWithSubstitution(filters1)
-                    newFilters1.loadFormulaWithSubstitution(filters2)
+                    newFilters1.loadFormulaWithSubstitution(filters1, why=reason2())
+                    newFilters1.loadFormulaWithSubstitution(filters2, why=reason2())
 
                     newFilters2 =  f2.newFormula()
-                    newFilters2.loadFormulaWithSubstitution(filters2)                    
+                    newFilters2.loadFormulaWithSubstitution(filters2, why=reason2())                    
                     
                     retVal.append(('formula', formula2.close(), newFilters1.close(), parents1 + parents2+{None:formula1}, bounds1 + bounds2, i1+i2, nI1+nI2))
                     retVal.append(('formula', formula2.close(), newFilters2.close(), parents2, bounds1 + bounds2, i2, nI2+{None:f3}))
@@ -1258,7 +1276,7 @@ class FromSparql(productionHandler):
 ### AutoGenerated
 
     def on_OffsetClause(self, p):
-        raise RuntimeError(`p`)
+        return self.on_NumericLiteral(p[1:])[1]
 
     def on_DescribeQuery(self, p):
         raise RuntimeError(`p`)
@@ -1291,25 +1309,37 @@ class FromSparql(productionHandler):
         return p[1]
 
     def on_OrderClause(self, p):
+        clauses = [p[3]] + p[4]
+        return clauses
         raise RuntimeError(`p`)
 
     def on__QOrderCondition_E_Plus(self, p):
+        if len(p) == 1:
+            return []
+        return [p[1]] + p[2]
         raise RuntimeError(`p`)
 
     def on_OrderCondition(self, p):
+        def listize(thing):
+            if len(thing) == 2 and isinstance(thing[1], Term):
+                return thing[1]
+            if thing[0] == 'function':
+                return self.store.newList([self.store.newSymbol(thing[1][1])] + [listize(x) for x in thing[2:]])
+            return self.store.newList([self.store.newLiteral(thing[0])] + [listize(x) for x in thing[1:]])
+        return listize(p[1])
         raise RuntimeError(`p`)
 
     def on__O_QASC_E__Or__QDESC_E__C(self, p):
-        raise RuntimeError(`p`)
+        return p[1][1]
 
     def on__O_QASC_E__Or__QDESC_E____QBrackettedExpression_E__C(self, p):
-        raise RuntimeError(`p`)
+        return p[1:]
 
     def on__O_QFunctionCall_E__Or__QVar_E__Or__QBrackettedExpression_E__C(self, p):
-        raise RuntimeError(`p`)
+        return p[1]
 
     def on_LimitClause(self, p):
-        raise RuntimeError(`p`)
+        return self.on_NumericLiteral(p[1:])[1]
 
     def on_ConstructTemplate(self, p):
         return self.on_GroupGraphPattern(p)[0][1]
@@ -1396,7 +1426,7 @@ class FromSparql(productionHandler):
         return p[1]
 
     def on_FunctionCall(self, p):
-        raise RuntimeError(`p`)
+        return ['function', ("funcName", p[1][1].uriref(),)] + p[2]
 
     def on_ArgList(self, p):
         return p[2]
@@ -1458,7 +1488,7 @@ class RulesMaker(object):
 #            print where, bound_vars
             unbound_vars = formula.universals() - bound_vars
             self.matching_subformula(F, unbound_vars, totalResult)
-            retFormula.add(where, self.ns['implies'], F.close())
+            retFormula.add(where, self.ns['implies'], F.close(), why=reason2())
         return retFormula
 
     def find_vars(self, vars, f):
@@ -1480,7 +1510,7 @@ class RulesMaker(object):
             if (clear(triple.subject()) and
                 clear(triple.predicate()) and
                 clear(triple.object())):
-                retF.add(*triple.spo())
+                retF.add(*triple.spo(), **{'why':reason2()})
 #            else:
 #                print triple, illegals
 

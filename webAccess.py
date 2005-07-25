@@ -146,7 +146,7 @@ def load(store, uri=None, openFormula=None, asIfFrom=None, contentType=None,
         if diag.chatty_flag > 49: progress("Parsing as SPARQL")
         from sparql import sparql_parser
         import sparql2cwm
-        convertor = sparql2cwm.FromSparql(store, F)
+        convertor = sparql2cwm.FromSparql(store, F, why=why)
         import StringIO
         p = sparql_parser.N3Parser(StringIO.StringIO(buffer), sparql_parser.branches, convertor)
         F = p.parse(sparql_parser.start).close()
