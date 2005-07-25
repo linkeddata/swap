@@ -45,7 +45,7 @@ class Serializer:
     """
     def __init__(self, F, sink, flags="", sorting=0):
 	self.context = F
-	assert F.canonical != None, "Formula to be printed must be canonical"
+	assert F.canonical is not None, "Formula to be printed must be canonical"
 	self.store = F.store
 	self.sink = sink
 	self.defaultNamespace = None
@@ -95,7 +95,7 @@ class Serializer:
 
         for r, count in counts.items():
 	    if count > 1 and r != mp:
-		if self.store.prefixes.get(r, None) == None:
+		if self.store.prefixes.get(r, None) is None:
 		    p = r
 		    if p[-1] in "/#": p = p[:-1]
 		    slash = p.rfind("/")
@@ -107,26 +107,26 @@ class Serializer:
 			else:
 			    break
 		    p = p[:i]
-		    if len(p) <6 and self.store.namespaces.get(p, None)==None: # and p[:3]!='xml':
+		    if len(p) <6 and self.store.namespaces.get(p, None)is None: # and p[:3]!='xml':
 			pref = p
 		    else:
 			p = p[:5]
 			for l in (3, 2, 4, 1, 5):
-			    if self.store.namespaces.get(p[:l], None) ==None: # and p[:l][:3]!='xml':
+			    if self.store.namespaces.get(p[:l], None) is None: # and p[:l][:3]!='xml':
 				pref = p[:l]
 				break	
 			else:
 			    n = 2
 			    while 1:
 				pref = p[:3]+`n`
-				if self.store.namespaces.get(pref, None) ==None:
+				if self.store.namespaces.get(pref, None) is None:
 				    break
 				n = n + 1			
     
 		    self.store.bind(pref, r)
 		    if verbosity() > 50: progress("Generated @prefix %s: <%s>." % (pref, r))
 
-	if self.defaultNamespace != None:
+	if self.defaultNamespace is not None:
 	    self.sink.setDefaultNamespace(self.defaultNamespace)
 
 #	progress("&&&& Counts: ", counts)
@@ -162,7 +162,7 @@ class Serializer:
 
 
     def dumpPrefixes(self):
-	if self.defaultNamespace != None:
+	if self.defaultNamespace is not None:
 	    sink.setDefaultNamespace(self.defaultNamespace)
         prefixes = self.store.namespaces.keys()   #  bind in same way as input did FYI
         prefixes.sort()
@@ -359,7 +359,7 @@ class Serializer:
 	"Does this appear in just one context, and if so counts how many times as object"
 	z = self._inContext.get(x, None)
 	if z == "many": return # forget it
-	if z == None:
+	if z is None:
 	    self._inContext[x] = context
 	elif z is not context:
 	    self._inContext[x] = "many"
@@ -375,12 +375,12 @@ class Serializer:
                     "scan: %s, a %s, now has %i occurrences as %s" 
                     %(x, x.__class__,y,"CPSOqqqqq"[y]))
 #	else:
-#	    if x == None: raise RuntimeError("Weird - None in a statement?")
+#	    if x is None: raise RuntimeError("Weird - None in a statement?")
 #	    progress("&&&&&&&&& %s has class %s " %(`z`, `z.__class__`))
 
     def _scan(self, x, context=None):
 #	progress("Scanning ", x, " &&&&&&&&")
-#	assert self.context._redirections.get(x, None) == None, "Should not be redirected: "+`x`
+#	assert self.context._redirections.get(x, None) is None, "Should not be redirected: "+`x`
 	if verbosity() > 98: progress("scanning %s a %s in context %s" %(`x`, `x.__class__`,`context`),
 			x.generated(), self._inContext.get(x, "--"))
 	if isinstance(x, NonEmptyList) or isinstance(x, N3Set):
@@ -394,7 +394,7 @@ class Serializer:
 			or (isinstance(y, Fragment) and y.generated())): 
 			z = self._inContext.get(y, None)
 			if z == "many": continue # forget it
-			if z == None:
+			if z is None:
 			    self._inContext[y] = x
 			elif z is not x:
 			    self._inContext[y] = "many"
@@ -507,7 +507,7 @@ class Serializer:
         """
 
 	context = self.context
-        assert context.canonical != None
+        assert context.canonical is not None
 	self._scan(context)
         self.sink.startDoc()
         self.selectDefaultPrefix(Serializer.dumpNested)        
@@ -584,13 +584,13 @@ class Serializer:
         for s in allStatements:
             con, pred, subj, obj =  s.quad
             if subj is con: continue # Done them above
-            if currentSubject == None: currentSubject = subj
+            if currentSubject is None: currentSubject = subj
             if subj != currentSubject:
                 self._dumpSubject(currentSubject, context, sink, sorting, statements)
                 statements = []
                 currentSubject = subj
             statements.append(s)
-        if currentSubject != None:
+        if currentSubject is not None:
             self._dumpSubject(currentSubject, context, sink, sorting, statements)
 
 
@@ -623,7 +623,7 @@ class Serializer:
             # continue to do arcs
             
         elif _anon and (_incoming == 0 or 
-	    (li != None and not isinstance(li, EmptyList))):    # Will be root anonymous node - {} or [] or ()
+	    (li is not None and not isinstance(li, EmptyList))):    # Will be root anonymous node - {} or [] or ()
 		
             if subj is context:
                 pass
@@ -640,7 +640,7 @@ class Serializer:
                         self.dumpStatement(sink, m, sorting)
                     sink.endAnonymousNode()
                     return 
-                elif li != None and not isinstance(li, EmptyList):
+                elif li is not None and not isinstance(li, EmptyList):
                     for s in statements:
                         p = s.quad[PRED]
                         if p is not self.store.first and p is not self.store.rest:
