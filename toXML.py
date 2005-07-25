@@ -50,7 +50,11 @@ import sys
 from uripath import refTo
 from diag import progress
 
+from random import choice, seed
+seed(23)
+
 import RDFSink
+from set_importer import Set
 
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
 from RDFSink import FORMULA, LITERAL, LITERAL_DT, LITERAL_LANG, ANONYMOUS, SYMBOL
@@ -131,6 +135,8 @@ class ToRDF(RDFSink.RDFStructuredOutput):
         def doNothing():
             pass
 	self._toDo = doNothing
+	self.namespace_redirections = {}
+	self.illegals = Set()
 
     #@@I18N
     _rdfns = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
@@ -138,7 +144,19 @@ class ToRDF(RDFSink.RDFStructuredOutput):
     def dummyClone(self):
 	"retun a version of myself which will only count occurrences"
 	return ToRDF(None, self._thisDoc, base=self._base, flags=self._flags )
-		    
+
+    def bind(self, prefix, namespace):
+        if prefix in self.namespace_redirections:
+            prefix = self.namespace_redirections[prefix]
+        else:
+            realPrefix = prefix
+            while prefix in self.illegals or prefix[:3] == 'xml':
+                prefix = choice(string.ascii_letters) + prefix
+            if realPrefix is not prefix:
+                self.illegals.add(prefix)
+                self.namespace_redirections[realPrefix] = prefix
+        return RDFSink.RDFStructuredOutput.bind(self, prefix, namespace)
+
     def startDoc(self):
         pass
 
@@ -186,6 +204,9 @@ z  - Allow relative URIs for namespaces
             if self.prefixes.get(RDF_NS_URI, ":::") == ":::":
                 if self.namespaces.get("rdf", ":::") ==":::":
                     self.bind("rdf", RDF_NS_URI)
+##                else:
+##                    ns = findLegal(self.prefixes, RDF_NS_URI)
+##                    self.bind(ns, RDF_NS_URI)
 #            if self.prefixes.get(Logic_NS, ":::") == ":::":
 #                if self.namespaces.get("log", ":::") ==":::":
 #                    self.bind("log", Logic_NS)
@@ -481,20 +502,36 @@ class XMLWriter:
                 setXMLVersion('1.1')
                 return self.figurePrefix(uriref, rawAttrs, prefixes)
             raise RuntimeError("this graph cannot be serialized in RDF/XML")
+        # We now have the largest possible namespace. Maybe a smaller one is defined already?
+        j = i
+        while j<len(uriref):
+            if (not isXMLChar(uriref[i], NCNameStartChar)) or uriref[i-1] == ':' or (uriref[:j] not in prefixes):
+                j = j + 1
+            else:
+                i = j
+                break
 	ln = uriref[i:]
 	#progress(ln)
 	ns = uriref[:i]
 	self.counter.countNamespace(ns)
 #        print "@@@ ns=",`ns`, "@@@ prefixes =", `prefixes`
-	
+	nsSet = False
         prefix = prefixes.get(ns, ":::")
         attrs = []
         for a, v in rawAttrs:   # Caller can set default namespace
-            if a == "xmlns": self.currentNS = v
+            if a == "xmlns":
+                self.currentNS = v
+                nsSet = True
         if ns != self.currentNS:
             if prefix == ":::" or not prefix:  # Can't trust stored null prefix
-                attrs = [('xmlns', ns)]
-                self.currentNS = ns
+                if nsSet:
+                    prefix = findLegal(prefixes, ns)
+                    prefixes[ns] = prefix
+                    attrs.append(('xmlns:' + prefix, ns))
+                    ln = prefix + ":" + ln
+                else:
+                    attrs = [('xmlns', ns)]
+                    self.currentNS = ns
             else:
                 if prefix: ln = prefix + ":" + ln
         for at, val in rawAttrs:
@@ -511,9 +548,17 @@ class XMLWriter:
 		self.counter.countNamespace(ans)
 		prefix = prefixes.get(ans,":::")
 		if prefix == ":::":
-		    raise RuntimeError("#@@@@@ tag %s: atr %s has no prefix :-( in prefix table:\n%s" %
-			(uriref, at, `prefixes`))
-            attrs.append(( prefix+":"+lan, val))    
+                    #print "finding prefix for '%s'" % ans
+                    prefix = findLegal(prefixes, ans)
+                    #print "--found '%s'" % prefix
+                    attrs.append(( 'xmlns:' + prefix, ans))
+                    prefixes[ans] = prefix
+##		    raise RuntimeError("#@@@@@ tag %s: atr %s has no prefix :-( in prefix table:\n%s" %
+##			(uriref, at, `prefixes`))
+	    if prefix:
+                attrs.append(( prefix+":"+lan, val))
+            else:
+                attrs.append(( lan, val))
 
 	self.newline(3-len(self._elts))    # Newlines separate higher levels
 	self._encwr("<%s" % (ln,))
@@ -602,6 +647,30 @@ def swap(List, a, b):
     q = List[a]
     List[a] = List[b]
     List[b] = q
+
+def findLegal(dict, str):
+    ns = Set(dict.values())
+    s = u''
+    k = len(str)
+    while k and str[k - 1] not in string.ascii_letters:
+        k = k - 1
+    i = k
+    while i:
+        if str[i - 1] not in string.ascii_letters:
+            break
+        i = i - 1
+    j = i
+#    raise RuntimeError(str[:i]+'[i]'+str[i:k]+'[k]'+str[k:])
+    while j < k and (str[j:k] in ns or str[j:k][:3] == 'xml'):
+        j = j + 1
+    if j == k:
+        # we need to find a better string
+        s = str[i:k]
+        while s in ns or s[:3] == 'xml':
+            s = choice(string.ascii_letters) + s[:-1]
+        return s
+    else:
+        return str[j:k]
 
 class tmToRDF(RDFSink.RDFStructuredOutput):
     """Trying to do the same as above, using the TripleMaker interface

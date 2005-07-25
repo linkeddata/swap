@@ -154,7 +154,7 @@ class BI_dtLit(LightBuiltIn, Function, ReverseFunction):
 class BI_query(LightBuiltIn, Function):
     def evalObj(self,subj, queue, bindings, proof, query):
         from query import applySparqlQueries
-        RESULTS_NS = 'http://www.w3.org/2005/06/sparqlResults#'
+        RESULTS_NS = 'http://www.w3.org/2005/06/sparqlResults'
         ns = self.store.newSymbol(SPARQL_NS)
         assert isinstance(subj, List)
         subj = [a for a in subj]
@@ -177,14 +177,14 @@ class BI_query(LightBuiltIn, Function):
             vars = []
             for triple in query.the(subj=node, pred=ns['select']):
                 vars.append(triple.object())
-                xwr.emptyElement(RESULTS_NS+'variable', [(RESULTS_NS+'name', str(triple.object()))], prefixTracker.prefixes)
+                xwr.emptyElement(RESULTS_NS+'variable', [(RESULTS_NS+' name', str(triple.object()))], prefixTracker.prefixes)
 
             xwr.endElement()
             xwr.startElement(RESULTS_NS+'results', [], prefixTracker.prefixes)
             for resultFormula in F.each(pred=self.store.type, obj=ns['Result']):
                 xwr.startElement(RESULTS_NS+'result', [], prefixTracker.prefixes)
                 for var in vars:
-                    xwr.startElement(RESULTS_NS+'binding', [(RESULTS_NS+'name', str(var))],  prefixTracker.prefixes)
+                    xwr.startElement(RESULTS_NS+'binding', [(RESULTS_NS+' name', str(var))],  prefixTracker.prefixes)
                     binding = resultFormula.the(pred=ns['bound'], obj=var)
                     if binding:
                         if isinstance(binding, LabelledNode):
@@ -198,9 +198,9 @@ class BI_query(LightBuiltIn, Function):
                         elif isinstance(binding, Literal):
                             props = []
                             if binding.datatype:
-                                props.append((RESULTS_NS+'datatype', binding.datatype.uriref()))
+                                props.append((RESULTS_NS+' datatype', binding.datatype.uriref()))
                             if binding.lang:
-                                props.append(("http://www.w3.org/XML/1998/namespace#lang", binding.lang))
+                                props.append(("http://www.w3.org/XML/1998/namespace lang", binding.lang))
                             xwr.startElement(RESULTS_NS+'literal', props,  prefixTracker.prefixes)
                             xwr.data(str(binding))
                             xwr.endElement()

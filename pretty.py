@@ -107,12 +107,12 @@ class Serializer:
 			else:
 			    break
 		    p = p[:i]
-		    if len(p) <6 and self.store.namespaces.get(p, None)==None and p!='xml':
+		    if len(p) <6 and self.store.namespaces.get(p, None)==None: # and p[:3]!='xml':
 			pref = p
 		    else:
 			p = p[:5]
 			for l in (3, 2, 4, 1, 5):
-			    if self.store.namespaces.get(p[:l], None) ==None and p[:l]!='xml':
+			    if self.store.namespaces.get(p[:l], None) ==None: # and p[:l][:3]!='xml':
 				pref = p[:l]
 				break	
 			else:

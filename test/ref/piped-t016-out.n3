@@ -1,4 +1,4 @@
-    #RDF parsed by Id: sax2rdf.py,v 1.42 2004/11/08 02:12:04 syosi Exp 
+    #RDF parsed by Id: sax2rdf.py,v 1.43 2005/07/22 15:14:20 syosi Exp 
          @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
      @prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
@@ -16,7 +16,7 @@
     <animal.rdf#_L10C8>     :onProperty <animal.rdf#parent>;
          :cardinality "2" .
     
-    #RDF parsed by Id: sax2rdf.py,v 1.42 2004/11/08 02:12:04 syosi Exp 
+    #RDF parsed by Id: sax2rdf.py,v 1.43 2005/07/22 15:14:20 syosi Exp 
          @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
      @prefix : <http://www.w3.org/2002/07/owl#> .
      @prefix dpo: <http://www.w3.org/2002/07/owl#> .
@@ -182,7 +182,7 @@
     ex:_L142C4     rdf:first ex:Man;
          rdf:rest () .
     
-    #RDF parsed by Id: sax2rdf.py,v 1.42 2004/11/08 02:12:04 syosi Exp 
+    #RDF parsed by Id: sax2rdf.py,v 1.43 2005/07/22 15:14:20 syosi Exp 
          @prefix web: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
      @prefix : <http://example.com/xmlns/aggregation-demo#> .
     
