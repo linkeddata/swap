@@ -163,6 +163,15 @@ def makeTripleObjList(subj, pred, obj):
                                                   obj))])))
 
 def normalize(expr):
+    """ The mapping from SPARQL syntax to n3 is decidedly nontrivial
+at this point, we have done the first step, building an AST that is (relatively) independant of all of the oddities that
+you get from the grammar
+
+Normalize does a couple of top down transforms on the tree. The first is a type determiner; it determines what
+needs to be coerced to a boolean. The second does boolean logic and pushes ``not''s all the way in.
+
+After normalize, the last bottom up step to generate the n3 can be done.
+    """
     if verbose(): print expr
     step1 = Coerce()(expr)
     return NotNot()(step1)
@@ -437,12 +446,12 @@ class FilterExpr(productionHandler):
             extra.extend(getExtra(rawArg))
             args.append(tuple(rawArg))
         if p[1] not in knownFunctions:
-            raise RuntimeError('''I don't support the ``%s'' function''' % p[1].uriref())
+            raise NotImplementedError('''I don't support the ``%s'' function''' % p[1].uriref())
         try:
             node, triples = knownFunctions[p[1]](self, keepGoing, *args)
             return andExtra(node, triples + extra)
         except TypeError:
-            raise
+#            raise
             return ['Error']
 
     def typeConvert(self, keepGoing, uri, val):
@@ -480,7 +489,7 @@ class FilterExpr(productionHandler):
 
     def on_Regex(self, p):
         if str(p[3][1]):
-            raise RuntimeError('I don\'t know how to deal with flags. The flag is: %r' % p[3][1])
+            raise NotImplementedError('I don\'t know how to deal with flags. The flag is: %r' % p[3][1])
         extra = getExtra(p[1]) + getExtra(p[2])
         string = tuple(p[1])
         regex = tuple(p[2])
@@ -785,7 +794,7 @@ class FromSparql(productionHandler):
     def on__QDISTINCT_E_Opt(self, p):
         if len(p) == 1:
             return None
-        raise RuntimeError(`p`)
+        raise NotImplementedError(`p`)
 
     def on_Var(self, p):
         var = self.store.newSymbol(self.base + p[1][1][1:])
@@ -1255,6 +1264,7 @@ class FromSparql(productionHandler):
         return p[2]
 
     def on__O_QBrackettedExpression_E__Or__QCallExpression_E__C(self, p):
+        """see normalize for an explanation of what we are doing"""
         return normalize(p[1])
     
     def on_Constraint(self, p):

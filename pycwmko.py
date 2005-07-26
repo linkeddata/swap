@@ -90,15 +90,16 @@ class ToPyStore(object):
             raise
 
 class FromPyStore(object):
-    def __init__(self, formula, pyStore):
+    def __init__(self, formula, pyStore, parent=None):
+        self.parent = parent
         self.formula = formula
         self.store = formula.store
         self.pyStore = pyStore
         self.bNodes = {}
         self.typeConvertors = [
             (Store.Store, self.subStore),
-            (terms.Variable, self.variable),
             (terms.Exivar, self.existential),
+            (terms.Variable, self.variable),
             (terms.URIRef, self.URI),
             (BNode.BNode, self.BNode),
             (terms.Literal, self.literal)]
@@ -127,7 +128,7 @@ class FromPyStore(object):
         if self.pyStore.get_clause(node.name) is not None:
             return self.subStore(self.pyStore.get_clause(node.name))
         v = self.URI(node.name)
-        self.formula.declareUniversal(v)
+        self.parent.declareUniversal(v)
         return v
 
     def existential(self, node):
@@ -150,7 +151,7 @@ class FromPyStore(object):
     
     def subStore(self, node):
         f = self.formula.newFormula()
-        self.__class__(f, node).run()
+        self.__class__(f, node, self.formula).run()
         return f.close()
 
     def facts_and_rules(self, pyStore):
