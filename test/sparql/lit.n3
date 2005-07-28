@@ -1,0 +1,5 @@
+@prefix : <http://example.com/lit#> .
+
+"hi" :b "him" .
+"hello"@en-US :b :c .
+"he" :b 4 .

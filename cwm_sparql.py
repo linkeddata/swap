@@ -47,7 +47,7 @@ class BI_truthValue(LightBuiltIn):
 ##            print '%s makes %s' % (obj, toBool(str(obj), obj.datatype.fragid))
 ##            print 'I got here on %s, %s, returning %s' % (subj, obj, toBool(str(subj), subj.datatype.fragid) is toBool(str(obj), obj.datatype.fragid))
             return toBool(str(subj), subj.datatype.fragid) is toBool(str(obj), obj.datatype.fragid)
-        raise TypeError
+        raise TypeError("%s type cannot be converted to boolean" % `subj.__class`)
 
 class BI_typeErrorIsTrue(LightBuiltIn):
     """
@@ -128,7 +128,7 @@ class BI_dtLit(LightBuiltIn, Function, ReverseFunction):
     def evalObj(self,subj, queue, bindings, proof, query):
         subj = [a for a in subj]
         if len(subj) != 2:
-            raise TypeError
+            raise ValueError
         subject, datatype = subj
         if not isinstance(subj, Literal) or not isinstance(datatype, LabelledNode):
             raise TypeError
@@ -138,8 +138,32 @@ class BI_dtLit(LightBuiltIn, Function, ReverseFunction):
 
     def evalSubj(self, obj, queue, bindings, proof, query):
         if not isinstance(obj, Literal):
-            raise TypeError
+            raise TypeError('I can only find the datatype of a Literal, not a %s' % `obj.__class__.__name__`)
         return self.store.newList([self.store.newLiteral(str(obj)), obj.datatype])
+
+class BI_langLit(LightBuiltIn, Function, ReverseFunction):
+    def evalObj(self,subj, queue, bindings, proof, query):
+        subj = [a for a in subj]
+        if len(subj) != 2:
+            raise ValueError
+        subject, lang = subj
+        if not isinstance(subj, Literal) or not isinstance(lang, Literal):
+            raise TypeError
+        if not lang:
+            lang = None
+        else:
+            lang = str(lang)
+        if subj.lang:
+            raise TypeError('%s must not have a lang already' % subj)
+        return self.store.newLiteral(str(subj), lang=lang)
+
+    def evalSubj(self, obj, queue, bindings, proof, query):
+        if not isinstance(obj, Literal):
+            raise TypeError('I can only find the datatype of a Literal, not a %s' % `obj.__class__.__name__`)
+        lang = obj.lang
+        if not obj.lang:
+            lang = ''
+        return self.store.newList([self.store.newLiteral(str(obj)), self.store.newLiteral(lang)])
 
 
 #############################
@@ -275,3 +299,5 @@ def register(store):
     ns.internFrag('truthValue', BI_truthValue)
     ns.internFrag('query', BI_query)
     ns.internFrag('semantics', BI_semantics)
+    ns.internFrag('dtLit', BI_dtLit)
+    ns.internFrag('langLit', BI_langLit)

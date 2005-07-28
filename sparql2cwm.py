@@ -185,7 +185,7 @@ class Coerce(object):
             self.k = self.k + 1
             if expr[0] in ('Var', 'Literal', 'Number', 'String', 'symbol'):
                 ww = self.atom(expr, coerce)
-            elif expr[0] in ('subtract', 'add', 'multiply', 'divide'):
+            elif expr[0] in ('subtract', 'add', 'multiply', 'divide', 'lang', 'datatype'):
                 ww = self.on_math(expr, coerce)
             elif expr[0] in ('less', 'equal', 'greater', 'notLess', 'notGreater'):
                 ww = self.on_pred(expr, coerce)
@@ -279,7 +279,8 @@ class NotNot(object):
                 return expr
             if expr[0] in self.inverse_operators:
                 ww = self.expr(expr, inv, Ored)
-            elif expr[0] in ('Var', 'Literal', 'Number', 'subtract', 'add', 'multiply', 'divide', 'String', 'symbol', 'function'):
+            elif expr[0] in ('Var', 'Literal', 'Number', 'subtract', 'add', 'datatype',
+                             'multiply', 'divide', 'String', 'symbol', 'function', 'lang'):
                 ww = self.atom(expr, inv, Ored)
             else:
                 ww = getattr(self, 'on_' + expr[0])(expr, inv, Ored)
@@ -562,6 +563,25 @@ class FilterExpr(productionHandler):
         k = self.bnode()
         return [makeTriple(p[1], ('symbol', self.log['rawType']), k, safeVersion=getTrueOnError(p[0])),
                 makeTriple(k, ('symbol', self.log['notEqualTo']), ('symbol', self.parent.store.Other))]
+    def on_lang(self, p):
+        if not isinstance(p[1], tuple):
+            return ['Error']
+        extra = getExtra(p[1])
+        op1 = tuple(p[1])
+        retVal = self.bnode()
+        meaningLess = self.bnode()
+        triple = makeSafeVal(retVal, (('List', [meaningLess[1], retVal[1]]), ('symbol', self.anything['langLit']), p[1]), safeVersion=getTrueOnError(p[0]))
+        return andExtra(retVal, [triple] + extra)
+    def on_datatype(self, p):
+        if not isinstance(p[1], tuple):
+            return ['Error']
+        extra = getExtra(p[1])
+        op1 = tuple(p[1])
+        retVal = self.bnode()
+        meaningLess = self.bnode()
+        triple = makeSafeVal(retVal, (('List', [meaningLess[1], retVal[1]]), ('symbol', self.anything['dtLit']), p[1]), safeVersion=getTrueOnError(p[0]))
+        return andExtra(retVal, [triple] + extra)
+
 
 class FromSparql(productionHandler):
     def __init__(self, store, formula=None, ve=0, why=None):
@@ -682,7 +702,7 @@ class FromSparql(productionHandler):
             f4.add(triple.object(), store.type, sparql['Result'], why=reason2())
             f.add(triple.subject(), store.implies, f4.close(), why=reason2())
         #TODO: I'm missing sorting and datasets
-        if p[6]:
+        if p[6] and p[6] != (None, None, None):
             raise NotImplementedError('Cwm does not support output modifiers yet')
             sort, limit, offset = p[6]
             if sort:
@@ -1417,7 +1437,7 @@ class FromSparql(productionHandler):
         if funcName == 'IT_LANG':
             return (typedThing('lang', 'literal', ['literal']), p[3])
         if funcName == 'IT_DATATYPE':
-            return (typedThing('lang', 'symbol', ['literal']), p[3])
+            return (typedThing('datatype', 'symbol', ['literal']), p[3])
         if funcName == 'IT_isBLANK':
             return (typedThing('isBlank', 'boolean'), p[3])
         if funcName == 'IT_isLITERAL':
@@ -1466,7 +1486,7 @@ class FromSparql(productionHandler):
         return p[1]
 
     def on_IRIrefOrFunc(self, p):
-        if p[2] == 0:
+        if p[2] == None:
             return p[1]
         return ['function', ("funcName", p[1][1].uriref(),)] + p[2]
 

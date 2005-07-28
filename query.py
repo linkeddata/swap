@@ -755,8 +755,21 @@ class Query:
 		if pair[0] not in existentials:
                     if isinstance(pair[0], List):
                         del newBindings[pair[0]]
-                        reallyNewBindings = pair[0].unify(
-                                pair[1], variables, existentials, bindings)[0][0]
+                        reallyNewBindingsList = pair[0].unify(
+                                    pair[1], variables, existentials, bindings)
+                        if not reallyNewBindingsList or not hasattr(reallyNewBindingsList, '__iter__'):
+                            return 0
+                        try:
+                            reallyNewBindings = reallyNewBindingsList[0][0]
+                        except:
+                            print 'we lost'
+                            print pair[0], pair[1]
+                            a = pair[0].unify(
+                                    pair[1], variables, existentials, bindings)
+                            print a
+                            print a[0]
+                            print a[0][0]
+                            raise
                         newBindingItems.extend(reallyNewBindings.items())
                         newBindings.update(reallyNewBindings)
                     else:

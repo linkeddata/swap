@@ -94,7 +94,7 @@ class BI_member(LightBuiltIn, MultipleFunction):
     def evalObj(self,subj, queue, bindings, proof, query):
 	if not isinstance(subj, NonEmptyList) and not isinstance(subj, N3Set): return None
 	rea = None
-	return subj # [({obj:x}, rea) for x in subj]
+	return [x for x in subj] # [({obj:x}, rea) for x in subj]
 
 
 

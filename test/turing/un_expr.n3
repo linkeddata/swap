@@ -4,7 +4,7 @@
 #(((s i) i) ((s i) i)) a RootExpression . #infinite loop unlambda.n3 can't get caught in.
 #(((s k) s) s) a RootExpression .
 #((k k) i) a RootExpression .
-#(i i) a RootExpression .
+(i i) a RootExpression .
 #
 #try to all 1 and 2 .
 #
@@ -16,7 +16,7 @@
 # or ((s ((s (k s)) k)) i)
 #
 #so our expression is -
-((((s i) (k (s ((s (k s)) k)))) i) ((s ((s (k s)) k)) i)) a RootExpression . #1 + 2
+#((((s i) (k (s ((s (k s)) k)))) i) ((s ((s (k s)) k)) i)) a RootExpression . #1 + 2
 #
 # here is 3 ``s``s`ksk``s``s`kski
 # or ((s ((s (k s)) k)) ((s ((s (k s)) k)) i))

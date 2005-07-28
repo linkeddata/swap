@@ -1,0 +1,6 @@
+PREFIX : <http://example.com/lit#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+SELECT *
+{ ?a :b ?c
+  FILTER (LANG(?a) = 'en-US' || DATATYPE(?c) = xsd:integer)
+}
