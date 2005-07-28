@@ -43,7 +43,7 @@ def abbr(prodURI):
    return prodURI.split('#').pop()
 
 class N3Parser(object): 
-   def __init__(self, buffer, branches, sink):
+   def __init__(self, buffer, branches, sink, ve=0):
       lexer = sparql_tokens.Lexer()
       lexer.input(buffer)
       tokens.update(sparql_tokens.tokens)
@@ -53,6 +53,7 @@ class N3Parser(object):
       self.productions = []
       self.memo = {}
       self.sink = sink
+      self.verbose = ve
 
    def parse(self, prod):
       todo_stack = [[prod, None]]
@@ -102,20 +103,23 @@ class N3Parser(object):
    def newToken(self): 
       self.token = self.data()
 
-   def onStart(self, prod): 
-#      print (' ' * len(self.productions)) + `prod`
+   def onStart(self, prod):
+      if self.verbose:
+          print (' ' * len(self.productions)) + `prod`
       self.productions.append([prod])
 
    def onFinish(self): 
       prod = self.sink.prod(self.productions.pop())
       if self.productions:
           self.productions[-1].append(prod)
-#      print (' ' * len(self.productions)) + '/' + `prod`
+      if self.verbose:
+          print (' ' * len(self.productions)) + '/' + `prod`
       return prod
 
    def onToken(self, prod, tok):
       self.productions[-1].append((prod, tok))
-#      print (' ' * len(self.productions)) + `(prod, tok)`
+      if self.verbose:
+          print (' ' * len(self.productions)) + `(prod, tok)`
 
 class nullProductionHandler(object):
     def prod(self, production):
@@ -127,13 +131,13 @@ def main(argv=None):
    import sparql2cwm, myStore, notation3
    _outSink = notation3.ToN3(sys.stdout.write,
                                       quiet=1, flags='')
-   sink = sparql2cwm.FromSparql(myStore._checkStore())
+   sink = sparql2cwm.FromSparql(myStore._checkStore(), ve=1)
    if len(argv) == 3:
        sink = nullProductionHandler()
-       p = N3Parser(file(argv[1], 'r'), branches, sink)
+       p = N3Parser(file(argv[1], 'r'), branches, sink, ve=1)
        p.parse(start)
    if len(argv) == 2: 
-      p = N3Parser(file(argv[1], 'r'), branches, sink)
+      p = N3Parser(file(argv[1], 'r'), branches, sink, ve=1)
       print "About to parse"
       f = p.parse(start).close()
       myStore._checkStore().dumpNested(f, _outSink)

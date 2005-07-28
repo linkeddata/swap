@@ -13,5 +13,9 @@
     test:description   "parsing of N3 set syntax";
     test:arguments     """-n3 sparql/sparql_builtin1.n3 --think --strings""".
 
+:t1002 a test:CwmTest;
+    test:referenceOutput <mixing-egl-result.n3>;
+    test:description   "Command line use";
+    test:arguments     """-n3 sparql/mixing_egl.n3 --sparql=sparql/mixing_egl.rq""".
 
 #ends

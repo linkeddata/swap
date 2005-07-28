@@ -166,6 +166,24 @@ class BI_langLit(LightBuiltIn, Function, ReverseFunction):
         return self.store.newList([self.store.newLiteral(str(obj)), self.store.newLiteral(lang)])
 
 
+class BI_lamePred(HeavyBuiltIn, MultipleReverseFunction):
+    def eval(self, subj, obj, queue, bindings, proof, query):
+        return True
+    def evalSubj(self, obj, queue, bindings, proof, query):
+        #really slow. Return every list I know anything about. Should I do this at all?
+        retVals = Set([self.store.nil])
+        retValCopy = Set()
+        n = 0
+        while retVals != retValCopy:
+            print n, retVals, retValCopy
+            n += 1
+            retValCopy = retVals.copy()
+            for node in retValCopy:
+                retVals.update(node._prec.values())
+        a = query.workingContext.occurringIn(retVals) ## Really slow. Need to generate this on the fly?
+        print 'a=', a
+        return a
+
 #############################
 #############################
 #    Builtins useful from within cwm, not within SPARQL
@@ -297,6 +315,7 @@ def register(store):
     ns.internFrag('typeErrorIsTrue', BI_typeErrorIsTrue)
     ns.internFrag('typeErrorReturner', BI_typeErrorReturner)
     ns.internFrag('truthValue', BI_truthValue)
+    ns.internFrag('lamePred', BI_lamePred)
     ns.internFrag('query', BI_query)
     ns.internFrag('semantics', BI_semantics)
     ns.internFrag('dtLit', BI_dtLit)

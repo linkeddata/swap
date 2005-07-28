@@ -559,6 +559,8 @@ class List(CompoundTerm):
 	    x = x.rest
 	    import types
 	    set = set | y.occurringIn(vars)
+	if self in vars:
+            set.add(self)
 	return set
 
     def asSequence(self):
