@@ -206,83 +206,94 @@ class BI_query(LightBuiltIn, Function):
         applySparqlQueries(source, query, F)
         if query.contains(obj=ns['ConstructQuery']):
             return F
-        if query.contains(obj=ns['SelectQuery']):
-            node = query.the(pred=self.store.type, obj=ns['SelectQuery'])
-            outputList = []
-            prefixTracker = RDFSink()
-            prefixTracker.setDefaultNamespace(RESULTS_NS)
-            prefixTracker.bind('', RESULTS_NS)
-            xwr = XMLWriter(outputList.append, prefixTracker)
-            xwr.makePI('xml version="%s"' % '1.0')
-            xwr.startElement(RESULTS_NS+'sparql', [], prefixTracker.prefixes)
-            xwr.startElement(RESULTS_NS+'head', [], prefixTracker.prefixes)
-            vars = []
-            for triple in query.the(subj=node, pred=ns['select']):
-                vars.append(triple.object())
-                xwr.emptyElement(RESULTS_NS+'variable', [(RESULTS_NS+' name', str(triple.object()))], prefixTracker.prefixes)
+        if query.contains(obj=ns['SelectQuery']) or query.contains(obj=ns['AskQuery']):
+            return self.store.newLiteral(sparql_output(query, F))
 
-            xwr.endElement()
-            xwr.startElement(RESULTS_NS+'results', [], prefixTracker.prefixes)
-            for resultFormula in F.each(pred=self.store.type, obj=ns['Result']):
-                xwr.startElement(RESULTS_NS+'result', [], prefixTracker.prefixes)
-                for var in vars:
-                    xwr.startElement(RESULTS_NS+'binding', [(RESULTS_NS+' name', str(var))],  prefixTracker.prefixes)
-                    binding = resultFormula.the(pred=ns['bound'], obj=var)
-                    if binding:
-                        if isinstance(binding, LabelledNode):
-                            xwr.startElement(RESULTS_NS+'uri', [],  prefixTracker.prefixes)
-                            xwr.data(binding.uriref())
-                            xwr.endElement()
-                        elif isinstance(binding, (AnonymousNode, List)):
-                            xwr.startElement(RESULTS_NS+'bnode', [],  prefixTracker.prefixes)
-                            xwr.data(binding.uriref())
-                            xwr.endElement()
-                        elif isinstance(binding, Literal):
-                            props = []
-                            if binding.datatype:
-                                props.append((RESULTS_NS+' datatype', binding.datatype.uriref()))
-                            if binding.lang:
-                                props.append(("http://www.w3.org/XML/1998/namespace lang", binding.lang))
-                            xwr.startElement(RESULTS_NS+'literal', props,  prefixTracker.prefixes)
-                            xwr.data(str(binding))
-                            xwr.endElement()
-                    else:
-                        xwr.emptyElement(RESULTS_NS+'unbound', [], prefixTracker.prefixes)
-                    xwr.endElement()
+def sparql_output(query, F):
+    store = F.store
+    RESULTS_NS = 'http://www.w3.org/2005/06/sparqlResults'
+    ns = store.newSymbol(SPARQL_NS)
+    if query.contains(obj=ns['SelectQuery']):
+        node = query.the(pred=store.type, obj=ns['SelectQuery'])
+        outputList = []
+        prefixTracker = RDFSink()
+        prefixTracker.setDefaultNamespace(RESULTS_NS)
+        prefixTracker.bind('', RESULTS_NS)
+        xwr = XMLWriter(outputList.append, prefixTracker)
+        xwr.makePI('xml version="%s"' % '1.0')
+        xwr.startElement(RESULTS_NS+'sparql', [], prefixTracker.prefixes)
+        xwr.startElement(RESULTS_NS+'head', [], prefixTracker.prefixes)
+        vars = []
+        for triple in query.the(subj=node, pred=ns['select']):
+            vars.append(triple.object())
+            xwr.emptyElement(RESULTS_NS+'variable', [(RESULTS_NS+' name', str(triple.object()))], prefixTracker.prefixes)
 
+        xwr.endElement()
+        xwr.startElement(RESULTS_NS+'results', [], prefixTracker.prefixes)
+        resultFormulae = [aa for aa in F.each(pred=store.type, obj=ns['Result'])]
+        resultFormulae.sort(Term.compareAnyTerm)
+        for resultFormula in resultFormulae:
+            xwr.startElement(RESULTS_NS+'result', [], prefixTracker.prefixes)
+            for var in vars:
+                xwr.startElement(RESULTS_NS+'binding', [(RESULTS_NS+' name', str(var))],  prefixTracker.prefixes)
+                binding = resultFormula.the(pred=ns['bound'], obj=var)
+                if binding:
+                    if isinstance(binding, LabelledNode):
+                        xwr.startElement(RESULTS_NS+'uri', [],  prefixTracker.prefixes)
+                        xwr.data(binding.uriref())
+                        xwr.endElement()
+                    elif isinstance(binding, (AnonymousNode, List)):
+                        xwr.startElement(RESULTS_NS+'bnode', [],  prefixTracker.prefixes)
+                        xwr.data(binding.uriref())
+                        xwr.endElement()
+                    elif isinstance(binding, Literal):
+                        props = []
+                        if binding.datatype:
+                            props.append((RESULTS_NS+' datatype', binding.datatype.uriref()))
+                        if binding.lang:
+                            props.append(("http://www.w3.org/XML/1998/namespace lang", binding.lang))
+                        xwr.startElement(RESULTS_NS+'literal', props,  prefixTracker.prefixes)
+                        xwr.data(str(binding))
+                        xwr.endElement()
+                else:
+                    xwr.emptyElement(RESULTS_NS+'unbound', [], prefixTracker.prefixes)
                 xwr.endElement()
+
             xwr.endElement()
-            xwr.endElement()
-            xwr.endDocument()
-            return self.store.newLiteral(''.join(outputList))
-        if query.contains(obj=ns['AskQuery']):
-            node = query.the(pred=self.store.type, obj=ns['AskQuery'])
-            outputList = []
-            prefixTracker = RDFSink()
-            prefixTracker.setDefaultNamespace(RESULTS_NS)
-            prefixTracker.bind('', RESULTS_NS)
-            xwr = XMLWriter(outputList.append, prefixTracker)
-            xwr.makePI('xml version="%s"' % '1.0')
-            xwr.startElement(RESULTS_NS+'sparql', [], prefixTracker.prefixes)
-            xwr.startElement(RESULTS_NS+'head', [], prefixTracker.prefixes)
-            vars = []
+        xwr.endElement()
+        xwr.endElement()
+        xwr.endDocument()
+        return ''.join(outputList)
+    if query.contains(obj=ns['AskQuery']):
+        node = query.the(pred=store.type, obj=ns['AskQuery'])
+        outputList = []
+        prefixTracker = RDFSink()
+        prefixTracker.setDefaultNamespace(RESULTS_NS)
+        prefixTracker.bind('', RESULTS_NS)
+        xwr = XMLWriter(outputList.append, prefixTracker)
+        xwr.makePI('xml version="%s"' % '1.0')
+        xwr.startElement(RESULTS_NS+'sparql', [], prefixTracker.prefixes)
+        xwr.startElement(RESULTS_NS+'head', [], prefixTracker.prefixes)
+        vars = []
 #            for triple in query.the(subj=node, pred=ns['select']):
 #                vars.append(triple.object())
 #                xwr.emptyElement(RESULTS_NS+'variable', [(RESULTS_NS+'name', str(triple.object()))], prefixTracker.prefixes)
 
-            xwr.endElement()
-            xwr.startElement(RESULTS_NS+'boolean', [], prefixTracker.prefixes)
-            if F.the(pred=self.store.type, obj=ns['Success']):
-                xwr.data('true')
-            else:
-                xwr.data('false')
-            xwr.endElement()
-                
+        xwr.endElement()
+        xwr.startElement(RESULTS_NS+'boolean', [], prefixTracker.prefixes)
+        if F.the(pred=store.type, obj=ns['Success']):
+            xwr.data('true')
+        else:
+            xwr.data('false')
+        xwr.endElement()
+            
 
-            xwr.endElement()
-            xwr.endDocument()
-            return self.store.newLiteral(''.join(outputList))
+        xwr.endElement()
+        xwr.endDocument()
+        return ''.join(outputList)
 
+
+    
 class BI_semantics(HeavyBuiltIn, Function):
     """ The semantics of a resource are its machine-readable meaning, as an
     N3 forumula.  The URI is used to find a represnetation of the resource in bits
