@@ -128,7 +128,7 @@ class nullProductionHandler(object):
 def main(argv=None):
    if argv is None: 
       argv = sys.argv
-   import sparql2cwm, myStore, notation3
+   from swap import sparql2cwm, myStore, notation3
    _outSink = notation3.ToN3(sys.stdout.write,
                                       quiet=1, flags='')
    sink = sparql2cwm.FromSparql(myStore._checkStore(), ve=1)
