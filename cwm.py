@@ -593,6 +593,16 @@ rdf/xml files. Note that this requires rdflib.
                 reconv = pycwmko.FromPyStore(workingContext, pyf)
                 reconv.run()
 
+            elif arg == '-server':
+                from swap.sparql import webserver
+                from swap import cwm_sparql
+                workingContext.stayOpen = False
+		workingContext = workingContext.canonicalize()
+                def _handler(s):
+                    return cwm_sparql.sparql_queryString(workingContext, s)
+                webserver.sparql_handler = _handler
+                webserver.run()
+
             elif arg == "-lxkbdump":  # just for debugging
                 raise NotImplementedError
 

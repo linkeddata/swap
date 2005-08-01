@@ -5,6 +5,7 @@ A webserver for SPARQL
 __version__ = '$Id$'
 
 import BaseHTTPServer, urllib
+from cgi import parse_qs
 
 def sparql_handler(s):
     return s
@@ -47,20 +48,11 @@ class SPARQL_request_handler(BaseHTTPServer.BaseHTTPRequestHandler):
             file, query = self.path, ''
         if file != self.query_file:
             self.send_error(404, "File not found")
-#        print query
-        queries = query.split('&')
-        args = {}
-        for i in queries:
-            try:
-                arg, val = i.split('=')
-            except ValueError:
-                arg, val = i, ''
-            arg, val = arg.replace('+', ' '), val.replace('+', ' ')
-            arg, val = urllib.unquote(arg), urllib.unquote(val)
-            args[arg] = val
+        args = parse_qs(query)
+
         print args
 
-        query = args.get('query', '')
+        query = args.get('query', [''])[0]
         if not query:
             self.send_response(200)
             self.send_header("Content-type", 'text/html')

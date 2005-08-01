@@ -293,6 +293,24 @@ def sparql_output(query, F):
         return ''.join(outputList)
 
 
+def sparql_queryString(source, queryString):
+    from query import applySparqlQueries
+    RESULTS_NS = 'http://www.w3.org/2005/06/sparqlResults'
+    store = source.store
+    ns = store.newSymbol(SPARQL_NS)
+    from sparql import sparql_parser
+    import sparql2cwm
+    convertor = sparql2cwm.FromSparql(store)
+    import StringIO
+    p = sparql_parser.N3Parser(StringIO.StringIO(queryString), sparql_parser.branches, convertor)
+    q = p.parse(sparql_parser.start).close()
+    F = store.newFormula()
+    applySparqlQueries(source, q, F)
+    F = F.close()
+    if q.contains(obj=ns['ConstructQuery']):
+        return F.n3String()
+    if q.contains(obj=ns['SelectQuery']) or q.contains(obj=ns['AskQuery']):
+        return sparql_output(q, F)
     
 class BI_semantics(HeavyBuiltIn, Function):
     """ The semantics of a resource are its machine-readable meaning, as an

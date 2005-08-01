@@ -29,14 +29,14 @@ def importTokens():
             for k, v in rs.iteritems():
                 setattr(Tokens, k, v)
         except ImportError:
-            import myStore
+            from swap import myStore
             store = myStore._checkStore()
             F = myStore.load('http://www.w3.org/2000/10/swap/grammar/sparql')
             BNF = myStore.Namespace("http://www.w3.org/2000/10/swap/grammar/bnf#")
             regexps = {}
             k = F.statementsMatching(pred=BNF.tokens)
             if len(k) != 1:
-                raise RuntimeError
+                raise RuntimeError(k, len(k))
             for triple in k:
                 tokens = [x.uriref() for x in triple.object()]
             tokens.append(BNF.PASSED_TOKENS.uriref())
@@ -56,6 +56,7 @@ def importTokens():
                     path = imp.find_module('sparql')[1]
                 except ImportError:
                     path = ''
+                path = ''
                 f = file(os.path.join(path, 'sparql_tokens_table.py'), 'w')
                 mkmodule(pklVal, f)
                 f.close()
