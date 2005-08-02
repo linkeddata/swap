@@ -47,7 +47,7 @@ from swap import  diag
 from swap.why import FormulaReason
 from swap.diag import verbosity, setVerbosity, progress, tracking, setTracking
 from swap.uripath import join
-from swap.webAccess import urlopenForRDF, load   # http://www.w3.org/2000/10/swap/
+from swap.webAccess import urlopenForRDF, load, sandBoxed   # http://www.w3.org/2000/10/swap/
 
 # import re
 # import StringIO
@@ -596,6 +596,7 @@ rdf/xml files. Note that this requires rdflib.
             elif arg == '-sparqlServer':
                 from swap.sparql import webserver
                 from swap import cwm_sparql
+                sandBoxed(True)
                 workingContext.stayOpen = False
 		workingContext = workingContext.canonicalize()
                 def _handler(s):

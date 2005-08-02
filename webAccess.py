@@ -28,6 +28,15 @@ HTTP_Content_Type = 'content-type' #@@ belongs elsewhere?
 
 print_all_file_names = diag.print_all_file_names   # for listing test files
 
+class SecurityError(RuntimeError):
+    pass
+
+def setting(self, val=None):
+    if val is not None:
+        self[0] = val
+    return self[0]
+
+sandBoxed = setting.__get__([False])
 
 def cacheHack(addr):
     """ If on a plane, hack remote w3.org access to local access
@@ -52,7 +61,10 @@ def urlopenForRDF(addr, referer=None):
 
     This is now uses urllib2.urlopen(), in order to get better error handling
     """
-    
+
+    if sandBoxed():
+        if addr[:5] == 'file:':
+            raise SecurityError('Nice try')
     addr = cacheHack(addr) # @@ hack
     z = urllib2.Request(addr)
     z.add_header('Accept', 'text/rdf+n3, application/rdf+xml')

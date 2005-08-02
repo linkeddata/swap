@@ -107,31 +107,6 @@ class multimap(dict):
     fromTuples = classmethod(_fromTuples)
 
 
-def anonymize(self, formula, uri = None):
-    if uri is not None:
-        if isinstance(uri, TripleHolder):
-            f = formula.newFormula()
-            f.add(*[anonymize(formula, k) for k in uri])
-            return f.close()
-        if isinstance(uri, list):
-            return formula.newList([anonymize(formula, k) for k in uri])
-        if isinstance(uri, Formula):
-            return uri.close()
-        if isinstance(uri, Term):
-            return uri
-        try:
-            if uri in self:
-                return self[uri]
-        except:
-            print uri
-            print 'uri = ', uri
-            raise
-        self[uri] = formula.newBlankNode(why=reason2())
-        return self[uri]
-    return formula.newBlankNode(why=reason2())
-
-anonymize = anonymize.__get__({})
-
 def makeTriple(subj, pred, obj, safeVersion=False):
     if safeVersion:
         store = pred[1].store
@@ -608,6 +583,30 @@ class FromSparql(productionHandler):
 	_reason2 = None	# Why these triples
 	if diag.tracking: _reason2 = BecauseOfData(store.newSymbol(self.base), because=self._reason)
 	reason2(_reason2)
+	self.anNodes = {}
+
+    def anonymize(self, formula, uri = None):
+        if uri is not None:
+            if isinstance(uri, TripleHolder):
+                f = formula.newFormula()
+                f.add(*[self.anonymize(formula, k) for k in uri])
+                return f.close()
+            if isinstance(uri, list):
+                return formula.newList([self.anonymize(formula, k) for k in uri])
+            if isinstance(uri, Formula):
+                return uri.close()
+            if isinstance(uri, Term):
+                return uri
+            try:
+                if uri in self.anNodes:
+                    return self.anNodes[uri]
+            except:
+                print uri
+                print 'uri = ', uri
+                raise
+            self.anNodes[uri] = formula.newBlankNode(why=reason2())
+            return self.anNodes[uri]
+        return formula.newBlankNode(why=reason2())
 
     def new_bnode(self):
         self.anonymous_counter += 1
@@ -634,7 +633,7 @@ class FromSparql(productionHandler):
             #raise RuntimeError(self.dataSets)
             for uri in self.dataSets:
                 stuff = knowledge_base_f.newBlankNode(why=reason2())
-                uri2 = anonymize(knowledge_base_f,uri[1])
+                uri2 = self.anonymize(knowledge_base_f,uri[1])
                 knowledge_base_f.add(uri2, self.store.semantics, stuff, why=reason2())
                 sources = sources.prepend(stuff)
             knowledge_base_f.add(sources, self.store.newSymbol('http://www.w3.org/2000/10/swap/log#conjunction'), knowledge_base)
@@ -652,12 +651,14 @@ class FromSparql(productionHandler):
                     graph.loadFormulaWithSubstitution(subGraph, why=reason2())
                 graph = graph.close()
                 if nodeName is not None:
-                    nameNode = anonymize(tail, nodeName[1])
+                    nameNode = self.anonymize(tail, nodeName[1])
                     semantics = tail.newBlankNode(why=reason2())
                     tail.add(nameNode, self.store.semantics, semantics, why=reason2())
                 else:
                     semantics = knowledge_base
                 tail.add(semantics, self.store.includes, graph, why=reason2())
+            includedVars = Set(self.vars)
+            excludedVars = includedVars.difference(tail.occurringIn(includedVars))
 
             for nodeName, graphIntersection in notIncludedStuff.iteritems():
                 if not graphIntersection: continue
@@ -666,12 +667,17 @@ class FromSparql(productionHandler):
 ##                    graph.loadFormulaWithSubstitution(subGraph)
 ##                graph = graph.close()
                     if nodeName is not None:
-                        nameNode = anonymize(tail, nodeName[1])
+                        nameNode = self.anonymize(tail, nodeName[1])
                         semantics = tail.newBlankNode(why=reason2())
                         tail.add(nameNode, self.store.semantics, semantics, why=reason2())
                     else:
                         semantics = knowledge_base
-                    tail.add(semantics, self.store.notIncludes, subGraph, why=reason2())
+                    excludedMap = {}
+                    bNodedSubGraph = subGraph.newFormula()
+                    for v in excludedVars:
+                        excludedMap[v] = bNodedSubGraph.newBlankNode()
+                    bNodedSubGraph.loadFormulaWithSubstitution(subGraph, excludedMap)
+                    tail.add(semantics, self.store.notIncludes, bNodedSubGraph.close(), why=reason2())
 
             
             f.add(node, sparql['where'], tail.close(), why=reason2())
@@ -995,16 +1001,16 @@ class FromSparql(productionHandler):
                     
                     for object in objectList:
                         try:
-                            subj = anonymize(f, subject[1])
-                            pred = anonymize(f, predicate[1])
+                            subj = self.anonymize(f, subject[1])
+                            pred = self.anonymize(f, predicate[1])
                             if pred is self.sparql['OPTIONAL']:
                                 options.append(object)
                             else:
-                                obj = anonymize(f, object[1])
+                                obj = self.anonymize(f, object[1])
                                 if pred is self.sparql['bound'] or pred is self.sparql['notBound']:
                                     bounds.append((pred, obj))
                                     
-                                    #print alternates, object[1], isinstance(object[1], Term), anonymize(f, object[1])
+                                    #print alternates, object[1], isinstance(object[1], Term), self.anonymize(f, object[1])
 ##                                elif isinstance(obj, Formula):
 ##                                    options.extend(object[2])
 ##                                    f.add(subj, pred, obj)
@@ -1031,7 +1037,7 @@ class FromSparql(productionHandler):
             oldRetVal = retVal
             retVal = []
             for _, f, filters, p, b, i, nI in oldRetVal:
-                node = anonymize(f, nodeName[1])
+                node = self.anonymize(f, nodeName[1])
                 for __, subF, filters2, p2, b2, i2, nI2 in subGraphList:
                     #@@@@@  What do I do with b2?
                     newF = f.newFormula()

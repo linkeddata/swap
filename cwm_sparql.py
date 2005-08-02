@@ -307,10 +307,12 @@ def sparql_queryString(source, queryString):
     F = store.newFormula()
     applySparqlQueries(source, q, F)
     F = F.close()
+##    print 'result is ', F
+##    print 'query is ', q.n3String()
     if q.contains(obj=ns['ConstructQuery']):
-        return F.rdfString()
+        return F.rdfString(), 'application/rdf+xml'
     if q.contains(obj=ns['SelectQuery']) or q.contains(obj=ns['AskQuery']):
-        return sparql_output(q, F)
+        return sparql_output(q, F), 'application/sparql-results+xml'
     
 class BI_semantics(HeavyBuiltIn, Function):
     """ The semantics of a resource are its machine-readable meaning, as an

@@ -871,42 +871,42 @@ class Query:
                 ## Looks better than anything else
                 ## let's see if this works
                 notIncludesStuff = []
-                if pred is query.store.notIncludes:
-                    notIncludesStuff.append(item)
-                for i in queue[:]:
-                    if i.quad[1] is query.store.notIncludes:
-                        notIncludesStuff.append(i)
-                        queue.remove(i)
-                if queue:
-                    queue.extend(notIncludesStuff)
-                    notIncludesStuff = []
-                elif notIncludesStuff:
-                    all_unmatched = []
-                    for con, pred, subj, obj in [s.quad for s in notIncludesStuff]:
-                        #I have stuff to do
-                        more_unmatched = obj.statements[:]
-                        more_variables = obj.variables().copy()
-
-                        if obj.universals() != Set():
-                            raise RuntimeError("""Cannot query for universally quantified things.
-            As of 2003/07/28 forAll x ...x cannot be on object of log:includes.
-            This/these were: %s\n""" % obj.universals())
-
-
-                        _substitute({obj: subj}, more_unmatched)
-                        _substitute(bindings, more_unmatched)
-                        existentials = existentials | more_variables
-                        allvars = variables | existentials
-                        if Query(query.store,
-                                 unmatched=more_unmatched,
-                                 template=subj,
-                                 variables=variables,
-                                 existentials=allvars,
-                                 justOne=1, mode=query.mode).resolve():
-                            return 0
-                    for item in notIncludesStuff:
-                        item.state = S_SATISFIED
-                    nbs = []
+##                if pred is query.store.notIncludes:
+##                    notIncludesStuff.append(item)
+##                for i in queue[:]:
+##                    if i.quad[1] is query.store.notIncludes:
+##                        notIncludesStuff.append(i)
+##                        queue.remove(i)
+##                if queue:
+##                    queue.extend(notIncludesStuff)
+##                    notIncludesStuff = []
+##                elif notIncludesStuff:
+##                    all_unmatched = []
+##                    for con, pred, subj, obj in [s.quad for s in notIncludesStuff]:
+##                        #I have stuff to do
+##                        more_unmatched = obj.statements[:]
+##                        more_variables = obj.variables().copy()
+##
+##                        if obj.universals() != Set():
+##                            raise RuntimeError("""Cannot query for universally quantified things.
+##            As of 2003/07/28 forAll x ...x cannot be on object of log:includes.
+##            This/these were: %s\n""" % obj.universals())
+##
+##
+##                        _substitute({obj: subj}, more_unmatched)
+##                        _substitute(bindings, more_unmatched)
+##                        existentials = existentials | more_variables
+##                        allvars = variables | existentials
+##                        if Query(query.store,
+##                                 unmatched=more_unmatched,
+##                                 template=subj,
+##                                 variables=variables,
+##                                 existentials=allvars,
+##                                 justOne=1, mode=query.mode).resolve():
+##                            return 0
+##                    for item in notIncludesStuff:
+##                        item.state = S_SATISFIED
+##                    nbs = []
 ##########  The following code ties together the results of the log:notincludes. This is wrong for what I need.
 ##                        for quad in more_unmatched:
 ##                            newItem = QueryItem(query, quad)
@@ -1156,7 +1156,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
     #			    return [([], rea)]  # Involves extra recursion just to track reason
                             return []   # No new bindings but success in logical operator
                         else: return 0   # We absoluteley know this won't match with this in it
-                    except:
+                    except (TypeError, ValueError, AttributeError, AssertionError):
                         progress("You got a ``" + sys.exc_info()[0].__name__ + ':' + str(sys.exc_info()[1]) + "'' on " + `subj.value()` + ', ' + `obj.value()`)
                         if "h" in self.query.mode:
                             raise
@@ -1166,7 +1166,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			if diag.chatty_flag > 97: progress("Builtin function call %s(%s)"%(pred, subj))
 			try:
                             result = pred.evalObj(subj, queue, bindings.copy(), proof, self.query)
-                        except:
+                        except (TypeError, ValueError, AttributeError, AssertionError):
                             progress("You got a ``" + sys.exc_info()[0].__name__ + ':' + str(sys.exc_info()[1]) + "'' on " + `subj.value()`)
                             if "h" in self.query.mode:
                                 raise
@@ -1190,7 +1190,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			if diag.chatty_flag > 97: progress("Builtin Rev function call %s(%s)"%(pred, obj))
                         try:
                             result = pred.evalSubj(obj, queue, bindings.copy(), proof, self.query)
-                        except:
+                        except (TypeError, ValueError, AttributeError, AssertionError):
                             progress("You got a ``" + sys.exc_info()[0].__name__ + ':' + str(sys.exc_info()[1]) + "'' on " + `subj.value()`)
                             if "h" in self.query.mode:
                                 raise
