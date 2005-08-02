@@ -61,7 +61,7 @@ class SPARQL_request_handler(BaseHTTPServer.BaseHTTPRequestHandler):
             self.wfile.write(self.default)
         else:
             try:
-                ctype = 'text/plain'
+                ctype = 'application/sparql-results+xml'
                 retVal = sparql_handler(query).encode('utf_8')
                 self.send_response(200)
                 self.send_header("Content-type", ctype)
