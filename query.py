@@ -124,31 +124,32 @@ class InferenceTask:
     def runSmart(self):
 	"""Run the rules by mapping rule interactions first"""
 	rules= self.ruleFor.values()
-	for r1 in rules:
-	    vars1 = r1.templateExistentials | r1.variablesUsed
-	    for r2 in rules:
-		vars2 = r2.templateExistentials | r2.variablesUsed
-		for s1 in r1.conclusion.statements:
-		    for s2 in r2.template.statements:
-			for p in PRED, SUBJ, OBJ:
-			    if ((s1[p] not in vars1
-				    and not isinstance(s1[p], CompoundTerm))
-				and (s2[p] not in vars2
-				    and not isinstance(s2[p], CompoundTerm))
-				and (s1[p] is not s2[p])):
-				    break
-			else:
-			    r1.affects[r2] = 1 # save transfer binding here?
-			    if diag.chatty_flag > 20: progress(
-				"%s can affect %s because %s can trigger %s" %
-					    (`r1`, `r2`, `s1`, `s2`))
-			    break # can affect
+	if self.targetContext is self.workingContext:
+            for r1 in rules:
+                vars1 = r1.templateExistentials | r1.variablesUsed
+                for r2 in rules:
+                    vars2 = r2.templateExistentials | r2.variablesUsed
+                    for s1 in r1.conclusion.statements:
+                        for s2 in r2.template.statements:
+                            for p in PRED, SUBJ, OBJ:
+                                if ((s1[p] not in vars1
+                                        and not isinstance(s1[p], CompoundTerm))
+                                    and (s2[p] not in vars2
+                                        and not isinstance(s2[p], CompoundTerm))
+                                    and (s1[p] is not s2[p])):
+                                        break
+                            else:
+                                r1.affects[r2] = 1 # save transfer binding here?
+                                if diag.chatty_flag > 20: progress(
+                                    "%s can affect %s because %s can trigger %s" %
+                                                (`r1`, `r2`, `s1`, `s2`))
+                                break # can affect
 
-		    else:  # that statement couldn't but
-			if diag.chatty_flag > 96:
-			    progress("...couldn't beccause of ",s1,s2,p)
-			continue # try next one
-		    break # can
+                        else:  # that statement couldn't but
+                            if diag.chatty_flag > 96:
+                                progress("...couldn't beccause of ",s1,s2,p)
+                            continue # try next one
+                        break # can
 
 	# Calculate transitive closure of "affects"
 	for r1 in rules:

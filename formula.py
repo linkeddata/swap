@@ -487,7 +487,9 @@ class Formula(AnonymousNode, CompoundTerm):
     def rdfString(self, base=None, flags=""):
         "Dump the formula to an absolute string in RDF/XML"
         buffer=StringIO.StringIO()
-        _outSink = ToRDF(buffer, _outURI, base=base, flags=flags)
+        import toXML
+        _outURI = 'http://example.com/'
+        _outSink = toXML.ToRDF(buffer, _outURI, base=base, flags=flags)
         self.store.dumpNested(self, _outSink)
         return buffer.getvalue()
 

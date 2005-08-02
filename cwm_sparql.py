@@ -308,7 +308,7 @@ def sparql_queryString(source, queryString):
     applySparqlQueries(source, q, F)
     F = F.close()
     if q.contains(obj=ns['ConstructQuery']):
-        return F.n3String()
+        return F.rdfString()
     if q.contains(obj=ns['SelectQuery']) or q.contains(obj=ns['AskQuery']):
         return sparql_output(q, F)
     

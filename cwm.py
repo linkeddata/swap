@@ -593,7 +593,7 @@ rdf/xml files. Note that this requires rdflib.
                 reconv = pycwmko.FromPyStore(workingContext, pyf)
                 reconv.run()
 
-            elif arg == '-server':
+            elif arg == '-sparqlServer':
                 from swap.sparql import webserver
                 from swap import cwm_sparql
                 workingContext.stayOpen = False
