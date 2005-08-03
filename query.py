@@ -124,7 +124,7 @@ class InferenceTask:
     def runSmart(self):
 	"""Run the rules by mapping rule interactions first"""
 	rules= self.ruleFor.values()
-	if self.targetContext is self.workingContext:
+	if self.targetContext is self.workingContext: #otherwise, there cannot be loops
             for r1 in rules:
                 vars1 = r1.templateExistentials | r1.variablesUsed
                 for r2 in rules:

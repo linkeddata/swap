@@ -253,7 +253,7 @@ def sparql_output(query, F):
                         if binding.lang:
                             props.append(("http://www.w3.org/XML/1998/namespace lang", binding.lang))
                         xwr.startElement(RESULTS_NS+'literal', props,  prefixTracker.prefixes)
-                        xwr.data(str(binding))
+                        xwr.data(unicode(binding))
                         xwr.endElement()
                 else:
                     xwr.emptyElement(RESULTS_NS+'unbound', [], prefixTracker.prefixes)
@@ -263,7 +263,7 @@ def sparql_output(query, F):
         xwr.endElement()
         xwr.endElement()
         xwr.endDocument()
-        return ''.join(outputList)
+        return u''.join(outputList)
     if query.contains(obj=ns['AskQuery']):
         node = query.the(pred=store.type, obj=ns['AskQuery'])
         outputList = []
@@ -310,7 +310,7 @@ def sparql_queryString(source, queryString):
 ##    print 'result is ', F
 ##    print 'query is ', q.n3String()
     if q.contains(obj=ns['ConstructQuery']):
-        return F.rdfString(), 'application/rdf+xml'
+        return F.rdfString().decode('utf_8'), 'application/rdf+xml'
     if q.contains(obj=ns['SelectQuery']) or q.contains(obj=ns['AskQuery']):
         return sparql_output(q, F), 'application/sparql-results+xml'
     
