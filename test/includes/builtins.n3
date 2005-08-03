@@ -1,0 +1,4 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+
+{ {} log:includes {:a log:equalTo :a} } => {<> a :Failure} .
+{ {} log:notIncludes {:a log:equalTo :a} } => {<> a :Success} .

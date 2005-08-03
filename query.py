@@ -503,7 +503,7 @@ class Rule:
 #	    else:
 #		self.__setattr__("leadsToCycle", 1)
     
-def testIncludes(f, g, _variables=Set(),  bindings={}):
+def testIncludes(f, g, _variables=Set(),  bindings={}, smartIn=[]):
     """Return whether or nor f contains a top-level formula equvalent to g.
     Just a test: no bindings returned."""
     if diag.chatty_flag >30: progress("testIncludes ============")
@@ -536,6 +536,7 @@ def testIncludes(f, g, _variables=Set(),  bindings={}):
 		unmatched=unmatched,
 		template = g,
 		variables=Set(),
+                smartIn=smartIn,
 		existentials=_variables | templateExistentials,
 		justOne=1, mode="").resolve()
 
@@ -844,7 +845,7 @@ class Query:
                         for quad in more_unmatched:
                             newItem = QueryItem(query, quad)
                             queue.append(newItem)
-                            newItem.setup(allvars, smartIn = query.smartIn + [subj],
+                            newItem.setup(allvars, smartIn = query.smartIn, # + [subj], @@ this was running builtins!
                                     unmatched=more_unmatched, mode=query.mode)
                         if diag.chatty_flag > 40:
                                 progress("**** Includes: Adding %i new terms and %s as new existentials."%

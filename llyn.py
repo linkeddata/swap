@@ -74,6 +74,8 @@ from OrderedSequence import merge
 from formula import Formula, StoredStatement
 import reify
 
+from weakref import WeakValueDictionary
+
 from query import think, applyRules, testIncludes
 import webAccess
 from webAccess import DocumentAccessError
@@ -829,8 +831,17 @@ class BI_notIncludes(HeavyBuiltIn):
     def eval(self, subj, obj, queue, bindings, proof, query):
         store = subj.store
         if isinstance(subj, Formula) and isinstance(obj, Formula):
-            return not testIncludes(subj, obj,  bindings=bindings) # No (relevant) variables
+            return not testIncludes(subj, obj,  bindings=bindings, smartIn=[]) # No (relevant) variables
         return 0   # Can't say it *doesn't* include it if it ain't a formula
+
+class BI_notIncludesWithBuiltins(HeavyBuiltIn):
+    def eval(self, subj, obj, queue, bindings, proof, query):
+        store = subj.store
+        if isinstance(subj, Formula) and isinstance(obj, Formula):
+            return not testIncludes(subj, obj,  bindings=bindings, smartIn=[subj]) # No (relevant) variables
+        return 0   # Can't say it *doesn't* include it if it ain't a formula
+
+
 
 class BI_semantics(HeavyBuiltIn, Function):
     """ The semantics of a resource are its machine-readable meaning, as an
@@ -1076,7 +1087,7 @@ class RDFStore(RDFSink) :
 
     def clear(self):
         "Remove all formulas from the store     @@@ DOESN'T ACTUALLY DO IT/BROKEN"
-        self.resources = {}    # Hash table of URIs for interning things
+        self.resources = WeakValueDictionary()    # Hash table of URIs for interning things
 #        self.formulae = []     # List of all formulae        
         self._experience = None   #  A formula of all the things program run knows from direct experience
         self._formulaeOfLength = {} # A dictionary of all the constant formuale in the store, lookup by length key.
@@ -1141,6 +1152,7 @@ class RDFStore(RDFSink) :
         self.includes =         log.internFrag( "includes", BI_includes)
 #        log.internFrag("directlyIncludes", BI_directlyIncludes)
         self.notIncludes = log.internFrag("notIncludes", BI_notIncludes)
+        self.smartNotIncludes = log.internFrag("notIncludesWithBuiltins", BI_notIncludesWithBuiltins)
 #        log.internFrag("notDirectlyIncludes", BI_notDirectlyIncludes)
 
 #Heavy functions:

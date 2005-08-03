@@ -49,6 +49,8 @@ from OrderedSequence import merge, intersection, minus
 import diag
 from diag import progress
 
+from weakref import WeakValueDictionary
+
 
 import sys
 if sys.hexversion < 0x02030000:
@@ -240,7 +242,7 @@ class Symbol(LabelledNode):
         assert string.find(uri, "#") < 0, "no fragments allowed: %s" % uri
         assert ':' in uri, "must be absolute: %s" % uri
         self.uri = uri
-        self.fragments = {}
+        self.fragments = WeakValueDictionary()
 
     def uriref2(self, base):
         assert ':' in base, "base must be absolute: %s" % base
@@ -948,6 +950,12 @@ class BuiltIn(Fragment):
     """This class is a supercalss to any builtin predicate in cwm.
     
     A binary operator can calculate truth value given 2 arguments"""
+    def __new__(cls, *args, **keywords):
+        self = Fragment.__new__(cls, *args, **keywords)
+        BuiltIn.all.append(self)         # to prevent the forgetting of builtins
+        return self
+    all = []
+    
     def __init__(self, resource, fragid):
         Fragment.__init__(self, resource, fragid)
 

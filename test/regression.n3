@@ -420,6 +420,10 @@ test:CwmTest;
     test:description   "Simple use of string built-ins";
     test:arguments     """includes/t8.n3 -think""".
 
+:t1039a a test:CwmTest;
+    test:referenceOutput <ref/includes-builtins.n3>;
+    test:description   "Builtins and log:includes";
+    test:arguments     """includes/builtins.n3 -think""".
 
 :t1040 a test:CwmTest;
     test:referenceOutput <ref/bi-t9.n3>;

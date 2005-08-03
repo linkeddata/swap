@@ -677,7 +677,7 @@ class FromSparql(productionHandler):
                     for v in excludedVars:
                         excludedMap[v] = bNodedSubGraph.newBlankNode()
                     bNodedSubGraph.loadFormulaWithSubstitution(subGraph, excludedMap)
-                    tail.add(semantics, self.store.notIncludes, bNodedSubGraph.close(), why=reason2())
+                    tail.add(semantics, self.store.smartNotIncludes, bNodedSubGraph.close(), why=reason2())
 
             
             f.add(node, sparql['where'], tail.close(), why=reason2())
@@ -1084,6 +1084,7 @@ class FromSparql(productionHandler):
                         for f4 in i1[document]:
                             totalFormula.loadFormulaWithSubstitution(f4, why=reason2())
                         f3.add(semantics, self.store.includes, totalFormula.close())
+                    f3.loadFormulaWithSubstitution(filters1, why=reason2())
                     f3 = f3.close()
                     newFilters1 =  f1.newFormula()
                     newFilters1.loadFormulaWithSubstitution(filters1, why=reason2())
