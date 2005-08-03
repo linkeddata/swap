@@ -31,7 +31,8 @@ The Cwm SPARQL server at %s<br />
 
 Enter a query here:<br />
 
-<form method="get" action="" name="sparql query"><textarea cols="80" rows="5" name="query">SELECT * {}</textarea><br />
+<form method="get" action="" name="sparql query"><textarea cols="80" rows="5" name="query">PREFIX log: <http://www.w3.org/2000/10/swap/log#>
+SELECT * {log:includes ?x ?y}</textarea><br />
 
   <button style="height: 2em; width: 5em;" name="Submit">Submit</button></form>
 

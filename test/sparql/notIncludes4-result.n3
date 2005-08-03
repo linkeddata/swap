@@ -1,0 +1,6 @@
+     @prefix : <http://yosi.us/2005/sparql#> .
+    {
+        <http://example#a>     :bound "x" .
+        
+        }     a :Result .
+    

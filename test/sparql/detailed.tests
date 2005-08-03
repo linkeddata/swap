@@ -18,4 +18,9 @@
     test:description   "Command line use";
     test:arguments     """-n3 sparql/mixing_egl.n3 --sparql=sparql/mixing_egl.rq""".
 
+:t1003 a test:CwmTest;
+    test:referenceOutput <notIncludes4-result.n3>;
+    test:description   "not inclusion of FILTER";
+    test:arguments     """-n3 sparql/notIncludes4_data.n3 --sparql=sparql/notIncludes4.sparql""".
+
 #ends
