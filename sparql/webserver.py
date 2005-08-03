@@ -65,6 +65,7 @@ class SPARQL_request_handler(BaseHTTPServer.BaseHTTPRequestHandler):
             try:
                 retVal, ctype= sparql_handler(query)
             except:
+                raise
                 self.send_response(400)
                 resp = str(exc_info()[1])
                 print 'error is', resp
