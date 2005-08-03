@@ -1,0 +1,20 @@
+<?xml version="1.1"?>
+<!--     using base file:/home/syosi/CVS-local/WWW/2000/10/swap/test/includes/non-ascii.n3-->
+<!-- Processed by Id: cwm.py,v 1.160 2004/08/03 18:56:57 syosi Exp -->
+
+
+<rdf:RDF xmlns="file:/home/syosi/CVS-local/WWW/2000/10/swap/test/includes/non-ascii.n3#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+
+    <rdf:Description rdf:about="#,,">
+        <ヨークͿ xmlns="file:/home/syosi/CVS-local/WWW/2000/10/swap/test/includes/non-ascii.n3#,,,">is</ヨークͿ>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="#my">
+        <name>Joerg</name>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="#僕">
+        <名前>ヨーク</名前>
+    </rdf:Description>
+</rdf:RDF>
