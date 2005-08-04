@@ -196,7 +196,6 @@ class BI_lamePred(HeavyBuiltIn, MultipleReverseFunction):
 class BI_query(LightBuiltIn, Function):
     def evalObj(self,subj, queue, bindings, proof, query):
         from query import applySparqlQueries
-        RESULTS_NS = 'http://www.w3.org/2005/06/sparqlResults'
         ns = self.store.newSymbol(SPARQL_NS)
         assert isinstance(subj, List)
         subj = [a for a in subj]
@@ -295,7 +294,6 @@ def sparql_output(query, F):
 
 def sparql_queryString(source, queryString):
     from query import applySparqlQueries
-    RESULTS_NS = 'http://www.w3.org/2005/06/sparqlResults'
     store = source.store
     ns = store.newSymbol(SPARQL_NS)
     from sparql import sparql_parser
