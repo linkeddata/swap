@@ -56,7 +56,7 @@ def importTokens():
                     path = imp.find_module('sparql')[1]
                 except ImportError:
                     path = ''
-                path = ''
+#                path = ''
                 f = file(os.path.join(path, 'sparql_tokens_table.py'), 'w')
                 mkmodule(pklVal, f)
                 f.close()

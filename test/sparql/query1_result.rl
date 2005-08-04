@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 
-<sparql xmlns="http://www.w3.org/2005/06/sparqlResults">
+<sparql xmlns="http://www.w3.org/2005/sparql-results#">
 
     <head>
         <variable name="age"/>

@@ -39,6 +39,16 @@ SELECT * {log:includes ?x ?y}</textarea><br />
 </body>
 </html>'''
 
+##file_open = file
+##m_types = {
+##    'html': 'text/html',
+##    'css': 'text/css',
+##    'js': 'text/javascript',
+##    'gif': 'image/gif',
+##    'jpeg': 'image/jpeg'
+##    }
+
+
 class SPARQL_request_handler(BaseHTTPServer.BaseHTTPRequestHandler):
     server_version = "CWM/" + __version__[1:-1]
     query_file = '/'
@@ -48,8 +58,25 @@ class SPARQL_request_handler(BaseHTTPServer.BaseHTTPRequestHandler):
             file, query = self.path.split('?', 1)
         except ValueError:
             file, query = self.path, ''
+##        if file[:13] == '/presentation':
+##            try:
+##                dot = file.rfind('.')
+##                if dot>0:
+##                    c_type = m_types.get(file[dot+1:], 'text/plain')
+##                else:
+##                    c_type = 'text/plain'
+##                s = file_open('/home/syosi/server_present/'+file[14:], 'r').read()
+##                self.send_response(200)
+##                self.send_header("Content-type", c_type)
+##                self.send_header("Content-Length", str(len(s)))
+##                self.end_headers()
+##                self.wfile.write(s)
+##                return
+##            except:
+##                pass
         if file != self.query_file:
             self.send_error(404, "File not found")
+            return
         args = parse_qs(query)
 
         print args
