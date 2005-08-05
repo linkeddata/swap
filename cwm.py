@@ -262,6 +262,7 @@ rdf/xml files. Note that this requires rdflib.
             elif arg == "-bySubject": option_outputStyle = arg
             elif arg == "-no": option_outputStyle = "-no"
             elif arg == "-strings": option_outputStyle = "-no"
+            elif arg == "-sparqlResults": option_outputStyle = "-no"
             elif arg == "-triples" or arg == "-ntriples":
                 option_format = "n3"
                 option_flags["n3"] = "uspartanev"
@@ -399,6 +400,8 @@ rdf/xml files. Note that this requires rdflib.
             workingContext.close()
             workingContext = _newContext
 
+        sparql_query_formula = None
+
                 
         for arg in sys.argv[1:]:  # Command line options after script name
             if arg.startswith("--"): arg = arg[1:]   # Chop posix-style double dash to one
@@ -528,6 +531,7 @@ rdf/xml files. Note that this requires rdflib.
 		filterContext = _store.load(_uri, why=r, referer="", contentType="x-application/sparql")
 		_newContext = _store.newFormula()
 		_newContext.stayOpen = True
+		sparql_query_formula = filterContext
 		if diag.tracking: proof = FormulaReason(_newContext)
                 applySparqlQueries(workingContext, filterContext, _newContext)
 #		workingContext.close()
@@ -650,6 +654,16 @@ rdf/xml files. Note that this requires rdflib.
             elif arg == "-strings":  # suppress output
                 workingContext.outputStrings() 
                 option_outputStyle = "-no"
+
+            elif arg == '-sparqlResults':
+                from cwm_sparql import outputString, SPARQL_NS
+                ns = _store.newSymbol(SPARQL_NS)
+                if not sparql_query_formula:
+                    raise ValueError('No query')
+                else:
+                    sys.stdout.write(outputString(sparql_query_formula, workingContext).encode('utf_8'))
+                    option_outputStyle = "-no"
+                    
                 
             elif arg == "-no":  # suppress output
                 option_outputStyle = arg

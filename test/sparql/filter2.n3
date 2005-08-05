@@ -1,0 +1,28 @@
+@prefix sparql: <http://yosi.us/2005/sparql#> .
+@prefix rs:      <http://www.w3.org/2001/sw/DataAccess/tests/result-set#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+
+@forAll :A, :B .
+@forSome :_g .
+
+
+{?X a sparql:Result .
+ ?X sparql:bNode ?K .
+ ?X log:includes {:A sparql:bound :B} .
+ ?L a sparql:resultBNode
+}
+=>
+{ ?L a    rs:ResultSet ;
+  rs:resultVariable  :B ;
+  rs:solution ?K .
+  ?K rs:binding  [ rs:value    :A ;
+                                  rs:variable  :B
+                                ]
+} .
+
+
+{?a ?b ?c ;
+    log:rawType [ log:notEqualTo log:Formula ] .
+
+ ?c log:notEqualTo sparql:resultBNode .
+} => {?a ?b ?c} .

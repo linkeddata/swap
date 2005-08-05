@@ -307,11 +307,17 @@ def sparql_queryString(source, queryString):
     F = F.close()
 ##    print 'result is ', F
 ##    print 'query is ', q.n3String()
+    return outputString(q, F)
+    
+def outputString(q, F):
+    store = q.store
+    ns = store.newSymbol(SPARQL_NS)
     if q.contains(obj=ns['ConstructQuery']):
         return F.rdfString().decode('utf_8'), 'application/rdf+xml'
     if q.contains(obj=ns['SelectQuery']) or q.contains(obj=ns['AskQuery']):
         return sparql_output(q, F), 'application/sparql-results+xml'
-    
+
+
 class BI_semantics(HeavyBuiltIn, Function):
     """ The semantics of a resource are its machine-readable meaning, as an
     N3 forumula.  The URI is used to find a represnetation of the resource in bits

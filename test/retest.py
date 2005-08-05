@@ -38,6 +38,7 @@ from swap.myStore import load, loadMany, Namespace
 from swap.uripath import refTo, base
 from swap import diag
 from swap.diag import progress
+from swap.term import AnonymousNode
 
 
 rdf = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
@@ -45,6 +46,10 @@ test = Namespace("http://www.w3.org/2000/10/swap/test.n3#")
 n3test = Namespace("http://www.w3.org/2004/11/n3test#")
 rdft = Namespace("http://www.w3.org/2000/10/rdf-tests/rdfcore/testSchema#")
 triage = Namespace("http://www.w3.org/2000/10/swap/test/triage#")
+
+sparql_manifest = Namespace("http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#")
+sparql_query = Namespace("http://www.w3.org/2001/sw/DataAccess/tests/test-query#")
+dawg_test = Namespace("http://www.w3.org/2001/sw/DataAccess/tests/test-dawg#")
 
 import getopt
 import sys
@@ -217,6 +222,7 @@ def main():
     perfData = []
     n3PositiveTestData = []
     n3NegativeTestData = []
+    sparqlTestData = []
 #    for fn in testFiles:
 #	print "Loading tests from", fn
 #	kb=load(fn)
@@ -330,6 +336,37 @@ def main():
 
 	n3NegativeTestData.append((t.uriref(), case, description,  inputDocument))
 
+    for tt in kb.each(pred=rdf.type, obj=sparql_manifest.Manifest):
+        for t in kb.the(subj=tt, pred=sparql_manifest.entries):
+            name = str(kb.the(subj=t, pred=sparql_manifest.name))
+            query_node = kb.the(subj=t, pred=sparql_manifest.action)
+            if isinstance(query_node, AnonymousNode):
+                data = ''
+                for data_node in kb.each(subj=query_node, pred=sparql_query.data):
+                    data = data + ' ' + data_node.uriref()
+
+                inputDocument = kb.the(subj=query_node, pred=sparql_query.query).uriref()
+            else:
+                data = ''
+                inputDocument = query_node.uriref()
+            j = inputDocument.rfind('/')
+            case = inputDocument[j+1:]
+            outputDocument = kb.the(subj=t, pred=sparql_manifest.result)
+            if outputDocument:
+                outputDocument = outputDocument.uriref()
+            else:
+                outputDocument = None
+            good = 1
+            status = kb.the(subj=t, pred=dawg_test.approval)
+            if status != dawg_test.Approved:
+                print status, name
+                if verbose: print "\tNot approved: "+ inputDocument[-40:]
+                good = 0
+            if good:
+                sparqlTestData.append((tt.uriref(), case, name, inputDocument, data, outputDocument))
+	
+
+
 
     for t in kb.each(pred=rdf.type, obj=test.PerformanceTest):
         x = t.uriref()
@@ -354,7 +391,9 @@ def main():
     n3PositiveTests = len(n3PositiveTestData)
     n3NegativeTestData.sort()
     n3NegativeTests = len(n3NegativeTestData)
-    totalTests = cwmTests + rdfTests + rdfNegativeTests \
+    sparqlTestData.sort()
+    sparqlTests = len(sparqlTestData)
+    totalTests = cwmTests + rdfTests + rdfNegativeTests + sparqlTests \
                  + perfTests + n3PositiveTests + n3NegativeTests
     if verbose: print "RDF parser tests: %i" % rdfTests
 
@@ -388,7 +427,33 @@ def main():
 	    if diff(case, refFile):
 		problem("######### from proof case %s: %scwm %s" %( case, env, arguments))
 	passes = passes + 1
-	
+
+
+    for u, case, name, inputDocument, data, outputDocument in sparqlTestData:
+        tests += 1
+        if tests < start: continue
+
+        urel = refTo(base(), u)
+        print "%3i/%i %-30s  %s" %(tests, totalTests, urel, name)
+        inNtriples = case + '_1'
+        outNtriples = case + '_2'
+        try:
+            execute("""%s %s %s --sparql=%s --filter=%s --filter=%s --ntriples > ',temp/%s'""" %
+                    (python_command, cwm_command, data, inputDocument,
+                     'sparql/filter1.n3', 'sparql/filter2.n3', inNtriples))
+        except NotImplementedError:
+            pass
+        except:
+            problem(str(sys.exc_info()[1]))
+        if outputDocument:
+            execute("""%s %s %s --ntriples > ',temp/%s'""" %
+                    (python_command, cwm_command, outputDocument, outNtriples))
+            if rdfcompare3(inNtriples, ',temp/' + outNtriples):
+                problem('We have a problem with %s on %s' %  (inputDocument, data))
+
+
+        passes += 1
+        
     for u, case, description,  inputDocument, outputDocument in RDFTestData:
 	tests = tests + 1
 	if tests < start: continue

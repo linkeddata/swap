@@ -162,7 +162,7 @@ class Coerce(object):
                 ww = self.atom(expr, coerce)
             elif expr[0] in ('subtract', 'add', 'multiply', 'divide', 'lang', 'datatype'):
                 ww = self.on_math(expr, coerce)
-            elif expr[0] in ('less', 'equal', 'greater', 'notLess', 'notGreater'):
+            elif expr[0] in ('less', 'equal', 'notEqual', 'greater', 'notLess', 'notGreater'):
                 ww = self.on_pred(expr, coerce)
             else:
                 ww = getattr(self, 'on_' + expr[0])(expr, coerce)
@@ -422,7 +422,7 @@ class FilterExpr(productionHandler):
             extra.extend(getExtra(rawArg))
             args.append(tuple(rawArg))
         if p[1] not in knownFunctions:
-            raise NotImplementedError('''I don't support the ``%s'' function''' % p[1].uriref())
+            raise NotImplementedError('''I don't support the ``%s'' function''' % p[1])
         try:
             node, triples = knownFunctions[p[1]](self, keepGoing, *args)
             return andExtra(node, triples + extra)
@@ -813,8 +813,8 @@ class FromSparql(productionHandler):
         return None
 
     def on_PrefixDecl(self, p):
-        self.prefixes[p[2][1][:-1]] = p[3][1][1:-1]
-        self.store.bind(p[2][1][:-1],p[3][1][1:-1])
+        self.prefixes[p[2][1][:-1]] = self.absolutize(p[3][1][1:-1])
+        self.store.bind(p[2][1][:-1],self.absolutize(p[3][1][1:-1]))
         return None
 
     def on__QDISTINCT_E_Opt(self, p):
