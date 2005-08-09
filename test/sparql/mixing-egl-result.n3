@@ -1,4 +1,4 @@
-     @prefix : <http://yosi.us/2005/sparql#> .
+     @prefix : <http://www.w3.org/2000/10/swap/sparqlCwm#> .
     {
         "400 400"     :bound "a" .
         "500 500"     :bound "b" .

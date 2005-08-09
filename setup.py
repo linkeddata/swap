@@ -24,17 +24,16 @@ swap_dir = join(lib_dir, "swap")
 print "swap dir: "+swap_dir
 
 
-#if exists(swap_dir):
-#    backup = "%s-%s" % (swap_dir, int(time()))
-#    print "Renaming previously installed swap to: \n  %s" % backup
-#    rename(swap_dir, backup)
-
+if exists(swap_dir):
+    backup = "%s-%s" % (swap_dir, int(time()))
+    print "Renaming previously installed swap to: \n  %s" % backup
+    rename(swap_dir, backup)
 
 
 # Install SWAP
 from distutils.core import setup
 #from swap import __version__
-__version__='1.0.1'
+__version__='1.1.0rc1'
 setup(
     name = 'cwm',
     version = __version__,

@@ -198,10 +198,10 @@ class Term(object):
 	
 class ErrorFlag(TypeError, Term):
     __init__ = TypeError.__init__
-    __repr__ = object.__repr__
+    __repr__ = TypeError.__str__
     __str__ = TypeError.__str__
 #    uriref = lambda s: ':'
-    value = lambda s: TypeError
+    value = lambda s: s
 
 
 
@@ -966,6 +966,8 @@ class BuiltIn(Fragment):
 	To reduce confusion, the inital ones called with the internals available
 	use abreviations "eval", "subj" etc while the python-style ones use evaluate, subject, etc."""
 	if hasattr(self, "evaluate"):
+            if not isinstance(subj, (Literal, CompoundTerm)) or not isinstance(obj, (Literal, CompoundTerm)):
+                raise ArgumentNotLiteral(subj, obj)
 	    return self.evaluate(subj.value(), obj.value())
 	elif isinstance(self, Function):
 		return Function.eval(self, subj, obj, queue, bindings, proof, query)
@@ -976,6 +978,9 @@ class BuiltIn(Fragment):
 class GenericBuiltIn(BuiltIn):
     def __init__(self, resource, fragid):
         Fragment.__init__(self, resource, fragid)
+
+class ArgumentNotLiteral(TypeError):
+    pass
 	
 class LightBuiltIn(GenericBuiltIn):
     """A light built-in is fast and is calculated immediately before searching the store.
@@ -1009,8 +1014,9 @@ class Function(BuiltIn):
 
 	To reduce confusion, the inital ones called with the internals available
 	use abreviations "eval", "subj" etc while the python-style ones use "evaluate", "subject", etc."""
-
-	return self.store._fromPython(self.evaluateObject(subj.value()))
+        if not isinstance(subj, (Literal, CompoundTerm)):
+            raise ArgumentNotLiteral
+        return self.store._fromPython(self.evaluateObject(subj.value()))
 
 
 # This version is used by functions by default:
@@ -1034,11 +1040,12 @@ class ReverseFunction(BuiltIn):
 	F = self.evalSubj(obj, queue, bindings, proof, query)
 	return F is subj
 
-
     def evalSubj(self, obj,  queue, bindings, proof, query):
-	"""This function which has access to the store, unless overridden,
-	calls a simpler one which uses python conventions"""
-	return self.store._fromPython(self.evaluateSubject(obj.value()))
+        """This function which has access to the store, unless overridden,
+        calls a simpler one which uses python conventions"""
+        if not isinstance(obj, (Literal, CompoundTerm)):
+            raise ArgumentNotLiteral(obj)
+        return self.store._fromPython(self.evaluateSubject(obj.value()))
 
 class MultipleFunction(Function):
     """Multiple return values.
@@ -1051,15 +1058,18 @@ class MultipleFunction(Function):
 	The python one returns a list of function values.
 	This returns a 'new bindings' structure (nbs) which is a sequence of
 	(bindings, reason) pairs."""
-
-	return self.store._fromPython(self.evaluateSubject(obj.value()))
+        if not isinstance(obj, (Literal, CompoundTerm)):
+            raise ArgumentNotLiteral(obj)
+        return self.store._fromPython(self.evaluateSubject(subj.value()))
 #	results = self.store._fromPython(self.evaluateSubject(obj.value()))
 #	return [ ({subj: x}, None) for x in results]
     
 class MultipleReverseFunction(ReverseFunction):
     """Multiple return values"""
     def evalObj(self, subj,  queue, bindings, proof, query):
-	return self.store._fromPython(self.evaluateObject(obj.value()))
+        if not isinstance(subj, (Literal, CompoundTerm)):
+            raise ArgumentNotLiteral(subj)
+        return self.store._fromPython(self.evaluateObject(obj.value()))
 #	results = self.store._fromPython(self.evaluateObject(obj.value()))
 #	return [ ({subj: x}, None) for x in results]
     
@@ -1099,7 +1109,7 @@ class FiniteProperty(GenericBuiltIn, Function, ReverseFunction):
 	    if s is subj: return o
 	return (subj, obj) in self.ennum()
 
-    
+
 #  For examples of use, see, for example, cwm_*.py
 
 

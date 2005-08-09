@@ -10,7 +10,7 @@
 
 :t1001 a test:CwmTest;
     test:referenceOutput <query1_result.rl>;
-    test:description   "parsing of N3 set syntax";
+    test:description   "sparql builtins from cwm";
     test:arguments     """-n3 sparql/sparql_builtin1.n3 --think --strings""".
 
 :t1002 a test:CwmTest;
@@ -22,5 +22,20 @@
     test:referenceOutput <notIncludes4-result.n3>;
     test:description   "not inclusion of FILTER";
     test:arguments     """-n3 sparql/notIncludes4_data.n3 --sparql=sparql/notIncludes4.sparql""".
+
+:t1004 a test:CwmTest;
+    test:referenceOutput <construct1-result.n3>;
+    test:description   "CONSTRUCT";
+    test:arguments     """-n3 sparql/data_construct1.n3 --sparql=sparql/construct.sparql""".
+
+:t1005 a test:CwmTest;
+    test:referenceOutput <filter6-result.n3>;
+    test:description   "complex FILTER expression with errors";
+    test:arguments     """-n3 sparql/filter6_data.n3 --sparql=sparql/filter6.sparql""".
+
+:t1006 a test:CwmTest;
+    test:referenceOutput <optional1-result.n3>;
+    test:description   "OPTIONAL in query";
+    test:arguments     """-n3 sparql/optional_data.n3 --sparql=sparql/optional.sparql""".
 
 #ends

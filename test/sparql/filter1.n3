@@ -1,4 +1,4 @@
-@prefix sparql: <http://yosi.us/2005/sparql#> .
+@prefix sparql: <http://www.w3.org/2000/10/swap/sparqlCwm#> .
 @prefix rs:      <http://www.w3.org/2001/sw/DataAccess/tests/result-set#> .
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 

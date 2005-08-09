@@ -27,7 +27,7 @@ except ImportError:
 
 from term import ErrorFlag as MyError
 
-SPARQL_NS = 'http://yosi.us/2005/sparql'
+SPARQL_NS = 'http://www.w3.org/2000/10/swap/sparqlCwm'
 
 
 def toBool(val, dt=None):

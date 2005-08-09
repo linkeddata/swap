@@ -1,6 +1,7 @@
      @prefix : <http://www.w3.org/2000/10/swap/sparqlCwm#> .
     {
-        <http://example#a>     :bound "x" .
+        "SPARQL Tutorial"     :bound "title" .
+        42     :bound "price" .
         
         }     a :Result .
     

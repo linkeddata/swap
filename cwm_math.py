@@ -20,7 +20,7 @@ __version__ = '$Revision$'
 
 import sys, string, re, urllib
 
-from term import LightBuiltIn, Function, ReverseFunction
+from term import LightBuiltIn, Function, ReverseFunction, ArgumentNotLiteral, Literal
 from local_decimal import Decimal
 import types
 
@@ -68,6 +68,8 @@ def numeric(s):
        type(s) == types.LongType or \
        type(s) is types.FloatType or \
        isinstance(s,Decimal): return s
+    if not isinstance(s, (Literal, str, unicode)):
+        raise ArgumentNotLiteral(s)
     if s.find('.') < 0 and s.find('e') < 0 : return long(s)
     return Decimal(s)
 

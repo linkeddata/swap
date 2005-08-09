@@ -17,7 +17,7 @@ from OrderedSequence import merge, intersection, minus, indentString
 
 import diag
 from diag import chatty_flag, tracking, progress
-from term import BuiltIn, LightBuiltIn, \
+from term import BuiltIn, LightBuiltIn, ArgumentNotLiteral, \
     HeavyBuiltIn, Function, ReverseFunction, MultipleFunction, MultipleReverseFunction, \
     Literal, Symbol, Fragment, FragmentNil,  Term, \
     CompoundTerm, List, EmptyList, NonEmptyList, ErrorFlag
@@ -88,7 +88,7 @@ def applySparqlQueries(
 		ruleFormula = None,    # Where to find the rules
 		targetContext = None):   # Where to put the conclusions
     """Once, nothing recusive, for a N3QL query"""
-    t = InferenceTask(workingContext, ruleFormula, targetContext)
+    t = InferenceTask(workingContext, ruleFormula, targetContext, mode="q")
     t.gatherSparqlQueries(t.ruleFormula)
     result = t.runSmart()
     del(t)
@@ -669,6 +669,8 @@ class Query:
 	es, exout = self.workingContext.existentials(), Set()
 	for var, val in bindings.items():
             if isinstance(val, Exception):
+                if "q" in self.mode: # How nice are we?
+                    raise ValueError(val)
                 return 0
 	    if val in es:   #  Take time for large number of bnodes?
 		exout.add(val)
@@ -1142,7 +1144,10 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
         con, pred, subj, obj = self.quad
 	proof = []  # place for built-in to hang a justification
 	rea = None  # Reason for believing this item is true
-
+	if "q" in self.query.mode:
+            caughtErrors = (TypeError, ValueError, AttributeError, AssertionError, ArgumentNotLiteral)
+        else:
+            caughtErrors = ()
 	try:
 	    if self.neededToRun[SUBJ] == Set():
 		if self.neededToRun[OBJ] == Set():   # bound expression - we can evaluate it
@@ -1157,24 +1162,29 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
     #			    return [([], rea)]  # Involves extra recursion just to track reason
                             return []   # No new bindings but success in logical operator
                         else: return 0   # We absoluteley know this won't match with this in it
-                    except (TypeError, ValueError, AttributeError, AssertionError):
-                        progress("You got a ``" + sys.exc_info()[0].__name__ + ':' + str(sys.exc_info()[1]) + "'' on " + `subj.value()` + ', ' + `obj.value()`)
-                        if "h" in self.query.mode:
+                    except caughtErrors:
+                        progress("You got a ``" + sys.exc_info()[0].__name__ + ':' + str(sys.exc_info()[1]) + "'' on " + `pred.value()` + 'builtin with ' + `subj.value()` + ', ' + `obj.value()`)
+                        if "q" not in self.query.mode:
                             raise
+                        return 0
+                    except ArgumentNotLiteral:
                         return 0
 		else: 
 		    if isinstance(pred, Function):
 			if diag.chatty_flag > 97: progress("Builtin function call %s(%s)"%(pred, subj))
 			try:
                             result = pred.evalObj(subj, queue, bindings.copy(), proof, self.query)
-                        except (TypeError, ValueError, AttributeError, AssertionError):
-                            progress("You got a ``" + sys.exc_info()[0].__name__ + ':' + str(sys.exc_info()[1]) + "'' on " + `subj.value()`)
-                            if "h" in self.query.mode:
+                        except caughtErrors:
+                            errVal = "``" + sys.exc_info()[0].__name__ + ':' + str(sys.exc_info()[1]) + "'' on " + `pred.value()` + 'builtin with ' + `subj.value()`
+                            progress("You got a " + errVal)
+                            if "q" not in self.query.mode:
                                 raise
                             if isinstance(pred, MultipleFunction):
-                                result = [ErrorFlag()]
+                                result = [ErrorFlag(errVal)]
                             else:
-                                result = ErrorFlag()
+                                result = ErrorFlag(errVal)
+                        except ArgumentNotLiteral:
+                            return 0
 			if result != None:
 			    self.state = S_DONE
 			    rea=None
@@ -1191,15 +1201,18 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			if diag.chatty_flag > 97: progress("Builtin Rev function call %s(%s)"%(pred, obj))
                         try:
                             result = pred.evalSubj(obj, queue, bindings.copy(), proof, self.query)
-                        except (TypeError, ValueError, AttributeError, AssertionError):
-                            progress("You got a ``" + sys.exc_info()[0].__name__ + ':' + str(sys.exc_info()[1]) + "'' on " + `subj.value()`)
-                            if "h" in self.query.mode:
+                        except caughtErrors:
+                            errVal = "``" + sys.exc_info()[0].__name__ + ':' + str(sys.exc_info()[1]) + "'' on " + `pred.value()` + 'builtin with ' + `subj.value()`
+                            progress("You got a " + errVal)
+                            if "q" not in self.query.mode:
                                 raise
                             if isinstance(pred, MultipleReverseFunction):
-                                result = [ErrorFlag()]
+                                result = [ErrorFlag(errVal)]
                             else:
-                                result = ErrorFlag()
+                                result = ErrorFlag(errVal)
 #                            result = None
+                        except ArgumentNotLiteral:
+                            return 0
 			if result != None:
 			    self.state = S_DONE
 			    rea=None

@@ -1213,9 +1213,13 @@ class RDFStore(RDFSink) :
 	cwm_list.register(self)
 	cwm_set.register(self)
 	cwm_sparql.register(self)
-        if crypto:
-	    import cwm_crypto  # Cryptography
-	    cwm_crypto.register(self)  # would like to anyway to catch bug if used but not available
+	import cwm_crypto  # Cryptography
+	if crypto:
+            if cwm_crypto.USE_PKC == 0:
+                raise RuntimeError("Try installing pycrypto, and make sure it is in you PYTHONPATH")
+	else:
+            cwm_crypto.USE_PKC = 0       
+	cwm_crypto.register(self)  # would like to anyway to catch bug if used but not available
 
     def newLiteral(self, str, dt=None, lang=None):
 	"Interned version: generate new literal object as stored in this store"

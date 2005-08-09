@@ -107,7 +107,7 @@ class SPARQL_request_handler(BaseHTTPServer.BaseHTTPRequestHandler):
                 self.send_header("Content-Length", str(len(retVal)))
                 self.end_headers()
                 self.wfile.write(retVal)
-
+    do_POST = do_GET
 
 
 
