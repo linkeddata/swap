@@ -17,11 +17,7 @@ Uris are relative to present working directory.
 
 For motivation and explanation, see  <http://www.w3.org/DesignIssues/Diff>
 
-<<<<<<< delta.py
 $Id$
-=======
-$Id$
->>>>>>> 1.2.4.1
 http://www.w3.org/2000/10/swap/diff.py
 """
 
@@ -319,7 +315,7 @@ def patches(delta, f, only_f, originalBnodes, definitions, deleting=0):
 	    if x in undefined:
 		if inverse: s, p, o = x, pred, y
 		else: s, p, o = y, pred, x
-		if verbose>2: progress("Declaring variable %s" % x.uriref())
+		if verbose > 4: progress("Declaring variable %s" % x.uriref())
 		if deleting:
 		    delta.declareUniversal(x)
 		    lhs.add(subj=s, pred=p, obj=o)
