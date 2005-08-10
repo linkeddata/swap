@@ -3,13 +3,13 @@
 sparql_parser. A parser of SPARQL based on 
     N3P - An N3 Parser using n3.n3
     Author: Sean B. Palmer, inamidst.com
-    Licence: GPL 2; share and enjoy!
+    Licence:    http://www.w3.org/Consortium/Lega l/copyright-software
     Documentation: http://inamidst.com/n3p/
     Derived from: 
        http://www.w3.org/2000/10/swap/grammar/predictiveParser.py
        - predictiveParser.py, Tim Berners-Lee, 2004
 
-Sparql_parser is by Yosi Scharf, and quite hevily modified
+Sparql_parser is by Yosi Scharf, and quite heavily modified
 from n3p
 """
 try:

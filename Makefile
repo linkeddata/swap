@@ -9,14 +9,14 @@ TESTIN=test/sameDan.n3
 
 HTMLS= term.html formula.html pretty.html myStore.html check.html query.html RDFSink.html cwm.html cwm_crypto.html cwm_list.html cwm_math.html cwm_sparql.html cwm_maths.html cwm_os.html cwm_string.html cwm_time.html cwm_times.html diag.html llyn.html notation3.html reify.html sax2rdf.html rdflib2rdf.html tab2n3.html thing.html toXML.html uripath.html xml2infoset.html why.html sparql2cwm.html doc/changes.html
 
-SOURCES = cwm.py cant.py delta.py notation3.py query.py llyn.py uripath.py diag.py RDFSink.py reify.py why.py myStore.py webAccess.py OrderedSequence.py term.py formula.py pretty.py cwm_list.py cwm_string.py cwm_os.py cwm_time.py isodate.py cwm_math.py cwm_trigo.py cwm_times.py cwm_maths.py toXML.py update.py sax2rdf.py rdflib_user.py rdfxml.py myStore.py __init__.py local_decimal.py isXML.py my_profiler.py cwm_crypto.py sparql/sparql_parser.py sparql/sparql_tokens.py sparql/sparql_tokens_table.py sparql/sparql_table.py
+SOURCES = cwm.py cant.py delta.py notation3.py query.py llyn.py uripath.py diag.py RDFSink.py reify.py why.py myStore.py webAccess.py OrderedSequence.py term.py formula.py pretty.py cwm_list.py cwm_string.py cwm_os.py cwm_time.py isodate.py cwm_math.py cwm_trigo.py cwm_times.py cwm_maths.py toXML.py update.py sax2rdf.py rdflib_user.py rdfxml.py myStore.py __init__.py local_decimal.py isXML.py my_profiler.py cwm_crypto.py sparql/sparql_parser.py sparql/sparql_tokens.py sparql/sparql_tokens_table.py sparql/sparql_table.py sparql/table_generator.py
 DOC=doc/CwmHelp.htm
 
 GRAMMAR =  grammar/n3.n3 grammar/README.txt grammar/predictiveParser.py grammar/bnf2html.n3 grammar/Makefile grammar/bnf2html.n3 grammar/bnf.n3 grammar/bnf-rules.n3 grammar/n3-rdf.n3 grammar/n3-rules.n3 grammar/n3-yacc.c grammar/n3-ql.n3 grammar/sparql.n3
 
 TESTS = test/Makefile test/regression.n3 test/list/detailed.tests test/ql/detailed.tests test/math/detailed.tests test/norm/detailed.tests test/n3parser.tests test/cwm/detailed.tests test/ntriples/detailed.tests test/delta/detailed.tests test/syntax/detailed.tests test/reify/detailed.tests test/testmeta.n3 test/retest.py
 
-VERSION = 1.1.0
+VERSION = 1.1.0rc1
 TARNAME = cwm-$(VERSION)
 
 TARBALL_STUFF = README LICENSE LICENSE.rdf LICENSE.n3
@@ -57,13 +57,13 @@ release : doc.made setup_tarball message.txt
 	rm message.txt
 
 
-package: math.rdf maths.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf time.rdf times.rdf LICENSE.rdf  $(HTMLS)
+package: math.rdf maths.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf time.rdf times.rdf LICENSE.rdf sparqlCwm.rdf $(HTMLS)
 
 
 # Can't make dependencies on *.py :-(
 
 # cwm.py notation3.py llyn.py  RDFSink.py toXML.py
-cwm.tar.gz:  $(HTMLS) $(SOURCES) $(TESTS) $(TARBALL_STUFF) tested filelist
+cwm.tar.gz:  $(HTMLS) $(SOURCES) $(TESTS) $(TARBALL_STUFF) # tested filelist
 	cvs -q update
 	tar -czf  cwm.tar.gz $(HTMLS) $(SOURCES) $(TESTS) $(TARBALL_STUFF) `cat test/testfilelist | sed -e 's/^/test\//'`
 	rm -rf ,cwm-tarball-test
@@ -111,7 +111,7 @@ setup_tarball: $(SOURCES) $(HTMLS) $(TESTS) $(GRAMMAR) $(TARBALL_STUFF)  tested 
 	cd ,cwm-$(VERSION)-test/cwm-$(VERSION)/test && $(MAKE)
 	$(PYTHON) -c 'print "".join([a for a in file(".htaccess")][:-1])[:-1]' > ,htaccess
 	echo 'RewriteRule ^cwm.tar.gz$ ' $(TARNAME).tar.gz '[L]' >> ,htaccess
-	mv ,htaccess .htaccess
+#	mv ,htaccess .htaccess
 	-cvs add $(TARNAME).tar.gz	
 
 yappstest: rdfn3_yapps.py rdfn3_yappstest.py
@@ -144,6 +144,8 @@ SemEnglish.html: SemEnglish.g gram2html.py
 log.rdf: log.n3
 	$(PYTHON) cwm.py log.n3 --rdf > log.rdf
 
+sparqlCwm.rdf: sparqlCwm.n3
+	$(PYTHON) cwm.py sparqlCwm.n3 --rdf > sparqlCwm.rdf
 
 #ends
 

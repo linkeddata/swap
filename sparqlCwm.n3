@@ -1,0 +1,186 @@
+#  Builtins and terms for cwm's SPARQL support
+#
+# $Id$
+
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix sparql: <http://www.w3.org/2000/10/swap/sparqlCwm#> .
+
+
+sparql:Query a rdfs:Class;
+
+.
+
+# The classes of queries
+sparql:SelectQuery a rdfs:Class;
+     rdfs:subClassOf sparql:Query;
+
+.
+
+sparql:AskQuery a rdfs:Class;
+  rdfs:subClassOf sparql:Query;
+
+.
+
+sparql:ConstructQuery a rdfs:Class;
+        rdfs:subClassOf sparql:Query;
+
+.
+
+
+##
+## The structure of a query
+##
+sparql:select a rdf:Property;
+     rdfs:label "variable list of query";
+     rdfs:domain sparql:SelectQuery;
+     rdfs:range log:Formula;
+     rdfs:comment """@@@@
+
+
+""" .
+
+sparql:construct a rdf:Property;
+     rdfs:label "head of construct rule";
+     rdfs:domain sparql:ConstructQuery;
+     rdfs:range log:Formula;
+     rdfs:comment """@@@@
+
+
+""" .
+
+sparql:where a rdf:Property;
+     rdfs:label "match pattern of query";
+     rdfs:domain sparql:Query;
+     rdfs:range log:Formula;
+     rdfs:comment """@@@@
+
+
+""" .
+
+##
+## Builtins that the compiler generates
+##
+
+sparql:equals a rdf:Property;
+     rdfs:label "test equality";
+     rdfs:comment """Test the equality of two things.
+Resources are equal if they are owl:sameAs. Literals are equal if they have the same value.
+Coercion rules are as defined in the SPARQL TR.
+""" .
+
+sparql:lessThan a rdf:Property;
+     rdfs:label "less than";
+     rdfs:domain rdfs:Literal;
+     rdfs:range rdfs:Literal;
+     rdfs:comment """@@@@
+
+
+""" .
+
+sparql:greaterThan a rdf:Property;
+     rdfs:label "greater than";
+     rdfs:domain rdfs:Literal;
+     rdfs:range rdfs:Literal;
+     rdfs:comment """@@@@
+
+
+""" .
+
+sparql:notGreaterThan a rdf:Property;
+     rdfs:label "less than or equal";
+     rdfs:domain rdfs:Literal;
+     rdfs:range rdfs:Literal;
+     rdfs:comment """@@@@
+
+
+""" .
+
+sparql:notLessThan a rdf:Property;
+     rdfs:label "greater than or equal";
+     rdfs:domain rdfs:Literal;
+     rdfs:range rdfs:Literal;
+     rdfs:comment """@@@@
+
+
+""" .
+
+sparql:notEquals a rdf:Property;
+     rdfs:label "not equality";
+     rdfs:comment """seee sparql:equals
+
+
+""" .
+
+sparql:typeErrorIsTrue a rdf:Property;
+     rdfs:label "match pattern of query";
+     rdfs:domain sparql:Query;
+     rdfs:range log:Formula;
+     rdfs:comment """@@@@
+
+
+""" .
+
+sparql:typeErrorReturner a rdf:Property;
+     rdfs:label "match pattern of query";
+     rdfs:domain sparql:Query;
+     rdfs:range log:Formula;
+     rdfs:comment """@@@@
+
+
+""" .
+
+sparql:truthValue a rdf:Property;
+     rdfs:label "coerce to boolean";
+     rdfs:range rdfs:Literal;
+     rdfs:comment """the truthValue of everything
+is either true of false
+""" .
+
+sparql:lamePred a rdf:Property;
+     rdfs:label "A lame predicate";
+     rdfs:domain rdf:List;
+     rdfs:comment """Keep cwm from forgetting about lists.
+""" .
+
+
+
+sparql:dtLit a rdf:Property;
+     rdfs:label "deal with datatyped literals";
+     rdfs:domain rdf:List;
+     rdfs:range rdfs:Literal;
+     rdfs:comment """The subject is a plain literal and a resource, the
+object is a literal with the same string but the datatype of the resource.
+""" .
+
+sparql:langLit a rdf:Property;
+     rdfs:label "deal with literals in languages";
+     rdfs:domain rdf:List;
+     rdfs:range rdfs:Literal;
+     rdfs:comment """Separate out a Literal and its language,
+or give a language to a literal.
+""" .
+
+##
+## Builtins for running SPARQL from within cwm
+##
+
+sparql:query a rdf:Property;
+     rdfs:label "run a sparql Query";
+     rdfs:domain rdf:List;
+     rdfs:comment """This runs a query, and returns a string
+(for SELECT and ASK) or a formula (for CONSTRUCT)
+
+
+""" .
+
+sparql:semantics a rdf:Property;
+     rdfs:label "parse as SPARQL";
+     rdfs:range log:Formula;
+     rdfs:comment """The object is the subject compiled from SPARQL to n3
+
+
+""" .

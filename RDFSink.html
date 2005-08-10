@@ -1,41 +1,44 @@
 
 <!doctype html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html><head><title>Python: module RDFSink</title>
-<style type="text/css"><!--
-TT { font-family: lucidatypewriter, lucida console, courier }
---></style></head><body bgcolor="#f0f0f8">
+</head><body bgcolor="#f0f0f8">
 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
 <tr bgcolor="#7799ee">
 <td valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>RDFSink</strong></big></big> (version $Id$)</font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/devel/WWW/2000/10/swap/RDFSink.py">/devel/WWW/2000/10/swap/RDFSink.py</a></font></td></tr></table>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/syosi/CVS-local/WWW/2000/10/swap/RDFSink.py">/home/syosi/CVS-local/WWW/2000/10/swap/RDFSink.py</a></font></td></tr></table>
     <p><tt><a href="#RDFSink">RDFSink</a>&nbsp;--&nbsp;RDF&nbsp;parser/serializer/store&nbsp;interface<br>
+&nbsp;<br>
+This&nbsp;is&nbsp;a&nbsp;simple&nbsp;API&nbsp;for&nbsp;a&nbsp;push-stream&nbsp;of&nbsp;RDF&nbsp;data.&nbsp;It&nbsp;doesn't&nbsp;use<br>
+a&nbsp;particular&nbsp;classof&nbsp;obejcts,&nbsp;but&nbsp;just&nbsp;uses&nbsp;python&nbsp;pairs.<br>
+It&nbsp;is&nbsp;kinda&nbsp;crude&nbsp;but&nbsp;it&nbsp;does&nbsp;allow&nbsp;for&nbsp;example&nbsp;data&nbsp;to&nbsp;be&nbsp;squirted&nbsp;efficiently&nbsp;<br>
+between&nbsp;modules&nbsp;which&nbsp;use&nbsp;different&nbsp;python&nbsp;classes&nbsp;for&nbsp;RDF.<br>
 &nbsp;<br>
 HISTORY<br>
 &nbsp;<br>
-This&nbsp;module&nbsp;is&nbsp;being&nbsp;factored&nbsp;out&nbsp;of&nbsp;notation3.py<br>
+This&nbsp;module&nbsp;was&nbsp;factored&nbsp;out&nbsp;of&nbsp;notation3.py<br>
 &nbsp;<br>
 REFERENCES<br>
 &nbsp;&nbsp;Python&nbsp;Style&nbsp;Guide<br>
 &nbsp;&nbsp;Author:&nbsp;Guido&nbsp;van&nbsp;Rossum<br>
 &nbsp;&nbsp;<a href="http://www.python.org/doc/essays/styleguide.html">http://www.python.org/doc/essays/styleguide.html</a></tt></p>
-
+<p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#aa55cc">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#fffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
     
-<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="uripath.html">uripath</a><br>
-</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ee77aa">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
     
-<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><dl>
 <dt><font face="helvetica, arial"><a href="RDFSink.html#RDFSink">RDFSink</a>
 </font></dt><dd>
@@ -51,13 +54,13 @@ REFERENCES<br>
 </font></dt></dl>
 </dd>
 </dl>
- 
+ <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#000000" face="helvetica, arial"><a name="RDFSink">class <strong>RDFSink</strong></a></font></td></tr>
     
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
 <td colspan=2><tt>interface&nbsp;to&nbsp;connect&nbsp;modules&nbsp;in&nbsp;RDF&nbsp;processing.<br>
 OBSOLETE<br>
 &nbsp;<br>
@@ -76,7 +79,7 @@ It&nbsp;has&nbsp;the&nbsp;disadvantages&nbsp;that<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;many&nbsp;times,&nbsp;which&nbsp;wastes&nbsp;time&nbsp;searching&nbsp;hash&nbsp;tables.<br>
 The&nbsp;superclass&nbsp;handles&nbsp;common&nbsp;functions&nbsp;such&nbsp;as&nbsp;craeting&nbsp;new&nbsp;arbitray<br>
 identifiers<br>&nbsp;</tt></td></tr>
-<tr><td>&nbsp;&nbsp;</td>
+<tr><td>&nbsp;</td>
 <td width="100%">Methods defined here:<br>
 <dl><dt><a name="RDFSink-__init__"><strong>__init__</strong></a>(self, genPrefix<font color="#909090">=None</font>)</dt><dd><tt>If&nbsp;you&nbsp;give&nbsp;it&nbsp;a&nbsp;URI&nbsp;prefix&nbsp;to&nbsp;use&nbsp;for&nbsp;generated&nbsp;IDs&nbsp;it<br>
 will&nbsp;use&nbsp;one;&nbsp;otherwise,&nbsp;it&nbsp;will&nbsp;use&nbsp;the&nbsp;name&nbsp;of&nbsp;an&nbsp;imaginary&nbsp;temporary&nbsp;file<br>
@@ -105,6 +108,8 @@ identifier&nbsp;of&nbsp;the&nbsp;root&nbsp;formula&nbsp;of&nbsp;the&nbsp;thing&n
 
 <dl><dt><a name="RDFSink-genId"><strong>genId</strong></a>(self)</dt></dl>
 
+<dl><dt><a name="RDFSink-intern"><strong>intern</strong></a>(self, something)</dt></dl>
+
 <dl><dt><a name="RDFSink-makeComment"><strong>makeComment</strong></a>(self, str)</dt><dd><tt>This&nbsp;passes&nbsp;on&nbsp;a&nbsp;comment&nbsp;line&nbsp;which&nbsp;of&nbsp;course&nbsp;has&nbsp;no&nbsp;semantics.<br>
 &nbsp;<br>
 This&nbsp;is&nbsp;only&nbsp;useful&nbsp;in&nbsp;direct&nbsp;piping&nbsp;of&nbsp;parsers&nbsp;to&nbsp;output,&nbsp;to&nbsp;preserve<br>
@@ -123,6 +128,8 @@ why&nbsp;is&nbsp;reason&nbsp;for&nbsp;the&nbsp;statement.</tt></dd></dl>
 <dl><dt><a name="RDFSink-newExistential"><strong>newExistential</strong></a>(self, context, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="RDFSink-newFormula"><strong>newFormula</strong></a>(self, uri<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="RDFSink-newList"><strong>newList</strong></a>(self, l, context)</dt></dl>
 
 <dl><dt><a name="RDFSink-newLiteral"><strong>newLiteral</strong></a>(self, str, dt<font color="#909090">=None</font>, lang<font color="#909090">=None</font>)</dt></dl>
 
@@ -148,21 +155,13 @@ avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;ugly.</tt
 
 <dl><dt><a name="RDFSink-startDoc"><strong>startDoc</strong></a>(self)</dt></dl>
 
-<hr>
-Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = 'interface to connect modules in RDF processing.<font color="#c040c0">\n</font>...uch as craeting new arbitray<font color="#c040c0">\n</font>    identifiers<font color="#c040c0">\n</font>    '</dl>
-
-<dl><dt><strong>__module__</strong> = 'RDFSink'</dl>
-
-</td></tr></table> 
+</td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#000000" face="helvetica, arial"><a name="RDFStructuredOutput">class <strong>RDFStructuredOutput</strong></a>(<a href="RDFSink.html#RDFSink">RDFSink</a>)</font></td></tr>
     
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2>&nbsp;</td></tr>
-<tr><td>&nbsp;&nbsp;</td>
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%">Methods defined here:<br>
 <dl><dt><a name="RDFStructuredOutput-endAnonymous"><strong>endAnonymous</strong></a>(self, subject, verb)</dt></dl>
 
@@ -183,12 +182,6 @@ Data and non-method functions defined here:<br>
 <dl><dt><a name="RDFStructuredOutput-startBagObject"><strong>startBagObject</strong></a>(self, triple)</dt></dl>
 
 <dl><dt><a name="RDFStructuredOutput-startBagSubject"><strong>startBagSubject</strong></a>(self, context)</dt></dl>
-
-<hr>
-Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = None</dl>
-
-<dl><dt><strong>__module__</strong> = 'RDFSink'</dl>
 
 <hr>
 Methods inherited from <a href="RDFSink.html#RDFSink">RDFSink</a>:<br>
@@ -219,6 +212,8 @@ identifier&nbsp;of&nbsp;the&nbsp;root&nbsp;formula&nbsp;of&nbsp;the&nbsp;thing&n
 
 <dl><dt><a name="RDFStructuredOutput-genId"><strong>genId</strong></a>(self)</dt></dl>
 
+<dl><dt><a name="RDFStructuredOutput-intern"><strong>intern</strong></a>(self, something)</dt></dl>
+
 <dl><dt><a name="RDFStructuredOutput-makeComment"><strong>makeComment</strong></a>(self, str)</dt><dd><tt>This&nbsp;passes&nbsp;on&nbsp;a&nbsp;comment&nbsp;line&nbsp;which&nbsp;of&nbsp;course&nbsp;has&nbsp;no&nbsp;semantics.<br>
 &nbsp;<br>
 This&nbsp;is&nbsp;only&nbsp;useful&nbsp;in&nbsp;direct&nbsp;piping&nbsp;of&nbsp;parsers&nbsp;to&nbsp;output,&nbsp;to&nbsp;preserve<br>
@@ -237,6 +232,8 @@ why&nbsp;is&nbsp;reason&nbsp;for&nbsp;the&nbsp;statement.</tt></dd></dl>
 <dl><dt><a name="RDFStructuredOutput-newExistential"><strong>newExistential</strong></a>(self, context, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="RDFStructuredOutput-newFormula"><strong>newFormula</strong></a>(self, uri<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="RDFStructuredOutput-newList"><strong>newList</strong></a>(self, l, context)</dt></dl>
 
 <dl><dt><a name="RDFStructuredOutput-newLiteral"><strong>newLiteral</strong></a>(self, str, dt<font color="#909090">=None</font>, lang<font color="#909090">=None</font>)</dt></dl>
 
@@ -262,13 +259,13 @@ avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;ugly.</tt
 
 <dl><dt><a name="RDFStructuredOutput-startDoc"><strong>startDoc</strong></a>(self)</dt></dl>
 
-</td></tr></table> 
+</td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#000000" face="helvetica, arial"><a name="TracingRDFSink">class <strong>TracingRDFSink</strong></a></font></td></tr>
     
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
 <td colspan=2><tt>An&nbsp;implementation&nbsp;of&nbsp;the&nbsp;<a href="#RDFSink">RDFSink</a>&nbsp;interface&nbsp;which&nbsp;helps&nbsp;me<br>
 understand&nbsp;it,&nbsp;especially&nbsp;how&nbsp;it&nbsp;gets&nbsp;used&nbsp;by&nbsp;parsers&nbsp;vs.&nbsp;by&nbsp;an<br>
 RDF&nbsp;store.&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;-sandro&nbsp;]<br>
@@ -283,7 +280,7 @@ bash-2.04$&nbsp;python&nbsp;cwm.py&nbsp;--pipe&nbsp;test/rules12.n3&nbsp;--langu
 bash-2.04$&nbsp;python&nbsp;cwm.py&nbsp;test/rules12.n3&nbsp;--bySubject&nbsp;--language=trace<br>
 &nbsp;<br>
 ...&nbsp;and&nbsp;see&nbsp;the&nbsp;different&nbsp;outputs<br>&nbsp;</tt></td></tr>
-<tr><td>&nbsp;&nbsp;</td>
+<tr><td>&nbsp;</td>
 <td width="100%">Methods defined here:<br>
 <dl><dt><a name="TracingRDFSink-__init__"><strong>__init__</strong></a>(self, outURI, base<font color="#909090">=None</font>, flags<font color="#909090">=None</font>)</dt></dl>
 
@@ -313,33 +310,21 @@ bash-2.04$&nbsp;python&nbsp;cwm.py&nbsp;test/rules12.n3&nbsp;--bySubject&nbsp;--
 
 <dl><dt><a name="TracingRDFSink-startDoc"><strong>startDoc</strong></a>(self)</dt></dl>
 
-<hr>
-Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = 'An implementation of the RDFSink interface which...race<font color="#c040c0">\n\n</font>    ... and see the different outputs<font color="#c040c0">\n\n</font>    '</dl>
-
-<dl><dt><strong>__module__</strong> = 'RDFSink'</dl>
-
-</td></tr></table> 
+</td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#000000" face="helvetica, arial"><a name="URISyntaxError">class <strong>URISyntaxError</strong></a>(<a href="exceptions.html#ValueError">exceptions.ValueError</a>)</font></td></tr>
     
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
 <td colspan=2><tt>A&nbsp;parameter&nbsp;is&nbsp;passed&nbsp;to&nbsp;a&nbsp;routine&nbsp;that&nbsp;requires&nbsp;a&nbsp;URI&nbsp;reference<br>&nbsp;</tt></td></tr>
-<tr><td>&nbsp;&nbsp;</td>
+<tr><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="RDFSink.html#URISyntaxError">URISyntaxError</a></dd>
 <dd><a href="exceptions.html#ValueError">exceptions.ValueError</a></dd>
 <dd><a href="exceptions.html#StandardError">exceptions.StandardError</a></dd>
 <dd><a href="exceptions.html#Exception">exceptions.Exception</a></dd>
 </dl>
-<hr>
-Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = 'A parameter is passed to a routine that requires a URI reference'</dl>
-
-<dl><dt><strong>__module__</strong> = 'RDFSink'</dl>
-
 <hr>
 Methods inherited from <a href="exceptions.html#Exception">exceptions.Exception</a>:<br>
 <dl><dt><a name="URISyntaxError-__getitem__"><strong>__getitem__</strong></a>(...)</dt></dl>
@@ -348,14 +333,15 @@ Methods inherited from <a href="exceptions.html#Exception">exceptions.Exception<
 
 <dl><dt><a name="URISyntaxError-__str__"><strong>__str__</strong></a>(...)</dt></dl>
 
-</td></tr></table></td></tr></table>
+</td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#eeaa77">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
     
-<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><dl><dt><a name="-getpid"><strong>getpid</strong></a>(...)</dt><dd><tt><a href="#-getpid">getpid</a>()&nbsp;-&gt;&nbsp;pid<br>
+&nbsp;<br>
 Return&nbsp;the&nbsp;current&nbsp;process&nbsp;id</tt></dd></dl>
  <dl><dt><a name="-runNamespace"><strong>runNamespace</strong></a>()</dt><dd><tt>Return&nbsp;a&nbsp;URI&nbsp;suitable&nbsp;as&nbsp;a&nbsp;namespace&nbsp;for&nbsp;run-local&nbsp;objects</tt></dd></dl>
  <dl><dt><a name="-time"><strong>time</strong></a>(...)</dt><dd><tt><a href="#-time">time</a>()&nbsp;-&gt;&nbsp;floating&nbsp;point&nbsp;number<br>
@@ -363,19 +349,21 @@ Return&nbsp;the&nbsp;current&nbsp;process&nbsp;id</tt></dd></dl>
 Return&nbsp;the&nbsp;current&nbsp;time&nbsp;in&nbsp;seconds&nbsp;since&nbsp;the&nbsp;Epoch.<br>
 Fractions&nbsp;of&nbsp;a&nbsp;second&nbsp;may&nbsp;be&nbsp;present&nbsp;if&nbsp;the&nbsp;system&nbsp;clock&nbsp;provides&nbsp;them.</tt></dd></dl>
  <dl><dt><a name="-uniqueURI"><strong>uniqueURI</strong></a>()</dt><dd><tt>A&nbsp;unique&nbsp;URI</tt></dd></dl>
-</td></tr></table>
+</td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
     
-<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><strong>ALL4</strong> = (0, 1, 2, 3)<br>
 <strong>ANONYMOUS</strong> = 3<br>
 <strong>CONTEXT</strong> = 0<br>
 <strong>DAML_sameAs_URI</strong> = 'http://www.w3.org/2002/07/owl#sameAs'<br>
 <strong>FORMULA</strong> = 1<br>
 <strong>LITERAL</strong> = 2<br>
+<strong>LITERAL_DT</strong> = 21<br>
+<strong>LITERAL_LANG</strong> = 22<br>
 <strong>List_NS</strong> = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'<br>
 <strong>Logic_NS</strong> = 'http://www.w3.org/2000/10/swap/log#'<br>
 <strong>N3_Empty</strong> = (0, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#Empty')<br>
@@ -393,11 +381,8 @@ Fractions&nbsp;of&nbsp;a&nbsp;second&nbsp;may&nbsp;be&nbsp;present&nbsp;if&nbsp;
 <strong>RDF_type_URI</strong> = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'<br>
 <strong>SUBJ</strong> = 2<br>
 <strong>SYMBOL</strong> = 0<br>
-<strong>_Old_Logic_NS</strong> = 'http://www.w3.org/2000/10/swap/log.n3#'<br>
-<strong>__file__</strong> = './RDFSink.pyc'<br>
-<strong>__name__</strong> = 'RDFSink'<br>
 <strong>__version__</strong> = '$Id$'<br>
-<strong>environ</strong> = {'INFOPATH': '/sw/share/info:/sw/info:/usr/share... 'MFLAGS': '', 'SWAP': '/devel/WWW/2000/10/swap'}<br>
+<strong>environ</strong> = {'GNOME_DESKTOP_SESSION_ID': 'Default', 'COLORTE....xwd=01;35:*.ogg=01;35:*.mp3=01;35:*.wav=01;35:'}<br>
 <strong>forAllSym</strong> = 'http://www.w3.org/2000/10/swap/log#forAll'<br>
 <strong>forSomeSym</strong> = 'http://www.w3.org/2000/10/swap/log#forSome'<br>
 <strong>nextu</strong> = 0<br>
