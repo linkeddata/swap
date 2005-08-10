@@ -17,7 +17,8 @@ sparql:Query a rdfs:Class;
 # The classes of queries
 sparql:SelectQuery a rdfs:Class;
      rdfs:subClassOf sparql:Query;
-
+     rdfs:comment """The class that of all SPARQL queries.
+"""
 .
 
 sparql:AskQuery a rdfs:Class;

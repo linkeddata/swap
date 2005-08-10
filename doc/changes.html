@@ -1,10 +1,11 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <title>Cwm features wished for and done</title>
-  <meta name="generator" content="amaya 8.7, see http://www.w3.org/Amaya/" />
+  <meta name="generator" content="amaya 8.5, see http://www.w3.org/Amaya/" />
   <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 
@@ -28,6 +29,37 @@ href="cwm">Cwm</a> Changes</h1>
   <li><a href="plans.html">Release Roadmap</a>. The list of longer term
     enhanecements and some release planning.</li>
 </ul>
+
+<p></p>
+
+<h2>Release 1.1</h2>
+
+<h4>Performance Improvements</h4>
+<ul>
+  <li>Cwm now uses Python Sets instead of lists to store many things</li>
+  <li>Speed improvements to some tests are orders of magnitude</li>
+  <li>Output is not as stable as it once was</li>
+</ul>
+
+<h4>Python 2.3 or later now required</h4>
+
+<p>Used for Sets</p>
+
+<h4>Experimental SPARQL Server support</h4>
+
+<p>Cwm can now run as a SPARQL server. This includes:</p>
+<ul>
+  <li>A preview cwm --sparqlServer, which runs a server on port 8000</li>
+  <li>cwm --sparql=, which behaves like --query=</li>
+  <li>builtins for doing sparql queries from within n3.</li>
+</ul>
+
+<p></p>
+
+<h4>RDF/XML serialization fixes</h4>
+
+<p>A few strange bugs in rdf:xml serialization, many related to the rdf:
+prefix or xml: prefix, have been fixed</p>
 
 <p></p>
 

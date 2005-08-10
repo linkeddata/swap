@@ -1,6 +1,6 @@
 #!/usr/bin/python
 """
-$ID    $
+$Id    $
 This is an attempt to generate a list of all files needed to
 run the tests. It will miss some files, especially in the online.tests
 
@@ -10,7 +10,7 @@ run the tests. It will miss some files, especially in the online.tests
 #the following lines should be removed. They will NOT work with any distribution
 #-----------------
 from os import chdir, getcwd
-from sys import path
+from sys import path, argv
 qqq = getcwd()
 chdir(path[0])
 chdir('..')
@@ -29,8 +29,12 @@ from swap import uripath
 def main():
     diag.print_all_file_names = 1
     import os
-    from cwm import doCommand
-    doCommand()
+    if os.argv[1] == 'delta':
+        from delta import main
+        main()
+    else:
+        from cwm import doCommand
+        doCommand()
     file_list = diag.file_list
     file_list = [a for a in file_list if a[0:4] == 'file']
     base = uripath.base()

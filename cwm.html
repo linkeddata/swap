@@ -85,6 +85,8 @@ steps,&nbsp;in&nbsp;order&nbsp;left&nbsp;to&nbsp;right:<br>
 --apply=foo&nbsp;&nbsp;&nbsp;Read&nbsp;rules&nbsp;from&nbsp;foo,&nbsp;apply&nbsp;to&nbsp;store,&nbsp;adding&nbsp;conclusions&nbsp;to&nbsp;store<br>
 --patch=foo&nbsp;&nbsp;&nbsp;Read&nbsp;patches&nbsp;from&nbsp;foo,&nbsp;applying&nbsp;insertions&nbsp;and&nbsp;deletions&nbsp;to&nbsp;store<br>
 --filter=foo&nbsp;&nbsp;Read&nbsp;rules&nbsp;from&nbsp;foo,&nbsp;apply&nbsp;to&nbsp;store,&nbsp;REPLACING&nbsp;store&nbsp;with&nbsp;conclusions<br>
+--query=foo&nbsp;&nbsp;&nbsp;Read&nbsp;a&nbsp;N3QL&nbsp;query&nbsp;from&nbsp;foo,&nbsp;apply&nbsp;it&nbsp;to&nbsp;the&nbsp;store,&nbsp;and&nbsp;replace&nbsp;the&nbsp;store&nbsp;with&nbsp;its&nbsp;conclusions<br>
+--sparql=foo&nbsp;&nbsp;&nbsp;Read&nbsp;a&nbsp;SPARQL&nbsp;query&nbsp;from&nbsp;foo,&nbsp;apply&nbsp;it&nbsp;to&nbsp;the&nbsp;store,&nbsp;and&nbsp;replace&nbsp;the&nbsp;store&nbsp;with&nbsp;its&nbsp;conclusions<br>
 --rules&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Apply&nbsp;rules&nbsp;in&nbsp;store&nbsp;to&nbsp;store,&nbsp;adding&nbsp;conclusions&nbsp;to&nbsp;store<br>
 --think&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;as&nbsp;-rules&nbsp;but&nbsp;continue&nbsp;until&nbsp;no&nbsp;more&nbsp;rule&nbsp;matches&nbsp;(or&nbsp;forever!)<br>
 --engine=otter&nbsp;use&nbsp;otter&nbsp;(in&nbsp;your&nbsp;$PATH)&nbsp;instead&nbsp;of&nbsp;llyn&nbsp;for&nbsp;linking,&nbsp;etc<br>
@@ -102,6 +104,7 @@ steps,&nbsp;in&nbsp;order&nbsp;left&nbsp;to&nbsp;right:<br>
 --help&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;this&nbsp;message<br>
 --revision&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;CVS&nbsp;revision&nbsp;numbers&nbsp;of&nbsp;major&nbsp;modules<br>
 --chatty=50&nbsp;&nbsp;&nbsp;Verbose&nbsp;debugging&nbsp;output&nbsp;of&nbsp;questionable&nbsp;use,&nbsp;range&nbsp;0-99<br>
+--sparqlServer&nbsp;instead&nbsp;of&nbsp;outputting,&nbsp;start&nbsp;a&nbsp;SPARQL&nbsp;server&nbsp;on&nbsp;port&nbsp;8000&nbsp;of&nbsp;the&nbsp;store<br>
 &nbsp;<br>
 finally:<br>
 &nbsp;<br>

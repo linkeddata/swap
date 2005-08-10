@@ -16,20 +16,22 @@ OFFLINETESTS=regression.n3 list/detailed.tests \
 	norm/detailed.tests \
 	cwm/detailed.tests \
 	ntriples/detailed.tests \
-	delta/detailed.tests \
 	syntax/detailed.tests \
 	testmeta.n3
 #	reify/detailed.tests \
 # 	i18n/detailed.tests \
 
-TESTS=online.tests n3parser.tests rdfcore-tests.n3 $(OFFLINETESTS)
+TESTS=online.tests n3parser.tests rdfcore-tests.n3 delta/detailed.tests \
+	$(OFFLINETESTS)
 
-post-install : pyc-check $(CODE) $(OFFLINETESTS)
+quick : pyc-check $(CODE) $(OFFLINETESTS)
 	PYTHONPATH=`/bin/pwd`/..:`/bin/pwd`/../.. $P retest.py -c $(OFFLINETESTS)
 
 pre-release : pyc-check $(CODE) $(TESTS) rdflib
 	PYTHONPATH=`/bin/pwd`/..:`/bin/pwd`/../.. $P retest.py -c $(TESTS)
 
+post-install : pyc-check $(CODE) $(OFFLINETESTS)
+	PYTHONPATH=`/bin/pwd`/..:`/bin/pwd`/../.. $P retest.py --cwm=../cwm -c $(OFFLINETESTS)
 
 filelist : pyc-check $(CODE) $(OFFLINETESTS)
 	export CWM_LIST_FILES=1; PYTHONPATH=`/bin/pwd`/..:`/bin/pwd`/../.. $P retest.py --cwm=./file_list.py -c $(OFFLINETESTS)
