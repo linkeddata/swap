@@ -82,7 +82,7 @@ cwm.tar.gz:  $(HTMLS) $(SOURCES) $(TESTS) $(TARBALL_STUFF) tested filelist
 	cvs add $(TARNAME).tar.gz
 #LX/*.py LX/*/*.py  LX/*/*.P dbork/*.py ply/*.py *.py
 
-setup_tarball: $(SOURCES) $(HTMLS) $(TESTS) $(GRAMMAR) $(TARBALL_STUFF) # tested filelist
+setup_tarball: $(SOURCES) $(HTMLS) $(TESTS) $(GRAMMAR) $(TARBALL_STUFF) tested filelist
 	-rm -rf swap
 	mkdir swap
 	mkdir swap/sparql
@@ -112,7 +112,7 @@ setup_tarball: $(SOURCES) $(HTMLS) $(TESTS) $(GRAMMAR) $(TARBALL_STUFF) # tested
 	cd ,cwm-$(VERSION)-test/cwm-$(VERSION)/test && $(MAKE) post-install
 	$(PYTHON) -c 'print "".join([a for a in file(".htaccess")][:-1])[:-1]' > ,htaccess
 	echo 'RewriteRule ^cwm.tar.gz$ ' $(TARNAME).tar.gz '[L]' >> ,htaccess
-#	mv ,htaccess .htaccess
+	mv ,htaccess .htaccess
 	-cvs add $(TARNAME).tar.gz	
 
 yappstest: rdfn3_yapps.py rdfn3_yappstest.py
