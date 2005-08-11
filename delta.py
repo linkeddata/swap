@@ -488,7 +488,7 @@ def main():
     for o, a in opts:
         if o in ("-h", "--help"):
             usage()
-            sys.exit()
+            sys.exit(2)
         if o in ("-v", "--verbose"):
 	    try: verbose = int(a)
 	    except ValueError: verbose = 10
