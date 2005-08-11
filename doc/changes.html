@@ -30,8 +30,6 @@ href="cwm">Cwm</a> Changes</h1>
     enhanecements and some release planning.</li>
 </ul>
 
-<p></p>
-
 <h2>Release 1.1</h2>
 
 <h4>Performance Improvements</h4>
@@ -54,14 +52,18 @@ href="cwm">Cwm</a> Changes</h1>
   <li>builtins for doing sparql queries from within n3.</li>
 </ul>
 
-<p></p>
-
 <h4>RDF/XML serialization fixes</h4>
 
 <p>A few strange bugs in rdf:xml serialization, many related to the rdf:
 prefix or xml: prefix, have been fixed</p>
 
-<p></p>
+<h4>delta exit statuses</h4>
+
+<p>delta now returns with similar exit statuses as the diff utility for
+plaintext files. An exit status of 0 means no differences between the
+<q>from</q> and <q>to</q> graphs were found. An exit status of 1 means some
+differences were found. An exit status of 2 means differences were not
+computed for some reason.</p>
 
 <h2>Release 1.0</h2>
 
@@ -82,8 +84,6 @@ prefix or xml: prefix, have been fixed</p>
 
 <p>A bug introduced into 0.8.0 where cwm crashed if no input files were
 specified has been fixed</p>
-
-<p></p>
 
 <h4>Other</h4>
 
@@ -111,25 +111,17 @@ grammar, grammar/predictiveParser.n3 can understand it.</p>
 <p>Performance work has resulted in some tasks taking 1/10 the time that they
 used to. Much more work is planned in this regard.</p>
 
-<p></p>
-
 <h4>Packaging</h4>
 
 <p>Cwm now uses python's distutils for distribution. This allows for
 installation of cwm. As an added bonus, there are now rpm's, windows
 installers.</p>
 
-<p></p>
-
 <h4>Flatten support</h4>
 
 <p>--flatten and --unflatten have been rewritten, replacing the old --flat.
 Flatten minimally reifies an n3 file to make it an rdf graph. Note that the
 graph may still fail to serialize as rdf, due to literals as subjects.</p>
-
-<p></p>
-
-<p></p>
 
 <h2 id="rel0.8">Release 0.8</h2>
 <ul>
@@ -219,13 +211,7 @@ does not try to parse the returned (HTML) file.</p>
 <p>An n3 statement which references the same universal quantifier twice now
 does the right thing.</p>
 
-<p style="text-align: right"><a
-href="../../../../DesignIssues/Notation3.html"><img alt=""
-src="../../../../RDF/icons/n3_small" /></a></p>
-
 <h2>Release 0.7.2</h2>
-
-<p></p>
 
 <p>Ooops - nodeID was misspelled nodeid on RDF/XML output.</p>
 
@@ -250,8 +236,6 @@ should URI-canonicalize, or IRI-canonicalize. (My instinct is that it should
 <p>Cwm does not canonicalize numerical (xsd:double and xsd:integer) values on
 N3 output. It uses python's str(float(s)) and str(int(s)). The effect is to
 reduce some over-precision in the output.</p>
-
-<p></p>
 
 <h2>Release 0.7.1, 2004-03-04</h2>
 
@@ -332,8 +316,6 @@ can't use it for anything else.</p>
 
 <h3>Release 0.7, 2004-02-04</h3>
 
-<p></p>
-
 <p>Release 0.7. 2004-02-04: This is a first numbered release. After much
 discussion we picked 0.7 as the number. Added a CVS tag rel-0-7, so that if
 you have the source through CVS, you up- or down-grade to this by</p>
@@ -371,12 +353,9 @@ work toward a more community-supported platform with time.</p>
       href="http://lists.w3.org/Archives/Public/pub;ic-www-talk/">public-cwm-talk</a></dt>
         <dd>Discussion by users and/or developers of the use and abuse of
           project software.</dd>
-      <dt></dt>
     </dl>
   </li>
 </ol>
-
-<p></p>
 
 <h3>Changes 2003-09</h3>
 <ol>
@@ -466,8 +445,6 @@ here.</p>
     won't reuse in related work.</li>
 </ol>
 
-<p></p>
-
 <p>More changes 2003-08-25</p>
 <ol>
   <li>2003-08 Pretty printing split from llyn.py to pretty.py. Interface may
@@ -482,8 +459,6 @@ here.</p>
 </ol>
 
 <h3>For python cwm developers</h3>
-
-<p></p>
 <ol>
   <li>The store is being separated into components. llyn.py was too big. The
     idea is to be able to support a redland underlying store in the future.
@@ -498,21 +473,14 @@ here.</p>
     of variables have goene into the formula objects. This should make it
     much easir for people tofollow whatis happeningin the code, and removes
     all kinds of special case code.</li>
-  <li></li>
 </ol>
 
 <h2>Getting an old version</h2>
-
-<p></p>
 
 <p>You can get the old version before these 2.0 changes using CVS, by
 checking out with the tag oldLists .</p>
 
 <p><code>cvs update -r oldLists</code></p>
-
-<p></p>
-
-<p></p>
 
 <h3>Features done earlier</h3>
 
@@ -571,18 +539,6 @@ ULTILS WE HAVE DONE</p>
 
 <p>- usesNamespace(x,y) # find transitive closure for validation - awful
 function in reality</p>
-
-<p></p>
-
-<p></p>
-
-<p></p>
-
-<p></p>
-
-<p></p>
-
-<p></p>
 
 <div class="noprint">
 <hr />
