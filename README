@@ -34,8 +34,30 @@ If a test fails: There are three possiblilities:
 		This is highly unlikely.
 
 
-== What's New In this Release (1.0.0) ==
+== What's New In this Release (1.1.0) ==
 For a complete list of changes, look at doc/changes.html
+
+Release 1.1.0
+
+==Performance Improvements
+    * Cwm now uses Python Sets instead of lists to store many things
+    * Speed improvements to some tests are orders of magnitude
+    * Output is not as stable as it once was
+
+==Python 2.3 or later now required
+Used for Sets
+
+==Experimental SPARQL Server support
+Cwm can now run as a SPARQL server. This includes:
+    * A preview cwm --sparqlServer, which runs a server on port 8000
+    * cwm --sparql=, which behaves like --query=
+    * builtins for doing sparql queries from within n3.
+
+==RDF/XML serialization fixes
+A few strange bugs in rdf:xml serialization, many related to the rdf: prefix or xml: prefix, have been fixed
+
+==delta exit statuses
+delta now returns with similar exit statuses as the diff utility for plaintext files. An exit status of 0 means no differences between the from and to graphs were found. An exit status of 1 means some differences were found. An exit status of 2 means differences were not computed for some reason.
 
 Release 1.0.0
 

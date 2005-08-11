@@ -29,8 +29,10 @@ from swap import uripath
 def main():
     diag.print_all_file_names = 1
     import os
-    if os.argv[1] == 'delta':
+    import sys
+    if len(sys.argv) > 1 and sys.argv[1] == 'delta':
         from delta import main
+        sys.argv = sys.argv[:1] + sys.argv[2:]
         main()
     else:
         from cwm import doCommand
