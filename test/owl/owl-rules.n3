@@ -266,8 +266,8 @@ owl:equivalentClass a owl:SymmetricProperty.
 {?S rdf:first ?X} => {?S list:member ?X}.
 {?S rdf:rest ?B. ?B list:member ?X} => {?S list:member ?X}.
 
-{} => {rdf:nil :notItem ?X}.
-{?S rdf:first ?A. ?A owl:differentFrom ?X. ?S rdf:rest ?B. ?B :notItem ?X} => {?S :notItem ?X}.
+#{} => {rdf:nil :notItem ?X}.
+#{?S rdf:first ?A. ?A owl:differentFrom ?X. ?S rdf:rest ?B. ?B :notItem ?X} => {?S :notItem ?X}.
 
 #this won't work either
 #{} => {?X :includes rdf:nil}.
