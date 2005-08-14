@@ -5,7 +5,7 @@ P=python
 C=$(SWAP)/cwm.py
 CG=PYTHONPATH=$(SWAP) python predictiveParser.py
 
-all : n3-checked.txt n3-report.html
+all : n3-checked.txt n3-report.html \
 		n3rdf-report.html \
 		n3rules-report.html \
 		n3ql-report.html
@@ -19,9 +19,11 @@ n3-yacc.c : n3-selectors.n3-yacc.y
 	yacc -o $@ n3-selectors.n3-yacc.y
 
 n3-selectors.n3-yacc.y : n3-selectors.n3
-#n3-checked.txt: n3-selectors.n3
-	$(CG) n3-selectors.n3 \
-		http://www.w3.org/2000/10/swap/grammar/n3#document> $@
+
+n3-checked.txt: n3-selectors.n3
+	$(CG) --grammar=n3-selectors.n3 \
+		--as=http://www.w3.org/2000/10/swap/grammar/n3#document \
+		--parse=n3.n3 && touch $@
 
 n3-selectors.n3 : n3.n3 bnf-rules.n3
 	time $P $C n3.n3 bnf-rules.n3 --think --purge --data > $@
@@ -88,6 +90,8 @@ Q=../../../../2001/sw/DataAccess/rq23
 sparql.n3 : $Q/grammar.yy
 	sed -f yy2n3.sed < $Q/grammar.yy > sparql.n3
 
+sparql-utf16.n3 : sparql.n3 to-utf18.sed
+	sed -f to-utf16.sed < sparql.n3 > sparql-utf16.n3
 
 sparql-checked.txt: sparql-selectors.n3
 	$(CG) --grammar=sparql-selectors.n3 \
