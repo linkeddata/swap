@@ -17,6 +17,12 @@ def abbr(prodURI):
    if prodURI is None: return None
    return prodURI.split('#').pop()
 
+wide_build = (len(u"\U00012345") == 1)
+def smartCompile(pattern, flags=0):
+    if not wide_build:
+        pattern = pattern.replace(u"\U00010000-\U000effff", u"\ud800-\udb7f\udc00-\udfff")
+    return re.compile(pattern, flags)
+
 def importTokens():
     global tokens
     if tokens is None:
@@ -47,8 +53,8 @@ def importTokens():
                 if key in tokens:
                     setattr(Tokens, 't_' + key, val)
                     regexps['t_' + key] = val
-                    setattr(Tokens, 'c_' + key, re.compile(val, re.I))
-                    regexps['c_' + key] = re.compile(val, re.I)
+                    setattr(Tokens, 'c_' + key, smartCompile(val, re.I))
+                    regexps['c_' + key] = smartCompile(val, re.I)
             pklVal = {'tokens': tokens, 'regexps': regexps}
             try:
                 import imp, os.path
