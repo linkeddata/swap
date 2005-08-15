@@ -75,13 +75,19 @@ def mkmodule(result, out):
    print >> out
    print >> out, 'import re'
    print >> out
+   print >> out, 'wide_build = (len(u"\U00012345") == 1)'
+   print >> out, 'def smartCompile(pattern, flags=0):'
+   print >> out, '    if not wide_build:'
+   print >> out, '        pattern = pattern.replace(u"\U00010000-\U000effff", u"\ud800-\udb7f\udc00-\udfff")'
+   print >> out, '    return re.compile(pattern, flags)'
+   print >> out   
    print >> out, 'tokens =', pp.pformat(tokens)
    print >> out, 'regexps = {'
    for (key, regexp) in regexps.iteritems():
         if isinstance(regexp, unicode):
             print >> out, '   %r: %r, ' % (key, regexp)
         else:
-            print >> out, '   %r: re.compile(%r, re.I), ' % (key, regexp.pattern)
+            print >> out, '   %r: smartCompile(%r, re.I), ' % (key, regexp.pattern)
    print >> out, '}'
    print >> out
    print >> out, 'if __name__=="__main__": '
