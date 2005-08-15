@@ -12,6 +12,10 @@
     test:description   "Parse a small RDF file, generate N3";
     test:arguments     """-rdf animal.rdf -n3""".
 
+:t1001a a test:CwmTest;
+    test:referenceOutput <ref/base64.n3>;
+    test:description   "Read a data: uri";
+    test:arguments     """'data:text/rdf+n3;charset=utf-8;base64,QHByZWZpeCBsb2c6IDxodHRwOi8vd3d3LnczLm9yZy8yMDAwLzEwL3N3YXAvbG9nIz4gLgp7fSA9PiB7OmEgOmIgOmN9IC4g'""".
 
 :t1002 a test:CwmTest;
     test:referenceOutput <ref/animal-1.rdf>;
