@@ -1090,6 +1090,7 @@ class SinkParser:
         return j, uch
 
     def UEscape(self, str, i, startline):
+        stringType = type('')
         j = i
         count = 0
         value = '\\U'
@@ -1106,7 +1107,7 @@ class SinkParser:
             value = value + ch
             count = count + 1
             
-        uch = value.decode('unicode-escape')
+        uch = stringType(value).decode('unicode-escape')
         return j, uch
 
 wide_build = True

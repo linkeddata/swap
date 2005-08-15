@@ -14,11 +14,23 @@ Based on:
 import sys, os, re, pprint
 import cPickle as pickle
 
-# From http://infomesh.net/.../rdf.py
-# Based on rdflib
-from rdf import Namespace, Graph, URI, bNode, Literal
+import sys, re
+from rdflib.TripleStore import TripleStore
+from rdflib.Namespace import Namespace
+from rdflib.URIRef import URIRef as URI
+from rdflib.Literal import Literal
+from rdflib.BNode import BNode as bNode
 
-N3G = Namespace('http://www.w3.org/2000/10/swap/grammar/n3#')
+class Graph(TripleStore): 
+   def theObject(self, subj, pred): 
+      objects = tuple(self.objects(subj, pred))
+      if len(objects) == 1: 
+         return objects[0]
+      elif len(objects) == 0: 
+         return None
+      else: raise "Some kind of an error"
+
+SPARQL = Namespace('http://www.w3.org/2000/10/swap/grammar/sparql#')
 BNF = Namespace('http://www.w3.org/2000/10/swap/grammar/bnf#')
 RDF = Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 
@@ -150,7 +162,7 @@ def main(argv=None):
    from optparse import OptionParser
    parser = OptionParser(usage='%prog [options] <output>')
    parser.add_option("-g", "--grammar", dest="grammar", 
-                     default='n3-selectors.rdf', metavar="URI", 
+                     default='sparql-selectors.rdf', metavar="URI", 
                      help="RDF/XML RDF BNF grammar file URI")
    parser.add_option("-s", "--start", dest="start", default=False, 
                      help="start production URI", metavar="URI")
@@ -167,7 +179,7 @@ def main(argv=None):
 
    if options.start: 
       start = URI(options.start)
-   else: start = N3G['document']
+   else: start = SPARQL['Query']
 
    if len(args) > 1: 
       barf("Error: you may only specify one output filename")

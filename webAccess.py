@@ -15,7 +15,7 @@ Web access functionality building on urllib2
 import sys, os
 
 #import urllib
-import urllib2  # Python standard
+import urllib2, urllib  # Python standard
 
 import uripath # http://www.w3.org/2000/10/swap/uripath.py
 import diag
@@ -66,6 +66,8 @@ def urlopenForRDF(addr, referer=None):
         if addr[:5] == 'file:':
             raise SecurityError('Nice try')
     addr = cacheHack(addr) # @@ hack
+    if addr[:5] == 'data:':
+        return urllib.urlopen(addr)
     z = urllib2.Request(addr)
     z.add_header('Accept', 'text/rdf+n3, application/rdf+xml')
     if referer: #consistently misspelt
