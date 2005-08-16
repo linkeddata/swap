@@ -17,8 +17,9 @@ from OrderedSequence import merge, intersection, minus, indentString
 
 import diag
 from diag import chatty_flag, tracking, progress
-from term import BuiltIn, LightBuiltIn, ArgumentNotLiteral, \
-    HeavyBuiltIn, Function, ReverseFunction, MultipleFunction, MultipleReverseFunction, \
+from term import BuiltIn, LightBuiltIn, RDFBuiltIn, ArgumentNotLiteral, \
+    HeavyBuiltIn, Function, ReverseFunction, MultipleFunction, \
+    MultipleReverseFunction, \
     Literal, Symbol, Fragment, FragmentNil,  Term, \
     CompoundTerm, List, EmptyList, NonEmptyList, ErrorFlag
 from formula import StoredStatement, Formula
@@ -58,7 +59,8 @@ def think(knowledgeBase, ruleFormula=None, mode=""):
 	ruleFormula = knowledgeBase
     assert knowledgeBase.canonical == None , "Must be open to add stuff:"+ `knowledgeBase `
 
-    if diag.chatty_flag > 45: progress("think: rules from %s added to %s" %(knowledgeBase, ruleFormula))
+    if diag.chatty_flag > 45: progress("think: rules from %s added to %s" %(
+					knowledgeBase, ruleFormula))
     return InferenceTask(knowledgeBase, ruleFormula, mode=mode, repeat=1).run()
 
 def applyRules(
@@ -106,8 +108,9 @@ class InferenceTask:
 		repeat = 0):		# do it until finished
 	""" Apply rules in one context to the same or another
     
-	A rule here is defined by log:implies, which associates the template (premise, precondidtion,
-	antecedent) to the conclusion (postcondition).
+	A rule here is defined by log:implies, which associates the template
+	(aka premise, precondidtion, antecedent, body) to the conclusion
+	(aka postcondition, head).
 	"""
 	if diag.chatty_flag >20:
 	    progress("New Inference task, rules from %s" % ruleFormula)
@@ -458,8 +461,7 @@ class Rule:
 	return
 
     def once(self):
-    # The smartIn context was the template context but it has been mapped to the workingContext.
-	if diag.chatty_flag >20:
+ 	if diag.chatty_flag >20:
 	    progress("Trying rule %s ===================" % self )
 	    progress( setToString(self.unmatched))
 	task = self.task
@@ -475,7 +477,7 @@ class Rule:
                       ###
 			rule = self.statement,
                       ###
-			smartIn = [task.workingContext],    # (...)
+			interpretBuiltins = 1,    # (...)
 			meta = task.workingContext,
 			mode = task.mode)
     
@@ -503,7 +505,7 @@ class Rule:
 #	    else:
 #		self.__setattr__("leadsToCycle", 1)
     
-def testIncludes(f, g, _variables=Set(),  bindings={}, smartIn=[]):
+def testIncludes(f, g, _variables=Set(),  bindings={}, interpretBuiltins = 0):
     """Return whether or nor f contains a top-level formula equvalent to g.
     Just a test: no bindings returned."""
     if diag.chatty_flag >30: progress("testIncludes ============")
@@ -536,7 +538,7 @@ def testIncludes(f, g, _variables=Set(),  bindings={}, smartIn=[]):
 		unmatched=unmatched,
 		template = g,
 		variables=Set(),
-                smartIn=smartIn,
+                interpretBuiltins = interpretBuiltins,
 		existentials=_variables | templateExistentials,
 		justOne=1, mode="").resolve()
 
@@ -569,7 +571,7 @@ def testIncludes(f, g, _variables=Set(),  bindings={}, smartIn=[]):
 
 
 
-class Query:
+class Query(Formula):
     """A query holds a hypothesis/antecedent/template which is being matched aginst (unified with)
     the knowledge base."""
     def __init__(self,
@@ -584,7 +586,7 @@ class Query:
 	       targetContext = None,
 	       already = None,	    # Dictionary of matches already found
 	       rule = None,		    # The rule statement
-               smartIn = [],        # List of contexts in which to use builtins
+               interpretBuiltins = 0,        # List of contexts in which to use builtins
                justOne = 0,         # Flag: Stop when you find the first one
 	       mode = "",	    # Character flags modifying modus operandi
 	    meta = None):	    # Context to check for useful info eg remote stuff
@@ -594,38 +596,38 @@ class Query:
             progress( "Query: created with %i terms. (justone=%i, wc=%s)" % 
 		    (len(unmatched), justOne, workingContext))
             if diag.chatty_flag > 80: progress( setToString(unmatched))
-	    if diag.chatty_flag > 90: progress(
-		"    Smart in: ", smartIn)
+	    if diag.chatty_flag > 90 and interpretBuiltins: progress(
+		"iBuiltIns=1 ")
 
-        self.queue = []   #  Unmatched with more info
-	self.store = store
+	Formula.__init__(self, store)
+#        self.statements = []   #  Unmatched with more info
+#	self.store = store      # Initialized by Formula
 	self.variables = variables
-	self.existentials = existentials
+	self._existentialVariables = existentials
 	self.workingContext = workingContext
 	self.conclusion = conclusion
 	self.targetContext = targetContext
-	self.smartIn = smartIn
 	self.justOne = justOne
 	self.already = already
 	self.rule = rule
-#	if self.rule == None:
-#            raise RuntimeError
 	self.template = template  # For looking for lists
 	self.meta = meta
 	self.mode = mode
 	self.lastCheckedNumberOfRedirections = 0
         for quad in unmatched:
             item = QueryItem(self, quad)
-            if item.setup(allvars=variables|existentials, unmatched=unmatched, smartIn=smartIn, mode=mode) == 0:
-                if diag.chatty_flag > 80: progress("match: abandoned, no way for "+`item`)
+            if item.setup(allvars=variables|existentials, unmatched=unmatched,
+			interpretBuiltins=interpretBuiltins, mode=mode) == 0:
+                if diag.chatty_flag > 80: progress(
+				    "match: abandoned, no way for "+`item`)
                 self.noWay = 1
 		return  # save time
-            self.queue.append(item)
+            self.statements.append(item)
 	return
 	
     def resolve(self):
 	if hasattr(self, "noWay"): return 0
-        return self.unify(self.queue, self.variables, self.existentials)
+        return self.unify(self.statements, self.variables, self._existentialVariables)
 
     def checkRedirectsInAlready(self):
 	"""Kludge"""
@@ -755,13 +757,15 @@ class Query:
                 variables.remove(pair[0])
                 bindings.update({pair[0]: pair[1]})  # Record for posterity
             else:      # Formulae aren't needed as existentials, unlike lists. hmm.
-#		if diag.tracking: raise RuntimeError(pair[0], pair[1]) #bindings.update({pair[0]: pair[1]})  # Record for proof only
+#		if diag.tracking: raise RuntimeError(pair[0], pair[1])
+		#bindings.update({pair[0]: pair[1]})  # Record for proof only
 		if pair[0] not in existentials:
                     if isinstance(pair[0], List):
                         del newBindings[pair[0]]
                         reallyNewBindingsList = pair[0].unify(
                                     pair[1], variables, existentials, bindings)
-                        if not reallyNewBindingsList or not hasattr(reallyNewBindingsList, '__iter__'):
+                        if not reallyNewBindingsList or not hasattr(
+					reallyNewBindingsList, '__iter__'):
                             return 0
                         try:
                             reallyNewBindings = reallyNewBindingsList[0][0]
@@ -847,7 +851,7 @@ class Query:
                         for quad in more_unmatched:
                             newItem = QueryItem(query, quad)
                             queue.append(newItem)
-                            newItem.setup(allvars, smartIn = query.smartIn, # + [subj], @@ this was running builtins!
+                            newItem.setup(allvars, interpretBuiltins = 0,
                                     unmatched=more_unmatched, mode=query.mode)
                         if diag.chatty_flag > 40:
                                 progress("**** Includes: Adding %i new terms and %s as new existentials."%
@@ -874,66 +878,7 @@ class Query:
                 ## Looks better than anything else
                 ## let's see if this works
                 notIncludesStuff = []
-##                if pred is query.store.notIncludes:
-##                    notIncludesStuff.append(item)
-##                for i in queue[:]:
-##                    if i.quad[1] is query.store.notIncludes:
-##                        notIncludesStuff.append(i)
-##                        queue.remove(i)
-##                if queue:
-##                    queue.extend(notIncludesStuff)
-##                    notIncludesStuff = []
-##                elif notIncludesStuff:
-##                    all_unmatched = []
-##                    for con, pred, subj, obj in [s.quad for s in notIncludesStuff]:
-##                        #I have stuff to do
-##                        more_unmatched = obj.statements[:]
-##                        more_variables = obj.variables().copy()
-##
-##                        if obj.universals() != Set():
-##                            raise RuntimeError("""Cannot query for universally quantified things.
-##            As of 2003/07/28 forAll x ...x cannot be on object of log:includes.
-##            This/these were: %s\n""" % obj.universals())
-##
-##
-##                        _substitute({obj: subj}, more_unmatched)
-##                        _substitute(bindings, more_unmatched)
-##                        existentials = existentials | more_variables
-##                        allvars = variables | existentials
-##                        if Query(query.store,
-##                                 unmatched=more_unmatched,
-##                                 template=subj,
-##                                 variables=variables,
-##                                 existentials=allvars,
-##                                 justOne=1, mode=query.mode).resolve():
-##                            return 0
-##                    for item in notIncludesStuff:
-##                        item.state = S_SATISFIED
-##                    nbs = []
-##########  The following code ties together the results of the log:notincludes. This is wrong for what I need.
-##                        for quad in more_unmatched:
-##                            newItem = QueryItem(query, quad)
-##                            all_unmatched.append(newItem)
-##                            newItem.setup(allvars, smartIn = query.smartIn + [subj],
-##                                    unmatched=more_unmatched, mode=query.mode)
-##                    if diag.chatty_flag > 50 :
-##                        progress('we are about to start a notIncludes query on:',  all_unmatched)
-##                    q = Query(query.store,
-##                                unmatched=[],
-##                                template = subj,
-##                                variables=variables,
-##                                existentials=variables | existentials,
-##                                justOne=1, mode=query.mode)
-##                    q.queue = all_unmatched
-##                    success = q.resolve()
-##                    for item in notIncludesStuff:
-##                        item.state = S_SATISFIED
-##                    if success:
-##                        return 0
-##                    else:
-##                        nbs = []
                         
-#                    raise RuntimeError(notIncludesStuff)
                 if not notIncludesStuff:
                     if diag.chatty_flag > 49 :
                         progress("@@@@ Warning: query can't find term which will work.")
@@ -978,49 +923,62 @@ class Query:
 
     def remoteQuery(query, items):
 	"""Perform remote query as client on remote store
-	Currently  this only goes to an SQL store, but should later use RDFQL/DAMLQL etc
+	Currently  this only goes to an SQL store, but should later use SPARQL etc
 	in remote HTTP/SOAP call."""
 	
-        import dbork.SqlDB
-        from dbork.SqlDB import ResultSet, SqlDBAlgae, ShowStatement
+	if diag.chatty_flag > 90:
+	    progress("    Remote service %s" % (items))
+	serviceURI = items[0].service.uri
+	if serviceURI.startswith("http:"):
+	    from sparql.sparqlClient import SparqlQuery
+	    return SparqlQuery(query, items, serviceURI)
+	elif not serviceURI.startswith("mysql:"):
+	    raise ValueError("Unknown URI scheme for remote query service: %s" % serviceURI)
+	    
+	import dbork.SqlDB
+	from dbork.SqlDB import ResultSet, SqlDBAlgae, ShowStatement
 
-        # SqlDB stores results in a ResultSet.
-        rs = ResultSet()
-        # QueryPiece qp stores query tree.
-        qp = rs.buildQuerySetsFromCwm(items, query.variables, query.existentials)
-        # Extract access info from the first item.
+	# SqlDB stores results in a ResultSet.
+	rs = ResultSet()
+	# QueryPiece qp stores query tree.
+	qp = rs.buildQuerySetsFromCwm(items, query.variables, query._existentialVariables)
+	# Extract access info from the first item.
 	if diag.chatty_flag > 90:
 	    progress("    Remote service %s" %items[0].service.uri)
-        (user, password, host, database) = re.match("^mysql://(?:([^@:]+)(?::([^@]+))?)@?([^/]+)/([^/]+)/$",
-                                                    items[0].service.uri).groups()
-        # Look for one of a set of pre-compiled rdb schemas.
-        HostDB2SchemeMapping = { "mysql://root@localhost/w3c" : "AclSqlObjects" }
-        if (HostDB2SchemeMapping.has_key(items[0].service.uri)):
-            cachedSchema = HostDB2SchemeMapping.get(items[0].service.uri)
-        else:
-            cachedSchema = None
-        # The SqlDBAlgae object knows how to compile SQL query from query tree qp.
-        a = SqlDBAlgae(query.store.symbol(items[0].service.uri), cachedSchema, user, password, host, database, query.meta, query.store.pointsAt, query.store)
-        # Execute the query.
-        messages = []
-        nextResults, nextStatements = a._processRow([], [], qp, rs, messages, {})
-        # rs.results = nextResults # Store results as initial state for next use of rs.
-        if diag.chatty_flag > 90: progress(string.join(messages, "\n"))
-        if diag.chatty_flag > 90: progress("query matrix \"\"\""+rs.toString({'dataFilter' : None})+"\"\"\" .\n")
+	(user, password, host, database) = re.match(
+		"^mysql://(?:([^@:]+)(?::([^@]+))?)@?([^/]+)/([^/]+)/$",
+		items[0].service.uri).groups()
+	# Look for one of a set of pre-compiled rdb schemas.
+	HostDB2SchemeMapping = { "mysql://root@localhost/w3c" : "AclSqlObjects" }
+	if (HostDB2SchemeMapping.has_key(items[0].service.uri)):
+	    cachedSchema = HostDB2SchemeMapping.get(items[0].service.uri)
+	else:
+	    cachedSchema = None
+	# The SqlDBAlgae object knows how to compile SQL query from query tree qp.
+	a = SqlDBAlgae(query.store.symbol(items[0].service.uri), cachedSchema,
+	    user, password, host, database, query.meta, query.store.pointsAt,
+	    query.store)
+	# Execute the query.
+	messages = []
+	nextResults, nextStatements = a._processRow([], [], qp, rs, messages, {})
+	# rs.results = nextResults # Store results as initial state for next use of rs.
+	if diag.chatty_flag > 90: progress(string.join(messages, "\n"))
+	if diag.chatty_flag > 90: progress("query matrix \"\"\""+
+			rs.toString({'dataFilter' : None})+"\"\"\" .\n")
 
 	nbs = []
 	reason = Because("Remote query") # could be messages[0] which is the query
-        # Transform nextResults to format cwm expects.
-        for resultsRow in nextResults:
-            boundRow = {}
-            for i in range(len(query.variables)):
-                v = query.variables[i]
-                index = rs.getVarIndex(v)
-                interned = resultsRow[index]
-                boundRow[v] = interned  # bindings
-            nbs.append((boundRow, reason))
+	# Transform nextResults to format cwm expects.
+	for resultsRow in nextResults:
+	    boundRow = {}
+	    for i in range(len(query.variables)):
+		v = query.variables[i]
+		index = rs.getVarIndex(v)
+		interned = resultsRow[index]
+		boundRow[v] = interned  # bindings
+	    nbs.append((boundRow, reason))
 
-        if diag.chatty_flag > 10: progress("====> bindings from remote query:"+`nbs`)
+	if diag.chatty_flag > 10: progress("====> bindings from remote query:"+`nbs`)
 	return nbs   # No bindings for testing
 
 	     
@@ -1056,7 +1014,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 
 
 
-    def setup(self, allvars, unmatched, smartIn=[], mode=""):        
+    def setup(self, allvars, unmatched, interpretBuiltins=[], mode=""):        
         """Check how many variables in this term,
         and how long it would take to search
 
@@ -1121,7 +1079,8 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 	self.short, self.myIndex = con.searchable(self.searchPattern[SUBJ],
                                            self.searchPattern[PRED],
                                            self.searchPattern[OBJ])
-        if con in smartIn and isinstance(pred, LightBuiltIn):
+        if isinstance(pred, RDFBuiltIn) or (
+	    interpretBuiltins and isinstance(pred, LightBuiltIn)):
             if self.canRun(): self.state = S_LIGHT_UNS_GO  # Can't do it here
             else: self.state = S_LIGHT_EARLY # Light built-in, can't run yet, not searched
         elif self.short == 0:  # Skip search if no possibilities!
@@ -1162,9 +1121,12 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
     #			    return [([], rea)]  # Involves extra recursion just to track reason
                             return []   # No new bindings but success in logical operator
                         else: return 0   # We absoluteley know this won't match with this in it
-                    except caughtErrors:
-                        progress("You got a ``" + sys.exc_info()[0].__name__ + ':' + str(sys.exc_info()[1]) + "'' on " + `pred.value()` + 'builtin with ' + `subj.value()` + ', ' + `obj.value()`)
-                        if "q" not in self.query.mode:
+
+                    except (TypeError, ValueError, AttributeError, AssertionError):
+                        progress("You got a ``" + sys.exc_info()[0].__name__ +
+			    ':' + str(sys.exc_info()[1]) + "'' on " + 
+			    `subj.value()` + ', ' + `obj.value()`)
+                        if "h" in self.query.mode:
                             raise
                         return 0
                     except ArgumentNotLiteral:
@@ -1174,10 +1136,14 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			if diag.chatty_flag > 97: progress("Builtin function call %s(%s)"%(pred, subj))
 			try:
                             result = pred.evalObj(subj, queue, bindings.copy(), proof, self.query)
-                        except caughtErrors:
-                            errVal = "``" + sys.exc_info()[0].__name__ + ':' + str(sys.exc_info()[1]) + "'' on " + `pred.value()` + 'builtin with ' + `subj.value()`
+
+                        except (TypeError, ValueError, AttributeError, AssertionError):
+                            errVal = ("``" + sys.exc_info()[0].__name__ 
+				+ ':' + str(sys.exc_info()[1]) + "'' on " 
+				+ `pred.value()` + 'builtin with '
+				+ `subj.value()`)
                             progress("You got a " + errVal)
-                            if "q" not in self.query.mode:
+                            if "h" in self.query.mode:
                                 raise
                             if isinstance(pred, MultipleFunction):
                                 result = [ErrorFlag(errVal)]
@@ -1201,10 +1167,12 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			if diag.chatty_flag > 97: progress("Builtin Rev function call %s(%s)"%(pred, obj))
                         try:
                             result = pred.evalSubj(obj, queue, bindings.copy(), proof, self.query)
-                        except caughtErrors:
-                            errVal = "``" + sys.exc_info()[0].__name__ + ':' + str(sys.exc_info()[1]) + "'' on " + `pred.value()` + 'builtin with ' + `subj.value()`
-                            progress("You got a " + errVal)
-                            if "q" not in self.query.mode:
+
+                        except (TypeError, ValueError, AttributeError, AssertionError):
+                            errVal = ("You got a ``" + sys.exc_info()[0].__name__ + 
+			        ':' + str(sys.exc_info()[1]) + "'' on " + `subj.value()`)
+			    progress(errVal)
+                            if "h" in self.query.mode:
                                 raise
                             if isinstance(pred, MultipleReverseFunction):
                                 result = [ErrorFlag(errVal)]
@@ -1271,7 +1239,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			    nb1 = {x: s.quad[p]}
 			else:  # Deep case
 			    nbs1 = x.unify(s.quad[p], self.query.variables,
-				self.query.existentials, {})  # Bindings have all been bound
+				self.query._existentialVariables, {})  # Bindings have all been bound
 			    if diag.chatty_flag > 70:
 				progress( "Searching deep %s result binding %s" %(self, nbs1))
 			    if nbs1 == 0:
@@ -1369,7 +1337,8 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                         self.short = INFINITY  # Forget it
                         break
             else:
-		self.short, self.myIndex = con.searchable(self.searchPattern[SUBJ],
+		self.short, self.myIndex = con.searchable(
+					    self.searchPattern[SUBJ],
                                            self.searchPattern[PRED],
                                            self.searchPattern[OBJ])
             if self.short == 0:
@@ -1389,24 +1358,23 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 
     def __repr__(self):
         """Diagnostic string only"""
-        return "%3i) short=%i, %s" % (
+        s = "%3i) short=%i, %s" % (
                 self.state, self.short,
                 quadToString(self.quad, self.neededToRun, self.searchPattern))
+	if self.service: s += (", servce=%s " % self.service)
+	return s
 
 
 ##############
 # Compare two cyclic subsystem sto see which should be done first
 
 def compareCyclics(self,other):
-    """Note the set indirectly affected is the same for any member of a cyclic subsystem"""
-#    progress("Comparing %s to %s" % (self[0], other[0]))
+    """Note the set indirectly affected is the same for any
+    member of a cyclic subsystem"""
     if other[0] in self[0].indirectlyAffects:
-#	progress("less, do earlier")
 	return -1  # Do me earlier
     if other[0] in self[0].indirectlyAffectedBy:
-#	progress("more, do me later")
 	return 1
-#    progress("same")
     return 0
 	
 
@@ -1458,7 +1426,7 @@ def quadToString(q, neededToRun=[[],[],[],[]], pattern=[1,1,1,1]):
     for p in ALL4:
         n = neededToRun[p]
         if n == []: qm[p]=""
-        else: qm[p] = "(" + `n`[1:-1] + ")"
+        else: qm[p] = "(" + `n`[5:-2] + ")"  # Set([...]) ->  (...)
         if pattern[p]==None: qm[p]=qm[p]+"?"
     return "%s%s ::  %8s%s %8s%s %8s%s." %(`q[CONTEXT]`, qm[CONTEXT],
                                             `q[SUBJ]`,qm[SUBJ],
@@ -1485,7 +1453,7 @@ def bindingsToString(bindings):
 
 class BuiltInFailed(Exception):
     def __init__(self, info, item, pred):
-        progress("@@@@@@@@@ BUILTIN %s FAILED" % pred, `info`)
+        progress("BuiltIn %s FAILED" % pred, `info`)
         self._item = item
         self._info = info
 	self._pred = pred

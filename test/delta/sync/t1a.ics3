@@ -12,10 +12,8 @@
     <http://www.w3.org/uid/009608A4-6FFB-11D9-B3B2-000A9580D8C0>     a :Vevent;
          :dtend  [
              zone:tz "2005-01-23T16:00:00" ];
-         :dtstamp "2005-01-27T00:33:53Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
          :dtstart  [
              zone:tz "2005-01-23T15:00:00" ];
-         :sequence "1";
          :summary "Meet everyone in the group";
          :uid "009608A4-6FFB-11D9-B3B2-000A9580D8C0" .
       [      a :Vcalendar;

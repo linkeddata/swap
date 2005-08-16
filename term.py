@@ -989,6 +989,14 @@ class LightBuiltIn(GenericBuiltIn):
     run it.  Going out onto the web or net counts as heavy."""
     pass
 
+class RDFBuiltIn(LightBuiltIn):
+    """An RDF built-in is a light built-in which is inherent in the RDF model.
+    
+    The only examples are (I think) rdf:first and rdf:rest which in the RDF model
+    are arcs but in cwm have to be builtins as Lists a a first class data type.
+."""
+    pass
+
 class HeavyBuiltIn(GenericBuiltIn):
     """A heavy built-in is fast and is calculated late, after searching the store
     to see if the answer is already in it.

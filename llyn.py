@@ -155,9 +155,9 @@ class IndexedFormula(Formula):
     """
     def __init__(self, store, uri=None):
         Formula.__init__(self, store, uri)
+#	self._redirections = {}
         self.descendents = None   # Placeholder for list of closure under subcontext
 	self.collector = None # Object collecting evidence, if any 
-	self._redirections = {}
 	self._newRedirections = {}  # not subsituted yet
 	self._index = {}
 	self._index[(None,None,None)] = self.statements
@@ -831,14 +831,14 @@ class BI_notIncludes(HeavyBuiltIn):
     def eval(self, subj, obj, queue, bindings, proof, query):
         store = subj.store
         if isinstance(subj, Formula) and isinstance(obj, Formula):
-            return not testIncludes(subj, obj,  bindings=bindings, smartIn=[]) # No (relevant) variables
+            return not testIncludes(subj, obj,  bindings=bindings, interpretBuiltins=0) # No (relevant) variables
         return 0   # Can't say it *doesn't* include it if it ain't a formula
 
 class BI_notIncludesWithBuiltins(HeavyBuiltIn):
     def eval(self, subj, obj, queue, bindings, proof, query):
         store = subj.store
         if isinstance(subj, Formula) and isinstance(obj, Formula):
-            return not testIncludes(subj, obj,  bindings=bindings, smartIn=[subj]) # No (relevant) variables
+            return not testIncludes(subj, obj,  bindings=bindings, interpretBuiltins=1) # No (relevant) variables
         return 0   # Can't say it *doesn't* include it if it ain't a formula
 
 

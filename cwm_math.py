@@ -201,8 +201,12 @@ class BI_equalTo(LightBuiltIn):
 
 class BI_notEqualTo(LightBuiltIn):
     def evaluate(self, subject, object):
-        return (float(subject) != float(object))
-
+	try:
+	    return (float(subject) != float(object))
+	except  (ValueError, AttributeError):
+	    return None # AttributeError: Symbol instance has no attribute '__float__'
+	# or: ValueError: invalid literal for float(): PT1H
+	    
 # memberCount - this is a proper forward function
 
 class BI_memberCount(LightBuiltIn, Function):

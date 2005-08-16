@@ -138,7 +138,7 @@ class UpdateQuery(Query):
 		raise RuntimeError(
 		    """Error: %i matches removing statement {%s %s %s} 
 		    bound as {%s %s %s} from %s""" %
-			(len(ss),s,p,o, subj.uriref(), pred.uriref(), obj.uriref(), self.workingContext))
+			(len(ss),s,p,o, `subj`, pred.uriref(), `obj`, self.workingContext))
 	    if diag.chatty_flag > 25: progress("Deleting %s" % ss[0])
 	    self.workingContext.removeStatement(ss[0])
 	self.justOne = 1  # drop out of here when done

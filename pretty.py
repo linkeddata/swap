@@ -45,7 +45,7 @@ class Serializer:
     """
     def __init__(self, F, sink, flags="", sorting=0):
 	self.context = F
-	assert F.canonical is not None, "Formula to be printed must be canonical"
+#	assert F.canonical is not None, "Formula to be printed must be canonical"
 	self.store = F.store
 	self.sink = sink
 	self.defaultNamespace = None
@@ -507,7 +507,7 @@ class Serializer:
         """
 
 	context = self.context
-        assert context.canonical is not None
+#        assert context.canonical is not None
 	self._scan(context)
         self.sink.startDoc()
         self.selectDefaultPrefix(Serializer.dumpNested)        

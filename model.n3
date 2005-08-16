@@ -7,6 +7,8 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix : <#> .
 
+@forAll :s, :p, :x, :y, :z .
+
 n3:Statement    a rdf:Class .
 n3:StatementSet a rdf:Class .
 
@@ -23,7 +25,6 @@ n3:context      a rdf:Property; rdfs:domain n3:statement;
 
 ########### Rules
 
-<> forall :s, :p, :x, :y, :z .
 { :x :p :y . } log:means { [
                 n3:subject :x;
                 n3:predicate :p;

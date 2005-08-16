@@ -236,10 +236,10 @@ def main():
 	    refFile = "ref/%s" % case
 	else:
 	    refFile = refTo(base(), ref.uriref())
-	    hash = u.rfind("#")
-	    slash = u.rfind("/")
-	    assert hash >0 and slash > 0
-	    case = u[slash+1:hash] + "_" + u[hash+1:] + ".out" # Make up temp filename
+	    case  = ""
+	    for ch in refFile:
+		if ch in "/#": case += "_"
+		else: case += ch  # Make up test-unique temp filename
 	description = str(kb.the(t, test.description))
 	arguments = str(kb.the(t, test.arguments))
 	environment = kb.the(t, test.environment)

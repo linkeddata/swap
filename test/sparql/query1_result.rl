@@ -22,7 +22,7 @@
                 <literal datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral">&#60;p xmlns="http://www.w3.org/1999/xhtml"&#62;My name is &#60;em&#62;Alice&#60;/em&#62;&#60;/p&#62;</literal>
             </binding>
             <binding name="friend">
-                <bnode>http://example.com/swap/test/run#_g64</bnode>
+                <bnode>http://example.com/swap/test/run#_g65</bnode>
             </binding>
             <binding name="hpage">
                 <uri>http://work.example.org/alice/</uri>
@@ -34,7 +34,7 @@
                 <literal>Alice</literal>
             </binding>
             <binding name="x">
-                <bnode>http://example.com/swap/test/run#_g63</bnode>
+                <bnode>http://example.com/swap/test/run#_g64</bnode>
             </binding>
         </result>
         <result>
@@ -45,7 +45,7 @@
                 <unbound/>
             </binding>
             <binding name="friend">
-                <bnode>http://example.com/swap/test/run#_g63</bnode>
+                <bnode>http://example.com/swap/test/run#_g64</bnode>
             </binding>
             <binding name="hpage">
                 <uri>http://work.example.org/bob/</uri>
@@ -57,7 +57,7 @@
                 <literal xml:lang="en">Bob</literal>
             </binding>
             <binding name="x">
-                <bnode>http://example.com/swap/test/run#_g64</bnode>
+                <bnode>http://example.com/swap/test/run#_g65</bnode>
             </binding>
         </result>
     </results>

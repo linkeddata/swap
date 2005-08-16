@@ -7,3 +7,6 @@ and ../../delta.py and ../../cant.py
 
 and aslo see tests in ../cant
 
+
+Also see:   ../../sync.py
+

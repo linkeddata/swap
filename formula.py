@@ -100,7 +100,8 @@ class Formula(AnonymousNode, CompoundTerm):
 	self._existentialVariables = Set()
 	self._universalVariables = Set()
 	self.stayOpen = 0   # If set, works as a knowledegbase, never canonicalized.
-
+	self._redirections = {}  # Used for equalities
+	
     def __repr__(self):
 	if self.statements == []:
 	    return "{}"

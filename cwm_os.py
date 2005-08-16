@@ -68,7 +68,7 @@ class BI_baseRelative(LightBuiltIn, Function, ReverseFunction):
 class BI_argv(LightBuiltIn, Function):
     def evaluateObject(self,  subj_py):
         if verbosity() > 80: progress("os:argv input:"+`subj_py`)
-        if isString(subj_py) and self.store.argv:  # Not None or []
+        if  self.store.argv:  # Not None or []. was also: isString(subj_py) and
             try:
                 argnum = int(subj_py) -1
             except ValueError:
