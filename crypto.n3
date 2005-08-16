@@ -105,10 +105,10 @@ cr:PublicKeyObject a s:Class;
     The object can hold a private and optionally a private key.""".
 
 cr:CanEncrypt s:isSubClassOf cr:PublicKeyObject;
-    s:comment """PublicKeyObjects which are cabable of encrypting things""".
+    s:comment """PublicKeyObjects which are capable of encrypting things""".
 
 cr:CanSign s:isSubClassOf cr:PublicKeyObject;
-    s:comment """PublicKeyObjects which are cabable of signing things.
+    s:comment """PublicKeyObjects which are capable of signing things.
 True if the algorithm is capable of signing data; returns false otherwise.
 To test if a given key object can sign data, use CanSign and HasPrivate. """.
 
