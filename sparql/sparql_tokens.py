@@ -339,7 +339,9 @@ class Lexer(object):
                         length = r.end() + extra
                         
         if not retVal and offset<len(string):
-            raise RuntimeError(string[offset:])
+            raise SyntaxError("found %s when expecting one of %s" %
+                              (string[offset:],
+                               [ str(t).split("#",1)[1] for t in tokens]))
         return retVal
 
 def runLexer():
