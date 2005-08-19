@@ -8,36 +8,35 @@
 <p class='ns'>@prefix crypto: &lt;http://www.w3.org/2000/10/swap/crypto#&gt;.</p>
 <table>  <tr><td class='ln'>CanEncrypt</td><td class='comment'>PublicKeyObjects which are capable of encrypting things</td></tr>
   <tr><td class='ln'>CanSign</td><td class='comment'>PublicKeyObjects which are capable of signing things.
-True if the algorithm is capable of signing data; returns false otherwise.
-To test if a given key object can sign data, use CanSign and HasPrivate. </td></tr>
+True if the algorithm is capable of signing data; false otherwise. To
+test if a given key object can sign data, use CanSign and HasPrivate.</td></tr>
   <tr><td class='ln'>HasPrivate</td><td class='comment'>
 Some keys have private parts, some don't.  This is the class of those which do.
 </td></tr>
   <tr><td class='ln'>HashFunction</td><td class='comment'>
-The crypographic hash functions are (being functions) unique and 
-(the whole point of being hash functions) are, when secure, assumed
-unambiguous. That is, you have the right hash you ahve the right document.
-Currently (2001/9)only SHA is given that property.
+The crypographic hash functions are (being functions) unique and are,
+when secure, assumed unambiguous (the whole point of being hash
+functions). That is, when you have the right hash, you have the right
+document. Currently (2001/9) only SHA is given that property.
 </td></tr>
   <tr><td class='ln'>PublicKeyObject</td><td class='comment'>An object corresponding to a key for some algorithm.
-    The object can hold a private and optionally a private key.</td></tr>
+The object can hold a public and optionally a private key.</td></tr>
   <tr><td class='ln'>md5</td><td class='comment'>The object is a MD5 hash of the subject.</td></tr>
   <tr><td class='ln'>publicKey</td><td class='comment'>The object is a public key object that doesn't
     contain the private key data in the subject.
     This function extracts the public part.</td></tr>
   <tr><td class='ln'>sha</td><td class='comment'>The object is a SHA-1 hash of the subject.</td></tr>
-  <tr><td class='ln'>sign</td><td class='comment'>The subject should be a list of two things,
-a hash string and a key (containing private and public parts).
-The obejcts is calculated as a signature string by signing
-the has with the key's private part.</td></tr>
-  <tr><td class='ln'>verify</td><td class='comment'>If the subject is a key object containing
-private and public parts and the obejct is a list of
-a hash and a signature, then this is true iff the signaure is
-a valid signatre of the hash with the key.</td></tr>
-  <tr><td class='ln'>verifyBoolean</td><td class='comment'>If the subject is a list
-containg the keypair, a hash and a signature
-then the object is either "1" if the signature validates
-or "0" is it does not.</td></tr>
+  <tr><td class='ln'>sign</td><td class='comment'>The subject should be a list of two things, a hash
+string and a key (containing private and public parts). The object is
+calculated as a signature string by signing the hash with the key's
+private part.</td></tr>
+  <tr><td class='ln'>verify</td><td class='comment'>If the subject is a key object containing private and
+public parts and the obejct is a list of a hash and a signature, then
+this is true if and only if the signature is a valid signature of the
+hash with the key.</td></tr>
+  <tr><td class='ln'>verifyBoolean</td><td class='comment'>If the subject is a list containg a keypair, a hash,
+and a signature, then the object is either "1" if the signature
+validates or "0" if it does not.</td></tr>
 </table><h2> list</h2>
 <p class='ns'>@prefix list: &lt;http://www.w3.org/2000/10/swap/list#&gt;.</p>
 <table>  <tr><td class='ln'>in</td><td class='comment'>

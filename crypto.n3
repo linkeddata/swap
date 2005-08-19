@@ -29,10 +29,10 @@
 cr:HashFunction a s:Class;
     s:label "Any crypographic hash function";
     s:comment """
-The crypographic hash functions are (being functions) unique and 
-(the whole point of being hash functions) are, when secure, assumed
-unambiguous. That is, you have the right hash you ahve the right document.
-Currently (2001/9)only SHA is given that property.
+The crypographic hash functions are (being functions) unique and are,
+when secure, assumed unambiguous (the whole point of being hash
+functions). That is, when you have the right hash, you have the right
+document. Currently (2001/9) only SHA is given that property.
 """.
 
 #cr:HAVAL128 a rdf:Property; s:label "HAVAL hash (128 bit)";
@@ -102,15 +102,15 @@ cr:sha a rdf:Property; s:label "SHA hash";
 
 cr:PublicKeyObject a s:Class;
     s:comment """An object corresponding to a key for some algorithm.
-    The object can hold a private and optionally a private key.""".
+The object can hold a public and optionally a private key.""".
 
 cr:CanEncrypt s:isSubClassOf cr:PublicKeyObject;
     s:comment """PublicKeyObjects which are capable of encrypting things""".
 
 cr:CanSign s:isSubClassOf cr:PublicKeyObject;
     s:comment """PublicKeyObjects which are capable of signing things.
-True if the algorithm is capable of signing data; returns false otherwise.
-To test if a given key object can sign data, use CanSign and HasPrivate. """.
+True if the algorithm is capable of signing data; false otherwise. To
+test if a given key object can sign data, use CanSign and HasPrivate.""".
 
 cr:HasPrivate s:isSubClassOf cr:PublicKeyObject;
     s:comment"""
@@ -153,22 +153,21 @@ cr:publicKey a s:Property;
 
 cr:sign a rdf:Property;
     s:label "sign";
-    s:comment """The subject should be a list of two things,
-a hash string and a key (containing private and public parts).
-The obejcts is calculated as a signature string by signing
-the has with the key's private part.""".
+    s:comment """The subject should be a list of two things, a hash
+string and a key (containing private and public parts). The object is
+calculated as a signature string by signing the hash with the key's
+private part.""".
 
 cr:verify a rdf:Property;
-    s:comment """If the subject is a key object containing
-private and public parts and the obejct is a list of
-a hash and a signature, then this is true iff the signaure is
-a valid signatre of the hash with the key.""".
+    s:comment """If the subject is a key object containing private and
+public parts and the obejct is a list of a hash and a signature, then
+this is true if and only if the signature is a valid signature of the
+hash with the key.""".
 
 cr:verifyBoolean a rdf:Property;
-    s:comment """If the subject is a list
-containg the keypair, a hash and a signature
-then the object is either "1" if the signature validates
-or "0" is it does not.""".
+    s:comment """If the subject is a list containg a keypair, a hash,
+and a signature, then the object is either "1" if the signature
+validates or "0" if it does not.""".
 
 ####### Metaproperties
 #
