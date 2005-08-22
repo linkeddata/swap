@@ -8,14 +8,18 @@ to check.
 """
 # check that proof
 
-from myStore import load, Namespace
-from RDFSink import CONTEXT, PRED, SUBJ, OBJ
-from llyn import Formula #@@ dependency should not be be necessary
-from diag import verbosity, setVerbosity, progress
-from sys import argv, exit
-import sys
+from swap.myStore import load, Namespace
+from swap.RDFSink import CONTEXT, PRED, SUBJ, OBJ
+from swap.term import List
+from swap.llyn import Formula #@@ dependency should not be be necessary
+from swap.diag import verbosity, setVerbosity, progress
+from swap.query import testIncludes
 
-import llyn # Chosen engine registers itself
+# Standard python
+import sys, getopt
+from sys import argv, exit
+
+import swap.llyn # Chosen engine registers itself
 
 reason = Namespace("http://www.w3.org/2000/10/swap/reason#")
 log = Namespace("http://www.w3.org/2000/10/swap/log#")
@@ -23,9 +27,11 @@ rdf=Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
 rei = Namespace("http://www.w3.org/2004/06/rei#")
 
 chatty = 0
+debugLevelForInference = 0
+debugLevelForParsing = 0
 
 def fail(str, level=0):
-    if chatty > 10:
+    if chatty > 0:
 	progress(" "*(level*4), "Proof failed: ", str)
     return None
 
@@ -35,16 +41,18 @@ def fyi(str, level=0):
     return None
 
 def bind(x, bindings):
-    for var, val in bindings:
-	if x is var: return val
-    return x
+    return x.substitution(bindings)
+#    for var, val in bindings:     #  DUH
+#	if x is var: return val
+#    return x
     
 def parse(resourceURI):
     global parsed
     f = parsed.get(resourceURI, None)
     if f == None:
-#	setVerbosity(90) #@@
+	setVerbosity(debugLevelForParsing)
 	f = load(resourceURI)
+	setVerbosity(0)
 	parsed[resourceURI] = f
     return f
 
@@ -55,12 +63,14 @@ def statementFromFormula(f):
     return f.statements[0]
 
 def valid(proof, r, level=0):
-    """Check whether this reason is valid. Returns the formula proved or None is not"""
+    """Check whether this reason is valid. Returns the formula proved or None if not"""
     f = proof.any(r,reason.gives)
     if f != None:
 	assert isinstance(f, Formula), "%s gives: %s which should be Formula" % (`r`, f)
-	s = statementFromFormula(f)
-	if s != None:
+	if len(f) == 1:
+#	s = statementFromFormula(f)
+#	if s != None:
+	    s = f.statements[0]
 	    fs = " proof of {%s %s %s}" % (s.subject(), s.predicate(), s.object())
 	else:
 	    fs = " proof of %s" % f
@@ -89,19 +99,19 @@ def valid(proof, r, level=0):
 	if f != None:  # Additional intermediate check not essential
 	    for sf in f.statements:
 		for sg in g.statements:
-		    bindings = [(f, g)]
+		    bindings = {f: g}
 		    if (bind(sf[PRED], bindings) is sg[PRED] and
 			bind(sf[SUBJ], bindings) is sg[SUBJ] and
 			bind(sf[OBJ],  bindings) is sg[OBJ]):
 			break
 		else:
-		    progress("@@@"+`g.statements`)
+		    progress("Statements parsed from %s:\n%s" %(u, `g.statements`))
 		    return fail("Can't verify that <%s> says %s" %(u, sf), level=level)
 	return g
 
     elif t is reason.Inference:
 	evidence = proof.each(subj=r, pred=reason.evidence)
-	bindings = []
+	bindings = {}
 	for b in proof.each(subj=r, pred=reason.binding):
 	    var_rei  = proof.the(subj=b, pred=reason.variable)  # de-reify  symbool
 	    var_uri   = proof.the(subj=var_rei, pred=rei.uri)
@@ -116,7 +126,7 @@ def valid(proof, r, level=0):
 		    val = proof.newLiteral(val_value.string, val_value.datatype, val_value.lang)
 		else:
 		    raise RuntimeError("Can't de-reify %s" % val_rei)
-	    bindings.append((var, val))
+	    bindings[var] = val
 
 	rule = proof.any(subj=r, pred=reason.rule)
 	if not valid(proof, rule, level):
@@ -139,11 +149,25 @@ def valid(proof, r, level=0):
 	    obj  = bind(obj, bindings) 
 	    for x in evidenceStatements:
 		for t in x.statements:
-		    if t[SUBJ] == subj and t[PRED]==pred and t[OBJ]==obj:
+		    if t[SUBJ] is subj and t[PRED] is pred and t[OBJ] is obj:
 			break
 		else: continue
 		break
 	    else:
+		for p, part in (subj, "subject"), (obj, "object"):
+		    if isinstance(p, List):
+			fyi("Looking for %s: %s" %(part, `p`), level=level) 
+			for i in range(len(p)):
+			    fyi("   item %i = %s" %(i, `p[i]`), level=level)
+		for x in evidenceStatements:
+		    for t in x.statements:
+			if  t[PRED] is pred:
+			    fyi("With same predicate %s" %(pred), level=level)
+			    for p, part in (t[SUBJ], "subject"), (t[OBJ], "object"):
+				if isinstance(p, List):
+				    fyi("Found for %s: %s" %(part, `p`), level=level) 
+				    for i in range(len(p)):
+					fyi("   item %i = %s" %(i, `p[i]`), level=level)
 		return fail("Can't find %s in evidence for rule %s: \nEvidence:%s\nBindings:%s\n"
 			      %((subj, pred,  obj), ruleStatement, evidenceStatements, bindings),
 			    level=level)
@@ -184,12 +208,11 @@ def valid(proof, r, level=0):
 	f2 = valid(proof, r2, level)
 	if f2 == None:
 	    return fail("Extraction: validation of source forumla failed.", level)
-	v = verbosity()
-	setVerbosity(0)
-	if not f2.includes(f):
+	setVerbosity(debugLevelForInference)
+	if not testIncludes(f2, f):
 	    return fail("""Extraction %s not included in formula  %s.\n______________\n%s\n______________not included in: ______________\n%s"""
 		    %(f, f2, f.debugString(), f2. debugString()), level=level)
-	setVerbosity(v)
+	setVerbosity(0)
 	return f
 
     s = ""
@@ -198,12 +221,38 @@ def valid(proof, r, level=0):
 
 # Main program 
 
+def usage():
+    sys.stderr.write(__doc__)
+    
 def main():
     global chatty
     global parsed
+    global debugLevelForInference
+    global debugLevelForParsing
     parsed = {}
     setVerbosity(0)
-    chatty=60
+    
+    
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "hv:c:p:",
+	    [ "help", "verbose=", "chatty=", "parsing="])
+    except getopt.GetoptError:
+        usage()
+        sys.exit(2)
+    output = None
+    for o, a in opts:
+        if o in ("-h", "--help"):
+            usage()
+            sys.exit()
+        if o in ("-v", "--verbose"):
+	    chatty = int(a)
+        if o in ("-p", "--verboseParsing"):
+	    debugLevelForParsing = int(a)
+        if o in ("-c", "--chatty"):
+	    debugLevelForInference = int(a)
+    
+    
+#    chatty=60
     #inputURI = argv[1]
     #fyi("Reading proof from "+inputURI)
     fyi("Reading proof from standard input.")

@@ -102,7 +102,7 @@
 		<p><em>void</em></p>
 	</dd>
   <dt><a name='propertylisttail'>propertylisttail</a></dt><dd>
-		<p><b><code>";"</code></b> <a href='#verb'>verb</a> <a href='#object'>object</a> <a href='#objecttail'>objecttail</a> <a href='#propertylisttail'>propertylisttail</a></p>
+		<p><b><code>";"</code></b> <a href='#propertylist'>propertylist</a></p>
 		<p><em>void</em></p>
 	</dd>
   <dt><a name='qname'>qname</a></dt><dd>
@@ -133,7 +133,7 @@
 		<p><em>void</em></p>
 	</dd>
   <dt><a name='string'>string</a></dt><dd>
-	<p><em>("([^"]|(\\"))*")</em></p>
+	<p><em>("""[^"\\]*(?:(?:\\.|"(?!""))[^"\\]*)*""")|("[^"\\]*(?:\\.[^"\\]*)*")</em></p>
 	</dd>
   <dt><a name='subject'>subject</a></dt><dd>
 		<p><a href='#item'>item</a></p>

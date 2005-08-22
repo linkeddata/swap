@@ -47,6 +47,19 @@ S_HEAVY_WAIT=	20  # Heavy built-in, too many variables in args to calculate, sea
 S_REMOTE =	10  # Waiting for local query to be resolved as much as possible
 S_SATISFIED =	 0  # Item has been staisfied, and is no longer a constraint, continue with others
 
+stateName = { 
+    S_UNKNOWN : "????",
+    S_DONE :	    "DONE",
+    S_LIGHT_UNS_GO :	"LtUsGo",
+    S_LIGHT_GO : "LtGo",
+    S_NOT_LIGHT : "NotLt",
+    S_LIGHT_EARLY : "LtEarly",
+    S_NEED_DEEP :  "Deep",
+    S_HEAVY_READY :   "HvGo",
+    S_LIGHT_WAIT : "LtWait",
+    S_HEAVY_WAIT : "HvWait",
+    S_REMOTE :   "Remote",
+    S_SATISFIED:	   "Satis" }
 
 def think(knowledgeBase, ruleFormula=None, mode=""):
     """Forward-chaining inference
@@ -402,6 +415,20 @@ class CyclicSetOfRules:
 	if diag.chatty_flag > 20: progress("Cyclic subsystem exhausted")
 	return total
 	
+
+def buildPattern(workingContext, template):
+    """Make a list of unmatched statements including special
+    builtins to check something is universally quantified"""
+    unmatched = template.statements[:]
+    for v in template.universals():
+	if diag.chatty_flag > 100: progress(
+	    "Tempate %s has universalVariableName %s, formula is %s" % (template, v, template.debugString()))
+	unmatched.append(StoredStatement((workingContext,
+		template.store.universalVariableName,
+		workingContext,
+		workingContext.store.newLiteral(v.uriref()))))
+    return unmatched
+    
     
 nextRule = 0
 class Rule:
@@ -435,12 +462,12 @@ class Rule:
 	# target context when the conclusion is drawn.
     
     
-	if self.template.universals() != Set():
-	    raise RuntimeError("""Cannot query for universally quantified things.
-	    As of 2003/07/28 forAll x ...x cannot be on left hand side of rule.
-	    This/these were: %s\n""" % self.template.universals())
+#	if self.template.universals() != Set():
+#	    raise RuntimeError("""Cannot query for universally quantified things.
+#	    As of 2003/07/28 forAll x ...x cannot be on left hand side of rule.
+#	    This/these were: %s\n""" % self.template.universals())
     
-	self.unmatched = self.template.statements[:]
+	self.unmatched = buildPattern(task.workingContext, self.template)
 	self.templateExistentials = self.template.existentials().copy()
 	_substitute({self.template: task.workingContext}, self.unmatched)
     
@@ -515,14 +542,14 @@ def testIncludes(f, g, _variables=Set(),  bindings={}, interpretBuiltins = 0):
     assert f.canonical is f
     assert g.canonical is g
 
-    unmatched = g.statements[:]
+    unmatched = buildPattern(f, g)
     templateExistentials = g.existentials()
     _substitute({g: f}, unmatched)
     
-    if g.universals() != Set():
-	raise RuntimeError("""Cannot query for universally quantified things.
-	As of 2003/07/28 forAll x ...x cannot be on left hand side of rule.
-	This/these were: %s\n""" % g.universals())
+#    if g.universals() != Set():
+#	raise RuntimeError("""Cannot query for universally quantified things.
+#	As of 2003/07/28 forAll x ...x cannot be on left hand side of rule.
+#	This/these were: %s\n""" % g.universals())
 
     if bindings != {}: _substitute(bindings, unmatched)
 
@@ -664,7 +691,7 @@ class Query(Formula):
 
 	if diag.tracking:
 	    reason = BecauseOfRule(self.rule, bindings=bindings, evidence=evidence)
-	    progress("We have a reason for %s of %s with bindings %s" % (self.rule, reason, bindings))
+#	    progress("We have a reason for %s of %s with bindings %s" % (self.rule, reason, bindings))
 	else:
 	    reason = None
 
@@ -783,7 +810,8 @@ class Query(Formula):
                     else:
                         progress("@@@  Not in existentials or variables but now bound:", `pair[0]`)
                 elif diag.tracking: bindings.update({pair[0]: pair[1]})
-                if not isinstance(pair[0], CompoundTerm): # Hack - else rules13.n3 fails @@
+                if not isinstance(pair[0], CompoundTerm) and ( # Hack - else rules13.n3 fails @@
+		    pair[0] in existentials):    # Hack ... could be bnding from nested expression
                     existentials.remove(pair[0]) # Can't match anything anymore, need exact match
 
         # Perform the substitution, noting where lists become boundLists.
@@ -835,15 +863,14 @@ class Query(Formula):
                     if (isinstance(subj, Formula)
                         and isinstance(obj, Formula)):
 
-                        more_unmatched = obj.statements[:]
-                        more_variables = obj.variables().copy()
+#                        more_unmatched = obj.statements[:]
+			more_unmatched = buildPattern(subj, obj)
+#                        if obj.universals() != Set():
+#                            raise RuntimeError("""Cannot query for universally quantified things.
+#            As of 2003/07/28 forAll x ...x cannot be on object of log:includes.
+#            This/these were: %s\n""" % obj.universals())
 
-                        if obj.universals() != Set():
-                            raise RuntimeError("""Cannot query for universally quantified things.
-            As of 2003/07/28 forAll x ...x cannot be on object of log:includes.
-            This/these were: %s\n""" % obj.universals())
-
-
+			more_variables = obj.variables().copy()
                         _substitute({obj: subj}, more_unmatched)
                         _substitute(bindings, more_unmatched)
                         existentials = existentials | more_variables
@@ -1067,7 +1094,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
             if x in allvars:   # Variable
                 self.neededToRun[p] = Set([x])
                 self.searchPattern[p] = None   # can bind this
-            elif isinstance(x, Formula) or isinstance(x, List): # expr
+            elif isinstance(x, Formula) or isinstance(x, List): # expr  @@ Set  @@@@@@@@@@ Check and CompundTerm>???
                 ur = x.occurringIn(allvars)
                 self.neededToRun[p] = ur
                 if ur != Set():
@@ -1115,10 +1142,9 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                             self.state = S_SATISFIED # satisfied
                             if diag.chatty_flag > 80: progress("Builtin buinary relation operator succeeds")
                             if diag.tracking:
-                                #raise Error
                                 rea = BecauseBuiltIn(subj, pred, obj, proof)
-                                evidence = evidence + [rea]
-    #			    return [([], rea)]  # Involves extra recursion just to track reason
+#                                evidence = evidence + [rea] # not pass be reference
+				return [({}, rea)]  # Involves extra recursion just to track reason
                             return []   # No new bindings but success in logical operator
                         else: return 0   # We absoluteley know this won't match with this in it
 
@@ -1197,9 +1223,9 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			result = pred.ennumerate()
 			if result != 0:
 			    self.state = S_DONE
-			    rea=None
-			    if tracking:
-				rea = BecauseBuiltIn(result, pred, obj, proof)
+#			    rea=None
+#			    if tracking:
+#				rea = BecauseBuiltIn(result, pred, obj, proof)
 			    return result  # Generates its own list of (list of bindings, reason)s
                         else:
 			    if heavy: return 0
@@ -1237,11 +1263,15 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			x = self.quad[p]
 			if self.neededToRun[p] == Set([x]):   # Normal case
 			    nb1 = {x: s.quad[p]}
-			else:  # Deep case
+			else:  # Deep case   
+			    if diag.chatty_flag > 70:
+				progress( "Deep: Unify %s with %s vars=%s; ee=%s" %
+				(x, s.quad[p], `self.query.variables`[4:-1],
+				`self.query._existentialVariables`[4:-1]))
 			    nbs1 = x.unify(s.quad[p], self.query.variables,
 				self.query._existentialVariables, {})  # Bindings have all been bound
 			    if diag.chatty_flag > 70:
-				progress( "Searching deep %s result binding %s" %(self, nbs1))
+				progress( "Unification in %s result binding %s" %(self, nbs1))
 			    if nbs1 == 0:
 				if diag.chatty_flag > 106: progress("......fail: %s" % self)
 				break  # reject this statement

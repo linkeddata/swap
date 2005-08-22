@@ -64,10 +64,12 @@ import notation3    # N3 parsers and generators, and RDF generator
 from webAccess import urlopenForRDF   # http://www.w3.org/2000/10/swap/
 # import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
-import diag  # problems importing the tracking flag, and chatty_flag must be explicit it seems diag.tracking
+import diag  # problems importing the tracking flag,
+	     # and chatty_flag must be explicit it seems: use diag.tracking
+
 from diag import progress, verbosity
-from term import BuiltIn, LightBuiltIn, \
-    HeavyBuiltIn, Function, ReverseFunction, \
+from term import BuiltIn, LightBuiltIn, RDFBuiltIn, HeavyBuiltIn, Function, \
+    MultipleFunction, ReverseFunction, MultipleReverseFunction, \
     Literal, Symbol, Fragment, FragmentNil, Term,\
     CompoundTerm, List, EmptyList, NonEmptyList, AnonymousNode, N3Set
 from OrderedSequence import merge
@@ -286,7 +288,7 @@ class IndexedFormula(Formula):
 	pred = pred.substituteEquals(self._redirections, newBindings)
 	obj = obj.substituteEquals(self._redirections, newBindings)
 	    
-        if diag.chatty_flag > 50:
+        if diag.chatty_flag > 90:
             progress("Add statement (size before %i, %i statements) to %s:\n {%s %s %s}" % (
 		self.store.size, len(self.statements),`self`,  `subj`, `pred`, `obj`) )
         if self.statementsMatching(pred, subj, obj):
@@ -730,12 +732,9 @@ class BI_notEqualTo(LightBuiltIn):
     
 class BI_uri(LightBuiltIn, Function, ReverseFunction):
 
-#    def evaluateObject(self, subject):
-#	return subject.uriref()
     def evalObj(self, subj, queue, bindings, proof, query):
 	type, value = subj.asPair()
-	if type == SYMBOL:     #    or type == ANONYMOUS: 
-         # @@@@@@ Should not allow anonymous, but test/forgetDups.n3 uses it
+	if type == SYMBOL:
 	    return self.store.intern((LITERAL, value))
 
     def evaluateSubject(self, object):
@@ -1021,6 +1020,40 @@ class BI_vars(LightBuiltIn, Function):
         #F.existentials().update(subj.existentials())
         F.universals().update(subj.universals())
         return F.close()
+
+class BI_universalVariableName(RDFBuiltIn, MultipleFunction):
+    """Is the object the name of a universal variable in the subject?
+    Runs even without interpretBuitins being set.  
+    Used internally in query.py for testing for 
+    Can be used as a test, or returns a sequence of values."""
+
+    def eval(self, subj, obj, queue, bindings, proof, query):
+	if not isinstance(subj, Formula): return None
+	s = str(obj)
+	for v in subj.universals():
+	    if v.uriref() == s: return 1
+	return 0
+
+    def evalObj(self,subj, queue, bindings, proof, query):
+	if not isinstance(subj, Formula): return None
+	return [subj.newLiteral(x.uriref()) for x in subj.universals()]
+
+class BI_existentialVariableName(RDFBuiltIn, MultipleFunction):
+    """Is the object the name of a existential variable in the subject?
+    Can be used as a test, or returns a sequence of values.
+    Currently gives BNode names too.  Maybe we make sep function for that?"""
+    def eval(self, subj, obj, queue, bindings, proof, query):
+	if not isinstance(subj, Formula): return None
+	s = str(obj)
+	for v in subj.existentials():
+	    if v.uriref() == s: return 1
+	return 0
+
+    def evalObj(self,subj, queue, bindings, proof, query):
+	if not isinstance(subj, Formula): return None
+	rea = None
+	return [subj.newLiteral(x.uriref()) for x in subj.existentials()]
+
     
 class BI_conjunction(LightBuiltIn, Function):      # Light? well, I suppose so.
     """ The conjunction of a set of formulae is the set of statements which is
@@ -1136,7 +1169,10 @@ class RDFStore(RDFSink) :
         self.Other =    log.internFrag("Other", Fragment) # syntactic type possible value - a class
         self.filter  =  log.internFrag("filter", BI_filter) # equivilent of --filter
         self.vars    =  log.internFrag("vars", BI_vars) # variables of formula
-
+	
+        self.universalVariableName = log.internFrag(
+			    "universalVariableName", BI_universalVariableName)
+        log.internFrag("existentialVariableName", BI_existentialVariableName)
         log.internFrag("conjunction", BI_conjunction)
         
 # Bidirectional things:

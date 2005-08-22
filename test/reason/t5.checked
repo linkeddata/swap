@@ -1,9 +1,7 @@
      @prefix : <file:/devel/WWW/2000/10/swap/test/reason/t5.n3#> .
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
-     @prefix run: <file:/devel/WWW/2000/10/swap/test/reason/.run-1041516826.629769p21358#> .
-     @prefix run_: <file:/devel/WWW/2000/10/swap/test/reason/.run-1048018335.7781219p26344#> .
     
-    this     log:forAll :x,
+     @forAll :x,
                 :y .
     
     :a     :b :c .

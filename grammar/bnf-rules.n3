@@ -40,7 +40,7 @@
 {?x optionTail [rdf:first ?y; rdf:rest ?z]} => {
 	?x 	bnf:branch [ bnf:sequence ?y];
 		optionTail ?z.
-	?y a :Used}.
+  }.
 
 { ?x bnf:branch [bnf:sequence ?y] } =>  { ?y sequenceTail ?y }.
 

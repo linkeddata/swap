@@ -454,7 +454,7 @@
 """ .
       ( "qname" 
         6  )
-         log:outputString """	<p><em>(([a-zA-Z_][a-zA-Z0-9_]*)?:)?([a-zA-Z_][a-zA-Z0-9_]*)?</em></p>
+         log:outputString """	<p><em>(([a-zA-Z_][a-zA-Z0-9_]*)?:)?[a-zA-Z_][a-zA-Z0-9_]*</em></p>
 """ .
       ( "qname" 
         9  )
@@ -1313,7 +1313,7 @@
                 "_",
                 "a";
          cfg:label "qname";
-         cfg:matches "(([a-zA-Z_][a-zA-Z0-9_]*)?:)?([a-zA-Z_][a-zA-Z0-9_]*)?";
+         cfg:matches "(([a-zA-Z_][a-zA-Z0-9_]*)?:)?[a-zA-Z_][a-zA-Z0-9_]*";
          h:reference "<a href='#qname'>qname</a>" .
     
     :simpleStatement     a h:Production;

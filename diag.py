@@ -11,6 +11,13 @@ def progress(*args):
     level = len(traceback.extract_stack())
     sys.stderr.write(" "*level)
     for a in args:
+	i = 0
+	a = unicode(a)
+	while 1:
+	    i = a.find("\n", i)
+	    if i < 0: break
+	    a = a[:i+1] + (" "*level) + a[i+1:]
+	    i = i+1
         q = utf_8_encode(u"%s " % (a,))[0]
         sys.stderr.write(q)
     sys.stderr.write("\n")

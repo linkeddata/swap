@@ -1,0 +1,38 @@
+# List of regression tests for $SWAP/test/reason
+
+@prefix : <#>.
+@prefix x: <#>.
+@prefix test: <http://www.w3.org/2000/10/swap/test.n3#>.
+@prefix dc:  <http://purl.org/dc/elements/1.1/>. # yuk - under protest - no hash
+
+
+# Test proof generation -- see also the -p option of retest.py
+
+
+
+:t01proof a test:CwmTest;
+    test:referenceOutput <../ref/reason-t01proof.n3>;
+    test:description   "Proof for just loading a file";
+    test:arguments     """reason/t1.n3 --base=foo --why""".
+
+:t01check a test:CwmTest;
+    test:referenceOutput <../ref/reason-t01check.n3>;
+    test:description   "Proof for just loading a file";
+    test:arguments     """reason/t1.n3 --base=foo --why | python ../check.py""".
+
+:t05proof a test:CwmTest;
+    test:referenceOutput <../ref/reason-t05proof.n3>;
+    test:description   "Proof for a little inference";
+    test:arguments     """reason/t5.n3 --base=foo --why""".
+
+:t05check a test:CwmTest;
+    test:referenceOutput <../ref/reason-t05check.n3>;
+    test:description   "Proof for a little inference";
+    test:arguments     """reason/t5.n3 --base=foo --why | python ../check.py""".
+
+#:t2060 a test:CwmTest;
+#    test:referenceOutput <../ref/reason-t5.n3>;
+#    test:description   "Proof for one simple rule";
+#    test:arguments     """reason/t5.n3 --think --base=foo --why""".
+
+#

@@ -174,12 +174,12 @@ class SinkParser:
 	    self._formula = openFormula
 	
 	if diag.tracking:
-	    progress ("@@@@@@ notation3  167 loading ",thisDoc,  why, self._formula)
+#	    progress ("@@@@@@ notation3  167 loading ",thisDoc,  why, self._formula)
 	    proof = self._formula.collector
 	    if proof == None:
 		proof = FormulaReason(self._formula)
-		progress ("\tAllocating new FormulaReason")
-	    progress ("\tNow: 169", why, proof, self._formula)
+#		progress ("\tAllocating new FormulaReason")
+#	    progress ("\tNow: 169", why, proof, self._formula)
 
         self._context = self._formula
 	self._parentContext = None
@@ -599,37 +599,7 @@ class SinkParser:
                 thing_type = self._store.newSet
                 i += 1
 	    j=i+1
-##            ######################################
-##            #The below code should be hit with a sledgehammer multiple times.
-##            #It is creating firsts and nexts, only to have the formula _slowly_
-##            #go through them and recreate the list. This will change
-##            previous = None  # remember value to return
-##            while 1:
-##                i = self.skipSpace(str, j)
-##                if i<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "needed ')', found end.")                    
-##                if str[i:i+1] == ')':
-##		    j = i+1
-##		    break
-##
-##                item = []
-##                j = self.item(str,i, item) #@@@@@ should be path, was object
-##                if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected item in list or ')'")
-##                this = self._context.newBlankNode(uri=self.here(i), why=self._reason2)
-##		if previous:
-##		    self.makeStatement((self._context, N3_rest, previous, this ))
-##		else:
-##		    head = this
-##		self.makeStatement((self._context, N3_first, this, item[0]))
-##                previous = this
-##                previousvalue = item[0]
-##
-##            if not previous:
-##                res.append(N3_nil)
-##                return j
-##	    self.makeStatement((self._context, N3_rest, previous, N3_nil ))
-##	    res.append(head)
-##	    #There is a far better way to do the above. See below
-##	    ##########################################
+
             List = []
             while 1:
                 i = self.skipSpace(str, j)

@@ -1,60 +1,62 @@
-#Processed by Id: cwm.py,v 1.126 2003/02/14 17:48:08 sandro Exp 
+#Processed by Id: cwm.py,v 1.176 2005/08/10 17:03:22 syosi Exp 
         #    using base file:/devel/WWW/2000/10/swap/test/reason/foo
         
 #  Notation3 generation by
-#       notation3.py,v 1.133 2003/02/02 16:09:09 timbl Exp
+#       notation3.py,v 1.182 2005/08/15 16:28:43 syosi Exp
 
 #   Base was: file:/devel/WWW/2000/10/swap/test/reason/foo
-     @prefix : <http://www.w3.org/2000/10/swap/reason#> .
-     @prefix run: <.run-1048018552.2804151p26463#> .
+     @prefix : <t3.n3#> .
+     @prefix foo: <#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix reason: <http://www.w3.org/2000/10/swap/reason#> .
     
-    this     <http://www.w3.org/2000/10/swap/log#forSome> <#_g0> .
-      [      a :Conjunction,
-                    :Proof;
-             :component  [
-                 a :Extraction;
-                 :because  [
-                     a :Inference;
-                     :evidence  [
-                         a :Extraction;
-                         :because <#_g0>;
-                         :gives {<t3.n3#a>     <t3.n3#b> <t3.n3#c> .
+     @forSome foo:_g0 .
+      [      a reason:Conjunction,
+                    reason:Proof;
+             reason:component  [
+                 a reason:Extraction;
+                 reason:because foo:_g0;
+                 reason:gives {:a     :b :c .
+                } ],
+                     [
+                 a reason:Extraction;
+                 reason:because foo:_g0;
+                 reason:gives {{
+                    :a     :b :c .
+                    
+                    }     log:implies {:a2     :b2 :c2 .
+                    } .
+                } ],
+                     [
+                 a reason:Extraction;
+                 reason:because  [
+                     a reason:Inference;
+                     reason:evidence  [
+                         a reason:Extraction;
+                         reason:because foo:_g0;
+                         reason:gives {:a     :b :c .
                         } ];
-                     :rule  [
-                         a :Extraction;
-                         :because <#_g0>;
-                         :gives {{
-                            <t3.n3#a>     <t3.n3#b> <t3.n3#c> .
+                     reason:rule  [
+                         a reason:Extraction;
+                         reason:because foo:_g0;
+                         reason:gives {{
+                            :a     :b :c .
                             
-                            }     <http://www.w3.org/2000/10/swap/log#implies> {<t3.n3#a2>     <t3.n3#b2> <t3.n3#c2> .
+                            }     log:implies {:a2     :b2 :c2 .
                             } .
                         } ] ];
-                 :gives {<t3.n3#a2>     <t3.n3#b2> <t3.n3#c2> .
-                } ],
-                     [
-                 a :Extraction;
-                 :because <#_g0>;
-                 :gives {<t3.n3#a>     <t3.n3#b> <t3.n3#c> .
-                } ],
-                     [
-                 a :Extraction;
-                 :because <#_g0>;
-                 :gives {{
-                    <t3.n3#a>     <t3.n3#b> <t3.n3#c> .
-                    
-                    }     <http://www.w3.org/2000/10/swap/log#implies> {<t3.n3#a2>     <t3.n3#b2> <t3.n3#c2> .
-                    } .
+                 reason:gives {:a2     :b2 :c2 .
                 } ];
-             :gives {<t3.n3#a>     <t3.n3#b> <t3.n3#c> .
-            <t3.n3#a2>     <t3.n3#b2> <t3.n3#c2> .
+             reason:gives {:a     :b :c .
+            :a2     :b2 :c2 .
             {
-                <t3.n3#a>     <t3.n3#b> <t3.n3#c> .
+                :a     :b :c .
                 
-                }     <http://www.w3.org/2000/10/swap/log#implies> {<t3.n3#a2>     <t3.n3#b2> <t3.n3#c2> .
+                }     log:implies {:a2     :b2 :c2 .
                 } .
             } ].
     
-    <#_g0>     a :Parsing;
-         :source <t3.n3> .
+    foo:_g0     a reason:Parsing;
+         reason:source <t3.n3> .
     
 #ENDS

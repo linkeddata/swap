@@ -71,7 +71,7 @@ class Reason:
 	"The representation of this object in the formula ko"
 	me = self.me.get(ko, None)
 	if me == None:
-	    me = ko.newBlankNode(why= dontAsk)	   # @@@ ko - specific, not reentrant
+	    me = ko.newBlankNode(why= dontAsk)	# @@@ ko - specific, not reentrant
 	    self.me[ko] = me
 	return me
 
@@ -106,7 +106,7 @@ class FormulaReason(Reason):
 	global proofOf
 	self.store = formula.store
 	proofOf[formula] = self
-	progress("@@@@@@@ Proof of %s is %s"%(formula, self))
+#	progress("@@@@@@@ Proof of %s is %s"%(formula, self))
 	return
 
     def	newStatement(self, s, why):

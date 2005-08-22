@@ -48,7 +48,8 @@ from diag import progress, verbosity, tracking
 from term import BuiltIn, LightBuiltIn, \
     HeavyBuiltIn, Function, ReverseFunction, \
     Literal, AnonymousNode , AnonymousExistential, AnonymousUniversal, \
-    Symbol, Fragment, FragmentNil,  Term, CompoundTerm, List, EmptyList, NonEmptyList
+    Symbol, Fragment, FragmentNil,  Term, CompoundTerm, List, EmptyList, \
+    NonEmptyList, unifySequence
 
 from RDFSink import Logic_NS, RDFSink, forSomeSym, forAllSym
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
@@ -159,14 +160,14 @@ class Formula(AnonymousNode, CompoundTerm):
 
 
     def universals(self):
-        """Return a list of variables universally quantified with this formula as scope.
+        """Return a set of variables universally quantified with this formula as scope.
 
 	Implementation:
 	We may move to an internal storage rather than these statements."""
 	return self._universalVariables
     
     def variables(self):
-        """Return a list of all variables quantified within this scope."""
+        """Return a set of all variables quantified within this scope."""
         return self.existentials() | self.universals()
 	
     def size(self):
@@ -391,7 +392,7 @@ class Formula(AnonymousNode, CompoundTerm):
     def occurringIn(self, vars):
 	"Which variables in the list occur in this?"
 	set = Set()
-	if verbosity() > 98: progress("----occuringIn: ", `self`)
+#	if verbosity() > 98: progress("----occuringIn: ", `self`)
 	for s in self.statements:
 	    for p in PRED, SUBJ, OBJ:
 		y = s[p]
@@ -405,15 +406,22 @@ class Formula(AnonymousNode, CompoundTerm):
 	"""See Term.unify()
 	"""
 
+	if diag.chatty_flag > 99: progress("Unifying formula %s with %s" %
+	    (`self`, `other`))
+	if diag.chatty_flag > 139: progress("Self is %s\n\nOther is %s" %
+	    (self.debugString(), other.debugString()))
 	if not isinstance(other, Formula): return 0
 	if self is other: return [({}, None)]
 	if (len(self) != len(other)
-	    or self. _existentialVariables != other._existentialVariables
-	    or self. _universalVariables != other._existentialVariables
+	    or len(self. _existentialVariables) != len(other._existentialVariables)
+	    or len(self. _universalVariables) != len(other._universalVariables)
 	    ): return 0
-#	raise RuntimeError("Not implemented unification method on formulae")
-	return 0    # @@@@@@@   FINISH THIS
-	
+	    
+	ex = existentials | self.existentials()  # @@ Add unis to make var names irrelevant?
+	return unifySequence(
+	    [self.statements, self.universals(), self.existentials()],
+	    [other.statements, other.universals(), other.existentials()],
+	     vars, ex, bindings) 
 		    
 
     def bind(self, prefix, uri):
@@ -524,12 +532,13 @@ class Formula(AnonymousNode, CompoundTerm):
         return self.store.reopen(self)
 
 
-    def includes(f, g, _variables=[],  bindings=[]):
-	"""Does this formula include the information in the other?
-	
-	bindings is for use within a query.
-	"""
-	return  f.store.testIncludes(f, g, _variables=_variables,  bindings=bindings)
+#    def includes(f, g, _variables=[],  bindings=[]):
+#	"""Does this formula include the information in the other?
+#	
+#	bindings is for use within a query.
+#	"""
+#	from swap.query import testIncludes  # Nor a dependency we want to make from here
+#	return  testIncludes(f, g, _variables=_variables,  bindings=bindings)
 
     def generated(self):
 	"""Yes, any identifier you see for this is arbitrary."""
@@ -656,6 +665,36 @@ class StoredStatement:
     def statements(self):
 	return [self]
 
+    def occurringIn(self, vars):
+	"Which variables in the list occur in this?"
+	set = Set()
+	if verbosity() > 98: progress("----occuringIn: ", `self`)
+	for p in PRED, SUBJ, OBJ:
+	    y = self[p]
+	    if y is self:
+		pass
+	    else:
+		set = set | y.occurringIn(vars)
+	return set
+
+    def existentials(self):
+	return self.occuringIn(self.quad[CONTEXT].existentials())
+
+    def universals(self):
+	return self.occuringIn(self.quad[CONTEXT].universals())
+
+    def unify(self, other, vars, existentials, bindings):
+	"""See Term.unify()
+	"""
+
+	if diag.chatty_flag > 99: progress("Unifying statement %s with %s" %
+	    (`self`, `other`))
+	if not isinstance(other, StoredStatement): return 0
+	return unifySequence([self[PRED], self[SUBJ], self[OBJ]],
+	    [other[PRED], other[SUBJ], other[OBJ]], 
+	    vars, existentials, bindings)
+	
+
 
     def asFormula(self, why=None):
 	"""The formula which contains only a statement like this.
@@ -671,15 +710,15 @@ class StoredStatement:
 	c, p, s, o = self.quad
 	f = store.newFormula()   # @@@CAN WE DO THIS BY CLEVER SUBCLASSING? statement subclass of f?
 	f.add(s, p, o, why=why)
-#	uu = store.occurringIn(f, c.universals())
-#	ee = store.occurringIn(f, c.existentials())
 	uu = f.occurringIn(c.universals())
 	ee = f.occurringIn(c.existentials())
 	bindings = []
 	for v in uu:
-	    x = f.newUniversal(v.uriref(), why=why)
+#	    progress("&&&&& New universal is %s\n\t in %s" % (v.uriref(), f))
+	    f.declareUniversal(v)
+#	    progress("&&&&& Universals are %s\n\t in %s" % (f.universals(), f))
 	for v in ee:
-	    x  = f.newExistential(v.uriref(), why=why)
+	    f.declareExistential(v.uriref(), why=why)
 	return f.close()  # probably slow - much slower than statement subclass of formula
 
 

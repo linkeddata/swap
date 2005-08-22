@@ -1,8 +1,8 @@
-#Processed by Id: cwm.py,v 1.155 2004/06/30 20:04:57 timbl Exp 
+#Processed by Id: cwm.py,v 1.165 2004/11/19 01:58:39 syosi Exp 
         #    using base file:/devel/WWW/2000/10/swap/grammar/
         
 #  Notation3 generation by
-#       notation3.py,v 1.156 2004/06/30 18:06:19 syosi Exp
+#       notation3.py,v 1.166 2004/10/28 17:41:59 timbl Exp
 
 #   Base was: file:/devel/WWW/2000/10/swap/grammar/
      @prefix : <http://www.w3.org/2000/10/swap/grammar/n3-rdf#> .
@@ -119,13 +119,10 @@
   <dl>
 """ .
       ( ";" 
-        :verb 
-        :object 
-        :objecttail 
-        :propertylisttail  )
+        :propertylist  )
          a h:Sequence,
                 h:SequenceTail;
-         h:seqlabel """<b><code>";"</code></b> <a href='#verb'>verb</a> <a href='#object'>object</a> <a href='#objecttail'>objecttail</a> <a href='#propertylisttail'>propertylisttail</a>""" .
+         h:seqlabel """<b><code>";"</code></b> <a href='#propertylist'>propertylist</a>""" .
       ( "="  )
          a h:Sequence,
                 h:SequenceTail;
@@ -410,7 +407,7 @@
 """ .
       ( "propertylisttail" 
         5  )
-         log:outputString """		<p><b><code>";"</code></b> <a href='#verb'>verb</a> <a href='#object'>object</a> <a href='#objecttail'>objecttail</a> <a href='#propertylisttail'>propertylisttail</a></p>
+         log:outputString """		<p><b><code>";"</code></b> <a href='#propertylist'>propertylist</a></p>
 """,
                 """		<p><em>void</em></p>
 """ .
@@ -484,7 +481,7 @@
 """ .
       ( "string" 
         6  )
-         log:outputString """	<p><em>("([^"]|(\\\\"))*")</em></p>
+         log:outputString """	<p><em>(\"""[^"\\\\]*(?:(?:\\\\.|"(?!""))[^"\\\\]*)*\""")|("[^"\\\\]*(?:\\\\.[^"\\\\]*)*")</em></p>
 """ .
       ( "string" 
         9  )
@@ -1155,35 +1152,23 @@
          bnf:canBeSequence (),
                  (
         ";" 
-        :verb 
-        :object 
-        :objecttail 
-        :propertylisttail  );
+        :propertylist  );
          bnf:label "propertylisttail";
          bnf:mustBeOneSequence  (
         () 
          (
             ";" 
-            :verb 
-            :object 
-            :objecttail 
-            :propertylisttail  ) );
+            :propertylist  ) );
          h:optionTail (),
                  (
         () 
          (
             ";" 
-            :verb 
-            :object 
-            :objecttail 
-            :propertylisttail  ) ),
+            :propertylist  ) ),
                  (
          (
             ";" 
-            :verb 
-            :object 
-            :objecttail 
-            :propertylisttail  ) );
+            :propertylist  ) );
          h:reference "<a href='#propertylisttail'>propertylisttail</a>" .
     
     :qname     a h:Production;
@@ -1289,8 +1274,9 @@
          h:reference "<a href='#statementtail'>statementtail</a>" .
     
     :string     a h:Production;
+         bnf:canStartWith "\"";
          bnf:label "string";
-         bnf:matches "(\"([^\"]|(\\\\\"))*\")";
+         bnf:matches """(\"""[^"\\\\]*(?:(?:\\\\.|"(?!""))[^"\\\\]*)*\""")|("[^"\\\\]*(?:\\\\.[^"\\\\]*)*")""";
          h:reference "<a href='#string'>string</a>" .
     
     :subject     a h:Production;

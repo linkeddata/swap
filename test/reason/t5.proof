@@ -1,76 +1,81 @@
-#Processed by Id: cwm.py,v 1.128 2003/04/02 03:42:04 timbl Exp 
+#Processed by Id: cwm.py,v 1.176 2005/08/10 17:03:22 syosi Exp 
         #    using base file:/devel/WWW/2000/10/swap/test/reason/foo
         
 #  Notation3 generation by
-#       notation3.py,v 1.136 2003/04/02 03:42:05 timbl Exp
+#       notation3.py,v 1.182 2005/08/15 16:28:43 syosi Exp
 
 #   Base was: file:/devel/WWW/2000/10/swap/test/reason/foo
-     @prefix : <http://www.w3.org/2000/10/swap/reason#> .
-     @prefix foo: <t5.n3#> .
+     @prefix : <t5.n3#> .
+     @prefix fo: <#> .
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
-     @prefix run: <.run-1049398594.582538p12221#> .
+     @prefix n3: <http://www.w3.org/2004/06/rei#> .
+     @prefix reason: <http://www.w3.org/2000/10/swap/reason#> .
     
-    this     log:forSome <#_g0> .
-      [      a :Conjunction,
-                    :Proof;
-             :component  [
-                 a :Extraction;
-                 :because  [
-                     a :Inference;
-                     :binding  [
-                         :boundTo  [
-                             <http://www.w3.org/2000/10/swap/reify#uri> "file:/devel/WWW/2000/10/swap/test/reason/t5.n3#b" ];
-                         :variable  [
-                             <http://www.w3.org/2000/10/swap/reify#uri> "file:/devel/WWW/2000/10/swap/test/reason/t5.n3#y" ] ],
+     @forSome fo:_g0 .
+      [      a reason:Conjunction,
+                    reason:Proof;
+             reason:component  [
+                 a reason:Extraction;
+                 reason:because fo:_g0;
+                 reason:gives {:a     :b :c .
+                } ],
+                     [
+                 a reason:Extraction;
+                 reason:because fo:_g0;
+                 reason:gives { @forSome :x,
+                            :y .
+                {
+                    :a     :y :x .
+                    
+                    }     log:implies {:x     :y <c2> .
+                    } .
+                } ],
+                     [
+                 a reason:Extraction;
+                 reason:because  [
+                     a reason:Inference;
+                     reason:binding  [
+                         reason:boundTo  [
+                             n3:uri "file:/devel/WWW/2000/10/swap/test/reason/t5.n3#b" ];
+                         reason:variable  [
+                             n3:uri "file:/devel/WWW/2000/10/swap/test/reason/t5.n3#y" ] ],
                              [
-                         :boundTo  [
-                             <http://www.w3.org/2000/10/swap/reify#uri> "file:/devel/WWW/2000/10/swap/test/reason/t5.n3#c" ];
-                         :variable  [
-                             <http://www.w3.org/2000/10/swap/reify#uri> "file:/devel/WWW/2000/10/swap/test/reason/t5.n3#x" ] ];
-                     :evidence  [
-                         a :Extraction;
-                         :because <#_g0>;
-                         :gives {foo:a     foo:b foo:c .
+                         reason:boundTo  [
+                             n3:uri "file:/devel/WWW/2000/10/swap/test/reason/t5.n3#c" ];
+                         reason:variable  [
+                             n3:uri "file:/devel/WWW/2000/10/swap/test/reason/t5.n3#x" ] ];
+                     reason:evidence  [
+                         a reason:Extraction;
+                         reason:because fo:_g0;
+                         reason:gives {:a     :b :c .
                         } ];
-                     :rule  [
-                         a :Extraction;
-                         :because <#_g0>;
-                         :gives {{
-                            foo:a     foo:y foo:x .
+                     reason:rule  [
+                         a reason:Extraction;
+                         reason:because fo:_g0;
+                         reason:gives { @forSome :x,
+                                    :y .
+                        {
+                            :a     :y :x .
                             
-                            }     log:implies {foo:x     foo:y <c2> .
+                            }     log:implies {:x     :y <c2> .
                             } .
                         } ] ];
-                 :gives {foo:c     foo:b <c2> .
-                } ],
-                     [
-                 a :Extraction;
-                 :because <#_g0>;
-                 :gives {foo:a     foo:b foo:c .
-                } ],
-                     [
-                 a :Extraction;
-                 :because <#_g0>;
-                 :gives {{
-                    foo:a     foo:y foo:x .
-                    
-                    }     log:implies {foo:x     foo:y <c2> .
-                    } .
+                 reason:gives {:c     :b <c2> .
                 } ];
-             :gives {this     log:forAll foo:x,
-                        foo:y .
-            foo:a     foo:b foo:c .
-            foo:c     foo:b <c2> .
+             reason:gives { @forAll :x,
+                        :y .
+            :a     :b :c .
+            :c     :b <c2> .
             {
-                foo:a     foo:y foo:x .
+                :a     :y :x .
                 
-                }     log:implies {foo:x     foo:y <c2> .
+                }     log:implies {:x     :y <c2> .
                 } .
             };
-             :universal foo:x,
-                    foo:y ].
+             reason:universal "file:/devel/WWW/2000/10/swap/test/reason/t5.n3#x",
+                    "file:/devel/WWW/2000/10/swap/test/reason/t5.n3#y" ].
     
-    <#_g0>     a :Parsing;
-         :source <t5.n3> .
+    fo:_g0     a reason:Parsing;
+         reason:source <t5.n3> .
     
 #ENDS

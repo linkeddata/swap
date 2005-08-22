@@ -1,0 +1,14 @@
+     @prefix : <http://www.w3.org/2000/10/swap/reason#> .
+    
+      [      a :Conjunction,
+                    :Proof;
+             :component  [
+                 a :Extraction;
+                 :because  [
+                     a :Parsing;
+                     :source <reason/t1.n3> ];
+                 :gives {<reason/a>     <reason/b> <reason/c> .
+                } ];
+             :gives {<reason/a>     <reason/b> <reason/c> .
+            } ].
+    

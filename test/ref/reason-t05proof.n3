@@ -1,0 +1,39 @@
+     @prefix : <reason/t5.n3#> .
+     @prefix fo: <#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix reason: <http://www.w3.org/2000/10/swap/reason#> .
+    
+     @forSome fo:_g0 .
+      [      a reason:Conjunction,
+                    reason:Proof;
+             reason:component  [
+                 a reason:Extraction;
+                 reason:because fo:_g0;
+                 reason:gives {:a     :b :c .
+                } ],
+                     [
+                 a reason:Extraction;
+                 reason:because fo:_g0;
+                 reason:gives { @forAll :x,
+                            :y .
+                {
+                    :a     :y :x .
+                    
+                    }     log:implies {:x     :y <reason/c2> .
+                    } .
+                } ];
+             reason:gives { @forAll :x,
+                        :y .
+            :a     :b :c .
+            {
+                :a     :y :x .
+                
+                }     log:implies {:x     :y <reason/c2> .
+                } .
+            };
+             reason:universal "http://example.com/swap/test/reason/t5.n3#x",
+                    "http://example.com/swap/test/reason/t5.n3#y" ].
+    
+    fo:_g0     a reason:Parsing;
+         reason:source <reason/t5.n3> .
+    

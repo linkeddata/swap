@@ -34,6 +34,7 @@ monthName= ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct"
 
 rdf_type = rdf.type
 cat = cat_ns
+meta = None   # Formula for metadata
     
 def sym(uri):
     return store.intern((0, uri))
@@ -123,6 +124,127 @@ def internalCheck():
 	
     return unbalanced
 
+
+def writeChart(filename, categories, totals, income, outgoings, shortTerm=0):
+    """Chart income vs outgoing
+    
+    Scaled chart
+    """
+    global meta
+    chart = open(filename, "w")
+    chart.write("""<?xml version="1.0" encoding="iso-8859-1"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+    xmlns:l="http://www.w3.org/1999/xlink">
+""")
+#"
+    vc = []
+
+    for c in categories:
+	if totals.get(c, 0) == 0: continue
+	
+	label = meta.the(subj=c, pred=rdfs.label)
+	if label == None:
+	    label = `c`
+	    sys.stderr.write("@@ No label for "+`c` +"\n")
+	else:
+	    label = str(label)
+	
+	if shortTerm and meta.contains(subj=c, pred=rdf.type, obj=qu.LongTerm):
+	    continue  # ignore in budget diagram
+	volatility = meta.the(subj=c, pred=qu.volatility)
+	if volatility == None:
+	    volatility = 50
+	    sys.stderr.write("No volatility for "+ c.uriref() +"\n")
+	else:
+	    volatility = int(str(volatility))
+	vc.append((volatility, label, c))
+    vc.sort()
+    
+    total = [0,0]  # in, out
+    for volatility, label, c in vc:
+	tot = totals.get(c,0)
+	if tot == 0: continue
+	if tot < 0 : out = 1
+	else: out = 0
+	change = abs(tot)
+	total[out] = total[out] + change
+    if total[0] > total[1]: largest = total[0]
+    else: largest = total[1]
+
+
+    lineheight = 15 # for text
+    upperBound = abs(income)
+    if abs(outgoings) > upperBound: upperBound = abs(outgoings)
+    
+    dh = 600  # document hight in pixels
+    scale = (dh - 30) / abs(largest)   # Pixels/dollar
+
+
+    chart.write("""    <text  y="%ipx" x="5px" width="60px"
+	height="20px">%s</text>
+""" %(20, yearInQuestion))
+
+    
+    y = 0
+    while y < dh:   # grid
+	chart.write("""    <rect stroke="#777777" fill="none" y="%ipx" x="50px" width="600px"
+	height="0px"/>
+""" %(dh-y))
+#"
+	chart.write("""    <text  y="%ipx" x="320px" width="60px"
+	height="20px">%ik</text>
+""" %(dh-y, round((y/scale)/1000))) 
+#"	
+	y = y + 10000 * scale
+
+    # for offset, cats, color in [ (100, incomeCategories, "#eeffee" ),
+    #			    (400, spendingCategories, "#ffeeee") ]:
+
+    total = [0,0]  # in, out
+    offset = [100,400]
+    color = ["#eeffee", "#ffeeee"]
+    for volatility, label, c in vc:
+	tot = totals.get(c,0)
+	if tot == 0: continue
+	if tot < 0 : out = 1
+	else: out = 0
+	change = abs(tot)
+	bottom = total[out]
+	total[out] = total[out] + change
+	top = total[out]
+	height = round((top-bottom)*scale)
+
+	chart.write("""    <a l:href="year-cat.html#%s">
+    <rect stroke="black" fill="none" y="%ipx" x="%ipx" width="200px"
+	height="%ipx" style="stroke: black; fill: %s"/></a>
+""" %(c.fragid, dh-round(top*scale), offset[out], height, color[out]))
+#"
+	if  height > lineheight:
+	    text = label
+	    text2 = " \n%7i" % round(abs(tot))
+	    
+	    middle = dh-round((bottom+top)*scale/2 - lineheight/2)
+	    if height > (3*lineheight):
+		chart.write("""    <text  y="%ipx" x="%ipx" width="160px"
+	height="%ipx" style="background: #eeeeff">%s</text>
+""" %(middle - (lineheight/2), offset[out]+20, height-40, text)) 
+#"	
+		chart.write("""    <text  y="%ipx" x="%ipx" width="160px"
+	height="%ipx" style="text-anchor:finish; background: #eeeeff">%s</text>
+""" %(middle + (lineheight/2), offset[out]+20, height-40, text2)) 
+#"
+	    else:
+		if len(text) < 15: text = text + " " + text2
+		chart.write("""    <text  y="%ipx" x="%ipx" width="160px"
+	height="%ipx" style="background: #eeeeff">%s</text>
+""" %(middle, offset[out]+20, height-40, text)) 
+#"	
+    
+    chart.write("""</svg>\n""")
+    chart.close()
+    return
+
+
 def doCommand(year, inputURI="/dev/stdin"):
         """Fin - financial summary
         
@@ -144,13 +266,6 @@ def doCommand(year, inputURI="/dev/stdin"):
         _outURI = _baseURI
         option_baseURI = _baseURI     # To start with - then tracks running base
 
-#        option_format = "n3"
-#        #  Fix the output sink
-#        if option_format == "rdf":
-#            _outSink = toXML.ToRDF(sys.stdout, _outURI, base=option_baseURI)
-#        else:
-#            _outSink = notation3.ToN3(sys.stdout.write, base=option_baseURI,
-#                                      quiet=option_quiet)
 
 # Load the data:
 
@@ -159,6 +274,7 @@ def doCommand(year, inputURI="/dev/stdin"):
 	
 #	print "Size of kb: ", len(kb)
 	
+	global meta
 	meta = loadMany(["categories.n3", "classify.n3"])  # Category names etc
 #	print "Size of meta", len(meta)
 	
@@ -167,6 +283,8 @@ def doCommand(year, inputURI="/dev/stdin"):
 	qu_payee = qu.payee
 	qu_Classified = qu.Classified
 	qu_Unclassified = qu.Unclassified
+	taxCategories = kb.each(pred=rdf_type, obj=tax.Category)
+	specialCategories = taxCategories + [qu.Classified, qu_Unclassified]
 
 ####### Analyse the data:
 	monthTotals = [0] * 12 
@@ -187,6 +305,7 @@ def doCommand(year, inputURI="/dev/stdin"):
 #	    progress( "Transaction ", `s`)
 	    t_ok, c_ok = 0, 0
 	    date = kb.any(subj=s, pred=qu_date).__str__()
+	    cats = kb.each(subj=s, pred=rdf_type)
 	    if date == "None":
 #		raise ValueError("No date for transaction %s" % s)
 		progress("No date for transaction %s -- ignoring\n" % s)
@@ -201,15 +320,22 @@ def doCommand(year, inputURI="/dev/stdin"):
 	    else: payee = payees[0]
 	    amounts = kb.each(subj=s, pred=qu_amount)
 	    if len(amounts) >1:
-		progress("More than one amount %s for transaction %s -- ignoring!@@\n"
-			% (amounts,s))
+		if (cat_ns.Internal not in cats or
+		    len(amounts) != 2 ):
+		
+		    progress("@@@ More than one amount %s for transaction %s -- ignoring!@@\n"
+			    % (amounts,s))
+		else:
+		    sum = float(amounts[0]) + float(amounts[1])
+		    if sum != 0:
+			progress("2 amounts %s for internal transaction %s.\n"
+			    % (amounts,s))
 		continue
 
 	    amount = float(kb.the(subj=s, pred=qu_amount).__str__())
 #	    print "%s  %40s  %10s month %i" %(date, payee, `amount`, month)
 
 	    monthTotals[month] = monthTotals[month] + amount
-	    cats = kb.each(subj=s, pred=rdf_type)
 	    if cat_ns.Internal not in cats:
 		if amount > 0:
 		    incomeByMonth[month] = incomeByMonth[month] + amount
@@ -218,13 +344,17 @@ def doCommand(year, inputURI="/dev/stdin"):
 		    outgoingsByMonth[month] = outgoingsByMonth[month] + amount
 		    outgoings = outgoings + amount
 
-	    for cat in kb.each(subj=s, pred=rdf_type):
-		totals[cat] = totals.get(cat, 0) + amount
-		byMonth[cat] = byMonth.get(cat, [0] * 12)
-		count[cat] = count.get(cat, 0) + 1
-		byMonth[cat][month] = byMonth[cat][month] + amount
-#		if `cat` == "Internal" and month == 8:
-#		    print "@@@@@ INTERNAL", "%s  %40s  %10s month %i" %(date, payee, `amount`, month)
+	    normalCats = []
+	    for c in cats:
+		totals[c] = totals.get(c, 0) + amount
+		byMonth[c] = byMonth.get(c, [0] * 12)
+		count[c] = count.get(c, 0) + 1
+		byMonth[c][month] = byMonth[c][month] + amount
+		if c not in specialCategories:
+		    normalCats.append(c)
+	    if len(normalCats) != 1:
+		progress("@@@@ %s Transaction with %s for %10s in >1 category: %s!!"
+			    %(date, payee, amount, normalCats))
     
 
 	print '<html xmlns="http://www.w3.org/1999/xhtml">'
@@ -246,7 +376,7 @@ def doCommand(year, inputURI="/dev/stdin"):
 #   TABLE OF CATEGORY BY MONTH
 
 		
-	print "<h2>Personal categories and month</h2><table class='wide'><tr><th></th><th>Year</th>"
+	print "<h2>%s Personal categories and month</h2><table class='wide'><tr><th></th><th>Year</th>" % yearInQuestion
 	for month in range(12):
 	    print "<th><a href='year-chron.html#m%s'>%s</a></th>" %(("0"+`month+1`)[-2:], monthName[month]),
 	print "</tr>"
@@ -272,109 +402,17 @@ def doCommand(year, inputURI="/dev/stdin"):
 
 	
 #  Chart of income stacked up against expenses
-	print "<a href='chart.svg'><p>Chart of income vs expense</p><img src='chart.svg'></a>"
+	print "<p><a href='chart.svg'><p>Chart of day-day income vs expense</p><img src='chart.svg'></a></p>"
+	print "<p><a href='chart.svg'><p>Chart of all income vs expense</p><img src='all.svg'></a></p>"
 
-	chart = open("chart.svg", "w")
-	chart.write("""<?xml version="1.0" encoding="iso-8859-1"?>
-<svg xmlns="http://www.w3.org/2000/svg"
-     xmlns:l="http://www.w3.org/1999/xlink">
-""")
-#"
-	vc = []
-	for c in quCategories + [ qu.UnclassifiedIncome, qu.UnclassifiedOutgoing]:
-	    if totals.get(c, 0) == 0: continue
-	    
-	    label = meta.the(subj=c, pred=rdfs.label)
-	    if label == None:
-		label = `c`
-		sys.stderr.write("@@ No label for "+`c` +"\n")
-	    else:
-		label = str(label)
-	    
-	    if meta.contains(subj=c, pred=rdf.type, obj=qu.LongTerm):
-		continue  # ignore in budget diagram
-	    volatility = meta.the(subj=c, pred=qu.volatility)
-	    if volatility == None:
-		volatility = 50
-		sys.stderr.write("No volatility for "+ cat.uriref() +"\n")
-	    else:
-		volatility = int(str(volatility))
-	    vc.append((volatility, label, c))
-	vc.sort()
-	
-	total = [0,0]  # in, out
-	for volatility, label, c in vc:
-	    tot = totals.get(c,0)
-	    if tot == 0: continue
-	    if tot < 0 : out = 1
-	    else: out = 0
-	    change = abs(tot)
-	    total[out] = total[out] + change
-	if total[0] > total[1]: largest = total[0]
-	else: largest = total[1]
-
-
-	lineheight = 15 # for text
-	upperBound = abs(income)
-	if abs(outgoings) > upperBound: upperBound = abs(outgoings)
-	
-	dh = 600  # document hight in pixels
-	scale = (dh - 30) / abs(largest*1.05)   # Pixels/dollar
-	
-	y = 0
-	while y < dh:   # grid
-	    chart.write("""    <rect stroke="#ddffdd" fill="none" y="%ipx" x="50px" width="600px"
-	    height="0px"/>
-""" %(dh-y))
-#"
-	    y = y + 10000 * scale
-
-	# for offset, cats, color in [ (100, incomeCategories, "#eeffee" ),
-	#			    (400, spendingCategories, "#ffeeee") ]:
-
-	total = [0,0]  # in, out
-	offset = [100,400]
-	color = ["#eeffee", "#ffeeee"]
-	for volatility, label, c in vc:
-	    tot = totals.get(c,0)
-	    if tot == 0: continue
-	    if tot < 0 : out = 1
-	    else: out = 0
-	    change = abs(tot)
-	    bottom = total[out]
-	    total[out] = total[out] + change
-	    top = total[out]
-	    height = round((top-bottom)*scale)
-
-	    chart.write("""    <a l:href="year-cat.html#%s">
-        <rect stroke="black" fill="none" y="%ipx" x="%ipx" width="200px"
-	    height="%ipx" style="stroke: black; fill: %s"/></a>
-""" %(c.fragid, dh-round(top*scale), offset[out], height, color[out]))
-#"
-	    if  height > lineheight:
-		text = label
-		text2 = " \n%7i" % round(abs(tot))
-		
-		middle = dh-round((bottom+top)*scale/2 - lineheight/2)
-		if height > (3*lineheight):
-		    chart.write("""    <text  y="%ipx" x="%ipx" width="160px"
-	    height="%ipx" style="background: #eeeeff">%s</text>
-""" %(middle - (lineheight/2), offset[out]+20, height-40, text)) 
-#"	
-		    chart.write("""    <text  y="%ipx" x="%ipx" width="160px"
-	    height="%ipx" style="text-anchor:finish; background: #eeeeff">%s</text>
-""" %(middle + (lineheight/2), offset[out]+20, height-40, text2)) 
-#"
-		else:
-		    if len(text) < 15: text = text + " " + text2
-		    chart.write("""    <text  y="%ipx" x="%ipx" width="160px"
-	    height="%ipx" style="background: #eeeeff">%s</text>
-""" %(middle, offset[out]+20, height-40, text)) 
-#"	
-	
-	chart.write("""</svg>\n""")
-	chart.close()
-
+	writeChart(filename = "chart.svg",
+	    categories=quCategories + [ qu.UnclassifiedIncome, qu.UnclassifiedOutgoing],
+	    totals = totals, income=income, outgoings=outgoings, shortTerm = 1)
+    
+	writeChart(filename = "all.svg",
+	    categories=quCategories + [ qu.UnclassifiedIncome, qu.UnclassifiedOutgoing],
+	    totals = totals, income=income, outgoings=outgoings, shortTerm = 0)
+    
 
 	# Output totals
 	

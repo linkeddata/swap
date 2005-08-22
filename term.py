@@ -179,6 +179,11 @@ class Term(object):
     def unify(self, other, vars, existentials,  bindings):
 	"""Unify this which may contain variables with the other,
 	    which may contain existentials but not variables.
+	    
+	    vars   are variables we want a binding for if matched
+	    existentials are things we don't need a binding returned for
+	    bindings are those bindings already made in this unification
+	    
 	    Return 0 if impossible.
 	    return [({}, reason] if no new bindings
 	    Return [( {var1: val1, var2: val2,...}, reason), ...] if match
@@ -516,6 +521,17 @@ class List(CompoundTerm):
 	    yield x.first
 	    x = x.rest
 
+    def __len__(self):
+	"""The internal method which allows one to count the statements
+	as though a formula were a sequence.
+	"""
+	x = self
+	i = 0
+	while x is not self.store.nil:
+	    i = i + 1
+	    x = x.rest
+	return i
+
     def value(self):
 	res = []
 	for x in self:
@@ -624,29 +640,27 @@ class NonEmptyList(List):
 	if not isinstance(other, NonEmptyList): return 0
 	if other is self: return [ ({}, None)]
 
-	nbs = self.first.unify(other.first, vars, existentials, bindings)
-	if nbs == 0: return 0
-	res = []
-	for nb, reason in nbs:
-	    b2 = bindings.copy()
-	    if nb == []:
-		nbs2 = self.rest.unify(other.rest, vars, existentials,  b2)
-	    else:
-		vars2 = vars.copy()
-		existentials2 = existentials.copy()
-		for var in nb:
-		    if var in vars2:
-			vars2.remove(var)
-		    else:
-			existentials2.remove(var)
-		b2.update(nb)
-		nbs2 = self.rest.unify(other.rest, vars2, existentials2, b2)
-	    if nbs2 == 0: return 0
-	    for nb2, reason2 in nbs2:
-		nb3 = nb2.copy()
-		nb3.update(nb)
-		res.append((nb3, None))
-	return res
+	# Using the sequence-like properties of lists:
+	return unifySequence(self, other, vars, existentials,  bindings)
+	
+#	nbs = self.first.unify(other.first, vars, existentials, bindings)
+#	if nbs == 0: return 0
+#	if nbs == [({}, None)]: return self.rest.unify(  #@@   Tail rec to loop
+#				other.rest, vars, existentials,  bindings)
+#	res = []
+#	for nb, reason in nbs:
+#	    b2 = bindings.copy()
+#	    b2.update(nb)
+#	    done = Set(nb.keys())
+#	    nbs2 = self.rest.unify(other.rest,
+#			vars.difference(done),
+#			existentials.difference(done), b2)
+#	    if nbs2 == 0: return 0
+#	    for nb2, reason2 in nbs2:
+#		nb3 = nb2.copy()
+#		nb3.update(nb)
+#		res.append((nb3, None))
+#	return res
 
     def debugString(self, already):
 	s = `self`+" is ("
@@ -732,6 +746,83 @@ class FragmentNil(EmptyList, Fragment):
 	Fragment.__init__(self, resource, fragid)
 	EmptyList.__init__(self, self.store, None, None)
 	self._asList = self
+
+
+
+def unifySequence(self, other, vars, existentials, bindings, start=0):
+    """Utility routine to unify 2 python sequences of things against each other
+    Slight optimization to iterate instead of recurse when no binding happens.
+    """
+
+    if diag.chatty_flag > 99: progress("Unifying sequence %s with %s" %
+	(`self`, `other`))
+    i = start
+    if len(self) != len(other): return 0
+    while 1:
+	nbs = unify(self[i], other[i], vars, existentials, bindings)
+	if nbs == 0: return 0	 # Match fail
+	i = i +1
+	if i == len(self): return nbs
+	if nbs != [({}, None)]: break   # Multiple bundings
+    
+    res = []
+    for nb, reason in nbs:
+	b2 = bindings.copy()
+	b2.update(nb)
+	done = Set(nb.keys())
+	nbs2 = unifySequence(self, other,
+		    vars.difference(done),
+		    existentials.difference(done), b2, start=i)
+	if nbs2 == 0: return 0
+	for nb2, reason2 in nbs2:
+	    nb3 = nb2.copy()
+	    nb3.update(nb)
+	    res.append((nb3, None))
+    return res
+    
+def unifySet(self, other, vars, existentials, bindings):
+    """Utility routine to unify 2 python sets of things against each other
+    No optimization!  This is of course the graph match function 
+    implemented properly in query.py
+    """
+    if diag.chatty_flag > 99: progress("Unifying set %s with %s" %
+	(`self`, `other`))
+    if len(self) != len(other): return 0    # Match fail
+    if self == Set([]): return [ ({}, None) ] # Perfect match
+    self2 = self.copy() # Don't mess with parameters
+    s = self2.pop()   # Pick one
+    for o in other:
+	nbs = unify(s, o, vars, existentials, bindings)
+	if nbs == 0: return 0
+	res = []
+	other2 = other.copy()
+	other2.remove(o)
+	for nb, reason in nbs:
+	    b2 = bindings.copy()
+	    b2.update(nb)
+	    done = Set(nb.keys())
+	    nbs2 = unifySet(self2, other2,
+			vars.difference(done),
+			existentials.difference(done), b2)
+	    if nbs2 == 0: return 0
+	    for nb2, reason2 in nbs2:
+		nb3 = nb2.copy()
+		nb3.update(nb)
+		res.append((nb3, None))
+	return res
+    return 0
+	    
+def unify(self, other, vars, existentials, bindings):
+    """Unify something whatever it is
+    See Term.unify
+    """
+    if diag.chatty_flag > 100: progress("Unifying %s" %(self))
+    if isinstance(self, Set):
+	return unifySet(self, other, vars, existentials, bindings)
+    if type(self) is type([]):
+	return unifySequence(self, other, vars, existentials, bindings)
+    return self.unify(other, vars, existentials, bindings)
+
 
 ##########################################################################
 #

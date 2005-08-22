@@ -1,21 +1,10 @@
      @prefix : <#> .
-     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
     
-    <>     a :Success .
-    {
-        {
-            
-            }     log:includes {:a     log:equalTo :a .
-            } .
-        
-        }     log:implies {<>     a :Failure .
-        } .
-    {
-        {
-            
-            }     log:notIncludes {:a     log:equalTo :a .
-            } .
-        
-        }     log:implies {<>     a :Success .
-        } .
+    :test1     a :Success .
+    
+    :test2     a :Success .
+    
+    :test3     a :Success .
+    
+    :test4     a :Success .
     

@@ -10,6 +10,7 @@ CODE=retest.py #../cwm.py  ../notation3.py ../query.py ../llyn.py
 
 OFFLINETESTS=regression.n3 list/detailed.tests \
 	sparql/detailed.tests \
+	reason/detailed.tests \
 	sets/detailed.tests \
 	ql/detailed.tests \
 	math/detailed.tests \

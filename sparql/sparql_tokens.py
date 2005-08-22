@@ -42,7 +42,7 @@ def importTokens():
             regexps = {}
             k = F.statementsMatching(pred=BNF.tokens)
             if len(k) != 1:
-                raise RuntimeError(k, len(k))
+                raise RuntimeError("Expected 1 occurrence of bnf:tokens, got %i: %s" % (len(k), `k`))
             for triple in k:
                 tokens = [x.uriref() for x in triple.object()]
             tokens.append(BNF.PASSED_TOKENS.uriref())

@@ -1,8 +1,7 @@
      @prefix : <file:/devel/WWW/2000/10/swap/test/reason/t4.n3#> .
-     @prefix run: <file:/devel/WWW/2000/10/swap/test/reason/.run-1048018332.815871p26340#> .
-     @prefix run_: <file:/devel/WWW/2000/10/swap/test/reason/.run-1048018334.096992p26342#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
     
-    this     <http://www.w3.org/2000/10/swap/log#forAll> :x .
+     @forAll :x .
     
     <file:/devel/WWW/2000/10/swap/test/reason/a>     <file:/devel/WWW/2000/10/swap/test/reason/b> <file:/devel/WWW/2000/10/swap/test/reason/c> .
     
@@ -10,7 +9,7 @@
     {
         <file:/devel/WWW/2000/10/swap/test/reason/a>     <file:/devel/WWW/2000/10/swap/test/reason/b> :x .
         
-        }     <http://www.w3.org/2000/10/swap/log#implies> {:x     <file:/devel/WWW/2000/10/swap/test/reason/b2> <file:/devel/WWW/2000/10/swap/test/reason/c2> .
+        }     log:implies {:x     <file:/devel/WWW/2000/10/swap/test/reason/b2> <file:/devel/WWW/2000/10/swap/test/reason/c2> .
         } .
     
 

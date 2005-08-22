@@ -79,6 +79,11 @@
     test:description   "List unification 4 - nested lists";
     test:arguments     """list/unify4.n3 --think --data""".
 
+:t2004u5 a test:CwmTest;
+    test:shortFileName "list-unify5.n3";
+    test:description   "List unification 5 - multiple values";
+    test:arguments     """list/unify4.n3 --think --data""".
+
 :t2005 a test:CwmTest;
     test:shortFileName "append-out.n3";
     test:description   "Iterative ops on lists";

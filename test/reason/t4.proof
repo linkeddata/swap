@@ -1,65 +1,72 @@
-#Processed by Id: cwm.py,v 1.126 2003/02/14 17:48:08 sandro Exp 
+#Processed by Id: cwm.py,v 1.176 2005/08/10 17:03:22 syosi Exp 
         #    using base file:/devel/WWW/2000/10/swap/test/reason/foo
         
 #  Notation3 generation by
-#       notation3.py,v 1.133 2003/02/02 16:09:09 timbl Exp
+#       notation3.py,v 1.182 2005/08/15 16:28:43 syosi Exp
 
 #   Base was: file:/devel/WWW/2000/10/swap/test/reason/foo
      @prefix : <http://www.w3.org/2000/10/swap/reason#> .
-     @prefix run: <.run-1048018556.640054p26474#> .
+     @prefix foo: <#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix n3: <http://www.w3.org/2004/06/rei#> .
+     @prefix t: <t4.n3#> .
     
-    this     <http://www.w3.org/2000/10/swap/log#forSome> <#_g0> .
+     @forSome foo:_g0 .
       [      a :Conjunction,
                     :Proof;
              :component  [
                  a :Extraction;
-                 :because  [
-                     a :Inference;
-                     :binding  [
-                         :boundTo <c>;
-                         :variable <t4.n3#x> ];
-                     :evidence  [
-                         a :Extraction;
-                         :because <#_g0>;
-                         :gives {<a>     <b> <c> .
-                        } ];
-                     :rule  [
-                         a :Extraction;
-                         :because <#_g0>;
-                         :gives {{
-                            <a>     <b> <t4.n3#x> .
-                            
-                            }     <http://www.w3.org/2000/10/swap/log#implies> {<t4.n3#x>     <b2> <c2> .
-                            } .
-                        } ] ];
-                 :gives {<c>     <b2> <c2> .
-                } ],
-                     [
-                 a :Extraction;
-                 :because <#_g0>;
+                 :because foo:_g0;
                  :gives {<a>     <b> <c> .
                 } ],
                      [
                  a :Extraction;
-                 :because <#_g0>;
-                 :gives {{
-                    <a>     <b> <t4.n3#x> .
+                 :because foo:_g0;
+                 :gives { @forSome t:x .
+                {
+                    <a>     <b> t:x .
                     
-                    }     <http://www.w3.org/2000/10/swap/log#implies> {<t4.n3#x>     <b2> <c2> .
+                    }     log:implies {t:x     <b2> <c2> .
                     } .
+                } ],
+                     [
+                 a :Extraction;
+                 :because  [
+                     a :Inference;
+                     :binding  [
+                         :boundTo  [
+                             n3:uri "file:/devel/WWW/2000/10/swap/test/reason/c" ];
+                         :variable  [
+                             n3:uri "file:/devel/WWW/2000/10/swap/test/reason/t4.n3#x" ] ];
+                     :evidence  [
+                         a :Extraction;
+                         :because foo:_g0;
+                         :gives {<a>     <b> <c> .
+                        } ];
+                     :rule  [
+                         a :Extraction;
+                         :because foo:_g0;
+                         :gives { @forSome t:x .
+                        {
+                            <a>     <b> t:x .
+                            
+                            }     log:implies {t:x     <b2> <c2> .
+                            } .
+                        } ] ];
+                 :gives {<c>     <b2> <c2> .
                 } ];
-             :gives {this     <http://www.w3.org/2000/10/swap/log#forAll> <t4.n3#x> .
+             :gives { @forAll t:x .
             <a>     <b> <c> .
             <c>     <b2> <c2> .
             {
-                <a>     <b> <t4.n3#x> .
+                <a>     <b> t:x .
                 
-                }     <http://www.w3.org/2000/10/swap/log#implies> {<t4.n3#x>     <b2> <c2> .
+                }     log:implies {t:x     <b2> <c2> .
                 } .
             };
-             :universal <t4.n3#x> ].
+             :universal "file:/devel/WWW/2000/10/swap/test/reason/t4.n3#x" ].
     
-    <#_g0>     a :Parsing;
+    foo:_g0     a :Parsing;
          :source <t4.n3> .
     
 #ENDS
