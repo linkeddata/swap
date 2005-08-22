@@ -409,25 +409,25 @@ test:CwmTest;
 :t1037 a test:CwmTest;
     test:referenceOutput <ref/bi-t6.n3>;
     test:description   "Simple use of log:includes";
-    test:arguments     """includes/t6.n3 -think""".
+    test:arguments     """includes/t6.n3 --think""".
 
 
 # Can't query query for "forall x" 2003-07-28
 #:t1038 a test:CwmTest;
 #    test:referenceOutput <ref/bi-t7.n3>;
 #    test:description   "Simple use of log:includes";
-#    test:arguments     """includes/t7.n3 -think""".
+#    test:arguments     """includes/t7.n3 --think""".
 
 
 :t1039 a test:CwmTest;
     test:referenceOutput <ref/bi-t8.n3>;
     test:description   "Simple use of string built-ins";
-    test:arguments     """includes/t8.n3 -think""".
+    test:arguments     """includes/t8.n3 --think""".
 
 :t1039a a test:CwmTest;
     test:referenceOutput <ref/includes-builtins.n3>;
     test:description   "Builtins and log:includes";
-    test:arguments     """includes/builtins.n3 -think""".
+    test:arguments     """includes/builtins.n3 --think --data""".
 
 :t1040 a test:CwmTest;
     test:referenceOutput <ref/bi-t9.n3>;
