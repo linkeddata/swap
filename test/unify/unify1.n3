@@ -1,0 +1,13 @@
+#  Two variables and some bnodes
+#
+@keywords is, a .
+
+Juno says  { Mars too aggressive }.
+
+@forAll ag.
+
+{ Juno says  { Mars too ag } } =>  { ag a ShouldBeAgressive }.
+
+
+#ends
+
