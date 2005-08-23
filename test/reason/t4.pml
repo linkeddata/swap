@@ -12,6 +12,7 @@
     </DirectAssertion>
 
     <rdf:Description>
+        <rdf:type rdf:resource="http://inferenceweb.stanford.edu/2004/07/iw.owl#NodeSet"/>
         <conclusion>     @prefix : &#60;file:/devel/WWW/2000/10/swap/test/reason/t4.n3#&#62; .
      @prefix log: &#60;http://www.w3.org/2000/10/swap/log#&#62; .
     
