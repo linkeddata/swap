@@ -2,12 +2,15 @@
 
 SWAP=../..
 
-.SUFFIXES: .checked .proof .result .n3
+.SUFFIXES: .checked .pml .proof .result .n3
 
 .n3.proof:
 	python $(SWAP)/cwm.py $< --think --base=foo --why > $@
 .n3.result:
 	python $(SWAP)/cwm.py $< --think --base=foo > $@
+.proof.pml:
+	python $(SWAP)/cwm.py $< --filter=to-pml.n3 --rdf > $@
+	
 .proof.checked:
 	python $(SWAP)/check.py < $< > $@
 
