@@ -7,6 +7,10 @@
     xmlns:iw="http://inferenceweb.stanford.edu/2004/07/iw.owl#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
 
+    <DirectAssertion rdf:nodeID="b1">
+        <source rdf:resource="t4.n3"/>
+    </DirectAssertion>
+
     <rdf:Description>
         <conclusion>     @prefix : &#60;file:/devel/WWW/2000/10/swap/test/reason/t4.n3#&#62; .
      @prefix log: &#60;http://www.w3.org/2000/10/swap/log#&#62; .

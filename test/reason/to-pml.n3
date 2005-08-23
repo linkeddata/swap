@@ -46,4 +46,8 @@
   ?x	iw:hasRule ?RULESTEP
 }.
 
+########## Provenance
+
+{  ?x a rea:Parsing; rea:source ?y } =>
+    { ?x a iw:DirectAssertion; iw:source ?y }.
  
