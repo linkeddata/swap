@@ -49,7 +49,7 @@ from myStore import Namespace, load, setStore # http://www.w3.org/2000/10/swap/
 from RDFSink import LITERAL_DT
 
 #hmm... generate from schema?
-from fromIcal import iCalendarDefs, TzdPfx # http://www.w3.org/2002/12/cal/ 
+from fromIcal import iCalendarDefs # http://www.w3.org/2002/12/cal/ 
 
 
 CRLF = chr(13) + chr(10)
@@ -192,34 +192,9 @@ class CalWr:
                 elif dt == ICAL.dateTime.uriref():
                     w("%s:%s%s%s" % (propName, tlit, z, CRLF))
                 else:
-<<<<<<< toIcal.py
-		    possibles = sts.statementsMatching(subj=when)
-		    for st in possibles:
-			preduri = st.predicate().uriref()
-			if preduri.startswith(TzdPfx):
-			    zone = preduri[len(TzdPfx):-3] # hack off "#tz"
-			    #@ See fromIcal - what for? Apple?
-			    tzid = {'US/Eastern': 'America/New_York',
-				    'US/Central': 'America/Chicago',
-				    # mountain? denver?
-				    'US/Pacific': 'America/Los_Angeles',
-				    }.get(tzid, tzid)
-
-
-
-			    whenV = translate(str(st.object()), maketrans("", ""), "-:")
-			    whenV = (whenV + "000000")[:15] # Must include seconds
-			    w("%s:TZID=%s:%s%s" %(propName, zone, whenV, CRLF))
-			    break
-		    else:
-			raise ValueError, \
-                          "no ical:dateTime or ical:date for %s = %s" \
-                          % (propName ,  when)
-=======
                     whenTZ = tzid(dt)
                     w("%s;VALUE=DATE-TIME;TZID=%s:%s%s" %  
                       (propName, str(whenTZ), tlit, CRLF))
->>>>>>> 2.27
 
     def doDuration(self, sts, r, propName, predName):
         w = self._w
@@ -413,8 +388,8 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.30  2005-08-22 21:12:54  timbl
-# Revive --why proof generation and check.py. Recode unification a bit
+# Revision 2.31  2005-08-26 15:21:35  connolly
+# undo borken commit
 #
 # Revision 2.29  2005/04/18 14:33:25  connolly
 # try not capitalizing mailto:
