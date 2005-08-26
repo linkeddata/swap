@@ -6,6 +6,11 @@ $ ID:   $
 """
 
 import string
+from unicodedata import category
+from set_importer import Set
+
+LETTER_CATEGORIES = Set(["Ll", "Lu", "Lo", "Lt", "Nl"])
+NCNAME_CATEGORIES = LETTER_CATEGORIES.union(["Mc", "Me", "Mn", "Lm", "Nd"])
 
 NCNameChar, NCNameStartChar, NameStartChar, NameChar, \
             Letter, Digit, CombiningChar, Extender, BaseChar, Ideographic = \
@@ -20,7 +25,22 @@ def isXMLChar10(character, char_class):
     usual use is isXMLChar(character, isXML.NCNameChar)
     """
     num = ord(character)
-    if char_class == BaseChar:
+    character = unicode(character)
+    if char_class == Letter:
+        return category(character) in LETTER_CATEGORIES
+    elif char_class == NCNameStartChar:
+        return (character == '_') or \
+               isXMLChar10(character, Letter)
+    elif char_class == NCNameChar:
+        return (character == '-') or \
+               (character == '.') or \
+               (character == '_') or \
+               category(character) in NCNAME_CATEGORIES
+    elif char_class == NameStartChar:
+        return character == ':' or isXMLChar10(character, NCNameStartChar)
+    elif char_class == NameChar:
+        return character == ':' or isXMLChar10(character, NCNameChar)
+    elif char_class == BaseChar:
         return (num >= 0x0041 and num <= 0x005A) or \
                (num >= 0x0061 and num <= 0x007A) or \
                (num >= 0x00C0 and num <= 0x00D6) or \
@@ -351,23 +371,6 @@ def isXMLChar10(character, char_class):
                (num >= 0x3031 and num <= 0x3035) or \
                (num >= 0x309D and num <= 0x309E) or \
                (num >= 0x30FC and num <= 0x30FE)
-    elif char_class == Letter:
-        return isXMLChar10(character, BaseChar) or \
-               isXMLChar10(character, Ideographic)
-    elif char_class == NCNameStartChar:
-        return (character == '_') or \
-               isXMLChar10(character, Letter)
-    elif char_class == NCNameChar:
-        return (character == '-') or \
-               (character == '.') or \
-               isXMLChar10(character, NCNameStartChar) or \
-               isXMLChar10(character, Digit) or \
-               isXMLChar10(character, CombiningChar) or \
-               isXMLChar10(character, Extender)
-    elif char_class == NameStartChar:
-        return character == ':' or isXMLChar10(character, NCNameStartChar)
-    elif char_class == NameChar:
-        return character == ':' or isXMLChar10(character, NCNameChar)
     else:
         raise NotImplementedError
         
