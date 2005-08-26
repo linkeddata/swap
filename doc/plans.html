@@ -91,12 +91,12 @@
   <li>W3.org homepage announcement</li>
 </ul>
 
-<h2 id="Release">by Release 1.1 2004/10/?? (Requires Python 2.3)</h2>
+<h2 id="Release">by Release 1.1 2005/09/?? (Requires Python 2.3)</h2>
 
 <p>This contains performance work which would have been been in 0.9 except
 for unexpected medical situation. This will use Python sets where appropriate
 (instead of homebrew sets or sequences) and will therefore <strong>require
-python 2.3.</strong></p>
+python 2.3.</strong></p><p><strong>Release candidate rc1 was made 2005/08</strong></p>
 <ul>
   <li>Distribution mechanisms 
     <ul>
@@ -115,11 +115,14 @@ python 2.3.</strong></p>
 
 <h2>Longer Term</h2>
 
-<p></p>
-
 <p>There is no timescale for these enhahcements, as they are not subject to
 existing funded development or volunteer commitment. Bother are of course
-welcome at any time!</p>
+welcome at any time!</p><p></p><p>Code Cleanup</p><p>Philosophy: To be able to integrate with other projects such as redfoot, pychinko, redland,
+etc, make the base classes for N3 terms as light as possible.
+&nbsp;Move functionality such as indexing for query, parsing, pretty
+printing, serializing, etc into separate modules.</p><ul><li>cut all code to 80 column</li><li>make API tests, including very simple API for user wanting to use just RDF level.</li><li>clean up serialier/output notation interface renaming functions and adding start/end list and set</li><li>n3xml namespace?</li><li>&nbsp;make new ultrlight term class structure</li><li>tetss for other programs like toIcal,&nbsp;</li><li>Make
+regression test manifest format less fussy about directory in which
+test is run or make it run in the same directory as the file etc</li><li>List other apps on home page</li><li>Clean interface to indexed formula so that different versions with different indexing can be used</li><li>Abstract interface to stored formula so that persistent store can be used (rdlib, 3store, etc)</li></ul>
 
 <h3>Performance</h3>
 
