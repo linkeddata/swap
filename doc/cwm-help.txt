@@ -26,6 +26,8 @@ steps, in order left to right:
 --apply=foo   Read rules from foo, apply to store, adding conclusions to store
 --patch=foo   Read patches from foo, applying insertions and deletions to store
 --filter=foo  Read rules from foo, apply to store, REPLACING store with conclusions
+--query=foo   Read a N3QL query from foo, apply it to the store, and replace the store with its conclusions
+--sparql=foo   Read a SPARQL query from foo, apply it to the store, and replace the store with its conclusions
 --rules       Apply rules in store to store, adding conclusions to store
 --think       as -rules but continue until no more rule matches (or forever!)
 --engine=otter use otter (in your $PATH) instead of llyn for linking, etc
@@ -43,6 +45,7 @@ steps, in order left to right:
 --help        print this message
 --revision    print CVS revision numbers of major modules
 --chatty=50   Verbose debugging output of questionable use, range 0-99
+--sparqlServer instead of outputting, start a SPARQL server on port 8000 of the store
 
 finally:
 
@@ -98,6 +101,7 @@ s   Subject must be explicit for every statement. Don't use ";" shorthand.
 t   "this" and "()" special syntax should be suppresed.
 u   Use \u for unicode escaping in URIs instead of utf-8 %XX
 v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSome".
+/   If namespace has no # in it, assume it ends at the last slash if outputting.
 
 
 Flags to control RDF/XML output (after --rdf=) areas follows:
@@ -105,6 +109,7 @@ Flags to control RDF/XML output (after --rdf=) areas follows:
 b  - Don't use nodeIDs for Bnodes
 c  - Don't use elements as class names
 d  - Default namespace supressed.
+l  - Don't use RDF collection syntax for lists
 r  - Relative URI suppression. Always use absolute URIs.
 z  - Allow relative URIs for namespaces
 

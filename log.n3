@@ -19,7 +19,7 @@ log:N3Document a rdfs:Class;
 as defined in general by http://www.w3.org/DesignIssues/Notation3.html
 and this schema, conveys the intent of the author by the semantics defined
 on those specifications, and the semantics defined by the specifications
-of any identifiers used in the document.
+of any other identifiers used in the document.
 """ .
 
 ################################################## Syntactic level
@@ -30,7 +30,7 @@ of any identifiers used in the document.
 
 log:equalTo a rdf:Property;
     rdfs:comment
-"""Equality in this sense is actually the same URI.
+"""True if the subject and object are the same RDF node (symbol or literal).
 Do not confuse with daml:EquivalentTo.
 A cwm built-in logical operator, RDF graph level.
 """.
@@ -45,9 +45,9 @@ A cwm built-in logical operator.
 log:rawType a rdf:Property;
     rdfs:comment """
 This is a low-level langauge type, one of log:Formula, log:Literal, 
-log:List, log:Other.  I only use testing for log:Formula right now (tbl 2001/9/17).
-List and Other are not stable and may change.
-Example: semanticsOrError returns either a Formula or a String.
+log:List, log:Set or log:Other. 
+Example: log:semanticsOrError returns either a formula or a string,
+and you can check which using log:rawType.
 """.
 
 log:Formula a rdfs:Class.
@@ -57,19 +57,19 @@ log:Other   a rdfs:Class.     # Not one of the above.
 
 #   The following are inherent in the translation of N3 syntax to quad representation:
 
-log:forSome a rdf:SyntaxArc;  #@@@@@   NOT a real property. A psedoproperty
-    rdfs:comment """A is true for some object for which here we use B. This
-        is NOT a real rdf property in its behaviour - a pseudoproperty.
-	For example, removal of it from a formula does nor
-	preserve truth, and substitution is not permitted on its object.""" ;
-	   rdfs:domain log:Formula.
+#log:forSome a rdf:SyntaxArc;  #@@@@@   NOT a real property. A psedoproperty
+#    rdfs:comment """A is true for some object for which here we use B. This
+#        is NOT a real rdf property in its behaviour - a pseudoproperty.
+#	For example, removal of it from a formula does nor
+#	preserve truth, and substitution is not permitted on its object.""" ;
+#	   rdfs:domain log:Formula.
 
 
-log:forAll a log:SyntaxArc;
-    rdfs:label 	"for All";
-    rdfs:comment """A is true for any object in place of B.
-	This is NOT a real rdf property in its behaviour - a pseudoproperty.
-	For examplem substitution is not permitted on its object.""".
+#log:forAll a log:SyntaxArc;
+#    rdfs:label 	"for All";
+#    rdfs:comment """A is true for any object in place of B.
+#	This is NOT a real rdf property in its behaviour - a pseudoproperty.
+#	For examplem substitution is not permitted on its object.""".
 
 
 #########################################################
@@ -79,8 +79,9 @@ log:forAll a log:SyntaxArc;
 
 log:Truth a rdfs:Class;
     rdfs:comment """Something which is true: belive it as you would belive this.
-	       Understood natively by cwm in that it will execute rules in a formula
-         declared a Truth within a formula it is already taking rules from.""".
+    
+	Understood natively by cwm in that it will execute rules in a formula
+	declared a Truth within a formula it is already taking rules from.""".
 
 #log:Falsehood a rdf:Class;
 #	rdfs:comment "Something which is not true. Not the complement of True!";
@@ -91,33 +92,48 @@ log:implies a rdf:Property;
     rdfs:comment """Logical implication. 
 This is the relation between the antecedent (subject) and
 conclusion (object) of a rule.
-For every subsitution of variable names for symbols or literals
-which maps the antecedent to a fromula which knowledge base
-log:includes, the same substitution is applied to the 
-conclusion to generate the result.
- 
-Used by cwm as the basic hook for adding inference to RDF.
-See the manual to define what the knowledge base is and
-where the results go. See also log:conclusion.""";
+The application of a rule to a knowledgebase is as follows.
+For every substitution which, applied to the antecedent,
+gives a formula which is a subset of the knowledgebase,
+then the result of applying that same substitution to the
+conclusion may be added to the knowledgebase.
+
+related: See log:conclusion. 
+(See the CWM manual for command line options to determine how
+rules from different sources are applied to and the results
+added to various formula.)
+""";
     rdfs:range log:Formula;
     rdfs:isDefinedBy <>;
     rdfs:range log:Formula.
 
 log:includes a rdf:Property;
-    rdfs:comment """One formula is subset of other.
-That is, the two graphs can be matched by finding the
-mapping between varibles in one and variables in the other.
-Variable subsitution is applied recursively to nested formulae.
-[Note forAll and forSome psuedo-statements themselves].
-The information in the subject formula supports the object formula.
-Understood natively by cwm in the antecendent of a rule.""";
+    rdfs:comment """The subject formula includes the object formula.
+Formula A includes formula B if there exists some substitution
+which when applied to B creates a formula B' such that for
+every statement in B' is also in A, every variable
+universally (or existentially) quantified in B' is quantified in
+the same way in A. 
+
+Variable subsitution is applied recursively to nested compound terms such as
+formulae, lists and sets.
+
+(Understood natively by cwm when in in the antecendent of a rule.
+You can use this to peer inside nested formulae.)""";
     rdfs:range log:Formula;
     rdfs:isDefinedBy <>;
     rdfs:range log:Formula.
 
 log:notIncludes a rdf:Property;
-    rdfs:comment "The object formula is NOT a subset of subject. Understood natively by cwm. (See includes)";
-    rdfs:range log:Formula;
+    rdfs:comment """The object formula is NOT a subset of subject.
+    True iff log:includes is false.
+    The converse of log:includes. (Understood natively by cwm.
+    The subject formula may contain variables.
+    (In cwm, variables must of course end up getting bound
+    before the log:include test can be done, or an infinite result set
+    would result)
+    Related: See includes""";
+    rdfs:domain log:Formula;
     rdfs:isDefinedBy <>;
     rdfs:range log:Formula.
 
@@ -142,10 +158,26 @@ log:semantics a rdf:Property;
     rdfs:domain doc:Work;
     rdfs:range  log:Formula;
     rdfs:label  "semantics";
-    rdfs:comment """The semantics of a document is the formula
+    rdfs:comment """The log:semantics of a document is the formula.
 acheived by parsing representation of the document.
+ For a document in Notation3, log:semantics is the
+log:parsedAsN3 of the log:contents of the document.
+For a document in RDF/XML, it is parsed according to the
+RDF/XML specification to yeild an RDF formula
+(a subclass of N3 log:Formula).
 
-(Cwm knows how to go get a document and parse it in order to evaluate this.)""".
+[Aside: Philosophers will be distrated here into worrying about the meaning
+of meaning. At least we didn't call this function "meaning"!
+In as much as N3 is used as an interlingua for interoperability
+for different systems, this for an N3 based system is the meaning 
+expressed by a document.]
+
+(Cwm knows how to go get a document and parse N3 and RDF/XML
+it in order to evaluate this.
+Other languages for web documents 
+mau be defined whose N3 semantics are therefore
+also calculable, and so they could be added in due course.
+See for example GRDDL, RDF/A, etc)""".
 
 log:semanticsOrError a rdf:Property;
     rdfs:domain doc:Work;
@@ -155,7 +187,7 @@ or an error message explaining what went wromg with trying. See log:semantics.
 (Cwm knows how to go get a document and parse it in order to evaluate this.)
 """.
 
-log:content a rdf:Property;   # (was hasContent but we use role nouns by preference)
+log:content a rdf:Property;
     rdfs:domain doc:Work;
     rdfs:range  log:String;
     rdfs:label  "content";
