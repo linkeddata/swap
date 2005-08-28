@@ -587,18 +587,22 @@ rdf/xml files. Note that this requires rdflib.
 
             elif arg == '-pythink':
                 from swap import pycwmko
-                from pychinko import interpreter
-                from swap.set_importer import Set, ImmutableSet
-                pyf = pycwmko.N3Loader.N3Loader()
-                conv = pycwmko.ToPyStore(pyf)
-                conv.statements(workingContext)
-                interp = interpreter.Interpreter(pyf.rules[:])
-                interp.addFacts(Set(pyf.facts), initialSet=True)
-                interp.run()
-                pyf.facts = interp.totalFacts
-                workingContext = workingContext.store.newFormula()
-                reconv = pycwmko.FromPyStore(workingContext, pyf)
-                reconv.run()
+                if True:
+                    pythink = pycwmko.directPychinkoQuery(workingContext)
+                    pythink()
+                else:
+                    from pychinko import interpreter
+                    from swap.set_importer import Set, ImmutableSet
+                    pyf = pycwmko.N3Loader.N3Loader()
+                    conv = pycwmko.ToPyStore(pyf)
+                    conv.statements(workingContext)
+                    interp = interpreter.Interpreter(pyf.rules[:])
+                    interp.addFacts(Set(pyf.facts), initialSet=True)
+                    interp.run()
+                    pyf.facts = interp.totalFacts
+                    workingContext = workingContext.store.newFormula()
+                    reconv = pycwmko.FromPyStore(workingContext, pyf)
+                    reconv.run()
 
             elif arg == '-sparqlServer':
                 from swap.sparql import webserver

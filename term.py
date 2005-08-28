@@ -217,16 +217,17 @@ class Node(Term):
 
 class LabelledNode(Node):
     "The labelled node is one which has a URI."
-
+        
     def compareTerm(self, other):
 	"Assume is also a LabelledNode - see function compareTerm in formula.py"
 	_type = RDF_type_URI
 	s = self.uriref()
-	if s == _type:
+	if s is self.store.type:
 		return -1
 	o = other.uriref()
-	if o == _type:
+	if o is self.store.type:
 		return 1
+	return cmp(s, o)
 	if s < o :
 		return -1
 	if s > o :
@@ -241,7 +242,7 @@ class LabelledNode(Node):
 class Symbol(LabelledNode):
     """   A Term which has no fragment
     """
-    
+
     def __init__(self, uri, store):
         Term.__init__(self, store)
         assert string.find(uri, "#") < 0, "no fragments allowed: %s" % uri
@@ -254,7 +255,7 @@ class Symbol(LabelledNode):
         return refTo(base, self.uri)
 
     def uriref(self):
-        assert ':' in self.uri, "oops! must be absolute: %s" % self.uri
+#        assert ':' in self.uri, "oops! must be absolute: %s" % self.uri
         return self.uri
 
     def internFrag(self, fragid, thetype):   # type was only Fragment before

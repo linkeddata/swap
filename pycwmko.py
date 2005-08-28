@@ -8,8 +8,9 @@ from pychinko import terms
 from pychinko import N3Loader
 from pychinko.helpers import removedups
 from swap import term, formula
+from swap.set_importer import Set
 from rdflib import BNode, Store
-from rdflib.constants import TYPE, FIRST, REST, LIST, NIL
+from rdflib.constants import TYPE, FIRST, REST, LIST, NIL, OWLNS
 LOG_IMPLIES = 'http://www.w3.org/2000/10/swap/log#'
 
 try:
@@ -22,6 +23,134 @@ except NameError:
             b -= 1
             yield ll[b]
 
+
+from pychinko import nodes, rete
+
+class fullSet(object):
+    def __contains__(self, other):
+        return True
+
+from sys import stderr
+class directPychinkoQuery(object):
+    def __init__(self, workingContext, rulesFormula=None, target=None):
+        if rulesFormula is None:
+            rulesFormula = workingContext
+        if target is None:
+            target = workingContext
+        self.rules = self.buildRules(rulesFormula)
+        self.workingContext = workingContext
+        self.target = target
+        if workingContext is target:
+            self.loop = True
+        else:
+            self.loop = False
+        
+
+    def __call__(self):
+        rules = self.rules
+        indexedFormula = self.workingContext
+        self.newStatements = fullSet()
+        self.rete = rete.RuleCompiler().compile(rules)
+        newStuff = True
+        first = True
+
+        while newStuff and (first or self.loop):
+            #print >> stderr, "starting loop"
+            first = False
+            newStuff = False
+            needToRun = False
+            for alphaNode in self.rete.alphaNodeStore:
+                pattern = alphaNode.pattern.noneBasedPattern()
+                for quad in indexedFormula.statementsMatching(
+                    subj=pattern[0],
+                    pred=pattern[1],
+                    obj =pattern[2]):
+                    self.extra = []
+                    if quad in self.newStatements:
+                        s, p, o = [self.convType(x, indexedFormula)
+                                   for x in quad.spo()]
+                        for f in (self.extra + [(s,p,o)]):
+                            if alphaNode.add(terms.Fact(*f)):
+                                needToRun = True
+                                
+            self.newStatements = Set()                
+            self.joinedBetaNodes = Set()
+            if needToRun:
+                for alphaNode in self.rete.alphaNodeStore:
+                    for betaNode in alphaNode.betaNodes:
+                        if betaNode in self.joinedBetaNodes:
+                            continue
+                        newNewStuff = self.processBetaNode(betaNode)
+                        newStuff = newStuff or newNewStuff
+#        self.rete.printNetwork()
+
+    def convType(self, t, F, K=None):
+        if isinstance(t, term.NonEmptyList):
+            raise RuntimeError
+        if t in F.universals():
+            return terms.Variable(t.uriref())
+        if K is not None and t in K.existentials():
+            return terms.ExiVar(t.uriref())
+        return t
+                    
+    def processBetaNode(self, betaNode):
+        """I process a beta node"""
+        retVal = False
+        inferences = betaNode.join()
+        self.joinedBetaNodes.add(betaNode)
+        if inferences:
+            if betaNode.rule:
+                #self.rulesThatFired.add(betaNode.rule)
+                #######this test will be moved into `matchingFacts'
+                for rhsPattern in betaNode.rule.rhs:
+                    results = betaNode.matchingFacts(rhsPattern, inferences)
+                    ### @@@ here we need to add to the workingcontext
+                    for triple in results:
+                        addedResult = self.workingContext.add(*triple.t)
+                        if addedResult:
+                            retVal = True
+                            self.newStatements.add(
+                                self.workingContext.statementsMatching(
+                                    subj=triple.s, pred=triple.p, obj=triple.o)[0])
+#                        retVal = retVal or addedResult
+            else:
+                for child in betaNode.children:
+                    #process children of BetaNode..
+                    betaNodeProcessed = self.processBetaNode(child)
+                    retVal = retVal or betaNodeProcessed
+        return retVal
+                    
+    def buildRules(self, indexedFormula):
+        rules = []
+        for rule in indexedFormula.statementsMatching(pred=indexedFormula.store.implies):
+            subj, _, obj = rule.spo()
+            if not isinstance(subj, formula.Formula) or \
+               not isinstance(obj, formula.Formula):
+                continue
+            head = []
+            tail = []
+            for fr, to in (subj, tail), (obj, head):
+                for quad in fr:
+                    self.extra = []
+                    s, p, o = [self.convType(x, indexedFormula, fr)
+                               for x in quad.spo()] #to get variables.
+                               #Not good enough for Lists
+                    for f in (self.extra + [(s,p,o)]):
+                        to.append(terms.Pattern(*f))
+            rules.append(terms.Rule(tail, head))
+        return rules
+
+    def add(self, triple):
+        t = triple.t
+        status = False
+        if self.workingContext.add(*t):
+            alphaMatches = self.rete.alphaIndex.match(f)
+            for anode in alphaMatches:
+                if anode.add(f):
+                    status = True
+        return Status
+                
+
 class ToPyStore(object):
 
     def __init__(self, pyStore):
@@ -33,7 +162,8 @@ class ToPyStore(object):
             (term.Fragment, self.URI), 
             (term.AnonymousNode, self.BNode),
             (term.Literal, self.literal),
-            (term.List, self.list)]
+            (term.List, self.list),
+            (term.N3Set, self.set)]
 
     def lookup(self, node):
         for theType, function in self.typeConvertors:
@@ -73,6 +203,12 @@ class ToPyStore(object):
             self.pyStore.add((bNode, FIRST, self.lookup(item)))
             next = bNode
         return next
+
+    def set(self, node):
+        bNode = BNode.BNode()
+        l = self.list(node)
+        self.pyStore.add((bNode, OWLNS['oneOf'], l))
+        return bNode
 
     def statements(self, formula):
         for var in formula.universals():
