@@ -601,8 +601,8 @@ class StoredStatement:
         return "{"+`self[CONTEXT]`+":: "+`self[SUBJ]`+" "+`self[PRED]`+" "+`self[OBJ]`+"}"
 
 #   The order of statements is only for canonical output
-#   We cannot override __cmp__ or the object becomes unhashable, and can't be put into a dictionary.
-
+#   We cannot override __cmp__ or the object becomes unhashable,
+# and can't be put into a dictionary.
 
     def compareSubjPredObj(self, other):
         """Just compare SUBJ, Pred and OBJ, others the same
@@ -621,7 +621,7 @@ class StoredStatement:
             if s is not o:
                 return s.compareAnyTerm(o)
         return 0
-
+	
     def comparePredObj(self, other):
         """Just compare P and OBJ, others the same"""
         if self is other: return 0
@@ -718,7 +718,7 @@ class StoredStatement:
 	    f.declareUniversal(v)
 #	    progress("&&&&& Universals are %s\n\t in %s" % (f.universals(), f))
 	for v in ee:
-	    f.declareExistential(v.uriref(), why=why)
+	    f.declareExistential(v.uriref())
 	return f.close()  # probably slow - much slower than statement subclass of formula
 
 
