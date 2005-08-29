@@ -486,7 +486,7 @@ class IndexedFormula(Formula):
             F.canonical = F
             return F
 
-        fl.sort(StoredStatement.compareSubjPredObj)
+        fl.sort()
 	fe = F.existentials()
 	#fe.sort(Term.compareAnyTerm)
 	fu = F.universals ()
@@ -497,7 +497,7 @@ class IndexedFormula(Formula):
 	    gkey = len(gl), len(G.universals()), len(G.existentials())
             if gkey != l: raise RuntimeError("@@Key of %s is %s instead of %s" %(G, `gkey`, `l`))
 
-	    gl.sort(StoredStatement.compareSubjPredObj)
+	    gl.sort()
             for se, oe, in  ((fe, G.existentials()),
 			     (fu, G.universals())):
                 if se != oe:

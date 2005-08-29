@@ -130,7 +130,7 @@ class InferenceTask:
 	if targetContext is None: targetContext = workingContext # return new data to store
 	if ruleFormula is None: self.ruleFormula = workingContext # apply own rules
 	else: self.ruleFormula = ruleFormula
-	self.ruleFor = {}
+	self.ruleList = []
 	self.hasMetaRule = 0
 
 	self.workingContext, self.targetContext, self.mode, self.repeat = \
@@ -139,7 +139,7 @@ class InferenceTask:
 
     def runSmart(self):
 	"""Run the rules by mapping rule interactions first"""
-	rules= self.ruleFor.values()
+	rules= self.ruleList
 	if self.targetContext is self.workingContext: #otherwise, there cannot be loops
             for r1 in rules:
                 vars1 = r1.templateExistentials | r1.variablesUsed
@@ -254,7 +254,7 @@ class InferenceTask:
 	Start again if new rule mayhave been generated."""
 	grandtotal = 0
 	iterations = 0
-	self.ruleFor = {}
+	self.ruleList = []
 	needToCheckForRules = 1
 	while 1:
 	    if needToCheckForRules:
@@ -262,7 +262,7 @@ class InferenceTask:
 		needToCheckForRules = 0
 	    _total = 0
 	    iterations = iterations + 1
-	    for rule in self.ruleFor.values():
+	    for rule in self.ruleList:
 		found = rule.once()
 		if (diag.chatty_flag >50):
 		    progress( "Laborious: Found %i new stmts on for rule %s" % (found, rule))
@@ -283,14 +283,14 @@ class InferenceTask:
     def gatherRules(self, ruleFormula):
 	universals = Set() # @@ self.universals??
 	for s in ruleFormula.statementsMatching(pred=self.store.implies):
-	    r = self.ruleFor.get(s, None)
-	    if r != None: continue
+##	    r = self.ruleFor.get(s, None)
+##	    if r != None: continue
 	    con, pred, subj, obj  = s.quad
 	    if (isinstance(subj, Formula)
 		and isinstance(obj, Formula)):
 		v2 = universals | ruleFormula.universals() # Note new variables can be generated
 		r = Rule(self, antecedent=subj, consequent=obj, statement=s,  variables=v2)
-		self.ruleFor[s] = r
+		self.ruleList.append(r)
 		if r.meta: self.hasMetaRule = 1
 		if (diag.chatty_flag >30):
 		    progress( "Found rule %r for statement %s " % (r, s))
@@ -304,8 +304,8 @@ class InferenceTask:
 	ql_select = self.store.newSymbol(QL_NS + "select")
 	ql_where = self.store.newSymbol(QL_NS + "where")
 	for s in ruleFormula.statementsMatching(pred=ql_select):
-	    r = self.ruleFor.get(s, None)
-	    if r != None: continue
+##	    r = self.ruleFor.get(s, None)
+##	    if r != None: continue
 	    con, pred, query, selectClause  = s.quad
 	    whereClause= ruleFormula.the(subj=query, pred=ql_where)
 	    if whereClause == None: continue # ignore (warning?)
@@ -315,7 +315,7 @@ class InferenceTask:
 		v2 = universals | ruleFormula.universals() # Note new variables can be generated
 		r = Rule(self, antecedent=whereClause, consequent=selectClause,
 				statement=s,  variables=v2)
-		self.ruleFor[s] = r
+		self.ruleList.append(r)
 		if r.meta: self.hasMetaRule = 1
 		if (diag.chatty_flag >30):
 		    progress( "Found rule %r for statement %s " % (r, s))
@@ -343,7 +343,7 @@ class InferenceTask:
                 v2 = ruleFormula.universals().copy()
                 r = Rule(self, antecedent=where_clause, consequent=implies_clause,
                          statement=where_triple, variables=v2)
-                self.ruleFor[where_triple] = r
+                self.ruleList.append(r)
                 if r.meta: self.hasMetaRule = 1
 		if (diag.chatty_flag >30):
 		    progress( "Found rule %r for statement %s " % (r, where_triple))

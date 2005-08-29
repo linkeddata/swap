@@ -39,6 +39,8 @@ FLOAT_DATATYPE = "http://www.w3.org/2001/XMLSchema#double"
 
 prefixchars = "abcdefghijklmnopqustuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
+class TooMuchRecursion(Exception): pass
+
 class Serializer:
     """A serializer to serialize the formula F into the given
     abstract syntax sink
@@ -54,6 +56,7 @@ class Serializer:
 	self._inContext ={}
 	self._loopCheck = {}
 	self._inLoop = {}
+	self._tooDeep = {}
 	self._occurringAs = [{}, {}, {}, {}]
 	self._topology_returns = {}
 
@@ -304,7 +307,7 @@ class Serializer:
 	self.dumpLists()
 
 	ss = context.statements[:]
-	ss.sort(StoredStatement.compareSubjPredObj)
+	ss.sort()
 	def fixSet(x):
             try:
                 return x._node
@@ -467,6 +470,7 @@ class Serializer:
 	_asPred = self._occurringAs[PRED].get(x, 0)
 	_asObj = self._occurringAs[OBJ].get(x, 0)
 	_inLoop = self._inLoop.get(x, 0)
+	_tooDeep = self._tooDeep.get(x, 0)
         if isinstance(x, Literal):
             _anon = 0     #  Never anonymous, always just use the string
 	elif isinstance(x, Formula):
@@ -486,8 +490,8 @@ class Serializer:
         else:  # bnode
 	    ctx = self._inContext.get(x, "weird")
 	    _anon = ctx == "weird" or (ctx is context and
-			_asObj < 2 and _asPred == 0 and _inLoop == 0 and
-			(not _loop) and
+			_asObj < 2 and _asPred == 0 and _inLoop == 0 and 
+			_tooDeep == 0 and (not _loop) and
 			_isExistential)
 	    if verbosity() > 97:
 		progress( "Topology %s in %s is: ctx=%s,anon=%i obj=%i, pred=%i loop=%s ex=%i "%(
@@ -569,8 +573,8 @@ class Serializer:
 		if not x.generated() and x not in context.variables():
 		    allStatements.append(StoredStatement(
 			(context, context.store.sameAs, x, y)))
-        allStatements.sort(StoredStatement.compareSubjPredObj)
-#        context.statements.sort(StoredStatement.compareSubjPredObj)
+        allStatements.sort()
+#        context.statements.sort()
 	# @@ necessary?
 	self.dumpVariables(context, sink, sorting, pretty=1)
 
@@ -662,7 +666,10 @@ class Serializer:
 		    if verbosity() > 90: progress("%s Not list, has property values." % `subj`)
                     sink.startAnonymousNode(subj.asPair())
                     for s in statements:  #   "[] color blue."  might be nicer. @@@  Try it?
-                        self.dumpStatement(sink, s.quad, sorting)
+                        try:
+                            self.dumpStatement(sink, s.quad, sorting)
+                        except TooMuchRecursion:
+                            pass
                     sink.endAnonymousNode()
                     return  # arcs as subject done
 
@@ -710,15 +717,19 @@ class Serializer:
 
         _anon, _incoming = self._topology(obj, context)
         if _anon and _incoming == 1:  # Embedded anonymous node in N3
-	    sink.startAnonymous(self.extern(triple))
-	    ss = context.statementsMatching(subj=obj)
-	    if sorting: ss.sort(StoredStatement.comparePredObj)
-	    for t in ss:
-		self.dumpStatement(sink, t.quad, sorting)
-	    sink.endAnonymous(sub.asPair(), pre.asPair()) # Restore parse state
-            return
+            if 0:
+                pass
+            else:
+                sink.startAnonymous(self.extern(triple))
+                ss = context.statementsMatching(subj=obj)
+                if sorting: ss.sort(StoredStatement.comparePredObj)
+                for t in ss:
+                    self.dumpStatement(sink, t.quad, sorting)
+                sink.endAnonymous(sub.asPair(), pre.asPair()) # Restore parse state
+                return
 
         self._outputStatement(sink, triple)
+
 
 BNodePossibles = None	
 def canItbeABNode(formula, symbol):   # @@@@ Really slow -tbl @@@ send me an e-mail with a run of myProfiler proving it. -Yosi
@@ -729,9 +740,9 @@ def canItbeABNode(formula, symbol):   # @@@@ Really slow -tbl @@@ send me an e-m
             for s in PRED, SUBJ, OBJ:
                 if isinstance(quad[s], Formula):
                     if BNodePossibles is None:
-                        BNodePossible = quad[s].doNodesAppear(formula.existentials())
+                        BNodePossible = quad[s].occurringIn(formula.existentials())
                     else:
-                        BNodePossible.update(quad[s].doNodesAppear(formula.existentials()))
+                        BNodePossible.update(quad[s].occurringIn(formula.existentials()))
         return symbol in BNodePossibles
     return returnFunc
 

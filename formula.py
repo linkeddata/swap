@@ -142,10 +142,10 @@ class Formula(AnonymousNode, CompoundTerm):
 		if diff != 0: return diff
 
 #		@@@@ No need - canonical formulae are always sorted
-	s.sort(StoredStatement.compareSubjPredObj) # forumulae are all the same
-	o.sort(StoredStatement.compareSubjPredObj)
+	s.sort() # forumulae are all the same
+	o.sort()
 	for i in range(ls):
-	    diff = s[i].compareSubjPredObj(o[i])
+	    diff = cmp(s[i],o[i])
 	    if diff != 0: return diff
 	raise RuntimeError("Identical formulae not interned! Length %i: %s\n\t%s\n vs\t%s" % (
 		    ls, `s`, self.debugString(), other.debugString()))
@@ -604,7 +604,7 @@ class StoredStatement:
 #   We cannot override __cmp__ or the object becomes unhashable,
 # and can't be put into a dictionary.
 
-    def compareSubjPredObj(self, other):
+    def __cmp__(self, other):
         """Just compare SUBJ, Pred and OBJ, others the same
         Avoid loops by spotting reference to containing formula"""
         if self is other: return 0
@@ -621,7 +621,10 @@ class StoredStatement:
             if s is not o:
                 return s.compareAnyTerm(o)
         return 0
-	
+
+    def __hash__(self):
+        return id(self)
+
     def comparePredObj(self, other):
         """Just compare P and OBJ, others the same"""
         if self is other: return 0

@@ -155,6 +155,7 @@ class ToPyStore(object):
 
     def __init__(self, pyStore):
         self.pyStore = pyStore
+        self.lists = {}
         self.typeConvertors = [ 
             (formula.Formula , self.formula),  
             (formula.StoredStatement, self.triple),
@@ -195,6 +196,8 @@ class ToPyStore(object):
         return terms.Literal(string, lang, dt)
 
     def list(self, node):
+        if node in self.lists:
+            return self.lists[node]
         newList = [].__class__
         next = NIL
         for item in reversed(newList(node)):
@@ -202,6 +205,7 @@ class ToPyStore(object):
             self.pyStore.add((bNode, REST, next))
             self.pyStore.add((bNode, FIRST, self.lookup(item)))
             next = bNode
+        self.lists[node] = next
         return next
 
     def set(self, node):

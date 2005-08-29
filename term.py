@@ -222,16 +222,14 @@ class LabelledNode(Node):
 	"Assume is also a LabelledNode - see function compareTerm in formula.py"
 	_type = RDF_type_URI
 	s = self.uriref()
-	if s is self.store.type:
+	if self is self.store.type:
 		return -1
 	o = other.uriref()
-	if o is self.store.type:
+	if other is self.store.type:
 		return 1
-	return cmp(s, o)
-	if s < o :
-		return -1
-	if s > o :
-		return 1
+	retVal = cmp(s, o)
+	if retVal:
+            return retVal
 	print "Error with '%s' being the same as '%s'" %(s,o)
 	raise RuntimeError("""Internal error: URIref strings should not match if not same object,
 	comparing %s and %s""" % (s, o))
@@ -317,6 +315,17 @@ class Fragment(LabelledNode):
         Term.__init__(self, resource.store)
         self.resource = resource
         self.fragid = fragid
+
+    def compareTerm(self, other):
+        if not isinstance(other, Fragment):
+            return LabelledNode.compareTerm(self, other)
+        if self is self.resource.store.type:
+            return -1
+        if other is self.resource.store.type:
+            return 1
+        if self.resource is other.resource:
+            return cmp(self.fragid, other.fragid)
+        return self.resource.compareTerm(other.resource)
    
     def uriref(self):
         return self.resource.uri + "#" + self.fragid
@@ -818,7 +827,7 @@ def unify(self, other, vars, existentials, bindings):
     See Term.unify
     """
     if diag.chatty_flag > 100: progress("Unifying %s" %(self))
-    if isinstance(self, Set):
+    if isinstance(self, (Set, ImmutableSet)):
 	return unifySet(self, other, vars, existentials, bindings)
     if type(self) is type([]):
 	return unifySequence(self, other, vars, existentials, bindings)

@@ -251,12 +251,15 @@ def main():
         if o in ("-c", "--chatty"):
 	    debugLevelForInference = int(a)
     
-    
+    if args:
+        fyi("Reading proof from "+args[0])
+        proof = load(args[0])
+    else:
 #    chatty=60
     #inputURI = argv[1]
     #fyi("Reading proof from "+inputURI)
-    fyi("Reading proof from standard input.")
-    proof = load()
+        fyi("Reading proof from standard input.")
+        proof = load()
     # setVerbosity(60)
     fyi("Length of proof: "+`len(proof)`)
     proof2 = proof.the(pred=rdf.type, obj=reason.Proof)  # the thing to be proved

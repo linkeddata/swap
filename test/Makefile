@@ -35,7 +35,7 @@ post-install : pyc-check $(CODE) $(OFFLINETESTS)
 	PYTHONPATH=`/bin/pwd`/..:`/bin/pwd`/../.. $P retest.py --cwm=../cwm -c $(OFFLINETESTS)
 
 filelist : pyc-check $(CODE) $(OFFLINETESTS)
-	export CWM_LIST_FILES=1; PYTHONPATH=`/bin/pwd`/..:`/bin/pwd`/../.. $P retest.py --cwm=./file_list.py -c $(OFFLINETESTS)
+	export CWM_LIST_FILES=1; PYTHONPATH=`/bin/pwd`/..:`/bin/pwd`/../.. $P retest.py --cwm=./file_list.py  $(OFFLINETESTS)
 	sort testfilelist > testfilelist3
 	uniq testfilelist3 > testfilelist
 	rm testfilelist3
