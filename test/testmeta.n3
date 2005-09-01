@@ -13,9 +13,9 @@
      @prefix string: <http://www.w3.org/2000/10/swap/string#> .
  
 # Added by hand:
-<http://www.w3.org/2000/10/rdf-tests/rdfcore/xml-canon/Manifest.rdf#test001> 
-       a :BoringTest,
-                :ParseTypeLiteralTest.
+#<http://www.w3.org/2000/10/rdf-tests/rdfcore/xml-canon/Manifest.rdf#test001> 
+#       a :BoringTest,
+#                :ParseTypeLiteralTest.
 # My machine:
 
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/Manifest.rdf#test004>     a :BoringTest,
@@ -28,8 +28,8 @@
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/Manifest.rdf#test0002>     a :BoringTest,
                 :ReificationTest .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#test003>     a :BoringTest,
-                :ParseTypeLiteralTest .
+#    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#test003>     a :BoringTest,
+#                :ParseTypeLiteralTest .
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#test005>     a :BoringTest,
                 :ReificationTest .
@@ -37,8 +37,8 @@
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#test006>     a :BoringTest,
                 :ReificationTest .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#test009>     a :BoringTest,
-                :ParseTypeLiteralTest .
+#    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#test009>     a :BoringTest,
+#                :ParseTypeLiteralTest .
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#test011>     a :BoringTest,
                 :ReificationTest .
@@ -46,17 +46,17 @@
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#test012>     a :BoringTest,
                 :ReificationTest .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-literal-is-xml-structure/Manifest.rdf#test001>     a :BoringTest,
-                :ParseTypeLiteralTest .
+#    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-literal-is-xml-structure/Manifest.rdf#test001>     a :BoringTest,
+#                :ParseTypeLiteralTest .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-literal-is-xml-structure/Manifest.rdf#test002>     a :BoringTest,
-                :ParseTypeLiteralTest .
+#    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-literal-is-xml-structure/Manifest.rdf#test002>     a :BoringTest,
+#                :ParseTypeLiteralTest .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-literal-is-xml-structure/Manifest.rdf#test003>     a :BoringTest,
-                :ParseTypeLiteralTest .
+#    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-literal-is-xml-structure/Manifest.rdf#test003>     a :BoringTest,
+#                :ParseTypeLiteralTest .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-literal-is-xml-structure/Manifest.rdf#test004>     a :BoringTest,
-                :ParseTypeLiteralTest .
+#    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-literal-is-xml-structure/Manifest.rdf#test004>     a :BoringTest,
+#                :ParseTypeLiteralTest .
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/Manifest.rdf#test001>     a :BoringTest,
                 :ReificationTest .
@@ -121,17 +121,17 @@
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-syntax-incomplete/Manifest.rdf#test004>     a :BoringTest,
                 :ReificationTest .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xml-literal-namespaces/Manifest.rdf#test001>     a :BoringTest,
-                :ParseTypeLiteralTest .
+#    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xml-literal-namespaces/Manifest.rdf#test001>     a :BoringTest,
+#                :ParseTypeLiteralTest .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xml-literal-namespaces/Manifest.rdf#test002>     a :BoringTest,
-                :ParseTypeLiteralTest .
+#    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xml-literal-namespaces/Manifest.rdf#test002>     a :BoringTest,
+#                :ParseTypeLiteralTest .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/Manifest.rdf#test001>     a :BoringTest,
-                :ParseTypeLiteralTest .
+#    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/Manifest.rdf#test001>     a :BoringTest,
+#                :ParseTypeLiteralTest .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/Manifest.rdf#test002>     a :BoringTest,
-                :ParseTypeLiteralTest .
+#    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/Manifest.rdf#test002>     a :BoringTest,
+#                :ParseTypeLiteralTest .
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/Manifest.rdf#test004>     a :BoringTest,
                 :ReificationTest .

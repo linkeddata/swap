@@ -38,6 +38,38 @@
 
 """
 
+# Some of the code adding support for XMLLiteral is
+    # Copyright (c) 2002, Daniel Krech, http://eikeon.com/
+    # All rights reserved.
+    #
+    # Redistribution and use in source and binary forms, with or without
+    # modification, are permitted provided that the following conditions are
+    # met:
+    #
+    #   * Redistributions of source code must retain the above copyright
+    # notice, this list of conditions and the following disclaimer.
+    #
+    #   * Redistributions in binary form must reproduce the above
+    # copyright notice, this list of conditions and the following
+    # disclaimer in the documentation and/or other materials provided
+    # with the distribution.
+    #
+    #   * Neither the name of Daniel Krech nor the names of its
+    # contributors may be used to endorse or promote products derived
+    # from this software without specific prior written permission.
+    #
+    # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+    # "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+    # LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+    # A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+    # OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+    # SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+    # LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+    # DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+    # THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+    # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+    # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 import string
 import sys
 
@@ -57,6 +89,7 @@ import xml.sax # PyXML stuff
                # TimBL points outhe does not use windows env't but cygwin and
                #   giuesses he should compile python2-xml for cygwin.
 import xml.sax._exceptions
+from xml.sax.saxutils import quoteattr
 from xml.sax.handler import feature_namespaces
 
 import RDFSink
@@ -114,6 +147,8 @@ class RDFHandler(xml.sax.ContentHandler):
 	self.flags = flags
         self._stack =[]  # Stack of states
         self._nsmap = [] # stack of namespace bindings
+        self._prefixMap = []
+        self.LiteralNS = None
 	self._delayedStatement = None
         self.sink = sink
         self._thisDoc = thisDoc
@@ -152,7 +187,7 @@ class RDFHandler(xml.sax.ContentHandler):
     def characters(self, data):
         if self._state == STATE_VALUE or \
            self._state == STATE_LITERAL:
-            self.testdata = self.testdata + data
+            self.testdata += data
         
 
     def flush(self):
@@ -327,21 +362,27 @@ class RDFHandler(xml.sax.ContentHandler):
 
         if self._nsmap:
             b = self._nsmap[-1].copy()
+            c = self._prefixMap[-1].copy()
         else:
             b = {}
+            c = {}
         b[prefix] = uri
+        c[uri] = prefix
         self._nsmap.append(b)
+        self._prefixMap.append(c)
 
         self.sink.bind(prefix, uri)
 
     def endPrefixMapping(self, prefix):
         del self._nsmap[-1]
+        self._prefixMap.pop()
 
     def startElementNS(self, name, qname, attrs):
         """ Handle start tag.
         """
-        
-        self.flush()
+
+        if self._state != STATE_LITERAL:
+            self.flush()
 	self.bnode = None
         
         tagURI = ((name[0] or "") + name[1])
@@ -411,13 +452,16 @@ class RDFHandler(xml.sax.ContentHandler):
             # print "\n  attributes:", `attrs`
 	    properties = []
 	    gotSubject = 0
+	    haveResource = 0
+	    haveParseType = 0
+	    haveExtras = 0
             for name, value in attrs.items():
                 ns, name = name
-
                 if name == "ID":
                     print "# Warning: ID=%s on statement ignored" %  (value) # I consider these a bug
 		    raise ValueError("ID attribute?  Reification not supported.")
                 elif name == "parseType":
+                    haveParseType = 1
 #		    x = value.find(":")
 #		    if x>=0: pref = value[:x]
 #		    else: pref = ""
@@ -451,9 +495,10 @@ class RDFHandler(xml.sax.ContentHandler):
                     elif value == "Literal" or "S" in self.flags:  # Strictly, other types are literal SYN#7.2.20
                         self._state = STATE_LITERAL # That's an XML subtree not a string
                         self._litDepth = 1
-                        self.testdata = "@@sax2rdf.py bug@@" # buggy implementation
+                        self.LiteralNS = [{}]
+                        self.testdata = '' #"@@sax2rdf.py bug@@" # buggy implementation
 			self._datatype = self.sink.newSymbol("http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral")
-			raise RuntimeError("This version of sax2rdf.py does not support parseType=Literal.")
+#			raise RuntimeError("This version of sax2rdf.py does not support parseType=Literal.")
 		    else:
 			raise SyntaxError("Unknown parse type '%s'" % value )
                 elif name == "nodeID":
@@ -472,6 +517,7 @@ class RDFHandler(xml.sax.ContentHandler):
 		    self._subject = obj
 		    gotSubject = 1
                 elif name == "resource":
+                    haveResource = 1
 		    assert not gotSubject
 		    x = self.sink.newSymbol(self.uriref(value)) 
                     self.sink.makeStatement((self._context,
@@ -486,7 +532,10 @@ class RDFHandler(xml.sax.ContentHandler):
                 elif ns == XML_NS_URI or name[:3] == "xml":  #  Ignore (lang is already done)
 		    pass # see rdf-tests/rdfcore/unrecognised-xml-attributes/test002.rdf
                 else:
+                    haveExtras = 1
 		    properties.append((ns, name, value)) # wait till subject is clear
+		assert haveResource + haveParseType  <= 1
+		assert haveParseType + haveExtras <= 1
 	    if not gotSubject and properties:
 		obj = self.newBlankNode()
 		self.sink.makeStatement((self._context,
@@ -549,6 +598,7 @@ class RDFHandler(xml.sax.ContentHandler):
 
         elif self._state == STATE_LITERAL:
             self._litDepth = self._litDepth + 1
+            self.literal_element_start(name, qname, attrs)
             #@@ need to capture the literal
         else:
             raise RuntimeError, ("Unknown state in RDF parser", self._stack) # Unknown state
@@ -571,12 +621,16 @@ class RDFHandler(xml.sax.ContentHandler):
             self._litDepth = self._litDepth - 1
             if self._litDepth == 0:
                 buf = self.testdata
+                self._datatype = self.sink.newSymbol("http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral")
                 self.sink.makeStatement(( self._context,
                                           self._predicate,
                                           self._subject,
-                                          self.sink.newLiteral(buf) ), why=self._reason2)
+                                          self.sink.newLiteral(buf, self._datatype) ), why=self._reason2)
                 self.testdata = ""
+
             else:
+                self.literal_element_end(name, qname)
+                self._stack.pop()
                 return # don't pop state
             
         elif self._state == STATE_VALUE:
@@ -638,6 +692,50 @@ class RDFHandler(xml.sax.ContentHandler):
     def endDocument(self, f=None):
         self.flush()
         self.sink.endDoc(self._formula)
+
+    def literal_element_start(self, name, qname, attrs):
+
+        declared = self.LiteralNS[-1].copy()
+        self.LiteralNS.append(declared)
+        nsMap = self._prefixMap[-1]
+        if name[0]:
+            prefix = nsMap[name[0]]
+            if prefix:
+                self.testdata += "<%s:%s" % (prefix, name[1])
+            else:
+                self.testdata += "<%s" % name[1]
+            for ns in [name] + attrs.keys():
+                ns = ns[0]
+                if not ns in declared:
+                    prefix = nsMap[ns]
+                    declared[ns] = prefix
+                    if prefix:
+                        self.testdata += (' xmlns:%s="%s"' % (prefix, ns))
+                    else:
+                        self.testdata += (' xmlns="%s"' % ns)
+        else:
+            self.testdata += "<%s" % name[1]
+
+        for (name, value) in attrs.items():
+            if name[0]:
+                name = declared[name[0]] + ":" + name[1]
+            else:
+                name = name[1]
+            self.testdata += (' %s=%s' % (name, quoteattr(value)))
+        self.testdata += ">"
+        
+    def literal_element_end(self, name, qname):
+        if name[0]:
+            prefix = self._prefixMap[-1][name[0]]
+            if prefix:
+                end = u"</%s:%s>" % (prefix, name[1])
+            else:
+                end = u"</%s>" % name[1]
+        else:
+            end = u"</%s>" % name[1]
+        self.testdata += end
+        self.LiteralNS.pop()
+
 
 
 class RDFXMLParser(RDFHandler):

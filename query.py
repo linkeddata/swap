@@ -130,7 +130,7 @@ class InferenceTask:
 	if targetContext is None: targetContext = workingContext # return new data to store
 	if ruleFormula is None: self.ruleFormula = workingContext # apply own rules
 	else: self.ruleFormula = ruleFormula
-	self.ruleList = []
+	self.ruleFor = {}
 	self.hasMetaRule = 0
 
 	self.workingContext, self.targetContext, self.mode, self.repeat = \
@@ -139,7 +139,7 @@ class InferenceTask:
 
     def runSmart(self):
 	"""Run the rules by mapping rule interactions first"""
-	rules= self.ruleList
+	rules= self.ruleFor.values()
 	if self.targetContext is self.workingContext: #otherwise, there cannot be loops
             for r1 in rules:
                 vars1 = r1.templateExistentials | r1.variablesUsed
@@ -254,7 +254,7 @@ class InferenceTask:
 	Start again if new rule mayhave been generated."""
 	grandtotal = 0
 	iterations = 0
-	self.ruleList = []
+	self.ruleFor = {}
 	needToCheckForRules = 1
 	while 1:
 	    if needToCheckForRules:
@@ -262,7 +262,7 @@ class InferenceTask:
 		needToCheckForRules = 0
 	    _total = 0
 	    iterations = iterations + 1
-	    for rule in self.ruleList:
+	    for rule in self.ruleFor.values():
 		found = rule.once()
 		if (diag.chatty_flag >50):
 		    progress( "Laborious: Found %i new stmts on for rule %s" % (found, rule))
@@ -283,14 +283,14 @@ class InferenceTask:
     def gatherRules(self, ruleFormula):
 	universals = Set() # @@ self.universals??
 	for s in ruleFormula.statementsMatching(pred=self.store.implies):
-##	    r = self.ruleFor.get(s, None)
-##	    if r != None: continue
+	    r = self.ruleFor.get(s, None)
+	    if r != None: continue
 	    con, pred, subj, obj  = s.quad
 	    if (isinstance(subj, Formula)
 		and isinstance(obj, Formula)):
 		v2 = universals | ruleFormula.universals() # Note new variables can be generated
 		r = Rule(self, antecedent=subj, consequent=obj, statement=s,  variables=v2)
-		self.ruleList.append(r)
+		self.ruleFor[s] = r
 		if r.meta: self.hasMetaRule = 1
 		if (diag.chatty_flag >30):
 		    progress( "Found rule %r for statement %s " % (r, s))
@@ -304,8 +304,8 @@ class InferenceTask:
 	ql_select = self.store.newSymbol(QL_NS + "select")
 	ql_where = self.store.newSymbol(QL_NS + "where")
 	for s in ruleFormula.statementsMatching(pred=ql_select):
-##	    r = self.ruleFor.get(s, None)
-##	    if r != None: continue
+	    r = self.ruleFor.get(s, None)
+	    if r != None: continue
 	    con, pred, query, selectClause  = s.quad
 	    whereClause= ruleFormula.the(subj=query, pred=ql_where)
 	    if whereClause == None: continue # ignore (warning?)
@@ -315,7 +315,7 @@ class InferenceTask:
 		v2 = universals | ruleFormula.universals() # Note new variables can be generated
 		r = Rule(self, antecedent=whereClause, consequent=selectClause,
 				statement=s,  variables=v2)
-		self.ruleList.append(r)
+		self.ruleFor[s] = r
 		if r.meta: self.hasMetaRule = 1
 		if (diag.chatty_flag >30):
 		    progress( "Found rule %r for statement %s " % (r, s))
@@ -343,7 +343,7 @@ class InferenceTask:
                 v2 = ruleFormula.universals().copy()
                 r = Rule(self, antecedent=where_clause, consequent=implies_clause,
                          statement=where_triple, variables=v2)
-                self.ruleList.append(r)
+                self.ruleFor[where_triple] = r
                 if r.meta: self.hasMetaRule = 1
 		if (diag.chatty_flag >30):
 		    progress( "Found rule %r for statement %s " % (r, where_triple))
@@ -551,7 +551,7 @@ def testIncludes(f, g, _variables=Set(),  bindings={}, interpretBuiltins = 0):
 #	As of 2003/07/28 forAll x ...x cannot be on left hand side of rule.
 #	This/these were: %s\n""" % g.universals())
 
-    if bindings != {}: _substitute(bindings, unmatched)
+#    if bindings != {}: _substitute(bindings, unmatched)
 
     if diag.chatty_flag > 20:
 	progress( "# testIncludes BUILTIN, %i terms in template %s, %i unmatched, %i template variables" % (
@@ -1008,6 +1008,24 @@ class Query(Formula):
 	if diag.chatty_flag > 10: progress("====> bindings from remote query:"+`nbs`)
 	return nbs   # No bindings for testing
 
+class BetterNone(object):
+    __slots__ = []
+    def __new__(cls):
+        try:
+            return cls.__val__
+        except:
+            cls.__val__ = object.__new__(cls)
+        return cls.__val__
+    def __hash__(self):
+        raise NotImplementedError
+    def __str__(self):
+        raise NotImplementedError
+    def __eq__(self, other):
+        raise NotImplementedError
+    __neq__ = __eq__
+    __lt__ = __gt__ = __leq__ = __geq__ = __eq__
+BNone = BetterNone()
+
 	     
 class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logical...
     """One line in a query being resolved.
@@ -1138,7 +1156,8 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 	    if self.neededToRun[SUBJ] == Set():
 		if self.neededToRun[OBJ] == Set():   # bound expression - we can evaluate it
                     try:
-                        if pred.eval(subj, obj,  queue, bindings.copy(), proof, self.query):
+#                        if pred.eval(subj, obj,  queue, bindings.copy(), proof, self.query):
+                        if pred.eval(subj, obj,  BNone, BNone, BNone, BNone):
                             self.state = S_SATISFIED # satisfied
                             if diag.chatty_flag > 80: progress("Builtin buinary relation operator succeeds")
                             if diag.tracking:
@@ -1148,7 +1167,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                             return []   # No new bindings but success in logical operator
                         else: return 0   # We absoluteley know this won't match with this in it
 
-                    except (TypeError, ValueError, AttributeError, AssertionError):
+                    except caughtErrors:
                         progress("You got a ``" + sys.exc_info()[0].__name__ +
 			    ':' + str(sys.exc_info()[1]) + "'' on " + 
 			    `subj.value()` + ', ' + `obj.value()`)
@@ -1161,9 +1180,9 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 		    if isinstance(pred, Function):
 			if diag.chatty_flag > 97: progress("Builtin function call %s(%s)"%(pred, subj))
 			try:
-                            result = pred.evalObj(subj, queue, bindings.copy(), proof, self.query)
-
-                        except (TypeError, ValueError, AttributeError, AssertionError):
+#                            result = pred.evalObj(subj, queue, bindings.copy(), proof, self.query)
+                            result = pred.evalObj(subj, BNone, BNone, BNone, BNone)
+                        except caughtErrors:
                             errVal = ("``" + sys.exc_info()[0].__name__ 
 				+ ':' + str(sys.exc_info()[1]) + "'' on " 
 				+ `pred.value()` + 'builtin with '
@@ -1192,9 +1211,9 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 		    if isinstance(pred, ReverseFunction):
 			if diag.chatty_flag > 97: progress("Builtin Rev function call %s(%s)"%(pred, obj))
                         try:
-                            result = pred.evalSubj(obj, queue, bindings.copy(), proof, self.query)
-
-                        except (TypeError, ValueError, AttributeError, AssertionError):
+#                            result = pred.evalSubj(obj, queue, bindings.copy(), proof, self.query)
+                            result = pred.evalSubj(obj, BNone, BNone, BNone, BNone)
+                        except caughtErrors:
                             errVal = ("You got a ``" + sys.exc_info()[0].__name__ + 
 			        ':' + str(sys.exc_info()[1]) + "'' on " + `subj.value()`)
 			    progress(errVal)

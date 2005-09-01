@@ -39,6 +39,8 @@
      @prefix dat: <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes#> .
      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
      @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+@prefix test: <http://www.w3.org/2000/10/swap/test.n3#>.
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/amp-in-url/Manifest.rdf#test001>     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Sep/0326.html>;
@@ -2477,6 +2479,7 @@ to represent it in the RDF/XML syntax.
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-xml-literal-namespaces>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xml-literal-namespaces/test002.nt>;
          :status "APPROVED" .
+
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xml-literal-namespaces/test001.nt>     a :NT-Document .
     
