@@ -6,7 +6,7 @@
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
 <tr bgcolor="#7799ee">
 <td valign=bottom>&nbsp;<br>
-<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>cwm_math</strong></big></big> (version 1.23)</font></td
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>cwm_math</strong></big></big> (version 1.24)</font></td
 ><td align=right valign=bottom
 ><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/syosi/CVS-local/WWW/2000/10/swap/cwm_math.py">/home/syosi/CVS-local/WWW/2000/10/swap/cwm_math.py</a></font></td></tr></table>
     <p><tt>Matematical&nbsp;Built-Ins&nbsp;for&nbsp;CWM/Llyn<br>
@@ -148,6 +148,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_absoluteValue-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_absoluteValue-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -167,8 +169,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_absoluteValue-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_absoluteValue-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
@@ -210,6 +210,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_absoluteValue-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -271,6 +276,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_bit-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_bit-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -290,8 +297,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_bit-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_bit-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
@@ -333,6 +338,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_bit-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -392,6 +402,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_difference-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_difference-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -411,8 +423,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_difference-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_difference-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
@@ -454,6 +464,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_difference-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -510,6 +525,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_differenceOf-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_differenceOf-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -529,8 +546,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_differenceOf-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_differenceOf-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
@@ -572,6 +587,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_differenceOf-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -628,6 +648,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_equalTo-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_equalTo-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -647,8 +669,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_equalTo-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_equalTo-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
@@ -690,6 +710,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_equalTo-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -749,6 +774,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_exponentiation-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_exponentiation-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -768,8 +795,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_exponentiation-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_exponentiation-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
@@ -811,6 +836,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_exponentiation-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -867,6 +897,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_exponentiationOf-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_exponentiationOf-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -886,8 +918,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_exponentiationOf-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_exponentiationOf-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
@@ -929,6 +959,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_exponentiationOf-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -985,6 +1020,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_factors-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_factors-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -1004,8 +1041,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_factors-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_factors-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
@@ -1047,6 +1082,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_factors-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -1103,6 +1143,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_greaterThan-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_greaterThan-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -1122,8 +1164,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_greaterThan-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_greaterThan-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
@@ -1165,6 +1205,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_greaterThan-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -1224,6 +1269,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_integerQuotient-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_integerQuotient-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -1243,8 +1290,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_integerQuotient-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_integerQuotient-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
@@ -1286,6 +1331,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_integerQuotient-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -1342,6 +1392,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_lessThan-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_lessThan-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -1361,8 +1413,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_lessThan-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_lessThan-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
@@ -1404,6 +1454,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_lessThan-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -1463,6 +1518,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_memberCount-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_memberCount-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -1482,8 +1539,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_memberCount-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_memberCount-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
@@ -1525,6 +1580,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_memberCount-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -1592,6 +1652,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_negation-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_negation-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -1611,8 +1673,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_negation-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_negation-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
@@ -1654,6 +1714,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_negation-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -1710,6 +1775,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_notEqualTo-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_notEqualTo-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -1729,8 +1796,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_notEqualTo-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_notEqualTo-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
@@ -1772,6 +1837,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_notEqualTo-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -1828,6 +1898,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_notGreaterThan-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_notGreaterThan-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -1847,8 +1919,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_notGreaterThan-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_notGreaterThan-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
@@ -1890,6 +1960,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_notGreaterThan-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -1946,6 +2021,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_notLessThan-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_notLessThan-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -1965,8 +2042,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_notLessThan-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_notLessThan-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
@@ -2008,6 +2083,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_notLessThan-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -2067,6 +2147,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_product-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_product-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -2086,8 +2168,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_product-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_product-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
@@ -2129,6 +2209,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_product-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -2188,6 +2273,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_quotient-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_quotient-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -2207,8 +2294,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_quotient-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_quotient-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
@@ -2250,6 +2335,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_quotient-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -2306,6 +2396,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_quotientOf-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_quotientOf-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -2325,8 +2417,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_quotientOf-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_quotientOf-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
@@ -2368,6 +2458,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_quotientOf-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -2427,6 +2522,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_remainder-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_remainder-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -2446,8 +2543,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_remainder-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_remainder-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
@@ -2489,6 +2584,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_remainder-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -2545,6 +2645,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_remainderOf-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_remainderOf-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -2564,8 +2666,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_remainderOf-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_remainderOf-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
@@ -2607,6 +2707,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_remainderOf-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -2666,6 +2771,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_rounded-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_rounded-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -2685,8 +2792,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_rounded-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_rounded-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
@@ -2728,6 +2833,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_rounded-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -2787,6 +2897,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_sum-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_sum-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -2806,8 +2918,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_sum-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_sum-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
@@ -2849,6 +2959,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_sum-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -2905,6 +3020,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_sumOf-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_sumOf-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -2924,8 +3041,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_sumOf-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_sumOf-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
@@ -2967,6 +3082,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_sumOf-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>

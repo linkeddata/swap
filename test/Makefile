@@ -32,7 +32,7 @@ pre-release : pyc-check $(CODE) $(TESTS) rdflib
 	PYTHONPATH=`/bin/pwd`/..:`/bin/pwd`/../.. $P retest.py -c $(TESTS)
 
 post-install : pyc-check $(CODE) $(OFFLINETESTS)
-	PYTHONPATH=`/bin/pwd`/..:`/bin/pwd`/../.. $P retest.py --cwm=../cwm -c $(OFFLINETESTS)
+	PYTHONPATH=`/bin/pwd`/..:`/bin/pwd`/../.. $P retest.py --cwm=../cwm $(OFFLINETESTS)
 
 filelist : pyc-check $(CODE) $(OFFLINETESTS)
 	export CWM_LIST_FILES=1; PYTHONPATH=`/bin/pwd`/..:`/bin/pwd`/../.. $P retest.py --cwm=./file_list.py  $(OFFLINETESTS)

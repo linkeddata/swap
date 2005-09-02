@@ -1017,7 +1017,7 @@ class BetterNone(object):
             cls.__val__ = object.__new__(cls)
         return cls.__val__
     def __hash__(self):
-        raise NotImplementedError
+        raise TypeError
     def __str__(self):
         raise NotImplementedError
     def __eq__(self, other):
@@ -1157,7 +1157,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 		if self.neededToRun[OBJ] == Set():   # bound expression - we can evaluate it
                     try:
 #                        if pred.eval(subj, obj,  queue, bindings.copy(), proof, self.query):
-                        if pred.eval(subj, obj,  BNone, BNone, BNone, BNone):
+                        if pred.eval(subj, obj,  BNone, BNone, proof, BNone):
                             self.state = S_SATISFIED # satisfied
                             if diag.chatty_flag > 80: progress("Builtin buinary relation operator succeeds")
                             if diag.tracking:
@@ -1181,7 +1181,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			if diag.chatty_flag > 97: progress("Builtin function call %s(%s)"%(pred, subj))
 			try:
 #                            result = pred.evalObj(subj, queue, bindings.copy(), proof, self.query)
-                            result = pred.evalObj(subj, BNone, BNone, BNone, BNone)
+                            result = pred.evalObj(subj, BNone, BNone, proof, BNone)
                         except caughtErrors:
                             errVal = ("``" + sys.exc_info()[0].__name__ 
 				+ ':' + str(sys.exc_info()[1]) + "'' on " 
@@ -1212,7 +1212,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			if diag.chatty_flag > 97: progress("Builtin Rev function call %s(%s)"%(pred, obj))
                         try:
 #                            result = pred.evalSubj(obj, queue, bindings.copy(), proof, self.query)
-                            result = pred.evalSubj(obj, BNone, BNone, BNone, BNone)
+                            result = pred.evalSubj(obj, BNone, BNone, proof, BNone)
                         except caughtErrors:
                             errVal = ("You got a ``" + sys.exc_info()[0].__name__ + 
 			        ':' + str(sys.exc_info()[1]) + "'' on " + `subj.value()`)

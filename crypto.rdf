@@ -1,94 +1,90 @@
 
-<!-- Processed by Id: cwm.py,v 1.126 2003/02/14 17:48:08 sandro Exp -->
-<!--     using base file:/home/danbri/cvs/w3.org/WWW/2000/10/swap/crypto.n3-->
+<!-- Processed by Id: cwm.py,v 1.177 2005/08/28 22:53:56 syosi Exp -->
+<!--     using base file:/home/syosi/CVS-local/WWW/2000/10/swap/crypto.n3-->
 
 
-<rdf:RDF xmlns="http://www.w3.org/2000/10/swap/crypto#"
-    xmlns:cr="http://www.w3.org/2000/10/swap/crypto#"
+<rdf:RDF xmlns="http://www.w3.org/2000/01/rdf-schema#"
     xmlns:dpo="http://www.daml.org/2001/03/daml+oil#"
-    xmlns:log="http://www.w3.org/2000/10/swap/log#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    xmlns:s="http://www.w3.org/2000/01/rdf-schema#"
-    xmlns:string="http://www.w3.org/2000/10/swap/string#">
+    xmlns:s="http://www.w3.org/2000/01/rdf-schema#">
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/crypto#CanEncrypt">
-        <s:comment>PublicKeyObjects which are cabable of encrypting things</s:comment>
-        <s:isSubClassOf rdf:resource="http://www.w3.org/2000/10/swap/crypto#PublicKeyObject"/>
+        <comment>PublicKeyObjects which are capable of encrypting things</comment>
+        <isSubClassOf rdf:resource="http://www.w3.org/2000/10/swap/crypto#PublicKeyObject"/>
     </rdf:Description>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/crypto#CanSign">
-        <s:comment>PublicKeyObjects which are cabable of signing things.
-True if the algorithm is capable of signing data; returns false otherwise.
-To test if a given key object can sign data, use CanSign and HasPrivate. </s:comment>
-        <s:isSubClassOf rdf:resource="http://www.w3.org/2000/10/swap/crypto#PublicKeyObject"/>
+        <comment>PublicKeyObjects which are capable of signing things.
+True if the algorithm is capable of signing data; false otherwise. To
+test if a given key object can sign data, use CanSign and HasPrivate.</comment>
+        <isSubClassOf rdf:resource="http://www.w3.org/2000/10/swap/crypto#PublicKeyObject"/>
     </rdf:Description>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/crypto#HasPrivate">
-        <s:comment>
+        <comment>
 Some keys have private parts, some don't.  This is the class of those which do.
-</s:comment>
-        <s:isSubClassOf rdf:resource="http://www.w3.org/2000/10/swap/crypto#PublicKeyObject"/>
+</comment>
+        <isSubClassOf rdf:resource="http://www.w3.org/2000/10/swap/crypto#PublicKeyObject"/>
     </rdf:Description>
 
-    <s:Class rdf:about="http://www.w3.org/2000/10/swap/crypto#HashFunction">
-        <s:comment>
-The crypographic hash functions are (being functions) unique and 
-(the whole point of being hash functions) are, when secure, assumed
-unambiguous. That is, you have the right hash you ahve the right document.
-Currently (2001/9)only SHA is given that property.
-</s:comment>
-        <s:label>Any crypographic hash function</s:label>
-    </s:Class>
+    <Class rdf:about="http://www.w3.org/2000/10/swap/crypto#HashFunction">
+        <comment>
+The crypographic hash functions are (being functions) unique and are,
+when secure, assumed unambiguous (the whole point of being hash
+functions). That is, when you have the right hash, you have the right
+document. Currently (2001/9) only SHA is given that property.
+</comment>
+        <label>Any crypographic hash function</label>
+    </Class>
 
-    <s:Class rdf:about="http://www.w3.org/2000/10/swap/crypto#PublicKeyObject">
-        <s:comment>An object corresponding to a key for some algorithm.
-    The object can hold a private and optionally a private key.</s:comment>
-    </s:Class>
+    <Class rdf:about="http://www.w3.org/2000/10/swap/crypto#PublicKeyObject">
+        <comment>An object corresponding to a key for some algorithm.
+The object can hold a public and optionally a private key.</comment>
+    </Class>
 
     <dpo:UniqueProperty rdf:about="http://www.w3.org/2000/10/swap/crypto#md5">
         <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
-        <s:comment>The object is a MD5 hash of the subject.</s:comment>
-        <s:domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
-        <s:label>MD5 hash</s:label>
-        <s:range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+        <comment>The object is a MD5 hash of the subject.</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+        <label>MD5 hash</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
     </dpo:UniqueProperty>
 
-    <s:Property rdf:about="http://www.w3.org/2000/10/swap/crypto#publicKey">
-        <s:comment>The object is a public key object that doesn't
+    <Property rdf:about="http://www.w3.org/2000/10/swap/crypto#publicKey">
+        <comment>The object is a public key object that doesn't
     contain the private key data in the subject.
-    This function extracts the public part.</s:comment>
-        <s:domain rdf:resource="http://www.w3.org/2000/10/swap/crypto#PublicKeyObject"/>
-        <s:range rdf:resource="http://www.w3.org/2000/10/swap/crypto#PublicKeyObject"/>
-    </s:Property>
+    This function extracts the public part.</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/crypto#PublicKeyObject"/>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/crypto#PublicKeyObject"/>
+    </Property>
 
     <dpo:UnambiguousProperty rdf:about="http://www.w3.org/2000/10/swap/crypto#sha">
         <rdf:type rdf:resource="http://www.daml.org/2001/03/daml+oil#UniqueProperty"/>
         <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
-        <s:comment>The object is a SHA-1 hash of the subject.</s:comment>
-        <s:domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
-        <s:label>SHA hash</s:label>
-        <s:range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+        <comment>The object is a SHA-1 hash of the subject.</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+        <label>SHA hash</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
     </dpo:UnambiguousProperty>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/crypto#sign">
-        <s:comment>The subject should be a list of two things,
-a hash string and a key (containing private and public parts).
-The obejcts is calculated as a signature string by signing
-the has with the key's private part.</s:comment>
-        <s:label>sign</s:label>
+        <comment>The subject should be a list of two things, a hash
+string and a key (containing private and public parts). The object is
+calculated as a signature string by signing the hash with the key's
+private part.</comment>
+        <label>sign</label>
     </rdf:Property>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/crypto#verify">
-        <s:comment>If the subject is a key object containing
-private and public parts and the obejct is a list of
-a hash and a signature, then this is true iff the signaure is
-a valid signatre of the hash with the key.</s:comment>
+        <comment>If the subject is a key object containing private and
+public parts and the obejct is a list of a hash and a signature, then
+this is true if and only if the signature is a valid signature of the
+hash with the key.</comment>
     </rdf:Property>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/crypto#verifyBoolean">
-        <s:comment>If the subject is a list
-containg the keypair, a hash and a signature
-then the object is either "1" if the signature validates
-or "0" is it does not.</s:comment>
+        <comment>If the subject is a list containg a keypair, a hash,
+and a signature, then the object is either "1" if the signature
+validates or "0" if it does not.</comment>
     </rdf:Property>
 </rdf:RDF>

@@ -717,16 +717,13 @@ class Serializer:
 
         _anon, _incoming = self._topology(obj, context)
         if _anon and _incoming == 1:  # Embedded anonymous node in N3
-            if 0:
-                pass
-            else:
-                sink.startAnonymous(self.extern(triple))
-                ss = context.statementsMatching(subj=obj)
-                if sorting: ss.sort(StoredStatement.comparePredObj)
-                for t in ss:
-                    self.dumpStatement(sink, t.quad, sorting)
-                sink.endAnonymous(sub.asPair(), pre.asPair()) # Restore parse state
-                return
+            sink.startAnonymous(self.extern(triple))
+            ss = context.statementsMatching(subj=obj)
+            if sorting: ss.sort(StoredStatement.comparePredObj)
+            for t in ss:
+                self.dumpStatement(sink, t.quad, sorting)
+            sink.endAnonymous(sub.asPair(), pre.asPair()) # Restore parse state
+            return
 
         self._outputStatement(sink, triple)
 

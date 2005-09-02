@@ -151,6 +151,20 @@ ANY&nbsp;WARRANTY;&nbsp;without&nbsp;even&nbsp;the&nbsp;implied&nbsp;warranty&nb
 <dt><font face="helvetica, arial"><a href="llyn.html#BI_vars">BI_vars</a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>, <a href="term.html#Function">term.Function</a>)
 </font></dt></dl>
 </dd>
+<dt><font face="helvetica, arial"><a href="term.html#MultipleFunction">term.MultipleFunction</a>(<a href="term.html#Function">term.Function</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="llyn.html#BI_existentialVariableName">BI_existentialVariableName</a>(<a href="term.html#RDFBuiltIn">term.RDFBuiltIn</a>, <a href="term.html#MultipleFunction">term.MultipleFunction</a>)
+</font></dt><dt><font face="helvetica, arial"><a href="llyn.html#BI_universalVariableName">BI_universalVariableName</a>(<a href="term.html#RDFBuiltIn">term.RDFBuiltIn</a>, <a href="term.html#MultipleFunction">term.MultipleFunction</a>)
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="term.html#RDFBuiltIn">term.RDFBuiltIn</a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="llyn.html#BI_existentialVariableName">BI_existentialVariableName</a>(<a href="term.html#RDFBuiltIn">term.RDFBuiltIn</a>, <a href="term.html#MultipleFunction">term.MultipleFunction</a>)
+</font></dt><dt><font face="helvetica, arial"><a href="llyn.html#BI_universalVariableName">BI_universalVariableName</a>(<a href="term.html#RDFBuiltIn">term.RDFBuiltIn</a>, <a href="term.html#MultipleFunction">term.MultipleFunction</a>)
+</font></dt></dl>
+</dd>
 <dt><font face="helvetica, arial"><a href="RDFSink.html#RDFSink">RDFSink.RDFSink</a>
 </font></dt><dd>
 <dl>
@@ -219,6 +233,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_EqualTo-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_EqualTo-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -238,8 +254,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_EqualTo-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_EqualTo-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <dl><dt><a name="BI_EqualTo-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
 
@@ -289,6 +303,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_EqualTo-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -347,6 +366,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_conclusion-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_conclusion-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -366,8 +387,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_conclusion-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_conclusion-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <dl><dt><a name="BI_conclusion-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
 
@@ -417,6 +436,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_conclusion-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -474,6 +498,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_conjunction-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_conjunction-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -493,8 +519,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_conjunction-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_conjunction-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <dl><dt><a name="BI_conjunction-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
 
@@ -544,6 +568,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_conjunction-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -597,6 +626,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_content-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_content-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -616,8 +647,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_content-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_content-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <dl><dt><a name="BI_content-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
 
@@ -667,6 +696,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_content-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -728,6 +762,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_dtlit-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_dtlit-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -747,8 +783,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_dtlit-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_dtlit-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <dl><dt><a name="BI_dtlit-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
 
@@ -798,11 +832,156 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_dtlit-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
 
 <dl><dt><a name="BI_dtlit-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
+
+<hr>
+Data and other attributes inherited from <a href="term.html#Term">term.Term</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dictproxy object&gt;<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;attribute '__weakref__' of 'Term' objects&gt;<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="BI_existentialVariableName">class <strong>BI_existentialVariableName</strong></a>(<a href="term.html#RDFBuiltIn">term.RDFBuiltIn</a>, <a href="term.html#MultipleFunction">term.MultipleFunction</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Is&nbsp;the&nbsp;object&nbsp;the&nbsp;name&nbsp;of&nbsp;a&nbsp;existential&nbsp;variable&nbsp;in&nbsp;the&nbsp;subject?<br>
+Can&nbsp;be&nbsp;used&nbsp;as&nbsp;a&nbsp;test,&nbsp;or&nbsp;returns&nbsp;a&nbsp;sequence&nbsp;of&nbsp;values.<br>
+Currently&nbsp;gives&nbsp;BNode&nbsp;names&nbsp;too.&nbsp;&nbsp;Maybe&nbsp;we&nbsp;make&nbsp;sep&nbsp;function&nbsp;for&nbsp;that?<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="llyn.html#BI_existentialVariableName">BI_existentialVariableName</a></dd>
+<dd><a href="term.html#RDFBuiltIn">term.RDFBuiltIn</a></dd>
+<dd><a href="term.html#LightBuiltIn">term.LightBuiltIn</a></dd>
+<dd><a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a></dd>
+<dd><a href="term.html#MultipleFunction">term.MultipleFunction</a></dd>
+<dd><a href="term.html#Function">term.Function</a></dd>
+<dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
+<dd><a href="term.html#Fragment">term.Fragment</a></dd>
+<dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
+<dd><a href="term.html#Node">term.Node</a></dd>
+<dd><a href="term.html#Term">term.Term</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="BI_existentialVariableName-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
+
+<dl><dt><a name="BI_existentialVariableName-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a>:<br>
+<dl><dt><a name="BI_existentialVariableName-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#MultipleFunction">term.MultipleFunction</a>:<br>
+<dl><dt><a name="BI_existentialVariableName-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+The&nbsp;python&nbsp;one&nbsp;returns&nbsp;a&nbsp;list&nbsp;of&nbsp;function&nbsp;values.<br>
+This&nbsp;returns&nbsp;a&nbsp;'new&nbsp;bindings'&nbsp;structure&nbsp;(nbs)&nbsp;which&nbsp;is&nbsp;a&nbsp;sequence&nbsp;of<br>
+(bindings,&nbsp;reason)&nbsp;pairs.</tt></dd></dl>
+
+<hr>
+Static methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
+<dl><dt><a name="BI_existentialVariableName-__new__"><strong>__new__</strong></a>(cls, *args, **keywords)</dt></dl>
+
+<hr>
+Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
+<dl><dt><strong>all</strong> = []</dl>
+
+<hr>
+Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_existentialVariableName-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
+<dl><dt><a name="BI_existentialVariableName-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
+&nbsp;<br>
+Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
+
+<dl><dt><a name="BI_existentialVariableName-generated"><strong>generated</strong></a>(self)</dt><dd><tt>A&nbsp;generated&nbsp;identifier?<br>
+This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
+name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
+It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
+context.</tt></dd></dl>
+
+<dl><dt><a name="BI_existentialVariableName-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
+
+<dl><dt><a name="BI_existentialVariableName-uriref"><strong>uriref</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BI_existentialVariableName-uriref2"><strong>uriref2</strong></a>(self, base)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
+<dl><dt><a name="BI_existentialVariableName-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BI_existentialVariableName-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="BI_existentialVariableName-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/whatever">http://example.org/whatever</a>"]</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
+<dl><dt><a name="BI_existentialVariableName-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
+&nbsp;<br>
+output&nbsp;as&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity.</tt></dd></dl>
+
+<dl><dt><a name="BI_existentialVariableName-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
+&nbsp;<br>
+The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
+see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="BI_existentialVariableName-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;Anonymous&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;<a href="formula.html#Formula">Formula</a>,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
+
+<dl><dt><a name="BI_existentialVariableName-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+
+<dl><dt><a name="BI_existentialVariableName-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
+<dl><dt><a name="BI_existentialVariableName-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
+
+<dl><dt><a name="BI_existentialVariableName-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_existentialVariableName-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_existentialVariableName-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="BI_existentialVariableName-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
+Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
+Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+
+<dl><dt><a name="BI_existentialVariableName-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
 <hr>
 Data and other attributes inherited from <a href="term.html#Term">term.Term</a>:<br>
@@ -853,6 +1032,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_filter-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_filter-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -872,8 +1053,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_filter-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_filter-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <dl><dt><a name="BI_filter-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
 
@@ -923,6 +1102,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_filter-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -975,6 +1159,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_includes-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_includes-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -994,8 +1180,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_includes-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_includes-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <dl><dt><a name="BI_includes-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
 
@@ -1045,6 +1229,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_includes-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -1106,6 +1295,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_n3String-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_n3String-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -1125,8 +1316,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_n3String-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_n3String-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <dl><dt><a name="BI_n3String-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
 
@@ -1176,6 +1365,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_n3String-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -1224,6 +1418,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_notEqualTo-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_notEqualTo-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -1243,8 +1439,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_notEqualTo-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_notEqualTo-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <dl><dt><a name="BI_notEqualTo-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
 
@@ -1294,6 +1488,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_notEqualTo-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -1356,6 +1555,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_notIncludes-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_notIncludes-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -1375,8 +1576,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_notIncludes-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_notIncludes-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <dl><dt><a name="BI_notIncludes-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
 
@@ -1426,6 +1625,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_notIncludes-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -1474,6 +1678,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_notIncludesWithBuiltins-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_notIncludesWithBuiltins-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -1493,8 +1699,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_notIncludesWithBuiltins-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_notIncludesWithBuiltins-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <dl><dt><a name="BI_notIncludesWithBuiltins-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
 
@@ -1544,6 +1748,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_notIncludesWithBuiltins-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -1597,6 +1806,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_parsedAsN3-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_parsedAsN3-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -1616,8 +1827,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_parsedAsN3-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_parsedAsN3-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <dl><dt><a name="BI_parsedAsN3-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
 
@@ -1667,6 +1876,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_parsedAsN3-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -1720,6 +1934,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_racine-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_racine-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -1739,8 +1955,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_racine-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_racine-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <dl><dt><a name="BI_racine-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
 
@@ -1790,6 +2004,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_racine-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -1847,6 +2066,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_rawType-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_rawType-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -1866,8 +2087,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_rawType-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_rawType-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <dl><dt><a name="BI_rawType-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
 
@@ -1917,6 +2136,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_rawType-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -1989,6 +2213,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_rawUri-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_rawUri-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -2008,8 +2234,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_rawUri-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_rawUri-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <dl><dt><a name="BI_rawUri-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
 
@@ -2059,6 +2283,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_rawUri-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -2115,6 +2344,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_reification-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_reification-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -2134,8 +2365,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_reification-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_reification-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <dl><dt><a name="BI_reification-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
 
@@ -2185,6 +2414,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_reification-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -2242,6 +2476,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_semantics-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_semantics-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -2261,8 +2497,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_semantics-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_semantics-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <dl><dt><a name="BI_semantics-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
 
@@ -2312,6 +2546,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_semantics-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -2368,6 +2607,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_semanticsOrError-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_semanticsOrError-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -2387,8 +2628,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_semanticsOrError-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_semanticsOrError-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <dl><dt><a name="BI_semanticsOrError-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
 
@@ -2438,6 +2677,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_semanticsOrError-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -2496,6 +2740,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_semanticsWithImportsClosure-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_semanticsWithImportsClosure-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -2515,8 +2761,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_semanticsWithImportsClosure-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_semanticsWithImportsClosure-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <dl><dt><a name="BI_semanticsWithImportsClosure-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
 
@@ -2566,11 +2810,157 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_semanticsWithImportsClosure-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
 
 <dl><dt><a name="BI_semanticsWithImportsClosure-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
+
+<hr>
+Data and other attributes inherited from <a href="term.html#Term">term.Term</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dictproxy object&gt;<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;attribute '__weakref__' of 'Term' objects&gt;<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="BI_universalVariableName">class <strong>BI_universalVariableName</strong></a>(<a href="term.html#RDFBuiltIn">term.RDFBuiltIn</a>, <a href="term.html#MultipleFunction">term.MultipleFunction</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Is&nbsp;the&nbsp;object&nbsp;the&nbsp;name&nbsp;of&nbsp;a&nbsp;universal&nbsp;variable&nbsp;in&nbsp;the&nbsp;subject?<br>
+Runs&nbsp;even&nbsp;without&nbsp;interpretBuitins&nbsp;being&nbsp;set.&nbsp;&nbsp;<br>
+Used&nbsp;internally&nbsp;in&nbsp;query.py&nbsp;for&nbsp;testing&nbsp;for&nbsp;<br>
+Can&nbsp;be&nbsp;used&nbsp;as&nbsp;a&nbsp;test,&nbsp;or&nbsp;returns&nbsp;a&nbsp;sequence&nbsp;of&nbsp;values.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="llyn.html#BI_universalVariableName">BI_universalVariableName</a></dd>
+<dd><a href="term.html#RDFBuiltIn">term.RDFBuiltIn</a></dd>
+<dd><a href="term.html#LightBuiltIn">term.LightBuiltIn</a></dd>
+<dd><a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a></dd>
+<dd><a href="term.html#MultipleFunction">term.MultipleFunction</a></dd>
+<dd><a href="term.html#Function">term.Function</a></dd>
+<dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
+<dd><a href="term.html#Fragment">term.Fragment</a></dd>
+<dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
+<dd><a href="term.html#Node">term.Node</a></dd>
+<dd><a href="term.html#Term">term.Term</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="BI_universalVariableName-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
+
+<dl><dt><a name="BI_universalVariableName-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a>:<br>
+<dl><dt><a name="BI_universalVariableName-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#MultipleFunction">term.MultipleFunction</a>:<br>
+<dl><dt><a name="BI_universalVariableName-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+The&nbsp;python&nbsp;one&nbsp;returns&nbsp;a&nbsp;list&nbsp;of&nbsp;function&nbsp;values.<br>
+This&nbsp;returns&nbsp;a&nbsp;'new&nbsp;bindings'&nbsp;structure&nbsp;(nbs)&nbsp;which&nbsp;is&nbsp;a&nbsp;sequence&nbsp;of<br>
+(bindings,&nbsp;reason)&nbsp;pairs.</tt></dd></dl>
+
+<hr>
+Static methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
+<dl><dt><a name="BI_universalVariableName-__new__"><strong>__new__</strong></a>(cls, *args, **keywords)</dt></dl>
+
+<hr>
+Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
+<dl><dt><strong>all</strong> = []</dl>
+
+<hr>
+Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_universalVariableName-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
+<dl><dt><a name="BI_universalVariableName-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
+&nbsp;<br>
+Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
+
+<dl><dt><a name="BI_universalVariableName-generated"><strong>generated</strong></a>(self)</dt><dd><tt>A&nbsp;generated&nbsp;identifier?<br>
+This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
+name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
+It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
+context.</tt></dd></dl>
+
+<dl><dt><a name="BI_universalVariableName-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
+
+<dl><dt><a name="BI_universalVariableName-uriref"><strong>uriref</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BI_universalVariableName-uriref2"><strong>uriref2</strong></a>(self, base)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
+<dl><dt><a name="BI_universalVariableName-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BI_universalVariableName-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="BI_universalVariableName-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/whatever">http://example.org/whatever</a>"]</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
+<dl><dt><a name="BI_universalVariableName-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
+&nbsp;<br>
+output&nbsp;as&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity.</tt></dd></dl>
+
+<dl><dt><a name="BI_universalVariableName-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
+&nbsp;<br>
+The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
+see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="BI_universalVariableName-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;Anonymous&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;<a href="formula.html#Formula">Formula</a>,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
+
+<dl><dt><a name="BI_universalVariableName-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+
+<dl><dt><a name="BI_universalVariableName-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
+<dl><dt><a name="BI_universalVariableName-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
+
+<dl><dt><a name="BI_universalVariableName-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_universalVariableName-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_universalVariableName-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="BI_universalVariableName-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
+Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
+Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+
+<dl><dt><a name="BI_universalVariableName-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
 <hr>
 Data and other attributes inherited from <a href="term.html#Term">term.Term</a>:<br>
@@ -2632,6 +3022,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_uri-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_uri-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -2651,8 +3043,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_uri-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_uri-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <dl><dt><a name="BI_uri-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
 
@@ -2702,6 +3092,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_uri-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -2757,6 +3152,8 @@ Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltI
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_vars-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
 <dl><dt><a name="BI_vars-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
@@ -2776,8 +3173,6 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
 <dl><dt><a name="BI_vars-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="BI_vars-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <dl><dt><a name="BI_vars-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
 
@@ -2827,6 +3222,11 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_vars-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+&nbsp;<br>
+vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
+existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
+bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
+&nbsp;<br>
 Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
@@ -3039,10 +3439,6 @@ we&nbsp;may&nbsp;move&nbsp;to&nbsp;an&nbsp;internal&nbsp;storage&nbsp;rather&nbs
 
 <dl><dt><a name="IndexedFormula-generated"><strong>generated</strong></a>(self)</dt><dd><tt>Yes,&nbsp;any&nbsp;identifier&nbsp;you&nbsp;see&nbsp;for&nbsp;this&nbsp;is&nbsp;arbitrary.</tt></dd></dl>
 
-<dl><dt><a name="IndexedFormula-includes"><strong>includes</strong></a>(f, g, _variables<font color="#909090">=[]</font>, bindings<font color="#909090">=[]</font>)</dt><dd><tt>Does&nbsp;this&nbsp;formula&nbsp;include&nbsp;the&nbsp;information&nbsp;in&nbsp;the&nbsp;other?<br>
-&nbsp;<br>
-bindings&nbsp;is&nbsp;for&nbsp;use&nbsp;within&nbsp;a&nbsp;query.</tt></dd></dl>
-
 <dl><dt><a name="IndexedFormula-intern"><strong>intern</strong></a>(self, value)</dt></dl>
 
 <dl><dt><a name="IndexedFormula-loadFormulaWithSubstitution"><strong>loadFormulaWithSubstitution</strong></a>(self, old, bindings<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Load&nbsp;information&nbsp;from&nbsp;another&nbsp;formula,&nbsp;subsituting&nbsp;as&nbsp;we&nbsp;go<br>
@@ -3104,12 +3500,12 @@ as&nbsp;the&nbsp;formula&nbsp;is&nbsp;a&nbsp;form&nbsp;of&nbsp;quotation.</tt></
 
 <dl><dt><a name="IndexedFormula-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>See&nbsp;Term.<a href="#IndexedFormula-unify">unify</a>()</tt></dd></dl>
 
-<dl><dt><a name="IndexedFormula-universals"><strong>universals</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;list&nbsp;of&nbsp;variables&nbsp;universally&nbsp;quantified&nbsp;with&nbsp;this&nbsp;formula&nbsp;as&nbsp;scope.<br>
+<dl><dt><a name="IndexedFormula-universals"><strong>universals</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;set&nbsp;of&nbsp;variables&nbsp;universally&nbsp;quantified&nbsp;with&nbsp;this&nbsp;formula&nbsp;as&nbsp;scope.<br>
 &nbsp;<br>
 Implementation:<br>
 We&nbsp;may&nbsp;move&nbsp;to&nbsp;an&nbsp;internal&nbsp;storage&nbsp;rather&nbsp;than&nbsp;these&nbsp;statements.</tt></dd></dl>
 
-<dl><dt><a name="IndexedFormula-variables"><strong>variables</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;list&nbsp;of&nbsp;all&nbsp;variables&nbsp;quantified&nbsp;within&nbsp;this&nbsp;scope.</tt></dd></dl>
+<dl><dt><a name="IndexedFormula-variables"><strong>variables</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;set&nbsp;of&nbsp;all&nbsp;variables&nbsp;quantified&nbsp;within&nbsp;this&nbsp;scope.</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="term.html#AnonymousNode">term.AnonymousNode</a>:<br>
