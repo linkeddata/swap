@@ -224,6 +224,8 @@ class CalWr:
         if ival: w(";INTERVAL=%s" % ival)
         by = sts.any(r, ICAL.byday)
         if by: w(";BYDAY=%s" % by)
+        by = sts.any(r, ICAL.bymonthday)
+        if by: w(";BYMONTHDAY=%s" % by)
         by = sts.any(r, ICAL.bymonth)
         if by: w(";BYMONTH=%s" % by)
         w(CRLF)
@@ -388,7 +390,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.31  2005-08-26 15:21:35  connolly
+# Revision 2.32  2005-09-05 23:53:35  connolly
+# handle bymonthday
+#
+# Revision 2.31  2005/08/26 15:21:35  connolly
 # undo borken commit
 #
 # Revision 2.29  2005/04/18 14:33:25  connolly
