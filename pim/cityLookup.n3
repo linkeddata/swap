@@ -117,6 +117,8 @@ k:Massachusetts-State  usps:stateAbbr "MA".
 { ?WHERE :formVal "ORD" } => { ?WHERE :formVal "Chicago" }.
 # patch for HEL airport
 { ?WHERE :formVal "HEL" } => { ?WHERE :formVal "Helsinki" }.
+# patch for MAN airport
+{ ?WHERE :formVal "MAN" } => { ?WHERE :formVal "Manchester,United+Kingdom" }.
 
 #http://www.vicinity.com/myblast/map.mb?CMD=LFILL&&CT=47.43000031:19.18000031:90000&
 
@@ -172,7 +174,10 @@ k:Massachusetts-State  usps:stateAbbr "MA".
 #  k:inRegion [ map:countryName "Hungary" ] ].
 
 # $Log$
-# Revision 1.13  2005-04-22 15:52:21  connolly
+# Revision 1.14  2005-09-15 02:03:39  connolly
+# patch for MAN airport
+#
+# Revision 1.13  2005/04/22 15:52:21  connolly
 # icaltzd namespace update
 #
 # Revision 1.12  2004/12/23 15:58:28  connolly
