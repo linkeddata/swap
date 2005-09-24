@@ -1,5 +1,14 @@
 @prefix dc: <http://purl.org/dc/elements/1.1/> . #@@ missing hash
+@prefix r: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+
+@prefix mime: <mime@@#>.
+@prefix util: <util@@#>.
+@prefix fs: <formal-systems@@#>.
+@prefix charmod: <charmod@@#>.
+
+@prefix : <changePolicy#>.
 
 <> dc:description """change policy vocabulary and rules
 
@@ -13,6 +22,8 @@ use it to build a change policy vocabulary.
 I'd also like to formalize policies like the RDF Calendar
 'subject to change with notice to www-rdf-calendar' policy.
 
+22Sep2005 update... w.r.t.
+ http://www.w3.org/2001/tag/2005/09/22-diagram1.png
 """,
   "$Id$";
   s:seeAlso <http://www.w3.org/2001/tag/webarch/#language-extensibility>,
@@ -21,33 +32,109 @@ I'd also like to formalize policies like the RDF Calendar
    <http://en.wikipedia.org/wiki/Liskov_substitution_principle>. #tx roy
 
 
-:Document a s:Class; s:label "Document";
-  s:comment "octet sequence".
+:Communication s:label "Communication";
+  is s:domain of mime:body, mime:bodyText, mime:charset, :language.
 
-:Language s:subClassOf s:Property; s:label "Language";
-  s:comment """a languge is a property that relates a
-	document to its meaning""".
 
-:subset s:label "subset"; owl:samePropertyAs s:subPropertyOf;
-  s:comment """Subset language: one language is a subset (or,
-	"profile") of a second language if any document in the first
-	language is also a valid document in the second language and
-	has the same interpretation in the second language.""".
+:effect s:label "effect"; is util:partialOrder of :Communication;
+  s:comment """sorta like :before, but using the esw:RoleNoun convention""".
 
-# I think this is a theorem w.r.t. rdfs... or perhaps owl...
+# :Document is replaced by charmod:Text
 
-{ ?L1 :subset ?L2 } log:means
-  { @forAll ?D.
-    { ?D ?L1 [] } => { ?D ?L1 [ is ?L2 of ?D ] }
-  }.
+:language s:label "language"; s:range :Language;
+  s:comment """hmm... functional? or is a communication in RDf
+   also a communication in XML?""".
 
-:interpretation a s:Property; s:label "interpretation";
-  s:domain :Language; s:range s:Resource. #hm... what's the range?
+:Language a s:Class; s:label "Language";
+  s:subClassOf s:Class;
+  s:comment """a languge is a class of texts,
+  and a mapping of those texts to information.
+  We constrain Communications to have their bodyText in their language.""";
+  is s:domain of :specification.
+{ ?L a :Language } => { ?L s:subClassOf charmod:Text }.
+{ [] mime:bodyText ?TXT; :language ?LANG } => { ?TXT a ?LANG }.
 
-:NamespaceDocument a s:Class; s:label "Namespace Document".
+:specification s:label "specification"; s:range :Communication.
 
-:Stable s:subClassOf :NamespaceDocument;
+
+:Production s:label "Production"; s:subClassOf :Communication;
+  is s:domain of :intent, :producer.
+:Consumption s:label "Consumption"; s:subClassOf :Communication;
+  is s:domain of :impact, :consumer.
+
+# perhaps: in a succesful communication, the intent and impact are the same...
+{ ?C :intent ?I; :impact ?I } => { ?C :meaning ?I }.
+
+:intent s:label "intent"; a owl:FunctionalProperty; s:range :Information.
+:impact s:label "impact"; a owl:FunctionalProperty; s:range :Information.
+
+:Information s:label "Information".
+
+:producer s:label "producer"; s:range :Agent.
+:consumer s:label "consumer"; s:range :Agent.
+
+:Agent s:label "Agent";
+  is s:domain of :commitment.
+
+:commitment s:label "commitment";
+  s:comment """hmm... flattens communication context; useful?
+   not one of the terms from the whiteboard""".
+
+{ ?WHO is :producer of [ :intent ?I ] } => { ?WHO :commitment ?I }.
+
+
+# A language and a text determine the intent/impact of a communication
+{
+  ?C1 mime:bodyText ?D; :language ?L; :intent ?I.
+  ?C2 mime:bodyText ?D; :language ?L.
+} => { ?C2 :intent ?I }.
+
+
+
+:sublanguage s:label "sublanguage"; is util:partialOrder of :Language;
+  s:comment "was: subset";
+  s:comment """one language is a sublanguage (or "profile") of a
+        second language if any text in the first language is also a
+        valid text in the second language and has the same
+        interpretation in the second language.""",
+     """HTML2 is a sublanguage of HTML3.2 and HTML4,
+      or rather: the languages you get when you strip off the
+      <!DOCTYPE> delcarations have this relationship""".
+{ 
+  [] mime:bodyText ?TXT; :language [ is :sublanguage of ?BIG ]; :intent ?I.
+  ?COMM mime:bodyText ?TXT; :language ?BIG.
+} => { ?COMM :intent ?I }.
+{ 
+  [] mime:bodyText ?TXT; :language ?BIG; :impact ?I.
+  ?COMM mime:bodyText ?TXT; :language [ is :sublanguage of ?BIG ].
+} => { ?COMM :impact ?I }.
+#@@ should do the only-iff part of this defn to.
+
+
+:elaboration s:label "elaboration";
+  is util:partialOrder of :Information;
+  s:comment """hmm... is it symmetric? or is it a strict partial order?""".
+
+:stateCommunication s:label "state communication";
+  s:domain :InformationResource; s:range :Communication;
+  s:comment """we say ?RES has :stateCommunication ?C when
+   ?C is a communication that conveys the state, i.e.
+   a representation of ?RES; e.g. a 200 OK response to an HTTP GET, or
+   an HTTP PUT.""".
+
+:TerminalStateCommunication s:label "terminal state communication";
+ s:subClassOf :Communication;
+ s:comment "permanently cacheable, a la http:expires never",
+   "hmm... what about http:vary, conneg? excluded, for now".
+{ [] :stateCommunication ?C1, ?C2.
+  ?C1 :effect ?C2.
+  ?C1 a :TerminalStateCommunication; :intent ?I.
+} => { ?C2 :intent ?I }.
+
+:stableSpecification s:subClassOf :InformationResource;
   s:isDefinedBy <http://www.w3.org/1999/10/nsuri>;
+  s:subPropertyOf :specification,
+    :monotonicIntentSpecification, :monotonicImpactSpecification;
   s:comment """This namespace name may be reused in any update of the
 	specification which is made for the purpose of clarification
 	or bug fixes. These changes will be minor in that they do not
@@ -56,8 +143,168 @@ I'd also like to formalize policies like the RDF Calendar
 	existing software written to process such documents.""";
   s:comment "hmm... 'the specification'?".
 
+{
+  [] :stateCommunication ?SPEC, ?REV.
+  ?SPEC :effect ?REV.
+  ?LANG :stableSpecification ?SPEC
+} => { ?LANG :specification ?REV }.
 
 
-   2. [Warning: Until the specification reaches W3C Candidate Recommendation (CR) status, this namespace name may be reused by any update in such a way as to cause documents written using the namespace to become invalid or to change in meaning.]
-   3. [Warning: Until the specification reaches W3C CR status, this namespace name may be reused by any update in such a way as to affect the operation of existing software written to process documents written according to this specification.]
+:monotonicIntentSpecification s:subPropertyOf :specification;
+    s:isDefinedBy <http://www.w3.org/1999/10/nsuri>;
+    s:comment """the language will only get larger; once you
+      write a correct document, its impact will remain constant""";
+    s:comment """opposite: Warning: Until the specification reaches W3C
+    Candidate Recommendation (CR) status, this namespace name may be
+    reused by any update in such a way as to cause documents written
+    using the namespace to become invalid or to change in meaning."""
+  .
+{
+  [] :stateCommunication ?SPEC, ?REV.
+  ?SPEC :effect ?REV.
+  ?LANG1 :monotonicIntentSpecification ?SPEC.
+  ?LANG2 :specification ?REV.
+} => { ?LANG1 is :sublanguage of ?LANG2 }.
 
+:monotonicImpactSpecification s:subPropertyOf :specification;
+  s:comment """the language will only get smaller; once you have
+   implemented a correct consumer, that consumer will remain correct.""";
+    s:isDefinedBy <http://www.w3.org/1999/10/nsuri>;
+
+    s:comment """opposite: 3. [Warning: Until the specification reaches W3C CR
+    status, this namespace name may be reused by any update in such a
+    way as to affect the operation of existing software written to
+    process documents written according to this specification.]""".
+{
+  ?IR :stateCommunication ?SPEC, ?REV.
+  ?SPEC :effect ?REV.
+  ?LANG1 :monotonicImpactSpecification ?SPEC.
+  ?LANG2 :specification ?REV.
+} => { ?LANG2 is :sublanguage of ?LANG1 }.
+
+
+
+######
+# mime stuff
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix reg: <registry-stuff@@#>.
+
+mime:body s:label "body"; a owl:FunctionalProperty;
+  s:range xsd:binary.
+
+mime:bodyText s:label "body text"; a owl:FunctionalProperty;
+  s:range charmod:Text.
+
+mime:charset s:label "charset";
+  a owl:FunctionalProperty;
+  s:comment """this is not the name, but the encoding you get
+   when you look it up via IANA. We could elaborate that...""".
+
+:InternetMediaTypes
+  [ reg:at "application" ]
+   [ [ reg:at "rdf+xml" ] :RDF].
+
+####
+# registry stuff...
+# hmm... connext with HTML forms? and/or SPARQL? (what is RDF forms, anyway?)
+
+reg:at s:domain r:Property; s:range s:Literal.
+
+#####
+# charmod stuff
+
+{ ?C mime:body ?BYTES; mime:charset ?ENC. 
+  ?BYTES ?ENC ?TXT } => { ?C mime:bodyText ?TXT }.
+
+charmod:CharacterEncodingScheme
+  is s:range of mime:charset.
+
+charmod:Text s:label "Text";
+  s:comment "aka character sequence; defined in charmod".
+
+charmod:CharacterEncodingScheme s:subClassOf owl:FunctionalProperty.
+######
+# utility stuff
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+{ ?PS util:memberClass ?S } log:means
+{
+  ?PS s:subClassOf [
+   owl:onProperty [ owl:inverseOf r:type ]; 
+   owl:allValuesFrom ?S ].
+}.
+
+{ ?C util:partialOrder ?O } =>
+  { ?O a owl:TransitiveProperty; s:domain ?C; s:range ?C }.
+
+
+####
+# formal systems stuff
+fs:LogicalInterpretation s:label "Logical Interpretation";
+  is s:domain of fs:satisfies.
+fs:satisfies s:label "satisfies";
+  s:range fs:Formula.
+
+
+#####
+# test for sublanguage
+#
+@prefix ex: <example@@#>.
+
+ex:HTML2 is :sublanguage of ex:HTML4.
+ex:chap1 :stateCommunication
+ [ :language ex:HTML2; mime:bodyText "<div>...</div>"; :intent ex:chap1in ],
+ [ :language ex:HTML4; mime:bodyText "<div>...</div>"; :impact ex:chap1im ].
+
+#####
+# example/special case: RDF.
+# an RDF Communication is a Communication whose
+# language is RDf.
+
+@prefix list: <http://www.w3.org/2000/10/swap/list#>.
+
+# if one communication gives a representation of a term's
+# defining (home/root) InformationResource, then the intent
+# any communication that uses that term elaborates the intent
+# of that communication.
+{ ?TERM log:racine [ is log:uri of [ :stateCommunication ?TDEF ] ].
+  ?TDEF :intent ?I1.
+  ?C2 ex:uses ?TERM; :intent ?I2.
+} => { ?I2 is :elaboration of ?I1 }.
+
+ex:NamespaceDocument a s:Class; s:label "Namespace Document";
+  s:subClassOf :InformationResource.
+
+
+ex:RDFCommunication s:subClassOf :Communication;
+  owl:onProperty :language; owl:hasValue ex:RDF.
+ex:RDF a :Language.
+# the intent of an RDF document is a Formula,
+# which discriminates between satisfying interpretations
+ex:RDFCommunication s:subClassOf [
+   owl:onProperty :intent; owl:allValuesFrom fs:Formula
+  ].
+
+ex:RDFDocument s:subClassOf charmod:Text.
+ex:properties s:label "properties";
+  s:domain :RDFDocument;
+  s:range ex:Vocabulary.
+ex:property s:label "property".
+{ ?D ex:property [ owl:oneOf ?L ].
+  ?T list:in ?L } => { ?D ex:property ?T }.
+
+# An RDF document uses all the terms mentioned as properties.
+{ ?C :language :RDF; mime:bodyText [ :property ?T ] } => { ?C :uses ?T }.
+# hmm... it uses the subjects an objects too, no? perhaps
+# perhaps :uses should be :dependsOn
+
+
+# RDFS stuff
+{ ?S [ s:domain ?C ] [] } => { ?S a ?C }.
+{ [] [ s:range ?C ] ?O } => { ?O a ?C }.
+{ ?C1 s:subClassOf [ s:subClassOf ?C2] } => { ?C1 s:subClassOf ?C2 }.
+s:domain s:domain r:Property; s:range s:Class.
+s:range s:domain r:Property; s:range s:Class.
+s:subClassOf s:domain s:Class.
+s:subClassOf s:range s:Class.
+s:subPropertyOf s:domain r:Property.
+s:subPropertyOf s:range r:Property.
