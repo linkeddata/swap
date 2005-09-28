@@ -1,0 +1,253 @@
+<html xmlns="http://www.w3.org/1999/xhtml" 
+ lang="en" xml:lang="en"> 
+<head> 
+  <title>Slide Shows in XHTML</title> 
+  <meta name="copyright" 
+   content="Copyright &#169; 2005 your copyright notice" /> 
+  <link rel="stylesheet" type="text/css" media="screen, projection" 
+   href="http://www.w3.org/Talks/Tools/Slidy/show.css" /> 
+  <script src="http://www.w3.org/Talks/Tools/Slidy/slidy.js" 
+   type="text/javascript"></script> 
+   <link rel="stylesheet" type="text/css" media="screen, projection"
+	 href="http://www.w3.org/Talks/Tools/Slidy/w3c-blue.css" /> 
+  <style type="text/css"> 
+    <!-- your custom style rules --> 
+  </style> 
+  <link rel="stylesheet" type="text/css" media="print" 
+  href="http://www.w3.org/Talks/Tools/Slidy/print.css" /> 
+</head> 
+<body>
+
+<div class="background"> 
+  <img id="head-icon" alt="graphic with four colored squares"
+    src="http://www.w3.org/Talks/Tools/Slidy/icon-blue.png" /> 
+  <object id="head-logo" title="W3C logo" type="image/svg+xml"
+    data="http://www.w3.org/Talks/Tools/Slidy/w3c-logo-blue.svg"><img
+   src="http://www.w3.org/Talks/Tools/Slidy/w3c-logo-blue.gif" 
+   alt="W3C logo" id="head-logo-fallback" /></object>
+</div>
+
+<div class="slide cover"> 
+ <img src="http://www.w3.org/Talks/Tools/Slidy/keys.jpg" 
+  alt="Cover page images (keys)" class="cover" /> 
+ <br clear="all" />            
+ <h1>Introduction to N3 Rules</h1> 
+ <p><a href="http://www.w3.org/People/Sandro/">Sandro Hawke,</a> 
+ <a href="mailto:sandro@w3.org">sandro@w3.org</a></p> 
+</div>
+
+<div class="slide">
+<h1>Naming Things</h1>
+<p>Using:</p>
+<ul>
+<li>File-Scope Names (Blank Nodes) </li>
+<li>Global-Scope Names (URIs, QNames)</li>
+<li>Variables</li>
+<li>Literals</li>
+</ul>
+<p>... to name people, physical objects, abstract classes of things, etc</p>
+</div>
+
+
+<div class="slide">
+<h1>File-Scope Names (Blank Nodes)</h1>
+<p></p>
+<pre>_:fred
+_:x
+_:node3442
+</pre>
+</div>
+
+
+<div class="slide">
+<h1>Global-Scope Names: URIs</h1>
+<p></p>
+<pre>
+&lt;http://web.mit.edu>                           <em>a web page</em>
+&lt;http://www.w3.org/People/Sandro>              <em>a web page</em>
+&lt;http://www.w3.org/People/Sandro/data#sandro>  <em>a person</em>
+&lt;http://www.w3.org/People/Connolly/#me>        <em>a person</em>
+&lt;http://purl.org/dc/elements/1.1/title         <em>a property</em>
+&lt;http://xmlns.com/foaf/0.1/firstName           <em>a property</em>
+&lt;http://xmlns.com/foaf/0.1/Person              <em>a class</em>
+</pre>
+</div>
+
+
+<div class="slide">
+<h1>Global-Scope Names: QNames</h1>
+<p>Assign some prefixes</p>
+<pre>
+@prefix dc: "http://purl.org/dc/elements/1.1/"
+@prefix foaf: "http://xmlns.com/foaf/0.1/"
+@prefix danc: "http://www.w3.org/People/Connolly/#"
+</pre>
+<p>and then just say</p>
+<pre>
+foaf:firstName
+foaf:Person
+danc:me
+</pre>
+</div>
+
+
+<div class="slide">
+<h1>Variables</h1>
+<p>Used as placeholders inside rules</p>
+<pre>?x
+?PERSON
+?_v21
+</pre>
+<p>Other kinds of names can be used as variables if quantified!</p>
+</div>
+
+
+<div class="slide">
+<h1>Literals</h1>
+<p>Strings</p>
+<pre>"strings like this"</pre>
+<pre>"""long "weird" strings like
+       this
+   one"""</pre>
+<p>Numbers</p>
+<pre>21</pre>
+<p>Arbitrary Datatypes</p>
+<pre>"2002-09-24Z"^^xs:date</pre>
+<pre>"2002-05-30T09:30:10Z"^^xs:dateTime</pre>
+<pre>"P5Y"^^xs:duration</pre>
+</div>
+
+
+<div class="slide">
+<h1>Expressing Statements (Propositions)</h1>
+<p>Boil everything down to:
+
+            &lt;subject> &lt;predicate> &lt;object>.</p>
+<pre>friends:Sue bio:age 21.
+friends:Sue fam:sister _:Betty.</pre>
+
+<p>Skip repeated subject using semi-colon:</p>
+
+<pre>
+sandat:sandro foaf:firstName "Sandro";
+              foaf:lastName "Hawke".
+</pre>
+</div>
+
+
+<div class="slide">
+<h1>Expressing Rules</h1>
+<p>Say that foaf:knows is reflexive (probably not true)</p>
+<pre>{ ?x foaf:knows ?y }
+=>
+{ ?y foaf:knows ?x }.
+</pre>
+
+<pre>
+{ ?x sec228:childSupportBalance ?bal.
+  ?bal math:greaterThan 1000 
+}
+=>
+{ ?x a sec228:Deadbeat }.
+</pre>
+</div>
+
+
+<div class="slide">
+<h1>Using N3 with cwm</h1>
+<p>Give it files of data and/or rules</p>
+<pre>$ cwm <em>inputs</em> --think
+</pre>
+<p>If you're looking for something in particular, use --filter:</p>
+<pre>$ cwm <em>inputs</em> --think --filter=my_query.n3
+</pre>
+</div>
+
+
+<div class="slide">
+<h1>Lists</h1>
+<p>Use lists to say this is all there is.   You could do:</p>
+<pre>sd:sandro fam:sister sd:Maya, sd:Brenna</pre>
+<p>But that doesn't say there are no more.  So:</p>
+<pre>sd:sandro fam:allSisters (sd:Maya sd:Brenna)</pre>
+</div>
+
+<div class="slide">
+<h1>Lists are Syntactic Sugar</h1>
+<pre>:a :b (1 2 3).</pre>
+<p> is the same as:</p>
+<pre>:a :b _:list123.
+_:list123 rdf:first 1;
+          rdf:rest _:list23.
+_:list23 rdf:first 2;
+         rdf:rest _:list3.
+_:list3 rdf:first 3;
+        rdf:rest rdf:nil.
+</pre>
+<p>This is similar to lists in LISP.</p>
+</div>
+
+
+<div class="slide">
+<h1>Square Brackets ("something-which-has ...")</h1>
+<pre>
+sd:sandro foaf:knows [ foaf:firstName "Tim";
+                       foaf:lastName "Berners-Lee" ].
+</pre>
+<p>In some contexts, this is the same as:</p>
+<pre>
+sd:sandro foaf:knows _:tim.
+_:tim foaf:firstName "Tim";
+      foaf:lastName "Berners-Lee".
+</pre>
+<p>But if it's in the "then"-clause of a rule, think of it
+being a <em>new</em> thing each time.</p>
+</div>
+
+
+<div class="slide">
+<h1>N-Ary</h1>
+<p>See <a href="http://www.w3.org/TR/swbp-n-aryRelations/">Defining N-ary Relations</a> from SWBP WG</p>
+<p>How do you say "Serenity is showing at 7:15 at Loews Copley"?</p>
+
+<pre class="incremental">
+[ a movie:Showing;
+    movie:time "7:15";
+    movie:title movie:serenity
+    movie:theater movie:bostonLoewsCopley
+].
+</pre>
+</div>
+
+
+<div class="slide">
+<h1>Built-In Predicates</h1>
+<p>See <a href="http://www.w3.org/2000/10/swap/doc/CwmBuiltins">cwm built-ins</a>.</p>
+<pre>
+{ (1 2 3 4) math:sum ?x }
+=>
+{ ... do something with ?x, which will be 10 }
+</pre>
+</div>
+
+
+<div class="slide">
+<h1>Example: Section 228</h1>
+<pre>
+       {
+           
+       }
+       => 
+       { [ a law:ApparentViolation;
+             law:alleged_violator ?x;
+             law:begins ?begin_time;
+             law:ends ?end_time;
+	     law:law x18usc:228.
+         ]
+       }
+</pre>
+<p>Note that human's probably can't accurately follow complex rules.</p>
+</div>
+
+</body>
+</html>
