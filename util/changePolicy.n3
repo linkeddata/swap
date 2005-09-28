@@ -54,7 +54,12 @@ I'd also like to formalize policies like the RDF Calendar
 { ?L a :Language } => { ?L s:subClassOf charmod:Text }.
 { [] mime:bodyText ?TXT; :language ?LANG } => { ?TXT a ?LANG }.
 
-:specification s:label "specification"; s:range :Communication.
+:specification s:label "specification";
+  a owl:InverseFunctionalProperty;
+  s:comment """This property is for the case of unambiguous language
+	specifications. If a spec specifies more than one language,
+	don't use this property!"""
+  s:range :Communication.
 
 
 :Production s:label "Production"; s:subClassOf :Communication;
@@ -131,7 +136,7 @@ I'd also like to formalize policies like the RDF Calendar
   ?C1 a :TerminalStateCommunication; :intent ?I.
 } => { ?C2 :intent ?I }.
 
-:stableSpecification s:subClassOf :InformationResource;
+:stableSpecification;
   s:isDefinedBy <http://www.w3.org/1999/10/nsuri>;
   s:subPropertyOf :specification,
     :monotonicIntentSpecification, :monotonicImpactSpecification;
@@ -162,9 +167,9 @@ I'd also like to formalize policies like the RDF Calendar
 {
   [] :stateCommunication ?SPEC, ?REV.
   ?SPEC :effect ?REV.
-  ?LANG1 :monotonicIntentSpecification ?SPEC.
-  ?LANG2 :specification ?REV.
-} => { ?LANG1 is :sublanguage of ?LANG2 }.
+  ?LITTLE :monotonicIntentSpecification ?SPEC.
+  ?BIG :specification ?REV.
+} => { ?LITTLE is :sublanguage of ?BIG }.
 
 :monotonicImpactSpecification s:subPropertyOf :specification;
   s:comment """the language will only get smaller; once you have
