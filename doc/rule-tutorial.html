@@ -234,19 +234,31 @@ being a <em>new</em> thing each time.</p>
 
 <div class="slide">
 <h1>Example: Section 228</h1>
+<p>See <a href="http://www.law.cornell.edu/uscode/html/uscode18/usc_sec_18_00000228----000-.html">the statute</a></p>
+
 <pre>
-       {
-           
-       }
-       => 
-       { [ a law:ApparentViolation;
-             law:alleged_violator ?x;
-             law:begins ?begin_time;
-             law:ends ?end_time;
-	     law:law x18usc:228.
-         ]
-       }
+# 18usc228(a)(1) - second branch ($5 limit)
+{  ?person s228:residesInDifferentStateFrom ?child.
+   [ a s228:UnpaidObligation;
+     s228:obligatedPerson ?person;
+     s228:supportedPerson ?child;
+     s228:amount ?amt
+   ].
+   ?amt math:greaterThan 5000. 
+}
+=> 
+{ [ a law:ApparentViolation;
+      law:alleged_violator ?x;
+      law:law usc:18_228;
+   ]
+}
 </pre>
+
+<p>Ignores temporal aspect....</p>
+
+<p>Needs several supporting rules, defining
+residesInDifferentStateFrom, etc</p>
+
 <p>Note that human's probably can't accurately follow complex rules.</p>
 </div>
 
