@@ -3,6 +3,15 @@
   <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/usps">
     <ns0:title xmlns:ns0="http://purl.org/dc/elements/1.1/">An RDF Schema for United States Postal Addressing Standards</ns0:title>
   </rdf:Description>
+  <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/usps">
+    <ns0:seeAlso xmlns:ns0="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://pe.usps.gov/cpim/ftp/pubs/Pub28/pub28.pdf"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/usps">
+    <ns0:seeAlso xmlns:ns0="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://pe.usps.gov/cpim/ftp/pubs/Pub63/Pub63.pdf"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/usps">
+    <ns0:seeAlso xmlns:ns0="http://www.w3.org/2000/01/rdf-schema#" rdf:resource="http://www.w3.org/2000/10/swap/pim/jobieLabels.pl"/>
+  </rdf:Description>
   <rdf:Description rdf:about="http://www.cyc.com/cycdoc/vocab/geography-vocab.html#ContactLocation">
     <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
   </rdf:Description>
