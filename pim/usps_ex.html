@@ -1,0 +1,30 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>usps example</title>
+</head>
+<body>
+<!-- odd! iframe doesn't seem to work with plain text docs in firefox. -->
+<pre>
+&lt;rdf:RDF xmlns="http://www.w3.org/2000/10/swap/pim/usps#"
+    xmlns:g="http://opencyc.sourceforge.net/daml/cyc.daml#"
+    xmlns:p="http://www.w3.org/2000/10/swap/pim/usps#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+
+    &lt;rdf:Description>
+        &lt;rdf:type rdf:resource="http://www.w3.org/2000/10/swap/pim/usps#MailPiece"/>
+        &lt;at rdf:parseType="Resource">
+            &lt;rdf:type rdf:resource="http://www.w3.org/2000/10/swap/pim/usps#MailingLocation"/>
+            &lt;g:inRegion rdf:parseType="Resource">
+                &lt;g:inRegion rdf:parseType="Resource">
+                    &lt;stateAbbr>TX&lt;/stateAbbr>
+                &lt;/g:inRegion>
+                &lt;cityName>Pflugerville&lt;/cityName>
+            &lt;/g:inRegion>
+            &lt;deliveryAddress>12345 Thackeray Ln&lt;/deliveryAddress>
+            &lt;zipCode>78660&lt;/zipCode>
+        &lt;/at>
+        &lt;recipientName>John Doe&lt;/recipientName>
+    &lt;/rdf:Description>
+&lt;/rdf:RDF>
+</pre>
+</body>
+</html>
