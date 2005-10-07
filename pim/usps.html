@@ -1,0 +1,185 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head profile="http://www.w3.org/2003/g/data-view">
+ <title>An RDF Schema for United States Postal Addressing Standards</title>
+ <link rel="transformation" href="http://www.w3.org/2003/g/pgdata" />
+
+ <link rel="transformation" href="http://www.w3.org/2000/07/hs78/html2rdfs" />
+ <link rel="stylesheet" href="http://www.w3.org/2000/07/hs78/style.css" />
+<style type="text/css">
+.figure { text-align: center }
+</style>
+</head>
+<body>
+<div class="nav"><a href="../">SWAP</a></div>
+
+<h1>United States Postal Addressing Terms</h1>
+
+<p>Suppose you want to produce a standard mailing label such as:</p>
+
+<div class="figure">
+<img src="usps_ex_out.png" alt="a mailing label" />
+</div>
+
+<p>The following publications specify mailing labels in terms such as
+Mailpiece and Delivery Address.</p>
+
+<ol class="bib">
+<!-- @@TODO: formalize these using title/date and normative ref,
+     not just seeAlso
+  -->
+  <li><cite><a rel="seeAlso"
+  href="http://pe.usps.gov/cpim/ftp/pubs/Pub28/pub28.pdf">Postal
+  Addressing Standards Publication 28</a></cite>, <span
+  class="date">November 2000</span>
+  </li>
+
+  <li><cite><a rel="seeAlso"
+  href="http://pe.usps.gov/cpim/ftp/pubs/Pub63/Pub63.pdf">Publication
+  63 - Designing Flat Mail</a></cite></li>
+</ol>
+
+<p>This schema establishes URIs to correspond with the terms in
+those documents for use in RDF.</p>
+
+<p>The perl script <a rel="seeAlso"
+href="jobieLabels.pl">jobieLabels.pl</a> consumes data that uses this
+vocabulary and produces standard labels
+using the
+<a href="http://www.oplnk.net/~ajackson/software/PostScript-MailLabels-2.02.tar.gz">PostScript-MailLabels-2.02</a> package.
+<small>@@I would
+have thought that the one of the well-known <a
+href="http://www.rddl.org/">RDDL</a> natures/purposes would have been
+applicable here, but I don't see one.</small>
+The label above corresponds to this bit of RDF:
+</p>
+
+<iframe src="usps_ex.html" width="90%" height="400">
+<a href="usps_ex.html">example of using these USPS terms</a>
+</iframe>
+
+<p>The classes and properties follow, in a <a
+href="http://www.w3.org/2000/07/hs78/">stylized form of RDF
+schema.</a></p>
+
+
+<div class="ClassTree">
+<h2>Classes</h2>
+<ul>
+  <li><a href="http://www.cyc.com/cycdoc/vocab/geography-vocab.html#ContactLocation">ContactLocation</a> in cyc
+  <ul>
+    <li><b id="MailingLocation">Mailing Location</b>
+    <p><a rel="sameAs" href="http://www.cyc.com/cycdoc/vocab/geography-vocab.html#MailingLocation">cyc Mailing Location</a>
+    </p>
+    </li>
+  </ul>
+  </li>
+
+  <li><a href="http://www.cyc.com/cycdoc/vocab/geography-vocab.html#CountrySubsidiary">CountrySubsidiary</a> in cyc
+  <ul>
+    <li><b id="State">State</b>
+    <p>includes military thingies and territories, I think.</p>
+    <ul>
+      <li><a href="http://www.cyc.com/cycdoc/vocab/geography-vocab.html#State-UnitedStates">State-UnitedStates</a> in cyc
+      </li>
+    </ul>
+    </li>
+  </ul>
+  </li>
+
+  <li><a href="http://www.cyc.com/cycdoc/vocab/geography-vocab.html#UrbanArea">UrbanArea</a> in cyc
+  <ul>
+    <li><b id="City">City</b>
+    <p>Hmm... does Shawnee Mission, KS have its own government?</p>
+    <p>see also census places@@</p>
+    </li>
+  </ul>
+  </li>
+
+  <li><b id="MailPiece">MailPiece</b>
+  </li>
+
+  <li><a href="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property">Property</a>
+  <ul>
+    <li><b id="PostmarkProperty">PostmarkProperty</b>
+    </li>
+  </ul>
+  </li>
+</ul>
+</div>
+
+<div><h2>Properties</h2>
+
+<ul>
+  <li class="Property"><b id="deliveryAddress">delivery address</b>:
+  <a href="#MailingLocation">Mailing Location</a> ->  
+  <a
+  href="http://www.w3.org/2000/01/rdf-schema#Literal">Literal</a>
+  <p>unique w.r.t. zip; i.e. a deliveryAddress and a zip
+  uniquely determine an object</p>
+  </li>
+
+  <li class="Property"><b id="zipCode">zip code</b>
+  <p>hmm... regex pattern?</p>
+  </li>
+
+  <li class="Property"><b id="cityName">city name</b>: <a
+  href="#City">City</a> -> <a
+  href="http://www.w3.org/2000/01/rdf-schema#Literal">Literal</a>
+  <p>range is string; should be &lt;13 chars</p>
+  </li>
+
+  <li class="Property"><b id="stateAbbr">state abbreviation</b>
+  <a href="#State">State</a> -> <a
+  href="http://www.w3.org/2000/01/rdf-schema#Literal">string</a>
+  <p>@@ a ont:UniqueProperty, ont:UnambiguousProperty</p>
+  <p>cf. Appendix B. Two-Letter State and Possession Abbreviations</p>
+  </li>
+
+  <li class="Property"><b id="to">to</b>: <a href="#MailPiece"> -> @@hmm... agent? or address?</a>
+  </li>
+
+  <li class="Property"><b id="at">at</b>:
+    <a href="#MailPiece">MailPiece</a> ->
+    <a href="#MailingLocation">MailingLocation</a>
+  </li>
+
+  <li class="Property"><b id="returnTo">return to</b>
+    <a href="#MailPiece">MailPiece</a> ->
+    <p>range is SocialEntity or something;
+    hm... what property relates SocialEntity to a name
+    used in a mailing address? Does the USPS really
+    talk about SocialEntities, or should I just
+    make one property that combines p:returnTo and c:called?</p>
+  </li>
+
+  <li class="Property"><b id="returnAt">return at</b>:
+    <a href="#MailPiece">MailPiece</a> ->
+    <a href="#MailingLocation">MailingLocation</a>
+  </li>
+
+  <li class="Property"><b id="from">from</b>:
+    <a href="#MailPiece">MailPiece</a> ->
+    ...
+  </li>
+</ul>
+
+<p><em>this stuff I sorta made up...</em></p>
+
+<ul>
+
+  <li class="Property"><b id="postmark">postmark</b>:
+  <a href="#PostOffice">Post Office</a> ->
+  <a href="#PostmarkProperty">PostmarkProperty</a>
+  <p>e.g. POSTOFFICE p:postmark P. LETTER P '2001-12-17'</p>
+  </li>
+</ul>
+</div>
+
+<hr />
+<address>
+<a href="http://www.w3.org/People/Connolly/">Dan Connolly</a><br />
+created Jan 2002<br />
+<small>$Revision$ of $Date$</small>
+</address>
+</body>
+</html>
