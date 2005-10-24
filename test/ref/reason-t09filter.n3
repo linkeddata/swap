@@ -1,0 +1,73 @@
+     @prefix : <http://www.w3.org/2000/10/swap/reason#> .
+    @prefix f: <reason/f9.n3#> .
+    @prefix foo: <#> .
+    @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    @prefix n3: <http://www.w3.org/2004/06/rei#> .
+    @prefix t: <reason/t9.n3#> .
+    
+     @forSome foo:_g0,
+                foo:_g1 .
+      [      a :Conjunction,
+                    :Proof;
+             :component  [
+                 a :Extraction;
+                 :because  [
+                     a :Inference;
+                     :binding  [
+                         :boundTo  [
+                             n3:uri "http://example.com/swap/test/reason/a" ];
+                         :variable  [
+                             n3:uri "http://example.com/swap/test/reason/f9.n3#x" ] ];
+                     :evidence  (
+                     [
+                             a :Extraction;
+                             :because  [
+                                 a :Inference;
+                                 :binding  [
+                                     :boundTo  [
+                                         n3:uri "http://example.com/swap/test/reason/c" ];
+                                     :variable  [
+                                         n3:uri "http://example.com/swap/test/reason/t9.n3#_g_L3C10" ] ];
+                                 :evidence  (
+                                 [
+                                         a :Extraction;
+                                         :because foo:_g1;
+                                         :gives {<reason/a>     <reason/b> <reason/c> .
+                                        } ] );
+                                 :rule  [
+                                     a :Extraction;
+                                     :because foo:_g1;
+                                     :gives {{
+                                         @forSome t:_g_L3C10 .
+                                        <reason/a>     <reason/b> t:_g_L3C10 .
+                                        
+                                        }     log:implies {<reason/a>     a <reason/Success> .
+                                        } .
+                                    } ] ];
+                             :gives {<reason/a>     a <reason/Success> .
+                            } ] );
+                     :rule  [
+                         a :Extraction;
+                         :because  [
+                             a :Parsing;
+                             :because foo:_g0;
+                             :source <reason/f9.n3> ];
+                         :gives { @forAll f:x .
+                        {
+                            f:x     a <reason/Success> .
+                            
+                            }     log:implies {f:x     a <reason/GreaterSuccess> .
+                            } .
+                        } ] ];
+                 :gives {<reason/a>     a <reason/GreaterSuccess> .
+                } ];
+             :gives {<reason/a>     a <reason/GreaterSuccess> .
+            } ].
+    
+    foo:_g0     a :CommandLine;
+         :args "['../cwm.py', '--quiet', '--n3=B', 'reason/t9.n3', '--think', '--filter=reason/f9.n3', '--base=foo', '--why']" .
+    
+    foo:_g1     a :Parsing;
+         :because foo:_g0;
+         :source <reason/t9.n3> .
+    

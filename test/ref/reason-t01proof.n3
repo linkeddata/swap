@@ -6,6 +6,9 @@
                  a :Extraction;
                  :because  [
                      a :Parsing;
+                     :because  [
+                         a :CommandLine;
+                         :args "['../cwm.py', '--quiet', 'reason/t1.n3', '--think', '--base=foo', '--why']" ];
                      :source <reason/t1.n3> ];
                  :gives {<reason/a>     <reason/b> <reason/c> .
                 } ];
