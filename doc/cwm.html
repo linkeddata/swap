@@ -251,14 +251,20 @@ run in $SWAP/test.</p>
 
 <h3>How to make a release</h3>
 <ol>
-  <li>A quick test that your code still works is cd $SWAP/test; make fast</li>
+  <li>Remember to <code>cvs update</code> to ensure you have any changes
+    other people have done before running tests.</li>
+  <li>A quick test that your code still works is <code>cd $SWAP/test; make
+    fast</code></li>
   <li>The test a release must pass before you make it is cd $SWAP/test; make
     pre-release</li>
-  <li>Edit $SWAP/Makefile 
+  <li>Update the releases page with details of the new bug fixes and/or
+    features.</li>
+  <li>Edit $SWAP/Makefile
     <ul>
       <li>Make sure the HTML files generated from any new .py files are added
         to the list HTMLS</li>
-      <li></li>
+      <li>Change the version number if you are going to make a new
+      tarball</li>
     </ul>
   </li>
 </ol>
