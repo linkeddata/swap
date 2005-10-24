@@ -1,8 +1,9 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
   <title>cwm - a general purpose data processor for the semantic web</title>
   <link xmlns:xlink="http://www.w3.org/1999/xlink" href="style.css"
   rel="stylesheet" type="text/css" />
@@ -17,17 +18,16 @@ src="../../../../RDF/icons/n3_small" /></a>
 <h1>Cwm</h1>
 
 <div class="nav" style="text-align:center">
-<a href="#disc">Discussion</a> |
-<a href="#Closed">Features</a> | 
-<a href="#Related">Related Work</a> | <a href="#dev">Development</a> | <a
+<a href="#disc">Discussion</a> | <a href="#Closed">Features</a> | <a
+href="#Related">Related Work</a> | <a href="#dev">Development</a> | <a
 href="#acks">Acks</a></div>
 
-<p>Cwm is a general-purpose data processor for the semantic web, somewhat
-like sed, awk, etc. for text files or XSLT for XML. It is a forward chaining
-reasoner which can be used for querying, checking, transforming and filtering
-information. Its core language is RDF, extended to include rules, and it uses
-RDF/XML or RDF/N3 (see <a href="../Primer">Notation3 Primer</a>)
-serializations as required.</p>
+<p>Cwm (pronounced coom) is a general-purpose data processor for the semantic
+web, somewhat like sed, awk, etc. for text files or XSLT for XML. It is a
+forward chaining reasoner which can be used for querying, checking,
+transforming and filtering information. Its core language is RDF, extended to
+include rules, and it uses RDF/XML or RDF/N3 (see <a
+href="../Primer">Notation3 Primer</a>) serializations as required.</p>
 
 <p>Cwm is <a href="../#L88">written in python</a>; it is part of <a
 href="../">SWAP</a>, a Semantic Web Application Platform. It is open source
@@ -244,15 +244,14 @@ for a new bug, so that bugs don't recur in future versions.</p>
 
 <h3>Code Overview</h3>
 
-<p>Cwm developers agree to keep line lengths below 80 characters,
-though we have some code that predates that agreement.</p>
+<p>Cwm developers agree to keep line lengths below 80 characters, though we
+have some code that predates that agreement.</p>
 
 <h4>llyn.py - The Store</h4>
 
 <p>An in-memory store which does the inference. See the <a href="">Formula
 class methods</a> for a more or less conventional RDF API. A Forumula is a
 set of statements.</p>
-
 
 <h4 id="L133">notation3.py - Serializing/deserializaing RDF/N3</h4>
 
@@ -311,14 +310,13 @@ documents.</p>
 <h2 id="acks">Acknowledgements</h2>
 
 <p>Thanks to Dan Connolly for writing the first code and thereby <a
-href="./#L88">introducing me to Python</a>, and to him and Sean Palmer
-and Mark Nottingham for writing built-in function modules. Eric
-Prud'hommeaux wrote the remote database query and mySQL
-interface. Sandro Hawke has made various contributions. Yosi Scharf
-engineered the cwm 1.0.0 release and fixed various bugs and added
-SPARQL support. Thanks to Sean for his <a
-href="http://infomesh.net/2001/cwm/">guide</a> to cwm. Thanks for all
-on #RDFIG for being everything which is #RDFIG.</p>
+href="./#L88">introducing me to Python</a>, and to him and Sean Palmer and
+Mark Nottingham for writing built-in function modules. Eric Prud'hommeaux
+wrote the remote database query and mySQL interface. Sandro Hawke has made
+various contributions. Yosi Scharf engineered the cwm 1.0.0 release and fixed
+various bugs and added SPARQL support. Thanks to Sean for his <a
+href="http://infomesh.net/2001/cwm/">guide</a> to cwm. Thanks for all on
+#RDFIG for being everything which is #RDFIG.</p>
 
 <p>Development of cwm is supported in part by funding from US Defense
 Advanced Research Projects Agency (DARPA) and Air Force Research Laboratory,
@@ -332,9 +330,9 @@ Air Force Materiel Command, USAF, under agreement number F30602-00-2-0593,
 <p>Copyright © 2000-2004 World Wide Web Consortium, (Massachusetts Institute
 of Technology, European Research Consortium for Informatics and Mathematics,
 Keio University). All Rights Reserved. This work is distributed under the
-W3C¨ Software License [1] in the hope that it will be useful, but WITHOUT ANY
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-A PARTICULAR PURPOSE. [1] <a
+W3C¨ Software License [1] in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. [1] <a
 href="/Consortium/Legal/2002/copyright-software-20021231 ">http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231</a><a></a></p>
 
 <p></p>
@@ -342,7 +340,8 @@ href="/Consortium/Legal/2002/copyright-software-20021231 ">http://www.w3.org/Con
 <p><a href="cwm-historical.html">Historical stuff from this page</a></p>
 <hr />
 <address>
-  <a href="http://www.w3.org/People/Berners-Lee/Research.html">Tim BL, with his director hat off</a><br />
+  <a href="http://www.w3.org/People/Berners-Lee/Research.html">Tim BL, with
+  his director hat off</a><br />
   $Id$
 </address>
 </body>
