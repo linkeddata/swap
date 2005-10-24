@@ -402,7 +402,7 @@ class Formula(AnonymousNode, CompoundTerm):
 		    set = set | y.occurringIn(vars)
 	return set
 
-    def unify(self, other, vars, existentials, bindings):
+    def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
 	"""See Term.unify()
 	"""
 
@@ -686,7 +686,7 @@ class StoredStatement:
     def universals(self):
 	return self.occuringIn(self.quad[CONTEXT].universals())
 
-    def unify(self, other, vars, existentials, bindings):
+    def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
 	"""See Term.unify()
 	"""
 
@@ -721,7 +721,7 @@ class StoredStatement:
 	    f.declareUniversal(v)
 #	    progress("&&&&& Universals are %s\n\t in %s" % (f.universals(), f))
 	for v in ee:
-	    f.declareExistential(v.uriref())
+	    f.declareExistential(v)
 	return f.close()  # probably slow - much slower than statement subclass of formula
 
 

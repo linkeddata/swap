@@ -5,7 +5,10 @@ P=python
 C=$(SWAP)/cwm.py
 CG=PYTHONPATH=$(SWAP) python predictiveParser.py
 
-all : n3-checked.txt n3-report.html \
+
+.SUFFIXES: .rdf .n3
+
+all : n3-checked.txt n3-report.html n3.rdf \
 		n3rdf-report.html \
 		n3rules-report.html \
 		n3ql-report.html
@@ -14,6 +17,8 @@ all : n3-checked.txt n3-report.html \
 
 #  N3 Full:
 
+.n3.rdf:
+	python $(SWAP)/cwm.py --n3 $< --rdf  > $>
 
 n3-yacc.c : n3-selectors.n3-yacc.y
 	yacc -o $@ n3-selectors.n3-yacc.y

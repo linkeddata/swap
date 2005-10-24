@@ -1,0 +1,4067 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<!DOCTYPE uridef[
+  <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY daml "http://www.daml.org/2001/03/daml+oil">
+  <!ENTITY usstate "http://www.daml.ri.cmu.edu/ont/USRegionState.daml">
+  <!ENTITY country "http://www.daml.ri.cmu.edu/ont/Country.daml">
+  <!ENTITY city "http://www.daml.ri.cmu.edu/ont/City.daml">
+  <!ENTITY DEFAULT "http://www.daml.ri.cmu.edu/ont/USCity.daml">
+  <!ENTITY THIS "http://www.daml.ri.cmu.edu/ont/USCity.daml">
+]>
+ 
+<!--
+This document uses entity types as a shorthand for URIs.
+Download the source for a version with unexpanded entities.
+  -->
+ 
+<rdf:RDF
+  xmlns:rdf=    "&rdf;#"
+  xmlns:rdfs=   "&rdfs;#"
+  xmlns:daml=   "&daml;#"
+  xmlns:usstate="&usstate;#"
+  xmlns:country="&country;#"
+  xmlns:city=   "&city;#"
+  xmlns=        "&DEFAULT;#">
+ 
+  <daml:Ontology about="">
+    <daml:versionInfo>
+      $Id$
+    </daml:versionInfo>
+    <rdfs:comment>
+      City and State Ontology for US Cities.
+      Thanks goes to Martin van Velsen who helped gather this
+      data for the Retsina Mocha project.
+
+	NOTE:	THIS IS NOT INTENDED TO BE A DEFINITIVE LIST OF ALL
+		US CITIES, BUT WE HAVE TRIED TO BE AS COMPREHENSIVE
+		AS POSSIBLE.
+
+    </rdfs:comment>
+    <daml:imports rdf:resource="&rdf;" />
+    <daml:imports rdf:resource="&rdfs;" />
+    <daml:imports rdf:resource="&daml;" />
+    <daml:imports rdf:resource="&city;" />
+  </daml:Ontology>
+ 
+  <rdfs:Class rdf:ID="USCity">
+    <rdfs:label>USCity</rdfs:label>
+    <rdfs:subClassOf rdf:resource="&city;#City" />
+    <rdfs:comment>
+      Information about US cities.
+    </rdfs:comment> 
+  </rdfs:Class>
+ 
+  <rdf:Property rdf:ID="state">
+    <rdfs:domain rdf:resource="#USCity" />
+    <rdfs:range rdf:resource="&usstate;#USState" />
+  </rdf:Property> 
+
+  <!-- Constrain the country to be the USA -->
+  <rdf:Property rdf:about="&city;#country">
+    <rdfs:range rdf:resource="&country;#UNITED-STATES" />
+  </rdf:Property>
+
+  <!-- Now to instantiate the codes -->
+
+  <USCity rdf:ID="anchorageak">
+    <name>Anchorage</name>
+    <state rdf:resource="&usstate;#AK"/>
+  </USCity>
+  
+  <USCity rdf:ID="eagleriverak">
+    <name>Eagle River</name>
+    <state rdf:resource="&usstate;#AK"/>
+  </USCity>
+  
+  <USCity rdf:ID="fairbanksak">
+    <name>Fairbanks</name>
+    <state rdf:resource="&usstate;#AK"/>
+  </USCity>
+  
+  <USCity rdf:ID="juneauak">
+    <name>Juneau</name>
+    <state rdf:resource="&usstate;#AK"/>
+  </USCity>
+  
+  <USCity rdf:ID="palmerak">
+    <name>Palmer</name>
+    <state rdf:resource="&usstate;#AK"/>
+  </USCity>
+  
+  <USCity rdf:ID="wasillaak">
+    <name>Wasilla</name>
+    <state rdf:resource="&usstate;#AK"/>
+  </USCity>
+  
+  <USCity rdf:ID="annistonal">
+    <name>Anniston</name>
+    <state rdf:resource="&usstate;#AL"/>
+  </USCity>
+  
+  <USCity rdf:ID="birminghamal">
+    <name>Birmingham</name>
+    <state rdf:resource="&usstate;#AL"/>
+  </USCity>
+  
+  <USCity rdf:ID="chelseaal">
+    <name>Chelsea</name>
+    <state rdf:resource="&usstate;#AL"/>
+  </USCity>
+  
+  <USCity rdf:ID="daphneal">
+    <name>Daphne</name>
+    <state rdf:resource="&usstate;#AL"/>
+  </USCity>
+  
+  <USCity rdf:ID="decatural">
+    <name>Decatur</name>
+    <state rdf:resource="&usstate;#AL"/>
+  </USCity>
+  
+  <USCity rdf:ID="dothanal">
+    <name>Dothan</name>
+    <state rdf:resource="&usstate;#AL"/>
+  </USCity>
+  
+  <USCity rdf:ID="fairhopeal">
+    <name>Fairhope</name>
+    <state rdf:resource="&usstate;#AL"/>
+  </USCity>
+  
+  <USCity rdf:ID="gadsdenal">
+    <name>Gadsden</name>
+    <state rdf:resource="&usstate;#AL"/>
+  </USCity>
+  
+  <USCity rdf:ID="hooveral">
+    <name>Hoover</name>
+    <state rdf:resource="&usstate;#AL"/>
+  </USCity>
+  
+  <USCity rdf:ID="huntsvilleal">
+    <name>Huntsville</name>
+    <state rdf:resource="&usstate;#AL"/>
+  </USCity>
+  
+  <USCity rdf:ID="madisonal">
+    <name>Madison</name>
+    <state rdf:resource="&usstate;#AL"/>
+  </USCity>
+  
+  <USCity rdf:ID="mobileal">
+    <name>Mobile</name>
+    <state rdf:resource="&usstate;#AL"/>
+  </USCity>
+  
+  <USCity rdf:ID="montgomeryal">
+    <name>Montgomery</name>
+    <state rdf:resource="&usstate;#AL"/>
+  </USCity>
+  
+  <USCity rdf:ID="mountainbrookal">
+    <name>Mountain Brook</name>
+    <state rdf:resource="&usstate;#AL"/>
+  </USCity>
+  
+  <USCity rdf:ID="opelikaal">
+    <name>Opelika</name>
+    <state rdf:resource="&usstate;#AL"/>
+  </USCity>
+  
+  <USCity rdf:ID="phenixcityal">
+    <name>Phenix City</name>
+    <state rdf:resource="&usstate;#AL"/>
+  </USCity>
+  
+  <USCity rdf:ID="shelbyal">
+    <name>Shelby</name>
+    <state rdf:resource="&usstate;#AL"/>
+  </USCity>
+  
+  <USCity rdf:ID="smithsal">
+    <name>Smiths</name>
+    <state rdf:resource="&usstate;#AL"/>
+  </USCity>
+  
+  <USCity rdf:ID="spanishfortal">
+    <name>Spanish Fort</name>
+    <state rdf:resource="&usstate;#AL"/>
+  </USCity>
+  
+  <USCity rdf:ID="tuscaloosaal">
+    <name>Tuscaloosa</name>
+    <state rdf:resource="&usstate;#AL"/>
+  </USCity>
+  
+  <USCity rdf:ID="vestaviahillsal">
+    <name>Vestavia Hills</name>
+    <state rdf:resource="&usstate;#AL"/>
+  </USCity>
+  
+  <USCity rdf:ID="fayettevillear">
+    <name>Fayetteville</name>
+    <state rdf:resource="&usstate;#AR"/>
+  </USCity>
+  
+  <USCity rdf:ID="fortsmithar">
+    <name>Fort Smith</name>
+    <state rdf:resource="&usstate;#AR"/>
+  </USCity>
+  
+  <USCity rdf:ID="hotspringsar">
+    <name>Hot Springs</name>
+    <state rdf:resource="&usstate;#AR"/>
+  </USCity>
+  
+  <USCity rdf:ID="jonesboroar">
+    <name>Jonesboro</name>
+    <state rdf:resource="&usstate;#AR"/>
+  </USCity>
+  
+  <USCity rdf:ID="littlerockar">
+    <name>Little Rock</name>
+    <state rdf:resource="&usstate;#AR"/>
+  </USCity>
+  
+  <USCity rdf:ID="pinebluffar">
+    <name>Pine Bluff</name>
+    <state rdf:resource="&usstate;#AR"/>
+  </USCity>
+  
+  <USCity rdf:ID="chandleraz">
+    <name>Chandler</name>
+    <state rdf:resource="&usstate;#AZ"/>
+  </USCity>
+  
+  <USCity rdf:ID="flagstaffaz">
+    <name>Flagstaff</name>
+    <state rdf:resource="&usstate;#AZ"/>
+  </USCity>
+  
+  <USCity rdf:ID="gilbertaz">
+    <name>Gilbert</name>
+    <state rdf:resource="&usstate;#AZ"/>
+  </USCity>
+  
+  <USCity rdf:ID="higleyaz">
+    <name>Higley</name>
+    <state rdf:resource="&usstate;#AZ"/>
+  </USCity>
+  
+  <USCity rdf:ID="kingmanaz">
+    <name>Kingman</name>
+    <state rdf:resource="&usstate;#AZ"/>
+  </USCity>
+  
+  <USCity rdf:ID="lakehavasucityaz">
+    <name>Lake Havasu City</name>
+    <state rdf:resource="&usstate;#AZ"/>
+  </USCity>
+  
+  <USCity rdf:ID="mesaaz">
+    <name>Mesa</name>
+    <state rdf:resource="&usstate;#AZ"/>
+  </USCity>
+  
+  <USCity rdf:ID="phoenixaz">
+    <name>Phoenix</name>
+    <state rdf:resource="&usstate;#AZ"/>
+  </USCity>
+  
+  <USCity rdf:ID="prescottaz">
+    <name>Prescott</name>
+    <state rdf:resource="&usstate;#AZ"/>
+  </USCity>
+  
+  <USCity rdf:ID="scottsdaleaz">
+    <name>Scottsdale</name>
+    <state rdf:resource="&usstate;#AZ"/>
+  </USCity>
+  
+  <USCity rdf:ID="sedonaaz">
+    <name>Sedona</name>
+    <state rdf:resource="&usstate;#AZ"/>
+  </USCity>
+  
+  <USCity rdf:ID="sierravistaaz">
+    <name>Sierra Vista</name>
+    <state rdf:resource="&usstate;#AZ"/>
+  </USCity>
+  
+  <USCity rdf:ID="tempeaz">
+    <name>Tempe</name>
+    <state rdf:resource="&usstate;#AZ"/>
+  </USCity>
+  
+  <USCity rdf:ID="tucsonaz">
+    <name>Tucson</name>
+    <state rdf:resource="&usstate;#AZ"/>
+  </USCity>
+  
+  <USCity rdf:ID="yumaaz">
+    <name>Yuma</name>
+    <state rdf:resource="&usstate;#AZ"/>
+  </USCity>
+  
+  <USCity rdf:ID="albanyca">
+    <name>Albany</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="alisoviejoca">
+    <name>Aliso Viejo</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="altalomaca">
+    <name>Alta Loma</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="americancanyonca">
+    <name>American Canyon</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="anaheimca">
+    <name>Anaheim</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="arcadiaca">
+    <name>Arcadia</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="arroyograndeca">
+    <name>Arroyo Grande</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="athertonca">
+    <name>Atherton</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="azusaca">
+    <name>Azusa</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="bakersfieldca">
+    <name>Bakersfield</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="baldwinparkca">
+    <name>Baldwin Park</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="banningca">
+    <name>Banning</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="beaumontca">
+    <name>Beaumont</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="belmontca">
+    <name>Belmont</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="beniciaca">
+    <name>Benicia</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="berkeleyca">
+    <name>Berkeley</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="brentwoodca">
+    <name>Brentwood</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="burbankca">
+    <name>Burbank</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="burlingameca">
+    <name>Burlingame</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="calabasasca">
+    <name>Calabasas</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="campbellca">
+    <name>Campbell</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="carlsbadca">
+    <name>Carlsbad</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="carmelca">
+    <name>Carmel</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="cerritosca">
+    <name>Cerritos</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="chinoca">
+    <name>Chino</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="claremontca">
+    <name>Claremont</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="clovisca">
+    <name>Clovis</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="coltonca">
+    <name>Colton</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="concordca">
+    <name>Concord</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="costamesaca">
+    <name>Costa Mesa</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="covinaca">
+    <name>Covina</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="cucamongaca">
+    <name>Cucamonga</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="cupertinoca">
+    <name>Cupertino</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="cypressca">
+    <name>Cypress</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="danvilleca">
+    <name>Danville</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="diamondbarca">
+    <name>Diamond Bar</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="elcerritoca">
+    <name>El Cerrito</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="elmonteca">
+    <name>El Monte</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="elsobranteca">
+    <name>El Sobrante</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="escondidoca">
+    <name>Escondido</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="fairfieldca">
+    <name>Fairfield</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="fallbrookca">
+    <name>Fallbrook</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="folsomca">
+    <name>Folsom</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="fontanaca">
+    <name>Fontana</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="fostercityca">
+    <name>Foster City</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="fountainvalleyca">
+    <name>Fountain Valley</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="fremontca">
+    <name>Fremont</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="fresnoca">
+    <name>Fresno</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="gardengroveca">
+    <name>Garden Grove</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="gilroyca">
+    <name>Gilroy</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="glendaleca">
+    <name>Glendale</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="glendoraca">
+    <name>Glendora</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="haywardca">
+    <name>Hayward</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="highlandca">
+    <name>Highland</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="huntingtonbeachca">
+    <name>Huntington Beach</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="irvineca">
+    <name>Irvine</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="lagunaniguelca">
+    <name>Laguna Niguel</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="lapuenteca">
+    <name>La Puente</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="laverneca">
+    <name>La Verne</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="livermoreca">
+    <name>Livermore</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="lomalindaca">
+    <name>Loma Linda</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="longbeachca">
+    <name>Long Beach</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="losaltosca">
+    <name>Los Altos</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="losangelesca">
+    <name>Los Angeles</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="losgatosca">
+    <name>Los Gatos</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="maderaca">
+    <name>Madera</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="malibuca">
+    <name>Malibu</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="martinezca">
+    <name>Martinez</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="menloparkca">
+    <name>Menlo Park</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="missionviejoca">
+    <name>Mission Viejo</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="modestoca">
+    <name>Modesto</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="monroviaca">
+    <name>Monrovia</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="mountainviewca">
+    <name>Mountain View</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="napaca">
+    <name>Napa</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="newportbeachca">
+    <name>Newport Beach</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="novatoca">
+    <name>Novato</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="oaklandca">
+    <name>Oakland</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="oceansideca">
+    <name>Oceanside</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="ontarioca">
+    <name>Ontario</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="oxnardca">
+    <name>Oxnard</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="pacificaca">
+    <name>Pacifica</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="paloaltoca">
+    <name>Palo Alto</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="pasadenaca">
+    <name>Pasadena</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="petalumaca">
+    <name>Petaluma</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="pleasanthillca">
+    <name>Pleasant Hill</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="pleasantonca">
+    <name>Pleasanton</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="pomonaca">
+    <name>Pomona</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="prunedaleca">
+    <name>Prunedale</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="ranchocucamongaca">
+    <name>Rancho Cucamonga</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="redlandsca">
+    <name>Redlands</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="redwoodcityca">
+    <name>Redwood City</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="rialtoca">
+    <name>Rialto</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="richmondca">
+    <name>Richmond</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="rosevilleca">
+    <name>Roseville</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="sacramentoca">
+    <name>Sacramento</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="salinasca">
+    <name>Salinas</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="sanbernardinoca">
+    <name>San Bernardino</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="sanbrunoca">
+    <name>San Bruno</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="sancarlosca">
+    <name>San Carlos</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="sanclementeca">
+    <name>San Clemente</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="sandiegoca">
+    <name>San Diego</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="sandimasca">
+    <name>San Dimas</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="sanfranciscoca">
+    <name>San Francisco</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="sanjoseca">
+    <name>San Jose</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="sanjuancapistranoca">
+    <name>San Juan Capistrano</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="sanluisobispoca">
+    <name>San Luis Obispo</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="sanmateoca">
+    <name>San Mateo</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="sanpabloca">
+    <name>San Pablo</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="sanrafaelca">
+    <name>San Rafael</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="sanramonca">
+    <name>San Ramon</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="santabarbaraca">
+    <name>Santa Barbara</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="santaclaraca">
+    <name>Santa Clara</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="santamonicaca">
+    <name>Santa Monica</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="santarosaca">
+    <name>Santa Rosa</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="saratogaca">
+    <name>Saratoga</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="stocktonca">
+    <name>Stockton</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="sunnyvaleca">
+    <name>Sunnyvale</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="tracyca">
+    <name>Tracy</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="unioncityca">
+    <name>Union City</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="uplandca">
+    <name>Upland</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="vacavilleca">
+    <name>Vacaville</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="vallejoca">
+    <name>Vallejo</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="visaliaca">
+    <name>Visalia</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="vistaca">
+    <name>Vista</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="walnutcreekca">
+    <name>Walnut Creek</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="westcovinaca">
+    <name>West Covina</name>
+    <state rdf:resource="&usstate;#CA"/>
+  </USCity>
+  
+  <USCity rdf:ID="arvadaco">
+    <name>Arvada</name>
+    <state rdf:resource="&usstate;#CO"/>
+  </USCity>
+  
+  <USCity rdf:ID="auroraco">
+    <name>Aurora</name>
+    <state rdf:resource="&usstate;#CO"/>
+  </USCity>
+  
+  <USCity rdf:ID="boulderco">
+    <name>Boulder</name>
+    <state rdf:resource="&usstate;#CO"/>
+  </USCity>
+  
+  <USCity rdf:ID="breckenridgeco">
+    <name>Breckenridge</name>
+    <state rdf:resource="&usstate;#CO"/>
+  </USCity>
+  
+  <USCity rdf:ID="coloradospringsco">
+    <name>Colorado Springs</name>
+    <state rdf:resource="&usstate;#CO"/>
+  </USCity>
+  
+  <USCity rdf:ID="denverco">
+    <name>Denver</name>
+    <state rdf:resource="&usstate;#CO"/>
+  </USCity>
+  
+  <USCity rdf:ID="englewoodco">
+    <name>Englewood</name>
+    <state rdf:resource="&usstate;#CO"/>
+  </USCity>
+  
+  <USCity rdf:ID="fortcollinsco">
+    <name>Fort Collins</name>
+    <state rdf:resource="&usstate;#CO"/>
+  </USCity>
+  
+  <USCity rdf:ID="friscoco">
+    <name>Frisco</name>
+    <state rdf:resource="&usstate;#CO"/>
+  </USCity>
+  
+  <USCity rdf:ID="greeleyco">
+    <name>Greeley</name>
+    <state rdf:resource="&usstate;#CO"/>
+  </USCity>
+  
+  <USCity rdf:ID="highlandsranchco">
+    <name>Highlands Ranch</name>
+    <state rdf:resource="&usstate;#CO"/>
+  </USCity>
+  
+  <USCity rdf:ID="keystoneco">
+    <name>Keystone</name>
+    <state rdf:resource="&usstate;#CO"/>
+  </USCity>
+  
+  <USCity rdf:ID="lakewoodco">
+    <name>Lakewood</name>
+    <state rdf:resource="&usstate;#CO"/>
+  </USCity>
+  
+  <USCity rdf:ID="littletonco">
+    <name>Littleton</name>
+    <state rdf:resource="&usstate;#CO"/>
+  </USCity>
+  
+  <USCity rdf:ID="longmontco">
+    <name>Longmont</name>
+    <state rdf:resource="&usstate;#CO"/>
+  </USCity>
+  
+  <USCity rdf:ID="lovelandco">
+    <name>Loveland</name>
+    <state rdf:resource="&usstate;#CO"/>
+  </USCity>
+  
+  <USCity rdf:ID="parkerco">
+    <name>Parker</name>
+    <state rdf:resource="&usstate;#CO"/>
+  </USCity>
+  
+  <USCity rdf:ID="puebloco">
+    <name>Pueblo</name>
+    <state rdf:resource="&usstate;#CO"/>
+  </USCity>
+  
+  <USCity rdf:ID="silverthorneco">
+    <name>Silverthorne</name>
+    <state rdf:resource="&usstate;#CO"/>
+  </USCity>
+  
+  <USCity rdf:ID="steamboatspringsco">
+    <name>Steamboat Springs</name>
+    <state rdf:resource="&usstate;#CO"/>
+  </USCity>
+  
+  <USCity rdf:ID="thorntonco">
+    <name>Thornton</name>
+    <state rdf:resource="&usstate;#CO"/>
+  </USCity>
+  
+  <USCity rdf:ID="vailco">
+    <name>Vail</name>
+    <state rdf:resource="&usstate;#CO"/>
+  </USCity>
+  
+  <USCity rdf:ID="westminsterco">
+    <name>Westminster</name>
+    <state rdf:resource="&usstate;#CO"/>
+  </USCity>
+  
+  <USCity rdf:ID="avonct">
+    <name>Avon</name>
+    <state rdf:resource="&usstate;#CT"/>
+  </USCity>
+  
+  <USCity rdf:ID="bridgeportct">
+    <name>Bridgeport</name>
+    <state rdf:resource="&usstate;#CT"/>
+  </USCity>
+  
+  <USCity rdf:ID="danburyct">
+    <name>Danbury</name>
+    <state rdf:resource="&usstate;#CT"/>
+  </USCity>
+  
+  <USCity rdf:ID="darienct">
+    <name>Darien</name>
+    <state rdf:resource="&usstate;#CT"/>
+  </USCity>
+  
+  <USCity rdf:ID="fairfieldct">
+    <name>Fairfield</name>
+    <state rdf:resource="&usstate;#CT"/>
+  </USCity>
+  
+  <USCity rdf:ID="farmingtonct">
+    <name>Farmington</name>
+    <state rdf:resource="&usstate;#CT"/>
+  </USCity>
+  
+  <USCity rdf:ID="greenwichct">
+    <name>Greenwich</name>
+    <state rdf:resource="&usstate;#CT"/>
+  </USCity>
+  
+  <USCity rdf:ID="guilfordct">
+    <name>Guilford</name>
+    <state rdf:resource="&usstate;#CT"/>
+  </USCity>
+  
+  <USCity rdf:ID="hartfordct">
+    <name>Hartford</name>
+    <state rdf:resource="&usstate;#CT"/>
+  </USCity>
+  
+  <USCity rdf:ID="hebronct">
+    <name>Hebron</name>
+    <state rdf:resource="&usstate;#CT"/>
+  </USCity>
+  
+  <USCity rdf:ID="middletownct">
+    <name>Middletown</name>
+    <state rdf:resource="&usstate;#CT"/>
+  </USCity>
+  
+  <USCity rdf:ID="mysticct">
+    <name>Mystic</name>
+    <state rdf:resource="&usstate;#CT"/>
+  </USCity>
+  
+  <USCity rdf:ID="newfairfieldct">
+    <name>New Fairfield</name>
+    <state rdf:resource="&usstate;#CT"/>
+  </USCity>
+  
+  <USCity rdf:ID="newhavenct">
+    <name>New Haven</name>
+    <state rdf:resource="&usstate;#CT"/>
+  </USCity>
+  
+  <USCity rdf:ID="newlondonct">
+    <name>New London</name>
+    <state rdf:resource="&usstate;#CT"/>
+  </USCity>
+  
+  <USCity rdf:ID="newtownct">
+    <name>Newtown</name>
+    <state rdf:resource="&usstate;#CT"/>
+  </USCity>
+  
+  <USCity rdf:ID="norwalkct">
+    <name>Norwalk</name>
+    <state rdf:resource="&usstate;#CT"/>
+  </USCity>
+  
+  <USCity rdf:ID="oldgreenwichct">
+    <name>Old Greenwich</name>
+    <state rdf:resource="&usstate;#CT"/>
+  </USCity>
+  
+  <USCity rdf:ID="oldlymect">
+    <name>Old Lyme</name>
+    <state rdf:resource="&usstate;#CT"/>
+  </USCity>
+  
+  <USCity rdf:ID="oldsaybrookct">
+    <name>Old Saybrook</name>
+    <state rdf:resource="&usstate;#CT"/>
+  </USCity>
+  
+  <USCity rdf:ID="ridgefieldct">
+    <name>Ridgefield</name>
+    <state rdf:resource="&usstate;#CT"/>
+  </USCity>
+  
+  <USCity rdf:ID="simsburyct">
+    <name>Simsbury</name>
+    <state rdf:resource="&usstate;#CT"/>
+  </USCity>
+  
+  <USCity rdf:ID="stamfordct">
+    <name>Stamford</name>
+    <state rdf:resource="&usstate;#CT"/>
+  </USCity>
+  
+  <USCity rdf:ID="stoningtonct">
+    <name>Stonington</name>
+    <state rdf:resource="&usstate;#CT"/>
+  </USCity>
+  
+  <USCity rdf:ID="torringtonct">
+    <name>Torrington</name>
+    <state rdf:resource="&usstate;#CT"/>
+  </USCity>
+  
+  <USCity rdf:ID="waterburyct">
+    <name>Waterbury</name>
+    <state rdf:resource="&usstate;#CT"/>
+  </USCity>
+  
+  <USCity rdf:ID="westonct">
+    <name>Weston</name>
+    <state rdf:resource="&usstate;#CT"/>
+  </USCity>
+  
+  <USCity rdf:ID="westportct">
+    <name>Westport</name>
+    <state rdf:resource="&usstate;#CT"/>
+  </USCity>
+  
+  <USCity rdf:ID="wiltonct">
+    <name>Wilton</name>
+    <state rdf:resource="&usstate;#CT"/>
+  </USCity>
+  
+  <USCity rdf:ID="washingtondc">
+    <name>Washington</name>
+    <state rdf:resource="&usstate;#DC"/>
+  </USCity>
+  
+  <USCity rdf:ID="doverde">
+    <name>Dover</name>
+    <state rdf:resource="&usstate;#DE"/>
+  </USCity>
+  
+  <USCity rdf:ID="newarkde">
+    <name>Newark</name>
+    <state rdf:resource="&usstate;#DE"/>
+  </USCity>
+  
+  <USCity rdf:ID="wilmingtonde">
+    <name>Wilmington</name>
+    <state rdf:resource="&usstate;#DE"/>
+  </USCity>
+  
+  <USCity rdf:ID="altamontespringsfl">
+    <name>Altamonte Springs</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="bocaratonfl">
+    <name>Boca Raton</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="boyntonbeachfl">
+    <name>Boynton Beach</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="bradentonfl">
+    <name>Bradenton</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="capecoralfl">
+    <name>Cape Coral</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="clearwaterfl">
+    <name>Clearwater</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="coralgablesfl">
+    <name>Coral Gables</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="coralspringsfl">
+    <name>Coral Springs</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="daviefl">
+    <name>Davie</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="daytonabeachfl">
+    <name>Daytona Beach</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="delraybeachfl">
+    <name>Delray Beach</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="destinfl">
+    <name>Destin</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="dunedinfl">
+    <name>Dunedin</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="fortlauderdalefl">
+    <name>Fort Lauderdale</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="fortmyersfl">
+    <name>Fort Myers</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="fortpiercefl">
+    <name>Fort Pierce</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="gainesvillefl">
+    <name>Gainesville</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="hialeahfl">
+    <name>Hialeah</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="homesteadfl">
+    <name>Homestead</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="jacksonvillefl">
+    <name>Jacksonville</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="jupiterfl">
+    <name>Jupiter</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="keywestfl">
+    <name>Key West</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="kissimmeefl">
+    <name>Kissimmee</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="lakelandfl">
+    <name>Lakeland</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="lakeworthfl">
+    <name>Lake Worth</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="largofl">
+    <name>Largo</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="longwoodfl">
+    <name>Longwood</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="marathonfl">
+    <name>Marathon</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="marcoislandfl">
+    <name>Marco Island</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="melbournefl">
+    <name>Melbourne</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="miamifl">
+    <name>Miami</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="naplesfl">
+    <name>Naples</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="navarrefl">
+    <name>Navarre</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="nicevillefl">
+    <name>Niceville</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="ocalafl">
+    <name>Ocala</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="orlandofl">
+    <name>Orlando</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="ormondbeachfl">
+    <name>Ormond Beach</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="palmbayfl">
+    <name>Palm Bay</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="panamacitybeachfl">
+    <name>Panama City Beach</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="panamacityfl">
+    <name>Panama City</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="pembrokepinesfl">
+    <name>Pembroke Pines</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="pensacolafl">
+    <name>Pensacola</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="pompanobeachfl">
+    <name>Pompano Beach</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="portcharlottefl">
+    <name>Port Charlotte</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="portorangefl">
+    <name>Port Orange</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="portstluciefl">
+    <name>Port St Lucie</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="puntagordafl">
+    <name>Punta Gorda</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="sanfordfl">
+    <name>Sanford</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="sanibelislandfl">
+    <name>Sanibel Island</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="sarasotafl">
+    <name>Sarasota</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="seminolefl">
+    <name>Seminole</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="stpetersburgfl">
+    <name>St Petersburg</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="tallahasseefl">
+    <name>Tallahassee</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="tampafl">
+    <name>Tampa</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="tarponspringsfl">
+    <name>Tarpon Springs</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="titusvillefl">
+    <name>Titusville</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="westpalmbeachfl">
+    <name>West Palm Beach</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="winterspringsfl">
+    <name>Winter Springs</name>
+    <state rdf:resource="&usstate;#FL"/>
+  </USCity>
+  
+  <USCity rdf:ID="albanyga">
+    <name>Albany</name>
+    <state rdf:resource="&usstate;#GA"/>
+  </USCity>
+  
+  <USCity rdf:ID="alpharettaga">
+    <name>Alpharetta</name>
+    <state rdf:resource="&usstate;#GA"/>
+  </USCity>
+  
+  <USCity rdf:ID="athensga">
+    <name>Athens</name>
+    <state rdf:resource="&usstate;#GA"/>
+  </USCity>
+  
+  <USCity rdf:ID="atlantaga">
+    <name>Atlanta</name>
+    <state rdf:resource="&usstate;#GA"/>
+  </USCity>
+  
+  <USCity rdf:ID="augustaga">
+    <name>Augusta</name>
+    <state rdf:resource="&usstate;#GA"/>
+  </USCity>
+  
+  <USCity rdf:ID="bogartga">
+    <name>Bogart</name>
+    <state rdf:resource="&usstate;#GA"/>
+  </USCity>
+  
+  <USCity rdf:ID="columbusga">
+    <name>Columbus</name>
+    <state rdf:resource="&usstate;#GA"/>
+  </USCity>
+  
+  <USCity rdf:ID="conyersga">
+    <name>Conyers</name>
+    <state rdf:resource="&usstate;#GA"/>
+  </USCity>
+  
+  <USCity rdf:ID="decaturga">
+    <name>Decatur</name>
+    <state rdf:resource="&usstate;#GA"/>
+  </USCity>
+  
+  <USCity rdf:ID="evansga">
+    <name>Evans</name>
+    <state rdf:resource="&usstate;#GA"/>
+  </USCity>
+  
+  <USCity rdf:ID="griffinga">
+    <name>Griffin</name>
+    <state rdf:resource="&usstate;#GA"/>
+  </USCity>
+  
+  <USCity rdf:ID="maconga">
+    <name>Macon</name>
+    <state rdf:resource="&usstate;#GA"/>
+  </USCity>
+  
+  <USCity rdf:ID="mariettaga">
+    <name>Marietta</name>
+    <state rdf:resource="&usstate;#GA"/>
+  </USCity>
+  
+  <USCity rdf:ID="martinezga">
+    <name>Martinez</name>
+    <state rdf:resource="&usstate;#GA"/>
+  </USCity>
+  
+  <USCity rdf:ID="peachtreecityga">
+    <name>Peachtree City</name>
+    <state rdf:resource="&usstate;#GA"/>
+  </USCity>
+  
+  <USCity rdf:ID="roswellga">
+    <name>Roswell</name>
+    <state rdf:resource="&usstate;#GA"/>
+  </USCity>
+  
+  <USCity rdf:ID="savannahga">
+    <name>Savannah</name>
+    <state rdf:resource="&usstate;#GA"/>
+  </USCity>
+  
+  <USCity rdf:ID="watkinsvillega">
+    <name>Watkinsville</name>
+    <state rdf:resource="&usstate;#GA"/>
+  </USCity>
+  
+  <USCity rdf:ID="hilohi">
+    <name>Hilo</name>
+    <state rdf:resource="&usstate;#HI"/>
+  </USCity>
+  
+  <USCity rdf:ID="honoluluhi">
+    <name>Honolulu</name>
+    <state rdf:resource="&usstate;#HI"/>
+  </USCity>
+  
+  <USCity rdf:ID="kailuakonahi">
+    <name>Kailua Kona</name>
+    <state rdf:resource="&usstate;#HI"/>
+  </USCity>
+  
+  <USCity rdf:ID="kaneohehi">
+    <name>Kaneohe</name>
+    <state rdf:resource="&usstate;#HI"/>
+  </USCity>
+  
+  <USCity rdf:ID="cedarrapidsia">
+    <name>Cedar Rapids</name>
+    <state rdf:resource="&usstate;#IA"/>
+  </USCity>
+  
+  <USCity rdf:ID="desmoinesia">
+    <name>Des Moines</name>
+    <state rdf:resource="&usstate;#IA"/>
+  </USCity>
+  
+  <USCity rdf:ID="dubuqueia">
+    <name>Dubuque</name>
+    <state rdf:resource="&usstate;#IA"/>
+  </USCity>
+  
+  <USCity rdf:ID="iowacityia">
+    <name>Iowa City</name>
+    <state rdf:resource="&usstate;#IA"/>
+  </USCity>
+  
+  <USCity rdf:ID="waterlooia">
+    <name>Waterloo</name>
+    <state rdf:resource="&usstate;#IA"/>
+  </USCity>
+  
+  <USCity rdf:ID="boiseid">
+    <name>Boise</name>
+    <state rdf:resource="&usstate;#ID"/>
+  </USCity>
+  
+  <USCity rdf:ID="idahofallsid">
+    <name>Idaho Falls</name>
+    <state rdf:resource="&usstate;#ID"/>
+  </USCity>
+  
+  <USCity rdf:ID="pocatelloid">
+    <name>Pocatello</name>
+    <state rdf:resource="&usstate;#ID"/>
+  </USCity>
+  
+  <USCity rdf:ID="arlingtonheightsil">
+    <name>Arlington Heights</name>
+    <state rdf:resource="&usstate;#IL"/>
+  </USCity>
+  
+  <USCity rdf:ID="aurorail">
+    <name>Aurora</name>
+    <state rdf:resource="&usstate;#IL"/>
+  </USCity>
+  
+  <USCity rdf:ID="barringtonil">
+    <name>Barrington</name>
+    <state rdf:resource="&usstate;#IL"/>
+  </USCity>
+  
+  <USCity rdf:ID="bartlettil">
+    <name>Bartlett</name>
+    <state rdf:resource="&usstate;#IL"/>
+  </USCity>
+  
+  <USCity rdf:ID="bloomingtonil">
+    <name>Bloomington</name>
+    <state rdf:resource="&usstate;#IL"/>
+  </USCity>
+  
+  <USCity rdf:ID="carolstreamil">
+    <name>Carol Stream</name>
+    <state rdf:resource="&usstate;#IL"/>
+  </USCity>
+  
+  <USCity rdf:ID="caryil">
+    <name>Cary</name>
+    <state rdf:resource="&usstate;#IL"/>
+  </USCity>
+  
+  <USCity rdf:ID="champaignil">
+    <name>Champaign</name>
+    <state rdf:resource="&usstate;#IL"/>
+  </USCity>
+  
+  <USCity rdf:ID="chicagoil">
+    <name>Chicago</name>
+    <state rdf:resource="&usstate;#IL"/>
+  </USCity>
+  
+  <USCity rdf:ID="decaturil">
+    <name>Decatur</name>
+    <state rdf:resource="&usstate;#IL"/>
+  </USCity>
+  
+  <USCity rdf:ID="dekalbil">
+    <name>De Kalb</name>
+    <state rdf:resource="&usstate;#IL"/>
+  </USCity>
+  
+  <USCity rdf:ID="genevail">
+    <name>Geneva</name>
+    <state rdf:resource="&usstate;#IL"/>
+  </USCity>
+  
+  <USCity rdf:ID="jolietil">
+    <name>Joliet</name>
+    <state rdf:resource="&usstate;#IL"/>
+  </USCity>
+  
+  <USCity rdf:ID="lakezurichil">
+    <name>Lake Zurich</name>
+    <state rdf:resource="&usstate;#IL"/>
+  </USCity>
+  
+  <USCity rdf:ID="napervilleil">
+    <name>Naperville</name>
+    <state rdf:resource="&usstate;#IL"/>
+  </USCity>
+  
+  <USCity rdf:ID="newlenoxil">
+    <name>New Lenox</name>
+    <state rdf:resource="&usstate;#IL"/>
+  </USCity>
+  
+  <USCity rdf:ID="palatineil">
+    <name>Palatine</name>
+    <state rdf:resource="&usstate;#IL"/>
+  </USCity>
+  
+  <USCity rdf:ID="peoriail">
+    <name>Peoria</name>
+    <state rdf:resource="&usstate;#IL"/>
+  </USCity>
+  
+  <USCity rdf:ID="plainfieldil">
+    <name>Plainfield</name>
+    <state rdf:resource="&usstate;#IL"/>
+  </USCity>
+  
+  <USCity rdf:ID="rockfordil">
+    <name>Rockford</name>
+    <state rdf:resource="&usstate;#IL"/>
+  </USCity>
+  
+  <USCity rdf:ID="schaumburgil">
+    <name>Schaumburg</name>
+    <state rdf:resource="&usstate;#IL"/>
+  </USCity>
+  
+  <USCity rdf:ID="skokieil">
+    <name>Skokie</name>
+    <state rdf:resource="&usstate;#IL"/>
+  </USCity>
+  
+  <USCity rdf:ID="springfieldil">
+    <name>Springfield</name>
+    <state rdf:resource="&usstate;#IL"/>
+  </USCity>
+  
+  <USCity rdf:ID="westchicagoil">
+    <name>West Chicago</name>
+    <state rdf:resource="&usstate;#IL"/>
+  </USCity>
+  
+  <USCity rdf:ID="wheatonil">
+    <name>Wheaton</name>
+    <state rdf:resource="&usstate;#IL"/>
+  </USCity>
+  
+  <USCity rdf:ID="bloomingtonin">
+    <name>Bloomington</name>
+    <state rdf:resource="&usstate;#IN"/>
+  </USCity>
+  
+  <USCity rdf:ID="evansvillein">
+    <name>Evansville</name>
+    <state rdf:resource="&usstate;#IN"/>
+  </USCity>
+  
+  <USCity rdf:ID="fortwaynein">
+    <name>Fort Wayne</name>
+    <state rdf:resource="&usstate;#IN"/>
+  </USCity>
+  
+  <USCity rdf:ID="garyin">
+    <name>Gary</name>
+    <state rdf:resource="&usstate;#IN"/>
+  </USCity>
+  
+  <USCity rdf:ID="indianapolisin">
+    <name>Indianapolis</name>
+    <state rdf:resource="&usstate;#IN"/>
+  </USCity>
+  
+  <USCity rdf:ID="lafayettein">
+    <name>Lafayette</name>
+    <state rdf:resource="&usstate;#IN"/>
+  </USCity>
+  
+  <USCity rdf:ID="munciein">
+    <name>Muncie</name>
+    <state rdf:resource="&usstate;#IN"/>
+  </USCity>
+  
+  <USCity rdf:ID="southbendin">
+    <name>South Bend</name>
+    <state rdf:resource="&usstate;#IN"/>
+  </USCity>
+  
+  <USCity rdf:ID="terrehautein">
+    <name>Terre Haute</name>
+    <state rdf:resource="&usstate;#IN"/>
+  </USCity>
+  
+  <USCity rdf:ID="kansascityks">
+    <name>Kansas City</name>
+    <state rdf:resource="&usstate;#KS"/>
+  </USCity>
+  
+  <USCity rdf:ID="manhattanks">
+    <name>Manhattan</name>
+    <state rdf:resource="&usstate;#KS"/>
+  </USCity>
+  
+  <USCity rdf:ID="overlandparkks">
+    <name>Overland Park</name>
+    <state rdf:resource="&usstate;#KS"/>
+  </USCity>
+  
+  <USCity rdf:ID="topekaks">
+    <name>Topeka</name>
+    <state rdf:resource="&usstate;#KS"/>
+  </USCity>
+  
+  <USCity rdf:ID="wichitaks">
+    <name>Wichita</name>
+    <state rdf:resource="&usstate;#KS"/>
+  </USCity>
+  
+  <USCity rdf:ID="covingtonky">
+    <name>Covington</name>
+    <state rdf:resource="&usstate;#KY"/>
+  </USCity>
+  
+  <USCity rdf:ID="frankfortky">
+    <name>Frankfort</name>
+    <state rdf:resource="&usstate;#KY"/>
+  </USCity>
+  
+  <USCity rdf:ID="hopkinsvilleky">
+    <name>Hopkinsville</name>
+    <state rdf:resource="&usstate;#KY"/>
+  </USCity>
+  
+  <USCity rdf:ID="lexingtonky">
+    <name>Lexington</name>
+    <state rdf:resource="&usstate;#KY"/>
+  </USCity>
+  
+  <USCity rdf:ID="louisvilleky">
+    <name>Louisville</name>
+    <state rdf:resource="&usstate;#KY"/>
+  </USCity>
+  
+  <USCity rdf:ID="alexandriala">
+    <name>Alexandria</name>
+    <state rdf:resource="&usstate;#LA"/>
+  </USCity>
+  
+  <USCity rdf:ID="batonrougela">
+    <name>Baton Rouge</name>
+    <state rdf:resource="&usstate;#LA"/>
+  </USCity>
+  
+  <USCity rdf:ID="lafayettela">
+    <name>Lafayette</name>
+    <state rdf:resource="&usstate;#LA"/>
+  </USCity>
+  
+  <USCity rdf:ID="lakecharlesla">
+    <name>Lake Charles</name>
+    <state rdf:resource="&usstate;#LA"/>
+  </USCity>
+  
+  <USCity rdf:ID="monroela">
+    <name>Monroe</name>
+    <state rdf:resource="&usstate;#LA"/>
+  </USCity>
+  
+  <USCity rdf:ID="neworleansla">
+    <name>New Orleans</name>
+    <state rdf:resource="&usstate;#LA"/>
+  </USCity>
+  
+  <USCity rdf:ID="shreveportla">
+    <name>Shreveport</name>
+    <state rdf:resource="&usstate;#LA"/>
+  </USCity>
+  
+  <USCity rdf:ID="andoverma">
+    <name>Andover</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="belmontma">
+    <name>Belmont</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="beverlyma">
+    <name>Beverly</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="bostonma">
+    <name>Boston</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="boxfordma">
+    <name>Boxford</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="braintreema">
+    <name>Braintree</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="bridgewaterma">
+    <name>Bridgewater</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="brooklinema">
+    <name>Brookline</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="cambridgema">
+    <name>Cambridge</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="cantonma">
+    <name>Canton</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="chelmsfordma">
+    <name>Chelmsford</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="concordma">
+    <name>Concord</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="danversma">
+    <name>Danvers</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="dennisma">
+    <name>Dennis</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="easthamptonma">
+    <name>Easthampton</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="eastonma">
+    <name>Easton</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="framinghamma">
+    <name>Framingham</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="grotonma">
+    <name>Groton</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="hamiltonma">
+    <name>Hamilton</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="hanoverma">
+    <name>Hanover</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="haverhillma">
+    <name>Haverhill</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="hinghamma">
+    <name>Hingham</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="kingstonma">
+    <name>Kingston</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="leominsterma">
+    <name>Leominster</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="lexingtonma">
+    <name>Lexington</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="lynnfieldma">
+    <name>Lynnfield</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="mansfieldma">
+    <name>Mansfield</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="marshfieldma">
+    <name>Marshfield</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="middletonma">
+    <name>Middleton</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="miltonma">
+    <name>Milton</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="needhamma">
+    <name>Needham</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="newburyportma">
+    <name>Newburyport</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="newtonma">
+    <name>Newton</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="northandoverma">
+    <name>North Andover</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="northreadingma">
+    <name>North Reading</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="norwellma">
+    <name>Norwell</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="peabodyma">
+    <name>Peabody</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="readingma">
+    <name>Reading</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="springfieldma">
+    <name>Springfield</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="stoughtonma">
+    <name>Stoughton</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="sudburyma">
+    <name>Sudbury</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="wellesleyma">
+    <name>Wellesley</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="westonma">
+    <name>Weston</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="winchesterma">
+    <name>Winchester</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="worcesterma">
+    <name>Worcester</name>
+    <state rdf:resource="&usstate;#MA"/>
+  </USCity>
+  
+  <USCity rdf:ID="annapolismd">
+    <name>Annapolis</name>
+    <state rdf:resource="&usstate;#MD"/>
+  </USCity>
+  
+  <USCity rdf:ID="baltimoremd">
+    <name>Baltimore</name>
+    <state rdf:resource="&usstate;#MD"/>
+  </USCity>
+  
+  <USCity rdf:ID="bethesdamd">
+    <name>Bethesda</name>
+    <state rdf:resource="&usstate;#MD"/>
+  </USCity>
+  
+  <USCity rdf:ID="bowiemd">
+    <name>Bowie</name>
+    <state rdf:resource="&usstate;#MD"/>
+  </USCity>
+  
+  <USCity rdf:ID="chevychasemd">
+    <name>Chevy Chase</name>
+    <state rdf:resource="&usstate;#MD"/>
+  </USCity>
+  
+  <USCity rdf:ID="columbiamd">
+    <name>Columbia</name>
+    <state rdf:resource="&usstate;#MD"/>
+  </USCity>
+  
+  <USCity rdf:ID="cumberlandmd">
+    <name>Cumberland</name>
+    <state rdf:resource="&usstate;#MD"/>
+  </USCity>
+  
+  <USCity rdf:ID="frederickmd">
+    <name>Frederick</name>
+    <state rdf:resource="&usstate;#MD"/>
+  </USCity>
+  
+  <USCity rdf:ID="gaithersburgmd">
+    <name>Gaithersburg</name>
+    <state rdf:resource="&usstate;#MD"/>
+  </USCity>
+  
+  <USCity rdf:ID="hagerstownmd">
+    <name>Hagerstown</name>
+    <state rdf:resource="&usstate;#MD"/>
+  </USCity>
+  
+  <USCity rdf:ID="potomacmd">
+    <name>Potomac</name>
+    <state rdf:resource="&usstate;#MD"/>
+  </USCity>
+  
+  <USCity rdf:ID="rockvillemd">
+    <name>Rockville</name>
+    <state rdf:resource="&usstate;#MD"/>
+  </USCity>
+  
+  <USCity rdf:ID="severnaparkmd">
+    <name>Severna Park</name>
+    <state rdf:resource="&usstate;#MD"/>
+  </USCity>
+  
+  <USCity rdf:ID="silverspringmd">
+    <name>Silver Spring</name>
+    <state rdf:resource="&usstate;#MD"/>
+  </USCity>
+  
+  <USCity rdf:ID="augustame">
+    <name>Augusta</name>
+    <state rdf:resource="&usstate;#ME"/>
+  </USCity>
+  
+  <USCity rdf:ID="lewistonme">
+    <name>Lewiston</name>
+    <state rdf:resource="&usstate;#ME"/>
+  </USCity>
+  
+  <USCity rdf:ID="portlandme">
+    <name>Portland</name>
+    <state rdf:resource="&usstate;#ME"/>
+  </USCity>
+  
+  <USCity rdf:ID="yorkme">
+    <name>York</name>
+    <state rdf:resource="&usstate;#ME"/>
+  </USCity>
+  
+  <USCity rdf:ID="annarbormi">
+    <name>Ann Arbor</name>
+    <state rdf:resource="&usstate;#MI"/>
+  </USCity>
+  
+  <USCity rdf:ID="bloomfieldmi">
+    <name>Bloomfield</name>
+    <state rdf:resource="&usstate;#MI"/>
+  </USCity>
+  
+  <USCity rdf:ID="dearbornmi">
+    <name>Dearborn</name>
+    <state rdf:resource="&usstate;#MI"/>
+  </USCity>
+  
+  <USCity rdf:ID="detroitmi">
+    <name>Detroit</name>
+    <state rdf:resource="&usstate;#MI"/>
+  </USCity>
+  
+  <USCity rdf:ID="farmingtonhillsmi">
+    <name>Farmington Hills</name>
+    <state rdf:resource="&usstate;#MI"/>
+  </USCity>
+  
+  <USCity rdf:ID="flintmi">
+    <name>Flint</name>
+    <state rdf:resource="&usstate;#MI"/>
+  </USCity>
+  
+  <USCity rdf:ID="grandrapidsmi">
+    <name>Grand Rapids</name>
+    <state rdf:resource="&usstate;#MI"/>
+  </USCity>
+  
+  <USCity rdf:ID="kalamazoomi">
+    <name>Kalamazoo</name>
+    <state rdf:resource="&usstate;#MI"/>
+  </USCity>
+  
+  <USCity rdf:ID="lansingmi">
+    <name>Lansing</name>
+    <state rdf:resource="&usstate;#MI"/>
+  </USCity>
+  
+  <USCity rdf:ID="livoniami">
+    <name>Livonia</name>
+    <state rdf:resource="&usstate;#MI"/>
+  </USCity>
+  
+  <USCity rdf:ID="novimi">
+    <name>Novi</name>
+    <state rdf:resource="&usstate;#MI"/>
+  </USCity>
+  
+  <USCity rdf:ID="portagemi">
+    <name>Portage</name>
+    <state rdf:resource="&usstate;#MI"/>
+  </USCity>
+  
+  <USCity rdf:ID="richlandmi">
+    <name>Richland</name>
+    <state rdf:resource="&usstate;#MI"/>
+  </USCity>
+  
+  <USCity rdf:ID="westlandmi">
+    <name>Westland</name>
+    <state rdf:resource="&usstate;#MI"/>
+  </USCity>
+  
+  <USCity rdf:ID="bloomingtonmn">
+    <name>Bloomington</name>
+    <state rdf:resource="&usstate;#MN"/>
+  </USCity>
+  
+  <USCity rdf:ID="duluthmn">
+    <name>Duluth</name>
+    <state rdf:resource="&usstate;#MN"/>
+  </USCity>
+  
+  <USCity rdf:ID="edenprairiemn">
+    <name>Eden Prairie</name>
+    <state rdf:resource="&usstate;#MN"/>
+  </USCity>
+  
+  <USCity rdf:ID="edinamn">
+    <name>Edina</name>
+    <state rdf:resource="&usstate;#MN"/>
+  </USCity>
+  
+  <USCity rdf:ID="minneapolismn">
+    <name>Minneapolis</name>
+    <state rdf:resource="&usstate;#MN"/>
+  </USCity>
+  
+  <USCity rdf:ID="minnetonkamn">
+    <name>Minnetonka</name>
+    <state rdf:resource="&usstate;#MN"/>
+  </USCity>
+  
+  <USCity rdf:ID="plymouthmn">
+    <name>Plymouth</name>
+    <state rdf:resource="&usstate;#MN"/>
+  </USCity>
+  
+  <USCity rdf:ID="rochestermn">
+    <name>Rochester</name>
+    <state rdf:resource="&usstate;#MN"/>
+  </USCity>
+  
+  <USCity rdf:ID="stcloudmn">
+    <name>St Cloud</name>
+    <state rdf:resource="&usstate;#MN"/>
+  </USCity>
+  
+  <USCity rdf:ID="stpaulmn">
+    <name>St Paul</name>
+    <state rdf:resource="&usstate;#MN"/>
+  </USCity>
+  
+  <USCity rdf:ID="columbiamo">
+    <name>Columbia</name>
+    <state rdf:resource="&usstate;#MO"/>
+  </USCity>
+  
+  <USCity rdf:ID="jeffersoncitymo">
+    <name>Jefferson City</name>
+    <state rdf:resource="&usstate;#MO"/>
+  </USCity>
+  
+  <USCity rdf:ID="joplinmo">
+    <name>Joplin</name>
+    <state rdf:resource="&usstate;#MO"/>
+  </USCity>
+  
+  <USCity rdf:ID="kansascitymo">
+    <name>Kansas City</name>
+    <state rdf:resource="&usstate;#MO"/>
+  </USCity>
+  
+  <USCity rdf:ID="marshfieldmo">
+    <name>Marshfield</name>
+    <state rdf:resource="&usstate;#MO"/>
+  </USCity>
+  
+  <USCity rdf:ID="springfieldmo">
+    <name>Springfield</name>
+    <state rdf:resource="&usstate;#MO"/>
+  </USCity>
+  
+  <USCity rdf:ID="stjosephmo">
+    <name>St Joseph</name>
+    <state rdf:resource="&usstate;#MO"/>
+  </USCity>
+  
+  <USCity rdf:ID="stlouismo">
+    <name>St Louis</name>
+    <state rdf:resource="&usstate;#MO"/>
+  </USCity>
+  
+  <USCity rdf:ID="hattiesburgms">
+    <name>Hattiesburg</name>
+    <state rdf:resource="&usstate;#MS"/>
+  </USCity>
+  
+  <USCity rdf:ID="jacksonms">
+    <name>Jackson</name>
+    <state rdf:resource="&usstate;#MS"/>
+  </USCity>
+  
+  <USCity rdf:ID="billingsmt">
+    <name>Billings</name>
+    <state rdf:resource="&usstate;#MT"/>
+  </USCity>
+  
+  <USCity rdf:ID="bozemanmt">
+    <name>Bozeman</name>
+    <state rdf:resource="&usstate;#MT"/>
+  </USCity>
+  
+  <USCity rdf:ID="greatfallsmt">
+    <name>Great Falls</name>
+    <state rdf:resource="&usstate;#MT"/>
+  </USCity>
+  
+  <USCity rdf:ID="helenamt">
+    <name>Helena</name>
+    <state rdf:resource="&usstate;#MT"/>
+  </USCity>
+  
+  <USCity rdf:ID="missoulamt">
+    <name>Missoula</name>
+    <state rdf:resource="&usstate;#MT"/>
+  </USCity>
+  
+  <USCity rdf:ID="ashevillenc">
+    <name>Asheville</name>
+    <state rdf:resource="&usstate;#NC"/>
+  </USCity>
+  
+  <USCity rdf:ID="carync">
+    <name>Cary</name>
+    <state rdf:resource="&usstate;#NC"/>
+  </USCity>
+  
+  <USCity rdf:ID="chapelhillnc">
+    <name>Chapel Hill</name>
+    <state rdf:resource="&usstate;#NC"/>
+  </USCity>
+  
+  <USCity rdf:ID="charlottenc">
+    <name>Charlotte</name>
+    <state rdf:resource="&usstate;#NC"/>
+  </USCity>
+  
+  <USCity rdf:ID="concordnc">
+    <name>Concord</name>
+    <state rdf:resource="&usstate;#NC"/>
+  </USCity>
+  
+  <USCity rdf:ID="fayettevillenc">
+    <name>Fayetteville</name>
+    <state rdf:resource="&usstate;#NC"/>
+  </USCity>
+  
+  <USCity rdf:ID="greensboronc">
+    <name>Greensboro</name>
+    <state rdf:resource="&usstate;#NC"/>
+  </USCity>
+  
+  <USCity rdf:ID="greenvillenc">
+    <name>Greenville</name>
+    <state rdf:resource="&usstate;#NC"/>
+  </USCity>
+  
+  <USCity rdf:ID="hickorync">
+    <name>Hickory</name>
+    <state rdf:resource="&usstate;#NC"/>
+  </USCity>
+  
+  <USCity rdf:ID="kannapolisnc">
+    <name>Kannapolis</name>
+    <state rdf:resource="&usstate;#NC"/>
+  </USCity>
+  
+  <USCity rdf:ID="lexingtonnc">
+    <name>Lexington</name>
+    <state rdf:resource="&usstate;#NC"/>
+  </USCity>
+  
+  <USCity rdf:ID="raleighdurhamnc">
+    <name>Raleigh Durham</name>
+    <state rdf:resource="&usstate;#NC"/>
+  </USCity>
+  
+  <USCity rdf:ID="wilmingtonnc">
+    <name>Wilmington</name>
+    <state rdf:resource="&usstate;#NC"/>
+  </USCity>
+  
+  <USCity rdf:ID="winstonsalemnc">
+    <name>Winston Salem</name>
+    <state rdf:resource="&usstate;#NC"/>
+  </USCity>
+  
+  <USCity rdf:ID="bismarcknd">
+    <name>Bismarck</name>
+    <state rdf:resource="&usstate;#ND"/>
+  </USCity>
+  
+  <USCity rdf:ID="fargond">
+    <name>Fargo</name>
+    <state rdf:resource="&usstate;#ND"/>
+  </USCity>
+  
+  <USCity rdf:ID="minotnd">
+    <name>Minot</name>
+    <state rdf:resource="&usstate;#ND"/>
+  </USCity>
+  
+  <USCity rdf:ID="grandislandne">
+    <name>Grand Island</name>
+    <state rdf:resource="&usstate;#NE"/>
+  </USCity>
+  
+  <USCity rdf:ID="lincolnne">
+    <name>Lincoln</name>
+    <state rdf:resource="&usstate;#NE"/>
+  </USCity>
+  
+  <USCity rdf:ID="omahane">
+    <name>Omaha</name>
+    <state rdf:resource="&usstate;#NE"/>
+  </USCity>
+  
+  <USCity rdf:ID="amherstnh">
+    <name>Amherst</name>
+    <state rdf:resource="&usstate;#NH"/>
+  </USCity>
+  
+  <USCity rdf:ID="concordnh">
+    <name>Concord</name>
+    <state rdf:resource="&usstate;#NH"/>
+  </USCity>
+  
+  <USCity rdf:ID="derrynh">
+    <name>Derry</name>
+    <state rdf:resource="&usstate;#NH"/>
+  </USCity>
+  
+  <USCity rdf:ID="dovernh">
+    <name>Dover</name>
+    <state rdf:resource="&usstate;#NH"/>
+  </USCity>
+  
+  <USCity rdf:ID="hollisnh">
+    <name>Hollis</name>
+    <state rdf:resource="&usstate;#NH"/>
+  </USCity>
+  
+  <USCity rdf:ID="keenenh">
+    <name>Keene</name>
+    <state rdf:resource="&usstate;#NH"/>
+  </USCity>
+  
+  <USCity rdf:ID="manchesternh">
+    <name>Manchester</name>
+    <state rdf:resource="&usstate;#NH"/>
+  </USCity>
+  
+  <USCity rdf:ID="nashuanh">
+    <name>Nashua</name>
+    <state rdf:resource="&usstate;#NH"/>
+  </USCity>
+  
+  <USCity rdf:ID="portsmouthnh">
+    <name>Portsmouth</name>
+    <state rdf:resource="&usstate;#NH"/>
+  </USCity>
+  
+  <USCity rdf:ID="rochesternh">
+    <name>Rochester</name>
+    <state rdf:resource="&usstate;#NH"/>
+  </USCity>
+  
+  <USCity rdf:ID="salemnh">
+    <name>Salem</name>
+    <state rdf:resource="&usstate;#NH"/>
+  </USCity>
+  
+  <USCity rdf:ID="atlanticcitynj">
+    <name>Atlantic City</name>
+    <state rdf:resource="&usstate;#NJ"/>
+  </USCity>
+  
+  <USCity rdf:ID="barnegatnj">
+    <name>Barnegat</name>
+    <state rdf:resource="&usstate;#NJ"/>
+  </USCity>
+  
+  <USCity rdf:ID="baskingridgenj">
+    <name>Basking Ridge</name>
+    <state rdf:resource="&usstate;#NJ"/>
+  </USCity>
+  
+  <USCity rdf:ID="cherryhillnj">
+    <name>Cherry Hill</name>
+    <state rdf:resource="&usstate;#NJ"/>
+  </USCity>
+  
+  <USCity rdf:ID="cranburynj">
+    <name>Cranbury</name>
+    <state rdf:resource="&usstate;#NJ"/>
+  </USCity>
+  
+  <USCity rdf:ID="denvillenj">
+    <name>Denville</name>
+    <state rdf:resource="&usstate;#NJ"/>
+  </USCity>
+  
+  <USCity rdf:ID="eastwindsornj">
+    <name>East Windsor</name>
+    <state rdf:resource="&usstate;#NJ"/>
+  </USCity>
+  
+  <USCity rdf:ID="englewoodcliffsnj">
+    <name>Englewood Cliffs</name>
+    <state rdf:resource="&usstate;#NJ"/>
+  </USCity>
+  
+  <USCity rdf:ID="fortleenj">
+    <name>Fort Lee</name>
+    <state rdf:resource="&usstate;#NJ"/>
+  </USCity>
+  
+  <USCity rdf:ID="hackensacknj">
+    <name>Hackensack</name>
+    <state rdf:resource="&usstate;#NJ"/>
+  </USCity>
+  
+  <USCity rdf:ID="haddonfieldnj">
+    <name>Haddonfield</name>
+    <state rdf:resource="&usstate;#NJ"/>
+  </USCity>
+  
+  <USCity rdf:ID="hillsdalenj">
+    <name>Hillsdale</name>
+    <state rdf:resource="&usstate;#NJ"/>
+  </USCity>
+  
+  <USCity rdf:ID="hopewellnj">
+    <name>Hopewell</name>
+    <state rdf:resource="&usstate;#NJ"/>
+  </USCity>
+  
+  <USCity rdf:ID="lavallettenj">
+    <name>Lavallette</name>
+    <state rdf:resource="&usstate;#NJ"/>
+  </USCity>
+  
+  <USCity rdf:ID="leonianj">
+    <name>Leonia</name>
+    <state rdf:resource="&usstate;#NJ"/>
+  </USCity>
+  
+  <USCity rdf:ID="mahwahnj">
+    <name>Mahwah</name>
+    <state rdf:resource="&usstate;#NJ"/>
+  </USCity>
+  
+  <USCity rdf:ID="montvalenj">
+    <name>Montvale</name>
+    <state rdf:resource="&usstate;#NJ"/>
+  </USCity>
+  
+  <USCity rdf:ID="moorestownnj">
+    <name>Moorestown</name>
+    <state rdf:resource="&usstate;#NJ"/>
+  </USCity>
+  
+  <USCity rdf:ID="morristownshipnj">
+    <name>Morris Township</name>
+    <state rdf:resource="&usstate;#NJ"/>
+  </USCity>
+  
+  <USCity rdf:ID="mountlaurelnj">
+    <name>Mount Laurel</name>
+    <state rdf:resource="&usstate;#NJ"/>
+  </USCity>
+  
+  <USCity rdf:ID="newbrunswicknj">
+    <name>New Brunswick</name>
+    <state rdf:resource="&usstate;#NJ"/>
+  </USCity>
+  
+  <USCity rdf:ID="oradellnj">
+    <name>Oradell</name>
+    <state rdf:resource="&usstate;#NJ"/>
+  </USCity>
+  
+  <USCity rdf:ID="parsippanynj">
+    <name>Parsippany</name>
+    <state rdf:resource="&usstate;#NJ"/>
+  </USCity>
+  
+  <USCity rdf:ID="princetonnj">
+    <name>Princeton</name>
+    <state rdf:resource="&usstate;#NJ"/>
+  </USCity>
+  
+  <USCity rdf:ID="ramseynj">
+    <name>Ramsey</name>
+    <state rdf:resource="&usstate;#NJ"/>
+  </USCity>
+  
+  <USCity rdf:ID="ridgewoodnj">
+    <name>Ridgewood</name>
+    <state rdf:resource="&usstate;#NJ"/>
+  </USCity>
+  
+  <USCity rdf:ID="spartanj">
+    <name>Sparta</name>
+    <state rdf:resource="&usstate;#NJ"/>
+  </USCity>
+  
+  <USCity rdf:ID="teanecknj">
+    <name>Teaneck</name>
+    <state rdf:resource="&usstate;#NJ"/>
+  </USCity>
+  
+  <USCity rdf:ID="trentonnj">
+    <name>Trenton</name>
+    <state rdf:resource="&usstate;#NJ"/>
+  </USCity>
+  
+  <USCity rdf:ID="voorheesnj">
+    <name>Voorhees</name>
+    <state rdf:resource="&usstate;#NJ"/>
+  </USCity>
+  
+  <USCity rdf:ID="waynenj">
+    <name>Wayne</name>
+    <state rdf:resource="&usstate;#NJ"/>
+  </USCity>
+  
+  <USCity rdf:ID="westwindsornj">
+    <name>West Windsor</name>
+    <state rdf:resource="&usstate;#NJ"/>
+  </USCity>
+  
+  <USCity rdf:ID="alamogordonm">
+    <name>Alamogordo</name>
+    <state rdf:resource="&usstate;#NM"/>
+  </USCity>
+  
+  <USCity rdf:ID="albuquerquenm">
+    <name>Albuquerque</name>
+    <state rdf:resource="&usstate;#NM"/>
+  </USCity>
+  
+  <USCity rdf:ID="lascrucesnm">
+    <name>Las Cruces</name>
+    <state rdf:resource="&usstate;#NM"/>
+  </USCity>
+  
+  <USCity rdf:ID="roswellnm">
+    <name>Roswell</name>
+    <state rdf:resource="&usstate;#NM"/>
+  </USCity>
+  
+  <USCity rdf:ID="santafenm">
+    <name>Santa Fe</name>
+    <state rdf:resource="&usstate;#NM"/>
+  </USCity>
+  
+  <USCity rdf:ID="carsoncitynv">
+    <name>Carson City</name>
+    <state rdf:resource="&usstate;#NV"/>
+  </USCity>
+  
+  <USCity rdf:ID="hendersonnv">
+    <name>Henderson</name>
+    <state rdf:resource="&usstate;#NV"/>
+  </USCity>
+  
+  <USCity rdf:ID="lasvegasnv">
+    <name>Las Vegas</name>
+    <state rdf:resource="&usstate;#NV"/>
+  </USCity>
+  
+  <USCity rdf:ID="renonv">
+    <name>Reno</name>
+    <state rdf:resource="&usstate;#NV"/>
+  </USCity>
+  
+  <USCity rdf:ID="sparksnv">
+    <name>Sparks</name>
+    <state rdf:resource="&usstate;#NV"/>
+  </USCity>
+  
+  <USCity rdf:ID="albanyny">
+    <name>Albany</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="buffalony">
+    <name>Buffalo</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="dixhillsny">
+    <name>Dix Hills</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="eastmorichesny">
+    <name>East Moriches</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="huntingtonny">
+    <name>Huntington</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="jerichony">
+    <name>Jericho</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="longbeachny">
+    <name>Long Beach</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="mamaroneckny">
+    <name>Mamaroneck</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="manliusny">
+    <name>Manlius</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="massapequany">
+    <name>Massapequa</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="merrickny">
+    <name>Merrick</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="middletownny">
+    <name>Middletown</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="newcityny">
+    <name>New City</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="newrochelleny">
+    <name>New Rochelle</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="newyorkny">
+    <name>New York</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="ossiningny">
+    <name>Ossining</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="peekskillny">
+    <name>Peekskill</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="pleasantvilleny">
+    <name>Pleasantville</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="pomonany">
+    <name>Pomona</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="poughkeepsieny">
+    <name>Poughkeepsie</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="queensvillageny">
+    <name>Queens Village</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="rochesterny">
+    <name>Rochester</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="rockvillecentreny">
+    <name>Rockville Centre</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="ryebrookny">
+    <name>Rye Brook</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="scarsdaleny">
+    <name>Scarsdale</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="setauketny">
+    <name>Setauket</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="southamptonny">
+    <name>Southampton</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="statenislandny">
+    <name>Staten Island</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="syossetny">
+    <name>Syosset</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="syracuseny">
+    <name>Syracuse</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="valleystreamny">
+    <name>Valley Stream</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="westhamptonny">
+    <name>Westhampton</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="westislipny">
+    <name>West Islip</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="whiteplainsny">
+    <name>White Plains</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="woodburyny">
+    <name>Woodbury</name>
+    <state rdf:resource="&usstate;#NY"/>
+  </USCity>
+  
+  <USCity rdf:ID="akronoh">
+    <name>Akron</name>
+    <state rdf:resource="&usstate;#OH"/>
+  </USCity>
+  
+  <USCity rdf:ID="brunswickoh">
+    <name>Brunswick</name>
+    <state rdf:resource="&usstate;#OH"/>
+  </USCity>
+  
+  <USCity rdf:ID="cantonoh">
+    <name>Canton</name>
+    <state rdf:resource="&usstate;#OH"/>
+  </USCity>
+  
+  <USCity rdf:ID="centervilleoh">
+    <name>Centerville</name>
+    <state rdf:resource="&usstate;#OH"/>
+  </USCity>
+  
+  <USCity rdf:ID="cincinnatioh">
+    <name>Cincinnati</name>
+    <state rdf:resource="&usstate;#OH"/>
+  </USCity>
+  
+  <USCity rdf:ID="clevelandoh">
+    <name>Cleveland</name>
+    <state rdf:resource="&usstate;#OH"/>
+  </USCity>
+  
+  <USCity rdf:ID="columbusoh">
+    <name>Columbus</name>
+    <state rdf:resource="&usstate;#OH"/>
+  </USCity>
+  
+  <USCity rdf:ID="daytonoh">
+    <name>Dayton</name>
+    <state rdf:resource="&usstate;#OH"/>
+  </USCity>
+  
+  <USCity rdf:ID="dublinoh">
+    <name>Dublin</name>
+    <state rdf:resource="&usstate;#OH"/>
+  </USCity>
+  
+  <USCity rdf:ID="gahannaoh">
+    <name>Gahanna</name>
+    <state rdf:resource="&usstate;#OH"/>
+  </USCity>
+  
+  <USCity rdf:ID="lakewoodoh">
+    <name>Lakewood</name>
+    <state rdf:resource="&usstate;#OH"/>
+  </USCity>
+  
+  <USCity rdf:ID="limaoh">
+    <name>Lima</name>
+    <state rdf:resource="&usstate;#OH"/>
+  </USCity>
+  
+  <USCity rdf:ID="mansfieldoh">
+    <name>Mansfield</name>
+    <state rdf:resource="&usstate;#OH"/>
+  </USCity>
+  
+  <USCity rdf:ID="mariettaoh">
+    <name>Marietta</name>
+    <state rdf:resource="&usstate;#OH"/>
+  </USCity>
+  
+  <USCity rdf:ID="parmaoh">
+    <name>Parma</name>
+    <state rdf:resource="&usstate;#OH"/>
+  </USCity>
+  
+  <USCity rdf:ID="solonoh">
+    <name>Solon</name>
+    <state rdf:resource="&usstate;#OH"/>
+  </USCity>
+  
+  <USCity rdf:ID="springborooh">
+    <name>Springboro</name>
+    <state rdf:resource="&usstate;#OH"/>
+  </USCity>
+  
+  <USCity rdf:ID="strongsvilleoh">
+    <name>Strongsville</name>
+    <state rdf:resource="&usstate;#OH"/>
+  </USCity>
+  
+  <USCity rdf:ID="toledooh">
+    <name>Toledo</name>
+    <state rdf:resource="&usstate;#OH"/>
+  </USCity>
+  
+  <USCity rdf:ID="westlakeoh">
+    <name>Westlake</name>
+    <state rdf:resource="&usstate;#OH"/>
+  </USCity>
+  
+  <USCity rdf:ID="youngstownoh">
+    <name>Youngstown</name>
+    <state rdf:resource="&usstate;#OH"/>
+  </USCity>
+  
+  <USCity rdf:ID="ardmoreok">
+    <name>Ardmore</name>
+    <state rdf:resource="&usstate;#OK"/>
+  </USCity>
+  
+  <USCity rdf:ID="bartlesvilleok">
+    <name>Bartlesville</name>
+    <state rdf:resource="&usstate;#OK"/>
+  </USCity>
+  
+  <USCity rdf:ID="brokenarrowok">
+    <name>Broken Arrow</name>
+    <state rdf:resource="&usstate;#OK"/>
+  </USCity>
+  
+  <USCity rdf:ID="edmondok">
+    <name>Edmond</name>
+    <state rdf:resource="&usstate;#OK"/>
+  </USCity>
+  
+  <USCity rdf:ID="muskogeeok">
+    <name>Muskogee</name>
+    <state rdf:resource="&usstate;#OK"/>
+  </USCity>
+  
+  <USCity rdf:ID="normanok">
+    <name>Norman</name>
+    <state rdf:resource="&usstate;#OK"/>
+  </USCity>
+  
+  <USCity rdf:ID="oklahomacityok">
+    <name>Oklahoma City</name>
+    <state rdf:resource="&usstate;#OK"/>
+  </USCity>
+  
+  <USCity rdf:ID="piedmontok">
+    <name>Piedmont</name>
+    <state rdf:resource="&usstate;#OK"/>
+  </USCity>
+  
+  <USCity rdf:ID="stillwaterok">
+    <name>Stillwater</name>
+    <state rdf:resource="&usstate;#OK"/>
+  </USCity>
+  
+  <USCity rdf:ID="tulsaok">
+    <name>Tulsa</name>
+    <state rdf:resource="&usstate;#OK"/>
+  </USCity>
+  
+  <USCity rdf:ID="albanyor">
+    <name>Albany</name>
+    <state rdf:resource="&usstate;#OR"/>
+  </USCity>
+  
+  <USCity rdf:ID="beavertonor">
+    <name>Beaverton</name>
+    <state rdf:resource="&usstate;#OR"/>
+  </USCity>
+  
+  <USCity rdf:ID="bendor">
+    <name>Bend</name>
+    <state rdf:resource="&usstate;#OR"/>
+  </USCity>
+  
+  <USCity rdf:ID="eugeneor">
+    <name>Eugene</name>
+    <state rdf:resource="&usstate;#OR"/>
+  </USCity>
+  
+  <USCity rdf:ID="greshamor">
+    <name>Gresham</name>
+    <state rdf:resource="&usstate;#OR"/>
+  </USCity>
+  
+  <USCity rdf:ID="hillsboroor">
+    <name>Hillsboro</name>
+    <state rdf:resource="&usstate;#OR"/>
+  </USCity>
+  
+  <USCity rdf:ID="lakeoswegoor">
+    <name>Lake Oswego</name>
+    <state rdf:resource="&usstate;#OR"/>
+  </USCity>
+  
+  <USCity rdf:ID="medfordor">
+    <name>Medford</name>
+    <state rdf:resource="&usstate;#OR"/>
+  </USCity>
+  
+  <USCity rdf:ID="milwaukieor">
+    <name>Milwaukie</name>
+    <state rdf:resource="&usstate;#OR"/>
+  </USCity>
+  
+  <USCity rdf:ID="portlandor">
+    <name>Portland</name>
+    <state rdf:resource="&usstate;#OR"/>
+  </USCity>
+  
+  <USCity rdf:ID="salemor">
+    <name>Salem</name>
+    <state rdf:resource="&usstate;#OR"/>
+  </USCity>
+  
+  <USCity rdf:ID="allentownpa">
+    <name>Allentown</name>
+    <state rdf:resource="&usstate;#PA"/>
+  </USCity>
+  
+  <USCity rdf:ID="bethlehempa">
+    <name>Bethlehem</name>
+    <state rdf:resource="&usstate;#PA"/>
+  </USCity>
+  
+  <USCity rdf:ID="bluebellpa">
+    <name>Blue Bell</name>
+    <state rdf:resource="&usstate;#PA"/>
+  </USCity>
+  
+  <USCity rdf:ID="boyertownpa">
+    <name>Boyertown</name>
+    <state rdf:resource="&usstate;#PA"/>
+  </USCity>
+  
+  <USCity rdf:ID="buckinghampa">
+    <name>Buckingham</name>
+    <state rdf:resource="&usstate;#PA"/>
+  </USCity>
+  
+  <USCity rdf:ID="collegevillepa">
+    <name>Collegeville</name>
+    <state rdf:resource="&usstate;#PA"/>
+  </USCity>
+  
+  <USCity rdf:ID="doylestownpa">
+    <name>Doylestown</name>
+    <state rdf:resource="&usstate;#PA"/>
+  </USCity>
+  
+  <USCity rdf:ID="duncansvillepa">
+    <name>Duncansville</name>
+    <state rdf:resource="&usstate;#PA"/>
+  </USCity>
+  
+  <USCity rdf:ID="eriepa">
+    <name>Erie</name>
+    <state rdf:resource="&usstate;#PA"/>
+  </USCity>
+  
+  <USCity rdf:ID="harrisburgpa">
+    <name>Harrisburg</name>
+    <state rdf:resource="&usstate;#PA"/>
+  </USCity>
+  
+  <USCity rdf:ID="harrisoncitypa">
+    <name>Harrison City</name>
+    <state rdf:resource="&usstate;#PA"/>
+  </USCity>
+  
+  <USCity rdf:ID="lancasterpa">
+    <name>Lancaster</name>
+    <state rdf:resource="&usstate;#PA"/>
+  </USCity>
+  
+  <USCity rdf:ID="lititzpa">
+    <name>Lititz</name>
+    <state rdf:resource="&usstate;#PA"/>
+  </USCity>
+  
+  <USCity rdf:ID="malvernpa">
+    <name>Malvern</name>
+    <state rdf:resource="&usstate;#PA"/>
+  </USCity>
+  
+  <USCity rdf:ID="monroevillepa">
+    <name>Monroeville</name>
+    <state rdf:resource="&usstate;#PA"/>
+  </USCity>
+  
+  <USCity rdf:ID="murrysvillepa">
+    <name>Murrysville</name>
+    <state rdf:resource="&usstate;#PA"/>
+  </USCity>
+  
+  <USCity rdf:ID="norristownpa">
+    <name>Norristown</name>
+    <state rdf:resource="&usstate;#PA"/>
+  </USCity>
+  
+  <USCity rdf:ID="perkasiepa">
+    <name>Perkasie</name>
+    <state rdf:resource="&usstate;#PA"/>
+  </USCity>
+  
+  <USCity rdf:ID="philadelphiapa">
+    <name>Philadelphia</name>
+    <state rdf:resource="&usstate;#PA"/>
+  </USCity>
+  
+  <USCity rdf:ID="pittsburghpa">
+    <name>Pittsburgh</name>
+    <state rdf:resource="&usstate;#PA"/>
+  </USCity>
+  
+  <USCity rdf:ID="pottstownpa">
+    <name>Pottstown</name>
+    <state rdf:resource="&usstate;#PA"/>
+  </USCity>
+  
+  <USCity rdf:ID="quakertownpa">
+    <name>Quakertown</name>
+    <state rdf:resource="&usstate;#PA"/>
+  </USCity>
+  
+  <USCity rdf:ID="readingpa">
+    <name>Reading</name>
+    <state rdf:resource="&usstate;#PA"/>
+  </USCity>
+  
+  <USCity rdf:ID="statecollegepa">
+    <name>State College</name>
+    <state rdf:resource="&usstate;#PA"/>
+  </USCity>
+  
+  <USCity rdf:ID="wilkesbarrepa">
+    <name>Wilkes Barre</name>
+    <state rdf:resource="&usstate;#PA"/>
+  </USCity>
+  
+  <USCity rdf:ID="williamsportpa">
+    <name>Williamsport</name>
+    <state rdf:resource="&usstate;#PA"/>
+  </USCity>
+  
+  <USCity rdf:ID="yorkpa">
+    <name>York</name>
+    <state rdf:resource="&usstate;#PA"/>
+  </USCity>
+  
+  <USCity rdf:ID="eastgreenwichri">
+    <name>East Greenwich</name>
+    <state rdf:resource="&usstate;#RI"/>
+  </USCity>
+  
+  <USCity rdf:ID="providenceri">
+    <name>Providence</name>
+    <state rdf:resource="&usstate;#RI"/>
+  </USCity>
+  
+  <USCity rdf:ID="wakefieldri">
+    <name>Wakefield</name>
+    <state rdf:resource="&usstate;#RI"/>
+  </USCity>
+  
+  <USCity rdf:ID="warwickri">
+    <name>Warwick</name>
+    <state rdf:resource="&usstate;#RI"/>
+  </USCity>
+  
+  <USCity rdf:ID="charlestonsc">
+    <name>Charleston</name>
+    <state rdf:resource="&usstate;#SC"/>
+  </USCity>
+  
+  <USCity rdf:ID="columbiasc">
+    <name>Columbia</name>
+    <state rdf:resource="&usstate;#SC"/>
+  </USCity>
+  
+  <USCity rdf:ID="greenvillesc">
+    <name>Greenville</name>
+    <state rdf:resource="&usstate;#SC"/>
+  </USCity>
+  
+  <USCity rdf:ID="hiltonheadislandsc">
+    <name>Hilton Head Island</name>
+    <state rdf:resource="&usstate;#SC"/>
+  </USCity>
+  
+  <USCity rdf:ID="mountpleasantsc">
+    <name>Mount Pleasant</name>
+    <state rdf:resource="&usstate;#SC"/>
+  </USCity>
+  
+  <USCity rdf:ID="myrtlebeachsc">
+    <name>Myrtle Beach</name>
+    <state rdf:resource="&usstate;#SC"/>
+  </USCity>
+  
+  <USCity rdf:ID="ridgewaysc">
+    <name>Ridgeway</name>
+    <state rdf:resource="&usstate;#SC"/>
+  </USCity>
+  
+  <USCity rdf:ID="rockhillsc">
+    <name>Rock Hill</name>
+    <state rdf:resource="&usstate;#SC"/>
+  </USCity>
+  
+  <USCity rdf:ID="spartanburgsc">
+    <name>Spartanburg</name>
+    <state rdf:resource="&usstate;#SC"/>
+  </USCity>
+  
+  <USCity rdf:ID="summervillesc">
+    <name>Summerville</name>
+    <state rdf:resource="&usstate;#SC"/>
+  </USCity>
+  
+  <USCity rdf:ID="sumtersc">
+    <name>Sumter</name>
+    <state rdf:resource="&usstate;#SC"/>
+  </USCity>
+  
+  <USCity rdf:ID="pierresd">
+    <name>Pierre</name>
+    <state rdf:resource="&usstate;#SD"/>
+  </USCity>
+  
+  <USCity rdf:ID="rapidcitysd">
+    <name>Rapid City</name>
+    <state rdf:resource="&usstate;#SD"/>
+  </USCity>
+  
+  <USCity rdf:ID="siouxfallssd">
+    <name>Sioux Falls</name>
+    <state rdf:resource="&usstate;#SD"/>
+  </USCity>
+  
+  <USCity rdf:ID="vermillionsd">
+    <name>Vermillion</name>
+    <state rdf:resource="&usstate;#SD"/>
+  </USCity>
+  
+  <USCity rdf:ID="brentwoodtn">
+    <name>Brentwood</name>
+    <state rdf:resource="&usstate;#TN"/>
+  </USCity>
+  
+  <USCity rdf:ID="chattanoogatn">
+    <name>Chattanooga</name>
+    <state rdf:resource="&usstate;#TN"/>
+  </USCity>
+  
+  <USCity rdf:ID="clarksvilletn">
+    <name>Clarksville</name>
+    <state rdf:resource="&usstate;#TN"/>
+  </USCity>
+  
+  <USCity rdf:ID="hendersonvilletn">
+    <name>Hendersonville</name>
+    <state rdf:resource="&usstate;#TN"/>
+  </USCity>
+  
+  <USCity rdf:ID="jacksontn">
+    <name>Jackson</name>
+    <state rdf:resource="&usstate;#TN"/>
+  </USCity>
+  
+  <USCity rdf:ID="johnsoncitytn">
+    <name>Johnson City</name>
+    <state rdf:resource="&usstate;#TN"/>
+  </USCity>
+  
+  <USCity rdf:ID="knoxvilletn">
+    <name>Knoxville</name>
+    <state rdf:resource="&usstate;#TN"/>
+  </USCity>
+  
+  <USCity rdf:ID="memphistn">
+    <name>Memphis</name>
+    <state rdf:resource="&usstate;#TN"/>
+  </USCity>
+  
+  <USCity rdf:ID="murfreesborotn">
+    <name>Murfreesboro</name>
+    <state rdf:resource="&usstate;#TN"/>
+  </USCity>
+  
+  <USCity rdf:ID="nashvilletn">
+    <name>Nashville</name>
+    <state rdf:resource="&usstate;#TN"/>
+  </USCity>
+  
+  <USCity rdf:ID="abilenetx">
+    <name>Abilene</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="amarillotx">
+    <name>Amarillo</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="arlingtontx">
+    <name>Arlington</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="austintx">
+    <name>Austin</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="azletx">
+    <name>Azle</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="baytowntx">
+    <name>Baytown</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="beaumonttx">
+    <name>Beaumont</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="bedfordtx">
+    <name>Bedford</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="brazoriacountytx">
+    <name>Brazoria County</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="brownsvilletx">
+    <name>Brownsville</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="bryancollegestationtx">
+    <name>Bryan College Station</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="colleyvilletx">
+    <name>Colleyville</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="corpuschristitx">
+    <name>Corpus Christi</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="crosbytx">
+    <name>Crosby</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="dallastx">
+    <name>Dallas</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="daytontx">
+    <name>Dayton</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="elpasotx">
+    <name>El Paso</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="fortworthtx">
+    <name>Fort Worth</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="galvestontx">
+    <name>Galveston</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="garlandtx">
+    <name>Garland</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="grandprairietx">
+    <name>Grand Prairie</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="grapevinetx">
+    <name>Grapevine</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="harkerheightstx">
+    <name>Harker Heights</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="houstontx">
+    <name>Houston</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="humbletx">
+    <name>Humble</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="hursttx">
+    <name>Hurst</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="katytx">
+    <name>Katy</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="killeentx">
+    <name>Killeen</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="kingwoodtx">
+    <name>Kingwood</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="leaguecitytx">
+    <name>League City</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="longviewtx">
+    <name>Longview</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="lubbocktx">
+    <name>Lubbock</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="marshalltx">
+    <name>Marshall</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="mcallentx">
+    <name>McAllen</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="midlandtx">
+    <name>Midland</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="northrichlandhillstx">
+    <name>North Richland Hills</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="odessatx">
+    <name>Odessa</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="planotx">
+    <name>Plano</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="richardsontx">
+    <name>Richardson</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="richmondtx">
+    <name>Richmond</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="rockporttx">
+    <name>Rockport</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="rockwalltx">
+    <name>Rockwall</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="roundrocktx">
+    <name>Round Rock</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="sanantoniotx">
+    <name>San Antonio</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="seguintx">
+    <name>Seguin</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="southlaketx">
+    <name>Southlake</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="southpadreislandtx">
+    <name>South Padre Island</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="sugarlandtx">
+    <name>Sugar Land</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="templetx">
+    <name>Temple</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="texarkanatx">
+    <name>Texarkana</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="thewoodlandstx">
+    <name>The Woodlands</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="tylertx">
+    <name>Tyler</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="victoriatx">
+    <name>Victoria</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="wacotx">
+    <name>Waco</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="wichitafallstx">
+    <name>Wichita Falls</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="willistx">
+    <name>Willis</name>
+    <state rdf:resource="&usstate;#TX"/>
+  </USCity>
+  
+  <USCity rdf:ID="cedarcityut">
+    <name>Cedar City</name>
+    <state rdf:resource="&usstate;#UT"/>
+  </USCity>
+  
+  <USCity rdf:ID="loganut">
+    <name>Logan</name>
+    <state rdf:resource="&usstate;#UT"/>
+  </USCity>
+  
+  <USCity rdf:ID="provout">
+    <name>Provo</name>
+    <state rdf:resource="&usstate;#UT"/>
+  </USCity>
+  
+  <USCity rdf:ID="saltlakecityut">
+    <name>Salt Lake City</name>
+    <state rdf:resource="&usstate;#UT"/>
+  </USCity>
+  
+  <USCity rdf:ID="stgeorgeut">
+    <name>St George</name>
+    <state rdf:resource="&usstate;#UT"/>
+  </USCity>
+  
+  <USCity rdf:ID="alexandriava">
+    <name>Alexandria</name>
+    <state rdf:resource="&usstate;#VA"/>
+  </USCity>
+  
+  <USCity rdf:ID="arlingtonva">
+    <name>Arlington</name>
+    <state rdf:resource="&usstate;#VA"/>
+  </USCity>
+  
+  <USCity rdf:ID="bristolva">
+    <name>Bristol</name>
+    <state rdf:resource="&usstate;#VA"/>
+  </USCity>
+  
+  <USCity rdf:ID="charlottesvilleva">
+    <name>Charlottesville</name>
+    <state rdf:resource="&usstate;#VA"/>
+  </USCity>
+  
+  <USCity rdf:ID="chesapeakeva">
+    <name>Chesapeake</name>
+    <state rdf:resource="&usstate;#VA"/>
+  </USCity>
+  
+  <USCity rdf:ID="cliftonva">
+    <name>Clifton</name>
+    <state rdf:resource="&usstate;#VA"/>
+  </USCity>
+  
+  <USCity rdf:ID="fairfaxva">
+    <name>Fairfax</name>
+    <state rdf:resource="&usstate;#VA"/>
+  </USCity>
+  
+  <USCity rdf:ID="hamptonva">
+    <name>Hampton</name>
+    <state rdf:resource="&usstate;#VA"/>
+  </USCity>
+  
+  <USCity rdf:ID="harrisonburgva">
+    <name>Harrisonburg</name>
+    <state rdf:resource="&usstate;#VA"/>
+  </USCity>
+  
+  <USCity rdf:ID="lynchburgva">
+    <name>Lynchburg</name>
+    <state rdf:resource="&usstate;#VA"/>
+  </USCity>
+  
+  <USCity rdf:ID="mcleanva">
+    <name>McLean</name>
+    <state rdf:resource="&usstate;#VA"/>
+  </USCity>
+  
+  <USCity rdf:ID="newportnewsva">
+    <name>Newport News</name>
+    <state rdf:resource="&usstate;#VA"/>
+  </USCity>
+  
+  <USCity rdf:ID="portsmouthva">
+    <name>Portsmouth</name>
+    <state rdf:resource="&usstate;#VA"/>
+  </USCity>
+  
+  <USCity rdf:ID="restonva">
+    <name>Reston</name>
+    <state rdf:resource="&usstate;#VA"/>
+  </USCity>
+  
+  <USCity rdf:ID="richmondva">
+    <name>Richmond</name>
+    <state rdf:resource="&usstate;#VA"/>
+  </USCity>
+  
+  <USCity rdf:ID="roanokeva">
+    <name>Roanoke</name>
+    <state rdf:resource="&usstate;#VA"/>
+  </USCity>
+  
+  <USCity rdf:ID="viennava">
+    <name>Vienna</name>
+    <state rdf:resource="&usstate;#VA"/>
+  </USCity>
+  
+  <USCity rdf:ID="virginiabeachva">
+    <name>Virginia Beach</name>
+    <state rdf:resource="&usstate;#VA"/>
+  </USCity>
+  
+  <USCity rdf:ID="williamsburgva">
+    <name>Williamsburg</name>
+    <state rdf:resource="&usstate;#VA"/>
+  </USCity>
+  
+  <USCity rdf:ID="burlingtonvt">
+    <name>Burlington</name>
+    <state rdf:resource="&usstate;#VT"/>
+  </USCity>
+  
+  <USCity rdf:ID="montpeliervt">
+    <name>Montpelier</name>
+    <state rdf:resource="&usstate;#VT"/>
+  </USCity>
+  
+  <USCity rdf:ID="rutlandvt">
+    <name>Rutland</name>
+    <state rdf:resource="&usstate;#VT"/>
+  </USCity>
+  
+  <USCity rdf:ID="arlingtonwa">
+    <name>Arlington</name>
+    <state rdf:resource="&usstate;#WA"/>
+  </USCity>
+  
+  <USCity rdf:ID="auburnwa">
+    <name>Auburn</name>
+    <state rdf:resource="&usstate;#WA"/>
+  </USCity>
+  
+  <USCity rdf:ID="bellevuewa">
+    <name>Bellevue</name>
+    <state rdf:resource="&usstate;#WA"/>
+  </USCity>
+  
+  <USCity rdf:ID="bellinghamwa">
+    <name>Bellingham</name>
+    <state rdf:resource="&usstate;#WA"/>
+  </USCity>
+  
+  <USCity rdf:ID="bremertonwa">
+    <name>Bremerton</name>
+    <state rdf:resource="&usstate;#WA"/>
+  </USCity>
+  
+  <USCity rdf:ID="edmondswa">
+    <name>Edmonds</name>
+    <state rdf:resource="&usstate;#WA"/>
+  </USCity>
+  
+  <USCity rdf:ID="everettwa">
+    <name>Everett</name>
+    <state rdf:resource="&usstate;#WA"/>
+  </USCity>
+  
+  <USCity rdf:ID="kennewickwa">
+    <name>Kennewick</name>
+    <state rdf:resource="&usstate;#WA"/>
+  </USCity>
+  
+  <USCity rdf:ID="kentwa">
+    <name>Kent</name>
+    <state rdf:resource="&usstate;#WA"/>
+  </USCity>
+  
+  <USCity rdf:ID="kirklandwa">
+    <name>Kirkland</name>
+    <state rdf:resource="&usstate;#WA"/>
+  </USCity>
+  
+  <USCity rdf:ID="lyndenwa">
+    <name>Lynden</name>
+    <state rdf:resource="&usstate;#WA"/>
+  </USCity>
+  
+  <USCity rdf:ID="lynnwoodwa">
+    <name>Lynnwood</name>
+    <state rdf:resource="&usstate;#WA"/>
+  </USCity>
+  
+  <USCity rdf:ID="olympiawa">
+    <name>Olympia</name>
+    <state rdf:resource="&usstate;#WA"/>
+  </USCity>
+  
+  <USCity rdf:ID="redmondwa">
+    <name>Redmond</name>
+    <state rdf:resource="&usstate;#WA"/>
+  </USCity>
+  
+  <USCity rdf:ID="seattlewa">
+    <name>Seattle</name>
+    <state rdf:resource="&usstate;#WA"/>
+  </USCity>
+  
+  <USCity rdf:ID="snohomishwa">
+    <name>Snohomish</name>
+    <state rdf:resource="&usstate;#WA"/>
+  </USCity>
+  
+  <USCity rdf:ID="spokanewa">
+    <name>Spokane</name>
+    <state rdf:resource="&usstate;#WA"/>
+  </USCity>
+  
+  <USCity rdf:ID="tacomawa">
+    <name>Tacoma</name>
+    <state rdf:resource="&usstate;#WA"/>
+  </USCity>
+  
+  <USCity rdf:ID="vancouverwa">
+    <name>Vancouver</name>
+    <state rdf:resource="&usstate;#WA"/>
+  </USCity>
+  
+  <USCity rdf:ID="yakimawa">
+    <name>Yakima</name>
+    <state rdf:resource="&usstate;#WA"/>
+  </USCity>
+  
+  <USCity rdf:ID="beloitwi">
+    <name>Beloit</name>
+    <state rdf:resource="&usstate;#WI"/>
+  </USCity>
+  
+  <USCity rdf:ID="brookfieldwi">
+    <name>Brookfield</name>
+    <state rdf:resource="&usstate;#WI"/>
+  </USCity>
+  
+  <USCity rdf:ID="eauclairewi">
+    <name>Eau Claire</name>
+    <state rdf:resource="&usstate;#WI"/>
+  </USCity>
+  
+  <USCity rdf:ID="greenbaywi">
+    <name>Green Bay</name>
+    <state rdf:resource="&usstate;#WI"/>
+  </USCity>
+  
+  <USCity rdf:ID="janesvillewi">
+    <name>Janesville</name>
+    <state rdf:resource="&usstate;#WI"/>
+  </USCity>
+  
+  <USCity rdf:ID="lacrossewi">
+    <name>La Crosse</name>
+    <state rdf:resource="&usstate;#WI"/>
+  </USCity>
+  
+  <USCity rdf:ID="madisonwi">
+    <name>Madison</name>
+    <state rdf:resource="&usstate;#WI"/>
+  </USCity>
+  
+  <USCity rdf:ID="menomoneefallswi">
+    <name>Menomonee Falls</name>
+    <state rdf:resource="&usstate;#WI"/>
+  </USCity>
+  
+  <USCity rdf:ID="milwaukeewi">
+    <name>Milwaukee</name>
+    <state rdf:resource="&usstate;#WI"/>
+  </USCity>
+  
+  <USCity rdf:ID="oshkoshwi">
+    <name>Oshkosh</name>
+    <state rdf:resource="&usstate;#WI"/>
+  </USCity>
+  
+  <USCity rdf:ID="waukeshawi">
+    <name>Waukesha</name>
+    <state rdf:resource="&usstate;#WI"/>
+  </USCity>
+  
+  <USCity rdf:ID="wausauwi">
+    <name>Wausau</name>
+    <state rdf:resource="&usstate;#WI"/>
+  </USCity>
+  
+  <USCity rdf:ID="charlestonwv">
+    <name>Charleston</name>
+    <state rdf:resource="&usstate;#WV"/>
+  </USCity>
+  
+  <USCity rdf:ID="huntingtonwv">
+    <name>Huntington</name>
+    <state rdf:resource="&usstate;#WV"/>
+  </USCity>
+  
+  <USCity rdf:ID="martinsburgwv">
+    <name>Martinsburg</name>
+    <state rdf:resource="&usstate;#WV"/>
+  </USCity>
+  
+  <USCity rdf:ID="morgantownwv">
+    <name>Morgantown</name>
+    <state rdf:resource="&usstate;#WV"/>
+  </USCity>
+  
+  <USCity rdf:ID="casperwy">
+    <name>Casper</name>
+    <state rdf:resource="&usstate;#WY"/>
+  </USCity>
+  
+  <USCity rdf:ID="cheyennewy">
+    <name>Cheyenne</name>
+    <state rdf:resource="&usstate;#WY"/>
+  </USCity>
+  
+  <USCity rdf:ID="gillettewy">
+    <name>Gillette</name>
+    <state rdf:resource="&usstate;#WY"/>
+  </USCity>
+  
+  <USCity rdf:ID="jacksonwy">
+    <name>Jackson</name>
+    <state rdf:resource="&usstate;#WY"/>
+  </USCity>
+  
+</rdf:RDF>

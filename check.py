@@ -5,14 +5,19 @@ and there are probably lots of ways to fool it especially as a deliberate
 malicious attack. That is because there are simple things I may have forgotten
 to check.
 
+Command line options for debug:
+ -v50   Set verbosity to 50 (range is 0 -100)
+ -c50   Set verbosity for inference done by cwm code to 50
+ -p50   Set verobsity when parsing top 50    
 """
 # check that proof
 
 from swap.myStore import load, Namespace
 from swap.RDFSink import CONTEXT, PRED, SUBJ, OBJ
-from swap.term import List
+from swap.term import List, Literal, CompoundTerm
 from swap.llyn import Formula #@@ dependency should not be be necessary
 from swap.diag import verbosity, setVerbosity, progress
+
 from swap.query import testIncludes
 
 # Standard python
@@ -51,7 +56,7 @@ def parse(resourceURI):
     f = parsed.get(resourceURI, None)
     if f == None:
 	setVerbosity(debugLevelForParsing)
-	f = load(resourceURI)
+	f = load(resourceURI, flags="B")
 	setVerbosity(0)
 	parsed[resourceURI] = f
     return f
@@ -59,11 +64,17 @@ def parse(resourceURI):
 def statementFromFormula(f):
     "Check just one statement and return it"
     if len(f) > 1:
-	raise RuntimeError("I think this was supposed tro be a single statement: %s" % f.statements)
+	raise RuntimeError("Should be a single statement: %s" % f.statements)
     return f.statements[0]
 
+def checkIncludes(f, g):
+    # return testIncludes(f,g)
+    x = f.unify(g)
+    
 def valid(proof, r, level=0):
-    """Check whether this reason is valid. Returns the formula proved or None if not"""
+    """Check whether this reason is valid.
+    
+    Returns the formula proved or None if not"""
     f = proof.any(r,reason.gives)
     if f != None:
 	assert isinstance(f, Formula), "%s gives: %s which should be Formula" % (`r`, f)
@@ -94,8 +105,9 @@ def valid(proof, r, level=0):
 	    setVerbosity(0)
 	    g = parse(u)
 	    setVerbosity(v)
-	except:
-	    return fail("Can't retreive/parse <%s> because:\n  %s." %(u, sys.exc_info()[1].__str__()), level)
+	except:   #   ValueError:  #@@@@@@@@@@@@ &&&&&&&&
+	    return fail("Can't retreive/parse <%s> because:\n  %s." 
+				%(u, sys.exc_info()[1].__str__()), level)
 	if f != None:  # Additional intermediate check not essential
 	    for sf in f.statements:
 		for sg in g.statements:
@@ -110,20 +122,28 @@ def valid(proof, r, level=0):
 	return g
 
     elif t is reason.Inference:
-	evidence = proof.each(subj=r, pred=reason.evidence)
+	evidence = proof.each(subj=r, pred=reason.evidence)  # Changes to a list 2005-08
+	if len(evidence) == 1 and isinstance(evidence[0], List):
+	    evidence = evidence[0]     # Transition between non-use and use of lists
+	assert isinstance(evidence, List)
 	bindings = {}
 	for b in proof.each(subj=r, pred=reason.binding):
 	    var_rei  = proof.the(subj=b, pred=reason.variable)  # de-reify  symbool
 	    var_uri   = proof.the(subj=var_rei, pred=rei.uri)
+	    if var_uri == None: raise RuntimeError(
+				    "No URI given for variable %s" % (`b`))
 	    var	      = proof.newSymbol(var_uri.string)
 	    val_rei  = proof.the(subj=b, pred=reason.boundTo) # @@@ Check that they really are variables in the rule!
 	    val_uri   = proof.the(subj=val_rei, pred=rei.uri)
 	    if val_uri != None:
 		val = proof.newSymbol(val_uri.string)
+	    elif isinstance(val_rei, (Literal, CompoundTerm)):
+		val = val_rei
 	    else:
 		val_value   = proof.the(subj=val_rei, pred=rei.value)
 		if val_value != None:
-		    val = proof.newLiteral(val_value.string, val_value.datatype, val_value.lang)
+		    val = proof.newLiteral(val_value.string,
+					val_value.datatype, val_value.lang)
 		else:
 		    raise RuntimeError("Can't de-reify %s" % val_rei)
 	    bindings[var] = val
@@ -237,6 +257,7 @@ def main():
         opts, args = getopt.getopt(sys.argv[1:], "hv:c:p:",
 	    [ "help", "verbose=", "chatty=", "parsing="])
     except getopt.GetoptError:
+	sys.stderr.write("check.py:  Command line syntax error.\n\n")
         usage()
         sys.exit(2)
     output = None
@@ -255,11 +276,9 @@ def main():
         fyi("Reading proof from "+args[0])
         proof = load(args[0])
     else:
-#    chatty=60
-    #inputURI = argv[1]
-    #fyi("Reading proof from "+inputURI)
-        fyi("Reading proof from standard input.")
-        proof = load()
+	fyi("Reading proof from standard input.")
+	proof = load(flags="B")
+
     # setVerbosity(60)
     fyi("Length of proof: "+`len(proof)`)
     proof2 = proof.the(pred=rdf.type, obj=reason.Proof)  # the thing to be proved

@@ -1,0 +1,24 @@
+# List of regression tests
+#
+@prefix : <#>.
+@prefix x: <#>.
+@prefix test: <http://www.w3.org/2000/10/swap/test.n3#>.
+
+
+
+:t553 a test:CwmTest;
+    test:referenceOutput "ref/unify2.out";
+    test:description   "log:incldues looking for @forAll";
+    test:arguments     """unify2.n3 --think --data""".
+
+
+:t555 a test:CwmTest;
+    test:referenceOutput "ref/unify2.out";
+    test:description   "Query looking for @forAll";
+    test:arguments     """unify2.n3 --think --data""".
+
+
+:t555 a test:CwmTest;
+    test:referenceOutput "ref/unify2.out";
+    test:description   "Query looking for @forAll";
+    test:arguments     """unify2.n3 --think --why """.

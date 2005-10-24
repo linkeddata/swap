@@ -1,0 +1,3258 @@
+#Processed by Id: cwm.py,v 1.121 2003/02/02 16:09:06 timbl Exp 
+        #    using base http://www.daml.ri.cmu.edu/ont/USCity.daml
+        
+#  Notation3 generation by
+#       notation3.py,v 1.133 2003/02/02 16:09:09 timbl Exp
+
+#   Base was: http://www.daml.ri.cmu.edu/ont/USCity.daml
+     @prefix : <#> .
+     @prefix city: <City.n3#> .
+     @prefix country: <Country.n3#> .
+     @prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#>.
+     @prefix usstate: <USRegionState.n3#> .
+
+############### Added TBL
+
+<http://mr-burns.w3.org:8000/> is log:definitiveService of 
+# <> is log:definitiveDocument of
+				:name, :state.
+
+###############
+    
+    city:country     a rdf:Property;
+         rdfs:range country:UNITED-STATES .
+    
+    <>     a daml:Ontology;
+         daml:imports <http://www.daml.org/2001/03/daml+oil>,
+                <City.n3>,
+                <http://www.w3.org/1999/02/22-rdf-syntax-ns>,
+                <http://www.w3.org/2000/01/rdf-schema>;
+         daml:versionInfo """
+      $Id$
+    """;
+         rdfs:comment """
+      City and State Ontology for US Cities.
+      Thanks goes to Martin van Velsen who helped gather this
+      data for the Retsina Mocha project.
+
+	NOTE:	THIS IS NOT INTENDED TO BE A DEFINITIVE LIST OF ALL
+		US CITIES, BUT WE HAVE TRIED TO BE AS COMPREHENSIVE
+		AS POSSIBLE.
+
+    """ .
+    
+    :USCity     a rdfs:Class;
+         rdfs:comment """
+      Information about US cities.
+    """;
+         rdfs:label "USCity";
+         rdfs:subClassOf city:City .
+    
+    :abilenetx     a :USCity;
+         :name "Abilene";
+         :state usstate:TX .
+    
+    :akronoh     a :USCity;
+         :name "Akron";
+         :state usstate:OH .
+    
+    :alamogordonm     a :USCity;
+         :name "Alamogordo";
+         :state usstate:NM .
+    
+    :albanyca     a :USCity;
+         :name "Albany";
+         :state usstate:CA .
+    
+    :albanyga     a :USCity;
+         :name "Albany";
+         :state usstate:GA .
+    
+    :albanyny     a :USCity;
+         :name "Albany";
+         :state usstate:NY .
+    
+    :albanyor     a :USCity;
+         :name "Albany";
+         :state usstate:OR .
+    
+    :albuquerquenm     a :USCity;
+         :name "Albuquerque";
+         :state usstate:NM .
+    
+    :alexandriala     a :USCity;
+         :name "Alexandria";
+         :state usstate:LA .
+    
+    :alexandriava     a :USCity;
+         :name "Alexandria";
+         :state usstate:VA .
+    
+    :alisoviejoca     a :USCity;
+         :name "Aliso Viejo";
+         :state usstate:CA .
+    
+    :allentownpa     a :USCity;
+         :name "Allentown";
+         :state usstate:PA .
+    
+    :alpharettaga     a :USCity;
+         :name "Alpharetta";
+         :state usstate:GA .
+    
+    :altalomaca     a :USCity;
+         :name "Alta Loma";
+         :state usstate:CA .
+    
+    :altamontespringsfl     a :USCity;
+         :name "Altamonte Springs";
+         :state usstate:FL .
+    
+    :amarillotx     a :USCity;
+         :name "Amarillo";
+         :state usstate:TX .
+    
+    :americancanyonca     a :USCity;
+         :name "American Canyon";
+         :state usstate:CA .
+    
+    :amherstnh     a :USCity;
+         :name "Amherst";
+         :state usstate:NH .
+    
+    :anaheimca     a :USCity;
+         :name "Anaheim";
+         :state usstate:CA .
+    
+    :anchorageak     a :USCity;
+         :name "Anchorage";
+         :state usstate:AK .
+    
+    :andoverma     a :USCity;
+         :name "Andover";
+         :state usstate:MA .
+    
+    :annapolismd     a :USCity;
+         :name "Annapolis";
+         :state usstate:MD .
+    
+    :annarbormi     a :USCity;
+         :name "Ann Arbor";
+         :state usstate:MI .
+    
+    :annistonal     a :USCity;
+         :name "Anniston";
+         :state usstate:AL .
+    
+    :arcadiaca     a :USCity;
+         :name "Arcadia";
+         :state usstate:CA .
+    
+    :ardmoreok     a :USCity;
+         :name "Ardmore";
+         :state usstate:OK .
+    
+    :arlingtonheightsil     a :USCity;
+         :name "Arlington Heights";
+         :state usstate:IL .
+    
+    :arlingtontx     a :USCity;
+         :name "Arlington";
+         :state usstate:TX .
+    
+    :arlingtonva     a :USCity;
+         :name "Arlington";
+         :state usstate:VA .
+    
+    :arlingtonwa     a :USCity;
+         :name "Arlington";
+         :state usstate:WA .
+    
+    :arroyograndeca     a :USCity;
+         :name "Arroyo Grande";
+         :state usstate:CA .
+    
+    :arvadaco     a :USCity;
+         :name "Arvada";
+         :state usstate:CO .
+    
+    :ashevillenc     a :USCity;
+         :name "Asheville";
+         :state usstate:NC .
+    
+    :athensga     a :USCity;
+         :name "Athens";
+         :state usstate:GA .
+    
+    :athertonca     a :USCity;
+         :name "Atherton";
+         :state usstate:CA .
+    
+    :atlantaga     a :USCity;
+         :name "Atlanta";
+         :state usstate:GA .
+    
+    :atlanticcitynj     a :USCity;
+         :name "Atlantic City";
+         :state usstate:NJ .
+    
+    :auburnwa     a :USCity;
+         :name "Auburn";
+         :state usstate:WA .
+    
+    :augustaga     a :USCity;
+         :name "Augusta";
+         :state usstate:GA .
+    
+    :augustame     a :USCity;
+         :name "Augusta";
+         :state usstate:ME .
+    
+    :auroraco     a :USCity;
+         :name "Aurora";
+         :state usstate:CO .
+    
+    :aurorail     a :USCity;
+         :name "Aurora";
+         :state usstate:IL .
+    
+    :austintx     a :USCity;
+         :name "Austin";
+         :state usstate:TX .
+    
+    :avonct     a :USCity;
+         :name "Avon";
+         :state usstate:CT .
+    
+    :azletx     a :USCity;
+         :name "Azle";
+         :state usstate:TX .
+    
+    :azusaca     a :USCity;
+         :name "Azusa";
+         :state usstate:CA .
+    
+    :bakersfieldca     a :USCity;
+         :name "Bakersfield";
+         :state usstate:CA .
+    
+    :baldwinparkca     a :USCity;
+         :name "Baldwin Park";
+         :state usstate:CA .
+    
+    :baltimoremd     a :USCity;
+         :name "Baltimore";
+         :state usstate:MD .
+    
+    :banningca     a :USCity;
+         :name "Banning";
+         :state usstate:CA .
+    
+    :barnegatnj     a :USCity;
+         :name "Barnegat";
+         :state usstate:NJ .
+    
+    :barringtonil     a :USCity;
+         :name "Barrington";
+         :state usstate:IL .
+    
+    :bartlesvilleok     a :USCity;
+         :name "Bartlesville";
+         :state usstate:OK .
+    
+    :bartlettil     a :USCity;
+         :name "Bartlett";
+         :state usstate:IL .
+    
+    :baskingridgenj     a :USCity;
+         :name "Basking Ridge";
+         :state usstate:NJ .
+    
+    :batonrougela     a :USCity;
+         :name "Baton Rouge";
+         :state usstate:LA .
+    
+    :baytowntx     a :USCity;
+         :name "Baytown";
+         :state usstate:TX .
+    
+    :beaumontca     a :USCity;
+         :name "Beaumont";
+         :state usstate:CA .
+    
+    :beaumonttx     a :USCity;
+         :name "Beaumont";
+         :state usstate:TX .
+    
+    :beavertonor     a :USCity;
+         :name "Beaverton";
+         :state usstate:OR .
+    
+    :bedfordtx     a :USCity;
+         :name "Bedford";
+         :state usstate:TX .
+    
+    :bellevuewa     a :USCity;
+         :name "Bellevue";
+         :state usstate:WA .
+    
+    :bellinghamwa     a :USCity;
+         :name "Bellingham";
+         :state usstate:WA .
+    
+    :belmontca     a :USCity;
+         :name "Belmont";
+         :state usstate:CA .
+    
+    :belmontma     a :USCity;
+         :name "Belmont";
+         :state usstate:MA .
+    
+    :beloitwi     a :USCity;
+         :name "Beloit";
+         :state usstate:WI .
+    
+    :bendor     a :USCity;
+         :name "Bend";
+         :state usstate:OR .
+    
+    :beniciaca     a :USCity;
+         :name "Benicia";
+         :state usstate:CA .
+    
+    :berkeleyca     a :USCity;
+         :name "Berkeley";
+         :state usstate:CA .
+    
+    :bethesdamd     a :USCity;
+         :name "Bethesda";
+         :state usstate:MD .
+    
+    :bethlehempa     a :USCity;
+         :name "Bethlehem";
+         :state usstate:PA .
+    
+    :beverlyma     a :USCity;
+         :name "Beverly";
+         :state usstate:MA .
+    
+    :billingsmt     a :USCity;
+         :name "Billings";
+         :state usstate:MT .
+    
+    :birminghamal     a :USCity;
+         :name "Birmingham";
+         :state usstate:AL .
+    
+    :bismarcknd     a :USCity;
+         :name "Bismarck";
+         :state usstate:ND .
+    
+    :bloomfieldmi     a :USCity;
+         :name "Bloomfield";
+         :state usstate:MI .
+    
+    :bloomingtonil     a :USCity;
+         :name "Bloomington";
+         :state usstate:IL .
+    
+    :bloomingtonin     a :USCity;
+         :name "Bloomington";
+         :state usstate:IN .
+    
+    :bloomingtonmn     a :USCity;
+         :name "Bloomington";
+         :state usstate:MN .
+    
+    :bluebellpa     a :USCity;
+         :name "Blue Bell";
+         :state usstate:PA .
+    
+    :bocaratonfl     a :USCity;
+         :name "Boca Raton";
+         :state usstate:FL .
+    
+    :bogartga     a :USCity;
+         :name "Bogart";
+         :state usstate:GA .
+    
+    :boiseid     a :USCity;
+         :name "Boise";
+         :state usstate:ID .
+    
+    :bostonma     a :USCity;
+         :name "Boston";
+         :state usstate:MA .
+    
+    :boulderco     a :USCity;
+         :name "Boulder";
+         :state usstate:CO .
+    
+    :bowiemd     a :USCity;
+         :name "Bowie";
+         :state usstate:MD .
+    
+    :boxfordma     a :USCity;
+         :name "Boxford";
+         :state usstate:MA .
+    
+    :boyertownpa     a :USCity;
+         :name "Boyertown";
+         :state usstate:PA .
+    
+    :boyntonbeachfl     a :USCity;
+         :name "Boynton Beach";
+         :state usstate:FL .
+    
+    :bozemanmt     a :USCity;
+         :name "Bozeman";
+         :state usstate:MT .
+    
+    :bradentonfl     a :USCity;
+         :name "Bradenton";
+         :state usstate:FL .
+    
+    :braintreema     a :USCity;
+         :name "Braintree";
+         :state usstate:MA .
+    
+    :brazoriacountytx     a :USCity;
+         :name "Brazoria County";
+         :state usstate:TX .
+    
+    :breckenridgeco     a :USCity;
+         :name "Breckenridge";
+         :state usstate:CO .
+    
+    :bremertonwa     a :USCity;
+         :name "Bremerton";
+         :state usstate:WA .
+    
+    :brentwoodca     a :USCity;
+         :name "Brentwood";
+         :state usstate:CA .
+    
+    :brentwoodtn     a :USCity;
+         :name "Brentwood";
+         :state usstate:TN .
+    
+    :bridgeportct     a :USCity;
+         :name "Bridgeport";
+         :state usstate:CT .
+    
+    :bridgewaterma     a :USCity;
+         :name "Bridgewater";
+         :state usstate:MA .
+    
+    :bristolva     a :USCity;
+         :name "Bristol";
+         :state usstate:VA .
+    
+    :brokenarrowok     a :USCity;
+         :name "Broken Arrow";
+         :state usstate:OK .
+    
+    :brookfieldwi     a :USCity;
+         :name "Brookfield";
+         :state usstate:WI .
+    
+    :brooklinema     a :USCity;
+         :name "Brookline";
+         :state usstate:MA .
+    
+    :brownsvilletx     a :USCity;
+         :name "Brownsville";
+         :state usstate:TX .
+    
+    :brunswickoh     a :USCity;
+         :name "Brunswick";
+         :state usstate:OH .
+    
+    :bryancollegestationtx     a :USCity;
+         :name "Bryan College Station";
+         :state usstate:TX .
+    
+    :buckinghampa     a :USCity;
+         :name "Buckingham";
+         :state usstate:PA .
+    
+    :buffalony     a :USCity;
+         :name "Buffalo";
+         :state usstate:NY .
+    
+    :burbankca     a :USCity;
+         :name "Burbank";
+         :state usstate:CA .
+    
+    :burlingameca     a :USCity;
+         :name "Burlingame";
+         :state usstate:CA .
+    
+    :burlingtonvt     a :USCity;
+         :name "Burlington";
+         :state usstate:VT .
+    
+    :calabasasca     a :USCity;
+         :name "Calabasas";
+         :state usstate:CA .
+    
+    :cambridgema     a :USCity;
+         :name "Cambridge";
+         :state usstate:MA .
+    
+    :campbellca     a :USCity;
+         :name "Campbell";
+         :state usstate:CA .
+    
+    :cantonma     a :USCity;
+         :name "Canton";
+         :state usstate:MA .
+    
+    :cantonoh     a :USCity;
+         :name "Canton";
+         :state usstate:OH .
+    
+    :capecoralfl     a :USCity;
+         :name "Cape Coral";
+         :state usstate:FL .
+    
+    :carlsbadca     a :USCity;
+         :name "Carlsbad";
+         :state usstate:CA .
+    
+    :carmelca     a :USCity;
+         :name "Carmel";
+         :state usstate:CA .
+    
+    :carolstreamil     a :USCity;
+         :name "Carol Stream";
+         :state usstate:IL .
+    
+    :carsoncitynv     a :USCity;
+         :name "Carson City";
+         :state usstate:NV .
+    
+    :caryil     a :USCity;
+         :name "Cary";
+         :state usstate:IL .
+    
+    :carync     a :USCity;
+         :name "Cary";
+         :state usstate:NC .
+    
+    :casperwy     a :USCity;
+         :name "Casper";
+         :state usstate:WY .
+    
+    :cedarcityut     a :USCity;
+         :name "Cedar City";
+         :state usstate:UT .
+    
+    :cedarrapidsia     a :USCity;
+         :name "Cedar Rapids";
+         :state usstate:IA .
+    
+    :centervilleoh     a :USCity;
+         :name "Centerville";
+         :state usstate:OH .
+    
+    :cerritosca     a :USCity;
+         :name "Cerritos";
+         :state usstate:CA .
+    
+    :champaignil     a :USCity;
+         :name "Champaign";
+         :state usstate:IL .
+    
+    :chandleraz     a :USCity;
+         :name "Chandler";
+         :state usstate:AZ .
+    
+    :chapelhillnc     a :USCity;
+         :name "Chapel Hill";
+         :state usstate:NC .
+    
+    :charlestonsc     a :USCity;
+         :name "Charleston";
+         :state usstate:SC .
+    
+    :charlestonwv     a :USCity;
+         :name "Charleston";
+         :state usstate:WV .
+    
+    :charlottenc     a :USCity;
+         :name "Charlotte";
+         :state usstate:NC .
+    
+    :charlottesvilleva     a :USCity;
+         :name "Charlottesville";
+         :state usstate:VA .
+    
+    :chattanoogatn     a :USCity;
+         :name "Chattanooga";
+         :state usstate:TN .
+    
+    :chelmsfordma     a :USCity;
+         :name "Chelmsford";
+         :state usstate:MA .
+    
+    :chelseaal     a :USCity;
+         :name "Chelsea";
+         :state usstate:AL .
+    
+    :cherryhillnj     a :USCity;
+         :name "Cherry Hill";
+         :state usstate:NJ .
+    
+    :chesapeakeva     a :USCity;
+         :name "Chesapeake";
+         :state usstate:VA .
+    
+    :chevychasemd     a :USCity;
+         :name "Chevy Chase";
+         :state usstate:MD .
+    
+    :cheyennewy     a :USCity;
+         :name "Cheyenne";
+         :state usstate:WY .
+    
+    :chicagoil     a :USCity;
+         :name "Chicago";
+         :state usstate:IL .
+    
+    :chinoca     a :USCity;
+         :name "Chino";
+         :state usstate:CA .
+    
+    :cincinnatioh     a :USCity;
+         :name "Cincinnati";
+         :state usstate:OH .
+    
+    :claremontca     a :USCity;
+         :name "Claremont";
+         :state usstate:CA .
+    
+    :clarksvilletn     a :USCity;
+         :name "Clarksville";
+         :state usstate:TN .
+    
+    :clearwaterfl     a :USCity;
+         :name "Clearwater";
+         :state usstate:FL .
+    
+    :clevelandoh     a :USCity;
+         :name "Cleveland";
+         :state usstate:OH .
+    
+    :cliftonva     a :USCity;
+         :name "Clifton";
+         :state usstate:VA .
+    
+    :clovisca     a :USCity;
+         :name "Clovis";
+         :state usstate:CA .
+    
+    :collegevillepa     a :USCity;
+         :name "Collegeville";
+         :state usstate:PA .
+    
+    :colleyvilletx     a :USCity;
+         :name "Colleyville";
+         :state usstate:TX .
+    
+    :coloradospringsco     a :USCity;
+         :name "Colorado Springs";
+         :state usstate:CO .
+    
+    :coltonca     a :USCity;
+         :name "Colton";
+         :state usstate:CA .
+    
+    :columbiamd     a :USCity;
+         :name "Columbia";
+         :state usstate:MD .
+    
+    :columbiamo     a :USCity;
+         :name "Columbia";
+         :state usstate:MO .
+    
+    :columbiasc     a :USCity;
+         :name "Columbia";
+         :state usstate:SC .
+    
+    :columbusga     a :USCity;
+         :name "Columbus";
+         :state usstate:GA .
+    
+    :columbusoh     a :USCity;
+         :name "Columbus";
+         :state usstate:OH .
+    
+    :concordca     a :USCity;
+         :name "Concord";
+         :state usstate:CA .
+    
+    :concordma     a :USCity;
+         :name "Concord";
+         :state usstate:MA .
+    
+    :concordnc     a :USCity;
+         :name "Concord";
+         :state usstate:NC .
+    
+    :concordnh     a :USCity;
+         :name "Concord";
+         :state usstate:NH .
+    
+    :conyersga     a :USCity;
+         :name "Conyers";
+         :state usstate:GA .
+    
+    :coralgablesfl     a :USCity;
+         :name "Coral Gables";
+         :state usstate:FL .
+    
+    :coralspringsfl     a :USCity;
+         :name "Coral Springs";
+         :state usstate:FL .
+    
+    :corpuschristitx     a :USCity;
+         :name "Corpus Christi";
+         :state usstate:TX .
+    
+    :costamesaca     a :USCity;
+         :name "Costa Mesa";
+         :state usstate:CA .
+    
+    :covinaca     a :USCity;
+         :name "Covina";
+         :state usstate:CA .
+    
+    :covingtonky     a :USCity;
+         :name "Covington";
+         :state usstate:KY .
+    
+    :cranburynj     a :USCity;
+         :name "Cranbury";
+         :state usstate:NJ .
+    
+    :crosbytx     a :USCity;
+         :name "Crosby";
+         :state usstate:TX .
+    
+    :cucamongaca     a :USCity;
+         :name "Cucamonga";
+         :state usstate:CA .
+    
+    :cumberlandmd     a :USCity;
+         :name "Cumberland";
+         :state usstate:MD .
+    
+    :cupertinoca     a :USCity;
+         :name "Cupertino";
+         :state usstate:CA .
+    
+    :cypressca     a :USCity;
+         :name "Cypress";
+         :state usstate:CA .
+    
+    :dallastx     a :USCity;
+         :name "Dallas";
+         :state usstate:TX .
+    
+    :danburyct     a :USCity;
+         :name "Danbury";
+         :state usstate:CT .
+    
+    :danversma     a :USCity;
+         :name "Danvers";
+         :state usstate:MA .
+    
+    :danvilleca     a :USCity;
+         :name "Danville";
+         :state usstate:CA .
+    
+    :daphneal     a :USCity;
+         :name "Daphne";
+         :state usstate:AL .
+    
+    :darienct     a :USCity;
+         :name "Darien";
+         :state usstate:CT .
+    
+    :daviefl     a :USCity;
+         :name "Davie";
+         :state usstate:FL .
+    
+    :daytonabeachfl     a :USCity;
+         :name "Daytona Beach";
+         :state usstate:FL .
+    
+    :daytonoh     a :USCity;
+         :name "Dayton";
+         :state usstate:OH .
+    
+    :daytontx     a :USCity;
+         :name "Dayton";
+         :state usstate:TX .
+    
+    :dearbornmi     a :USCity;
+         :name "Dearborn";
+         :state usstate:MI .
+    
+    :decatural     a :USCity;
+         :name "Decatur";
+         :state usstate:AL .
+    
+    :decaturga     a :USCity;
+         :name "Decatur";
+         :state usstate:GA .
+    
+    :decaturil     a :USCity;
+         :name "Decatur";
+         :state usstate:IL .
+    
+    :dekalbil     a :USCity;
+         :name "De Kalb";
+         :state usstate:IL .
+    
+    :delraybeachfl     a :USCity;
+         :name "Delray Beach";
+         :state usstate:FL .
+    
+    :dennisma     a :USCity;
+         :name "Dennis";
+         :state usstate:MA .
+    
+    :denverco     a :USCity;
+         :name "Denver";
+         :state usstate:CO .
+    
+    :denvillenj     a :USCity;
+         :name "Denville";
+         :state usstate:NJ .
+    
+    :derrynh     a :USCity;
+         :name "Derry";
+         :state usstate:NH .
+    
+    :desmoinesia     a :USCity;
+         :name "Des Moines";
+         :state usstate:IA .
+    
+    :destinfl     a :USCity;
+         :name "Destin";
+         :state usstate:FL .
+    
+    :detroitmi     a :USCity;
+         :name "Detroit";
+         :state usstate:MI .
+    
+    :diamondbarca     a :USCity;
+         :name "Diamond Bar";
+         :state usstate:CA .
+    
+    :dixhillsny     a :USCity;
+         :name "Dix Hills";
+         :state usstate:NY .
+    
+    :dothanal     a :USCity;
+         :name "Dothan";
+         :state usstate:AL .
+    
+    :doverde     a :USCity;
+         :name "Dover";
+         :state usstate:DE .
+    
+    :dovernh     a :USCity;
+         :name "Dover";
+         :state usstate:NH .
+    
+    :doylestownpa     a :USCity;
+         :name "Doylestown";
+         :state usstate:PA .
+    
+    :dublinoh     a :USCity;
+         :name "Dublin";
+         :state usstate:OH .
+    
+    :dubuqueia     a :USCity;
+         :name "Dubuque";
+         :state usstate:IA .
+    
+    :duluthmn     a :USCity;
+         :name "Duluth";
+         :state usstate:MN .
+    
+    :duncansvillepa     a :USCity;
+         :name "Duncansville";
+         :state usstate:PA .
+    
+    :dunedinfl     a :USCity;
+         :name "Dunedin";
+         :state usstate:FL .
+    
+    :eagleriverak     a :USCity;
+         :name "Eagle River";
+         :state usstate:AK .
+    
+    :eastgreenwichri     a :USCity;
+         :name "East Greenwich";
+         :state usstate:RI .
+    
+    :easthamptonma     a :USCity;
+         :name "Easthampton";
+         :state usstate:MA .
+    
+    :eastmorichesny     a :USCity;
+         :name "East Moriches";
+         :state usstate:NY .
+    
+    :eastonma     a :USCity;
+         :name "Easton";
+         :state usstate:MA .
+    
+    :eastwindsornj     a :USCity;
+         :name "East Windsor";
+         :state usstate:NJ .
+    
+    :eauclairewi     a :USCity;
+         :name "Eau Claire";
+         :state usstate:WI .
+    
+    :edenprairiemn     a :USCity;
+         :name "Eden Prairie";
+         :state usstate:MN .
+    
+    :edinamn     a :USCity;
+         :name "Edina";
+         :state usstate:MN .
+    
+    :edmondok     a :USCity;
+         :name "Edmond";
+         :state usstate:OK .
+    
+    :edmondswa     a :USCity;
+         :name "Edmonds";
+         :state usstate:WA .
+    
+    :elcerritoca     a :USCity;
+         :name "El Cerrito";
+         :state usstate:CA .
+    
+    :elmonteca     a :USCity;
+         :name "El Monte";
+         :state usstate:CA .
+    
+    :elpasotx     a :USCity;
+         :name "El Paso";
+         :state usstate:TX .
+    
+    :elsobranteca     a :USCity;
+         :name "El Sobrante";
+         :state usstate:CA .
+    
+    :englewoodcliffsnj     a :USCity;
+         :name "Englewood Cliffs";
+         :state usstate:NJ .
+    
+    :englewoodco     a :USCity;
+         :name "Englewood";
+         :state usstate:CO .
+    
+    :eriepa     a :USCity;
+         :name "Erie";
+         :state usstate:PA .
+    
+    :escondidoca     a :USCity;
+         :name "Escondido";
+         :state usstate:CA .
+    
+    :eugeneor     a :USCity;
+         :name "Eugene";
+         :state usstate:OR .
+    
+    :evansga     a :USCity;
+         :name "Evans";
+         :state usstate:GA .
+    
+    :evansvillein     a :USCity;
+         :name "Evansville";
+         :state usstate:IN .
+    
+    :everettwa     a :USCity;
+         :name "Everett";
+         :state usstate:WA .
+    
+    :fairbanksak     a :USCity;
+         :name "Fairbanks";
+         :state usstate:AK .
+    
+    :fairfaxva     a :USCity;
+         :name "Fairfax";
+         :state usstate:VA .
+    
+    :fairfieldca     a :USCity;
+         :name "Fairfield";
+         :state usstate:CA .
+    
+    :fairfieldct     a :USCity;
+         :name "Fairfield";
+         :state usstate:CT .
+    
+    :fairhopeal     a :USCity;
+         :name "Fairhope";
+         :state usstate:AL .
+    
+    :fallbrookca     a :USCity;
+         :name "Fallbrook";
+         :state usstate:CA .
+    
+    :fargond     a :USCity;
+         :name "Fargo";
+         :state usstate:ND .
+    
+    :farmingtonct     a :USCity;
+         :name "Farmington";
+         :state usstate:CT .
+    
+    :farmingtonhillsmi     a :USCity;
+         :name "Farmington Hills";
+         :state usstate:MI .
+    
+    :fayettevillear     a :USCity;
+         :name "Fayetteville";
+         :state usstate:AR .
+    
+    :fayettevillenc     a :USCity;
+         :name "Fayetteville";
+         :state usstate:NC .
+    
+    :flagstaffaz     a :USCity;
+         :name "Flagstaff";
+         :state usstate:AZ .
+    
+    :flintmi     a :USCity;
+         :name "Flint";
+         :state usstate:MI .
+    
+    :folsomca     a :USCity;
+         :name "Folsom";
+         :state usstate:CA .
+    
+    :fontanaca     a :USCity;
+         :name "Fontana";
+         :state usstate:CA .
+    
+    :fortcollinsco     a :USCity;
+         :name "Fort Collins";
+         :state usstate:CO .
+    
+    :fortlauderdalefl     a :USCity;
+         :name "Fort Lauderdale";
+         :state usstate:FL .
+    
+    :fortleenj     a :USCity;
+         :name "Fort Lee";
+         :state usstate:NJ .
+    
+    :fortmyersfl     a :USCity;
+         :name "Fort Myers";
+         :state usstate:FL .
+    
+    :fortpiercefl     a :USCity;
+         :name "Fort Pierce";
+         :state usstate:FL .
+    
+    :fortsmithar     a :USCity;
+         :name "Fort Smith";
+         :state usstate:AR .
+    
+    :fortwaynein     a :USCity;
+         :name "Fort Wayne";
+         :state usstate:IN .
+    
+    :fortworthtx     a :USCity;
+         :name "Fort Worth";
+         :state usstate:TX .
+    
+    :fostercityca     a :USCity;
+         :name "Foster City";
+         :state usstate:CA .
+    
+    :fountainvalleyca     a :USCity;
+         :name "Fountain Valley";
+         :state usstate:CA .
+    
+    :framinghamma     a :USCity;
+         :name "Framingham";
+         :state usstate:MA .
+    
+    :frankfortky     a :USCity;
+         :name "Frankfort";
+         :state usstate:KY .
+    
+    :frederickmd     a :USCity;
+         :name "Frederick";
+         :state usstate:MD .
+    
+    :fremontca     a :USCity;
+         :name "Fremont";
+         :state usstate:CA .
+    
+    :fresnoca     a :USCity;
+         :name "Fresno";
+         :state usstate:CA .
+    
+    :friscoco     a :USCity;
+         :name "Frisco";
+         :state usstate:CO .
+    
+    :gadsdenal     a :USCity;
+         :name "Gadsden";
+         :state usstate:AL .
+    
+    :gahannaoh     a :USCity;
+         :name "Gahanna";
+         :state usstate:OH .
+    
+    :gainesvillefl     a :USCity;
+         :name "Gainesville";
+         :state usstate:FL .
+    
+    :gaithersburgmd     a :USCity;
+         :name "Gaithersburg";
+         :state usstate:MD .
+    
+    :galvestontx     a :USCity;
+         :name "Galveston";
+         :state usstate:TX .
+    
+    :gardengroveca     a :USCity;
+         :name "Garden Grove";
+         :state usstate:CA .
+    
+    :garlandtx     a :USCity;
+         :name "Garland";
+         :state usstate:TX .
+    
+    :garyin     a :USCity;
+         :name "Gary";
+         :state usstate:IN .
+    
+    :genevail     a :USCity;
+         :name "Geneva";
+         :state usstate:IL .
+    
+    :gilbertaz     a :USCity;
+         :name "Gilbert";
+         :state usstate:AZ .
+    
+    :gillettewy     a :USCity;
+         :name "Gillette";
+         :state usstate:WY .
+    
+    :gilroyca     a :USCity;
+         :name "Gilroy";
+         :state usstate:CA .
+    
+    :glendaleca     a :USCity;
+         :name "Glendale";
+         :state usstate:CA .
+    
+    :glendoraca     a :USCity;
+         :name "Glendora";
+         :state usstate:CA .
+    
+    :grandislandne     a :USCity;
+         :name "Grand Island";
+         :state usstate:NE .
+    
+    :grandprairietx     a :USCity;
+         :name "Grand Prairie";
+         :state usstate:TX .
+    
+    :grandrapidsmi     a :USCity;
+         :name "Grand Rapids";
+         :state usstate:MI .
+    
+    :grapevinetx     a :USCity;
+         :name "Grapevine";
+         :state usstate:TX .
+    
+    :greatfallsmt     a :USCity;
+         :name "Great Falls";
+         :state usstate:MT .
+    
+    :greeleyco     a :USCity;
+         :name "Greeley";
+         :state usstate:CO .
+    
+    :greenbaywi     a :USCity;
+         :name "Green Bay";
+         :state usstate:WI .
+    
+    :greensboronc     a :USCity;
+         :name "Greensboro";
+         :state usstate:NC .
+    
+    :greenvillenc     a :USCity;
+         :name "Greenville";
+         :state usstate:NC .
+    
+    :greenvillesc     a :USCity;
+         :name "Greenville";
+         :state usstate:SC .
+    
+    :greenwichct     a :USCity;
+         :name "Greenwich";
+         :state usstate:CT .
+    
+    :greshamor     a :USCity;
+         :name "Gresham";
+         :state usstate:OR .
+    
+    :griffinga     a :USCity;
+         :name "Griffin";
+         :state usstate:GA .
+    
+    :grotonma     a :USCity;
+         :name "Groton";
+         :state usstate:MA .
+    
+    :guilfordct     a :USCity;
+         :name "Guilford";
+         :state usstate:CT .
+    
+    :hackensacknj     a :USCity;
+         :name "Hackensack";
+         :state usstate:NJ .
+    
+    :haddonfieldnj     a :USCity;
+         :name "Haddonfield";
+         :state usstate:NJ .
+    
+    :hagerstownmd     a :USCity;
+         :name "Hagerstown";
+         :state usstate:MD .
+    
+    :hamiltonma     a :USCity;
+         :name "Hamilton";
+         :state usstate:MA .
+    
+    :hamptonva     a :USCity;
+         :name "Hampton";
+         :state usstate:VA .
+    
+    :hanoverma     a :USCity;
+         :name "Hanover";
+         :state usstate:MA .
+    
+    :harkerheightstx     a :USCity;
+         :name "Harker Heights";
+         :state usstate:TX .
+    
+    :harrisburgpa     a :USCity;
+         :name "Harrisburg";
+         :state usstate:PA .
+    
+    :harrisonburgva     a :USCity;
+         :name "Harrisonburg";
+         :state usstate:VA .
+    
+    :harrisoncitypa     a :USCity;
+         :name "Harrison City";
+         :state usstate:PA .
+    
+    :hartfordct     a :USCity;
+         :name "Hartford";
+         :state usstate:CT .
+    
+    :hattiesburgms     a :USCity;
+         :name "Hattiesburg";
+         :state usstate:MS .
+    
+    :haverhillma     a :USCity;
+         :name "Haverhill";
+         :state usstate:MA .
+    
+    :haywardca     a :USCity;
+         :name "Hayward";
+         :state usstate:CA .
+    
+    :hebronct     a :USCity;
+         :name "Hebron";
+         :state usstate:CT .
+    
+    :helenamt     a :USCity;
+         :name "Helena";
+         :state usstate:MT .
+    
+    :hendersonnv     a :USCity;
+         :name "Henderson";
+         :state usstate:NV .
+    
+    :hendersonvilletn     a :USCity;
+         :name "Hendersonville";
+         :state usstate:TN .
+    
+    :hialeahfl     a :USCity;
+         :name "Hialeah";
+         :state usstate:FL .
+    
+    :hickorync     a :USCity;
+         :name "Hickory";
+         :state usstate:NC .
+    
+    :highlandca     a :USCity;
+         :name "Highland";
+         :state usstate:CA .
+    
+    :highlandsranchco     a :USCity;
+         :name "Highlands Ranch";
+         :state usstate:CO .
+    
+    :higleyaz     a :USCity;
+         :name "Higley";
+         :state usstate:AZ .
+    
+    :hillsboroor     a :USCity;
+         :name "Hillsboro";
+         :state usstate:OR .
+    
+    :hillsdalenj     a :USCity;
+         :name "Hillsdale";
+         :state usstate:NJ .
+    
+    :hilohi     a :USCity;
+         :name "Hilo";
+         :state usstate:HI .
+    
+    :hiltonheadislandsc     a :USCity;
+         :name "Hilton Head Island";
+         :state usstate:SC .
+    
+    :hinghamma     a :USCity;
+         :name "Hingham";
+         :state usstate:MA .
+    
+    :hollisnh     a :USCity;
+         :name "Hollis";
+         :state usstate:NH .
+    
+    :homesteadfl     a :USCity;
+         :name "Homestead";
+         :state usstate:FL .
+    
+    :honoluluhi     a :USCity;
+         :name "Honolulu";
+         :state usstate:HI .
+    
+    :hooveral     a :USCity;
+         :name "Hoover";
+         :state usstate:AL .
+    
+    :hopewellnj     a :USCity;
+         :name "Hopewell";
+         :state usstate:NJ .
+    
+    :hopkinsvilleky     a :USCity;
+         :name "Hopkinsville";
+         :state usstate:KY .
+    
+    :hotspringsar     a :USCity;
+         :name "Hot Springs";
+         :state usstate:AR .
+    
+    :houstontx     a :USCity;
+         :name "Houston";
+         :state usstate:TX .
+    
+    :humbletx     a :USCity;
+         :name "Humble";
+         :state usstate:TX .
+    
+    :huntingtonbeachca     a :USCity;
+         :name "Huntington Beach";
+         :state usstate:CA .
+    
+    :huntingtonny     a :USCity;
+         :name "Huntington";
+         :state usstate:NY .
+    
+    :huntingtonwv     a :USCity;
+         :name "Huntington";
+         :state usstate:WV .
+    
+    :huntsvilleal     a :USCity;
+         :name "Huntsville";
+         :state usstate:AL .
+    
+    :hursttx     a :USCity;
+         :name "Hurst";
+         :state usstate:TX .
+    
+    :idahofallsid     a :USCity;
+         :name "Idaho Falls";
+         :state usstate:ID .
+    
+    :indianapolisin     a :USCity;
+         :name "Indianapolis";
+         :state usstate:IN .
+    
+    :iowacityia     a :USCity;
+         :name "Iowa City";
+         :state usstate:IA .
+    
+    :irvineca     a :USCity;
+         :name "Irvine";
+         :state usstate:CA .
+    
+    :jacksonms     a :USCity;
+         :name "Jackson";
+         :state usstate:MS .
+    
+    :jacksontn     a :USCity;
+         :name "Jackson";
+         :state usstate:TN .
+    
+    :jacksonvillefl     a :USCity;
+         :name "Jacksonville";
+         :state usstate:FL .
+    
+    :jacksonwy     a :USCity;
+         :name "Jackson";
+         :state usstate:WY .
+    
+    :janesvillewi     a :USCity;
+         :name "Janesville";
+         :state usstate:WI .
+    
+    :jeffersoncitymo     a :USCity;
+         :name "Jefferson City";
+         :state usstate:MO .
+    
+    :jerichony     a :USCity;
+         :name "Jericho";
+         :state usstate:NY .
+    
+    :johnsoncitytn     a :USCity;
+         :name "Johnson City";
+         :state usstate:TN .
+    
+    :jolietil     a :USCity;
+         :name "Joliet";
+         :state usstate:IL .
+    
+    :jonesboroar     a :USCity;
+         :name "Jonesboro";
+         :state usstate:AR .
+    
+    :joplinmo     a :USCity;
+         :name "Joplin";
+         :state usstate:MO .
+    
+    :juneauak     a :USCity;
+         :name "Juneau";
+         :state usstate:AK .
+    
+    :jupiterfl     a :USCity;
+         :name "Jupiter";
+         :state usstate:FL .
+    
+    :kailuakonahi     a :USCity;
+         :name "Kailua Kona";
+         :state usstate:HI .
+    
+    :kalamazoomi     a :USCity;
+         :name "Kalamazoo";
+         :state usstate:MI .
+    
+    :kaneohehi     a :USCity;
+         :name "Kaneohe";
+         :state usstate:HI .
+    
+    :kannapolisnc     a :USCity;
+         :name "Kannapolis";
+         :state usstate:NC .
+    
+    :kansascityks     a :USCity;
+         :name "Kansas City";
+         :state usstate:KS .
+    
+    :kansascitymo     a :USCity;
+         :name "Kansas City";
+         :state usstate:MO .
+    
+    :katytx     a :USCity;
+         :name "Katy";
+         :state usstate:TX .
+    
+    :keenenh     a :USCity;
+         :name "Keene";
+         :state usstate:NH .
+    
+    :kennewickwa     a :USCity;
+         :name "Kennewick";
+         :state usstate:WA .
+    
+    :kentwa     a :USCity;
+         :name "Kent";
+         :state usstate:WA .
+    
+    :keystoneco     a :USCity;
+         :name "Keystone";
+         :state usstate:CO .
+    
+    :keywestfl     a :USCity;
+         :name "Key West";
+         :state usstate:FL .
+    
+    :killeentx     a :USCity;
+         :name "Killeen";
+         :state usstate:TX .
+    
+    :kingmanaz     a :USCity;
+         :name "Kingman";
+         :state usstate:AZ .
+    
+    :kingstonma     a :USCity;
+         :name "Kingston";
+         :state usstate:MA .
+    
+    :kingwoodtx     a :USCity;
+         :name "Kingwood";
+         :state usstate:TX .
+    
+    :kirklandwa     a :USCity;
+         :name "Kirkland";
+         :state usstate:WA .
+    
+    :kissimmeefl     a :USCity;
+         :name "Kissimmee";
+         :state usstate:FL .
+    
+    :knoxvilletn     a :USCity;
+         :name "Knoxville";
+         :state usstate:TN .
+    
+    :lacrossewi     a :USCity;
+         :name "La Crosse";
+         :state usstate:WI .
+    
+    :lafayettein     a :USCity;
+         :name "Lafayette";
+         :state usstate:IN .
+    
+    :lafayettela     a :USCity;
+         :name "Lafayette";
+         :state usstate:LA .
+    
+    :lagunaniguelca     a :USCity;
+         :name "Laguna Niguel";
+         :state usstate:CA .
+    
+    :lakecharlesla     a :USCity;
+         :name "Lake Charles";
+         :state usstate:LA .
+    
+    :lakehavasucityaz     a :USCity;
+         :name "Lake Havasu City";
+         :state usstate:AZ .
+    
+    :lakelandfl     a :USCity;
+         :name "Lakeland";
+         :state usstate:FL .
+    
+    :lakeoswegoor     a :USCity;
+         :name "Lake Oswego";
+         :state usstate:OR .
+    
+    :lakewoodco     a :USCity;
+         :name "Lakewood";
+         :state usstate:CO .
+    
+    :lakewoodoh     a :USCity;
+         :name "Lakewood";
+         :state usstate:OH .
+    
+    :lakeworthfl     a :USCity;
+         :name "Lake Worth";
+         :state usstate:FL .
+    
+    :lakezurichil     a :USCity;
+         :name "Lake Zurich";
+         :state usstate:IL .
+    
+    :lancasterpa     a :USCity;
+         :name "Lancaster";
+         :state usstate:PA .
+    
+    :lansingmi     a :USCity;
+         :name "Lansing";
+         :state usstate:MI .
+    
+    :lapuenteca     a :USCity;
+         :name "La Puente";
+         :state usstate:CA .
+    
+    :largofl     a :USCity;
+         :name "Largo";
+         :state usstate:FL .
+    
+    :lascrucesnm     a :USCity;
+         :name "Las Cruces";
+         :state usstate:NM .
+    
+    :lasvegasnv     a :USCity;
+         :name "Las Vegas";
+         :state usstate:NV .
+    
+    :lavallettenj     a :USCity;
+         :name "Lavallette";
+         :state usstate:NJ .
+    
+    :laverneca     a :USCity;
+         :name "La Verne";
+         :state usstate:CA .
+    
+    :leaguecitytx     a :USCity;
+         :name "League City";
+         :state usstate:TX .
+    
+    :leominsterma     a :USCity;
+         :name "Leominster";
+         :state usstate:MA .
+    
+    :leonianj     a :USCity;
+         :name "Leonia";
+         :state usstate:NJ .
+    
+    :lewistonme     a :USCity;
+         :name "Lewiston";
+         :state usstate:ME .
+    
+    :lexingtonky     a :USCity;
+         :name "Lexington";
+         :state usstate:KY .
+    
+    :lexingtonma     a :USCity;
+         :name "Lexington";
+         :state usstate:MA .
+    
+    :lexingtonnc     a :USCity;
+         :name "Lexington";
+         :state usstate:NC .
+    
+    :limaoh     a :USCity;
+         :name "Lima";
+         :state usstate:OH .
+    
+    :lincolnne     a :USCity;
+         :name "Lincoln";
+         :state usstate:NE .
+    
+    :lititzpa     a :USCity;
+         :name "Lititz";
+         :state usstate:PA .
+    
+    :littlerockar     a :USCity;
+         :name "Little Rock";
+         :state usstate:AR .
+    
+    :littletonco     a :USCity;
+         :name "Littleton";
+         :state usstate:CO .
+    
+    :livermoreca     a :USCity;
+         :name "Livermore";
+         :state usstate:CA .
+    
+    :livoniami     a :USCity;
+         :name "Livonia";
+         :state usstate:MI .
+    
+    :loganut     a :USCity;
+         :name "Logan";
+         :state usstate:UT .
+    
+    :lomalindaca     a :USCity;
+         :name "Loma Linda";
+         :state usstate:CA .
+    
+    :longbeachca     a :USCity;
+         :name "Long Beach";
+         :state usstate:CA .
+    
+    :longbeachny     a :USCity;
+         :name "Long Beach";
+         :state usstate:NY .
+    
+    :longmontco     a :USCity;
+         :name "Longmont";
+         :state usstate:CO .
+    
+    :longviewtx     a :USCity;
+         :name "Longview";
+         :state usstate:TX .
+    
+    :longwoodfl     a :USCity;
+         :name "Longwood";
+         :state usstate:FL .
+    
+    :losaltosca     a :USCity;
+         :name "Los Altos";
+         :state usstate:CA .
+    
+    :losangelesca     a :USCity;
+         :name "Los Angeles";
+         :state usstate:CA .
+    
+    :losgatosca     a :USCity;
+         :name "Los Gatos";
+         :state usstate:CA .
+    
+    :louisvilleky     a :USCity;
+         :name "Louisville";
+         :state usstate:KY .
+    
+    :lovelandco     a :USCity;
+         :name "Loveland";
+         :state usstate:CO .
+    
+    :lubbocktx     a :USCity;
+         :name "Lubbock";
+         :state usstate:TX .
+    
+    :lynchburgva     a :USCity;
+         :name "Lynchburg";
+         :state usstate:VA .
+    
+    :lyndenwa     a :USCity;
+         :name "Lynden";
+         :state usstate:WA .
+    
+    :lynnfieldma     a :USCity;
+         :name "Lynnfield";
+         :state usstate:MA .
+    
+    :lynnwoodwa     a :USCity;
+         :name "Lynnwood";
+         :state usstate:WA .
+    
+    :maconga     a :USCity;
+         :name "Macon";
+         :state usstate:GA .
+    
+    :maderaca     a :USCity;
+         :name "Madera";
+         :state usstate:CA .
+    
+    :madisonal     a :USCity;
+         :name "Madison";
+         :state usstate:AL .
+    
+    :madisonwi     a :USCity;
+         :name "Madison";
+         :state usstate:WI .
+    
+    :mahwahnj     a :USCity;
+         :name "Mahwah";
+         :state usstate:NJ .
+    
+    :malibuca     a :USCity;
+         :name "Malibu";
+         :state usstate:CA .
+    
+    :malvernpa     a :USCity;
+         :name "Malvern";
+         :state usstate:PA .
+    
+    :mamaroneckny     a :USCity;
+         :name "Mamaroneck";
+         :state usstate:NY .
+    
+    :manchesternh     a :USCity;
+         :name "Manchester";
+         :state usstate:NH .
+    
+    :manhattanks     a :USCity;
+         :name "Manhattan";
+         :state usstate:KS .
+    
+    :manliusny     a :USCity;
+         :name "Manlius";
+         :state usstate:NY .
+    
+    :mansfieldma     a :USCity;
+         :name "Mansfield";
+         :state usstate:MA .
+    
+    :mansfieldoh     a :USCity;
+         :name "Mansfield";
+         :state usstate:OH .
+    
+    :marathonfl     a :USCity;
+         :name "Marathon";
+         :state usstate:FL .
+    
+    :marcoislandfl     a :USCity;
+         :name "Marco Island";
+         :state usstate:FL .
+    
+    :mariettaga     a :USCity;
+         :name "Marietta";
+         :state usstate:GA .
+    
+    :mariettaoh     a :USCity;
+         :name "Marietta";
+         :state usstate:OH .
+    
+    :marshalltx     a :USCity;
+         :name "Marshall";
+         :state usstate:TX .
+    
+    :marshfieldma     a :USCity;
+         :name "Marshfield";
+         :state usstate:MA .
+    
+    :marshfieldmo     a :USCity;
+         :name "Marshfield";
+         :state usstate:MO .
+    
+    :martinezca     a :USCity;
+         :name "Martinez";
+         :state usstate:CA .
+    
+    :martinezga     a :USCity;
+         :name "Martinez";
+         :state usstate:GA .
+    
+    :martinsburgwv     a :USCity;
+         :name "Martinsburg";
+         :state usstate:WV .
+    
+    :massapequany     a :USCity;
+         :name "Massapequa";
+         :state usstate:NY .
+    
+    :mcallentx     a :USCity;
+         :name "McAllen";
+         :state usstate:TX .
+    
+    :mcleanva     a :USCity;
+         :name "McLean";
+         :state usstate:VA .
+    
+    :medfordor     a :USCity;
+         :name "Medford";
+         :state usstate:OR .
+    
+    :melbournefl     a :USCity;
+         :name "Melbourne";
+         :state usstate:FL .
+    
+    :memphistn     a :USCity;
+         :name "Memphis";
+         :state usstate:TN .
+    
+    :menloparkca     a :USCity;
+         :name "Menlo Park";
+         :state usstate:CA .
+    
+    :menomoneefallswi     a :USCity;
+         :name "Menomonee Falls";
+         :state usstate:WI .
+    
+    :merrickny     a :USCity;
+         :name "Merrick";
+         :state usstate:NY .
+    
+    :mesaaz     a :USCity;
+         :name "Mesa";
+         :state usstate:AZ .
+    
+    :miamifl     a :USCity;
+         :name "Miami";
+         :state usstate:FL .
+    
+    :middletonma     a :USCity;
+         :name "Middleton";
+         :state usstate:MA .
+    
+    :middletownct     a :USCity;
+         :name "Middletown";
+         :state usstate:CT .
+    
+    :middletownny     a :USCity;
+         :name "Middletown";
+         :state usstate:NY .
+    
+    :midlandtx     a :USCity;
+         :name "Midland";
+         :state usstate:TX .
+    
+    :miltonma     a :USCity;
+         :name "Milton";
+         :state usstate:MA .
+    
+    :milwaukeewi     a :USCity;
+         :name "Milwaukee";
+         :state usstate:WI .
+    
+    :milwaukieor     a :USCity;
+         :name "Milwaukie";
+         :state usstate:OR .
+    
+    :minneapolismn     a :USCity;
+         :name "Minneapolis";
+         :state usstate:MN .
+    
+    :minnetonkamn     a :USCity;
+         :name "Minnetonka";
+         :state usstate:MN .
+    
+    :minotnd     a :USCity;
+         :name "Minot";
+         :state usstate:ND .
+    
+    :missionviejoca     a :USCity;
+         :name "Mission Viejo";
+         :state usstate:CA .
+    
+    :missoulamt     a :USCity;
+         :name "Missoula";
+         :state usstate:MT .
+    
+    :mobileal     a :USCity;
+         :name "Mobile";
+         :state usstate:AL .
+    
+    :modestoca     a :USCity;
+         :name "Modesto";
+         :state usstate:CA .
+    
+    :monroela     a :USCity;
+         :name "Monroe";
+         :state usstate:LA .
+    
+    :monroevillepa     a :USCity;
+         :name "Monroeville";
+         :state usstate:PA .
+    
+    :monroviaca     a :USCity;
+         :name "Monrovia";
+         :state usstate:CA .
+    
+    :montgomeryal     a :USCity;
+         :name "Montgomery";
+         :state usstate:AL .
+    
+    :montpeliervt     a :USCity;
+         :name "Montpelier";
+         :state usstate:VT .
+    
+    :montvalenj     a :USCity;
+         :name "Montvale";
+         :state usstate:NJ .
+    
+    :moorestownnj     a :USCity;
+         :name "Moorestown";
+         :state usstate:NJ .
+    
+    :morgantownwv     a :USCity;
+         :name "Morgantown";
+         :state usstate:WV .
+    
+    :morristownshipnj     a :USCity;
+         :name "Morris Township";
+         :state usstate:NJ .
+    
+    :mountainbrookal     a :USCity;
+         :name "Mountain Brook";
+         :state usstate:AL .
+    
+    :mountainviewca     a :USCity;
+         :name "Mountain View";
+         :state usstate:CA .
+    
+    :mountlaurelnj     a :USCity;
+         :name "Mount Laurel";
+         :state usstate:NJ .
+    
+    :mountpleasantsc     a :USCity;
+         :name "Mount Pleasant";
+         :state usstate:SC .
+    
+    :munciein     a :USCity;
+         :name "Muncie";
+         :state usstate:IN .
+    
+    :murfreesborotn     a :USCity;
+         :name "Murfreesboro";
+         :state usstate:TN .
+    
+    :murrysvillepa     a :USCity;
+         :name "Murrysville";
+         :state usstate:PA .
+    
+    :muskogeeok     a :USCity;
+         :name "Muskogee";
+         :state usstate:OK .
+    
+    :myrtlebeachsc     a :USCity;
+         :name "Myrtle Beach";
+         :state usstate:SC .
+    
+    :mysticct     a :USCity;
+         :name "Mystic";
+         :state usstate:CT .
+    
+    :napaca     a :USCity;
+         :name "Napa";
+         :state usstate:CA .
+    
+    :napervilleil     a :USCity;
+         :name "Naperville";
+         :state usstate:IL .
+    
+    :naplesfl     a :USCity;
+         :name "Naples";
+         :state usstate:FL .
+    
+    :nashuanh     a :USCity;
+         :name "Nashua";
+         :state usstate:NH .
+    
+    :nashvilletn     a :USCity;
+         :name "Nashville";
+         :state usstate:TN .
+    
+    :navarrefl     a :USCity;
+         :name "Navarre";
+         :state usstate:FL .
+    
+    :needhamma     a :USCity;
+         :name "Needham";
+         :state usstate:MA .
+    
+    :newarkde     a :USCity;
+         :name "Newark";
+         :state usstate:DE .
+    
+    :newbrunswicknj     a :USCity;
+         :name "New Brunswick";
+         :state usstate:NJ .
+    
+    :newburyportma     a :USCity;
+         :name "Newburyport";
+         :state usstate:MA .
+    
+    :newcityny     a :USCity;
+         :name "New City";
+         :state usstate:NY .
+    
+    :newfairfieldct     a :USCity;
+         :name "New Fairfield";
+         :state usstate:CT .
+    
+    :newhavenct     a :USCity;
+         :name "New Haven";
+         :state usstate:CT .
+    
+    :newlenoxil     a :USCity;
+         :name "New Lenox";
+         :state usstate:IL .
+    
+    :newlondonct     a :USCity;
+         :name "New London";
+         :state usstate:CT .
+    
+    :neworleansla     a :USCity;
+         :name "New Orleans";
+         :state usstate:LA .
+    
+    :newportbeachca     a :USCity;
+         :name "Newport Beach";
+         :state usstate:CA .
+    
+    :newportnewsva     a :USCity;
+         :name "Newport News";
+         :state usstate:VA .
+    
+    :newrochelleny     a :USCity;
+         :name "New Rochelle";
+         :state usstate:NY .
+    
+    :newtonma     a :USCity;
+         :name "Newton";
+         :state usstate:MA .
+    
+    :newtownct     a :USCity;
+         :name "Newtown";
+         :state usstate:CT .
+    
+    :newyorkny     a :USCity;
+         :name "New York";
+         :state usstate:NY .
+    
+    :nicevillefl     a :USCity;
+         :name "Niceville";
+         :state usstate:FL .
+    
+    :normanok     a :USCity;
+         :name "Norman";
+         :state usstate:OK .
+    
+    :norristownpa     a :USCity;
+         :name "Norristown";
+         :state usstate:PA .
+    
+    :northandoverma     a :USCity;
+         :name "North Andover";
+         :state usstate:MA .
+    
+    :northreadingma     a :USCity;
+         :name "North Reading";
+         :state usstate:MA .
+    
+    :northrichlandhillstx     a :USCity;
+         :name "North Richland Hills";
+         :state usstate:TX .
+    
+    :norwalkct     a :USCity;
+         :name "Norwalk";
+         :state usstate:CT .
+    
+    :norwellma     a :USCity;
+         :name "Norwell";
+         :state usstate:MA .
+    
+    :novatoca     a :USCity;
+         :name "Novato";
+         :state usstate:CA .
+    
+    :novimi     a :USCity;
+         :name "Novi";
+         :state usstate:MI .
+    
+    :oaklandca     a :USCity;
+         :name "Oakland";
+         :state usstate:CA .
+    
+    :ocalafl     a :USCity;
+         :name "Ocala";
+         :state usstate:FL .
+    
+    :oceansideca     a :USCity;
+         :name "Oceanside";
+         :state usstate:CA .
+    
+    :odessatx     a :USCity;
+         :name "Odessa";
+         :state usstate:TX .
+    
+    :oklahomacityok     a :USCity;
+         :name "Oklahoma City";
+         :state usstate:OK .
+    
+    :oldgreenwichct     a :USCity;
+         :name "Old Greenwich";
+         :state usstate:CT .
+    
+    :oldlymect     a :USCity;
+         :name "Old Lyme";
+         :state usstate:CT .
+    
+    :oldsaybrookct     a :USCity;
+         :name "Old Saybrook";
+         :state usstate:CT .
+    
+    :olympiawa     a :USCity;
+         :name "Olympia";
+         :state usstate:WA .
+    
+    :omahane     a :USCity;
+         :name "Omaha";
+         :state usstate:NE .
+    
+    :ontarioca     a :USCity;
+         :name "Ontario";
+         :state usstate:CA .
+    
+    :opelikaal     a :USCity;
+         :name "Opelika";
+         :state usstate:AL .
+    
+    :oradellnj     a :USCity;
+         :name "Oradell";
+         :state usstate:NJ .
+    
+    :orlandofl     a :USCity;
+         :name "Orlando";
+         :state usstate:FL .
+    
+    :ormondbeachfl     a :USCity;
+         :name "Ormond Beach";
+         :state usstate:FL .
+    
+    :oshkoshwi     a :USCity;
+         :name "Oshkosh";
+         :state usstate:WI .
+    
+    :ossiningny     a :USCity;
+         :name "Ossining";
+         :state usstate:NY .
+    
+    :overlandparkks     a :USCity;
+         :name "Overland Park";
+         :state usstate:KS .
+    
+    :oxnardca     a :USCity;
+         :name "Oxnard";
+         :state usstate:CA .
+    
+    :pacificaca     a :USCity;
+         :name "Pacifica";
+         :state usstate:CA .
+    
+    :palatineil     a :USCity;
+         :name "Palatine";
+         :state usstate:IL .
+    
+    :palmbayfl     a :USCity;
+         :name "Palm Bay";
+         :state usstate:FL .
+    
+    :palmerak     a :USCity;
+         :name "Palmer";
+         :state usstate:AK .
+    
+    :paloaltoca     a :USCity;
+         :name "Palo Alto";
+         :state usstate:CA .
+    
+    :panamacitybeachfl     a :USCity;
+         :name "Panama City Beach";
+         :state usstate:FL .
+    
+    :panamacityfl     a :USCity;
+         :name "Panama City";
+         :state usstate:FL .
+    
+    :parkerco     a :USCity;
+         :name "Parker";
+         :state usstate:CO .
+    
+    :parmaoh     a :USCity;
+         :name "Parma";
+         :state usstate:OH .
+    
+    :parsippanynj     a :USCity;
+         :name "Parsippany";
+         :state usstate:NJ .
+    
+    :pasadenaca     a :USCity;
+         :name "Pasadena";
+         :state usstate:CA .
+    
+    :peabodyma     a :USCity;
+         :name "Peabody";
+         :state usstate:MA .
+    
+    :peachtreecityga     a :USCity;
+         :name "Peachtree City";
+         :state usstate:GA .
+    
+    :peekskillny     a :USCity;
+         :name "Peekskill";
+         :state usstate:NY .
+    
+    :pembrokepinesfl     a :USCity;
+         :name "Pembroke Pines";
+         :state usstate:FL .
+    
+    :pensacolafl     a :USCity;
+         :name "Pensacola";
+         :state usstate:FL .
+    
+    :peoriail     a :USCity;
+         :name "Peoria";
+         :state usstate:IL .
+    
+    :perkasiepa     a :USCity;
+         :name "Perkasie";
+         :state usstate:PA .
+    
+    :petalumaca     a :USCity;
+         :name "Petaluma";
+         :state usstate:CA .
+    
+    :phenixcityal     a :USCity;
+         :name "Phenix City";
+         :state usstate:AL .
+    
+    :philadelphiapa     a :USCity;
+         :name "Philadelphia";
+         :state usstate:PA .
+    
+    :phoenixaz     a :USCity;
+         :name "Phoenix";
+         :state usstate:AZ .
+    
+    :piedmontok     a :USCity;
+         :name "Piedmont";
+         :state usstate:OK .
+    
+    :pierresd     a :USCity;
+         :name "Pierre";
+         :state usstate:SD .
+    
+    :pinebluffar     a :USCity;
+         :name "Pine Bluff";
+         :state usstate:AR .
+    
+    :pittsburghpa     a :USCity;
+         :name "Pittsburgh";
+         :state usstate:PA .
+    
+    :plainfieldil     a :USCity;
+         :name "Plainfield";
+         :state usstate:IL .
+    
+    :planotx     a :USCity;
+         :name "Plano";
+         :state usstate:TX .
+    
+    :pleasanthillca     a :USCity;
+         :name "Pleasant Hill";
+         :state usstate:CA .
+    
+    :pleasantonca     a :USCity;
+         :name "Pleasanton";
+         :state usstate:CA .
+    
+    :pleasantvilleny     a :USCity;
+         :name "Pleasantville";
+         :state usstate:NY .
+    
+    :plymouthmn     a :USCity;
+         :name "Plymouth";
+         :state usstate:MN .
+    
+    :pocatelloid     a :USCity;
+         :name "Pocatello";
+         :state usstate:ID .
+    
+    :pomonaca     a :USCity;
+         :name "Pomona";
+         :state usstate:CA .
+    
+    :pomonany     a :USCity;
+         :name "Pomona";
+         :state usstate:NY .
+    
+    :pompanobeachfl     a :USCity;
+         :name "Pompano Beach";
+         :state usstate:FL .
+    
+    :portagemi     a :USCity;
+         :name "Portage";
+         :state usstate:MI .
+    
+    :portcharlottefl     a :USCity;
+         :name "Port Charlotte";
+         :state usstate:FL .
+    
+    :portlandme     a :USCity;
+         :name "Portland";
+         :state usstate:ME .
+    
+    :portlandor     a :USCity;
+         :name "Portland";
+         :state usstate:OR .
+    
+    :portorangefl     a :USCity;
+         :name "Port Orange";
+         :state usstate:FL .
+    
+    :portsmouthnh     a :USCity;
+         :name "Portsmouth";
+         :state usstate:NH .
+    
+    :portsmouthva     a :USCity;
+         :name "Portsmouth";
+         :state usstate:VA .
+    
+    :portstluciefl     a :USCity;
+         :name "Port St Lucie";
+         :state usstate:FL .
+    
+    :potomacmd     a :USCity;
+         :name "Potomac";
+         :state usstate:MD .
+    
+    :pottstownpa     a :USCity;
+         :name "Pottstown";
+         :state usstate:PA .
+    
+    :poughkeepsieny     a :USCity;
+         :name "Poughkeepsie";
+         :state usstate:NY .
+    
+    :prescottaz     a :USCity;
+         :name "Prescott";
+         :state usstate:AZ .
+    
+    :princetonnj     a :USCity;
+         :name "Princeton";
+         :state usstate:NJ .
+    
+    :providenceri     a :USCity;
+         :name "Providence";
+         :state usstate:RI .
+    
+    :provout     a :USCity;
+         :name "Provo";
+         :state usstate:UT .
+    
+    :prunedaleca     a :USCity;
+         :name "Prunedale";
+         :state usstate:CA .
+    
+    :puebloco     a :USCity;
+         :name "Pueblo";
+         :state usstate:CO .
+    
+    :puntagordafl     a :USCity;
+         :name "Punta Gorda";
+         :state usstate:FL .
+    
+    :quakertownpa     a :USCity;
+         :name "Quakertown";
+         :state usstate:PA .
+    
+    :queensvillageny     a :USCity;
+         :name "Queens Village";
+         :state usstate:NY .
+    
+    :raleighdurhamnc     a :USCity;
+         :name "Raleigh Durham";
+         :state usstate:NC .
+    
+    :ramseynj     a :USCity;
+         :name "Ramsey";
+         :state usstate:NJ .
+    
+    :ranchocucamongaca     a :USCity;
+         :name "Rancho Cucamonga";
+         :state usstate:CA .
+    
+    :rapidcitysd     a :USCity;
+         :name "Rapid City";
+         :state usstate:SD .
+    
+    :readingma     a :USCity;
+         :name "Reading";
+         :state usstate:MA .
+    
+    :readingpa     a :USCity;
+         :name "Reading";
+         :state usstate:PA .
+    
+    :redlandsca     a :USCity;
+         :name "Redlands";
+         :state usstate:CA .
+    
+    :redmondwa     a :USCity;
+         :name "Redmond";
+         :state usstate:WA .
+    
+    :redwoodcityca     a :USCity;
+         :name "Redwood City";
+         :state usstate:CA .
+    
+    :renonv     a :USCity;
+         :name "Reno";
+         :state usstate:NV .
+    
+    :restonva     a :USCity;
+         :name "Reston";
+         :state usstate:VA .
+    
+    :rialtoca     a :USCity;
+         :name "Rialto";
+         :state usstate:CA .
+    
+    :richardsontx     a :USCity;
+         :name "Richardson";
+         :state usstate:TX .
+    
+    :richlandmi     a :USCity;
+         :name "Richland";
+         :state usstate:MI .
+    
+    :richmondca     a :USCity;
+         :name "Richmond";
+         :state usstate:CA .
+    
+    :richmondtx     a :USCity;
+         :name "Richmond";
+         :state usstate:TX .
+    
+    :richmondva     a :USCity;
+         :name "Richmond";
+         :state usstate:VA .
+    
+    :ridgefieldct     a :USCity;
+         :name "Ridgefield";
+         :state usstate:CT .
+    
+    :ridgewaysc     a :USCity;
+         :name "Ridgeway";
+         :state usstate:SC .
+    
+    :ridgewoodnj     a :USCity;
+         :name "Ridgewood";
+         :state usstate:NJ .
+    
+    :roanokeva     a :USCity;
+         :name "Roanoke";
+         :state usstate:VA .
+    
+    :rochestermn     a :USCity;
+         :name "Rochester";
+         :state usstate:MN .
+    
+    :rochesternh     a :USCity;
+         :name "Rochester";
+         :state usstate:NH .
+    
+    :rochesterny     a :USCity;
+         :name "Rochester";
+         :state usstate:NY .
+    
+    :rockfordil     a :USCity;
+         :name "Rockford";
+         :state usstate:IL .
+    
+    :rockhillsc     a :USCity;
+         :name "Rock Hill";
+         :state usstate:SC .
+    
+    :rockporttx     a :USCity;
+         :name "Rockport";
+         :state usstate:TX .
+    
+    :rockvillecentreny     a :USCity;
+         :name "Rockville Centre";
+         :state usstate:NY .
+    
+    :rockvillemd     a :USCity;
+         :name "Rockville";
+         :state usstate:MD .
+    
+    :rockwalltx     a :USCity;
+         :name "Rockwall";
+         :state usstate:TX .
+    
+    :rosevilleca     a :USCity;
+         :name "Roseville";
+         :state usstate:CA .
+    
+    :roswellga     a :USCity;
+         :name "Roswell";
+         :state usstate:GA .
+    
+    :roswellnm     a :USCity;
+         :name "Roswell";
+         :state usstate:NM .
+    
+    :roundrocktx     a :USCity;
+         :name "Round Rock";
+         :state usstate:TX .
+    
+    :rutlandvt     a :USCity;
+         :name "Rutland";
+         :state usstate:VT .
+    
+    :ryebrookny     a :USCity;
+         :name "Rye Brook";
+         :state usstate:NY .
+    
+    :sacramentoca     a :USCity;
+         :name "Sacramento";
+         :state usstate:CA .
+    
+    :salemnh     a :USCity;
+         :name "Salem";
+         :state usstate:NH .
+    
+    :salemor     a :USCity;
+         :name "Salem";
+         :state usstate:OR .
+    
+    :salinasca     a :USCity;
+         :name "Salinas";
+         :state usstate:CA .
+    
+    :saltlakecityut     a :USCity;
+         :name "Salt Lake City";
+         :state usstate:UT .
+    
+    :sanantoniotx     a :USCity;
+         :name "San Antonio";
+         :state usstate:TX .
+    
+    :sanbernardinoca     a :USCity;
+         :name "San Bernardino";
+         :state usstate:CA .
+    
+    :sanbrunoca     a :USCity;
+         :name "San Bruno";
+         :state usstate:CA .
+    
+    :sancarlosca     a :USCity;
+         :name "San Carlos";
+         :state usstate:CA .
+    
+    :sanclementeca     a :USCity;
+         :name "San Clemente";
+         :state usstate:CA .
+    
+    :sandiegoca     a :USCity;
+         :name "San Diego";
+         :state usstate:CA .
+    
+    :sandimasca     a :USCity;
+         :name "San Dimas";
+         :state usstate:CA .
+    
+    :sanfordfl     a :USCity;
+         :name "Sanford";
+         :state usstate:FL .
+    
+    :sanfranciscoca     a :USCity;
+         :name "San Francisco";
+         :state usstate:CA .
+    
+    :sanibelislandfl     a :USCity;
+         :name "Sanibel Island";
+         :state usstate:FL .
+    
+    :sanjoseca     a :USCity;
+         :name "San Jose";
+         :state usstate:CA .
+    
+    :sanjuancapistranoca     a :USCity;
+         :name "San Juan Capistrano";
+         :state usstate:CA .
+    
+    :sanluisobispoca     a :USCity;
+         :name "San Luis Obispo";
+         :state usstate:CA .
+    
+    :sanmateoca     a :USCity;
+         :name "San Mateo";
+         :state usstate:CA .
+    
+    :sanpabloca     a :USCity;
+         :name "San Pablo";
+         :state usstate:CA .
+    
+    :sanrafaelca     a :USCity;
+         :name "San Rafael";
+         :state usstate:CA .
+    
+    :sanramonca     a :USCity;
+         :name "San Ramon";
+         :state usstate:CA .
+    
+    :santabarbaraca     a :USCity;
+         :name "Santa Barbara";
+         :state usstate:CA .
+    
+    :santaclaraca     a :USCity;
+         :name "Santa Clara";
+         :state usstate:CA .
+    
+    :santafenm     a :USCity;
+         :name "Santa Fe";
+         :state usstate:NM .
+    
+    :santamonicaca     a :USCity;
+         :name "Santa Monica";
+         :state usstate:CA .
+    
+    :santarosaca     a :USCity;
+         :name "Santa Rosa";
+         :state usstate:CA .
+    
+    :sarasotafl     a :USCity;
+         :name "Sarasota";
+         :state usstate:FL .
+    
+    :saratogaca     a :USCity;
+         :name "Saratoga";
+         :state usstate:CA .
+    
+    :savannahga     a :USCity;
+         :name "Savannah";
+         :state usstate:GA .
+    
+    :scarsdaleny     a :USCity;
+         :name "Scarsdale";
+         :state usstate:NY .
+    
+    :schaumburgil     a :USCity;
+         :name "Schaumburg";
+         :state usstate:IL .
+    
+    :scottsdaleaz     a :USCity;
+         :name "Scottsdale";
+         :state usstate:AZ .
+    
+    :seattlewa     a :USCity;
+         :name "Seattle";
+         :state usstate:WA .
+    
+    :sedonaaz     a :USCity;
+         :name "Sedona";
+         :state usstate:AZ .
+    
+    :seguintx     a :USCity;
+         :name "Seguin";
+         :state usstate:TX .
+    
+    :seminolefl     a :USCity;
+         :name "Seminole";
+         :state usstate:FL .
+    
+    :setauketny     a :USCity;
+         :name "Setauket";
+         :state usstate:NY .
+    
+    :severnaparkmd     a :USCity;
+         :name "Severna Park";
+         :state usstate:MD .
+    
+    :shelbyal     a :USCity;
+         :name "Shelby";
+         :state usstate:AL .
+    
+    :shreveportla     a :USCity;
+         :name "Shreveport";
+         :state usstate:LA .
+    
+    :sierravistaaz     a :USCity;
+         :name "Sierra Vista";
+         :state usstate:AZ .
+    
+    :silverspringmd     a :USCity;
+         :name "Silver Spring";
+         :state usstate:MD .
+    
+    :silverthorneco     a :USCity;
+         :name "Silverthorne";
+         :state usstate:CO .
+    
+    :simsburyct     a :USCity;
+         :name "Simsbury";
+         :state usstate:CT .
+    
+    :siouxfallssd     a :USCity;
+         :name "Sioux Falls";
+         :state usstate:SD .
+    
+    :skokieil     a :USCity;
+         :name "Skokie";
+         :state usstate:IL .
+    
+    :smithsal     a :USCity;
+         :name "Smiths";
+         :state usstate:AL .
+    
+    :snohomishwa     a :USCity;
+         :name "Snohomish";
+         :state usstate:WA .
+    
+    :solonoh     a :USCity;
+         :name "Solon";
+         :state usstate:OH .
+    
+    :southamptonny     a :USCity;
+         :name "Southampton";
+         :state usstate:NY .
+    
+    :southbendin     a :USCity;
+         :name "South Bend";
+         :state usstate:IN .
+    
+    :southlaketx     a :USCity;
+         :name "Southlake";
+         :state usstate:TX .
+    
+    :southpadreislandtx     a :USCity;
+         :name "South Padre Island";
+         :state usstate:TX .
+    
+    :spanishfortal     a :USCity;
+         :name "Spanish Fort";
+         :state usstate:AL .
+    
+    :sparksnv     a :USCity;
+         :name "Sparks";
+         :state usstate:NV .
+    
+    :spartanburgsc     a :USCity;
+         :name "Spartanburg";
+         :state usstate:SC .
+    
+    :spartanj     a :USCity;
+         :name "Sparta";
+         :state usstate:NJ .
+    
+    :spokanewa     a :USCity;
+         :name "Spokane";
+         :state usstate:WA .
+    
+    :springborooh     a :USCity;
+         :name "Springboro";
+         :state usstate:OH .
+    
+    :springfieldil     a :USCity;
+         :name "Springfield";
+         :state usstate:IL .
+    
+    :springfieldma     a :USCity;
+         :name "Springfield";
+         :state usstate:MA .
+    
+    :springfieldmo     a :USCity;
+         :name "Springfield";
+         :state usstate:MO .
+    
+    :stamfordct     a :USCity;
+         :name "Stamford";
+         :state usstate:CT .
+    
+    :state     a rdf:Property;
+         rdfs:domain :USCity;
+         rdfs:range usstate:USState .
+    
+    :statecollegepa     a :USCity;
+         :name "State College";
+         :state usstate:PA .
+    
+    :statenislandny     a :USCity;
+         :name "Staten Island";
+         :state usstate:NY .
+    
+    :stcloudmn     a :USCity;
+         :name "St Cloud";
+         :state usstate:MN .
+    
+    :steamboatspringsco     a :USCity;
+         :name "Steamboat Springs";
+         :state usstate:CO .
+    
+    :stgeorgeut     a :USCity;
+         :name "St George";
+         :state usstate:UT .
+    
+    :stillwaterok     a :USCity;
+         :name "Stillwater";
+         :state usstate:OK .
+    
+    :stjosephmo     a :USCity;
+         :name "St Joseph";
+         :state usstate:MO .
+    
+    :stlouismo     a :USCity;
+         :name "St Louis";
+         :state usstate:MO .
+    
+    :stocktonca     a :USCity;
+         :name "Stockton";
+         :state usstate:CA .
+    
+    :stoningtonct     a :USCity;
+         :name "Stonington";
+         :state usstate:CT .
+    
+    :stoughtonma     a :USCity;
+         :name "Stoughton";
+         :state usstate:MA .
+    
+    :stpaulmn     a :USCity;
+         :name "St Paul";
+         :state usstate:MN .
+    
+    :stpetersburgfl     a :USCity;
+         :name "St Petersburg";
+         :state usstate:FL .
+    
+    :strongsvilleoh     a :USCity;
+         :name "Strongsville";
+         :state usstate:OH .
+    
+    :sudburyma     a :USCity;
+         :name "Sudbury";
+         :state usstate:MA .
+    
+    :sugarlandtx     a :USCity;
+         :name "Sugar Land";
+         :state usstate:TX .
+    
+    :summervillesc     a :USCity;
+         :name "Summerville";
+         :state usstate:SC .
+    
+    :sumtersc     a :USCity;
+         :name "Sumter";
+         :state usstate:SC .
+    
+    :sunnyvaleca     a :USCity;
+         :name "Sunnyvale";
+         :state usstate:CA .
+    
+    :syossetny     a :USCity;
+         :name "Syosset";
+         :state usstate:NY .
+    
+    :syracuseny     a :USCity;
+         :name "Syracuse";
+         :state usstate:NY .
+    
+    :tacomawa     a :USCity;
+         :name "Tacoma";
+         :state usstate:WA .
+    
+    :tallahasseefl     a :USCity;
+         :name "Tallahassee";
+         :state usstate:FL .
+    
+    :tampafl     a :USCity;
+         :name "Tampa";
+         :state usstate:FL .
+    
+    :tarponspringsfl     a :USCity;
+         :name "Tarpon Springs";
+         :state usstate:FL .
+    
+    :teanecknj     a :USCity;
+         :name "Teaneck";
+         :state usstate:NJ .
+    
+    :tempeaz     a :USCity;
+         :name "Tempe";
+         :state usstate:AZ .
+    
+    :templetx     a :USCity;
+         :name "Temple";
+         :state usstate:TX .
+    
+    :terrehautein     a :USCity;
+         :name "Terre Haute";
+         :state usstate:IN .
+    
+    :texarkanatx     a :USCity;
+         :name "Texarkana";
+         :state usstate:TX .
+    
+    :thewoodlandstx     a :USCity;
+         :name "The Woodlands";
+         :state usstate:TX .
+    
+    :thorntonco     a :USCity;
+         :name "Thornton";
+         :state usstate:CO .
+    
+    :titusvillefl     a :USCity;
+         :name "Titusville";
+         :state usstate:FL .
+    
+    :toledooh     a :USCity;
+         :name "Toledo";
+         :state usstate:OH .
+    
+    :topekaks     a :USCity;
+         :name "Topeka";
+         :state usstate:KS .
+    
+    :torringtonct     a :USCity;
+         :name "Torrington";
+         :state usstate:CT .
+    
+    :tracyca     a :USCity;
+         :name "Tracy";
+         :state usstate:CA .
+    
+    :trentonnj     a :USCity;
+         :name "Trenton";
+         :state usstate:NJ .
+    
+    :tucsonaz     a :USCity;
+         :name "Tucson";
+         :state usstate:AZ .
+    
+    :tulsaok     a :USCity;
+         :name "Tulsa";
+         :state usstate:OK .
+    
+    :tuscaloosaal     a :USCity;
+         :name "Tuscaloosa";
+         :state usstate:AL .
+    
+    :tylertx     a :USCity;
+         :name "Tyler";
+         :state usstate:TX .
+    
+    :unioncityca     a :USCity;
+         :name "Union City";
+         :state usstate:CA .
+    
+    :uplandca     a :USCity;
+         :name "Upland";
+         :state usstate:CA .
+    
+    :vacavilleca     a :USCity;
+         :name "Vacaville";
+         :state usstate:CA .
+    
+    :vailco     a :USCity;
+         :name "Vail";
+         :state usstate:CO .
+    
+    :vallejoca     a :USCity;
+         :name "Vallejo";
+         :state usstate:CA .
+    
+    :valleystreamny     a :USCity;
+         :name "Valley Stream";
+         :state usstate:NY .
+    
+    :vancouverwa     a :USCity;
+         :name "Vancouver";
+         :state usstate:WA .
+    
+    :vermillionsd     a :USCity;
+         :name "Vermillion";
+         :state usstate:SD .
+    
+    :vestaviahillsal     a :USCity;
+         :name "Vestavia Hills";
+         :state usstate:AL .
+    
+    :victoriatx     a :USCity;
+         :name "Victoria";
+         :state usstate:TX .
+    
+    :viennava     a :USCity;
+         :name "Vienna";
+         :state usstate:VA .
+    
+    :virginiabeachva     a :USCity;
+         :name "Virginia Beach";
+         :state usstate:VA .
+    
+    :visaliaca     a :USCity;
+         :name "Visalia";
+         :state usstate:CA .
+    
+    :vistaca     a :USCity;
+         :name "Vista";
+         :state usstate:CA .
+    
+    :voorheesnj     a :USCity;
+         :name "Voorhees";
+         :state usstate:NJ .
+    
+    :wacotx     a :USCity;
+         :name "Waco";
+         :state usstate:TX .
+    
+    :wakefieldri     a :USCity;
+         :name "Wakefield";
+         :state usstate:RI .
+    
+    :walnutcreekca     a :USCity;
+         :name "Walnut Creek";
+         :state usstate:CA .
+    
+    :warwickri     a :USCity;
+         :name "Warwick";
+         :state usstate:RI .
+    
+    :washingtondc     a :USCity;
+         :name "Washington";
+         :state usstate:DC .
+    
+    :wasillaak     a :USCity;
+         :name "Wasilla";
+         :state usstate:AK .
+    
+    :waterburyct     a :USCity;
+         :name "Waterbury";
+         :state usstate:CT .
+    
+    :waterlooia     a :USCity;
+         :name "Waterloo";
+         :state usstate:IA .
+    
+    :watkinsvillega     a :USCity;
+         :name "Watkinsville";
+         :state usstate:GA .
+    
+    :waukeshawi     a :USCity;
+         :name "Waukesha";
+         :state usstate:WI .
+    
+    :wausauwi     a :USCity;
+         :name "Wausau";
+         :state usstate:WI .
+    
+    :waynenj     a :USCity;
+         :name "Wayne";
+         :state usstate:NJ .
+    
+    :wellesleyma     a :USCity;
+         :name "Wellesley";
+         :state usstate:MA .
+    
+    :westchicagoil     a :USCity;
+         :name "West Chicago";
+         :state usstate:IL .
+    
+    :westcovinaca     a :USCity;
+         :name "West Covina";
+         :state usstate:CA .
+    
+    :westhamptonny     a :USCity;
+         :name "Westhampton";
+         :state usstate:NY .
+    
+    :westislipny     a :USCity;
+         :name "West Islip";
+         :state usstate:NY .
+    
+    :westlakeoh     a :USCity;
+         :name "Westlake";
+         :state usstate:OH .
+    
+    :westlandmi     a :USCity;
+         :name "Westland";
+         :state usstate:MI .
+    
+    :westminsterco     a :USCity;
+         :name "Westminster";
+         :state usstate:CO .
+    
+    :westonct     a :USCity;
+         :name "Weston";
+         :state usstate:CT .
+    
+    :westonma     a :USCity;
+         :name "Weston";
+         :state usstate:MA .
+    
+    :westpalmbeachfl     a :USCity;
+         :name "West Palm Beach";
+         :state usstate:FL .
+    
+    :westportct     a :USCity;
+         :name "Westport";
+         :state usstate:CT .
+    
+    :westwindsornj     a :USCity;
+         :name "West Windsor";
+         :state usstate:NJ .
+    
+    :wheatonil     a :USCity;
+         :name "Wheaton";
+         :state usstate:IL .
+    
+    :whiteplainsny     a :USCity;
+         :name "White Plains";
+         :state usstate:NY .
+    
+    :wichitafallstx     a :USCity;
+         :name "Wichita Falls";
+         :state usstate:TX .
+    
+    :wichitaks     a :USCity;
+         :name "Wichita";
+         :state usstate:KS .
+    
+    :wilkesbarrepa     a :USCity;
+         :name "Wilkes Barre";
+         :state usstate:PA .
+    
+    :williamsburgva     a :USCity;
+         :name "Williamsburg";
+         :state usstate:VA .
+    
+    :williamsportpa     a :USCity;
+         :name "Williamsport";
+         :state usstate:PA .
+    
+    :willistx     a :USCity;
+         :name "Willis";
+         :state usstate:TX .
+    
+    :wilmingtonde     a :USCity;
+         :name "Wilmington";
+         :state usstate:DE .
+    
+    :wilmingtonnc     a :USCity;
+         :name "Wilmington";
+         :state usstate:NC .
+    
+    :wiltonct     a :USCity;
+         :name "Wilton";
+         :state usstate:CT .
+    
+    :winchesterma     a :USCity;
+         :name "Winchester";
+         :state usstate:MA .
+    
+    :winstonsalemnc     a :USCity;
+         :name "Winston Salem";
+         :state usstate:NC .
+    
+    :winterspringsfl     a :USCity;
+         :name "Winter Springs";
+         :state usstate:FL .
+    
+    :woodburyny     a :USCity;
+         :name "Woodbury";
+         :state usstate:NY .
+    
+    :worcesterma     a :USCity;
+         :name "Worcester";
+         :state usstate:MA .
+    
+    :yakimawa     a :USCity;
+         :name "Yakima";
+         :state usstate:WA .
+    
+    :yorkme     a :USCity;
+         :name "York";
+         :state usstate:ME .
+    
+    :yorkpa     a :USCity;
+         :name "York";
+         :state usstate:PA .
+    
+    :youngstownoh     a :USCity;
+         :name "Youngstown";
+         :state usstate:OH .
+    
+    :yumaaz     a :USCity;
+         :name "Yuma";
+         :state usstate:AZ .
+    
+#ENDS

@@ -1,0 +1,7 @@
+# Testing proof generation and checking.
+
+<a> <b> <c>.
+{<a> <b> []} => { <a> a <Success> }.
+#{@forSome :E1. <a> <b> :E1} => { <a> a <Success> }.
+# ends
+

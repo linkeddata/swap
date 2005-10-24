@@ -21,6 +21,19 @@
     test:arguments     """crypto/test-parsedAsN3.n3 --think""".
  
  
+# The access control demo
+#
+
+:ta5 a test:CwmTest;
+    test:referenceOutput <ref/access-1.request>;
+    test:description   "Generate signed request";
+    test:arguments     """--crypto crypto/access-tiina.private crypto/access-sign-request.n3 --think --purge --with http://www.w3.org/Member""".
+ 
+:ta9 a test:CwmTest;
+    test:referenceOutput <ref/access-1.response>;
+    test:description   "Check access request and credentials";
+    test:arguments     """--crypto crypto/access-rule.n3 --think --purge-rules --with access-1.request""".
+ 
 
 
 

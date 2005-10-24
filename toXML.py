@@ -83,11 +83,12 @@ DAML_LISTS = 1    # Else don't do these - do the funny compact ones- not a good 
 RDF_type = ( SYMBOL , RDF_type_URI )
 DAML_sameAs = ( SYMBOL, DAML_sameAs_URI )
 
-List_NS = DPO_NS     # We have to pick just one all the time
+List_NS = RDF_NS_URI     # We have to pick just one all the time
 
 # For lists:
 N3_first = (SYMBOL, List_NS + "first")
 N3_rest = (SYMBOL, List_NS + "rest")
+RDF_li = (SYMBOL, List_NS + "li")
 # N3_only = (SYMBOL, List_NS + "only")
 N3_nil = (SYMBOL, List_NS + "nil")
 N3_List = (SYMBOL, List_NS + "List")
@@ -137,6 +138,7 @@ class ToRDF(RDFSink.RDFStructuredOutput):
 	self._toDo = doNothing
 	self.namespace_redirections = {}
 	self.illegals = Set()
+	self.stack = [0]
 
     #@@I18N
     _rdfns = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
@@ -166,6 +168,7 @@ Flags to control RDF/XML output (after --rdf=) areas follows:
 b  - Don't use nodeIDs for Bnodes
 c  - Don't use elements as class names
 d  - Default namespace supressed.
+l  - Don't use RDF collection syntax for lists
 r  - Relative URI suppression. Always use absolute URIs.
 z  - Allow relative URIs for namespaces
 
@@ -233,6 +236,18 @@ z  - Allow relative URIs for namespaces
     def makeStatement(self,  tuple, why=None, aIsPossible=0):
         context, pred, subj, obj = tuple # Context is ignored
 
+        if self.stack[-1]:
+	    if pred == N3_first:
+		pred = RDF_li
+	    elif pred == RDF_type and obj == N3_List:
+		return  # We knew
+	    elif pred == RDF_type and obj == N3_Empty:
+		return  # not how we would have put it but never mind
+	    elif pred == N3_rest:
+		return # Ignore rest
+	    else: raise RuntimeError ("Should only see %s and %s in list mode, for tuple %s and stack %s" 
+				    %(N3_first, N3_rest, `tuple`, `self.stack`))
+
 	if subj == context: # and context == self._formula:
 	    if pred == (SYMBOL, N3_forAll_URI):
 		progress("Ignoring universal quantification of ", obj)
@@ -249,6 +264,7 @@ z  - Allow relative URIs for namespaces
 	if subj[0] not in (SYMBOL, ANONYMOUS, LITERAL, LITERAL_DT, LITERAL_LANG):
 	    progress("Warning:  because subject is not symbol, bnode or literal, Ignoring ", tuple)
 	    return
+#        progress("@@@ subject node is ", subj)
 
         self.flushStart()
 	if self._formula == None:
@@ -268,12 +284,16 @@ z  - Allow relative URIs for namespaces
                  start_tag = obj[1]
             else:
                  start_tag = RDF_NS_URI+'Description'
-                
+#            progress("@@@@@@@@@@@@ Start tag: %s" % start_tag)    
 	    if subj[0] == SYMBOL or subj[0] == ANONYMOUS:
 		nid = self._nodeID.get(subj, None)
 		if nid == None:
-		    self._xwr.startElement(start_tag,
-					[(RDF_NS_URI+" about", subjn),], self.prefixes)
+		    if subj[0] == ANONYMOUS:
+			self._xwr.startElement(start_tag,
+				[], self.prefixes)
+		    else:
+			self._xwr.startElement(start_tag,
+				[(RDF_NS_URI+" about", subjn),], self.prefixes)
 		else:
 		    self._xwr.startElement(start_tag,
 					[(RDF_NS_URI+" nodeID", nid),], self.prefixes)
@@ -330,7 +350,57 @@ z  - Allow relative URIs for namespaces
 # Below is for writing an anonymous node which is the object of only one arc
 # This is the arc leading to it.
 
-    def startAnonymous(self,  tuple, isList =0):
+# As object
+
+    def startAnonymous(self,  tuple):
+	self.startWithParseType("Resource", tuple)
+
+    def endAnonymous(self, subject, verb):    # Remind me where we are
+        self._xwr.endElement()
+        self._subj = subject       # @@@ This all needs to be thought about!
+
+
+# Below we do anonymous top level node - arrows only leave this circle
+# There is no list synmtax for subject in RDF
+
+# As subject
+
+    def startAnonymousNode(self, subj, isList=0):
+#        progress("@@@ Anonymous node is ", subj)
+        self.flushStart()
+        if self._subj:
+            self._xwr.endElement()
+            self._subj = None
+
+        self._xwr.startElement(RDF_NS_URI+'Description', [], self.prefixes)
+        self._subj = subj    # The object is not the subject context
+
+    def endAnonymousNode(self, subj=None):    # Remove context
+        return #If a new subject is started, they'll know to close this one
+    	self._xwr.endElement()
+	self._subj = None
+	
+#  LISTS
+#
+
+# Below is for writing an anonymous node which is the object of only one arc
+# This is the arc leading to it.
+
+# As object
+
+    def startListObject(self,  tuple, isList =0):
+	self._pred = RDF_li
+	self.startWithParseType('Collection', tuple)
+	return
+
+
+    def endListObject(self, subject, verb):    # Remind me where we are
+        self._xwr.endElement()
+        self._subj = subject       # @@@ This all needs to be thought about!
+	return
+
+
+    def startWithParseType(self, parseType, tuple):
         self.flushStart()
         context, pred, subj, obj = tuple 
 	if self._subj != subj:
@@ -339,46 +409,36 @@ z  - Allow relative URIs for namespaces
 	    nid = self._nodeID.get(subj, None)
 	    if nid == None:
 		subjn = self.referenceTo( subj[1])
+		attr = ((RDF_NS_URI+' about', subjn),)
+		if subj[0] == ANONYMOUS: attr = []
 		self._xwr.startElement(RDF_NS_URI + 'Description',
-				    ((RDF_NS_URI+' about', subjn),), self.prefixes)
+				    attr, self.prefixes)
 	    else:
 		self._xwr.startElement(RDF_NS_URI + 'Description',
 				    ((RDF_NS_URI+' nodeID', nid),), self.prefixes)
 	    self._subj = subj
         nid = self._nodeID.get(pred, None)
 	if nid is None:
-            self._xwr.startElement(pred[1], [(RDF_NS_URI+' parseType','Resource')], self.prefixes)  # @@? Parsetype RDF
+            self._xwr.startElement(pred[1],
+		    [(RDF_NS_URI+' parseType',parseType)], self.prefixes)
         else:
             bNodePredicate()             
 
         self._subj = obj    # The object is now the current subject
+	return
 
+# As subject:
 
-    def endAnonymous(self, subject, verb):    # Remind me where we are
+    def startListSubject(self, subj):
+	self.startAnonymousNode(self)
+	# @@@@@@ set flaf to do first/rest decomp
+	
+    def endListSubject(self, subj):
+	self.endAnonymousNode(subj)
 
-        self._xwr.endElement()
-#        self._subj = subject
-        self._subj = subject       # @@@ This all needs to be thought about!
+# Below we notate a nested formula
 
-
-# Below we do anonymous top level node - arrows only leave this circle
-
-    def startAnonymousNode(self, subj, li=0):
-        self.flushStart()
-        if self._subj:
-            self._xwr.endElement()
-            self._subj = None
-        self._xwr.startElement(RDF_NS_URI+'Description', [], self.prefixes)
-        self._subj = subj    # The object is not the subject context
-
-    def endAnonymousNode(self, subj=None):    # Remove context
-        return #If a new subject is started, they'll know to close this one
-    	self._xwr.endElement()
-	self._subj = None
-
-# Below we notate a nested bag of statements - a context
-
-    def startBagSubject(self, context):  # Doesn't work with RDF sorry ILLEGAL
+    def startFormulaSubject(self, context):  # Doesn't work with RDF sorry ILLEGAL
         self.flushStart()
         if self._subj:
             self._xwr.endElement()
@@ -387,18 +447,19 @@ z  - Allow relative URIs for namespaces
 			      [],
                               self.prefixes)
         
-        self._xwr.startElement(NODE_MERGE_URI, [(RDF_NS_URI+' parseType', "Quote")], self.prefixes)
+        self._xwr.startElement(NODE_MERGE_URI,
+		    [(RDF_NS_URI+' parseType', "Quote")], self.prefixes)
         self._subj = None
 
 
-    def endBagSubject(self, subj):    # Remove context
+    def endFormulaSubject(self, subj):    # Remove context
         if self._subj:
             self._xwr.endElement()   # End description if any
             self._subj = 0
         self._xwr.endElement()     # End quote
         self._subj = subj
 
-    def startBagObject(self, tuple):
+    def startFormulaObject(self, tuple):
         self.flushStart()
         context, pred, subj, obj = tuple 
 	if self._subj != subj:
@@ -416,11 +477,12 @@ z  - Allow relative URIs for namespaces
 	    self._subj = subj
 
 #        log_quote = self.prefixes[(SYMBOL, Logic_NS)] + ":Quote"  # Qname yuk
-        self._xwr.startElement(pred[1], [(RDF_NS_URI+' parseType', "Quote")], self.prefixes)  # @@? Parsetype RDF
+        self._xwr.startElement(pred[1], [(RDF_NS_URI+' parseType', "Quote")],
+				self.prefixes)  # @@? Parsetype RDF? Formula?
         self._subj = None
 
 
-    def endBagObject(self, pred, subj):    # Remove context
+    def endFormulaObject(self, pred, subj):    # Remove context
         if self._subj:
             self._xwr.endElement()        #  </description> if any
             self._subj = None
@@ -1014,9 +1076,7 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
         
 def xmldata(write, str, markupChars):
     i = 0
-#    progress("XML data: type is ", type(str))
-#    write(u"&&&& Called xmldata \u00BE\n")
-#    write(u"&&&& Called xmldata with %s" % str)
+
     while i < len(str):
         m = markupChars.search(str, i)
         if not m:

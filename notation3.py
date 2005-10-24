@@ -3,12 +3,8 @@
 $Id$
 
 
-This module implements basic sources and sinks for RDF data.
-It defines a stream interface for such data.
-It has a command line interface, can work as a web query engine,
-and has built in test(), all of which demosntrate how it is used.
-
-To make a new RDF processor, subclass RDFSink.
+This module implements a Nptation3 parser, and the final
+part of a notation3 serializer.
 
 See also:
 
@@ -16,58 +12,32 @@ Notation 3
 http://www.w3.org/DesignIssues/Notation3
 
 Closed World Machine - and RDF Processor
-http;//www.w3.org/2000/10/swap/cwm
+http://www.w3.org/2000/10/swap/cwm
 
 To DO: See also "@@" in comments
 
-Internationlization:
-- Decode incoming N3 file as unicode
-- Encode outgoing file
-- unicode \u  (??) escapes in parse
-- unicode \u  (??) escapes in string output
-
-Note currently unicode strings work in this code
-but fail when they are output into the python debugger
-interactive window.
-
+- Clean up interfaces
 ______________________________________________
 
 Module originally by Dan Connolly, includeing notation3
 parser and RDF generator. TimBL added RDF stream model
 and N3 generation, replaced stream model with use
-of common store/formula API.
-
-DWC:
-oops... I'm not doing qname expansion as described
-there (i.e. adding a # if it's not already there).
-
-I allow unprefixed qnames, so not all barenames
-are keywords.
-
----- hmmmm ... not expandable - a bit of a trap.
-
-I haven't done quoting yet.
-
-idea: migrate toward CSS notation?
-
-idea: use notation3 for wiki record keeping.
-
+of common store/formula API.  Yosi Scharf developped
+the module, including tests and test harness.
 
 """
 
 
-
+# Python standard libraries
 import types, sys
 import string
 import codecs # python 2-ism; for writing utf-8 in RDF/xml output
 import urllib
-
 import re
 
+# SWAP http://www.w3.org/2000/10/swap
 from diag import verbosity, setVerbosity, progress
-
 from uripath import refTo, join
-
 import uripath
 import RDFSink
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
@@ -93,7 +63,7 @@ ADDED_HASH = "#"  # Stop where we use this in case we want to remove it!
 RDF_type = ( SYMBOL , RDF_type_URI )
 DAML_sameAs = ( SYMBOL, DAML_sameAs_URI )
 
-from RDFSink import N3_first, N3_rest, N3_nil, N3_List, N3_Empty
+from RDFSink import N3_first, N3_rest, N3_nil, N3_li, N3_List, N3_Empty
 
 LOG_implies_URI = "http://www.w3.org/2000/10/swap/log#implies"
 
@@ -103,10 +73,11 @@ DECIMAL_DATATYPE = "http://www.w3.org/2001/XMLSchema#decimal"
 
 option_noregen = 0   # If set, do not regenerate genids on output
 
-# @@ I18n - the notname chars need extending for well known unicode non-text characters.
-# The XML spec switched to assuming unknown things were name characaters.
+# @@ I18n - the notname chars need extending for well known unicode non-text
+# characters. The XML spec switched to assuming unknown things were name
+# characaters.
 # _namechars = string.lowercase + string.uppercase + string.digits + '_-'
-_notQNameChars = "\t\r\n !\"#$%&'()*.,+/;<=>?@[\\]^`{|}~"  # Assume anything else valid qname :-/
+_notQNameChars = "\t\r\n !\"#$%&'()*.,+/;<=>?@[\\]^`{|}~" # else valid qname :-/
 _notNameChars = _notQNameChars + ":"  # Assume anything else valid name :-/
 _rdfns = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
 
@@ -118,7 +89,7 @@ N3CommentCharacter = "#"     # For unix script #! compatabilty
 # Regular expressions:
 eol = re.compile(r'[ \t]*(#[^\n]*)?\r?\n')	# end  of line, poss. w/comment
 eof = re.compile(r'[ \t]*(#[^\n]*)?$')      	# end  of file, poss. w/comment
-ws = re.compile(r'[ \t]*')			# Whitespace not including newline @@(whatabout unicode NL? ask MartinD)
+ws = re.compile(r'[ \t]*')			# Whitespace not including NL
 signed_integer = re.compile(r'[-+]?[0-9]+')	# integer
 number_syntax = re.compile(r'([-+]?[0-9]+)(\.[0-9]+)?(e[-+]?[0-9]+)?')
 digitstring = re.compile(r'[0-9]+')		# Unsigned integer	
@@ -134,8 +105,9 @@ class SinkParser:
 	the # will get added during qname processing """
 
     	self._bindings = {}
+	self._flags = flags
         if thisDoc != "":
-	    assert ':' in thisDoc, "Document URI if any must be absolute: <%s>" % thisDoc
+	    assert ':' in thisDoc, "Document URI not absolute: <%s>" % thisDoc
 	    self._bindings[""] = thisDoc + "#"  # default
 
         self._store = store
@@ -146,11 +118,13 @@ class SinkParser:
 	self.startOfLine = 0	    # For calculating character number
         self._genPrefix = genPrefix
 	self.keywords = ['a', 'this', 'bind', 'has', 'is', 'of' ]
-	self.keywordsSet = 0    # When and only when they have been set can others be considerd qnames
-        self._anonymousNodes = {}   # Dict of anon nodes already declared  ln : Term
-	self._reason = why	# Why the parser w
+	self.keywordsSet = 0    # Then only can others be considerd qnames
+        self._anonymousNodes = {} # Dict of anon nodes already declared ln: Term
+	self._reason = why	# Why the parser was asked to parse this
+
 	self._reason2 = None	# Why these triples
-	if diag.tracking: self._reason2 = BecauseOfData(store.newSymbol(thisDoc), because=self._reason) 
+	if diag.tracking: self._reason2 = BecauseOfData(
+			store.newSymbol(thisDoc), because=self._reason) 
 
         if baseURI: self._baseURI = baseURI
         else:
@@ -170,22 +144,16 @@ class SinkParser:
 		self._formula = store.newFormula(thisDoc + "#_formula")
 	    else:
 		self._formula = store.newFormula()
+		proof = FormulaReason(self._formula)
 	else:
 	    self._formula = openFormula
 	
-	if diag.tracking:
-#	    progress ("@@@@@@ notation3  167 loading ",thisDoc,  why, self._formula)
-	    proof = self._formula.collector
-	    if proof == None:
-		proof = FormulaReason(self._formula)
-#		progress ("\tAllocating new FormulaReason")
-#	    progress ("\tNow: 169", why, proof, self._formula)
 
         self._context = self._formula
 	self._parentContext = None
         
         if metaURI:
-            self.makeStatement((SYMBOL, metaURI), # relate document to parse tree
+            self.makeStatement((SYMBOL, metaURI), # relate doc to parse tree
                             (SYMBOL, PARSES_TO_URI ), #pred
                             (SYMBOL, thisDoc),  #subj
                             self._context)                      # obj
@@ -201,11 +169,12 @@ class SinkParser:
 	This has diagnostic uses less formally, as it should point one to which 
 	bnode the arbitrary identifier actually is. It gives the
 	line and character number of the '[' charcacter or path character
-	which introduced the blank node.  The first blank node is boringly _L1C1.
+	which introduced the blank node. The first blank node is boringly _L1C1.
 	It used to be used only for tracking, but for tests in general
 	it makes the canonical ordering of bnodes repeatable."""
-#	if not diag.tracking: return None
-	return "%s_L%iC%i" % (self._genPrefix , self.lines, i - self.startOfLine + 1) 
+
+	return "%s_L%iC%i" % (self._genPrefix , self.lines,
+					    i - self.startOfLine + 1) 
         
     def formula(self):
         return self._formula
@@ -237,7 +206,8 @@ class SinkParser:
             i = self.directiveOrStatement(str,j)
             if i<0:
                 print "# next char: ", `str[j]` 
-                raise BadSyntax(self._thisDoc, self.lines, str, j, "expected directive or statement")
+                raise BadSyntax(self._thisDoc, self.lines, str, j,
+				    "expected directive or statement")
 
     def directiveOrStatement(self, str,h):
     
@@ -262,12 +232,13 @@ class SinkParser:
 	we must not be at end of file."""
 	
 	assert tok[0] not in _notNameChars # not for punctuation
-	whitespace = '\t\n\x0b\x0c\r ' # string.whitespace was '\t\n\x0b\x0c\r \xa0' not ascii
+	# was: string.whitespace which is '\t\n\x0b\x0c\r \xa0' -- not ascii
+	whitespace = '\t\n\x0b\x0c\r ' 
 	if str[i:i+1] == "@":
 	    i = i+1
 	else:
 	    if tok not in self.keywords:
-		return -1   # Nope, this has neither keywords declaration nor "@"
+		return -1   # No, this has neither keywords declaration nor "@"
 
 	if (str[i:i+len(tok)] == tok
             and (str[i+len(tok)] in  _notQNameChars )): 
@@ -282,7 +253,8 @@ class SinkParser:
 	res = []
 	
 	j = self.tok('bind', str, i)        # implied "#". Obsolete.
-	if j>0: raise BadSyntax(self._thisDoc, self.lines, str, i, "keyword bind is obsolete: use @prefix")
+	if j>0: raise BadSyntax(self._thisDoc, self.lines, str, i,
+				"keyword bind is obsolete: use @prefix")
 
 	j = self.tok('keywords', str, i)
 	if j>0:
@@ -324,7 +296,8 @@ class SinkParser:
 	if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i,
 			    "expected <uriref> after @prefix _qname_")
 
-	if isinstance(t[1], types.TupleType): ns = t[1][1] # old system for --pipe
+	if isinstance(t[1], types.TupleType):
+	    ns = t[1][1] # old system for --pipe
         else:
 	    ns = t[1].uriref()
 
@@ -338,7 +311,8 @@ class SinkParser:
 	return j
 
     def bind(self, qn, uri):
-	assert isinstance(uri, types.StringType), "Any unicode must be %x-encoded already"
+	assert isinstance(uri,
+		    types.StringType), "Any unicode must be %x-encoded already"
         if qn == "":
             self._store.setDefaultNamespace(uri)
         else:
@@ -371,12 +345,13 @@ class SinkParser:
     def statement(self, str, i):
 	r = []
 
-	i = self.object(str, i, r)       #  Allow literal for subject - This extends RDF model
+	i = self.object(str, i, r)  #  Allow literal for subject - extends RDF 
 	if i<0: return i
 
 	j = self.property_list(str, i, r[0])
 
-	if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected propertylist")
+	if j<0: raise BadSyntax(self._thisDoc, self.lines,
+				    str, i, "expected propertylist")
 	return j
 
     def subject(self, str, i, res):
@@ -400,21 +375,25 @@ class SinkParser:
 	j = self.tok('has', str, i)
 	if j>=0:
 	    i = self.prop(str, j, r)
-	    if i < 0: raise BadSyntax(self._thisDoc, self.lines, str, j, "expected property after 'has'")
+	    if i < 0: raise BadSyntax(self._thisDoc, self.lines,
+				str, j, "expected property after 'has'")
 	    res.append(('->', r[0]))
 	    return i
 
 	j = self.tok('is', str, i)
 	if j>=0:
 	    i = self.prop(str, j, r)
-	    if i < 0: raise BadSyntax(self._thisDoc, self.lines, str, j, "expected <property> after 'is'")
+	    if i < 0: raise BadSyntax(self._thisDoc, self.lines, str, j,
+				"expected <property> after 'is'")
 	    j = self.skipSpace(str, i)
 	    if j<0:
-		raise BadSyntax(self._thisDoc, self.lines, str, i, "EOF found, expected property after 'is'")
+		raise BadSyntax(self._thisDoc, self.lines, str, i,
+			    "End of file found, expected property after 'is'")
 		return j # eof
 	    i=j
 	    j = self.tok('of', str, i)
-	    if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected 'of' after 'is' <prop>")
+	    if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i,
+				"expected 'of' after 'is' <prop>")
 	    res.append(('<-', r[0]))
 	    return j
 
@@ -436,7 +415,8 @@ class SinkParser:
 	    return i+1
 
 	if str[i:i+2] == ":=":
-	    res.append(('->', Logic_NS+"becomes"))   # patch file relates two formulae, uses this
+	    # patch file relates two formulae, uses this    @@ really?
+	    res.append(('->', Logic_NS+"becomes")) 
 	    return i+2
 
 	j = self.prop(str, i, r)
@@ -445,7 +425,8 @@ class SinkParser:
 	    return j
 
 	if str[i:i+2] == ">-" or str[i:i+2] == "<-":
-	    raise BadSyntax(self._thisDoc, self.lines, str, j, ">- ... -> syntax is obsolete.")
+	    raise BadSyntax(self._thisDoc, self.lines, str, j,
+					">- ... -> syntax is obsolete.")
 
 	return -1
 
@@ -454,6 +435,13 @@ class SinkParser:
 
     def item(self, str, i, res):
 	return self.path(str, i, res)
+
+    def blankNode(self, uri=None):
+	if "B" not in self._flags:
+	    return self._context.newBlankNode(uri, why=self._reason2)
+	x = self._context.newSymbol(uri)
+	self._context.declareExistential(x)
+	return x
 	
     def path(self, str, i, res):
 	"""Parse the path production.
@@ -462,15 +450,16 @@ class SinkParser:
 	if j<0: return j  # nope
 
 	while str[j:j+1] in "!^.":  # no spaces, must follow exactly (?)
-	    ch = str[j:j+1]		# @@ Allow "." followed IMMEDIATELY by a node.
+	    ch = str[j:j+1]	# @@ Allow "." followed IMMEDIATELY by a node.
 	    if ch == ".":
 		ahead = str[j+1:j+2]
-		if not ahead or (ahead in _notNameChars and ahead not in ":?<[{("):
-		    break
+		if not ahead or (ahead in _notNameChars
+			    and ahead not in ":?<[{("): break
 	    subj = res.pop()
-	    obj = self._store.newBlankNode(self._context, uri=self.here(j), why=self._reason2)
+	    obj = self.blankNode(uri=self.here(j))
 	    j = self.node(str, j+1, res)
-	    if j<0: raise BadSyntax(self._thisDoc, self.lines, str, j, "EOF found in middle of path syntax")
+	    if j<0: raise BadSyntax(self._thisDoc, self.lines, str, j,
+			    "EOF found in middle of path syntax")
 	    pred = res.pop()
 	    if ch == "^": # Reverse traverse
 		self.makeStatement((self._context, pred, obj, subj)) 
@@ -484,7 +473,6 @@ class SinkParser:
 	term = self._anonymousNodes.get(ln, None)
 	if term != None: return term
 	term = self._store.newBlankNode(self._context, why=self._reason2)
-#	term = self._store.newExistential(self._context, self._genPrefix + ln, why=self._reason2)
 	self._anonymousNodes[ln] = term
 	return term
 
@@ -503,8 +491,9 @@ class SinkParser:
         if ch == "[":
 	    bnodeID = self.here(i)
 	    j=self.skipSpace(str,i+1)
-	    if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "EOF after '['")
-	    if str[j:j+1] == "=":     #   Hack for "is"  binding name to anon node
+	    if j<0: raise BadSyntax(self._thisDoc,
+				    self.lines, str, i, "EOF after '['")
+	    if str[j:j+1] == "=":     # Hack for "is"  binding name to anon node
 		i = j+1
                 objs = []
                 j = self.objectList(str, i, objs);
@@ -524,8 +513,7 @@ class SinkParser:
 					"objectList expected after [= ")
 
             if subj is None:
-		subj=self._store.newBlankNode(
-				self._context,uri= bnodeID, why=self._reason2)
+		subj=self.blankNode(uri= bnodeID)
 
             i = self.property_list(str, j, subj)
             if i<0: raise BadSyntax(self._thisDoc, self.lines, str, j,
@@ -535,7 +523,8 @@ class SinkParser:
 	    if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i,
 		"EOF when ']' expected after [ <propertyList>")
 	    if str[j:j+1] != "]":
-		raise BadSyntax(self._thisDoc, self.lines, str, j, "']' expected")
+		raise BadSyntax(self._thisDoc,
+				    self.lines, str, j, "']' expected")
             res.append(subj)
             return j+1
 
@@ -548,7 +537,8 @@ class SinkParser:
                 first_run = True
                 while 1:
                     i = self.skipSpace(str, j)
-                    if i<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "needed '$}', found end.")                    
+                    if i<0: raise BadSyntax(self._thisDoc, self.lines, str, i,
+						    "needed '$}', found end.")                    
                     if str[i:i+2] == '$}':
                         j = i+2
                         break
@@ -557,12 +547,14 @@ class SinkParser:
                         if str[i:i+1] == ',':
                             i+=1
                         else:
-                            raise BadSyntax(self._thisDoc, self.lines, str, i, "expected: ','")
+                            raise BadSyntax(self._thisDoc, self.lines,
+						str, i, "expected: ','")
                     else: first_run = False
                     
                     item = []
                     j = self.item(str,i, item) #@@@@@ should be path, was object
-                    if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected item in set or '$}'")
+                    if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i,
+					    "expected item in set or '$}'")
                     List.append(self._store.intern(item[0]))
                 res.append(self._store.newSet(List, self._context))
                 return j
@@ -577,19 +569,21 @@ class SinkParser:
                 
                 while 1:
                     i = self.skipSpace(str, j)
-                    if i<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "needed '}', found end.")
+                    if i<0: raise BadSyntax(self._thisDoc, self.lines,
+				    str, i, "needed '}', found end.")
                     
                     if str[i:i+1] == "}":
                         j = i+1
                         break
                     
                     j = self.directiveOrStatement(str,i)
-                    if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected statement or '}'")
+                    if j<0: raise BadSyntax(self._thisDoc, self.lines,
+				    str, i, "expected statement or '}'")
 
                 self._anonymousNodes = parentAnonymousNodes
                 self._context = self._parentContext
                 self._parentContext = oldParentContext
-                res.append(subj.close())   # Must not actually use the formula until it has been closed
+                res.append(subj.close())   #  No use until closed
                 return j
 
         if ch == "(":
@@ -603,14 +597,16 @@ class SinkParser:
             List = []
             while 1:
                 i = self.skipSpace(str, j)
-                if i<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "needed ')', found end.")                    
+                if i<0: raise BadSyntax(self._thisDoc, self.lines,
+				    str, i, "needed ')', found end.")                    
                 if str[i:i+1] == ')':
 		    j = i+1
 		    break
 
                 item = []
                 j = self.item(str,i, item) #@@@@@ should be path, was object
-                if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected item in list or ')'")
+                if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i,
+					"expected item in list or ')'")
                 List.append(self._store.intern(item[0]))
             res.append(thing_type(List, self._context))
             return j
@@ -634,14 +630,16 @@ class SinkParser:
 	while 1:
 	    j = self.skipSpace(str, i)
 	    if j<0:
-		raise BadSyntax(self._thisDoc, self.lines, str, i, "EOF found when expected verb in property list")
+		raise BadSyntax(self._thisDoc, self.lines, str, i,
+			    "EOF found when expected verb in property list")
 		return j #eof
 
             if str[j:j+2] ==":-":
 		i = j + 2
                 res = []
                 j = self.node(str, i, res, subj)
-                if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "bad {} or () or [] node after :- ")
+                if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i,
+					"bad {} or () or [] node after :- ")
 		i=j
                 continue
 	    i=j
@@ -652,7 +650,8 @@ class SinkParser:
 
 	    objs = []
 	    i = self.objectList(str, j, objs)
-	    if i<0: raise BadSyntax(self._thisDoc, self.lines, str, j, "objectList expected")
+	    if i<0: raise BadSyntax(self._thisDoc, self.lines, str, j,
+							"objectList expected")
 	    for obj in objs:
 		dir, sym = v[0]
 		if dir == '->':
@@ -662,7 +661,8 @@ class SinkParser:
 
 	    j = self.skipSpace(str, i)
 	    if j<0:
-		raise BadSyntax(self._thisDoc, self.lines, str, j, "EOF found in list of objects")
+		raise BadSyntax(self._thisDoc, self.lines, str, j,
+						"EOF found in list of objects")
 		return j #eof
 	    if str[i:i+1] != ";":
 		return i
@@ -674,14 +674,14 @@ class SinkParser:
 	"""
 	i = self.skipSpace(str, j)
 	if i<0:
-	    raise BadSyntax(self._thisDoc, self.lines, str, i, "EOF found expecting comma sep list")
+	    raise BadSyntax(self._thisDoc, self.lines, str, i,
+				    "EOF found expecting comma sep list")
 	    return i
 	if str[i] == ".": return j  # empty list is OK
 	i = what(str, i, res)
 	if i<0: return -1
 	
 	while 1:
-#	    progress("^^^^^", res, `what`, "\n >>>%s" % str[i:i+40])
 	    j = self.skipSpace(str, i)
 	    if j<0: return j # eof
 	    ch = str[j:j+1]  
@@ -691,7 +691,8 @@ class SinkParser:
 		return j    # Found  but not swallowed "."
 	    i = what(str, j+1, res)
 	    if i<0:
-		raise BadSyntax(self._thisDoc, self.lines, str, i, "bad list content")
+		raise BadSyntax(self._thisDoc, self.lines, str, i,
+						"bad list content")
 		return i
 
     def objectList(self, str, i, res):
@@ -700,7 +701,8 @@ class SinkParser:
 	while 1:
 	    j = self.skipSpace(str, i)
 	    if j<0:
-		raise BadSyntax(self._thisDoc, self.lines, str, j, "EOF found after object")
+		raise BadSyntax(self._thisDoc, self.lines, str, j,
+				    "EOF found after object")
 		return j #eof
 	    if str[j:j+1] != ",":
 		return j    # Found something else!
@@ -716,7 +718,8 @@ class SinkParser:
 		return j     # don't skip it
 	    if str[j:j+1] == "]":
 		return j
-            raise BadSyntax(self._thisDoc, self.lines, str, j, "expected '.' or '}' or ']' at end of statement")
+            raise BadSyntax(self._thisDoc, self.lines,
+		    str, j, "expected '.' or '}' or ']' at end of statement")
             return i
 
 
@@ -738,12 +741,14 @@ class SinkParser:
 		try:
 		    ns = self._bindings[pfx]
 		except KeyError:
-                    if pfx == "_":   # Magic prefix added 2001/05/30, can be overridden
+                    if pfx == "_":  # Magic prefix 2001/05/30, can be overridden
                         res.append(self.anonymousNode(ln))
                         return j
-		    raise BadSyntax(self._thisDoc, self.lines, str, i, "Prefix %s not bound" % (pfx))
+		    raise BadSyntax(self._thisDoc, self.lines, str, i,
+				"Prefix %s not bound" % (pfx))
             res.append(self._store.newSymbol(ns + ln)) # @@@ "#" CONVENTION
-            if not string.find(ns, "#"):progress("Warning: no # on NS %s," % ns)
+            if not string.find(ns, "#"):progress(
+			"Warning: no # on namespace %s," % ns)
 	    return j
 
         
@@ -753,7 +758,7 @@ class SinkParser:
 	if str[i] == "?":
 	    v = []
 	    j = self.variable(str,i,v)
-	    if j>0:                    #Forget varibles as a class, only in context.
+	    if j>0:              #Forget varibles as a class, only in context.
 		res.append(v[0])
 		return j
 	    return -1
@@ -767,18 +772,20 @@ class SinkParser:
 		    if self._baseURI:
 			uref = uripath.join(self._baseURI, uref)
 		    else:
-			assert ":" in uref, "With no base URI, cannot deal with relative URIs"
+			assert ":" in uref, \
+			    "With no base URI, cannot deal with relative URIs"
                     if str[i-1:i]=="#" and not uref[-1:]=="#":
-                        uref = uref + "#"  # She meant it! Weirdness in urlparse?
+                        uref = uref + "#" # She meant it! Weirdness in urlparse?
                     res.append(self._store.newSymbol(uref))
                     return i+1
                 i = i + 1
-            raise BadSyntax(self._thisDoc, self.lines, str, j, "unterminated URI reference")
+            raise BadSyntax(self._thisDoc, self.lines, str, j,
+			    "unterminated URI reference")
 
         elif self.keywordsSet:
 	    v = []
 	    j = self.bareWord(str,i,v)
-	    if j<0: return -1                    #Forget varibles as a class, only in context.
+	    if j<0: return -1      #Forget varibles as a class, only in context.
 	    if v[0] in self.keywords:
 		raise BadSyntax(self._thisDoc, self.lines, str, i,
 		    'Keyword "%s" not allowed here.' % v[0])
@@ -821,10 +828,11 @@ class SinkParser:
             i = i+1
 	if self._parentContext == None:
 	    raise BadSyntax(self._thisDoc, self.lines, str, j,
-			    "Can't use ?xxx syntax for variable in outermost level: %s" % str[j-1:i])
-	var = self._store.newUniversal(self._parentContext, self._baseURI + "#" +str[j:i], why=self._reason2)
+		"Can't use ?xxx syntax for variable in outermost level: %s"
+		% str[j-1:i])
+	var = self._store.newUniversal(self._parentContext,
+			    self._baseURI + "#" +str[j:i], why=self._reason2)
         res.append(var)
-#        print "Variable found: <<%s>>" % str[j:i]
         return i
 
     def bareWord(self, str, i, res):
@@ -946,7 +954,7 @@ class SinkParser:
 		    m = langcode.match(str, j+1)
 		    if m == None:
 			raise BadSyntax(self._thisDoc, startline, str, i,
-				    "Bad language code syntax on string literal, after @")
+			"Bad language code syntax on string literal, after @")
 		    i = m.end()
 		    lang = str[j+1:i]
 		    j = i
@@ -979,11 +987,8 @@ class SinkParser:
                 continue
             m = interesting.search(str, j)  # was str[j:].
 	    # Note for pos param to work, MUST be compiled  ... re bug?
-#	    print "Matched >>>>", m.group(0), "<<< in string >>>>>", m.string, "<<<<<<"
             assert m , "Quote expected in string at ^ in %s^%s" %(
 		str[j-20:j], str[j:j+20]) # we at least have to find a quote
-#	    print "@@@ old i = ",i, " j=",j, "m.start=", m.start(),"m.end=", m.end(), 
-#	    print ">>>>>>>", m.string[:j+m.start()], "|||||||", m.string[j+m.start(): j+m.end()], "<<<<<<<"
 
             i = m.start()
 	    try:
@@ -994,7 +999,7 @@ class SinkParser:
 		    err = err + (" %02x" % ord(c))
 		streason = sys.exc_info()[1].__str__()
 		raise BadSyntax(self._thisDoc, startline, str, j,
-				"Unicode error appending characters %s to string, because\n\t%s"
+		"Unicode error appending characters %s to string, because\n\t%s"
 				% (err, streason))
 		
 #	    print "@@@ i = ",i, " j=",j, "m.end=", m.end()
@@ -1045,7 +1050,8 @@ class SinkParser:
         count = 0
         value = 0
         while count < 4:  # Get 4 more characters
-            ch = str[j:j+1].lower()  # sbp http://ilrt.org/discovery/chatlogs/rdfig/2002-07-05
+            ch = str[j:j+1].lower() 
+		# sbp http://ilrt.org/discovery/chatlogs/rdfig/2002-07-05
             j = j + 1
             if ch == "":
                 raise BadSyntax(self._thisDoc, startline, str, i,
@@ -1065,7 +1071,8 @@ class SinkParser:
         count = 0
         value = '\\U'
         while count < 8:  # Get 8 more characters
-            ch = str[j:j+1].lower()  # sbp http://ilrt.org/discovery/chatlogs/rdfig/2002-07-05
+            ch = str[j:j+1].lower() 
+	    # sbp http://ilrt.org/discovery/chatlogs/rdfig/2002-07-05
             j = j + 1
             if ch == "":
                 raise BadSyntax(self._thisDoc, startline, str, i,
@@ -1110,7 +1117,8 @@ class BadSyntax(SyntaxError):
 	else: post=""
 
 	return 'Line %i of <%s>: Bad syntax (%s) at ^ in:\n"%s%s^%s%s"' \
-	       % (self.lines +1, self._uri, self._why, pre, str[st:i], str[i:i+60], post)
+	       % (self.lines +1, self._uri, self._why, pre,
+				    str[st:i], str[i:i+60], post)
 
 
 
@@ -1124,7 +1132,7 @@ def stripCR(str):
 def dummyWrite(x):
     pass
 
-############################################################################################
+################################################################################
     
 class ToN3(RDFSink.RDFSink):
     """Serializer output sink for N3
@@ -1142,13 +1150,17 @@ i   Use identifiers from store - don't regen on output
 l   List syntax suppression. Don't use (..)
 n   No numeric syntax - use strings typed with ^^ syntax
 p   Prefix suppression - don't use them, always URIs in <> instead of qnames.
-q   Quiet - don't make comments about the environment in which processing was done.
+q   Quiet - don't output comments about version and base URI used.
 r   Relative URI suppression. Always use absolute URIs.
 s   Subject must be explicit for every statement. Don't use ";" shorthand.
 t   "this" and "()" special syntax should be suppresed.
 u   Use \u for unicode escaping in URIs instead of utf-8 %XX
-v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSome".
+v   Use  "this log:forAll" for @forAll, and "this log:forAll" for "@forSome".
 /   If namespace has no # in it, assume it ends at the last slash if outputting.
+
+Flags for N3 input:
+
+B   Turn any blank node into a existentially qualified explicitly named node.
 """
 # "
 
@@ -1164,9 +1176,11 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
 #  We use here a convention that underscores at the start of fragment IDs
 # are reserved for generated Ids. The caller can change that.
 #
-# Now there is a new way of generating these, with the "_" prefix for anonymous nodes.
+# Now there is a new way of generating these, with the "_" prefix
+# for anonymous nodes.
 
-    def __init__(self, write, base=None, genPrefix = None, noLists=0 , quiet=0, flags=""):
+    def __init__(self, write, base=None, genPrefix = None,
+			    noLists=0 , quiet=0, flags=""):
 	gp = genPrefix
 	if gp == None:
 	    gp = "#_g"
@@ -1187,17 +1201,16 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
 	self.base = base
 #	self.nextId = 0         # Regenerate Ids on output
 	self.regen = {}         # Mapping of regenerated Ids
-#	self.genPrefix = genPrefix  # Prefix for generated URIs on output
-	self.stack = [ 0 ]      # List mode?
 	self.noLists = noLists  # Suppress generation of lists?
 	self._anodeName = {} # For "a" flag
 	self._anodeId = {} # For "a" flag - reverse mapping
+	self._needNL = 0    # Do we need to have a newline before a new element?
 
         if "l" in self._flags: self.noLists = 1
 	
     def dummyClone(self):
 	"retun a version of myself which will only count occurrences"
-	return ToN3(write=dummyWrite, base=self.base, genPrefix=self._genPrefix, \
+	return ToN3(write=dummyWrite, base=self.base, genPrefix=self._genPrefix,
 		    noLists=self.noLists, quiet=self._quiet, flags=self._flags )
 		    
     def writeEncoded(self, str):
@@ -1218,14 +1231,15 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
             and "d" not in self._flags): return # don't duplicate ??
         self._endStatement()
         self.prefixes[uri] = prefixString
-        self._write(" @prefix %s: <%s> ." % (prefixString, refTo(self.base, uri)) )
+        self._write("@prefix %s: <%s> ."%(prefixString, refTo(self.base, uri)))
         self._newline()
 
     def setDefaultNamespace(self, uri):
-        if "d" in self._flags or "p" in self._flags: return  # Ignore the prefix system completely
+        if "d" in self._flags or "p" in self._flags:
+	    return  # Ignore the prefix system completely
         self._endStatement()
         self.defaultNamespace = uri
-	if self.base:  # Sometimes there is none, and nowadays refTo is intolerant
+	if self.base:  # Sometimes there is none, and now refTo is intolerant
 	    x = refTo(self.base, uri)
 	else:
 	    x = uri
@@ -1237,8 +1251,10 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
  
         if not self._quiet:  # Suppress stuff which will confuse test diffs
             self._write("\n#  Notation3 generation by\n")
-            idstring = "$Id$" # CVS CHANGES THIS
-            self._write("#       " + idstring[5:-2] + "\n\n") # Strip $s in case result is checked in
+            idstr = "$Id$"
+	    # CVS CHANGES THE ABOVE LINE
+            self._write("#       " + idstr[5:-2] + "\n\n") 
+	    # Strip "$" in case the N3 file is checked in to CVS
             if self.base: self._write("#   Base was: " + self.base + "\n")
         self._write("    " * self.indent)
         self._subj = None
@@ -1262,21 +1278,10 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
 
     def makeStatement(self, triple, why=None, aIsPossible=1):
 #        triple = tuple([a.asPair() for a in triple2])
-        if self.stack[-1]:
-	    if triple[PRED] == N3_first:
-		self._write(self.representationOf(triple[CONTEXT], triple[OBJ])+" ")
-	    elif triple[PRED] == RDF_type and triple[OBJ] == N3_List:
-		pass  # We knew
-	    elif triple[PRED] == RDF_type and triple[OBJ] == N3_Empty:
-		pass  # not how we would have put it but never mind
-	    elif triple[PRED] != N3_rest:
-		raise RuntimeError ("Should only see %s and %s in list mode" 
-				    %(N3_first, N3_rest), triple)
-            return
-        
         if ("a" in self._flags and
             triple[PRED] == (SYMBOL, N3_forSome_URI) and
-            triple[CONTEXT] == triple[SUBJ]) : # and   # We assume the output is flat @@@ true, we should not
+            triple[CONTEXT] == triple[SUBJ]) :
+	    # and   # We assume the output is flat @@@ true, we should not
             try:
                 aIsPossible = aIsPossible()
             except TypeError:
@@ -1294,78 +1299,100 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
                         j = j +1
                     str2 = str3
                 if str2[0] in "0123456789": str2 = "a"+str2
-                if diag.chatty_flag > 60: progress("Anode %s  means %s" % (str2, value)) 
+                if diag.chatty_flag > 60: progress(
+					"Anode %s  means %s" % (str2, value)) 
                 self._anodeName[str2] = value
                 self._anodeId[value] = str2
                 return
 
         self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])        
         self._write(self.representationOf(triple[CONTEXT], triple[OBJ]))
-        
-# Below is for writing an anonymous node which is the object of only one arc        
-    def startAnonymous(self,  triple, isList=0):
-        if isList and not self.noLists:
-            wasList = self.stack[-1]
-            if wasList and (triple[PRED]==N3_rest) :   # rest p of existing list
-                self.stack.append(2)    # just a rest - no parens         
-                self._subj = triple[OBJ]
-            else:
-                self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])
-                self.stack.append(1)    # New list
-                self._write(" (")
-                self.indent = self.indent + 1
-            self._pred = N3_first
+	self._needNL = 1
+	        
+# Below is for writing an anonymous node
 
-        else:
-            self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])
-            self.stack.append(0)
-            self._write(" [")
-            self.indent = self.indent + 1
-            self._pred = None
+# As object, with one incoming arc:
+        
+    def startAnonymous(self,  triple):
+	self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])
+	self._write(" [")
+	self.indent = self.indent + 1
+	self._pred = None
         self._newline()
         self._subj = triple[OBJ]    # The object is now the current subject
 
     def endAnonymous(self, subject, verb):    # Remind me where we are
-        wasList = self.stack.pop()
-        isList = self.stack[-1]
-        if wasList:
-            if not isList or wasList == 1:
-                self._write(" )")
-                self.indent = self.indent - 1
-        else:
-            self._write(" ]")
-            self.indent = self.indent - 1
+	self._write(" ]")
+	self.indent = self.indent - 1
         self._subj = subject
         self._pred = verb
 
-# Below we do anonymous top level node - arrows only leave this circle
+# As subject:
 
-    def startAnonymousNode(self, subj, isList=0):
-        self.stack.append(isList)
+    def startAnonymousNode(self, subj):
         if self._subj:
             self._write(" .")
         self._newline()
         self.indent = self.indent + 1
-        if isList: self._write("  ( ")
-        else: self._write("  [ ")
+        self._write("  [ ")
         self._subj = subj    # The object is not the subject context
         self._pred = None
 
 
     def endAnonymousNode(self, subj=None):    # Remove default subject
-        isList = self.stack.pop()
-        if isList: self._write(" )")
-        else: self._write(" ]")
+        self._write(" ]")
         if not subj: self._write(".")
         self.indent = self.indent - 1
         self._newline()
         self._subj = subj
         self._pred = None
 
-# Below we notate a nested bag of statements
+# Below we print lists. A list expects to have lots of li links sent
 
-    def startBagSubject(self, context):
-        self.stack.append(0)
+# As subject:
+
+    def startListSubject(self, subj):
+        if self._subj:
+            self._write(" .")
+        self._newline()
+        self.indent = self.indent + 1
+        self._write("  ( ")
+	self._needNL = 0
+        self._subj = subj    # The object is not the subject context
+	self._pred = N3_li  # expect these until list ends
+
+
+    def endListSubject(self, subj=None):    # Remove default subject
+        self._write(" )")
+        if not subj: self._write(".")
+        self.indent = self.indent - 1
+        self._newline()
+        self._subj = subj
+        self._pred = None
+
+
+# As Object:
+
+    def startListObject(self,  triple):
+	self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])
+	self._subj = triple[OBJ]
+	self._write(" (")
+	self._needNL = 1      # Choice here of compactness
+	self.indent = self.indent + 1
+	self._pred = N3_li  # expect these until list ends
+        self._subj = triple[OBJ]    # The object is now the current subject
+
+    def endListObject(self, subject, verb):    # Remind me where we are
+	self._write(" )")
+	self.indent = self.indent - 1
+        self._subj = subject
+        self._pred = verb
+
+
+
+# Below we print a nested formula of statements
+
+    def startFormulaSubject(self, context):
 	if self._subj != context:
 	    self._endStatement()
         self.indent = self.indent + 1
@@ -1374,9 +1401,7 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
 	self._subj = None
         self._pred = None
 
-    def endBagSubject(self, subj):    # Remove context
-        #self.stack.append(0)
-        self.stack.pop()
+    def endFormulaSubject(self, subj):    # Remove context
         self._endStatement()     # @@@@@@@@ remove in syntax change to implicit
         self._newline()
         self.indent = self.indent - 1
@@ -1384,44 +1409,14 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
         self._subj = subj
         self._pred = None
      
-    def startBagNamed(self, context, subj):
-        if self._subj != subj:
-            self._endStatement()
-            if self.indent == 1:  # Top level only - extra newline
-                self._newline()
-            self._write(self.representationOf(context, subj))
-            self._subj = subj
-            self._pred = None
-
-        if self._pred is not None:
-            self._write(";")
- #       self._makeSubjPred(somecontext, subj, ( SYMBOL,  DAML_sameAs_URI ))
-        self.stack.append(0)
-        self.indent = self.indent + 1
-        self._write(" :- {")
-        self._newline()
-        self._subj = None
-        self._pred = None
-
-    def endBagNamed(self, subj):    # Remove context
-        self.stack.pop()
-        self._endStatement()     # @@@@@@@@ remove in syntax change to implicit
-        self._newline()
-        self._write("}")
-        self._subj = subj
-        self._pred = None
-        self.indent = self.indent - 1
-     
-    def startBagObject(self, triple):
+    def startFormulaObject(self, triple):
         self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])
-        self.stack.append(0)
         self.indent = self.indent + 1
         self._write("{")
         self._subj = None
         self._pred = None
 
-    def endBagObject(self, pred, subj):    # Remove context
-        self.stack.pop()
+    def endFormulaObject(self, pred, subj):    # Remove context
         self._endStatement() # @@@@@@@@ remove in syntax change to implicit
         self.indent = self.indent - 1
         self._write("}")
@@ -1431,7 +1426,10 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
      
     def _makeSubjPred(self, context, subj, pred):
 
-        if self.stack[-1]: return  # If we are in list mode, don't need to.
+        if pred == N3_li:
+	    if 	self._needNL:
+		self._newline()
+	    return  # If we are in list mode, don't need to.
         
 	varDecl = (subj == context and "v" not in self._flags and (
 		pred == (SYMBOL, N3_forAll_URI) or
@@ -1446,7 +1444,8 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
 	    else:  # "this" suppressed
 		if (pred != (SYMBOL, N3_forAll_URI) and
 		    pred != (SYMBOL, N3_forSome_URI)):
-		    raise ValueError("On N3 output, 'this' used with bad predicate: %s" % pred)
+		    raise ValueError(
+		     "On N3 output, 'this' used with bad predicate: %s" % pred)
             self._subj = subj
             self._pred = None
 
@@ -1466,9 +1465,9 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
 			self._write( " @forAll ")
 		    else:
 			self._write( " @forSome ")
-            elif pred == ( SYMBOL,  DAML_sameAs_URI ) and "t" not in self._flags:
+            elif pred == (SYMBOL, DAML_sameAs_URI) and "t" not in self._flags:
                 self._write(" = ")
-            elif pred == ( SYMBOL, RDF_type_URI )  and "t" not in self._flags:
+            elif pred == (SYMBOL, RDF_type_URI)  and "t" not in self._flags:
                 self._write(" a ")
             else :
                 self._write( " %s " % self.representationOf(context, pred))
@@ -1519,7 +1518,8 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
 
         if ty == LITERAL_LANG:
 	    s, lang = value
-	    return stringToN3(s, singleLine= singleLine, flags=self._flags)+ "@" + lang
+	    return stringToN3(s, singleLine= singleLine,
+					flags=self._flags)+ "@" + lang
 
 	aid = self._anodeId.get(pair[1], None)
 	if aid != None:  # "a" flag only
@@ -1541,12 +1541,11 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
 	
         if (j>=0
             and "p" not in self._flags):   # Suppress use of prefixes?
-#            and value[j+1:].find(".") <0 ): # Can't use prefix if localname includes "."
-#            print "|%s|%s|"%(self.defaultNamespace, value[:j+1])
-	    for ch in value[j+1:]:  #  Examples: "."   ";"  we can't have in qname
+	    for ch in value[j+1:]:  #  Examples: "." ";"  we can't have in qname
 		if ch in _notNameChars:
 		    if verbosity() > 0:
-			progress("Cannot have character %i in local name." % ord(ch))
+			progress("Cannot have character %i in local name."
+				    % ord(ch))
 		    break
 	    else:
 		namesp = value[:j+1]
@@ -1559,7 +1558,7 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
 		if prefix != None : return prefix + ":" + value[j+1:]
 	    
 		if value[:j] == self.base:   # If local to output stream,
-		    return "<#" + value[j+1:] + ">" #   use local frag id (@@ lone word?)
+		    return "<#" + value[j+1:] + ">" # use local frag id
         
 	if "r" not in self._flags and self.base != None:
 	    value = hexify(refTo(self.base, value))
@@ -1580,7 +1579,8 @@ class tmToN3(RDFSink.RDFSink):
 
 
     """
-    def __init__(self, write, base=None, genPrefix = None, noLists=0 , quiet=0, flags=""):
+    def __init__(self, write, base=None, genPrefix = None,
+				    noLists=0 , quiet=0, flags=""):
         gp = genPrefix
 	if gp == None:
 	    gp = "#_g"
@@ -1613,6 +1613,7 @@ class tmToN3(RDFSink.RDFSink):
 	return self._writeRaw(str.encode('utf-8'))
 
     def _newline(self, extra=0):
+	self._needNL = 0
         self._write("\n"+ "    " * (self.indent+extra))
         
     def bind(self, prefixString, uri):
@@ -1626,14 +1627,15 @@ class tmToN3(RDFSink.RDFSink):
             and "d" not in self._flags): return # don't duplicate ??
         self.endStatement()
         self.prefixes[uri] = prefixString
-        self._write(" @prefix %s: <%s> ." % (prefixString, refTo(self.base, uri)) )
+        self._write(" @prefix %s: <%s> ." %
+			    (prefixString, refTo(self.base, uri)) )
         self._newline()
 
     def setDefaultNamespace(self, uri):
-        if "d" in self._flags or "p" in self._flags: return  # Ignore the prefix system completely
+        if "d" in self._flags or "p" in self._flags: return  # no prefix system
         self.endStatement()
         self.defaultNamespace = uri
-	if self.base:  # Sometimes there is none, and nowadays refTo is intolerant
+	if self.base:  # Sometimes there is none, and now refTo is intolerant
 	    x = refTo(self.base, uri)
 	else:
 	    x = uri
@@ -1662,7 +1664,7 @@ class tmToN3(RDFSink.RDFSink):
                         self._write(str(long(lit)))
                         return
                     if (dt_uri == FLOAT_DATATYPE):
-                        self._write(str(float(lit)))    # numeric value python-normalized
+                        self._write(str(float(lit))) # numeric python-normalized
                         return
                     if (dt_uri == DECIMAL_DATATYPE):
                         self._write(str(Decimal(lit)))
@@ -1696,12 +1698,11 @@ class tmToN3(RDFSink.RDFSink):
 	
         if (j>=0
             and "p" not in self._flags):   # Suppress use of prefixes?
-#            and value[j+1:].find(".") <0 ): # Can't use prefix if localname includes "."
-#            print "|%s|%s|"%(self.defaultNamespace, value[:j+1])
-	    for ch in value[j+1:]:  #  Examples: "."   ";"  we can't have in qname
+	    for ch in value[j+1:]:  #  Examples: "." ";"  we can't have in qname
 		if ch in _notNameChars:
 		    if verbosity() > 0:
-			progress("Cannot have character %i in local name." % ord(ch))
+			progress("Cannot have character %i in local name."
+					    % ord(ch))
 		    break
 	    else:
 		namesp = value[:j+1]
@@ -1714,7 +1715,7 @@ class tmToN3(RDFSink.RDFSink):
 		if prefix != None : return prefix + ":" + value[j+1:]
 	    
 		if value[:j] == self.base:   # If local to output stream,
-		    return "<#" + value[j+1:] + ">" #   use local frag id (@@ lone word?)
+		    return "<#" + value[j+1:] + ">" #   use local frag id
         
 	if "r" not in self._flags and self.base != None:
 	    value = refTo(self.base, value)
@@ -1854,7 +1855,8 @@ def stringToN3(str, singleLine=0, flags=""):
             else:
                 if 'e' in flags:
 #                res = res + ('\\u%04x' % ord(ch))
-                    res = res + ('\\u%04X' % ord(ch))  # http://www.w3.org/TR/rdf-testcases/#ntriples
+                    res = res + ('\\u%04X' % ord(ch)) 
+		    # http://www.w3.org/TR/rdf-testcases/#ntriples
                 else:
                     res = res + ch
         i = j + 1
@@ -1863,7 +1865,8 @@ def stringToN3(str, singleLine=0, flags=""):
     newstr = ""
     for ch in res + str[i:]:
         if ord(ch)>65535:
-            newstr = newstr + ('\\U%08X' % ord(ch))  # http://www.w3.org/TR/rdf-testcases/#ntriples
+            newstr = newstr + ('\\U%08X' % ord(ch)) 
+		# http://www.w3.org/TR/rdf-testcases/#ntriples
         else:
             newstr = newstr + ch
     #
@@ -1871,7 +1874,8 @@ def stringToN3(str, singleLine=0, flags=""):
     return delim + newstr + delim
 
 def backslashUify(ustr):
-    """Use URL encoding to return an ASCII string corresponding to the given unicode"""
+    """Use URL encoding to return an ASCII string corresponding
+	to the given unicode"""
 #    progress("String is "+`ustr`)
 #    s1=ustr.encode('utf-8')
     str  = ""
@@ -1886,7 +1890,8 @@ def backslashUify(ustr):
     return str
 
 def hexify(ustr):
-    """Use URL encoding to return an ASCII string corresponding to the given UTF8 string
+    """Use URL encoding to return an ASCII string
+    corresponding to the given UTF8 string
 
     >>> hexify("http://example/a b")
     'http://example/a%20b'
@@ -1905,7 +1910,8 @@ def hexify(ustr):
     
 def dummy():
         res = ""
-        if len(str) > 20 and (string.find(str, "\n") >=0 or string.find(str, '"') >=0):
+        if len(str) > 20 and (string.find(str, "\n") >=0 
+				or string.find(str, '"') >=0):
                 delim= '"""'
                 forbidden = "\\\"\a\b\f\r\v"    # (allow tabs too now)
         else:
@@ -1914,18 +1920,14 @@ def dummy():
         for i in range(len(str)):
                 ch = str[i]
                 j = string.find(forbidden, ch)
-                if ch == '"' and delim == '"""' and i+1 < len(str) and str[i+1] != '"':
+                if ch == '"' and delim == '"""' \
+				and i+1 < len(str) and str[i+1] != '"':
                     j=-1   # Single quotes don't need escaping in long format
                 if j>=0: ch = "\\" + '\\"abfrvtn'[j]
                 elif ch not in "\n\t" and (ch < " " or ch > "}"):
                     ch = "[[" + `ch` + "]]" #[2:-1] # Use python
                 res = res + ch
         return delim + res + delim
-
-
-
-#ends
-
 
 def _test():
     import doctest
@@ -1934,3 +1936,6 @@ def _test():
 
 if __name__ == '__main__':
     _test()
+
+#ends
+

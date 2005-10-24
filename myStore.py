@@ -23,7 +23,10 @@ History:
     Spilt off from  thing.py 2003-08-19
 
 $Log$
-Revision 1.11  2004-08-08 01:44:49  syosi
+Revision 1.12  2005-10-24 16:58:38  timbl
+--n3=B flag introduced. --why improved but not perfect.
+
+Revision 1.11  2004/08/08 01:44:49  syosi
 undo what I did last thing Friday. Those changes are nowhere near ready for the trunk
 
 Revision 1.9  2004/07/29 16:16:11  syosi
@@ -144,7 +147,7 @@ def universal(str, context, uri):
     formula as context, and return it for future use"""
     return _checkStore().newUniversal(context, uri)
 
-def load(uri=None, openFormula=None, contentType=None, remember=1):
+def load(uri=None, openFormula=None, contentType=None, remember=1, flags=""):
     """Get and parse document.  Guesses format if necessary.
 
     uri:      if None, load from standard input.
@@ -154,7 +157,7 @@ def load(uri=None, openFormula=None, contentType=None, remember=1):
     Raises:   IOError, SyntaxError, DocumentError
     """
     return _checkStore().load(uri, openFormula=openFormula, contentType=contentType,
-			remember=remember)
+			remember=remember, flags=flags)
 
 def loadMany(uris, openFormula=None, referer=None):
     """Load a number of resources into the same formula

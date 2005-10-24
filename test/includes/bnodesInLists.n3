@@ -1,0 +1,31 @@
+@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
+
+# Addressing a tricky problem with canonicaloization
+
+@keywords is, a.
+
+albert children ( fred [ mother joe] ).
+
+
+{ ?x children ( fred [ mother joe] ) } => { ?x a Success }.
+
+
+{
+    { albert children ( fred [ mother joe] ). } 
+
+    log:includes { albert children ( fred [ mother joe] ).}
+
+} => { Test2 a Success }.
+ 
+ 
+ 
+ 
+ { 
+ 
+  @forAll mat:x.
+        {(3 5) math:sum mat:x}           log:implies {mat:x mat:valueOf "3 + 5"} .}.
+
+
+
+
+# ends

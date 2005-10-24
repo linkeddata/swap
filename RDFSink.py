@@ -76,6 +76,7 @@ _Old_Logic_NS = "http://www.w3.org/2000/10/swap/log.n3#"
 # For lists:
 N3_first = (SYMBOL, List_NS + "first")
 N3_rest = (SYMBOL, List_NS + "rest")
+N3_li = (SYMBOL, List_NS + "li")
 N3_nil = (SYMBOL, List_NS + "nil")
 N3_List = (SYMBOL, List_NS + "List")
 N3_Empty = (SYMBOL, List_NS + "Empty")
@@ -345,22 +346,16 @@ class RDFStructuredOutput(RDFSink):
     def endAnonymousNode(self, endAnonymousNode):    # Remove default subject, restore to subj
         pass
 
-    def startBagSubject(self, context):
+    def startFormulaSubject(self, context):
         pass
 
-    def endBagSubject(self, subj):    # Remove context
+    def endFormulaSubject(self, subj):    # Remove context
         pass
      
-    def startBagNamed(self, context, subj):
-        pass
-
-    def endBagNamed(self, subj):    # Remove context
-        pass
-     
-    def startBagObject(self, triple):
+    def startFormulaObject(self, triple):
         return self.makeStatement(triple)
 
-    def endBagObject(self, pred, subj):    # Remove context
+    def endFormulaObject(self, pred, subj):    # Remove context
         pass
     
 
@@ -415,21 +410,21 @@ class TracingRDFSink:
 
     # These ones get called when there's nesting, pretty-printed...
 
-    def startBagSubject(self, context):
+    def startFormulaSubject(self, context):
         printState()
-        if self.backing: self.backing.startBagSubject(context)
+        if self.backing: self.backing.startFormulaSubject(context)
 
-    def endBagSubject(self, subj):
+    def endFormulaSubject(self, subj):
         printState()
-        if self.backing: self.backing.endBagSubject(subj)
+        if self.backing: self.backing.endFormulaSubject(subj)
 
-    def startBagObject(self, triple):
+    def startFormulaObject(self, triple):
         printState()
-        if self.backing: self.backing.startBagObject(triple)
+        if self.backing: self.backing.startFormulaObject(triple)
 
-    def endBagObject(self, pred, subj):
+    def endFormulaObject(self, pred, subj):
         printState()
-        if self.backing: self.backing.endBagObject(pred, subj)
+        if self.backing: self.backing.endFormulaObject(pred, subj)
 
     # These are called by "cwm --pipe", they *need* backing to work.
 

@@ -49,6 +49,7 @@ from set_importer import Set, ImmutableSet
 
 import types
 import string
+
 import re
 import StringIO
 import sys
@@ -60,6 +61,9 @@ import urllib # for log:content
 import md5, binascii  # for building md5 URIs
 
 import uripath
+
+from why import smushedFormula
+
 import notation3    # N3 parsers and generators, and RDF generator
 from webAccess import urlopenForRDF   # http://www.w3.org/2000/10/swap/
 # import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
@@ -67,7 +71,7 @@ from webAccess import urlopenForRDF   # http://www.w3.org/2000/10/swap/
 import diag  # problems importing the tracking flag,
 	     # and chatty_flag must be explicit it seems: use diag.tracking
 
-from diag import progress, verbosity
+from diag import progress, verbosity, tracking
 from term import BuiltIn, LightBuiltIn, RDFBuiltIn, HeavyBuiltIn, Function, \
     MultipleFunction, ReverseFunction, MultipleReverseFunction, \
     Literal, Symbol, Fragment, FragmentNil, Term,\
@@ -85,7 +89,8 @@ from local_decimal import Decimal
 
 from RDFSink import Logic_NS, RDFSink, forSomeSym, forAllSym
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
-from RDFSink import N3_nil, N3_first, N3_rest, OWL_NS, N3_Empty, N3_List, List_NS
+from RDFSink import N3_nil, N3_first, N3_rest, OWL_NS, N3_Empty, N3_List, \
+		    N3_li, List_NS
 from RDFSink import RDF_NS_URI
 
 from RDFSink import FORMULA, LITERAL, LITERAL_DT, LITERAL_LANG, ANONYMOUS, SYMBOL
@@ -159,7 +164,7 @@ class IndexedFormula(Formula):
         Formula.__init__(self, store, uri)
 #	self._redirections = {}
         self.descendents = None   # Placeholder for list of closure under subcontext
-	self.collector = None # Object collecting evidence, if any 
+#	self.collector = None # Object collecting evidence, if any 
 	self._newRedirections = {}  # not subsituted yet
 	self._index = {}
 	self._index[(None,None,None)] = self.statements
@@ -457,9 +462,9 @@ class IndexedFormula(Formula):
     def canonicalize(F):
         """If this formula already exists, return the master version.
         If not, record this one and return it.
-        Call this when the formula is in its final form, with all its statements.
-        Make sure no one else has a copy of the pointer to the smushed one.
-	In canonical form,
+        Call this when the formula is in its final form, with all its
+	statements.  Make sure no one else has a copy of the pointer to the
+	smushed one.  In canonical form,
 	 - the statments are ordered
 	 - the lists are all internalized as lists
 	 
@@ -472,12 +477,12 @@ class IndexedFormula(Formula):
             return F.canonical
 	if F.stayOpen:
             if diag.chatty_flag > 70:
-                progress("End formula -- @@ Knowledge base mode, ignoring c'n:"+`F`)
+                progress("Canonicalizion ignored: @@ Knowledge base mode:"+`F`)
             return F
  
         fl = F.statements
-        l = len(fl), len(F.universals()), len(F.existentials())   # The number of statements
-        possibles = store._formulaeOfLength.get(l, None)  # Formulae of same length
+        l = len(fl), len(F.universals()), len(F.existentials()) 
+        possibles = store._formulaeOfLength.get(l, None)  # Any of same length
 
         if possibles == None:
             store._formulaeOfLength[l] = [F]
@@ -493,42 +498,57 @@ class IndexedFormula(Formula):
 	#fu.sort(Term.compareAnyTerm)
 
         for G in possibles:
-            gl = G.statements
+	
+#	    progress("Just checking.\n",
+#		    "\n", "_"*80, "\n", F.debugString(),
+#		    "\n", "_"*80, "\n", G.debugString(),
+#		    )
+	    gl = G.statements
 	    gkey = len(gl), len(G.universals()), len(G.existentials())
-            if gkey != l: raise RuntimeError("@@Key of %s is %s instead of %s" %(G, `gkey`, `l`))
+            if gkey != l: raise RuntimeError("@@Key of %s is %s instead of %s"
+		%(G, `gkey`, `l`))
 
 	    gl.sort()
             for se, oe, in  ((fe, G.existentials()),
 			     (fu, G.universals())):
                 if se != oe:
                     break
-##		lse = len(se)
-##		loe = len(oe)
-##		if lse > loe: return 1
-##		if lse < loe: return -1
-##		oe.sort(Term.compareAnyTerm)
-##		for i in range(lse):
-##		    if se[i] is not oe[i]:
-##			break # mismatch
-##		else:
-##		    continue # match
-##		break
             
             for i in range(l[0]):
                 for p in PRED, SUBJ, OBJ:
-                    if (fl[i][p] is not gl[i][p]
-                        and (fl[i][p] is not F or gl[i][p] is not G)): # Allow self-reference @@
+                    if (fl[i][p] is not gl[i][p]):
+#			progress("""Mismatch on part %i on statement %i.
+#	    Becaue  %s  is not   %s"""
+#			% (p, i, `fl[i][p].uriref()`, `gl[i][p].uriref()`),
+#				)
+#			for  x in (fl[i][p], gl[i][p]):
+#			    progress("Class %s, id=%i" %(x.__class__, id(x)))
+#
+#			if Formula.unify(F,G):
+#			    progress("""Unifies but did not match on part %i on statement %i.
+#			    Because  %s  is not   %s"""
+#					% (p, i, `fl[i][p].uriref()`, `gl[i][p].uriref()`),
+#				    "\n", "_"*80, "\n", F.debugString(),
+#				    "\n", "_"*80, "\n", G.debugString()
+#				    )
+#			    raise RuntimeError("foundOne")
+
                         break # mismatch
                 else: #match one statement
                     continue
                 break
             else: #match
+#		if not Formula.unify(F,G):
+#		    raise RuntimeError("Look the same but don't unify")
+		if tracking: smushedFormula(F,G)
                 if diag.chatty_flag > 20: progress(
 		    "** End Formula: Smushed new formula %s giving old %s" % (F, G))
 		del(F)  # Make sure it ain't used again
                 return G
+
+
+
         possibles.append(F)
-#        raise oops
         F.canonical = F
         if diag.chatty_flag > 70:
             progress("End formula, a fresh one:"+`F`)
@@ -782,8 +802,8 @@ class BI_rawType(LightBuiltIn, Function):
         if isinstance(subj, Literal): y = store.Literal
         elif isinstance(subj, Formula): y = store.Formula
         elif isinstance(subj, List): y = store.List
+        elif isinstance(subj, N3Set): y = store.Set
         elif isinstance(subj, AnonymousNode): y = store.Blank
-        #@@elif context.listValue.get(subj, None): y = store.List
         else: y = store.Other  #  None?  store.Other?
         if diag.chatty_flag > 91:
             progress("%s  rawType %s." %(`subj`, y))
@@ -837,15 +857,16 @@ class BI_notIncludesWithBuiltins(HeavyBuiltIn):
     def eval(self, subj, obj, queue, bindings, proof, query):
         store = subj.store
         if isinstance(subj, Formula) and isinstance(obj, Formula):
-            return not testIncludes(subj, obj,  bindings=bindings, interpretBuiltins=1) # No (relevant) variables
+            return not testIncludes(subj, obj,  bindings=bindings,
+		    interpretBuiltins=1) # No (relevant) variables
         return 0   # Can't say it *doesn't* include it if it ain't a formula
 
 
 
 class BI_semantics(HeavyBuiltIn, Function):
     """ The semantics of a resource are its machine-readable meaning, as an
-    N3 forumula.  The URI is used to find a represnetation of the resource in bits
-    which is then parsed according to its content type."""
+    N3 forumula.  The URI is used to find a representation of the resource in
+    bits which is then parsed according to its content type."""
     def evalObj(self, subj, queue, bindings, proof, query):
         store = subj.store
         if isinstance(subj, Fragment): doc = subj.resource
@@ -857,10 +878,10 @@ class BI_semantics(HeavyBuiltIn, Function):
 
         if diag.chatty_flag > 10: progress("Reading and parsing " + doc.uriref())
         inputURI = doc.uriref()
-        F = self.store.load(inputURI)
+        F = self.store.load(inputURI, why=becauseSubexpression)
         if diag.chatty_flag>10: progress("    semantics: %s" % (F))
-	if diag.tracking:
-	    proof.append(F.collector)
+#	if diag.tracking:
+#	    proof.append(F.collector)
         return F.canonicalize()
 
 class BI_semanticsWithImportsClosure(HeavyBuiltIn, Function):
@@ -887,8 +908,8 @@ class BI_semanticsWithImportsClosure(HeavyBuiltIn, Function):
   	F = store.load(uri=inputURI, openFormula=F)
           
         if diag.chatty_flag>10: progress("Reading and parsing with closure done.    semantics: %s" % (F))
-  	if diag.tracking:
-            proof.append(F.collector)
+#  	if diag.tracking:
+#            proof.append(F.collector)
         return F.close()
     
 class BI_semanticsOrError(BI_semantics):
@@ -973,8 +994,8 @@ class BI_conclusion(HeavyBuiltIn, Function):
             F = self.store.newFormula()
 	    if diag.tracking:
 		reason = BecauseMerge(F, subj)
-		F.collector = reason
-		proof.append(reason)
+#		F.collector = reason
+#		proof.append(reason)
 	    else: reason = None
             if diag.chatty_flag > 10: progress("Bultin: " + `subj`+ " log:conclusion " + `F`)
             self.store.copyFormula(subj, F, why=reason) # leave open
@@ -1058,7 +1079,7 @@ class BI_existentialVariableName(RDFBuiltIn, MultipleFunction):
 class BI_conjunction(LightBuiltIn, Function):      # Light? well, I suppose so.
     """ The conjunction of a set of formulae is the set of statements which is
     just the union of the sets of statements
-    modulo non-duplication of course"""
+    modulo non-duplication of course."""
     def evalObj(self, subj, queue, bindings, proof, query):
 	subj_py = subj.value()
         if diag.chatty_flag > 50:
@@ -1070,12 +1091,13 @@ class BI_conjunction(LightBuiltIn, Function):      # Light? well, I suppose so.
         F = self.store.newFormula()
 	if diag.tracking:
 	    reason = BecauseMerge(F, subj_py)
-	    F.collector = reason
-	    proof.append(reason)
+#	    F.collector = reason
+#	    proof.append(reason)
 	else: reason = None
         for x in subj_py:
             if not isinstance(x, Formula): return None # Can't
-            self.store.copyFormula(x, F, why=reason)
+
+            self.store.copyFormula(x, F, why=reason)   #  No, that is 
             if diag.chatty_flag > 74:
                 progress("    Formula %s now has %i" % (`F`,len(F.statements)))
         return F.canonicalize()
@@ -1164,6 +1186,7 @@ class RDFStore(RDFSink) :
         log.internFrag("rawUri", BI_rawUri)
         self.Literal =  log.internFrag("Literal", Fragment) # syntactic type possible value - a class
         self.List =     log.internFrag("List", Fragment) # syntactic type possible value - a class
+        self.Set =     log.internFrag("Set", Fragment) # syntactic type possible value - a class
         self.Formula =  log.internFrag("Formula", Fragment) # syntactic type possible value - a class
         self.Blank   =  log.internFrag("Blank", Fragment)
         self.Other =    log.internFrag("Other", Fragment) # syntactic type possible value - a class
@@ -1227,6 +1250,7 @@ class RDFStore(RDFSink) :
         self.rest = rdf.internFrag("rest", BI_rest)
         self.nil = self.intern(N3_nil, FragmentNil)
         self.Empty = self.intern(N3_Empty)
+        self.li = self.intern(N3_li)
         self.List = self.intern(N3_List)
 
         import cwm_string  # String builtins
@@ -1581,10 +1605,10 @@ class RDFStore(RDFSink) :
 	del(pp)
 	
 
-    def dumpNested(self, context, sink):
+    def dumpNested(self, context, sink, flags=""):
         """ Iterates over all URIs ever seen looking for statements
         """
-	pp = Serializer(context, sink)
+	pp = Serializer(context, sink, flags=flags)
 	pp. dumpNested()
 	del(pp)
 

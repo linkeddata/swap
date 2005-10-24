@@ -4,14 +4,16 @@
     This is not done correctly, so I don't expect this file
     to last very long.
 
-    $ID   $
+    $Id$
 
 """
 
-def rdfxmlparser(store, openFormula, thisDoc=None,  flags="", why=None, parser='sax2rdf'):
+def rdfxmlparser(store, openFormula, thisDoc=None,  flags="", why=None,
+		    parser='sax2rdf'):
     if parser == 'rdflib':
         import rdflib_user
-        return rdflib_user.rdflib_handoff(store, openFormula,thisDoc, why=why) #put something here
+        return rdflib_user.rdflib_handoff(store, openFormula,thisDoc, why=why)
     else:   # parser == sax2xml
         import sax2rdf
-        return  sax2rdf.RDFXMLParser(store, openFormula,  thisDoc=thisDoc, flags=flags, why=why)
+        return  sax2rdf.RDFXMLParser(store, openFormula,  thisDoc=thisDoc,
+			flags=flags, why=why)

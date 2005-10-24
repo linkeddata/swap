@@ -35,6 +35,10 @@ some: access-1.response
 
 all: access-1.checked
 
+test:
+	rm access-1.request
+	make some
+
 clean:
 #	rm *.response *.cert *.public 
 	rm make.graph make.dot make.n3

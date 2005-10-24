@@ -35,13 +35,15 @@ INFINITY = 1000000000           # @@ larger than any number occurences
 
 # State values as follows, high value=try first:
 S_UNKNOWN = 	99  # State unknown - to be [re]calculated by setup.
-S_DONE =   	80  # Have exhausted all possible ways to saitsfy this item. return now.
+S_DONE =   	80  # Exhausted all possible ways to saitsfy this. return now.
 S_LIGHT_UNS_GO= 70  # Light, not searched yet, but can run
 S_LIGHT_GO =  	65  # Light, can run  Do this!
 S_NOT_LIGHT =   60  # Not a light built-in, haven't searched yet.
-S_LIGHT_EARLY=	50  # Light built-in, not enough constants to calculate, haven't searched yet.
-S_NEED_DEEP=	45  # Can't search because of unbound compound term, could do recursive unification
-S_HEAVY_READY=	40  # Heavy built-in, search done, but formula now has no vars left. Ready to run.
+S_LIGHT_EARLY=	50  # Light built-in, not ready to calculate, not searched yet.
+S_NEED_DEEP=	45  # Can't search because of unbound compound term,
+		    #   could do recursive unification
+S_HEAVY_READY=	40  # Heavy built-in, search done,
+		    #    but formula now has no vars left. Ready to run.
 S_LIGHT_WAIT=	30  # Light built-in, not enough constants to calculate, search done.
 S_HEAVY_WAIT=	20  # Heavy built-in, too many variables in args to calculate, search done.
 S_REMOTE =	10  # Waiting for local query to be resolved as much as possible
@@ -61,7 +63,7 @@ stateName = {
     S_REMOTE :   "Remote",
     S_SATISFIED:	   "Satis" }
 
-def think(knowledgeBase, ruleFormula=None, mode=""):
+def think(knowledgeBase, ruleFormula=None, mode="", why=None):
     """Forward-chaining inference
     
     In the case in which rules are added back into the
@@ -74,7 +76,7 @@ def think(knowledgeBase, ruleFormula=None, mode=""):
 
     if diag.chatty_flag > 45: progress("think: rules from %s added to %s" %(
 					knowledgeBase, ruleFormula))
-    return InferenceTask(knowledgeBase, ruleFormula, mode=mode, repeat=1).run()
+    return InferenceTask(knowledgeBase, ruleFormula, mode=mode, why=why, repeat=1).run()
 
 def applyRules(
 		workingContext,    # Data we assume 
@@ -929,7 +931,7 @@ class Query(Formula):
                         q2.append(newItem)  #@@@@@@@@@@  If exactly 1 binding, loop (tail recurse)
 		    
                     found = query.unify(q2, variables.copy(), existentials.copy(),
-                                          bindings.copy(), nb, evidence = evidence + [reason])
+			    bindings.copy(), nb, evidence = evidence + [reason])
 		    if diag.chatty_flag > 80: progress(
 			"Nested query returns %i fo %r" % (found, nb))
                     total = total + found
@@ -1168,9 +1170,10 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                         else: return 0   # We absoluteley know this won't match with this in it
 
                     except caughtErrors:
-                        progress("You got a ``" + sys.exc_info()[0].__name__ +
-			    ':' + str(sys.exc_info()[1]) + "'' on " + 
-			    `subj.value()` + ', ' + `obj.value()`)
+			progress(
+			"Warning: Built-in %s %s %s failed because:\n   %s: %s"
+			 % (`subj`, `pred`, `obj`, sys.exc_info()[0].__name__ , 
+			     sys.exc_info()[1].__str__()  ))
                         if "h" in self.query.mode:
                             raise
                         return 0
@@ -1178,16 +1181,17 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                         return 0
 		else: 
 		    if isinstance(pred, Function):
-			if diag.chatty_flag > 97: progress("Builtin function call %s(%s)"%(pred, subj))
+			if diag.chatty_flag > 97:
+			    progress("Builtin function call %s(%s)"%(pred, subj))
 			try:
 #                            result = pred.evalObj(subj, queue, bindings.copy(), proof, self.query)
                             result = pred.evalObj(subj, BNone, BNone, proof, BNone)
                         except caughtErrors:
-                            errVal = ("``" + sys.exc_info()[0].__name__ 
-				+ ':' + str(sys.exc_info()[1]) + "'' on " 
-				+ `pred.value()` + 'builtin with '
-				+ `subj.value()`)
-                            progress("You got a " + errVal)
+                            errVal = (
+			    "Warning: Built-in %s!%s failed because:\n   %s: %s"
+			     % (`pred`, `subj`, sys.exc_info()[0].__name__ , 
+			         sys.exc_info()[1].__str__()  ))
+			    progress(errVal)
                             if "h" in self.query.mode:
                                 raise
                             if isinstance(pred, MultipleFunction):
@@ -1214,8 +1218,10 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 #                            result = pred.evalSubj(obj, queue, bindings.copy(), proof, self.query)
                             result = pred.evalSubj(obj, BNone, BNone, proof, BNone)
                         except caughtErrors:
-                            errVal = ("You got a ``" + sys.exc_info()[0].__name__ + 
-			        ':' + str(sys.exc_info()[1]) + "'' on " + `subj.value()`)
+                            errVal = (
+			    "Warning: Built-in %s^%s failed because:\n   %s: %s"
+			     % (`pred`, `obj`, sys.exc_info()[0].__name__ , 
+			         sys.exc_info()[1].__str__()  ))
 			    progress(errVal)
                             if "h" in self.query.mode:
                                 raise

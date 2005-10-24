@@ -163,7 +163,8 @@ class RDFHandler(xml.sax.ContentHandler):
 
 	self._reason = why	# Why the parser w
 	self._reason2 = None	# Why these triples
-	if diag.tracking: self._reason2 = BecauseOfData(sink.newSymbol(thisDoc), because=self._reason)
+	if diag.tracking: self._reason2 = BecauseOfData(
+		    sink.newSymbol(thisDoc), because=self._reason)
 
         self._subject = None
         self._predicate = None
@@ -755,7 +756,8 @@ class RDFXMLParser(RDFHandler):
 """
 
     def __init__(self, sink, openFormula, thisDoc=None,  flags="", why=None):
-        RDFHandler.__init__(self, sink, openFormula, thisDoc, flags=flags)
+        RDFHandler.__init__(self, sink, openFormula, thisDoc, flags=flags,
+	    why=why)
 	assert thisDoc != None, "Need document URI at the moment, sorry"
         p = xml.sax.make_parser()
         p.setFeature(feature_namespaces, 1)

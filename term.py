@@ -41,7 +41,8 @@ LITERAL_URI_prefix = "data:application/rdf+n3-literal;"
 
 from RDFSink import List_NS
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
-from RDFSink import FORMULA, LITERAL, LITERAL_LANG, LITERAL_DT, ANONYMOUS, SYMBOL, RDF_type_URI
+from RDFSink import FORMULA, LITERAL, LITERAL_LANG, LITERAL_DT, ANONYMOUS, \
+			    SYMBOL, RDF_type_URI
 from RDFSink import Logic_NS
 
 from OrderedSequence import merge, intersection, minus
@@ -100,10 +101,10 @@ class Term(object):
         s = self.uriref()
         p = string.rfind(s, "#")
 	if p<0:  # No hash, use slash
-	    p=s.rfind("/", 0, len(s)-2)   # Allow "/" namespaces as a second best, not a trailing one
-#	    if p == len(s) - 1:   # trailing slash? use a previous one
-#		p = s.rfind("/", 0, p-1)
-        if (p>=0 and s[p+1:].find(".") <0 ): # Can't use prefix if localname includes "."
+	    p=s.rfind("/", 0, len(s)-2) 
+	    # Allow "/" namespaces as a second best, not a trailing one
+        if (p>=0 and s[p+1:].find(".") <0 ):
+	    # Can't use prefix if localname includes "."
             prefix = self.store.prefixes.get(s[:p+1], None) # @@ #CONVENTION
             if prefix != None : return prefix + ":" + s[p+1:]
 	if s.endswith("#_formula"):
@@ -146,7 +147,8 @@ class Term(object):
 	"""Representation in an earlier format, being phased out 2002/08
 	
 	The first part of the pair is a constant number represnting the type
-	see RDFSink.py.  the second is the value -- uri for symbols, string for literals"""
+	see RDFSink.py.  the second is the value -- uri for symbols,
+	string for literals"""
         return (SYMBOL, self.uriref())
     
     def substitution(self, bindings, why=None):
@@ -176,7 +178,7 @@ class Term(object):
 ##    def doNodesAppear(self, symbols):
 ##        return Set([a for a in symbols if a == self])
 
-    def unify(self, other, vars, existentials,  bindings):
+    def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
 	"""Unify this which may contain variables with the other,
 	    which may contain existentials but not variables.
 	    
@@ -189,7 +191,8 @@ class Term(object):
 	    Return [( {var1: val1, var2: val2,...}, reason), ...] if match
 	"""
 	assert type(bindings) is types.DictType
-	if diag.chatty_flag > 97: progress("Unifying symbol %s with %s vars=%s, so far=%s"%
+	if diag.chatty_flag > 97:
+	    progress("Unifying symbol %s with %s vars=%s, so far=%s"%
 					(self, other,vars, bindings))
 	try:
 	    x = bindings[self]
@@ -197,7 +200,8 @@ class Term(object):
 	except KeyError:	    
 	    if self is other: return [ ({}, None)]
 	    if self in vars|existentials:
-		if diag.chatty_flag > 80: progress("Unifying term MATCHED %s to %s"%(self,other))
+		if diag.chatty_flag > 80:
+		    progress("Unifying term MATCHED %s to %s"%(self,other))
 		return [ ({self: other}, None) ]
 	    return 0
 	
@@ -208,6 +212,8 @@ class ErrorFlag(TypeError, Term):
 #    uriref = lambda s: ':'
     value = lambda s: s
 
+    def classOrder(self):
+	return 99
 
 
 class Node(Term):
@@ -231,7 +237,8 @@ class LabelledNode(Node):
 	if retVal:
             return retVal
 	print "Error with '%s' being the same as '%s'" %(s,o)
-	raise RuntimeError("""Internal error: URIref strings should not match if not same object,
+	raise RuntimeError(
+	"""Internal error: URIref strings should not match if not same object,
 	comparing %s and %s""" % (s, o))
 
     def classOrder(self):
@@ -260,7 +267,9 @@ class Symbol(LabelledNode):
             f = self.fragments.get(fragid, None)
             if f != None:
                 if not isinstance(f, thetype):
-                    raise RuntimeError("Oops.. %s exists already but not with type %s"%(f, thetype))
+                    raise RuntimeError(
+		    "Oops.. %s exists already but not with type %s"
+			%(f, thetype))
                 return f    # (Could check that types match just to be sure)
             f = thetype(self, fragid)
             self.fragments[fragid] = f
@@ -292,19 +301,22 @@ class Symbol(LabelledNode):
                 try:
                     F = self.store.load(inputURI)
                 except:
-                #except (IOError, SyntaxError, DocumentAccessError, xml.sax._exceptions.SAXParseException):
+                #except (IOError, SyntaxError, DocumentAccessError,
+		#    xml.sax._exceptions.SAXParseException):
                     F = None
 	if F != None:
 	    if "m" in mode:
 		workingContext.reopen()
-		if diag.chatty_flag > 45: progress("Web: dereferenced %s  added to %s" %(
+		if diag.chatty_flag > 45:
+		    progress("Web: dereferenced %s  added to %s" %(
 			    self, workingContext))
 		workingContext.store.copyFormula(F, workingContext)
 	    if "x" in mode:   # capture experience
 		workingContext.add(r, self.store.semantics, F)
 	if not hasattr(self, "_semantics"):
             setattr(self, "_semantics", F)
-	if diag.chatty_flag > 25: progress("Web: Dereferencing %s gave %s" %(self, F))
+	if diag.chatty_flag > 25:
+	    progress("Web: Dereferencing %s gave %s" %(self, F))
 	return F
 		
 
@@ -361,7 +373,8 @@ class AnonymousNode(Node):
     Goal is to eliminate use of ths URI in the code.
     The URI is however useful as a diagnostic, so we carry it
     when it is given.   It is NOT checked for uniqueness etc.
-    This is a superclass of many things, including AnonymousExistential, which has a scope."""
+    This is a superclass of many things, including AnonymousExistential,
+    which has a scope."""
 
     def __init__(self, store, uri=None):
 	global nextId
@@ -404,7 +417,8 @@ class AnonymousExistential(AnonymousVariable):
     pass
 	 
 class AnonymousUniversal(AnonymousVariable):
-    """Nodes which are introduced as universally quantified variables with no quotable URI"""
+    """Nodes which are introduced as universally quantified variables with
+    no quotable URI"""
     pass
     
     
@@ -420,8 +434,8 @@ class AnonymousUniversal(AnonymousVariable):
 #  in statements.
 # These don't have much to be said for them, compared with python lists,
 # except that (a) they are hashable, and (b) if you do your procesing using
-# first and rest a lot, you don't generate n(n+1)/2 list elements when traversing
-# (which you probably don't anyway using slices)
+# first and rest a lot, you don't generate n(n+1)/2 list elements when
+# traversing (which you probably don't anyway using slices)
 #
 # Many different implementations are of course possible.
 #
@@ -465,7 +479,8 @@ class N3Set(ImmutableSet, CompoundTerm): #,
 
     def substituteEquals(self, bindings, newBindings):
 	"Return this or a version of me with substitution of equals made"
-	if diag.chatty_flag > 100: progress("SubstituteEquals list %s with %s" % (self, bindings))
+	if diag.chatty_flag > 100:
+	    progress("SubstituteEquals list %s with %s" % (self, bindings))
 	if self.occurringIn(bindings.keys()) == Set():
 	    return self # phew!
 
@@ -564,7 +579,8 @@ class List(CompoundTerm):
 	    
     def substituteEquals(self, bindings, newBindings):
 	"Return this or a version of me with substitution of equals made"
-	if diag.chatty_flag > 100: progress("SubstituteEquals list %s with %s" % (self, bindings))
+	if diag.chatty_flag > 100:
+	    progress("SubstituteEquals list %s with %s" % (self, bindings))
 	if self.occurringIn(bindings.keys()) == Set():
 	    return self # phew!
 	s = self.asSequence()
@@ -574,7 +590,8 @@ class List(CompoundTerm):
 	    tail = tail.prepend(x.substituteEquals(bindings, newBindings))
 	newBindings[self] = tail # record a new equality
 	self.generated = lambda : True
-	if diag.chatty_flag > 90: progress("SubstitueEquals list CHANGED %s -> %s" % (self, tail))
+	if diag.chatty_flag > 90:
+	    progress("SubstitueEquals list CHANGED %s -> %s" % (self, tail))
 	return tail
 	    
 
@@ -603,8 +620,8 @@ class List(CompoundTerm):
     def doesNodeAppear(self, symbol):
         """Does that particular node appear anywhere in this list
 
-        This function is necessarily recursive, and is useful for the pretty printer
-        It will also be useful for the flattener, when we write it.
+        This function is necessarily recursive, and is useful for the pretty
+	printer. It will also be useful for the flattener, when we write it.
         """
         for elt in self:
             val = 0
@@ -642,7 +659,7 @@ class NonEmptyList(List):
 	    s = s.rest
 	    o = o.rest
 
-    def unify(self, other, vars, existentials,  bindings):
+    def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
 	"""See Term.unify()"""
 	if diag.chatty_flag > 90:
 	    progress("Unifying list %s with %s vars=%s, so far=%s"%
@@ -687,7 +704,8 @@ class NonEmptyList(List):
 	    if i == 0: return p.first
 	    p = p.rest
 	    if not isinstance(p, NonEmptyList):
-		raise ValueError("Index %i exceeds size of list %s" % (i, `self`))
+		raise ValueError("Index %i exceeds size of list %s"
+			% (i, `self`))
 	    i = i - 1
 
 class EmptyList(List):
@@ -728,10 +746,10 @@ class EmptyList(List):
                 x = x.prepend(value[l])
         return x
 
-    def unify(self, other, vars, existentials, bindings):
+    def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
 	"""Unify the substitution of this using bindings found so far
-	    with the other.
-	    This may contain variables, the other may contain existentials but not variables.
+	    with the other. This may contain variables, the other may contain
+	    existentials but not variables.
 	    Return 0 if impossible.
 	    Return [({}, None)] if no new bindings
 	    Return [( {var1: val1, var2: val2, ...}, reason) ...] if match.
@@ -759,7 +777,7 @@ class FragmentNil(EmptyList, Fragment):
 
 
 
-def unifySequence(self, other, vars, existentials, bindings, start=0):
+def unifySequence(self, other, vars=Set([]), existentials=Set([]),  bindings={}, start=0):
     """Utility routine to unify 2 python sequences of things against each other
     Slight optimization to iterate instead of recurse when no binding happens.
     """
@@ -790,10 +808,10 @@ def unifySequence(self, other, vars, existentials, bindings, start=0):
 	    res.append((nb3, None))
     return res
     
-def unifySet(self, other, vars, existentials, bindings):
+def unifySet(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
     """Utility routine to unify 2 python sets of things against each other
     No optimization!  This is of course the graph match function 
-    implemented properly in query.py
+    implemented with indexing, and built-in functions, in query.py.
     """
     if diag.chatty_flag > 99: progress("Unifying set %s with %s" %
 	(`self`, `other`))
@@ -822,7 +840,7 @@ def unifySet(self, other, vars, existentials, bindings):
 	return res
     return 0
 	    
-def unify(self, other, vars, existentials, bindings):
+def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
     """Unify something whatever it is
     See Term.unify
     """
@@ -889,7 +907,8 @@ class Literal(Term):
     really, data:text/rdf+n3;%22hello%22 == "hello" but who
     wants to store it that way?  Maybe we do... at least in theory and maybe
     practice but, for now, we keep them in separate subclases of Term.
-    An RDF literal has a value - by default a string, and a datattype, and a language
+    An RDF literal has a value - by default a string, and a datattype, and a
+    language.
     """
 
 
@@ -960,7 +979,8 @@ class Literal(Term):
 	return self
 
     def representation(self, base=None):
-        return '"' + self.string + '"'   # @@@ encode quotes; @@@@ strings containing \n
+        return '"' + self.string + '"' 
+	# @@@ encode quotes; @@@@ strings containing \n
 
     def value(self):
 	"""Datatype conversion XSD to Python
@@ -975,11 +995,10 @@ class Literal(Term):
 	    try:
 		return typeMap[self.datatype.fragid](self.string)
 	    except KeyError:
-		raise ValueError("Attempt to run built-in on unsupported XSD datatype %s of value %s." 
+		raise ValueError(
+	  "Attempt to run built-in on unsupported XSD datatype %s of value %s." 
 			% (`self.datatype`, self.string))
-		
-#	if self.datatype is self.store.integer: return int(self.string)
-#	if self.datatype is self.store.float: return float(self.string)
+
 	raise ValueError("Attempt to run built-in on unknown datatype %s of value %s." 
 			% (`self.datatype`, self.string))
 
@@ -989,7 +1008,7 @@ class Literal(Term):
         return self.asHashURI() #something of a kludge?
         #return  LITERAL_URI_prefix + uri_encode(self.representation())    # tbl preferred
 
-    def unify(self, other, vars, existentials, bindings):
+    def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
 	"""Unify this which may contain variables with the other,
 	    which may contain existentials but not variables.
 	    Return 0 if impossible.
@@ -1037,13 +1056,13 @@ from urllib import quote as uri_encode
 
 
 
-##################################################################################
+################################################################################
 #
 #   Built-in master classes
 #
 # These are resources in the store which have processing capability.
-# Each one has to have its own class, and each inherits from various of the generic
-# classes below, according to its capabilities.
+# Each one has to have its own class, and each inherits from various of the
+# generic classes below, according to its capabilities.
 #
 # First, the template classes:
 #
@@ -1065,15 +1084,17 @@ class BuiltIn(Fragment):
 	calls a simpler one which uses python conventions.
 	
 	To reduce confusion, the inital ones called with the internals available
-	use abreviations "eval", "subj" etc while the python-style ones use evaluate, subject, etc."""
+	use abreviations "eval", "subj" etc while the python-style ones use
+	evaluate, subject, etc."""
 	if hasattr(self, "evaluate"):
-            if not isinstance(subj, (Literal, CompoundTerm)) or not isinstance(obj, (Literal, CompoundTerm)):
+            if (not isinstance(subj, (Literal, CompoundTerm)) or
+			not isinstance(obj, (Literal, CompoundTerm))):
                 raise ArgumentNotLiteral(subj, obj)
 	    return self.evaluate(subj.value(), obj.value())
 	elif isinstance(self, Function):
-		return Function.eval(self, subj, obj, queue, bindings, proof, query)
+	    return Function.eval(self, subj, obj, queue, bindings, proof, query)
 	elif isinstance(self, ReverseFunction):
-		return ReverseFunction.eval(self, subj, obj, queue, bindings, proof, query)
+	    return ReverseFunction.eval(self, subj, obj, queue, bindings, proof, query)
 	raise RuntimeError("Instance %s of built-in has no eval() or subsititue for it" %`self`)
 
 class GenericBuiltIn(BuiltIn):

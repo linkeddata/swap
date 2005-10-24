@@ -36,8 +36,6 @@ try:
     from swap.diag import verbosity, setVerbosity, progress
     from swap import notation3    	# N3 parsers and generators
 
-
-    from swap.RDFSink import FORMULA, LITERAL, ANONYMOUS, Logic_NS
     from swap import uripath
     from swap.uripath import base
     from swap.myStore import  Namespace
@@ -53,7 +51,6 @@ except ImportError:
     import notation3    	# N3 parsers and generators
 
 
-    from RDFSink import FORMULA, LITERAL, ANONYMOUS, Logic_NS
     import uripath
     from uripath import base
     from myStore import  Namespace

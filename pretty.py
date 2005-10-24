@@ -14,15 +14,18 @@ This is or was http://www.w3.org/2000/10/swap/pretty.py
 import types
 import string
 
-import diag  # problems importing the tracking flag, must be explicit it seems diag.tracking
+import diag
 from diag import progress, verbosity, tracking
-from term import   Literal, Symbol, Fragment, AnonymousVariable, FragmentNil, \
-     Term, CompoundTerm, List, EmptyList, NonEmptyList, N3Set
+from term import   Literal, Symbol, Fragment, AnonymousNode, \
+    AnonymousVariable, FragmentNil, \
+    Term, CompoundTerm, List, EmptyList, NonEmptyList, N3Set
 from formula import Formula, StoredStatement
 
 from RDFSink import Logic_NS, RDFSink, forSomeSym, forAllSym
-from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
-from RDFSink import N3_nil, N3_first, N3_rest, OWL_NS, N3_Empty, N3_List, List_NS
+from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4, \
+	    ANONYMOUS, SYMBOL, LITERAL, LITERAL_DT, LITERAL_LANG
+from RDFSink import N3_nil, N3_first, N3_rest, OWL_NS, N3_Empty, N3_List, \
+		    List_NS
 from RDFSink import RDF_NS_URI
 from RDFSink import RDF_type_URI
 
@@ -39,6 +42,33 @@ FLOAT_DATATYPE = "http://www.w3.org/2001/XMLSchema#double"
 
 prefixchars = "abcdefghijklmnopqustuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
+
+
+# Utility functions for the object-free abstract notation interface
+
+def auPair(x):
+    """Encode as object-free form for unparser interface"""
+    if isinstance(x, Literal):
+	if x.datatype:
+	    return LITERAL_DT, (x.string, x.datatype.uriref())
+	if x.lang:
+	    return LITERAL_LANG, (x.string, x.lang)
+	return (LITERAL, x.string)
+    
+    if isinstance(x, AnonymousNode):
+	return (ANONYMOUS, x.uriref())
+    else:
+	return (SYMBOL, x.uriref())
+
+
+def auxPairs(t):
+    return(auPair(t[CONTEXT]),
+			auPair(t[PRED]),
+			auPair(t[SUBJ]),
+			auPair(t[OBJ]),
+			)
+
+
 class TooMuchRecursion(Exception): pass
 
 class Serializer:
@@ -47,7 +77,7 @@ class Serializer:
     """
     def __init__(self, F, sink, flags="", sorting=0):
 	self.context = F
-#	assert F.canonical is not None, "Formula to be printed must be canonical"
+#	assert F.canonical is not None, "Formula printed must be canonical"
 	self.store = F.store
 	self.sink = sink
 	self.defaultNamespace = None
@@ -59,12 +89,12 @@ class Serializer:
 	self._tooDeep = {}
 	self._occurringAs = [{}, {}, {}, {}]
 	self._topology_returns = {}
-
+	
     def selectDefaultPrefix(self, printFunction):
 
         """ Symbol whose fragments have the most occurrences.
-        we suppress the RDF namespace itself because the XML syntax has problems with it
-        being default as it is used for attributes.
+        we suppress the RDF namespace itself because the XML syntax
+	has problems with it being default as it is used for attributes.
 	
 	This also outputs the prefixes."""
 
@@ -182,6 +212,7 @@ class Serializer:
 		self._listsWithinLists(i, lists)
 
     def dumpLists(self):
+	"Dump lists out as first and rest. Not used in pretty."
         listList = {}
 	context = self.context
 	sink = self.sink
@@ -223,6 +254,9 @@ class Serializer:
 		listList[list] = 1
 		list = list.rest
 
+
+	
+
     def dumpChronological(self):
 	"Fast as possible. Only dumps data. No formulae or universals."
 	context = self.context
@@ -255,32 +289,16 @@ class Serializer:
             raise ValueError("Cannot have a literal as a predicate. This makes no sense, %s" % `quad[1]`)
         if isinstance(quad[1], Formula):
             raise ValueError("Cannot have a formula as a predicate. This makes no sense")
-        sink.makeStatement(self.extern(quad), aIsPossible=aWorks)
+        sink.makeStatement(auxPairs(quad), aIsPossible=aWorks)
 
-    def notAsExtern(self, t):
-        return(t[CONTEXT],
-                            t[PRED],
-                            t[SUBJ],
-                            t[OBJ],
-                            )
-
-    def extern(self, t):
-        return(t[CONTEXT].asPair(),
-                            t[PRED].asPair(),
-                            t[SUBJ].asPair(),
-                            t[OBJ].asPair(),
-                            )
 
     def dumpVariables(self, context, sink, sorting=1, pretty=0, dataOnly=0):
 	"""Dump the forAlls and the forSomes at the top of a formula"""
+	uv = list(context.universals())
+	ev = list(context.existentials())
 	if sorting:
-	    uv = list(context.universals())
 	    uv.sort(Term.compareAnyTerm)
-	    ev = list(context.existentials())
 	    ev.sort(Term.compareAnyTerm)
-	else:
-	    uv = list(context.universals())
-	    ev = list(context.existentials())
 	if not dataOnly:
 	    for v in uv:
 		self._outputStatement(sink, (context, self.store.forAll, context, v))
@@ -295,7 +313,8 @@ class Serializer:
 		self._outputStatement(sink, (context, self.store.forSome, context, v), 1)
 
     def dumpBySubject(self, sorting=1):
-        """ Dump one formula only by order of subject except forSome's first for n3=a mode"""
+        """ Dump one formula only by order of subject except
+	    forSome's first for n3=a mode"""
         
 	context = self.context
 	uu = context.universals().copy()
@@ -621,9 +640,9 @@ class Serializer:
 	else: se = None
 	
         if isinstance(subj, Formula) and subj is not context:
-            sink.startBagSubject(subj.asPair())
-            self.dumpFormulaContents(subj, sink, sorting)  # dump contents of anonymous bag
-            sink.endBagSubject(subj.asPair())       # Subject is now set up
+            sink.startFormulaSubject(auPair(subj))
+            self.dumpFormulaContents(subj, sink, sorting) 
+            sink.endFormulaSubject(auPair(subj))       # Subject is now set up
             # continue to do arcs
             
         elif _anon and (_incoming == 0 or 
@@ -633,11 +652,11 @@ class Serializer:
                 pass
             else:     #  Could have alternative syntax here
 
-                if sorting: statements.sort(StoredStatement.comparePredObj)    # @@ Needed now Fs are canonical?
+                if sorting: statements.sort(StoredStatement.comparePredObj) # @@ Needed now Fs are canonical?
 
                 if se is not None:
                     a = self.context.newBlankNode()
-                    sink.startAnonymousNode(a.asPair())
+                    sink.startAnonymousNode(auPair(a))
                     self.dumpStatement(sink, (context, self.store.owlOneOf, a, li), sorting)
                     for s in statements:  #   "[] color blue."  might be nicer. @@@  Try it?
                         m = s.quad[0:2] + (a, s.quad[3])
@@ -648,23 +667,34 @@ class Serializer:
                     for s in statements:
                         p = s.quad[PRED]
                         if p is not self.store.first and p is not self.store.rest:
-			    if verbosity() > 90: progress("@ Is list, has values for", `p`)
+			    if verbosity() > 90: progress("Is list, has values for", `p`)
                             break # Something to print (later)
                     else:
 			if subj.generated(): return # Nothing.
-                    sink.startAnonymousNode(subj.asPair(), li)
-		    self.dumpStatement(sink, (context, self.store.first, subj, subj.first), sorting)
-		    self.dumpStatement(sink, (context, self.store.rest, subj,  subj.rest), sorting)
-		    sink.endAnonymousNode(subj.asPair())
-                    for s in statements:
-                        p = s.quad[PRED]
-                        if p is not self.store.first and p is not self.store.rest:
-#                            progress("++++%s" % `s`)
-                            self.dumpStatement(sink, s.quad, sorting) # Dump the rest outside the ()
+
+		    if "l" not in self.flags:
+			sink.startListSubject(auPair(subj))
+			for ele in subj:
+			    self.dumpStatement(sink, (context, self.store.li, subj,
+						ele), sorting)
+			sink.endListSubject(auPair(subj))
+			for s in statements:
+			    p = s.quad[PRED]
+			    if p is not self.store.first and p is not self.store.rest:
+				self.dumpStatement(sink, s.quad, sorting) # Dump the rest outside the ()
+		    else:  # List but explicitly using first and rest
+			sink.startAnonymousNode(auPair(subj))
+			self.dumpStatement(sink, (context,
+			    self.store.first, subj, subj.first), sorting)
+			self.dumpStatement(sink, (context,
+			    self.store.rest, subj, subj.rest), sorting)
+			for s in statements:
+				self.dumpStatement(sink, s.quad, sorting)
+			sink.endAnonymousNode()
                     return
                 else:
 		    if verbosity() > 90: progress("%s Not list, has property values." % `subj`)
-                    sink.startAnonymousNode(subj.asPair())
+                    sink.startAnonymousNode(auPair(subj))
                     for s in statements:  #   "[] color blue."  might be nicer. @@@  Try it?
                         try:
                             self.dumpStatement(sink, s.quad, sorting)
@@ -691,45 +721,66 @@ class Serializer:
 
 
         if isinstance(obj, Formula):
-            sink.startBagObject(self.extern(triple))
-            self.dumpFormulaContents(obj, sink, sorting)  # dump contents of anonymous bag
-            sink.endBagObject(pre.asPair(), sub.asPair())
+            sink.startFormulaObject(auxPairs(triple))
+            self.dumpFormulaContents(obj, sink, sorting)
+            sink.endFormulaObject(auPair(pre), auPair(sub))
             return
 
 	if isinstance(obj, NonEmptyList):
 	    if verbosity()>99:
-		progress("List found as object of dumpStatement " + `obj` + context.debugString())
-	    sink.startAnonymous(self.extern(triple), isList=1)
-	    self.dumpStatement(sink, (context, self.store.first, obj, obj.first), sorting)
-	    self.dumpStatement(sink, (context, self.store.rest, obj, obj.rest), sorting)
-	    sink.endAnonymous(sub.asPair(), pre.asPair()) # Restore parse state
+		progress("List found as object of dumpStatement " + `obj`
+					+ context.debugString())
+
+	    collectionSyntaxOK = ("l" not in self.flags)
+#	    if "x" in self.flags:  #  Xml can't serialize literal in collection
+#		for ele in obj:
+#		    if isinstance(ele, Literal):
+#			collectionSyntaxOK = 0
+#			break
+
+	    if collectionSyntaxOK:
+		sink.startListObject(auxPairs(triple))
+		for ele in obj:
+		    self.dumpStatement(sink, (context, self.store.li, obj, ele),
+			sorting)
+		sink.endListObject(auPair(sub), auPair(pre))
+	    else:
+		sink.startAnonymous(auxPairs(triple))
+		self.dumpStatement(sink,
+		    (context, self.store.first, obj, obj.first), sorting)
+		self.dumpStatement(sink,
+		    (context, self.store.rest, obj, obj.rest), sorting)
+		sink.endAnonymous(auPair(sub), auPair(pre))
 	    return
 
 	if isinstance(obj, N3Set):
             a = self.context.newBlankNode()
-            tempobj = [mm for mm in obj] #I hate sorting things
+            tempobj = [mm for mm in obj] #I hate sorting things - yosi
             tempobj.sort(Term.compareAnyTerm)
             tempList = self.store.newList(tempobj)
-            sink.startAnonymous(self.extern((triple[CONTEXT], triple[PRED], triple[SUBJ], a)))
-            self.dumpStatement(sink, (context, self.store.owlOneOf, a, tempList), sorting)
-            sink.endAnonymous(sub.asPair(), pre.asPair())
+            sink.startAnonymous(auxPairs((triple[CONTEXT],
+					triple[PRED], triple[SUBJ], a)))
+            self.dumpStatement(sink, (context, self.store.owlOneOf,
+					a, tempList), sorting)
+            sink.endAnonymous(auPair(sub), auPair(pre))
             return
 
         _anon, _incoming = self._topology(obj, context)
+
         if _anon and _incoming == 1:  # Embedded anonymous node in N3
-            sink.startAnonymous(self.extern(triple))
+            sink.startAnonymous(auxPairs(triple))
             ss = context.statementsMatching(subj=obj)
             if sorting: ss.sort(StoredStatement.comparePredObj)
             for t in ss:
                 self.dumpStatement(sink, t.quad, sorting)
-            sink.endAnonymous(sub.asPair(), pre.asPair()) # Restore parse state
+            sink.endAnonymous(sub.asPair(), pre.asPair())
             return
 
         self._outputStatement(sink, triple)
 
 
 BNodePossibles = None	
-def canItbeABNode(formula, symbol):   # @@@@ Really slow -tbl @@@ send me an e-mail with a run of myProfiler proving it. -Yosi
+def canItbeABNode(formula, symbol):
     def returnFunc():
         if BNodePossibles is not None:
             return symbol in BNodePossibles
@@ -737,30 +788,13 @@ def canItbeABNode(formula, symbol):   # @@@@ Really slow -tbl @@@ send me an e-m
             for s in PRED, SUBJ, OBJ:
                 if isinstance(quad[s], Formula):
                     if BNodePossibles is None:
-                        BNodePossible = quad[s].occurringIn(formula.existentials())
+                        BNodePossible = quad[s].occurringIn(
+						formula.existentials())
                     else:
-                        BNodePossible.update(quad[s].occurringIn(formula.existentials()))
+                        BNodePossible.update(quad[s].occurringIn(
+						formula.existentials()))
         return symbol in BNodePossibles
     return returnFunc
-
-##    toplayer = 1
-##    otherlayers = 1
-##    statementList = formula.statements[:]
-##    parentList.append(formula)
-##    while statementList:
-##        quad = statementList.pop(0)
-##        for s in SUBJ, OBJ:
-##            if quad[s] == symbol:
-##                toplayer = 0
-##            elif isinstance(quad[s], List):
-##                for elt in quad[s]:
-##                    statementList.append(elt)
-##            elif isinstance(quad[s], Formula):
-##                top, other = canItbeABNode(parentList, quad[s], symbol)
-##                otherlayers = otherlayers and top and other
-##            else:
-##                pass
-##    return toplayer, otherlayers
 
 
 #ends

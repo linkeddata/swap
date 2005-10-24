@@ -1,12 +1,5 @@
-#Processed by Id: cwm.py,v 1.176 2005/08/10 17:03:22 syosi Exp 
-        #    using base file:/devel/WWW/2000/10/swap/test/crypto/
-        
-#  Notation3 generation by
-#       notation3.py,v 1.183 2005/08/22 21:12:53 timbl Exp
-
-#   Base was: file:/devel/WWW/2000/10/swap/test/crypto/
-     @prefix : <access-sign-request.n3#> .
-     @prefix ac: <access-tiina.private#> .
+     @prefix : <crypto/access-sign-request.n3#> .
+     @prefix ac: <crypto/access-tiina.private#> .
      @prefix acc: <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
     
      @forAll :d,
@@ -20,8 +13,8 @@
     
     """     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
     
-      [      :credential <file:/devel/WWW/2000/10/swap/test/crypto/access-elisa.cert>,
-                    <file:/devel/WWW/2000/10/swap/test/crypto/access-tiina.cert>;
+      [      :credential <http://example.com/swap/test/crypto/access-elisa.cert>,
+                    <http://example.com/swap/test/crypto/access-tiina.cert>;
              :forDocument <http://www.w3.org/Member>;
              :junk "32746213462187364732164732164321" ].
     
@@ -43,4 +36,3 @@ Mjc3MjExNTc4MzM4MjM0NDY3MDQ3ODcyMTQxNTQwMTMyMTQ3MDA5MzMwNjA3OTAzNTYyMDM5ODIz
 OTEzMzM1OTQyMjQ2MTU1ODE4ODYyMjM=3D
 """ ] .
     
-#ENDS

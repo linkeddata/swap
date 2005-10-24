@@ -32,8 +32,10 @@
 { ?x	rea:evidence ?y } => { ?x  iw:hasAntecedent ?y }.  #@@ should be list
 
 { ?x a  rea:Proof } => {
-	?x  iw:hasLanguage n3:N3;
-	    iw:hasInferenceEngine  <http://inferenceweb.stanford.edu/registry/IE/CWM.owl#CWM>}.
+	?x  a iw:NodeSet;
+	    iw:hasLanguage n3:N3;
+	    iw:hasInferenceEngine  <http://inferenceweb.stanford.edu/registry/IE/CWM.owl#CWM>
+}.
 
 
 { ?x	a rea:Inference;

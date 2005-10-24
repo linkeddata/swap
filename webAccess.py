@@ -174,7 +174,9 @@ def load(store, uri=None, openFormula=None, asIfFrom=None, contentType=None,
         else:
             parser = os.environ.get("CWM_RDF_PARSER", "sax2rdf")
         import rdfxml
-        p = rdfxml.rdfxmlparser(store, F,  thisDoc=asIfFrom, flags=flags, parser=parser)
+        p = rdfxml.rdfxmlparser(store, F,  thisDoc=asIfFrom, flags=flags,
+		parser=parser, why=why)
+
 	p.feed(buffer)
 	F = p.close()
     else:

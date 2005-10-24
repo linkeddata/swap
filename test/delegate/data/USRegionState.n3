@@ -1,0 +1,667 @@
+#Processed by Id: cwm.py,v 1.121 2003/02/02 16:09:06 timbl Exp 
+        #    using base http://www.daml.ri.cmu.edu/ont/USRegionState.daml
+        
+#  Notation3 generation by
+#       notation3.py,v 1.133 2003/02/02 16:09:09 timbl Exp
+
+#   Base was: http://www.daml.ri.cmu.edu/ont/USRegionState.daml
+     @prefix : <#> .
+     @prefix country: <Country.n3#> .
+     @prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#>.
+     @prefix state: <State.n3#> .
+     @prefix uscity: <USCity.n3#> .
+
+########## Added TBL:
+# <> is log:definitiveDocument of :capital, :name, :code, :borderstate,  :region. 
+<http://mr-burns.w3.org:8000/> is log:definitiveService of  # test only !! 
+    :capital, :name, :code, :borderstate,  :region. 
+##############
+
+
+    
+    state:country     a rdf:Property;
+         rdfs:range country:UNITED-STATES .
+    
+    <>     a daml:Ontology;
+         daml:imports <http://www.daml.org/2001/03/daml+oil>,
+                <State.n3>,
+                <http://www.w3.org/1999/02/22-rdf-syntax-ns>,
+                <http://www.w3.org/2000/01/rdf-schema>;
+         daml:versionInfo """
+      $Id$
+    """;
+         rdfs:comment """
+      US Regions and States.
+    """ .
+    
+    :AK     a :USState;
+         :capital uscity:juneauak;
+         :code "AK";
+         :name "Alaska";
+         :region :PacificWest .
+    
+    :AL     a :USState;
+         :borderstate :FL,
+                :GA,
+                :MS,
+                :TN;
+         :capital uscity:montgomeryal;
+         :code "AL";
+         :name "Alabama";
+         :region :DeepSouth .
+    
+    :AR     a :USState;
+         :borderstate :LA,
+                :MO,
+                :MS,
+                :OK,
+                :TN,
+                :TX;
+         :capital uscity:littlerockar;
+         :code "AR";
+         :name "Arkansas";
+         :region :SouthCentral .
+    
+    :AZ     a :USState;
+         :borderstate :CA,
+                :CO,
+                :NM,
+                :NV,
+                :UT;
+         :capital uscity:phoenixaz;
+         :code "AZ";
+         :name "Arizona";
+         :region :SouthWest .
+    
+    :CA     a :USState;
+         :borderstate :AZ,
+                :NV,
+                :OR;
+         :capital uscity:sacramentoca;
+         :code "CA";
+         :name "California";
+         :region :PacificWest .
+    
+    :CO     a :USState;
+         :borderstate :AZ,
+                :KS,
+                :NE,
+                :NM,
+                :OK,
+                :UT,
+                :WY;
+         :capital uscity:denverco;
+         :code "CO";
+         :name "Colorado";
+         :region :SouthWest .
+    
+    :CT     a :USState;
+         :borderstate :MA,
+                :NY,
+                :RI;
+         :capital uscity:hartfordct;
+         :code "CT";
+         :name "Connecticut";
+         :region :NewEngland .
+    
+    :DC     a :USState;
+         :capital uscity:washingtondc;
+         :code "DC";
+         :name "District of Columbia";
+         rdfs:comment """
+      Is this really a state?  Has been included
+      for completeness...
+    """ .
+    
+    :DE     a :USState;
+         :borderstate :MD,
+                :NJ,
+                :PA;
+         :capital uscity:doverde;
+         :code "DE";
+         :name "Delaware";
+         :region :Mid-Atlantic .
+    
+    :DeepSouth     a :USRegion;
+         :memberstate :AL,
+                :FL,
+                :GA,
+                :LA,
+                :MS;
+         rdfs:label "Deep South" .
+    
+    :FL     a :USState;
+         :borderstate :AL,
+                :GA;
+         :capital uscity:tallahasseefl;
+         :code "FL";
+         :name "Florida";
+         :region :DeepSouth .
+    
+    :GA     a :USState;
+         :borderstate :AL,
+                :FL,
+                :NC,
+                :SC,
+                :TN;
+         :capital uscity:atlantaga;
+         :code "GA";
+         :name "Georgia";
+         :region :DeepSouth .
+    
+    :GreatLakes     a :USRegion;
+         :memberstate :IL,
+                :IN,
+                :MI,
+                :OH,
+                :WI;
+         rdfs:label "Great Lakes" .
+    
+    :HI     a :USState;
+         :capital uscity:honoluluhi;
+         :code "HI";
+         :name "Hawaii";
+         :region :PacificWest .
+    
+    :IA     a :USState;
+         :borderstate :IL,
+                :MN,
+                :MO,
+                :NE,
+                :SD,
+                :WI;
+         :capital uscity:desmoinesia;
+         :code "IA";
+         :name "Iowa";
+         :region :UpperPlains .
+    
+    :ID     a :USState;
+         :borderstate :MT,
+                :NV,
+                :OR,
+                :UT,
+                :WA,
+                :WY;
+         :capital uscity:boiseid;
+         :code "ID";
+         :name "Idaho";
+         :region :NorthWest .
+    
+    :IL     a :USState;
+         :borderstate :IA,
+                :IN,
+                :KY,
+                :MI,
+                :MO,
+                :WI;
+         :capital uscity:springfieldil;
+         :code "IL";
+         :name "Illinois";
+         :region :GreatLakes .
+    
+    :IN     a :USState;
+         :borderstate :IL,
+                :KY,
+                :MI,
+                :OH;
+         :capital uscity:indianapolisin;
+         :code "IN";
+         :name "Indiana";
+         :region :GreatLakes .
+    
+    :KS     a :USState;
+         :borderstate :CO,
+                :MO,
+                :NE,
+                :OK;
+         :capital uscity:topekaks;
+         :code "KS";
+         :name "Kansas";
+         :region :SouthCentral .
+    
+    :KY     a :USState;
+         :borderstate :IL,
+                :IN,
+                :MO,
+                :OH,
+                :TN,
+                :VA,
+                :WV;
+         :capital uscity:frankfortky;
+         :code "KY";
+         :name "Kentucky";
+         :region :Mid-South .
+    
+    :LA     a :USState;
+         :borderstate :AR,
+                :MS,
+                :TX;
+         :capital uscity:batonrougela;
+         :code "LA";
+         :name "Louisiana";
+         :region :DeepSouth .
+    
+    :MA     a :USState;
+         :borderstate :CT,
+                :NH,
+                :NY,
+                :RI,
+                :VT;
+         :capital uscity:bostonma;
+         :code "MA";
+         :name "Massachusetts";
+         :region :NewEngland .
+    
+    :MD     a :USState;
+         :borderstate :DE,
+                :PA,
+                :VA,
+                :WV;
+         :capital uscity:annapolismd;
+         :code "MD";
+         :name "Maryland";
+         :region :Mid-Atlantic .
+    
+    :ME     a :USState;
+         :borderstate :NH;
+         :capital uscity:augustame;
+         :code "ME";
+         :name "Maine";
+         :region :NewEngland .
+    
+    :MI     a :USState;
+         :borderstate :IL,
+                :IN,
+                :OH,
+                :WI;
+         :capital uscity:lansingmi;
+         :code "MI";
+         :name "Michigan";
+         :region :GreatLakes .
+    
+    :MN     a :USState;
+         :borderstate :IA,
+                :ND,
+                :SD,
+                :WI;
+         :capital uscity:stpaulmn;
+         :code "MN";
+         :name "Minnesota";
+         :region :UpperPlains .
+    
+    :MO     a :USState;
+         :borderstate :AR,
+                :IA,
+                :IL,
+                :KS,
+                :KY,
+                :NE,
+                :OK,
+                :TN;
+         :capital uscity:jeffersoncitymo;
+         :code "MO";
+         :name "Missouri";
+         :region :SouthCentral .
+    
+    :MS     a :USState;
+         :borderstate :AL,
+                :AR,
+                :LA,
+                :TN;
+         :capital uscity:jacksonms;
+         :code "MS";
+         :name "Mississippi";
+         :region :DeepSouth .
+    
+    :MT     a :USState;
+         :borderstate :ID,
+                :ND,
+                :SD,
+                :WY;
+         :capital uscity:helenamt;
+         :code "MT";
+         :name "Montana";
+         :region :NorthWest .
+    
+    :Mid-Atlantic     a :USRegion;
+         :memberstate :DE,
+                :MD,
+                :NJ,
+                :NY,
+                :PA,
+                :WV;
+         rdfs:label "Mid-Atlantic" .
+    
+    :Mid-South     a :USRegion;
+         :memberstate :KY,
+                :NC,
+                :SC,
+                :TN,
+                :VA;
+         rdfs:label "Mid-South" .
+    
+    :NC     a :USState;
+         :borderstate :GA,
+                :SC,
+                :TN,
+                :VA;
+         :capital uscity:raleighdurhamnc;
+         :code "NC";
+         :name "North Carolina";
+         :region :Mid-South .
+    
+    :ND     a :USState;
+         :borderstate :MN,
+                :MT,
+                :SD;
+         :capital uscity:bismarcknd;
+         :code "ND";
+         :name "North Dakota";
+         :region :UpperPlains .
+    
+    :NE     a :USState;
+         :borderstate :CO,
+                :IA,
+                :KS,
+                :MO,
+                :SD,
+                :WY;
+         :capital uscity:lincolnne;
+         :code "NE";
+         :name "Nebraska";
+         :region :UpperPlains .
+    
+    :NH     a :USState;
+         :borderstate :MA,
+                :ME,
+                :VT;
+         :capital uscity:concordnh;
+         :code "NH";
+         :name "New Hampshire";
+         :region :NewEngland .
+    
+    :NJ     a :USState;
+         :borderstate :DE,
+                :NY,
+                :PA;
+         :capital uscity:trentonnj;
+         :code "NJ";
+         :name "New Jersey";
+         :region :Mid-Atlantic .
+    
+    :NM     a :USState;
+         :borderstate :AZ,
+                :CO,
+                :OK,
+                :TX,
+                :UT;
+         :capital uscity:santafenm;
+         :code "NM";
+         :name "New Mexico";
+         :region :SouthWest .
+    
+    :NV     a :USState;
+         :borderstate :AZ,
+                :CA,
+                :ID,
+                :OR,
+                :UT;
+         :capital uscity:carsoncitynv;
+         :code "NV";
+         :name "Nevada";
+         :region :SouthWest .
+    
+    :NY     a :USState;
+         :borderstate :CT,
+                :MA,
+                :NJ,
+                :PA,
+                :VT;
+         :capital uscity:albanyny;
+         :code "NY";
+         :name "New York";
+         :region :Mid-Atlantic .
+    
+    :NewEngland     a :USRegion;
+         :memberstate :CT,
+                :MA,
+                :ME,
+                :NH,
+                :RI,
+                :VT;
+         rdfs:label "New England" .
+    
+    :NorthWest     a :USRegion;
+         :memberstate :ID,
+                :MT,
+                :OR,
+                :WA,
+                :WY;
+         rdfs:label "NorthWest" .
+    
+    :OH     a :USState;
+         :borderstate :IN,
+                :KY,
+                :MI,
+                :PA,
+                :WV;
+         :capital uscity:columbusoh;
+         :code "OH";
+         :name "Ohio";
+         :region :GreatLakes .
+    
+    :OK     a :USState;
+         :borderstate :AR,
+                :CO,
+                :KS,
+                :MO,
+                :NM,
+                :TX;
+         :capital uscity:oklahomacityok;
+         :code "OK";
+         :name "Oklahoma";
+         :region :SouthCentral .
+    
+    :OR     a :USState;
+         :borderstate :CA,
+                :ID,
+                :NV,
+                :WA;
+         :capital uscity:salemor;
+         :code "OR";
+         :name "Oregon";
+         :region :NorthWest .
+    
+    :PA     a :USState;
+         :borderstate :DE,
+                :MD,
+                :NJ,
+                :NY,
+                :OH,
+                :WV;
+         :capital uscity:harrisburgpa;
+         :code "PA";
+         :name "Pennsylvania";
+         :region :Mid-Atlantic .
+    
+    :PacificWest     a :USRegion;
+         :memberstate :AK,
+                :CA,
+                :HI;
+         rdfs:label "Pacific West" .
+    
+    :RI     a :USState;
+         :borderstate :CT,
+                :MA;
+         :capital uscity:providenceri;
+         :code "RI";
+         :name "Rhode Island";
+         :region :NewEngland .
+    
+    :SC     a :USState;
+         :borderstate :GA,
+                :NC;
+         :capital uscity:columbiasc;
+         :code "SC";
+         :name "South Carolina";
+         :region :Mid-South .
+    
+    :SD     a :USState;
+         :borderstate :IA,
+                :MN,
+                :MT,
+                :ND,
+                :NE,
+                :WY;
+         :capital uscity:pierresd;
+         :code "SD";
+         :name "South Dakota";
+         :region :UpperPlains .
+    
+    :SouthCentral     a :USRegion;
+         :memberstate :AR,
+                :KS,
+                :MO,
+                :OK,
+                :TX;
+         rdfs:label "South Central" .
+    
+    :SouthWest     a :USRegion;
+         :memberstate :AZ,
+                :CO,
+                :NM,
+                :NV,
+                :UT;
+         rdfs:label "Southwest" .
+    
+    :TN     a :USState;
+         :borderstate :AL,
+                :AR,
+                :GA,
+                :KY,
+                :MO,
+                :MS,
+                :NC,
+                :VA;
+         :capital uscity:nashvilletn;
+         :code "TN";
+         :name "Tennessee";
+         :region :Mid-South .
+    
+    :TX     a :USState;
+         :borderstate :AR,
+                :LA,
+                :NM,
+                :OK;
+         :capital uscity:austintx;
+         :code "TX";
+         :name "Texas";
+         :region :SouthCentral .
+    
+    :USRegion     a rdfs:Class;
+         rdfs:comment """
+      Information about the US regions.
+    """;
+         rdfs:label "USRegion";
+         rdfs:subClassOf daml:Thing .
+    
+    :USState     a rdfs:Class;
+         rdfs:comment """
+      Information about one of the US states.
+    """;
+         rdfs:label "USState";
+         rdfs:subClassOf state:State .
+    
+    :UT     a :USState;
+         :borderstate :AZ,
+                :CO,
+                :ID,
+                :NM,
+                :NV,
+                :WY;
+         :capital uscity:saltlakecityut;
+         :code "UT";
+         :name "Utah";
+         :region :SouthWest .
+    
+    :UpperPlains     a :USRegion;
+         :memberstate :IA,
+                :MN,
+                :ND,
+                :NE,
+                :SD;
+         rdfs:label "Upper Plains" .
+    
+    :VA     a :USState;
+         :borderstate :KY,
+                :MD,
+                :NC,
+                :TN,
+                :WV;
+         :capital uscity:richmondva;
+         :code "VA";
+         :name "Virginia";
+         :region :Mid-South .
+    
+    :VT     a :USState;
+         :borderstate :MA,
+                :NH,
+                :NY;
+         :capital uscity:montpeliervt;
+         :code "VT";
+         :name "Vermont";
+         :region :NewEngland .
+    
+    :WA     a :USState;
+         :borderstate :ID,
+                :OR;
+         :capital uscity:olympiawa;
+         :code "WA";
+         :name "Washington";
+         :region :NorthWest .
+    
+    :WI     a :USState;
+         :borderstate :IA,
+                :IL,
+                :MI,
+                :MN;
+         :capital uscity:madisonwi;
+         :code "WI";
+         :name "Wisconsin";
+         :region :GreatLakes .
+    
+    :WV     a :USState;
+         :borderstate :KY,
+                :MD,
+                :OH,
+                :PA,
+                :VA;
+         :capital uscity:charlestonwv;
+         :code "WV";
+         :name "West Virginia";
+         :region :Mid-Atlantic .
+    
+    :WY     a :USState;
+         :borderstate :CO,
+                :ID,
+                :MT,
+                :NE,
+                :SD,
+                :UT;
+         :capital uscity:cheyennewy;
+         :code "WY";
+         :name "Wyoming";
+         :region :NorthWest .
+    
+    :memberstate     a rdf:Property;
+         rdfs:domain :USRegion;
+         rdfs:range :USState .
+    
+    :region     a rdf:Property;
+         rdfs:domain :USState;
+         rdfs:range :USRegion .
+    
+#ENDS

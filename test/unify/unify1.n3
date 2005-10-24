@@ -2,11 +2,11 @@
 #
 @keywords is, a .
 
-Juno says  { Mars too aggressive }.
+Juno says  { Mars too Successful }.
 
-@forAll ag.
+@forAll x.
 
-{ Juno says  { Mars too ag } } =>  { ag a ShouldBeAgressive }.
+{ Juno says  { Mars too x } } =>  { test a x }.
 
 
 #ends

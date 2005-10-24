@@ -1,0 +1,29 @@
+<rdf:RDF xmlns:iw="http://inferenceweb.stanford.edu/2004/07/iw.owl#"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"> 
+<iw:NodeSet rdf:about="http://.../tonysns4_0.owl#tonysns4_0"> 
+<iw:conclusion> 
+(|http://www.w3.org/1999/02/22-rdf-syntax-ns#|::type 
+|http://.../tonys.daml#|::|TonysSpecialty| ?x) 
+</iw:conclusion> 
+<iw:hasLanguage rdf:resource="http://.../registry/LG/KIF.owl#KIF"/> 
+<iw:isConsequentOf rdf:parseType="Collection"> 
+<iw:InferenceStep> 
+<iw:hasRule rdf:resource="http://.../registry/DPR/GMP.owl#GMP"/> 
+<iw:hasInferenceEngine 
+rdf:resource="http://.../registry/IE/JTP.owl#JTP" 
+rdf:type="http://.../iw.owl#InferenceEngine"/> 
+<iw:hasAntecedent rdf:parseType="Collection"> 
+<iw:NodeSet rdf:about="http://.../tonysns4_1.owl#tonysns4_1"/> 
+<iw:NodeSet rdf:about="http://.../tonysns4_5.owl#tonysns4_5"/> 
+</iw:hasAntecedent> 
+<iw:hasVariableMapping rdf:parseType="Collection"> 
+<iw:VariableMapping iw:Variable="?x"> 
+<iw:Term> 
+|http://.../tonys.daml#|::|SEAFOOD| 
+</iw:Term> 
+</iw:VariableMapping> 
+</iw:hasVariableMapping> 
+</iw:InferenceStep> 
+</iw:isConsequentOf> 
+</iw:NodeSet> 
+</rdf:RDF> 

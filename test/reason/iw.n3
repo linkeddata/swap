@@ -1,0 +1,680 @@
+#Processed by Id: cwm.py,v 1.176 2005/08/10 17:03:22 syosi Exp 
+        #    using base http://iw.stanford.edu/2004/07/iw.owl
+        
+#  Notation3 generation by
+#       notation3.py,v 1.183 2005/08/22 21:12:53 timbl Exp
+
+#   Base was: http://iw.stanford.edu/2004/07/iw.owl
+     @prefix : <http://www.w3.org/2002/07/owl#> .
+     @prefix XML: <http://www.w3.org/2001/XMLSchema#> .
+     @prefix iw: <http://inferenceweb.stanford.edu/2004/07/iw.owl#> .
+     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+    
+    <http://inferenceweb.stanford.edu/2004/07/iw.owl>     a :Ontology;
+         :imports <http://protege.stanford.edu/plugins/owl/protege>,
+                <http://www.w3.org/1999/02/22-rdf-syntax-ns>,
+                <http://www.w3.org/2000/01/rdf-schema>,
+                <http://www.w3.org/2002/07/owl>;
+         :versionInfo "$Id$" .
+    
+    iw:Agent     a :Class;
+         rdfs:subClassOf iw:ProvenanceElement,
+                 [
+             a :Restriction;
+             :minCardinality "0"^^XML:int;
+             :onProperty iw:usesInferenceEngine ] .
+    
+    iw:Axiom     a :Class;
+         rdfs:subClassOf iw:ProvenanceElement,
+                 [
+             a :Restriction;
+             :maxCardinality "1"^^XML:int;
+             :onProperty iw:hasLanguage ],
+                 [
+             a :Restriction;
+             :cardinality "1";
+             :onProperty iw:axiomContent ] .
+    
+    iw:ConclusionFiller     a :Class;
+         rdfs:subClassOf  [
+             a :Restriction;
+             :cardinality "1"^^XML:int;
+             :onProperty iw:hasIndex ],
+                 [
+             a :Restriction;
+             :minCardinality "0"^^XML:int;
+             :onProperty iw:hasFillerAntecedent ],
+                 [
+             a :Restriction;
+             :minCardinality "1"^^XML:int;
+             :onProperty iw:hasFillerMapping ] .
+    
+    iw:DeclarativeRule     a :Class;
+         rdfs:subClassOf iw:PrimitiveRule,
+                 [
+             a :Restriction;
+             :minCardinality "0"^^XML:int;
+             :onProperty iw:hasAxiom ] .
+    
+    iw:DerivedRule     a :Class;
+         rdfs:subClassOf iw:InferenceRule,
+                 [
+             a :Restriction;
+             :minCardinality "0"^^XML:int;
+             :onProperty iw:hasAxiom ],
+                 [
+             a :Restriction;
+             :cardinality "1"^^XML:int;
+             :onProperty iw:ruleNodeSet ] .
+    
+    iw:FillerAntecedent     a :Class;
+         rdfs:subClassOf  [
+             a :Restriction;
+             :minCardinality "1"^^XML:int;
+             :onProperty iw:hasAntecedent ],
+                 [
+             a :Restriction;
+             :cardinality "1"^^XML:int;
+             :onProperty iw:hasInferenceStepIndex ] .
+    
+    iw:FillerMapping     a :Class;
+         rdfs:subClassOf  [
+             a :Restriction;
+             :cardinality "1"^^XML:int;
+             :onProperty iw:filler ],
+                 [
+             a :Restriction;
+             :cardinality "1"^^XML:int;
+             :onProperty iw:placeholder ] .
+    
+    iw:InferenceEngine     a :Class;
+         rdfs:subClassOf iw:ProvenanceElement,
+                 [
+             a :Restriction;
+             :minCardinality "1";
+             :onProperty iw:inferenceEngineRule ],
+                 [
+             a :Restriction;
+             :cardinality "1";
+             :onProperty iw:version ] .
+    
+    iw:InferenceRule     a :Class;
+         rdfs:subClassOf iw:ProvenanceElement,
+                 [
+             a :Restriction;
+             :maxCardinality "1";
+             :onProperty iw:englishDescriptionTemplate ] .
+    
+    iw:InferenceStep     a :Class;
+         rdfs:subClassOf  [
+             a :Restriction;
+             :minCardinality "0";
+             :onProperty iw:fromQuery ],
+                 [
+             a :Restriction;
+             :maxCardinality "1";
+             :onProperty iw:fromAnswer ],
+                 [
+             a :Restriction;
+             :maxCardinality "1"^^XML:int;
+             :onProperty iw:hasInferenceEngine ],
+                 [
+             a :Restriction;
+             :maxCardinality "1"^^XML:int;
+             :onProperty iw:hasIndex ],
+                 [
+             a :Restriction;
+             :minCardinality "0";
+             :onProperty iw:hasVariableMapping ],
+                 [
+             a :Restriction;
+             :minCardinality "0";
+             :onProperty iw:hasDischarge ],
+                 [
+             a :Restriction;
+             :cardinality "1"^^XML:int;
+             :onProperty iw:hasRule ],
+                 [
+             a :Restriction;
+             :minCardinality "0"^^XML:int;
+             :onProperty iw:hasSourceUsage ],
+                 [
+             a :Restriction;
+             :minCardinality "0"^^XML:int;
+             :onProperty iw:hasAntecedent ] .
+    
+    iw:Language     a :Class;
+         rdfs:subClassOf iw:ProvenanceElement,
+                 [
+             a :Restriction;
+             :maxCardinality "1"^^XML:int;
+             :onProperty iw:escapeCharacter ] .
+    
+    iw:LanguageAxiomSet     a :Class;
+         rdfs:subClassOf iw:Ontology,
+                 [
+             a :Restriction;
+             :cardinality "1"^^XML:int;
+             :onProperty iw:forLanguage ],
+                 [
+             a :Restriction;
+             :minCardinality "1";
+             :onProperty iw:hasAxiom ] .
+    
+    iw:MethodRule     a :Class;
+         rdfs:subClassOf iw:PrimitiveRule,
+                 [
+             a :Restriction;
+             :maxCardinality "1";
+             :onProperty iw:verificationMethod ] .
+    
+    iw:ModelElement     a :Class;
+         rdfs:subClassOf  [
+             a :Restriction;
+             :cardinality "1"^^XML:int;
+             :onProperty iw:firstSubmissionDate ],
+                 [
+             a :Restriction;
+             :cardinality "1"^^XML:int;
+             :onProperty iw:lastSubmissionDate ],
+                 [
+             a :Restriction;
+             :cardinality "1"^^XML:int;
+             :onProperty iw:uri ] .
+    
+    iw:NodeSet     a :Class;
+         rdfs:subClassOf iw:ProofElement,
+                 [
+             a :Restriction;
+             :minCardinality "0";
+             :onProperty iw:isConsequentOf ],
+                 [
+             a :Restriction;
+             :cardinality "1"^^XML:int;
+             :onProperty iw:hasLanguage ],
+                 [
+             a :Restriction;
+             :cardinality "1";
+             :onProperty iw:hasConclusion ],
+                 [
+             a :Restriction;
+             :minCardinality "0"^^XML:int;
+             :onProperty iw:hasConclusionFiller ],
+                 [
+             a :Restriction;
+             :maxCardinality "1";
+             :onProperty iw:isExplanationOf ] .
+    
+    iw:Ontology     a :Class;
+         rdfs:subClassOf iw:Source,
+                 [
+             a :Restriction;
+             :cardinality "1";
+             :onProperty iw:version ] .
+    
+    iw:Organization     a :Class;
+         rdfs:subClassOf iw:Source .
+    
+    iw:Person     a :Class;
+         rdfs:subClassOf iw:Source .
+    
+    iw:PrimitiveRule     a :Class;
+         rdfs:subClassOf iw:InferenceRule,
+                 [
+             a :Restriction;
+             :cardinality "1"^^XML:int;
+             :onProperty iw:hasLanguage ],
+                 [
+             a :Restriction;
+             :cardinality "1";
+             :onProperty iw:ruleSpec ] .
+    
+    iw:ProofElement     a :Class;
+         rdfs:subClassOf iw:ModelElement .
+    
+    iw:ProvenanceElement     a :Class;
+         rdfs:subClassOf iw:ModelElement,
+                 [
+             a :Restriction;
+             :maxCardinality "1"^^XML:int;
+             :onProperty iw:hasImage ],
+                 [
+             a :Restriction;
+             :maxCardinality "1";
+             :onProperty iw:englishDescription ],
+                 [
+             a :Restriction;
+             :cardinality "1";
+             :onProperty iw:name ],
+                 [
+             a :Restriction;
+             :maxCardinality "1"^^XML:int;
+             :onProperty iw:url ],
+                 [
+             a :Restriction;
+             :minCardinality "0";
+             :onProperty iw:hasSource ],
+                 [
+             a :Restriction;
+             :maxCardinality "1"^^XML:int;
+             :onProperty iw:hasAudio ],
+                 [
+             a :Restriction;
+             :maxCardinality "1";
+             :onProperty iw:englishExample ],
+                 [
+             a :Restriction;
+             :cardinality "1"^^XML:int;
+             :onProperty iw:submitter ] .
+    
+    iw:Publication     a :Class;
+         rdfs:subClassOf iw:Source,
+                 [
+             a :Restriction;
+             :minCardinality "1"^^XML:int;
+             :onProperty iw:hasAuthor ],
+                 [
+             a :Restriction;
+             :maxCardinality "1"^^XML:int;
+             :onProperty iw:month ],
+                 [
+             a :Restriction;
+             :maxCardinality "1"^^XML:int;
+             :onProperty iw:year ],
+                 [
+             a :Restriction;
+             :maxCardinality "1"^^XML:int;
+             :onProperty iw:day ] .
+    
+    iw:Query     a :Class;
+         rdfs:subClassOf iw:ProofElement,
+                 [
+             a :Restriction;
+             :cardinality "1";
+             :onProperty iw:queryContent ],
+                 [
+             a :Restriction;
+             :maxCardinality "1"^^XML:int;
+             :onProperty iw:hasLanguage ],
+                 [
+             a :Restriction;
+             :maxCardinality "1";
+             :onProperty iw:isQueryFor ],
+                 [
+             a :Restriction;
+             :minCardinality "0";
+             :onProperty iw:hasAnswer ],
+                 [
+             a :Restriction;
+             :cardinality "1";
+             :onProperty iw:isFromEngine ] .
+    
+    iw:Question     a :Class;
+         rdfs:subClassOf iw:ProofElement,
+                 [
+             a :Restriction;
+             :cardinality "1";
+             :onProperty iw:questionContent ],
+                 [
+             a :Restriction;
+             :maxCardinality "1";
+             :onProperty iw:hasAnswerPattern ] .
+    
+    iw:Source     a :Class;
+         rdfs:subClassOf iw:ProvenanceElement .
+    
+    iw:SourceUsage     a :Class;
+         rdfs:subClassOf  [
+             a :Restriction;
+             :minCardinality "0"^^XML:int;
+             :onProperty iw:hasSource ],
+                 [
+             a :Restriction;
+             :maxCardinality "1"^^XML:int;
+             :onProperty iw:spanToByte ],
+                 [
+             a :Restriction;
+             :maxCardinality "1"^^XML:int;
+             :onProperty iw:usageQuery ],
+                 [
+             a :Restriction;
+             :cardinality "1"^^XML:int;
+             :onProperty iw:usageTime ],
+                 [
+             a :Restriction;
+             :maxCardinality "1"^^XML:int;
+             :onProperty iw:spanFromByte ] .
+    
+    iw:Team     a :Class;
+         rdfs:subClassOf iw:Source,
+                 [
+             a :Restriction;
+             :minCardinality "0";
+             :onProperty iw:hasMember ] .
+    
+    iw:TranslationRule     a :Class;
+         rdfs:subClassOf iw:InferenceRule,
+                 [
+             a :Restriction;
+             :cardinality "1"^^XML:int;
+             :onProperty iw:toLanguage ],
+                 [
+             a :Restriction;
+             :cardinality "1"^^XML:int;
+             :onProperty iw:fromLanguage ],
+                 [
+             a :Restriction;
+             :cardinality "1"^^XML:int;
+             :onProperty iw:toExpression ],
+                 [
+             a :Restriction;
+             :cardinality "1"^^XML:int;
+             :onProperty iw:fromExpresssion ] .
+    
+    iw:VariableMapping     a :Class;
+         rdfs:subClassOf  [
+             a :Restriction;
+             :cardinality "1";
+             :onProperty iw:term ],
+                 [
+             a :Restriction;
+             :cardinality "1";
+             :onProperty iw:variable ] .
+    
+    iw:Website     a :Class;
+         rdfs:subClassOf iw:Source .
+    
+    iw:axiomContent     a :DatatypeProperty;
+         rdfs:domain iw:Axiom;
+         rdfs:range XML:string .
+    
+    iw:day     a :DatatypeProperty;
+         rdfs:domain iw:Publication;
+         rdfs:range XML:gDay .
+    
+    iw:englishDescription     a :DatatypeProperty,
+                :FunctionalProperty;
+         rdfs:domain iw:ProvenanceElement;
+         rdfs:range XML:string .
+    
+    iw:englishDescriptionTemplate     a :DatatypeProperty,
+                :FunctionalProperty;
+         rdfs:domain iw:InferenceRule;
+         rdfs:range XML:string .
+    
+    iw:englishExample     a :DatatypeProperty,
+                :FunctionalProperty;
+         rdfs:domain iw:ProvenanceElement;
+         rdfs:range XML:string .
+    
+    iw:escapeCharacter     a :DatatypeProperty;
+         rdfs:domain iw:Language;
+         rdfs:range XML:string .
+    
+    iw:filler     a :DatatypeProperty;
+         rdfs:domain iw:FillerMapping;
+         rdfs:range XML:string .
+    
+    iw:firstSubmissionDate     a :DatatypeProperty,
+                :FunctionalProperty;
+         rdfs:domain iw:ModelElement;
+         rdfs:range XML:date .
+    
+    iw:forLanguage     a :ObjectProperty;
+         rdfs:domain iw:LanguageAxiomSet;
+         rdfs:range iw:Language .
+    
+    iw:fromAnswer     a :ObjectProperty;
+         rdfs:domain iw:InferenceStep;
+         rdfs:range iw:NodeSet .
+    
+    iw:fromExpresssion     a :DatatypeProperty;
+         rdfs:domain iw:TranslationRule;
+         rdfs:range XML:string .
+    
+    iw:fromLanguage     a :ObjectProperty;
+         rdfs:domain iw:TranslationRule;
+         rdfs:range iw:Language .
+    
+    iw:fromQuery     a :ObjectProperty;
+         rdfs:domain iw:InferenceStep;
+         rdfs:range iw:Query .
+    
+    iw:hasAnswer     a :ObjectProperty;
+         rdfs:domain iw:Query;
+         rdfs:range iw:NodeSet .
+    
+    iw:hasAnswerPattern     a :DatatypeProperty,
+                :FunctionalProperty;
+         rdfs:domain iw:Query;
+         rdfs:range XML:string .
+    
+    iw:hasAntecedent     a :ObjectProperty;
+         rdfs:domain  [
+             a :Class;
+             :unionOf  (
+            iw:FillerAntecedent 
+            iw:InferenceStep  ) ];
+         rdfs:range iw:NodeSet .
+    
+    iw:hasAudio     a :DatatypeProperty;
+         rdfs:domain iw:ProvenanceElement;
+         rdfs:range XML:anyURI .
+    
+    iw:hasAuthor     a :ObjectProperty;
+         rdfs:domain iw:Publication;
+         rdfs:range iw:Person .
+    
+    iw:hasAxiom     a :ObjectProperty;
+         rdfs:domain  [
+             a :Class;
+             :unionOf  (
+            iw:LanguageAxiomSet 
+            iw:DerivedRule  ) ];
+         rdfs:range iw:Axiom .
+    
+    iw:hasConclusion     a :DatatypeProperty;
+         rdfs:domain iw:NodeSet;
+         rdfs:range XML:string .
+    
+    iw:hasConclusionFiller     a :ObjectProperty;
+         rdfs:domain iw:NodeSet;
+         rdfs:range iw:ConclusionFiller .
+    
+    iw:hasDischarge     a :DatatypeProperty;
+         rdfs:domain iw:InferenceStep;
+         rdfs:range XML:string .
+    
+    iw:hasFillerAntecedent     a :ObjectProperty;
+         rdfs:domain iw:ConclusionFiller;
+         rdfs:range iw:FillerAntecedent .
+    
+    iw:hasFillerMapping     a :ObjectProperty;
+         rdfs:domain iw:ConclusionFiller;
+         rdfs:range iw:FillerMapping .
+    
+    iw:hasImage     a :DatatypeProperty;
+         rdfs:domain iw:ProvenanceElement;
+         rdfs:range XML:anyURI .
+    
+    iw:hasIndex     a :DatatypeProperty;
+         rdfs:domain  [
+             a :Class;
+             :unionOf  (
+            iw:ConclusionFiller 
+            iw:InferenceStep  ) ];
+         rdfs:range XML:int .
+    
+    iw:hasInferenceEngine     a :ObjectProperty;
+         rdfs:domain iw:InferenceStep;
+         rdfs:range iw:InferenceEngine .
+    
+    iw:hasInferenceStepIndex     a :DatatypeProperty;
+         rdfs:domain iw:FillerAntecedent;
+         rdfs:range XML:int .
+    
+    iw:hasLanguage     a :ObjectProperty;
+         rdfs:domain  [
+             a :Class;
+             :unionOf  (
+            iw:PrimitiveRule 
+            iw:NodeSet 
+            iw:Query 
+            iw:Axiom  ) ];
+         rdfs:range iw:Language .
+    
+    iw:hasMember     a :ObjectProperty;
+         rdfs:domain iw:Team;
+         rdfs:range iw:Person .
+    
+    iw:hasRule     a :ObjectProperty;
+         rdfs:domain iw:InferenceStep;
+         rdfs:range iw:InferenceRule .
+    
+    iw:hasSource     a :ObjectProperty;
+         rdfs:domain  [
+             a :Class;
+             :unionOf  (
+            iw:ProvenanceElement 
+            iw:SourceUsage  ) ];
+         rdfs:range iw:Source .
+    
+    iw:hasSourceUsage     a :ObjectProperty;
+         rdfs:domain iw:InferenceStep;
+         rdfs:range iw:SourceUsage .
+    
+    iw:hasVariableMapping     a :ObjectProperty;
+         rdfs:allValuesFrom iw:VariableMapping;
+         rdfs:domain iw:InferenceStep;
+         rdfs:range iw:VariableMapping .
+    
+    iw:inferenceEngineRule     a :ObjectProperty;
+         rdfs:domain iw:InferenceEngine;
+         rdfs:range iw:PrimitiveRule .
+    
+    iw:isConsequentOf     a :ObjectProperty;
+         rdfs:allValuesFrom iw:InferenceStep;
+         rdfs:domain iw:NodeSet;
+         rdfs:range iw:InferenceStep .
+    
+    iw:isExplanationOf     a :ObjectProperty;
+         rdfs:domain iw:NodeSet;
+         rdfs:range iw:NodeSet .
+    
+    iw:isFromEngine     a :ObjectProperty;
+         rdfs:domain iw:Query;
+         rdfs:range iw:InferenceEngine .
+    
+    iw:isQueryFor     a :ObjectProperty;
+         rdfs:domain iw:Query;
+         rdfs:range iw:Question .
+    
+    iw:lastSubmissionDate     a :DatatypeProperty,
+                :FunctionalProperty;
+         rdfs:domain iw:ModelElement;
+         rdfs:range XML:date .
+    
+    iw:month     a :DatatypeProperty;
+         rdfs:domain iw:Publication;
+         rdfs:range XML:gMonth .
+    
+    iw:name     a :DatatypeProperty,
+                :FunctionalProperty;
+         rdfs:range XML:string .
+    
+    iw:placeholder     a :DatatypeProperty;
+         rdfs:domain iw:FillerMapping;
+         rdfs:range XML:string .
+    
+    iw:queryContent     a :DatatypeProperty,
+                :FunctionalProperty;
+         rdfs:domain iw:Query;
+         rdfs:range XML:string .
+    
+    iw:questionContent     a :DatatypeProperty,
+                :FunctionalProperty;
+         rdfs:domain iw:Question;
+         rdfs:range XML:string .
+    
+    iw:ruleNodeSet     a :ObjectProperty;
+         rdfs:domain iw:DerivedRule;
+         rdfs:range iw:NodeSet .
+    
+    iw:ruleSpec     a :DatatypeProperty;
+         rdfs:domain iw:PrimitiveRule;
+         rdfs:range XML:string .
+    
+    iw:spanFromByte     a :DatatypeProperty;
+         rdfs:domain iw:SourceUsage;
+         rdfs:range XML:int .
+    
+    iw:spanToByte     a :DatatypeProperty;
+         rdfs:domain iw:SourceUsage;
+         rdfs:range XML:int .
+    
+    iw:submitter     a :ObjectProperty;
+         rdfs:domain iw:ProvenanceElement;
+         rdfs:range iw:Team .
+    
+    iw:term     a :DatatypeProperty,
+                :FunctionalProperty;
+         rdfs:domain iw:VariableMapping;
+         rdfs:range XML:string .
+    
+    iw:toExpression     a :DatatypeProperty;
+         rdfs:domain iw:TranslationRule;
+         rdfs:range XML:string .
+    
+    iw:toLanguage     a :ObjectProperty;
+         rdfs:domain iw:TranslationRule;
+         rdfs:range iw:Language .
+    
+    iw:uri     a :DatatypeProperty;
+         rdfs:domain iw:ModelElement;
+         rdfs:range XML:anyURI .
+    
+    iw:url     a :DatatypeProperty,
+                :FunctionalProperty;
+         rdfs:domain iw:ProvenanceElement;
+         rdfs:range XML:anyURI .
+    
+    iw:usageQuery     a :DatatypeProperty;
+         rdfs:domain iw:SourceUsage;
+         rdfs:range XML:string .
+    
+    iw:usageTime     a :DatatypeProperty;
+         rdfs:domain iw:SourceUsage;
+         rdfs:range XML:date .
+    
+    iw:usesInferenceEngine     a :ObjectProperty;
+         rdfs:domain iw:Agent;
+         rdfs:range iw:InferenceEngine .
+    
+    iw:variable     a :DatatypeProperty,
+                :FunctionalProperty;
+         rdfs:domain iw:VariableMapping;
+         rdfs:range XML:string .
+    
+    iw:verificationMethod     a :DatatypeProperty,
+                :FunctionalProperty;
+         rdfs:domain iw:MethodRule;
+         rdfs:range XML:string .
+    
+    iw:version     a :DatatypeProperty,
+                :FunctionalProperty;
+         rdfs:domain  [
+             a :Class;
+             :unionOf  (
+            iw:Ontology 
+            iw:InferenceEngine  ) ];
+         rdfs:range XML:string .
+    
+    iw:year     a :DatatypeProperty;
+         rdfs:domain iw:Publication;
+         rdfs:range XML:gYear .
+    
+    :Thing     :unionOf  (
+        :Thing 
+        iw:VariableMapping  ) .
+    
+#ENDS
