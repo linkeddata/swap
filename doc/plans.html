@@ -45,11 +45,11 @@ class="description"><b class="summary">paw/cwm dev meetings</b> starting
 14:30ET</abbr> for 90 mins and <span class="rrule">every <abbr title="2"
 class="interval">other</abbr> <abbr title="WEEKLY" class="freq">week</abbr>
 on <abbr class="byday" title="WE">Wednesday</abbr> thereafter until further
-notice.</span></span></span> </p>
+notice.</span></span></span></p>
 
 <p>Meeting coordinates: <a
 href="irc://irc.freenode.net/paw">irc://irc.freenode.net/paw</a> Dial in
-tel:+1 617 761 6200 Code 79296 ("SW CWM") </p>
+tel:+1 617 761 6200 Code 79296 ("SW CWM")</p>
 
 <p>The first was <a
 href="http://www.policyawareweb.org/2005/pf-dev/08-31-paw-minutes">31
@@ -64,7 +64,7 @@ september</a>.</p>
   <li>Convene
     <p>see <a
     href="http://www.w3.org/Guide/1998/08/teleconference-calendar#s_1780">telcon
-    res</a> </p>
+    res</a></p>
     <p>Any agenda additions</p>
   </li>
   <li>review of Action Items from <a
@@ -97,7 +97,7 @@ september</a>.</p>
   <li>Need for deep unification in nested formulae. This was a point where
     proof checking of a more complex scario broke down: the proof used
     different variable names in rules, and cwm doesn't match nested fromulae
-    with different variable names. Formula canonicalization; </li>
+    with different variable names. Formula canonicalization;</li>
   <li>Formulae in pychinko see B</li>
 </ul>
 
@@ -237,6 +237,19 @@ for unexpected medical situation. This will use Python sets where appropriate
 python 2.3.</strong></p>
 
 <p><strong>Release candidate rc1 was made 2005/08</strong></p>
+
+<p>CVS release 2005-10-24:</p>
+<ul>
+  <li>RDF/XML generation does not use collection syntax still.</li>
+  <li>--why works with a greater variety of files, see
+    test/reason/detailed.tests. Beacuse proofs don't handle bnodes, the
+    --n3=B option is used with proofs.</li>
+  <li>--n3=B flag allows blank nnodes to be explicitly named on input</li>
+</ul>
+
+<p></p>
+
+<p>To do:</p>
 <ul>
   <li>Distribution mechanisms
     <ul>
