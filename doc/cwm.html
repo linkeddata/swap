@@ -230,7 +230,10 @@ $ <span style="color: #007F00">cvs -d:pserver:anonymous@dev.w3.org:/sources/publ
     <dd>Get the files one by one. <a href="/2000/10/swap/cwm.py">cwm.py</a>
       is the main application file. You can browse the source files on the
       web, but this is <strong>not</strong> a practical way to install the
-      system.</dd>
+      system.
+      <p>In the following, we assume $SWAP expands to the place where you
+      have code checked out.</p>
+    </dd>
 </dl>
 
 <h3>Test Driven Development (Don't trust the docs ;-)</h3>
@@ -241,6 +244,24 @@ features which are generally checked on each checkin. Cwm developers agree
 that all the tests have to pass before code is checked in. To run the tests,
 do <tt>make</tt> in the <tt>swap/test</tt> directory. We reckon to add a test
 for a new bug, so that bugs don't recur in future versions.</p>
+
+<p>Each subdirectory of test has its own detailed.tests file. In that you can
+put tests for new features. Note that the test commands are all writted to be
+run in $SWAP/test.</p>
+
+<h3>How to make a release</h3>
+<ol>
+  <li>A quick test that your code still works is cd $SWAP/test; make fast</li>
+  <li>The test a release must pass before you make it is cd $SWAP/test; make
+    pre-release</li>
+  <li>Edit $SWAP/Makefile 
+    <ul>
+      <li>Make sure the HTML files generated from any new .py files are added
+        to the list HTMLS</li>
+      <li></li>
+    </ul>
+  </li>
+</ol>
 
 <h3>Code Overview</h3>
 
