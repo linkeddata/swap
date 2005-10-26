@@ -314,7 +314,7 @@ class IndexedFormula(Formula):
 # We trigger list collapse on any of these three becoming true.
 # @@@ we don't reverse this on remove statement.  Remove statement is really not a user call.
 
-# (Not clear: how t smush symbols without smushing variables. Need separate pytyhon class
+# (Not clear: how t smush symbols without smushing variables. Need separate python class
 # for variables I guess as everyone has been saying.
 # When that happens, expend smushing to symbols.)
 
@@ -873,12 +873,15 @@ class BI_semantics(HeavyBuiltIn, Function):
         else: doc = subj
         F = store.any((store._experience, store.semantics, doc, None))
         if F != None:
-            if diag.chatty_flag > 10: progress("Already read and parsed "+`doc`+" to "+ `F`)
+            if diag.chatty_flag > 10:
+		progress("Already read and parsed "+`doc`+" to "+ `F`)
             return F
 
         if diag.chatty_flag > 10: progress("Reading and parsing " + doc.uriref())
         inputURI = doc.uriref()
-        F = self.store.load(inputURI, why=becauseSubexpression)
+	if diag.tracking: flags="B"   # @@@@@@@@@@@ Yuk
+	else: flags=""
+        F = self.store.load(inputURI, why=becauseSubexpression, flags=flags)
         if diag.chatty_flag>10: progress("    semantics: %s" % (F))
 #	if diag.tracking:
 #	    proof.append(F.collector)

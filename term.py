@@ -821,7 +821,7 @@ def unifySet(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
     s = self2.pop()   # Pick one
     for o in other:
 	nbs = unify(s, o, vars, existentials, bindings)
-	if nbs == 0: return 0
+	if nbs == 0: continue
 	res = []
 	other2 = other.copy()
 	other2.remove(o)
@@ -840,11 +840,46 @@ def unifySet(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
 	return res
     return 0
 	    
+def matchSet(pattern, kb, vars=Set([]),  bindings={}):
+    """Utility routine to match 2 python sets of things.
+    No optimization!  This is of course the graph match function 
+    implemented with indexing, and built-in functions, in query.py.
+    This only reuires the first to include the second.
+    
+    vars are things to be regarded as variables in the pattern.
+    bindings map from pattern to kb.
+    """
+    if diag.chatty_flag > 99: progress("Matching pattern %s against %s, vars=%s" %
+	(`pattern`, `kb`, `vars`))
+    if len(pattern) > len(kb): return 0    # Match fail  @@@discuss corner cases
+    if len(pattern) == 0: return [(bindings, None)] # Success
+    
+    pattern2 = pattern.copy() # Don't mess with parameters
+    o = pattern2.pop()   # Pick one
+    for s in kb:   # Really slow recursion unaided by indexes
+	nbs = unify(o, s, vars, Set([]), bindings)
+	if nbs == 0: continue
+	res = []
+	kb2 = kb.copy()
+	kb2.remove(s)
+	for nb, reason in nbs:
+	    b2 = bindings.copy()
+	    b2.update(nb)
+	    done = Set(nb.keys())
+	    nbs2 = matchSet(pattern2, kb2, vars.difference(done), b2)
+	    if nbs2 == 0: return 0
+	    for nb2, reason2 in nbs2:
+		nb3 = nb2.copy()
+		nb3.update(nb)
+		res.append((nb3, None))
+	return res
+    return 0  # Failed to match the one we picked
+	    
 def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
     """Unify something whatever it is
     See Term.unify
     """
-    if diag.chatty_flag > 100: progress("Unifying %s" %(self))
+    if diag.chatty_flag > 100: progress("Unifying %s with %s" %(self, other))
     if isinstance(self, (Set, ImmutableSet)):
 	return unifySet(self, other, vars, existentials, bindings)
     if type(self) is type([]):

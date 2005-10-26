@@ -1,8 +1,8 @@
-    #RDF parsed by Id: sax2rdf.py,v 1.44 2005/09/01 21:03:10 syosi Exp 
-         @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-     @prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
-     @prefix : <http://www.daml.org/2000/12/daml+oil#> .
+    #RDF parsed by Id: sax2rdf.py,v 1.45 2005/10/24 16:58:38 timbl Exp 
+        @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+    @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+    @prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
+    @prefix : <http://www.daml.org/2000/12/daml+oil#> .
     
     <animal.rdf#Animal>     a rdfs:Class;
          rdfs:label "Animal" .
@@ -16,11 +16,11 @@
     <animal.rdf#_L10C8>     :onProperty <animal.rdf#parent>;
          :cardinality "2" .
     
-    #RDF parsed by Id: sax2rdf.py,v 1.44 2005/09/01 21:03:10 syosi Exp 
-         @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-     @prefix : <http://www.w3.org/2002/07/owl#> .
-     @prefix dpo: <http://www.w3.org/2002/07/owl#> .
-     @prefix ex: <owl-ex.rdf#> .
+    #RDF parsed by Id: sax2rdf.py,v 1.45 2005/10/24 16:58:38 timbl Exp 
+        @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+    @prefix : <http://www.w3.org/2002/07/owl#> .
+    @prefix dpo: <http://www.w3.org/2002/07/owl#> .
+    @prefix ex: <owl-ex.rdf#> .
     
     <owl-ex.rdf>     a dpo:Ontology;
          dpo:versionInfo "";
@@ -182,9 +182,9 @@
     ex:_L142C4     rdf:first ex:Man;
          rdf:rest () .
     
-    #RDF parsed by Id: sax2rdf.py,v 1.44 2005/09/01 21:03:10 syosi Exp 
-         @prefix web: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-     @prefix : <http://example.com/xmlns/aggregation-demo#> .
+    #RDF parsed by Id: sax2rdf.py,v 1.45 2005/10/24 16:58:38 timbl Exp 
+        @prefix web: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+    @prefix : <http://example.com/xmlns/aggregation-demo#> .
     
      @forSome <smush-examples.rdf#_L8C0> .
     
@@ -224,8 +224,8 @@
     <http://dotherightthing.example.org/policy.xhtml>     :title "Ethical Business Shared Guidelines 1.1" .
     
      @prefix : <http://www.daml.org/2001/03/daml-ont#> .
-     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+    @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+    @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
     
     <daml-ont.n3>     :versionInfo "";
          :imports <http://www.w3.org/2000/01/rdf-schema>;

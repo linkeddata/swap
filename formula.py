@@ -45,7 +45,7 @@ import notation3    # N3 parsers and generators, and RDF generator
 
 import diag  # problems importing the tracking flag, must be explicit it seems diag.tracking
 from diag import progress, verbosity, tracking
-from term import BuiltIn, LightBuiltIn, \
+from term import BuiltIn, LightBuiltIn, matchSet, \
     HeavyBuiltIn, Function, ReverseFunction, \
     Literal, AnonymousNode , AnonymousExistential, AnonymousUniversal, \
     Symbol, Fragment, FragmentNil,  Term, CompoundTerm, List, EmptyList, \
@@ -419,10 +419,52 @@ class Formula(AnonymousNode, CompoundTerm):
 	    
 	ex = existentials | self.existentials()  # @@ Add unis to make var names irrelevant?
 	return unifySequence(
-	    [self.statements, self.universals(), self.existentials()],
-	    [other.statements, other.universals(), other.existentials()],
-	     vars, ex, bindings) 
+	    [Set(self.statements), self.universals(), self.existentials()],
+	    [Set(other.statements), other.universals(), other.existentials()],
+	     vars | self.existentials() | self.universals(),
+	     existentials , bindings) 
 		    
+    def n3EntailedBy(pattern, kb, vars=Set([]), existentials=Set([]),  bindings={}):
+	"""See Term.unify() and term.matchSet()
+	
+	KB is a stronger statement han other.
+	Bindings map variables in pattern onto kb.
+	Self n3-entails other.
+	Criteria:  Subset of self statements must match other statements.
+	  Self's exisetntials must be subset of other's
+	  Self's universals must be superset.
+	"""
+
+	if diag.chatty_flag > 99: progress("n3EntailedBy:  %s entailed by %s ?" %
+	    (`pattern`, `kb`))
+	if diag.chatty_flag > 139: progress("Pattern is %s\n\nKB is %s" %
+	    (pattern.debugString(), kb.debugString()))
+	assert isinstance(kb, Formula), kb 
+	if pattern is kb: return [({}, None)]
+	nbs = matchSet(Set(pattern.statements), Set(kb.statements),
+			vars | pattern.existentials(),
+			# | pattern.universals(),
+			bindings)
+	if diag.chatty_flag > 99: progress("n3EntailedBy: match result: ", `nbs`)
+	if nbs == 0: return 0
+	res = []
+	for nb, rea in nbs:
+	    # We have matched the statements, now the lists of vars.
+	    ke = Set([ nb.get(e,e) for e in kb.existentials()])
+	    ke = pattern.occurringIn(ke) #Only ones mentioned count
+	    pe = Set([ nb.get(e,e) for e in pattern.existentials()])
+	    if diag.chatty_flag > 99: progress("\tpe=%s; ke=%s" %(pe,ke))
+	    if not ke.issubset(pe): return 0 # KB must be stronger - less e's
+	    ku = Set([ nb.get(v,v) for v in kb.universals()])
+	    pu = Set([ nb.get(v,v) for v in pattern.universals()])
+	    if diag.chatty_flag > 99: progress("\tpu=%s; ku=%s" %(pu,ku))
+	    if not pu.issubset(ku): return 0 # KB stronger -  more u's
+	    if diag.chatty_flag > 99: progress("n3EntailwsBy: success with ", `nb`)
+	    res.append((nb, None))    # That works
+	return res
+	    
+
+
 
     def bind(self, prefix, uri):
 	"""Give a prefix and associated URI as a hint for output

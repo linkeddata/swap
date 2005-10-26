@@ -267,7 +267,8 @@ class InferenceTask:
 	    for rule in self.ruleFor.values():
 		found = rule.once()
 		if (diag.chatty_flag >50):
-		    progress( "Laborious: Found %i new stmts on for rule %s" % (found, rule))
+		    progress( "Laborious: Found %i new stmts on for rule %s" %
+							    (found, rule))
 		_total = _total+found
 		if found and (rule.meta or self.targetContext._closureMode):
 		    needToCheckForRules = 1
@@ -277,7 +278,8 @@ class InferenceTask:
 	    if _total == 0: break
 	    grandtotal= grandtotal + _total
 	    if not self.repeat: break
-	if diag.chatty_flag > 5: progress("Grand total of %i new statements in %i iterations." %
+	if diag.chatty_flag > 5: progress(
+		"Grand total of %i new statements in %i iterations." %
 		    (grandtotal, iterations))
 	return grandtotal
 
@@ -682,17 +684,20 @@ class Query(Formula):
 	Returns the number of statements added."""
 	if self.justOne: return 1   # If only a test needed
 
-        if diag.chatty_flag >60: progress( "Concluding tentatively...%r" % bindings)
+        if diag.chatty_flag >60:
+			progress( "Concluding tentatively...%r" % bindings)
         if self.already != None:
 	    self.checkRedirectsInAlready() # @@@ KLUDGE - use delegation and notification systme instead
             if bindings in self.already:
-                if diag.chatty_flag > 30: progress("@@ Duplicate result: %r" %  bindings)
+                if diag.chatty_flag > 30:
+		    progress("@@ Duplicate result: %r" %  bindings)
                 return 0
             if diag.chatty_flag > 30: progress("Not duplicate: %r" % bindings)
             self.already.append(bindings)
 
 	if diag.tracking:
-	    reason = BecauseOfRule(self.rule, bindings=bindings, evidence=evidence)
+	    reason = BecauseOfRule(self.rule, bindings=bindings,
+				    evidence=evidence, kb=self.workingContext)
 #	    progress("We have a reason for %s of %s with bindings %s" % (self.rule, reason, bindings))
 	else:
 	    reason = None
@@ -705,14 +710,16 @@ class Query(Formula):
                 return 0
 	    if val in es:   #  Take time for large number of bnodes?
 		exout.add(val)
-		if diag.chatty_flag > 25:
-		    progress("Match found to that which is only an existential: %s -> %s" % (var, val))
+		if diag.chatty_flag > 25: progress(
+		"Match found to that which is only an existential: %s -> %s" %
+						    (var, val))
 		if self.workingContext is not self.targetContext:
 		    self.targetContext.declareExistential(val)
 
         b2 = bindings.copy()
 	b2[self.conclusion] = self.targetContext
-        ok = self.targetContext.universals()  # It is actually ok to share universal variables with other stuff
+        ok = self.targetContext.universals() 
+	# It is actually ok to share universal variables with other stuff
         poss = self.conclusion.universals().copy()
         for x in poss.copy():
             if x in ok: poss.remove(x)
@@ -858,20 +865,16 @@ class Query(Formula):
             elif state == S_LIGHT_GO:
 		item.state = S_DONE   # Searched.
                 nbs = item.tryBuiltin(queue, bindings, heavy=0, evidence=evidence)
-            elif state == S_LIGHT_EARLY or state == S_NOT_LIGHT or state == S_NEED_DEEP: #  Not searched yet
+            elif (state == S_LIGHT_EARLY or state == S_NOT_LIGHT or
+				    state == S_NEED_DEEP): #  Not searched yet
                 nbs = item.tryDeepSearch()
             elif state == S_HEAVY_READY:  # not light, may be heavy; or heavy ready to run
                 if pred is query.store.includes: # and not diag.tracking:  # don't optimize when tracking?
+		    nbs = []
                     if (isinstance(subj, Formula)
                         and isinstance(obj, Formula)):
 
-#                        more_unmatched = obj.statements[:]
 			more_unmatched = buildPattern(subj, obj)
-#                        if obj.universals() != Set():
-#                            raise RuntimeError("""Cannot query for universally quantified things.
-#            As of 2003/07/28 forAll x ...x cannot be on object of log:includes.
-#            This/these were: %s\n""" % obj.universals())
-
 			more_variables = obj.variables().copy()
                         _substitute({obj: subj}, more_unmatched)
                         _substitute(bindings, more_unmatched)
@@ -883,14 +886,18 @@ class Query(Formula):
                             newItem.setup(allvars, interpretBuiltins = 0,
                                     unmatched=more_unmatched, mode=query.mode)
                         if diag.chatty_flag > 40:
-                                progress("**** Includes: Adding %i new terms and %s as new existentials."%
+                                progress("log:Includes: Adding %i new terms and %s as new existentials."%
                                           (len(more_unmatched),
                                            seqToString(more_variables)))
                         item.state = S_SATISFIED
-                    else:
-                        progress("Include can only work on formulae "+`item`) #@@ was RuntimeError exception
+			if diag.tracking:
+			    rea = BecauseBuiltIn(subj, pred, obj)
+			    nbs = [({}, rea)]
+		    else:
+                        progress("""Warning: Type error ignored on builtin:
+			    log:include only on formulae """+`item`)
+			     #@@ was RuntimeError exception
                         item.state = S_DONE
-                    nbs = []
                 else:
 		    item.state = S_HEAVY_WAIT  # Assume can't resolve
                     nbs = item.tryBuiltin(queue, bindings, heavy=1, evidence=evidence)
@@ -909,7 +916,7 @@ class Query(Formula):
                 notIncludesStuff = []
                         
                 if not notIncludesStuff:
-                    if diag.chatty_flag > 49 :
+                    if diag.chatty_flag > 20 :
                         progress("@@@@ Warning: query can't find term which will work.")
                         progress( "   state is %s, queue length %i" % (state, len(queue)+1))
                         progress("@@ Current item: %s" % `item`)
@@ -1161,9 +1168,10 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 #                        if pred.eval(subj, obj,  queue, bindings.copy(), proof, self.query):
                         if pred.eval(subj, obj,  BNone, BNone, proof, BNone):
                             self.state = S_SATISFIED # satisfied
-                            if diag.chatty_flag > 80: progress("Builtin buinary relation operator succeeds")
+                            if diag.chatty_flag > 80: progress(
+				"Builtin buinary relation operator succeeds")
                             if diag.tracking:
-                                rea = BecauseBuiltIn(subj, pred, obj, proof)
+                                rea = BecauseBuiltIn(subj, pred, obj)
 #                                evidence = evidence + [rea] # not pass be reference
 				return [({}, rea)]  # Involves extra recursion just to track reason
                             return []   # No new bindings but success in logical operator
@@ -1203,7 +1211,8 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			if result != None:
 			    self.state = S_DONE
 			    rea=None
-			    if diag.tracking: rea = BecauseBuiltIn(subj, pred, result, proof)
+			    if diag.tracking:
+				rea = BecauseBuiltIn(subj, pred, result)
 			    if isinstance(pred, MultipleFunction):
 				return [({obj:x}, rea) for x in result]
 			    else:
@@ -1236,7 +1245,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			    self.state = S_DONE
 			    rea=None
 			    if diag.tracking:
-				rea = BecauseBuiltIn(result, pred, obj, proof)
+				rea = BecauseBuiltIn(result, pred, obj)
 			    if isinstance(pred, MultipleReverseFunction):
 				return [({subj:x}, rea) for x in result]
 			    else:

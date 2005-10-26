@@ -14,7 +14,7 @@ Command line options for debug:
 
 from swap.myStore import load, Namespace
 from swap.RDFSink import CONTEXT, PRED, SUBJ, OBJ
-from swap.term import List, Literal, CompoundTerm
+from swap.term import List, Literal, CompoundTerm, BuiltIn
 from swap.llyn import Formula #@@ dependency should not be be necessary
 from swap.diag import verbosity, setVerbosity, progress
 
@@ -34,6 +34,7 @@ rei = Namespace("http://www.w3.org/2004/06/rei#")
 chatty = 0
 debugLevelForInference = 0
 debugLevelForParsing = 0
+nameBlankNodes = 0
 
 def fail(str, level=0):
     if chatty > 0:
@@ -71,18 +72,47 @@ def checkIncludes(f, g):
     # return testIncludes(f,g)
     x = f.unify(g)
     
+
+def getSymbol(proof, x):
+	"De-reify a symbol: get the informatuion identifying it from the proof"
+
+	y = proof.the(subj=x, pred=rei.uri)
+	if y != None: return proof.newSymbol(y.string)
+
+	y = proof.the(subj=x, pred=rei.nodeId)
+	if y != None:
+	    progress("Warning: variable is identified by nodeId: <%s>" %
+			y.string)
+	    return proof.newSymbol(y.string)
+	raise RuntimeError("Can't de-reify %s" % x)
+	
+
+def getTerm(proof, x):
+	"De-reify a term: get the informatuion about it from the proof"
+	if isinstance(x, (Literal, CompoundTerm)):
+	    return x
+	    
+	val = proof.the(subj=x, pred=rei.value)
+	if val != None:  return proof.newLiteral(val.string,
+				val_value.datatype, val.lang)
+	return getSymbol(proof, x)
+
+
 def valid(proof, r, level=0):
     """Check whether this reason is valid.
     
     Returns the formula proved or None if not"""
+    
     f = proof.any(r,reason.gives)
     if f != None:
-	assert isinstance(f, Formula), "%s gives: %s which should be Formula" % (`r`, f)
+	assert isinstance(f, Formula), \
+			"%s gives: %s which should be Formula" % (`r`, f)
 	if len(f) == 1:
 #	s = statementFromFormula(f)
 #	if s != None:
 	    s = f.statements[0]
-	    fs = " proof of {%s %s %s}" % (s.subject(), s.predicate(), s.object())
+	    fs = " proof of {%s %s %s}" % (
+				    s.subject(), s.predicate(), s.object())
 	else:
 	    fs = " proof of %s" % f
     else:
@@ -117,35 +147,22 @@ def valid(proof, r, level=0):
 			bind(sf[OBJ],  bindings) is sg[OBJ]):
 			break
 		else:
-		    progress("Statements parsed from %s:\n%s" %(u, `g.statements`))
-		    return fail("Can't verify that <%s> says %s" %(u, sf), level=level)
+		    progress("Statements parsed from %s:\n%s" %
+						    (u, `g.statements`))
+		    return fail("Can't verify that <%s> says %s" %
+						 (u, sf), level=level)
 	return g
 
     elif t is reason.Inference:
 	evidence = proof.each(subj=r, pred=reason.evidence)  # Changes to a list 2005-08
-	if len(evidence) == 1 and isinstance(evidence[0], List):
-	    evidence = evidence[0]     # Transition between non-use and use of lists
+	evidence = evidence[0]     # Transition between non-use and use of lists
 	assert isinstance(evidence, List)
 	bindings = {}
 	for b in proof.each(subj=r, pred=reason.binding):
 	    var_rei  = proof.the(subj=b, pred=reason.variable)  # de-reify  symbool
-	    var_uri   = proof.the(subj=var_rei, pred=rei.uri)
-	    if var_uri == None: raise RuntimeError(
-				    "No URI given for variable %s" % (`b`))
-	    var	      = proof.newSymbol(var_uri.string)
+	    var = getSymbol(proof, var_rei)
 	    val_rei  = proof.the(subj=b, pred=reason.boundTo) # @@@ Check that they really are variables in the rule!
-	    val_uri   = proof.the(subj=val_rei, pred=rei.uri)
-	    if val_uri != None:
-		val = proof.newSymbol(val_uri.string)
-	    elif isinstance(val_rei, (Literal, CompoundTerm)):
-		val = val_rei
-	    else:
-		val_value   = proof.the(subj=val_rei, pred=rei.value)
-		if val_value != None:
-		    val = proof.newLiteral(val_value.string,
-					val_value.datatype, val_value.lang)
-		else:
-		    raise RuntimeError("Can't de-reify %s" % val_rei)
+	    val = getTerm(proof, val_rei)
 	    bindings[var] = val
 
 	rule = proof.any(subj=r, pred=reason.rule)
@@ -164,6 +181,9 @@ def valid(proof, r, level=0):
 	    evidenceStatements.append(f2)
 	for s in ruleStatement[SUBJ]: # Antecedent
 	    context, pred, subj, obj = s.quad
+	    if pred is context.store.includes:
+		fyi("log:includes found in antecentent, assumed good! @@@@@", level) 
+		continue
 	    pred = bind(pred, bindings)
 	    subj = bind(subj, bindings)
 	    obj  = bind(obj, bindings) 
@@ -219,18 +239,29 @@ def valid(proof, r, level=0):
 	
     elif t is reason.Fact:
 	con, pred, subj, obj = statementFromFormula(f).quad
-	fyi("Function: @@ Taking for granted that {%s %s %s}" % (subj, pred, obj), level=level)
+	fyi("Built-in: testing fact {%s %s %s}" % (subj, pred, obj), level=level)
+	if not isinstance(pred, BuiltIn):
+	    return fail("Claimed as fact, but predicate is %s not builtin" % pred, level)
+	    if not pred.eval(subj, obj, None, None, None, None):
+		return fail("Built-in fact does not give correct results", level)
 	return f
+	
     elif t is reason.Extraction:
 	r2 = proof.the(r, reason.because)
 	if r2 == None:
 	    return fail("Extraction: no source formula given for %s." % (`r`), level)
 	f2 = valid(proof, r2, level)
 	if f2 == None:
-	    return fail("Extraction: validation of source forumla failed.", level)
+	    return fail("Extraction: couldn't validate formula to be extracted from.", level)
 	setVerbosity(debugLevelForInference)
-	if not testIncludes(f2, f):
-	    return fail("""Extraction %s not included in formula  %s.\n______________\n%s\n______________not included in: ______________\n%s"""
+	nbs = f.n3EntailedBy(f2)
+	if nbs == 0:
+#	if not testIncludes(f2, f):
+	    return fail("""Extraction %s not included in formula  %s.
+	    ______________
+	    %s
+	    ______________not included in: ______________
+	    %s"""
 		    %(f, f2, f.debugString(), f2. debugString()), level=level)
 	setVerbosity(0)
 	return f
@@ -249,13 +280,14 @@ def main():
     global parsed
     global debugLevelForInference
     global debugLevelForParsing
+    global nameBlankNodes
     parsed = {}
     setVerbosity(0)
     
     
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hv:c:p:",
-	    [ "help", "verbose=", "chatty=", "parsing="])
+        opts, args = getopt.getopt(sys.argv[1:], "hv:c:p:B",
+	    [ "help", "verbose=", "chatty=", "parsing=", "nameBlankNodes"])
     except getopt.GetoptError:
 	sys.stderr.write("check.py:  Command line syntax error.\n\n")
         usage()
@@ -271,13 +303,17 @@ def main():
 	    debugLevelForParsing = int(a)
         if o in ("-c", "--chatty"):
 	    debugLevelForInference = int(a)
+        if o in ("-B", "--nameBlankNodes"):
+	    nameBlankNodes = 1
+    if nameBlankNodes: flags="B"
+    else: flags=""
     
     if args:
         fyi("Reading proof from "+args[0])
-        proof = load(args[0])
+        proof = load(args[0], flags=flags)
     else:
 	fyi("Reading proof from standard input.")
-	proof = load(flags="B")
+	proof = load(flags=flags)
 
     # setVerbosity(60)
     fyi("Length of proof: "+`len(proof)`)

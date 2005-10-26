@@ -10,12 +10,14 @@ The dontAsk constant reason is used as a reason for the explanations themselves-
 Assumes wwe are using the process-global store -- uses Namespace() @@@
 """
 
-
+giveForumlaArguments = 0 # How detailed do you want your proof?
 
 import string
 #import re
 #import StringIO
 import sys
+
+from set_importer import Set
 
 # import notation3    # N3 parsers and generators, and RDF generator
 # import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
@@ -99,10 +101,10 @@ class Reason:
 
     def meIn(self, ko):
 	"The representation of this object in the formula ko"
-	me = self.me.get(ko, None)
-	if me == None:
-	    me = ko.newBlankNode(why= dontAsk)	# @@ ko, specific, not reentrant
-	    self.me[ko] = me
+	if self.me.get(ko, None) != None:
+	    raise ooops
+	me = ko.newBlankNode(why= dontAsk)	# @@ ko, specific, not reentrant
+	self.me[ko] = me
 	return me
 
     def explain(self, ko):
@@ -121,26 +123,16 @@ class FormulaReason(Reason):
     def __init__(self, formula=None):
 	Reason.__init__(self)
 	self._string = str
-#	self._reason = because
-	self.statementReasons = []
 	self.formula = formula
 	if formula != None:
-	    self.setFormula(formula)
+	    proofOf[formula] = self
 	self.reasonForStatement = {}
 	return
 
-    def setFormula(self, formula):
-	"""Change the address fo the formula when the formula is moved on close()"""
-	global proofOf
-	self.store = formula.store
-	proofOf[formula] = self
-#	progress("@@@@@@@ Proof of %s is %s"%(formula, self))
-	return
 
     def	newStatement(self, s, why):
 	if verbosity() > 80: progress("Believing %s because of %s"%(s, why))
 	assert why is not self
-	self.statementReasons.append((s, why)) # @@@ redundant
 	self.reasonForStatement[s]=why
 
     def explanation(self, ko=None):
@@ -148,7 +140,8 @@ class FormulaReason(Reason):
 	
 	Creates an output formula if necessary.
 	returns it.
-	(NB: This is different from reason.explain(ko) which returns the reason)"""
+	(This is different from reason.explain(ko) which returns the reason)"""
+
 	if ko == None: ko = self.formula.store.newFormula()
 	ko.bind("n3", "http://www.w3.org/2004/06/rei#")
 	ko.bind("log", "http://www.w3.org/2000/10/swap/log#")
@@ -159,75 +152,50 @@ class FormulaReason(Reason):
 	return ko
 	
     def explain(self, ko):
+	me = self.me.get(ko, None)
+	if me != None: return me  #  Only do this once
     	me = self.meIn(ko)
 
 	qed = ko.newBlankNode(why= dontAsk)
-#        ko.add(subj=ko, pred=reason.prooves, obj=self.formula, why=dontAsk) 
-    #   ko.add(obj=ko, pred=reason.proof, subj=self.formula, why=dontAsk) 
-#	ko.add(subj=self.formula, pred=rdf.type, obj=reason.QED, why=dontAsk) 
-#	ko.add(subj=self.formula, pred=reason.because, obj=qed, why=dontAsk) 
 	ko.add(subj=me, pred=rdf.type, obj=reason.Conjunction, why=dontAsk) 
         ko.add(subj=me, pred=reason.gives, obj=self.formula, why=dontAsk)
-#	ko.add(obj=qed, pred=reason.because, subj=self.formula, why=dontAsk)
     
-	# Needed? u and e
-#	for u in self.formula.universals():
-#	    ko.add(me, reason.universal, u.uriref() , why=dontAsk) # ko.newLiteral(u.uriref())
-#
-#	for e in self.formula.existentials():
-#	    ko.add(me, reason.existential, e.uriref(), why=dontAsk)
-	    
-        for s, rea in self.statementReasons:
+	for s, rea in self.reasonForStatement.items():
             if rea is self:
                 raise ValueError("Loop in reasons!", self, id(self), s)
             pred = s.predicate()
 	    if diag.chatty_flag > 29: progress(
 		"Explaining reason %s for %s" % (rea, s))
-            if pred is not self.store.forAll and pred is not self.store.forSome:
-                si = describeStatement(s, ko)
-                ko.add(si, rdf.type, reason.Extraction, why=dontAsk)
-                ko.add(si, reason.because, rea.explain(ko), why=dontAsk)
-                ko.add(me, reason.component, si, why=dontAsk)
+	    # Why is the following conditional needed to weed out log:forAll's?
+            if pred is not pred.store.forAll and pred is not pred.store.forSome:
+		si = describeStatement(s, ko)
+		ko.add(si, rdf.type, reason.Extraction, why=dontAsk)
+		ko.add(si, reason.because, rea.explain(ko), why=dontAsk)
+		ko.add(me, reason.component, si, why=dontAsk)
 	return me
 
 class BecauseMerge(FormulaReason):
     """Because this formula is a merging of others"""
     def __init__(self, f, set):
 	FormulaReason.__init__(self, f)
-	self.fodder = set
+	self.fodder = Set()
 
     def	newStatement(self, s, why):  # Why isn't a reason here, it is the source
-	if verbosity() > 80: progress("Merge: Believing %s because of merge"%(s))
-#	assert why is  self # Every statement just because this is a merge
-#	self.statementReasons.append((s, why)) # @@@ redundant
-#	self.reasonForStatement[s]=why
-
+	if verbosity() > 80:progress("Merge: Believing %s because of merge"%(s))
+	self.fodder.add(why)
+	
     def explain(self, ko):
+	me = self.me.get(ko, None)
+	if me != None: return me  #  Only do this once
     	me = self.meIn(ko)
-
 	qed = ko.newBlankNode(why= dontAsk)
 	ko.add(subj=me, pred=rdf.type, obj=reason.Conjunction, why=dontAsk) 
-        ko.add(subj=me, pred=reason.gives, obj=self.formula, why=dontAsk)
-	ko.add(obj=qed, pred=reason.because, subj=self.formula, why=dontAsk)
-    
-
-#	# Needed? u and e
-#	for u in self.formula.universals():
-#	    ko.add(me, reason.universal, u.uriref() , why=dontAsk) # ko.newLiteral(u.uriref())
-#
-#	for e in self.formula.existentials():
-#	    ko.add(me, reason.existential, e.uriref(), why=dontAsk)
-#	    
-#        for s, rea in self.statementReasons:
-#            if rea is self:
-#                raise ValueError("Loop in reasons!", self, id(self), s)
-#            pred = s.predicate()
-#	    si = describeStatement(s, ko)
-#	    ko.add(si, rdf.type, reason.Extraction, why=dontAsk)
-#	    ko.add(si, reason.because, rea.explain(ko), why=dontAsk)
-#	    ko.add(me, reason.component, si, why=dontAsk)
-
-	return me
+        if giveForumlaArguments:
+	    ko.add(subj=me, pred=reason.gives, obj=self.formula, why=dontAsk)
+#	ko.add(obj=qed, pred=reason.because, subj=self.formula, why=dontAsk)
+	for x in self.fodder:
+	    ko.add(subj=me, pred=reason.mergeOf, obj=proofOf[x]) 
+    	return me
 
 class BecauseSubexpression(Reason):
 
@@ -235,9 +203,12 @@ class BecauseSubexpression(Reason):
 	"""Describe this reason to an RDF store
 	Returns the value of this reason as interned in the store.
 	"""
+	me = self.me.get(ko, None)
+	if me != None: return me  #  Only do this once
 	me = self.meIn(ko)
 	ko.add(subj=me, pred=rdf.type, obj=reason.TextExplanation, why=dontAsk)
-	ko.add(subj=me, pred=reason.text, obj=ko.newLiteral("(Subexpression)"), why=dontAsk)
+	ko.add(subj=me, pred=reason.text, obj=ko.newLiteral("(Subexpression)"),
+		    why=dontAsk)
 	return me
 
 becauseSubexpression = BecauseSubexpression()
@@ -246,7 +217,7 @@ becauseSubexpression = BecauseSubexpression()
 
 class Because(Reason):
     """For the reason given on the string.
-    This is a kinda end of the road reason. Try to make a more useful one up! ;-)
+    This is a kinda end of the road reason.
     
     A nested reason can also be given.
     """
@@ -260,22 +231,26 @@ class Because(Reason):
 	"""Describe this reason to an RDF store
 	Returns the value of this reason as interned in the store.
 	"""
+	me = self.me.get(ko, None)
+	if me != None: return me  #  Only do this once
 	me = self.meIn(ko)
 	ko.add(subj=me, pred=rdf.type, obj=reason.TextExplanation, why=dontAsk)
-	ko.add(subj=me, pred=reason.text, obj=ko.newLiteral(self._string), why=dontAsk)
+	ko.add(subj=me, pred=reason.text, obj=ko.newLiteral(self._string),
+				why=dontAsk)
 	return me
 
 dontAsk = Because("Generating explanation")
 
 
 class BecauseOfRule(Reason):
-    def __init__(self, rule, bindings, evidence, because=None):
+    def __init__(self, rule, bindings, evidence, kb, because=None):
         #print rule
         #raise Error
 	Reason.__init__(self)
 	self._bindings = bindings
 	self._rule = rule
 	self._evidence = evidence # Set of statements etc to justify LHS
+	self._kb = kb # The formula the rule was trusting at base
 	self._reason = because
 	return
 
@@ -284,6 +259,8 @@ class BecauseOfRule(Reason):
 	"""Describe this reason to an RDF store
 	Returns the value of this reason as interned in the store.
 	"""
+	me = self.me.get(ko, None)
+	if me != None: return me  #  Only do this once
 	me = self.meIn(ko)
 	ko.add(subj=me, pred=rdf.type, obj=reason.Inference, why=dontAsk) 
 	for var, val in self._bindings.items():
@@ -301,7 +278,17 @@ class BecauseOfRule(Reason):
 	    if isinstance(s, BecauseBuiltIn):
 		e = s.explain(ko)
 	    else:
-		e = explainStatement(s, ko)
+		f = s.context()
+		if f is self._kb: # Normal case
+		    e = explainStatement(s, ko)
+		    if s.predicate() is f.store.includes:
+			for t in self.evidence:
+			    if t.context() is s.subject():
+				progress("Included statement used:" + `t`)
+				ko.add(e, reason.includeEvidence,
+				    explainStatement(t, ko)) 
+#		else:
+#		    progress("Included statement found:" + `s`)
 	    ev.append(e)
 	ko.add(subj=me, pred=reason.evidence, obj=ev, why= dontAsk)
 
@@ -317,16 +304,17 @@ def explainStatement(s, ko):
 
     if statementFormulaReason == None:
 	raise RuntimeError(
-	"Ooops, only have proofs for %s.\n No proof for formula %s needed for statement %s\n%s\n" 
-				% (proofOf,f,s, f.debugString()))
-
-	pass
+	"""Ooops, only have proofs for %s.
+	No proof for formula %s needed for statement %s
+	%s
+	""" % (proofOf,f,s, f.debugString()))	
     else:
 	statementReason = statementFormulaReason.reasonForStatement.get(s, None)
 	if statementReason == None:
 	    progress("Ooops, formula has no reason for statement,", s)
 	    progress("formula is: %s" % `f.statements`)
-	    progress("hash table is: %s" % `statementFormulaReason.reasonForStatement`)
+	    progress("hash table is: %s" % 
+				`statementFormulaReason.reasonForStatement`)
 	    raise RuntimeError("see above")
 	    return None
 	ri = statementReason.explain(ko)
@@ -338,11 +326,6 @@ def describeStatement(s, ko):
 	si = ko.newBlankNode(why=dontAsk)
 	ko.add(si, rdf.type, reason.Extraction, why=dontAsk)
 	ko.add(si, reason.gives, s.asFormula(why=dontAsk), why=dontAsk)
-
-#	con, pred, subj, obj = s.quad
-#	ko.add(subj=si, pred=reason.subj, obj=subj.uriref(), why=dontAsk)
-#	ko.add(subj=si, pred=reason.pred, obj=pred.uriref(), why=dontAsk)
-#	ko.add(subj=si, pred=reason.obj, obj=obj.uriref(), why=dontAsk)
 	return si
 
 	
@@ -367,10 +350,13 @@ class BecauseOfData(Because):
 	"""Describe this reason to an RDF store
 	Returns the value of this reason as interned in the store.
 	"""
+	me = self.me.get(ko, None)
+	if me != None: return me  #  Only do this once
 	me = self.meIn(ko)
 	ko.add(subj=me, pred=rdf.type, obj=reason.Parsing, why=dontAsk)
 	ko.add(subj=me, pred=reason.source, obj=self._source, why=dontAsk)
-	ko.add(subj=me, pred=reason.because, obj=self._reason.explain(ko), why=dontAsk)
+	ko.add(subj=me, pred=reason.because, obj=self._reason.explain(ko),
+							why=dontAsk)
 #	ko.add(subj=me, pred=reason.gives, obj=giveTerm(@@@outout formula @@)
 	return me
 
@@ -383,42 +369,50 @@ class BecauseOfCommandLine(Because):
 	"""Describe this reason to an RDF store
 	Returns the value of this reason as interned in the store.
 	"""
+	me = self.me.get(ko, None)
+	if me != None: return me  #  Only do this once
 	me = self.meIn(ko)
 	ko.add(subj=me, pred=rdf.type, obj=reason.CommandLine, why=dontAsk)
 	ko.add(subj=me, pred=reason.args, obj=self._string, why=dontAsk)
 	return me
     
 class BecauseOfExperience(Because):
-    """Becase the command line given in the string"""
+    """Becase of the experience of this agent, as described in the string"""
     pass
     
 class BecauseBuiltIn(Reason):
     """Because the built-in function given concluded so.
     A nested reason for running the function must be given"""
-    def __init__(self, subj, pred, obj, proof):
+    def __init__(self, subj, pred, obj):
 	Reason.__init__(self)
 	self._subject = subj
 	self._predicate = pred
 	self._object = obj
-	self._proof = proof   # Proof should be hubg on here?
 	
     def explain(self, ko):
 	"This is just a plain fact - or was at the time."
+	me = self.me.get(ko, None)
+	if me != None: return me  #  Only do this once
 	me = self.meIn(ko)
 	fact = ko.newFormula()
-	fact.add(subj=self._subject, pred=self._predicate, obj=self._object, why=dontAsk)
+	fact.add(subj=self._subject, pred=self._predicate, obj=self._object,
+							why=dontAsk)
 	fact = fact.close()
 	ko.add(me, rdf.type, reason.Fact, why=dontAsk)
 	ko.add(me, reason.gives, fact, why=dontAsk)
-	for x in self._subject, self._object:
-	    proof = proofOf.get(x, None)
-	    if proof != None:
-		ko.add(me, reason.proof, proof.explain(ko), why=dontAsk)
+	if giveForumlaArguments:
+	    for x in self._subject, self._object:
+		proof = proofOf.get(x, None)
+		if proof != None:
+		    ko.add(me, reason.proof, proof.explain(ko), why=dontAsk)
 
 #	if self._proof != None:
 #	    ko.add(me, reason.proof, self._proof.explain(ko), why=dontAsk)
 	return me
 
+class BecauseIncludes(BecauseBuiltIn):
+    """Because of the speific built-in log:includes"""
+    pass
 
 
 # ends
