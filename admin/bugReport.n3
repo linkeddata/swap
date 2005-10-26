@@ -25,19 +25,19 @@
 <body>""".
 
 "0 4a" a log:Chaff; log:outputString """
-<h1><a href="../../doc/cwm">Cwm</a> Bug Status</h1>
+<h1><a href="../doc/cwm">Cwm</a> Bug Status</h1>
 
 <p>This is a chronological listing of known bugs, open or closed, in
-<a href="../../doc/cwm">Cwm</a>. A list of only the open bugs can be
+<a href="../doc/cwm">Cwm</a>. A list of only the open bugs can be
 found on the <a href="openBugs.html">Cwm Open Bugs</a> page.</p>
 
 <!-- The following is an artifact of the way bug lists are generated.""".
 
 "0 4b" log:outputString """
-<h1><a href="../../doc/cwm">Cwm</a> Open Bugs</h1>
+<h1><a href="../doc/cwm">Cwm</a> Open Bugs</h1>
 
 <p>This is a chronological listing of open bug reports against
-<a href="../../doc/cwm">Cwm</a>. A list of all bugs, both open and
+<a href="../doc/cwm">Cwm</a>. A list of all bugs, both open and
 closed, can be found on the <a href="bugStatus.html">Cwm Bug Status</a>
 page.</p>""".
 
