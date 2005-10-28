@@ -8,7 +8,7 @@
 <td valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>formula</strong></big></big></font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/syosi/CVS-local/WWW/2000/10/swap/formula.py">/home/syosi/CVS-local/WWW/2000/10/swap/formula.py</a></font></td></tr></table>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/devel/WWW/2000/10/swap/formula.py">/devel/WWW/2000/10/swap/formula.py</a></font></td></tr></table>
     <p><tt>$Id$<br>
 &nbsp;<br>
 <a href="#Formula">Formula</a><br>
@@ -112,7 +112,9 @@ as&nbsp;though&nbsp;a&nbsp;formula&nbsp;were&nbsp;a&nbsp;sequence.</tt></dd></dl
 <dl><dt><a name="Formula-add"><strong>add</strong></a>(self, subj, pred, obj, why<font color="#909090">=None</font>)</dt><dd><tt>Add&nbsp;a&nbsp;triple&nbsp;to&nbsp;the&nbsp;formula.<br>
 &nbsp;<br>
 The&nbsp;formula&nbsp;must&nbsp;be&nbsp;open.<br>
-subj,&nbsp;pred&nbsp;and&nbsp;obj&nbsp;must&nbsp;be&nbsp;objects&nbsp;as&nbsp;for&nbsp;example&nbsp;generated&nbsp;by&nbsp;<a href="#Formula">Formula</a>.<a href="#Formula-newSymbol">newSymbol</a>()&nbsp;and&nbsp;<a href="#Formula-newLiteral">newLiteral</a>(),&nbsp;or&nbsp;else&nbsp;literal&nbsp;values&nbsp;which&nbsp;can&nbsp;be&nbsp;interned.<br>
+subj,&nbsp;pred&nbsp;and&nbsp;obj&nbsp;must&nbsp;be&nbsp;objects&nbsp;as&nbsp;for&nbsp;example&nbsp;generated&nbsp;<br>
+by&nbsp;<a href="#Formula">Formula</a>.<a href="#Formula-newSymbol">newSymbol</a>()&nbsp;and&nbsp;<a href="#Formula-newLiteral">newLiteral</a>(),&nbsp;or&nbsp;else&nbsp;literal<br>
+values&nbsp;which&nbsp;can&nbsp;be&nbsp;interned.<br>
 why&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;may&nbsp;be&nbsp;a&nbsp;reason&nbsp;for&nbsp;use&nbsp;when&nbsp;a&nbsp;proof&nbsp;will&nbsp;be&nbsp;required.</tt></dd></dl>
 
 <dl><dt><a name="Formula-any"><strong>any</strong></a>(self, subj<font color="#909090">=None</font>, pred<font color="#909090">=None</font>, obj<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;None&nbsp;or&nbsp;the&nbsp;value&nbsp;filing&nbsp;the&nbsp;blank&nbsp;in&nbsp;the&nbsp;called&nbsp;parameters.<br>
@@ -181,6 +183,15 @@ we&nbsp;may&nbsp;move&nbsp;to&nbsp;an&nbsp;internal&nbsp;storage&nbsp;rather&nbs
 <dl><dt><a name="Formula-loadFormulaWithSubstitution"><strong>loadFormulaWithSubstitution</strong></a>(self, old, bindings<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Load&nbsp;information&nbsp;from&nbsp;another&nbsp;formula,&nbsp;subsituting&nbsp;as&nbsp;we&nbsp;go<br>
 returns&nbsp;number&nbsp;of&nbsp;statements&nbsp;added&nbsp;(roughly)</tt></dd></dl>
 
+<dl><dt><a name="Formula-n3EntailedBy"><strong>n3EntailedBy</strong></a>(pattern, kb, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>See&nbsp;Term.<a href="#Formula-unify">unify</a>()&nbsp;and&nbsp;term.matchSet()<br>
+&nbsp;<br>
+KB&nbsp;is&nbsp;a&nbsp;stronger&nbsp;statement&nbsp;han&nbsp;other.<br>
+Bindings&nbsp;map&nbsp;variables&nbsp;in&nbsp;pattern&nbsp;onto&nbsp;kb.<br>
+Self&nbsp;n3-entails&nbsp;other.<br>
+Criteria:&nbsp;&nbsp;Subset&nbsp;of&nbsp;self&nbsp;statements&nbsp;must&nbsp;match&nbsp;other&nbsp;statements.<br>
+&nbsp;&nbsp;Self's&nbsp;exisetntials&nbsp;must&nbsp;be&nbsp;subset&nbsp;of&nbsp;other's<br>
+&nbsp;&nbsp;Self's&nbsp;universals&nbsp;must&nbsp;be&nbsp;superset.</tt></dd></dl>
+
 <dl><dt><a name="Formula-n3String"><strong>n3String</strong></a>(self, base<font color="#909090">=None</font>, flags<font color="#909090">=''</font>)</dt><dd><tt>Dump&nbsp;the&nbsp;formula&nbsp;to&nbsp;an&nbsp;absolute&nbsp;string&nbsp;in&nbsp;N3</tt></dd></dl>
 
 <dl><dt><a name="Formula-newBlankNode"><strong>newBlankNode</strong></a>(self, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Create&nbsp;a&nbsp;new&nbsp;unnamed&nbsp;node&nbsp;with&nbsp;this&nbsp;formula&nbsp;as&nbsp;context.<br>
@@ -190,8 +201,7 @@ If&nbsp;given&nbsp;is&nbsp;used&nbsp;as&nbsp;the&nbsp;(arbitrary)&nbsp;internal&
 
 <dl><dt><a name="Formula-newExistential"><strong>newExistential</strong></a>(self, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Create&nbsp;a&nbsp;named&nbsp;variable&nbsp;existentially&nbsp;qualified&nbsp;within&nbsp;this&nbsp;formula<br>
 &nbsp;<br>
-If&nbsp;the&nbsp;URI&nbsp;is&nbsp;not&nbsp;given,&nbsp;an&nbsp;arbitrary&nbsp;identifier&nbsp;is&nbsp;generated.<br>
-See&nbsp;also:&nbsp;<a href="#Formula-existentials">existentials</a>().</tt></dd></dl>
+See&nbsp;also:&nbsp;<a href="#Formula-existentials">existentials</a>()&nbsp;&nbsp;and&nbsp;<a href="#Formula-newBlankNode">newBlankNode</a>().</tt></dd></dl>
 
 <dl><dt><a name="Formula-newFormula"><strong>newFormula</strong></a>(self, uri<font color="#909090">=None</font>)</dt><dd><tt>Create&nbsp;a&nbsp;new&nbsp;open,&nbsp;empty,&nbsp;formula&nbsp;in&nbsp;the&nbsp;same&nbsp;store&nbsp;as&nbsp;this&nbsp;one.<br>
 &nbsp;<br>
@@ -210,7 +220,6 @@ The&nbsp;symbol&nbsp;is&nbsp;created&nbsp;in&nbsp;the&nbsp;same&nbsp;store&nbsp;
 
 <dl><dt><a name="Formula-newUniversal"><strong>newUniversal</strong></a>(self, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Create&nbsp;a&nbsp;named&nbsp;variable&nbsp;universally&nbsp;qualified&nbsp;within&nbsp;this&nbsp;formula<br>
 &nbsp;<br>
-If&nbsp;the&nbsp;URI&nbsp;is&nbsp;not&nbsp;given,&nbsp;an&nbsp;arbitrary&nbsp;identifier&nbsp;is&nbsp;generated.<br>
 See&nbsp;also:&nbsp;<a href="#Formula-universals">universals</a>()</tt></dd></dl>
 
 <dl><dt><a name="Formula-objects"><strong>objects</strong></a>(self, pred<font color="#909090">=None</font>, subj<font color="#909090">=None</font>)</dt><dd><tt>Obsolete&nbsp;-&nbsp;use&nbsp;<a href="#Formula-each">each</a>(subj=...,&nbsp;pred=...)</tt></dd></dl>
@@ -276,7 +285,7 @@ one&nbsp;answer&nbsp;in&nbsp;the&nbsp;store.&nbsp;It&nbsp;wise&nbsp;to&nbsp;use&
 color&nbsp;=&nbsp;f.<a href="#Formula-the">the</a>(pred=pantoneColor,&nbsp;subj=myCar)<br>
 redCar&nbsp;=&nbsp;f.<a href="#Formula-the">the</a>(pred=pantoneColor,&nbsp;obj=red)</tt></dd></dl>
 
-<dl><dt><a name="Formula-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>See&nbsp;Term.<a href="#Formula-unify">unify</a>()</tt></dd></dl>
+<dl><dt><a name="Formula-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>See&nbsp;Term.<a href="#Formula-unify">unify</a>()</tt></dd></dl>
 
 <dl><dt><a name="Formula-universals"><strong>universals</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;set&nbsp;of&nbsp;variables&nbsp;universally&nbsp;quantified&nbsp;with&nbsp;this&nbsp;formula&nbsp;as&nbsp;scope.<br>
 &nbsp;<br>
@@ -312,7 +321,7 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <hr>
 Data and other attributes inherited from <a href="term.html#Term">term.Term</a>:<br>
-<dl><dt><strong>__dict__</strong> = &lt;dictproxy object&gt;<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dl>
+<dl><dt><strong>__dict__</strong> = &lt;dictproxy object at 0x231e70&gt;<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dl>
 
 <dl><dt><strong>__weakref__</strong> = &lt;attribute '__weakref__' of 'Term' objects&gt;<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dl>
 
@@ -366,7 +375,7 @@ This&nbsp;extends&nbsp;the&nbsp;<a href="#StoredStatement">StoredStatement</a>&n
 
 <dl><dt><a name="StoredStatement-subject"><strong>subject</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;subject&nbsp;of&nbsp;the&nbsp;statement</tt></dd></dl>
 
-<dl><dt><a name="StoredStatement-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>See&nbsp;Term.<a href="#StoredStatement-unify">unify</a>()</tt></dd></dl>
+<dl><dt><a name="StoredStatement-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>See&nbsp;Term.<a href="#StoredStatement-unify">unify</a>()</tt></dd></dl>
 
 <dl><dt><a name="StoredStatement-universals"><strong>universals</strong></a>(self)</dt></dl>
 
@@ -397,7 +406,7 @@ This&nbsp;extends&nbsp;the&nbsp;<a href="#StoredStatement">StoredStatement</a>&n
 <strong>RDF_type_URI</strong> = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'<br>
 <strong>SUBJ</strong> = 2<br>
 <strong>SYMBOL</strong> = 0<br>
-<strong>becauseSubexpression</strong> = &lt;why.BecauseSubexpression instance&gt;<br>
+<strong>becauseSubexpression</strong> = &lt;why.BecauseSubexpression instance at 0x2715a8&gt;<br>
 <strong>cvsRevision</strong> = '$Revision$'<br>
 <strong>forAllSym</strong> = 'http://www.w3.org/2000/10/swap/log#forAll'<br>
 <strong>forSomeSym</strong> = 'http://www.w3.org/2000/10/swap/log#forSome'<br>
