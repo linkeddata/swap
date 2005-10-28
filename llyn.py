@@ -879,12 +879,10 @@ class BI_semantics(HeavyBuiltIn, Function):
 
         if diag.chatty_flag > 10: progress("Reading and parsing " + doc.uriref())
         inputURI = doc.uriref()
-	if diag.tracking: flags="B"   # @@@@@@@@@@@ Yuk
-	else: flags=""
-        F = self.store.load(inputURI, why=becauseSubexpression, flags=flags)
+#	if diag.tracking: flags="B"   # @@@@@@@@@@@ Yuk
+#	else: flags=""
+        F = self.store.load(inputURI, why=becauseSubexpression)
         if diag.chatty_flag>10: progress("    semantics: %s" % (F))
-#	if diag.tracking:
-#	    proof.append(F.collector)
         return F.canonicalize()
 
 class BI_semanticsWithImportsClosure(HeavyBuiltIn, Function):
