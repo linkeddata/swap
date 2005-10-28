@@ -35,18 +35,35 @@ chatty = 0
 debugLevelForInference = 0
 debugLevelForParsing = 0
 nameBlankNodes = 0
+proofSteps = 0
 
 parsed = {} # Record of retrieval/parsings
+checked = {} # Formulae from checked reasons
 
 def fail(str, level=0):
     if chatty > 0:
 	progress(" "*(level*4), "Proof failed: ", str)
     return None
 
-def fyi(str, level=0):
-    if chatty > 50:
+def fyi(str, level=0, thresh=50):
+    if chatty >= thresh:
 	progress(" "*(level*4),  str)
     return None
+
+def evidenceDiagnostics(subj, pred, obj, evidenceStatements, level):
+    for p, part in (subj, "subject"), (obj, "object"):
+	if isinstance(p, List):
+	    fyi("Looking for %s: %s" %(part, `p`), level=level) 
+	    for i in range(len(p)):
+		fyi("   item %i = %s" %(i, `p[i]`), level=level)
+    for t in evidenceStatements:
+	if  t[PRED] is pred:
+	    fyi("Evidence with right predicate: %s" %(t), level=level)
+	    for p, part in (t[SUBJ], "subject"), (t[OBJ], "object"):
+		if isinstance(p, List):
+		    fyi("Found for %s: %s" %(part, `p`), level=level) 
+		    for i in range(len(p)):
+			fyi("   item %i = %s" %(i, `p[i]`), level=level)
 
 def bind(x, bindings):
     return x.substitution(bindings)
@@ -83,8 +100,8 @@ def getSymbol(proof, x):
 
 	y = proof.the(subj=x, pred=rei.nodeId)
 	if y != None:
-	    progress("Warning: variable is identified by nodeId: <%s>" %
-			y.string)
+	    fyi("Warning: variable is identified by nodeId: <%s>" %
+			y.string, 20)
 	    return proof.newSymbol(y.string)
 	raise RuntimeError("Can't de-reify %s" % x)
 	
@@ -103,8 +120,10 @@ def getTerm(proof, x):
 def valid(proof, r=None, level=0):
     """Check whether this reason is valid.
     
-    r   is the reason to be checked, or none if the root reason
-	The root reason is the reason of type reason:Proof
+    proof   is the formula which contains the proof
+    
+    r       is the reason to be checked, or none if the root reason
+	    The root reason is the reason of type reason:Proof
     
     level   is just the nesting level for diagnostic output
     
@@ -114,6 +133,14 @@ def valid(proof, r=None, level=0):
     if r == None:
         r = proof.the(pred=rdf.type, obj=reason.Proof)  #  thing to be proved
 	
+    f = checked.get(r, None)
+    if f is not None:
+	fyi("Cache hit: already proved")
+	return f
+
+    global proofSteps
+    proofSteps += 1
+        
     f = proof.any(r,reason.gives)
     if f != None:
 	assert isinstance(f, Formula), \
@@ -162,12 +189,12 @@ def valid(proof, r=None, level=0):
 						    (u, `g.statements`))
 		    return fail("Can't verify that <%s> says %s" %
 						 (u, sf), level=level)
+	checked[r] = g
 	return g
 
     elif t is reason.Inference:
-	evidence = proof.each(subj=r, pred=reason.evidence)  # Changes to a list 2005-08
-	evidence = evidence[0]     # Transition between non-use and use of lists
-	assert isinstance(evidence, List)
+	evidence = proof.the(subj=r, pred=reason.evidence)
+#	assert isinstance(evidence, List)
 	bindings = {}
 	for b in proof.each(subj=r, pred=reason.binding):
 	    var_rei  = proof.the(subj=b, pred=reason.variable)
@@ -177,70 +204,73 @@ def valid(proof, r=None, level=0):
 	    val = getTerm(proof, val_rei)
 	    bindings[var] = val
 
-	rule = proof.any(subj=r, pred=reason.rule)
+	rule = proof.the(subj=r, pred=reason.rule)
 	if not valid(proof, rule, level):
 	    return fail("No justification for rule "+`rule`, level)
-	for s in proof.the(rule, reason.gives).statements:
+	for s in proof.the(rule, reason.gives).statements:  #@@@@@@ why look here?
 	    if s[PRED] is log.implies:
 		ruleStatement = s
 		break
 	else: return fail("Rule has %s instead of log:implies as predicate.", level)
-	evidenceStatements = []
+	
+	# Check the evidence is itself proved
+	evidenceFormula = proof.newFormula()
 	for e in evidence:
 	    f2 = valid(proof, e, level)
 	    if f2 == None:
 		return fail("Evidence %s was not proved."%(e))
-	    evidenceStatements.append(f2)
-	for s in ruleStatement[SUBJ]: # Antecedent
-	    context, pred, subj, obj = s.quad
-	    if pred is context.store.includes:
-		fyi("log:includes found in antecentent, assumed good", level) 
-		continue
-	    pred = bind(pred, bindings)
-	    subj = bind(subj, bindings)
-	    obj  = bind(obj, bindings) 
-	    for x in evidenceStatements:   # x is the formula
-		for t in x.statements:     # t is the statement
-		    fyi("Trying evidence statement %s" %(`t`), level=level) 
-		    if (t[SUBJ].unify(subj) != 0 and 
-		        t[PRED].unify(pred) != 0 and
-			t[OBJ].unify(obj) != 0):
-			break
-		else: continue
-		break
-	    else:
-		for p, part in (subj, "subject"), (obj, "object"):
-		    if isinstance(p, List):
-			fyi("Looking for %s: %s" %(part, `p`), level=level) 
-			for i in range(len(p)):
-			    fyi("   item %i = %s" %(i, `p[i]`), level=level)
-		for x in evidenceStatements:
-		    for t in x.statements:
-			if  t[PRED] is pred:
-			    fyi("Evidence with right predicate: %s" %(t), level=level)
-			    for p, part in (t[SUBJ], "subject"), (t[OBJ], "object"):
-				if isinstance(p, List):
-				    fyi("Found for %s: %s" %(part, `p`), level=level) 
-				    for i in range(len(p)):
-					fyi("   item %i = %s" %(i, `p[i]`), level=level)
-		return fail("Can't find %s in evidence for rule %s: \nEvidence:%s\nBindings:%s\n"
-			      %((subj, pred,  obj), ruleStatement, evidenceStatements, bindings),
-			    level=level)
+	    f2.store.copyFormula(f2, evidenceFormula)
+	evidenceFormula = evidenceFormula.close()
+	
+	# Check: Every antecedent statement must be included as evidence
+	antecedent = ruleStatement[SUBJ].substitution(bindings)
+	if evidenceFormula is antecedent: fyi("Yahooo! #########  ")
+	
+#	if testIncludes(evidenceFormula, antecedent):
+#	    fyi("Success: the antecedent can be found by indexed query", level)
+#	else:
+	if 1:
+	    fyi("Ooooops: query fails to find match antecedent, try unification", level)
+	    for s in antecedent:
+		context, pred, subj, obj = s.quad
+		if pred is context.store.includes:
+		    fyi("(log:includes found in antecedent, assumed good)", level) 
+		    continue
+		if evidenceFormula.statementsMatching(pred=pred, subj=subj,
+			obj=obj) != []:
+		    fyi("Statement found in index: %s" % s, level)
+		    continue
 
-	for e in evidence:
-	    if not valid(proof, e, level):
-		return fail("Evidence could not be proved: " + `e`, level=level)
+		for t in evidenceFormula.statements:
+		    fyi("Trying unify evidence statement %s" %(`t`), level=level+1, thresh=70) 
+		    if (t[PRED].unify(pred) != 0 and
+		        t[SUBJ].unify(subj) != 0 and 
+			t[OBJ].unify(obj) != 0):
+			fyi("Statment unified: %s" % t, level) 
+			break
+		else:
+		    evidenceDiagnostics(subj, pred, obj, evidenceFormula.statements, level)
+		    return fail("""Can't find %s in evidence for rule %s:
+Evidence:%s
+Bindings:%s
+"""
+				  %((subj, pred,  obj), ruleStatement,
+				evidenceFormula.statements, bindings),
+				level=level)
+
 	fyi("Rule %s conditions met" % ruleStatement, level=level)
 
-	proved = proof.newFormula()
-	for s in ruleStatement[OBJ]: # Conclusion
-	    context, pred, subj, obj = s.quad
-	    pred = bind(pred, bindings)
-	    subj = bind(subj, bindings)
-	    obj  = bind(obj, bindings)
-	    proved.add(subj, pred, obj)
-	proved=proved.close()
-	return proved
+#	proved = proof.newFormula()
+#	for s in ruleStatement[OBJ]: # Conclusion
+#	    context, pred, subj, obj = s.quad
+#	    pred = bind(pred, bindings)
+#	    subj = bind(subj, bindings)
+#	    obj  = bind(obj, bindings)
+#	    proved.add(subj, pred, obj)
+#	proved=proved.close()
+	f = ruleStatement[OBJ].substitution(bindings)
+	checked[r] = f
+	return f
 	
     elif t is reason.Conjunction:
 	components = proof.each(subj=r, pred=reason.component)
@@ -250,6 +280,7 @@ def valid(proof, r=None, level=0):
 		return fail("In Conjunction %s, evidence %s could not be proved."%(r,e), level=level)
 	    proved.append(proof.the(subj=e, pred=reason.gives))
 	
+	checked[r] = f
 	return f
 	
     elif t is reason.Fact:
@@ -259,6 +290,7 @@ def valid(proof, r=None, level=0):
 	    return fail("Claimed as fact, but predicate is %s not builtin" % pred, level)
 	    if not pred.eval(subj, obj, None, None, None, None):
 		return fail("Built-in fact does not give correct results", level)
+	checked[r] = f
 	return f
 	
     elif t is reason.Extraction:
@@ -281,6 +313,7 @@ def valid(proof, r=None, level=0):
 """
 		    %(f, f2, f.debugString(), f2. debugString()), level=level)
 	setVerbosity(0)
+	checked[r] = f
 	return f
 
     s = ""
@@ -328,15 +361,15 @@ def main():
         fyi("Reading proof from "+args[0])
         proof = load(args[0], flags=flags)
     else:
-	fyi("Reading proof from standard input.")
+	fyi("Reading proof from standard input.", thresh=5)
 	proof = load(flags=flags)
 
     # setVerbosity(60)
-    fyi("Length of proof: "+`len(proof)`)
+    fyi("Length of proof formula: "+`len(proof)`, thresh=5)
     
     proved = valid(proof)
     if proved != None:
-	fyi("Proof looks OK.")
+	fyi("Proof looks OK.   %i Steps" % proofSteps, thresh=5)
 	setVerbosity(0)
 	print proved.n3String()
 	exit(0)
