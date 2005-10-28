@@ -406,6 +406,7 @@ rdf/xml files. Note that this requires rdflib.
 
                 
         for arg in sys.argv[1:]:  # Command line options after script name
+	    if verbosity()>5: progress("Processing %s." % (arg))
             if arg.startswith("--"): arg = arg[1:]   # Chop posix-style -- to -
             _equals = string.find(arg, "=")
             _lhs = ""
