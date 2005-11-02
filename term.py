@@ -196,6 +196,7 @@ class Term(object):
 					(self, other,vars, bindings))
 	try:
 	    x = bindings[self]
+	    assert x is not self
 	    return x.unify(other, vars, existentials, bindings)
 	except KeyError:	    
 	    if self is other: return [ ({}, None)]

@@ -125,9 +125,8 @@ def n3Entails(f, g, skipIncludes=0, level=0):
 		fyi("Statement unified: %s" % t, level) 
 		break
 	else:
-	    evidenceDiagnostics(subj, pred, obj, evidenceFormula.statements, level)
-	    fyi("""n3Entailment failure.\nCan't find: %s\nin formula: %s\n""" %
-			    (g,f), level, thresh=1)
+	    fyi("""n3Entailment failure.\nCan't find: %s=%s\nin formula: %s=%s\n""" %
+			    (g, g.n3String(), f, f.n3String()), level, thresh=1)
 	    setVerbosity(v)
 	    return 0
     setVerbosity(v)
@@ -305,28 +304,26 @@ Bindings:%s
 	    return fail("Extraction: couldn't validate formula to be extracted from.", level)
 	
 	if not n3Entails(f2, f):
-	    return fail("""Extraction %s not included in formula  %s.
-	    _____________________________________________
-	    %s
-	    ______________not included in: ______________
-	    %s
-	    _____________________________________________
-"""
+	    return fail("""Extraction %s not included in formula  %s."""
 #    """ 
-
-		    %(f, f2, f.debugString(), f2. debugString()), level=level)
-	setVerbosity(0)
+		    %(f, f2), level=level)
 	checked[r] = f
 	return f
+
     elif t is reason.CommandLine:
-	premises.add(t)
-	return whatever
+	raise RuntimeError("shouldn't get here: command line a not a proof step")
+	return
+    elif t is reason.Premise:
+	g = proof.the(r, reason.gives)
+	if g is None: return fail("No given input for %s" % r)
+	fyi("Premise is: %s" % g.n3String(), level, thresh=25) 
+	
     else:
 	s = ""
 	for x in proof.statementsMatching(subj=r): s = `x` + "\n"
 	return fail("Reason %s is of unknown type %s.\n%s"%(r,t, s), level=level)
 
-    if g.occurringIn(g.existentials()) != g.existentials():
+    if g.occurringIn(g.existentials()) != g.existentials(): # Check integrity
 	raise RuntimeError(g.debugString())
 
     if f is not None and f.unify(g) == 0:

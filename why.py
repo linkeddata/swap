@@ -52,6 +52,9 @@ proofOf = {} # Track reasons for formulae
 
 # origin = {}   # track (statement, formula) to reason
 
+
+# Reporting functions called from teh rest of the system:
+
 def smushedFormula(F, G):
     """The formula F has been replaced by G
     
@@ -85,11 +88,12 @@ def report(statement, why):
 	proofOf[f] = collector
     return collector.newStatement(statement, why)
 
+# Internal utility
 
-def giveTerm(x, ko):
+def _giveTerm(x, ko):
     """Describe a term in a proof
     
-    This reifies symbols and bnodes.
+    This reifies symbols and bnodes.  Internal utility
     """
     if isinstance(x, (Literal, CompoundTerm)):
 	return x
@@ -101,6 +105,19 @@ def giveTerm(x, ko):
     else:
 	return x.reification(ko, why=dontAsk)
 
+def _subsetFormula(ss):
+    """Return a subset formula containing the given statements
+    
+    The statements are all in the same context."""
+    f = ss[0].context()
+    g = f.newFormula()
+    for s in ss:
+	g.add(s.subject(), s.predicate(), s.object(), why=dontAsk)
+    g._existentialVariables = g.occurringIn(f._existentialVariables)
+    g._universalVariables = g.occurringIn(f._universalVariables)
+    g = g.close()
+    return g
+    
 class Reason:
     """The Reason class holds a reason for having some information.
     Well, its subclasses actually do hold data.  This class should not be used
@@ -303,11 +320,11 @@ class Premise(Reason):
 	ko.add(subj=me, pred=reason.text, obj=ko.newLiteral(self._string),
 				why=dontAsk)
 
-	prem = ko.newFormula()
-	for s in ss:
-	    prem.add(s.subject(), s.predicate(), s.object())
-	prem = prem.close()
-	ko.add(me, reason.gives, prem)
+	if ss is None:
+	    raise RuntimeError("No given data for Premise %s" % self)
+	else:
+	    prem = _subsetFormula(ss)
+	    ko.add(me, reason.gives, prem, why=dontAsk)
 	return me
 
 dontAsk = Because("Generating explanation")
@@ -338,9 +355,9 @@ class BecauseOfRule(Reason):
 	    b = ko.newBlankNode(why= dontAsk)
 	    ko.add(subj=me, pred=reason.binding, obj=b, why= dontAsk)
 	    ko.add(subj=b, pred=reason.variable,
-			obj=giveTerm(var,ko),why= dontAsk)
+			obj=_giveTerm(var,ko),why= dontAsk)
 	    ko.add(subj=b, pred=reason.boundTo,
-			obj=giveTerm(val, ko), why= dontAsk)
+			obj=_giveTerm(val, ko), why= dontAsk)
 	ru = explainStatement(self._rule,ko)
 	ko.add(subj=me, pred=reason.rule, obj=ru, why=dontAsk)
 	    
@@ -397,7 +414,7 @@ def explainStatement(s, ko, ss=None):
 	""" % (KBReasonTrackers, f, s, KBReasonTrackers.reasonForStatement,
 	    f.debugString()))	
 
-    ri = statementReason.explain(ko)
+    ri = statementReason.explain(ko, ss=[s])
     ko.add(subj=si, pred=reason.because, obj=ri, why=dontAsk)
     return si
 
