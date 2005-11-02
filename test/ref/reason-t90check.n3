@@ -23,15 +23,15 @@
                     :x,
                     :y,
                     :z.
-             @forSome fo:_g2,
-                    fo:_g3,
-                    fo:_g4 .
-        fo:_g2     a dpo:Class;
+             @forSome fo:_g1,
+                    fo:_g2,
+                    fo:_g3 .
+        fo:_g1     a dpo:Class;
              dpo:complementOf ex_:Person .
-        fo:_g3     a dpo:Restriction;
+        fo:_g2     a dpo:Restriction;
              dpo:onProperty ex_:parent;
              dpo:toClass ex_:Person .
-        fo:_g4     a dpo:Restriction;
+        fo:_g3     a dpo:Restriction;
              dpo:onProperty ex_:height;
              dpo:toValue ex_:tall .
         <http://example.com/swap/test/daml-ex.n3>     a dpo:Ontology;
@@ -47,8 +47,8 @@
              dpo:label "Animal" .
         ex_:Car     a dpo:Class;
              dpo:comment "no car is a person";
-             dpo:subClassOf fo:_g2;
-             s:subClassOf fo:_g2 .
+             dpo:subClassOf fo:_g1;
+             s:subClassOf fo:_g1 .
         ex_:Female     a dpo:Class;
              dpo:disjointFrom ex_:Male;
              dpo:subClassOf ex_:Animal;
@@ -72,7 +72,7 @@
              dpo:disjointUnionOf  (
             ex_:Man
             ex_:Woman );
-             dpo:restrictedBy fo:_g3;
+             dpo:restrictedBy fo:_g2;
              dpo:subClassOf ex_:Animal;
              s:subClassOf ex_:Animal .
         ex_:TallMan     a dpo:Class;
@@ -80,7 +80,7 @@
             ex_:TallThing
             ex_:Man ) .
         ex_:TallThing     a dpo:Class;
-             dpo:restrictedBy fo:_g4 .
+             dpo:restrictedBy fo:_g3 .
         ex_:Woman     a dpo:Class;
              dpo:subClassOf ex_:Female,
                     ex_:Person;

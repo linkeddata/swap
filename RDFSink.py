@@ -103,7 +103,7 @@ def runNamespace():
 	except KeyError:
 	    runNamespaceValue = uripath.join(
 		uripath.base(), ".run-" + `time()` + "p"+ `getpid()` +"#")
-    runNamespaceValue = join(base(), runNamespaceValue) # absolutize
+	runNamespaceValue = join(base(), runNamespaceValue) # absolutize
     return runNamespaceValue
 
 nextu = 0

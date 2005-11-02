@@ -46,7 +46,7 @@ import string, sys
 
 # From  http://www.w3.org/2000/10/swap/
 from swap import  diag
-from swap.why import FormulaReason, proofOf
+from swap.why import  proofOf
 from swap.diag import verbosity, setVerbosity, progress, tracking, setTracking
 from swap.uripath import join
 from swap.webAccess import urlopenForRDF, load, sandBoxed 
@@ -373,8 +373,6 @@ rdf/xml files. Note that this requires rdflib.
 		workingContext.reopen()
 	workingContext.stayOpen = 1 # Never canonicalize this. Never share it.
 	
-	if diag.tracking:
-	    proof = FormulaReason(workingContext)
 
 	# ____________________________________________________________________
         #  Take commands from command line:- - - - - P A S S 2
@@ -393,11 +391,9 @@ rdf/xml files. Note that this requires rdflib.
             global r
             workingContext = workingContext.canonicalize()
             filterContext = _store.newFormula()
-            if diag.tracking: proof = FormulaReason(filterContext)
             _store.load(_uri, openFormula=filterContext,
 					why=myReason, referer="")
             _newContext = _store.newFormula()
-            if diag.tracking: proof = FormulaReason(_newContext)
             applyRules(workingContext, filterContext, _newContext)
             workingContext.close()
             workingContext = _newContext
@@ -526,7 +522,6 @@ rdf/xml files. Note that this requires rdflib.
                             referer="",
 			    why=myReason)
 		_newContext = _store.newFormula()
-		if diag.tracking: proof = FormulaReason(_newContext)
                 applyQueries(workingContext, filterContext, _newContext)
 		workingContext.close()
                 workingContext = _newContext
@@ -539,7 +534,6 @@ rdf/xml files. Note that this requires rdflib.
 		_newContext = _store.newFormula()
 		_newContext.stayOpen = True
 		sparql_query_formula = filterContext
-		if diag.tracking: proof = FormulaReason(_newContext)
                 applySparqlQueries(workingContext, filterContext, _newContext)
 #		workingContext.close()
                 workingContext = _newContext

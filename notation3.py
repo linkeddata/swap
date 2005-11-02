@@ -45,7 +45,7 @@ from RDFSink import  LITERAL, LITERAL_DT, LITERAL_LANG, ANONYMOUS, SYMBOL
 from RDFSink import Logic_NS
 import diag
 
-from why import BecauseOfData, FormulaReason
+from why import BecauseOfData
 
 N3_forSome_URI = RDFSink.forSomeSym
 N3_forAll_URI = RDFSink.forAllSym
@@ -144,7 +144,6 @@ class SinkParser:
 		self._formula = store.newFormula(thisDoc + "#_formula")
 	    else:
 		self._formula = store.newFormula()
-		proof = FormulaReason(self._formula)
 	else:
 	    self._formula = openFormula
 	

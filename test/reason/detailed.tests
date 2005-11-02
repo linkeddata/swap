@@ -8,9 +8,12 @@
 
 # Test proof generation -- see also the -p option of retest.py
 
+# Commented out the tests which are not checks, as proof format itself is not
+# so stable or guarantted yet and the proofs tend to serialize with unordered
+# bnodes
 
-
-:t01proof a test:CwmTest;
+:t01proof
+# a test:CwmTest;
     test:workingDirectory  <../>;
     test:referenceOutput <../ref/reason-t01proof.n3>;
     test:description   "Proof for just loading a file";
@@ -22,7 +25,8 @@
     test:description   "Proof for just loading a file";
     test:arguments     """reason/t1.n3 --think --base=foo --why | python ../check.py""".
 
-:t02proof a test:CwmTest;
+:t02proof
+# a test:CwmTest;
     test:workingDirectory  <../>;
     test:referenceOutput <../ref/reason-t02proof.n3>;
     test:description   "Proof for just loading a file";
@@ -34,7 +38,8 @@
     test:description   "Proof for just loading a file";
     test:arguments     """reason/t2.n3 --think --base=foo --why | python ../check.py""".
 
-:t03proof a test:CwmTest;
+:t03proof
+# a test:CwmTest;
     test:workingDirectory  <../>;
     test:referenceOutput <../ref/reason-t03proof.n3>;
     test:description   "Proof for just loading a file";
@@ -46,7 +51,8 @@
     test:description   "Proof for just loading a file";
     test:arguments     """reason/t3.n3 --think --base=foo --why | python ../check.py""".
 
-:t04proof a test:CwmTest;
+:t04proof
+#  a test:CwmTest;
     test:workingDirectory  <../>;
     test:referenceOutput <../ref/reason-t04proof.n3>;
     test:description   "Proof for just loading a file";
@@ -58,7 +64,8 @@
     test:description   "Proof for just loading a file";
     test:arguments     """reason/t4.n3 --think --base=foo --why | python ../check.py""".
 
-:t05proof a test:CwmTest;
+:t05proof
+# a test:CwmTest;
     test:workingDirectory  <../>;
     test:referenceOutput <../ref/reason-t05proof.n3>;
     test:description   "Proof for a little inference";
@@ -71,7 +78,8 @@
     test:arguments     """reason/t5.n3 --think --base=foo --why | python ../check.py""".
 
 
-:t06proof a test:CwmTest;
+:t06proof
+# a test:CwmTest;
     test:workingDirectory  <../>;
     test:referenceOutput <../ref/reason-t06proof.n3>;
     test:description   "Proof for a little inference";
@@ -84,7 +92,8 @@
     test:arguments     """reason/t6.n3 --think --base=foo --why | python ../check.py""".
 
 
-:t08proof a test:CwmTest;
+:t08proof
+# a test:CwmTest;
     test:workingDirectory  <../>;
     test:referenceOutput <../ref/reason-t08proof.n3>;
     test:description   "Proof for inference, --n3=B to name BNodes";
@@ -96,7 +105,8 @@
     test:description   "Proof for inference, --n3=B to name BNodes (check proof)";
     test:arguments     """--n3=B reason/t8.n3 --think --base=foo --why | python ../check.py""".
 
-:t09proof a test:CwmTest;
+:t09proof
+# a test:CwmTest;
     test:workingDirectory  <../>;
     test:referenceOutput <../ref/reason-t09proof.n3>;
     test:description   "Proof for a little inference - binding Bnode to symbol";
@@ -109,7 +119,8 @@
     test:arguments     """--n3=B reason/t9.n3 --think --base=foo --why | python ../check.py""".
 
 
-:t09wf a test:CwmTest;
+:t09wf
+# a test:CwmTest;
     test:workingDirectory  <../>;
     test:referenceOutput <../ref/reason-t09filter.n3>;
     test:description   "Proof with filter - binding Bnode to symbol";

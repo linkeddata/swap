@@ -11,11 +11,6 @@
              pr:component  [
                  a pr:Extraction;
                  pr:because fo:_g0;
-                 pr:gives {:joe     :friend :kev .
-                } ],
-                     [
-                 a pr:Extraction;
-                 pr:because fo:_g0;
                  pr:gives {:joe     :height "1.6" .
                 } ],
                      [
@@ -73,6 +68,11 @@
                             } .
                         } ] ];
                  pr:gives {:joe     a :player .
+                } ],
+                     [
+                 a pr:Extraction;
+                 pr:because fo:_g0;
+                 pr:gives {:joe     :friend :kev .
                 } ];
              pr:gives { @forAll :h,
                         :x .

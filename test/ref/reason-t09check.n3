@@ -4,8 +4,8 @@
     <http://example.com/swap/test/reason/a>     a <http://example.com/swap/test/reason/Success>;
          <http://example.com/swap/test/reason/b> <http://example.com/swap/test/reason/c> .
     {
-         @forSome :_g_L3C10 .
-        <http://example.com/swap/test/reason/a>     <http://example.com/swap/test/reason/b> :_g_L3C10 .
+         @forSome :_g_L4C10 .
+        <http://example.com/swap/test/reason/a>     <http://example.com/swap/test/reason/b> :_g_L4C10 .
         
         }     log:implies {<http://example.com/swap/test/reason/a>     a <http://example.com/swap/test/reason/Success> .
         } .

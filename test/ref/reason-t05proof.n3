@@ -9,22 +9,6 @@
                     pr:Proof;
              pr:component  [
                  a pr:Extraction;
-                 pr:because fo:_g0;
-                 pr:gives {:a     :b :c .
-                } ],
-                     [
-                 a pr:Extraction;
-                 pr:because fo:_g0;
-                 pr:gives { @forAll :x,
-                            :y .
-                {
-                    :a     :y :x .
-                    
-                    }     log:implies {:x     :y <reason/c2> .
-                    } .
-                } ],
-                     [
-                 a pr:Extraction;
                  pr:because  [
                      a pr:Inference;
                      pr:binding  [
@@ -55,6 +39,22 @@
                             } .
                         } ] ];
                  pr:gives {:c     :b <reason/c2> .
+                } ],
+                     [
+                 a pr:Extraction;
+                 pr:because fo:_g0;
+                 pr:gives { @forAll :x,
+                            :y .
+                {
+                    :a     :y :x .
+                    
+                    }     log:implies {:x     :y <reason/c2> .
+                    } .
+                } ],
+                     [
+                 a pr:Extraction;
+                 pr:because fo:_g0;
+                 pr:gives {:a     :b :c .
                 } ];
              pr:gives { @forAll :x,
                         :y .

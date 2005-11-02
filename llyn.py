@@ -541,7 +541,7 @@ class IndexedFormula(Formula):
 #		if not Formula.unify(F,G):
 #		    raise RuntimeError("Look the same but don't unify")
 		if tracking: smushedFormula(F,G)
-                if diag.chatty_flag > 20: progress(
+                if diag.chatty_flag > 70: progress(
 		    "** End Formula: Smushed new formula %s giving old %s" % (F, G))
 		del(F)  # Make sure it ain't used again
                 return G
@@ -1086,14 +1086,11 @@ class BI_conjunction(LightBuiltIn, Function):      # Light? well, I suppose so.
         if diag.chatty_flag > 50:
             progress("Conjunction input:"+`subj_py`)
             for x in subj_py:
-                progress("    conjunction input formula %s has %i statements" % (x, x.size()))
-#        F = conjunctionCache.get(subj_py, None)
-#        if F != None: return F
+                progress("    conjunction input formula %s has %i statements" 
+						% (x, x.size()))
         F = self.store.newFormula()
 	if diag.tracking:
 	    reason = BecauseMerge(F, subj_py)
-#	    F.collector = reason
-#	    proof.append(reason)
 	else: reason = None
         for x in subj_py:
             if not isinstance(x, Formula): return None # Can't

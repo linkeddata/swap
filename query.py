@@ -443,6 +443,11 @@ class Rule:
 	Beware lists are corrupted. Already list is updated if present.
 	The idea is that, for a rule which may be tried many times, the constant 
 	processing is done in this rather than in Query().
+	
+	The already dictionary is used to track bindings.
+	This less useful when not repeating (as in --filter), but as in fact
+	there may be several ways in which one cane get the same bindings,
+	even without a repeat.
 	"""
 	global nextRule
 	self.task = task
@@ -452,8 +457,9 @@ class Rule:
 	self.statement = statement      #  original statement
 	self.number = nextRule = nextRule+1
 	self.meta = self.conclusion.contains(pred=self.conclusion.store.implies) #generate rules?
-	if task.repeat: self.already = []
-	else: self.already = None
+#	if task.repeat: self.already = []    # No neat to track dups if not 
+#	else: self.already = None
+	self.already = []
 	self.affects = {}
 	self.indirectlyAffects = []
 	self.indirectlyAffectedBy = []
@@ -694,6 +700,9 @@ class Query(Formula):
                 return 0
             if diag.chatty_flag > 30: progress("Not duplicate: %r" % bindings)
             self.already.append(bindings)
+	else: 
+	    if diag.chatty_flag >60:
+			progress( "No duplication check")
 
 	if diag.tracking:
 	    reason = BecauseOfRule(self.rule, bindings=bindings,
@@ -714,7 +723,10 @@ class Query(Formula):
 		"Match found to that which is only an existential: %s -> %s" %
 						    (var, val))
 		if self.workingContext is not self.targetContext:
-		    self.targetContext.declareExistential(val)
+		    if self.conclusion.occurringIn([val]):
+			self.targetContext.declareExistential(val)
+
+	# Variable renaming
 
         b2 = bindings.copy()
 	b2[self.conclusion] = self.targetContext
@@ -940,7 +952,7 @@ class Query(Formula):
                     found = query.unify(q2, variables.copy(), existentials.copy(),
 			    bindings.copy(), nb, evidence = evidence + [reason])
 		    if diag.chatty_flag > 80: progress(
-			"Nested query returns %i fo %r" % (found, nb))
+			"Nested query returns %i (nb= %r)" % (found, nb))
                     total = total + found
 		    if query.justOne and total:
                         return total

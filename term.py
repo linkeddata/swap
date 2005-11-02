@@ -112,7 +112,7 @@ class Term(object):
         if p >= 0: return s[p+1:]
         return s
 
-    def debugString(self, already):
+    def debugString(self, already=[]):
 	return `self`  # unless more eleborate in superclass
 	
     def representation(self, base=None):
@@ -689,7 +689,7 @@ class NonEmptyList(List):
 #		res.append((nb3, None))
 #	return res
 
-    def debugString(self, already):
+    def debugString(self, already=[]):
 	s = `self`+" is ("
 	for i in self:
 	    s = s + i.debugString(already) + " "

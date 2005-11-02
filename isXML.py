@@ -10,7 +10,7 @@ from unicodedata import category
 from set_importer import Set
 
 LETTER_CATEGORIES = Set(["Ll", "Lu", "Lo", "Lt", "Nl"])
-NCNAME_CATEGORIES = LETTER_CATEGORIES.union(["Mc", "Me", "Mn", "Lm", "Nd"])
+NCNAME_CATEGORIES = LETTER_CATEGORIES.union(Set(["Mc", "Me", "Mn", "Lm", "Nd"]))
 
 NCNameChar, NCNameStartChar, NameStartChar, NameChar, \
             Letter, Digit, CombiningChar, Extender, BaseChar, Ideographic = \

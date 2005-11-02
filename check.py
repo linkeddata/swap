@@ -17,7 +17,7 @@ from swap.RDFSink import CONTEXT, PRED, SUBJ, OBJ
 from swap.term import List, Literal, CompoundTerm, BuiltIn
 from swap.llyn import Formula #@@ dependency should not be be necessary
 from swap.diag import verbosity, setVerbosity, progress
-
+from swap import diag
 from swap.query import testIncludes
 
 # Standard python
@@ -87,9 +87,52 @@ def statementFromFormula(f):
 	raise RuntimeError("Should be a single statement: %s" % f.statements)
     return f.statements[0]
 
-def checkIncludes(f, g):
-    # return testIncludes(f,g)
-    x = f.unify(g)
+def n3Entails(f, g, skipIncludes=0, level=0):
+    """Does f N3-entail g?
+    
+    First try indexed graph match algorithm, and if that fails,
+    unification."""
+
+    v = verbosity()
+    setVerbosity(debugLevelForInference)
+	
+    if f is g:
+	fyi("Yahooo! #########  ")
+	setVerbosity(v)
+	return 1
+	
+    if testIncludes(f,g):
+	fyi("Indexed query works looking in %s for %s" %(f,g), level)
+	setVerbosity(v)
+ 	return 1
+	
+    fyi("Indexed query fails to find match, try unification", level)
+    for s in g:
+	context, pred, subj, obj = s.quad
+	if skipIncludes and pred is context.store.includes:
+	    fyi("(log:includes found in antecedent, assumed good)", level) 
+	    continue
+	if f.statementsMatching(pred=pred, subj=subj,
+		obj=obj) != []:
+	    fyi("Statement found in index: %s" % s, level)
+	    continue
+
+	for t in f.statements:
+	    fyi("Trying unify  statement %s" %(`t`), level=level+1, thresh=70) 
+	    if (t[PRED].unify(pred) != 0 and
+		t[SUBJ].unify(subj) != 0 and 
+		t[OBJ].unify(obj) != 0):
+		fyi("Statement unified: %s" % t, level) 
+		break
+	else:
+	    evidenceDiagnostics(subj, pred, obj, evidenceFormula.statements, level)
+	    fyi("""n3Entailment failure.\nCan't find: %s\nin formula: %s\n""" %
+			    (g,f), level, thresh=1)
+	    setVerbosity(v)
+	    return 0
+    setVerbosity(v)
+    return 1
+
     
 
 def getSymbol(proof, x):
@@ -101,7 +144,7 @@ def getSymbol(proof, x):
 	y = proof.the(subj=x, pred=rei.nodeId)
 	if y != None:
 	    fyi("Warning: variable is identified by nodeId: <%s>" %
-			y.string, 20)
+			y.string, level=0, thresh=20)
 	    return proof.newSymbol(y.string)
 	raise RuntimeError("Can't de-reify %s" % x)
 	
@@ -135,7 +178,7 @@ def valid(proof, r=None, level=0):
 	
     f = checked.get(r, None)
     if f is not None:
-	fyi("Cache hit: already proved")
+	fyi("Cache hit: already checked reason for %s is %s."%(f, r), level, 80)
 	return f
 
     global proofSteps
@@ -145,17 +188,10 @@ def valid(proof, r=None, level=0):
     if f != None:
 	assert isinstance(f, Formula), \
 			"%s gives: %s which should be Formula" % (`r`, f)
-	if len(f) == 1:
-#	s = statementFromFormula(f)
-#	if s != None:
-	    s = f.statements[0]
-	    fs = " proof of {%s %s %s}" % (
-				    s.subject(), s.predicate(), s.object())
-	else:
-	    fs = " proof of %s" % f
+	fs = " proof of %s" % f
     else:
 	fs = ""
-#    fyi("Reason for %s is %s."%(f, r), level)
+#    fyi("Validating: Reason for %s is %s."%(f, r), level, 60)
 
     if r == None:
 	str = f.n3String()
@@ -168,33 +204,24 @@ def valid(proof, r=None, level=0):
 	res = proof.any(subj=r, pred=reason.source)
 	if res == None: return fail("No source given to parse", level=level)
 	u = res.uriref()
+	v = verbosity()
+	setVerbosity(debugLevelForParsing)
 	try:
-	    v = verbosity()
-	    setVerbosity(0)
 	    g = parse(u)
-	    setVerbosity(v)
 	except:   #   ValueError:  #@@@@@@@@@@@@ &&&&&&&&
 	    return fail("Can't retreive/parse <%s> because:\n  %s." 
 				%(u, sys.exc_info()[1].__str__()), level)
+	setVerbosity(v)
 	if f != None:  # Additional intermediate check not essential
-	    for sf in f.statements:
-		for sg in g.statements:
-		    bindings = {f: g}
-		    if (bind(sf[PRED], bindings) is sg[PRED] and
-			bind(sf[SUBJ], bindings) is sg[SUBJ] and
-			bind(sf[OBJ],  bindings) is sg[OBJ]):
-			break
-		else:
-		    progress("Statements parsed from %s:\n%s" %
-						    (u, `g.statements`))
-		    return fail("Can't verify that <%s> says %s" %
-						 (u, sf), level=level)
+	    if f.unify(g) == 0:
+		return fail("""Parsed data does not match that given.\n
+		Parsed: <%s>\n\n
+		Given: %s\n\n""" % (g,f) , level=level)
 	checked[r] = g
 	return g
 
     elif t is reason.Inference:
 	evidence = proof.the(subj=r, pred=reason.evidence)
-#	assert isinstance(evidence, List)
 	bindings = {}
 	for b in proof.each(subj=r, pred=reason.binding):
 	    var_rei  = proof.the(subj=b, pred=reason.variable)
@@ -211,7 +238,8 @@ def valid(proof, r=None, level=0):
 	    if s[PRED] is log.implies:
 		ruleStatement = s
 		break
-	else: return fail("Rule has %s instead of log:implies as predicate.", level)
+	else: return fail("Rule has %s instead of log:implies as predicate.",
+	    level)
 	
 	# Check the evidence is itself proved
 	evidenceFormula = proof.newFormula()
@@ -224,64 +252,39 @@ def valid(proof, r=None, level=0):
 	
 	# Check: Every antecedent statement must be included as evidence
 	antecedent = ruleStatement[SUBJ].substitution(bindings)
-	if evidenceFormula is antecedent: fyi("Yahooo! #########  ")
-	
-#	if testIncludes(evidenceFormula, antecedent):
-#	    fyi("Success: the antecedent can be found by indexed query", level)
-#	else:
-	if 1:
-	    fyi("Ooooops: query fails to find match antecedent, try unification", level)
-	    for s in antecedent:
-		context, pred, subj, obj = s.quad
-		if pred is context.store.includes:
-		    fyi("(log:includes found in antecedent, assumed good)", level) 
-		    continue
-		if evidenceFormula.statementsMatching(pred=pred, subj=subj,
-			obj=obj) != []:
-		    fyi("Statement found in index: %s" % s, level)
-		    continue
-
-		for t in evidenceFormula.statements:
-		    fyi("Trying unify evidence statement %s" %(`t`), level=level+1, thresh=70) 
-		    if (t[PRED].unify(pred) != 0 and
-		        t[SUBJ].unify(subj) != 0 and 
-			t[OBJ].unify(obj) != 0):
-			fyi("Statment unified: %s" % t, level) 
-			break
-		else:
-		    evidenceDiagnostics(subj, pred, obj, evidenceFormula.statements, level)
-		    return fail("""Can't find %s in evidence for rule %s:
+	fyi("Bindings: %s\nAntecedent after subst: %s" % (
+	    bindings, antecedent.debugString()),
+	    level, 195)
+	if not n3Entails(evidenceFormula, antecedent,
+			skipIncludes=1, level=level+1):
+	    return fail("""Can't find %s in evidence for
+Rule %s:
 Evidence:%s
 Bindings:%s
 """
-				  %((subj, pred,  obj), ruleStatement,
-				evidenceFormula.statements, bindings),
-				level=level)
+			  %((s[SUBJ], s[PRED],  s[OBJ]), ruleStatement,
+			evidenceFormula.n3String(), bindings),
+			level=level)
 
 	fyi("Rule %s conditions met" % ruleStatement, level=level)
 
-#	proved = proof.newFormula()
-#	for s in ruleStatement[OBJ]: # Conclusion
-#	    context, pred, subj, obj = s.quad
-#	    pred = bind(pred, bindings)
-#	    subj = bind(subj, bindings)
-#	    obj  = bind(obj, bindings)
-#	    proved.add(subj, pred, obj)
-#	proved=proved.close()
-	f = ruleStatement[OBJ].substitution(bindings)
-	checked[r] = f
-	return f
+	g = ruleStatement[OBJ].substitution(bindings)
+	
 	
     elif t is reason.Conjunction:
 	components = proof.each(subj=r, pred=reason.component)
-	proved = []
+	fyi("Conjunction:  %i components" % len(components))
+	g = r.store.newFormula()
 	for e in components:
-	    if not valid(proof, e, level):
-		return fail("In Conjunction %s, evidence %s could not be proved."%(r,e), level=level)
-	    proved.append(proof.the(subj=e, pred=reason.gives))
-	
-	checked[r] = f
-	return f
+	    g1 = valid(proof, e, level)
+	    if not g1:
+		return fail("In Conjunction %s, evidence %s could not be proved."
+		    %(r,e), level=level)
+	    before = len(g)
+	    g.loadFormulaWithSubstitution(g1)
+	    fyi("Conjunction: adding %i statements, was %i, total %i\nAdded: %s" %
+			(len(g1), before, len(g), g1.n3String()), level, thresh=80) 
+	g = g.close()
 	
     elif t is reason.Fact:
 	con, pred, subj, obj = statementFromFormula(f).quad
@@ -300,10 +303,8 @@ Bindings:%s
 	f2 = valid(proof, r2, level)
 	if f2 == None:
 	    return fail("Extraction: couldn't validate formula to be extracted from.", level)
-	setVerbosity(debugLevelForInference)
-	nbs = f.n3EntailedBy(f2)
-	if nbs == 0:
-#	if not testIncludes(f2, f):
+	
+	if not n3Entails(f2, f):
 	    return fail("""Extraction %s not included in formula  %s.
 	    _____________________________________________
 	    %s
@@ -311,14 +312,35 @@ Bindings:%s
 	    %s
 	    _____________________________________________
 """
+#    """ 
+
 		    %(f, f2, f.debugString(), f2. debugString()), level=level)
 	setVerbosity(0)
 	checked[r] = f
 	return f
+    elif t is reason.CommandLine:
+	premises.add(t)
+	return whatever
+    else:
+	s = ""
+	for x in proof.statementsMatching(subj=r): s = `x` + "\n"
+	return fail("Reason %s is of unknown type %s.\n%s"%(r,t, s), level=level)
 
-    s = ""
-    for x in proof.statementsMatching(subj=r): s = `x` + "\n"
-    return fail("Reason %s is of unknown type %s.\n%s"%(r,t, s), level=level)
+    if g.occurringIn(g.existentials()) != g.existentials():
+	raise RuntimeError(g.debugString())
+
+    if f is not None and f.unify(g) == 0:
+	setVerbosity(150)
+	f.unify(g)
+	setVerbosity(0)
+	return fail("%s: Calculated formula: %s\ndoes not match given: %s" %
+		(t, g.debugString(), f.debugString()))
+
+    checked[r] = g
+    fyi("\n\nRESULT of %s %s is:\n%s\n\n" %(t,r,g.n3String()), level, thresh=100)
+    return g
+
+
 
 # Main program 
 
