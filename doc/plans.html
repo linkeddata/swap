@@ -31,6 +31,10 @@ href="cwm">Cwm</a> Development Agenda and Release Roadmap</h1>
   <li><a href="../admin/bugStatus.html">Outstanding bugs.</a> Bugs (and some
     small requests for enhancement) are tracked in RDF, and available as a
     TODO list in an online calendar.</li>
+  <li><a
+    href="http://projects.semwebcentral.org/projects/cwm/">semwebcentral project entry</a></li>
+
+
 </ul>
 
 <div>
@@ -131,7 +135,7 @@ and
 	<li><strong class="summary">ACTION: Lalana be chief writer on an N3 logic aimed at AAAI's track on AI &amp;  the Web.</strong></li>
     </ul>
   </li>
-  <li>Clean up. Priorities. What is your #1 request?
+  <li>Common RDF API. (was: clean-up priorities)
     <p>We discussed a very clean common class structure for the basic N3
     language elements. Arrive at common class tree for that. The [new] fact
     that pychinko seems to be happy using cwm classes now suggest that there
@@ -153,18 +157,6 @@ and
     <p>aka: on arch of rdflib doing N3 formulae (Eikeon)</p>
   </li>
   <li>Common test suites -- manifests of manifests?</li>
-  <li>RDFlib fork - where were we? <a
-  href="http://www.policyawareweb.org/2005/pf-dev/09-14-paw-minutes.html">15
-  Sep</a> minutes don't show new direction. as of 26 Oct, pychinko is
-  using the mainline rdflib; i.e. there's really no more
-  fork. Mindswap and rdflib sites are cross-linked, right?
-  </li>
-  <li>Pychinko install
-    <ul>
-      <li class="vtodo"><strong class="summary">ACTION: Yarden: check
-        nodetests.py [Almost done, needs checkin 9/28]</strong></li>
-    </ul>
-  </li>
   <li>Nary operations and built-ins; @@ links to Nary Note and Rules
   charter</li>
   <li>much progress has been made on built-ins in pychinko. functions seem to work as well as relational ops as of ~Sep. log:includes progress? log:semantics? formulas as 1st-class objects?
@@ -174,84 +166,21 @@ and
 
 <hr />
 
-<h2>for Release 1.1</h2>
+<h2>for Release 1.2</h2>
 <ul>
   <li>done with cwm.py 1.180:
 Need for deep unification in nested formulae. This was a point where
     proof checking of a more complex scario broke down: the proof used
     different variable names in rules, and cwm doesn't match nested fromulae
     with different variable names. Formula canonicalization;</li>
+  <li>RDFlib fork joined with pychinko. Mindswap and rdflib sites are cross-linked, right?
+  </li>
 </ul>
 
 
-<h2>by Release 0.9 (may be skipped)</h2>
 
 
-<p></p>
-
-<p>(no enhancements except tackling of bugs in bug system)</p>
-<ul>
-  <li>Reification: write it up - in tutorial and some reference form
-    (ontology comments? DesignIssues? )</li>
-</ul>
-
-<h2>by Release 1.0 2004/11/31</h2>
-
-<p></p>
-<ul>
-  <li>Distribution mechanisms
-    <ul>
-      <li>tarball (with test) (<em>done in 0.8. Broken 2004-11-02 by setup.py
-        work. make cwm.tar.gz bulds a bad tarball. make setup_tarball
-        works.</em>)</li>
-      <li>python setup.py <em>(in progress as of 22 Jul. Now works - yosi
-        2004/9/3. )</em></li>
-      <li>dpkg debian packagin: setup.py -&gt; RPM -alien-&gt; debian
-        (<em>Works iff you run it on Linux --&gt; releases should be done on
-        linux. Dependencies? apt-get alien. 2004-11-05)</em></li>
-    </ul>
-  </li>
-  <li>allow alternative parsers; in particular,
-    <ul>
-      <li>RDFlib 22Jul: should be working, (Does all RDF parser tests --
-        yosi)) 20040907) (20041105 negative parser tests too now in
-        pre-release tests. (Does not pass all negative parser tests.)).</li>
-    </ul>
-  </li>
-  <li>N3 formal grammar (<a
-    href="http://lists.w3.org/Archives/Public/public-cwm-bugs/2004Jun/0015.html">RFE
-    10 Jul</a>) Not included in test as of 2004-11-10.
-    <ul>
-      <li>20041105: predictiveParser.py does all the positive parser tests
-        yosi has come up with. . The tests are only run pre-release (to check
-        consistency of tests and grammar) not in post release. <em>TODO:
-        Include the grammar code in the tarball. Negative test generation and
-        inclusion of Turtle negative tests wait for 1.1</em></li>
-    </ul>
-  </li>
-  <li>--think --filter combination. The application of rules to the
-    [notional] deductive closure of a formula is a function which is equally
-    valid in forward and backward chaining systems. Providing it will allow
-    the same problems to be tackled by different techniques, and different
-    systems and clones. (written - yosi)</li>
-  <li>connect with semwebcentral <em>(Now <a
-    href="http://projects.semwebcentral.org/projects/cwm/">exists on
-    semwebcentral</a> as much as it can link to its w3.or home
-  2004/9/1)</em></li>
-  <li>Bugs:
-    <ul>
-      <li>--patch diff.py now can generate weak deltas when necessary, when
-        the graphs are not solid
-        <p>Offline working hack in webaccess.py</p>
-        <p>Fixed bug in llyn.py with interning of datatyped literals giving
-        diff objects for same type sometimes.</p>
-      </li>
-    </ul>
-  </li>
-  <li>W3.org homepage announcement</li>
-</ul>
-
-<h2 id="Release">by Release 1.1 2005/09/?? (Requires Python 2.3)</h2>
+<h2 id="Release">by Release 1.1@@ 2005/09/?? (Requires Python 2.3)</h2>
 
 <p>This contains performance work which would have been been in 0.9 except
 for unexpected medical situation. This will use Python sets where appropriate
@@ -323,6 +252,19 @@ printing, serializing, etc into separate modules.</p>
     different indexing can be used</li>
   <li>Abstract interface to stored formula so that persistent store can be
     used (rdlib, 3store, etc)</li>
+  <li>Reification: write it up - in tutorial and some reference form
+    (ontology comments? DesignIssues? )</li>
+  <li>N3 formal grammar (<a
+    href="http://lists.w3.org/Archives/Public/public-cwm-bugs/2004Jun/0015.html">RFE
+    10 Jul</a>) Not included in test as of 2004-11-10.
+    <ul>
+      <li>20041105: predictiveParser.py does all the positive parser tests
+        yosi has come up with. . The tests are only run pre-release (to check
+        consistency of tests and grammar) not in post release. <em>TODO:
+        Include the grammar code in the tarball. Negative test generation and
+        inclusion of Turtle negative tests wait for 1.1</em></li>
+    </ul>
+  </li>
 </ul>
 
 <h3>Performance</h3>
