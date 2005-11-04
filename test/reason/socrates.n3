@@ -1,0 +1,7 @@
+@keywords is, of, a.
+@prefix : <#>.
+socrates a Man.
+{ ?who a Man } => { ?who a Mortal }.
+
+#ends
+
