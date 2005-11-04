@@ -91,6 +91,13 @@
     test:description   "Proof for a little inference";
     test:arguments     """reason/t6.n3 --think --base=foo --why | python ../check.py""".
 
+# This is equiv of others but easier to explain with famous example
+:socrates a test:CwmTest;
+    test:workingDirectory  <../>;
+    test:referenceOutput <../ref/socrates.n3>;
+    test:description   "Proof with basic modus ponens";
+    test:arguments     """reason/socrates.n3 --think --base=foo --why | python ../check.py""".
+
 
 :t08proof
 # a test:CwmTest;
