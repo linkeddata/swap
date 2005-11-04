@@ -197,6 +197,8 @@ class Term(object):
 	try:
 	    x = bindings[self]
 	    assert x is not self
+	    if diag.chatty_flag > 80:
+		progress("Unifying term BOUND %s to %s"%(self,x))
 	    return x.unify(other, vars, existentials, bindings)
 	except KeyError:	    
 	    if self is other: return [ ({}, None)]

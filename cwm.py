@@ -46,7 +46,7 @@ import string, sys
 
 # From  http://www.w3.org/2000/10/swap/
 from swap import  diag
-from swap.why import  proofOf
+from swap.why import  explainFormula
 from swap.diag import verbosity, setVerbosity, progress, tracking, setTracking
 from swap.uripath import join
 from swap.webAccess import urlopenForRDF, load, sandBoxed 
@@ -541,7 +541,7 @@ rdf/xml files. Note that this requires rdflib.
             elif arg == "-why":
                 workingContext.stayOpen = False
 		workingContext = workingContext.close()
-		workingContext = proofOf[workingContext].explanation()
+		workingContext = explainFormula(workingContext)
 
             elif arg == "-dump":
                 
