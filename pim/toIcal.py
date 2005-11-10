@@ -203,7 +203,7 @@ class CalWr:
         related = sts.any(r, ICAL.related)
         if related: w(";RELATED=" + str(related))
 
-        dur = sts.the(r, ICAL.duration)
+        dur = sts.the(r, RDF.value)
         w(":" + str(dur))
         w(CRLF)
 
@@ -248,7 +248,8 @@ class CalWr:
                                ):
             v = sts.any(who, sym)
             if v:
-                v = v.string.encode('utf-8')
+                if sym is ICAL.dir: v = v.uriref()
+                else: v = v.string.encode('utf-8')
                 if ';' in v or ' ' in v or ':' in v:
                     #@@hmm... what if " in v?
                     w(";%s=\"%s\"" % (paramName, v))
@@ -390,7 +391,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.32  2005-09-05 23:53:35  connolly
+# Revision 2.33  2005-11-10 14:40:32  connolly
+# updated duration handling
+#
+# Revision 2.32  2005/09/05 23:53:35  connolly
 # handle bymonthday
 #
 # Revision 2.31  2005/08/26 15:21:35  connolly
