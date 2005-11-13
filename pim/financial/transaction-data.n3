@@ -1,0 +1,13 @@
+# Filter for transaction and account data only
+# Transactions those things which have amounts.
+
+@prefix : <http://www.w3.org/2000/10/swap/pim/qif#> .
+@prefix ofx: <http://www.w3.org/2000/10/swap/pim/ofx#> .
+
+{ ?x :amount []; ?p ?z } => { ?x ?p ?z }.
+
+{ ?x ofx:ACCTID []; ?p ?z } => { ?x ?p ?z }.
+
+
+#ends
+ 

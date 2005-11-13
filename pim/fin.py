@@ -314,6 +314,7 @@ def doCommand(year, inputURI="/dev/stdin"):
 #	    print year, yearInQuestion, `s`
 	    if  int(year) != int(yearInQuestion): continue
 	    month = int(date[5:7]) -1
+	    if month not in range(12): raise ValueError("Month %i"% month)
 	    
 	    payees = kb.each(subj=s, pred=qu_payee)
 	    if str(payees[0]) == "Check" and len(payees) >1: payee = payees[1]

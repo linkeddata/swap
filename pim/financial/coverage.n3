@@ -1,0 +1,120 @@
+#  n3
+#
+#  Find coverage of different files
+#
+# usage:   cwm coverage.n3 --with  *.ofx3
+#
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix string: <http://www.w3.org/2000/10/swap/string#>.
+@prefix time: <http://www.w3.org/2000/10/swap/time#>.
+@prefix math: <http://www.w3.org/2000/10/swap/math#>.
+# @prefix q:  <http://www.w3.org/2000/10/swap/pim/qif#>.
+
+@prefix ofx: <http://www.w3.org/2000/10/swap/pim/ofx#>.
+@prefix ofxh: <http://www.w3.org/2000/10/swap/pim/ofx-headers#>.
+
+@prefix os: <http://www.w3.org/2000/10/swap/os#>.
+#@prefix tax:  <http://www.w3.org/2000/10/swap/pim/tax.n3#>.    #@@
+
+#
+@prefix : <foo#>.
+@prefix foo: <foo#>.
+
+this log:forAll :A, :E, :F, :G, :S, :X, :Y, :Z.
+
+{
+    {
+	this log:forAll :a, :d, :e, :f,  :n, :m, :p, :s, :t, :x, :y, :z,
+			:ez, :sz, :ex, :ey, :sx, :sy.
+
+	"1" a :Possible.
+
+	{:n 	a :Possible;
+		os:argv [os:baseAbsolute [is log:uri of :d]].
+	 (:n "1") math:sum :m.
+	} log:implies{
+	  :m a :Possible.
+	  :d a :Target.
+	}.
+
+	{ :d a :Target; log:semantics [log:includes {
+
+	 []  ofx:STMTTRN [
+	        ofx:BANKACCTFROM [
+	             ofx:ACCTTYPE :a;
+	        ];   # BANKACCTFROM
+	        ofx:BANKTRANLIST [
+	            ofx:DTSTART :s;
+	            ofx:DTEND   :e;
+		]
+	    ]
+	 }].
+	   (:s "Z") string:concatenation :sz.
+	   (:e "Z") string:concatenation :ez.
+	   :f time:inSeconds ("86400" [is time:inSeconds of :ez])!math:sum.
+
+	} log:implies {
+		:d :start :sz;  :end :f; :account :a. # :endMinusOne :ez;
+	}.
+
+
+	{ :x :end :e;   :account :a.
+	  :y :start :e; :account :a.
+	} log:implies {
+	  :y :follows :x.
+	}.
+
+
+# Check for overlap:
+
+	{ :x :start :sx; :end :ex; :account :a.
+	  :y :start :sy; :end :ey; :account :a.
+	  :sx string:lessThan :ey.
+	  :sy string:lessThan :ex.
+	  :x!log:uri string:notEqualTo :y!log:uri.
+	} log:implies {
+	  :y :OVERLAPS :x.
+	}.
+
+	log:implies a log:Chaff.
+	log:semantics a log:Chaff.
+	# :Target a log:Chaff.
+	:Possible a log:Chaff.
+
+    } log:conclusion :G
+} log:implies { :G a :CoverageList }.
+
+#_____________________________________________
+
+{ 	:G 	a :CoverageList;
+  		log:includes {:X :start :S; :account :A.
+			};
+  		log:notIncludes {:X :follows []}.
+} log:implies {
+ 	:S 	:runsStartFor :A.
+}.
+
+{ 	:G 	a :CoverageList;
+  		log:includes {:X :start :S; :account :A.
+			      :Y :start :T; :account :A.
+			};
+  		log:notIncludes {:X :follows []}.
+	:S 	string:greaterThan :T.
+} log:implies {
+ 	:S 	:runReStartFor :A.
+}.
+
+{ 	:G a :CoverageList;
+  		log:includes {:X :end :E; :account :A};
+  		log:notIncludes {[] :follows :X}
+} log:implies {
+ 	:E :runEndsFor :A.
+}.
+
+
+
+#______________________________________________
+
+
+#ends

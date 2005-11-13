@@ -35,11 +35,13 @@
 
 this log:forAll :a, :b, :d, :i, :l, :m, :n, :p, :r, :s, :t, :x, :y, :z.
 
+############### POST 2005 rule for finding responses:
+
 {
 :s ofx:OFX  [
    ofx:BANKMSGSRSV1[
        ofx:STMTTRNRS  [
-           ofx:STMTTRN  [
+           ofx:STMTRS  [
                ofx:BANKACCTFROM  [
                    ofx:ACCTID :a;
                    ofx:ACCTTYPE :l;
@@ -61,6 +63,56 @@ this log:forAll :a, :b, :d, :i, :l, :m, :n, :p, :r, :s, :t, :x, :y, :z.
 }.
 
 
+########### ORIGINAL pre-2005-06 rule: 
+{
+:s ofx:OFX  [
+   ofx:BANKMSGSRSV1[
+       ofx:STMTTRNRS  [
+           ofx:STMTTRN  [    # sic. Later becomes STMTTRS. Maybe was Fleet bug.
+               ofx:BANKACCTFROM  [
+                   ofx:ACCTID :a;
+                   ofx:ACCTTYPE :l;
+                   ofx:BANKID :b ];
+               ofx:BANKTRANLIST :x
+                        ]]]].
+
+# Construct a unique identifier for account which will match
+# between different statements:
+
+    :z 	log:uri [is os:baseAbsolute of
+		    [is string:concatenation of ( "acc#" :b "_" :a )]].
+	
+} log:implies {
+   :x	:listForAccount :z; :sourceDocument :s.
+   :z   ofx:ACCTID :a;
+        ofx:ACCTTYPE :l;  s:label :l;
+        ofx:BANKID :b.
+}.
+
+
+###################### Now we have isolated the statement list
+
+# New rule: post 2005
+
+{  [:listForAccount :y; :sourceDocument :s] ofx:STMTTRN [
+   ofx:DTPOSTED :d;
+   ofx:FITID    :i;
+   ofx:NAME     :m;
+   ofx:TRNAMT   :x ].
+   :r log:uri [is os:baseAbsolute of
+	[is string:concatenation of ( "fit.n3#" :i  )]].
+#   ofx:TRNTYPE  :t 
+} log:implies {
+:r  qu:toAccount :y ;
+   qu:date :d;
+   qu:payee :m;  	# Quicken seems to mix it like this
+   qu:accordingTo :s;	# useful to track the source
+   qu:amount :x .
+}.
+
+# Original version before 2005-06 used MEMO instead of NAME
+# Note spec is very vaugue on this
+
 {  [:listForAccount :y; :sourceDocument :s] ofx:STMTTRN [
    ofx:DTPOSTED :d;
    ofx:FITID    :i;
@@ -77,6 +129,8 @@ this log:forAll :a, :b, :d, :i, :l, :m, :n, :p, :r, :s, :t, :x, :y, :z.
    qu:amount :x .
 }.
 
+###############
+
 # For those with check numbers, get the check number:
 {  [:listForAccount :y] ofx:STMTTRN [
    ofx:FITID    :i;
@@ -89,15 +143,15 @@ this log:forAll :a, :b, :d, :i, :l, :m, :n, :p, :r, :s, :t, :x, :y, :z.
 }.
 
 # Prepare for purging the old vocabulary bits we no longer need:
-
-{} log:implies {ofx:STMTTRN a log:Chaff.
-		ofx:DTPOSTED a log:Chaff.  
-		ofx:FITID a log:Chaff.
-		ofx:MEMO a log:Chaff.
-		ofx:NAME a log:Chaff.
-		ofx:TRNAMT a log:Chaff. 
-		ofx:CHECKNUM a log:Chaff.
-		ofx:TRNTYPE a log:Chaff.}.
+# (obsolete - use filter instead)
+#{} log:implies {ofx:STMTTRN a log:Chaff.
+#		ofx:DTPOSTED a log:Chaff.  
+#		ofx:FITID a log:Chaff.
+#		ofx:MEMO a log:Chaff.
+#		ofx:NAME a log:Chaff.
+#		ofx:TRNAMT a log:Chaff. 
+#		ofx:CHECKNUM a log:Chaff.
+#		ofx:TRNTYPE a log:Chaff.}.
 
    
 

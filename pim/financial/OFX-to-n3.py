@@ -1,24 +1,44 @@
 #!/usr/bin/python
-"""fromOFX.py -- interpret OFX format as RDF
+"""OFX-to-n3.py -- interpret OFX format as RDF
 
+Converts OFX format (as in downloaded back statements etc
 USAGE:
-  python fromOFX.py  [options]  foo.ofx > foo.rdf
-
-  options:
-    --base uri
-    --noprotocol    Supress SEQUENCE and DTSTAMP
-    --noalarm       Supress VALARMs
+  python fromOFX.py < foo.ofx > foo.rdf
+  
+  The conversion is only syntactic.  The OFX modelling is
+  pretty weel thought out, so taking it as defining an effecive
+  RDF ontolofy seems to make sense. Rules can then be used to
+  define mapping into your favorite ontology.
+  
+DESIGN NOTES
+  
+  The properties have even been left in upper
+  case, although I wouldn't do that again next time.
+  The SGML/XML tree is converted into a tree of blank nodes.
+  This is made easier by the rule that OFX does not allow empty elements
+  or mixed content.
+    
+  OFX actually defines a request-response protocol using HTTP and
+  SGML (v1.*) or  XML (v2.*).
+  I have only had access to downloaded statements which look like HTTP
+  responses carrying SGML, so that is what this handles.
 
 REFERENCES
 
+This converts data from the  common proprietary format whcih seems
+to be in use.  The spec i found is a later XML-based version, which will
+be much simpler. Alas the spec not served directly on the web.
+"Open" Financial Exchange
+   Specification 2.0 
+   April 28, 2000 (c) 2000 Intuit Inc., Microsoft Corp.
  
-
-  Python Style Guide
+We try to stick to:
+Python Style Guide
   Author: Guido van Rossum
   http://www.python.org/doc/essays/styleguide.html
 
-  
-LICENSE
+   
+LICENSE OF THIS CODE
 
 Workspace: http://www.w3.org/2000/10/swap/pim/financial/
 
@@ -31,17 +51,11 @@ in the hope that it will be useful, but WITHOUT ANY WARRANTY;
 without even the implied warranty of MERCHANTABILITY or FITNESS FOR
 A PARTICULAR PURPOSE.
 
-
+This is or was http://www.w3.org/2000/10.swap/pim/financial/OFX-to-n3.py
 """
 
 __version__ = "$Id$"
-
-
-from warnings import warn
-import codecs, quopri
-
-
-UID_PREFIX = 'uid:'  # Must Be absolute. (Was '#' - timbl) ('uuid:' ?)
+thisSource = "http://www.w3.org/2000/10.swap/pim/financial/OFX-to-n3.py"
 
 from swap.myStore import load, Namespace
 from swap.diag import chatty_flag, progress
@@ -90,6 +104,9 @@ def contentLines(doc):
 	    raise SyntaxError("No colon in header line, line %i: %s" % (
 						ln, line))
 	hname, value = line[:colon], line[colon+1:]
+	while " " in hname:
+	    i = hname.find(" ")
+	    hname = hname[:i] + hname[i+1:]
 #	fyi("Header line %s:%s" % (hname, value))
 	print "  ofxh:%s \"%s\";" % (hname, value)  #@@ do n3 escaping
 	header[hname] = value
