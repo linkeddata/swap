@@ -13,30 +13,25 @@ Id: rdf2dot.xsl,v 1.4 2001/02/26 19:55:00 connolly Exp
 
 import sys, os
 import urlparse
-import xml2rdf, cwm, notation3
 
-GV_ns='http://www.w3.org/2001/02pd/gv#'
+from swap import myStore, Namespace
+
+GV = Namespace('http://www.w3.org/2001/02pd/gv#')
 RCSId='$Id$'
 
 def dotTop(text):
     text("/* transformed by " + RCSId + " */\n")
 
-def rdf2dot(text, store, docAddr):
-    engine = store.engine
-    digraph = engine.internURI(GV_ns + 'digraph')
-
-    docRes = engine.internURI(docAddr)
-
-    props = (engine.internURI(GV_ns + 'label'),
-             engine.internURI(GV_ns + 'size'),
-             engine.internURI(GV_ns + 'rankdir'),
-             engine.internURI(GV_ns + 'color'),
-             engine.internURI(GV_ns + 'shape'),
-             engine.internURI(GV_ns + 'style'),
+def rdf2dot(text, f):
+    props = (GVlabel,
+             GV.size,
+             GV.rankdir),
+             GV.color,
+             GV.shape,
+             GV.style,
              )
     dotTop(text)
-    for s in docRes.occursAs[cwm.SUBJ]:
-        if s.quad[cwm.PRED] is digraph:
+    for s in f.statementsMatching(pred=GV.digraph):
             print "@@digraph", s.quad[cwm.OBJ]
             text("digraph ")
             eachGraph(text, store, s.quad[cwm.OBJ], props)
@@ -83,19 +78,9 @@ def eachNode(text, store, gnode, props):
                 
                 
 def main(argv):
-    baseURI = "file:" + cwm.fixslash(os.getcwd()) + "/"
+    f = myStore.load(argv[1])
 
-    rdfAddr = urlparse.urljoin(baseURI, argv[1])
-
-    engine = cwm.Engine()
-    store = cwm.RDFStore(engine, "#_gs") #@@??
-
-
-    p = xml2rdf.RDFXMLParser(store, rdfAddr)
-    #@@p = notation3.SinkParser(store,  rdfAddr)
-    p.load(rdfAddr)
-
-    rdf2dot(sys.stdout.write, store, rdfAddr)
+    rdf2dot(sys.stdout.write, f)
     
 
 if __name__ == '__main__':
