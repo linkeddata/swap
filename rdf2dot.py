@@ -9,6 +9,9 @@ http://www.w3.org/COPYRIGHT
 
 transcribed from
 Id: rdf2dot.xsl,v 1.4 2001/02/26 19:55:00 connolly Exp 
+
+cwm API notes:
+ Symbol.uriref() vs uriref2()... why not an optional arg?
 """
 
 class Usage(Exception):
@@ -26,13 +29,15 @@ import sys, os
 from swap.myStore import load, Namespace
 
 GV = Namespace('http://www.w3.org/2001/02pd/gv#')
+RDF = Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns')
+
 RCSId='$Id$'
 
 def dotTop(text):
     text("/* transformed by " + RCSId + " */\n")
 
 def rdf2dot(text, f):
-    props = (GVlabel,
+    props = (GV.label,
              GV.size,
              GV.rankdir,
              GV.color,
@@ -41,12 +46,11 @@ def rdf2dot(text, f):
              )
     dotTop(text)
     for s in f.statementsMatching(pred=GV.digraph):
-            print "@@digraph", s.object()
             text("digraph ")
-            eachGraph(text, store, s.object(), props)
+            eachGraph(text, f, s.object(), props)
 
 def eachGraph(text, store, it, props, cluster=''):
-    text(cluster + 'N' + `hash(it.uriref('foo@@:'))`) #@@??
+    text(cluster + 'N' + `hash(it.uriref())`)
     text(" {\n")
     for p in props:
 	for o in store.each(subj = it, pred = p):
@@ -61,7 +65,7 @@ def eachGraph(text, store, it, props, cluster=''):
     print "@@ carry on with subgraphs"
 
 def eachNode(text, store, gnode, props):
-    text('"' + gnode.uriref('foo@@:') + '" [')
+    text('"' + gnode.uriref() + '" [')
 
     for p in props:
 	for o in store.each(subj = gnode, pred = p):
@@ -73,8 +77,8 @@ def eachNode(text, store, gnode, props):
 
     for p in store.each(pred=RDF.type, obj=GV.EdgeProperty):
 	for o in store.each(subj=gnode, pred = p):
-	    text('"' + gnode.uriref('foo@@:') + " -> "
-		 + o.uriref('foo@@:') + '"')
+	    text('"' + gnode.uriref() + " -> "
+		 + o.uriref() + '"')
 	    print "@@edge attributes..."
 
 def main(argv):
