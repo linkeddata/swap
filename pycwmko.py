@@ -4,13 +4,14 @@
 
 """
 
-from pychinko import terms
+from pychinko import terms, interpreter
 from pychinko import N3Loader
 from pychinko.helpers import removedups
 from swap import term, formula
 from swap.set_importer import Set
-from rdflib import BNode, Store
-from rdflib.constants import TYPE, FIRST, REST, LIST, NIL, OWLNS
+import time
+#from rdflib import BNode, Store
+# from rdflib.constants import TYPE, FIRST, REST, LIST, NIL, OWLNS
 LOG_IMPLIES = 'http://www.w3.org/2000/10/swap/log#'
 
 try:
@@ -31,22 +32,45 @@ class fullSet(object):
         return True
 
 from sys import stderr
+
 class directPychinkoQuery(object):
     def __init__(self, workingContext, rulesFormula=None, target=None):
         if rulesFormula is None:
             rulesFormula = workingContext
         if target is None:
             target = workingContext
+        t = time.time()
         self.rules = self.buildRules(rulesFormula)
+        print "rules"
+        print self.rules
+        
+        self.facts = self.buildFacts(rulesFormula)
+        print "converting time:", time.time() - t
+        t = time.time()
+        self.interp = interpreter.Interpreter(self.rules)
+        self.interp.addFacts(Set(self.facts), initialSet=True)
+        print "add facts time:", time.time() - t
+        t = time.time()
+        self.interp.run()
+        print "interp.run() time:", time.time() - t
+
+
+        print len(self.interp.inferredFacts), ' inferred fact(s)'
+        
+        """
+        print "facts"
+        print self.facts
         self.workingContext = workingContext
         self.target = target
         if workingContext is target:
             self.loop = True
         else:
-            self.loop = False
+            self.loop = False"""
         
 
     def __call__(self):
+        #convert it to a set of facts (simply take all triples in a formula and add them as facts)
+        #as first cut
         rules = self.rules
         indexedFormula = self.workingContext
         self.newStatements = fullSet()
@@ -82,15 +106,24 @@ class directPychinkoQuery(object):
                             continue
                         newNewStuff = self.processBetaNode(betaNode)
                         newStuff = newStuff or newNewStuff
+        
+        
 #        self.rete.printNetwork()
 
     def convType(self, t, F, K=None):
+        
+        """if isinstance(t, term.Symbol):
+                print t.uri
+        else:
+                print t.fragid"""
         if isinstance(t, term.NonEmptyList):
             raise RuntimeError
         if t in F.universals():
-            return terms.Variable(t.uriref())
+            return terms.Variable(t.fragid)
         if K is not None and t in K.existentials():
-            return terms.ExiVar(t.uriref())
+            return terms.ExiVar(t.fragid)
+        if isinstance(t, term.Symbol):                
+                return t.uri
         return t
                     
     def processBetaNode(self, betaNode):
@@ -123,22 +156,49 @@ class directPychinkoQuery(object):
     def buildRules(self, indexedFormula):
         rules = []
         for rule in indexedFormula.statementsMatching(pred=indexedFormula.store.implies):
-            subj, _, obj = rule.spo()
+            subj, predi, obj = rule.spo()
+            
             if not isinstance(subj, formula.Formula) or \
                not isinstance(obj, formula.Formula):
                 continue
             head = []
             tail = []
-            for fr, to in (subj, tail), (obj, head):
-                for quad in fr:
+            for fr, to in (subj, tail), (obj, head):                
+                for quad in fr:                    
                     self.extra = []
                     s, p, o = [self.convType(x, indexedFormula, fr)
                                for x in quad.spo()] #to get variables.
-                               #Not good enough for Lists
+                               #Not good enough for Lists                    
                     for f in (self.extra + [(s,p,o)]):
                         to.append(terms.Pattern(*f))
-            rules.append(terms.Rule(tail, head))
+            rules.append(terms.Rule(tail, head, (subj, predi, obj) ))
         return rules
+
+    def buildFacts(self, indexedFormula):
+        #only root level facts for now
+        #how to check for that         
+        facts = []
+        for fact in indexedFormula.statements:
+            subj, predi, obj = fact.spo()
+            # ignore formulas for now
+            if  isinstance(subj, formula.Formula) or \
+                isinstance(obj, formula.Formula):
+                continue
+            # only get top level facts            
+            head = []
+            tail = []            
+            
+            self.extra = []
+            s, p, o = [self.convType(x, indexedFormula, None)
+                       for x in fact.spo()] #to get variables.
+                       #Not good enough for Lists
+            
+            """
+            for f in (self.extra + [(s,p,o)]):
+                to.append(terms.Pattern(*f))"""
+            facts.append(terms.Fact(s, p, o))
+        
+        return facts
 
     def add(self, triple):
         t = triple.t
@@ -149,8 +209,8 @@ class directPychinkoQuery(object):
                 if anode.add(f):
                     status = True
         return Status
-                
 
+"""                
 class ToPyStore(object):
 
     def __init__(self, pyStore):
@@ -349,4 +409,4 @@ if __name__ == '__main__':
     reConv = FromPyStore(g, pyf)
     reConv.run()
     print g.close().n3String()
-
+"""
