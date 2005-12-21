@@ -583,11 +583,11 @@ rdf/xml files. Note that this requires rdflib.
                 think(workingContext, mode=option_flags["think"])
 
             elif arg == '-pythink':
-                from swap import pycwmko
-                if True:
-                    pythink = pycwmko.directPychinkoQuery(workingContext)
-                    pythink()
-                else:
+                from swap import pycwmko                
+                pythink = pycwmko.directPychinkoQuery(workingContext)
+                return
+                #pythink()
+                """
                     from pychinko import interpreter
                     from swap.set_importer import Set, ImmutableSet
                     pyf = pycwmko.N3Loader.N3Loader()
@@ -600,6 +600,7 @@ rdf/xml files. Note that this requires rdflib.
                     workingContext = workingContext.store.newFormula()
                     reconv = pycwmko.FromPyStore(workingContext, pyf)
                     reconv.run()
+                """
 
             elif arg == '-sparqlServer':
                 from swap.sparql import webserver
