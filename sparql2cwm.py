@@ -871,7 +871,7 @@ class FromSparql(productionHandler):
     def on__Q_O_QLANGTAG_E__Or__QDTYPE_E____QIRIref_E__C_E_Opt(self, p):
         if len(p) == 1:
             return (None, None)
-        raise RuntimeError(`p`)
+        return p[1]
 
     def on_RDFLiteral(self, p):
         return ('Literal', self.store.newLiteral(p[1][1], dt=p[2][0], lang=p[2][1]))
@@ -1406,7 +1406,8 @@ class FromSparql(productionHandler):
         return p[1]
 
     def on__O_QCOMMA_E____QObjectList_E__C(self, p):
-        raise RuntimeError(`p`)
+        #raise RuntimeError(`p`)
+        return (p[2][0], p[2][1][1], p[2][2])
 
     def on_VarOrIRIref(self, p):
         raise RuntimeError(`p`)
@@ -1506,10 +1507,15 @@ class FromSparql(productionHandler):
         return p[1]
 
     def on__O_QDTYPE_E____QIRIref_E__C(self, p):
-        raise RuntimeError(`p`)
+        return (p[1][0], p[2][1])
 
     def on__O_QLANGTAG_E__Or__QDTYPE_E____QIRIref_E__C(self, p):
+        if abbr(p[1][0]) == 'LANGTAG':
+            return (None, p[1][1][1:])
+        if abbr(p[1][0]) == 'GT_DTYPE':
+            return (p[1][1], None)
         raise RuntimeError(`p`)
+        
 
     def on_BooleanLiteral(self, p):
         return ('Literal', (p[1][1] == u'true' and self.true or self.false))

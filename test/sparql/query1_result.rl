@@ -31,7 +31,7 @@
                 <literal></literal>
             </binding>
             <binding name="name">
-                <literal>Alice</literal>
+                <literal xml:lang="he-il">Alice</literal>
             </binding>
             <binding name="x">
                 <bnode>http://example.com/swap/test/run#_g64</bnode>

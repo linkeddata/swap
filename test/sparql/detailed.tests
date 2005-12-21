@@ -38,4 +38,9 @@
     test:description   "OPTIONAL in query";
     test:arguments     """-n3 sparql/optional_data.n3 --sparql=sparql/optional.sparql""".
 
+:t1007 a test:CwmTest;
+    test:referenceOutput <datatype-result.n3>;
+    test:description   "OPTIONAL in query";
+    test:arguments     """-n3 sparql/datatype.n3 --sparql=sparql/datatype.sparql""".
+
 #ends
