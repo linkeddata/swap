@@ -6,7 +6,7 @@
 
 from pychinko import terms, interpreter
 from pychinko import N3Loader
-from pychinko.helpers import removedups
+from pychinko.helpers import removedups, convertBNodeToFact
 from swap import term, formula
 from swap.set_importer import Set
 import time
@@ -35,14 +35,19 @@ from sys import stderr
 
 class directPychinkoQuery(object):
     def __init__(self, workingContext, rulesFormula=None, target=None):
+            
+        self.extra = []
+        self.store = workingContext.store
+        self.workingContext = workingContext
         if rulesFormula is None:
             rulesFormula = workingContext
         if target is None:
             target = workingContext
         t = time.time()
         self.rules = self.buildRules(rulesFormula)
-        print "rules"
-        print self.rules
+        #print "rules"
+        #print self.rules
+        
         
         self.facts = self.buildFacts(rulesFormula)
         print "converting time:", time.time() - t
@@ -56,6 +61,9 @@ class directPychinkoQuery(object):
 
 
         print len(self.interp.inferredFacts), ' inferred fact(s)'
+        print "inferred facts:"
+        for i in self.interp.inferredFacts:
+                print i
         
         """
         print "facts"
@@ -68,7 +76,174 @@ class directPychinkoQuery(object):
             self.loop = False"""
         
 
-    def __call__(self):
+    
+    def convType(self, t, F, K=None):  
+        """print "t:", t
+        print type(t)
+        print "f unis:", F.universals()
+        if (K): print "k exis:", K.existentials()"""
+        
+        if isinstance(t, term.NonEmptyList):
+            #convert the name of the list to an exivar and return it            
+            #self.convertListToRDF(t, listId, self.extra)
+            #return terms.Exivar('_:' + str(t))
+            return '_:' + str(t)
+            #raise RuntimeError            
+        if t in F.universals():
+            return terms.Variable(t.fragid)
+        if K is not None and t in K.existentials():
+            print "returning existential:", t
+            return terms.Exivar(t.fragid)
+        if isinstance(t, term.Symbol):                
+                return t.uri
+        if isinstance(t, term.BuiltIn):
+                return t.uriref()
+        
+        
+        return str(t)
+                    
+    """def processBetaNode(self, betaNode):        
+        retVal = False
+        inferences = betaNode.join()
+        self.joinedBetaNodes.add(betaNode)
+        if inferences:
+            if betaNode.rule:
+                #self.rulesThatFired.add(betaNode.rule)
+                #######this test will be moved into `matchingFacts'
+                for rhsPattern in betaNode.rule.rhs:
+                    results = betaNode.matchingFacts(rhsPattern, inferences)
+                    ### @@@ here we need to add to the workingcontext
+                    for triple in results:
+                        addedResult = self.workingContext.add(*triple.t)
+                        if addedResult:
+                            retVal = True
+                            self.newStatements.add(
+                                self.workingContext.statementsMatching(
+                                    subj=triple.s, pred=triple.p, obj=triple.o)[0])
+#                        retVal = retVal or addedResult
+            else:
+                for child in betaNode.children:
+                    #process children of BetaNode..
+                    betaNodeProcessed = self.processBetaNode(child)
+                    retVal = retVal or betaNodeProcessed
+        return retVal"""
+                 
+    def _listsWithinLists(self, L, lists):
+        if L not in lists:
+            lists.append(L)
+        for i in L:
+            if isinstance(i, term.NonEmptyList):
+                self._listsWithinLists(i, lists)
+
+    def dumpLists(self, context):
+        "Dump lists out as first and rest. Not used in pretty."        
+        listList = {}
+        result = []
+        #context = self.workingContext
+        #sink = self.sink
+        lists = []
+        for s in context.statements:
+            #print "s:", s
+            for x in s.predicate(), s.subject(), s.object():
+                if isinstance(x, term.NonEmptyList):
+                    self._listsWithinLists(x, lists)
+                    
+        for l in lists:           
+            list = l
+            while not isinstance(list, term.EmptyList):
+                if list not in listList:
+                    #print list, " rdf:type rdf:list"
+                    #self._outputStatement(sink, (context, self.store.forSome, context, list))
+                    listList[list] = 1
+                list = list.rest
+                
+        listList = {}
+        for l in lists:
+            list = l            
+            while (not isinstance(list, term.EmptyList)) and list not in listList:    
+                result.append(terms.Pattern(terms.Exivar("_:" + str(list)), "http://www.w3.org/1999/02/22-rdf-syntax-ns#first", self.convType(list.first, self.workingContext, context)))                
+                if isinstance(list.rest, term.EmptyList):
+                        #print "_:", list, " rdf:rest rdf:nil"
+                        result.append(terms.Pattern(terms.Exivar("_:" + str(list)), "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest", "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"))                        
+                else:    
+                        result.append(terms.Pattern(terms.Exivar("_:" + str(list)), "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest", self.convType(list.rest, self.workingContext, context)))    
+                        #print list, " rdf:rest ", list.rest
+                #self._outputStatement(sink, (context, self.store.first, list, list.first))
+                #self._outputStatement(sink, (context, self.store.rest,  list, list.rest))
+                listList[list] = 1
+                list = list.rest
+                
+        return result
+                 
+                    
+    def buildRules(self, indexedFormula):
+        rules = []
+        for rule in indexedFormula.statementsMatching(pred=indexedFormula.store.implies):
+            subj, predi, obj = rule.spo()
+            
+            if not isinstance(subj, formula.Formula) or \
+               not isinstance(obj, formula.Formula):
+                continue
+            head = []
+            tail = []
+            for fr, to in (subj, tail), (obj, head):                
+                self.extra = self.dumpLists(fr) #use extra for the list-related triples                   
+                for quad in fr: 
+                    #if not isinstance(quad.subject(), term.NonEmptyList):                                                           
+                    s, p, o = [self.convType(x, indexedFormula, fr)
+                               for x in quad.spo()] #to get variables.
+                               #Not good enough for Lists   
+                    print "spo:", s,p,o
+                    for f in (self.extra + [(s,p,o)]):
+                        to.append(terms.Pattern(*f))
+            rules.append(terms.Rule(tail, head, (subj, predi, obj) ))
+            
+        return rules
+
+    def buildFacts(self, indexedFormula):
+        #only root level facts for now
+        #how to check for that         
+        facts = []
+        for f in self.dumpLists(indexedFormula):                
+                facts.append(terms.Fact(convertBNodeToFact(f.s),f.p, convertBNodeToFact(f.o)))
+                        
+        
+        for fact in indexedFormula.statements:
+            subj, predi, obj = fact.spo()
+            # ignore formulas for now
+            if  isinstance(subj, formula.Formula) or \
+                isinstance(obj, formula.Formula):
+                continue
+            # only get top level facts            
+            head = []
+            tail = []            
+            
+            
+            s, p, o = [self.convType(x, indexedFormula, None)
+                       for x in fact.spo()] #to get variables.
+                       #Not good enough for Lists
+            
+            """
+            for f in (self.extra + [(s,p,o)]):
+                to.append(terms.Pattern(*f))"""
+            print "spo:", s,p,o
+            facts.append(terms.Fact(s, p, o))
+        
+        return facts
+
+    def add(self, triple):
+        t = triple.t
+        status = False
+        if self.workingContext.add(*t):
+            alphaMatches = self.rete.alphaIndex.match(f)
+            for anode in alphaMatches:
+                if anode.add(f):
+                    status = True
+        return Status
+
+"""      
+
+ def __call__(self):
         #convert it to a set of facts (simply take all triples in a formula and add them as facts)
         #as first cut
         rules = self.rules
@@ -107,110 +282,9 @@ class directPychinkoQuery(object):
                         newNewStuff = self.processBetaNode(betaNode)
                         newStuff = newStuff or newNewStuff
         
-        
+        print self.newStatements
 #        self.rete.printNetwork()
-
-    def convType(self, t, F, K=None):
-        
-        """if isinstance(t, term.Symbol):
-                print t.uri
-        else:
-                print t.fragid"""
-        if isinstance(t, term.NonEmptyList):
-            raise RuntimeError
-        if t in F.universals():
-            return terms.Variable(t.fragid)
-        if K is not None and t in K.existentials():
-            return terms.ExiVar(t.fragid)
-        if isinstance(t, term.Symbol):                
-                return t.uri
-        return t
-                    
-    def processBetaNode(self, betaNode):
-        """I process a beta node"""
-        retVal = False
-        inferences = betaNode.join()
-        self.joinedBetaNodes.add(betaNode)
-        if inferences:
-            if betaNode.rule:
-                #self.rulesThatFired.add(betaNode.rule)
-                #######this test will be moved into `matchingFacts'
-                for rhsPattern in betaNode.rule.rhs:
-                    results = betaNode.matchingFacts(rhsPattern, inferences)
-                    ### @@@ here we need to add to the workingcontext
-                    for triple in results:
-                        addedResult = self.workingContext.add(*triple.t)
-                        if addedResult:
-                            retVal = True
-                            self.newStatements.add(
-                                self.workingContext.statementsMatching(
-                                    subj=triple.s, pred=triple.p, obj=triple.o)[0])
-#                        retVal = retVal or addedResult
-            else:
-                for child in betaNode.children:
-                    #process children of BetaNode..
-                    betaNodeProcessed = self.processBetaNode(child)
-                    retVal = retVal or betaNodeProcessed
-        return retVal
-                    
-    def buildRules(self, indexedFormula):
-        rules = []
-        for rule in indexedFormula.statementsMatching(pred=indexedFormula.store.implies):
-            subj, predi, obj = rule.spo()
-            
-            if not isinstance(subj, formula.Formula) or \
-               not isinstance(obj, formula.Formula):
-                continue
-            head = []
-            tail = []
-            for fr, to in (subj, tail), (obj, head):                
-                for quad in fr:                    
-                    self.extra = []
-                    s, p, o = [self.convType(x, indexedFormula, fr)
-                               for x in quad.spo()] #to get variables.
-                               #Not good enough for Lists                    
-                    for f in (self.extra + [(s,p,o)]):
-                        to.append(terms.Pattern(*f))
-            rules.append(terms.Rule(tail, head, (subj, predi, obj) ))
-        return rules
-
-    def buildFacts(self, indexedFormula):
-        #only root level facts for now
-        #how to check for that         
-        facts = []
-        for fact in indexedFormula.statements:
-            subj, predi, obj = fact.spo()
-            # ignore formulas for now
-            if  isinstance(subj, formula.Formula) or \
-                isinstance(obj, formula.Formula):
-                continue
-            # only get top level facts            
-            head = []
-            tail = []            
-            
-            self.extra = []
-            s, p, o = [self.convType(x, indexedFormula, None)
-                       for x in fact.spo()] #to get variables.
-                       #Not good enough for Lists
-            
-            """
-            for f in (self.extra + [(s,p,o)]):
-                to.append(terms.Pattern(*f))"""
-            facts.append(terms.Fact(s, p, o))
-        
-        return facts
-
-    def add(self, triple):
-        t = triple.t
-        status = False
-        if self.workingContext.add(*t):
-            alphaMatches = self.rete.alphaIndex.match(f)
-            for anode in alphaMatches:
-                if anode.add(f):
-                    status = True
-        return Status
-
-"""                
+          
 class ToPyStore(object):
 
     def __init__(self, pyStore):
