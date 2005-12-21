@@ -119,9 +119,9 @@ def n3Entails(f, g, skipIncludes=0, level=0):
 
 	for t in f.statements:
 	    fyi("Trying unify  statement %s" %(`t`), level=level+1, thresh=70) 
-	    if (t[PRED].unify(pred) != 0 and
-		t[SUBJ].unify(subj) != 0 and 
-		t[OBJ].unify(obj) != 0):
+	    if (t[PRED].unify(pred) != [] and
+		t[SUBJ].unify(subj) != [] and 
+		t[OBJ].unify(obj) != []):
 		fyi("Statement unified: %s" % t, level) 
 		break
 	else:
@@ -212,7 +212,7 @@ def valid(proof, r=None, level=0):
 				%(u, sys.exc_info()[1].__str__()), level)
 	setVerbosity(v)
 	if f != None:  # Additional intermediate check not essential
-	    if f.unify(g) == 0:
+	    if f.unify(g) == []:
 		return fail("""Parsed data does not match that given.\n
 		Parsed: <%s>\n\n
 		Given: %s\n\n""" % (g,f) , level=level)
@@ -326,7 +326,7 @@ Bindings:%s
     if g.occurringIn(g.existentials()) != g.existentials(): # Check integrity
 	raise RuntimeError(g.debugString())
 
-    if f is not None and f.unify(g) == 0:
+    if f is not None and f.unify(g) == []:
 	setVerbosity(150)
 	f.unify(g)
 	setVerbosity(0)

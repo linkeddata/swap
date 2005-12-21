@@ -186,7 +186,7 @@ class Term(object):
 	    existentials are things we don't need a binding returned for
 	    bindings are those bindings already made in this unification
 	    
-	    Return 0 if impossible.
+	    Return [] if impossible.
 	    return [({}, reason] if no new bindings
 	    Return [( {var1: val1, var2: val2,...}, reason), ...] if match
 	"""
@@ -198,7 +198,7 @@ class Term(object):
 	    x = bindings[self]
 	    assert x is not self
 	    if diag.chatty_flag > 80:
-		progress("(Unifying term as bound: %s to %s)"%(self,x))
+		progress("(Unifying term note  %s is bound to to %s)"%(self,x))
 	    return x.unify(other, vars, existentials, bindings)
 	except KeyError:	    
 	    if self is other:
@@ -210,7 +210,7 @@ class Term(object):
 	    if diag.chatty_flag > 99:
 		progress("Failed Unifying symbol %s with %s vars=%s, so far=%s"%
 					(self, other,vars, bindings))
-	    return 0
+	    return []
 	
 class ErrorFlag(TypeError, Term):
     __init__ = TypeError.__init__
@@ -671,7 +671,7 @@ class NonEmptyList(List):
 	if diag.chatty_flag > 90:
 	    progress("Unifying list %s with %s vars=%s, so far=%s"%
 		    (self.value(), other.value(),vars, bindings))
-	if not isinstance(other, NonEmptyList): return 0
+	if not isinstance(other, NonEmptyList): return []
 	if other is self: return [ ({}, None)]
 
 	# Using the sequence-like properties of lists:
@@ -744,7 +744,7 @@ class EmptyList(List):
 	    bindings is a dictionary."""
 	assert type(bindings) is type({})
 	if self is other: return [({}, None)]
-	return 0
+	return []
 	
     def occurringIn(self, vars):
 	return Set()
@@ -773,10 +773,10 @@ def unifySequence(self, other, vars=Set([]), existentials=Set([]),  bindings={},
     if diag.chatty_flag > 99: progress("Unifying sequence %s with %s" %
 	(`self`, `other`))
     i = start
-    if len(self) != len(other): return 0
+    if len(self) != len(other): return []
     while 1:
 	nbs = unify(self[i], other[i], vars, existentials, bindings)
-	if nbs == 0: return 0	 # Match fail
+	if nbs == []: return []	 # Match fail
 	i = i +1
 	if i == len(self): return nbs
 	if nbs != [({}, None)]: break   # Multiple bundings
@@ -789,7 +789,7 @@ def unifySequence(self, other, vars=Set([]), existentials=Set([]),  bindings={},
 	nbs2 = unifySequence(self, other,
 		    vars.difference(done),
 		    existentials.difference(done), b2, start=i)
-	if nbs2 == 0: return 0
+	if nbs2 == []: return []
 	for nb2, reason2 in nbs2:
 	    nb3 = nb2.copy()
 	    nb3.update(nb)
@@ -803,30 +803,29 @@ def unifySet(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
     """
     if diag.chatty_flag > 99: progress("Unifying set %s with %s" %
 	(`self`, `other`))
-    if len(self) != len(other): return 0    # Match fail
+    if len(self) != len(other): return []    # Match fail
     if self == Set([]): return [ ({}, None) ] # Perfect match
     self2 = self.copy() # Don't mess with parameters
     s = self2.pop()   # Pick one
+    res = []
     for o in other:
 	nbs = unify(s, o, vars, existentials, bindings)
-	if nbs == 0: continue
-	res = []
+	if nbs == []: continue
 	other2 = other.copy()
 	other2.remove(o)
-	for nb, reason in nbs:
+	for nb, reason in nbs:  # For each way the object matched,
 	    b2 = bindings.copy()
 	    b2.update(nb)
 	    done = Set(nb.keys())
-	    nbs2 = unifySet(self2, other2,
+	    nbs2 = unifySet(self2, other2,  # Try the rest of the set
 			vars.difference(done),
 			existentials.difference(done), b2)
-	    if nbs2 == 0: return 0
+	    if nbs2 == []: continue # try next case for the object
 	    for nb2, reason2 in nbs2:
 		nb3 = nb2.copy()
 		nb3.update(nb)
-		res.append((nb3, None))
-	return res
-    return 0
+		res.append((nb3, None))  # Add next total case
+    return res
 	    
 def matchSet(pattern, kb, vars=Set([]),  bindings={}):
     """Utility routine to match 2 python sets of things.
@@ -839,15 +838,15 @@ def matchSet(pattern, kb, vars=Set([]),  bindings={}):
     """
     if diag.chatty_flag > 99: progress("Matching pattern %s against %s, vars=%s" %
 	(`pattern`, `kb`, `vars`))
-    if len(pattern) > len(kb): return 0    # Match fail  @@@discuss corner cases
+    if len(pattern) > len(kb): return []    # Match fail  @@@discuss corner cases
     if len(pattern) == 0: return [(bindings, None)] # Success
     
     pattern2 = pattern.copy() # Don't mess with parameters
     o = pattern2.pop()   # Pick one
+    res = []
     for s in kb:   # Really slow recursion unaided by indexes
 	nbs = unify(o, s, vars, Set([]), bindings)
-	if nbs == 0: continue
-	res = []
+	if nbs == []: continue
 	kb2 = kb.copy()
 	kb2.remove(s)
 	for nb, reason in nbs:
@@ -855,13 +854,12 @@ def matchSet(pattern, kb, vars=Set([]),  bindings={}):
 	    b2.update(nb)
 	    done = Set(nb.keys())
 	    nbs2 = matchSet(pattern2, kb2, vars.difference(done), b2)
-	    if nbs2 == 0: return 0
+	    if nbs2 == []: continue
 	    for nb2, reason2 in nbs2:
 		nb3 = nb2.copy()
 		nb3.update(nb)
 		res.append((nb3, None))
-	return res
-    return 0  # Failed to match the one we picked
+    return res  # Failed to match the one we picked
 	    
 def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
     """Unify something whatever it is
@@ -1034,10 +1032,10 @@ class Literal(Term):
     def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
 	"""Unify this which may contain variables with the other,
 	    which may contain existentials but not variables.
-	    Return 0 if impossible.
+	    Return [] if impossible.
 	    Return [(var1, val1), (var2,val2)...] if match"""
 	if self is other: return [({}, None)]
-	return 0
+	return []
 	
 
 #class Integer(Literal):
