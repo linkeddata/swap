@@ -1322,7 +1322,9 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 				if diag.chatty_flag > 106: progress("......fail: %s" % self)
 				break  # reject this statement
 			    if len(nbs1) > 1:
-				raise RuntimeError("Not implemented this hook yet - call timbl")
+#				raise RuntimeError(
+				progress(
+ "@@@ Not implemented multiple bindings here yet - call timbl. Returned bindings are:"+`nbs1`)
 			    nb1, rea = nbs1[0]
 			if diag.chatty_flag > 120:
                             progress("nb1 = %s" % `nb1`)

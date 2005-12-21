@@ -290,8 +290,8 @@ Bindings:%s
 	fyi("Built-in: testing fact {%s %s %s}" % (subj, pred, obj), level=level)
 	if not isinstance(pred, BuiltIn):
 	    return fail("Claimed as fact, but predicate is %s not builtin" % pred, level)
-	    if not pred.eval(subj, obj, None, None, None, None):
-		return fail("Built-in fact does not give correct results", level)
+	if not pred.eval(subj, obj, None, None, None, None):
+	    return fail("Built-in fact does not give correct results", level)
 	checked[r] = f
 	return f
 	
