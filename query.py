@@ -1318,7 +1318,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 				self.query._existentialVariables, {})  # Bindings have all been bound
 			    if diag.chatty_flag > 70:
 				progress( "Unification in %s result binding %s" %(self, nbs1))
-			    if nbs1 == 0:
+			    if !nbs1:
 				if diag.chatty_flag > 106: progress("......fail: %s" % self)
 				break  # reject this statement
 			    if len(nbs1) > 1:
