@@ -451,16 +451,6 @@ test:CwmTest;
     test:arguments     """includes/t11.n3 -think""".
 
 
-:t1043 a test:CwmTest;
-    test:referenceOutput <ref/endsWith-out.n3>;
-    test:description   "string:endsWith";
-    test:arguments     """string/endsWith.n3 -rules""".
-
-:t10431 a test:CwmTest;
-    test:referenceOutput <ref/roughly-out.n3>;
-    test:description   "string:containsRoughly ignores case smart whitespace";
-    test:arguments     """string/roughly.n3 -rules""".
-
 
 :t1044 a test:CwmTest;
     test:referenceOutput <ref/bi-quant.n3>;

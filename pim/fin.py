@@ -4,7 +4,8 @@
 usage, eg:
     fin -y 2003
     
-    The year must be given explicitly. Transactions outside that year will be ignored.
+    The year must be given explicitly.
+    Transactions outside that year will be ignored.
 
 This is an RDF application.
 
@@ -29,7 +30,8 @@ rdf = Namespace(RDF_NS_URI)
 rdfs = Namespace("http://www.w3.org/2000/01/rdf-schema#")
 cat_ns = Namespace("categories.n3#")
 
-monthName= ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+monthName= ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
+			    "Aug", "Sep", "Oct", "Nov", "Dec"]
 
 
 rdf_type = rdf.type
@@ -62,7 +64,8 @@ def printCategories(cats, totals, count):
 	trans = trans + count.get(c,0)
 
     print "</table>"
-    print "<p>In %i transactions, Total income %9.2f,  outgoings %9.2f, balance %92f</p>" % (trans, inc, out, inc + out)
+    print """<p>In %i transactions, Total income %9.2f, 
+    outgoings %9.2f, balance %92f</p>""" % (trans, inc, out, inc + out)
 
 
 
@@ -91,10 +94,11 @@ def internalCheck():
 	    datey = str(kb.the(subj=y, pred=qu.date))
 	    if date[0:10] == datey[0:10]:  # precision one day
 		if len(kb.each(subj=y, pred=qu.amount)) != 1:
-		    progress("Ignoring III double amount transaction %s" % y)
+		    progress("Error: Ignoring: >1 amount for transaction %s" % y)
 		    transactions.remove(y)
 		    continue
-		if abs(amount + float(str(kb.the(subj=y, pred=qu.amount)))) < 0.001 : # Floating point ~=
+		if abs(amount +
+			float(str(kb.the(subj=y, pred=qu.amount)))) < 0.001:
 		    transactions.remove(y)
 		    break
 	else:
@@ -145,7 +149,7 @@ def writeChart(filename, categories, totals, income, outgoings, shortTerm=0):
 	label = meta.the(subj=c, pred=rdfs.label)
 	if label == None:
 	    label = `c`
-	    sys.stderr.write("@@ No label for "+`c` +"\n")
+	    sys.stderr.write("Warning: No label for category"+`c` +"\n")
 	else:
 	    label = str(label)
 	
@@ -264,7 +268,7 @@ def doCommand(year, inputURI="/dev/stdin"):
 	_baseURI = uripath.base()
 	
         _outURI = _baseURI
-        option_baseURI = _baseURI     # To start with - then tracks running base
+        option_baseURI = _baseURI   # To start with - then tracks running base
 
 
 # Load the data:
@@ -283,7 +287,9 @@ def doCommand(year, inputURI="/dev/stdin"):
 	qu_payee = qu.payee
 	qu_Classified = qu.Classified
 	qu_Unclassified = qu.Unclassified
-	taxCategories = kb.each(pred=rdf_type, obj=tax.Category)
+	taxCategories = meta.each(pred=rdf_type, obj=tax.Category)
+	if verbose:
+	    print "Tax categories", taxCategories
 	specialCategories = taxCategories + [qu.Classified, qu_Unclassified]
 
 ####### Analyse the data:
@@ -292,7 +298,7 @@ def doCommand(year, inputURI="/dev/stdin"):
 	income, outgoings = 0,0
 	outgoingsByMonth = [0] * 12 
 
-	quCategories = kb.each(pred=rdf_type, obj=qu.Cat)
+	quCategories = meta.each(pred=rdf_type, obj=qu.Cat)
 	
 	totals = {}  # Total by all classes of transaction
 	count = {}  # Number of transactions
@@ -324,7 +330,8 @@ def doCommand(year, inputURI="/dev/stdin"):
 		if (cat_ns.Internal not in cats or
 		    len(amounts) != 2 ):
 		
-		    progress("@@@ More than one amount %s for transaction %s -- ignoring!@@\n"
+		    progress(
+	    "Error: More than one amount %s for transaction %s -- ignoring!\n"
 			    % (amounts,s))
 		else:
 		    sum = float(amounts[0]) + float(amounts[1])
@@ -354,7 +361,7 @@ def doCommand(year, inputURI="/dev/stdin"):
 		if c not in specialCategories:
 		    normalCats.append(c)
 	    if len(normalCats) != 1:
-		progress("@@@@ %s Transaction with %s for %10s in >1 category: %s!!"
+		progress("Error: %s Transaction with %s for %10s in >1 category: %s!!"
 			    %(date, payee, amount, normalCats))
     
 

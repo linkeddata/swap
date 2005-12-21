@@ -21,6 +21,7 @@
 
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
 @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix crypto: <http://www.w3.org/2000/10/swap/crypto#>.
 @prefix string: <http://www.w3.org/2000/10/swap/string#>.
 @prefix math: <http://www.w3.org/2000/10/swap/math#>.
 @prefix os: <http://www.w3.org/2000/10/swap/os#>.
@@ -35,7 +36,64 @@
 
 this log:forAll :a, :b, :d, :i, :l, :m, :n, :p, :r, :s, :t, :x, :y, :z.
 
-############### POST 2005 rule for finding responses:
+
+
+########## Rule for getting credit card account:
+#
+# Bug: does not pick up any name for the account.
+# I guess this is to do with the way credit cards work: they are not really
+# connected to  a bank as they can be transferred from bank to bank.
+# could use last 4 digits of card number
+
+{
+:s ofx:OFX  [
+
+#   ofx:SIGNONMSGSRSV1[
+#       ofx:SONRS[
+#        ofx:DTSERVER "2005-09-01T08:54:01";
+#        ofx:LANGUAGE "ENG";
+#        ofx:DTACCTUP "20050901085401.000[-4:EDT]";
+#        ofx:FI[
+#            ofx:ORG ?f ;      #          e.g. "Bank of America";
+#            ofx:FID "BANK OF AMERICA";
+#              ];   # FI
+#	];   # SONRS
+#    ];   # SIGNONMSGSRSV1
+	    
+	
+   ofx:CREDITCARDMSGSRSV1[
+       ofx:CCSTMTTRNRS  [
+           ofx:CCSTMTRS  [
+               ofx:CCACCTFROM  [
+                   ofx:ACCTID :a;
+#                   ofx:ACCTTYPE :l;
+#                   ofx:BANKID :b
+	       ];
+               ofx:BANKTRANLIST :x
+                        ]]]].
+
+# Construct a unique identifier for account which will match
+# between different statements:
+
+    (:a ".*(....)") string:scrape ?a4. # Last 4 digits only
+    :z 	log:uri [is os:baseAbsolute of
+		    [is string:concatenation of ( "acc#CCARD_" ?a4 )]].
+	
+} log:implies {
+   :x	:listForAccount :z;
+	:payeeField ofx:NAME;   # New version
+	:sourceDocument :s.
+	
+   :z   ofx:ACCTID :a4;
+	 # Extending their ontology by inventing an account type for consistency
+	 # :-/
+        ofx:ACCTTYPE "CREDITCARD";  s:label "CREDITCARD";
+#        ofx:BANKID :b.
+}.
+
+
+
+############### POST 2005 rule for finding responses - bank version:
 
 {
 :s ofx:OFX  [
@@ -56,7 +114,9 @@ this log:forAll :a, :b, :d, :i, :l, :m, :n, :p, :r, :s, :t, :x, :y, :z.
 		    [is string:concatenation of ( "acc#" :b "_" :a )]].
 	
 } log:implies {
-   :x	:listForAccount :z; :sourceDocument :s.
+   :x	:listForAccount :z;
+	:payeeField ofx:NAME;   # New version
+	:sourceDocument :s.
    :z   ofx:ACCTID :a;
         ofx:ACCTTYPE :l;  s:label :l;
         ofx:BANKID :b.
@@ -83,7 +143,10 @@ this log:forAll :a, :b, :d, :i, :l, :m, :n, :p, :r, :s, :t, :x, :y, :z.
 		    [is string:concatenation of ( "acc#" :b "_" :a )]].
 	
 } log:implies {
-   :x	:listForAccount :z; :sourceDocument :s.
+   :x	:listForAccount :z;
+	:payeeField ofx:MEMO;  # Old version
+	:sourceDocument :s.
+	
    :z   ofx:ACCTID :a;
         ofx:ACCTTYPE :l;  s:label :l;
         ofx:BANKID :b.
@@ -92,15 +155,20 @@ this log:forAll :a, :b, :d, :i, :l, :m, :n, :p, :r, :s, :t, :x, :y, :z.
 
 ###################### Now we have isolated the statement list
 
-# New rule: post 2005
+# Convert statements to basic financial ontology
+#
+# We use NAME as that is what there is, whil before
+# we used MEMO which was in practice a longer version of NAME.
 
-{  [:listForAccount :y; :sourceDocument :s] ofx:STMTTRN [
+{  [:listForAccount :y; :payeeField ?p; :sourceDocument :s] ofx:STMTTRN
+  [
    ofx:DTPOSTED :d;
    ofx:FITID    :i;
-   ofx:NAME     :m;
+   ?p           :m;
    ofx:TRNAMT   :x ].
+   :i crypto:sha ?id.
    :r log:uri [is os:baseAbsolute of
-	[is string:concatenation of ( "fit.n3#" :i  )]].
+	[is string:concatenation of ( "fit.n3#" ?id  )]].
 #   ofx:TRNTYPE  :t 
 } log:implies {
 :r  qu:toAccount :y ;
@@ -110,24 +178,6 @@ this log:forAll :a, :b, :d, :i, :l, :m, :n, :p, :r, :s, :t, :x, :y, :z.
    qu:amount :x .
 }.
 
-# Original version before 2005-06 used MEMO instead of NAME
-# Note spec is very vaugue on this
-
-{  [:listForAccount :y; :sourceDocument :s] ofx:STMTTRN [
-   ofx:DTPOSTED :d;
-   ofx:FITID    :i;
-   ofx:MEMO     :m;
-   ofx:TRNAMT   :x ].
-   :r log:uri [is os:baseAbsolute of
-	[is string:concatenation of ( "fit.n3#" :i  )]].
-#   ofx:TRNTYPE  :t 
-} log:implies {
-:r  qu:toAccount :y ;
-   qu:date :d;
-   qu:payee :m;  	# Quicken seems to mix it like this
-   qu:accordingTo :s;	# useful to track the source
-   qu:amount :x .
-}.
 
 ###############
 
@@ -141,17 +191,6 @@ this log:forAll :a, :b, :d, :i, :l, :m, :n, :p, :r, :s, :t, :x, :y, :z.
 } log:implies {
 :r  qu:number :x .
 }.
-
-# Prepare for purging the old vocabulary bits we no longer need:
-# (obsolete - use filter instead)
-#{} log:implies {ofx:STMTTRN a log:Chaff.
-#		ofx:DTPOSTED a log:Chaff.  
-#		ofx:FITID a log:Chaff.
-#		ofx:MEMO a log:Chaff.
-#		ofx:NAME a log:Chaff.
-#		ofx:TRNAMT a log:Chaff. 
-#		ofx:CHECKNUM a log:Chaff.
-#		ofx:TRNTYPE a log:Chaff.}.
 
    
 

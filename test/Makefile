@@ -17,6 +17,7 @@ OFFLINETESTS=regression.n3 list/detailed.tests \
 	norm/detailed.tests \
 	cwm/detailed.tests \
 	ntriples/detailed.tests \
+	string/detailed.tests \
 	syntax/detailed.tests \
 	testmeta.n3
 #	reify/detailed.tests \

@@ -29,7 +29,7 @@
  
 #q:Unclassified a :toBeDisplayed; s:label "Unclassified transactions".
 q:UnclassifiedIncome a :toBeDisplayed; s:label "Unclassified Income".
-q:UnclassifiedOutgoing a :toBeDisplayed.
+q:UnclassifiedOutgoing a :toBeDisplayed;  s:label "Unclassified Outgoings".
 
 "00" log:outputString
 """<html xmlns="http://www.w3.org/1999/xhtml">

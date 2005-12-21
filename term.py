@@ -198,14 +198,18 @@ class Term(object):
 	    x = bindings[self]
 	    assert x is not self
 	    if diag.chatty_flag > 80:
-		progress("Unifying term BOUND %s to %s"%(self,x))
+		progress("(Unifying term as bound: %s to %s)"%(self,x))
 	    return x.unify(other, vars, existentials, bindings)
 	except KeyError:	    
-	    if self is other: return [ ({}, None)]
+	    if self is other:
+		return [ ({}, None)]
 	    if self in vars|existentials:
 		if diag.chatty_flag > 80:
-		    progress("Unifying term MATCHED %s to %s"%(self,other))
+		    progress("Unifying var or exi MATCHED %s to %s"%(self,other))
 		return [ ({self: other}, None) ]
+	    if diag.chatty_flag > 99:
+		progress("Failed Unifying symbol %s with %s vars=%s, so far=%s"%
+					(self, other,vars, bindings))
 	    return 0
 	
 class ErrorFlag(TypeError, Term):
@@ -673,25 +677,6 @@ class NonEmptyList(List):
 	# Using the sequence-like properties of lists:
 	return unifySequence(self, other, vars, existentials,  bindings)
 	
-#	nbs = self.first.unify(other.first, vars, existentials, bindings)
-#	if nbs == 0: return 0
-#	if nbs == [({}, None)]: return self.rest.unify(  #@@   Tail rec to loop
-#				other.rest, vars, existentials,  bindings)
-#	res = []
-#	for nb, reason in nbs:
-#	    b2 = bindings.copy()
-#	    b2.update(nb)
-#	    done = Set(nb.keys())
-#	    nbs2 = self.rest.unify(other.rest,
-#			vars.difference(done),
-#			existentials.difference(done), b2)
-#	    if nbs2 == 0: return 0
-#	    for nb2, reason2 in nbs2:
-#		nb3 = nb2.copy()
-#		nb3.update(nb)
-#		res.append((nb3, None))
-#	return res
-
     def debugString(self, already=[]):
 	s = `self`+" is ("
 	for i in self:

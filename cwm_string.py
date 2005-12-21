@@ -241,6 +241,21 @@ def xmlEscape(subj_py, markupChars):
     return result
 
 
+class BI_encodeForURI(LightBuiltIn, Function):
+    """Take a unicode string and return it encoded so as to pass in an
+    URI path segment. See
+    http://www.w3.org/TR/2005/CR-xpath-functions-20051103/#func-encode-for-uri"""
+    
+    def evaluateObject(self, subj_py):
+	return urllib.quote(subj_py, "#!~*'()")
+
+class BI_encodeForFragID(LightBuiltIn, Function):
+    """Take a unicode string and return it encoded so as to pass in
+    a URI grament identifier."""
+    
+    def evaluateObject(self, subj_py):
+	return urllib.quote(subj_py)
+
 
 #  Register the string built-ins with the store
 
@@ -273,5 +288,7 @@ def register(store):
     str.internFrag("notEqualIgnoringCase", BI_notEqualIgnoringCase)
     str.internFrag("xmlEscapeAttribute", BI_xmlEscapeAttribute)
     str.internFrag("xmlEscapeData", BI_xmlEscapeData)
+    str.internFrag("encodeForURI", BI_encodeForURI)
+    str.internFrag("encodeForFragID", BI_encodeForFragID)
 
     
