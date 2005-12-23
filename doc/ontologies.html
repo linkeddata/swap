@@ -68,10 +68,10 @@ documentation.</p>
 <p>Our simplest machine-readable declaration is that two URIs mean the
 same thing:</p>
 
-<pre>:Pat owl:sameIndividualAs :Patrick.</pre>
+<pre>:Pat owl:sameAs :Patrick.</pre>
 
 <p>Given this statement, a system which understands
-<code>owl:sameIndividualAs</code> would know that everything true of
+<code>owl:sameAs</code> would know that everything true of
 :Pat was also true of :Patrick and everything true of :Patrick was
 true of :Pat.  They are just synonyms: two names for the same thing.
 This is what N3 means with "=".   (Note that cwm does not
@@ -82,11 +82,11 @@ to use them, via rules.)</p>
 
 <pre>:Dog owl:equivalentClass :CanisFamiliaris.
   # or 
-:Dog owl:sameIndividualAs :CanisFamiliaris.</pre>
+:Dog owl:sameAs :CanisFamiliaris.</pre>
 
 <p>These two are slightly different: equivalent classes have exactly
 the members, but may have a different intended meaning.  If we use
-owl:sameIndividualAs, then our label "Canis familiaris" would also
+owl:sameAs, then our label "Canis familiaris" would also
 apply to :Dog.</p>
 
 <h2>Cardinality</h2>
