@@ -35,6 +35,11 @@
     test:arguments     "--n3 syntax/trailing-semicolon.n3 --ntriples".
 
 
+:syn008 a test:CwmTest;
+    test:referenceOutput <decimal-ref.n3>;
+    test:description   "Math datatypes are parsed and generated correctly";
+    test:arguments     "--n3 syntax/decimal.n3".
+
 
 
 #ends
