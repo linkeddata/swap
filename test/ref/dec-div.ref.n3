@@ -1,11 +1,11 @@
      @prefix : <#> .
-     @prefix k: <http://opencyc.sourceforge.net/daml/cyc.daml#> .
-     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
-     @prefix m: <http://www.w3.org/2000/10/swap/pim/currency@@#> .
-     @prefix math: <http://www.w3.org/2000/10/swap/math#> .
-     @prefix qif: <http://www.w3.org/2000/10/swap/pim/qif#> .
-     @prefix time: <http://www.w3.org/2000/10/swap/time#> .
-     @prefix xsdt: <http://www.w3.org/2001/XMLSchema#> .
+    @prefix k: <http://opencyc.sourceforge.net/daml/cyc.daml#> .
+    @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    @prefix m: <http://www.w3.org/2000/10/swap/pim/currency@@#> .
+    @prefix math: <http://www.w3.org/2000/10/swap/math#> .
+    @prefix qif: <http://www.w3.org/2000/10/swap/pim/qif#> .
+    @prefix time: <http://www.w3.org/2000/10/swap/time#> .
+    @prefix xsdt: <http://www.w3.org/2001/XMLSchema#> .
     
      @forAll :EXCH,
                 :FOREIGN,
@@ -22,7 +22,7 @@
     :exch1     k:startingDate  [
              xsdt:date "2004-08-08" ];
          m:buyCurrency m:USD;
-         m:rate 1.91666666667;
+         m:rate 1.91666666667e+00;
          m:sellCurrency m:CAD .
     
     :priceCAD     m:priceCurrency m:CAD .
@@ -30,21 +30,21 @@
     :trx     :priceCAD "12.43";
          k:startingDate  [
              xsdt:date "2004-08-12" ];
-         qif:amount 6.4852173913 .
+         qif:amount 6.4852173913e+00 .
     
     qif:amount     m:priceCurrency m:USD .
     {
         
-          ( "2.3" 
-            "1.2"  )
+          ( "2.3"
+            "1.2" )
              math:quotient :X .
         
         }     log:implies {:exch1     m:rate :X .
         } .
     {
         
-          ( :QTY 
-            :RATE  )
+          ( :QTY
+            :RATE )
              math:quotient :Q2 .
         :EXCH     k:startingDate  [
                  xsdt:date  [

@@ -144,6 +144,8 @@ class Decimal:
     def __coerce__(self, other):
         """x.__coerce__(y) <==> coerce(x, y)
         """
+        if other.__class__ == float:
+            return float(self), other
         return self, self.__class__(other)
         pass
     def __div__(self, other):
@@ -295,7 +297,7 @@ class Decimal:
     def __repr__(self):
         """x.__repr__() <==> repr(x)
         """
-        return str(self) + 'D'
+        return '%s("%s")' % (self.__class__.__name__, str(self))
     def __rfloordiv__(self, other):
         """x.__rfloordiv__(y) <==> y//x
         """
