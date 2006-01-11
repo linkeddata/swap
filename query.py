@@ -705,6 +705,10 @@ class Query(Formula):
 			progress( "No duplication check")
 
 	if diag.tracking:
+            for loc in xrange(len(evidence)):
+                r = evidence[loc]
+                if isinstance(r, BecauseBuiltInWill):
+                    evidence[loc] = BecauseBuiltIn(*[k.substitution(bindings, why=Because("I said so")) for k in r.args])
 	    reason = BecauseOfRule(self.rule, bindings=bindings,
 				    evidence=evidence, kb=self.workingContext)
 #	    progress("We have a reason for %s of %s with bindings %s" % (self.rule, reason, bindings))
@@ -903,7 +907,7 @@ class Query(Formula):
                                            seqToString(more_variables)))
                         item.state = S_SATISFIED
 			if diag.tracking:
-			    rea = BecauseBuiltIn(subj, pred, obj)
+			    rea = BecauseBuiltInWill(subj, pred, obj)
 			    nbs = [({}, rea)]
 		    else:
                         progress("""Warning: Type error ignored on builtin:
@@ -1528,6 +1532,10 @@ def bindingsToString(bindings):
     for x, y in bindings.items():
         str = str + (" %s->%s " % ( `x`, `y`))
     return str
+
+class BecauseBuiltInWill(object):
+    def __init__(self, *args):
+        self.args = args
 
 class BuiltInFailed(Exception):
     def __init__(self, info, item, pred):
