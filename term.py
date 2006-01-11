@@ -732,7 +732,7 @@ class EmptyList(List):
 	"""Unify the substitution of this using bindings found so far
 	    with the other. This may contain variables, the other may contain
 	    existentials but not variables.
-	    Return 0 if impossible.
+	    Return [] if impossible.
 	    Return [({}, None)] if no new bindings
 	    Return [( {var1: val1, var2: val2, ...}, reason) ...] if match.
 	    bindings is a dictionary."""
@@ -783,7 +783,7 @@ def unifySequence(self, other, vars=Set([]), existentials=Set([]),  bindings={},
 	nbs2 = unifySequence(self, other,
 		    vars.difference(done),
 		    existentials.difference(done), b2, start=i)
-	if nbs2 == []: return []
+#	if nbs2 == []: return []   No, don't return ... may be others
 	for nb2, reason2 in nbs2:
 	    nb3 = nb2.copy()
 	    nb3.update(nb)

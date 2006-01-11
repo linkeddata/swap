@@ -14,7 +14,7 @@ Command line options for debug:
 
 from swap.myStore import load, Namespace
 from swap.RDFSink import CONTEXT, PRED, SUBJ, OBJ
-from swap.term import List, Literal, CompoundTerm, BuiltIn
+from swap.term import List, Literal, CompoundTerm, BuiltIn, Function
 from swap.llyn import Formula #@@ dependency should not be be necessary
 from swap.diag import verbosity, setVerbosity, progress
 from swap import diag
@@ -290,10 +290,28 @@ Bindings:%s
 	fyi("Built-in: testing fact {%s %s %s}" % (subj, pred, obj), level=level)
 	if not isinstance(pred, BuiltIn):
 	    return fail("Claimed as fact, but predicate is %s not builtin" % pred, level)
-	if not pred.eval(subj, obj, None, None, None, None):
-	    return fail("Built-in fact does not give correct results", level)
-	checked[r] = f
-	return f
+	if  pred.eval(subj, obj, None, None, None, None):
+	    checked[r] = f
+	    return f
+
+	if isinstance(pred, Function) and isinstance(obj, Formula):
+	    result =  pred.evalObj(subj, None, None, None, None)
+	    fyi("Re-checking builtin %s  result %s against quoted %s"
+		%(pred, result, obj))
+	    if n3Entails(obj, result) and n3Entails(result, obj):
+		fyi("Re-checked OK builtin %s  result %s against quoted %s"
+		%(pred, result, obj))
+		checked[r] = f
+		return f
+	s, o = subj, obj
+	if isinstance(subj, Formula): s = subj.n3String()
+	if isinstance(obj, Formula): o = obj.n3String()
+		
+	return fail("""Built-in fact does not give correct results:
+	subject: %s
+	predicate: %s
+	object: %s
+	""" % (s, pred, o), level)
 	
     elif t is reason.Extraction:
 	r2 = proof.the(r, reason.because)

@@ -406,12 +406,12 @@ class Formula(AnonymousNode, CompoundTerm):
 	    (`self`, `other`))
 	if diag.chatty_flag > 139: progress("Self is %s\n\nOther is %s" %
 	    (self.debugString(), other.debugString()))
-	if not isinstance(other, Formula): return 0
+	if not isinstance(other, Formula): return []
 	if self is other: return [({}, None)]
 	if (len(self) != len(other)
 	    or len(self. _existentialVariables) != len(other._existentialVariables)
 	    or len(self. _universalVariables) != len(other._universalVariables)
-	    ): return 0
+	    ): return []
 	    
 	ex = existentials | self.existentials()  # @@ Add unis to make var names irrelevant?
 	return unifySequence(
@@ -442,7 +442,7 @@ class Formula(AnonymousNode, CompoundTerm):
 			# | pattern.universals(),
 			bindings)
 	if diag.chatty_flag > 99: progress("n3EntailedBy: match result: ", `nbs`)
-	if nbs == 0: return 0
+	if nbs == []: return []
 	res = []
 	for nb, rea in nbs:
 	    # We have matched the statements, now the lists of vars.
@@ -450,11 +450,11 @@ class Formula(AnonymousNode, CompoundTerm):
 	    ke = pattern.occurringIn(ke) #Only ones mentioned count
 	    pe = Set([ nb.get(e,e) for e in pattern.existentials()])
 	    if diag.chatty_flag > 99: progress("\tpe=%s; ke=%s" %(pe,ke))
-	    if not ke.issubset(pe): return 0 # KB must be stronger - less e's
+	    if not ke.issubset(pe): return [] # KB must be stronger - less e's
 	    ku = Set([ nb.get(v,v) for v in kb.universals()])
 	    pu = Set([ nb.get(v,v) for v in pattern.universals()])
 	    if diag.chatty_flag > 99: progress("\tpu=%s; ku=%s" %(pu,ku))
-	    if not pu.issubset(ku): return 0 # KB stronger -  more u's
+	    if not pu.issubset(ku): return [] # KB stronger -  more u's
 	    if diag.chatty_flag > 99: progress("n3EntailwsBy: success with ", `nb`)
 	    res.append((nb, None))    # That works
 	return res
@@ -732,7 +732,7 @@ class StoredStatement:
 
 	if diag.chatty_flag > 99: progress("Unifying statement %s with %s" %
 	    (`self`, `other`))
-	if not isinstance(other, StoredStatement): return 0
+	if not isinstance(other, StoredStatement): return []
 	return unifySequence([self[PRED], self[SUBJ], self[OBJ]],
 	    [other[PRED], other[SUBJ], other[OBJ]], 
 	    vars, existentials, bindings)
