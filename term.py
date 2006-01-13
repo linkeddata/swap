@@ -774,7 +774,12 @@ def unifySequence(self, other, vars=Set([]), existentials=Set([]),  bindings={},
 	i = i +1
 	if i == len(self): return nbs
 	if nbs != [({}, None)]: break   # Multiple bundings
-    
+
+    try:
+        for a,b in nbs: pass
+    except TypeError:
+        print nbs
+        raise
     res = []
     for nb, reason in nbs:
 	b2 = bindings.copy()
@@ -820,7 +825,60 @@ def unifySet(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
 		nb3.update(nb)
 		res.append((nb3, None))  # Add next total case
     return res
-	    
+
+
+def betterUnifySet(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
+    """We need to be smarter about this
+
+    there are the following catagories :
+        atoms
+        variable atoms
+        lists of only lists and atoms (recursive)
+        lists of only lists and atoms (recursive), some of which may be variables
+        lists containing sets
+        sets
+
+    in about that order of difficulty. Can we use this?
+    strategy: Usually, we will only have a set of triples (of ... )
+        remove all ground ones. Match those directly off the bat (note: a ground set is NOT good enough!)
+            This is looking complex
+        look at all simple ones, generating binding possibilities
+        then deal with sets
+    """
+    def all_list(l, vars):
+        m = True
+        n = True
+        for k in l:
+            if isinstance(k, list_type):
+                m_, n_ = all_list(k, vars)
+                m = m and m_
+                n = n and n_
+            if isinstance(k, set_type):
+                return False, False
+            if k in vars:
+                n = False
+        return m, n
+    atoms = Set()
+    trivials = Set()
+    someSubstitutionNeeded = Set()
+    hard = Set()
+    for s in self:
+        if isinstance(s, atom):
+            atoms.add(s)
+        elif isinstance(s, list_type):
+            lists, grounded = all_list(s, vars)
+            if lists and grounded:
+                trivials.add(s)
+            elif lists:
+                someSubstitutionNeeded.add(s)
+            else:
+                hard.add(s)
+        else:
+            hard.add(s)
+    #@@@todo atoms
+    ##
+    ## Now lists
+    
 def matchSet(pattern, kb, vars=Set([]),  bindings={}):
     """Utility routine to match 2 python sets of things.
     No optimization!  This is of course the graph match function 
@@ -864,12 +922,26 @@ def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
 	return unifySet(self, other, vars, existentials, bindings)
     if type(self) is type([]):
 	return unifySequence(self, other, vars, existentials, bindings)
-    return self.unify(other, vars, existentials, bindings)
+    k = self.unify(other, vars, existentials, bindings)
+    if k == 0:
+        raise RuntimeError(other, other.__class__)
+    return k
 
 
 ##########################################################################
 #
 #		L I T E R A L S
+
+def toBool(val, dt=None):
+    if dt == 'boolean':
+        if val == 'false' or val == 'False' or val == '0':
+            return False
+        if val == 'true' or val == 'True' or val == '1':
+            return True
+        raise ValueError('"%s" is not a valid boolean' % val)
+    if dt in typeMap:
+        return bool(typeMap[dt](val))
+    return bool(val)
 
 typeMap = { "decimal": Decimal,
                 "integer": long,
@@ -885,7 +957,7 @@ typeMap = { "decimal": Decimal,
                                 "unsignedShort": int,
                                     "unsignedByte": int,
                         "positiveInteger": long,
-            "boolean": int,
+            "boolean": toBool,
             "double": float,
             "float": float,
             "duration": unicode,
@@ -916,6 +988,7 @@ typeMap = { "decimal": Decimal,
 ##
 ## We don't support base64Binary or hexBinary
 ##
+
 class Literal(Term):
     """ A Literal is a representation of an RDF literal
 
@@ -1010,11 +1083,11 @@ class Literal(Term):
 	    try:
 		return typeMap[self.datatype.fragid](self.string)
 	    except KeyError:
-		raise ValueError(
+		raise UnknownType(
 	  "Attempt to run built-in on unsupported XSD datatype %s of value %s." 
 			% (`self.datatype`, self.string))
 
-	raise ValueError("Attempt to run built-in on unknown datatype %s of value %s." 
+	raise UnknownType("Attempt to run built-in on unknown datatype %s of value %s." 
 			% (`self.datatype`, self.string))
 
     def uriref(self):
@@ -1118,7 +1191,10 @@ class GenericBuiltIn(BuiltIn):
 
 class ArgumentNotLiteral(TypeError):
     pass
-	
+
+class UnknownType(ValueError):
+    pass
+    
 class LightBuiltIn(GenericBuiltIn):
     """A light built-in is fast and is calculated immediately before searching the store.
     

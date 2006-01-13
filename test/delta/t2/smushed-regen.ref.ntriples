@@ -9,7 +9,7 @@
     
     _:g4     <http://example.com/swap/test/delta/bank.n3#id> "10-23-45" .
     
-    _:g5     <http://example.com/swap/test/delta/bank.n3#address> _:g20 .
+    _:g5     <http://example.com/swap/test/delta/bank.n3#address> _:g19 .
     
     _:g5     <http://example.com/swap/test/delta/bank.n3#dateOfBirth> "1966--6" .
     
@@ -35,7 +35,7 @@
     
     _:L18C30     <http://example.com/swap/test/delta/bank.n3#dateOfBirth> "1987-06-05" .
     
-    _:g20     <http://example.com/swap/test/delta/bank.n3#city> "Anytown" .
+    _:g19     <http://example.com/swap/test/delta/bank.n3#city> "Anytown" .
     
-    _:g20     <http://example.com/swap/test/delta/bank.n3#street> "77 Accacia Avenue" .
+    _:g19     <http://example.com/swap/test/delta/bank.n3#street> "77 Accacia Avenue" .
     

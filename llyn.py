@@ -115,6 +115,7 @@ META_NS_URI = "http://www.w3.org/2000/10/swap/meta#"
 INTEGER_DATATYPE = "http://www.w3.org/2001/XMLSchema#integer"
 FLOAT_DATATYPE = "http://www.w3.org/2001/XMLSchema#double"
 DECIMAL_DATATYPE = "http://www.w3.org/2001/XMLSchema#decimal"
+BOOL_DATATYPE = "http://www.w3.org/2001/XMLSchema#boolean"
 
 #reason=Namespace("http://www.w3.org/2000/10/swap/reason#")
 
@@ -266,6 +267,7 @@ class IndexedFormula(Formula):
 	
 	In this implementation, we use the length of the sequence to be searched."""
         res = self._index.get((pred, subj, obj), [])
+        print self.statements, (pred, subj, obj)
 	return len(res), res
 
 
@@ -470,6 +472,8 @@ class IndexedFormula(Formula):
 	 
 	Store dependency: Uses store._formulaeOfLength
         """
+        if diag.chatty_flag > 70:
+            progress('I got here')
 	store = F.store
 	if F.canonical != None:
             if diag.chatty_flag > 70:
@@ -490,7 +494,8 @@ class IndexedFormula(Formula):
                 progress("End formula - first of length", l, F)
             F.canonical = F
             return F
-
+        if diag.chatty_flag > 70:
+            progress('I got here, possibles = ', possibles)
         fl.sort()
 	fe = F.existentials()
 	#fe.sort(Term.compareAnyTerm)
@@ -552,6 +557,11 @@ class IndexedFormula(Formula):
         F.canonical = F
         if diag.chatty_flag > 70:
             progress("End formula, a fresh one:"+`F`)
+##            for k in possibles:
+##                print 'one choice is'
+##                print k.n3String()
+##                print '--------\n--------'
+##            raise RuntimeError(F.n3String())
         return F
 
 
@@ -1163,6 +1173,7 @@ class RDFStore(RDFSink) :
         self.forSome = self.symbol(forSomeSym)
 	self.integer = self.symbol(INTEGER_DATATYPE)
 	self.float  = self.symbol(FLOAT_DATATYPE)
+	self.boolean = self.symbol(BOOL_DATATYPE)
 	self.decimal = self.symbol(DECIMAL_DATATYPE)
         self.forAll  = self.symbol(forAllSym)
         self.implies = self.symbol(Logic_NS + "implies")
@@ -1433,6 +1444,8 @@ class RDFStore(RDFSink) :
             return self.newLiteral(str(x), self.integer)
         elif isinstance(x, Decimal):
             return self.newLiteral(str(x), self.decimal)
+        elif isinstance(x, bool):
+            return self.newLiteral(x and 'true' or 'false', self.boolean)
         elif type(x) is types.FloatType:
 	    if `x`.lower() == "nan":  # We can get these form eg 2.math:asin
 		return None
@@ -1467,6 +1480,8 @@ class RDFStore(RDFSink) :
 		return self.newLiteral(repr(what),  self.float)
 	    if isinstance(what,Decimal):
                 return self.newLiteral(str(what), self.decimal)
+            if isinstance(what, bool):
+                return self.newLiteral(what and 'true' or 'false', self.boolean)
 	    if type(what) is types.ListType: #types.SequenceType:
 		return self.newList(what)
 	    raise RuntimeError("Eh?  can't intern "+`what`+" of type: "+`type(what)`)

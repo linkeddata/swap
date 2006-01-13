@@ -19,12 +19,15 @@ import diag
 from diag import chatty_flag, tracking, progress
 from term import BuiltIn, LightBuiltIn, RDFBuiltIn, ArgumentNotLiteral, \
     HeavyBuiltIn, Function, ReverseFunction, MultipleFunction, \
-    MultipleReverseFunction, \
+    MultipleReverseFunction, UnknownType, \
     Literal, Symbol, Fragment, FragmentNil,  Term, \
     CompoundTerm, List, EmptyList, NonEmptyList, ErrorFlag
 from formula import StoredStatement, Formula
 from why import Because, BecauseBuiltIn, BecauseOfRule, \
     BecauseOfExperience, becauseSubexpression, BecauseMerge ,report
+
+
+BuiltinFeedError = (ArgumentNotLiteral, UnknownType)
 
 import types
 import sys
@@ -1140,7 +1143,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
             elif isinstance(x, Formula) or isinstance(x, List): # expr  @@ Set  @@@@@@@@@@ Check and CompundTerm>???
                 ur = x.occurringIn(allvars)
                 self.neededToRun[p] = ur
-                if ur != Set():
+                if ur != Set() or isinstance(x, Formula):
                     hasUnboundCoumpundTerm = 1     # Can't search directly
 		    self.searchPattern[p] = None   # can bind this if we recurse
 		    
@@ -1174,7 +1177,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 	proof = []  # place for built-in to hang a justification
 	rea = None  # Reason for believing this item is true
 	if "q" in self.query.mode:
-            caughtErrors = (TypeError, ValueError, AttributeError, AssertionError, ArgumentNotLiteral)
+            caughtErrors = (TypeError, ValueError, AttributeError, AssertionError, ArgumentNotLiteral, UnknownType)
         else:
             caughtErrors = ()
 	try:
@@ -1201,7 +1204,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                         if "h" in self.query.mode:
                             raise
                         return 0
-                    except ArgumentNotLiteral:
+                    except BuiltinFeedError:
                         return 0
 		else: 
 		    if isinstance(pred, Function):
@@ -1222,7 +1225,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                                 result = [ErrorFlag(errVal)]
                             else:
                                 result = ErrorFlag(errVal)
-                        except ArgumentNotLiteral:
+                        except BuiltinFeedError:
                             return 0
 			if result != None:
 			    self.state = S_DONE
@@ -1255,7 +1258,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                             else:
                                 result = ErrorFlag(errVal)
 #                            result = None
-                        except ArgumentNotLiteral:
+                        except BuiltinFeedError:
                             return 0
 			if result != None:
 			    self.state = S_DONE

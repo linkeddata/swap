@@ -732,7 +732,7 @@ class StoredStatement:
 
 	if diag.chatty_flag > 99: progress("Unifying statement %s with %s" %
 	    (`self`, `other`))
-	if not isinstance(other, StoredStatement): return []
+	if not isinstance(other, StoredStatement): raise TypeError
 	return unifySequence([self[PRED], self[SUBJ], self[OBJ]],
 	    [other[PRED], other[SUBJ], other[OBJ]], 
 	    vars, existentials, bindings)

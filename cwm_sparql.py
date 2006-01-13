@@ -9,7 +9,7 @@ $Id$
 from term import LightBuiltIn, Function, ReverseFunction, MultipleFunction,\
     MultipleReverseFunction, typeMap, LabelledNode, \
     CompoundTerm, N3Set, List, EmptyList, NonEmptyList, \
-    Symbol, Fragment, Literal, Term, AnonymousNode, HeavyBuiltIn
+    Symbol, Fragment, Literal, Term, AnonymousNode, HeavyBuiltIn, toBool
 import diag
 progress = diag.progress
 
@@ -29,15 +29,6 @@ from term import ErrorFlag as MyError
 
 SPARQL_NS = 'http://www.w3.org/2000/10/swap/sparqlCwm'
 
-
-def toBool(val, dt=None):
-    if dt == 'boolean':
-        if val == 'false' or val == 'False' or val == '0':
-            return False
-        return toBool(val)
-    if dt in typeMap:
-        return bool(typeMap[dt](val))
-    return bool(val)
 
 
 class BI_truthValue(LightBuiltIn):

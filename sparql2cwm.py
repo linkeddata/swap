@@ -575,8 +575,8 @@ class FromSparql(productionHandler):
         self.xsd = store.newSymbol('http://www.w3.org/2001/XMLSchema')
         self.math = store.newSymbol('http://www.w3.org/2000/10/swap/math')
         self.numTypes = Set([self.xsd[k] for k in ['unsignedShort', 'short', 'nonPositiveInteger', 'decimal', 'unsignedInt', 'long', 'nonNegativeInteger', 'int', 'unsignedByte', 'positiveInteger', 'integer', 'byte', 'negativeInteger', 'unsignedLong']])
-        self.true = store.newLiteral('1', dt=self.xsd['boolean'])
-        self.false = store.newLiteral('0', dt=self.xsd['boolean'])
+        self.true = store.newLiteral('true', dt=self.xsd['boolean'])
+        self.false = store.newLiteral('false', dt=self.xsd['boolean'])
         self.anonymous_counter = 0
         self.uribase = uripath.base()
         self.dataSets = None

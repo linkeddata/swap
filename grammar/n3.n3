@@ -154,9 +154,15 @@ pathitem cfg:mustBeOneSequence (
 		( literal )
 		( "[" propertylist "]"  )
 		(  "("  pathlist ")"  )
+                ( boolean )
 #		( "@this" )	  #  Deprocated.  Was allowed for this log:forAll x
 ).
 
+
+boolean cfg:mustBeOneSequence (
+                ( "@true" )
+                ( "@false" )
+) .
 
 pathlist cfg:mustBeOneSequence (() (expression pathlist)).
 
@@ -165,6 +171,12 @@ symbol cfg:mustBeOneSequence (
 		(qname)
 	).
 
+
+numericliteral cfg:mustBeOneSequence (
+          ( integer )
+          ( double )
+          ( decimal )
+) .
 
 literal cfg:mustBeOneSequence(( string dtlang)).
 
@@ -179,8 +191,15 @@ dtlang cfg:mustBeOneSequence(  ()  ("@" langcode)  ("^^" symbol)).
 # and "0" for any of the digits 0-9.  This is used to build the branching
 # tables.
 # 
-numericliteral	cfg:matches	"""[-+]?[0-9]+(\\.[0-9]+)?(e[-+]?[0-9]+)?""";
+integer 	cfg:matches	"""[-+]?[0-9]+""";
 		cfg:canStartWith 	"0", "-", "+".
+double	cfg:matches	"""[-+]?[0-9]+(\\.[0-9]+)?([eE][-+]?[0-9]+)""";
+		cfg:canStartWith 	"0", "-", "+".
+decimal	cfg:matches	"""[-+]?[0-9]+(\\.[0-9]+)?""";
+		cfg:canStartWith 	"0", "-", "+".
+
+#numericliteral	cfg:matches	"""[-+]?[0-9]+(\\.[0-9]+)?(e[-+]?[0-9]+)?""";
+#		cfg:canStartWith 	"0", "-", "+".
 
 explicituri 	cfg:matches 	"<[^>]*>";
 		cfg:canStartWith 	"<".

@@ -1,10 +1,11 @@
      @prefix : <http://www.w3.org/2001/vcard-rdf/3.0#> .
+    @prefix data: <#> .
     
-      [      :N  [
-                 :familyName "Hacker";
-                 :givenName "Alice" ] ].
+    data:_g0     :N  [
+             :familyName "Hacker";
+             :givenName "Alice" ] .
     
-      [      :N  [
-                 :familyName "Hacker";
-                 :givenName "Bob" ] ].
+    data:_g1     :N  [
+             :familyName "Hacker";
+             :givenName "Bob" ] .
     

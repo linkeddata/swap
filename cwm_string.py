@@ -97,7 +97,7 @@ def normalizeWhitespace(s):
     return res
 
 #  String Constructors - more light built-ins
-make_string = str
+make_string = unicode
 
 class BI_concat(LightBuiltIn, ReverseFunction):
     def evaluateSubject(self, obj_py):

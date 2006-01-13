@@ -7,7 +7,7 @@
     2.0     :is "The number 2.0",
                 "The number 2.0 expressed with extra trailing zeroes" .
     
-    2000.0     :is "The double precision floating point 2.0e3" .
+    2000.0e+00     :is "The double precision floating point 2.0e3" .
     
     -2     :is "The integer -2" .
     

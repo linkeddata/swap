@@ -70,6 +70,7 @@ LOG_implies_URI = "http://www.w3.org/2000/10/swap/log#implies"
 INTEGER_DATATYPE = "http://www.w3.org/2001/XMLSchema#integer"
 FLOAT_DATATYPE = "http://www.w3.org/2001/XMLSchema#double"
 DECIMAL_DATATYPE = "http://www.w3.org/2001/XMLSchema#decimal"
+BOOLEAN_DATATYPE = "http://www.w3.org/2001/XMLSchema#boolean"
 
 option_noregen = 0   # If set, do not regenerate genids on output
 
@@ -117,7 +118,7 @@ class SinkParser:
         self.lines = 0              # for error handling
 	self.startOfLine = 0	    # For calculating character number
         self._genPrefix = genPrefix
-	self.keywords = ['a', 'this', 'bind', 'has', 'is', 'of' ]
+	self.keywords = ['a', 'this', 'bind', 'has', 'is', 'of', 'true', 'false' ]
 	self.keywordsSet = 0    # Then only can others be considerd qnames
         self._anonymousNodes = {} # Dict of anon nodes already declared ln: Term
 	self._reason = why	# Why the parser was asked to parse this
@@ -613,6 +614,16 @@ class SinkParser:
         j = self.tok('this', str, i)   # This context
         if j>=0:
             res.append(self._context)
+            return j
+
+        #booleans
+        j = self.tok('true', str, i)
+        if j>=0:
+            res.append(True)
+            return j
+        j = self.tok('false', str, i)
+        if j>=0:
+            res.append(False)
             return j
 
 	if subj is None:   # If this can be a named node, then check for a name.
@@ -1132,6 +1143,14 @@ def dummyWrite(x):
     pass
 
 ################################################################################
+
+
+def toBool(s):
+    if s == 'true' or s == 'True' or s == '1':
+        return True
+    if s == 'false' or s == 'False' or s == '0':
+        return False
+    raise ValueError(s)
     
 class ToN3(RDFSink.RDFSink):
     """Serializer output sink for N3
@@ -1162,7 +1181,6 @@ Flags for N3 input:
 B   Turn any blank node into a existentially qualified explicitly named node.
 """
 # "
-
 
 
 #   A word about regenerated Ids.
@@ -1230,7 +1248,10 @@ B   Turn any blank node into a existentially qualified explicitly named node.
             and "d" not in self._flags): return # don't duplicate ??
         self._endStatement()
         self.prefixes[uri] = prefixString
-        self._write("@prefix %s: <%s> ."%(prefixString, refTo(self.base, uri)))
+        if 'r' in self._flags:
+            self._write("@prefix %s: <%s> ."%(prefixString, uri))
+        else:
+            self._write("@prefix %s: <%s> ."%(prefixString, refTo(self.base, uri)))
         self._newline()
 
     def setDefaultNamespace(self, uri):
@@ -1503,6 +1524,9 @@ B   Turn any blank node into a existentially qualified explicitly named node.
 
         if ty == LITERAL_DT:
 	    s, dt = value
+	    if "b" not in self._flags:
+                if (dt == BOOLEAN_DATATYPE):
+                    return toBool(s) and "true" or "false"
 	    if "n" not in self._flags:
 		dt_uri = dt
 #		dt_uri = dt.uriref()		 

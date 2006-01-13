@@ -14,6 +14,7 @@ Command line options for debug:
 
 from swap.myStore import load, Namespace
 from swap.RDFSink import CONTEXT, PRED, SUBJ, OBJ
+from swap.set_importer import Set
 from swap.term import List, Literal, CompoundTerm, BuiltIn, Function
 from swap.llyn import Formula #@@ dependency should not be be necessary
 from swap.diag import verbosity, setVerbosity, progress
@@ -40,13 +41,20 @@ proofSteps = 0
 parsed = {} # Record of retrieval/parsings
 checked = {} # Formulae from checked reasons
 
+knownReasons = Set([reason.Premise, reason.Parsing,
+                    reason.Inference, reason.Conjunction,
+                    reason.Fact, reason.Extraction,
+                    reason.CommandLine])
+
+
 def fail(str, level=0):
-    if chatty > 0:
+    if True or chatty > 0:
 	progress(" "*(level*4), "Proof failed: ", str)
+    raise RuntimeError
     return None
 
-def fyi(str, level=0, thresh=50):
-    if chatty >= thresh:
+def fyi(str, level=0, thresh=40):
+    if True or chatty >= thresh:
 	progress(" "*(level*4),  str)
     return None
 
@@ -100,12 +108,17 @@ def n3Entails(f, g, skipIncludes=0, level=0):
 	fyi("Yahooo! #########  ")
 	setVerbosity(v)
 	return 1
-	
+
+    if not isinstance(f, Formula) or not isinstance(g, Formula):
+        return 0
+
     if testIncludes(f,g):
 	fyi("Indexed query works looking in %s for %s" %(f,g), level)
 	setVerbosity(v)
  	return 1
-	
+
+    return False
+    return bool(g.n3EntailedBy(f))
     fyi("Indexed query fails to find match, try unification", level)
     for s in g:
 	context, pred, subj, obj = s.quad
@@ -125,8 +138,10 @@ def n3Entails(f, g, skipIncludes=0, level=0):
 		fyi("Statement unified: %s" % t, level) 
 		break
 	else:
+            setVerbosity(0)
 	    fyi("""n3Entailment failure.\nCan't find: %s=%s\nin formula: %s=%s\n""" %
 			    (g, g.n3String(), f, f.n3String()), level, thresh=1)
+	    fyi("""The triple which failed to match was %s""" % s, thresh=-1)
 	    setVerbosity(v)
 	    return 0
     setVerbosity(v)
@@ -195,8 +210,13 @@ def valid(proof, r=None, level=0):
     if r == None:
 	str = f.n3String()
 	return fail("No reason for "+`f` + " :\n\n"+str +"\n\n", level=level)
-    t = proof.any(subj=r, pred=rdf.type)
-    fyi("%s %s %s"%(t,r,fs), level=level)
+    classesOfReason = knownReasons.intersection(proof.each(subj=r, pred=rdf.type))
+    if len(classesOfReason) < 1:
+        return fail("%s does not have the type of any reason" % r)
+    if len(classesOfReason) > 1:
+        return fail("%s has too many reasons, being %s" % (r, classesOfReason))
+    t = classesOfReason.pop()
+    fyi("%s %s %s"%(t,r,fs), level=level, thresh=-10)
     level = level + 1
     
     if t is reason.Parsing:
@@ -254,14 +274,15 @@ def valid(proof, r=None, level=0):
 	fyi("Bindings: %s\nAntecedent after subst: %s" % (
 	    bindings, antecedent.debugString()),
 	    level, 195)
+	fyi("about to test if n3Entails(%s, %s)" % (evidenceFormula.n3String(), antecedent.n3String()), level, -1)
 	if not n3Entails(evidenceFormula, antecedent,
 			skipIncludes=1, level=level+1):
 	    return fail("""Can't find %s in evidence for
-Rule %s:
+Antecedent of rule: %s
 Evidence:%s
 Bindings:%s
 """
-			  %((s[SUBJ], s[PRED],  s[OBJ]), ruleStatement,
+			  %((s[SUBJ], s[PRED],  s[OBJ]), antecedent.n3String(),
 			evidenceFormula.n3String(), bindings),
 			level=level)
 
@@ -288,6 +309,13 @@ Bindings:%s
     elif t is reason.Fact:
 	con, pred, subj, obj = statementFromFormula(f).quad
 	fyi("Built-in: testing fact {%s %s %s}" % (subj, pred, obj), level=level)
+	if pred is log.includes:
+            #log:includes is very special
+            if n3Entails(subj, obj):
+                checked[r] = f
+                return f
+            else:
+                return fail("Include test failed")
 	if not isinstance(pred, BuiltIn):
 	    return fail("Claimed as fact, but predicate is %s not builtin" % pred, level)
 	if  pred.eval(subj, obj, None, None, None, None):
@@ -303,10 +331,17 @@ Bindings:%s
 		%(pred, result, obj))
 		checked[r] = f
 		return f
+##	else:
+##            if not isinstance(pred, Function):
+##                print 'not a function'
+##            if not isinstance(obj. Formula):
+##                print 'not a formula'
 	s, o = subj, obj
 	if isinstance(subj, Formula): s = subj.n3String()
 	if isinstance(obj, Formula): o = obj.n3String()
-		
+##	if n3Entails(result, obj) and not n3Entails(obj, result): a = 0
+##	elif n3Entails(obj, result) and not n3Entails(result, obj): a = 1
+##	else: a = 2
 	return fail("""Built-in fact does not give correct results:
 	subject: %s
 	predicate: %s
