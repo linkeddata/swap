@@ -40,6 +40,10 @@
     test:description   "Math datatypes are parsed and generated correctly";
     test:arguments     "--n3 syntax/decimal.n3".
 
+:syn009 a test:CwmTest;
+    test:referenceOutput <boolean-ref.n3>;
+    test:description   "Adding true and false to n3";
+    test:arguments     "--n3 syntax/boolean.n3".
 
 
 #ends
