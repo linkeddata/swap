@@ -1,26 +1,35 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+
+  
+  
   <title>Processing your data using N3 and Cwm</title>
-  <link href="style.css" rel="stylesheet"
-  type="text/css" />
+  <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 
+
+
 <body xml:lang="en" lang="en">
+
 
 <div class="noprint">
 <p><a href="/">W3C</a> | <a href="/2000/01/sw/Overview.html">Semantic Web</a>
 | <a href="Overview.html">SWAP</a></p>
+
 <br />
+
 <br />
+
 </div>
+
 
 <h1>Processing your data using N3 and Cwm</h1>
 
+
 <p>Now that we know how to make a statements in N3, what can we do with
 them?</p>
+
 
 <p>You know about how to write your data in N3, and also how to describe the
 terms you are using in a schema, or ontology. Why is that so useful? Because
@@ -32,12 +41,18 @@ go quite a long way with it. It isn't optimized, though, so you may find it
 too slow to use for large datasets. This is going to be a completely
 practical how-to, rather than a theoretical analysis of what is going on. You
 might like to keep around for reference:</p>
+
 <ul>
+
   <li><a href="cwm.html">The cwm manual</a> 
+    
     <p><a href="../Examples.html">Examples</a> - rather random order
     supplement</p>
+
   </li>
+
 </ul>
+
 
 <p>Cwm is a python program, so on most systems you can run it as <code>python
 wherever/cwm.py</code>, depending on where you have installed it. From now
@@ -45,33 +60,47 @@ on, though, we'll assume you have set up an alias or whatever your system
 uses to make it available by simply by the command <code>cwm</code>. You can
 always use the long form if you don't have the short form.</p>
 
+
 <p>Cwm uses the command line as a sequence of operations to perform from left
 to right. You can input data, process it and output it. The default is to
 input and output from the standard input and output. So you can read</p>
+
 <pre>cwm --rdf foo.rdf --think --n3</pre>
+
 
 <p>as "switch to RDF/XML format, read in foo.rdf, think about it, and then
 switch to N3 format (for output)".</p>
 
+
 <p>Any filename is actually a relative URI, so you can suck data off the web
 just by giving its URI:</p>
+
 <pre>cwm http://www.w3.org/2000/10/swap/log.n3</pre>
+
 
 <p>will read in the remote file, and then output it to the terminal.</p>
 
+
 <h2><a name="Converting" id="Converting">Converting data format</a></h2>
 
+
 <p>Converting data formats is simple:</p>
+
 <pre>cwm --rdf foo.xml --n3 &gt; foo.n3</pre>
 
+
 <p>converts the RDF/XML file foo.xml into n3, and</p>
+
 <pre>cwm bar.n3 --ntriples &gt; bar.nt</pre>
 
+
 <p></p>
+
 
 <p>converts bar.n3 to ntriples format. The default format at the beginning of
 the command line is N3. We'll mostly use RDF/N3 from now on, but all the data
 could equally well be in RDF/XML.</p>
+
 
 <p>(All these examples involve cwm reading the data into a store, and then
 reading it out. This means that the order of the results will be different
@@ -83,59 +112,72 @@ about one of the things your RDF file is about, make it a rdfs:comment
 property and it will be carried through the system -- who knows who will find
 it useful later?)</p>
 
+
 <h2><a name="Merging" id="Merging">Merging data</a></h2>
 
+
 <p></p>
+
 
 <p>The great thing about RDF which you will soon just assume (but you can't
 do with plain XML documents) is that merging data is trivial.</p>
 
+
 <p></p>
+
 <pre>cwm <a href="../test/meet/blue.n3">blue.n3</a> <a href="../test/meet/red.n3">red.n3</a> <a href="../test/meet/green.n3">green.n3</a>  &gt; <a href="../test/meet/white.n3">white.n3</a></pre>
 
+
 <p></p>
 
+
 <p>reads three n3 files, and then outputs the results in N3 to white.n3.</p>
+
 
 <p>This is particulaly useful if the files have used the same URIs for the
 same concepts. Suppose the first has that someone is attending a meeting
 which has a given home page.</p>
 
+
 <p><img src="../../../../DesignIssues/diagrams/arcs-1.gif" alt="stack" /></p>
+
 
 <p>and the second (red) has some information about the meeting, and a third
 (green) has some information about the meeting's home page. Merging the three
 gives us an interconnected web, including the fact that the attendee is
 actuallt chairing the meeting.</p>
 
+
 <p><img src="../../../../DesignIssues/diagrams/arcs-3.gif" alt="stack" /></p>
+
 
 <p></p>
 
+
 <h3><a name="Deducing" id="Deducing">Deducing more data</a></h3>
+
 
 <p>Often, you have data in a raw form and the information you want can be
 deduced from it, and you would like it added to the data set.</p>
 
+
 <p>In <a href="../test/uncle.n3">uncle.n3</a> we state that Fred is the
 father Joe, and Bob is the brother of Fred; we also describe the logical rule
 for the uncle relationship:</p>
-<pre>@prefix : &lt;uncle#&gt;.
-:Joe has :father :Fred.
-:Fred has :brother :Bob.
 
-@prefix log: &lt;http://www.w3.org/2000/10/swap/log#&gt; .
-this log:forAll :who1, :who2.
-{ :who1 :father [ :brother :who2 ] } log:implies { :who1 :uncle :who2 }.</pre>
+<pre>@prefix : &lt;uncle#&gt;.<br />:Joe has :father :Fred.<br />:Fred has :brother :Bob.<br /><br />@prefix log: &lt;http://www.w3.org/2000/10/swap/log#&gt; .<br />@forAll :who1, :who2.<br />{ :who1 :father [ :brother :who2 ] } log:implies { :who1 :uncle :who2 }.</pre>
+
 
 <p>This rule means "whenever someone's father has a brother, then the latter
-is their uncle". This rule, once is cwm's store, will cause <em><a
-href="doc/cwm.html">cwm</a></em> to deduce the uncle information when it runs
+is their uncle". This rule, once is cwm's store, will cause <em><a href="doc/cwm.html">cwm</a></em> to deduce the uncle information when it runs
 with the command line option <code>--think.</code></p>
+
 
 <p></p>
 
+
 <div class="noprint">@@- adding effective focal length to a photograph</div>
+
 
 <p>Delivery of packet in the USA has often one price within the
 <em>contiguous United States</em>. How could we find those? Well, the test
@@ -145,59 +187,58 @@ property which gives a state's neighbors. Contiguous means that you can get
 there from here by going from state to neighboring US state. Suppose you are
 starting in Boston.so you can get to Massachusetts. Also, any state bordering
 a contiguous state must also be contiguous. That's all the rules you need:</p>
-<pre>{?x us:code "MA"} =&gt; { ?x a :ContiguousState }.
-{?x a :ContiguousState.  ?x us:borderstate ?y} =&gt; {?y a :ContiguousState}.</pre>
+
+<pre>{?x us:code "MA"} =&gt; { ?x a :ContiguousState }.<br />{?x a :ContiguousState.  ?x us:borderstate ?y} =&gt; {?y a :ContiguousState}.</pre>
+
 
 <p></p>
+
 
 <p>These rules need to be applied more than once to find all the contiguous
 states. This is where you can see the difference between --rules and --think.
 Try it with --rules. Try it with --rules --rules. Then try it with
 --think.s</p>
 
+
 <p></p>
 
+
 <h2 id="Filtering">Filtering: when you have too much data</h2>
+
 
 <p>The result of the above search for contiguous state is too much
 information. How can we cut it down? Sometimes all we want from the mass of
 data at our disposal is a single statement.</p>
+
 
 <p>One way is to decorate the data by marking all the uninteresting bits as
 being in class log:Chaff. Then, the --purge option of cwm will remove from
 the store any statement which mentions anything which is in that class. This
 doesn't need much more discussion.</p>
 
+
 <p>A more interesting way is to compute just the things which are
-interesting. This is done with a <dfn><a name="filter11"
-id="filter11">filter</a></dfn>.</p>
+interesting. This is done with a <dfn><a name="filter11" id="filter11">filter</a></dfn>.</p>
+
 
 <p>In <a href="test/uncleF.n3">uncleF.n3</a> we use the uncle example above,
 but as a filter. When a filter runs (unlike --think) <em>only</em> the
 information gathered by the rules is preserved: everything else is discarded.
 We use a filter to select the logical relationships that we want from the
 mass of what is already known:</p>
-<pre>@prefix : &lt;uncle#&gt;.
-@prefix log: &lt;http://www.w3.org/2000/10/swap/log#&gt; .
 
-this log:forAll :p.
+<pre>@prefix : &lt;uncle#&gt;.<br />@prefix log: &lt;http://www.w3.org/2000/10/swap/log#&gt; .<br /><br />@forAll :p.<br /><br /># What is the relationship between Joe and Bob<br /><br />{ :Joe :p :Bob } log:implies { :p a :RelationshipBetweeJoeAndBob }.<br /><br /># Is Bob an Uncle of Joe?<br /><br />{ :Joe :uncle :Bob } log:implies { :Joe :uncle :Bob }.</pre>
 
-# What is the relationship between Joe and Bob
-
-{ :Joe :p :Bob } log:implies { :p a :RelationshipBetweeJoeAndBob }.
-
-# Is Bob an Uncle of Joe?
-
-{ :Joe :uncle :Bob } log:implies { :Joe :uncle :Bob }.</pre>
 
 <p>When we ask cwm to consider the implication it concludes:</p>
-<pre>&gt; python cwm.py uncle.n3 --think --filter=uncleF.n3
-    :Joe     :uncle :Bob .
-    :uncle     a :RelationshipBetweeJoeAndBob .</pre>
+
+<pre>&gt; python cwm.py uncle.n3 --think --filter=uncleF.n3<br />    :Joe     :uncle :Bob .<br />    :uncle     a :RelationshipBetweeJoeAndBob .</pre>
+
 
 <p>You can read the command line as: <em>read uncle.n3 and the deduce any new
 information you can given any rules you have. Now just tell me the
 information selected by the filter uncleF.n3</em>.</p>
+
 
 <p>Note that any data in the filter is <strong>not</strong> used. It is easy
 to imagine that the machine knows something because you can see it in the
@@ -206,37 +247,52 @@ to include the data, you can put it into a separate input file, or you can
 even add the filter file as an input file as well as using it as the
 filter.</p>
 
+
 <h3><a name="Combining" id="Combining">Combining cwm steps</a></h3>
+
 
 <p>In a lot of cases, one wants to take input, decorate the information with
 new stuff inferred using rules (with <code>--think</code>) and then filter
 out the essence of what is needed. Commands like</p>
+
 <pre>cwm income.n3 expenses.n3  categorize.n3 --think --filter=taxable.n3 </pre>
+
 
 <p>are common ways of using cwm.</p>
 
+
 <h2><a name="Report" id="Report">Report Generation</a></h2>
+
 
 <p>All the examples above process data and leave the result in N3. It is easy
 of course to generate RDF/XML, too.</p>
 
+
 <p>What do you do to generate something else, maybe an XHTML page, or an SVG
 diagram?</p>
 
+
 <h3>Using RDF/XML and XSLT</h3>
+
 
 <p>If you are used to XML tools such as XSLT, then you can generate the
 RDF/XML of your data, and then use XSLT to transform it into a report. When
 you do this, you may want to use the rdf output control flags to tell cwm how
 you like your output. There is also the <code>--bySubject</code> output
 method which prevents the "pretty-printing" of XML.</p>
+
 <ul>
+
   <li>See examples: Making .dot files, ...</li>
+
 </ul>
+
 
 <p></p>
 
+
 <h3><a name="Using" id="Using">Using --strings to output text</a></h3>
+
 
 <p>Another way is to output strings from cwm. This may work well or seem a
 bit weird, depending on your application. Remembering that all the data in
@@ -246,42 +302,58 @@ using log:outputString relationship from key to string.. The --strings option
 then outputs all the strings which have keys, in order of key. You can use
 string:concatenation to build the strings out of data. You can also use it to
 build the key.</p>
+
 <pre>{   ?x.context:familyName  ?k.</pre>
-<pre>     (?x.context:givenName " " ?x.context:familyName "has been invited\n" )
-string:concatenation  ?s</pre>
+
+<pre>     (?x.context:givenName " " ?x.context:familyName "has been invited\n" )<br />string:concatenation  ?s</pre>
+
 <pre>} =&gt; {</pre>
+
 <pre>    ?k  log:outputString ?s.</pre>
+
 <pre>}.</pre>
+
 
 <p>This says if k is someone's family name, and a string is made by
 concatenating their given name, a space, their family name and " has been
 invited\n", then that string is output in order of key. In other words, in
 order of family name.</p>
 
+
 <p></p>
+
 <ul>
+
   <li>See examples: tax report</li>
+
 </ul>
+
 
 <h2 id="Debugging">Debugging</h2>
 
+
 <p>This is all very well, but what happens if it doesn't work? There are a
 number of ways of looking at problems. They are not in order.</p>
+
 
 <p>Checking the syntax of files when you have finished editing them can save
 both later. You can just load the file with the <code>--no</code> option so
 that the syntax is checked by no output is done.</p>
 
+
 <p>If a rule isn't firing, try commenting out one of the conditions to see
 which isn't firing.</p>
 
+
 <p>Try calculating intermediate results, dividing a big rule into more than
 one step.</p>
+
 
 <p>You may have misspelled a term. If you do that, it just won't match but it
 will be perfectly good syntax. To catch this, validate your file using the
 DAML validator or the cwm validator. These will check that the terms you use
 are indeed declared in a schema. It'll check a few other things too.</p>
+
 
 <p>If you think it would help to know what cwm is doing, you can run cwm with
 <code>--chatty=50</code>, or any value between 0 and 99. It is often useful
@@ -292,15 +364,20 @@ deduced, then increasing levels give you more and more of the gorey details
 of what happens inside. If a rule isn't firing, look for "no way" in the
 debug output.</p>
 
+
 <p>Get cwm to read your input file and output them again (<code>cwm foo.n3
 &gt; ,foo.n3</code>). Looking at the file in its new format sometimes shows
 up a bug: is that <em>really</em> what you meant?</p>
 
+
 <p>Think.</p>
+
 
 <p></p>
 
+
 <h2 id="Tips">Tips</h2>
+
 
 <p>When you use N3, you find that all your files, data and rules, can all be
 in the same language. Sometimes, when using tools like <code>make</code>, it
@@ -310,40 +387,54 @@ role. You might want to leave the rule files as .n3, but make the sensor data
 make makefile rules to map create <code>.ana</code> files from
 <code>.sen</code> files.</p>
 
+
 <p>If you need to pass parameters to your rules, for example something to
 search for, or your name, then pass them as command line arguments, putting
 them at the very end of the cwm command line, after a --with. Then, the
 <code>os:argv</code> builtin function can be used to pick up the value of
 each argument, as <code>"1".os:argv</code> and so on.</p>
 
+
 <h2 id="More">More</h2>
+
 
 <p>At this point, you should be getting the hang of it and be writing stuff.
 To give you some more ideas, though, there is a <a href="Examples">longer
 list of more complex and varied examples</a>. These come with less tutorial
 explanation.</p>
 
+
 <p>Have fun!</p>
+
 
 <div class="noprint">
 <hr />
 
 <h2 id="References">References</h2>
+
 <ul>
+
   <li><a href="Examples.html">Many More Examples</a></li>
+
   <li><a href="/DesignIssues/Notation3.html">Notation3 - Design Issues
     article</a></li>
+
 </ul>
+
 
 <hr />
 Thanks to contributors including Joseph Reagle who added the uncle example to
 the original primer.<br />
 
 
+
 <address>Tim BL, with his director hat off
 <br />
+
 <small>$Id$</small>
 </address>
+
 </div>
+
 </body>
 </html>

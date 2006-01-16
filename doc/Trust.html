@@ -1,22 +1,28 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+
+  
+  
   <title>Trust</title>
   <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 
+
+
 <body xml:lang="en" lang="en">
+
 
 <div class="noprint">
 <p><a href="/">W3C</a> | <a href="/2001/sw/Overview.html">Semantic Web</a> |
-<a href="/2000/01/sw/Overview.html">Advanced Development</a> | <a
-href="/2000/10/swap/">SWAP</a> | <a href="/2000/10/swap/doc/">Tutorial</a> |
+<a href="/2000/01/sw/Overview.html">Advanced Development</a> | <a href="/2000/10/swap/">SWAP</a> | <a href="/2000/10/swap/doc/">Tutorial</a> |
 Reaching Out Onto the Web</p>
+
 </div>
 
+
 <h1>Trust</h1>
+
 
 <p>In the real world, you don't want a program doing things without being
 careful. One of the more difficult things is figuring out what rules you
@@ -26,17 +32,21 @@ Semantic Web allows you to write it down. Not only that -- if we introduce
 cryptographic built-in functions, we can actually make a system which will
 use public key cryptography to check the authenticity of data.</p>
 
+
 <p>This can of course get very big, and as complicated as your social or
 business environment. However, we can give a taste with a simple example. The
 idea here is not to learn this particular cryptographic library, but to get
 the feel of what can be done.</p>
 
+
 <h2>Delegated authority</h2>
+
 
 <p>Suppose we want to set up an access control system for the W3C <em>Member
 site</em>. (Yes, even though companies support W3C just because is a good
 thing, many quite reasonably need this "what's in it for me?"
 justification).</p>
+
 
 <p>We will formalize the social arrangements and then we will write the rules
 which encapsulate those arrangements so that they can be followed by a
@@ -48,8 +58,9 @@ everyone at the organization and everything happening at W3C. Currently
 member site in that role, we check, by email, with the AC rep. Let's design a
 system to do it with digital signature.</p>
 
-<p><img alt="example of trust processing"
-src="../../../../2002/Talks/04-sweb/elisaaccess.png" /></p>
+
+<p><img alt="example of trust processing" src="../../../../2002/Talks/04-sweb/elisaaccess.png" /></p>
+
 
 <p>In this picture, Alan Kotok is the W3C associate chairman who deals with
 membership. In this case, Kari is the AC rep for W3C member <em>Elisa
@@ -57,32 +68,23 @@ Communications</em>. Alan delegates to Kari the right to say who, as a
 employee of Elisa, get access to the W3C Member Site.</p>
 
 
+
 <p>Alan's authority to define who is a W3C is represented by a digital key.
 he generates it using the command</p>
+
 <pre>cwm access-gen-master.n3 --think --purge &gt; access-master.private</pre>
 
+
 <p></p>
+
 
 <p>where the access-gen-master.n3 contains:</p>
-<pre>#  Generate master key
 
-@prefix : &lt;#&gt; .
-@prefix log: &lt;http://www.w3.org/2000/10/swap/log#&gt; .
-@prefix crypto: &lt;http://www.w3.org/2000/10/swap/crypto#&gt; .
-@prefix string: &lt;http://www.w3.org/2000/10/swap/string#&gt; .
-@prefix acc: &lt;http://www.w3.org/2000/10/swap/test/crypto/acc.n3#&gt;.
+<pre>#  Generate master key<br /><br />@prefix : &lt;#&gt; .<br />@prefix log: &lt;http://www.w3.org/2000/10/swap/log#&gt; .<br />@prefix crypto: &lt;http://www.w3.org/2000/10/swap/crypto#&gt; .<br />@prefix string: &lt;http://www.w3.org/2000/10/swap/string#&gt; .<br />@prefix acc: &lt;http://www.w3.org/2000/10/swap/test/crypto/acc.n3#&gt;.<br /><br />@forAll :x , :y.<br /><br /><br />{ :x crypto:keyLength "1024";<br />     crypto:publicKey :y } log:implies {<br /> :x a acc:MasterKeyPair; a acc:Secret.  :y a acc:MasterKey } .<br /><br />log:implies a log:Chaff.</pre>
 
-this log:forAll :x , :y.
-
-
-{ :x crypto:keyLength "1024";
-     crypto:publicKey :y } log:implies {
- :x a acc:MasterKeyPair; a acc:Secret.  :y a acc:MasterKey } .
-
-log:forAll a log:Chaff.
-log:implies a log:Chaff.</pre>
 
 <p></p>
+
 
 <p>The <code>crypto:keyLength</code> built-in generates :x, which a string
 which actually contains both the private and the public keys. This is
@@ -92,13 +94,16 @@ isn't repeatable rule you can reuse - it is just a trick for generating a
 key. (It will generate a different key each time, although the library at one
 stage didn't do that to make debugging easier).</p>
 
+
 <p>The <code>crypto:publicKey</code> builtin is a function which strips out
 the private parts of a key :x, leaving only the public part :y. Note we have
 class here <code>:Secret</code> which we just use for labelling things which
 we don't want another person to know.</p>
 
+
 <p>The log:Chaff part is to label those bits which are for deletion by the
 --purge command, just to leave the key file clean of stuff we don't want.</p>
+
 
 <p>Kari also generates a key, which represents the authority has as Elisa's
 representative. he does this in an identical fashion, using
@@ -106,26 +111,19 @@ representative. he does this in an identical fashion, using
 when Kari gives the public part of his key to Alan, in some way secure enough
 for Alan to be sure enough it , and Alan then signs something to the effect
 that it is indeed Kari's key as AC rep for Elisa.</p>
-<pre>cwm access-elisa.public access-master.private access-sign-member-cert.n3 \
- --think --purge --with "Elisa" &gt; access-eliza.cert</pre>
+
+<pre>cwm access-elisa.public access-master.private access-sign-member-cert.n3 \<br /> --think --purge --with "Elisa" &gt; access-eliza.cert</pre>
+
 
 <p>Here, Alan uses the private key which he (alone) has access to and the
 public key which Kari gave him. <code>access-sign-member-cert.n3</code> is a
 rule file which does the signing. It contains, in essence:</p>
-<pre>{ :n is os:argv of "1".
-  :tk a acc:MemberKey.
-  { :tk a acc:MemberKey;
-        acc:authorityName :n;
-        acc:junk "327462sjsdfjsakdhfkjsafd32164321"
-   } log:n3String :str.
-   :kp a acc:MasterKeyPair.
-   :k a acc:MasterKey.
-   ([is crypto:md5 of :str] :kp) crypto:sign :z
-} =&gt; {
-   :str acc:endorsement[acc:signature :z; acc:key :k
-} .</pre>
+
+<pre>{ :n is os:argv of "1".<br />  :tk a acc:MemberKey.<br />  { :tk a acc:MemberKey;<br />        acc:authorityName :n;<br />        acc:junk "327462sjsdfjsakdhfkjsafd32164321"<br />   } log:n3String :str.<br />   :kp a acc:MasterKeyPair.<br />   :k a acc:MasterKey.<br />   ([is crypto:md5 of :str] :kp) crypto:sign :z<br />} =&gt; {<br />   :str acc:endorsement[acc:signature :z; acc:key :k<br />} .</pre>
+
 
 <p></p>
+
 
 <p>:n resolves to be the name "Elisa", :tk resolves to be Elisa's public key.
 The string str is string form of the certificate formula, as the digital
@@ -135,109 +133,68 @@ hand side of the rule is resolved, and when it has, then the conclusion is
 that that string has an endorsement which has a given signature and a given
 public key. This endorsement information is the certificate.</p>
 
+
 <p>In exactly the same fashion, Tiina, the employee, makes a key, and gets a
 certificate from Kari about that key.</p>
 
+
 <p>Then the time comes that Tiina wants to access the member site. She makes
 up a request for the web page, and signs it with her private key.</p>
-<pre>cwm access-tiina.private access-sign-request.n3 \
- --think --purge --with http://www.w3.org/Member &gt; access-1.request</pre>
+
+<pre>cwm access-tiina.private access-sign-request.n3 \<br /> --think --purge --with http://www.w3.org/Member &gt; access-1.request</pre>
+
 
 <p>The with command passes in the URI of the page she would like to
 access.</p>
+
 
 <p>The crux of this whole system is the file <code>access-rule.n3</code>
 which tells the web site how to trust a request. And the crux of that is its
 first rule. It is a bit simple but you should get the idea. It says that:</p>
 
+
 <blockquote>
+  
   <p>if a request is supported by a key, and there is a certificate -- signed
   itself with k2 -- which says k is a good request key, and that there is
   some other certificate, signed with the master key, that says that k2 is a
   member key, then the request is a good request.</p>
+
 </blockquote>
+
 
 <p>The other details of what "supported" means are below.</p>
 
-<p></p>
-<pre>this log:forAll :d, :F, :G, :k, :k2, :k3, :kp, :x, :request, :sig, :str, :y , :z , :q .
-
-# The rule of access.
-#
-#  acc:requestSupportedBy means that it correctly claimed to be
-#        signed by the given key.
-
-{ :request a acc:GoodRequest } is log:implies of
-{
-    :request acc:forDocument :d;
-             acc:requestSupportedBy :k.
-
-    []       acc:certSupportedBy :k2;    # Certificate
-             log:includes { :k a acc:RequestKey }.
-
-    []       acc:certSupportedBy [a acc:MasterKey];    # Certificate
-             log:includes { :k2 a acc:MemberKey }.
-
-}.
-
-#  What is a Master key?
-#
-#  (we could just put in the text here)
-
-{ &lt;access-master.public&gt; log:semantics [
-        log:includes {:x a acc:MasterKey}]
-} log:implies {:x a acc:MasterKey}.
-
-
-#  What do we belive is a request?
-#  We trust the command line in defining what is a request.
-
-{  "1"!os:argv!os:baseAbsolute^log:uri log:semantics :F.
-   :F log:includes { :str acc:endorsement[acc:signature :sig; acc:key :k]}.
-   :k crypto:verify ([is crypto:md5 of :str] :sig).
-   :str log:parsedAsN3:G } log:implies { :G acc:requestSupportedBy :k }.
-
-#  What do we believe from a signed request?
-#   - what it says it is asking for.
-#   - what it quotes as credentials
-#  It could actually enclose a copy of the credentials inline,
-#  but here we use the web.  A credential is a document which
-#  provides evidence in support of the request.
-
-{:G acc:requestSupportedBy :k; log:includes {:G acc:forDocument :d}} =&gt;
-   {:G acc:forDocument :d}.
-
-{:G acc:requestSupportedBy :k; log:includes {:G acc:credential :d}} =&gt;
-   {:G acc:credential :d}.
-
-# What do we belive from a signed credential.
-#
-# In this case, just note that a key supports the signed formula.
-# The fact of this support is used in the access rule above.
-# We don't actually beleive everything the certificate says.
-
-{  [] acc:credential [ log:semantics :F ].
-   :F log:includes { :str acc:endorsement[acc:signature :sig; acc:key :k]}.
-   :k crypto:verify ([is crypto:md5 of :str] :sig).
-   :str log:parsedAsN3 :G } log:implies { :G acc:certSupportedBy :k }.</pre>
 
 <p></p>
+
+<pre>@forAll :d, :F, :G, :k, :k2, :k3, :kp, :x, :request, :sig, :str, :y , :z , :q .<br /><br /># The rule of access.<br />#<br />#  acc:requestSupportedBy means that it correctly claimed to be<br />#        signed by the given key.<br /><br />{ :request a acc:GoodRequest } is log:implies of<br />{<br />    :request acc:forDocument :d;<br />             acc:requestSupportedBy :k.<br /><br />    []       acc:certSupportedBy :k2;    # Certificate<br />             log:includes { :k a acc:RequestKey }.<br /><br />    []       acc:certSupportedBy [a acc:MasterKey];    # Certificate<br />             log:includes { :k2 a acc:MemberKey }.<br /><br />}.<br /><br />#  What is a Master key?<br />#<br />#  (we could just put in the text here)<br /><br />{ &lt;access-master.public&gt; log:semantics [<br />        log:includes {:x a acc:MasterKey}]<br />} log:implies {:x a acc:MasterKey}.<br /><br /><br />#  What do we belive is a request?<br />#  We trust the command line in defining what is a request.<br /><br />{  "1"!os:argv!os:baseAbsolute^log:uri log:semantics :F.<br />   :F log:includes { :str acc:endorsement[acc:signature :sig; acc:key :k]}.<br />   :k crypto:verify ([is crypto:md5 of :str] :sig).<br />   :str log:parsedAsN3:G } log:implies { :G acc:requestSupportedBy :k }.<br /><br />#  What do we believe from a signed request?<br />#   - what it says it is asking for.<br />#   - what it quotes as credentials<br />#  It could actually enclose a copy of the credentials inline,<br />#  but here we use the web.  A credential is a document which<br />#  provides evidence in support of the request.<br /><br />{:G acc:requestSupportedBy :k; log:includes {:G acc:forDocument :d}} =&gt;<br />   {:G acc:forDocument :d}.<br /><br />{:G acc:requestSupportedBy :k; log:includes {:G acc:credential :d}} =&gt;<br />   {:G acc:credential :d}.<br /><br /># What do we belive from a signed credential.<br />#<br /># In this case, just note that a key supports the signed formula.<br /># The fact of this support is used in the access rule above.<br /># We don't actually beleive everything the certificate says.<br /><br />{  [] acc:credential [ log:semantics :F ].<br />   :F log:includes { :str acc:endorsement[acc:signature :sig; acc:key :k]}.<br />   :k crypto:verify ([is crypto:md5 of :str] :sig).<br />   :str log:parsedAsN3 :G } log:implies { :G acc:certSupportedBy :k }.</pre>
+
+
+<p></p>
+
 
 <p>The important thing is that we are really trusting very specific
 information from different sources.</p>
 
+
 <p></p>
+
 
 <p>Here is the complete data flow in summary.</p>
 
-<p></p>
 
 <p></p>
 
-<p><img src="../test/crypto/make.jpg" alt="See Makefile for text version"
-/></p>
 
 <p></p>
+
+
+<p><img src="../test/crypto/make.jpg" alt="See Makefile for text version" /></p>
+
+
+<p></p>
+
 
 <p>The bit at the bottom shows how the picture itself, <code>make.svg</code>,
 was generated from the Makefile - via RDF of course. Some people have
@@ -245,17 +202,23 @@ actually started to use RDF just because of the diagram drawing facility, but
 we hope by this stage that you will have a longer term and wider vision of
 the value of Semantic Web!</p>
 
-<p></p>
 
 <p></p>
+
+
+<p></p>
+
 
 <h2>Conclusion</h2>
 
+
 <p></p>
+
 
 <p>You will notice that in this example we didn't use a PKI certificates
 looked up in a x.509 hierarchy. We could have. We would have used an RDF
 interface to PKI.</p>
+
 
 <p>There are two interesting reasons not to. One is that in designing the
 system from scratch we defined exactly how it works. We defined what
@@ -269,10 +232,12 @@ doing concerns the relationships between the social entities involved without
 bringing in any superfluous external authority, it is more weblike in nature.
 We are freer to model the actual social trust system we use.</p>
 
+
 <p>The other interesting point is that the amount of software for working out
 whether a request is valid is in fact quite small. The access rule is the
 secure part which is specific to this system. Apart from that the trusted
 code base is a general-purpose engine and a cryptographic library.</p>
+
 
 <p>One can make the code base even smaller. Tiina can herself run the access
 rule herself, and generate a proof - an output of the bits of data used and
@@ -291,17 +256,22 @@ trusted code base would be a proof checker and a digital signature validator.
  That's the sort of thing it every processor could have in ROM when it is
 made.</p>
 
+
 <p>The ability to write rules about what document actually says what allows
 us to make systems which behave in predicatable and appropriate ways in the
 real world. Cryptography gives use the ability to build secure systems, which
 in a weblike way allow us to express what the real trust situation.</p>
 
+
 <div class="noprint">
 <hr />
 <address>Tim BL, with his director hat off<br />
 
+
 <small>$Id$</small>
 </address>
+
 </div>
+
 </body>
 </html>
