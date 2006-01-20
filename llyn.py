@@ -267,7 +267,7 @@ class IndexedFormula(Formula):
 	
 	In this implementation, we use the length of the sequence to be searched."""
         res = self._index.get((pred, subj, obj), [])
-        print self.statements, (pred, subj, obj)
+#        progress("searchable  %s, %s" %(self.statements, (pred, subj, obj))
 	return len(res), res
 
 

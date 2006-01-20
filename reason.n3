@@ -78,12 +78,20 @@
 :variable a rdf:Property;
 	s:label "variable";
 	s:domain :Binding;
-	s:range	n3:Symbol.
+	s:range	n3:String;
+	s:comment """
+	The given string is that used as the identifier of the variable
+	which is bound by this binding.  The variable name has to be given as
+	a string, rather than the variable being put here, or the variable
+	would be treated as a variable.""".
 
 :boundTo  a rdf:Property;
 	s:label "bound to";
 	s:domain :Binding;
-	s:range	n3:Term.
+	s:range	n3:Term;
+	s:comment """
+	This binding binds its variable to this term.
+	""".
 
 
 

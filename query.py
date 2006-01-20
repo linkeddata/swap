@@ -656,8 +656,8 @@ class Query(Formula):
 	self.lastCheckedNumberOfRedirections = 0
         for quad in unmatched:
             item = QueryItem(self, quad)
-            if item.setup(allvars=variables|existentials, unmatched=unmatched,
-			interpretBuiltins=interpretBuiltins, mode=mode) == 0:
+            if not item.setup(allvars=variables|existentials, unmatched=unmatched,
+			interpretBuiltins=interpretBuiltins, mode=mode):
                 if diag.chatty_flag > 80: progress(
 				    "match: abandoned, no way for "+`item`)
                 self.noWay = 1
@@ -667,7 +667,7 @@ class Query(Formula):
 	
     def resolve(self):
 	if hasattr(self, "noWay"): return 0
-        return self.unify(self.statements, self.variables, self._existentialVariables)
+        return self.matchFormula(self.statements, self.variables, self._existentialVariables)
 
     def checkRedirectsInAlready(self):
 	"""Kludge"""
@@ -711,7 +711,8 @@ class Query(Formula):
             for loc in xrange(len(evidence)):
                 r = evidence[loc]
                 if isinstance(r, BecauseBuiltInWill):
-                    evidence[loc] = BecauseBuiltIn(*[k.substitution(bindings, why=Because("I said so")) for k in r.args])
+                    evidence[loc] = BecauseBuiltIn(*[k.substitution(bindings,
+			why=Because("I said so")) for k in r.args])
 	    reason = BecauseOfRule(self.rule, bindings=bindings,
 				    evidence=evidence, kb=self.workingContext)
 #	    progress("We have a reason for %s of %s with bindings %s" % (self.rule, reason, bindings))
@@ -779,7 +780,7 @@ class Query(Formula):
 ##################################################################################
 
 
-    def unify(query,
+    def matchFormula(query,
                queue,               # Set of items we are trying to match CORRUPTED
                variables,           # List of variables to match and return CORRUPTED
                existentials,        # List of variables to match to anything
@@ -878,48 +879,21 @@ class Query(Formula):
             state = item.state
             if state == S_DONE:
                 return total # Forget it -- must be impossible
-            if state == S_LIGHT_UNS_GO:
+            if state == S_LIGHT_UNS_GO:		# Search then 
 		item.state = S_LIGHT_EARLY   # Unsearched, try builtin
-                nbs = item.tryBuiltin(queue, bindings, heavy=0, evidence=evidence)
+                nbs = item.tryBuiltin(queue, bindings, evidence=evidence)
             elif state == S_LIGHT_GO:
 		item.state = S_DONE   # Searched.
-                nbs = item.tryBuiltin(queue, bindings, heavy=0, evidence=evidence)
+                nbs = item.tryBuiltin(queue, bindings, evidence=evidence)
             elif (state == S_LIGHT_EARLY or state == S_NOT_LIGHT or
 				    state == S_NEED_DEEP): #  Not searched yet
                 nbs = item.tryDeepSearch()
             elif state == S_HEAVY_READY:  # not light, may be heavy; or heavy ready to run
                 if pred is query.store.includes: # and not diag.tracking:  # don't optimize when tracking?
-		    nbs = []
-                    if (isinstance(subj, Formula)
-                        and isinstance(obj, Formula)):
-
-			more_unmatched = buildPattern(subj, obj)
-			more_variables = obj.variables().copy()
-                        _substitute({obj: subj}, more_unmatched)
-                        _substitute(bindings, more_unmatched)
-                        existentials = existentials | more_variables
-                        allvars = variables | existentials
-                        for quad in more_unmatched:
-                            newItem = QueryItem(query, quad)
-                            queue.append(newItem)
-                            newItem.setup(allvars, interpretBuiltins = 0,
-                                    unmatched=more_unmatched, mode=query.mode)
-                        if diag.chatty_flag > 40:
-                                progress("log:Includes: Adding %i new terms and %s as new existentials."%
-                                          (len(more_unmatched),
-                                           seqToString(more_variables)))
-                        item.state = S_SATISFIED
-			if diag.tracking:
-			    rea = BecauseBuiltInWill(subj, pred, obj)
-			    nbs = [({}, rea)]
-		    else:
-                        progress("""Warning: Type error ignored on builtin:
-			    log:include only on formulae """+`item`)
-			     #@@ was RuntimeError exception
-                        item.state = S_DONE
+		    nbs = item.doIncludes(queue, existentials, variables, bindings)
                 else:
 		    item.state = S_HEAVY_WAIT  # Assume can't resolve
-                    nbs = item.tryBuiltin(queue, bindings, heavy=1, evidence=evidence)
+                    nbs = item.tryBuiltin(queue, bindings, evidence=evidence)
             elif state == S_REMOTE: # Remote query -- need to find all of them for the same service
 		items = [item]
 		for i in queue[:]:
@@ -928,24 +902,24 @@ class Query(Formula):
 			queue.remove(i)
 		nbs = query.remoteQuery(items)
 		item.state = S_SATISFIED  # do not put back on list
-            elif state ==S_HEAVY_WAIT or state == S_LIGHT_WAIT: # Can't
-                ## Is now the time to run log:notIncludes?
-                ## Looks better than anything else
-                ## let's see if this works
-                notIncludesStuff = []
-                        
-                if not notIncludesStuff:
-                    if diag.chatty_flag > 20 :
-                        progress("@@@@ Warning: query can't find term which will work.")
-                        progress( "   state is %s, queue length %i" % (state, len(queue)+1))
-                        progress("@@ Current item: %s" % `item`)
-                        progress(queueToString(queue))
-    #                    raise RuntimeError, "Insufficient clues"
-                    return 0  # Forget it
+            elif state ==S_HEAVY_WAIT or state == S_LIGHT_WAIT:
+
+		if diag.chatty_flag > 20 :
+		    progress("@@@@ Warning: query can't find term which will work.")
+		    progress( "   state is %s, queue length %i" % (state, len(queue)+1))
+		    progress("@@ Current item: %s" % `item`)
+		    progress(queueToString(queue))
+		return 0  # Forget it
             else:
                 raise RuntimeError, "Unknown state " + `state`
+		
             if diag.chatty_flag > 90: progress("nbs=" + `nbs`)
-            if nbs == 0: return total
+            if nbs == 0:
+		raise RuntimeError("Eh?  bad return convention")
+#            if nbs == []:
+#	        progress("Query.py 953  "+`item.state`)
+#@@		raise RuntimeError("Query.py "+`item.state`)
+#@@		return total #@@@@@@@
             elif nbs != []:
 #		if nbs != 0 and nbs != []: pass
 		# progress("llyn.py 2738:   nbs = %s" % nbs)
@@ -956,9 +930,9 @@ class Query(Formula):
                         newItem = i.clone()
                         q2.append(newItem)  #@@@@@@@@@@  If exactly 1 binding, loop (tail recurse)
 		    
-                    found = query.unify(q2, variables.copy(), existentials.copy(),
+                    found = query.matchFormula(q2, variables.copy(), existentials.copy(),
 			    bindings.copy(), nb, evidence = evidence + [reason])
-		    if diag.chatty_flag > 80: progress(
+		    if diag.chatty_flag > 91: progress(
 			"Nested query returns %i (nb= %r)" % (found, nb))
                     total = total + found
 		    if query.justOne and total:
@@ -1091,7 +1065,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
         """Check how many variables in this term,
         and how long it would take to search
 
-        Returns, [] normally or 0 if there is no way this query will work.
+        Returns, true normally or false if there is no way this query will work.
         Only called on virgin query item.
 	The mode is a set of character flags about how we think."""
         con, pred, subj, obj = self.quad
@@ -1143,7 +1117,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
             elif isinstance(x, Formula) or isinstance(x, List): # expr  @@ Set  @@@@@@@@@@ Check and CompundTerm>???
                 ur = x.occurringIn(allvars)
                 self.neededToRun[p] = ur
-                if ur != Set() or isinstance(x, Formula):
+                if ur != Set():# or isinstance(x, Formula):
                     hasUnboundCoumpundTerm = 1     # Can't search directly
 		    self.searchPattern[p] = None   # can bind this if we recurse
 		    
@@ -1163,12 +1137,49 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
         else:
             self.state = S_NOT_LIGHT   # Not a light built in, not searched.
         if diag.chatty_flag > 80: progress("setup:" + `self`)
-        if self.state == S_DONE: return 0
-        return []
+        if self.state == S_DONE: return False
+        return True
+
+    def doIncludes(item, queue, existentials, variables, bindings):
+	"""Implement log:includes by adding all the statements on the LHS
+	to the query items.  The plan is that this should"""
+	con, pred, subj, obj = item.quad
+	state = item.state
+	
+	nbs = []  # Failure
+	if (isinstance(subj, Formula)
+	    and isinstance(obj, Formula)):
+
+	    more_unmatched = buildPattern(subj, obj)
+	    more_variables = obj.variables().copy()
+	    _substitute({obj: subj}, more_unmatched)
+	    _substitute(bindings, more_unmatched)
+	    existentials = existentials | more_variables
+	    allvars = variables | existentials
+	    for quad in more_unmatched:
+		newItem = QueryItem(item.query, quad)
+		queue.append(newItem)
+		newItem.setup(allvars, interpretBuiltins = 0,
+			unmatched=more_unmatched, mode=item.query.mode)
+	    if diag.chatty_flag > 40:
+		    progress("log:Includes: Adding %i new terms and %s as new existentials."%
+			      (len(more_unmatched),
+			       seqToString(more_variables)))
+	    item.state = S_SATISFIED
+	    if diag.tracking:
+		rea = BecauseBuiltInWill(subj, pred, obj)
+		nbs = [({}, rea)]
+	    else:
+		nbs = [({}, None)]
+	else:
+	    progress("""Warning: Type error ignored on builtin:
+		log:include only on formulae """+`item`)
+		 #@@ was RuntimeError exception
+	    item.state = S_DONE
+	return nbs
 
 
-
-    def tryBuiltin(self, queue, bindings, heavy, evidence):                    
+    def tryBuiltin(self, queue, bindings, evidence):                    
         """Check for  built-in functions to see whether it will resolve.
         Return codes:  0 - give up; 
 		[] - success, no new bindings, (action has been called)
@@ -1193,8 +1204,8 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                                 rea = BecauseBuiltIn(subj, pred, obj)
 #                                evidence = evidence + [rea] # not pass be reference
 				return [({}, rea)]  # Involves extra recursion just to track reason
-                            return []   # No new bindings but success in logical operator
-                        else: return 0   # We absoluteley know this won't match with this in it
+                            return [({}, None)]   # No new bindings but success in logical operator
+                        else: return []   # We absoluteley know this won't match with this in it
 
                     except caughtErrors:
 			progress(
@@ -1203,9 +1214,9 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			     sys.exc_info()[1].__str__()  ))
                         if "h" in self.query.mode:
                             raise
-                        return 0
+                        return []
                     except BuiltinFeedError:
-                        return 0
+                        return []
 		else: 
 		    if isinstance(pred, Function):
 			if diag.chatty_flag > 97:
@@ -1226,7 +1237,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                             else:
                                 result = ErrorFlag(errVal)
                         except BuiltinFeedError:
-                            return 0
+                            return []
 			if result != None:
 			    self.state = S_DONE
 			    rea=None
@@ -1237,7 +1248,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			    else:
 				return [({obj: result}, rea)]
                         else:
-			    if heavy: return 0
+			    return []
 	    else:
 		if (self.neededToRun[OBJ] == Set()):
 		    if isinstance(pred, ReverseFunction):
@@ -1257,9 +1268,9 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                                 result = [ErrorFlag(errVal)]
                             else:
                                 result = ErrorFlag(errVal)
-#                            result = None
+
                         except BuiltinFeedError:
-                            return 0
+                            return []
 			if result != None:
 			    self.state = S_DONE
 			    rea=None
@@ -1270,29 +1281,24 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			    else:
 				return [({subj: result}, rea)]
                         else:
-			    if heavy: return 0
+			    return []
 		else:
 		    if isinstance(pred, FiniteProperty):
 			result = pred.ennumerate()
 			if result != 0:
 			    self.state = S_DONE
-#			    rea=None
-#			    if tracking:
-#				rea = BecauseBuiltIn(result, pred, obj, proof)
 			    return result  # Generates its own list of (list of bindings, reason)s
                         else:
-			    if heavy: return 0
+			    return []
 	    if diag.chatty_flag > 30:
 		progress("Builtin could not give result"+`self`)
-    
-	    # Now we have a light builtin needs search,
-	    # otherwise waiting for enough constants to run
-	    return []   # Keep going
+	    return []   # no solution
+	    # @@@ remove dependency on 'heavy' above and remove heavy as param
         except (IOError, SyntaxError):
             raise BuiltInFailed(sys.exc_info(), self, pred ),None
         
     def tryDeepSearch(self):
-        """Search the store, matching nested compound structures
+        """Search the store, unifying nested compound structures
 	
 	Returns lists of list of bindings, attempting if necessary to unify
 	any nested compound terms. Added 20030810, not sure whether it is worth the
@@ -1301,20 +1307,26 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 	
 	Used in state S_NEED_DEEP
 	"""
-        nbs = []
+        nbs = [] # Assume failure
         if self.short == INFINITY:
             if diag.chatty_flag > 36:
                 progress( "Can't deep search for %s" % `self`)
         else:
             if diag.chatty_flag > 36:
                 progress( "Searching (S=%i) %i for %s" %(self.state, self.short, `self`))
+	    try:
+		for s in self.myIndex:
+		    pass
+	    except:
+		print self.myIndex, self
+		raise
             for s in self.myIndex :  # for everything matching what we know,
                 nb = {}
 		if diag.chatty_flag > 106: progress("...checking %r" % s)
                 for p in PRED, SUBJ, OBJ:
                     if self.searchPattern[p] == None: # Need to check
 			x = self.quad[p]
-			if self.neededToRun[p] == Set([x]):   # Normal case
+			if self.neededToRun[p] == Set([x]):   # a term with no variables
 			    nb1 = {x: s.quad[p]}
 			else:  # Deep case   
 			    if diag.chatty_flag > 70:
@@ -1350,13 +1362,15 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                     nbs.append((nb, s))  # Add the new bindings into the set
 
         self.searchDone()  # State transitions
-        return nbs
+        return nbs   # End try deep search
 
     def searchDone(self):
         """Search has been done: figure out next state."""
         con, pred, subj, obj = self.quad
         if self.state == S_LIGHT_EARLY:   # Light, can't run yet.
             self.state = S_LIGHT_WAIT    # Search done, can't run
+	elif self.state == S_LIGHT_UNS_GO: # Still have to run this light one
+	    return
 	elif self.service:
 	    self.state = S_REMOTE    #  Search done, need to synchronize with other items
         elif not isinstance(pred, HeavyBuiltIn):
@@ -1414,7 +1428,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                 
         self.quad = q[0], q[1], q[2], q[3]  # yuk
 
-        if self.state in [S_NOT_LIGHT, S_LIGHT_EARLY, S_NEED_DEEP]: # Not searched yet
+        if self.state in [S_NOT_LIGHT, S_LIGHT_EARLY, S_NEED_DEEP, S_LIGHT_UNS_GO]: # Not searched yet
             for p in PRED, SUBJ, OBJ:
                 x = self.quad[p]
                 if isinstance(x, Formula):
@@ -1438,8 +1452,8 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                 elif self.state == S_HEAVY_WAIT: self.state = S_HEAVY_READY
         if diag.chatty_flag > 90:
             progress("...bound becomes ", `self`)
-        if self.state == S_DONE: return 0
-        return [] # continue
+        if self.state == S_DONE: return []
+        return [({}, None)] # continue
 
     def __repr__(self):
         """Diagnostic string only"""
