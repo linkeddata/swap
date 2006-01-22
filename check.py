@@ -54,7 +54,7 @@ def fail(str, level=0):
     return None
 
 def fyi(str, level=0, thresh=40):
-    if True or chatty >= thresh:
+    if chatty >= thresh:
 	progress(" "*(level*4),  str)
     return None
 
@@ -326,27 +326,45 @@ Bindings:%s
 	    result =  pred.evalObj(subj, None, None, None, None)
 	    fyi("Re-checking builtin %s  result %s against quoted %s"
 		%(pred, result, obj))
-	    if n3Entails(obj, result) and n3Entails(result, obj):
-		fyi("Re-checked OK builtin %s  result %s against quoted %s"
-		%(pred, result, obj))
-		checked[r] = f
-		return f
+	    if n3Entails(obj, result):
+		fyi("Ok for n3Entails(obj, result), checking reverse.")
+	        if n3Entails(result, obj):
+		    fyi("Re-checked OK builtin %s  result %s against quoted %s"
+		    %(pred, result, obj))
+		    checked[r] = f
+		    return f
+		else:
+		    fyi("Failed reverse n3Entails!\n\n\n")
+	    else:
+		fyi("Failed forward n3Entails!\n\n\n")
+		v = verbosity()
+		setVerbosity(100)
+		n3Entails(obj, result)
+		setVerbosity(v)
+
 ##	else:
 ##            if not isinstance(pred, Function):
 ##                print 'not a function'
 ##            if not isinstance(obj. Formula):
 ##                print 'not a formula'
-	s, o = subj, obj
+	s, o, r = subj, obj, result
 	if isinstance(subj, Formula): s = subj.n3String()
 	if isinstance(obj, Formula): o = obj.n3String()
+	if isinstance(result, Formula): r = obj.n3String()
+	
 ##	if n3Entails(result, obj) and not n3Entails(obj, result): a = 0
 ##	elif n3Entails(obj, result) and not n3Entails(result, obj): a = 1
 ##	else: a = 2
 	return fail("""Built-in fact does not give correct results:
-	subject: %s
+	PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
 	predicate: %s
+	SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+	subject: %s
+	OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
 	object: %s
-	""" % (s, pred, o), level)
+	RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+	result: %s
+	""" % (s, pred, o, r), level)
 	
     elif t is reason.Extraction:
 	r2 = proof.the(r, reason.because)
@@ -443,7 +461,7 @@ def main():
     if proved != None:
 	fyi("Proof looks OK.   %i Steps" % proofSteps, thresh=5)
 	setVerbosity(0)
-	print proved.n3String()
+	print proved.n3String().encode('utf-8')
 	exit(0)
     progress("Proof invalid.")
     exit(-1)
