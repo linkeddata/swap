@@ -32,7 +32,7 @@
 :ta9 a test:CwmTest;
     test:referenceOutput <ref/access-1.response>;
     test:description   "Check access request and credentials";
-    test:arguments     """--crypto crypto/access-rule.n3 --think --purge-rules --with access-1.request""".
+    test:arguments     """--crypto crypto/access-rule.n3 --think --purge-rules --with crypto/access-1.request""".
  
 
 

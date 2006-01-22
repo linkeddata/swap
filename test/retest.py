@@ -8,7 +8,7 @@ Options:
 			Or just by themselves at end of command line after options
 --normal        -n      Do normal tests, checking output NOW DEFAULT - NOT NEEDED
 --chatty        -c	Do tests with debug --chatty=100 (flag just check doesn't crash)
---proof         -p      Do tests generating and cheking a proof
+--proof         -p      Do tests generating and cheking a proof (if a test:CwmProofTest)
 --start=13      -s 13   Skip the first 12 tests
 --verbose	-v      Print what you are doing as you go
 --ignoreErrors  -i	Print error message but plough on though more tests if errors found
@@ -56,6 +56,12 @@ import sys
 import re
 
 
+normal = 1
+chatty = 0
+proofs = 0
+verbose = 0
+no_action = 0
+
 def localize(uri):
     """Get URI relative to where this lives"""
     import uripath
@@ -75,8 +81,9 @@ def usage():
     print __doc__
 
 def execute(cmd1):
-    global verbose
+    global verbose, no_action
     if verbose: print "    "+cmd1
+    if no_action: return
     result = system(cmd1)
     if result != 0:
 	raise RuntimeError("Error %i executing %s" %(result, cmd1))
@@ -92,7 +99,8 @@ def diff(case, ref=None, prog="diff -Bbwu"):
         a.close()
     diffcmd = """%s %s ,temp/%s >,diffs/%s""" %(prog, ref, case, case)
     if verbose: print "  ", diffcmd
-    result = system(diffcmd)
+    if no_action: result = 0
+    else: result = system(diffcmd)
     if result < 0:
 	raise problem("Comparison fails: result %i executing %s" %(result, diffcmd))
     if result > 0: print "Files differ, result=", result
@@ -150,11 +158,11 @@ def rdfcompare(case, ref=None):
 	raise problem("Comparison fails: result %s executing %s" %(result, diffcmd))
     return result
 
+
+
 def main():
+    global verbose, proofs, chatty, normal, no_action
     start = 1
-    normal = 1
-    chatty = 0
-    proofs = 0
     cwm_command='../cwm.py'
     python_command='python'
     global ploughOn # even if error
@@ -168,15 +176,16 @@ def main():
         a.write('')
         a.close()
     try:
-        opts, testFiles = getopt.getopt(sys.argv[1:], "hs:ncipf:v",
-	    ["help", "start=", "testsFrom=", "normal", "chatty", "ignoreErrors", "proofs", "verbose","overwrite","cwm="])
+        opts, testFiles = getopt.getopt(sys.argv[1:], "h?s:nNcipf:v",
+	    ["help", "start=", "testsFrom=", "no-action", "No-normal", "chatty",
+		"ignoreErrors", "proofs", "verbose","overwrite","cwm="])
     except getopt.GetoptError:
         # print help information and exit:
         usage()
         sys.exit(2)
     output = None
     for o, a in opts:
-        if o in ("-h", "--help"):
+        if o in ("-h", "-?", "--help"):
             usage()
             sys.exit()
         if o in ("-v", "--verbose"):
@@ -187,8 +196,10 @@ def main():
             start = int(a)
 	if o in ("-f", "--testsFrom"):
 	    testFiles.append(a)
-	if o in ("-n", "--normal"):
-	    normal = 1
+	if o in ("-n", "--no-action"):
+	    no_action = 1
+	if o in ("-N", "--No-normal"):
+	    normal = 0
 	if o in ("-c", "--chatty"):
 	    chatty = 1
 	if o in ("-p", "--proofs"):
@@ -245,7 +256,7 @@ def main():
 	environment = kb.the(t, test.environment)
 	if environment == None: env=""
 	else: env = str(environment) + " "
-	testData.append((t.uriref(), case, refFile, description, env, arguments, verboseDebug))
+	testData.append((t, t.uriref(), case, refFile, description, env, arguments, verboseDebug))
 
     for t in kb.each(pred=rdf.type, obj=rdft.PositiveParserTest):
 
@@ -397,7 +408,7 @@ def main():
                  + perfTests + n3PositiveTests + n3NegativeTests
     if verbose: print "RDF parser tests: %i" % rdfTests
 
-    for u, case, refFile, description, env, arguments, verboseDebug in testData:
+    for t, u, case, refFile, description, env, arguments, verboseDebug in testData:
 	tests = tests + 1
 	if tests < start: continue
 	
@@ -419,13 +430,15 @@ def main():
 	    execute("""%s %s %s --chatty=100  %s  &> /dev/null""" %
 		(env, python_command, cwm_command, arguments))	
 
-	if proofs:
+	if proofs and kb.contains(t, rdf.type, test.CwmProofTest):
 	    execute("""%s %s %s --quiet %s --base=a --why  > ,proofs/%s""" %
 		(env, python_command, cwm_command, arguments, case))
 	    execute("""%s ../check.py < ,proofs/%s | %s > ,temp/%s""" %
 		(python_command, case, cleanup , case))	
 	    if diff(case, refFile):
 		problem("######### from proof case %s: %scwm %s" %( case, env, arguments))
+	else:
+	    progress("No proof for "+`t`+ " "+`proofs`)
 	passes = passes + 1
 
 

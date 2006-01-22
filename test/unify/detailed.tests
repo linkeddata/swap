@@ -7,18 +7,18 @@
 
 
 :t553 a test:CwmTest;
-    test:referenceOutput "ref/unify2.out";
+    test:referenceOutput <ref/unify1.out>;
     test:description   "log:incldues looking for @forAll";
-    test:arguments     """unify2.n3 --think --data""".
+    test:arguments     """unify/unify1.n3 --think --data""".
 
 
-:t555 a test:CwmTest;
-    test:referenceOutput "ref/unify2.out";
+:t554 a test:CwmTest;
+    test:referenceOutput <ref/unify2.out>;
     test:description   "Query looking for @forAll";
-    test:arguments     """unify2.n3 --think --data""".
+    test:arguments     """unify/unify2.n3 --think --data""".
 
 
-:t555 a test:CwmTest;
-    test:referenceOutput "ref/unify2.out";
-    test:description   "Query looking for @forAll";
-    test:arguments     """unify2.n3 --think --why """.
+#:t555 a test:CwmTest;
+#    test:referenceOutput <ref/unify3.out>;
+#    test:description   "Query looking for @forAll";
+#    test:arguments     """unify/unify3.n3 --think --why """.
