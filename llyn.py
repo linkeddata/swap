@@ -1063,7 +1063,8 @@ class BI_universalVariableName(RDFBuiltIn, MultipleFunction):
 	if not isinstance(subj, Formula): return None
 	s = str(obj)
 	for v in subj.universals():
-	    if v.uriref() == s: return 1
+            if v is s: return 1
+#	    if v.uriref() == s: return 1
 	return 0
 
     def evalObj(self,subj, queue, bindings, proof, query):

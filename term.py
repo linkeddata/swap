@@ -1023,7 +1023,7 @@ class Literal(Term):
 	return Set()
 
     def __repr__(self):
-        return '"' + self.string[0:8] + '"'
+        return '"' + self.string[0:4] + '...' + self.string[-4:] + '"'
 #        return self.string
 
     def asPair(self):

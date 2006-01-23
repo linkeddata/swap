@@ -433,7 +433,9 @@ def buildPattern(workingContext, template):
 	unmatched.append(StoredStatement((workingContext,
 		template.store.universalVariableName,
 		workingContext,
-		workingContext.store.newLiteral(v.uriref()))))
+                v
+#		workingContext.store.newLiteral(v.uriref())
+                                          )))
     return unmatched
     
     
@@ -557,6 +559,7 @@ def testIncludes(f, g, _variables=Set(),  bindings={}, interpretBuiltins = 0):
 
     unmatched = buildPattern(f, g)
     templateExistentials = g.existentials()
+    more_variables = g.universals().copy()
     _substitute({g: f}, unmatched)
     
 #    if g.universals() != Set():
@@ -579,7 +582,7 @@ def testIncludes(f, g, _variables=Set(),  bindings={}, interpretBuiltins = 0):
 		template = g,
 		variables=Set(),
                 interpretBuiltins = interpretBuiltins,
-		existentials=_variables | templateExistentials,
+		existentials=_variables | templateExistentials | more_variables,
 		justOne=1, mode="").resolve()
 
     if diag.chatty_flag >30: progress("=================== end testIncludes =" + `result`)
@@ -1117,7 +1120,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
             elif isinstance(x, Formula) or isinstance(x, List): # expr  @@ Set  @@@@@@@@@@ Check and CompundTerm>???
                 ur = x.occurringIn(allvars)
                 self.neededToRun[p] = ur
-                if ur != Set():# or isinstance(x, Formula):
+                if ur != Set() or isinstance(x, Formula):
                     hasUnboundCoumpundTerm = 1     # Can't search directly
 		    self.searchPattern[p] = None   # can bind this if we recurse
 		    
