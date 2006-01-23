@@ -430,15 +430,16 @@ def main():
 	    execute("""%s %s %s --chatty=100  %s  &> /dev/null""" %
 		(env, python_command, cwm_command, arguments))	
 
-	if proofs and kb.contains(t, rdf.type, test.CwmProofTest):
+	if proofs and kb.contains(subj=t, pred=rdf.type, obj=test.CwmProofTest):
 	    execute("""%s %s %s --quiet %s --base=a --why  > ,proofs/%s""" %
 		(env, python_command, cwm_command, arguments, case))
 	    execute("""%s ../check.py < ,proofs/%s | %s > ,temp/%s""" %
 		(python_command, case, cleanup , case))	
 	    if diff(case, refFile):
 		problem("######### from proof case %s: %scwm %s" %( case, env, arguments))
-	else:
-	    progress("No proof for "+`t`+ " "+`proofs`)
+#	else:
+#	    progress("No proof for "+`t`+ " "+`proofs`)
+#	    progress("@@ %s" %(kb.each(t,rdf.type)))
 	passes = passes + 1
 
 

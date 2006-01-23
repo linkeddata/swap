@@ -57,11 +57,10 @@
     test:arguments     """--rdf=T xml-syntax/in-xml.xml -n3""".
 
 
-:t1004 a test:CwmTest, test:CwmProofTest;
+:t1004 a test:CwmTest;
     test:referenceOutput <ref/in-xml.n3>;
-    test:description   "Ignore RDF embedded in foreign XML";
+    test:description   "Ignore RDF embedded in foreign XML -> empty formula";
     test:arguments     """--rdf xml-syntax/in-xml.xml -n3""".
-
 
 :t1005 a test:CwmTest;
     test:referenceOutput <ref/reluri-1.rdf>;
