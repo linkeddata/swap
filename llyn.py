@@ -722,6 +722,11 @@ class IndexedFormula(Formula):
 	    if diag.chatty_flag>70: progress("Substitions %s generated %s" %(bindings, newBindings))
 	return
 
+    def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
+        from query import n3Entails, testIncludes
+        return n3Entails(other, self, vars=vars, existentials=existentials) \
+               and n3Entails(self, other, vars=vars, existentials=existentials, bindings=bindings)
+
 
 
 def comparePair(self, other):
@@ -1053,7 +1058,7 @@ class BI_vars(LightBuiltIn, Function):
         F.universals().update(subj.universals())
         return F.close()
 
-class BI_universalVariableName(RDFBuiltIn, MultipleFunction):
+class BI_universalVariableName(RDFBuiltIn): #, MultipleFunction):
     """Is the object the name of a universal variable in the subject?
     Runs even without interpretBuitins being set.  
     Used internally in query.py for testing for 
@@ -1062,9 +1067,9 @@ class BI_universalVariableName(RDFBuiltIn, MultipleFunction):
     def eval(self, subj, obj, queue, bindings, proof, query):
 	if not isinstance(subj, Formula): return None
 	s = str(obj)
+	return obj in subj.universals()
 	for v in subj.universals():
-            if v is s: return 1
-#	    if v.uriref() == s: return 1
+	    if v.uriref() == s: return 1
 	return 0
 
     def evalObj(self,subj, queue, bindings, proof, query):

@@ -53,7 +53,7 @@ def fail(str, level=0):
     raise RuntimeError
     return None
 
-def fyi(str, level=0, thresh=40):
+def fyi(str, level=0, thresh=-50):
     if chatty >= thresh:
 	progress(" "*(level*4),  str)
     return None

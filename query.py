@@ -66,6 +66,35 @@ stateName = {
     S_REMOTE :   "Remote",
     S_SATISFIED:	   "Satis" }
 
+
+class BackwardChainer(object): #for now
+
+    ##Euler anti-looping. Need rule and goal (made from antecendent of rule) in stack. If that pair returns, fail
+    def query(self, pattern, vars):
+        first_pattern = [tuple(vars)] + self.processTriples(pattern)
+        backward_chain([first_pattern], [])
+
+    def backward_chain(chains, bindings):
+        chain = chains.pop()
+        end = chain.pop()
+        for triple in self.formula.statementsMatching(end.pattern):
+            b = {}
+            if triple.unify(end, bindings = b):
+                newChain = applyBindings(chains, b)
+                if len(newChain) == 1:
+                    bindings.extend(newChain)
+                else:
+                    chains.append(newChain)
+        for triple in rulesThatHaveTailMatching(end.pattern):
+            tail, _, head = rule.spo()
+            b = {}
+            if head.unify(end, bindings = b): #Only one triple. Need to properly say that
+                newChain = applyBindings(chain, b)
+                newTriples = self.processTriples(tail, b)
+                newChain.extend(newTriples)
+                chains.append(newChain)
+
+
 def think(knowledgeBase, ruleFormula=None, mode="", why=None):
     """Forward-chaining inference
     
@@ -589,7 +618,42 @@ def testIncludes(f, g, _variables=Set(),  bindings={}, interpretBuiltins = 0):
     return result
 
 
+def n3Entails(f, g, vars=Set([]), existentials=Set([]),  bindings={}):    
+    """Return whether or nor f contains a top-level formula equvalent to g.
+    Just a test: no bindings returned."""
+    if diag.chatty_flag >30: progress("Query.py n3Entails ============")
+#    raise RuntimeError()
+    if not(isinstance(f, Formula) and isinstance(g, Formula)): return False
+
+    assert f.canonical is f
+    assert g.canonical is g
+
+    unmatched = buildPattern(f, g)
+    templateExistentials = g.existentials() | existentials
+    more_variables = g.universals() | vars
+    _substitute({g: f}, unmatched)
     
+    if bindings != {}: _substitute(bindings, unmatched)
+
+    if diag.chatty_flag > 20:
+	progress( "# testIncludes BUILTIN, %i terms in template %s, %i unmatched, %i template variables" % (
+	    len(g.statements),
+	    `g`[-8:], len(unmatched), len(templateExistentials)))
+	if diag.chatty_flag > 80:
+	    for v in vars:
+		progress( "    Variable: " + `v`[-8:])
+
+    result = Query(f.store,
+		unmatched=unmatched,
+		template = g,
+		variables=Set(),
+                interpretBuiltins = False,
+		existentials= templateExistentials | more_variables,
+		justReturn=1, mode="").resolve()
+
+    if diag.chatty_flag >30: progress("=================== end testIncludes =" + `result`)
+    if not result: return []
+    return [(x, None) for x in result]
 
 
 ############################################################## Query engine
@@ -631,6 +695,7 @@ class Query(Formula):
 	       rule = None,		    # The rule statement
                interpretBuiltins = 0,        # List of contexts in which to use builtins
                justOne = 0,         # Flag: Stop when you find the first one
+               justReturn = 0,      # Flag: Return bindings, don't conclude
 	       mode = "",	    # Character flags modifying modus operandi
 	    meta = None):	    # Context to check for useful info eg remote stuff
 
@@ -657,6 +722,8 @@ class Query(Formula):
 	self.meta = meta
 	self.mode = mode
 	self.lastCheckedNumberOfRedirections = 0
+	self.bindingList = []
+	self.justReturn = justReturn
         for quad in unmatched:
             item = QueryItem(self, quad)
             if not item.setup(allvars=variables|existentials, unmatched=unmatched,
@@ -670,7 +737,10 @@ class Query(Formula):
 	
     def resolve(self):
 	if hasattr(self, "noWay"): return 0
-        return self.matchFormula(self.statements, self.variables, self._existentialVariables)
+        k = self.matchFormula(self.statements, self.variables, self._existentialVariables)
+        if self.justReturn:
+            return self.bindingList
+        return k
 
     def checkRedirectsInAlready(self):
 	"""Kludge"""
@@ -695,6 +765,10 @@ class Query(Formula):
 
 	Returns the number of statements added."""
 	if self.justOne: return 1   # If only a test needed
+	if self.justReturn:
+            if bindings not in self.bindingList:
+                self.bindingList.append(bindings)
+            return 1
 
         if diag.chatty_flag >60:
 			progress( "Concluding tentatively...%r" % bindings)
