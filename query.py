@@ -67,32 +67,7 @@ stateName = {
     S_SATISFIED:	   "Satis" }
 
 
-class BackwardChainer(object): #for now
 
-    ##Euler anti-looping. Need rule and goal (made from antecendent of rule) in stack. If that pair returns, fail
-    def query(self, pattern, vars):
-        first_pattern = [tuple(vars)] + self.processTriples(pattern)
-        backward_chain([first_pattern], [])
-
-    def backward_chain(chains, bindings):
-        chain = chains.pop()
-        end = chain.pop()
-        for triple in self.formula.statementsMatching(end.pattern):
-            b = {}
-            if triple.unify(end, bindings = b):
-                newChain = applyBindings(chains, b)
-                if len(newChain) == 1:
-                    bindings.extend(newChain)
-                else:
-                    chains.append(newChain)
-        for triple in rulesThatHaveTailMatching(end.pattern):
-            tail, _, head = rule.spo()
-            b = {}
-            if head.unify(end, bindings = b): #Only one triple. Need to properly say that
-                newChain = applyBindings(chain, b)
-                newTriples = self.processTriples(tail, b)
-                newChain.extend(newTriples)
-                chains.append(newChain)
 
 
 def think(knowledgeBase, ruleFormula=None, mode="", why=None):
@@ -466,7 +441,19 @@ def buildPattern(workingContext, template):
 #		workingContext.store.newLiteral(v.uriref())
                                           )))
     return unmatched
-    
+
+def buildStrictPattern(workingContext, template):
+    unmatched = buildPattern(workingContext, template)
+    for v in template.existentials():
+	if diag.chatty_flag > 100: progress(
+	    "Tempate %s has existentialVariableName %s, formula is %s" % (template, v, template.debugString()))
+	unmatched.append(StoredStatement((workingContext,
+		template.store.existentialVariableName,
+		workingContext,
+                v
+#		workingContext.store.newLiteral(v.uriref())
+                                          )))
+    return unmatched
     
 nextRule = 0
 class Rule:
@@ -585,7 +572,7 @@ def testIncludes(f, g, _variables=Set(),  bindings={}, interpretBuiltins = 0):
 
     assert f.canonical is f
     assert g.canonical is g
-
+    f = f.renameVars()
     unmatched = buildPattern(f, g)
     templateExistentials = g.existentials()
     more_variables = g.universals().copy()
@@ -627,8 +614,8 @@ def n3Entails(f, g, vars=Set([]), existentials=Set([]),  bindings={}):
 
     assert f.canonical is f
     assert g.canonical is g
-
-    unmatched = buildPattern(f, g)
+    f = f.renameVars()
+    unmatched = buildStrictPattern(f, g)
     templateExistentials = g.existentials() | existentials
     more_variables = g.universals() | vars
     _substitute({g: f}, unmatched)
@@ -646,12 +633,12 @@ def n3Entails(f, g, vars=Set([]), existentials=Set([]),  bindings={}):
     result = Query(f.store,
 		unmatched=unmatched,
 		template = g,
-		variables=Set(),
+		variables=more_variables,
                 interpretBuiltins = False,
-		existentials= templateExistentials | more_variables,
+		existentials= templateExistentials ,
 		justReturn=1, mode="").resolve()
 
-    if diag.chatty_flag >30: progress("=================== end testIncludes =" + `result`)
+    if diag.chatty_flag >30: progress("=================== end n3Entails =" + `result`)
     if not result: return []
     return [(x, None) for x in result]
 
@@ -767,6 +754,7 @@ class Query(Formula):
 	if self.justOne: return 1   # If only a test needed
 	if self.justReturn:
             if bindings not in self.bindingList:
+                progress('CONCLUDE bindings = %s' % bindings)
                 self.bindingList.append(bindings)
             return 1
 
@@ -1200,9 +1188,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 		    
 	    if diag.chatty_flag > 98: progress("        %s needs to run: %s"%(`x`, `self.neededToRun[p]`))
                 
-	self.short, self.myIndex = con.searchable(self.searchPattern[SUBJ],
-                                           self.searchPattern[PRED],
-                                           self.searchPattern[OBJ])
+	self.updateMyIndex(con)
         if isinstance(pred, RDFBuiltIn) or (
 	    interpretBuiltins and isinstance(pred, LightBuiltIn)):
             if self.canRun(): self.state = S_LIGHT_UNS_GO  # Can't do it here
@@ -1506,17 +1492,25 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
         self.quad = q[0], q[1], q[2], q[3]  # yuk
 
         if self.state in [S_NOT_LIGHT, S_LIGHT_EARLY, S_NEED_DEEP, S_LIGHT_UNS_GO]: # Not searched yet
-            for p in PRED, SUBJ, OBJ:
+            hasUnboundCoumpundTerm = 0
+            for p in PRED, SUBJ, OBJ :
                 x = self.quad[p]
-                if isinstance(x, Formula):
-                    if self.neededToRun[p]!= Set():
-                        self.short = INFINITY  # Forget it
-                        break
+                if isinstance(x, Formula): # expr  @@ Set  @@@@@@@@@@ Check and CompundTerm>???
+                    ur = x.occurringIn(self.neededToRun[p])
+                    self.neededToRun[p] = ur
+                    hasUnboundCoumpundTerm = 1     # Can't search directly
+                    self.searchPattern[p] = None   # can bind this if we recurse
+
+        
+##            for p in PRED, SUBJ, OBJ:
+##                x = self.quad[p]
+##                if isinstance(x, Formula):
+##                    if self.neededToRun[p]!= Set():
+##                        self.short = INFINITY  # Forget it
+##                        break
             else:
-		self.short, self.myIndex = con.searchable(
-					    self.searchPattern[SUBJ],
-                                           self.searchPattern[PRED],
-                                           self.searchPattern[OBJ])
+		self.updateMyIndex(con)
+
             if self.short == 0:
                 self.searchDone()
 	else:
@@ -1531,6 +1525,20 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
             progress("...bound becomes ", `self`)
         if self.state == S_DONE: return []
         return [({}, None)] # continue
+
+    def updateMyIndex(self, formula):
+        self.short, self.myIndex = formula.searchable(
+					    self.searchPattern[SUBJ],
+                                           self.searchPattern[PRED],
+                                           self.searchPattern[OBJ])
+##        self.myIndex = []
+##        for triple in myIndex:
+##            for loc in SUBJ, PRED, OBJ:
+##                node = triple[loc]
+##                if node in formula.variables() and self.searchPattern[loc] is not None:
+##                    break
+##            else:
+##                self.myIndex.append(triple)
 
     def __repr__(self):
         """Diagnostic string only"""

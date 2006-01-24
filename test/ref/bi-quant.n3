@@ -10,6 +10,8 @@
     
     :testb1     a :FAILURE .
     
+    :testb1n     a :success .
+    
     :testb1nd     a :success .
     
     :testb2     a :success .
@@ -17,6 +19,8 @@
     :testb2d     a :success .
     
     :testc1     a :success .
+    
+    :testc1n     a :FAILURE .
     
     :testc1nd     a :FAILURE .
     

@@ -399,6 +399,31 @@ class Formula(AnonymousNode, CompoundTerm):
 		    set = set | y.occurringIn(vars)
 	return set
 
+    def renameVars(self):
+        m = {}
+        n = {}
+        F1 = self.newFormula()
+        F1.loadFormulaWithSubstitution(self)
+        for v in F1.existentials().copy():
+            m[v] = F1.newBlankNode()
+        for v in F1.universals().copy():
+            n[v] = F1.newUniversal()
+        e = F1.existentials()
+        u = F1.universals()
+        for var in m:
+            e.remove(var)
+        for var in n:
+            u.remove(var)
+        m.update(n)
+        newF = F1.substitution(m, why=Because("Vars must be renamed"))
+        m2 = {}
+        for triple in newF:
+            for node in triple.spo():
+                if isinstance(node, Formula):
+                    if node not in m2:
+                        m2[node] = node.renameVars()
+        return newF.substitution(m2, why=Because("Vars in subexpressions must be renamed"))
+
     def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
 	"""See Term.unify()
 	"""

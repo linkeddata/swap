@@ -33,7 +33,7 @@ rdf=Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
 rei = Namespace("http://www.w3.org/2004/06/rei#")
 
 chatty = 0
-debugLevelForInference = 0
+debugLevelForInference = 1000
 debugLevelForParsing = 0
 nameBlankNodes = 0
 proofSteps = 0
@@ -53,8 +53,8 @@ def fail(str, level=0):
     raise RuntimeError
     return None
 
-def fyi(str, level=0, thresh=-50):
-    if chatty >= thresh:
+def fyi(str, level=0, thresh=50):
+    if True or chatty >= thresh:
 	progress(" "*(level*4),  str)
     return None
 
@@ -103,49 +103,49 @@ def n3Entails(f, g, skipIncludes=0, level=0):
 
     v = verbosity()
     setVerbosity(debugLevelForInference)
-	
-    if f is g:
-	fyi("Yahooo! #########  ")
-	setVerbosity(v)
-	return 1
+    try:
+        if f is g:
+            fyi("Yahooo! #########  ")
+            return 1
 
-    if not isinstance(f, Formula) or not isinstance(g, Formula):
-        return 0
+        if not isinstance(f, Formula) or not isinstance(g, Formula):
+            return 0
 
-    if testIncludes(f,g):
-	fyi("Indexed query works looking in %s for %s" %(f,g), level)
-	setVerbosity(v)
- 	return 1
+        if testIncludes(f,g):
+            fyi("Indexed query works looking in %s for %s" %(f,g), level)
+            
+            return 1
 
-    return False
-    return bool(g.n3EntailedBy(f))
-    fyi("Indexed query fails to find match, try unification", level)
-    for s in g:
-	context, pred, subj, obj = s.quad
-	if skipIncludes and pred is context.store.includes:
-	    fyi("(log:includes found in antecedent, assumed good)", level) 
-	    continue
-	if f.statementsMatching(pred=pred, subj=subj,
-		obj=obj) != []:
-	    fyi("Statement found in index: %s" % s, level)
-	    continue
+    #    return False
+        return bool(g.n3EntailedBy(f))
+        fyi("Indexed query fails to find match, try unification", level)
+        for s in g:
+            context, pred, subj, obj = s.quad
+            if skipIncludes and pred is context.store.includes:
+                fyi("(log:includes found in antecedent, assumed good)", level) 
+                continue
+            if f.statementsMatching(pred=pred, subj=subj,
+                    obj=obj) != []:
+                fyi("Statement found in index: %s" % s, level)
+                continue
 
-	for t in f.statements:
-	    fyi("Trying unify  statement %s" %(`t`), level=level+1, thresh=70) 
-	    if (t[PRED].unify(pred) != [] and
-		t[SUBJ].unify(subj) != [] and 
-		t[OBJ].unify(obj) != []):
-		fyi("Statement unified: %s" % t, level) 
-		break
-	else:
-            setVerbosity(0)
-	    fyi("""n3Entailment failure.\nCan't find: %s=%s\nin formula: %s=%s\n""" %
-			    (g, g.n3String(), f, f.n3String()), level, thresh=1)
-	    fyi("""The triple which failed to match was %s""" % s, thresh=-1)
-	    setVerbosity(v)
-	    return 0
-    setVerbosity(v)
-    return 1
+            for t in f.statements:
+                fyi("Trying unify  statement %s" %(`t`), level=level+1, thresh=70) 
+                if (t[PRED].unify(pred) != [] and
+                    t[SUBJ].unify(subj) != [] and 
+                    t[OBJ].unify(obj) != []):
+                    fyi("Statement unified: %s" % t, level) 
+                    break
+            else:
+                setVerbosity(0)
+                fyi("""n3Entailment failure.\nCan't find: %s=%s\nin formula: %s=%s\n""" %
+                                (g, g.n3String(), f, f.n3String()), level, thresh=1)
+                fyi("""The triple which failed to match was %s""" % s, thresh=-1)
+                return 0
+        
+        return 1
+    finally:
+         setVerbosity(v)
 
     
 
@@ -338,7 +338,7 @@ Bindings:%s
 	    else:
 		fyi("Failed forward n3Entails!\n\n\n")
 		v = verbosity()
-		setVerbosity(100)
+		setVerbosity(0)
 		n3Entails(obj, result)
 		setVerbosity(v)
 
@@ -397,13 +397,14 @@ Bindings:%s
     if g.occurringIn(g.existentials()) != g.existentials(): # Check integrity
 	raise RuntimeError(g.debugString())
 
+    setVerbosity(1000)
     if f is not None and f.unify(g) == []:
-	setVerbosity(150)
-	f.unify(g)
+##	setVerbosity(1000)
+##	f.unify(g)
 	setVerbosity(0)
 	return fail("%s: Calculated formula: %s\ndoes not match given: %s" %
 		(t, g.debugString(), f.debugString()))
-
+    setVerbosity(0)
     checked[r] = g
     fyi("\n\nRESULT of %s %s is:\n%s\n\n" %(t,r,g.n3String()), level, thresh=100)
     return g
