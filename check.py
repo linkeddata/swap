@@ -33,7 +33,7 @@ rdf=Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
 rei = Namespace("http://www.w3.org/2004/06/rei#")
 
 chatty = 0
-debugLevelForInference = 1000
+debugLevelForInference = 000
 debugLevelForParsing = 0
 nameBlankNodes = 0
 proofSteps = 0
@@ -48,13 +48,13 @@ knownReasons = Set([reason.Premise, reason.Parsing,
 
 
 def fail(str, level=0):
-    if True or chatty > 0:
+    if chatty > 0:
 	progress(" "*(level*4), "Proof failed: ", str)
     raise RuntimeError
     return None
 
 def fyi(str, level=0, thresh=50):
-    if True or chatty >= thresh:
+    if chatty >= thresh:
 	progress(" "*(level*4),  str)
     return None
 
@@ -270,7 +270,14 @@ def valid(proof, r=None, level=0):
 	evidenceFormula = evidenceFormula.close()
 	
 	# Check: Every antecedent statement must be included as evidence
-	antecedent = ruleStatement[SUBJ].substitution(bindings)
+	antecedent = proof.newFormula()
+	antecedent.loadFormulaWithSubstitution(ruleStatement[SUBJ], bindings)
+	for k in bindings.values():
+            if k in evidenceFormula.existentials():
+                antecedent.declareExistential(k)
+        antecedent = antecedent.close()
+	
+	#antecedent = ruleStatement[SUBJ].substitution(bindings)
 	fyi("Bindings: %s\nAntecedent after subst: %s" % (
 	    bindings, antecedent.debugString()),
 	    level, 195)
@@ -397,14 +404,14 @@ Bindings:%s
     if g.occurringIn(g.existentials()) != g.existentials(): # Check integrity
 	raise RuntimeError(g.debugString())
 
-    setVerbosity(1000)
+##    setVerbosity(1000)
     if f is not None and f.unify(g) == []:
-##	setVerbosity(1000)
-##	f.unify(g)
+	setVerbosity(1000)
+	f.unify(g)
 	setVerbosity(0)
 	return fail("%s: Calculated formula: %s\ndoes not match given: %s" %
 		(t, g.debugString(), f.debugString()))
-    setVerbosity(0)
+##    setVerbosity(0)
     checked[r] = g
     fyi("\n\nRESULT of %s %s is:\n%s\n\n" %(t,r,g.n3String()), level, thresh=100)
     return g

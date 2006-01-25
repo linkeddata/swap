@@ -538,7 +538,7 @@ class Rule:
 			interpretBuiltins = 1,    # (...)
 			meta = task.workingContext,
 			mode = task.mode)
-    
+        Formula.resetRenames()
 	total = query.resolve()
 	if diag.chatty_flag > 20:
 	    progress("Rule try generated %i new statements" % total)
@@ -573,6 +573,7 @@ def testIncludes(f, g, _variables=Set(),  bindings={}, interpretBuiltins = 0):
     assert f.canonical is f
     assert g.canonical is g
     f = f.renameVars()
+    if diag.chatty_flag >100: progress("Formula we are searching in is\n%s" % f.debugString())
     unmatched = buildPattern(f, g)
     templateExistentials = g.existentials()
     more_variables = g.universals().copy()
@@ -610,10 +611,11 @@ def n3Entails(f, g, vars=Set([]), existentials=Set([]),  bindings={}):
     Just a test: no bindings returned."""
     if diag.chatty_flag >30: progress("Query.py n3Entails ============")
 #    raise RuntimeError()
-    if not(isinstance(f, Formula) and isinstance(g, Formula)): return False
+    if not(isinstance(f, Formula) and isinstance(g, Formula)): return []
 
     assert f.canonical is f
     assert g.canonical is g
+    if len(f) != len(g): return [] 
     f = f.renameVars()
     unmatched = buildStrictPattern(f, g)
     templateExistentials = g.existentials() | existentials
@@ -754,7 +756,7 @@ class Query(Formula):
 	if self.justOne: return 1   # If only a test needed
 	if self.justReturn:
             if bindings not in self.bindingList:
-                progress('CONCLUDE bindings = %s' % bindings)
+#                progress('CONCLUDE bindings = %s' % bindings)
                 self.bindingList.append(bindings)
             return 1
 
@@ -902,7 +904,8 @@ class Query(Formula):
                         newBindingItems.extend(reallyNewBindings.items())
                         newBindings.update(reallyNewBindings)
                     else:
-                        progress("@@@  Not in existentials or variables but now bound:", `pair[0]`)
+                        if diag.chatty_flag > 0:
+                            progress("@@@  Not in existentials or variables but now bound:", `pair[0]`)
                 elif diag.tracking: bindings.update({pair[0]: pair[1]})
                 if not isinstance(pair[0], CompoundTerm) and ( # Hack - else rules13.n3 fails @@
 		    pair[0] in existentials):    # Hack ... could be bnding from nested expression
@@ -968,13 +971,18 @@ class Query(Formula):
 		nbs = query.remoteQuery(items)
 		item.state = S_SATISFIED  # do not put back on list
             elif state ==S_HEAVY_WAIT or state == S_LIGHT_WAIT:
-
-		if diag.chatty_flag > 20 :
-		    progress("@@@@ Warning: query can't find term which will work.")
-		    progress( "   state is %s, queue length %i" % (state, len(queue)+1))
-		    progress("@@ Current item: %s" % `item`)
-		    progress(queueToString(queue))
-		return 0  # Forget it
+                if item.quad[PRED] is query.store.universalVariableName or \
+                   item.quad[PRED] is query.store.existentialVariableName:
+                    ### We will never bind this variable in the first place
+                    item.state = S_SATISFIED
+                    nbs = []
+                else:
+                    if diag.chatty_flag > 20 :
+                        progress("@@@@ Warning: query can't find term which will work.")
+                        progress( "   state is %s, queue length %i" % (state, len(queue)+1))
+                        progress("@@ Current item: %s" % `item`)
+                        progress(queueToString(queue))
+                    return 0  # Forget it
             else:
                 raise RuntimeError, "Unknown state " + `state`
 		
@@ -1212,7 +1220,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 	nbs = []  # Failure
 	if (isinstance(subj, Formula)
 	    and isinstance(obj, Formula)):
-
+            subj = subj.renameVars()
 	    more_unmatched = buildPattern(subj, obj)
 	    more_variables = obj.variables().copy()
 	    _substitute({obj: subj}, more_unmatched)

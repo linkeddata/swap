@@ -3,9 +3,9 @@
     
     data:_g0     :N  [
              :familyName "Hacker";
-             :givenName "Alice" ] .
+             :givenName "Bob" ] .
     
     data:_g1     :N  [
              :familyName "Hacker";
-             :givenName "Bob" ] .
+             :givenName "Alice" ] .
     
