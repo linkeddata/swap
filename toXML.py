@@ -553,7 +553,8 @@ class XMLWriter:
 	    else:
 		break
 	while i<len(uriref):
-            if (not isXMLChar(uriref[i], NCNameStartChar)) or uriref[i-1] == ':':
+            if (not isXMLChar(uriref[i], NCNameStartChar)) or (uriref[i-1] == ':' and
+                                                               uriref.rfind(':', 0, i-1) < 0):
                 i = i+1
             else:
                 break

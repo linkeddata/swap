@@ -453,6 +453,14 @@ def buildStrictPattern(workingContext, template):
                 v
 #		workingContext.store.newLiteral(v.uriref())
                                           )))
+##    for v in template.variables():
+##	if diag.chatty_flag > 100: progress(
+##	    "Tempate %s has enforceUniqueBinding %s, formula is %s" % (template, v, template.debugString()))
+##	unmatched.append(StoredStatement((workingContext,
+##		template.store.enforceUniqueBinding,
+##                v,
+##		workingContext.store.newLiteral(v.uriref())
+##                                          )))
     return unmatched
     
 nextRule = 0
@@ -540,6 +548,7 @@ class Rule:
 			mode = task.mode)
         Formula.resetRenames()
 	total = query.resolve()
+	Formula.resetRenames(False)
 	if diag.chatty_flag > 20:
 	    progress("Rule try generated %i new statements" % total)
 	return total
@@ -1130,6 +1139,10 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
         for p in ALL4:   # Deep copy!  Prevent crosstalk
             x.neededToRun.append(self.neededToRun[p].copy())  
         x.myIndex = self.myIndex
+        try:
+            x.interpretBuiltins = self.interpretBuiltins
+        except AttributeError:
+            pass
         return x
 
 
@@ -1142,6 +1155,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
         Only called on virgin query item.
 	The mode is a set of character flags about how we think."""
         con, pred, subj, obj = self.quad
+        self.interpretBuiltins = interpretBuiltins
 	self.service = None
 
 	if "r" in mode:
@@ -1243,6 +1257,9 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 	    else:
 		nbs = [({}, None)]
 	else:
+            if isinstance(subj, Formula): subj = subj.n3String()
+            if isinstance(obj, Formula): obj = obj.n3String()
+            raise RuntimeError("Cannot do {%s} log:includes {%s} " % (subj, obj))
 	    progress("""Warning: Type error ignored on builtin:
 		log:include only on formulae """+`item`)
 		 #@@ was RuntimeError exception
@@ -1444,7 +1461,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 	    return
 	elif self.service:
 	    self.state = S_REMOTE    #  Search done, need to synchronize with other items
-        elif not isinstance(pred, HeavyBuiltIn):
+        elif not isinstance(pred, HeavyBuiltIn) or not self.interpretBuiltins:
             self.state = S_DONE  # Done with this one: Do new bindings & stop
         elif self.canRun():
             self.state = S_HEAVY_READY

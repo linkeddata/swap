@@ -48,12 +48,12 @@ knownReasons = Set([reason.Premise, reason.Parsing,
 
 
 def fail(str, level=0):
-    if chatty > 0:
+    if True or chatty > 0:
 	progress(" "*(level*4), "Proof failed: ", str)
     raise RuntimeError
     return None
 
-def fyi(str, level=0, thresh=50):
+def fyi(str, level=0, thresh=-50):
     if chatty >= thresh:
 	progress(" "*(level*4),  str)
     return None
@@ -110,7 +110,7 @@ def n3Entails(f, g, skipIncludes=0, level=0):
 
         if not isinstance(f, Formula) or not isinstance(g, Formula):
             return 0
-
+        #if len(g) != 4: return True #I hope not....
         if testIncludes(f,g):
             fyi("Indexed query works looking in %s for %s" %(f,g), level)
             
@@ -322,7 +322,8 @@ Bindings:%s
                 checked[r] = f
                 return f
             else:
-                return fail("Include test failed")
+                return fail("""Include test failed.
+It seems {%s} log:includes {%s} is false""" % (subj.n3String(), obj.n3String()))
 	if not isinstance(pred, BuiltIn):
 	    return fail("Claimed as fact, but predicate is %s not builtin" % pred, level)
 	if  pred.eval(subj, obj, None, None, None, None):
@@ -380,6 +381,8 @@ Bindings:%s
 	f2 = valid(proof, r2, level)
 	if f2 == None:
 	    return fail("Extraction: couldn't validate formula to be extracted from.", level)
+	if not isinstance(f2, Formula):
+            return fail("Extraction of %s gave something odd, %s" % (r2, f2), level)
 	
 	if not n3Entails(f2, f):
 	    return fail("""Extraction %s not included in formula  %s."""

@@ -3,6 +3,8 @@
 
 { {} log:includes {:a log:equalTo :a} } => { :test1n a :Failure} .
 
+{ {} log:includes {{:a :b :c} log:includes {}} } => { :test2n a :Failure} .
+
 { {} log:notIncludes {:a log:equalTo :a} } => { :test1 a :Success} .
 
 { { :foo :bar (1 2) } log:includes { :foo :bar [rdf:first []]} }
