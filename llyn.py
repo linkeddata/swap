@@ -1099,12 +1099,13 @@ class BI_enforceUniqueBinding(RDFBuiltIn):
     """Is the mapping from the variable in the subject to the name in the object unique?
 
     """
-    pass
-##    def eval(self, subj, obj, queue, bindings, proof, query):
-##	if not isinstance(subj, Formula): return None
-##	s = str(obj)
-##	if subj not in query.backwardMappings:
-##            query.backwardMappings[subj
+    def eval(self, subj, obj, queue, bindings, proof, query):
+	if not isinstance(subj, Formula): return None
+	s = str(obj)
+	if subj not in query.backwardMappings:
+            query.backwardMappings[subj] = s
+            return True
+        return query.backwardMappings[subj] == s
 
 class BI_conjunction(LightBuiltIn, Function):      # Light? well, I suppose so.
     """ The conjunction of a set of formulae is the set of statements which is

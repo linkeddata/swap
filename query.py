@@ -624,7 +624,7 @@ def n3Entails(f, g, vars=Set([]), existentials=Set([]),  bindings={}):
 
     assert f.canonical is f
     assert g.canonical is g
-    if len(f) != len(g): return [] 
+    if len(f) > len(g): return [] 
     f = f.renameVars()
     unmatched = buildStrictPattern(f, g)
     templateExistentials = g.existentials() | existentials
@@ -645,6 +645,7 @@ def n3Entails(f, g, vars=Set([]), existentials=Set([]),  bindings={}):
 		unmatched=unmatched,
 		template = g,
 		variables=more_variables,
+                workingContext = f,
                 interpretBuiltins = False,
 		existentials= templateExistentials ,
 		justReturn=1, mode="").resolve()
@@ -675,6 +676,20 @@ def n3Entails(f, g, vars=Set([]), existentials=Set([]),  bindings={}):
 # When we do the variable substitution for new bindings, these can be reconsidered.
 
 
+class Queue([].__class__):
+    __slots__ = ['statements']
+    list = [].__class__
+
+    def __init__(self, other=[], metaSource = None):
+        self.list.__init__(self, other)
+        if isinstance(metaSource, Queue):
+            for k in self.__slots__:
+                setattr(self, k, getattr(metaSource, k).copy())
+        else:
+            self.statements = Set()
+            pass #fill in slots here
+
+#Queue = [].__class__
 
 class Query(Formula):
     """A query holds a hypothesis/antecedent/template which is being matched aginst (unified with)
@@ -706,7 +721,7 @@ class Query(Formula):
 		"iBuiltIns=1 ")
 
 	Formula.__init__(self, store)
-#        self.statements = []   #  Unmatched with more info
+        self.statements = Queue()   #  Unmatched with more info
 #	self.store = store      # Initialized by Formula
 	self.variables = variables
 	self._existentialVariables = existentials
@@ -782,13 +797,14 @@ class Query(Formula):
 	else: 
 	    if diag.chatty_flag >60:
 			progress( "No duplication check")
-
+        
 	if diag.tracking:
             for loc in xrange(len(evidence)):
                 r = evidence[loc]
                 if isinstance(r, BecauseBuiltInWill):
-                    evidence[loc] = BecauseBuiltIn(*[k.substitution(bindings,
-			why=Because("I said so")) for k in r.args])
+                    
+                    evidence[loc] = BecauseBuiltIn(*[smarterSubstitution(k, bindings,
+			r.args[0]) for k in r.args])
 	    reason = BecauseOfRule(self.rule, bindings=bindings,
 				    evidence=evidence, kb=self.workingContext)
 #	    progress("We have a reason for %s of %s with bindings %s" % (self.rule, reason, bindings))
@@ -1007,7 +1023,14 @@ class Query(Formula):
 		# progress("llyn.py 2738:   nbs = %s" % nbs)
                 for nb, reason in nbs:
 		    assert type(nb) is types.DictType, nb
-                    q2 = []
+                    q2 = Queue([], queue)
+                    if query.justReturn:
+                        if isinstance(reason, StoredStatement):
+                            if reason not in q2.statements and \
+                               reason[CONTEXT] is query.workingContext:
+                                q2.statements.add(reason)
+                            else:
+                                continue
                     for i in queue:
                         newItem = i.clone()
                         q2.append(newItem)  #@@@@@@@@@@  If exactly 1 binding, loop (tail recurse)
@@ -1028,6 +1051,16 @@ class Query(Formula):
             # And loop back to take the next item
 
         if diag.chatty_flag>50: progress("QUERY MATCH COMPLETE with bindings: " + `bindings`)
+        if query.justReturn:
+            try:
+                len(queue.statements)
+                len(query.workingContext)
+            except:
+                print type(queue.statements)
+                print type(query.workingContext)
+                raise
+            if len(queue.statements) != len(query.workingContext):
+                return total
         return query.conclude(bindings,  evidence=evidence)  # No terms left .. success!
 
 
@@ -1680,5 +1713,15 @@ class BuiltInFailed(Exception):
             `reason`))
     
 
+def smarterSubstitution(f, bindings, source):
+    if isinstance(f, Formula):
+        f2 = f.newFormula()
+        f2.loadFormulaWithSubstitution(f, bindings, why=Because("I said so"))
+        if f is not source:
+            newExistentials = f2.occurringIn(source.existentials().intersection(bindings.values()))
+            for n in newExistentials:
+                f2.declareExistential(n)
+        return f2.close()
+    return f.substitution(bindings, why=Because("I said so"))
 
 # ends
