@@ -428,9 +428,8 @@ class Formula(AnonymousNode, CompoundTerm):
         retVal = newF.substitution(m2, why=Because("Vars in subexpressions must be renamed"))
         if self._renameVarsMaps:
             self._renameVarsMaps[-1][self] = retVal
-            self._renameVarsMaps[-1][retVal] = retVal
+#            self._renameVarsMaps[-1][retVal] = retVal
         return retVal
-
 
     def resetRenames(reset = True):
         if reset:

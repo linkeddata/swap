@@ -575,13 +575,16 @@ class Rule:
 def testIncludes(f, g, _variables=Set(),  bindings={}, interpretBuiltins = 0):
     """Return whether or nor f contains a top-level formula equvalent to g.
     Just a test: no bindings returned."""
-    if diag.chatty_flag >30: progress("testIncludes ============")
+    if diag.chatty_flag >30: progress("testIncludes ============\nseeing if %s entails %s" % (f, g))
 #    raise RuntimeError()
     if not(isinstance(f, Formula) and isinstance(g, Formula)): return 0
 
     assert f.canonical is f
     assert g.canonical is g
+    m = diag.chatty_flag
+    diag.chatty_flag = 0
     f = f.renameVars()
+    diag.chatty_flag = m
     if diag.chatty_flag >100: progress("Formula we are searching in is\n%s" % f.debugString())
     unmatched = buildPattern(f, g)
     templateExistentials = g.existentials()
@@ -618,14 +621,19 @@ def testIncludes(f, g, _variables=Set(),  bindings={}, interpretBuiltins = 0):
 def n3Entails(f, g, vars=Set([]), existentials=Set([]),  bindings={}):    
     """Return whether or nor f contains a top-level formula equvalent to g.
     Just a test: no bindings returned."""
-    if diag.chatty_flag >30: progress("Query.py n3Entails ============")
+    if diag.chatty_flag >30: progress("Query.py n3Entails ============\nseeing if %s equals %s" % (f, g))
 #    raise RuntimeError()
     if not(isinstance(f, Formula) and isinstance(g, Formula)): return []
 
     assert f.canonical is f
     assert g.canonical is g
-    if len(f) > len(g): return [] 
+    if f is g: return [({}, None)]
+    if len(f) > len(g): return []
+
+    m = diag.chatty_flag
+    diag.chatty_flag = 0
     f = f.renameVars()
+    diag.chatty_flag = m
     unmatched = buildStrictPattern(f, g)
     templateExistentials = g.existentials() | existentials
     more_variables = g.universals() | vars
@@ -653,6 +661,7 @@ def n3Entails(f, g, vars=Set([]), existentials=Set([]),  bindings={}):
     if diag.chatty_flag >30: progress("=================== end n3Entails =" + `result`)
     if not result: return []
     return [(x, None) for x in result]
+
 
 
 ############################################################## Query engine
@@ -737,6 +746,8 @@ class Query(Formula):
 	self.lastCheckedNumberOfRedirections = 0
 	self.bindingList = []
 	self.justReturn = justReturn
+	if justReturn and not variables:
+            self.justOne = True
         for quad in unmatched:
             item = QueryItem(self, quad)
             if not item.setup(allvars=variables|existentials, unmatched=unmatched,
@@ -777,7 +788,9 @@ class Query(Formula):
 	"""When a match found in a query, add conclusions to target formula.
 
 	Returns the number of statements added."""
-	if self.justOne: return 1   # If only a test needed
+	if self.justOne:
+            self.bindingList = [{}]
+            return 1   # If only a test needed
 	if self.justReturn:
             if bindings not in self.bindingList:
 #                progress('CONCLUDE bindings = %s' % bindings)
@@ -980,7 +993,7 @@ class Query(Formula):
                 nbs = item.tryBuiltin(queue, bindings, evidence=evidence)
             elif (state == S_LIGHT_EARLY or state == S_NOT_LIGHT or
 				    state == S_NEED_DEEP): #  Not searched yet
-                nbs = item.tryDeepSearch()
+                nbs = item.tryDeepSearch(queue)
             elif state == S_HEAVY_READY:  # not light, may be heavy; or heavy ready to run
                 if pred is query.store.includes: # and not diag.tracking:  # don't optimize when tracking?
 		    nbs = item.doIncludes(queue, existentials, variables, bindings)
@@ -1037,6 +1050,7 @@ class Query(Formula):
 		    
                     found = query.matchFormula(q2, variables.copy(), existentials.copy(),
 			    bindings.copy(), nb, evidence = evidence + [reason])
+
 		    if diag.chatty_flag > 91: progress(
 			"Nested query returns %i (nb= %r)" % (found, nb))
                     total = total + found
@@ -1267,6 +1281,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 	nbs = []  # Failure
 	if (isinstance(subj, Formula)
 	    and isinstance(obj, Formula)):
+            oldsubj = subj
             subj = subj.renameVars()
 	    more_unmatched = buildPattern(subj, obj)
 	    more_variables = obj.variables().copy()
@@ -1286,13 +1301,13 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 	    item.state = S_SATISFIED
 	    if diag.tracking:
 		rea = BecauseBuiltInWill(subj, pred, obj)
-		nbs = [({}, rea)]
+		nbs = [({oldsubj: subj}, rea)]
 	    else:
-		nbs = [({}, None)]
+		nbs = [({oldsubj: subj}, None)]
 	else:
             if isinstance(subj, Formula): subj = subj.n3String()
             if isinstance(obj, Formula): obj = obj.n3String()
-            raise RuntimeError("Cannot do {%s} log:includes {%s} " % (subj, obj))
+            #raise RuntimeError("Cannot do {%s} log:includes {%s} " % (subj, obj))
 	    progress("""Warning: Type error ignored on builtin:
 		log:include only on formulae """+`item`)
 		 #@@ was RuntimeError exception
@@ -1418,7 +1433,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
         except (IOError, SyntaxError):
             raise BuiltInFailed(sys.exc_info(), self, pred ),None
         
-    def tryDeepSearch(self):
+    def tryDeepSearch(self, queue):
         """Search the store, unifying nested compound structures
 	
 	Returns lists of list of bindings, attempting if necessary to unify
@@ -1442,6 +1457,8 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 		print self.myIndex, self
 		raise
             for s in self.myIndex :  # for everything matching what we know,
+                if self.query.justReturn and s in queue.statements:
+                    continue
                 nb = {}
 		if diag.chatty_flag > 106: progress("...checking %r" % s)
                 for p in PRED, SUBJ, OBJ:
@@ -1454,8 +1471,8 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 				progress( "Deep: Unify %s with %s vars=%s; ee=%s" %
 				(x, s.quad[p], `self.query.variables`[4:-1],
 				`self.query._existentialVariables`[4:-1]))
-			    nbs1 = x.unify(s.quad[p], self.query.variables,
-				self.query._existentialVariables, {})  # Bindings have all been bound
+			    nbs1 = x.unify(s.quad[p], self.neededToRun[p] & self.query.variables,
+				self.neededToRun[p] & self.query._existentialVariables, {})  # Bindings have all been bound
 			    if diag.chatty_flag > 70:
 				progress( "Unification in %s result binding %s" %(self, nbs1))
 			    if nbs1 == []:
@@ -1589,6 +1606,14 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 					    self.searchPattern[SUBJ],
                                            self.searchPattern[PRED],
                                            self.searchPattern[OBJ])
+        for p in PRED, OBJ :
+            if isinstance(self.quad[p], Formula) and not self.neededToRun[p]:
+                newIndex = []
+                for triple in self.myIndex:
+                    if isinstance(triple[p], Formula) and len(triple[p]) == len(self.quad[p]):
+                        newIndex.append(triple)
+                self.myIndex = newIndex
+        
 ##        self.myIndex = []
 ##        for triple in myIndex:
 ##            for loc in SUBJ, PRED, OBJ:

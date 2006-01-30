@@ -54,7 +54,7 @@ def fail(str, level=0):
     return None
 
 def fyi(str, level=0, thresh=-50):
-    if chatty >= thresh:
+    if True or chatty >= thresh:
 	progress(" "*(level*4),  str)
     return None
 
@@ -111,10 +111,14 @@ def n3Entails(f, g, skipIncludes=0, level=0):
         if not isinstance(f, Formula) or not isinstance(g, Formula):
             return 0
         #if len(g) != 4: return True #I hope not....
-        if testIncludes(f,g):
-            fyi("Indexed query works looking in %s for %s" %(f,g), level)
-            
-            return 1
+        f.resetRenames()
+        try:
+            if testIncludes(f,g):
+                fyi("Indexed query works looking in %s for %s" %(f,g), level)
+                
+                return 1
+        finally:
+            f.resetRenames(False)
 
     #    return False
         return bool(g.n3EntailedBy(f))
@@ -186,7 +190,7 @@ def valid(proof, r=None, level=0):
     
     Returns the formula proved or None if not
     """
-    
+    fyi("Starting valid on %s" % r, level=level, thresh=1000)
     if r == None:
         r = proof.the(pred=rdf.type, obj=reason.Proof)  #  thing to be proved
 	
@@ -281,6 +285,7 @@ def valid(proof, r=None, level=0):
 	fyi("Bindings: %s\nAntecedent after subst: %s" % (
 	    bindings, antecedent.debugString()),
 	    level, 195)
+	fyi("about to test if n3Entails(%s, %s)" % (evidenceFormula, antecedent), level, -1)
 	fyi("about to test if n3Entails(%s, %s)" % (evidenceFormula.n3String(), antecedent.n3String()), level, -1)
 	if not n3Entails(evidenceFormula, antecedent,
 			skipIncludes=1, level=level+1):
@@ -408,6 +413,7 @@ It seems {%s} log:includes {%s} is false""" % (subj.n3String(), obj.n3String()))
 	raise RuntimeError(g.debugString())
 
 ##    setVerbosity(1000)
+    fyi("About to check if proved %s matches given %s" % (g, f), level=level, thresh=100)
     if f is not None and f.unify(g) == []:
 	setVerbosity(1000)
 	f.unify(g)
