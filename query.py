@@ -39,7 +39,7 @@ INFINITY = 1000000000           # @@ larger than any number occurences
 # State values as follows, high value=try first:
 S_UNKNOWN = 	99  # State unknown - to be [re]calculated by setup.
 S_DONE =   	80  # Exhausted all possible ways to saitsfy this. return now.
-S_LIGHT_UNS_GO= 70  # Light, not searched yet, but can run
+S_LIGHT_UNS_READY= 70  # Light, not searched yet, but can run
 S_LIGHT_GO =  	65  # Light, can run  Do this!
 S_NOT_LIGHT =   60  # Not a light built-in, haven't searched yet.
 S_LIGHT_EARLY=	50  # Light built-in, not ready to calculate, not searched yet.
@@ -50,12 +50,12 @@ S_HEAVY_READY=	40  # Heavy built-in, search done,
 S_LIGHT_WAIT=	30  # Light built-in, not enough constants to calculate, search done.
 S_HEAVY_WAIT=	20  # Heavy built-in, too many variables in args to calculate, search done.
 S_REMOTE =	10  # Waiting for local query to be resolved as much as possible
-S_SATISFIED =	 0  # Item has been staisfied, and is no longer a constraint, continue with others
+#S_SATISFIED =	 0  # Item has been staisfied, and is no longer a constraint, continue with others
 
 stateName = { 
     S_UNKNOWN : "????",
     S_DONE :	    "DONE",
-    S_LIGHT_UNS_GO :	"LtUsGo",
+    S_LIGHT_UNS_READY :	"LtUsGo",
     S_LIGHT_GO : "LtGo",
     S_NOT_LIGHT : "NotLt",
     S_LIGHT_EARLY : "LtEarly",
@@ -63,8 +63,8 @@ stateName = {
     S_HEAVY_READY :   "HvGo",
     S_LIGHT_WAIT : "LtWait",
     S_HEAVY_WAIT : "HvWait",
-    S_REMOTE :   "Remote",
-    S_SATISFIED:	   "Satis" }
+    S_REMOTE :   "Remote"}
+#    S_SATISFIED:	   "Satis" }
 
 
 
@@ -819,7 +819,7 @@ class Query(Formula):
                     evidence[loc] = BecauseBuiltIn(*[smarterSubstitution(k, bindings,
 			r.args[0]) for k in r.args])
 	    reason = BecauseOfRule(self.rule, bindings=bindings,
-				    evidence=evidence, kb=self.workingContext)
+			    evidence=evidence, kb=self.workingContext)
 #	    progress("We have a reason for %s of %s with bindings %s" % (self.rule, reason, bindings))
 	else:
 	    reason = None
@@ -922,6 +922,8 @@ class Query(Formula):
 		#bindings.update({pair[0]: pair[1]})  # Record for proof only
 		if pair[0] not in existentials:
                     if isinstance(pair[0], List):
+			# pair[0] should be a variable, can't be a list, surely
+			progress("@@@ Yosi, what does this code do? ")
                         del newBindings[pair[0]]
                         reallyNewBindingsList = pair[0].unify(
                                     pair[1], variables, existentials, bindings)
@@ -942,8 +944,8 @@ class Query(Formula):
                         newBindingItems.extend(reallyNewBindings.items())
                         newBindings.update(reallyNewBindings)
                     else:
-                        if diag.chatty_flag > 0:
-                            progress("@@@  Not in existentials or variables but now bound:", `pair[0]`)
+                        if diag.chatty_flag > 40:  # Reasonable
+                            progress("Not in existentials or variables but now bound:", `pair[0]`)
                 elif diag.tracking: bindings.update({pair[0]: pair[1]})
                 if not isinstance(pair[0], CompoundTerm) and ( # Hack - else rules13.n3 fails @@
 		    pair[0] in existentials):    # Hack ... could be bnding from nested expression
@@ -983,14 +985,14 @@ class Query(Formula):
                          + " ExQuVars:("+seqToString(existentials)+")")
             con, pred, subj, obj = item.quad
             state = item.state
-            if state == S_DONE:
+            if state == S_DONE:  # After bindNew, could be undoable.
                 return total # Forget it -- must be impossible
-            if state == S_LIGHT_UNS_GO:		# Search then 
-		item.state = S_LIGHT_EARLY   # Unsearched, try builtin
+            if state == S_LIGHT_UNS_READY:		# Search then 
                 nbs = item.tryBuiltin(queue, bindings, evidence=evidence)
+		item.state = S_LIGHT_EARLY   # Unsearched, try builtin @@@@@@@@@ <== need new state here
             elif state == S_LIGHT_GO:
-		item.state = S_DONE   # Searched.
                 nbs = item.tryBuiltin(queue, bindings, evidence=evidence)
+		item.state = S_DONE   # Searched.
             elif (state == S_LIGHT_EARLY or state == S_NOT_LIGHT or
 				    state == S_NEED_DEEP): #  Not searched yet
                 nbs = item.tryDeepSearch(queue)
@@ -1000,6 +1002,7 @@ class Query(Formula):
                 else:
 		    item.state = S_HEAVY_WAIT  # Assume can't resolve
                     nbs = item.tryBuiltin(queue, bindings, evidence=evidence)
+		item.state = S_DONE
             elif state == S_REMOTE: # Remote query -- need to find all of them for the same service
 		items = [item]
 		for i in queue[:]:
@@ -1007,12 +1010,12 @@ class Query(Formula):
 			items.append(i)
 			queue.remove(i)
 		nbs = query.remoteQuery(items)
-		item.state = S_SATISFIED  # do not put back on list
+		item.state = S_DONE  # do not put back on list
             elif state ==S_HEAVY_WAIT or state == S_LIGHT_WAIT:
                 if item.quad[PRED] is query.store.universalVariableName or \
                    item.quad[PRED] is query.store.existentialVariableName:
                     ### We will never bind this variable in the first place
-                    item.state = S_SATISFIED
+                    item.state = S_DONE
                     nbs = []
                 else:
                     if diag.chatty_flag > 20 :
@@ -1025,43 +1028,43 @@ class Query(Formula):
                 raise RuntimeError, "Unknown state " + `state`
 		
             if diag.chatty_flag > 90: progress("nbs=" + `nbs`)
-            if nbs == 0:
-		raise RuntimeError("Eh?  bad return convention")
-#            if nbs == []:
-#	        progress("Query.py 953  "+`item.state`)
-#@@		raise RuntimeError("Query.py "+`item.state`)
-#@@		return total #@@@@@@@
-            elif nbs != []:
-#		if nbs != 0 and nbs != []: pass
-		# progress("llyn.py 2738:   nbs = %s" % nbs)
-                for nb, reason in nbs:
-		    assert type(nb) is types.DictType, nb
-                    q2 = Queue([], queue)
-                    if query.justReturn:
-                        if isinstance(reason, StoredStatement):
-                            if reason not in q2.statements and \
-                               reason[CONTEXT] is query.workingContext:
-                                q2.statements.add(reason)
-                            else:
-                                continue
-                    for i in queue:
-                        newItem = i.clone()
-                        q2.append(newItem)  #@@@@@@@@@@  If exactly 1 binding, loop (tail recurse)
-		    
-                    found = query.matchFormula(q2, variables.copy(), existentials.copy(),
-			    bindings.copy(), nb, evidence = evidence + [reason])
+	    
+#<<<<<<< query.py  Removed as I added this and wasn't sure whether it works with justReturn change below -tbl
+#	    # Optimization when sucess but no bindings
+#	    if (len(nbs) == 1 and nbs[0][0] == {} and nbs[0][1] is None and # if nbs == [({}, None)] and
+#		    state == S_DONE):
+#		if diag.chatty_flag>90: progress("LOOP to next, state="+`state`)
+#		continue # Loop around and do the next one. optimization.
 
-		    if diag.chatty_flag > 91: progress(
-			"Nested query returns %i (nb= %r)" % (found, nb))
-                    total = total + found
-		    if query.justOne and total:
-                        return total
+	    for nb, reason in nbs:
+		assert type(nb) is types.DictType, nb
+		q2 = Queue([], queue)
+		if query.justReturn:
+		    if isinstance(reason, StoredStatement):
+			if reason not in q2.statements and \
+			   reason[CONTEXT] is query.workingContext:
+			    q2.statements.add(reason)
+			else:
+			    continue
+		for i in queue:
+		    newItem = i.clone()
+		    q2.append(newItem)  #@@@@@@@@@@  If exactly 1 binding, loop (tail recurse)
+		
+		found = query.matchFormula(q2, variables.copy(), existentials.copy(),
+			bindings.copy(), nb, evidence = evidence + [reason])
+
+		if diag.chatty_flag > 91: progress(
+		    "Nested query returns %i (nb= %r)" % (found, nb))
+		total = total + found
+		if query.justOne and total:
+		    return total
+
 # NO - more to do return total # The called recursive calls above will have generated the output @@@@ <====XXXX
 	    if diag.chatty_flag > 80: progress("Item state %i, returning total %i" % (item.state, total))
-            if item.state == S_DONE:
+            if (item.state == S_DONE):
 		return total
-            if item.state != S_SATISFIED:   # state 0 means leave me off the list
-                queue.append(item)
+
+	    queue.append(item)
             # And loop back to take the next item
 
         if diag.chatty_flag>50: progress("QUERY MATCH COMPLETE with bindings: " + `bindings`)
@@ -1260,7 +1263,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 	self.updateMyIndex(con)
         if isinstance(pred, RDFBuiltIn) or (
 	    interpretBuiltins and isinstance(pred, LightBuiltIn)):
-            if self.canRun(): self.state = S_LIGHT_UNS_GO  # Can't do it here
+            if self.canRun(): self.state = S_LIGHT_UNS_READY  # Can't do it here
             else: self.state = S_LIGHT_EARLY # Light built-in, can't run yet, not searched
         elif self.short == 0:  # Skip search if no possibilities!
             self.searchDone()
@@ -1292,13 +1295,13 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 	    for quad in more_unmatched:
 		newItem = QueryItem(item.query, quad)
 		queue.append(newItem)
-		newItem.setup(allvars, interpretBuiltins = 0,
-			unmatched=more_unmatched, mode=item.query.mode)
+		if not newItem.setup(allvars, interpretBuiltins = 0,
+			unmatched=more_unmatched, mode=item.query.mode):
+		    return []
 	    if diag.chatty_flag > 40:
 		    progress("log:Includes: Adding %i new terms and %s as new existentials."%
 			      (len(more_unmatched),
 			       seqToString(more_variables)))
-	    item.state = S_SATISFIED
 	    if diag.tracking:
 		rea = BecauseBuiltInWill(subj, pred, obj)
 		nbs = [({oldsubj: subj}, rea)]
@@ -1333,12 +1336,10 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                     try:
 #                        if pred.eval(subj, obj,  queue, bindings.copy(), proof, self.query):
                         if pred.eval(subj, obj,  BNone, BNone, proof, BNone):
-                            self.state = S_SATISFIED # satisfied
                             if diag.chatty_flag > 80: progress(
 				"Builtin buinary relation operator succeeds")
                             if diag.tracking:
                                 rea = BecauseBuiltIn(subj, pred, obj)
-#                                evidence = evidence + [rea] # not pass be reference
 				return [({}, rea)]  # Involves extra recursion just to track reason
                             return [({}, None)]   # No new bindings but success in logical operator
                         else: return []   # We absoluteley know this won't match with this in it
@@ -1507,7 +1508,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
         con, pred, subj, obj = self.quad
         if self.state == S_LIGHT_EARLY:   # Light, can't run yet.
             self.state = S_LIGHT_WAIT    # Search done, can't run
-	elif self.state == S_LIGHT_UNS_GO: # Still have to run this light one
+	elif self.state == S_LIGHT_UNS_READY: # Still have to run this light one
 	    return
 	elif self.service:
 	    self.state = S_REMOTE    #  Search done, need to synchronize with other items
@@ -1566,7 +1567,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                 
         self.quad = q[0], q[1], q[2], q[3]  # yuk
 
-        if self.state in [S_NOT_LIGHT, S_LIGHT_EARLY, S_NEED_DEEP, S_LIGHT_UNS_GO]: # Not searched yet
+        if self.state in [S_NOT_LIGHT, S_LIGHT_EARLY, S_NEED_DEEP, S_LIGHT_UNS_READY]: # Not searched yet
             hasUnboundCoumpundTerm = 0
             for p in PRED, SUBJ, OBJ :
                 x = self.quad[p]
@@ -1593,7 +1594,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 	    self.myIndex = None
         if isinstance(self.quad[PRED], BuiltIn):
             if self.canRun():
-                if self.state == S_LIGHT_EARLY: self.state = S_LIGHT_UNS_GO
+                if self.state == S_LIGHT_EARLY: self.state = S_LIGHT_UNS_READY
                 elif self.state == S_LIGHT_WAIT: self.state = S_LIGHT_GO
                 elif self.state == S_HEAVY_WAIT: self.state = S_HEAVY_READY
         if diag.chatty_flag > 90:
