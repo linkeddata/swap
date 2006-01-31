@@ -746,6 +746,7 @@ class Query(Formula):
 	self.lastCheckedNumberOfRedirections = 0
 	self.bindingList = []
 	self.justReturn = justReturn
+	realMatchCount = 0
 	if justReturn and not variables:
             self.justOne = True
         for quad in unmatched:
@@ -756,7 +757,12 @@ class Query(Formula):
 				    "match: abandoned, no way for "+`item`)
                 self.noWay = 1
 		return  # save time
+	    if not item.builtIn:
+                realMatchCount += 1    
             self.statements.append(item)
+        if justReturn and realMatchCount > len(workingContext):
+            self.noWay = 1
+            return
 	return
 	
     def resolve(self):
@@ -1177,6 +1183,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
         self.neededToRun = None   # see setup()
         self.myIndex = None     # will be list of satistfying statements
 	self.service = None   # Remote database server for this predicate?
+	self.builtIn = False
         return
 
     def clone(self):
@@ -1261,6 +1268,9 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 	    if diag.chatty_flag > 98: progress("        %s needs to run: %s"%(`x`, `self.neededToRun[p]`))
                 
 	self.updateMyIndex(con)
+	if isinstance(pred, RDFBuiltIn) or (
+	    interpretBuiltins and isinstance(pred, BuiltIn)):
+            self.builtIn = True
         if isinstance(pred, RDFBuiltIn) or (
 	    interpretBuiltins and isinstance(pred, LightBuiltIn)):
             if self.canRun(): self.state = S_LIGHT_UNS_READY  # Can't do it here
