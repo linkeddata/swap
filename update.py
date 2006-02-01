@@ -110,7 +110,7 @@ class UpdateQuery(Query):
 		conclusion=conclusion, targetContext = workingContext, rule=rule)
 	self.retraction = retraction
 
-    def conclude(self, bindings, evidence = []):
+    def conclude(self, bindings, evidence = [], extraBNodes=Set()):
 	"""When a match found in a query, add conclusions to target formula,
 	and also remove retractions.
 

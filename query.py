@@ -431,7 +431,7 @@ def buildPattern(workingContext, template):
     """Make a list of unmatched statements including special
     builtins to check something is universally quantified"""
     unmatched = template.statements[:]
-    for v in template.universals():
+    for v in template.occurringIn(template.universals()):
 	if diag.chatty_flag > 100: progress(
 	    "Tempate %s has universalVariableName %s, formula is %s" % (template, v, template.debugString()))
 	unmatched.append(StoredStatement((workingContext,
@@ -444,7 +444,7 @@ def buildPattern(workingContext, template):
 
 def buildStrictPattern(workingContext, template):
     unmatched = buildPattern(workingContext, template)
-    for v in template.existentials():
+    for v in template.occurringIn(template.existentials()):
 	if diag.chatty_flag > 100: progress(
 	    "Tempate %s has existentialVariableName %s, formula is %s" % (template, v, template.debugString()))
 	unmatched.append(StoredStatement((workingContext,
@@ -579,7 +579,7 @@ def testIncludes(f, g, _variables=Set(),  bindings={}, interpretBuiltins = 0):
 #    raise RuntimeError()
     if not(isinstance(f, Formula) and isinstance(g, Formula)): return 0
 
-    assert f.canonical is f
+    assert f.canonical is f, f.debugString()
     assert g.canonical is g
     m = diag.chatty_flag
     diag.chatty_flag = 0
@@ -686,7 +686,7 @@ def n3Entails(f, g, vars=Set([]), existentials=Set([]),  bindings={}):
 
 
 class Queue([].__class__):
-    __slots__ = ['statements']
+    __slots__ = ['statements', 'bNodes']
     list = [].__class__
 
     def __init__(self, other=[], metaSource = None):
@@ -696,6 +696,7 @@ class Queue([].__class__):
                 setattr(self, k, getattr(metaSource, k).copy())
         else:
             self.statements = Set()
+            self.bNodes = Set()
             pass #fill in slots here
 
 #Queue = [].__class__
@@ -790,7 +791,7 @@ class Query(Formula):
 		    if diag.chatty_flag>29: progress("Redirecting binding %r to %r" % (value, x))
 		    bindings[var] = x
 
-    def conclude(self, bindings, evidence = []):
+    def conclude(self, bindings, evidence = [], extraBNodes = Set()):
 	"""When a match found in a query, add conclusions to target formula.
 
 	Returns the number of statements added."""
@@ -830,7 +831,7 @@ class Query(Formula):
 	else:
 	    reason = None
 
-	es, exout = self.workingContext.existentials(), Set()
+	es, exout = (self.workingContext.existentials() | extraBNodes), Set()
 	for var, val in bindings.items():
             if isinstance(val, Exception):
                 if "q" in self.mode: # How nice are we?
@@ -841,8 +842,8 @@ class Query(Formula):
 		if diag.chatty_flag > 25: progress(
 		"Match found to that which is only an existential: %s -> %s" %
 						    (var, val))
-		if self.workingContext is not self.targetContext:
-		    if self.conclusion.occurringIn([val]):
+		if self.workingContext is not self.targetContext or val in extraBNodes:
+		    if self.conclusion.occurringIn([var]):
 			self.targetContext.declareExistential(val)
 
 	# Variable renaming
@@ -1052,6 +1053,13 @@ class Query(Formula):
 			    q2.statements.add(reason)
 			else:
 			    continue
+		if isinstance(reason, StoredStatement):
+                    if reason[CONTEXT] is not query.workingContext:
+                        for m in nb.values():
+                            if m in reason[CONTEXT].existentials():
+                                q2.bNodes.add(m)
+                                if diag.chatty_flag > 80:
+                                    progress('Adding bNode %s, now %s' % (m, q2.bNodes))
 		for i in queue:
 		    newItem = i.clone()
 		    q2.append(newItem)  #@@@@@@@@@@  If exactly 1 binding, loop (tail recurse)
@@ -1084,7 +1092,7 @@ class Query(Formula):
                 raise
             if len(queue.statements) != len(query.workingContext):
                 return total
-        return query.conclude(bindings,  evidence=evidence)  # No terms left .. success!
+        return query.conclude(bindings,  evidence=evidence, extraBNodes = queue.bNodes)  # No terms left .. success!
 
 
 
@@ -1312,11 +1320,9 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 		    progress("log:Includes: Adding %i new terms and %s as new existentials."%
 			      (len(more_unmatched),
 			       seqToString(more_variables)))
-	    if diag.tracking:
-		rea = BecauseBuiltInWill(subj, pred, obj)
-		nbs = [({oldsubj: subj}, rea)]
-	    else:
-		nbs = [({oldsubj: subj}, None)]
+	    rea = BecauseBuiltInWill(subj, pred, obj)
+##	    nbs = [({oldsubj: subj}, rea)]
+	    nbs = [({}, rea)]
 	else:
             if isinstance(subj, Formula): subj = subj.n3String()
             if isinstance(obj, Formula): obj = obj.n3String()
@@ -1388,6 +1394,9 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			if result != None:
 			    self.state = S_DONE
 			    rea=None
+			    if isinstance(result, Formula):
+                                result = result.renameVars()
+                                assert result.canonical is result, result.debugString()
 			    if diag.tracking:
 				rea = BecauseBuiltIn(subj, pred, result)
 			    if isinstance(pred, MultipleFunction):

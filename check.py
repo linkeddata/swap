@@ -120,7 +120,7 @@ def n3Entails(f, g, skipIncludes=0, level=0):
         finally:
             f.resetRenames(False)
 
-    #    return False
+        return False
         return bool(g.n3EntailedBy(f))
         fyi("Indexed query fails to find match, try unification", level)
         for s in g:

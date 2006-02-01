@@ -425,11 +425,15 @@ class Formula(AnonymousNode, CompoundTerm):
                 if isinstance(node, Formula):
                     if node not in m2:
                         m2[node] = node.renameVars()
-        retVal = newF.substitution(m2, why=Because("Vars in subexpressions must be renamed"))
+        retVal = newF.substitution(m2, why=Because("Vars in subexpressions must be renamed")).close()
         if self._renameVarsMaps:
             self._renameVarsMaps[-1][self] = retVal
-#            self._renameVarsMaps[-1][retVal] = retVal
+            self._renameVarsMaps[-1][retVal] = retVal
+        assert retVal.canonical is retVal, retVal
         return retVal
+
+##    def renameVars(self):
+##        return self
 
     def resetRenames(reset = True):
         if reset:
