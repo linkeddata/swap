@@ -101,17 +101,39 @@ Nov</a>.. 7 Dec, 21 Dec, 2006 Jan 4, 1 Feb (IRC only).</p>
     type for decimal, and make sure output format of those is right - must
     preserve type. And make tests. </p>
   </li>
-  <li><a href="/2005/ajar/tab">Tabulator</a> UI walkthrough</li>
-  <li>RDF API. Experience with AJAR stuff suggests compromise of (subject,
-    predicate, object, why) why why is used for provenence filtering and
-    SPARQL source.</li>
-  <li>Parsing from string in RDF API. 
-    <p><strong>ACTION TimBL</strong>: Add formulaFromN3String
-    formulaFromRDFXMLString() methods to store.</p>
-    <p></p>
-    <p></p>
+  <li>Common RDF API. (was: clean-up priorities)
+
+    <ul>
+      <li class="vtodo"><strong class="summary">ACTION: DanC to work with
+        timbl to separate operators from term.py, look at other class
+        organization</strong></li>
+      <li class="vtodo"><strong class="summary">ACTION: DanC to kill
+        sumOf</strong></li>
+    </ul>
+
+    <p>Experience with AJAR/<a href="/2005/ajar/tab">Tabulator</a>
+    stuff suggests compromise of (subject, predicate, object, why) why
+    why is used for provenence filtering and SPARQL source.</p>
+
+    <p>Earlier, we discussed a very clean common class structure for
+    the basic N3 language elements. Arrive at common class tree for
+    that. The [new] fact that pychinko seems to be happy using cwm
+    classes now suggest that there is a clean break here and
+    cooperation will be easy.</p>
+
+    <p>Wiki page on <a
+    href="http://esw.w3.org/topic/WebDataInterfaceDesign">WebDataInterface
+    design</a></p>
   </li>
-  <li>Vlad's progress integrating pychinko and cwm,</li>
+  <li>Parsing from string in RDF API.  <p class="vtodo"><strong
+  class="summary">ACTION TimBL: Add formulaFromN3String
+  formulaFromRDFXMLString() methods to store.</strong></p>
+  </li>
+  <li>Vlad's progress integrating pychinko and cwm
+  <p>much progress has been made on built-ins in pychinko. functions seem to
+    work as well as relational ops as of ~Sep. log:includes progress?
+    log:semantics? formulas as 1st-class objects?</p>
+  </li>
   <li>getting rdflib to pass the N3 parsing tests</li>
   <li>cwm/Inferenceweb integration
     <ul>
@@ -131,22 +153,6 @@ Nov</a>.. 7 Dec, 21 Dec, 2006 Jan 4, 1 Feb (IRC only).</p>
         logic aimed at AAAI's track on AI &amp; the Web.</strong></li>
     </ul>
   </li>
-  <li>Common RDF API. (was: clean-up priorities)
-    <p>We discussed a very clean common class structure for the basic N3
-    language elements. Arrive at common class tree for that. The [new] fact
-    that pychinko seems to be happy using cwm classes now suggest that there
-    is a clean break here and cooperation will be easy.</p>
-    <ul>
-      <li class="vtodo"><strong class="summary">ACTION: DanC to work with
-        timbl to separate operators from term.py, look at other class
-        organization</strong></li>
-      <li class="vtodo"><strong class="summary">ACTION: DanC to kill
-        sumOf</strong></li>
-    </ul>
-    <p>Wiki page on <a
-    href="http://esw.w3.org/topic/WebDataInterfaceDesign">WebDataInterface
-    design</a></p>
-  </li>
   <li>the N3 abstract syntax interface to parsers and serializers. Possible
     to preserve similarity between parser and unparser interface to allow
     straight-through data merge at speed?
@@ -155,9 +161,6 @@ Nov</a>.. 7 Dec, 21 Dec, 2006 Jan 4, 1 Feb (IRC only).</p>
   <li>Common test suites -- manifests of manifests?</li>
   <li>Nary operations and built-ins; @@ links to Nary Note and Rules
   charter</li>
-  <li>much progress has been made on built-ins in pychinko. functions seem to
-    work as well as relational ops as of ~Sep. log:includes progress?
-    log:semantics? formulas as 1st-class objects?</li>
 </ol>
 
 <h4>Closed actions:</h4>
