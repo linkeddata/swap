@@ -1,151 +1,163 @@
-     @prefix : <schema-rules.n3#> .
-     @prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
-     @prefix ex: <daml-ex.n3#> .
-     @prefix inv: <invalid-ex.n3#> .
-     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
-     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+     @prefix : <daml-ex.n3#> .
+    @prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
+    @prefix inv: <invalid-ex.n3#> .
+    @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+    @prefix v: <schema-rules.n3#> .
     
-         @forAll :c,
-                :c1,
-                :c2,
-                :p,
-                :p1,
-                :p2,
-                :x,
-                :y,
-                :z.
-         @forSome <#_g0> .
+     @forAll v:c,
+                v:c1,
+                v:c2,
+                v:p,
+                v:p1,
+                v:p2,
+                v:x,
+                v:y,
+                v:z,
+                <#_g0>,
+                <#_g1>,
+                <#_g2>,
+                <#_g3>,
+                <#_g4>,
+                <#_g5>,
+                <#_g6>,
+                <#_g7>,
+                <#_g8>,
+                <#_g9>,
+                <#_g10>,
+                <#_g11>.
+         @forSome <#_g12> .
     
     <daml-ex.n3>     a daml:Ontology;
          daml:comment "An example ontology";
          daml:imports <http://www.daml.org/2000/10/daml-ont>;
          daml:versionInfo "" .
     
-    ex:Adam     a daml:Person;
+    :Adam     a daml:Person;
          daml:comment "Adam is a person.";
          daml:label "Adam" .
     
-    ex:Animal     a daml:Class;
+    :Animal     a daml:Class;
          daml:comment """This class of animals is illustrative of a number of
 	ontological idioms.""";
          daml:label "Animal" .
     
-    ex:Car     a daml:Class;
+    :Car     a daml:Class;
          daml:comment "no car is a person";
-         daml:subClassOf <#_g0>;
-         rdfs:subClassOf <#_g0> .
+         daml:subClassOf <#_g12>;
+         rdfs:subClassOf <#_g12> .
     
-    ex:Female     a daml:Class;
-         daml:disjointFrom ex:Male;
-         daml:subClassOf ex:Animal;
-         rdfs:subClassOf ex:Animal .
+    :Female     a daml:Class;
+         daml:disjointFrom :Male;
+         daml:subClassOf :Animal;
+         rdfs:subClassOf :Animal .
     
-    ex:Height     a daml:Class;
+    :Height     a daml:Class;
          daml:oneOf  (
-        ex:short 
-        ex:medium 
-        ex:tall  ) .
+        :short
+        :medium
+        :tall ) .
     
-    ex:Male     a daml:Class;
-         daml:subClassOf ex:Animal;
-         rdfs:subClassOf ex:Animal .
+    :Male     a daml:Class;
+         daml:subClassOf :Animal;
+         rdfs:subClassOf :Animal .
     
-    ex:Man     a daml:Class;
-         daml:subClassOf ex:Male,
-                ex:Person;
-         rdfs:subClassOf ex:Animal,
-                ex:Male,
-                ex:Person .
+    :Man     a daml:Class;
+         daml:subClassOf :Male,
+                :Person;
+         rdfs:subClassOf :Animal,
+                :Male,
+                :Person .
     
-    ex:Person     a daml:Class;
+    :Person     a daml:Class;
          daml:comment "every person is a man or a woman";
          daml:disjointUnionOf  (
-        ex:Man 
-        ex:Woman  );
+        :Man
+        :Woman );
          daml:restrictedBy  [
              a daml:Restriction;
-             daml:onProperty ex:parent;
-             daml:toClass ex:Person ];
-         daml:subClassOf ex:Animal;
-         rdfs:subClassOf ex:Animal .
+             daml:onProperty :parent;
+             daml:toClass :Person ];
+         daml:subClassOf :Animal;
+         rdfs:subClassOf :Animal .
     
-    ex:TallMan     a daml:Class;
+    :TallMan     a daml:Class;
          daml:intersectionOf  (
-        ex:TallThing 
-        ex:Man  ) .
+        :TallThing
+        :Man ) .
     
-    ex:TallThing     a daml:Class;
+    :TallThing     a daml:Class;
          daml:restrictedBy  [
              a daml:Restriction;
-             daml:onProperty ex:height;
-             daml:toValue ex:tall ] .
+             daml:onProperty :height;
+             daml:toValue :tall ] .
     
-    ex:Woman     a daml:Class;
-         daml:subClassOf ex:Female,
-                ex:Person;
-         rdfs:subClassOf ex:Animal,
-                ex:Female,
-                ex:Person .
+    :Woman     a daml:Class;
+         daml:subClassOf :Female,
+                :Person;
+         rdfs:subClassOf :Animal,
+                :Female,
+                :Person .
     
-    ex:ancestor     a daml:TransitiveProperty;
+    :ancestor     a daml:TransitiveProperty;
          daml:label "ancestor" .
     
-    ex:child     a daml:Property;
-         daml:inverseOf ex:parent .
+    :child     a daml:Property;
+         daml:inverseOf :parent .
     
-    ex:descendant     a daml:TransitiveProperty .
+    :descendant     a daml:TransitiveProperty .
     
-    ex:father     a daml:Property;
+    :father     a daml:Property;
          daml:cardinality "1";
-         daml:range ex:Man;
-         daml:subProperty ex:parent;
-         rdfs:range ex:Man .
+         daml:range :Man;
+         daml:subProperty :parent;
+         rdfs:range :Man .
     
-    ex:height     a daml:Property;
-         daml:domain ex:Person;
-         daml:range ex:Height;
-         rdfs:domain ex:Person;
-         rdfs:range ex:Height .
+    :height     a daml:Property;
+         daml:domain :Person;
+         daml:range :Height;
+         rdfs:domain :Person;
+         rdfs:range :Height .
     
-    ex:mom     a daml:Property;
-         = ex:mother .
+    :mom     a daml:Property;
+         = :mother .
     
-    ex:mother     a daml:UniqueProperty;
-         daml:range ex:Woman;
-         daml:subProperty ex:parent;
-         rdfs:range ex:Woman .
+    :mother     a daml:UniqueProperty;
+         daml:range :Woman;
+         daml:subProperty :parent;
+         rdfs:range :Woman .
     
-    ex:occupation     a daml:Property;
+    :occupation     a daml:Property;
          daml:maxCardinality "1" .
     
-    ex:parent     a daml:Property;
+    :parent     a daml:Property;
          daml:cardinality "2";
-         daml:domain ex:Animal;
-         rdfs:domain ex:Animal .
+         daml:domain :Animal;
+         rdfs:domain :Animal .
     
     <invalid-ex.n3>     daml:imports <daml-ex.n3> .
     
-    inv:alex     ex:father inv:joe .
+    inv:alex     :father inv:joe .
     
-    inv:bill     ex:mother inv:joe .
+    inv:bill     :mother inv:joe .
     
-    inv:disjointTest     a ex:Animal,
-                ex:Female,
-                ex:Male,
-                ex:Man,
-                ex:Person,
-                ex:Woman,
-                :schemaInconsistency .
+    inv:disjointTest     a :Animal,
+                :Female,
+                :Male,
+                :Man,
+                :Person,
+                :Woman,
+                v:schemaInconsistency .
     
-    inv:joe     a ex:Animal,
-                ex:Female,
-                ex:Male,
-                ex:Man,
-                ex:Person,
-                ex:Woman,
-                :schemaInconsistency .
+    inv:joe     a :Animal,
+                :Female,
+                :Male,
+                :Man,
+                :Person,
+                :Woman,
+                v:schemaInconsistency .
     
-    :schemaInconsistency     daml:subPropertyOf log:Falsehood;
+    v:schemaInconsistency     daml:subPropertyOf log:Falsehood;
          rdfs:subPropertyOf log:Falsehood .
     
     daml:domain     = rdfs:domain .
@@ -160,80 +172,80 @@
     
     rdfs:subPropertyOf     a daml:TransitiveProperty .
     
-    <#_g0>     a daml:Class;
-         daml:complementOf ex:Person .
+    <#_g12>     a daml:Class;
+         daml:complementOf :Person .
     {
-        :p     a daml:TransitiveProperty .
+        v:p     a daml:TransitiveProperty .
         
-        }     log:implies {     @forAll :x,
-                    :y,
-                    :z .
+        }     log:implies { @forAll v:xx,
+                    v:yx,
+                    v:zx .
         {
-            :x     :p :y .
-            :y     :p :z .
+            v:xx     v:p v:yx .
+            v:yx     v:p v:zx .
             
-            }     log:implies {:x     :p :z .
+            }     log:implies {v:xx     v:p v:zx .
             } .
         } .
     {
-        :c1     rdfs:subClassOf :c2 .
-        :x     a :c1 .
+        v:c1     rdfs:subClassOf v:c2 .
+        v:x     a v:c1 .
         
-        }     log:implies {:x     a :c2 .
+        }     log:implies {v:x     a v:c2 .
         } .
     {
-        :p     rdfs:domain :c .
-        :x     :p :y .
+        v:p     rdfs:domain v:c .
+        v:x     v:p v:y .
         
-        }     log:implies {:x     a :c .
+        }     log:implies {v:x     a v:c .
         } .
     {
-        :p     rdfs:range :c .
-        :x     :p :y .
+        v:p     rdfs:range v:c .
+        v:x     v:p v:y .
         
-        }     log:implies {:y     a :c .
+        }     log:implies {v:y     a v:c .
         } .
     {
-        :p1     rdfs:range :c .
-        :p2     rdfs:subPropertyOf :p1 .
+        v:p1     rdfs:range v:c .
+        v:p2     rdfs:subPropertyOf v:p1 .
         
-        }     log:implies {:p2     rdfs:range :c .
+        }     log:implies {v:p2     rdfs:range v:c .
         } .
     {
-        :p1     = :p2 .
-        :x     :p1 :y .
+        v:p1     = v:p2 .
+        v:x     v:p1 v:y .
         
-        }     log:implies {:x     :p2 :y .
+        }     log:implies {v:x     v:p2 v:y .
         } .
     {
-        :x     ex:ancestor :y .
-        :y     ex:ancestor :z .
+        <#_g0>     :ancestor <#_g1> .
+        <#_g1>     :ancestor <#_g2> .
         
-        }     log:implies {:x     ex:ancestor :z .
+        }     log:implies {<#_g0>     :ancestor <#_g2> .
         } .
     {
-        :x     ex:descendant :y .
-        :y     ex:descendant :z .
+        <#_g3>     :descendant <#_g4> .
+        <#_g4>     :descendant <#_g5> .
         
-        }     log:implies {:x     ex:descendant :z .
+        }     log:implies {<#_g3>     :descendant <#_g5> .
         } .
     {
-        :x     rdfs:subClassOf :y .
-        :y     rdfs:subClassOf :z .
+        <#_g6>     rdfs:subPropertyOf <#_g7> .
+        <#_g7>     rdfs:subPropertyOf <#_g8> .
         
-        }     log:implies {:x     rdfs:subClassOf :z .
+        }     log:implies {<#_g6>     rdfs:subPropertyOf <#_g8> .
         } .
     {
-        :x     rdfs:subPropertyOf :y .
-        :y     rdfs:subPropertyOf :z .
+        <#_g9>     rdfs:subClassOf <#_g10> .
+        <#_g10>     rdfs:subClassOf <#_g11> .
         
-        }     log:implies {:x     rdfs:subPropertyOf :z .
+        }     log:implies {<#_g9>     rdfs:subClassOf <#_g11> .
         } .
     {
-        :x     a :y,
-                    :z .
-        :y     daml:disjointFrom :z .
+        v:x     a v:y,
+                    v:z .
+        v:y     daml:disjointFrom v:z .
         
-        }     log:implies {:x     a :schemaInconsistency .
+        }     log:implies {v:x     a v:schemaInconsistency .
         } .
     

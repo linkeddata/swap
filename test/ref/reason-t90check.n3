@@ -14,26 +14,38 @@
                 foo:x,
                 foo:y .
     
-    foo:result     foo:is { @forAll :_g22,
+    foo:result     foo:is { @forAll :_g1,
+                    :_g10,
+                    :_g11,
+                    :_g12,
+                    :_g13,
+                    :_g14,
+                    :_g15,
+                    :_g16,
+                    :_g17,
+                    :_g18,
+                    :_g19,
+                    :_g2,
+                    :_g20,
+                    :_g21,
+                    :_g3,
+                    :_g4,
+                    :_g5,
+                    :_g6,
+                    :_g7,
+                    :_g8,
+                    :_g9.
+             @forSome :_g22,
                     :_g23,
-                    :_g24,
-                    :_g25,
-                    :_g26,
-                    :_g27,
-                    :_g28,
-                    :_g29,
-                    :_g30.
-             @forSome :_g31,
-                    :_g32,
-                    :_g33 .
-        :_g31     a dpo:Restriction;
-             dpo:onProperty ex_:parent;
-             dpo:toClass ex_:Person .
-        :_g32     a dpo:Class;
-             dpo:complementOf ex_:Person .
-        :_g33     a dpo:Restriction;
+                    :_g24 .
+        :_g22     a dpo:Restriction;
              dpo:onProperty ex_:height;
              dpo:toValue ex_:tall .
+        :_g23     a dpo:Restriction;
+             dpo:onProperty ex_:parent;
+             dpo:toClass ex_:Person .
+        :_g24     a dpo:Class;
+             dpo:complementOf ex_:Person .
         <http://example.com/swap/test/daml-ex.n3>     a dpo:Ontology;
              dpo:comment "An example ontology";
              dpo:imports <http://www.daml.org/2000/10/daml-ont>;
@@ -47,8 +59,8 @@
              dpo:label "Animal" .
         ex_:Car     a dpo:Class;
              dpo:comment "no car is a person";
-             dpo:subClassOf :_g32;
-             s:subClassOf :_g32 .
+             dpo:subClassOf :_g24;
+             s:subClassOf :_g24 .
         ex_:Female     a dpo:Class;
              dpo:disjointFrom ex_:Male;
              dpo:subClassOf ex_:Animal;
@@ -72,7 +84,7 @@
              dpo:disjointUnionOf  (
             ex_:Man
             ex_:Woman );
-             dpo:restrictedBy :_g31;
+             dpo:restrictedBy :_g23;
              dpo:subClassOf ex_:Animal;
              s:subClassOf ex_:Animal .
         ex_:TallMan     a dpo:Class;
@@ -80,7 +92,7 @@
             ex_:TallThing
             ex_:Man ) .
         ex_:TallThing     a dpo:Class;
-             dpo:restrictedBy :_g33 .
+             dpo:restrictedBy :_g22 .
         ex_:Woman     a dpo:Class;
              dpo:subClassOf ex_:Female,
                     ex_:Person;
@@ -140,78 +152,78 @@
         s:subClassOf     a dpo:TransitiveProperty .
         s:subPropertyOf     a dpo:TransitiveProperty .
         {
-            :_g22     a dpo:TransitiveProperty .
+            :_g11     a dpo:TransitiveProperty .
             
-            }     log:implies { @forAll :_g24,
-                        :_g25,
-                        :_g30 .
+            }     log:implies { @forAll :_g25,
+                        :_g26,
+                        :_g27 .
             {
-                :_g24     :_g22 :_g30 .
-                :_g30     :_g22 :_g25 .
+                :_g25     :_g11 :_g27 .
+                :_g26     :_g11 :_g25 .
                 
-                }     log:implies {:_g24     :_g22 :_g25 .
+                }     log:implies {:_g26     :_g11 :_g27 .
                 } .
             } .
         {
-            :_g22     s:domain :_g23 .
-            :_g24     :_g22 :_g30 .
+            :_g1     ex_:ancestor :_g2 .
+            :_g2     ex_:ancestor :_g3 .
             
-            }     log:implies {:_g24     a :_g23 .
+            }     log:implies {:_g1     ex_:ancestor :_g3 .
             } .
         {
-            :_g22     s:range :_g23 .
-            :_g24     :_g22 :_g30 .
+            :_g11     s:domain :_g12 .
+            :_g17     :_g11 :_g14 .
             
-            }     log:implies {:_g30     a :_g23 .
+            }     log:implies {:_g17     a :_g12 .
             } .
         {
-            :_g24     a :_g29 .
-            :_g29     s:subClassOf :_g28 .
+            :_g11     s:range :_g12 .
+            :_g17     :_g11 :_g14 .
             
-            }     log:implies {:_g24     a :_g28 .
+            }     log:implies {:_g14     a :_g12 .
             } .
         {
-            :_g24     :_g27 :_g30 .
-            :_g27     = :_g26 .
+            :_g13     s:subClassOf :_g16 .
+            :_g17     a :_g13 .
             
-            }     log:implies {:_g24     :_g26 :_g30 .
+            }     log:implies {:_g17     a :_g16 .
             } .
         {
-            :_g24     ex_:ancestor :_g30 .
-            :_g30     ex_:ancestor :_g25 .
+            :_g15     s:range :_g12 .
+            :_g5     s:subPropertyOf :_g15 .
             
-            }     log:implies {:_g24     ex_:ancestor :_g25 .
+            }     log:implies {:_g5     s:range :_g12 .
             } .
         {
-            :_g24     ex_:descendant :_g30 .
-            :_g30     ex_:descendant :_g25 .
+            :_g15     = :_g5 .
+            :_g17     :_g15 :_g14 .
             
-            }     log:implies {:_g24     ex_:descendant :_g25 .
+            }     log:implies {:_g17     :_g5 :_g14 .
             } .
         {
-            :_g24     s:subClassOf :_g30 .
-            :_g30     s:subClassOf :_g25 .
+            :_g18     ex_:descendant :_g21 .
+            :_g19     ex_:descendant :_g18 .
             
-            }     log:implies {:_g24     s:subClassOf :_g25 .
+            }     log:implies {:_g19     ex_:descendant :_g21 .
             } .
         {
-            :_g24     s:subPropertyOf :_g30 .
-            :_g30     s:subPropertyOf :_g25 .
+            :_g20     s:subClassOf :_g9 .
+            :_g9     s:subClassOf :_g4 .
             
-            }     log:implies {:_g24     s:subPropertyOf :_g25 .
+            }     log:implies {:_g20     s:subClassOf :_g4 .
             } .
         {
-            :_g26     s:subPropertyOf :_g27 .
-            :_g27     s:range :_g23 .
+            :_g6     s:subPropertyOf :_g8 .
+            :_g7     s:subPropertyOf :_g6 .
             
-            }     log:implies {:_g26     s:range :_g23 .
+            }     log:implies {:_g7     s:subPropertyOf :_g8 .
             } .
         {
-            :_g24     a :_g25,
-                        :_g30 .
-            :_g30     dpo:disjointFrom :_g25 .
+            :_g14     dpo:disjointFrom :_g10 .
+            :_g17     a :_g10,
+                        :_g14 .
             
-            }     log:implies {:_g24     a v:schemaInconsistency .
+            }     log:implies {:_g17     a v:schemaInconsistency .
             } .
         } .
     {

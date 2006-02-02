@@ -825,13 +825,13 @@ class Query(Formula):
                     
                     evidence[loc] = BecauseBuiltIn(*[smarterSubstitution(k, bindings,
 			r.args[0]) for k in r.args])
-	    reason = BecauseOfRule(self.rule, bindings=bindings,
+	    reason = BecauseOfRule(self.rule, bindings=bindings, knownExistentials = extraBNodes,
 			    evidence=evidence, kb=self.workingContext)
 #	    progress("We have a reason for %s of %s with bindings %s" % (self.rule, reason, bindings))
 	else:
 	    reason = None
 
-	es, exout = (self.workingContext.existentials() | extraBNodes), Set()
+	es, exout = (extraBNodes), Set() #self.workingContext.existentials() | 
 	for var, val in bindings.items():
             if isinstance(val, Exception):
                 if "q" in self.mode: # How nice are we?
@@ -842,7 +842,7 @@ class Query(Formula):
 		if diag.chatty_flag > 25: progress(
 		"Match found to that which is only an existential: %s -> %s" %
 						    (var, val))
-		if self.workingContext is not self.targetContext or val in extraBNodes:
+		if val not in self.workingContext.existentials():
 		    if self.conclusion.occurringIn([var]):
 			self.targetContext.declareExistential(val)
 
@@ -930,15 +930,18 @@ class Query(Formula):
 		if pair[0] not in existentials:
                     if isinstance(pair[0], List):
 			# pair[0] should be a variable, can't be a list, surely
-			progress("@@@ Yosi, what does this code do? ")
                         del newBindings[pair[0]]
+                        #We can accidently bind a list using (1 2 3) rdf:rest (?x 3).
+                        #This finds the true binding
                         reallyNewBindingsList = pair[0].unify(
                                     pair[1], variables, existentials, bindings)
+                        ## I'm a bit parenoid. If we did not find a binding ...
                         if not reallyNewBindingsList or not hasattr(
 					reallyNewBindingsList, '__iter__'):
                             return 0
                         try:
-                            reallyNewBindings = reallyNewBindingsList[0][0]
+                            reallyNewBindings = reallyNewBindingsList[0][0] #We don't deal
+                            # with multiple ways to bind
                         except:
                             print 'we lost'
                             print pair[0], pair[1]
@@ -1054,7 +1057,7 @@ class Query(Formula):
 			else:
 			    continue
 		if isinstance(reason, StoredStatement):
-                    if reason[CONTEXT] is not query.workingContext:
+                    if True or reason[CONTEXT] is not query.workingContext:
                         for m in nb.values():
                             if m in reason[CONTEXT].existentials():
                                 q2.bNodes.add(m)
@@ -1269,7 +1272,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
             elif isinstance(x, Formula) or isinstance(x, List): # expr  @@ Set  @@@@@@@@@@ Check and CompundTerm>???
                 ur = x.occurringIn(allvars)
                 self.neededToRun[p] = ur
-                if ur != Set() or isinstance(x, Formula):
+                if ur != Set() or isinstance(x, Formula) or (isinstance(x, List) and hasFormula(x)):
                     hasUnboundCoumpundTerm = 1     # Can't search directly
 		    self.searchPattern[p] = None   # can bind this if we recurse
 		    
@@ -1394,7 +1397,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			if result != None:
 			    self.state = S_DONE
 			    rea=None
-			    if isinstance(result, Formula):
+			    if isinstance(result, Formula) and diag.tracking:
                                 result = result.renameVars()
                                 assert result.canonical is result, result.debugString()
 			    if diag.tracking:
@@ -1590,7 +1593,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
             hasUnboundCoumpundTerm = 0
             for p in PRED, SUBJ, OBJ :
                 x = self.quad[p]
-                if isinstance(x, Formula): # expr  @@ Set  @@@@@@@@@@ Check and CompundTerm>???
+                if hasFormula(x): # expr  @@ Set  @@@@@@@@@@ Check and CompundTerm>???
                     ur = x.occurringIn(self.neededToRun[p])
                     self.neededToRun[p] = ur
                     hasUnboundCoumpundTerm = 1     # Can't search directly
@@ -1626,7 +1629,11 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 					    self.searchPattern[SUBJ],
                                            self.searchPattern[PRED],
                                            self.searchPattern[OBJ])
-        for p in PRED, OBJ :
+        if isinstance(self.quad[SUBJ], Formula) and self.short:
+            self.short = self.short * 3 + len(self.quad[SUBJ]) * 100
+        if isinstance(self.quad[OBJ], Formula) and self.short:
+            self.short = self.short * 3 + len(self.quad[OBJ]) * 100
+        for p in SUBJ, OBJ :
             if isinstance(self.quad[p], Formula) and not self.neededToRun[p]:
                 newIndex = []
                 for triple in self.myIndex:
@@ -1756,7 +1763,16 @@ class BuiltInFailed(Exception):
             `self._item`,
 #            `self._info`))
             `reason`))
-    
+
+def hasFormula(l):
+    if not isinstance(l, (List, Formula)):
+        return False
+    if isinstance(l, Formula):
+        return True
+    for x in l:
+        if hasFormula(x):
+            return True
+    return False
 
 def smarterSubstitution(f, bindings, source):
     if isinstance(f, Formula):

@@ -353,6 +353,8 @@ class Formula(AnonymousNode, CompoundTerm):
 	"Return this or a version of me with subsitution made"
 	assert type(bindings) is type({})
 	store = self.store
+	if self in bindings:
+            return bindings[self]
 	oc = self.occurringIn(bindings.keys())
 	if oc == Set(): return self # phew!
 
@@ -403,10 +405,17 @@ class Formula(AnonymousNode, CompoundTerm):
         if self._renameVarsMaps:
             if self in self._renameVarsMaps[-1]:
                 return self._renameVarsMaps[-1][self]
+        #progress('Running renameVars of self=%s' % self.debugString())
+        m2 = {}
+        for triple in self:
+            for node in triple.spo():
+                if isinstance(node, Formula):
+                    if node not in m2:
+                        m2[node] = node.renameVars()
         m = {}
         n = {}
         F1 = self.newFormula()
-        F1.loadFormulaWithSubstitution(self, why=Because("I need an open copy of self"))
+        F1.loadFormulaWithSubstitution(self, m2, why=Because("Vars in subexpressions must be renamed"))
         for v in F1.existentials().copy():
             m[v] = F1.newBlankNode()
         for v in F1.universals().copy():
@@ -417,19 +426,19 @@ class Formula(AnonymousNode, CompoundTerm):
             e.remove(var)
         for var in n:
             u.remove(var)
+        
         m.update(n)
-        newF = F1.substitution(m, why=Because("Vars must be renamed"))
-        m2 = {}
-        for triple in newF:
-            for node in triple.spo():
-                if isinstance(node, Formula):
-                    if node not in m2:
-                        m2[node] = node.renameVars()
-        retVal = newF.substitution(m2, why=Because("Vars in subexpressions must be renamed")).close()
+        #progress('F1 is %s' % F1.debugString())
+        #progress('bindings are %s' % m)
+
+        retVal = F1.substitution(m, why=Because("Vars must be renamed")).close()
         if self._renameVarsMaps:
             self._renameVarsMaps[-1][self] = retVal
             self._renameVarsMaps[-1][retVal] = retVal
+
+        
         assert retVal.canonical is retVal, retVal
+        #progress('...got %s' % retVal.debugString())
         return retVal
 
 ##    def renameVars(self):

@@ -364,7 +364,7 @@ class Premise(Reason):
 
 
 class BecauseOfRule(Reason):
-    def __init__(self, rule, bindings, evidence, kb, because=None):
+    def __init__(self, rule, bindings, knownExistentials, evidence, kb, because=None):
         #print rule
         #raise Error
 	Reason.__init__(self)
@@ -373,6 +373,7 @@ class BecauseOfRule(Reason):
 	self._evidence = evidence # Set of statements etc to justify LHS
 	self._kb = kb # The formula the rule was trusting at base
 	self._reason = because
+	self._existentials = knownExistentials
 	return
 
 
@@ -390,8 +391,13 @@ class BecauseOfRule(Reason):
 	    ko.add(subj=me, pred=reason.binding, obj=b, why= dontAsk)
 	    ko.add(subj=b, pred=reason.variable,
 			obj=_giveTerm(var,ko),why= dontAsk)
+	    valObject = _giveTerm(val, ko)
 	    ko.add(subj=b, pred=reason.boundTo,
-			obj=_giveTerm(val, ko), why= dontAsk)
+			obj=valObject, why= dontAsk)
+	    if val in self._existentials:
+                ko.add(subj=valObject, pred=rdf.type,
+                       obj=reason.Existential, why=dontAsk)
+	    
 	if diag.chatty_flag>49: progress("rule:")
 	ru = explainStatement(self._rule,ko)
 	ko.add(subj=me, pred=reason.rule, obj=ru, why=dontAsk)

@@ -18,5 +18,9 @@
     test:arguments     "includes/list-in.n3 --think --data".
 
 
+:bnode a test:CwmTest;
+    test:referenceOutput <bnode-conclude-ref.n3>;
+    test:description   "Binding a bnode from a log:includes.";
+    test:arguments     "includes/bnodeConclude.n3 --think --data".
 
 #ends

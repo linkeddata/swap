@@ -1025,6 +1025,13 @@ class BI_conclusion(HeavyBuiltIn, Function):
 		    why=BecauseOfExperience("conclusion"))  # Cache for later
             return F
 
+class BI_supports(HeavyBuiltIn):
+    """A more managable version of log:conclusion
+
+    """
+    def eval(self, subj, obj, queue, bindings, proof, query):
+        pass
+
 class BI_filter(LightBuiltIn, Function):
     """Filtering of formulae
 

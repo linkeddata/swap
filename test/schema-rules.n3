@@ -48,9 +48,9 @@ daml:domain = rdfs:domain .
 
 {  <#p> a daml:TransitiveProperty . } log:implies
 
-{ @forAll <#x> , <#y> , <#z>.
+{ @forAll <#xx> , <#yx> , <#zx>.
   
-    { <#x> <#p> <#y>. <#y> <#p> <#z>. } log:implies { <#x> <#p> <#z>}
+    { <#xx> <#p> <#yx>. <#yx> <#p> <#zx>. } log:implies { <#xx> <#p> <#zx>}
  } .
 
 

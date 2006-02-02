@@ -1,8 +1,8 @@
      @prefix : <#> .
-     @prefix closure: <rules_closure.n3#> .
-     @prefix data: <data#> .
-     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
-     @prefix owl: <http://www.w3.org/2002/07/owl#> .
+    @prefix closure: <rules_closure.n3#> .
+    @prefix data: <data#> .
+    @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    @prefix owl: <http://www.w3.org/2002/07/owl#> .
     
      @forAll :A,
                 :B .
@@ -26,7 +26,7 @@
             }     log:implies {closure:x     a closure:Answer .
             } .
         
-        }     :a :Step2 .
+        }     :a :Step22 .
     {
          @forAll closure:x .
         <rules_included.n3>     owl:imports <rules_closure.n3> .
@@ -37,5 +37,5 @@
             }     log:implies {closure:x     a closure:Answer .
             } .
         
-        }     :a :Step22 .
+        }     :a :Step2 .
     

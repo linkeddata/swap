@@ -48,13 +48,13 @@ knownReasons = Set([reason.Premise, reason.Parsing,
 
 
 def fail(str, level=0):
-    if True or chatty > 0:
+    if chatty > 0:
 	progress(" "*(level*4), "Proof failed: ", str)
     raise RuntimeError
     return None
 
-def fyi(str, level=0, thresh=-50):
-    if True or chatty >= thresh:
+def fyi(str, level=0, thresh=50):
+    if chatty >= thresh:
 	progress(" "*(level*4),  str)
     return None
 
@@ -220,7 +220,7 @@ def valid(proof, r=None, level=0):
     if len(classesOfReason) > 1:
         return fail("%s has too many reasons, being %s" % (r, classesOfReason))
     t = classesOfReason.pop()
-    fyi("%s %s %s"%(t,r,fs), level=level, thresh=-10)
+    fyi("%s %s %s"%(t,r,fs), level=level, thresh=10)
     level = level + 1
     
     if t is reason.Parsing:
@@ -245,6 +245,7 @@ def valid(proof, r=None, level=0):
 
     elif t is reason.Inference:
 	evidence = proof.the(subj=r, pred=reason.evidence)
+	existentials = Set()
 	bindings = {}
 	for b in proof.each(subj=r, pred=reason.binding):
 	    var_rei  = proof.the(subj=b, pred=reason.variable)
@@ -253,6 +254,8 @@ def valid(proof, r=None, level=0):
 	    # @@@ Check that they really are variables in the rule!
 	    val = getTerm(proof, val_rei)
 	    bindings[var] = val
+	    if proof.contains(subj=val_rei, pred=rdf.type, obj=reason.Existential):
+                existentials.add(val)
 
 	rule = proof.the(subj=r, pred=reason.rule)
 	if not valid(proof, rule, level):
@@ -277,7 +280,7 @@ def valid(proof, r=None, level=0):
 	antecedent = proof.newFormula()
 	antecedent.loadFormulaWithSubstitution(ruleStatement[SUBJ], bindings)
 	for k in bindings.values():
-            if k in evidenceFormula.existentials():
+            if k in existentials: #k in evidenceFormula.existentials() or 
                 antecedent.declareExistential(k)
         antecedent = antecedent.close()
 	
@@ -286,7 +289,7 @@ def valid(proof, r=None, level=0):
 	    bindings, antecedent.debugString()),
 	    level, 195)
 	fyi("about to test if n3Entails(%s, %s)" % (evidenceFormula, antecedent), level, -1)
-	fyi("about to test if n3Entails(%s, %s)" % (evidenceFormula.n3String(), antecedent.n3String()), level, -1)
+	fyi("about to test if n3Entails(%s, %s)" % (evidenceFormula.n3String(), antecedent.n3String()), level, 80)
 	if not n3Entails(evidenceFormula, antecedent,
 			skipIncludes=1, level=level+1):
 	    return fail("""Can't find %s in evidence for

@@ -19,6 +19,7 @@ OFFLINETESTS=regression.n3 list/detailed.tests \
 	ntriples/detailed.tests \
 	string/detailed.tests \
 	syntax/detailed.tests \
+	includes/detailed.tests \
 	testmeta.n3
 #	reify/detailed.tests \
 # 	i18n/detailed.tests \
