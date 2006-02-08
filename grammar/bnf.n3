@@ -9,6 +9,8 @@
 @prefix n3: <http://www.w3.org/2000/10/swap/grammar/n3#>.
 @prefix list: <http://www.w3.org/2000/10/swap/list#>.
 @prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+
 @keywords a, is, of.
 
 <http://www.w3.org/2000/10/swap/grammar/bnf> doc:rules <bnf-rules>;
@@ -35,7 +37,8 @@
 #
 #bnf:canBe rdfs:domain bnf:Term; rdfs:range bnf:Production.
 
-bnf:mustBeOneSequence
+bnf:mustBeOneSequence a rdf:Property;
+	rdfs:label "productions";
 	rdfs:domain bnf:Production; rdfs:range bnf:ListOfSequencesOfProductions;
 	rdfs:comment
 
@@ -45,15 +48,20 @@ term may expand.  Each sequence is just a list of other productions in order.
 """.
 
 bnf:Token rdfs:subClassOf bnf:Production;
-	rdfs:comment "A terminal, aka atomic, production,
-	defined as string or regexp".
+	rdfs:label "token";
+	rdfs:comment """A terminal, aka atomic, production,
+	defined as string or regexp""".
 
-bnf:matches	rdfs:domain bnf:Token;
+bnf:matches	 a rdf:Property;
+		rdfs:label "matches";
+		rdfs:domain bnf:Token;
 		rdfs:range  bnf:RegularExpression;
-		rdfs:comment "The given token is defined by the
-		regular expression which a token must match".
+		rdfs:comment """The given token is defined by the
+		regular expression which a token must match""".
 
-bnf:canStartWith rdfs:domain bnf:Production;
+bnf:canStartWith  a rdf:Property;
+		rdfs:domain bnf:Production;
+		rdfs:label "can start with";
 		rdfs:comment """The production can only start with the given
 		representative character. In the case that a token starts
 		with always the same character, that is the one given.
@@ -65,10 +73,13 @@ bnf:canStartWith rdfs:domain bnf:Production;
 
 # Sugar
 
-bnf:zeroOrMore  rdfs:domain bnf:Term; rdfs:range bnf:Production.
+bnf:zeroOrMore 
+	rdfs:label "zero or more";
+	rdfs:domain bnf:Term; rdfs:range bnf:Production.
 
 
 bnf:commaSeparatedPeriodTerminatedListOf
+	rdfs:label "comma-separated period-terminated list of";
 	rdfs:domain bnf:Production;
 	rdfs:range bnf:Production.
 

@@ -26,10 +26,11 @@
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/bnf#Token">
         <comment>A terminal, aka atomic, production,
 	defined as string or regexp</comment>
+        <label>token</label>
         <subClassOf rdf:resource="http://www.w3.org/2000/10/swap/grammar/bnf#Production"/>
     </rdf:Description>
 
-    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/bnf#canStartWith">
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/grammar/bnf#canStartWith">
         <comment>The production can only start with the given
 		representative character. In the case that a token starts
 		with always the same character, that is the one given.
@@ -38,37 +39,42 @@
 		as the value for this predicate.  This predicate is used
 		only when a predictive parser is possible and desired.</comment>
         <domain rdf:resource="http://www.w3.org/2000/10/swap/grammar/bnf#Production"/>
+        <label>can start with</label>
         <range rdf:resource="http://www.w3.org/2000/10/swap/grammar/bnf#String"/>
-    </rdf:Description>
+    </rdf:Property>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/bnf#commaSeparatedPeriodTerminatedListOf">
         <domain rdf:resource="http://www.w3.org/2000/10/swap/grammar/bnf#Production"/>
+        <label>comma-separated period-terminated list of</label>
         <range rdf:resource="http://www.w3.org/2000/10/swap/grammar/bnf#Production"/>
     </rdf:Description>
 
-    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/bnf#matches">
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/grammar/bnf#matches">
         <comment>The given token is defined by the
 		regular expression which a token must match</comment>
         <domain rdf:resource="http://www.w3.org/2000/10/swap/grammar/bnf#Token"/>
+        <label>matches</label>
         <range rdf:resource="http://www.w3.org/2000/10/swap/grammar/bnf#RegularExpression"/>
-    </rdf:Description>
+    </rdf:Property>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/bnf#mustBe">
         <domain rdf:resource="http://www.w3.org/2000/10/swap/grammar/bnf#Production"/>
         <range rdf:resource="http://www.w3.org/2000/10/swap/grammar/bnf#Production"/>
     </rdf:Description>
 
-    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/bnf#mustBeOneSequence">
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/grammar/bnf#mustBeOneSequence">
         <comment>This is the core property you need to define a BNF production.
 It defines the list of the only sequences to which a given 
 term may expand.  Each sequence is just a list of other productions in order.
 </comment>
         <domain rdf:resource="http://www.w3.org/2000/10/swap/grammar/bnf#Production"/>
+        <label>productions</label>
         <range rdf:resource="http://www.w3.org/2000/10/swap/grammar/bnf#ListOfSequencesOfProductions"/>
-    </rdf:Description>
+    </rdf:Property>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/bnf#zeroOrMore">
         <domain rdf:resource="http://www.w3.org/2000/10/swap/grammar/bnf#Term"/>
+        <label>zero or more</label>
         <range rdf:resource="http://www.w3.org/2000/10/swap/grammar/bnf#Production"/>
     </rdf:Description>
 </rdf:RDF>
