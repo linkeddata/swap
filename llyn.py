@@ -1027,7 +1027,7 @@ class BI_conclusion(HeavyBuiltIn, Function):
 
 class BI_supports(HeavyBuiltIn):
     """A more managable version of log:conclusion
-
+The real version of this should appear in query.py
     """
     def eval(self, subj, obj, queue, bindings, proof, query):
         pass
@@ -1251,6 +1251,8 @@ class RDFStore(RDFSink) :
 # Heavy relational operators:
 
         self.includes =         log.internFrag( "includes", BI_includes)
+        self.supports =         log.internFrag( "supports", BI_supports)
+
 #        log.internFrag("directlyIncludes", BI_directlyIncludes)
         self.notIncludes = log.internFrag("notIncludes", BI_notIncludes)
         self.smartNotIncludes = log.internFrag("notIncludesWithBuiltins", BI_notIncludesWithBuiltins)

@@ -446,7 +446,7 @@ class Formula(AnonymousNode, CompoundTerm):
 
     def resetRenames(reset = True):
         if reset:
-            if diag.chatty_flag > 0:
+            if diag.chatty_flag > 20:
                 progress("Resetting all renamed vars maps ---------------------------------")
             Formula._renameVarsMaps.append({})
         else:

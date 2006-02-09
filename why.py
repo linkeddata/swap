@@ -264,6 +264,7 @@ class BecauseMerge(KBReasonTracker):
     def	newStatement(self, s, why):  # Why isn't a reason here, it is the source
 	if verbosity() > 80:progress("Merge: Believing %s because of merge"%(s))
 	self.fodder.add(why)
+	self.reasonForStatement[s] = why
 	
     def explain(self, ko):
 	me = self.me.get(ko, None)
@@ -557,6 +558,46 @@ class BecauseIncludes(BecauseBuiltIn):
     """Because of the speific built-in log:includes"""
     pass
 
+class BecauseSupports(BecauseBuiltIn):
+    """Because of the very special build-in log:supports"""
+    def __init__(self, subj, conclusion, pred, obj, reason):
+        BecauseBuiltIn.__init__(self, subj, pred, obj)
+        self.reason = []
+        for statement in reason:
+            if isinstance(statement, Reason):
+                pass
+            else:
+                if statement in conclusion:
+                    self.reason.append(statement)
+        self.conclusion = conclusion
+
+    def explain(self, ko):
+        "This is just a plain fact - or was at the time."
+        me = self.me.get(ko, None)
+        if me != None: return me  #  Only do this once
+        me = self.meIn(ko)
+        if diag.chatty_flag>49: progress("Fact reason=%s ko=%s"%(self,me))
+        fact = ko.newFormula()
+        m = []
+        for s in self.reason:
+            e = explainStatement(s, ko)
+            m.append(e)
+#        raise RuntimeError(m)
+        fact.add(subj=self._subject, pred=self._predicate, obj=self._object,
+                                                        why=dontAsk)
+        fact = fact.close()
+        ko.add(me, rdf.type, reason.Fact, why=dontAsk)
+        ko.add(me, reason.gives, fact, why=dontAsk)
+        ko.add(me, reason.reasoning, m, why=dontAsk)
+        if giveForumlaArguments:
+            for x in self._subject, self._object:
+                proofs = proofsOf.get(x, None)
+                if proofs != None:
+                    ko.add(me, reason.proof, proof[0].explain(ko), why=dontAsk)
+
+#	if self._proof != None:
+#	    ko.add(me, reason.proof, self._proof.explain(ko), why=dontAsk)
+        return me
 
 
 # ends

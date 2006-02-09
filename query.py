@@ -24,7 +24,8 @@ from term import BuiltIn, LightBuiltIn, RDFBuiltIn, ArgumentNotLiteral, \
     CompoundTerm, List, EmptyList, NonEmptyList, ErrorFlag
 from formula import StoredStatement, Formula
 from why import Because, BecauseBuiltIn, BecauseOfRule, \
-    BecauseOfExperience, becauseSubexpression, BecauseMerge ,report
+    BecauseOfExperience, becauseSubexpression, Reason, \
+    BecauseSupports, BecauseMerge ,report, Premise
 
 
 BuiltinFeedError = (ArgumentNotLiteral, UnknownType)
@@ -821,10 +822,14 @@ class Query(Formula):
 	if diag.tracking:
             for loc in xrange(len(evidence)):
                 r = evidence[loc]
-                if isinstance(r, BecauseBuiltInWill):
-                    
+                
+                if isinstance(r, BecauseSupportsWill):                    
+                    evidence[loc] = BecauseSupports(*([smarterSubstitution(k, bindings,
+                        r.args[0]) for k in r.args] +
+                        [[k for k in evidence if isinstance(k, (StoredStatement, Reason))]]))
+                if isinstance(r, BecauseBuiltInWill):                    
                     evidence[loc] = BecauseBuiltIn(*[smarterSubstitution(k, bindings,
-			r.args[0]) for k in r.args])
+                        r.args[0]) for k in r.args])
 	    reason = BecauseOfRule(self.rule, bindings=bindings, knownExistentials = extraBNodes,
 			    evidence=evidence, kb=self.workingContext)
 #	    progress("We have a reason for %s of %s with bindings %s" % (self.rule, reason, bindings))
@@ -1009,6 +1014,8 @@ class Query(Formula):
             elif state == S_HEAVY_READY:  # not light, may be heavy; or heavy ready to run
                 if pred is query.store.includes: # and not diag.tracking:  # don't optimize when tracking?
 		    nbs = item.doIncludes(queue, existentials, variables, bindings)
+		elif pred is query.store.supports:
+                    nbs = item.doSupports(queue, existentials, variables, bindings)
                 else:
 		    item.state = S_HEAVY_WAIT  # Assume can't resolve
                     nbs = item.tryBuiltin(queue, bindings, evidence=evidence)
@@ -1335,6 +1342,73 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 		 #@@ was RuntimeError exception
 	    item.state = S_DONE
 	return nbs
+
+
+    def doSupports(item, queue, existentials, variables, bindings):
+        """Real implementation of log:supports. Have fun.
+
+        """
+        con, pred, subj, obj = item.quad
+	state = item.state
+        store = con.store
+        #statementObject = iter(con.statementsMatching(subj=subj, pred=pred, obj=obj)).next()
+
+        nbs = []  # Failure
+	if (isinstance(subj, Formula)
+	    and isinstance(obj, Formula)):
+	    assert subj.canonical != None
+            F = store.any((store._experience, store.cufi, subj, None))  # Cached value?
+            if F != None:
+		if diag.chatty_flag > 10: progress("Bultin: " + `subj`+ " cached log:conclusion " + `F`)
+            else:
+                oldSubj = subj
+#                subj = subj.renameVars()
+
+                F = subj.newFormula()
+                if diag.tracking:
+                    reason = Premise("Assumption of builtin", item)
+                    #reason = BecauseMerge(F, subj)
+    #		F.collector = reason
+    #		proof.append(reason)
+                else: reason = None
+                if diag.chatty_flag > 10: progress("Bultin: " + `subj`+ " log:conclusion " + `F`)
+                store.copyFormula(subj, F, why=reason) # leave open
+                think(F)
+                F = F.close()
+                assert subj.canonical != None
+                
+                store.storeQuad((store._experience, store.cufi, oldSubj, F),
+                        why=BecauseOfExperience("conclusion"))  # Cache for later
+
+	    more_unmatched = buildPattern(F, obj)
+	    more_variables = obj.variables().copy()
+	    _substitute({obj: F}, more_unmatched)
+	    _substitute(bindings, more_unmatched)
+	    existentials = existentials | more_variables
+	    allvars = variables | existentials
+	    for quad in more_unmatched:
+		newItem = QueryItem(item.query, quad)
+		queue.append(newItem)
+		if not newItem.setup(allvars, interpretBuiltins = 0,
+			unmatched=more_unmatched, mode=item.query.mode):
+		    return []
+	    if diag.chatty_flag > 40:
+		    progress("log:Includes: Adding %i new terms and %s as new existentials."%
+			      (len(more_unmatched),
+			       seqToString(more_variables)))
+	    rea = BecauseSupportsWill(subj, F, pred, obj)
+##	    nbs = [({oldsubj: subj}, rea)]
+	    nbs = [({}, rea)]
+	else:
+            if isinstance(subj, Formula): subj = subj.n3String()
+            if isinstance(obj, Formula): obj = obj.n3String()
+            #raise RuntimeError("Cannot do {%s} log:includes {%s} " % (subj, obj))
+	    progress("""Warning: Type error ignored on builtin:
+		log:include only on formulae """+`item`)
+		 #@@ was RuntimeError exception
+	    item.state = S_DONE
+	return nbs
+
 
 
     def tryBuiltin(self, queue, bindings, evidence):                    
@@ -1746,6 +1820,10 @@ def bindingsToString(bindings):
     return str
 
 class BecauseBuiltInWill(object):
+    def __init__(self, *args):
+        self.args = args
+
+class BecauseSupportsWill(object):
     def __init__(self, *args):
         self.args = args
 
