@@ -1330,7 +1330,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 		    progress("log:Includes: Adding %i new terms and %s as new existentials."%
 			      (len(more_unmatched),
 			       seqToString(more_variables)))
-	    rea = BecauseBuiltInWill(subj, pred, obj)
+	    rea = BecauseBuiltInWill(con, subj, pred, obj)
 ##	    nbs = [({oldsubj: subj}, rea)]
 	    nbs = [({}, rea)]
 	else:
@@ -1396,7 +1396,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 		    progress("log:Includes: Adding %i new terms and %s as new existentials."%
 			      (len(more_unmatched),
 			       seqToString(more_variables)))
-	    rea = BecauseSupportsWill(subj, F, pred, obj)
+	    rea = BecauseSupportsWill(con, subj, F, pred, obj)
 ##	    nbs = [({oldsubj: subj}, rea)]
 	    nbs = [({}, rea)]
 	else:
@@ -1432,7 +1432,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                             if diag.chatty_flag > 80: progress(
 				"Builtin buinary relation operator succeeds")
                             if diag.tracking:
-                                rea = BecauseBuiltIn(subj, pred, obj)
+                                rea = BecauseBuiltIn(con, subj, pred, obj)
 				return [({}, rea)]  # Involves extra recursion just to track reason
                             return [({}, None)]   # No new bindings but success in logical operator
                         else: return []   # We absoluteley know this won't match with this in it
@@ -1475,7 +1475,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                                 result = result.renameVars()
                                 assert result.canonical is result, result.debugString()
 			    if diag.tracking:
-				rea = BecauseBuiltIn(subj, pred, result)
+				rea = BecauseBuiltIn(con, subj, pred, result)
 			    if isinstance(pred, MultipleFunction):
 				return [({obj:x}, rea) for x in result]
 			    else:
@@ -1508,7 +1508,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			    self.state = S_DONE
 			    rea=None
 			    if diag.tracking:
-				rea = BecauseBuiltIn(result, pred, obj)
+				rea = BecauseBuiltIn(con, result, pred, obj)
 			    if isinstance(pred, MultipleReverseFunction):
 				return [({subj:x}, rea) for x in result]
 			    else:

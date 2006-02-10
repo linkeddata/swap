@@ -44,19 +44,40 @@ checked = {} # Formulae from checked reasons
 knownReasons = Set([reason.Premise, reason.Parsing,
                     reason.Inference, reason.Conjunction,
                     reason.Fact, reason.Extraction,
-                    reason.CommandLine])
+                    reason.CommandLine,
+                    reason.Conclusion])
 
 
 def fail(str, level=0):
-    if chatty > 0:
+    if True or chatty > 0:
 	progress(" "*(level*4), "Proof failed: ", str)
     raise RuntimeError
     return None
 
 def fyi(str, level=0, thresh=50):
-    if chatty >= thresh:
+    if True or chatty >= thresh:
 	progress(" "*(level*4),  str)
     return None
+
+
+class Truth(object):
+    """A Truth is a worldview.
+    Within one there are valid premises
+
+    Every level of quotation necessarally opens a new Truth"""
+    def __init__(self, validParses, premise=None):
+        self.v = validParses
+        self.premise = premise
+    def assumes(self, f):
+        if not f: return True
+        if not self.premise: return False
+        return n3Entails(self.premise, f)
+    def canTrustSource(self, f):
+        if self.v is True:
+            return True
+        if self.v is False:
+            return False
+        return f in self.v
 
 def evidenceDiagnostics(subj, pred, obj, evidenceStatements, level):
     for p, part in (subj, "subject"), (obj, "object"):
@@ -178,7 +199,7 @@ def getTerm(proof, x):
 	return getSymbol(proof, x)
 
 
-def valid(proof, r=None, level=0):
+def valid(proof, r=None, truth=None, level=0):
     """Check whether this reason is valid.
     
     proof   is the formula which contains the proof
@@ -191,6 +212,8 @@ def valid(proof, r=None, level=0):
     Returns the formula proved or None if not
     """
     fyi("Starting valid on %s" % r, level=level, thresh=1000)
+    if truth is None:
+        raise RuntimeError
     if r == None:
         r = proof.the(pred=rdf.type, obj=reason.Proof)  #  thing to be proved
 	
@@ -227,6 +250,8 @@ def valid(proof, r=None, level=0):
 	res = proof.any(subj=r, pred=reason.source)
 	if res == None: return fail("No source given to parse", level=level)
 	u = res.uriref()
+	if not truth.canTrustSource(u):
+            return fail("I cannot trust that source")
 	v = verbosity()
 	setVerbosity(debugLevelForParsing)
 	try:
@@ -258,7 +283,7 @@ def valid(proof, r=None, level=0):
                 existentials.add(val)
 
 	rule = proof.the(subj=r, pred=reason.rule)
-	if not valid(proof, rule, level):
+	if not valid(proof, rule, truth, level):
 	    return fail("No justification for rule "+`rule`, level)
 	for s in proof.the(rule, reason.gives).statements:  #@@@@@@ why look here?
 	    if s[PRED] is log.implies:
@@ -270,7 +295,7 @@ def valid(proof, r=None, level=0):
 	# Check the evidence is itself proved
 	evidenceFormula = proof.newFormula()
 	for e in evidence:
-	    f2 = valid(proof, e, level)
+	    f2 = valid(proof, e, truth, level)
 	    if f2 == None:
 		return fail("Evidence %s was not proved."%(e))
 	    f2.store.copyFormula(f2, evidenceFormula)
@@ -311,7 +336,7 @@ Bindings:%s
 	fyi("Conjunction:  %i components" % len(components))
 	g = r.store.newFormula()
 	for e in components:
-	    g1 = valid(proof, e, level)
+	    g1 = valid(proof, e, truth, level)
 	    if not g1:
 		return fail("In Conjunction %s, evidence %s could not be proved."
 		    %(r,e), level=level)
@@ -381,12 +406,38 @@ It seems {%s} log:includes {%s} is false""" % (subj.n3String(), obj.n3String()))
 	RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
 	result: %s
 	""" % (s, pred, o, r), level)
+
+
+    elif t is reason.Conclusion:
+	con, pred, subj, obj = statementFromFormula(f).quad
+	fyi("Built-in: testing log:supports {%s %s %s}" % (subj, pred, obj), level=level)
+	if pred is not log.supports:
+            return fail('Supports step is not a log:supports')
+            #log:includes is very special
+        r2 = proof.the(r, reason.because)
+        if r2 is None:
+	    return fail("Extraction: no source formula given for %s." % (`r`), level)
+        newTruth = Truth(False, subj)
+        fyi("Starting nested conclusion", level=level)
+        f2 = valid(proof, r2, newTruth, level)
+        if f2 is None:
+	    return fail("Extraction: couldn't validate formula to be extracted from.", level)
+	if not isinstance(f2, Formula):
+            return fail("Extraction of %s gave something odd, %s" % (r2, f2), level)
+        fyi("... ended nested conclusion. success!", level=level)
+	if not n3Entails(f2, obj):
+	    return fail("""Extraction %s not included in formula  %s."""
+#    """ 
+		    %(f, f2), level=level)
+	checked[r] = f
+	return f
+
 	
     elif t is reason.Extraction:
 	r2 = proof.the(r, reason.because)
 	if r2 == None:
 	    return fail("Extraction: no source formula given for %s." % (`r`), level)
-	f2 = valid(proof, r2, level)
+	f2 = valid(proof, r2, truth, level)
 	if f2 == None:
 	    return fail("Extraction: couldn't validate formula to be extracted from.", level)
 	if not isinstance(f2, Formula):
@@ -405,7 +456,10 @@ It seems {%s} log:includes {%s} is false""" % (subj.n3String(), obj.n3String()))
     elif t is reason.Premise:
 	g = proof.the(r, reason.gives)
 	if g is None: return fail("No given input for %s" % r)
-	fyi("Premise is: %s" % g.n3String(), level, thresh=25) 
+	fyi("Premise is: %s" % g.n3String(), level, thresh=25)
+	if not truth.assumes(g):
+            return fail("I cannot assume %s" % g)
+
 	
     else:
 	s = ""
@@ -476,8 +530,8 @@ def main():
 
     # setVerbosity(60)
     fyi("Length of proof formula: "+`len(proof)`, thresh=5)
-    
-    proved = valid(proof)
+    truth = Truth(True)
+    proved = valid(proof, truth=truth)
     if proved != None:
 	fyi("Proof looks OK.   %i Steps" % proofSteps, thresh=5)
 	setVerbosity(0)

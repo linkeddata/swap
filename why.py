@@ -526,11 +526,12 @@ class BecauseOfExperience(Because):
 class BecauseBuiltIn(Reason):
     """Because the built-in function given concluded so.
     A nested reason for running the function must be given"""
-    def __init__(self, subj, pred, obj):
+    def __init__(self, context, subj, pred, obj):
 	Reason.__init__(self)
 	self._subject = subj
 	self._predicate = pred
 	self._object = obj
+	self._context = context
 	
     def explain(self, ko):
 	"This is just a plain fact - or was at the time."
@@ -560,12 +561,14 @@ class BecauseIncludes(BecauseBuiltIn):
 
 class BecauseSupports(BecauseBuiltIn):
     """Because of the very special build-in log:supports"""
-    def __init__(self, subj, conclusion, pred, obj, reason):
-        BecauseBuiltIn.__init__(self, subj, pred, obj)
+    def __init__(self, context, subj, conclusion, pred, obj, reason):
+        BecauseBuiltIn.__init__(self, context, subj, pred, obj)
         self.reason = []
         for statement in reason:
             if isinstance(statement, Reason):
-                pass
+                if isinstance(statement, BecauseBuiltIn):
+                    if statement._context is conclusion:
+                        self.reason.append(statement)
             else:
                 if statement in conclusion:
                     self.reason.append(statement)
@@ -578,17 +581,23 @@ class BecauseSupports(BecauseBuiltIn):
         me = self.meIn(ko)
         if diag.chatty_flag>49: progress("Fact reason=%s ko=%s"%(self,me))
         fact = ko.newFormula()
-        m = []
-        for s in self.reason:
-            e = explainStatement(s, ko)
-            m.append(e)
+        m = ko.newBlankNode(why= dontAsk)
 #        raise RuntimeError(m)
         fact.add(subj=self._subject, pred=self._predicate, obj=self._object,
                                                         why=dontAsk)
         fact = fact.close()
-        ko.add(me, rdf.type, reason.Fact, why=dontAsk)
+        ko.add(me, rdf.type, reason.Conclusion, why=dontAsk)
         ko.add(me, reason.gives, fact, why=dontAsk)
-        ko.add(me, reason.reasoning, m, why=dontAsk)
+        ko.add(subj=m, pred=rdf.type, obj=reason.Conjunction, why=dontAsk) 
+        ko.add(me, reason.because, m, why=dontAsk)
+        statementsForReason = {}  # reverse index: group by reason
+        for s in self.reason:
+            rea = explainStatement(s, ko)
+	    x = statementsForReason.get(rea, None)
+	    if x is None: statementsForReason[rea] = [s]
+	    else: x.append(s)
+        for e in statementsForReason:
+            ko.add(m, reason.component, e, why=dontAsk)
         if giveForumlaArguments:
             for x in self._subject, self._object:
                 proofs = proofsOf.get(x, None)

@@ -1519,7 +1519,7 @@ class RDFStore(RDFSink) :
                 return self.newLiteral(what and 'true' or 'false', self.boolean)
 	    if type(what) is types.ListType: #types.SequenceType:
 		return self.newList(what)
-	    raise RuntimeError("Eh?  can't intern "+`what`+" of type: "+`type(what)`)
+	    raise RuntimeError("Eh?  can't intern "+`what`+" of type: "+`what.__class__`)
 
         typ, urirefString = what
 
