@@ -8,7 +8,16 @@
 
   $ID   $
 """
-from rdflib.syntax.parser import ParserDispatcher
+try:
+    from rdflib.syntax.parser import ParserDispatcher
+except ImportError:
+    from rdflib.syntax.parsers.RDFXMLParser import RDFXMLParser
+    class ParserDispatcher(object):
+        def __init__(self, sink):
+            self.sink = sink
+            self.realParser = RDFXMLParser()
+        def __call__(self, source, format):
+            self.realParser.parse(source, self.sink)
 from rdflib.StringInputSource import StringInputSource
 from rdflib.URIRef import URIRef
 from rdflib.BNode import BNode
@@ -33,11 +42,12 @@ class rdflib_handoff:
 	self._reason2 = None	# Why these triples
 	if diag.tracking: self._reason2 = BecauseOfData(sink.newSymbol(thisDoc), because=self._reason)
 
-    def prefix_mapping(self, prefix, uri):
+    def prefix_mapping(self, prefix, uri, override=False):
         self.prefix_ns_map[prefix] = uri
         self.ns_prefix_map[uri] = prefix
 #        print 'why was I told about: ', prefix, uri
 #        raise RuntimeError(prefix, prefix.__class__, uri, uri.__class__)
+    bind = prefix_mapping
     
     def feed(self, buffer):
         self.parser(StringInputSource(buffer), self.format)
