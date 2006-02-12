@@ -13,7 +13,7 @@
 @prefix : <lp#>.
 @prefix lp: <lp#>.
 
-@forAll s, t, st, ts, tc, F, G.
+@forAll s, t, st, ts, tc, F, G, MAP.
 
 comp a owl:FunctionalProperty;
   s:domain (Proof Proof).crossProduct;
@@ -34,24 +34,25 @@ sum a owl:FunctionalProperty;
  }
   => {  ts proves G }.
 
-#@@
-{ (t s) comp ts.
-#@@  t proves { F => G }.
-  s proves F
+# GMP application
+{ s proves F.
+  (MAP F) subst G.
+  (s MAP) genl t
  }
-  => {  (s ts F) a Answer }.
+  => {  t proves G }.
+
 
 
 # proof checker
-#@@{ t proves F } => { t.check proves { t proves F } }.
+# { t proves F } => { t.check proves { t proves F } }.
 { t check tc.
   t proves F. } => { tc proves { t proves F } }.
 
 # sum
-#@@ { s proves F } => { (s t).sum proves F }.
+# { s proves F } => { (s t).sum proves F }.
 { (s t) sum st.
  s proves F } => { st proves F }.
-#@@ { t proves F } => { (s t).sum proves F }.
+# { t proves F } => { (s t).sum proves F }.
 { (s t) sum st.
   t proves F } => { st proves F }.
 
@@ -70,14 +71,19 @@ sum a owl:FunctionalProperty;
 
 
 a1 lp:proves { Socrates a Man }.
-#@@a2 lp:proves { @forAll WHO. { WHO a Man } => { WHO a Mortal } }.
 a2 lp:proves { { Socrates a Man } => { Socrates a Mortal } }.
-(a2 a1) lp:comp a2_a1.
 
-(z2 z1) lp:comp z2z1.
-z1 lp:proves ABC.
-z2 lp:proves { ABC => DEF }.
+(a2 a1).lp:comp a lp:Proof.
+
+
+a3 lp:proves { @forAll WHO. { WHO a Man } => { WHO a Mortal } }.
+
+( (WHO Socrates)
+  { @forAll WHO. { WHO a Man } => { WHO a Mortal } }
+) lp:subst { { Socrates a Man } => { Socrates a Mortal } }.
+
+(a3 (WHO Socrates)).lp:genl a lp:Proof.
 
 #
-#@@{ ?S [ s:domain ?C] ?O } => { ?S a ?C }.
-#@@{ ?S [ s:range ?C] ?O } => { ?O a ?C }.
+{ ?S [ s:domain ?C] ?O } => { ?S a ?C }.
+{ ?S [ s:range ?C] ?O } => { ?O a ?C }.
