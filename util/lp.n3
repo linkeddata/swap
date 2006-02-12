@@ -9,12 +9,14 @@
 @keywords is, of, a.
 @prefix owl: <http://www.w3.org/2002/07/owl#>.
 @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
 
 @prefix : <lp#>.
 @prefix lp: <lp#>.
 
-@forAll s, t, st, ts, tc, F, G, MAP.
+@forAll s, t, st, ts, tc, F, G, FG, MAP.
 
+proves s:domain Proof.
 comp a owl:FunctionalProperty;
   s:domain (Proof Proof).crossProduct;
   s:range Proof.
@@ -36,11 +38,25 @@ sum a owl:FunctionalProperty;
 
 # GMP application
 { s proves F.
-  (MAP F) subst G.
+  (MAP F) log:subst G.
   (s MAP) genl t
  }
   => {  t proves G }.
 
+# and-introduction
+# @@generalize to N formulas
+{ s proves F.
+  t proves G.
+  (F G) log:conjunction FG.
+  (s t) sum st.
+} => { st proves FG }.
+
+# RDF simple entailment
+#  (subsumes and-elimination)
+{ s proves F.
+  (s G) specl t.
+  F log:includes G.
+} => { t proves G }.
 
 
 # proof checker
@@ -66,6 +82,12 @@ sum a owl:FunctionalProperty;
   A.quote a Axiom } => { c proves A }.
 
 
+######
+{ ?S [ s:domain ?C] ?O } => { ?S a ?C }.
+{ ?S [ s:range ?C] ?O } => { ?O a ?C }.
+######
+
+
 @prefix lpex: <lp_ex@@#>.
 @prefix : <lp_ex@@#>.
 
@@ -73,17 +95,20 @@ sum a owl:FunctionalProperty;
 a1 lp:proves { Socrates a Man }.
 a2 lp:proves { { Socrates a Man } => { Socrates a Mortal } }.
 
-(a2 a1).lp:comp a lp:Proof.
+(a2 a1).lp:comp a lp:Proof. # i.e. it exists
 
 
 a3 lp:proves { @forAll WHO. { WHO a Man } => { WHO a Mortal } }.
 
 ( (WHO Socrates)
   { @forAll WHO. { WHO a Man } => { WHO a Mortal } }
-) lp:subst { { Socrates a Man } => { Socrates a Mortal } }.
+) log:subst { { Socrates a Man } => { Socrates a Mortal } }.
 
 (a3 (WHO Socrates)).lp:genl a lp:Proof.
 
-#
-{ ?S [ s:domain ?C] ?O } => { ?S a ?C }.
-{ ?S [ s:range ?C] ?O } => { ?O a ?C }.
+
+a4 lp:proves { sky color blue }.
+(a1 a4).lp:sum a lp:Proof.
+
+a5 lp:proves { sky color blue. air temp hot }.
+(a5 {air temp hot}).lp:specl a lp:Proof.
