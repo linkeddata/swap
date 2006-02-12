@@ -1,0 +1,83 @@
+# @@cite BSL.ps Artemov
+# based on
+#html  <a href="http://www.cs.gc.cuny.edu/~sartemov/publ.html">S. Artemov</a>, <cite><a href="http://www.cs.gc.cuny.edu/~sartemov/publications/BSL.ps">Explicit provability and constructive semantics</a></cite>, Bulletin of Symbolic Logic, volume 7, No.1, pp. 1-36, 2001
+#
+#html see also: <a href="http://rdfig.xmlhack.com/2003/09/23/2003-09-23.html#1064349895.329315">discovery notes 23 Sep 2003</a>
+# <- http://www.w3.org/XML/9711theory/LogicOfProofs.lsl
+# <- http://esw.w3.org/topic/LogicalReflection
+
+@keywords is, of, a.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+
+@prefix : <lp#>.
+@prefix lp: <lp#>.
+
+@forAll s, t, st, ts, tc, F, G.
+
+comp a owl:FunctionalProperty;
+  s:domain (Proof Proof).crossProduct;
+  s:range Proof.
+check a owl:FunctionalProperty;
+  s:domain Proof; s:range Proof.
+sum a owl:FunctionalProperty;
+  s:domain (Proof Proof).crossProduct;
+  s:range Proof.
+
+# reflection
+{ t proves F } => F.
+
+# application
+{ (t s) comp ts.
+  t proves { F => G }.
+  s proves F
+ }
+  => {  ts proves G }.
+
+#@@
+{ (t s) comp ts.
+#@@  t proves { F => G }.
+  s proves F
+ }
+  => {  (s ts F) a Answer }.
+
+
+# proof checker
+#@@{ t proves F } => { t.check proves { t proves F } }.
+{ t check tc.
+  t proves F. } => { tc proves { t proves F } }.
+
+# sum
+#@@ { s proves F } => { (s t).sum proves F }.
+{ (s t) sum st.
+ s proves F } => { st proves F }.
+#@@ { t proves F } => { (s t).sum proves F }.
+{ (s t) sum st.
+  t proves F } => { st proves F }.
+
+
+@forAll c, A.
+
+#hmm... this is probably circular, using => for
+# both the propositional implications symbol
+# and the inference rule turnstile.
+{ c a Proof.
+  A.quote a Axiom } => { c proves A }.
+
+
+@prefix lpex: <lp_ex@@#>.
+@prefix : <lp_ex@@#>.
+
+
+a1 lp:proves { Socrates a Man }.
+#@@a2 lp:proves { @forAll WHO. { WHO a Man } => { WHO a Mortal } }.
+a2 lp:proves { { Socrates a Man } => { Socrates a Mortal } }.
+(a2 a1) lp:comp a2_a1.
+
+(z2 z1) lp:comp z2z1.
+z1 lp:proves ABC.
+z2 lp:proves { ABC => DEF }.
+
+#
+#@@{ ?S [ s:domain ?C] ?O } => { ?S a ?C }.
+#@@{ ?S [ s:range ?C] ?O } => { ?O a ?C }.
