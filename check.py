@@ -49,13 +49,13 @@ knownReasons = Set([reason.Premise, reason.Parsing,
 
 
 def fail(str, level=0):
-    if True or chatty > 0:
+    if chatty > 0:
 	progress(" "*(level*4), "Proof failed: ", str)
     raise RuntimeError
     return None
 
 def fyi(str, level=0, thresh=50):
-    if True or chatty >= thresh:
+    if chatty >= thresh:
 	progress(" "*(level*4),  str)
     return None
 
