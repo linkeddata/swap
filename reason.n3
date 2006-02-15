@@ -7,6 +7,8 @@
 @prefix n3: <http://www.w3.org/2000/10/swap/reify#>.
 @prefix soc: <http://www.w3.org/2000/10/swap/pim/soc#>.
 
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 
 
 :Step a s:Class;
@@ -36,7 +38,7 @@
 	s:comment """The formula given was derived from parsing a
 	resource.""".
 
-:source rdf:Property;
+:source a rdf:Property;
 	s:label "source";
 	s:domain :Parsing;
 	s:range soc:Work;
@@ -45,8 +47,8 @@
 	""".
 
 :Extraction s:subClassOf :Step;
-	s:label "Co""njunction elimination";
-	s:comment "The step of taking one statement out of a formula.
+	s:label "Conjunction elimination";
+	s:comment """The step of taking one statement out of a formula.
 	The step is identified by the :gives formula (the statement)
 	and the :because step's :gives formula (the formula extracted
 	from).
