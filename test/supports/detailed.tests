@@ -1,0 +1,28 @@
+# List of regression tests for $SWAP/test/supports
+
+@prefix : <#>.
+@prefix x: <#>.
+@prefix test: <http://www.w3.org/2000/10/swap/test.n3#>.
+
+
+:t01
+  a test:CwmTest;
+    test:workingDirectory  <../>;
+    test:referenceOutput <../ref/supports.ref>;
+    test:description   "A very simple use of log:supports";
+    test:arguments     """supports/simple.n3 --think --base=foo:""".
+
+:t02
+  a test:CwmTest;
+    test:workingDirectory  <../>;
+    test:referenceOutput <../ref/supports_proof.ref>;
+    test:description   "Proof for simple use of log:supports";
+    test:arguments     """supports/simple.n3 --think --why --base=foo:""".
+
+
+:t03
+  a test:CwmTest;
+    test:workingDirectory  <../>;
+    test:referenceOutput <../ref/supports.ref>;
+    test:description   "checking of proof for simple use of log:supports";
+    test:arguments     """supports/simple.n3 --think --why --base=foo: | python ../check.py""".
