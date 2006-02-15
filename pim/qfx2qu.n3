@@ -185,8 +185,9 @@ this log:forAll :a, :b, :d, :i, :l, :m, :n, :p, :r, :s, :t, :x, :y, :z.
 {  [:listForAccount :y] ofx:STMTTRN [
    ofx:FITID    :i;
    ofx:CHECKNUM   :x ].
+   :i crypto:sha ?id.
    :r log:uri [is os:baseAbsolute of
-	[is string:concatenation of ( "fit.n3#" :i  )]].
+	[is string:concatenation of ( "fit.n3#" ?id  )]].
 #   ofx:TRNTYPE  :t 
 } log:implies {
 :r  qu:number :x .
