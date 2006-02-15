@@ -18,7 +18,7 @@ all : n3-checked.txt n3-report.html n3.rdf \
 #  N3 Full:
 
 .n3.rdf:
-	python $(SWAP)/cwm.py --n3 $< --rdf  > $>
+	python $(SWAP)/cwm.py --n3 $< --rdf  > $@
 
 n3-yacc.c : n3-selectors.n3-yacc.y
 	yacc -o $@ n3-selectors.n3-yacc.y
