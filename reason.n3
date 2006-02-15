@@ -39,6 +39,7 @@
 	resource.""".
 
 :CommandLine s:subClassOf :Step.
+:Inference s:subClassOf :Step.
 
 :source a rdf:Property;
 	s:label "source";
