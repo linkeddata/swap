@@ -38,6 +38,8 @@
 	s:comment """The formula given was derived from parsing a
 	resource.""".
 
+:CommandLine s:subClassOf :Step.
+
 :source a rdf:Property;
 	s:label "source";
 	s:domain :Parsing;
@@ -60,7 +62,7 @@
 	s:range :Step;
 	s:comment """gives the step whose data was input to this step.""".
 
-:Conjunction a :Step;
+:Conjunction s:subClassOf :Step;
 	s:label """The step of conjunction introduction: 
 	taking a bunch of compent statements
 	and building a formula from them.""".
