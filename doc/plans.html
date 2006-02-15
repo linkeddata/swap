@@ -5,7 +5,7 @@
 <head profile="http://www.w3.org/2003/g/data-view">
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
   <title>Cwm enhancement roadmap</title>
-  <meta name="generator" content="amaya 9.3, see http://www.w3.org/Amaya/" />
+  <meta name="generator" content="amaya 9.4, see http://www.w3.org/Amaya/" />
   <link href="style.css" rel="stylesheet" type="text/css" />
   <link rel="transformation"
   href="http://www.w3.org/2002/12/cal/glean-hcal.xsl" />
@@ -40,8 +40,9 @@ href="cwm">Cwm</a> Development Agenda and Release Roadmap</h1>
 <p>In connection with the <a href="http://www.policyawareweb.org/">PAW
 project</a>, we have <span id="ev442" class="vevent"><span
 class="description"><b class="summary">paw/cwm dev meetings</b> starting
-<abbr class="dtstart" title="2006-03-09T11:00:00-0400">9 Mar at
-11:00ET</abbr> for 90 mins and <span class="rrule">every <span class="interval">2</span>nd <abbr title="WEEKLY" class="freq">week</abbr>
+<abbr class="dtstart" title="2006-02-15T11:00:00-0400">15 Feb at
+11:00ET</abbr> for 90 mins and <span class="rrule">every <abbr title="2"
+class="interval">other</abbr> <abbr title="WEEKLY" class="freq">week</abbr>
 on <abbr class="byday" title="WE">Wednesday</abbr> thereafter until further
 notice.</span>.</span></span><!--
 repeat doesn't quite work right.
@@ -62,21 +63,19 @@ Oct</a>, and <a
 href="http://www.policyawareweb.org/2005/ftf2/10-28-paw-minutes.html">28 Oct
 (all paw-team meeting)</a>, 4 Nov (no records), <a
 href="http://www.policyawareweb.org/2005/pf-dev/11-23-paw-minutes.html">23
-Nov</a>.. 7 Dec, 21 Dec, 2006 Jan 4, <a href="http://www.policyawareweb.org/2006/PAWf2fJan2006.html">Jan 19</a>, 1 Feb (IRC only),
-<a href="http://www.policyawareweb.org/2005/pf-dev/02-15-paw-minutes">15 Feb</a>.</p>
+Nov</a>.. 7 Dec, 21 Dec, 2006 Jan 4, 1 Feb (IRC only).</p>
 <ol>
   <li>Convene, take roll, review records and agenda.
     <ul>
-      <li>Meeting coordinates: <a
-      href="irc://irc.freenode.net/paw">#paw on irc.freenode.net</a>
-      Dial in <a
-      href="tel:+1-617-761-6200;postdial=79296">+1-617-761-6200 Code
-      79296 ("SW CWM")</a> . (<a
-      href="http://www.w3.org/Guide/1998/08/teleconference-calendar#s_1780"
-      >@@telcon res</a>)</li>
+      <li>Meeting coordinates: <a href="irc://irc.freenode.net/paw">#paw on
+        irc.freenode.net</a> Dial in <a
+        href="tel:+1-617-761-6200;postdial=79296">+1-617-761-6200 Code 79296
+        ("SW CWM")</a> . (<a
+        href="http://www.w3.org/Guide/1998/08/teleconference-calendar#s_1780">@@telcon
+        res</a>)</li>
       <li>Round the table updates <em>(a sort of roll call and agenda
-      review)</em> expected: Yarden aka Jordan, Vlad, DanC, TimBL,
-      Eikeon aka Dan K. Expected during MIT IAP 6 weeks: Yosi</li>
+        review)</em> expected: Yarden aka Jordan, Vlad, DanC, TimBL, Eikeon
+        aka Dan K. Expected during MIT IAP 6 weeks: Yosi</li>
       <li>review of Action Items that don't fit below:
         <p><em>other actions are integrated into topics below, rather than <a
         href="http://esw.w3.org/topic/BulkActionReview">BulkActionReview</a>
@@ -86,85 +85,14 @@ Nov</a>.. 7 Dec, 21 Dec, 2006 Jan 4, <a href="http://www.policyawareweb.org/2006
   </li>
   <li>PAW demo item? How is it going? Debugging cwm --why and proof checking.
     Diag.trackingTim: Upgraded the javascript A.
-    <p class="vtodo"><strong class="summary">ACTION TimBL: To think about phaseing out statement[CONTEXT]</strong></p>
-
-    <p>15 Feb update Yosi got the basic rein case working, though it
-    takes around 3min. He's working on log:supports, performance.</p>
-
-    <p>See also: <a
-    href="http://www.policyawareweb.org/2005/demo/pfproxy.py">pfproxy.py</a>,
-    <a href="http://www.policyawareweb.org/2005site/dev.html">PAW dev
-    SVN info</a>, rein stuff@@</p>
-
-    <p>older test case: DanC ran it at the face-face meeting.:</p>
+    <p class="vtodo"><strong class="summary">ACTION TimBL: To think about
+    phaseing out statement[CONTEXT]</strong></p>
+    <p class="vtodo"><strong class="summary">ACTION @@who? to find the
+    current bug in --why which lists variable names in rule evidence instead
+    of the actual daata symbols.</strong></p>
+    <p>Test case: DanC ran it at the face-face meeting.:</p>
     <pre>cwm --rdf http://dig.csail.mit.edu/2005/09/rein/examples/judy-req.rdf --n3 http://dig.csail.mit.edu/2005/09/rein/engine.n3 --think --filter="http://dig.csail.mit.edu/2005/09/rein/filter.n3" --why</pre>
     <p>TBL checked in minimally-working code in the 26 Oct meeting.</p>
-  </li>
-
-  <li>
-    N3 changes and n3.n3
-
-    <p>N3 decimal - any reasons why not move 1.0
-    in N3, turtle and sparql to xsd:decimal? Also, true and false keywords.</p>
-
-    <p class="vtodo"><strong class='summary'>ACTION TimBL/Yosi. Change
-    n3.n3 to include @true, @false, and separate type for decimal, and
-    make sure output format of those is right - must preserve
-    type. And make tests.</strong></p>
-
-    <p>update 10 Feb: <a
-    href="http://dig.csail.mit.edu/breadcrumbs/node/85">bnf2turtle --
-    write a turtle version of an EBNF grammar</a></p>
-  </li>
-  <li>Common RDF API. (was: clean-up priorities)
-
-    <ul>
-      <li class="vtodo"><strong class="summary">ACTION: DanC to work with
-        timbl to separate operators from term.py, look at other class
-        organization</strong></li>
-      <li class="vtodo"><strong class="summary">ACTION: DanC to kill
-        sumOf</strong></li>
-    </ul>
-
-    <p>Experience with AJAR/<a href="/2005/ajar/tab">Tabulator</a>
-    stuff suggests compromise of (subject, predicate, object, why) why
-    why is used for provenence filtering and SPARQL source.</p>
-
-    <p>Earlier, we discussed a very clean common class structure for
-    the basic N3 language elements. Arrive at common class tree for
-    that. The [new] fact that pychinko seems to be happy using cwm
-    classes now suggest that there is a clean break here and
-    cooperation will be easy.</p>
-
-    <p>Wiki page on <a
-    href="http://esw.w3.org/topic/WebDataInterfaceDesign">WebDataInterface
-    design</a></p>
-  </li>
-  <li>
-    the N3 abstract syntax interface to parsers and serializers.
-
-    <p class="vtodo"><strong class="summary">ACTION TimBL: Add
-    formulaFromN3String formulaFromRDFXMLString() methods to
-    store.</strong></p>
-
-    <p>Possible to preserve similarity between parser and unparser
-    interface to allow straight-through data merge at speed?</p>
-    <p>aka: on arch of rdflib doing N3 formulae (Eikeon)</p>
-  </li>
-
-  <li>
-    Vlad's progress integrating pychinko and cwm
-
-    <p>much progress has been made on built-ins in pychinko. functions
-    seem to work as well as relational ops as of ~Sep. log:includes
-    progress?  log:semantics? formulas as 1st-class objects?</p>
-
-    <p>15 Feb Conclusion: The TAR file will have the whole source tree
-    in, with swap/<a
-    href="http://svn.mindswap.org/pychinko/">pychinko</a>... but the
-    CVS won't. Aim for: --pythink ?  -or --rete or -run. release with
-    a few tests and explanation of when to use --rete vs --think.
-    </p>
   </li>
   <li>cwm/Inferenceweb integration
     <ul>
@@ -172,39 +100,74 @@ Nov</a>.. 7 Dec, 21 Dec, 2006 Jan 4, <a href="http://www.policyawareweb.org/2006
         cwm generating PML that can be seen in iwbrowser, with timbl. 9/28:
         DanC has the ball to contact Paulo</strong></li>
     </ul>
-    <p>progress: <a
-    href="http://lists.w3.org/Archives/Public/public-cwm-talk/2006JanMar/0019.html">help
-    checking/reading some proof related to versioning?</a> Feb</p>
-
+  </li>
+  <li>N3 changes
+    <p>Unicode problems in reg exps using predictiveParser.</p>
+    <p>N3 decimal - any reasons why not move 1.0 in N3, turtle and sparql to
+    xsd:decimal? Also, true and false keywords.</p>
+    <p class="vtodo"><strong class="summary">ACTION TimBL/Yosi. Change n3.n3
+    to include @true, @false, and separet type for decimal, and make sure
+    output format of those is right - must preserve type. And make
+    tests.</strong></p>
+  </li>
+  <li>Common RDF API. (was: clean-up priorities)
+    <ul>
+      <li class="vtodo"><strong class="summary">ACTION: DanC to work with
+        timbl to separate operators from term.py, look at other class
+        organization</strong></li>
+      <li class="vtodo"><strong class="summary">ACTION: DanC to kill
+        sumOf</strong></li>
+    </ul>
+    <p>Experience with AJAR/<a href="/2005/ajar/tab">Tabulator</a> stuff
+    suggests compromise of (subject, predicate, object, why) why why is used
+    for provenence filtering and SPARQL source.</p>
+    <p>Earlier, we discussed a very clean common class structure for the
+    basic N3 language elements. Arrive at common class tree for that. The
+    [new] fact that pychinko seems to be happy using cwm classes now suggest
+    that there is a clean break here and cooperation will be easy.</p>
+    <p>Wiki page on <a
+    href="http://esw.w3.org/topic/WebDataInterfaceDesign">WebDataInterface
+    design</a></p>
+  </li>
+  <li>the N3 abstract syntax interface to parsers and serializers.
+    <p class="vtodo"><strong class="summary">ACTION TimBL: Add
+    formulaFromN3String formulaFromRDFXMLString() methods to
+    store.</strong></p>
+    <p>Possible to preserve similarity between parser and unparser interface
+    to allow straight-through data merge at speed?</p>
+    <p>aka: on arch of rdflib doing N3 formulae (Eikeon)</p>
+  </li>
+  <li>Vlad's progress integrating pychinko and cwm
+    <p>much progress has been made on built-ins in pychinko. functions seem
+    to work as well as relational ops as of ~Sep. log:includes progress?
+    log:semantics? formulas as 1st-class objects?</p>
   </li>
   <li>N3 semantics.
     <p>paper for KR conference? for WWW2005? for AAAI?</p>
     <ul>
-      <li class="vtodo"><strong class="summary">ACTION: Vlad to submit
-      cwm systems paper to <a
-      href="http://www.dsi.unive.it/~tplp/">Journal of Theory and
-      Practice of Logic Programming (TPLP) special issue on Logic
-      Programming and the Web</a></strong></li>
-      <li><strong class="summary">ACTION: LK to submit
-      N3 semantics paper to <a
-      href="http://www.dsi.unive.it/~tplp/">Journal of Theory and
-      Practice of Logic Programming (TPLP) special issue on Logic
-      Programming and the Web</a></strong></li>
+      <li class="vtodo"><strong class="summary">ACTION: Vlad chief writer on
+        the cwm systems paper for the journal of web semantics</strong> -&gt;
+        Special issue of Journal on Logic Programming "Logic programming on
+        teh web"</li>
+      <li class="vtodo"><strong class="summary">ACTION: YK to schedule a
+        meeting with TimBL and Bijan to discuss n3 semantics.
+      done.</strong></li>
+      <li><strong class="summary">ACTION: Lalana be chief writer on an N3
+        logic aimed at AAAI's track on AI &amp; the Web. (Paper dropped --
+        missed deadline)</strong>
+        <p>ACTIO:</p>
+      </li>
     </ul>
   </li>
-  <li>
-    Common test suites -- manifests of manifests?
+  <li>Common test suites -- manifests of manifests?
     <p>getting rdflib to pass the N3 parsing tests</p>
   </li>
-  <li>
-    Nary operations and built-ins
-
+  <li>Nary operations and built-ins
     <p>@@ links to Nary Note and Rules charter. <a
     href="http://esw.w3.org/topic/NaryRelations">NaryRelations in ESW
     wiki</a></p>
   </li>
 </ol>
-
 </div>
 <hr />
 
