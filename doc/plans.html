@@ -87,24 +87,34 @@ Nov</a>.. 7 Dec, 21 Dec, 2006 Jan 4, <a href="http://www.policyawareweb.org/2006
   <li>PAW demo item? How is it going? Debugging cwm --why and proof checking.
     Diag.trackingTim: Upgraded the javascript A.
     <p class="vtodo"><strong class="summary">ACTION TimBL: To think about phaseing out statement[CONTEXT]</strong></p>
-    <p class="vtodo"><strong class="summary">ACTION @@who? to find the current bug in --why which lists variable names in
-    rule evidence instead of the actual daata symbols.</strong></p>
 
-    <p>Test case: DanC ran it at the face-face meeting.:</p>
+    <p>15 Feb update Yosi got the basic rein case working, though it
+    takes around 3min. He's working on log:supports, performance.</p>
+
+    <p>See also: <a
+    href="http://www.policyawareweb.org/2005/demo/pfproxy.py">pfproxy.py</a>,
+    <a href="http://www.policyawareweb.org/2005site/dev.html">PAW dev
+    SVN info</a>, rein stuff@@</p>
+
+    <p>older test case: DanC ran it at the face-face meeting.:</p>
     <pre>cwm --rdf http://dig.csail.mit.edu/2005/09/rein/examples/judy-req.rdf --n3 http://dig.csail.mit.edu/2005/09/rein/engine.n3 --think --filter="http://dig.csail.mit.edu/2005/09/rein/filter.n3" --why</pre>
     <p>TBL checked in minimally-working code in the 26 Oct meeting.</p>
   </li>
 
   <li>
-    N3 changes
+    N3 changes and n3.n3
 
     <p>N3 decimal - any reasons why not move 1.0
     in N3, turtle and sparql to xsd:decimal? Also, true and false keywords.</p>
 
     <p class="vtodo"><strong class='summary'>ACTION TimBL/Yosi. Change
-    n3.n3 to include @true, @false, and separet type for decimal, and
+    n3.n3 to include @true, @false, and separate type for decimal, and
     make sure output format of those is right - must preserve
     type. And make tests.</strong></p>
+
+    <p>update 10 Feb: <a
+    href="http://dig.csail.mit.edu/breadcrumbs/node/85">bnf2turtle --
+    write a turtle version of an EBNF grammar</a></p>
   </li>
   <li>Common RDF API. (was: clean-up priorities)
 
@@ -142,10 +152,19 @@ Nov</a>.. 7 Dec, 21 Dec, 2006 Jan 4, <a href="http://www.policyawareweb.org/2006
     <p>aka: on arch of rdflib doing N3 formulae (Eikeon)</p>
   </li>
 
-  <li>Vlad's progress integrating pychinko and cwm
-  <p>much progress has been made on built-ins in pychinko. functions seem to
-    work as well as relational ops as of ~Sep. log:includes progress?
-    log:semantics? formulas as 1st-class objects?</p>
+  <li>
+    Vlad's progress integrating pychinko and cwm
+
+    <p>much progress has been made on built-ins in pychinko. functions
+    seem to work as well as relational ops as of ~Sep. log:includes
+    progress?  log:semantics? formulas as 1st-class objects?</p>
+
+    <p>15 Feb Conclusion: The TAR file will have the whole source tree
+    in, with swap/<a
+    href="http://svn.mindswap.org/pychinko/">pychinko</a>... but the
+    CVS won't. Aim for: --pythink ?  -or --rete or -run. release with
+    a few tests and explanation of when to use --rete vs --think.
+    </p>
   </li>
   <li>cwm/Inferenceweb integration
     <ul>
@@ -153,16 +172,24 @@ Nov</a>.. 7 Dec, 21 Dec, 2006 Jan 4, <a href="http://www.policyawareweb.org/2006
         cwm generating PML that can be seen in iwbrowser, with timbl. 9/28:
         DanC has the ball to contact Paulo</strong></li>
     </ul>
+    <p>progress: <a
+    href="http://lists.w3.org/Archives/Public/public-cwm-talk/2006JanMar/0019.html">help
+    checking/reading some proof related to versioning?</a> Feb</p>
+
   </li>
   <li>N3 semantics.
     <p>paper for KR conference? for WWW2005? for AAAI?</p>
     <ul>
-      <li class="vtodo"><strong class="summary">ACTION: Vlad chief writer on
-        the cwm systems paper for the journal of web semantics</strong></li>
-      <li class="vtodo"><strong class="summary">ACTION: YK to schedule a
-        meeting with TimBL and Bijan to discuss n3 semantics</strong></li>
-      <li><strong class="summary">ACTION: Lalana be chief writer on an N3
-        logic aimed at AAAI's track on AI &amp; the Web.</strong></li>
+      <li class="vtodo"><strong class="summary">ACTION: Vlad to submit
+      cwm systems paper to <a
+      href="http://www.dsi.unive.it/~tplp/">Journal of Theory and
+      Practice of Logic Programming (TPLP) special issue on Logic
+      Programming and the Web</a></strong></li>
+      <li><strong class="summary">ACTION: LK to submit
+      N3 semantics paper to <a
+      href="http://www.dsi.unive.it/~tplp/">Journal of Theory and
+      Practice of Logic Programming (TPLP) special issue on Logic
+      Programming and the Web</a></strong></li>
     </ul>
   </li>
   <li>
