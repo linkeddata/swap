@@ -5,6 +5,7 @@
 @prefix math: <http://www.w3.org/2000/10/swap/math#> .
 @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
 @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#>.
 
 @prefix rea: <http://www.w3.org/2000/10/swap/reason#> .
 @prefix n3: <http://www.w3.org/2004/06/rei#> .
@@ -15,38 +16,57 @@
 
 # Translation rules (much could be done with OWL but we have rules)
 
-{ ?x	a rea:Inference;
-	rea:binding [
-	    rea:variable  [n3:uri ?var ];
-	    rea:boundTo  [ n3:uri ?val ]].
-
-} => { ?x a iw:InferenceStep;
-	    iw:hasVariableMapping [
-				    # a iw:VariableMapping;
-				    iw:variable  ?var; iw:term ?val ].
-}.
-
-{ ?x	rea:gives ?y.
-    ?y  log:n3String ?s } => { ?x  iw:conclusion ?s }.  #  No nested RDF!
-
-{ ?x	rea:evidence ?y } => { ?x  iw:hasAntecedent ?y }.  #@@ should be list
-
+##### root proof step
 { ?x a  rea:Proof } => {
 	?x  a iw:NodeSet;
 	    iw:hasLanguage n3:N3;
 	    iw:hasInferenceEngine  <http://inferenceweb.stanford.edu/registry/IE/CWM.owl#CWM>
 }.
 
+##### all proof steps
+{ ?x	rea:gives ?y.
+    ?y  log:n3String ?s } => {
+ ?x  iw:hasConclusion ?s;
+            iw:isConsequentOf ?x; # is that right? -- DWC
+ }.  #  No nested RDF!
 
+
+########## Extraction setp
+{ ?THEN a rea:Extraction; rea:because ?IF } =>
+  { ?THEN a iw:InferenceStep;
+     iw:rule rea:Extraction; # looked for AND-ELIM; didn't find it.
+     iw:hasAntecedent ?IF
+  }.
+
+########## Conjunction step
+{ ?THEN a rea:Conjunction; rea:component ?IF } =>
+  { ?THEN a iw:InferenceStep;
+     iw:rule <http://inferenceweb.stanford.edu/registry/DPR/AND-INTRO.owl#AND-INTRO>;
+     iw:hasAntecedent ?IF }.
+
+########
 { ?x	a rea:Inference;
 	rea:rule  ?RULESTEP.
 
-#  ?RULE!log:n3String crypto:md5 ?HASH.
-#  ( "mid:"  ?HASH ) string:concatenation ?URI.
-
 } => {
-  ?x	iw:hasRule ?RULESTEP
+  ?x a iw:InferenceStep;
+     iw:hasRule <http://inferenceweb.stanford.edu/registry/DPR/GMP.owl#GMP>;
+     iw:hasAntecedent ?RULESTEP.
 }.
+
+{ ?x	a rea:Inference;
+	rea:binding [
+	    rea:variable  [n3:uri ?var ];
+	    rea:boundTo  [ n3:uri ?val ]]. #@@can be bound to bnodes too. hmm.
+
+} => { ?x a iw:InferenceStep;
+	    iw:hasVariableMapping [
+				    a iw:Mapping;
+				    iw:mapFrom  ?var; iw:mapTo ?val ].
+}.
+
+{ ?x	rea:evidence [ is list:in of ?y] } => { ?x  iw:hasAntecedent ?y }.
+
 
 ########## Provenance
 
