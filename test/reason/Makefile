@@ -9,9 +9,11 @@ CWM=time python $(SWAP)/cwm.py
 	python $(SWAP)/cwm.py $< --think --base=foo --why > $@
 .n3.result:
 	python $(SWAP)/cwm.py $< --think --base=foo > $@
+
+#--mode=mrse
 .proof.pml:
-	python $(SWAP)/cwm.py $< --filter=to-pml.n3 --rdf > $@
-	
+	python $(SWAP)/cwm.py  $< ../../reason.n3 --think=to-pml.n3 --data --rdf=b > $@
+
 .proof.checked:
 	python $(SWAP)/check.py < $< > $@
 
