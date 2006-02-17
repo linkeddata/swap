@@ -16,42 +16,56 @@
 
 # Translation rules (much could be done with OWL but we have rules)
 
-##### root proof step
-{ ?x a  rea:Proof } => {
-	?x  a iw:NodeSet;
-	    iw:hasLanguage n3:N3;
-	    iw:hasInferenceEngine  <http://inferenceweb.stanford.edu/registry/IE/CWM.owl#CWM>
-}.
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+{ ?S a [ s:subClassOf ?C] } => { ?S a ?C }. # a bit of RDFS
 
 ##### all proof steps
-{ ?x	rea:gives ?y.
-    ?y  log:n3String ?s } => {
- ?x  iw:hasConclusion ?s;
-            iw:isConsequentOf ?x; # is that right? -- DWC
- }.  #  No nested RDF!
+{ ?S a rea:Step } => { [] a iw:NodeSet; iw:isConsequentOf ?S; s:label "@@step" }.
 
+
+#### gives (only on some. hmm.)
+{
+  ?NODESET iw:isConsequentOf ?x.
+  ?x	rea:gives ?y.
+    ?y  log:n3String ?s.
+ } => {
+ ?NODESET   iw:hasConclusion ?s; #  No nested RDF!
+    iw:hasLanguage n3:N3;
+ }.  
+
+
+##### root proof step
+{ ?x a  rea:Proof } => {
+    ?x iw:hasInferenceEngine  <http://inferenceweb.stanford.edu/registry/IE/CWM.owl#CWM>
+}.
 
 ########## Extraction setp
-{ ?THEN a rea:Extraction; rea:because ?IF } =>
+{ ?THEN a rea:Extraction } =>
   { ?THEN a iw:InferenceStep;
      iw:rule rea:Extraction; # looked for AND-ELIM; didn't find it.
-     iw:hasAntecedent ?IF
+  }.
+{ ?THEN a rea:Extraction; rea:because ?IF.
+  ?NODESET iw:isConsequentOf ?IF } =>
+  { ?THEN iw:hasAntecedent ?NODESET
   }.
 
 ########## Conjunction step
-{ ?THEN a rea:Conjunction; rea:component ?IF } =>
+{ ?THEN a rea:Conjunction; rea:component ?IF.
+  ?NODESET iw:isConsequentOf ?IF 
+ } =>
   { ?THEN a iw:InferenceStep;
      iw:rule <http://inferenceweb.stanford.edu/registry/DPR/AND-INTRO.owl#AND-INTRO>;
-     iw:hasAntecedent ?IF }.
+     iw:hasAntecedent ?NODESET }.
 
 ########
 { ?x	a rea:Inference;
 	rea:rule  ?RULESTEP.
+  ?NODESET iw:isConsequentOf ?RULESTEP. 
 
 } => {
   ?x a iw:InferenceStep;
      iw:hasRule <http://inferenceweb.stanford.edu/registry/DPR/GMP.owl#GMP>;
-     iw:hasAntecedent ?RULESTEP.
+     iw:hasAntecedent ?NODESET.
 }.
 
 { ?x	a rea:Inference;
@@ -59,13 +73,15 @@
 	    rea:variable  [n3:uri ?var ];
 	    rea:boundTo  [ n3:uri ?val ]]. #@@can be bound to bnodes too. hmm.
 
-} => { ?x a iw:InferenceStep;
-	    iw:hasVariableMapping [
+} => { ?x iw:hasVariableMapping [
 				    a iw:Mapping;
 				    iw:mapFrom  ?var; iw:mapTo ?val ].
 }.
 
-{ ?x	rea:evidence [ is list:in of ?y] } => { ?x  iw:hasAntecedent ?y }.
+{ ?x	rea:evidence [ is list:in of ?y] }
+  => {
+ ?x  iw:hasAntecedent [ a iw:NodeSet; iw:isConsequentOf ?y; s:label "@@evidence" ]
+ }.
 
 
 ########## Provenance
