@@ -5,6 +5,7 @@
 @prefix math: <http://www.w3.org/2000/10/swap/math#> .
 @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
 @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix os: <http://www.w3.org/2000/10/swap/os#> .
 @prefix list: <http://www.w3.org/2000/10/swap/list#>.
 
 @prefix rea: <http://www.w3.org/2000/10/swap/reason#> .
@@ -19,9 +20,18 @@
 @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
 { ?S a [ s:subClassOf ?C] } => { ?S a ?C }. # a bit of RDFS
 
-##### all proof steps
-{ ?S a rea:Step } => { [] a iw:NodeSet; iw:isConsequentOf ?S; s:label "@@step" }.
 
+##### all proof steps
+# make up a nearby URI
+{ ?S a rea:Step } => { ?S :aux [] }.
+{ ?S :aux [ log:rawUri ?I ].
+  (?I "[^#]#(.*)") string:search (?FRAG).
+  ?X log:uri ("#aux_" ?FRAG).string:concatenation.os:baseAbsolute.
+} => {
+ ?X a iw:NodeSet; iw:isConsequentOf ?S; s:label "@@step".
+}.
+
+{ ?NODESET iw:isConsequentOf ?STEP. } => { ?STEP a iw:InferenceStep }.
 
 #### gives (only on some. hmm.)
 {
@@ -86,6 +96,13 @@
 
 ########## Provenance
 
-{  ?x a rea:Parsing; rea:source ?y } =>
-    { ?x a iw:DirectAssertion; iw:source ?y }.
- 
+{  ?x a rea:Parsing; rea:source ?y }
+ => {
+ ?x
+  iw:hasRule
+   <http://inferenceweb.stanford.edu/registry/DPR/Told.owl#Told>;
+  iw:hasSourceUsage [
+   a iw:SourceUsage;
+   iw:hasSource ?y
+  ]
+}.
