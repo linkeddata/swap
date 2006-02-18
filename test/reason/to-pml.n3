@@ -96,13 +96,21 @@
 
 ########## Provenance
 
-{  ?x a rea:Parsing; rea:source ?y }
+
+@prefix time: <http://www.w3.org/2000/10/swap/time#> .
+@prefix dt: <http://www.w3.org/2001/XMLSchema#>.
+
+{  ?x a rea:Parsing; rea:source ?y.
+  "" time:localTime ?NOW.
+  (?NOW dt:dateTime) log:dtlit ?NOW_T.
+ }
  => {
  ?x
   iw:hasRule
    <http://inferenceweb.stanford.edu/registry/DPR/Told.owl#Told>;
   iw:hasSourceUsage [
    a iw:SourceUsage;
-   iw:hasSource ?y
+   iw:hasSource ?y;
+   iw:usageTime ?NOW_T
   ]
 }.
