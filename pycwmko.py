@@ -47,8 +47,7 @@ class directPychinkoQuery(object):
         self.rules = self.buildRules(rulesFormula)
         #print "rules"
         #print self.rules
-        
-        
+                
         self.facts = self.buildFacts(rulesFormula)
         print "converting time:", time.time() - t
         t = time.time()
@@ -62,9 +61,22 @@ class directPychinkoQuery(object):
 
         print len(self.interp.inferredFacts), ' inferred fact(s)'
         print "inferred facts:"
+        # add the inferred facts back to cwm store
         for i in self.interp.inferredFacts:
-                print i
-        
+#                convertFromPystore();
+#                if isinstance(i.o, str):
+#                        print type(i.o)
+#                elif isinstance(i.o, unicode):
+#                        print('unicode')
+                # convert them to term.Symbols 
+                # cannot convert to term.Symbol if it's a literal
+#                print i.s, i.p, i.o
+#                print self.convFromRete(i.s),  self.convFromRete(i.p), self.convFromRete(i.o)
+                newTriple =  self.convFromRete(i.s),  self.convFromRete(i.p), self.convFromRete(i.o)
+                if not  self.workingContext.contains(newTriple):
+                        self.workingContext.add(*newTriple)
+                else:
+                        print "contains!"
         """
         print "facts"
         print self.facts
@@ -76,7 +88,13 @@ class directPychinkoQuery(object):
             self.loop = False"""
         
 
-    
+    def convFromRete(self, t):            
+            if isinstance(t,unicode):                    
+                    return self.workingContext.newSymbol(t)
+            elif isinstance(t,str):
+                    return self.workingContext.newLiteral(t)
+            return term.Symbol(t, self.store)
+            
     def convType(self, t, F, K=None):  
         """print "t:", t
         print type(t)
