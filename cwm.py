@@ -582,10 +582,10 @@ rdf/xml files. Note that this requires rdflib.
             elif arg == "-think":  
                 think(workingContext, mode=option_flags["think"])
 
-            elif arg == '-pythink':
+            elif arg == '-rete':
                 from swap import pycwmko                
                 pythink = pycwmko.directPychinkoQuery(workingContext)
-                return
+                #return
                 #pythink()
                 """
                     from pychinko import interpreter
