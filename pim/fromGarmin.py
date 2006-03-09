@@ -2,7 +2,7 @@
 """Download GPS data from serial link to an RDF/N3 file.
 
 Options:
- -d=xxx --device=xxx     Device GPS is attached to, eg /dev/cu.USA19H191P1.1  com1 etc
+ -d=xxx --device=xxx     Device GPS is attached to, eg /dev/cu.KeySerial1  com1 etc
  -o=xxx --output=xxx     Output filename required, default is gpsData.n3
  -v     --verbose        Print data between reading GPS and writing file
  -t     --tracks         Get tracks from the GPS
@@ -20,13 +20,15 @@ $Id$
 import os, sys, time
 
 # SWAP  http://www.w3.org/2000/10/swap
-from myStore import Namespace, formula, symbol, intern, bind
-from diag import progress
-import uripath
-from uripath import join, base
-from notation3 import RDF_NS_URI
-import notation3    	# N3 parsers and generators
-import isodate  # for isodate.fullString
+
+#import swap
+from swap.myStore import Namespace, formula, symbol, intern, bind
+from swap.diag import progress
+from swap import uripath
+from swap.uripath import join, base
+from swap.notation3 import RDF_NS_URI
+import swap.notation3    	# N3 parsers and generators
+from swap import isodate  # for isodate.fullString
 
 # import toXML 		#  RDF generator
 

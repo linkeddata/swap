@@ -16,14 +16,15 @@ from math import sin, cos, tan, sqrt
 from urllib import urlopen
 
 # SWAP  http://www.w3.org/2000/10/swap
-from myStore import Namespace, formula, symbol, intern, bind, load
-from diag import progress
-import uripath
-from uripath import refTo, base
+from swap import myStore, diag, uripath, notation3, isodate
+from swap.myStore import Namespace, formula, symbol, intern, bind, load
+from swap.diag import progress
+#import uripath
+from swap.uripath import refTo, base
 
-from notation3 import RDF_NS_URI
-import notation3    	# N3 parsers and generators
-import isodate  # for isodate.fullString
+from swap.notation3 import RDF_NS_URI
+import swap.notation3    	# N3 parsers and generators
+from swap import  isodate  # for isodate.fullString
 
 # import toXML 		#  RDF generator
 
