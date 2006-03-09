@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 """
 
-
 """
 
 from pychinko import terms, interpreter
-from pychinko import N3Loader
+#from pychinko import N3Loader
 from pychinko.helpers import removedups, convertBNodeToFact
 from swap import term, formula
 from swap.set_importer import Set
@@ -46,21 +45,22 @@ class directPychinkoQuery(object):
         t = time.time()
         self.rules = self.buildRules(rulesFormula)
         #print "rules"
-        #print self.rules
+        print self.rules
                 
         self.facts = self.buildFacts(rulesFormula)
         print "converting time:", time.time() - t
         t = time.time()
         self.interp = interpreter.Interpreter(self.rules)
         self.interp.addFacts(Set(self.facts), initialSet=True)
+        print self.rules
         print "add facts time:", time.time() - t
         t = time.time()
         self.interp.run()
         print "interp.run() time:", time.time() - t
 
-
         print len(self.interp.inferredFacts), ' inferred fact(s)'
-        print "inferred facts:"
+        print "size of inferred facts:", len(self.interp.inferredFacts)
+        print self.interp.inferredFacts
         # add the inferred facts back to cwm store
         for i in self.interp.inferredFacts:
 #                convertFromPystore();
@@ -72,6 +72,7 @@ class directPychinkoQuery(object):
                 # cannot convert to term.Symbol if it's a literal
 #                print i.s, i.p, i.o
 #                print self.convFromRete(i.s),  self.convFromRete(i.p), self.convFromRete(i.o)
+
                 newTriple =  self.convFromRete(i.s),  self.convFromRete(i.p), self.convFromRete(i.o)
                 if not  self.workingContext.contains(newTriple):
                         self.workingContext.add(*newTriple)
@@ -88,7 +89,8 @@ class directPychinkoQuery(object):
             self.loop = False"""
         
 
-    def convFromRete(self, t):            
+    def convFromRete(self, t):
+            print "cnv:", t, type(t)            
             if isinstance(t,unicode):                    
                     return self.workingContext.newSymbol(t)
             elif isinstance(t,str):
@@ -96,6 +98,7 @@ class directPychinkoQuery(object):
             return term.Symbol(t, self.store)
             
     def convType(self, t, F, K=None):  
+        print "type:",t, type(t)
         """print "t:", t
         print type(t)
         print "f unis:", F.universals()
@@ -110,14 +113,18 @@ class directPychinkoQuery(object):
         if t in F.universals():
             return terms.Variable(t.fragid)
         if K is not None and t in K.existentials():
-            print "returning existential:", t
-            return terms.Exivar(t.fragid)
-        if isinstance(t, term.Symbol):                
-                return t.uri
+#            print "returning existential:", t
+            return terms.Exivar(t)
+        if isinstance(t, term.Symbol):
+                return terms.URIRef(t.uri)
         if isinstance(t, term.BuiltIn):
                 return t.uriref()
-        
-        
+        if isinstance(t, term.Fragment):
+                print "uriref:",terms.URIRef(t.uriref())
+                print type(t.uriref())
+                return terms.URIRef(t.uriref())
+#        print type(t)
+#        print "returning URI",t              
         return str(t)
                     
     """def processBetaNode(self, betaNode):        
