@@ -1,0 +1,42 @@
+#  Notation3 generation by
+#       notation3.py,v 1.187 2006/01/13 14:48:54 syosi Exp
+
+#   Base was: file:/Documents and Settings/kolovski/My Documents/mindswap/Policy Aware Web/www/2000/10/swap/test/rete/builtin5.n3
+     @prefix : <#> .
+    @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    @prefix math: <http://www.w3.org/2000/10/swap/math#> .
+    
+     @forAll :a,
+                :b,
+                :d,
+                :x,
+                :y,
+                :z .
+    
+    "0"     <http://cwmTest/worksWith> "0" .
+    
+    "2"     <http://cwmTest/worksWith> "0" .
+    
+    "4"     <http://cwmTest/worksWith> "2" .
+    
+    "6"     <http://cwmTest/worksWith> "2" .
+    
+    <http://cwmTest/a1>     <http://cwmTest/hasValue> 2 .
+    
+    <http://cwmTest/a2>     <http://cwmTest/hasValue> 0 .
+    {
+         @forSome :_g0 .
+          ( :x
+            :_g0 )
+             math:sum :d .
+          ( :y
+            :z )
+             math:sum :_g0 .
+        :a     <http://cwmTest/hasValue> :x .
+        :b     <http://cwmTest/hasValue> :y,
+                    :z .
+        
+        }     log:implies {:d     <http://cwmTest/worksWith> :y .
+        } .
+    
+#ENDS

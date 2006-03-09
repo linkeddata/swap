@@ -1,0 +1,11 @@
+        @prefix : <http://cwmTest/>.
+
+        @prefix log: <http://www.w3.org/2000/10/swap/log#>.
+	  @prefix math: <http://www.w3.org/2000/10/swap/math#> .
+
+         { (3 6) math:sum ?x. "semanticsTest.n3" log:semantics ?f.
+?f log:includes { [ <http://cwmTest/hasValue> "2" ] }
+   }
+            
+         log:implies 
+          {:x  :value ?x}.

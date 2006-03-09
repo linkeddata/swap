@@ -1,0 +1,12 @@
+@prefix : <sum.n3#>.  
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix math: <http://www.w3.org/2000/10/swap/math#>.
+
+
+         { ?x :hasVal ?a. ?y :hasVal ?a.  (?a ?a) math:sum ?c }
+         log:implies 
+          {?x :val ?c}.
+
+:b :hasVal 4.
+:cd :hasVal 4.
+:d :hasVal 4. 

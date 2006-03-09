@@ -1,0 +1,12 @@
+
+        @prefix : <http://cwmTest/>.
+
+        @prefix log: <http://www.w3.org/2000/10/swap/log#>.
+	  @prefix math: <http://www.w3.org/2000/10/swap/math#> .
+	  @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+
+         {?x math:sum ?y. ?z :hasValue ?x. ?x rdf:first 5} 
+         log:implies 
+          {?z :has :fired}.
+
+ :z :hasValue (5 2 4).

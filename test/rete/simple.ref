@@ -1,0 +1,18 @@
+    @prefix : <fam.n3#> .
+    @prefix sim: <#> .
+    
+     @forAll sim:x,
+                sim:y,
+                sim:z .
+    
+    :Jim     :ancestor :Michael .
+    
+    :John     :ancestor :Jim,
+                :Michael .
+    {
+        sim:x     :ancestor sim:y .
+        sim:y     :ancestor sim:z .
+        
+        }     <http://www.w3.org/2000/10/swap/log#implies> {sim:x     :ancestor sim:z .
+        } .
+    
