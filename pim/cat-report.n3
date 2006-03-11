@@ -77,6 +77,21 @@ q:UnclassifiedOutgoing a :toBeDisplayed;  s:label "Unclassified Outgoings".
    :k log:outputString :s
 }.
 
+# Total if available
+
+{  
+    :y a :toBeDisplayed; s:label :l; q:total :x.
+    ( :l "9000" ) string:concatenation :k.
+    (  "<tr><td class='date'>"
+#       "</td><td class='cat'>" :l
+       "</td><td class='payee'>" "Total"
+       "</td><td class='amount'><b>" :x "</b></td></tr>\n") string:concatenation :s
+} log:implies {
+   :k log:outputString :s
+}.
+
+
+
 # end section:
 
 {   :y a :toBeDisplayed; s:label :l.
