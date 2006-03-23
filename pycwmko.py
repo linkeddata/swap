@@ -44,24 +44,29 @@ class directPychinkoQuery(object):
             target = workingContext
         t = time.time()
         self.rules = self.buildRules(rulesFormula)
+        self.interp = interpreter.Interpreter(self.rules)
         #print "rules"
-        print self.rules
+        #print self.rules
                 
         self.facts = self.buildFacts(rulesFormula)
-        print "converting time:", time.time() - t
+        print "converting and adding time:", time.time() - t
         t = time.time()
-        self.interp = interpreter.Interpreter(self.rules)
-        self.interp.addFacts(Set(self.facts), initialSet=True)
-        print self.rules
-        print "add facts time:", time.time() - t
+                
+                       
+            
+                
+#        self.interp.addFacts(Set(self.facts), initialSet=True)
+        #print self.rules
+        #print "add facts time:", time.time() - t
         t = time.time()
         self.interp.run()
         print "interp.run() time:", time.time() - t
 
         print len(self.interp.inferredFacts), ' inferred fact(s)'
-        print "size of inferred facts:", len(self.interp.inferredFacts)
-        print self.interp.inferredFacts
+        #print "size of inferred facts:", len(self.interp.inferredFacts)
+#        print self.interp.inferredFacts
         # add the inferred facts back to cwm store
+        t = time.time()
         for i in self.interp.inferredFacts:
 #                convertFromPystore();
 #                if isinstance(i.o, str):
@@ -74,10 +79,13 @@ class directPychinkoQuery(object):
 #                print self.convFromRete(i.s),  self.convFromRete(i.p), self.convFromRete(i.o)
 
                 newTriple =  self.convFromRete(i.s),  self.convFromRete(i.p), self.convFromRete(i.o)
-                if not  self.workingContext.contains(newTriple):
-                        self.workingContext.add(*newTriple)
-                else:
-                        print "contains!"
+                self.workingContext.add(*newTriple)
+#                if not  self.workingContext.contains(newTriple):
+#                        self.workingContext.add(*newTriple)
+#                else:
+#                        print "contains!"
+        print "add facts time to cwm:", time.time() - t
+
         """
         print "facts"
         print self.facts
@@ -90,7 +98,9 @@ class directPychinkoQuery(object):
         
 
     def convFromRete(self, t):
-            print "cnv:", t, type(t)            
+            if not t:
+                    return None
+#            print "cnv:", t, type(t)            
             if isinstance(t,unicode):                    
                     return self.workingContext.newSymbol(t)
             elif isinstance(t,str):
@@ -98,7 +108,7 @@ class directPychinkoQuery(object):
             return term.Symbol(t, self.store)
             
     def convType(self, t, F, K=None):  
-        print "type:",t, type(t)
+#        print "type:",t, type(t)
         """print "t:", t
         print type(t)
         print "f unis:", F.universals()
@@ -120,8 +130,8 @@ class directPychinkoQuery(object):
         if isinstance(t, term.BuiltIn):
                 return t.uriref()
         if isinstance(t, term.Fragment):
-                print "uriref:",terms.URIRef(t.uriref())
-                print type(t.uriref())
+#                print "uriref:",terms.URIRef(t.uriref())
+#                print type(t.uriref())
                 return terms.URIRef(t.uriref())
 #        print type(t)
 #        print "returning URI",t              
@@ -218,7 +228,7 @@ class directPychinkoQuery(object):
                     s, p, o = [self.convType(x, indexedFormula, fr)
                                for x in quad.spo()] #to get variables.
                                #Not good enough for Lists   
-                    print "spo:", s,p,o
+#                    print "spo:", s,p,o
                     for f in (self.extra + [(s,p,o)]):
                         to.append(terms.Pattern(*f))
             rules.append(terms.Rule(tail, head, (subj, predi, obj) ))
@@ -226,18 +236,37 @@ class directPychinkoQuery(object):
         return rules
 
     def buildFacts(self, indexedFormula):
-        #only root level facts for now
-        #how to check for that         
         facts = []
         for f in self.dumpLists(indexedFormula):                
                 facts.append(terms.Fact(convertBNodeToFact(f.s),f.p, convertBNodeToFact(f.o)))
-                        
+           
         
+#        for alphaNode in self.interp.rete.alphaNodeStore:
+#                print alphaNode
+#                i = alphaNode.pattern.noneBasedPattern()
+#                pattern =  self.convFromRete(i[0]),  self.convFromRete(i[1]), self.convFromRete(i[2])
+#                print "pattern:", pattern
+#                for quad in indexedFormula.statementsMatching(
+#                    subj=pattern[0],
+#                    pred=pattern[1],
+#                    obj =pattern[2]):                    
+##                    print "quad:", quad
+#                    if  isinstance(subj, formula.Formula) or isinstance(obj, formula.Formula):
+#                            print "The RETE engine cannot process nested formulas currently"
+#                            continue
+#                    
+#                    s, p, o = [self.convType(x, indexedFormula, None) for x in quad.spo()]
+#                    
+#                    alphaNode.add(terms.Fact(s,p,o))
+     
         for fact in indexedFormula.statements:
             subj, predi, obj = fact.spo()
             # ignore formulas for now
             if  isinstance(subj, formula.Formula) or \
                 isinstance(obj, formula.Formula):
+                print "The RETE cannot process nested formulas at the time - use it for ntriples only"
+                raise NotImplementedError
+                
                 continue
             # only get top level facts            
             head = []
@@ -246,15 +275,13 @@ class directPychinkoQuery(object):
             
             s, p, o = [self.convType(x, indexedFormula, None)
                        for x in fact.spo()] #to get variables.
-                       #Not good enough for Lists
-            
-            """
-            for f in (self.extra + [(s,p,o)]):
-                to.append(terms.Pattern(*f))"""
-            print "spo:", s,p,o
+                       #Not good enough for Lists, but they're taken care of earlier
+                      
             facts.append(terms.Fact(s, p, o))
-        
+
+        self.interp.addFacts(Set(facts), initialSet=True)             
         return facts
+
 
     def add(self, triple):
         t = triple.t
