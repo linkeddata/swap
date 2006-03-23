@@ -52,7 +52,7 @@ class Builtin(nodes.AlphaNode):
         self.pattern = pattern
         self.py_list = list() # python representation of rdf lists used in builtins,
                               #now this only represents cwmSubj, extend it for obj,too
-        pychinko.nodes.AlphaNode.__init__(self, pattern)                
+        nodes.AlphaNode.__init__(self, pattern)                
 
     def evaluate(self, subj, obj):
         #print self.URI        
@@ -121,9 +121,9 @@ class Builtin(nodes.AlphaNode):
         rows resulting builtin evaluation"""
         inputNode = self.getInputNode()
         
-        if isinstance(inputNode, pychinko.nodes.AlphaNode):            
+        if isinstance(inputNode, nodes.AlphaNode):            
             return removedups(inputNode.svars + inputNode.vars)
-        elif isinstance(inputNode, pychinko.nodes.BetaNode):            
+        elif isinstance(inputNode, nodes.BetaNode):            
             return inputNode.pattern
         
     
