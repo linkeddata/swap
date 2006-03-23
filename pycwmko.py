@@ -262,12 +262,14 @@ class directPychinkoQuery(object):
         for fact in indexedFormula.statements:
             subj, predi, obj = fact.spo()
             # ignore formulas for now
+            
             if  isinstance(subj, formula.Formula) or \
                 isinstance(obj, formula.Formula):
-                print "The RETE cannot process nested formulas at the time - use it for ntriples only"
-                raise NotImplementedError
                 
-                continue
+                 print "The RETE cannot process nested formulas at the time - use it for ntriples only"
+#                raise NotImplementedError
+                
+                 continue
             # only get top level facts            
             head = []
             tail = []            
