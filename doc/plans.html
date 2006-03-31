@@ -44,15 +44,11 @@ class="description"><b class="summary">paw/cwm dev meetings</b> starting
 11:00ET</abbr> for 90 mins and <span class="rrule">every <span
 class="interval">2</span>nd <abbr title="WEEKLY" class="freq">week</abbr> on
 <abbr class="byday" title="WE">Thursday</abbr> thereafter until further
-notice. </span></span></span>. <strong>NOTE: on 23 Mar, it looks like we'll meet at 1pET, not 11aET.</strong></p>
+notice. </span></span></span>.</p>
 
-<p><span id="ev4421" class="vevent"><span class="description"><span
-class="rrule">NOTE that the change from Wednesday to
-<strong>Thursday</strong> at 11:00 ET to fit in with Yosi's
-schedule.</span></span></span><!--
+<!--
 repeat doesn't quite work right.
  em><a href="http://suda.co.uk/projects/X2V/get-vcal.php?uri=http://www.w3.org/2000/10/swap/doc/plans.html">iCal</a></em-->
-</p>
 
 <p>Meetings were held <a
 href="http://www.policyawareweb.org/2005/pf-dev/08-31-paw-minutes">31
@@ -85,13 +81,11 @@ Feb</a>,
         href="http://www.w3.org/Guide/1998/08/teleconference-calendar#s_1780">@@telcon
         res</a>)</li>
       <li>Round the table updates <em>(a sort of roll call and agenda
-        review)</em> expected: Yarden aka Jordan (?), Vlad, DanC, TimBL,
-        Eikeon aka Dan K. Expected during MIT IAP 6 weeks: Yosi</li>
-      <li>review of Action Items that don't fit below:
-        <p><em>other actions are integrated into topics below, rather than <a
-        href="http://esw.w3.org/topic/BulkActionReview">BulkActionReview</a>
-        duplication</em></p>
-      </li>
+        review)</em> expected: Yarden aka Jordan (?), Vlad, Eikeon aka Dan K. 
+	DanC, TimBL, Yosi</li>
+	<li class="vtodo">misc action: <strong class="summary">Eikeon
+	to Ask ron to copy TimBL's keys across from the pychinko space
+	to the policyawareweb.org space</strong></li>
     </ul>
   </li>
   <li>Vlad's progress integrating pychinko and cwm
@@ -102,13 +96,22 @@ Feb</a>,
     with swap/<a href="http://svn.mindswap.org/pychinko/">pychinko</a>... but
     the CVS won't. Aim for: --pythink ? -or --rete or -run. release with a
     few tests and explanation of when to use --rete vs --think.</p>
+
+    <p class="vtodo"><strong class="summary">ACTION: Vlad to Send mail
+    to public-cwm-announce@w3.org about the inclusion of the rete as
+    an alpha test, test users welcome</strong></p>
+
   </li>
   <li>PAW demo item? How is it going? Debugging cwm --why and proof checking.
     Diag.tracking. (Tim: Upgraded the javascript API.)
-    <p class="vtodo"><strong class="summary">ACTION TimBL: To think about
-    phasing out statement[CONTEXT]</strong></p>
+    <p>Yosi got the code running with the paw demo but found it slow unifying
+    the formulae involved. ... what to do now? Issues: Indexing for speed in
+    a world of nested formaule with variables;</p>
     <p>15 Feb update Yosi got the basic rein case working, though it takes
     around 3min. He's working on log:supports, performance.</p>
+    <p class="vtodo"><strong class="summary">ACTION: Tim and Vlad talk 5pm Tuesday 28th. about proofs in cwm</strong></p>
+    <p class="vtodo"><strong class="summary">ACTION TimBL: To think about
+    phasing out statement[CONTEXT]</strong></p>
     <p>See also: <a
     href="http://www.policyawareweb.org/2005/demo/pfproxy.py">pfproxy.py</a>,
     <a href="http://www.policyawareweb.org/2005site/dev.html">PAW dev SVN
@@ -116,19 +119,19 @@ Feb</a>,
     <p>older test case: DanC ran it at the face-face meeting.:</p>
     <pre>cwm --rdf http://dig.csail.mit.edu/2005/09/rein/examples/judy-req.rdf --n3 http://dig.csail.mit.edu/2005/09/rein/engine.n3 --think --filter="http://dig.csail.mit.edu/2005/09/rein/filter.n3" --why</pre>
     <p>TBL checked in minimally-working code in the 26 Oct 2005 meeting.</p>
-    <p>Yosi got the code running with the paw demo but found it slow unifying
-    the formulae involved. ... what to do now? Issues: Indexing for speed in
-    a world of nested formaule with variables;</p>
   </li>
   <li>cwm/Inferenceweb integration
     <ul>
-      <li class="vtodo"><strong class="summary">ACTION: DanC, DLM: dlm to get
-        cwm generating PML that can be seen in iwbrowser, with timbl. 9/28:
-        DanC has the ball to contact Paulo</strong></li>
+      <li class="vtodo"><strong class="summary">ACTION: DanC, DLM: dlm
+      to get cwm generating PML that can be seen in iwbrowser, with
+      timbl.</strong></li>
     </ul>
     <p>progress: <a
     href="http://lists.w3.org/Archives/Public/public-cwm-talk/2006JanMar/0019.html">help
-    checking/reading some proof related to versioning?</a> Feb</p>
+    checking/reading some proof related to versioning?</a> Feb, see <a
+    href="http://projects.semwebcentral.org/pipermail/inferenceweb/2006-March/000004.html">Thu
+    Mar 23 discussion in inferenceweb list</a></p>
+
   </li>
   <li>N3 changes and n3.n3
     <p>Unicode problems in reg exps using predictiveParser.</p>
