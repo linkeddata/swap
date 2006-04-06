@@ -443,10 +443,15 @@ class BetaNode:
                     #get the bindings according to its own key, above line didnt work
                     bindings = dict()
                     key = self.getkey()
-                   
-                    for i, v in enumerate(key):
-                        bindings[v] = row[i]
-                            
+                    try:
+                        for i, v in enumerate(key):
+                            bindings[v] = row[i]
+                    except:
+                        print "bindings=%s" % bindings
+                        print "row=%s" % row
+                        print "v=%s" % v
+                        print "i=%s" % i
+                        raise
 
                     #copy the values for the variable in pattern.o
                     if self.rnode.pattern.o in bindings:                    
@@ -667,24 +672,67 @@ class AlphaStore(object):
                 return 1
         return 0
             
-
+    lastTopSort = -1000000000L
     def topSort(self, unsorted, sorted):
+##        k = len(unsorted)
+##        if k > self.lastTopSort:
+##            import traceback
+##            #traceback.print_stack()
+##        self.__class__.lastTopSort = k
         from builtins import funcBuiltinp
-        if not unsorted:
-            #for i in sorted:
-            #   print "s", i            
-            return sorted
-        else:
-            first = [x for x in unsorted if self.indegree(x,unsorted)==0 and not funcBuiltinp(x)]            
-            if first:                
-                sorted.append(first[0])
-                unsorted.remove(first[0])
-                return self.topSort(unsorted, sorted)
-            else:               
-                first = [x for x in unsorted if self.indegree(x,unsorted)==0]                            
-                sorted.append(first[0])
-                unsorted.remove(first[0])
-                return self.topSort(unsorted, sorted)
+##        if not unsorted:
+##            #for i in sorted:
+##            #   print "s", i            
+##            return sorted
+##        else:
+##            first = [x for x in unsorted if self.indegree(x,unsorted)==0 and not funcBuiltinp(x)]            
+##            if first:                
+##                sorted.append(first[0])
+##                unsorted.remove(first[0])
+##                #print len(unsorted)
+##                return self.topSort(unsorted, sorted)
+##            else:               
+##                first = [x for x in unsorted if self.indegree(x,unsorted)==0]                            
+##                sorted.append(first[0])
+##                unsorted.remove(first[0])
+##                return self.topSort(unsorted, sorted)
+
+        try: set
+        except:
+             from sets import Set as set
+        unsorted = set(unsorted)
+        inDegrees = {}
+        for node in unsorted:
+            inDegrees[node] = 0
+        for node in unsorted:
+            for parent in node.dependents:
+		if parent in inDegrees:
+                    inDegrees[parent] = inDegrees[parent] + 1
+        zeros = set()
+        simpleZeros = set()
+        for node in inDegrees:
+            if inDegrees[node] == 0:
+                if funcBuiltinp(node):
+                    zeros.add(node)
+                else:
+                    simpleZeros.add(node)
+        while zeros or simpleZeros:
+            if simpleZeros:
+                top = simpleZeros.pop()
+            else:
+                top = zeros.pop()
+            sorted.append(top)
+            for node in top.dependents:
+		if node in inDegrees:
+                    inDegrees[node] = inDegrees[node] - 1
+                    if inDegrees[node] == 0:
+                        if funcBuiltinp(node):
+                            zeros.add(node)
+                        else:
+                            simpleZeros.add(node)
+        if inDegrees and max(inDegrees.values()) != 0:
+            raise ValueError
+	return sorted
             
            
     def sort(self):
