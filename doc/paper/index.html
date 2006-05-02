@@ -168,9 +168,9 @@ environment should have the ability to determine what document or
 message said what and match graphs against variable graphs.</p>
 <p>The goal of the Semantic Web is the beneficial reuse of data in
 unplanned ways. (@@this is discussed in the N3 section)</p>
-<p>We introduce a tool called Cwm [footnote: originally from Closed
-World Machine, now a misnomer, as cwm explicitly deals with open
-world.] motivated by the above requirements. Cwm is a
+<p>We introduce a tool called Cwm<em class="footnote">originally
+from Closed World Machine, now a misnomer, as cwm explicitly deals
+with open world.</em> motivated by the above requirements. Cwm is a
 general-purpose data processor for the Semantic Web, analogous like
 sed, awk, etc. for text files or XSLT for XML. It is a forward
 chaining reasoner which can be used for querying, checking,
@@ -216,17 +216,22 @@ greater expressiveness. It has two important subsets, one of which
 is RDF 1.0 equivalent, and one of which is RDF extended with rules.
 In this section, we will briefly introduce N3 show how it is
 different from RDF.</p>
-<p>N3 syntax is very readable, using the &lt;subject&gt;
-&lt;predicate&gt; &lt;object&gt; form. E,g.:</p>
-<p><code>:John :parent :Bob.</code></p>
-<p>The colon form of qname is similar to XML's qname form. In this
-paper, for the sake of space, we do not define the namespaces to
-which prefxes refer. [@@in a footnote we could] Blank nodes
-(bnodes, RDF's form of existential node) are expressed using '[]',
-for example: [ :brother :John ] specifies some person who has
-brother :John.</p>
-<p>An N3 rule is stored as a statement whose predicate is
-<code>log:implies</code>, for example:</p>
+<p>N3 syntax is very readable, using the <i>subject</i>
+<i>predicate</i> <i>object</i> form. E.g.:</p>
+<pre>
+:John :parent :Bob.
+</pre>
+<p>The colon form of qname is similar to XML's qname
+form<span class="online">@@refer to XML namespace spec?</span>. In
+this paper, for the sake of space, we do not define the namespaces
+to which prefxes refer. <span class="online">@@in a footnote we
+could</span> Blank nodes (bnodes, RDF's form of existential
+variable) are expressed using '[]', for example: <tt>[ :brother
+:John ]</tt> specifies something that has <tt>:brother
+:John</tt>.</p>
+<p>An N3 rule is written as a statement whose predicate is
+<code>log:implies</code>, for example:<span class="online">@@we
+haven't explained ?var syntax</span></p>
 <pre>
 { ?x parent ?y. ?y sister ?z } log:implies { ?x aunt ?z }.
 </pre>
@@ -239,7 +244,7 @@ the consequents of the rules. Another restriction worth mentioning
 is that, since monotonicity is one of the design goals for N3,
 there is no negation-as-failure. The only form of negation allowed
 in N3 is scoped negation as failure, which will be described in
-Section [@@REF].</p>
+section <a rel="ref" href="#neg23">4.8</a>.</p>
 <p>One of the design goals of N3 is that information, such as but
 not limited to rules, which requires greater expresive power than
 RDF, should be sharable in the same way as RDF can be shared. This
@@ -373,9 +378,10 @@ was also done for architectural simplicity. Making this simple
 decision allows all the language support for RDF and N3 to be
 immediately adopted for the arithmetic expressions; the store can
 store them, the serializer can output them and so on. Contrast this
-with the situation in for example SPARQL [ref], in which a special
-place in th query expression is reserved for filter expressions,
-and whole separate syntax is supported for it.</p>
+with the situation in for example SPARQL<a href=
+"#SPARQL">[SPARQL]</a>, in which a special place in th query
+expression is reserved for filter expressions, and whole separate
+syntax is supported for it.</p>
 <p>Within the reasoner, built-in functions are made part of the
 query. During query optimization, <em>light</em> builtins (such as
 negation of an integer) are assumed to be faster than searching the
@@ -473,7 +479,7 @@ appeal is that in fact the trusted code base is fairly small, only
 the basic builtin functions (code shared by all users and will be
 hopefully well inspected), and declarative rules which may
 themselves by automatically analyzed.</p>
-<h2>Web-aware queries</h2>
+<h3>Web-aware queries</h3>
 <p>The cwm system can operate in modes in when a symbol occurs
 during processing, it will be dereferenced on the web so that any
 published information about the symbol may be loaded. The loading
@@ -523,7 +529,11 @@ state:code log:definitiveDocument &lt;stateCodes.rdf&gt;.
 <pre>
 
 </pre>
+<div id="neg23">
 <h3>Scoped Negation as Failure</h3>
+<p class="online">@@heading structure seems odd; isn't the Remote
+query section below part of Web-aware queries? Should this SNAF
+section move down?</p>
 <p>While some sources of data are definitive, others (such as a set
 of temperature measurements) are not: one never knows when evidence
 may come to light of another. This aspect of the Semantic Web makes
@@ -540,7 +550,7 @@ color, then the car is black.</p>
 } =&gt; {
      ?y ex:Color "black"
 }.
-</pre>
+</pre></div>
 <h4 id="Remote">Remote query processing</h4>
 <p>The modes mentioned above allow cwm to pick up data while it is
 processing a query, by loading RDF or N3 documents. We were also
@@ -564,24 +574,30 @@ a given server should be contacted for a given form of query.</p>
 <h2 id="N10115">Applications</h2>
 <p>We now discuss some applications for which we have used cwm. It
 has also been used as a general teaching and introductory tool for
-new develepers [@ref tutorial]. To validate the usefulness of the
-tecnology, we used cwm for a variety of tasks, including tax code
-calculations, creation and filtering of calendar information,
-project management tasks such as dependency analysis and bug
-tracking, and all kinds of quick manipulations of data occuring in
-everyday personal or enterprise use of data. Here we mention two
-specific applications as examples.</p>
+new develepers<a href="#swtut2003">[N3CWM2003]</a>. To validate the
+usefulness of the technology, we used cwm for a variety of tasks,
+including tax code calculations, creation and filtering of calendar
+information, project management tasks such as dependency analysis
+and bug tracking, and all kinds of quick manipulations of data
+occuring in everyday personal or enterprise use of data. Here we
+mention two specific applications as examples.</p>
 <h3>Policy Aware Web</h3>
 <p>The Policy-Aware Web (PAW) Project is a collaboration between
-Mindswap and DIG aimed at developing a framework for decentralized,
-rule-based access control on the Web using Semantic Web
-technologies. The main design goals of the project are to keep
-access control policies as transparent as possible, and offload the
-work of proving whether access should be granted or not to the
-client, instead of the server. The latter is done by requiring the
-clients to generate proofs (using CWM) of their rights to access a
-particular resource protected by N3 policies. Thus, cwm's proof
-generation/checking features are extensively used in PAW.</p>
+Mindswap and DIG<span class="online">@@expand DIG acronym? do we
+really want to talk about project organization? Perhaps cite
+<cite><a href=
+"http://www.w3.org/2004/09/Policy-Aware-Web-acl.pdf">Creating the
+Policy-Aware Web: Discretionary, Rules-based Access for the World
+Wide Web</a></cite> book chapter?</span> aimed at developing a
+framework for decentralized, rule-based access control on the Web
+using Semantic Web technologies. The main design goals of the
+project are to keep access control policies as transparent as
+possible, and offload the work of proving whether access should be
+granted or not to the client, instead of the server. The latter is
+done by requiring the clients to generate proofs (using CWM) of
+their rights to access a particular resource protected by N3
+policies. Thus, cwm's proof generation/checking features are
+extensively used in PAW.</p>
 <div class="figure" id="pawfig"><object data="paw.jpg" height=
 "5in"><img border="0" src="" width="865" height="569" alt=
 "policy aware web scenario" /></object>
@@ -725,6 +741,26 @@ Language Reference</a></cite> <tt class=
 "number">http://www.w3.org/TR/2004/REC-owl-ref-20040210/</tt>
 <span class="institution">W3C</span> Recommendation 10 <span class=
 "month">February</span> <span class="year">2004</span></dd>
+<dt class="misc" id="swtut2003">[N3CWM2003]</dt>
+<dd><span class="author">Tim Berners-Lee and Dan Connolly and
+Sandro Hawke</span>. <cite><a href=
+"http://www.w3.org/2000/10/swap/doc/">Semantic Web Tutorial Using
+N3</a></cite> <span class="address">Budapest</span> <span class=
+"year">2003</span></dd>
+<dt class="TechReport"><a name="SPARQL" id=
+"SPARQL">[SPARQL]</a></dt>
+<dd><span class="author">Seaborne, Andy and Prud'hommeaux,
+Eric</span> <cite><a href=
+"http://www.w3.org/TR/2006/CR-rdf-sparql-query-20060406/">SPARQL
+Query Language for RDF</a></cite> , <span class=
+"institution">W3C</span> Candidate Recommendation (work in
+progress), 6 <span class="month">April</span> <span class=
+"year">2006</span>, <tt class=
+"number">http://www.w3.org/TR/2006/CR-rdf-sparql-query-20060406/</tt>.
+<a href="http://www.w3.org/TR/rdf-sparql-query/" title=
+"Latest version of SPARQL Query Language for RDF">Latest
+version</a> available at http://www.w3.org/TR/rdf-sparql-query/
+.</dd>
 </dl>
 </div>
 </div>
