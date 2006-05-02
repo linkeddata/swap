@@ -11,7 +11,7 @@
 
 
 \title{A Reasoner for the Web}
-\author[Berners-Lee et. al.]{Tim Berners-Lee \and Dan Connolly \and James Hendler \and Vladimir Kolovski \and Yoseph Scharf}
+\author[Berners-Lee et. al.]{Tim Berners-Lee \and Vladimir Kolovski \and Dan Connolly \and James Hendler \and Vladimir Kolovski \and Yoseph Scharf}
   \maketitle
 \label{firstpage}
   
@@ -21,15 +21,16 @@
 
 
 \par Cwm (pronounced coom) is a general-purpose data processor for
-the semantic web, somewhat like sed, awk, etc. for text files or
-XSLT for XML. It is a forward chaining reasoner which can be used
-for querying, checking, transforming and filtering information. Its
-core language is RDF, extended to include rules, and it uses
-RDF/XML or RDF/N3 serializations as required. The logic, and the
-functions To be used effectively as a Semantic Web reasoner, Cwm
-has a host of features that allow it to operate as an agent on the
-Semantic Web . In this paper, we discuss those features and show
-why we consider cwm a reasoner for the Semantic Web.
+the Semantic Web, for RDF somewhat what sed, awk, etc. are for text
+files or XSLT is for XML. It is a forward chaining reasoner that
+can be used for querying, checking, transforming and filtering
+information. Its core language is RDF, extended to include rules,
+and it uses RDF/XML or RDF/N3 serializations as required. Cwm's
+logic and functions are both specially adapeted to be used
+effectively in the environment of an unbounded webb of data and
+rules of diverse provenance. We discuss those features and give the
+experience gained in the design and use of this reasoner for the
+Semantic Web.
 \end{abstract}
   
 
@@ -39,19 +40,19 @@ why we consider cwm a reasoner for the Semantic Web.
 
 \par The popularity of the Semantic Web is ever-increasing, one of
 the main reasons being the improving tool support for its
-foundational languages (OWL and RDF). This tool support usually
-comes in the form of ontology editors and reasoners for
-OWL\footnote{because of its clear and concise semantics,
- OWL-DL can boast a large number of reasoners.}.
-However, for the general
-purpose manipulation of data, a rule-based engine makes intuitive
-things which are unintuitive, difficult or sometimes impossible
-using Description Logics. The requirements for such a rule engine
-were twofold: to be a general tool to allow semantic-web based
-systems to be built, so as to provide feedback on the overall
-architecture, and provide an on-ramp for newcomers; and to provide
-a platform on which to build more sophisticated applications to
-research future directions for semantic web design.
+foundational languages (The Resource Description Framework
+(RDF)\cite{RDFC04} and Web Ontology Language
+(OWL)\cite{owl}). This tool support usually comes in
+the form of ontology editors and reasoners for OWL\footnote{Because of its clear and concise semantics, OWL-DL can
+boast a large number of reasoners.}.  However, for the general purpose manipulation of data,
+a rule-based engine makes intuitive things which are unintuitive,
+difficult or sometimes impossible using Description Logics. The
+requirements for such a rule engine were twofold: to be a general
+tool to allow Semantic Web based systems to be built, so as to
+provide feedback on the overall architecture, and provide an
+on-ramp for newcomers; and to provide a platform on which to build
+more sophisticated applications to research future directions for
+Semantic Web design.
 
 \par In the context of the Semantic Web, RDF is the lingua franca for
 representing machine-processable documents. RDF uses URIs as
@@ -70,10 +71,10 @@ message said what and match graphs against variable graphs.
 \par The goal of the Semantic Web is the beneficial reuse of data in
 unplanned ways. (@@this is discussed in the N3 section)
 
-\par We introduce a tool called Cwm [footnote: originally from Closed
-World Machine, now a misnomer, as cwm explicitly deals with open
-world.] motivated by the above requirements. Cwm is a
-general-purpose data processor for the semantic web, analogous like
+\par We introduce a tool called Cwm\footnote{originally
+from Closed World Machine, now a misnomer, as cwm explicitly deals
+with open world.} motivated by the above requirements. Cwm is a
+general-purpose data processor for the Semantic Web, analogous like
 sed, awk, etc. for text files or XSLT for XML. It is a forward
 chaining reasoner which can be used for querying, checking,
 transforming and filtering information. Since RDF itself is not
@@ -124,19 +125,21 @@ is RDF 1.0 equivalent, and one of which is RDF extended with rules.
 In this section, we will briefly introduce N3 show how it is
 different from RDF.
 
-\par N3 syntax is very readable, using the <subject>
-<predicate> <object> form. E,g.:
+\par N3 syntax is very readable, using the {\it subject}
+{\it predicate} {\it object} form. E.g.:
+\begin{verbatim}
+:John :parent :Bob.
+\end{verbatim}
 
-\par {\tt :John :parent :Bob.}
+\par The colon form of qname is similar to XML's qname
+form. In
+this paper, for the sake of space, we do not define the namespaces
+to which prefxes refer.  Blank nodes (bnodes, RDF's form of existential
+variable) are expressed using '[]', for example: {\tt [ :brother
+:John ]} specifies something that has {\tt :brother
+:John}.
 
-\par The colon form of qname is similar to XML's qname form. In this
-paper, for the sake of space, we do not define the namespaces to
-which prefxes refer. [@@in a footnote we could] Blank nodes
-(bnodes, RDF's form of existential node) are expressed using '[]',
-for example: [ :brother :John ] specifies some person who has
-brother :John.
-
-\par An N3 rule is stored as a statement whose predicate is
+\par An N3 rule is written as a statement whose predicate is
 {\tt log:implies}, for example:
 \begin{verbatim}
 { ?x parent ?y. ?y sister ?z } log:implies { ?x aunt ?z }.
@@ -152,7 +155,7 @@ the consequents of the rules. Another restriction worth mentioning
 is that, since monotonicity is one of the design goals for N3,
 there is no negation-as-failure. The only form of negation allowed
 in N3 is scoped negation as failure, which will be described in
-Section [@@REF].
+section \ref{neg23}.
 
 \par One of the design goals of N3 is that information, such as but
 not limited to rules, which requires greater expresive power than
@@ -306,9 +309,9 @@ was also done for architectural simplicity. Making this simple
 decision allows all the language support for RDF and N3 to be
 immediately adopted for the arithmetic expressions; the store can
 store them, the serializer can output them and so on. Contrast this
-with the situation in for example SPARQL [ref], in which a special
-place in th query expression is reserved for filter expressions,
-and whole separate syntax is supported for it.
+with the situation in for example SPARQL\cite{SPARQL}, in which a special place in th query
+expression is reserved for filter expressions, and whole separate
+syntax is supported for it.
 
 \par Within the reasoner, built-in functions are made part of the
 query. During query optimization, {\em light} builtins (such as
@@ -342,7 +345,7 @@ statements - is introduced.
 
 \par In order to interact with the web, cwm has a builtin called
 {\tt log:semantics}. The {\tt log:semantics} of a
-document is the formula which one gets by parsing a semantic web
+document is the formula which one gets by parsing a Semantic Web
 document. Cwm regards the web as being a mapping between symbols
 and formulas. As it is a built-in function, when cwm needs to
 evaluate it it will retrieve up the document (in N3 or RDF/XML
@@ -356,7 +359,7 @@ into its contents by using log:includes. One formula
 {\tt log:includes} a second formula if for each statement in
 the second, there is a corresponding one in the first.
 
-\par So let's say we we have a concept of a semantic web home page
+\par So let's say we we have a concept of a Semantic Web home page
 for a person. We decide on the policy that if someone's home page
 says that they are a vegetarian, then we believe that they are a
 vegetarian.
@@ -422,7 +425,7 @@ appeal is that in fact the trusted code base is fairly small, only
 the basic builtin functions (code shared by all users and will be
 hopefully well inspected), and declarative rules which may
 themselves by automatically analyzed.
-\section{Web-aware queries}
+\subsection{Web-aware queries}
   
 
 \par The cwm system can operate in modes in when a symbol occurs
@@ -441,7 +444,7 @@ metadata to control processing as described below.
 
 \par However, it is generally unwise to follow subject or object
 links when loading statements, as in a well-connected web the
-entire semantic web could be eventually loaded.
+entire Semantic Web could be eventually loaded.
 
 \par By contrast, when a query is being matched, it is very
 reasonable to load any URIs occuring in subject or object positions
@@ -455,10 +458,10 @@ bring in documents which together form the parts of a large graph
 as it is needed.
 
 \par These modes of operation, and ones like them, are, we belive,
-important to the development of the semantic web. Future research
+important to the development of the Semantic Web. Future research
 should be directed toward protocols which involve conventions for
 the sort of information which is published against the URIs used as
-symbols for arbitrary things in the semantic web.
+symbols for arbitrary things in the Semantic Web.
 \subsubsection{Definitive documents}
   
 
@@ -482,8 +485,11 @@ state:code log:definitiveDocument <stateCodes.rdf>.
 \begin{verbatim}
 
 \end{verbatim}
+
 \subsection{Scoped Negation as Failure}
-  
+  \label{neg23}
+
+
 
 \par While some sources of data are definitive, others (such as a set
 of temperature measurements) are not: one never knows when evidence
@@ -530,26 +536,27 @@ a given server should be contacted for a given form of query.
 
 \par We now discuss some applications for which we have used cwm. It
 has also been used as a general teaching and introductory tool for
-new develepers [@ref tutorial]. To validate the usefulness of the
-tecnology, we used cwm for a variety of tasks, including tax code
-calculations, creation and filtering of calendar information,
-project management tasks such as dependency analysis and bug
-tracking, and all kinds of quick manipulations of data occuring in
-everyday personal or enterprise use of data. Here we mention two
-specific applications as examples.
+new develepers\cite{swtut2003}. To validate the
+usefulness of the technology, we used cwm for a variety of tasks,
+including tax code calculations, creation and filtering of calendar
+information, project management tasks such as dependency analysis
+and bug tracking, and all kinds of quick manipulations of data
+occuring in everyday personal or enterprise use of data. Here we
+mention two specific applications as examples.
 \subsection{Policy Aware Web}
   
 
 \par The Policy-Aware Web (PAW) Project is a collaboration between
-Mindswap and DIG aimed at developing a framework for decentralized,
-rule-based access control on the Web using Semantic Web
-technologies. The main design goals of the project are to keep
-access control policies as transparent as possible, and offload the
-work of proving whether access should be granted or not to the
-client, instead of the server. The latter is done by requiring the
-clients to generate proofs (using CWM) of their rights to access a
-particular resource protected by N3 policies. Thus, cwm's proof
-generation/checking features are extensively used in PAW.
+Mindswap and DIG aimed at developing a
+framework for decentralized, rule-based access control on the Web
+using Semantic Web technologies. The main design goals of the
+project are to keep access control policies as transparent as
+possible, and offload the work of proving whether access should be
+granted or not to the client, instead of the server. The latter is
+done by requiring the clients to generate proofs (using CWM) of
+their rights to access a particular resource protected by N3
+policies. Thus, cwm's proof generation/checking features are
+extensively used in PAW.
 \begin{figure}[tb]
 \centerline{\epsfig{file=paw.jpg, height=5in}}
 
@@ -642,7 +649,21 @@ intimately and scalably in the Web.
 \section{Acknowledgements}
   
 
-\par This work was funded under @@@ DARPA and @@@ PAW NSF
+\par This work is supported in part by funding from US Defense
+Advanced Research Projects Agency (DARPA) and Air Force Research
+Laboratory, Air Force Materiel Command, USAF, under agreement
+number F30602-00-2-0593, \empty Semantic Web
+Development.
+
+\par This work was also funded under \empty NSF \empty ITR
+04-012.
+
+\par Originally written by Berners-Lee and Connolly, CWM has been
+significantly enhanced and extended by Scharf. Kolovski ported the
+{\em pychinko} rete engine, and authored this paper. Sean
+Palmer, Mark Nottingham, Jos de Roo, and other members of the W3C
+Semantic Web Interest Group provided code, tests, comments and
+encouragement.
 
 \bibliography{index}
 
