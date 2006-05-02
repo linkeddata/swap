@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="EN" lang="EN">
 <head>
 <meta name="generator" content=
-"HTML Tidy for Mac OS X (vers 1st December 2004), see www.w3.org" />
+"HTML Tidy for Windows (vers 14 February 2006), see www.w3.org" />
 <meta http-equiv="content-type" content=
 "application/xhtml+xml; charset=us-ascii" />
 <title>cwm Systems Paper</title>
@@ -122,18 +122,19 @@ why we consider cwm a reasoner for the Semantic Web.</p>
 <div class="div1">
 <h2 id="N10111">Introduction: Motivation and Goals</h2>
 <p>The popularity of the Semantic Web is ever-increasing, one of
-the main reasons being the improving tool support for its main
-languages (OWL and RDF). This tool support usually comes in the
-form of ontology editors and reasoners for OWL. Because of its
-clear and concise semantics, OWL-DL can boast a large number of
-reasoners. However, for the general purpose manipulation of data, a
-rule-based engine makes intuitive things which are unintuitive,
-difficult or sometimes impossible using DL. The requirements were
-twofold: to be a general tool to allow semantic-web based systems
-to be built, so as to provide feedback on the overall architecture,
-and provide an on-ramp for newcomers; and to provide a platform on
-which to build more sophisticated applications to research future
-dirctions for semanatic web design.</p>
+the main reasons being the improving tool support for its
+foundational languages (OWL and RDF). This tool support usually
+comes in the form of ontology editors and reasoners for OWL
+(@@footnote:because of its clear and concise semantics, OWL-DL can
+boast a large number of reasoners). However, for the general
+purpose manipulation of data, a rule-based engine makes intuitive
+things which are unintuitive, difficult or sometimes impossible
+using Description Logics. The requirements for such a rule engine
+were twofold: to be a general tool to allow semantic-web based
+systems to be built, so as to provide feedback on the overall
+architecture, and provide an on-ramp for newcomers; and to provide
+a platform on which to build more sophisticated applications to
+research future directions for semantic web design.</p>
 <p>In the context of the Semantic Web, RDF is the lingua franca for
 representing machine-processable documents. RDF uses URIs as
 symbols. The <i>Web</i> in Semantic <i>Web</i> comes from the fact
@@ -148,12 +149,12 @@ and responsible for its disposition. A tool in this type of
 environment should have the ability to determine what document or
 message said what and match graphs against variable graphs.</p>
 <p>The goal of the Semantic Web is the beneficial reuse of data in
-unplanned ways.</p>
+unplanned ways. (@@this is discussed in the N3 section)</p>
 <p>We introduce a tool called Cwm [footnote: originally from Closed
 World Machine, now a misnomer, as cwm explicitly deals with open
 world.] motivated by the above requirements. Cwm is a
-general-purpose data processor for the semantic web, analogousy to
-like sed, awk, etc. for text files or XSLT for XML. It is a forward
+general-purpose data processor for the semantic web, analogous like
+sed, awk, etc. for text files or XSLT for XML. It is a forward
 chaining reasoner which can be used for querying, checking,
 transforming and filtering information. Since RDF itself is not
 sufficient to express rules, Cwm is based on an extension of RDF
@@ -172,18 +173,20 @@ popular rule engine, used in major research projects. The goal of
 this paper is to explain the functionality and distinguishing
 features of this tool in more detail.</p>
 <p>The second goal cwm, as a platform for research, was in a way to
-cover as much of the Semantic Web layer cake as possible. Thus,
-among other things, there is functionality for the <i>proof</i> and
-<i>trust</i> layer.</p>
+serve as a experimental ground for more expressive Semantic Web
+applications (which cover some of the upper layers of the Semantic
+Web layer cake). To this end, we have added <i>proof</i>
+generation/checking support to the system, and also a crypto module
+which empowers Cwm users with the tools to build <i>trust</i>
+systems on the Semantic Web.</p>
 <p>In the next section there will be a brief introduction to N3,
-mainly to show how it extends RDF. Then, we will briefly explain
+mainly describing how it extends RDF. Then, we will briefly explain
 the system architecture of cwm. From that point on, we will talk
 about the distinguishing features of the tool, such as its builtin
 functions, proof generation and proof checking. Cwm has been used
-as the rule engine in our research project (Policy Aware Web) - we
-will cover that in Applications. We will show its performance
-results for large datasets before wrapping up with Future Work and
-Conclusion.</p>
+as the rule engine in research projects (Policy Aware Web) and for
+automating tasks at the W3C - we will cover that in Applications,
+and wrap up with Future Work and Conclusions.</p>
 </div>
 </div>
 <div class="back">
@@ -218,7 +221,7 @@ the consequents of the rules. Another restriction worth mentioning
 is that, since monotonicity is one of the design goals for N3,
 there is no negation-as-failure. The only form of negation allowed
 in N3 is scoped negation as failure, which will be described in
-Section 4.</p>
+Section [@@REF].</p>
 <p>One of the design goals of N3 is that information, such as but
 not limited to rules, which requires greater expresive power than
 RDF, should be sharable in the same way as RDF can be shared. This
@@ -398,8 +401,8 @@ for a person. We decide on the policy that if someone's home page
 says that they are a vegetarian, then we believe that they are a
 vegetarian.</p>
 <pre>
-@forAll :x.
-{:x :homePage log:includes { :x a :Vegetarian }}=&gt; { :x a :Vegetarian}.
+
+{?x :homePage log:includes { ?x a :Vegetarian }}=&gt; { ?x a :Vegetarian}.
 </pre>
 <h3>Proof generation</h3>
 <p>The proof generation facility is an integral part of the CWM
@@ -436,22 +439,22 @@ processing to be reduced to operations in logic on the web.</p>
 quality and privacy issues arising from the vision of the Semantic
 Web as a global information integration infrastructure are
 essential. Cwm provides the tools with which to write responsible
-systems. The sofware itself doesn't make it easier to decide on the
-trust model to use - but it does provide the capability to express
-it. Moreover, CWM includes a cryptography module which allows a
-user to generate public/private keys and sign and verify documents.
-Between them, the logical and cryptographic functionality, together
-with the capacity to look up the web, allow a wide variety of
-trust-aware systems to be built from scratch. One appeal of this
-technique is that because the language does not have any
-assumptions about the trust infrastructure built in, the user is
-not forced to trust based the topology of existing systems, such as
-a formalized hierarchical public key system. All kinds of different
-forms of trust can be used for different data. Another appeal is
-that in fact the trusted code base is fairly small, only the basic
-builtin functions (code shared by all users and will be hopefully
-well inspected), and declarative rules which may themselves by
-automatically analysed.</p>
+systems. The software itself doesn't make it easier to decide on
+the trust model to use - but it does provide the capability to
+express it. Moreover, CWM includes a cryptography module which
+allows a user to generate public/private keys and sign and verify
+documents. Between them, the logical and cryptographic
+functionality, together with the capacity to look up the web, allow
+a wide variety of trust-aware systems to be built from scratch. One
+appeal of this technique is that because the language does not have
+any assumptions about the trust infrastructure built in, the user
+is not forced to trust based the topology of existing systems, such
+as a formalized hierarchical public key system. All kinds of
+different forms of trust can be used for different data. Another
+appeal is that in fact the trusted code base is fairly small, only
+the basic builtin functions (code shared by all users and will be
+hopefully well inspected), and declarative rules which may
+themselves by automatically analyzed.</p>
 <h2>Web-aware queries</h2>
 <p>The cwm system can operate in modes in when a symbol occurs
 during processing, it will be dereferenced on the web so that any
@@ -499,6 +502,28 @@ state:code log:definitiveDocument &lt;stateCodes.rdf&gt;.
 </pre>
 <p>The client then converts any query or query part of the form
 <code>?s state:code ?y</code> into a query on that document.</p>
+<pre>
+
+</pre>
+<h3>Scoped Negation as Failure</h3>
+<p>While&nbsp; some sources of data&nbsp; are definitive, others
+(such as a set of temperature measurements) are not: one never
+knows when evidence may come to light of another. This aspect of
+the Semantic Web makes negation as failure (NAF) meaningless unless
+it is associated to a specific dataset. The effect of a default
+with an explicit domain is achieved with
+<code>log:notIncludes</code>, the negation of
+<code>log:includes</code>. In the example below, if an order has an
+item which is car, and the order doesn't say that the car has some
+color, then the car is black.</p>
+<pre>
+{    &lt;thisOrder.rdf&gt;  log:semantics ?ORDER.
+     ?ORDER  log:includes    { ?x  biz:item ?y. ?y a ex:Car };
+     ?ORDER  log:notIncludes { ?y  ex:color [] }
+} =&gt; {
+     ?y ex:Color "black"
+}.
+</pre>
 <h4 id="Remote">Remote query processing</h4>
 <p>The modes mentioned above allow cwm to pick up data while it is
 processing a query, by loading RDF or N3 documents. We were also
@@ -592,18 +617,15 @@ expressivity: Pychinko cannot handle most of the cwm builtins. It
 is worth mentioning here that the RETE engine used in Pychinko has
 been ported to Cwm - thus Cwm can now boast the same performance
 improvements.</p>
-<h2>Future Work</h2>
-<p>Optimizing the proof generation/checking so as to be able to
-handle more expressive policy engines.</p>
-<h2 id="conc">Conclusion</h2>
+<h2 id="conc">Conclusion and Future Work</h2>
 <p>The N3 language enabled our use of the Semantic Web both by its
 simplicity and ease of use as a data language, and in the fact that
 its extra expressive power allowed rules and rules about what
 document said what to be written. The extra logical operations
-added in Cwm to seemed to be a faily complete set, in that new
+added in Cwm to seemed to be a fairly complete set, in that new
 applications were made by combining the old ones, and did not
 require the constant additions of new builtins. That said, many
-areas such as date and time processing, arithmentic for various
+areas such as date and time processing, arithmetic for various
 forms of number, and functions on lists and sets are covered quite
 incompletely.</p>
 <p>The cwm system is a useful, and much used, tool for many
@@ -619,7 +641,7 @@ file caused cwm to find and integrate in real time data from
 diverse sources on the web, and also small query files which cause
 cwm to follow links to the point where the query can be resolved.
 We hope in future to do more research into such systems which work
-intimitely and scalably in the Web.</p>
+intimately and scalably in the Web.</p>
 <h2 id="acknowledgements">Acknowledgements</h2>
 <p>This work was funded under @@@ DARPA and @@@ PAW NSF</p>
 <h2 id="refs">References</h2>
