@@ -34,6 +34,10 @@ sup small      { font-style: italic;
                  color: #8F8F8F;
                }
     
+.footnote      { font-style: italic;
+                 color: #8F8F8F;
+               }
+    
 div.exampleInner pre { margin-left: 1em;
                        margin-top: 0em; margin-bottom: 0em}
 div.exampleOuter {border: 4px double gray;
@@ -127,9 +131,10 @@ why we consider cwm a reasoner for the Semantic Web.</p>
 <p>The popularity of the Semantic Web is ever-increasing, one of
 the main reasons being the improving tool support for its
 foundational languages (OWL and RDF). This tool support usually
-comes in the form of ontology editors and reasoners for OWL
-(@@footnote:because of its clear and concise semantics, OWL-DL can
-boast a large number of reasoners). However, for the general
+comes in the form of ontology editors and reasoners for
+OWL<span class="footnote">because of its clear and concise semantics,
+ OWL-DL can boast a large number of reasoners.</span>.
+However, for the general
 purpose manipulation of data, a rule-based engine makes intuitive
 things which are unintuitive, difficult or sometimes impossible
 using Description Logics. The requirements for such a rule engine

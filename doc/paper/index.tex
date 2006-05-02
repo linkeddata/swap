@@ -40,9 +40,10 @@ why we consider cwm a reasoner for the Semantic Web.
 \par The popularity of the Semantic Web is ever-increasing, one of
 the main reasons being the improving tool support for its
 foundational languages (OWL and RDF). This tool support usually
-comes in the form of ontology editors and reasoners for OWL
-(@@footnote:because of its clear and concise semantics, OWL-DL can
-boast a large number of reasoners). However, for the general
+comes in the form of ontology editors and reasoners for
+OWL\footnote{because of its clear and concise semantics,
+ OWL-DL can boast a large number of reasoners.}.
+However, for the general
 purpose manipulation of data, a rule-based engine makes intuitive
 things which are unintuitive, difficult or sometimes impossible
 using Description Logics. The requirements for such a rule engine
@@ -384,18 +385,18 @@ in the proof ontology available at [ref].
 \par An important point needs to be made here. An interesting aspect
 of proof checking on the Web is that the proofs presented may
 contain not just traditional logics, but also proof steps grounded
-in ``nonlogical''; justifications. For example, suppose
-that two parties A and B agree on an oracle Z that is to be trusted
-on the matter of membership to some group. Then, if A wants to
-prove membership to that group it will generate a proof of
-membership and one of the inference steps in the proof will be
-``because Z says so''. Thus, in many cases, there will be
-inference steps like the one described - justifications that must
-be shared between parties without the ability to appeal to a formal
-theory. Thus, in cwm, steps in a proof may be made by reference to
-an agreed upon ``oracle'' rather than to a logical
-mechanism. The web bultin functions allow these trust-like
-processing to be reduced to operations in logic on the web.
+in ``nonlogical''; justifications. For example, suppose that two
+parties A and B agree on an oracle Z that is to be trusted on the
+matter of membership to some group. Then, if A wants to prove
+membership to that group it will generate a proof of membership and
+one of the inference steps in the proof will be ``because Z says
+so''. Thus, in many cases, there will be inference steps like the
+one described - justifications that must be shared between parties
+without the ability to appeal to a formal theory. Thus, in cwm,
+steps in a proof may be made by reference to an agreed upon
+``oracle'' rather than to a logical mechanism. The web bultin
+functions allow these trust-like processing to be reduced to
+operations in logic on the web.
 
 \par A separate program, check.py, is used to validate a proof.
 \subsection{Trust/ Digital Signatures}
@@ -484,13 +485,12 @@ state:code log:definitiveDocument <stateCodes.rdf>.
 \subsection{Scoped Negation as Failure}
   
 
-\par While some sources of data are definitive, others
-(such as a set of temperature measurements) are not: one never
-knows when evidence may come to light of another. This aspect of
-the Semantic Web makes negation as failure (NAF) meaningless unless
-it is associated to a specific dataset. The effect of a default
-with an explicit domain is achieved with
-{\tt log:notIncludes}, the negation of
+\par While some sources of data are definitive, others (such as a set
+of temperature measurements) are not: one never knows when evidence
+may come to light of another. This aspect of the Semantic Web makes
+negation as failure (NAF) meaningless unless it is associated to a
+specific dataset. The effect of a default with an explicit domain
+is achieved with {\tt log:notIncludes}, the negation of
 {\tt log:includes}. In the example below, if an order has an
 item which is car, and the order doesn't say that the car has some
 color, then the car is black.
