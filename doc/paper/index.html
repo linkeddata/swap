@@ -103,7 +103,10 @@ emacs</a></p>
 <h1 id="title">A Reasoner for the Web</h1>
 <address><span class="vcard"><a class="fn url" href=
 "http://www.w3.org/People/Berners-Lee/" title=
-"Berners-Lee et. al.">Tim Berners-Lee</a></span>, <span class=
+"Berners-Lee et. al.">Tim Berners-Lee</a></span>, 
+<span class="vcard"><span class="fn">Vladimir
+Kolovski</span></span>, 
+<span class=
 "vcard"><a class="fn url" href=
 "http://www.w3.org/People/Connolly/">Dan Connolly</a></span>,
 <span class="vcard"><a class="fn url" href=
@@ -115,18 +118,16 @@ Scharf</span></span>.</address>
 <div class="abstract">
 <h2 id="abstract">Abstract</h2>
 <p>Cwm (pronounced coom) is a general-purpose data processor for
-the semantic web<span class="online">@@capitalize or not? let's
-please pick one</span>, somewhat like sed, awk, etc. for text files
-or XSLT for XML. It is a forward chaining reasoner that can be used
+the Semantic Web, for RDF somewhat what sed, awk, etc. are for text files
+or XSLT is for XML. It is a forward chaining reasoner that can be used
 for querying, checking, transforming and filtering information. Its
-core language is RDF<span class="online">@@spell out Resource
-Description Framework?</span>, extended to include rules, and it
-uses RDF/XML or RDF/N3 serializations as required. <span class=
-"online">@@paste-o? The logic, and the functions</span> To be used
-effectively as a Semantic Web reasoner, Cwm has a host of features
-that allow it to operate as an agent on the Semantic Web . In this
-paper, we discuss those features and show why we consider cwm a
-reasoner for the Semantic Web.</p>
+core language is RDF, extended to include rules, and it
+uses RDF/XML or RDF/N3 serializations as required.  Cwm's logic and functions
+are both specially adapeted to be used
+effectively in the environment of an unbounded webb of data
+and rules of diverse provenance.
+We discuss those features and give the experience
+gained in the design and use of this reasoner for the Semantic Web.</p>
 </div>
 <div class="body">
 <div class="div1">
@@ -660,7 +661,14 @@ cwm to follow links to the point where the query can be resolved.
 We hope in future to do more research into such systems which work
 intimately and scalably in the Web.</p>
 <h2 id="acknowledgements">Acknowledgements</h2>
-<p>This work was funded under @@@ DARPA and @@@ PAW NSF</p>
+<p>This work was funded under @@@ DARPA grant @@@ and @@@ PAW NSF.
+Originally written by Berners-Lee and Connolly,
+CWM has been significantly enhanced and extended by Scharf.
+Kolovski ported the <em>pychinko</em> rete engine, and authored this paper.
+Sean Palmer, Mark Nottingham, Jos de Roo, and other members of the
+W3C Semantic Web Interest Group
+provided code, tests, comments and encouragement.
+</p>
 <h2 id="refs">References</h2>
 <dl class="bib">
 <dt class="misc">[<a name="RDFC04" id="RDFC04">RDFC04</a>]</dt>
