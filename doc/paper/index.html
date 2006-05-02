@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="EN" lang="EN">
 <head>
 <meta name="generator" content=
-"HTML Tidy for Windows (vers 14 February 2006), see www.w3.org" />
+"HTML Tidy for Linux/x86 (vers 1 September 2005), see www.w3.org" />
 <meta http-equiv="content-type" content=
 "application/xhtml+xml; charset=us-ascii" />
 <title>cwm Systems Paper</title>
@@ -97,12 +97,15 @@ emacs</a></p>
 </div>
 <div class="maketitle">
 <h1 id="title">A Reasoner for the Web</h1>
-<address><span class="vcard"><span class="fn">Tim
-Berners-Lee</span></span>, <span class="vcard"><span class=
-"fn"><span class="vcard"><span class="fn">Dan
-Connolly</span></span>, James Hendler</span></span>, <span class=
-"vcard"><span class="fn">Vladimir Kolovski</span></span>,
-<span class="vcard"><span class="fn">Yoseph
+<address><span class="vcard"><a class="fn url" href=
+"http://www.w3.org/People/Berners-Lee/" title=
+"Berners-Lee et. al.">Tim Berners-Lee</a></span> , <span class=
+"vcard"><a class="fn url" href=
+"http://www.w3.org/People/Connolly/">Dan Connolly</a></span> ,
+<span class="vcard"><a class="fn url" href=
+"http://www.cs.umd.edu/~hendler/">James Hendler</a></span> ,
+<span class="vcard"><span class="fn">Vladimir
+Kolovski</span></span>, <span class="vcard"><span class="fn">Yoseph
 Scharf</span></span>.</address>
 </div>
 <div class="abstract">
@@ -421,18 +424,18 @@ in the proof ontology available at [ref].</p>
 <p>An important point needs to be made here. An interesting aspect
 of proof checking on the Web is that the proofs presented may
 contain not just traditional logics, but also proof steps grounded
-in &ldquo;nonlogical&rdquo; justifications. For example, suppose
-that two parties A and B agree on an oracle Z that is to be trusted
-on the matter of membership to some group. Then, if A wants to
-prove membership to that group it will generate a proof of
-membership and one of the inference steps in the proof will be
-<q>because Z says so</q>. Thus, in many cases, there will be
-inference steps like the one described - justifications that must
-be shared between parties without the ability to appeal to a formal
-theory. Thus, in cwm, steps in a proof may be made by reference to
-an agreed upon &ldquo;oracle&rdquo; rather than to a logical
-mechanism. The web bultin functions allow these trust-like
-processing to be reduced to operations in logic on the web.</p>
+in <q>nonlogical</q>; justifications. For example, suppose that two
+parties A and B agree on an oracle Z that is to be trusted on the
+matter of membership to some group. Then, if A wants to prove
+membership to that group it will generate a proof of membership and
+one of the inference steps in the proof will be <q>because Z says
+so</q>. Thus, in many cases, there will be inference steps like the
+one described - justifications that must be shared between parties
+without the ability to appeal to a formal theory. Thus, in cwm,
+steps in a proof may be made by reference to an agreed upon
+<q>oracle</q> rather than to a logical mechanism. The web bultin
+functions allow these trust-like processing to be reduced to
+operations in logic on the web.</p>
 <p>A separate program, check.py, is used to validate a proof.</p>
 <h3>Trust/ Digital Signatures</h3>
 <p><a name="Intro0" id="Intro"></a>The security, trust, information
@@ -506,13 +509,12 @@ state:code log:definitiveDocument &lt;stateCodes.rdf&gt;.
 
 </pre>
 <h3>Scoped Negation as Failure</h3>
-<p>While&nbsp; some sources of data&nbsp; are definitive, others
-(such as a set of temperature measurements) are not: one never
-knows when evidence may come to light of another. This aspect of
-the Semantic Web makes negation as failure (NAF) meaningless unless
-it is associated to a specific dataset. The effect of a default
-with an explicit domain is achieved with
-<code>log:notIncludes</code>, the negation of
+<p>While some sources of data are definitive, others (such as a set
+of temperature measurements) are not: one never knows when evidence
+may come to light of another. This aspect of the Semantic Web makes
+negation as failure (NAF) meaningless unless it is associated to a
+specific dataset. The effect of a default with an explicit domain
+is achieved with <code>log:notIncludes</code>, the negation of
 <code>log:includes</code>. In the example below, if an order has an
 item which is car, and the order doesn't say that the car has some
 color, then the car is black.</p>
