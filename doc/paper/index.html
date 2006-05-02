@@ -134,9 +134,10 @@ gained in the design and use of this reasoner for the Semantic Web.</p>
 <h2 id="N10111">Introduction: Motivation and Goals</h2>
 <p>The popularity of the Semantic Web is ever-increasing, one of
 the main reasons being the improving tool support for its
-foundational languages (OWL and RDF). This tool support usually
+foundational languages (The Resource Description Framework
+(RDF) and Web Ontology Language (OWL)). This tool support usually
 comes in the form of ontology editors and reasoners for
-OWL<span class="footnote">because of its clear and concise
+OWL<span class="footnote">Because of its clear and concise
 semantics, OWL-DL can boast a large number of reasoners.</span>.
 <span class="online">@@DanC: I don't get this at all. RDF's
 semantics are simpler than OWL's; the reason OWL's semantics are
@@ -148,12 +149,12 @@ for.</span> However, for the general purpose manipulation of data,
 a rule-based engine makes intuitive things which are unintuitive,
 difficult or sometimes impossible using Description Logics. The
 requirements for such a rule engine were twofold: to be a general
-tool to allow semantic-web<span class="online">@@now a 3rd way to
+tool to allow Semantic Web<span class="online">@@now a 3rd way to
 spell it</span> based systems to be built, so as to provide
 feedback on the overall architecture, and provide an on-ramp for
 newcomers; and to provide a platform on which to build more
 sophisticated applications to research future directions for
-semantic web design.</p>
+Semantic Web design.</p>
 <p>In the context of the Semantic Web, RDF is the lingua franca for
 representing machine-processable documents. RDF uses URIs as
 symbols. The <i>Web</i> in Semantic <i>Web</i> comes from the fact
@@ -172,7 +173,7 @@ unplanned ways. (@@this is discussed in the N3 section)</p>
 <p>We introduce a tool called Cwm [footnote: originally from Closed
 World Machine, now a misnomer, as cwm explicitly deals with open
 world.] motivated by the above requirements. Cwm is a
-general-purpose data processor for the semantic web, analogous like
+general-purpose data processor for the Semantic Web, analogous like
 sed, awk, etc. for text files or XSLT for XML. It is a forward
 chaining reasoner which can be used for querying, checking,
 transforming and filtering information. Since RDF itself is not
@@ -403,7 +404,7 @@ document. For this, the concept of a formula - a set of RDF
 statements - is introduced.</p>
 <p>In order to interact with the web, cwm has a builtin called
 <code>log:semantics</code>. The <code>log:semantics</code> of a
-document is the formula which one gets by parsing a semantic web
+document is the formula which one gets by parsing a Semantic Web
 document. Cwm regards the web as being a mapping between symbols
 and formulas. As it is a built-in function, when cwm needs to
 evaluate it it will retrieve up the document (in N3 or RDF/XML
@@ -415,7 +416,7 @@ format ) and parse it, returning the formula. Example:</p>
 into its contents by using log:includes. One formula
 <code>log:includes</code> a second formula if for each statement in
 the second, there is a corresponding one in the first.</p>
-<p>So let's say we we have a concept of a semantic web home page
+<p>So let's say we we have a concept of a Semantic Web home page
 for a person. We decide on the policy that if someone's home page
 says that they are a vegetarian, then we believe that they are a
 vegetarian.</p>
@@ -489,7 +490,7 @@ ontologies) are finite and small in number, and provide useful
 metadata to control processing as described below.</p>
 <p>However, it is generally unwise to follow subject or object
 links when loading statements, as in a well-connected web the
-entire semantic web could be eventually loaded.</p>
+entire Semantic Web could be eventually loaded.</p>
 <p>By contrast, when a query is being matched, it is very
 reasonable to load any URIs occuring in subject or object positions
 the query, as this typically brings in new data but not an infinte
@@ -501,10 +502,10 @@ first mentioned, then it is possible for the query to successively
 bring in documents which together form the parts of a large graph
 as it is needed.</p>
 <p>These modes of operation, and ones like them, are, we belive,
-important to the development of the semantic web. Future research
+important to the development of the Semantic Web. Future research
 should be directed toward protocols which involve conventions for
 the sort of information which is published against the URIs used as
-symbols for arbitrary things in the semantic web.</p>
+symbols for arbitrary things in the Semantic Web.</p>
 <h4 id="Definitive">Definitive documents</h4>
 <p>There are times when a particular document on the web contains
 all cases of a particular relation. For example, the relationship
