@@ -103,11 +103,9 @@ emacs</a></p>
 <h1 id="title">A Reasoner for the Web</h1>
 <address><span class="vcard"><a class="fn url" href=
 "http://www.w3.org/People/Berners-Lee/" title=
-"Berners-Lee et. al.">Tim Berners-Lee</a></span>, 
-<span class="vcard"><span class="fn">Vladimir
-Kolovski</span></span>, 
-<span class=
-"vcard"><a class="fn url" href=
+"Berners-Lee et. al.">Tim Berners-Lee</a></span>, <span class=
+"vcard"><span class="fn">Vladimir Kolovski</span></span>,
+<span class="vcard"><a class="fn url" href=
 "http://www.w3.org/People/Connolly/">Dan Connolly</a></span>,
 <span class="vcard"><a class="fn url" href=
 "http://www.cs.umd.edu/~hendler/">James Hendler</a></span>,
@@ -118,16 +116,16 @@ Scharf</span></span>.</address>
 <div class="abstract">
 <h2 id="abstract">Abstract</h2>
 <p>Cwm (pronounced coom) is a general-purpose data processor for
-the Semantic Web, for RDF somewhat what sed, awk, etc. are for text files
-or XSLT is for XML. It is a forward chaining reasoner that can be used
-for querying, checking, transforming and filtering information. Its
-core language is RDF, extended to include rules, and it
-uses RDF/XML or RDF/N3 serializations as required.  Cwm's logic and functions
-are both specially adapeted to be used
-effectively in the environment of an unbounded webb of data
-and rules of diverse provenance.
-We discuss those features and give the experience
-gained in the design and use of this reasoner for the Semantic Web.</p>
+the Semantic Web, for RDF somewhat what sed, awk, etc. are for text
+files or XSLT is for XML. It is a forward chaining reasoner that
+can be used for querying, checking, transforming and filtering
+information. Its core language is RDF, extended to include rules,
+and it uses RDF/XML or RDF/N3 serializations as required. Cwm's
+logic and functions are both specially adapeted to be used
+effectively in the environment of an unbounded webb of data and
+rules of diverse provenance. We discuss those features and give the
+experience gained in the design and use of this reasoner for the
+Semantic Web.</p>
 </div>
 <div class="body">
 <div class="div1">
@@ -135,25 +133,25 @@ gained in the design and use of this reasoner for the Semantic Web.</p>
 <p>The popularity of the Semantic Web is ever-increasing, one of
 the main reasons being the improving tool support for its
 foundational languages (The Resource Description Framework
-(RDF) and Web Ontology Language (OWL)). This tool support usually
-comes in the form of ontology editors and reasoners for
-OWL<span class="footnote">Because of its clear and concise
-semantics, OWL-DL can boast a large number of reasoners.</span>.
-<span class="online">@@DanC: I don't get this at all. RDF's
-semantics are simpler than OWL's; the reason OWL's semantics are
-more concise that RDF's is that the OWL spec doesn't try to teach
-model theory to Java programmers like the RDF spec does. The reason
-people develop OWL reasoners is that OWL's semantics are richer;
-i.e. they're adequate for problem domains that RDF is not adequate
+(RDF)<a href="#RDFC04">[RDFC04]</a> and Web Ontology Language
+(OWL)<a href="#owl">[OWL]</a>). This tool support usually comes in
+the form of ontology editors and reasoners for OWL<span class=
+"footnote">Because of its clear and concise semantics, OWL-DL can
+boast a large number of reasoners.</span>. <span class=
+"online">@@DanC: I don't get this at all. RDF's semantics are
+simpler than OWL's; the reason OWL's semantics are more concise
+that RDF's is that the OWL spec doesn't try to teach model theory
+to Java programmers like the RDF spec does. The reason people
+develop OWL reasoners is that OWL's semantics are richer; i.e.
+they're adequate for problem domains that RDF is not adequate
 for.</span> However, for the general purpose manipulation of data,
 a rule-based engine makes intuitive things which are unintuitive,
 difficult or sometimes impossible using Description Logics. The
 requirements for such a rule engine were twofold: to be a general
-tool to allow Semantic Web<span class="online">@@now a 3rd way to
-spell it</span> based systems to be built, so as to provide
-feedback on the overall architecture, and provide an on-ramp for
-newcomers; and to provide a platform on which to build more
-sophisticated applications to research future directions for
+tool to allow Semantic Web based systems to be built, so as to
+provide feedback on the overall architecture, and provide an
+on-ramp for newcomers; and to provide a platform on which to build
+more sophisticated applications to research future directions for
 Semantic Web design.</p>
 <p>In the context of the Semantic Web, RDF is the lingua franca for
 representing machine-processable documents. RDF uses URIs as
@@ -671,41 +669,46 @@ Development</a></cite>.</p>
 <p>This work was also funded under <a href=
 "http://www.nsf.gov/">NSF</a> <a href=
 "http://www.nsf.gov/pubs/2004/nsf04012/nsf04012.htm">ITR
-04-012</a>.
-Originally written by Berners-Lee and Connolly,
-CWM has been significantly enhanced and extended by Scharf.
-Kolovski ported the <em>pychinko</em> rete engine, and authored this paper.
-Sean Palmer, Mark Nottingham, Jos de Roo, and other members of the
-W3C Semantic Web Interest Group
-provided code, tests, comments and encouragement.
-</p>
+04-012</a>.</p>
+<p>Originally written by Berners-Lee and Connolly, CWM has been
+significantly enhanced and extended by Scharf. Kolovski ported the
+<em>pychinko</em> rete engine, and authored this paper. Sean
+Palmer, Mark Nottingham, Jos de Roo, and other members of the W3C
+Semantic Web Interest Group provided code, tests, comments and
+encouragement.</p>
 <h2 id="refs">References</h2>
 <dl class="bib">
-<dt class="misc">[<a name="RDFC04" id="RDFC04">RDFC04</a>]</dt>
+<dt class="TechReport">[<a name="RDFC04" id=
+"RDFC04">RDFC04</a>]</dt>
 <dd><span class="author">Klyne, G. and Carroll, J. J.</span>
 <cite><a href=
 "http://www.w3.org/TR/2004/REC-rdf-concepts-20040210/">Resource
 Description Framework (RDF): Concepts and Abstract
-Syntax</a></cite>, <span class="institution">W3C</span>
-<span class="type">Recommendation</span>, 10 <span class=
+Syntax</a></cite> <tt class=
+"number">http://www.w3.org/TR/2004/REC-rdf-concepts-20040210/</tt>
+<span class="institution">W3C</span> Recommendation 10 <span class=
 "month">February</span> <span class="year">2004</span>.
 <p class="online"><a href=
 "http://www.w3.org/TR/rdf-concepts/">Latest version</a> available
 at <code>http://www.w3.org/TR/rdf-concepts/</code></p>
 </dd>
-<dt class="misc">[<a name="DC02" id="DC02">DC02</a>]</dt>
+<dt class="TechReport">[<a name="DC02" id="DC02">DC02</a>]</dt>
 <dd><span class="author">Beckett, D. and Miller, E. and Brickley,
-D.</span> <a href=
-"http://dublincore.org/documents/2002/07/31/dcmes-xml/"><cite>Expressing
-Simple Dublin Core in RDF/XML</cite></a> <span class=
-"institution">Dublin Core Metadata Initiative</span> <span class=
-"type">Recommendation</span> 31 <span class="month">July</span>
-<span class="year">2002</span></dd>
+D.</span> <cite><a href=
+"http://dublincore.org/documents/2002/07/31/dcmes-xml/">Expressing
+Simple Dublin Core in RDF/XML</a></cite> <span class=
+"institution">Dublin Core Metadata Initiative</span> Recommendation
+31 <span class="month">July</span> <span class="year">2002</span>
+<tt class=
+"number">http://dublincore.org/documents/2002/07/31/dcmes-xml/</tt></dd>
 <dt class="misc">[<a name="RSS" id="RSS">RSS</a>]</dt>
-<dd><span class="author">Beged-Dov, Gabe et. al.</span>
-<cite><a href="http://web.resource.org/rss/1.0/">RDF Site Summary
-(RSS) 1.0</a></cite> 6 <span class="month">December</span>
-<span class="year">2000</span></dd>
+<dd><span class="author">Gabe Beged-Dov and Dan Brickley and Rael
+Dornfest and Ian Davis and Leigh Dodds and Jonathan Eisenzopf and
+David Galbraith and R.V. Guha and Ken MacLeod and Eric Miller and
+Aaron Swartz and Eric van der Vlist</span> <cite><a href=
+"http://web.resource.org/rss/1.0/">RDF Site Summary (RSS)
+1.0</a></cite> 6 <span class="month">December</span> <span class=
+"year">2000</span></dd>
 <dt class="Article">[<a name="Gol03" id="Gol03">Gol03</a>]</dt>
 <dd><span class="author">Golbeck, Jennifer and Fragoso, Gilberto
 and Hartel, Frank and Hendler, James and Parsia, Bijan and
@@ -715,6 +718,13 @@ cancer institute's thesaurus and ontology</a></cite>. <span class=
 "journal">Journal of Web Semantics</span>, <span class=
 "volume">1</span>(<span class="number">1</span>), <span class=
 "month">Dec</span> <span class="year">2003</span>.</dd>
+<dt class="TechReport" id="owl">[OWL]</dt>
+<dd><span class="author">Dean, Mike and Schreiber, Guus</span>
+<cite><a href="http://www.w3.org/TR/owl-ref/">OWL Web Ontology
+Language Reference</a></cite> <tt class=
+"number">http://www.w3.org/TR/2004/REC-owl-ref-20040210/</tt>
+<span class="institution">W3C</span> Recommendation 10 <span class=
+"month">February</span> <span class="year">2004</span></dd>
 </dl>
 </div>
 </div>
