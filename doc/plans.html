@@ -77,14 +77,12 @@ Feb</a>,
       <li>Meeting coordinates: <a href="irc://irc.freenode.net/paw">#paw on
         irc.freenode.net</a> Dial in <a
         href="tel:+1-617-761-6200;postdial=79296">+1-617-761-6200 Code 79296
-        ("SW CWM")</a> . (<a
-        href="http://www.w3.org/Guide/1998/08/teleconference-calendar#s_1780">@@telcon
-        res</a>)</li>
+        ("SW CWM")</a>.</li>
       <li>Round the table updates <em>(a sort of roll call and agenda
         review)</em> expected: Yarden aka Jordan (?), Vlad, Eikeon aka Dan K. 
 	DanC, TimBL, Yosi</li>
 	<li class="vtodo">misc action: <strong class="summary">Eikeon
-	to Ask ron to copy TimBL's keys across from the pychinko space
+	to ask Ron to copy TimBL's keys across from the pychinko space
 	to the policyawareweb.org space</strong></li>
     </ul>
   </li>
@@ -99,23 +97,54 @@ Feb</a>,
 
     <p class="vtodo"><strong class="summary">ACTION: Vlad to Send mail
     to public-cwm-announce@w3.org about the inclusion of the rete as
-    an alpha test, test users welcome</strong></p>
+    an alpha test, test users welcome</strong>. <em>Vlad sent the
+    relevant mail message, but it seems to be stuck in a moderation
+    queue as of 7 Apr</em></p>
 
   </li>
   <li>PAW demo item? How is it going? Debugging cwm --why and proof checking.
-    Diag.tracking. (Tim: Upgraded the javascript API.)
-    <p>Yosi got the code running with the paw demo but found it slow unifying
-    the formulae involved. ... what to do now? Issues: Indexing for speed in
-    a world of nested formaule with variables;</p>
-    <p>15 Feb update Yosi got the basic rein case working, though it takes
-    around 3min. He's working on log:supports, performance.</p>
-    <p class="vtodo"><strong class="summary">ACTION: Tim and Vlad talk 5pm Tuesday 28th. about proofs in cwm</strong></p>
-    <p class="vtodo"><strong class="summary">ACTION TimBL: To think about
-    phasing out statement[CONTEXT]</strong></p>
+    Diag.tracking.
+
+    <p>Tim and Vlad talked about cwm proofs.  On 26 Apr, Vlad reported
+    reducing the size of the generated proof from 355KB to
+    54KB:</p>
+
+    <blockquote>
+      This is the command I ran to generate the proof:
+      <pre>
+      cwm.py <a href="http://www.policyawareweb.org/2006/lean/troop42-policy.n3">http://www.policyawareweb.org/2006/lean/troop42-policy.n3</a>
+<a href="http://www.policyawareweb.org/2006/lean/bengine.n3">http://www.policyawareweb.org/2006/lean/bengine.n3</a> --think 
+--filter="<a href="http://www.policyawareweb.org/2006/lean/bfilter.n3">http://www.policyawareweb.org/2006/lean/bfilter.n3</a>" --why >
+proof.n3
+      </pre>
+      <p>To check the proof I tried:</p>
+      <pre>
+	check.py proof.n3
+      </pre>
+
+      <p>The proof and the "lean" REIN files are available in the SVN:
+      svn+ssh://mindswap.org/home/svn/paw/www/2006/lean
+      </p>
+    </blockquote>
+
+    <p>Perhaps that addresses the "Indexing for speed in a world of
+    nested formaule with variables" performance issues?</p>
+
+    <p>Yosi implemented log:supports, though Dan sent a <a
+    href="http://lists.w3.org/Archives/Public/public-cwm-talk/2006AprJun/0003.html">can't
+    reproduce log:supports results</a> message 26 Apr. Is somebody
+    working on using log:supports rather than
+    log:conclusion/log:includes in the REIN engine? Lalana?</p>
+
+    <p class="vtodo"><strong class="summary">ACTION TimBL: To think
+    about phasing out statement[CONTEXT]</strong>.  (Tim: Upgraded the
+    javascript API.)</p>
+    
     <p>See also: <a
     href="http://www.policyawareweb.org/2005/demo/pfproxy.py">pfproxy.py</a>,
     <a href="http://www.policyawareweb.org/2005site/dev.html">PAW dev SVN
-    info</a>, rein stuff@@</p>
+    info</a></p>
+
     <p>older test case: DanC ran it at the face-face meeting.:</p>
     <pre>cwm --rdf http://dig.csail.mit.edu/2005/09/rein/examples/judy-req.rdf --n3 http://dig.csail.mit.edu/2005/09/rein/engine.n3 --think --filter="http://dig.csail.mit.edu/2005/09/rein/filter.n3" --why</pre>
     <p>TBL checked in minimally-working code in the 26 Oct 2005 meeting.</p>
