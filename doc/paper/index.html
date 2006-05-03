@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="EN" lang="EN">
 <head>
 <meta name="generator" content=
-"HTML Tidy for Linux/x86 (vers 1 September 2005), see www.w3.org" />
+"HTML Tidy for Mac OS X (vers 1st December 2004), see www.w3.org" />
 <meta http-equiv="content-type" content=
 "application/xhtml+xml; charset=us-ascii" />
 <title>cwm Systems Paper</title>
@@ -116,8 +116,8 @@ Scharf</span></span>.</address>
 <div class="abstract">
 <h2 id="abstract">Abstract</h2>
 <p>Cwm (pronounced coom) is a general-purpose data processor for
-the Semantic Web. It is a forward chaining reasoner that
-can be used for querying, checking, transforming and filtering
+the Semantic Web. It is a forward chaining reasoner that can be
+used for querying, checking, transforming and filtering
 information. Its core language is RDF, extended to include rules,
 and it uses RDF/XML or RDF/N3 serializations as required. Cwm's
 logic and functions are both specially adapeted to be used
@@ -167,22 +167,19 @@ environment should have the ability to determine what document or
 message said what and match graphs against variable graphs.</p>
 <p>The goal of the Semantic Web is the beneficial reuse of data in
 unplanned ways. (@@this is discussed in the N3 section)</p>
-<p>We introduce a tool called Cwm<em class="footnote">"Cwm" was originally
-for Closed World Machine, is a misnomer as it explicitly
-deals with open worlds.
-Cwm is the welsh for <em>valley</em>, 
-something not closed by open to the rest of the world.
-</em> motivated by the above requirements. Cwm is a
-general-purpose data processor for the Semantic Web.
-Cwm is to RDF somewhat as sed, awk, grep, etc. are to text
-files, or XSLT is to XML: desiged as a general workhorse
-or tool for small one-off processing tasks. 
-It is a forward
-chaining reasoner which can be used for querying, checking,
-transforming and filtering information. Since RDF itself is not
-sufficient to express rules, Cwm is based on an extension of RDF
-called Notation3 (N3) which has support for quoting (making
-statements about statements), variables and rules.</p>
+<p>We introduce a tool called Cwm<em class="footnote">"Cwm" was
+originally for Closed World Machine, is a misnomer as it explicitly
+deals with open worlds. Cwm is the Welsh for valley, something
+not closed by open to the rest of the world.</em> motivated by the above
+requirements. Cwm is a general-purpose data processor for the
+Semantic Web. Cwm is to RDF somewhat as sed, awk, grep, etc. are to
+text files, or XSLT is to XML: desiged as a general workhorse or
+tool for small one-off processing tasks. It is a forward chaining
+reasoner which can be used for querying, checking, transforming and
+filtering information. Since RDF itself is not sufficient to
+express rules, Cwm is based on an extension of RDF called Notation3
+(N3) which has support for quoting (making statements about
+statements), variables and rules.</p>
 <p>Being based on a more expressive logic language added a host of
 features to Cwm not available to other RDF processing tools:
 possibility of filtering RDF graphs after merging them, for
@@ -240,16 +237,18 @@ haven't explained ?var syntax</span></p>
 <pre>
 { ?x parent ?y. ?y sister ?z } log:implies { ?x aunt ?z }.
 </pre>
-<p>Set of statements surrounded by braces is called an N3 formula.
-Formula is a generalization of an RDF-graph, adding variables.</p>
+<p>A set of statements surrounded by braces is called an N3
+formula. Formula is a generalization of an RDF-graph, adding
+variables.</p>
 <p>N3 rules are at the same time more and less expressive than
 Datalog. On one hand, N3 is restricted to binary predicates
 (triples), but on the other, existentials (bnodes) are allowed in
 the consequents of the rules. Another restriction worth mentioning
 is that, since monotonicity is one of the design goals for N3,
 there is no negation-as-failure. The only form of negation allowed
-in N3 is scoped negation as failure, which will be described in
-section <a rel="ref" href="#neg23">4.8</a>.</p>
+in N3 is what we term <em>scoped negation as failure</em>, which
+will be described in section <a rel="ref" href=
+"#neg23">4.8@@</a>.</p>
 <p>One of the design goals of N3 is that information, such as but
 not limited to rules, which requires greater expresive power than
 RDF, should be sharable in the same way as RDF can be shared. This
@@ -416,8 +415,8 @@ statements - is introduced.</p>
 document is the formula which one gets by parsing a Semantic Web
 document. Cwm regards the web as being a mapping between symbols
 and formulas. As it is a built-in function, when cwm needs to
-evaluate it it will retrieve up the document (in N3 or RDF/XML
-format ) and parse it, returning the formula. Example:</p>
+evaluate it it will retrieve the document (in N3 or RDF/XML format)
+and parse it, returning the formula. Example:</p>
 <pre>
 { &lt;foo.rdf&gt; log:semantics ?f } =&gt; { ?f a :InterestingFormula}.
 </pre>
@@ -433,6 +432,9 @@ vegetarian.</p>
 
 {?x :homePage log:includes { ?x a :Vegetarian }}=&gt; { ?x a :Vegetarian}.
 </pre>
+<p>Future work could include extending Cwm's concept of the
+semantic od a web resource to include the GRDDL algorithm for
+extracing RDF semantics from various sorts of XML documents.</p>
 <h3>Proof generation</h3>
 <p>The proof generation facility is an integral part of the CWM
 software. For a cwm command line which would have produced a given
@@ -493,20 +495,26 @@ object when a statement is loaded, or when a statement occurs with
 in a query term being matched. These modes can be controlled
 individually from the cwm command line.</p>
 <p>Our experience is that it is wise to follow predicates when
-statements are loaded, foring what we term the <em>ontological
-closure</em> of the loaded data. The ontologies loaded (and their
-ontologies) are finite and small in number, and provide useful
-metadata to control processing as described below.</p>
-<p>However, it is generally unwise to follow subject or object
+statements are loaded, forming what we term the <em>ontological
+closure</em> of the loaded data. The ontologies recursively loaded
+are small in number, and provide useful metadata to control
+processing as described below.</p>
+<p>(One simple property, <code>log:rules</code>, links an ontology
+and a web resource containing N3 rules which apply to the terms in
+the ontology. This allows some of the the semantics of the
+ontology, or translations into other ontologies, to be sepcified in
+terms of N3 rules where this is convenient, and automatically
+picked up by Cwm whenever terms in the ontology are used.)</p>
+<p>It is, however, generally unwise to follow subject or object
 links when loading statements, as in a well-connected web the
 entire Semantic Web could be eventually loaded.</p>
 <p>By contrast, when a query is being matched, it is very
 reasonable to load any URIs occuring in subject or object positions
-the query, as this typically brings in new data but not an infinte
-amount. A query is evaluated by matching a graph template to the
-graph of data which can be found on the web. If each node in the
-graph, has useful and relevant information associated with it, and
-that information is loaded by the query engine when the node is
+the query, as this typically brings in new data but not an
+unbounded amount. A query is evaluated by matching a graph template
+to the graph of data which can be found on the web. If each node in
+the graph, has useful and relevant information associated with it,
+and that information is loaded by the query engine when the node is
 first mentioned, then it is possible for the query to successively
 bring in documents which together form the parts of a large graph
 as it is needed.</p>
@@ -534,28 +542,6 @@ state:code log:definitiveDocument &lt;stateCodes.rdf&gt;.
 <pre>
 
 </pre>
-<div id="neg23">
-<h3>Scoped Negation as Failure</h3>
-<p class="online">@@heading structure seems odd; isn't the Remote
-query section below part of Web-aware queries? Should this SNAF
-section move down?</p>
-<p>While some sources of data are definitive, others (such as a set
-of temperature measurements) are not: one never knows when evidence
-may come to light of another. This aspect of the Semantic Web makes
-negation as failure (NAF) meaningless unless it is associated to a
-specific dataset. The effect of a default with an explicit domain
-is achieved with <code>log:notIncludes</code>, the negation of
-<code>log:includes</code>. In the example below, if an order has an
-item which is car, and the order doesn't say that the car has some
-color, then the car is black.</p>
-<pre>
-{    &lt;thisOrder.rdf&gt;  log:semantics ?ORDER.
-     ?ORDER  log:includes    { ?x  biz:item ?y. ?y a ex:Car };
-     ?ORDER  log:notIncludes { ?y  ex:color [] }
-} =&gt; {
-     ?y ex:Color "black"
-}.
-</pre></div>
 <h4 id="Remote">Remote query processing</h4>
 <p>The modes mentioned above allow cwm to pick up data while it is
 processing a query, by loading RDF or N3 documents. We were also
@@ -576,6 +562,25 @@ In this way, systems of federated SPARQL servers should be set up.
 This is a very interesting direction for future research,
 specifically the protocols for defining the conditions under which
 a given server should be contacted for a given form of query.</p>
+<div id="neg23">
+<h3>Scoped Negation as Failure</h3>
+<p>While some sources of data are definitive, others (such as a set
+of temperature measurements) are not: one never knows when evidence
+may come to light of another. This aspect of the Semantic Web makes
+negation as failure (NAF) meaningless unless it is associated to a
+specific dataset. The effect of a default with an explicit domain
+is achieved with <code>log:notIncludes</code>, the negation of
+<code>log:includes</code>. In the example below, if an order has an
+item which is car, and the order doesn't say that the car has some
+color, then the car is black.</p>
+<pre>
+{    &lt;thisOrder.rdf&gt;  log:semantics ?ORDER.
+     ?ORDER  log:includes    { ?x  biz:item ?y. ?y a ex:Car };
+     ?ORDER  log:notIncludes { ?y  ex:color [] }
+} =&gt; {
+     ?y ex:Color "black"
+}.
+</pre></div>
 <h2 id="N10115">Applications</h2>
 <p>We now discuss some applications for which we have used cwm. It
 has also been used as a general teaching and introductory tool for
@@ -669,11 +674,12 @@ incompletely.</p>
 <p>The cwm system is a useful, and much used, tool for many
 practical small applications. However, it was not optimised for
 speed, and as applications grow there are needs for cwm-compatible
-fast processors for specific forms of problem. In general our
-experience demonstrates both the need for and the adequacy of the
-N3 formula as a quoting system for procesing of data in real
-web-like environment, where the provenance of data is as important
-a factor as its content.</p>
+fast processors for specific forms of problem. The pychinko port is
+a significant step in this direction.</p>
+<p>In general our experience demonstrates both the need for and the
+adequacy of the N3 formula as a quoting system for procesing of
+data in real web-like environment, where the provenance of data is
+as important a factor as its content.</p>
 <p>Particularly interesting were applications in which a small N3
 file caused cwm to find and integrate in real time data from
 diverse sources on the web, and also small query files which cause
