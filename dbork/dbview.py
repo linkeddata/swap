@@ -2,6 +2,10 @@
 """
 dbview -- view an SQL DB thru RDF glasses.
 
+  *** NOTE WELL ***
+  As of May 2006, active development has moved to
+  http://dig.csail.mit.edu/2006/dbview/dbview.py
+  
 an implementation of...
 
 [SWDB]
@@ -783,7 +787,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.19  2003-03-02 06:07:46  connolly
+# Revision 1.20  2006-05-18 19:53:54  connolly
+# note development has moved
+#
+# Revision 1.19  2003/03/02 06:07:46  connolly
 # updated per bind API change, XML serializer move to toXML module
 #
 # Revision 1.18  2002/03/16 06:14:53  connolly
