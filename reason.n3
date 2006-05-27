@@ -7,23 +7,31 @@
 @prefix n3: <http://www.w3.org/2000/10/swap/reify#>.
 @prefix soc: <http://www.w3.org/2000/10/swap/pim/soc#>.
 
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
 @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@keywords a, is, of.
 
-
-:Step a s:Class;
+Step a s:Class;
 	s:label "proof step";
 	s:comment """A step in a proof.
 
-	See :gives for the arc to the formula proved at this step.
+	See :gives for the arc to the formula actually proved at this step.
 	""".
 
-:gives a rdf:Property;
+gives a rdf:Property;
 	s:label "gives";
-	s:domain :Step;
+	s:comment """The proof step gives the formula as a result.
+	For some steps, like extraction of a statement from a formula,
+	it is essential to give the result formula in a proof to define
+	what step has been taken.  For other steps, such as GMP inference,
+	the specification of the rule and bindings defines the result,
+	and so the proof can still be checked if the reason:gives ars""";
+	s:domain Step;
 	s:range n3:Formula.
 	
-:Proof s:subClassOf :Step;
+
+Proof s:subClassOf :Step;
 	s:label "proof";
 	s:comment
 	"""A Proof step is the last step in the proof, 
@@ -33,15 +41,19 @@
 	the Formula proved - Q.E.D. .
 	""".
 
-:Parsing s:subClassOf :Step;
+CommandLine s:subClassOf Step.
+
+args	a rdf:Property, owl:FunctionalProperty;
+	s:label  """A human-readable representation of the arguments given
+	    on the command line""";
+	s:domain Commandline.
+
+Parsing s:subClassOf :Step;
 	s:label "parsing";
 	s:comment """The formula given was derived from parsing a
 	resource.""".
 
-:CommandLine s:subClassOf :Step.
-:Inference s:subClassOf :Step.
-
-:source a rdf:Property;
+:source a rdf:Property, owl:FunctionalProperty;
 	s:label "source";
 	s:domain :Parsing;
 	s:range soc:Work;
@@ -49,7 +61,7 @@
 	"""The source document which was parsed.
 	""".
 
-:Extraction s:subClassOf :Step;
+Extraction s:subClassOf :Step;
 	s:label "Conjunction elimination";
 	s:comment """The step of taking one statement out of a formula.
 	The step is identified by the :gives formula (the statement)
@@ -57,30 +69,52 @@
 	from).
 	""".
 
-:because a rdf:Property;
-	s:label "because";
+because a rdf:Property;
+	s:label "from";
 	s:domain :Extraction;
 	s:range :Step;
 	s:comment """gives the step whose data was input to this step.""".
 
-:Conjunction s:subClassOf :Step;
+Conjunction s:subClassOf :Step;
 	s:label """The step of conjunction introduction: 
 	taking a bunch of compent statements
 	and building a formula from them.""".
 
-:component a rdf:Property;
+component a rdf:Property;
 	s:label "component";
 	s:domain :Conjunction;
 	s:range :Step;
 	s:comment "A step whose data was used in building this conjunction".
+#
+#   GMP Inference
+#
 
-:Binding a s:Class;
+Inference s:subClassOf Step;
+    s:label "GMP Inference".
+
+rule a rdf:Property, owl:FunctionalProperty;
+    s:label  "rule";
+    s:comment """The inference step was performed using a rule (implication)
+    given.""";
+    s:domain Inference;
+    s:range  Step.
+
+evidence a rdf:Property, owl:FunctionalProperty; # only one list
+    s:label  "antecedents";
+    s:comment """The :evidence for a GMP inference step is a list of
+    formulas, each proved by other means, which combined entail the
+    result of making the given substitution in the antecedent of the rule.""";
+    s:domain Inference;
+    s:range  rdf:List.   #  List of Steps
+
+Binding a s:Class;
 	s:label "binding";
-	s:comment """A binding is given eg in a proof or query result
-
+	s:comment """A binding is given eg in a proof or query result.
+	The binding specifies which variable was bound (:variable),
+	and what term it was bound to.
 	""".
 
-:variable a rdf:Property;
+variable a rdf:Property, owl:FunctionalProperty;
 	s:label "variable";
 	s:domain :Binding;
 	s:range	n3:String;
@@ -90,7 +124,7 @@
 	a string, rather than the variable being put here, or the variable
 	would be treated as a variable.""".
 
-:boundTo  a rdf:Property;
+boundTo  a rdf:Property,  owl:FunctionalProperty;
 	s:label "bound to";
 	s:domain :Binding;
 	s:range	n3:Term;

@@ -1,6 +1,6 @@
 
-<!-- Processed by Id: cwm.py,v 1.183 2006/01/13 14:48:54 syosi Exp -->
-<!--     using base file:/home/connolly/w3ccvs/WWW/2000/10/swap/reason.n3-->
+<!-- Processed by Id: cwm.py,v 1.184 2006/03/09 06:28:53 vkolovsk Exp -->
+<!--     using base file:/devel/WWW/2000/10/swap/reason.n3-->
 
 
 <rdf:RDF xmlns="http://www.w3.org/2000/01/rdf-schema#"
@@ -8,8 +8,9 @@
     xmlns:s="http://www.w3.org/2000/01/rdf-schema#">
 
     <Class rdf:about="http://www.w3.org/2000/10/swap/reason#Binding">
-        <comment>A binding is given eg in a proof or query result
-
+        <comment>A binding is given eg in a proof or query result.
+	The binding specifies which variable was bound (:variable),
+	and what term it was bound to.
 	</comment>
         <label>binding</label>
     </Class>
@@ -36,6 +37,7 @@
     </rdf:Description>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/reason#Inference">
+        <label>GMP Inference</label>
         <subClassOf rdf:resource="http://www.w3.org/2000/10/swap/reason#Step"/>
     </rdf:Description>
 
@@ -60,19 +62,27 @@
     <Class rdf:about="http://www.w3.org/2000/10/swap/reason#Step">
         <comment>A step in a proof.
 
-	See :gives for the arc to the formula proved at this step.
+	See :gives for the arc to the formula actually proved at this step.
 	</comment>
         <label>proof step</label>
     </Class>
 
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/reason#args">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/reason#Commandline"/>
+        <label>A human-readable representation of the arguments given
+	    on the command line</label>
+    </rdf:Property>
+
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/reason#because">
         <comment>gives the step whose data was input to this step.</comment>
         <domain rdf:resource="http://www.w3.org/2000/10/swap/reason#Extraction"/>
-        <label>because</label>
+        <label>from</label>
         <range rdf:resource="http://www.w3.org/2000/10/swap/reason#Step"/>
     </rdf:Property>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/reason#boundTo">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
         <comment>
 	This binding binds its variable to this term.
 	</comment>
@@ -88,13 +98,39 @@
         <range rdf:resource="http://www.w3.org/2000/10/swap/reason#Step"/>
     </rdf:Property>
 
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/reason#evidence">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <comment>The :evidence for a GMP inference step is a list of
+    formulas, each proved by other means, which combined entail the
+    result of making the given substitution in the antecedent of the rule.</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/reason#Inference"/>
+        <label>antecedents</label>
+        <range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
+    </rdf:Property>
+
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/reason#gives">
+        <comment>The proof step gives the formula as a result.
+	For some steps, like extraction of a statement from a formula,
+	it is essential to give the result formula in a proof to define
+	what step has been taken.  For other steps, such as GMP inference,
+	the specification of the rule and bindings defines the result,
+	and so the proof can still be checked if the reason:gives ars</comment>
         <domain rdf:resource="http://www.w3.org/2000/10/swap/reason#Step"/>
         <label>gives</label>
         <range rdf:resource="http://www.w3.org/2000/10/swap/reify#Formula"/>
     </rdf:Property>
 
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/reason#rule">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <comment>The inference step was performed using a rule (implication)
+    given.</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/reason#Inference"/>
+        <label>rule</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/reason#Step"/>
+    </rdf:Property>
+
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/reason#source">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
         <comment>The source document which was parsed.
 	</comment>
         <domain rdf:resource="http://www.w3.org/2000/10/swap/reason#Parsing"/>
@@ -103,6 +139,7 @@
     </rdf:Property>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/reason#variable">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
         <comment>
 	The given string is that used as the identifier of the variable
 	which is bound by this binding.  The variable name has to be given as
