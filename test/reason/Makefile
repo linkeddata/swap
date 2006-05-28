@@ -41,4 +41,7 @@ judy-out.n3:
 	--filter="http://dig.csail.mit.edu/2005/09/rein/filter.n3"  \
 					> judy-out.n3
 
+animals-proof.n3: animals.n3 animal-goal.n3 ../../util/rdfs-nice.n3 ../../util/owlth.n3
+	$(CWM) animals.n3 ../../util/rdfs-nice.n3 ../../util/owlth.n3 \
+		--think --filter=animal-goal.n3 --why >$@
 #ends

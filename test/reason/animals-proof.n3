@@ -1,0 +1,1301 @@
+#Processed by Id: cwm.py,v 1.184 2006/03/09 06:28:53 vkolovsk Exp 
+        #    using base file:/Users/connolly/w3ccvs/WWW/2000/10/swap/test/reason/
+        
+#  Notation3 generation by
+#       notation3.py,v 1.187 2006/01/13 14:48:54 syosi Exp
+
+#   Base was: file:/Users/connolly/w3ccvs/WWW/2000/10/swap/test/reason/
+     @prefix : <http://www.w3.org/2000/10/swap/reason#> .
+    @prefix ani: <animal-goal.n3#> .
+    @prefix daml: <http://www.w3.org/2002/07/owl#> .
+    @prefix ex: <http://www.daml.org/2000/12/daml+oil-ex#> .
+    @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    @prefix n3: <http://www.w3.org/2004/06/rei#> .
+    @prefix owlth: <../../util/owlth.n3#> .
+    @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+    
+     @forSome <#_g0>,
+                <#_g1>,
+                <#_g2>,
+                <#_g3>,
+                <#_g4>,
+                <#_g5>,
+                <#_g6>,
+                <#_g7>,
+                <#_g8> .
+      [      a :Conjunction,
+                    :Proof;
+             :component  [
+                 a :Inference;
+                 :binding  [
+                     :boundTo  [
+                         n3:uri "http://www.daml.org/2000/12/daml+oil-ex#jill" ];
+                     :variable  [
+                         n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/test/reason/animal-goal.n3#who" ] ];
+                 :evidence  (
+                 [
+                         a :Extraction;
+                         :because  [
+                             a :Inference;
+                             :binding  [
+                                 :boundTo  [
+                                     n3:uri "http://www.daml.org/2000/12/daml+oil-ex#Man" ];
+                                 :variable  [
+                                     n3:nodeId "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#_g_L49C3" ] ],
+                                     [
+                                 :boundTo  [
+                                     n3:uri "http://www.daml.org/2000/12/daml+oil-ex#Woman" ];
+                                 :variable  [
+                                     n3:nodeId "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#_g_L49C42" ] ],
+                                     [
+                                 :boundTo  [
+                                     n3:uri "http://www.daml.org/2000/12/daml+oil-ex#bob" ];
+                                 :variable  [
+                                     n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#x" ] ],
+                                     [
+                                 :boundTo  [
+                                     n3:uri "http://www.daml.org/2000/12/daml+oil-ex#jill" ];
+                                 :variable  [
+                                     n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#y" ] ];
+                             :evidence  (
+                             [
+                                     a :Extraction;
+                                     :because <#_g3>;
+                                     :gives {ex:Man     daml:disjointWith ex:Woman .
+                                    } ]
+                             [
+                                     a :Extraction;
+                                     :because  [
+                                         a :Inference;
+                                         :binding  [
+                                             :boundTo  [
+                                                 n3:uri "http://www.daml.org/2000/12/daml+oil-ex#husband" ];
+                                             :variable  [
+                                                 n3:nodeId "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#_g_L47C8" ] ],
+                                                 [
+                                             :boundTo  [
+                                                 n3:uri "http://www.daml.org/2000/12/daml+oil-ex#Woman" ];
+                                             :variable  [
+                                                 n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#zzz" ] ],
+                                                 [
+                                             :boundTo  [
+                                                 n3:uri "http://www.daml.org/2000/12/daml+oil-ex#jill" ];
+                                             :variable  [
+                                                 n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#xxx" ] ],
+                                                 [
+                                             :boundTo  [
+                                                 n3:uri "http://www.daml.org/2000/12/daml+oil-ex#lawrence" ];
+                                             :variable  [
+                                                 n3:nodeId "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#_g_L47C27" ] ];
+                                         :evidence  (
+                                         [
+                                                 a :Extraction;
+                                                 :because <#_g3>;
+                                                 :gives {ex:husband     rdfs:domain ex:Woman .
+                                                } ]
+                                         [
+                                                 a :Extraction;
+                                                 :because  [
+                                                     a :Inference;
+                                                     :binding  [
+                                                         :boundTo  [
+                                                             n3:uri "http://www.daml.org/2000/12/daml+oil-ex#wife" ];
+                                                         :variable  [
+                                                             n3:nodeId "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#_g_L94C6" ] ],
+                                                             [
+                                                         :boundTo  [
+                                                             n3:uri "http://www.daml.org/2000/12/daml+oil-ex#husband" ];
+                                                         :variable  [
+                                                             n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#q" ] ],
+                                                             [
+                                                         :boundTo  [
+                                                             n3:uri "http://www.daml.org/2000/12/daml+oil-ex#jill" ];
+                                                         :variable  [
+                                                             n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#w" ] ],
+                                                             [
+                                                         :boundTo  [
+                                                             n3:uri "http://www.daml.org/2000/12/daml+oil-ex#lawrence" ];
+                                                         :variable  [
+                                                             n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#v" ] ];
+                                                     :evidence  (
+                                                     [
+                                                             a :Extraction;
+                                                             :because <#_g3>;
+                                                             :gives {ex:wife     daml:inverseOf ex:husband .
+                                                            } ]
+                                                     [
+                                                             a :Extraction;
+                                                             :because <#_g3>;
+                                                             :gives {ex:lawrence     ex:wife ex:jill .
+                                                            } ] );
+                                                     :rule  [
+                                                         a :Extraction;
+                                                         :because <#_g2>;
+                                                         :gives { @forAll owlth:q,
+                                                                    owlth:v,
+                                                                    owlth:w .
+                                                        {
+                                                             @forSome <#_g9> .
+                                                            owlth:v     <#_g9> owlth:w .
+                                                            <#_g9>     daml:inverseOf owlth:q .
+                                                            
+                                                            }     log:implies {owlth:w     owlth:q owlth:v .
+                                                            } .
+                                                        } ] ];
+                                                 :gives {ex:jill     ex:husband ex:lawrence .
+                                                } ] );
+                                         :rule  [
+                                             a :Extraction;
+                                             :because <#_g4>;
+                                             :gives { @forAll <../../util/rdfs-nice.n3#xxx>,
+                                                        <../../util/rdfs-nice.n3#zzz> .
+                                            {
+                                                 @forSome <#_g10> .
+                                                <../../util/rdfs-nice.n3#xxx>     <#_g10>  [
+                                                     ] .
+                                                <#_g10>     rdfs:domain <../../util/rdfs-nice.n3#zzz> .
+                                                
+                                                }     log:implies {<../../util/rdfs-nice.n3#xxx>     a <../../util/rdfs-nice.n3#zzz> .
+                                                } .
+                                            } ] ];
+                                     :gives {ex:jill     a ex:Woman .
+                                    } ]
+                             [
+                                     a :Extraction;
+                                     :because <#_g3>;
+                                     :gives {ex:bob     a ex:Man .
+                                    } ] );
+                             :rule  [
+                                 a :Extraction;
+                                 :because <#_g2>;
+                                 :gives { @forAll owlth:x,
+                                            owlth:y .
+                                {
+                                     @forSome <#_g11>,
+                                                <#_g12> .
+                                    owlth:x     a <#_g11> .
+                                    owlth:y     a <#_g12> .
+                                    <#_g11>     daml:disjointWith <#_g12> .
+                                    
+                                    }     log:implies {owlth:x     daml:differentFrom owlth:y .
+                                    } .
+                                } ] ];
+                         :gives {ex:bob     daml:differentFrom ex:jill .
+                        } ] );
+                 :rule  [
+                     a :Extraction;
+                     :because <#_g0>;
+                     :gives { @forAll ani:who .
+                    {
+                        ex:bob     daml:differentFrom ani:who .
+                        
+                        }     log:implies {ex:bob     daml:differentFrom ani:who .
+                        } .
+                    } ] ],
+                     [
+                 a :Inference;
+                 :binding  [
+                     :boundTo  [
+                         n3:uri "http://www.daml.org/2000/12/daml+oil-ex#chevy1" ];
+                     :variable  [
+                         n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/test/reason/animal-goal.n3#who" ] ];
+                 :evidence  (
+                 [
+                         a :Extraction;
+                         :because  [
+                             a :Inference;
+                             :binding  [
+                                 :boundTo  [
+                                     n3:uri "http://www.w3.org/2002/07/owl#differentFrom" ];
+                                 :variable  [
+                                     n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#p" ] ],
+                                     [
+                                 :boundTo  [
+                                     n3:uri "http://www.daml.org/2000/12/daml+oil-ex#chevy1" ];
+                                 :variable  [
+                                     n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#v" ] ],
+                                     [
+                                 :boundTo  [
+                                     n3:uri "http://www.daml.org/2000/12/daml+oil-ex#bob" ];
+                                 :variable  [
+                                     n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#w" ] ];
+                             :evidence  (
+                             [
+                                     a :Extraction;
+                                     :because <#_g2>;
+                                     :gives {daml:differentFrom     a daml:SymmetricProperty .
+                                    } ]
+                             [
+                                     a :Extraction;
+                                     :because  [
+                                         a :Inference;
+                                         :binding  [
+                                             :boundTo  [
+                                                 a :Existential;
+                                                 n3:nodeId "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/test/reason/animals.n3#_g_L40C27" ];
+                                             :variable  [
+                                                 n3:nodeId "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#_g_L49C3" ] ],
+                                                 [
+                                             :boundTo  [
+                                                 n3:uri "http://www.daml.org/2000/12/daml+oil-ex#Person" ];
+                                             :variable  [
+                                                 n3:nodeId "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#_g_L49C42" ] ],
+                                                 [
+                                             :boundTo  [
+                                                 n3:uri "http://www.daml.org/2000/12/daml+oil-ex#chevy1" ];
+                                             :variable  [
+                                                 n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#x" ] ],
+                                                 [
+                                             :boundTo  [
+                                                 n3:uri "http://www.daml.org/2000/12/daml+oil-ex#bob" ];
+                                             :variable  [
+                                                 n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#y" ] ];
+                                         :evidence  (
+                                         [
+                                                 a :Extraction;
+                                                 :because  [
+                                                     a :Inference;
+                                                     :binding  [
+                                                         :boundTo  [
+                                                             n3:uri "http://www.w3.org/2002/07/owl#complementOf" ];
+                                                         :variable  [
+                                                             n3:nodeId "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#_g_L71C8" ] ],
+                                                             [
+                                                         :boundTo  [
+                                                             n3:uri "http://www.w3.org/2002/07/owl#disjointWith" ];
+                                                         :variable  [
+                                                             n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#bbb" ] ],
+                                                             [
+                                                         :boundTo  [
+                                                             a :Existential;
+                                                             n3:nodeId "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/test/reason/animals.n3#_g_L40C27" ];
+                                                         :variable  [
+                                                             n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#xxx" ] ],
+                                                             [
+                                                         :boundTo  [
+                                                             n3:uri "http://www.daml.org/2000/12/daml+oil-ex#Person" ];
+                                                         :variable  [
+                                                             n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#yyy" ] ];
+                                                     :evidence  (
+                                                     [
+                                                             a :Extraction;
+                                                             :because <#_g2>;
+                                                             :gives {daml:complementOf     rdfs:subPropertyOf daml:disjointWith .
+                                                            } ]
+                                                     [
+                                                             a :Extraction;
+                                                             :because <#_g3>;
+                                                             :gives { @forSome <#_g13> .
+                                                            <#_g13>     daml:complementOf ex:Person .
+                                                            } ] );
+                                                     :rule  [
+                                                         a :Extraction;
+                                                         :because <#_g4>;
+                                                         :gives { @forAll <../../util/rdfs-nice.n3#bbb>,
+                                                                    <../../util/rdfs-nice.n3#xxx>,
+                                                                    <../../util/rdfs-nice.n3#yyy> .
+                                                        {
+                                                             @forSome <#_g14> .
+                                                            <../../util/rdfs-nice.n3#xxx>     <#_g14> <../../util/rdfs-nice.n3#yyy> .
+                                                            <#_g14>     rdfs:subPropertyOf <../../util/rdfs-nice.n3#bbb> .
+                                                            
+                                                            }     log:implies {<../../util/rdfs-nice.n3#xxx>     <../../util/rdfs-nice.n3#bbb> <../../util/rdfs-nice.n3#yyy> .
+                                                            } .
+                                                        } ] ];
+                                                 :gives { @forSome <#_g13> .
+                                                <#_g13>     daml:disjointWith ex:Person .
+                                                } ]
+                                         [
+                                                 a :Extraction;
+                                                 :because  [
+                                                     a :Inference;
+                                                     :binding  [
+                                                         :boundTo  [
+                                                             n3:uri "http://www.daml.org/2000/12/daml+oil-ex#Car" ];
+                                                         :variable  [
+                                                             n3:nodeId "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#_g_L83C10" ] ],
+                                                             [
+                                                         :boundTo  [
+                                                             a :Existential;
+                                                             n3:nodeId "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/test/reason/animals.n3#_g_L40C27" ];
+                                                         :variable  [
+                                                             n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#yyy" ] ],
+                                                             [
+                                                         :boundTo  [
+                                                             n3:uri "http://www.daml.org/2000/12/daml+oil-ex#chevy1" ];
+                                                         :variable  [
+                                                             n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#aaa" ] ];
+                                                     :evidence  (
+                                                     [
+                                                             a :Extraction;
+                                                             :because <#_g3>;
+                                                             :gives { @forSome <#_g13> .
+                                                            ex:Car     rdfs:subClassOf <#_g13> .
+                                                            } ]
+                                                     [
+                                                             a :Extraction;
+                                                             :because <#_g3>;
+                                                             :gives {ex:chevy1     a ex:Car .
+                                                            } ] );
+                                                     :rule  [
+                                                         a :Extraction;
+                                                         :because <#_g4>;
+                                                         :gives { @forAll <../../util/rdfs-nice.n3#aaa>,
+                                                                    <../../util/rdfs-nice.n3#yyy> .
+                                                        {
+                                                             @forSome <#_g15> .
+                                                            <../../util/rdfs-nice.n3#aaa>     a <#_g15> .
+                                                            <#_g15>     rdfs:subClassOf <../../util/rdfs-nice.n3#yyy> .
+                                                            
+                                                            }     log:implies {<../../util/rdfs-nice.n3#aaa>     a <../../util/rdfs-nice.n3#yyy> .
+                                                            } .
+                                                        } ] ];
+                                                 :gives { @forSome <#_g13> .
+                                                ex:chevy1     a <#_g13> .
+                                                } ]
+                                         [
+                                                 a :Extraction;
+                                                 :because <#_g5>;
+                                                 :gives {ex:bob     a ex:Person .
+                                                } ] );
+                                         :rule  [
+                                             a :Extraction;
+                                             :because <#_g2>;
+                                             :gives { @forAll owlth:x,
+                                                        owlth:y .
+                                            {
+                                                 @forSome <#_g11>,
+                                                            <#_g12> .
+                                                owlth:x     a <#_g11> .
+                                                owlth:y     a <#_g12> .
+                                                <#_g11>     daml:disjointWith <#_g12> .
+                                                
+                                                }     log:implies {owlth:x     daml:differentFrom owlth:y .
+                                                } .
+                                            } ] ];
+                                     :gives {ex:chevy1     daml:differentFrom ex:bob .
+                                    } ] );
+                             :rule  [
+                                 a :Extraction;
+                                 :because <#_g2>;
+                                 :gives { @forAll owlth:p,
+                                            owlth:v,
+                                            owlth:w .
+                                {
+                                    owlth:p     a daml:SymmetricProperty .
+                                    owlth:v     owlth:p owlth:w .
+                                    
+                                    }     log:implies {owlth:w     owlth:p owlth:v .
+                                    } .
+                                } ] ];
+                         :gives {ex:bob     daml:differentFrom ex:chevy1 .
+                        } ] );
+                 :rule  [
+                     a :Extraction;
+                     :because <#_g0>;
+                     :gives { @forAll ani:who .
+                    {
+                        ex:bob     daml:differentFrom ani:who .
+                        
+                        }     log:implies {ex:bob     daml:differentFrom ani:who .
+                        } .
+                    } ] ],
+                     [
+                 a :Inference;
+                 :binding  [
+                     :boundTo  [
+                         n3:uri "http://www.daml.org/2000/12/daml+oil-ex#lawrence" ];
+                     :variable  [
+                         n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/test/reason/animal-goal.n3#who" ] ];
+                 :evidence  (
+                 [
+                         a :Extraction;
+                         :because  [
+                             a :Inference;
+                             :binding  [
+                                 :boundTo  [
+                                     n3:uri "http://www.daml.org/2000/12/daml+oil-ex#hasAncestor" ];
+                                 :variable  [
+                                     n3:nodeId "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#_g_L71C8" ] ],
+                                     [
+                                 :boundTo  [
+                                     n3:uri "http://www.w3.org/2002/07/owl#differentFrom" ];
+                                 :variable  [
+                                     n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#bbb" ] ],
+                                     [
+                                 :boundTo  [
+                                     n3:uri "http://www.daml.org/2000/12/daml+oil-ex#bob" ];
+                                 :variable  [
+                                     n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#xxx" ] ],
+                                     [
+                                 :boundTo  [
+                                     n3:uri "http://www.daml.org/2000/12/daml+oil-ex#lawrence" ];
+                                 :variable  [
+                                     n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#yyy" ] ];
+                             :evidence  (
+                             [
+                                     a :Extraction;
+                                     :because <#_g3>;
+                                     :gives {ex:hasAncestor     rdfs:subPropertyOf daml:differentFrom .
+                                    } ]
+                             [
+                                     a :Extraction;
+                                     :because  [
+                                         a :Inference;
+                                         :binding  [
+                                             :boundTo  [
+                                                 n3:uri "http://www.daml.org/2000/12/daml+oil-ex#hasAncestor" ];
+                                             :variable  [
+                                                 n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#p" ] ],
+                                                 [
+                                             :boundTo  [
+                                                 n3:uri "http://www.daml.org/2000/12/daml+oil-ex#wilma" ];
+                                             :variable  [
+                                                 n3:nodeId "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#_g_L74C9" ] ],
+                                                 [
+                                             :boundTo  [
+                                                 n3:uri "http://www.daml.org/2000/12/daml+oil-ex#lawrence" ];
+                                             :variable  [
+                                                 n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#w" ] ],
+                                                 [
+                                             :boundTo  [
+                                                 n3:uri "http://www.daml.org/2000/12/daml+oil-ex#bob" ];
+                                             :variable  [
+                                                 n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#u" ] ];
+                                         :evidence  (
+                                         [
+                                                 a :Extraction;
+                                                 :because <#_g3>;
+                                                 :gives {ex:hasAncestor     a daml:TransitiveProperty .
+                                                } ]
+                                         [
+                                                 a :Extraction;
+                                                 :because  [
+                                                     a :Inference;
+                                                     :binding  [
+                                                         :boundTo  [
+                                                             n3:uri "http://www.daml.org/2000/12/daml+oil-ex#hasParent" ];
+                                                         :variable  [
+                                                             n3:nodeId "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#_g_L71C8" ] ],
+                                                             [
+                                                         :boundTo  [
+                                                             n3:uri "http://www.daml.org/2000/12/daml+oil-ex#hasAncestor" ];
+                                                         :variable  [
+                                                             n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#bbb" ] ],
+                                                             [
+                                                         :boundTo  [
+                                                             n3:uri "http://www.daml.org/2000/12/daml+oil-ex#wilma" ];
+                                                         :variable  [
+                                                             n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#xxx" ] ],
+                                                             [
+                                                         :boundTo  [
+                                                             n3:uri "http://www.daml.org/2000/12/daml+oil-ex#lawrence" ];
+                                                         :variable  [
+                                                             n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#yyy" ] ];
+                                                     :evidence  (
+                                                     [
+                                                             a :Extraction;
+                                                             :because <#_g3>;
+                                                             :gives {ex:hasParent     rdfs:subPropertyOf ex:hasAncestor .
+                                                            } ]
+                                                     [
+                                                             a :Extraction;
+                                                             :because  [
+                                                                 a :Inference;
+                                                                 :binding  [
+                                                                     :boundTo  [
+                                                                         n3:uri "http://www.daml.org/2000/12/daml+oil-ex#hasFather" ];
+                                                                     :variable  [
+                                                                         n3:nodeId "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#_g_L71C8" ] ],
+                                                                         [
+                                                                     :boundTo  [
+                                                                         n3:uri "http://www.daml.org/2000/12/daml+oil-ex#hasParent" ];
+                                                                     :variable  [
+                                                                         n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#bbb" ] ],
+                                                                         [
+                                                                     :boundTo  [
+                                                                         n3:uri "http://www.daml.org/2000/12/daml+oil-ex#wilma" ];
+                                                                     :variable  [
+                                                                         n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#xxx" ] ],
+                                                                         [
+                                                                     :boundTo  [
+                                                                         n3:uri "http://www.daml.org/2000/12/daml+oil-ex#lawrence" ];
+                                                                     :variable  [
+                                                                         n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#yyy" ] ];
+                                                                 :evidence  (
+                                                                 [
+                                                                         a :Extraction;
+                                                                         :because <#_g3>;
+                                                                         :gives {ex:hasFather     rdfs:subPropertyOf ex:hasParent .
+                                                                        } ]
+                                                                 [
+                                                                         a :Extraction;
+                                                                         :because <#_g3>;
+                                                                         :gives {ex:wilma     ex:hasFather ex:lawrence .
+                                                                        } ] );
+                                                                 :rule  [
+                                                                     a :Extraction;
+                                                                     :because <#_g4>;
+                                                                     :gives { @forAll <../../util/rdfs-nice.n3#bbb>,
+                                                                                <../../util/rdfs-nice.n3#xxx>,
+                                                                                <../../util/rdfs-nice.n3#yyy> .
+                                                                    {
+                                                                         @forSome <#_g14> .
+                                                                        <../../util/rdfs-nice.n3#xxx>     <#_g14> <../../util/rdfs-nice.n3#yyy> .
+                                                                        <#_g14>     rdfs:subPropertyOf <../../util/rdfs-nice.n3#bbb> .
+                                                                        
+                                                                        }     log:implies {<../../util/rdfs-nice.n3#xxx>     <../../util/rdfs-nice.n3#bbb> <../../util/rdfs-nice.n3#yyy> .
+                                                                        } .
+                                                                    } ] ];
+                                                             :gives {ex:wilma     ex:hasParent ex:lawrence .
+                                                            } ] );
+                                                     :rule  [
+                                                         a :Extraction;
+                                                         :because <#_g4>;
+                                                         :gives { @forAll <../../util/rdfs-nice.n3#bbb>,
+                                                                    <../../util/rdfs-nice.n3#xxx>,
+                                                                    <../../util/rdfs-nice.n3#yyy> .
+                                                        {
+                                                             @forSome <#_g14> .
+                                                            <../../util/rdfs-nice.n3#xxx>     <#_g14> <../../util/rdfs-nice.n3#yyy> .
+                                                            <#_g14>     rdfs:subPropertyOf <../../util/rdfs-nice.n3#bbb> .
+                                                            
+                                                            }     log:implies {<../../util/rdfs-nice.n3#xxx>     <../../util/rdfs-nice.n3#bbb> <../../util/rdfs-nice.n3#yyy> .
+                                                            } .
+                                                        } ] ];
+                                                 :gives {ex:wilma     ex:hasAncestor ex:lawrence .
+                                                } ]
+                                         [
+                                                 a :Extraction;
+                                                 :because <#_g6>;
+                                                 :gives {ex:bob     ex:hasAncestor ex:wilma .
+                                                } ] );
+                                         :rule  [
+                                             a :Extraction;
+                                             :because <#_g2>;
+                                             :gives { @forAll owlth:p,
+                                                        owlth:u,
+                                                        owlth:w .
+                                            {
+                                                owlth:p     a daml:TransitiveProperty .
+                                                owlth:u     owlth:p  [
+                                                         owlth:p owlth:w ] .
+                                                
+                                                }     log:implies {owlth:u     owlth:p owlth:w .
+                                                } .
+                                            } ] ];
+                                     :gives {ex:bob     ex:hasAncestor ex:lawrence .
+                                    } ] );
+                             :rule  [
+                                 a :Extraction;
+                                 :because <#_g4>;
+                                 :gives { @forAll <../../util/rdfs-nice.n3#bbb>,
+                                            <../../util/rdfs-nice.n3#xxx>,
+                                            <../../util/rdfs-nice.n3#yyy> .
+                                {
+                                     @forSome <#_g14> .
+                                    <../../util/rdfs-nice.n3#xxx>     <#_g14> <../../util/rdfs-nice.n3#yyy> .
+                                    <#_g14>     rdfs:subPropertyOf <../../util/rdfs-nice.n3#bbb> .
+                                    
+                                    }     log:implies {<../../util/rdfs-nice.n3#xxx>     <../../util/rdfs-nice.n3#bbb> <../../util/rdfs-nice.n3#yyy> .
+                                    } .
+                                } ] ];
+                         :gives {ex:bob     daml:differentFrom ex:lawrence .
+                        } ] );
+                 :rule  [
+                     a :Extraction;
+                     :because <#_g0>;
+                     :gives { @forAll ani:who .
+                    {
+                        ex:bob     daml:differentFrom ani:who .
+                        
+                        }     log:implies {ex:bob     daml:differentFrom ani:who .
+                        } .
+                    } ] ],
+                     [
+                 a :Inference;
+                 :binding  [
+                     :boundTo  [
+                         n3:uri "http://www.daml.org/2000/12/daml+oil-ex#wilma" ];
+                     :variable  [
+                         n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/test/reason/animal-goal.n3#who" ] ];
+                 :evidence  (
+                 [
+                         a :Extraction;
+                         :because  [
+                             a :Inference;
+                             :binding  [
+                                 :boundTo  [
+                                     n3:uri "http://www.daml.org/2000/12/daml+oil-ex#hasAncestor" ];
+                                 :variable  [
+                                     n3:nodeId "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#_g_L71C8" ] ],
+                                     [
+                                 :boundTo  [
+                                     n3:uri "http://www.w3.org/2002/07/owl#differentFrom" ];
+                                 :variable  [
+                                     n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#bbb" ] ],
+                                     [
+                                 :boundTo  [
+                                     n3:uri "http://www.daml.org/2000/12/daml+oil-ex#bob" ];
+                                 :variable  [
+                                     n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#xxx" ] ],
+                                     [
+                                 :boundTo  [
+                                     n3:uri "http://www.daml.org/2000/12/daml+oil-ex#wilma" ];
+                                 :variable  [
+                                     n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#yyy" ] ];
+                             :evidence  (
+                             [
+                                     a :Extraction;
+                                     :because <#_g3>;
+                                     :gives {ex:hasAncestor     rdfs:subPropertyOf daml:differentFrom .
+                                    } ]
+                             [
+                                     a :Extraction;
+                                     :because <#_g6>;
+                                     :gives {ex:bob     ex:hasAncestor ex:wilma .
+                                    } ] );
+                             :rule  [
+                                 a :Extraction;
+                                 :because <#_g4>;
+                                 :gives { @forAll <../../util/rdfs-nice.n3#bbb>,
+                                            <../../util/rdfs-nice.n3#xxx>,
+                                            <../../util/rdfs-nice.n3#yyy> .
+                                {
+                                     @forSome <#_g14> .
+                                    <../../util/rdfs-nice.n3#xxx>     <#_g14> <../../util/rdfs-nice.n3#yyy> .
+                                    <#_g14>     rdfs:subPropertyOf <../../util/rdfs-nice.n3#bbb> .
+                                    
+                                    }     log:implies {<../../util/rdfs-nice.n3#xxx>     <../../util/rdfs-nice.n3#bbb> <../../util/rdfs-nice.n3#yyy> .
+                                    } .
+                                } ] ];
+                         :gives {ex:bob     daml:differentFrom ex:wilma .
+                        } ] );
+                 :rule  [
+                     a :Extraction;
+                     :because <#_g0>;
+                     :gives { @forAll ani:who .
+                    {
+                        ex:bob     daml:differentFrom ani:who .
+                        
+                        }     log:implies {ex:bob     daml:differentFrom ani:who .
+                        } .
+                    } ] ],
+                     [
+                 a :Inference;
+                 :binding  [
+                     :boundTo  [
+                         n3:uri "http://www.daml.org/2000/12/daml+oil-ex#fredo" ];
+                     :variable  [
+                         n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/test/reason/animal-goal.n3#who" ] ];
+                 :evidence  (
+                 [
+                         a :Extraction;
+                         :because <#_g8>;
+                         :gives {ex:bob     daml:differentFrom ex:fredo .
+                        } ] );
+                 :rule  [
+                     a :Extraction;
+                     :because <#_g0>;
+                     :gives { @forAll ani:who .
+                    {
+                        ex:bob     daml:differentFrom ani:who .
+                        
+                        }     log:implies {ex:bob     daml:differentFrom ani:who .
+                        } .
+                    } ] ],
+                     [
+                 a :Inference;
+                 :binding  [
+                     :boundTo  [
+                         n3:uri "http://www.daml.org/2000/12/daml+oil-ex#fred" ];
+                     :variable  [
+                         n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/test/reason/animal-goal.n3#who" ] ];
+                 :evidence  (
+                 [
+                         a :Extraction;
+                         :because  [
+                             a :Inference;
+                             :binding  [
+                                 :boundTo  [
+                                     n3:uri "http://www.daml.org/2000/12/daml+oil-ex#fredo" ];
+                                 :variable  [
+                                     n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#v" ] ],
+                                     [
+                                 :boundTo  [
+                                     n3:uri "http://www.daml.org/2000/12/daml+oil-ex#fred" ];
+                                 :variable  [
+                                     n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#vv" ] ],
+                                     [
+                                 :boundTo  [
+                                     n3:uri "http://www.daml.org/2000/12/daml+oil-ex#bob" ];
+                                 :variable  [
+                                     n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#u" ] ],
+                                     [
+                                 :boundTo  [
+                                     n3:uri "http://www.w3.org/2002/07/owl#differentFrom" ];
+                                 :variable  [
+                                     n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#p" ] ];
+                             :evidence  (
+                             [
+                                     a :Extraction;
+                                     :because  [
+                                         a :Inference;
+                                         :binding  [
+                                             :boundTo  [
+                                                 a :Existential;
+                                                 n3:nodeId "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/test/reason/animals.n3#_g_L88C18" ];
+                                             :variable  [
+                                                 n3:nodeId "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#_g_L196C8" ] ],
+                                                 [
+                                             :boundTo  [
+                                                 n3:uri "http://www.daml.org/2000/12/daml+oil-ex#hasSpouse" ];
+                                             :variable  [
+                                                 n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#p" ] ],
+                                                 [
+                                             :boundTo  [
+                                                 n3:uri "http://www.daml.org/2000/12/daml+oil-ex#fred" ];
+                                             :variable  [
+                                                 n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#v2" ] ],
+                                                 [
+                                             :boundTo  [
+                                                 n3:uri "http://www.daml.org/2000/12/daml+oil-ex#wilma" ];
+                                             :variable  [
+                                                 n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#x" ] ],
+                                                 [
+                                             :boundTo  [
+                                                 n3:uri "http://www.daml.org/2000/12/daml+oil-ex#fredo" ];
+                                             :variable  [
+                                                 n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#v1" ] ];
+                                         :evidence  (
+                                         [
+                                                 a :Extraction;
+                                                 :because <#_g3>;
+                                                 :gives { @forSome <#_g16> .
+                                                <#_g16>     daml:maxCardinality 1 .
+                                                } ]
+                                         [
+                                                 a :Extraction;
+                                                 :because <#_g3>;
+                                                 :gives { @forSome <#_g16> .
+                                                <#_g16>     daml:onProperty ex:hasSpouse .
+                                                } ]
+                                         [
+                                                 a :Extraction;
+                                                 :because  [
+                                                     a :Inference;
+                                                     :binding  [
+                                                         :boundTo  [
+                                                             n3:uri "http://www.daml.org/2000/12/daml+oil-ex#Person" ];
+                                                         :variable  [
+                                                             n3:nodeId "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#_g_L83C10" ] ],
+                                                             [
+                                                         :boundTo  [
+                                                             a :Existential;
+                                                             n3:nodeId "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/test/reason/animals.n3#_g_L88C18" ];
+                                                         :variable  [
+                                                             n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#yyy" ] ],
+                                                             [
+                                                         :boundTo  [
+                                                             n3:uri "http://www.daml.org/2000/12/daml+oil-ex#wilma" ];
+                                                         :variable  [
+                                                             n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#aaa" ] ];
+                                                     :evidence  (
+                                                     [
+                                                             a :Extraction;
+                                                             :because <#_g3>;
+                                                             :gives { @forSome <#_g16> .
+                                                            ex:Person     rdfs:subClassOf <#_g16> .
+                                                            } ]
+                                                     [
+                                                             a :Extraction;
+                                                             :because  [
+                                                                 a :Inference;
+                                                                 :binding  [
+                                                                     :boundTo  [
+                                                                         a :Existential;
+                                                                         n3:nodeId "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/test/reason/animals.n3#_g_L80C18" ];
+                                                                     :variable  [
+                                                                         n3:nodeId "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#_g_L143C8" ] ],
+                                                                         [
+                                                                     :boundTo  [
+                                                                         n3:uri "http://www.daml.org/2000/12/daml+oil-ex#Person" ];
+                                                                     :variable  [
+                                                                         n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#w" ] ],
+                                                                         [
+                                                                     :boundTo  [
+                                                                         n3:uri "http://www.daml.org/2000/12/daml+oil-ex#wilma" ];
+                                                                     :variable  [
+                                                                         n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#x" ] ],
+                                                                         [
+                                                                     :boundTo  [
+                                                                         n3:uri "http://www.daml.org/2000/12/daml+oil-ex#bob" ];
+                                                                     :variable  [
+                                                                         n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#u" ] ],
+                                                                         [
+                                                                     :boundTo  [
+                                                                         n3:uri "http://www.daml.org/2000/12/daml+oil-ex#hasParent" ];
+                                                                     :variable  [
+                                                                         n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#p" ] ];
+                                                                 :evidence  (
+                                                                 [
+                                                                         a :Extraction;
+                                                                         :because <#_g3>;
+                                                                         :gives { @forSome <#_g17> .
+                                                                        <#_g17>     daml:allValuesFrom ex:Person .
+                                                                        } ]
+                                                                 [
+                                                                         a :Extraction;
+                                                                         :because <#_g3>;
+                                                                         :gives { @forSome <#_g17> .
+                                                                        <#_g17>     daml:onProperty ex:hasParent .
+                                                                        } ]
+                                                                 [
+                                                                         a :Extraction;
+                                                                         :because  [
+                                                                             a :Inference;
+                                                                             :binding  [
+                                                                                 :boundTo  [
+                                                                                     n3:uri "http://www.daml.org/2000/12/daml+oil-ex#Person" ];
+                                                                                 :variable  [
+                                                                                     n3:nodeId "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#_g_L83C10" ] ],
+                                                                                     [
+                                                                                 :boundTo  [
+                                                                                     a :Existential;
+                                                                                     n3:nodeId "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/test/reason/animals.n3#_g_L80C18" ];
+                                                                                 :variable  [
+                                                                                     n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#yyy" ] ],
+                                                                                     [
+                                                                                 :boundTo  [
+                                                                                     n3:uri "http://www.daml.org/2000/12/daml+oil-ex#bob" ];
+                                                                                 :variable  [
+                                                                                     n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#aaa" ] ];
+                                                                             :evidence  (
+                                                                             [
+                                                                                     a :Extraction;
+                                                                                     :because <#_g3>;
+                                                                                     :gives { @forSome <#_g17> .
+                                                                                    ex:Person     rdfs:subClassOf <#_g17> .
+                                                                                    } ]
+                                                                             [
+                                                                                     a :Extraction;
+                                                                                     :because <#_g5>;
+                                                                                     :gives {ex:bob     a ex:Person .
+                                                                                    } ] );
+                                                                             :rule  [
+                                                                                 a :Extraction;
+                                                                                 :because <#_g4>;
+                                                                                 :gives { @forAll <../../util/rdfs-nice.n3#aaa>,
+                                                                                            <../../util/rdfs-nice.n3#yyy> .
+                                                                                {
+                                                                                     @forSome <#_g15> .
+                                                                                    <../../util/rdfs-nice.n3#aaa>     a <#_g15> .
+                                                                                    <#_g15>     rdfs:subClassOf <../../util/rdfs-nice.n3#yyy> .
+                                                                                    
+                                                                                    }     log:implies {<../../util/rdfs-nice.n3#aaa>     a <../../util/rdfs-nice.n3#yyy> .
+                                                                                    } .
+                                                                                } ] ];
+                                                                         :gives { @forSome <#_g17> .
+                                                                        ex:bob     a <#_g17> .
+                                                                        } ]
+                                                                 [
+                                                                         a :Extraction;
+                                                                         :because <#_g7>;
+                                                                         :gives {ex:bob     ex:hasParent ex:wilma .
+                                                                        } ] );
+                                                                 :rule  [
+                                                                     a :Extraction;
+                                                                     :because <#_g2>;
+                                                                     :gives { @forAll owlth:p,
+                                                                                owlth:u,
+                                                                                owlth:w,
+                                                                                owlth:x .
+                                                                    {
+                                                                        owlth:u     a  [
+                                                                                 daml:allValuesFrom owlth:w;
+                                                                                 daml:onProperty owlth:p ];
+                                                                             owlth:p owlth:x .
+                                                                        
+                                                                        }     log:implies {owlth:x     a owlth:w .
+                                                                        } .
+                                                                    } ] ];
+                                                             :gives {ex:wilma     a ex:Person .
+                                                            } ] );
+                                                     :rule  [
+                                                         a :Extraction;
+                                                         :because <#_g4>;
+                                                         :gives { @forAll <../../util/rdfs-nice.n3#aaa>,
+                                                                    <../../util/rdfs-nice.n3#yyy> .
+                                                        {
+                                                             @forSome <#_g15> .
+                                                            <../../util/rdfs-nice.n3#aaa>     a <#_g15> .
+                                                            <#_g15>     rdfs:subClassOf <../../util/rdfs-nice.n3#yyy> .
+                                                            
+                                                            }     log:implies {<../../util/rdfs-nice.n3#aaa>     a <../../util/rdfs-nice.n3#yyy> .
+                                                            } .
+                                                        } ] ];
+                                                 :gives { @forSome <#_g16> .
+                                                ex:wilma     a <#_g16> .
+                                                } ]
+                                         [
+                                                 a :Extraction;
+                                                 :because <#_g3>;
+                                                 :gives {ex:wilma     ex:hasSpouse ex:fred .
+                                                } ]
+                                         [
+                                                 a :Extraction;
+                                                 :because <#_g3>;
+                                                 :gives {ex:wilma     ex:hasSpouse ex:fredo .
+                                                } ] );
+                                         :rule  [
+                                             a :Extraction;
+                                             :because <#_g2>;
+                                             :gives { @forAll owlth:p,
+                                                        owlth:v1,
+                                                        owlth:v2,
+                                                        owlth:x .
+                                            {
+                                                owlth:x     a  [
+                                                         daml:maxCardinality 1;
+                                                         daml:onProperty owlth:p ];
+                                                     owlth:p owlth:v1,
+                                                            owlth:v2 .
+                                                
+                                                }     log:implies {owlth:v1     = owlth:v2 .
+                                                } .
+                                            } ] ];
+                                     :gives {ex:fredo     = ex:fred .
+                                    } ]
+                             [
+                                     a :Extraction;
+                                     :because <#_g8>;
+                                     :gives {ex:bob     daml:differentFrom ex:fredo .
+                                    } ] );
+                             :rule  [
+                                 a :Extraction;
+                                 :because <#_g2>;
+                                 :gives { @forAll owlth:p,
+                                            owlth:u,
+                                            owlth:v,
+                                            owlth:vv .
+                                {
+                                    owlth:u     owlth:p owlth:v .
+                                    owlth:v     = owlth:vv .
+                                    
+                                    }     log:implies {owlth:u     owlth:p owlth:vv .
+                                    } .
+                                } ] ];
+                         :gives {ex:bob     daml:differentFrom ex:fred .
+                        } ] );
+                 :rule  [
+                     a :Extraction;
+                     :because <#_g0>;
+                     :gives { @forAll ani:who .
+                    {
+                        ex:bob     daml:differentFrom ani:who .
+                        
+                        }     log:implies {ex:bob     daml:differentFrom ani:who .
+                        } .
+                    } ] ];
+             :gives {ex:bob     daml:differentFrom ex:chevy1,
+                        ex:fred,
+                        ex:fredo,
+                        ex:jill,
+                        ex:lawrence,
+                        ex:wilma .
+            } ].
+    
+    <#_g0>     a :Parsing;
+         :because <#_g1>;
+         :source <animal-goal.n3> .
+    
+    <#_g1>     a :CommandLine;
+         :args "['../../cwm.py', 'animals.n3', '../../util/rdfs-nice.n3', '../../util/owlth.n3', '--think', '--filter=animal-goal.n3', '--why']" .
+    
+    <#_g2>     a :Parsing;
+         :because <#_g1>;
+         :source <../../util/owlth.n3> .
+    
+    <#_g3>     a :Parsing;
+         :because <#_g1>;
+         :source <animals.n3> .
+    
+    <#_g4>     a :Parsing;
+         :because <#_g1>;
+         :source <../../util/rdfs-nice.n3> .
+    
+    <#_g5>     a :Inference;
+         :binding  [
+             :boundTo  [
+                 n3:uri "http://www.daml.org/2000/12/daml+oil-ex#Man" ];
+             :variable  [
+                 n3:nodeId "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#_g_L83C10" ] ],
+                 [
+             :boundTo  [
+                 n3:uri "http://www.daml.org/2000/12/daml+oil-ex#Person" ];
+             :variable  [
+                 n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#yyy" ] ],
+                 [
+             :boundTo  [
+                 n3:uri "http://www.daml.org/2000/12/daml+oil-ex#bob" ];
+             :variable  [
+                 n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#aaa" ] ];
+         :evidence  (
+         [
+                 a :Extraction;
+                 :because <#_g3>;
+                 :gives {ex:Man     rdfs:subClassOf ex:Person .
+                } ]
+         [
+                 a :Extraction;
+                 :because <#_g3>;
+                 :gives {ex:bob     a ex:Man .
+                } ] );
+         :rule  [
+             a :Extraction;
+             :because <#_g4>;
+             :gives { @forAll <../../util/rdfs-nice.n3#aaa>,
+                        <../../util/rdfs-nice.n3#yyy> .
+            {
+                 @forSome <#_g15> .
+                <../../util/rdfs-nice.n3#aaa>     a <#_g15> .
+                <#_g15>     rdfs:subClassOf <../../util/rdfs-nice.n3#yyy> .
+                
+                }     log:implies {<../../util/rdfs-nice.n3#aaa>     a <../../util/rdfs-nice.n3#yyy> .
+                } .
+            } ] .
+    
+    <#_g6>     a :Inference;
+         :binding  [
+             :boundTo  [
+                 n3:uri "http://www.daml.org/2000/12/daml+oil-ex#hasParent" ];
+             :variable  [
+                 n3:nodeId "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#_g_L71C8" ] ],
+                 [
+             :boundTo  [
+                 n3:uri "http://www.daml.org/2000/12/daml+oil-ex#hasAncestor" ];
+             :variable  [
+                 n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#bbb" ] ],
+                 [
+             :boundTo  [
+                 n3:uri "http://www.daml.org/2000/12/daml+oil-ex#bob" ];
+             :variable  [
+                 n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#xxx" ] ],
+                 [
+             :boundTo  [
+                 n3:uri "http://www.daml.org/2000/12/daml+oil-ex#wilma" ];
+             :variable  [
+                 n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#yyy" ] ];
+         :evidence  (
+         [
+                 a :Extraction;
+                 :because <#_g3>;
+                 :gives {ex:hasParent     rdfs:subPropertyOf ex:hasAncestor .
+                } ]
+         [
+                 a :Extraction;
+                 :because <#_g7>;
+                 :gives {ex:bob     ex:hasParent ex:wilma .
+                } ] );
+         :rule  [
+             a :Extraction;
+             :because <#_g4>;
+             :gives { @forAll <../../util/rdfs-nice.n3#bbb>,
+                        <../../util/rdfs-nice.n3#xxx>,
+                        <../../util/rdfs-nice.n3#yyy> .
+            {
+                 @forSome <#_g14> .
+                <../../util/rdfs-nice.n3#xxx>     <#_g14> <../../util/rdfs-nice.n3#yyy> .
+                <#_g14>     rdfs:subPropertyOf <../../util/rdfs-nice.n3#bbb> .
+                
+                }     log:implies {<../../util/rdfs-nice.n3#xxx>     <../../util/rdfs-nice.n3#bbb> <../../util/rdfs-nice.n3#yyy> .
+                } .
+            } ] .
+    
+    <#_g7>     a :Inference;
+         :binding  [
+             :boundTo  [
+                 n3:uri "http://www.daml.org/2000/12/daml+oil-ex#hasMother" ];
+             :variable  [
+                 n3:nodeId "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#_g_L71C8" ] ],
+                 [
+             :boundTo  [
+                 n3:uri "http://www.daml.org/2000/12/daml+oil-ex#hasParent" ];
+             :variable  [
+                 n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#bbb" ] ],
+                 [
+             :boundTo  [
+                 n3:uri "http://www.daml.org/2000/12/daml+oil-ex#bob" ];
+             :variable  [
+                 n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#xxx" ] ],
+                 [
+             :boundTo  [
+                 n3:uri "http://www.daml.org/2000/12/daml+oil-ex#wilma" ];
+             :variable  [
+                 n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#yyy" ] ];
+         :evidence  (
+         [
+                 a :Extraction;
+                 :because <#_g3>;
+                 :gives {ex:hasMother     rdfs:subPropertyOf ex:hasParent .
+                } ]
+         [
+                 a :Extraction;
+                 :because <#_g3>;
+                 :gives {ex:bob     ex:hasMother ex:wilma .
+                } ] );
+         :rule  [
+             a :Extraction;
+             :because <#_g4>;
+             :gives { @forAll <../../util/rdfs-nice.n3#bbb>,
+                        <../../util/rdfs-nice.n3#xxx>,
+                        <../../util/rdfs-nice.n3#yyy> .
+            {
+                 @forSome <#_g14> .
+                <../../util/rdfs-nice.n3#xxx>     <#_g14> <../../util/rdfs-nice.n3#yyy> .
+                <#_g14>     rdfs:subPropertyOf <../../util/rdfs-nice.n3#bbb> .
+                
+                }     log:implies {<../../util/rdfs-nice.n3#xxx>     <../../util/rdfs-nice.n3#bbb> <../../util/rdfs-nice.n3#yyy> .
+                } .
+            } ] .
+    
+    <#_g8>     a :Inference;
+         :binding  [
+             :boundTo  [
+                 n3:uri "http://www.daml.org/2000/12/daml+oil-ex#hasAncestor" ];
+             :variable  [
+                 n3:nodeId "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#_g_L71C8" ] ],
+                 [
+             :boundTo  [
+                 n3:uri "http://www.w3.org/2002/07/owl#differentFrom" ];
+             :variable  [
+                 n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#bbb" ] ],
+                 [
+             :boundTo  [
+                 n3:uri "http://www.daml.org/2000/12/daml+oil-ex#bob" ];
+             :variable  [
+                 n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#xxx" ] ],
+                 [
+             :boundTo  [
+                 n3:uri "http://www.daml.org/2000/12/daml+oil-ex#fredo" ];
+             :variable  [
+                 n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#yyy" ] ];
+         :evidence  (
+         [
+                 a :Extraction;
+                 :because <#_g3>;
+                 :gives {ex:hasAncestor     rdfs:subPropertyOf daml:differentFrom .
+                } ]
+         [
+                 a :Extraction;
+                 :because  [
+                     a :Inference;
+                     :binding  [
+                         :boundTo  [
+                             n3:uri "http://www.daml.org/2000/12/daml+oil-ex#hasParent" ];
+                         :variable  [
+                             n3:nodeId "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#_g_L71C8" ] ],
+                             [
+                         :boundTo  [
+                             n3:uri "http://www.daml.org/2000/12/daml+oil-ex#hasAncestor" ];
+                         :variable  [
+                             n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#bbb" ] ],
+                             [
+                         :boundTo  [
+                             n3:uri "http://www.daml.org/2000/12/daml+oil-ex#bob" ];
+                         :variable  [
+                             n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#xxx" ] ],
+                             [
+                         :boundTo  [
+                             n3:uri "http://www.daml.org/2000/12/daml+oil-ex#fredo" ];
+                         :variable  [
+                             n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/rdfs-nice.n3#yyy" ] ];
+                     :evidence  (
+                     [
+                             a :Extraction;
+                             :because <#_g3>;
+                             :gives {ex:hasParent     rdfs:subPropertyOf ex:hasAncestor .
+                            } ]
+                     [
+                             a :Extraction;
+                             :because  [
+                                 a :Inference;
+                                 :binding  [
+                                     :boundTo  [
+                                         n3:uri "http://www.daml.org/2000/12/daml+oil-ex#hasChild" ];
+                                     :variable  [
+                                         n3:nodeId "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#_g_L94C6" ] ],
+                                         [
+                                     :boundTo  [
+                                         n3:uri "http://www.daml.org/2000/12/daml+oil-ex#hasParent" ];
+                                     :variable  [
+                                         n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#q" ] ],
+                                         [
+                                     :boundTo  [
+                                         n3:uri "http://www.daml.org/2000/12/daml+oil-ex#bob" ];
+                                     :variable  [
+                                         n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#w" ] ],
+                                         [
+                                     :boundTo  [
+                                         n3:uri "http://www.daml.org/2000/12/daml+oil-ex#fredo" ];
+                                     :variable  [
+                                         n3:uri "file:/Users/connolly/w3ccvs/WWW/2000/10/swap/util/owlth.n3#v" ] ];
+                                 :evidence  (
+                                 [
+                                         a :Extraction;
+                                         :because <#_g3>;
+                                         :gives {ex:hasChild     daml:inverseOf ex:hasParent .
+                                        } ]
+                                 [
+                                         a :Extraction;
+                                         :because <#_g3>;
+                                         :gives {ex:fredo     ex:hasChild ex:bob .
+                                        } ] );
+                                 :rule  [
+                                     a :Extraction;
+                                     :because <#_g2>;
+                                     :gives { @forAll owlth:q,
+                                                owlth:v,
+                                                owlth:w .
+                                    {
+                                         @forSome <#_g9> .
+                                        owlth:v     <#_g9> owlth:w .
+                                        <#_g9>     daml:inverseOf owlth:q .
+                                        
+                                        }     log:implies {owlth:w     owlth:q owlth:v .
+                                        } .
+                                    } ] ];
+                             :gives {ex:bob     ex:hasParent ex:fredo .
+                            } ] );
+                     :rule  [
+                         a :Extraction;
+                         :because <#_g4>;
+                         :gives { @forAll <../../util/rdfs-nice.n3#bbb>,
+                                    <../../util/rdfs-nice.n3#xxx>,
+                                    <../../util/rdfs-nice.n3#yyy> .
+                        {
+                             @forSome <#_g14> .
+                            <../../util/rdfs-nice.n3#xxx>     <#_g14> <../../util/rdfs-nice.n3#yyy> .
+                            <#_g14>     rdfs:subPropertyOf <../../util/rdfs-nice.n3#bbb> .
+                            
+                            }     log:implies {<../../util/rdfs-nice.n3#xxx>     <../../util/rdfs-nice.n3#bbb> <../../util/rdfs-nice.n3#yyy> .
+                            } .
+                        } ] ];
+                 :gives {ex:bob     ex:hasAncestor ex:fredo .
+                } ] );
+         :rule  [
+             a :Extraction;
+             :because <#_g4>;
+             :gives { @forAll <../../util/rdfs-nice.n3#bbb>,
+                        <../../util/rdfs-nice.n3#xxx>,
+                        <../../util/rdfs-nice.n3#yyy> .
+            {
+                 @forSome <#_g14> .
+                <../../util/rdfs-nice.n3#xxx>     <#_g14> <../../util/rdfs-nice.n3#yyy> .
+                <#_g14>     rdfs:subPropertyOf <../../util/rdfs-nice.n3#bbb> .
+                
+                }     log:implies {<../../util/rdfs-nice.n3#xxx>     <../../util/rdfs-nice.n3#bbb> <../../util/rdfs-nice.n3#yyy> .
+                } .
+            } ] .
+    
+#ENDS
