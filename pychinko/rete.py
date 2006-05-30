@@ -82,6 +82,7 @@ class RuleCompiler(object):
     
     def compile(self, rules):        
         for rule in rules:
+            print "%s of %s" % (rules.index(rule), len(rules))
             alphaNodesOfRule = AlphaStore()
             for pattern in rule.lhs:
                 anodePattern = Pattern(pattern.s, pattern.p, pattern.o)

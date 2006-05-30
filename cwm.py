@@ -579,7 +579,8 @@ rdf/xml files. Note that this requires rdflib.
             elif _lhs == "-engine":
                 option_engine = _rhs
                 
-            elif arg == "-think":  
+            elif arg == "-think":
+                workingContext.isWorkingContext = True
                 think(workingContext, mode=option_flags["think"])
 
             elif arg == '-rete':

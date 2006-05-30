@@ -4,8 +4,9 @@
 
     :C     :a :b;
          = :S .
+    :W = :W .
     {
         :S     :a :X .
-
+        ?X = ?X .
         }     <http://www.w3.org/2000/10/swap/log#implies> {:Q     :Q :Q .
         } .

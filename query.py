@@ -889,6 +889,8 @@ class Query(Formula):
         before = self.store.size
         delta = self.targetContext.loadFormulaWithSubstitution(
 		    self.conclusion, b2, why=reason)
+        if diag.chatty_flag>9 and delta:
+            progress(" --- because of: %s => %s" % (self.template.debugString(), self.conclusion.debugString()))
         if diag.chatty_flag>30:
             progress("Added %i, nominal size of store changed from %i to %i."%(delta, before, self.store.size))
         return delta #  self.store.size - before
@@ -1192,6 +1194,8 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
     When a remote query is done, query lines to the same server have to be coordinated again.
     """
     def __init__(self, query, quad):
+        quad = lookupQuad(quad[CONTEXT]._redirections, quad)
+        #print quad[CONTEXT]._redirections
         self.quad = quad
 	self.query = query
         self.searchPattern = None # Will be list of variables

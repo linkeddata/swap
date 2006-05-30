@@ -335,6 +335,7 @@ class Premise(Reason):
     has to tell a Premis what statements it has.
     """
     def __init__(self, str, because=None):
+#        raise RuntimeError
 	Reason.__init__(self)
 	self._string = str
 	self._reason = because
