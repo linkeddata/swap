@@ -1,0 +1,11 @@
+     @prefix : <#> .
+
+     @forAll :X .
+
+    :C     :a :b;
+         = :S .
+    {
+        :S     :a :X .
+
+        }     <http://www.w3.org/2000/10/swap/log#implies> {:Q     :Q :Q .
+        } .
