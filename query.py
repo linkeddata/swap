@@ -1861,7 +1861,7 @@ def smarterSubstitution(f, bindings, source):
         f2 = f.newFormula()
         f2.loadFormulaWithSubstitution(f, bindings, why=Because("I said so"))
         if f is not source:
-            newExistentials = f2.occurringIn(source.existentials().intersection(bindings.values()))
+            newExistentials = f2.occurringIn(source.existentials().intersection(Set(bindings.values())))
             for n in newExistentials:
                 f2.declareExistential(n)
         return f2.close()
