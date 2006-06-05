@@ -1,0 +1,85 @@
+@prefix : <http://www.w3.org/2000/10/swap/reason#> .
+@prefix pf: <http://www.w3.org/2000/10/swap/reason#> .
+@prefix n3: <http://www.w3.org/2004/06/rei#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix str: <http://www.w3.org/2000/10/swap/string#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+@prefix list: <http://www.w3.org/2000/10/swap/list#>.
+
+######
+{ ?cmd a :CommandLine; :args ?ARGS }
+ =>
+{ ?cmd rdfs:label "Invocation"; :_depth 1; :_body ?ARGS }.
+
+{ ?S :_depth ?N; :_body ?BODY; rdfs:label ?JUST.
+  ("\n%d. %s [%s]\n" ?N ?BODY ?JUST) str:format ?LINE.
+  ("%04d" ?N) str:format ?K.
+} => { ?K log:outputString ?LINE }.
+
+
+#####
+
+{ ?p a :Parsing; :source [ rdfs:label ?FN ];
+     :because [ rdfs:label ?WHYTXT; :_depth ?N ].
+  ("%s, Parsing <%s>" ?WHYTXT ?FN) str:format ?JUST.
+  (?N 1) math:sum ?N1.
+} => { ?p rdfs:label ?JUST; :_depth ?N1; :_body "{...}" }.
+
+{ [] :source ?D.
+  ?D log:uri ?DOCID.
+  (?DOCID ".*/([^/]+)") str:scrape ?FN
+} => { ?D rdfs:label ?FN }.
+
+
+#######
+
+{ ?P a :Proof; :gives ?F.
+  (?F.log:n3String ".*\\.\\s*([^\\.]+)\\.\\s*$") str:scrape ?LASTSTATEMENT.
+} => {
+ [] :_depth 0; :_body ?LASTSTATEMENT; rdfs:label "Show".
+ }.
+
+#########
+
+{ ?S a :Extraction; :gives ?A; :because [ rdfs:label ?PF_AB; :_depth ?N].
+  ("%s, CE" ?PF_AB) str:format ?LABEL.
+  ?A log:n3String ?ATXT.
+  (?N 1) math:sum ?N1.
+} => {
+ ?S rdfs:label ?LABEL; :_body ?ATXT; :_depth ?N1.
+}.
+
+
+#########
+
+{ ?S a :Inference;
+  :rule [ rdfs:label ?RULEJUST; :_depth ?NR ];
+  # @@ case of 1 other premise, for now
+  :evidence ( [ rdfs:label ?JUST; :_depth ?NE ] );
+  :binding [ :variable [ n3:uri ?V]; :boundTo [ n3:uri ?T] ]. # one binding
+
+  (?V "#([^#]+)") str:scrape ?VNAME.
+  (?T "#([^#]+)") str:scrape ?TABBR.
+  ("rule(%s), evidence(%s), GMP ?%s := <...#%s>" ?RULEJUST ?JUST ?VNAME ?TABBR)
+     str:format ?LABEL.
+  (?NR ?NE 1) math:sum ?NI.
+}
+ => { ?S rdfs:label ?LABEL; :_depth ?NI;
+     :_body "{...}" # for some reason, cwm doesn't output :gives on :Inference
+ }.
+
+
+#########
+
+{ ?S a :Conjunction; :gives ?AB; :component [ rdfs:label ?PF_A; :_depth ?N]. #@@
+  (?N 1) math:sum ?N1.
+  ?AB log:n3String ?ABTXT.
+  ("%s, CI(1)" ?PF_A) str:format ?JUST.
+} => {
+ ?S :_depth ?N1; rdfs:label ?JUST; :_body ?ABTXT.
+}.
+
+
+
