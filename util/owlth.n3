@@ -4,6 +4,10 @@
 
 # owl pD* per ter Horst's paper, with some wrinkles
 
+#
+# H.J. ter Horst, Completeness, Decidability and Complexity of Entailment for RDF
+# Schema and a Semantic Extension Involving the OWL Vocabulary, Revised and
+# extended version of [11], Journal of Web Semantics 3 (2005) 79-115.
 
 ### Axioms
 
