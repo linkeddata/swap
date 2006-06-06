@@ -1,0 +1,534 @@
+# A new attempt at owl rules
+# We will take this slowly to try to stay working
+
+## standard namespaces
+@prefix  rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix  rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix  xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix  owl:     <http://www.w3.org/2002/07/owl#> .
+
+## cwm namespaces
+@prefix  log:     <http://www.w3.org/2000/10/swap/log#> .
+@prefix  math:    <http://www.w3.org/2000/10/swap/math#> .
+@prefix  list:    <http://www.w3.org/2000/10/swap/list#> .
+
+### this document
+@prefix  : <#> .
+
+# RDF rules
+{?S ?P ?O} => {?P a rdf:Property} .
+
+## pick up rdfs information
+<> owl:imports <http://www.w3.org/2000/01/rdf-schema> .
+
+########## The above should import
+##rdf:Alt rdfs:subClassOf rdfs:Container.
+##rdf:Bag rdfs:subClassOf rdfs:Container.
+##rdfs:ContainerMembershipProperty rdfs:subClassOf rdf:Property.
+##rdfs:Datatype rdfs:subClassOf rdfs:Class.
+##rdf:Seq rdfs:subClassOf rdfs:Container.
+##rdf:XMLLiteral rdfs:subClassOf rdfs:Literal; a rdfs:Datatype.
+
+##rdfs:comment rdfs:domain rdfs:Resource; rdfs:range rdfs:Literal.
+##rdfs:domain rdfs:domain rdf:Property; rdfs:range rdfs:Class.
+##rdf:first rdfs:domain rdf:List; rdfs:range rdfs:Resource; a owl:FunctionalProperty.
+##rdfs:isDefinedBy rdfs:domain rdfs:Resource; rdfs:range rdfs:Resource; rdfs:subPropertyOf rdfs:seeAlso.
+##rdfs:label rdfs:domain rdfs:Resource; rdfs:range rdfs:Literal.
+##rdfs:member rdfs:domain rdfs:Container; rdfs:range rdfs:Resource.
+##rdf:object rdfs:domain rdf:Statement; rdfs:range rdfs:Resource.
+##rdf:predicate rdfs:domain rdf:Statement; rdfs:range rdf:Property.
+##rdfs:range rdfs:domain rdf:Property; rdfs:range rdfs:Class.
+##rdf:rest rdfs:domain rdf:List; rdfs:range rdf:List; a owl:FunctionalProperty.
+##rdfs:seeAlso rdfs:domain rdfs:Resource; rdfs:range rdfs:Resource.
+##rdfs:subClassOf rdfs:domain rdfs:Class; rdfs:range rdfs:Class.
+##rdfs:subPropertyOf rdfs:domain rdf:Property; rdfs:range rdf:Property.
+##rdf:subject rdfs:domain rdf:Statement; rdfs:range rdfs:Resource.
+##rdf:type rdfs:domain rdfs:Resource; rdfs:range rdfs:Class.
+##rdf:value rdfs:domain rdfs:Resource; rdfs:range rdfs:Resource.
+
+## a useful triple
+rdf:nil a rdf:List.
+
+## RDFS rules
+{?P rdfs:domain ?C .
+ ?S ?P ?O .
+} => { ?S a ?C } .
+
+{?P rdfs:range ?C .
+ ?S ?P ?O .
+} => { ?O a ?C } .
+
+{?S ?P ?O
+} => { ?S a rdfs:Resource .
+       ?O a rdfs:Resource .
+     } .
+
+{?A rdfs:subPropertyOf ?B .
+ ?B rdfs:subPropertyOf ?C .
+} => {?A rdfs:subPropertyOf ?C } .
+
+{?P a rdf:Property} => {?P rdfs:subPropertyOf ?P} .
+
+{?P1 rdfs:subPropertyOf ?P2 .
+ ?S ?P1 ?O .
+} => {?S ?P2 ?O} .
+
+{?C a rdfs:Class} => {?C rdfs:subClassOf rdfs:Resource} .
+
+{?C1 rdfs:subClassOf ?C2 .
+ ?M a ?C1 .
+} => {?M a ?C2} .
+
+{?C a rdfs:Class} => {?C rdfs:subClassOf ?C} .
+
+{?A rdfs:subClassOf ?B .
+ ?B rdfs:subClassOf ?C .
+} => {?A rdfs:subClassOf ?C} .
+
+{?X a rdfs:ContainerMembershipProperty} => {?X rdfs:subPropertyOf rdfs:member} .
+
+{?X a rdfs:Datatype} => {?X rdfs:subClassOf rdfs:Literal} .
+
+##### until this point is in http://eulersharp.sourceforge.net/2003/03swap/rdfs-rules.n3 --- should we just do
+## <> owl:imports <http://eulersharp.sourceforge.net/2003/03swap/rdfs-rules.n3> . 
+##### ?
+
+
+rdfs:comment     a owl:AnnotationProperty .
+
+rdfs:isDefinedBy     a owl:AnnotationProperty .
+
+rdfs:label     a owl:AnnotationProperty .
+
+rdfs:seeAlso     a owl:AnnotationProperty .
+
+### owl:AllDifferent
+owl:AllDifferent     a rdfs:Class .
+
+### owl:AllDifferent rules
+
+##############################
+
+owl:AnnotationProperty     a rdfs:Class;
+         rdfs:subClassOf rdf:Property .
+
+owl:Class     a rdfs:Class;
+         rdfs:subClassOf rdfs:Class .
+
+owl:DataRange     a rdfs:Class .
+
+owl:DatatypeProperty     a rdfs:Class;
+         rdfs:subClassOf rdf:Property .
+
+owl:DeprecatedClass     a rdfs:Class;
+         rdfs:subClassOf rdfs:Class .
+
+owl:DeprecatedProperty     a rdfs:Class;
+         rdfs:subClassOf rdf:Property .
+
+
+### owl:FunctionalProperty
+owl:FunctionalProperty     a rdfs:Class;
+         rdfs:subClassOf rdf:Property .
+
+### owl:FunctionalProperty rules
+{?P a owl:FunctionalProperty .
+  ?S ?P ?O1, ?O2 .
+} => {?O1 owl:sameAs ?O2} .
+
+#################################
+
+### owl:InverseFunctionalProperty
+owl:InverseFunctionalProperty     a rdfs:Class;
+         rdfs:subClassOf owl:ObjectProperty .
+
+### owl:InverseFunctionalProperty rules
+{?P a owl:InverseFunctionalProperty .
+ ?O @is ?P @of ?S1, ?S2 .
+} => {?S1 owl:sameAs ?S2} .
+
+#################################
+
+owl:Nothing     a owl:Class;
+         owl:complementOf owl:Thing .
+{ [ a owl:Nothing ] } => {:WeNeed a :FailureCondition} .
+
+
+
+owl:ObjectProperty     a rdfs:Class;
+         rdfs:subClassOf rdf:Property .
+
+owl:Ontology     a rdfs:Class .
+
+owl:OntologyProperty     a rdfs:Class;
+         rdfs:subClassOf rdf:Property .
+
+owl:Restriction     a rdfs:Class;
+         rdfs:subClassOf owl:Class .
+
+### owl:SymmetricProperty
+owl:SymmetricProperty     a rdfs:Class;
+         rdfs:subClassOf owl:ObjectProperty .
+
+### owl:SymmetricProperty rules
+{?P a owl:SymmetricProperty .
+ ?S ?P ?O .
+} => {?O ?P ?S} .
+
+###############################
+
+### owl:Thing
+owl:Thing     a owl:Class;
+         owl:unionOf  (
+        owl:Nothing
+         [
+                 a owl:Class;
+                 owl:complementOf owl:Nothing ] ) .
+[ a owl:Thing ] .
+
+### owl:Thing rules
+{?X a owl:Class} => {?X rdfs:subClassOf owl:Thing} .
+
+###############################
+
+### owl:TransitiveProperty
+owl:TransitiveProperty     a rdfs:Class;
+         rdfs:subClassOf owl:ObjectProperty .
+
+### owl:TransitiveProperty rules
+{?P a owl:TransitiveProperty .
+ ?S ?P [ ?P ?O ] .
+} => {?S ?P ?O} .
+
+################################
+
+owl:allValuesFrom     a rdf:Property;
+         rdfs:domain owl:Restriction;
+         rdfs:range rdfs:Class .
+
+owl:backwardCompatibleWith     a rdf:Property,
+                owl:OntologyProperty;
+         rdfs:domain owl:Ontology;
+         rdfs:range owl:Ontology .
+
+owl:cardinality     a rdf:Property;
+         rdfs:domain owl:Restriction;
+         rdfs:label "cardinality";
+         rdfs:range </2001/XMLSchema#nonNegativeInteger> .
+
+owl:complementOf     a rdf:Property;
+         rdfs:domain owl:Class;
+         rdfs:label "complementOf";
+         rdfs:range owl:Class .
+
+    owl:differentFrom     a rdf:Property;
+         rdfs:domain owl:Thing;
+         rdfs:label "differentFrom";
+         rdfs:range owl:Thing .
+
+    owl:disjointWith     a rdf:Property;
+         rdfs:domain owl:Class;
+         rdfs:label "disjointWith";
+         rdfs:range owl:Class .
+
+### owl:distinctMembers
+owl:distinctMembers     a rdf:Property;
+         rdfs:domain owl:AllDifferent;
+         rdfs:label "distinctMembers";
+         rdfs:range rdf:List .
+
+### owl:distinctMembers rules
+{?X owl:distinctMembers ?L} => {?L :subList ?L} .
+{ ?L :subList ?L2 .
+  ?L2 rdf:first ?F; rdf:rest ?L3 .
+} => { ?L :subList ?L3 } .
+
+{?X owl:distinctMembers ?L .
+ ?L :subList ?L2 .
+ ?L2 rdf:first ?F;
+    rdf:rest ?L3 .
+ ?L3 list:member ?G .
+} => {?F owl:differentFrom ?G} .
+
+#################################
+
+### owl:equivalentClass
+owl:equivalentClass     a rdf:Property, 
+                          owl:SymmetricProperty;
+         rdfs:domain owl:Class;
+         rdfs:label "equivalentClass";
+         rdfs:range owl:Class;
+         rdfs:subPropertyOf rdfs:subClassOf .
+
+rdfs:subClassOf a owl:TransitiveProperty . 
+owl:Nothing owl:equivalentClass owl:Nothing .
+
+### owl:equivalentClass rules
+{?A owl:equivalentClass ?B .
+ ?X a ?A .
+} => {?X a ?B} .
+
+{?C a owl:Class} => {?C owl:equivalentClass ?C} .
+{?A a owl:Class; rdfs:subClassOf ?B . ?B a owl:Class; rdfs:subClassOf ?A } => {?A owl:equivalentClass ?B} .
+
+### owl:equivalentProperty
+owl:equivalentProperty     a rdf:Property;
+         rdfs:label "equivalentProperty";
+         a owl:SymmetricProperty;
+         rdfs:subPropertyOf rdfs:subPropertyOf .
+
+rdfs:subPropertyOf a owl:TransitiveProperty .
+
+### owl:equivalentProperty rules
+{?P1 owl:equivalentProperty ?P2 .
+ ?S ?P1 ?O .
+} => {?S ?P2 ?O} .
+
+{?A rdfs:subPropertyOf ?B. ?B rdfs:subPropertyOf ?A} => {?A owl:equivalentProperty ?B} .
+
+{?P a rdf:Property} => {?P owl:equivalentProperty ?P} .
+
+###################################################
+
+    owl:hasValue     a rdf:Property;
+         rdfs:domain owl:Restriction;
+         rdfs:label "hasValue" .
+
+    owl:imports     a rdf:Property,
+                owl:OntologyProperty;
+         rdfs:domain owl:Ontology;
+         rdfs:label "imports";
+         rdfs:range owl:Ontology .
+
+    owl:incompatibleWith     a rdf:Property,
+                owl:OntologyProperty;
+         rdfs:domain owl:Ontology;
+         rdfs:label "incompatibleWith";
+         rdfs:range owl:Ontology .
+
+### owl:intersectionOf
+    owl:intersectionOf     a rdf:Property;
+         rdfs:domain owl:Class;
+         rdfs:label "intersectionOf";
+         rdfs:range rdf:List .
+
+### owl:intersectionOf rules
+{?A owl:intersectionOf ?L .
+ ?L list:member ?K .
+} => {?K a owl:Class} .
+
+{?A owl:intersectionOf ?L .
+ ?L list:member ?K .
+} => {?A rdfs:subClassOf ?K} .
+
+# actually figure out what is in the intersection
+{?A owl:intersectionOf ?L .
+} => {?L a :NeedsAllMembers} .
+
+{?L rdf:rest ?L2;
+    a :NeedsAllMembers .
+} => {?L a :NeedsAllMembers} .
+
+{(?C) a :NeedsAllMembers .
+ ?X a ?C .
+} => {(?C) :allMembers ?X} .
+
+{?L a :NeedsAllMembers;
+    rdf:first ?F;
+    rdf:rest ?L2 .
+ ?L2 :allMembers ?X .
+ ?X a ?F .
+} => {?L :allMembers ?X} .
+
+# A couple special cases
+{?A owl:intersectionOf ?L .
+ ?L :allMembers ?X .
+} => {?X a ?A} .
+
+{?A owl:intersectionOf ?L .
+ ?L list:member ?K .
+ ?K owl:equivalentClass owl:Nothing .
+} => {?A owl:equivalentClass owl:Nothing} .
+
+{?A owl:intersectionOf ?L .
+ ?L list:member ?C, ?D .
+ ?C owl:disjointWith ?D .
+} => {?A owl:equivalentClass owl:Nothing} .
+
+######################################
+
+### owl:inverseOf
+owl:inverseOf     a rdf:Property, owl:SymmetricProperty;
+         rdfs:domain owl:ObjectProperty;
+         rdfs:label "inverseOf";
+         rdfs:range owl:ObjectProperty .
+
+### owl:inverseOf rules
+{?P owl:inverseOf ?Q . 
+ ?A ?P ?B .
+} => {?B ?Q ?A} .
+
+########################################################
+
+    owl:maxCardinality     a rdf:Property;
+         rdfs:domain owl:Restriction;
+         rdfs:label "maxCardinality";
+         rdfs:range </2001/XMLSchema#nonNegativeInteger> .
+
+    owl:minCardinality     a rdf:Property;
+         rdfs:domain owl:Restriction;
+         rdfs:label "minCardinality";
+         rdfs:range </2001/XMLSchema#nonNegativeInteger> .
+
+    owl:onProperty     a rdf:Property;
+         rdfs:domain owl:Restriction;
+         rdfs:label "onProperty";
+         rdfs:range rdf:Property .
+
+### owl:oneOf
+    owl:oneOf     a rdf:Property;
+         rdfs:domain rdfs:Class;
+         rdfs:label "oneOf";
+         rdfs:range rdf:List .
+
+### owl:oneOf rules
+{?C owl:oneOf ?L .
+ ?L list:member ?X .
+} => {?X a ?C} .
+####################################
+
+    owl:priorVersion     a rdf:Property,
+                owl:OntologyProperty;
+         rdfs:domain owl:Ontology;
+         rdfs:label "priorVersion";
+         rdfs:range owl:Ontology .
+
+### owl:sameAs
+
+    owl:sameAs     a rdf:Property;
+         rdfs:domain owl:Thing;
+         rdfs:label "sameAs";
+         rdfs:range owl:Thing .
+
+#### Try to axiomize owl:sameAs
+#### should we teach cwm all about it instead?
+#### how much does cwm know already?
+
+### reflexive  --- this is killer, and will always generate "owl:sameAs owl:sameAs owl:sameAs."
+{?A a rdfs:Resource} => {?A owl:sameAs ?A} .
+{?A a rdf:Property} => {?A owl:sameAs ?A} .
+
+### symmetric
+{?A owl:sameAs ?B} => {?B owl:sameAs ?A} .
+
+### transitive
+{?A owl:sameAs ?B .
+ ?B owl:sameAs ?C .
+} => {?A owl:sameAs ?C} .
+
+### substitutive
+{?A owl:sameAs ?B .
+ ?A ?P ?O .
+} => {?B ?P ?O} .
+
+{?A owl:sameAs ?B .
+ ?S ?A ?O .
+} => {?S ?B ?O} .
+
+{?A owl:sameAs ?B .
+ ?S ?P ?A .
+} => {?S ?P ?B} .
+###################################
+
+    owl:someValuesFrom     a rdf:Property;
+         rdfs:domain owl:Restriction;
+         rdfs:label "someValuesFrom";
+         rdfs:range rdfs:Class .
+
+
+## owl:unionOf
+    owl:unionOf     a rdf:Property;
+         rdfs:domain owl:Class;
+         rdfs:label "unionOf";
+         rdfs:range rdf:List .
+
+### owl:unionOf rules
+{?C owl:unionOf ?L . 
+ ?L list:member ?C2 .
+ ?X a ?C2 .
+} => {?X a ?C} .
+
+{?C owl:unionOf ?L .
+ ?L list:member ?K .
+} => {?K rdfs:subClassOf ?C} .
+
+{?C owl:unionOf ?L .
+ ?L list:member owl:Thing .
+} => {?C owl:equivalentClass owl:Thing} .
+
+{?C owl:unionOf ?L .
+ ?L list:member ?K, ?L .
+ ?K owl:complementOf ?L .
+} => {?C owl:equivalentClass owl:Thing} .
+
+{?C owl:unionOf ?L .
+} => {?L a :NeedsRemoveUnions} .
+
+{?L a :NeedsRemoveUnions;
+      rdf:rest ?L2 .
+} => {?L2 a :NeedsRemoveUnions} .
+
+{[a ?X]} => {?X owl:disjointWith owl:Nothing} .
+
+rdf:nil :removeUnions rdf:nil .
+
+{?L a :NeedsRemoveUnions;
+      rdf:first ?K;
+      rdf:rest ?L2 .
+# ?K owl:disjointWith owl:Nothing .
+ ?L2 :removeUnions ?L3 .
+} => {?L :removeUnions [ rdf:first ?K; rdf:rest ?L3] } .
+
+{?L a :NeedsRemoveUnions;
+      rdf:first ?K;
+      rdf:rest ?L2 .
+ ?K owl:equivalentClass owl:Nothing .
+ ?L2 :removeUnions ?L3 .
+} => {?L :removeUnions ?L3} .
+
+{?C owl:unionOf ?L .
+ ?L :removeUnions ?L2 .
+} => {?C owl:unionOf ?L2} .
+
+{?C owl:unionOf (?K)} => {?C rdfs:subClassOf ?K} .
+
+###################################
+
+    owl:versionInfo     a rdf:Property,
+                owl:AnnotationProperty;
+         rdfs:label "versionInfo" .
+
+
+
+
+
+##{?C owl:unionOf ?L .
+## ?X a ?C .
+##} => {?X needsInstanceOfAny ?L} .
+##
+##{?L rdf:first ?H;
+##    rdf:rest  ?T .
+## ?X needsInstanceOfAny ?L .
+##} => {?X needsInstanceOfAny ?T } .
+##
+##{?X needsInstanceOfAny rdf:nil} =? {?X failsInstance ?nil} .
+##{?L rdf:first ?H;
+##    rdf:rest  ?T .
+## ?X needsInstanceOfAny ?L .
+## ?X 
+##} => {?X needsInstanceOfAny ?T } .
+
+
+
+
+### owl:minCardinality and owl:maxCardinality
