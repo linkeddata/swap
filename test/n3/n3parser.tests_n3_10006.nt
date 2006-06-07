@@ -157,6 +157,30 @@
     
     <http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10020>     <http://www.w3.org/2004/11/n3test#outputDocument> <http://www.w3.org/2000/10/swap/test/n3/n3parser.tests_n3_10020.nt> .
     
+    <http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10021>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/11/n3test#PositiveParserTest> .
+    
+    <http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10021>     <http://www.w3.org/2004/11/n3test#description> "Are we exceeding a maximum recursion limit or two?" .
+    
+    <http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10021>     <http://www.w3.org/2004/11/n3test#inputDocument> <http://www.w3.org/2000/10/swap/test/syntax/too-nested.n3> .
+    
+    <http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10025>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/11/n3test#PositiveParserTest> .
+    
+    <http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10025>     <http://www.w3.org/2004/11/n3test#description> "The = keyword" .
+    
+    <http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10025>     <http://www.w3.org/2004/11/n3test#inputDocument> <http://www.w3.org/2000/10/swap/test/syntax/equals1.n3> .
+    
+    <http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10026>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/11/n3test#PositiveParserTest> .
+    
+    <http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10026>     <http://www.w3.org/2004/11/n3test#description> "The = keyword" .
+    
+    <http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10026>     <http://www.w3.org/2004/11/n3test#inputDocument> <http://www.w3.org/2000/10/swap/test/syntax/equals2.n3> .
+    
+    <http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10027>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/11/n3test#PositiveParserTest> .
+    
+    <http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10027>     <http://www.w3.org/2004/11/n3test#description> "A statement that says nothing at all" .
+    
+    <http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10027>     <http://www.w3.org/2004/11/n3test#inputDocument> <http://www.w3.org/2000/10/swap/test/syntax/zero-predicates.n3> .
+    
     <http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20000>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/11/n3test#NegativeParserTest> .
     
     <http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20000>     <http://www.w3.org/2004/11/n3test#description> "something that isn't n3" .
@@ -177,7 +201,25 @@
     
     <http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20003>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/11/n3test#NegativeParserTest> .
     
-    <http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20003>     <http://www.w3.org/2004/11/n3test#description> "single quoted strings are illegal" .
+    <http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20003>     <http://www.w3.org/2004/11/n3test#description> "The `this' keyword is no longer legal " .
     
     <http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20003>     <http://www.w3.org/2004/11/n3test#inputDocument> <http://www.w3.org/2000/10/swap/test/syntax/neg-thisadoc.n3> .
+    
+    <http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20004>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/11/n3test#NegativeParserTest> .
+    
+    <http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20004>     <http://www.w3.org/2004/11/n3test#description> "A predicate cannot be a literal, I hope" .
+    
+    <http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20004>     <http://www.w3.org/2004/11/n3test#inputDocument> <http://www.w3.org/2000/10/swap/test/syntax/neg-literal-predicate.n3> .
+    
+    <http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20005>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/11/n3test#NegativeParserTest> .
+    
+    <http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20005>     <http://www.w3.org/2004/11/n3test#description> "A predicate cannot be a formula, I hope" .
+    
+    <http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20005>     <http://www.w3.org/2004/11/n3test#inputDocument> <http://www.w3.org/2000/10/swap/test/syntax/neg-formula-predicate.n3> .
+    
+    <http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20028>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/11/n3test#NegativeParserTest> .
+    
+    <http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20028>     <http://www.w3.org/2004/11/n3test#description> "A statement that says nothing at all" .
+    
+    <http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20028>     <http://www.w3.org/2004/11/n3test#inputDocument> <http://www.w3.org/2000/10/swap/test/syntax/zero-objects.n3> .
     

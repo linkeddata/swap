@@ -67,13 +67,27 @@
     
     _:li17     <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
     
-    _:li19     <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://www.w3.org/2000/10/swap/test/n3/.run-1100818951.269227p32593#_g5> .
+    _:g28     <http://www.w3.org/2002/07/owl#oneOf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
     
-    _:li19     <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:li18 .
+    _:g29     <http://www.w3.org/2002/07/owl#oneOf> _:li20 .
     
-    _:li18     <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://www.w3.org/2000/10/swap/test/n3/.run-1100818951.269227p32593#_g6> .
+    _:li20     <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:g12 .
     
-    _:li18     <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+    _:li20     <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+    
+    _:g30     <http://www.w3.org/2002/07/owl#oneOf> _:li21 .
+    
+    _:li21     <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:g20 .
+    
+    _:li21     <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+    
+    _:li23     <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:g9 .
+    
+    _:li23     <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:li22 .
+    
+    _:li22     <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:g17 .
+    
+    _:li22     <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
     
     <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil>     <http://www.w3.org/2000/10/swap/test/test#verb0> <http://www.w3.org/2000/10/swap/test/test#object0> .
     
@@ -93,9 +107,45 @@
     
     <http://www.w3.org/2000/10/swap/test/test#twoAnons>     <http://www.w3.org/2002/07/owl#sameAs> _:li13 .
     
-    <http://www.w3.org/2000/10/swap/test/test#twoFormulae>     <http://www.w3.org/2002/07/owl#sameAs> _:li19 .
+    <http://www.w3.org/2000/10/swap/test/test#twoFormulae>     <http://www.w3.org/2002/07/owl#sameAs> _:li23 .
     
     _:L17C14     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/10/swap/test/test#mother> .
     
     _:L17C25     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/10/swap/test/test#father> .
+    
+    _:g9     <http://www.w3.org/2004/06/rei#existentials> _:g28 .
+    
+    _:g9     <http://www.w3.org/2004/06/rei#statements> _:g29 .
+    
+    _:g9     <http://www.w3.org/2004/06/rei#universals> _:g28 .
+    
+    _:g12     <http://www.w3.org/2004/06/rei#object> _:g15 .
+    
+    _:g12     <http://www.w3.org/2004/06/rei#predicate> _:g14 .
+    
+    _:g12     <http://www.w3.org/2004/06/rei#subject> _:g13 .
+    
+    _:g13     <http://www.w3.org/2004/06/rei#uri> "http://www.w3.org/2000/10/swap/test/test#a" .
+    
+    _:g14     <http://www.w3.org/2004/06/rei#uri> "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" .
+    
+    _:g15     <http://www.w3.org/2004/06/rei#uri> "http://www.w3.org/2000/10/swap/test/test#mother" .
+    
+    _:g17     <http://www.w3.org/2004/06/rei#existentials> _:g28 .
+    
+    _:g17     <http://www.w3.org/2004/06/rei#statements> _:g30 .
+    
+    _:g17     <http://www.w3.org/2004/06/rei#universals> _:g28 .
+    
+    _:g20     <http://www.w3.org/2004/06/rei#object> _:g23 .
+    
+    _:g20     <http://www.w3.org/2004/06/rei#predicate> _:g22 .
+    
+    _:g20     <http://www.w3.org/2004/06/rei#subject> _:g21 .
+    
+    _:g21     <http://www.w3.org/2004/06/rei#uri> "http://www.w3.org/2000/10/swap/test/test#b" .
+    
+    _:g22     <http://www.w3.org/2004/06/rei#uri> "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" .
+    
+    _:g23     <http://www.w3.org/2004/06/rei#uri> "http://www.w3.org/2000/10/swap/test/test#father" .
     
