@@ -1,7 +1,7 @@
     
-    <http://www.w3.org/2000/10/swap/test/syntax/qvars1.n3#_work>     <<http://www.w3.org/2000/10/swap/log#forAll> <http://www.w3.org/2000/10/swap/test/syntax/qvars1.n3#a> .
+    <http://www.w3.org/2000/10/swap/test/syntax/qvars1.n3#_work>     <http://www.w3.org/2000/10/swap/log#forAll> <http://www.w3.org/2000/10/swap/test/syntax/qvars1.n3#a> .
     
-    <http://www.w3.org/2000/10/swap/test/syntax/qvars1.n3#_work>     <<http://www.w3.org/2000/10/swap/log#forAll> <http://www.w3.org/2000/10/swap/test/syntax/qvars1.n3#b> .
+    <http://www.w3.org/2000/10/swap/test/syntax/qvars1.n3#_work>     <http://www.w3.org/2000/10/swap/log#forAll> <http://www.w3.org/2000/10/swap/test/syntax/qvars1.n3#b> .
     
-    <http://www.w3.org/2000/10/swap/test/syntax/qvars1.n3#_work>     <<http://www.w3.org/2000/10/swap/log#forAll> <http://www.w3.org/2000/10/swap/test/syntax/qvars1.n3#c> .
+    <http://www.w3.org/2000/10/swap/test/syntax/qvars1.n3#_work>     <http://www.w3.org/2000/10/swap/log#forAll> <http://www.w3.org/2000/10/swap/test/syntax/qvars1.n3#c> .
     

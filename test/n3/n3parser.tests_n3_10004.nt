@@ -1,9 +1,9 @@
     
-    <http://www.w3.org/2000/10/swap/test/syntax/keywords2.n3#_work>     <<http://www.w3.org/2000/10/swap/log#forAll> <http://www.w3.org/2000/10/swap/test/syntax/foo.n3#x> .
+    <http://www.w3.org/2000/10/swap/test/syntax/keywords2.n3#_work>     <http://www.w3.org/2000/10/swap/log#forAll> <http://www.w3.org/2000/10/swap/test/syntax/foo.n3#x> .
     
-    <http://www.w3.org/2000/10/swap/test/syntax/keywords2.n3#_work>     <<http://www.w3.org/2000/10/swap/log#forAll> <http://www.w3.org/2000/10/swap/test/syntax/foo.n3#y> .
+    <http://www.w3.org/2000/10/swap/test/syntax/keywords2.n3#_work>     <http://www.w3.org/2000/10/swap/log#forAll> <http://www.w3.org/2000/10/swap/test/syntax/foo.n3#y> .
     
-    <http://www.w3.org/2000/10/swap/test/syntax/keywords2.n3#_work>     <<http://www.w3.org/2000/10/swap/log#forAll> <http://www.w3.org/2000/10/swap/test/syntax/foo.n3#z> .
+    <http://www.w3.org/2000/10/swap/test/syntax/keywords2.n3#_work>     <http://www.w3.org/2000/10/swap/log#forAll> <http://www.w3.org/2000/10/swap/test/syntax/foo.n3#z> .
     
     _:b     _:a _:c .
     

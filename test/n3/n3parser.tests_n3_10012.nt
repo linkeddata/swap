@@ -19,7 +19,7 @@
     
     _:li5     <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
     
-    _:li2     <<http://www.w3.org/2000/10/swap/math#sum> _:L20C12 .
+    _:li2     <http://www.w3.org/2000/10/swap/math#sum> _:L20C12 .
     
     _:li4     <http://www.w3.org/2000/10/swap/test/syntax/path2.n3#relatedTo> _:li5 .
     
