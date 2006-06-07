@@ -19,35 +19,35 @@
     
     _:li5     <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
     
-    _:li2     <http://www.w3.org/2000/10/swap/math#sum> _:L20C12 .
+    _:li2     <<http://www.w3.org/2000/10/swap/math#sum> _:L20C12 .
     
-    _:li4     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/path2.n3#relatedTo> _:li5 .
+    _:li4     <http://www.w3.org/2000/10/swap/test/syntax/path2.n3#relatedTo> _:li5 .
     
-    <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/a>     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/b> _:L27C7 .
+    <http://www.w3.org/2000/10/swap/test/syntax/a>     <http://www.w3.org/2000/10/swap/test/syntax/b> _:L27C7 .
     
-    <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/e>     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/f> _:L27C41 .
+    <http://www.w3.org/2000/10/swap/test/syntax/e>     <http://www.w3.org/2000/10/swap/test/syntax/f> _:L27C41 .
     
-    <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/foo.n3#admires>     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/foo.n3#converse> _:L18C21 .
+    <http://www.w3.org/2000/10/swap/test/syntax/foo.n3#admires>     <http://www.w3.org/2000/10/swap/test/syntax/foo.n3#converse> _:L18C21 .
     
-    <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/foo.n3#albert>     <http://www.daml.example.org/2001/03/fam#mother> _:L16C10 .
+    <http://www.w3.org/2000/10/swap/test/syntax/foo.n3#albert>     <http://www.daml.example.org/2001/03/fam#mother> _:L16C10 .
     
-    <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/foo.n3#albert>     _:L18C21 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/foo.n3#grumpy> .
+    <http://www.w3.org/2000/10/swap/test/syntax/foo.n3#albert>     _:L18C21 <http://www.w3.org/2000/10/swap/test/syntax/foo.n3#grumpy> .
     
-    <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/foo.n3#mentor>     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/foo.n3#inverse> _:L16C29 .
+    <http://www.w3.org/2000/10/swap/test/syntax/foo.n3#mentor>     <http://www.w3.org/2000/10/swap/test/syntax/foo.n3#inverse> _:L16C29 .
     
-    <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/foo.n3#x>     <http://www.w3.org/2000/01/rdf-schema#label> _:L22C22 .
+    <http://www.w3.org/2000/10/swap/test/syntax/foo.n3#x>     <http://www.w3.org/2000/01/rdf-schema#label> _:L22C22 .
     
-    <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/foo.n3#x>     <http://www.w3.org/2000/01/rdf-schema#label> _:L22C38 .
+    <http://www.w3.org/2000/10/swap/test/syntax/foo.n3#x>     <http://www.w3.org/2000/01/rdf-schema#label> _:L22C38 .
     
-    _:L16C10     _:L16C29 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/foo.n3#auntieAnne> .
+    _:L16C10     _:L16C29 <http://www.w3.org/2000/10/swap/test/syntax/foo.n3#auntieAnne> .
     
-    _:L20C12     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/foo.n3#THREE> .
+    _:L20C12     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/10/swap/test/syntax/foo.n3#THREE> .
     
     _:L22C22     <http://www.daml.example.org/2000/10/lang#eng> "Help!" .
     
     _:L22C38     <http://www.daml.example.org/2000/10/lang#fr> "foo" .
     
-    _:L27C16     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/d> <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/c> .
+    _:L27C16     <http://www.w3.org/2000/10/swap/test/syntax/d> <http://www.w3.org/2000/10/swap/test/syntax/c> .
     
-    _:L27C41     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/g> _:L27C45 .
+    _:L27C41     <http://www.w3.org/2000/10/swap/test/syntax/g> _:L27C45 .
     

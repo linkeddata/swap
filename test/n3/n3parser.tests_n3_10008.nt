@@ -1,5 +1,5 @@
     
-    <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/anon-prop.n3#anySubj>     _:L12C12 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/anon-prop.n3#anyObj> .
+    <http://www.w3.org/2000/10/swap/test/anon-prop.n3#anySubj>     _:L12C12 <http://www.w3.org/2000/10/swap/test/anon-prop.n3#anyObj> .
     
-    _:L12C12     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/anon-prop.n3#propProp> "red" .
+    _:L12C12     <http://www.w3.org/2000/10/swap/test/anon-prop.n3#propProp> "red" .
     
