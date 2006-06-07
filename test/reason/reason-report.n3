@@ -1,4 +1,4 @@
-@prefix : <http://www.w3.org/2000/10/swap/reason#> .
+	@prefix : <http://www.w3.org/2000/10/swap/reason#> .
 @prefix pf: <http://www.w3.org/2000/10/swap/reason#> .
 @prefix n3: <http://www.w3.org/2004/06/rei#> .
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
@@ -8,22 +8,34 @@
 
 @prefix list: <http://www.w3.org/2000/10/swap/list#>.
 
+########
+:CommandLine a :_StepType.
+:Parsing a :_StepType.
+:Extraction a :_StepType.
+:Conjunction a :_StepType.
+:Inference a :_StepType.
+
+{ ?S a [ a :_StepType ].
+  (?S.log:rawUri "(\\w+)$") str:scrape ?STEPNAME.
+} => { ?S :_stepName ?STEPNAME }.
+
+{ ?S :_depth ?N; :_body ?BODY; rdfs:label ?JUST;
+     :_stepName ?STEPNAME .
+
+  ("\n%d%s %s [%s]\n" ?N ?STEPNAME ?BODY ?JUST) str:format ?LINE.
+  ("%04d" ?N) str:format ?K.
+} => { ?K log:outputString ?LINE }.
+
 ######
 { ?cmd a :CommandLine; :args ?ARGS }
  =>
 { ?cmd rdfs:label "Invocation"; :_depth 1; :_body ?ARGS }.
 
-{ ?S :_depth ?N; :_body ?BODY; rdfs:label ?JUST.
-  ("\n%d. %s [%s]\n" ?N ?BODY ?JUST) str:format ?LINE.
-  ("%04d" ?N) str:format ?K.
-} => { ?K log:outputString ?LINE }.
-
-
 #####
 
 { ?p a :Parsing; :source [ rdfs:label ?FN ];
-     :because [ rdfs:label ?WHYTXT; :_depth ?N ].
-  ("%s, Parsing <%s>" ?WHYTXT ?FN) str:format ?JUST.
+     :because [ :_stepName ?WHY; :_depth ?N ].
+  ("%d%s, Parsing <%s>" ?N ?WHY ?FN) str:format ?JUST.
   (?N 1) math:sum ?N1.
 } => { ?p rdfs:label ?JUST; :_depth ?N1; :_body "{...}" }.
 
@@ -38,13 +50,13 @@
 { ?P a :Proof; :gives ?F.
   (?F.log:n3String ".*\\.\\s*([^\\.]+)\\.\\s*$") str:scrape ?LASTSTATEMENT.
 } => {
- [] :_depth 0; :_body ?LASTSTATEMENT; rdfs:label "Show".
+ [] :_depth 0; :_body ?LASTSTATEMENT; rdfs:label "Show"; :_stepName "Show".
  }.
 
 #########
 
-{ ?S a :Extraction; :gives ?A; :because [ rdfs:label ?PF_AB; :_depth ?N].
-  ("%s, CE" ?PF_AB) str:format ?LABEL.
+{ ?S a :Extraction; :gives ?A; :because [ :_stepName ?PF_AB; :_depth ?N].
+  ("%d%s, CE" ?N ?PF_AB) str:format ?LABEL.
   ?A log:n3String ?ATXT.
   (?N 1) math:sum ?N1.
 } => {
@@ -55,31 +67,65 @@
 #########
 
 { ?S a :Inference;
-  :rule [ rdfs:label ?RULEJUST; :_depth ?NR ];
+  :rule [ :_stepName ?RULEREF; :_depth ?NR ];
   # @@ case of 1 other premise, for now
-  :evidence ( [ rdfs:label ?JUST; :_depth ?NE ] );
-  :binding [ :variable [ n3:uri ?V]; :boundTo [ n3:uri ?T] ]. # one binding
+  :_premiseRefs ?JP; :_premiseDepth ?NP;
 
+  # We show just one binding
+  :binding [ :variable [ n3:uri ?V]; :boundTo [ n3:uri ?T] ].
   (?V "#([^#]+)") str:scrape ?VNAME.
   (?T "#([^#]+)") str:scrape ?TABBR.
-  ("rule(%s), evidence(%s), GMP ?%s := <...#%s>" ?RULEJUST ?JUST ?VNAME ?TABBR)
+
+  ("%d%s, (%s), GMP ?%s := <...#%s>" ?NR ?RULEREF ?JP ?VNAME ?TABBR)
      str:format ?LABEL.
-  (?NR ?NE 1) math:sum ?NI.
+  (?NR ?NP) math:sum ?NI.
 }
  => { ?S rdfs:label ?LABEL; :_depth ?NI;
      :_body "{...}" # for some reason, cwm doesn't output :gives on :Inference
  }.
 
+# case of 1 other premise...
+{ ?S a :Inference;
+  :evidence ( [ :_stepName ?JR1; :_depth ?NE1 ] ).
+  (?NE1 1) math:sum ?NE.
+  ("%d%s" ?NE1 ?JR1) str:format ?JREFS.
+}
+ => { ?S :_premiseRefs ?JREFS; :_premiseDepth ?NE }.
+
+# case of 2 other premises...
+{ ?S a :Inference;
+  :evidence (
+   [ :_stepName ?J1; :_depth ?NE1 ]
+   [ :_stepName ?J2; :_depth ?NE2 ]
+    ).
+  (?NE1 ?NE2 1) math:sum ?NE.
+  ("%d%s, %d%s" ?NE1 ?J1 ?NE2 ?J2) str:format ?JUST.
+}
+ => { ?S :_premiseRefs ?JUST; :_premiseDepth ?NE }.
+
+# case of 3 other premises...
+{ ?S a :Inference;
+  :evidence (
+   [ :_stepName ?J1; :_depth ?NE1 ]
+   [ :_stepName ?J2; :_depth ?NE2 ]
+   [ :_stepName ?J3; :_depth ?NE3 ]
+    ).
+  (?NE1 ?NE2 ?NE3 1) math:sum ?NE.
+  ("%d%s, %d%s, %d%s" ?NE1 ?J1 ?NE2 ?J2 ?NE3 ?J3) str:format ?JUST.
+}
+ => { ?S :_premiseRefs ?JUST; :_premiseDepth ?NE }.
+
+
+
 
 #########
 
-{ ?S a :Conjunction; :gives ?AB; :component [ rdfs:label ?PF_A; :_depth ?N]. #@@
+{ ?S a :Conjunction; :gives ?AB; :component [ :_stepName ?PF_A; :_depth ?N]. #@@
   (?N 1) math:sum ?N1.
   ?AB log:n3String ?ABTXT.
-  ("%s, CI(1)" ?PF_A) str:format ?JUST.
+  ("%d%s, CI(1)" ?N ?PF_A) str:format ?JUST.
 } => {
  ?S :_depth ?N1; rdfs:label ?JUST; :_body ?ABTXT.
 }.
-
 
 
