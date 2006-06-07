@@ -1,0 +1,4 @@
+@keywords is, of, a.
+@prefix : <socrates.n3#>.
+
+{ socrates ?p Mortal } => { socrates ?p Mortal }.
