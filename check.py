@@ -60,11 +60,11 @@ def fyi(str, level=0, thresh=50):
     return None
 
 
-class Truth(object):
-    """A Truth is a worldview.
+class Axioms(object):
+    """A Axioms is a worldview.
     Within one there are valid premises
 
-    Every level of quotation necessarally opens a new Truth"""
+    Every level of quotation necessarally opens a new Axioms"""
     def __init__(self, validParses, premise=None):
         self.v = validParses
         self.premise = premise
@@ -199,7 +199,7 @@ def getTerm(proof, x):
 	return getSymbol(proof, x)
 
 
-def valid(proof, r=None, truth=None, level=0):
+def valid(proof, r=None, policy=None, level=0):
     """Check whether this reason is valid.
     
     proof   is the formula which contains the proof
@@ -212,7 +212,7 @@ def valid(proof, r=None, truth=None, level=0):
     Returns the formula proved or None if not
     """
     fyi("Starting valid on %s" % r, level=level, thresh=1000)
-    if truth is None:
+    if policy is None:
         raise RuntimeError
     if r == None:
         r = proof.the(pred=rdf.type, obj=reason.Proof)  #  thing to be proved
@@ -250,7 +250,7 @@ def valid(proof, r=None, truth=None, level=0):
 	res = proof.any(subj=r, pred=reason.source)
 	if res == None: return fail("No source given to parse", level=level)
 	u = res.uriref()
-	if not truth.canTrustSource(u):
+	if not policy.canTrustSource(u):
             return fail("I cannot trust that source")
 	v = verbosity()
 	setVerbosity(debugLevelForParsing)
@@ -283,7 +283,7 @@ def valid(proof, r=None, truth=None, level=0):
                 existentials.add(val)
 
 	rule = proof.the(subj=r, pred=reason.rule)
-	if not valid(proof, rule, truth, level):
+	if not valid(proof, rule, policy, level):
 	    return fail("No justification for rule "+`rule`, level)
 	for s in proof.the(rule, reason.gives).statements:  #@@@@@@ why look here?
 	    if s[PRED] is log.implies:
@@ -295,7 +295,7 @@ def valid(proof, r=None, truth=None, level=0):
 	# Check the evidence is itself proved
 	evidenceFormula = proof.newFormula()
 	for e in evidence:
-	    f2 = valid(proof, e, truth, level)
+	    f2 = valid(proof, e, policy, level)
 	    if f2 == None:
 		return fail("Evidence %s was not proved."%(e))
 	    f2.store.copyFormula(f2, evidenceFormula)
@@ -336,7 +336,7 @@ Bindings:%s
 	fyi("Conjunction:  %i components" % len(components))
 	g = r.store.newFormula()
 	for e in components:
-	    g1 = valid(proof, e, truth, level)
+	    g1 = valid(proof, e, policy, level)
 	    if not g1:
 		return fail("In Conjunction %s, evidence %s could not be proved."
 		    %(r,e), level=level)
@@ -417,9 +417,9 @@ It seems {%s} log:includes {%s} is false""" % (subj.n3String(), obj.n3String()))
         r2 = proof.the(r, reason.because)
         if r2 is None:
 	    return fail("Extraction: no source formula given for %s." % (`r`), level)
-        newTruth = Truth(False, subj)
+        newAxioms = Axioms(False, subj)
         fyi("Starting nested conclusion", level=level)
-        f2 = valid(proof, r2, newTruth, level)
+        f2 = valid(proof, r2, newAxioms, level)
         if f2 is None:
 	    return fail("Extraction: couldn't validate formula to be extracted from.", level)
 	if not isinstance(f2, Formula):
@@ -437,7 +437,7 @@ It seems {%s} log:includes {%s} is false""" % (subj.n3String(), obj.n3String()))
 	r2 = proof.the(r, reason.because)
 	if r2 == None:
 	    return fail("Extraction: no source formula given for %s." % (`r`), level)
-	f2 = valid(proof, r2, truth, level)
+	f2 = valid(proof, r2, policy, level)
 	if f2 == None:
 	    return fail("Extraction: couldn't validate formula to be extracted from.", level)
 	if not isinstance(f2, Formula):
@@ -457,7 +457,7 @@ It seems {%s} log:includes {%s} is false""" % (subj.n3String(), obj.n3String()))
 	g = proof.the(r, reason.gives)
 	if g is None: return fail("No given input for %s" % r)
 	fyi("Premise is: %s" % g.n3String(), level, thresh=25)
-	if not truth.assumes(g):
+	if not policy.assumes(g):
             return fail("I cannot assume %s" % g)
 
 	
@@ -530,8 +530,8 @@ def main():
 
     # setVerbosity(60)
     fyi("Length of proof formula: "+`len(proof)`, thresh=5)
-    truth = Truth(True)
-    proved = valid(proof, truth=truth)
+    policy = Axioms(True)
+    proved = valid(proof, policy=policy)
     if proved != None:
 	fyi("Proof looks OK.   %i Steps" % proofSteps, thresh=5)
 	setVerbosity(0)
