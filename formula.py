@@ -26,14 +26,8 @@ __version__ = '$Id$'[1:-1]
 from __future__ import generators
 
 import types
-import string
-import re
 import StringIO
-import sys
-import time
-import uripath
-
-from OrderedSequence import merge
+import sys # for outputstrings. shouldn't be here - DWC
 
 from set_importer import Set, ImmutableSet
 
@@ -594,6 +588,8 @@ class Formula(AnonymousNode, CompoundTerm):
         To output a string, associate (using the given relation) with a key
         such that the order of the keys is the order in which you want the corresponding
         strings output.
+
+        @@ what is this doing here??
         """
         if channel == None:
             channel = sys.stdout
