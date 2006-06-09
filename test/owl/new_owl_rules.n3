@@ -19,7 +19,7 @@
 {?S ?P ?O} => {?P a rdf:Property} .
 
 ## pick up rdfs information
-<> owl:imports <http://www.w3.org/2000/01/rdf-schema> .
+<> owl:imports <http://www.w3.org/2000/01/rdf-schema> . 
 
 ########## The above should import
 ##rdf:Alt rdfs:subClassOf rdfs:Container.
@@ -82,7 +82,7 @@ rdf:nil a rdf:List.
 {?C a rdfs:Class} => {?C rdfs:subClassOf ?C} .
 
 {?A rdfs:subClassOf ?B .
- ?B rdfs:subClassOf ?C .
+ ?B rdfs:subClassOf ?C . 
 } => {?A rdfs:subClassOf ?C} .
 
 {?X a rdfs:ContainerMembershipProperty} => {?X rdfs:subPropertyOf rdfs:member} .
@@ -216,10 +216,17 @@ owl:cardinality     a rdf:Property;
          rdfs:label "cardinality";
          rdfs:range </2001/XMLSchema#nonNegativeInteger> .
 
+###  owl:complementOf
 owl:complementOf     a rdf:Property;
          rdfs:domain owl:Class;
          rdfs:label "complementOf";
          rdfs:range owl:Class .
+
+{?D owl:complementOf ?C . 
+ ?D owl:equivalentClass owl:Nothing .
+} => {?C owl:equivalentClass owl:Thing} .
+
+#####################################
 
     owl:differentFrom     a rdf:Property;
          rdfs:domain owl:Thing;
@@ -478,7 +485,7 @@ owl:inverseOf     a rdf:Property, owl:SymmetricProperty;
       rdf:rest ?L2 .
 } => {?L2 a :NeedsRemoveUnions} .
 
-{[a ?X]} => {?X owl:disjointWith owl:Nothing} .
+{?X a owl:Class . [a ?X]} => {?X owl:disjointWith owl:Nothing} .
 
 rdf:nil :removeUnions rdf:nil .
 
