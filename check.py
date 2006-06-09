@@ -12,7 +12,7 @@ Command line options for debug:
 """
 # check that proof
 
-from swap.myStore import load, Namespace
+from swap.myStore import load, Namespace, formula
 from swap.RDFSink import CONTEXT, PRED, SUBJ, OBJ
 from swap.set_importer import Set
 from swap.term import List, Literal, CompoundTerm, BuiltIn, Function
@@ -48,18 +48,6 @@ knownReasons = Set([reason.Premise, reason.Parsing,
                     reason.Fact, reason.Extraction,
                     reason.CommandLine,
                     reason.Conclusion])
-
-
-def fail(str, level=0):
-    if chatty > 0:
-	progress(" "*(level*4), "Proof failed: ", str)
-    raise RuntimeError # This kludge will have to go for the paw server, no?
-    return None
-
-def fyi(str, level=0, thresh=50):
-    if chatty >= thresh:
-	progress(" "*(level*4),  str)
-    return None
 
 
 class Axioms(object):
@@ -308,7 +296,38 @@ def checkParsing(r, f, proof, policy):
     return g
 
 
-def checkGMP(r, f, proof, policy, level):
+_TestGMPStep = """
+@prefix soc: <http://example/socrates#>.
+@prefix : <http://www.w3.org/2000/10/swap/reason#>.
+@prefix n3: <http://www.w3.org/2004/06/rei#>.
+
+<#p1> a :Premise;
+  :gives {soc:socrates     a soc:Man . }.
+<#p2>  a :Premise;
+  :gives { @forAll soc:who .
+     { soc:who     a soc:Man . } => {soc:who     a soc:Mortal }
+  }.
+  
+<#step1> a :Inference;
+ :evidence  ( <#p1> );
+ :rule  <#p2>;
+ :binding  [
+   :variable [ n3:uri "http://example/socrates#who" ];
+   :boundTo [  n3:uri "http://example/socrates#socrates" ];
+   ].
+"""
+
+# """ emacs python mode needs help
+
+def checkGMP(r, f, proof, policy, level=0):
+    r"""check a generalized modus ponens step.
+
+    >>> soc = Namespace("http://example/socrates#")
+    >>> pf = _s2f(_TestGMPStep, "http://example/socrates")
+    >>> f = checkGMP(soc.step1, None, pf, _TestPolicy())
+    >>> f.n3String().strip()
+    u'@prefix : <http://example/socrates#> .\n    \n    :socrates     a :Mortal .'
+    """
     evidence = proof.the(subj=r, pred=reason.evidence)
     existentials = Set()
     bindings = {}
@@ -319,7 +338,7 @@ def checkGMP(r, f, proof, policy, level):
         # @@@ Check that they really are variables in the rule!
         val = getTerm(proof, val_rei)
         bindings[var] = val
-        if proof.contains(subj=val_rei, pred=rdf.type, obj=reason.Existential):
+        if val_rei in proof.existentials():
             existentials.add(val)
 
     rule = proof.the(subj=r, pred=reason.rule)
@@ -353,7 +372,7 @@ def checkGMP(r, f, proof, policy, level):
     fyi("Bindings: %s\nAntecedent after subst: %s" % (
         bindings, antecedent.debugString()),
         level, 195)
-    fyi("about to test if n3Entails(%s, %s)" % (evidenceFormula, antecedent), level, -1)
+    fyi("about to test if n3Entails(%s, %s)" % (evidenceFormula, antecedent), level, 1)
     fyi("about to test if n3Entails(%s, %s)" % (evidenceFormula.n3String(), antecedent.n3String()), level, 80)
     if not n3Entails(evidenceFormula, antecedent,
                     skipIncludes=1, level=level+1):
@@ -495,7 +514,7 @@ def checkExtraction(r, f, proof, policy, level):
 def usage():
     sys.stderr.write(__doc__)
     
-def main():
+def main(argv):
     global chatty
     global parsed
     global debugLevelForInference
@@ -505,7 +524,7 @@ def main():
     
     
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hv:c:p:B",
+        opts, args = getopt.getopt(argv[1:], "hv:c:p:B",
 	    [ "help", "verbose=", "chatty=", "parsing=", "nameBlankNodes"])
     except getopt.GetoptError:
 	sys.stderr.write("check.py:  Command line syntax error.\n\n")
@@ -546,8 +565,63 @@ def main():
     progress("Proof invalid.")
     exit(-1)
 
+################################
+# test harness and diagnostics
+
+def fail(str, level=0):
+    if chatty > 0:
+	progress(" "*(level*4), "Proof failed: ", str)
+    raise RuntimeError # This kludge will have to go for the paw server, no?
+    return None
+
+def fyi(str, level=0, thresh=50):
+    if chatty >= thresh:
+	progress(" "*(level*4),  str)
+    return None
+
+
+
+def _test():
+    import doctest
+    doctest.testmod()
+    
+class _TestPolicy(Axioms):
+    """The test policy is to accept all premises and no sources.
+    """
+    def __init__(self):
+        return Axioms.__init__(self, True)
+    def assumes(self, f):
+        return True
+    def canTrustSource(self, f):
+        return False
+
+
+def _s2f(s, base):
+    """make a formula from a string.
+    Cribbed from llyn.BI_parsedAsN3
+    should be part of the myStore API, no?
+
+    >>> f = _s2f(_TestGMPStep, "http://example/socrates")
+
+    """
+    import notation3
+    p = notation3.SinkParser(formula().store, baseURI=base)
+    p.startDoc()
+    p.feed(s)
+    f = p.endDoc()
+    f.close()
+    return f
+
+########
+
 if __name__ == "__main__":
     """This trick prevents the pydoc from actually running the script"""
-    main()
+    import sys
+    if '--test' in sys.argv:
+        _test()
+    else:
+        main(sys.argv)
+
+
 #ends
 
