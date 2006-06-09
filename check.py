@@ -38,6 +38,8 @@ debugLevelForParsing = 0
 nameBlankNodes = 0
 proofSteps = 0
 
+#@@ These globals need to be moved into a checker object
+# or something if this code is to be used in a server
 parsed = {} # Record of retrieval/parsings
 checked = {} # Formulae from checked reasons
 
@@ -51,7 +53,7 @@ knownReasons = Set([reason.Premise, reason.Parsing,
 def fail(str, level=0):
     if chatty > 0:
 	progress(" "*(level*4), "Proof failed: ", str)
-    raise RuntimeError
+    raise RuntimeError # This kludge will have to go for the paw server, no?
     return None
 
 def fyi(str, level=0, thresh=50):
@@ -94,12 +96,6 @@ def evidenceDiagnostics(subj, pred, obj, evidenceStatements, level):
 		    for i in range(len(p)):
 			fyi("   item %i = %s" %(i, `p[i]`), level=level)
 
-def bind(x, bindings):
-    return x.substitution(bindings)
-#    for var, val in bindings:     #  DUH
-#	if x is var: return val
-#    return x
-    
 def parse(resourceURI):
     global parsed
     f = parsed.get(resourceURI, None)
@@ -201,6 +197,9 @@ def getTerm(proof, x):
 
 def valid(proof, r=None, policy=None, level=0):
     """Check whether this reason is valid.
+
+    @@This code isn't reentrant. It assumes we're only
+    checking one proof per python process.
     
     proof   is the formula which contains the proof
     
@@ -213,7 +212,7 @@ def valid(proof, r=None, policy=None, level=0):
     """
     fyi("Starting valid on %s" % r, level=level, thresh=1000)
     if policy is None:
-        raise RuntimeError
+        raise RuntimeError #@@ huh? then why is this arg optional? -DWC
     if r == None:
         r = proof.the(pred=rdf.type, obj=reason.Proof)  #  thing to be proved
 	
@@ -247,212 +246,19 @@ def valid(proof, r=None, policy=None, level=0):
     level = level + 1
     
     if t is reason.Parsing:
-	res = proof.any(subj=r, pred=reason.source)
-	if res == None: return fail("No source given to parse", level=level)
-	u = res.uriref()
-	if not policy.canTrustSource(u):
-            return fail("I cannot trust that source")
-	v = verbosity()
-	setVerbosity(debugLevelForParsing)
-	try:
-	    g = parse(u)
-	except:   #   ValueError:  #@@@@@@@@@@@@ &&&&&&&&
-	    return fail("Can't retreive/parse <%s> because:\n  %s." 
-				%(u, sys.exc_info()[1].__str__()), level)
-	setVerbosity(v)
-	if f != None:  # Additional intermediate check not essential
-	    if f.unify(g) == []:
-		return fail("""Parsed data does not match that given.\n
-		Parsed: <%s>\n\n
-		Given: %s\n\n""" % (g,f) , level=level)
-	checked[r] = g
-	return g
-
+        return checkParsing(r, f, proof, policy)
     elif t is reason.Inference:
-	evidence = proof.the(subj=r, pred=reason.evidence)
-	existentials = Set()
-	bindings = {}
-	for b in proof.each(subj=r, pred=reason.binding):
-	    var_rei  = proof.the(subj=b, pred=reason.variable)
-	    var = getSymbol(proof, var_rei)
-	    val_rei  = proof.the(subj=b, pred=reason.boundTo)
-	    # @@@ Check that they really are variables in the rule!
-	    val = getTerm(proof, val_rei)
-	    bindings[var] = val
-	    if proof.contains(subj=val_rei, pred=rdf.type, obj=reason.Existential):
-                existentials.add(val)
-
-	rule = proof.the(subj=r, pred=reason.rule)
-	if not valid(proof, rule, policy, level):
-	    return fail("No justification for rule "+`rule`, level)
-	for s in proof.the(rule, reason.gives).statements:  #@@@@@@ why look here?
-	    if s[PRED] is log.implies:
-		ruleStatement = s
-		break
-	else: return fail("Rule has %s instead of log:implies as predicate.",
-	    level)
-	
-	# Check the evidence is itself proved
-	evidenceFormula = proof.newFormula()
-	for e in evidence:
-	    f2 = valid(proof, e, policy, level)
-	    if f2 == None:
-		return fail("Evidence %s was not proved."%(e))
-	    f2.store.copyFormula(f2, evidenceFormula)
-	evidenceFormula = evidenceFormula.close()
-	
-	# Check: Every antecedent statement must be included as evidence
-	antecedent = proof.newFormula()
-	antecedent.loadFormulaWithSubstitution(ruleStatement[SUBJ], bindings)
-	for k in bindings.values():
-            if k in existentials: #k in evidenceFormula.existentials() or 
-                antecedent.declareExistential(k)
-        antecedent = antecedent.close()
-	
-	#antecedent = ruleStatement[SUBJ].substitution(bindings)
-	fyi("Bindings: %s\nAntecedent after subst: %s" % (
-	    bindings, antecedent.debugString()),
-	    level, 195)
-	fyi("about to test if n3Entails(%s, %s)" % (evidenceFormula, antecedent), level, -1)
-	fyi("about to test if n3Entails(%s, %s)" % (evidenceFormula.n3String(), antecedent.n3String()), level, 80)
-	if not n3Entails(evidenceFormula, antecedent,
-			skipIncludes=1, level=level+1):
-	    return fail("""Can't find %s in evidence for
-Antecedent of rule: %s
-Evidence:%s
-Bindings:%s
-"""
-			  %((s[SUBJ], s[PRED],  s[OBJ]), antecedent.n3String(),
-			evidenceFormula.n3String(), bindings),
-			level=level)
-
-	fyi("Rule %s conditions met" % ruleStatement, level=level)
-
-	g = ruleStatement[OBJ].substitution(bindings)
-	
-	
+        g = checkGMP(r, f, proof, policy, level)
     elif t is reason.Conjunction:
-	components = proof.each(subj=r, pred=reason.component)
-	fyi("Conjunction:  %i components" % len(components))
-	g = r.store.newFormula()
-	for e in components:
-	    g1 = valid(proof, e, policy, level)
-	    if not g1:
-		return fail("In Conjunction %s, evidence %s could not be proved."
-		    %(r,e), level=level)
-	    before = len(g)
-	    g.loadFormulaWithSubstitution(g1)
-	    fyi("Conjunction: adding %i statements, was %i, total %i\nAdded: %s" %
-			(len(g1), before, len(g), g1.n3String()), level, thresh=80) 
-	g = g.close()
-	
+        g = checkConjunction(r, f, proof, policy, level)
     elif t is reason.Fact:
-	con, pred, subj, obj = statementFromFormula(f).quad
-	fyi("Built-in: testing fact {%s %s %s}" % (subj, pred, obj), level=level)
-	if pred is log.includes:
-            #log:includes is very special
-            if n3Entails(subj, obj):
-                checked[r] = f
-                return f
-            else:
-                return fail("""Include test failed.
-It seems {%s} log:includes {%s} is false""" % (subj.n3String(), obj.n3String()))
-	if not isinstance(pred, BuiltIn):
-	    return fail("Claimed as fact, but predicate is %s not builtin" % pred, level)
-	if  pred.eval(subj, obj, None, None, None, None):
-	    checked[r] = f
-	    return f
-
-	if isinstance(pred, Function) and isinstance(obj, Formula):
-	    result =  pred.evalObj(subj, None, None, None, None)
-	    fyi("Re-checking builtin %s  result %s against quoted %s"
-		%(pred, result, obj))
-	    if n3Entails(obj, result):
-		fyi("Ok for n3Entails(obj, result), checking reverse.")
-	        if n3Entails(result, obj):
-		    fyi("Re-checked OK builtin %s  result %s against quoted %s"
-		    %(pred, result, obj))
-		    checked[r] = f
-		    return f
-		else:
-		    fyi("Failed reverse n3Entails!\n\n\n")
-	    else:
-		fyi("Failed forward n3Entails!\n\n\n")
-		v = verbosity()
-		setVerbosity(0)
-		n3Entails(obj, result)
-		setVerbosity(v)
-
-##	else:
-##            if not isinstance(pred, Function):
-##                print 'not a function'
-##            if not isinstance(obj. Formula):
-##                print 'not a formula'
-	s, o, r = subj, obj, result
-	if isinstance(subj, Formula): s = subj.n3String()
-	if isinstance(obj, Formula): o = obj.n3String()
-	if isinstance(result, Formula): r = obj.n3String()
-	
-##	if n3Entails(result, obj) and not n3Entails(obj, result): a = 0
-##	elif n3Entails(obj, result) and not n3Entails(result, obj): a = 1
-##	else: a = 2
-	return fail("""Built-in fact does not give correct results:
-	PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
-	predicate: %s
-	SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
-	subject: %s
-	OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
-	object: %s
-	RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
-	result: %s
-	""" % (s, pred, o, r), level)
-
-
+        return checkBuiltin(r, f, proof, policy, level)
     elif t is reason.Conclusion:
-	con, pred, subj, obj = statementFromFormula(f).quad
-	fyi("Built-in: testing log:supports {%s %s %s}" % (subj, pred, obj), level=level)
-	if pred is not log.supports:
-            return fail('Supports step is not a log:supports')
-            #log:includes is very special
-        r2 = proof.the(r, reason.because)
-        if r2 is None:
-	    return fail("Extraction: no source formula given for %s." % (`r`), level)
-        newAxioms = Axioms(False, subj)
-        fyi("Starting nested conclusion", level=level)
-        f2 = valid(proof, r2, newAxioms, level)
-        if f2 is None:
-	    return fail("Extraction: couldn't validate formula to be extracted from.", level)
-	if not isinstance(f2, Formula):
-            return fail("Extraction of %s gave something odd, %s" % (r2, f2), level)
-        fyi("... ended nested conclusion. success!", level=level)
-	if not n3Entails(f2, obj):
-	    return fail("""Extraction %s not included in formula  %s."""
-#    """ 
-		    %(f, f2), level=level)
-	checked[r] = f
-	return f
-
-	
+        return checkSupports(r, f, proof, policy, level)
     elif t is reason.Extraction:
-	r2 = proof.the(r, reason.because)
-	if r2 == None:
-	    return fail("Extraction: no source formula given for %s." % (`r`), level)
-	f2 = valid(proof, r2, policy, level)
-	if f2 == None:
-	    return fail("Extraction: couldn't validate formula to be extracted from.", level)
-	if not isinstance(f2, Formula):
-            return fail("Extraction of %s gave something odd, %s" % (r2, f2), level)
-	
-	if not n3Entails(f2, f):
-	    return fail("""Extraction %s not included in formula  %s."""
-#    """ 
-		    %(f, f2), level=level)
-	checked[r] = f
-	return f
-
+        return checkExtraction(r, f, proof, policy, level)
     elif t is reason.CommandLine:
 	raise RuntimeError("shouldn't get here: command line a not a proof step")
-	return
     elif t is reason.Premise:
 	g = proof.the(r, reason.gives)
 	if g is None: return fail("No given input for %s" % r)
@@ -460,12 +266,7 @@ It seems {%s} log:includes {%s} is false""" % (subj.n3String(), obj.n3String()))
 	if not policy.assumes(g):
             return fail("I cannot assume %s" % g)
 
-	
-    else:
-	s = ""
-	for x in proof.statementsMatching(subj=r): s = `x` + "\n"
-	return fail("Reason %s is of unknown type %s.\n%s"%(r,t, s), level=level)
-
+    # this is crying out for a unit test -DWC
     if g.occurringIn(g.existentials()) != g.existentials(): # Check integrity
 	raise RuntimeError(g.debugString())
 
@@ -483,6 +284,211 @@ It seems {%s} log:includes {%s} is false""" % (subj.n3String(), obj.n3String()))
     return g
 
 
+def checkParsing(r, f, proof, policy):
+    res = proof.any(subj=r, pred=reason.source)
+    if res == None: return fail("No source given to parse", level=level)
+    u = res.uriref()
+    if not policy.canTrustSource(u):
+        return fail("I cannot trust that source")
+    v = verbosity()
+    setVerbosity(debugLevelForParsing)
+    try:
+        g = parse(u)
+    except:   #   ValueError:  #@@@@@@@@@@@@ &&&&&&&&
+        return fail("Can't retreive/parse <%s> because:\n  %s." 
+                            %(u, sys.exc_info()[1].__str__()), level)
+    setVerbosity(v)
+    if f != None:  # Additional intermediate check not essential
+        #@@ this code is untested, no? -DWC
+        if f.unify(g) == []:
+            return fail("""Parsed data does not match that given.\n
+            Parsed: <%s>\n\n
+            Given: %s\n\n""" % (g,f) , level=level)
+    checked[r] = g
+    return g
+
+
+def checkGMP(r, f, proof, policy, level):
+    evidence = proof.the(subj=r, pred=reason.evidence)
+    existentials = Set()
+    bindings = {}
+    for b in proof.each(subj=r, pred=reason.binding):
+        var_rei  = proof.the(subj=b, pred=reason.variable)
+        var = getSymbol(proof, var_rei)
+        val_rei  = proof.the(subj=b, pred=reason.boundTo)
+        # @@@ Check that they really are variables in the rule!
+        val = getTerm(proof, val_rei)
+        bindings[var] = val
+        if proof.contains(subj=val_rei, pred=rdf.type, obj=reason.Existential):
+            existentials.add(val)
+
+    rule = proof.the(subj=r, pred=reason.rule)
+    if not valid(proof, rule, policy, level):
+        return fail("No justification for rule "+`rule`, level)
+    for s in proof.the(rule, reason.gives).statements:  #@@@@@@ why look here?
+        if s[PRED] is log.implies:
+            ruleStatement = s
+            break
+    else: return fail("Rule has %s instead of log:implies as predicate.",
+        level)
+
+    # Check the evidence is itself proved
+    evidenceFormula = proof.newFormula()
+    for e in evidence:
+        f2 = valid(proof, e, policy, level)
+        if f2 == None:
+            return fail("Evidence %s was not proved."%(e))
+        f2.store.copyFormula(f2, evidenceFormula)
+    evidenceFormula = evidenceFormula.close()
+
+    # Check: Every antecedent statement must be included as evidence
+    antecedent = proof.newFormula()
+    antecedent.loadFormulaWithSubstitution(ruleStatement[SUBJ], bindings)
+    for k in bindings.values():
+        if k in existentials: #k in evidenceFormula.existentials() or 
+            antecedent.declareExistential(k)
+    antecedent = antecedent.close()
+
+    #antecedent = ruleStatement[SUBJ].substitution(bindings)
+    fyi("Bindings: %s\nAntecedent after subst: %s" % (
+        bindings, antecedent.debugString()),
+        level, 195)
+    fyi("about to test if n3Entails(%s, %s)" % (evidenceFormula, antecedent), level, -1)
+    fyi("about to test if n3Entails(%s, %s)" % (evidenceFormula.n3String(), antecedent.n3String()), level, 80)
+    if not n3Entails(evidenceFormula, antecedent,
+                    skipIncludes=1, level=level+1):
+        return fail("Can't find %s in evidence for\n"
+                    "Antecedent of rule: %s\n"
+                    "Evidence:%s\n"
+                    "Bindings:%s"
+                    %((s[SUBJ], s[PRED],  s[OBJ]), antecedent.n3String(),
+                      evidenceFormula.n3String(), bindings),
+                    level=level)
+
+    fyi("Rule %s conditions met" % ruleStatement, level=level)
+
+    return ruleStatement[OBJ].substitution(bindings)
+	
+
+def checkConjunction(r, f, proof, policy, level):
+    components = proof.each(subj=r, pred=reason.component)
+    fyi("Conjunction:  %i components" % len(components))
+    g = r.store.newFormula()
+    for e in components:
+        g1 = valid(proof, e, policy, level)
+        if not g1:
+            return fail("In Conjunction %s, evidence %s could not be proved."
+                %(r,e), level=level)
+        before = len(g)
+        g.loadFormulaWithSubstitution(g1)
+        fyi("Conjunction: adding %i statements, was %i, total %i\nAdded: %s" %
+                    (len(g1), before, len(g), g1.n3String()), level, thresh=80) 
+    return g.close()
+
+
+def checkBuiltin(r, f, proof, policy, level):
+    con, pred, subj, obj = statementFromFormula(f).quad
+    fyi("Built-in: testing fact {%s %s %s}" % (subj, pred, obj), level=level)
+    if pred is log.includes:
+        #log:includes is very special
+        if n3Entails(subj, obj):
+            checked[r] = f
+            return f
+        else:
+            return fail("Include test failed.\n"
+                        "It seems {%s} log:includes {%s} is false""" %
+                        (subj.n3String(), obj.n3String()))
+    if not isinstance(pred, BuiltIn):
+        return fail("Claimed as fact, but predicate is %s not builtin" % pred, level)
+    if  pred.eval(subj, obj, None, None, None, None):
+        checked[r] = f
+        return f
+
+    if isinstance(pred, Function) and isinstance(obj, Formula):
+        result =  pred.evalObj(subj, None, None, None, None)
+        fyi("Re-checking builtin %s  result %s against quoted %s"
+            %(pred, result, obj))
+        if n3Entails(obj, result):
+            fyi("Ok for n3Entails(obj, result), checking reverse.")
+            if n3Entails(result, obj):
+                fyi("Re-checked OK builtin %s  result %s against quoted %s"
+                %(pred, result, obj))
+                checked[r] = f
+                return f
+            else:
+                fyi("Failed reverse n3Entails!\n\n\n")
+        else:
+            fyi("Failed forward n3Entails!\n\n\n")
+            v = verbosity()
+            setVerbosity(0)
+            n3Entails(obj, result)
+            setVerbosity(v)
+
+##	else:
+##            if not isinstance(pred, Function):
+##                print 'not a function'
+##            if not isinstance(obj. Formula):
+##                print 'not a formula'
+    s, o, r = subj, obj, result
+    if isinstance(subj, Formula): s = subj.n3String()
+    if isinstance(obj, Formula): o = obj.n3String()
+    if isinstance(result, Formula): r = obj.n3String()
+
+##	if n3Entails(result, obj) and not n3Entails(obj, result): a = 0
+##	elif n3Entails(obj, result) and not n3Entails(result, obj): a = 1
+##	else: a = 2
+    return fail("""Built-in fact does not give correct results:
+    PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+    predicate: %s
+    SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+    subject: %s
+    OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+    object: %s
+    RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+    result: %s
+    """ % (s, pred, o, r), level)
+
+
+def checkSupports(r, f, proof, policy, level):
+    con, pred, subj, obj = statementFromFormula(f).quad
+    fyi("Built-in: testing log:supports {%s %s %s}" % (subj, pred, obj), level=level)
+    if pred is not log.supports:
+        return fail('Supports step is not a log:supports')
+        #log:includes is very special
+    r2 = proof.the(r, reason.because)
+    if r2 is None:
+        return fail("Extraction: no source formula given for %s." % (`r`), level)
+    newAxioms = Axioms(False, subj)
+    fyi("Starting nested conclusion", level=level)
+    f2 = valid(proof, r2, newAxioms, level)
+    if f2 is None:
+        return fail("Extraction: couldn't validate formula to be extracted from.", level)
+    if not isinstance(f2, Formula):
+        return fail("Extraction of %s gave something odd, %s" % (r2, f2), level)
+    fyi("... ended nested conclusion. success!", level=level)
+    if not n3Entails(f2, obj):
+        return fail("""Extraction %s not included in formula  %s."""
+                %(f, f2), level=level)
+    checked[r] = f
+    return f
+
+
+def checkExtraction(r, f, proof, policy, level):
+    r2 = proof.the(r, reason.because)
+    if r2 == None:
+        return fail("Extraction: no source formula given for %s." % (`r`), level)
+    f2 = valid(proof, r2, policy, level)
+    if f2 == None:
+        return fail("Extraction: couldn't validate formula to be extracted from.", level)
+    if not isinstance(f2, Formula):
+        return fail("Extraction of %s gave something odd, %s" % (r2, f2), level)
+
+    if not n3Entails(f2, f):
+        return fail("""Extraction %s not included in formula  %s."""
+                    #    """ 
+                %(f, f2), level=level)
+    checked[r] = f
+    return f
 
 # Main program 
 
