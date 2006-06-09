@@ -20,8 +20,8 @@ and the redfoot/rdflib interface, a python RDF API:
 
 """
 
-reifyNS = 'http://www.w3.org/2004/06/rei#'
-owlOneOf = 'http://www.w3.org/2002/07/owl#oneOf'
+__version__ = '$Id$'[1:-1]
+
 
 from __future__ import generators
 
@@ -37,44 +37,35 @@ from OrderedSequence import merge
 
 from set_importer import Set, ImmutableSet
 
-import urllib # for log:content
-import md5, binascii  # for building md5 URIs
-
 import notation3    # N3 parsers and generators, and RDF generator
-# import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
 import diag  # problems importing the tracking flag, must be explicit it seems diag.tracking
 from diag import progress, verbosity, tracking
-from term import BuiltIn, LightBuiltIn, matchSet, \
-    HeavyBuiltIn, Function, ReverseFunction, \
-    Literal, AnonymousNode , AnonymousExistential, AnonymousUniversal, \
-    Symbol, Fragment, FragmentNil,  Term, CompoundTerm, List, EmptyList, \
-    NonEmptyList, unifySequence
+from term import matchSet, \
+    AnonymousNode , AnonymousExistential, AnonymousUniversal, \
+    Term, CompoundTerm, List, \
+    unifySequence
 
-from RDFSink import Logic_NS, RDFSink, forSomeSym, forAllSym
-from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
-from RDFSink import N3_nil, N3_first, N3_rest, OWL_NS, N3_Empty, N3_List, List_NS
-from RDFSink import RDF_NS_URI
-from RDFSink import RDF_type_URI
-from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
+from RDFSink import Logic_NS
+from RDFSink import CONTEXT, PRED, SUBJ, OBJ
+from RDFSink import FORMULA, SYMBOL
 
 
 
-cvsRevision = "$Revision$"
+from why import Because
 
-# Magic resources we know about
-
-
-from why import Because, BecauseBuiltIn, BecauseOfRule, \
-    BecauseOfExperience, becauseSubexpression, BecauseMerge ,report
-
-
-
-		
 
 ###################################### Forumula
 #
-# A Formula is a set of triples.
+# An atomic forumla is three terms holds(s, p, o)
+# A formula is
+#  - an atomic formula
+#  - a conjuction of formulas
+#  - exists(x) F where F is a formula
+#  - forall(x) F where F is a formula
+# These are kept in a normal form:
+#  exists e1,e2,e3... forall u1,u2u3, ... 
+#    holds(s, p, o) and holds(s2,p2,o2) and ...
 
 class Formula(AnonymousNode, CompoundTerm):
     """A formula of a set of RDF statements, triples.
