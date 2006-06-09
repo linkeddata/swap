@@ -27,15 +27,23 @@ def isXMLChar10(character, char_class):
     num = ord(character)
     character = unicode(character)
     if char_class == Letter:
-        return category(character) in LETTER_CATEGORIES
+        return isXMLChar10(character, BaseChar) or \
+               isXMLChar10(character, Ideographic)
+### The following appears to simply be too accepting
+###        return category(character) in LETTER_CATEGORIES
     elif char_class == NCNameStartChar:
         return (character == '_') or \
                isXMLChar10(character, Letter)
     elif char_class == NCNameChar:
         return (character == '-') or \
                (character == '.') or \
-               (character == '_') or \
-               category(character) in NCNAME_CATEGORIES
+               isXMLChar10(character, NCNameStartChar) or \
+               isXMLChar10(character, Digit) or \
+               isXMLChar10(character, CombiningChar) or \
+               isXMLChar10(character, Extender)
+### The following appears to simply be too accepting
+###               (character == '_') or \
+###               category(character) in NCNAME_CATEGORIES
     elif char_class == NameStartChar:
         return character == ':' or isXMLChar10(character, NCNameStartChar)
     elif char_class == NameChar:
