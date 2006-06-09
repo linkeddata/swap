@@ -9,11 +9,13 @@ Command line options for debug:
  -v50   Set verbosity to 50 (range is 0 -100)
  -c50   Set verbosity for inference done by cwm code to 50
  -p50   Set verobsity when parsing top 50    
+
+@@for more command line options, see main() in source
 """
 __version__ = '$Id$'[1:-1]
 
 from swap.myStore import load, Namespace, formula
-from swap.RDFSink import CONTEXT, PRED, SUBJ, OBJ
+from swap.RDFSink import PRED, SUBJ, OBJ
 from swap.set_importer import Set
 from swap.term import List, Literal, CompoundTerm, BuiltIn, Function
 from swap.llyn import Formula #@@ dependency should not be be necessary
@@ -36,11 +38,6 @@ debugLevelForParsing = 0
 nameBlankNodes = 0
 proofSteps = 0
 
-#@@ These globals need to be moved into a checker object
-# or something if this code is to be used in a server
-parsed = {} # Record of retrieval/parsings
-checked = {} # Formulae from checked reasons
-
 knownReasons = Set([reason.Premise, reason.Parsing,
                     reason.Inference, reason.Conjunction,
                     reason.Fact, reason.Extraction,
@@ -48,55 +45,42 @@ knownReasons = Set([reason.Premise, reason.Parsing,
                     reason.Conclusion])
 
 
-class Axioms(object):
-    """A Axioms is a worldview.
-    Within one there are valid premises
-
-    Every level of quotation necessarally opens a new Axioms"""
-    def __init__(self, validParses, premise=None):
-        self.v = validParses
-        self.premise = premise
+class Policy(object):
+    """a proof-checking policy"""
+    def documentOK(self, u):
+        raise RuntimeError("subclass must implement")
+    
     def assumes(self, f):
-        if not f: return True
-        if not self.premise: return False
-        return n3Entails(self.premise, f)
-    def canTrustSource(self, f):
-        if self.v is True:
-            return True
-        if self.v is False:
-            return False
-        return f in self.v
+        """Check whether a formula is an axiom.
 
-def evidenceDiagnostics(subj, pred, obj, evidenceStatements, level):
-    for p, part in (subj, "subject"), (obj, "object"):
-	if isinstance(p, List):
-	    fyi("Looking for %s: %s" %(part, `p`), level=level) 
-	    for i in range(len(p)):
-		fyi("   item %i = %s" %(i, `p[i]`), level=level)
-    for t in evidenceStatements:
-	if  t[PRED] is pred:
-	    fyi("Evidence with right predicate: %s" %(t), level=level)
-	    for p, part in (t[SUBJ], "subject"), (t[OBJ], "object"):
-		if isinstance(p, List):
-		    fyi("Found for %s: %s" %(part, `p`), level=level) 
-		    for i in range(len(p)):
-			fyi("   item %i = %s" %(i, `p[i]`), level=level)
+        Hmm... move checkBuiltin here?"""
+        raise RuntimeError("subclass must implement")
 
-def parse(resourceURI):
-    global parsed
-    f = parsed.get(resourceURI, None)
-    if f == None:
-	setVerbosity(debugLevelForParsing)
-	f = load(resourceURI, flags="B")
-	setVerbosity(0)
-	parsed[resourceURI] = f
-    return f
+class AllPremises(Policy):
+    """A useful testing policy is to accept all premises and no sources.
+    """
+    def __init__(self):
+        return Policy.__init__(self, True)
 
-def statementFromFormula(f):
-    "Check just one statement and return it"
-    if len(f) > 1:
-	raise RuntimeError("Should be a single statement: %s" % f.statements)
-    return f.statements[0]
+    def assumes(self, f):
+        return True
+
+    def documentOK(self, f):
+        return False
+
+class FormulaCache(object):
+    def __init__(self):
+        self._loaded = {}
+
+    def get(self, uri):
+        f = self._loaded.get(uri, None)
+        if f == None:
+            setVerbosity(debugLevelForParsing)
+            f = load(uri, flags="B") # why B? -DWC
+            setVerbosity(0)
+            self._loaded[uri] = f
+        return f
+
 
 def n3Entails(f, g, skipIncludes=0, level=0):
     """Does f N3-entail g?
@@ -154,144 +138,203 @@ def n3Entails(f, g, skipIncludes=0, level=0):
     finally:
          setVerbosity(v)
 
+
+class InvalidProof(Exception):
+    def __init__(self, s, level=0):
+        self._s = s
+        if chatty > 0:
+            progress(" "*(level*4), "Proof failed: ", s)
+
+    def __str__(self):
+        return self._s
+
+class PolicyViolation(InvalidProof):
+    pass
+
+class LogicalFallacy(InvalidProof):
+    pass
+
+
+
+class Checker(FormulaCache):
+    def __init__(self, proof):
+        """proof   is the formula which contains the proof
+        """
     
+        FormulaCache.__init__(self)
 
-def getSymbol(proof, x):
-	"De-reify a symbol: get the informatuion identifying it from the proof"
-
-	y = proof.the(subj=x, pred=rei.uri)
-	if y != None: return proof.newSymbol(y.string)
-
-	y = proof.the(subj=x, pred=rei.nodeId)
-	if y != None:
-	    fyi("Warning: variable is identified by nodeId: <%s>" %
-			y.string, level=0, thresh=20)
-	    return proof.newSymbol(y.string)
-	raise RuntimeError("Can't de-reify %s" % x)
-	
-
-def getTerm(proof, x):
-	"De-reify a term: get the informatuion about it from the proof"
-	if isinstance(x, (Literal, CompoundTerm)):
-	    return x
-	    
-	val = proof.the(subj=x, pred=rei.value)
-	if val != None:  return proof.newLiteral(val.string,
-				val_value.datatype, val.lang)
-	return getSymbol(proof, x)
-
-
-def valid(proof, r=None, policy=None, level=0):
-    """Check whether this reason is valid.
-
-    @@This code isn't reentrant. It assumes we're only
-    checking one proof per python process.
-    
-    proof   is the formula which contains the proof
-    
-    r       is the reason to be checked, or none if the root reason
-	    The root reason is the reason of type reason:Proof
-    
-    level   is just the nesting level for diagnostic output
-    
-    Returns the formula proved or None if not
-    """
-    fyi("Starting valid on %s" % r, level=level, thresh=1000)
-    if policy is None:
-        raise RuntimeError #@@ huh? then why is this arg optional? -DWC
-    if r == None:
-        r = proof.the(pred=rdf.type, obj=reason.Proof)  #  thing to be proved
-	
-    f = checked.get(r, None)
-    if f is not None:
-	fyi("Cache hit: already checked reason for %s is %s."%(f, r), level, 80)
-	return f
-
-    global proofSteps
-    proofSteps += 1
+        self._checked = {}
+        self._pf = proof
         
-    f = proof.any(r,reason.gives)
-    if f != None:
-	assert isinstance(f, Formula), \
-			"%s gives: %s which should be Formula" % (`r`, f)
-	fs = " proof of %s" % f
-    else:
-	fs = ""
-#    fyi("Validating: Reason for %s is %s."%(f, r), level, 60)
 
-    if r == None:
-	str = f.n3String()
-	return fail("No reason for "+`f` + " :\n\n"+str +"\n\n", level=level)
-    classesOfReason = knownReasons.intersection(proof.each(subj=r, pred=rdf.type))
-    if len(classesOfReason) < 1:
-        return fail("%s does not have the type of any reason" % r)
-    if len(classesOfReason) > 1:
-        return fail("%s has too many reasons, being %s" % (r, classesOfReason))
-    t = classesOfReason.pop()
-    fyi("%s %s %s"%(t,r,fs), level=level, thresh=10)
-    level = level + 1
-    
-    if t is reason.Parsing:
-        return checkParsing(r, f, proof, policy)
-    elif t is reason.Inference:
-        g = checkGMP(r, f, proof, policy, level)
-    elif t is reason.Conjunction:
-        g = checkConjunction(r, f, proof, policy, level)
-    elif t is reason.Fact:
-        return checkBuiltin(r, f, proof, policy, level)
-    elif t is reason.Conclusion:
-        return checkSupports(r, f, proof, policy, level)
-    elif t is reason.Extraction:
-        return checkExtraction(r, f, proof, policy, level)
-    elif t is reason.CommandLine:
-	raise RuntimeError("shouldn't get here: command line a not a proof step")
-    elif t is reason.Premise:
-	g = proof.the(r, reason.gives)
-	if g is None: return fail("No given input for %s" % r)
-	fyi("Premise is: %s" % g.n3String(), level, thresh=25)
-	if not policy.assumes(g):
-            return fail("I cannot assume %s" % g)
+    def result(self, r, policy, level=0):
+        """Get the result of a proof step.
 
-    # this is crying out for a unit test -DWC
-    if g.occurringIn(g.existentials()) != g.existentials(): # Check integrity
-	raise RuntimeError(g.debugString())
+        r       is the step to be checked, or none if the root reason
+                The root reason is the reason of type reason:Proof
 
-##    setVerbosity(1000)
-    fyi("About to check if proved %s matches given %s" % (g, f), level=level, thresh=100)
-    if f is not None and f.unify(g) == []:
-	setVerbosity(1000)
-	f.unify(g)
-	setVerbosity(0)
-	return fail("%s: Calculated formula: %s\ndoes not match given: %s" %
-		(t, g.debugString(), f.debugString()))
-##    setVerbosity(0)
-    checked[r] = g
-    fyi("\n\nRESULT of %s %s is:\n%s\n\n" %(t,r,g.n3String()), level, thresh=100)
-    return g
+        level   is just the nesting level for diagnostic output
+
+        Returns the formula proved
+        raises InvalidProof (perhaps IOError, others)
+        """
+
+        fyi("Starting valid on %s" % r, level=level, thresh=1000)
+
+        f = self._checked.get(r, None)
+        if f is not None:
+            fyi("Cache hit: already checked reason for %s is %s."%(f, r), level, 80)
+            return f
+
+        global proofSteps
+        proofSteps += 1
+
+        proof = self._pf
+        
+        f = proof.any(r, reason.gives)
+        if f != None:
+            assert isinstance(f, Formula), \
+                            "%s gives: %s which should be Formula" % (`r`, f)
+            fs = " proof of %s" % f
+        else:
+            fs = ""
+    #    fyi("Validating: Reason for %s is %s."%(f, r), level, 60)
+
+        if r == None:
+            str = f.n3String() #@@fails if f is None
+            raise InvalidProof("No reason for "+`f` + " :\n\n"+str +"\n\n", level=level)
+        classesOfReason = knownReasons.intersection(proof.each(subj=r, pred=rdf.type))
+        if len(classesOfReason) < 1:
+            raise InvalidProof("%s does not have the type of any reason" % r)
+        if len(classesOfReason) > 1:
+            raise InvalidProof("%s has too many reasons, being %s" % (r, classesOfReason))
+        t = classesOfReason.pop()
+        fyi("%s %s %s"%(t,r,fs), level=level, thresh=10)
+        level = level + 1
+
+        if t is reason.Parsing:
+            return self.checkParsing(r, f, policy)
+        elif t is reason.Inference:
+            g = checkGMP(r, f, self, policy, level)
+        elif t is reason.Conjunction:
+            g = checkConjunction(r, f, self, policy, level)
+        elif t is reason.Fact:
+            return checkBuiltin(r, f, self, policy, level)
+        elif t is reason.Conclusion:
+            return checkSupports(r, f, self, policy, level)
+        elif t is reason.Extraction:
+            return checkExtraction(r, f, self, policy, level)
+        elif t is reason.CommandLine:
+            raise RuntimeError("shouldn't get here: command line a not a proof step")
+        elif t is reason.Premise:
+            g = proof.the(r, reason.gives)
+            if g is None: raise InvalidProof("No given input for %s" % r)
+            fyi("Premise is: %s" % g.n3String(), level, thresh=25)
+            if not policy.assumes(g):
+                raise PolicyViolation("I cannot assume %s" % g)
+
+        # this is crying out for a unit test -DWC
+        if g.occurringIn(g.existentials()) != g.existentials(): # Check integrity
+            raise RuntimeError(g.debugString())
+
+    ##    setVerbosity(1000)
+        fyi("About to check if proved %s matches given %s" % (g, f), level=level, thresh=100)
+        if f is not None and f.unify(g) == []:
+            setVerbosity(1000)
+            f.unify(g)
+            setVerbosity(0)
+            raise LogicalFallacy("%s: Calculated formula: %s\ndoes not match given: %s" %
+                    (t, g.debugString(), f.debugString()))
+    ##    setVerbosity(0)
+        self._checked[r] = g
+        fyi("\n\nRESULT of %s %s is:\n%s\n\n" %(t,r,g.n3String()), level, thresh=100)
+        return g
 
 
-def checkParsing(r, f, proof, policy):
-    res = proof.any(subj=r, pred=reason.source)
-    if res == None: return fail("No source given to parse", level=level)
-    u = res.uriref()
-    if not policy.canTrustSource(u):
-        return fail("I cannot trust that source")
-    v = verbosity()
-    setVerbosity(debugLevelForParsing)
-    try:
-        g = parse(u)
-    except:   #   ValueError:  #@@@@@@@@@@@@ &&&&&&&&
-        return fail("Can't retreive/parse <%s> because:\n  %s." 
-                            %(u, sys.exc_info()[1].__str__()), level)
-    setVerbosity(v)
-    if f != None:  # Additional intermediate check not essential
-        #@@ this code is untested, no? -DWC
-        if f.unify(g) == []:
-            return fail("""Parsed data does not match that given.\n
-            Parsed: <%s>\n\n
-            Given: %s\n\n""" % (g,f) , level=level)
-    checked[r] = g
-    return g
+    def checkParsing(self, r, f, policy):
+        proof = self._pf
+        res = proof.any(subj=r, pred=reason.source)
+        if res == None: raise InvalidProof("No source given to parse", level=level)
+        u = res.uriref()
+        if not policy.documentOK(u):
+            raise PolicyViolation("I cannot trust that source")
+        v = verbosity()
+        setVerbosity(debugLevelForParsing)
+        try:
+            g = self.get(u)
+        except IOError:
+            raise InvalidProof("Can't retreive/parse <%s> because:\n  %s." 
+                                %(u, sys.exc_info()[1].__str__()), level)
+        setVerbosity(v)
+        if f != None:  # Additional intermediate check not essential
+            #@@ this code is untested, no? -DWC
+            if f.unify(g) == []:
+                raise InvalidProof("""Parsed data does not match that given.\n
+                Parsed: <%s>\n\n
+                Given: %s\n\n""" % (g,f) , level=level)
+        self._checked[r] = g
+        return g
+
+
+    #
+    # some of the check* routines below should probably be
+    # methods on Checker too.
+    #
+
+_TestCEstep = """
+@prefix soc: <http://example/socrates#>.
+@prefix : <http://www.w3.org/2000/10/swap/reason#>.
+@prefix n3: <http://www.w3.org/2004/06/rei#>.
+
+<#p1> a :Premise;
+  :gives {soc:socrates     a soc:Man . soc:socrates a soc:Mortal }.
+  
+<#step1> a :Extraction;
+ :because <#p1>;
+ :gives { soc:socrates     a soc:Man }.
+"""
+
+def checkExtraction(r, f, checker, policy, level=0):
+    r"""check an Extraction step.
+
+    >>> soc = Namespace("http://example/socrates#")
+    >>> pf = _s2f(_TestCEstep, "http://example/socrates")
+    >>> checkExtraction(soc.step1,
+    ...                 pf.the(subj=soc.step1, pred=reason.gives),
+    ...                 Checker(pf), AllPremises())
+    {soc:socrates type soc:Man}
+    """
+    # """ emacs python mode needs help
+
+    proof = checker._pf
+    r2 = proof.the(r, reason.because)
+    if r2 == None:
+        raise InvalidProof("Extraction: no source formula given for %s." % (`r`), level)
+    f2 = checker.result(r2, policy, level)
+    if not isinstance(f2, Formula):
+        raise InvalidProof("Extraction of %s gave something odd, %s" % (r2, f2), level)
+
+    if not n3Entails(f2, f):
+        raise LogicalFallacy("""Extraction %s not included in formula  %s."""
+                    #    """ 
+                %(f, f2), level=level)
+    checker._checked[r] = f # hmm... why different between Extraction and GMP?
+    return f
+
+
+def checkConjunction(r, f, checker, policy, level):
+    proof = checker._pf
+    components = proof.each(subj=r, pred=reason.component)
+    fyi("Conjunction:  %i components" % len(components))
+    g = r.store.newFormula()
+    for e in components:
+        g1 = checker.result(e, policy, level)
+        before = len(g)
+        g.loadFormulaWithSubstitution(g1)
+        fyi("Conjunction: adding %i statements, was %i, total %i\nAdded: %s" %
+                    (len(g1), before, len(g), g1.n3String()), level, thresh=80) 
+    #@@ hmm... don't we check f against g? -DWC
+    return g.close()
 
 
 _TestGMPStep = """
@@ -317,15 +360,19 @@ _TestGMPStep = """
 
 # """ emacs python mode needs help
 
-def checkGMP(r, f, proof, policy, level=0):
+def checkGMP(r, f, checker, policy, level=0):
     r"""check a generalized modus ponens step.
 
     >>> soc = Namespace("http://example/socrates#")
     >>> pf = _s2f(_TestGMPStep, "http://example/socrates")
-    >>> f = checkGMP(soc.step1, None, pf, _TestPolicy())
+    >>> f = checkGMP(soc.step1, None, Checker(pf), AllPremises())
     >>> f.n3String().strip()
     u'@prefix : <http://example/socrates#> .\n    \n    :socrates     a :Mortal .'
     """
+
+    # """ emacs python mode needs help
+
+    proof = checker._pf
     evidence = proof.the(subj=r, pred=reason.evidence)
     existentials = Set()
     bindings = {}
@@ -340,21 +387,17 @@ def checkGMP(r, f, proof, policy, level=0):
             existentials.add(val)
 
     rule = proof.the(subj=r, pred=reason.rule)
-    if not valid(proof, rule, policy, level):
-        return fail("No justification for rule "+`rule`, level)
     for s in proof.the(rule, reason.gives).statements:  #@@@@@@ why look here?
         if s[PRED] is log.implies:
             ruleStatement = s
             break
-    else: return fail("Rule has %s instead of log:implies as predicate.",
+    else: raise InvalidProof("Rule has %s instead of log:implies as predicate.",
         level)
 
     # Check the evidence is itself proved
     evidenceFormula = proof.newFormula()
     for e in evidence:
-        f2 = valid(proof, e, policy, level)
-        if f2 == None:
-            return fail("Evidence %s was not proved."%(e))
+        f2 = checker.result(e, policy, level)
         f2.store.copyFormula(f2, evidenceFormula)
     evidenceFormula = evidenceFormula.close()
 
@@ -374,7 +417,7 @@ def checkGMP(r, f, proof, policy, level=0):
     fyi("about to test if n3Entails(%s, %s)" % (evidenceFormula.n3String(), antecedent.n3String()), level, 80)
     if not n3Entails(evidenceFormula, antecedent,
                     skipIncludes=1, level=level+1):
-        return fail("Can't find %s in evidence for\n"
+        raise LogicalFallacy("Can't find %s in evidence for\n"
                     "Antecedent of rule: %s\n"
                     "Evidence:%s\n"
                     "Bindings:%s"
@@ -385,40 +428,84 @@ def checkGMP(r, f, proof, policy, level=0):
     fyi("Rule %s conditions met" % ruleStatement, level=level)
 
     return ruleStatement[OBJ].substitution(bindings)
+
+def getSymbol(proof, x):
+    "De-reify a symbol: get the informatuion identifying it from the proof"
+
+    y = proof.the(subj=x, pred=rei.uri)
+    if y != None: return proof.newSymbol(y.string)
+    
+    y = proof.the(subj=x, pred=rei.nodeId)
+    if y != None:
+        fyi("Warning: variable is identified by nodeId: <%s>" %
+                    y.string, level=0, thresh=20)
+        return proof.newSymbol(y.string)
+    raise RuntimeError("Can't de-reify %s" % x)
 	
 
-def checkConjunction(r, f, proof, policy, level):
-    components = proof.each(subj=r, pred=reason.component)
-    fyi("Conjunction:  %i components" % len(components))
-    g = r.store.newFormula()
-    for e in components:
-        g1 = valid(proof, e, policy, level)
-        if not g1:
-            return fail("In Conjunction %s, evidence %s could not be proved."
-                %(r,e), level=level)
-        before = len(g)
-        g.loadFormulaWithSubstitution(g1)
-        fyi("Conjunction: adding %i statements, was %i, total %i\nAdded: %s" %
-                    (len(g1), before, len(g), g1.n3String()), level, thresh=80) 
-    return g.close()
+def getTerm(proof, x):
+    "De-reify a term: get the informatuion about it from the proof"
+    if isinstance(x, (Literal, CompoundTerm)):
+        return x
+
+    val = proof.the(subj=x, pred=rei.value)
+    if val != None:  return proof.newLiteral(val.string,
+                            val_value.datatype, val.lang)
+    return getSymbol(proof, x)
 
 
-def checkBuiltin(r, f, proof, policy, level):
-    con, pred, subj, obj = statementFromFormula(f).quad
+_TestBuiltinStep = """
+@keywords is, of, a.
+@prefix math: <http://www.w3.org/2000/10/swap/math#>.
+@prefix str: <http://www.w3.org/2000/10/swap/string#>.
+@prefix : <http://www.w3.org/2000/10/swap/reason#>.
+
+<#step1> a :Fact, :Proof;
+  :gives { %s }.
+"""
+
+def checkBuiltin(r, f, checker, policy, level=0):
+    """Check a built-in step.
+    @@hmm... integrate with Policy more?
+    
+    >>> soc = Namespace("http://example/socrates#")
+    >>> pf = _s2f(_TestBuiltinStep % '"abc" str:startsWith "a"',
+    ...           "http://example/socrates")
+    >>> f = checkBuiltin(soc.step1,
+    ...                 pf.the(subj=soc.step1, pred=reason.gives),
+    ...                 Checker(pf), AllPremises())
+    >>> len(f)
+    1
+
+
+    >>> pf = _s2f(_TestBuiltinStep % '"abc" str:startsWith "b"',
+    ...           "http://example/socrates")
+    >>> f = checkBuiltin(soc.step1,
+    ...                 pf.the(subj=soc.step1, pred=reason.gives),
+    ...                 Checker(pf), AllPremises())
+    Traceback (most recent call last):
+        ...
+    LogicalFallacy: Built-in fact does not give correct results: predicate: abc subject: str:startsWith object: b result: None
+
+    """
+    # """ help emacs
+    
+    proof = checker._pf
+    pred, subj, obj = atomicFormulaTerms(f)
     fyi("Built-in: testing fact {%s %s %s}" % (subj, pred, obj), level=level)
     if pred is log.includes:
-        #log:includes is very special
+        #log:includes is very special. Huh? Why? -DWC
         if n3Entails(subj, obj):
-            checked[r] = f
+            checker._checked[r] = f
             return f
         else:
-            return fail("Include test failed.\n"
+            raise LogicalFallacy("Include test failed.\n"
                         "It seems {%s} log:includes {%s} is false""" %
                         (subj.n3String(), obj.n3String()))
     if not isinstance(pred, BuiltIn):
-        return fail("Claimed as fact, but predicate is %s not builtin" % pred, level)
+        raise PolicyViolation("Claimed as fact, but predicate is %s not builtin" % pred, level)
     if  pred.eval(subj, obj, None, None, None, None):
-        checked[r] = f
+        checker._checked[r] = f
         return f
 
     if isinstance(pred, Function) and isinstance(obj, Formula):
@@ -430,7 +517,7 @@ def checkBuiltin(r, f, proof, policy, level):
             if n3Entails(result, obj):
                 fyi("Re-checked OK builtin %s  result %s against quoted %s"
                 %(pred, result, obj))
-                checked[r] = f
+                checker._checked[r] = f
                 return f
             else:
                 fyi("Failed reverse n3Entails!\n\n\n")
@@ -440,12 +527,9 @@ def checkBuiltin(r, f, proof, policy, level):
             setVerbosity(0)
             n3Entails(obj, result)
             setVerbosity(v)
+    else:
+        result = None
 
-##	else:
-##            if not isinstance(pred, Function):
-##                print 'not a function'
-##            if not isinstance(obj. Formula):
-##                print 'not a formula'
     s, o, r = subj, obj, result
     if isinstance(subj, Formula): s = subj.n3String()
     if isinstance(obj, Formula): o = obj.n3String()
@@ -454,76 +538,96 @@ def checkBuiltin(r, f, proof, policy, level):
 ##	if n3Entails(result, obj) and not n3Entails(obj, result): a = 0
 ##	elif n3Entails(obj, result) and not n3Entails(result, obj): a = 1
 ##	else: a = 2
-    return fail("""Built-in fact does not give correct results:
-    PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
-    predicate: %s
-    SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
-    subject: %s
-    OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
-    object: %s
-    RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
-    result: %s
-    """ % (s, pred, o, r), level)
+    raise LogicalFallacy("Built-in fact does not give correct results: "
+                         "predicate: %s "
+                         "subject: %s "
+                         "object: %s "
+                         "result: %s" % (s, pred, o, r), level)
 
 
-def checkSupports(r, f, proof, policy, level):
-    con, pred, subj, obj = statementFromFormula(f).quad
+def atomicFormulaTerms(f):
+    """Check that a formula is atomic and return the p, s, o terms.
+
+    >>> atomicFormulaTerms(_s2f("<#sky> <#color> <#blue>.",
+    ...                         "http://example/stuff"))
+    (color, sky, blue)
+    """
+    # """ help emacs
+    if len(f) <> 1:
+        raise ValueError("expected atomic formula; got: %s." %
+                         f.statements)
+
+    #warn("DanC wants to get rid of the StoredStatement interface.")
+    c, p, s, o = f.statements[0].quad
+    return p, s, o
+
+
+def checkSupports(r, f, checker, policy, level):
+    proof = checker._pf
+    pred, subj, obj = atomicFormulaTerms(f)
     fyi("Built-in: testing log:supports {%s %s %s}" % (subj, pred, obj), level=level)
     if pred is not log.supports:
-        return fail('Supports step is not a log:supports')
+        raise InvalidProof('Supports step is not a log:supports')
         #log:includes is very special
     r2 = proof.the(r, reason.because)
     if r2 is None:
-        return fail("Extraction: no source formula given for %s." % (`r`), level)
-    newAxioms = Axioms(False, subj)
+        raise InvalidProof("Extraction: no source formula given for %s." % (`r`), level)
     fyi("Starting nested conclusion", level=level)
-    f2 = valid(proof, r2, newAxioms, level)
-    if f2 is None:
-        return fail("Extraction: couldn't validate formula to be extracted from.", level)
+    f2 = checker.result(r2, Assumption(subj), level)
     if not isinstance(f2, Formula):
-        return fail("Extraction of %s gave something odd, %s" % (r2, f2), level)
+        raise InvalidProof("Extraction of %s gave something odd, %s" % (r2, f2), level)
     fyi("... ended nested conclusion. success!", level=level)
     if not n3Entails(f2, obj):
-        return fail("""Extraction %s not included in formula  %s."""
+        raise LogicalFallacy("""Extraction %s not included in formula  %s."""
                 %(f, f2), level=level)
-    checked[r] = f
+    checker._checked[r] = f
     return f
 
+class Assumption(Policy):
+    def __init__(self, premise):
+        self.premise = premise
 
-def checkExtraction(r, f, proof, policy, level):
-    r2 = proof.the(r, reason.because)
-    if r2 == None:
-        return fail("Extraction: no source formula given for %s." % (`r`), level)
-    f2 = valid(proof, r2, policy, level)
-    if f2 == None:
-        return fail("Extraction: couldn't validate formula to be extracted from.", level)
-    if not isinstance(f2, Formula):
-        return fail("Extraction of %s gave something odd, %s" % (r2, f2), level)
+    def documentOK(self, u):
+        return False
+    
+    def assumes(self, f):
+        return n3Entails(self.premise, f)
 
-    if not n3Entails(f2, f):
-        return fail("""Extraction %s not included in formula  %s."""
-                    #    """ 
-                %(f, f2), level=level)
-    checked[r] = f
-    return f
+
 
 # Main program 
 
 def usage():
     sys.stderr.write(__doc__)
     
+class ParsingOK(Policy):
+    """When run from the command-line, the policy is that
+    all Parsing's are OK.
+
+    Hmm... shouldn't it be only those that are mentioned
+    in the CommandLine step?
+    """
+    def documentOK(self, u):
+        return True
+    
+    def assumes(self, f):
+        return False
+
+
 def main(argv):
     global chatty
-    global parsed
     global debugLevelForInference
     global debugLevelForParsing
     global nameBlankNodes
     setVerbosity(0)
     
-    
+
+    policy=ParsingOK()
+
     try:
-        opts, args = getopt.getopt(argv[1:], "hv:c:p:B",
-	    [ "help", "verbose=", "chatty=", "parsing=", "nameBlankNodes"])
+        opts, args = getopt.getopt(argv[1:], "hv:c:p:B:a",
+	    [ "help", "verbose=", "chatty=", "parsing=", "nameBlankNodes",
+              "allPremises"])
     except getopt.GetoptError:
 	sys.stderr.write("check.py:  Command line syntax error.\n\n")
         usage()
@@ -541,6 +645,8 @@ def main(argv):
 	    debugLevelForInference = int(a)
         if o in ("-B", "--nameBlankNodes"):
 	    nameBlankNodes = 1
+        if o in ("-a", "--allPremises"):
+	    policy = AllPremises()
     if nameBlankNodes: flags="B"
     else: flags=""
     
@@ -553,24 +659,22 @@ def main(argv):
 
     # setVerbosity(60)
     fyi("Length of proof formula: "+`len(proof)`, thresh=5)
-    policy = Axioms(True)
-    proved = valid(proof, policy=policy)
-    if proved != None:
+
+    try:
+        c = Checker(proof)
+        proved = c.result(proof.the(pred=rdf.type, obj=reason.Proof),
+                          policy=policy)
+
 	fyi("Proof looks OK.   %i Steps" % proofSteps, thresh=5)
 	setVerbosity(0)
 	print proved.n3String().encode('utf-8')
-	sys.exit(0)
-    progress("Proof invalid.")
-    sys.exit(-1)
+    except InvalidProof, e:
+        progress("Proof invalid:", e)
+        sys.exit(-1)
+
 
 ################################
 # test harness and diagnostics
-
-def fail(str, level=0):
-    if chatty > 0:
-	progress(" "*(level*4), "Proof failed: ", str)
-    raise RuntimeError # This kludge will have to go for the paw server, no?
-    return None
 
 def fyi(str, level=0, thresh=50):
     if chatty >= thresh:
@@ -581,27 +685,23 @@ def fyi(str, level=0, thresh=50):
 
 def _test():
     import doctest
+    chatty = 20 #@@
     doctest.testmod()
     
-class _TestPolicy(Axioms):
-    """The test policy is to accept all premises and no sources.
-    """
-    def __init__(self):
-        return Axioms.__init__(self, True)
-    def assumes(self, f):
-        return True
-    def canTrustSource(self, f):
-        return False
-
 
 def _s2f(s, base):
     """make a formula from a string.
+
     Cribbed from llyn.BI_parsedAsN3
     should be part of the myStore API, no?
 
-    >>> f = _s2f(_TestGMPStep, "http://example/socrates")
+    >>> _s2f("<#sky> <#color> <#blue>.", "http://example/socrates")
+    {sky color blue}
 
+    ^ that test output depends on the way formulas print themselves.
     """
+    # """ emacs python mode needs help
+
     import notation3
     p = notation3.SinkParser(formula().store, baseURI=base)
     p.startDoc()
@@ -612,8 +712,7 @@ def _s2f(s, base):
 
 ########
 
-if __name__ == "__main__":
-    """This trick prevents the pydoc from actually running the script"""
+if __name__ == "__main__": # we're running as a script, not imported...
     import sys, getopt
 
     if '--test' in sys.argv:
