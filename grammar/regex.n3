@@ -1,0 +1,104 @@
+@keywords a, of, is .
+
+@prefix : <http://www.w3.org/2000/10/swap/grammar/regex#> .
+
+## standard namespaces
+@prefix  rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix  rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix  xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix  owl:     <http://www.w3.org/2002/07/owl#> .
+
+@prefix list: <http://www.w3.org/2000/10/swap/list#>.
+
+##
+## What do we want? Let us say we have a decimal  [-+]?[0-9]+(\.[0-9]+)
+## Take that apart
+##
+## R :following (plus_piece before_decimal after_decimal)
+## plus_piece :question plus_minus
+## plus_minus :char_group "+-" 
+## before_decimal :plus num_group
+## after_decimal :following ("." before_decimal)
+## num_group :start
+##
+
+
+
+:Regex a owl:Class .
+
+
+:CharClass a owl:Class;
+    rdfs:subClassOf :Regex .
+
+:rdef a owl:FunctionalProperty .
+
+:group_literal rdfs:subPropertyOf :rdef;
+    rdfs:domain :CharClass;
+    rdfs:range  xsd:string .
+
+
+:modifies rdfs:subPropertyOf :rdef;
+    rdfs:domain :Modified;
+    rdfs:range  :Regex .
+
+:Modified a owl:Class;
+    rdfs:subClassOf :Regex .
+
+:modification a owl:FunctionalProperty;
+    rdfs:domain :Modified;
+    rdfs:range  :Modifier .
+
+:Modifier a owl:Class .
+   :Star a :Modifier .
+   :Plus a :Modifier .
+   :Optional a :Modifier .
+   :Non-Greedy-Star a :Modifier .
+   :Non-Greedy-Plus a :Modifier .
+   :Non-Greedy-Optional a :Modifier .
+
+:MatchCounter a owl:Class;
+    rdfs:subClassOf :Modifier .
+
+:NonGreedyMatchCounter a owl:Class;
+    rdfs:subClassOf :MatchCounter .
+
+:minMatches a owl:FunctionalProperty;
+    rdfs:domain :MatchCounter;
+    rdfs:range xsd:nonNegativeInteger .
+
+:maxMatches a owl:FunctionalProperty;
+    rdfs:domain :MatchCounter;
+    rdfs:range xsd:nonNegativeInteger .
+
+:complement rdfs:subPropertyOf :rdef;
+    rdfs:domain :CharClass;
+    rdfs:range  :CharClass .
+
+:sequence rdfs:subPropertyOf :rdef;
+    rdfs:domain :Regex;
+    rdfs:range  :List .
+
+:or rdfs:subPropertyOf :rdef;
+    rdfs:domain :Regex;
+    rdfs:range  :List .
+
+
+:lookAhead rdfs:subPropertyOf :rdef;
+    rdfs:domain :Regex;
+    rdfs:range  :Regex .
+
+:negativeLookAhead rdfs:subPropertyOf :rdef;
+    rdfs:domain :Regex;
+    rdfs:range  :Regex .
+
+:lookBehind rdfs:subPropertyOf :rdef;
+    rdfs:domain :Regex;
+    rdfs:range  :Regex .
+
+:negativeLookBehind rdfs:subPropertyOf :rdef;
+    rdfs:domain :Regex;
+    rdfs:range  :Regex .
+
+:Dot a :CharClass .
+:Start a :CharClass .
+:End a :CharClass .

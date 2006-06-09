@@ -244,7 +244,7 @@ class PredictiveParser:
             parser.atMode = False
         else:
             parser.keywords = [ "a", "is", "of", "this" ]
-        print parser.keywords
+        #print parser.keywords
 	parser.verb = 0  # Verbosity
 	parser.keywordMode = 0  # In a keyword statement, adding keywords
 	
