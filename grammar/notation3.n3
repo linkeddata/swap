@@ -1,0 +1,538 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix : <http://www.w3.org/2001/sw/DataAccess/rq23/parsers/sparql#>.
+@prefix g: <http://www.w3.org/2001/sw/DataAccess/rq23/parsers/grammar@@#>.
+#@@ case insensitivity of 'BASE' and the like is not expressed.
+
+:document rdfs:label "document"; rdf:value "1";
+ rdfs:comment "[1] document ::= statements_optional";
+ a g:NonTerminal;
+  g:seq ( :statements_optional )
+.
+
+:statements_optional rdfs:label "statements_optional"; rdf:value "2";
+ rdfs:comment "[2] statements_optional ::=| statement \".\" statements_optional";
+ a g:NonTerminal;
+  g:alt (
+    [ g:seq (
+     ) ]
+    [ g:seq (
+      :statement
+      "."
+      :statements_optional
+     ) ]
+   )
+.
+
+:formulacontent rdfs:label "formulacontent"; rdf:value "3";
+ rdfs:comment "[3] formulacontent ::= statementlist";
+ a g:NonTerminal;
+  g:seq ( :statementlist )
+.
+
+:statementlist rdfs:label "statementlist"; rdf:value "4";
+ rdfs:comment "[4] statementlist ::=| statement statementtail";
+ a g:NonTerminal;
+  g:alt (
+    [ g:seq (
+     ) ]
+    [ g:seq (
+      :statement
+      :statementtail
+     ) ]
+   )
+.
+
+:statementtail rdfs:label "statementtail"; rdf:value "5";
+ rdfs:comment "[5] statementtail ::=| \".\" statementlist";
+ a g:NonTerminal;
+  g:alt (
+    [ g:seq (
+     ) ]
+    [ g:seq (
+      "."
+      :statementlist
+     ) ]
+   )
+.
+
+:statement rdfs:label "statement"; rdf:value "6";
+ rdfs:comment "[6] statement  ::= declaration| universal| existential| simpleStatement";
+ a g:NonTerminal;
+  g:alt (
+    :declaration
+    :universal
+    :existential
+    :simpleStatement
+   )
+.
+
+:universal rdfs:label "universal"; rdf:value "7";
+ rdfs:comment "[7] universal ::= \"@forAll\" symbol (\",\" symbol)*";
+ a g:NonTerminal;
+  g:seq (
+    "@forAll"
+    :symbol
+    [ g:star 
+      [ g:seq (
+        ","
+        :symbol
+       ) ]
+     ]
+   )
+.
+
+:existential rdfs:label "existential"; rdf:value "8";
+ rdfs:comment "[8] existential ::= \"@forSome\" symbol (\",\" symbol)*";
+ a g:NonTerminal;
+  g:seq (
+    "@forSome"
+    :symbol
+    [ g:star 
+      [ g:seq (
+        ","
+        :symbol
+       ) ]
+     ]
+   )
+.
+
+:declaration rdfs:label "declaration"; rdf:value "9";
+ rdfs:comment "[9] declaration ::= \"@prefix\" prefix explicituri|   \"@keywords\" barename (\",\" barename)*";
+ a g:NonTerminal;
+  g:alt (
+    [ g:seq (
+      "@prefix"
+      :prefix
+      :explicituri
+     ) ]
+    [ g:seq (
+      "@keywords"
+      :barename
+      [ g:star 
+        [ g:seq (
+          ","
+          :barename
+         ) ]
+       ]
+     ) ]
+   )
+.
+
+:simpleStatement rdfs:label "simpleStatement"; rdf:value "10";
+ rdfs:comment "[10] simpleStatement ::= subject propertylist";
+ a g:NonTerminal;
+  g:seq (
+    :subject
+    :propertylist
+   )
+.
+
+:propertylist rdfs:label "propertylist"; rdf:value "11";
+ rdfs:comment "[11] propertylist ::=| verb object objecttail propertylisttail";
+ a g:NonTerminal;
+  g:alt (
+    [ g:seq (
+     ) ]
+    [ g:seq (
+      :verb
+      :object
+      :objecttail
+      :propertylisttail
+     ) ]
+   )
+.
+
+:propertylisttail rdfs:label "propertylisttail"; rdf:value "12";
+ rdfs:comment "[12] propertylisttail ::=| \";\" propertylist";
+ a g:NonTerminal;
+  g:alt (
+    [ g:seq (
+     ) ]
+    [ g:seq (
+      ";"
+      :propertylist
+     ) ]
+   )
+.
+
+:objecttail rdfs:label "objecttail"; rdf:value "13";
+ rdfs:comment "[13] objecttail ::=| \",\"   object objecttail";
+ a g:NonTerminal;
+  g:alt (
+    [ g:seq (
+     ) ]
+    [ g:seq (
+      ","
+      :object
+      :objecttail
+     ) ]
+   )
+.
+
+:verb rdfs:label "verb"; rdf:value "14";
+ rdfs:comment "[14] verb ::= expression| \"@has\" expression| \"@is\" expression \"@of\"| \"@a\"| \"=\"| \"=>\"| \"<=\"";
+ a g:NonTerminal;
+  g:alt (
+    :expression
+    [ g:seq (
+      "@has"
+      :expression
+     ) ]
+    [ g:seq (
+      "@is"
+      :expression
+      "@of"
+     ) ]
+    "@a"
+    "="
+    "=>"
+    "<="
+   )
+.
+
+:subject rdfs:label "subject"; rdf:value "15";
+ rdfs:comment "[15] subject ::= expression";
+ a g:NonTerminal;
+  g:seq ( :expression )
+.
+
+:object rdfs:label "object"; rdf:value "16";
+ rdfs:comment "[16] object ::= expression";
+ a g:NonTerminal;
+  g:seq ( :expression )
+.
+
+:expression rdfs:label "expression"; rdf:value "17";
+ rdfs:comment "[17] expression ::= pathitem pathtail";
+ a g:NonTerminal;
+  g:seq (
+    :pathitem
+    :pathtail
+   )
+.
+
+:pathtail rdfs:label "pathtail"; rdf:value "18";
+ rdfs:comment "[18] pathtail ::=| \"!\" expression| \"^\" expression";
+ a g:NonTerminal;
+  g:alt (
+    [ g:seq (
+     ) ]
+    [ g:seq (
+      "!"
+      :expression
+     ) ]
+    [ g:seq (
+      "^"
+      :expression
+     ) ]
+   )
+.
+
+:pathitem rdfs:label "pathitem"; rdf:value "19";
+ rdfs:comment "[19] pathitem ::= symbol| \"{\" formulacontent \"}\"| quickvariable| numericliteral| literal| \"[\" propertylist \"]\"|  \"(\"  pathlist \")\"| boolean";
+ a g:NonTerminal;
+  g:alt (
+    :symbol
+    [ g:seq (
+      "{"
+      :formulacontent
+      "}"
+     ) ]
+    :quickvariable
+    :numericliteral
+    :literal
+    [ g:seq (
+      "["
+      :propertylist
+      "]"
+     ) ]
+    [ g:seq (
+      "("
+      :pathlist
+      ")"
+     ) ]
+    :boolean
+   )
+.
+
+:boolean rdfs:label "boolean"; rdf:value "20";
+ rdfs:comment "[20] boolean ::= \"@true\" | \"@false\"";
+ a g:NonTerminal;
+  g:alt (
+    "@true"
+    "@false"
+   )
+.
+
+:pathlist rdfs:label "pathlist"; rdf:value "21";
+ rdfs:comment "[21] pathlist ::=| expression pathlist";
+ a g:NonTerminal;
+  g:alt (
+    [ g:seq (
+     ) ]
+    [ g:seq (
+      :expression
+      :pathlist
+     ) ]
+   )
+.
+
+:symbol rdfs:label "symbol"; rdf:value "22";
+ rdfs:comment "[22] symbol ::= explicituri| qname";
+ a g:NonTerminal;
+  g:alt (
+    :explicituri
+    :qname
+   )
+.
+
+:numericliteral rdfs:label "numericliteral"; rdf:value "23";
+ rdfs:comment "[23] numericliteral ::= integer| double| decimal";
+ a g:NonTerminal;
+  g:alt (
+    :integer
+    :double
+    :decimal
+   )
+.
+
+:literal rdfs:label "literal"; rdf:value "24";
+ rdfs:comment "[24] literal ::= string dtlang";
+ a g:NonTerminal;
+  g:seq (
+    :string
+    :dtlang
+   )
+.
+
+:dtlang rdfs:label "dtlang"; rdf:value "25";
+ rdfs:comment "[25] dtlang ::=| \"@\" langcode| \"^^\" symbol";
+ a g:NonTerminal;
+  g:alt (
+    [ g:seq (
+     ) ]
+    [ g:seq (
+      "@"
+      :langcode
+     ) ]
+    [ g:seq (
+      "^^"
+      :symbol
+     ) ]
+   )
+.
+
+:integer rdfs:label "integer"; rdf:value "26";
+ rdfs:comment "[26] integer ::= [-+]? [0-9]+";
+ a g:Terminal;
+  g:seq (
+    [ g:opt 
+      [  g:matches "[-+]"  ]
+     ]
+    [ g:rep 
+      [  g:matches "[0-9]"  ]
+     ]
+   )
+.
+
+:double rdfs:label "double"; rdf:value "27";
+ rdfs:comment "[27] double	::= [-+]? [0-9]+ (\".\" [0-9]+)? ( [eE] [-+]? [0-9]+)";
+ a g:Terminal;
+  g:seq (
+    [ g:opt 
+      [  g:matches "[-+]"  ]
+     ]
+    [ g:rep 
+      [  g:matches "[0-9]"  ]
+     ]
+    [ g:opt 
+      [ g:seq (
+        "."
+        [ g:rep 
+          [  g:matches "[0-9]"  ]
+         ]
+       ) ]
+     ]
+    [ g:seq (
+      [  g:matches "[eE]"  ]
+      [ g:opt 
+        [  g:matches "[-+]"  ]
+       ]
+      [ g:rep 
+        [  g:matches "[0-9]"  ]
+       ]
+     ) ]
+   )
+.
+
+:decimal rdfs:label "decimal"; rdf:value "28";
+ rdfs:comment "[28] decimal	::= [-+]? [0-9]+ (\".\" [0-9]+)?";
+ a g:Terminal;
+  g:seq (
+    [ g:opt 
+      [  g:matches "[-+]"  ]
+     ]
+    [ g:rep 
+      [  g:matches "[0-9]"  ]
+     ]
+    [ g:opt 
+      [ g:seq (
+        "."
+        [ g:rep 
+          [  g:matches "[0-9]"  ]
+         ]
+       ) ]
+     ]
+   )
+.
+
+:explicituri rdfs:label "explicituri"; rdf:value "29";
+ rdfs:comment "[29] explicituri ::=	\"<\" [^>]* \">\"";
+ a g:Terminal;
+  g:seq (
+    "<"
+    [ g:star 
+      [  g:matches "[^>]"  ]
+     ]
+    ">"
+   )
+.
+
+:NameStartChar3 rdfs:label "NameStartChar3"; rdf:value "30";
+ rdfs:comment "[30] NameStartChar3	   ::=   	\":\" | [A-Z] | \"_\" | [a-z] | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF] | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D] | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]";
+ a g:Terminal;
+  g:alt (
+    ":"
+    [  g:matches "[A-Z]"  ]
+    "_"
+    [  g:matches "[a-z]"  ]
+    [  g:matches "[#xC0-#xD6]"  ]
+    [  g:matches "[#xD8-#xF6]"  ]
+    [  g:matches "[#xF8-#x2FF]"  ]
+    [  g:matches "[#x370-#x37D]"  ]
+    [  g:matches "[#x37F-#x1FFF]"  ]
+    [  g:matches "[#x200C-#x200D]"  ]
+    [  g:matches "[#x2070-#x218F]"  ]
+    [  g:matches "[#x2C00-#x2FEF]"  ]
+    [  g:matches "[#x3001-#xD7FF]"  ]
+    [  g:matches "[#xF900-#xFDCF]"  ]
+    [  g:matches "[#xFDF0-#xFFFD]"  ]
+    [  g:matches "[#x10000-#xEFFFF]"  ]
+   )
+.
+
+:NameChar3 rdfs:label "NameChar3"; rdf:value "31";
+ rdfs:comment "[31]   	NameChar3	   ::=   	NameStartChar | \"-\" | [0-9] | #xB7 | [#x0300-#x036F] | [#x203F-#x2040]";
+ a g:Terminal;
+  g:alt (
+    :NameStartChar
+    "-"
+    [  g:matches "[0-9]"  ]
+    [  g:matches "\\xB7"  ]
+    [  g:matches "[#x0300-#x036F]"  ]
+    [  g:matches "[#x203F-#x2040]"  ]
+   )
+.
+
+:prefix rdfs:label "prefix"; rdf:value "32";
+ rdfs:comment "[32] prefix ::= (NameStartChar3 NameChar3*)? \":\"";
+ a g:Terminal;
+  g:seq (
+    [ g:opt 
+      [ g:seq (
+        :NameStartChar3
+        [ g:star 
+          :NameChar3
+         ]
+       ) ]
+     ]
+    ":"
+   )
+.
+
+:qname rdfs:label "qname"; rdf:value "33";
+ rdfs:comment "[33] qname  ::= ( (NameStartChar3 NameChar3*)? \":\")? NameStartChar3 NameChar3*";
+ a g:Terminal;
+  g:seq (
+    [ g:opt 
+      [ g:seq (
+        [ g:opt 
+          [ g:seq (
+            :NameStartChar3
+            [ g:star 
+              :NameChar3
+             ]
+           ) ]
+         ]
+        ":"
+       ) ]
+     ]
+    :NameStartChar3
+    [ g:star 
+      :NameChar3
+     ]
+   )
+.
+
+:barename rdfs:label "barename"; rdf:value "34";
+ rdfs:comment "[34] barename ::= NameStartChar3 NameChar3*";
+ a g:Terminal;
+  g:seq (
+    :NameStartChar3
+    [ g:star 
+      :NameChar3
+     ]
+   )
+.
+
+:quickvariable rdfs:label "quickvariable"; rdf:value "35";
+ rdfs:comment "[35] quickvariable ::= \"?\" barename";
+ a g:Terminal;
+  g:seq (
+    "?"
+    :barename
+   )
+.
+
+:langcode rdfs:label "langcode"; rdf:value "33";
+ rdfs:comment "[33] langcode	::= [a-z]+ (\"-\" [a-z0-9]+)*";
+ a g:Terminal;
+  g:seq (
+    [ g:rep 
+      [  g:matches "[a-z]"  ]
+     ]
+    [ g:star 
+      [ g:seq (
+        "-"
+        [ g:rep 
+          [  g:matches "[a-z0-9]"  ]
+         ]
+       ) ]
+     ]
+   )
+.
+
+:string rdfs:label "string"; rdf:value "34";
+ rdfs:comment "[34] string ::= dq ([^\"] | (\"\\\" dq))* dq";
+ a g:Terminal;
+  g:seq (
+    :dq
+    [ g:star 
+      [ g:alt (
+        [  g:matches "[^\"]"  ]
+        [ g:seq (
+          "\\"
+          :dq
+         ) ]
+       ) ]
+     ]
+    :dq
+   )
+.
+
+:dq rdfs:label "dq"; rdf:value "35";
+ rdfs:comment "[35] dq ::= #x22";
+ a g:Terminal;
+   g:matches "\\x22" 
+.
