@@ -96,10 +96,9 @@
 
 @terminals
 
-[26] integer ::= signopt [0-9]+
-[26b] signopt ::= ("+" | "-")?
-[27] double	::= signopt [0-9]+ ("." [0-9]+)? ( [eE] signopt [0-9]+)
-[28] decimal	::= signopt [0-9]+ ("." [0-9]+)?
+[26] integer ::= [+-]? [0-9]+
+[27] double	::= [+-]? [0-9]+ ("." [0-9]+)? ( [eE] [+-]? [0-9]+)
+[28] decimal	::= [+-]? [0-9]+ ("." [0-9]+)?
 
 /* @@check SPARQL spec, which excludes newlines and some other nastiness */
 [29] explicituri ::=	"<" [^>]* ">"
@@ -127,10 +126,15 @@
 [33] langcode	::= [a-z]+ ("-" [a-z0-9]+)*
 /* http://www.w3.org/TR/rdf-testcases/#language */
 
+[34] string ::= STRING_LITERAL2 | STRING_LITERAL_LONG2
 
-[34] string ::= dq ([^"] | ("\" dq))* dq
-/* @@ ugh... can't figure out triple-quoted string tonight. */
+/* borrow from SPARQL... */
 
-/* " */
-[35] dq ::= #x22
+[79]    	STRING_LITERAL2  	  ::=    	'"' ( ([^#x22#x5C#xA#xD]) | ECHAR | UCHAR )* '"'
+[81]    	STRING_LITERAL_LONG2  	  ::=    	'"""' ( ( '"' | '""' )? ( [^"\] | ECHAR | UCHAR ) )* '"""'
+[82]    	ECHAR  	  ::=    	'\' [tbnrf\"']
+
+[83]    	UCHAR  	  ::=    	'\' ( 'u' HEX HEX HEX HEX | 'U' HEX HEX HEX HEX HEX HEX HEX HEX )
+[84]    	HEX  	  ::=    	[0-9] | [A-F] | [a-f]
+
 
