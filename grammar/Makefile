@@ -113,5 +113,8 @@ sparql-report.html : sparql-report.big
 	time $P $C  sparql-report.big --strings > $@
 
 
+notation3.n3: notation3.bnf bnf2turtle.py
+	$P bnf2turtle.py notation3.bnf >$@
+
 #ends
 
