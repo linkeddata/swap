@@ -1,0 +1,135 @@
+/* transcribe from n3.n3 revision 1.28 date: 2006/02/15 15:49:00 */
+
+/* The N3 Full Grammar */
+
+
+[1] document ::= statements_optional
+
+[2] statements_optional ::= 
+                        | statement "." statements_optional
+
+/* Formula does NOT need period on last statement */
+
+[3] formulacontent ::= statementlist
+
+[4] statementlist ::= 
+                  | statement statementtail
+
+[5] statementtail ::=
+                  | "." statementlist
+
+[6] statement  ::= declaration
+	       | universal
+	       | existential
+	       | simpleStatement
+
+[7] universal ::= "@forAll" symbol ("," symbol)*
+
+[8] existential ::= "@forSome" symbol ("," symbol)*
+
+
+[9] declaration ::= "@prefix" prefix explicituri
+    		|   "@keywords" barename ("," barename)*
+
+[10] simpleStatement ::= subject propertylist
+
+[11] propertylist ::= 
+		  | verb object objecttail propertylisttail
+
+[12] propertylisttail ::=
+     		      | ";" propertylist
+
+
+[13] objecttail ::=
+		| ","   object objecttail
+
+[14] verb ::= expression 
+		| "@has" expression
+		| "@is" expression "@of"
+		| "@a"
+		| "="
+		| "=>"
+		| "<=" 
+
+/* let's call it term rather than expression -DWC */
+[15] subject ::= expression
+
+[16] object ::= expression
+
+[17] expression ::= pathitem pathtail
+
+[18] pathtail ::=
+     	      | "!" expression
+	      | "^" expression
+
+[19] pathitem ::= symbol
+		| "{" formulacontent "}"
+		| quickvariable
+		| numericliteral
+		| literal
+		| "[" propertylist "]"
+		|  "("  pathlist ")"
+                | boolean
+/*		| "@this"  #  Deprecated.  Was allowed for this log:forAll x */
+
+
+[20] boolean ::= "@true" | "@false"
+
+[21] pathlist ::= 
+     	      | expression pathlist
+
+[22] symbol ::= explicituri
+	    | qname
+
+[23] numericliteral ::= integer
+          | double
+          | decimal
+
+[24] literal ::= string dtlang
+
+[25] dtlang ::= 
+            | "@" langcode
+            | "^^" symbol
+
+
+/***********/
+
+@terminals
+
+[26] integer ::= [-+]? [0-9]+
+[27] double	::= [-+]? [0-9]+ ("." [0-9]+)? ( [eE] [-+]? [0-9]+)
+[28] decimal	::= [-+]? [0-9]+ ("." [0-9]+)?
+
+/* @@check SPARQL spec, which excludes newlines and some other nastiness */
+[29] explicituri ::=	"<" [^>]* ">"
+
+
+/* [4]   	NameStartChar	from xml11, less ":" */
+[30] NameStartChar3	   ::=   	":" | [A-Z] | "_" | [a-z] | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF] | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D] | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]
+
+/* [4a]   	NameChar from xml11 less ":" and "." */
+[31]   	NameChar3	   ::=   	NameStartChar | "-" | [0-9] | #xB7 | [#x0300-#x036F] | [#x203F-#x2040]
+
+[32] prefix ::= (NameStartChar3 NameChar3*)? ":"
+
+[33] qname  ::= ( (NameStartChar3 NameChar3*)? ":")? NameStartChar3 NameChar3*
+
+
+[34] barename ::= NameStartChar3 NameChar3*
+
+
+[35] quickvariable ::= "?" barename
+
+/* Maybe dtlang should just be part of string regexp? */
+/* Whitespace is not allowed */
+
+[33] langcode	::= [a-z]+ ("-" [a-z0-9]+)*
+/* http://www.w3.org/TR/rdf-testcases/#language */
+
+
+[34] string ::= dq ([^"] | ("\" dq))* dq
+/* @@ ugh... can't figure out triple-quoted string tonight. */
+
+/* " */
+[35] dq ::= #x22
+
