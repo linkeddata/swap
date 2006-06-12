@@ -32,13 +32,34 @@ def processProduction(f, prod):
             return knownProps[prop](f, prod, l)
     return knownClasses[prod], regex['CharClass']
 
+def modifies(f, subj, obj):
+    substring, cs = processProduction(f, obj)
+    modification = f.the(subj=subj, pred=regex['modification'])
+    if not modification:
+        raise ValueError
+    if modification in knownModifications:
+        return knownModifications[modification](f, substring)
+    elif f.contains(subj=modification, pred=rdf['type'], obj=rejex['GreedyMatchCounter']):
+        pass
+    elif f.contains(subj=modification, pred=rdf['type'], obj=rejex['NonGreedyMatchCounter']):
+        pass
+    
+
 
 def group_literal(f, subj, obj):
-    substring = processProduction(f, obj)
-    return u'[%s]' % substring
+    substring, cs = processProduction(f, obj)
+    return (u'[%s]' % substring), regex['CharClass']
 
 def complement(f, subj, obj):
-    substring = processProduction(f, obj)
+    substring, cs = processProduction(f, obj)
+    if cs if not regex['CharClass']:
+        raise ValueError
+    return (u'[^%s]' % substring[1:-1]), regex['CharClass']
+
+def disjunction(f, subj, obj):
+    values = [processProduction(f, x)[0] for x in obj]
+    return '(?:' + '|'.join(values) + ')'
+
 
 def main():
     import sys
