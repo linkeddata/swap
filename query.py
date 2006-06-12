@@ -825,11 +825,11 @@ class Query(Formula):
                 
                 if isinstance(r, BecauseSupportsWill):                    
                     evidence[loc] = BecauseSupports(*([smarterSubstitution(k, bindings,
-                        r.args[0]) for k in r.args] +
+                        r.args[1]) for k in r.args] +
                         [[k for k in evidence if isinstance(k, (StoredStatement, Reason))]]))
                 if isinstance(r, BecauseBuiltInWill):                    
                     evidence[loc] = BecauseBuiltIn(*[smarterSubstitution(k, bindings,
-                        r.args[0]) for k in r.args])
+                        r.args[1]) for k in r.args])
 	    reason = BecauseOfRule(self.rule, bindings=bindings, knownExistentials = extraBNodes,
 			    evidence=evidence, kb=self.workingContext)
 #	    progress("We have a reason for %s of %s with bindings %s" % (self.rule, reason, bindings))
