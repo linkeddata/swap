@@ -30,10 +30,13 @@
 :CharClass a owl:Class;
     rdfs:subClassOf :Regex .
 
+:ExplicitCharClass a owl:Class;
+    rdfs:subClassOf :CharClass .
+
 :rdef a owl:FunctionalProperty .
 
 :group_literal rdfs:subPropertyOf :rdef;
-    rdfs:domain :CharClass;
+    rdfs:domain :ExplicitCharClass;
     rdfs:range  xsd:string .
 
 
@@ -52,12 +55,15 @@
    :Star a :Modifier .
    :Plus a :Modifier .
    :Optional a :Modifier .
-   :Non-Greedy-Star a :Modifier .
-   :Non-Greedy-Plus a :Modifier .
-   :Non-Greedy-Optional a :Modifier .
+   :NonGreedyStar a :Modifier .
+   :NonGreedyPlus a :Modifier .
+   :NonGreedyOptional a :Modifier .
 
 :MatchCounter a owl:Class;
     rdfs:subClassOf :Modifier .
+
+:GreedyMatchCounter a owl:Class;
+    rdfs:subClassOf :MatchCounter .
 
 :NonGreedyMatchCounter a owl:Class;
     rdfs:subClassOf :MatchCounter .
@@ -69,6 +75,9 @@
 :maxMatches a owl:FunctionalProperty;
     rdfs:domain :MatchCounter;
     rdfs:range xsd:nonNegativeInteger .
+
+:preciseMatches a owl:FunctionalProperty;
+    rdfs:subPropertyOf :maxMatches, :minMatches .
 
 :complement rdfs:subPropertyOf :rdef;
     rdfs:domain :CharClass;
