@@ -128,13 +128,16 @@
 
 [34] string ::= STRING_LITERAL2 | STRING_LITERAL_LONG2
 
-/* borrow from SPARQL... */
+/* borrow from SPARQL... and double some \\ */
 
-[79]    	STRING_LITERAL2  	  ::=    	'"' ( ([^#x22#x5C#xA#xD]) | ECHAR | UCHAR )* '"'
-[81]    	STRING_LITERAL_LONG2  	  ::=    	'"""' ( ( '"' | '""' )? ( [^"\] | ECHAR | UCHAR ) )* '"""'
-[82]    	ECHAR  	  ::=    	'\' [tbnrf\"']
+[79]    	STRING_LITERAL2  	  ::=    	'"' ( ([^#x22#x5C#x0A#x0D]) | ECHAR | UCHAR )* '"'
 
-[83]    	UCHAR  	  ::=    	'\' ( 'u' HEX HEX HEX HEX | 'U' HEX HEX HEX HEX HEX HEX HEX HEX )
+[81]    	STRING_LITERAL_LONG2  	  ::=    	'"""' ( ( '"' | '""' )? ( [^"\\] | ECHAR | UCHAR ) )* '"""'
+
+[82]    	ECHAR  	  ::=    	'\\' [tbnrf\"']
+
+[83]    	UCHAR  	  ::=    	'\\' ( 'u' HEX HEX HEX HEX | 'U' HEX HEX HEX HEX HEX HEX HEX HEX )
+
 [84]    	HEX  	  ::=    	[0-9] | [A-F] | [a-f]
 
 
