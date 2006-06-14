@@ -1094,7 +1094,7 @@ class BI_existentialVariableName(RDFBuiltIn): #, MultipleFunction):
 	if not isinstance(subj, Formula): return None
 	s = str(obj)
 	if obj not in subj.existentials() and diag.chatty_flag > 25:
-            progress('Failed, which is odd. Subj="%s", Obj="%s"' % subj.debugString(), obj.debugString())
+            progress('Failed, which is odd. Subj="%s", Obj="%s"' % (subj.debugString(), obj.debugString()))
 	return obj in subj.existentials()
 	for v in subj.existentials():
 	    if v.uriref() == s: return 1
