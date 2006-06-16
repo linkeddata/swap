@@ -1,3 +1,4 @@
+/* $Id$ */
 /* transcribe from n3.n3 revision 1.28 date: 2006/02/15 15:49:00 */
 
 /* The N3 Full Grammar */
@@ -105,10 +106,10 @@
 
 
 /* [4]   	NameStartChar	from xml11, less ":" */
-[30] NameStartChar3	   ::=   	":" | [A-Z] | "_" | [a-z] | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF] | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D] | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]
+[30] NameStartChar3	   ::=   	[A-Z] | "_" | [a-z] | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF] | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D] | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]
 
 /* [4a]   	NameChar from xml11 less ":" and "." */
-[31]   	NameChar3	   ::=   	NameStartChar | "-" | [0-9] | #xB7 | [#x0300-#x036F] | [#x203F-#x2040]
+[31]   	NameChar3	   ::=   	NameStartChar3 | "-" | [0-9] | #xB7 | [#x0300-#x036F] | [#x203F-#x2040]
 
 [32] prefix ::= (NameStartChar3 NameChar3*)? ":"
 
