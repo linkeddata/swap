@@ -1,0 +1,75 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/>.  # @@ no #
+
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<> dc:title "first and follow rules";
+dc:source [
+ = <http://en.wikipedia.org/wiki/LL_parser#Constructing_an_LL.281.29_parsing_table>;
+ dc:title "Constructing an LL(1) parsing table";
+ dc:description "The same material is covered in page 44-48 of Aho, Sethi, Ullman";
+ dc:relation <http://en.wikipedia.org/wiki/Compilers:_Principles%2C_Techniques%2C_and_Tools>;
+].
+
+@prefix g: <http://www.w3.org/2000/10/swap/grammar/ebnf#>.
+
+@prefix list: <http://www.w3.org/2000/10/swap/list#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+@prefix : <first_follow#>.
+@prefix ll1: <first_follow#>.
+
+@keywords is, of, a.
+
+#hmm... perhaps g:NonTerminal and g:Terminal shoule be w.r.t. a language...
+
+
+# from wikipedia:
+
+# Fi(a w' ) = { a } for every terminal a
+{ ?A g:seq [ rdf:first ?T ].
+  ?T a g:Terminal.
+} => { ?A first ?T }.
+
+{ ?A g:alt [ list:member ?T ].
+  ?T a g:Terminal.
+} => { ?A first ?T }.
+
+# Fi(A w' ) = Fi(A) for every nonterminal A with ε not in Fi(A)
+{ ?AW g:seq [ rdf:first ?A ].
+  ?A first ?T
+} => { ?AW first ?T }.
+
+# Fi(A w' ) = Fi(A) \ { ε } ∪ Fi(w' ) for every nonterminal A with ε in Fi(A)
+{ ?AW seq [ rdf:first ?A; rdf:rest ?W ].
+  ?A first eps.
+  ?W first ?T
+} => { ?AW first ?T }.
+
+# Fi(ε) = { ε }
+{ ?E g:seq () } => { ?E first eps }.
+
+# and one more rule since wikipedia doesn't use exactly the same structure:
+{ ?A g:alt [ list:member [ first ?T ] ].
+} => { ?A first ?T }.
+
+
+
+# Comprehension rule:
+# all shorter sequences exist.
+{ ?X g:seq [ rdf:rest ?R] } => { [] g:seq ?R }.
+
+
+# promote literals to Terminals
+{ [] g:alt [ list:member ?T ].
+  ?T log:rawType log:Literal.
+} => {
+ ?T a g:Terminal.
+ # hmm...  g:Literal ?
+ }.
+{ [] g:seq [ list:member ?T ].
+  ?T log:rawType log:Literal.
+} => {
+ ?T a g:Terminal.
+ # hmm...  g:Literal ?
+ }.
