@@ -29,8 +29,10 @@
 [8] existential ::= "@forSome" (symbol ("," symbol)*)?
 
 
+/* barename and qname were ambiguous */
+/* so the barename check will have to be extra-grammatical */
 [9] declaration ::= "@prefix" prefix explicituri
-    		|   "@keywords" (barename ("," barename)*)?
+    		|   "@keywords" (qname ("," qname)*)?
 
 [10] simpleStatement ::= subject propertylist
 
@@ -113,13 +115,9 @@
 
 [32] prefix ::= (NameStartChar3 NameChar3*)? ":"
 
-[33] qname  ::= ( (NameStartChar3 NameChar3*)? ":")? NameStartChar3 NameChar3*
+[34] qname  ::= ( (NameStartChar3 NameChar3*)? ":")? NameStartChar3 NameChar3*
 
-
-[34] barename ::= NameStartChar3 NameChar3*
-
-
-[35] quickvariable ::= "?" barename
+[35] quickvariable ::= "?" NameStartChar3 NameChar3*
 
 /* Maybe dtlang should just be part of string regexp? */
 /* Whitespace is not allowed */
