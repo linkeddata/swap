@@ -24,13 +24,13 @@
 	       | existential
 	       | simpleStatement
 
-[7] universal ::= "@forAll" symbol ("," symbol)*
+[7] universal ::= "@forAll" (symbol ("," symbol)*)?
 
-[8] existential ::= "@forSome" symbol ("," symbol)*
+[8] existential ::= "@forSome" (symbol ("," symbol)*)?
 
 
 [9] declaration ::= "@prefix" prefix explicituri
-    		|   "@keywords" barename ("," barename)*
+    		|   "@keywords" (barename ("," barename)*)?
 
 [10] simpleStatement ::= subject propertylist
 
