@@ -1,0 +1,56 @@
+
+<!-- Processed by Id: cwm.py,v 1.185 2006/05/30 21:08:05 syosi Exp -->
+<!--     using base file:/home/connolly/w3ccvs/WWW/2000/10/swap/grammar/ebnf.n3-->
+
+
+<rdf:RDF xmlns="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+
+    <rdf:Description rdf:about="">
+        <seeAlso rdf:resource="http://en.wikipedia.org/wiki/Extended_Backus-Naur_form"/>
+    </rdf:Description>
+
+    <Class rdf:about="http://www.w3.org/2000/10/swap/grammar/ebnf#NonTerminal">
+        <label>NonTerminal</label>
+    </Class>
+
+    <Class rdf:about="http://www.w3.org/2000/10/swap/grammar/ebnf#Terminal">
+        <comment>a lexical token; i.e. a symbol in a lower-level language</comment>
+        <label>Terminal</label>
+    </Class>
+
+    <owl:InverseFunctionalProperty rdf:about="http://www.w3.org/2000/10/swap/grammar/ebnf#alt">
+        <comment>read {X :alt (Y Z)]} as: an X is either a Y or a Z.</comment>
+        <label>alt</label>
+    </owl:InverseFunctionalProperty>
+
+    <owl:InverseFunctionalProperty rdf:about="http://www.w3.org/2000/10/swap/grammar/ebnf#matches">
+        <comment> [ :matches "x|y"] is the language of strings that matches the regex "x|y". </comment>
+        <label>matches</label>
+        <range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </owl:InverseFunctionalProperty>
+
+    <owl:InverseFunctionalProperty rdf:about="http://www.w3.org/2000/10/swap/grammar/ebnf#opt">
+        <comment>[ :opt X] is an optional X,
+ i.e. zero or one X's.
+short for [ :alt ([ :seq ()] X)]</comment>
+        <label>opt</label>
+    </owl:InverseFunctionalProperty>
+
+    <owl:InverseFunctionalProperty rdf:about="http://www.w3.org/2000/10/swap/grammar/ebnf#rep">
+        <comment>[ :rep X] is one or more Xs.</comment>
+        <label>rep</label>
+    </owl:InverseFunctionalProperty>
+
+    <owl:InverseFunctionalProperty rdf:about="http://www.w3.org/2000/10/swap/grammar/ebnf#seq">
+        <comment>read {X :seq (Y Z)]} as: an X is a Y followed by a Z.</comment>
+        <label>seq</label>
+    </owl:InverseFunctionalProperty>
+
+    <owl:InverseFunctionalProperty rdf:about="http://www.w3.org/2000/10/swap/grammar/ebnf#star">
+        <comment>[ :star X] is zero or more Xs.</comment>
+        <label>star</label>
+    </owl:InverseFunctionalProperty>
+</rdf:RDF>

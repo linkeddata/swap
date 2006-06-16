@@ -1,0 +1,49 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+
+@prefix : <http://www.w3.org/2000/10/swap/grammar/ebnf#> .
+@prefix ebnf: <http://www.w3.org/2000/10/swap/grammar/ebnf#> .
+
+@prefix ss: <http://www.w3.org/2000/10/swap/util/sniffSchema#> .
+
+<> rdfs:seeAlso <http://en.wikipedia.org/wiki/Extended_Backus-Naur_form>.
+    
+    :alt     a owl:InverseFunctionalProperty;
+         rdfs:label "alt" ;
+	 rdfs:comment "read {X :alt (Y Z)]} as: an X is either a Y or a Z."
+.
+    
+    :seq     a owl:InverseFunctionalProperty;
+         rdfs:label "seq";
+	 rdfs:comment "read {X :seq (Y Z)]} as: an X is a Y followed by a Z."
+ .
+    
+    :opt     a owl:InverseFunctionalProperty;
+         rdfs:label "opt" ;
+         rdfs:comment """[ :opt X] is an optional X,
+ i.e. zero or one X's.
+short for [ :alt ([ :seq ()] X)]"""
+.
+    
+    :rep     a owl:InverseFunctionalProperty;
+         rdfs:label "rep";
+         rdfs:comment """[ :rep X] is one or more Xs.""".
+
+    
+    :star     a owl:InverseFunctionalProperty;
+         rdfs:label "star";
+         rdfs:comment """[ :star X] is zero or more Xs.""".
+
+    :NonTerminal     a rdfs:Class;
+         rdfs:label "NonTerminal" .
+    
+    :Terminal     a rdfs:Class;
+         rdfs:label "Terminal";
+         rdfs:comment "a lexical token; i.e. a symbol in a lower-level language" .
+    
+    :matches     a owl:InverseFunctionalProperty;
+         rdfs:label "matches";
+         rdfs:range rdfs:Literal;
+         rdfs:comment """ [ :matches "x|y"] is the language of strings that matches the regex "x|y". """ .
+    

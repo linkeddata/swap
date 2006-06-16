@@ -1,8 +1,10 @@
+/* The N3 Full Grammar */
+/* in XML formal grammar notation */
+/* which see  http://www.w3.org/TR/2004/REC-xml11-20040204/#sec-notation */
+/* and see http://en.wikipedia.org/wiki/Extended_Backus-Naur_form */
+
 /* $Id$ */
 /* transcribe from n3.n3 revision 1.28 date: 2006/02/15 15:49:00 */
-
-/* The N3 Full Grammar */
-
 
 [1] document ::= statements_optional
 
