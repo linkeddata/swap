@@ -113,6 +113,8 @@ sparql-report.html : sparql-report.big
 	time $P $C  sparql-report.big --strings > $@
 
 
+ebnf: notation3.rdf ebnf.rdf
+
 notation3.n3: notation3.bnf ebnf2turtle.py
 	$P ebnf2turtle.py notation3.bnf 'http://www.w3.org/2000/10/swap/grammar/notation3#' >$@
 
