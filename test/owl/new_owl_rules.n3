@@ -474,8 +474,8 @@ owl:inverseOf     a rdf:Property, owl:SymmetricProperty;
 } => {?C owl:equivalentClass owl:Thing} .
 
 {?C owl:unionOf ?L .
- ?L list:member ?K, ?L .
- ?K owl:complementOf ?L .
+ ?L list:member ?K, ?L2 .
+ ?K owl:complementOf ?L2 .
 } => {?C owl:equivalentClass owl:Thing} .
 
 {?C owl:unionOf ?L .
@@ -507,7 +507,7 @@ rdf:nil :removeUnions rdf:nil .
  ?L :removeUnions ?L2 .
 } => {?C owl:unionOf ?L2} .
 
-{?C owl:unionOf (?K)} => {?C rdfs:subClassOf ?K} .
+# {?C owl:unionOf (?K)} => {?C rdfs:subClassOf ?K} .
 
 ###################################
 
