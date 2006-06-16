@@ -1,0 +1,9 @@
+@prefix g: <http://www.w3.org/2000/10/swap/grammar/ebnf#>.
+
+{ ?A g:opt ?B } => { ?A g:alt ( [ g:seq ()] ?B ) }.
+
+{ ?A g:rep ?B } => { ?A g:seq ( ?B [ g:star ?B] ) }.
+
+{ ?A g:star ?B } => { ?A g:alt ( [ g:seq ()] [ g:seq (?B ?A) ] ) }.
+
+
