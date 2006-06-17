@@ -14,7 +14,6 @@ dc:source [
 @prefix g: <http://www.w3.org/2000/10/swap/grammar/ebnf#>.
 
 @prefix list: <http://www.w3.org/2000/10/swap/list#>.
-@prefix log: <http://www.w3.org/2000/10/swap/log#>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 
 @prefix : <http://www.w3.org/2000/10/swap/grammar/ebnf#>.
@@ -87,13 +86,3 @@ dc:source [
 # Comprehension rule:
 # all shorter sequences exist.
 { ?X g:seq [ rdf:rest ?R] } => { [] g:seq ?R }.
-
-
-# promote literals to Terminals
-{ [] g:alt [ list:member ?T ].
-  ?T log:rawType log:Literal.
-} => { ?T a g:Terminal }.
-
-{ [] g:seq [ list:member ?T ].
-  ?T log:rawType log:Literal.
-} => { ?T a g:Terminal }.
