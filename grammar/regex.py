@@ -8,7 +8,7 @@ Convert an n3 file of the regex ontology to a python regex
 
 from swap import myStore, term
 regex = myStore.symbol('http://www.w3.org/2000/10/swap/grammar/regex')
-from RDFSink import RDF_NS_URI
+from swap.RDFSink import RDF_NS_URI
 rdf = myStore.symbol(RDF_NS_URI[:-1])
 
 knownClasses = {regex['Dot']: u'.',
@@ -160,7 +160,7 @@ def makeRegex(f, base):
 def escape(s):
     if s in '-<>':
         return u'\\' + s
-    return s.replace('\\','\\\\').replace('.','\\.').replace('?','\\?').replace('+','\\+')
+    return s.replace('\\','\\\\').replace('.','\\.').replace('?','\\?').replace('+','\\+').replace("[", "\\[").replace("]", "\\]").replace("(", "\\(").replace(")", "\\)")
 
 def es_len(s):
     if len(s) == 2 and s[0] == '\\' and s[1] in '\\abfnrtvxAbBdDsSwW.?+':
