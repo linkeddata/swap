@@ -1,0 +1,1711 @@
+#Processed by Id: cwm.py,v 1.185 2006/05/30 21:08:05 syosi Exp 
+        #    using base file:/home/connolly/w3ccvs/WWW/2000/10/swap/grammar/
+        
+#  Notation3 generation by
+#       notation3.py,v 1.187 2006/01/13 14:48:54 syosi Exp
+
+#   Base was: file:/home/connolly/w3ccvs/WWW/2000/10/swap/grammar/
+     @prefix : <http://www.w3.org/2000/10/swap/grammar/ebnf#> .
+    @prefix n3: <http://www.w3.org/2000/10/swap/grammar/notation3#> .
+    @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+    @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+    @prefix re: <http://www.w3.org/2000/10/swap/grammar/regex#> .
+    
+     @forSome <#_g0>,
+                <#_g1>,
+                <#_g2>,
+                <#_g3>,
+                <#_g4>,
+                <#_g5>,
+                <#_g6>,
+                <#_g7>,
+                <#_g8>,
+                <#_g9>,
+                <#_g10>,
+                <#_g11> .
+    
+    "!"     a :Terminal .
+    
+    "("     a :Terminal .
+    
+    ")"     a :Terminal .
+    
+    ","     a :Terminal .
+    
+    "."     a :Terminal .
+    
+    ";"     a :Terminal .
+    
+    "<="     a :Terminal;
+         :follow "(",
+                "@false",
+                "@true",
+                "[",
+                "{",
+                n3:decimal,
+                n3:double,
+                n3:explicituri,
+                n3:integer,
+                n3:qname,
+                n3:quickvariable,
+                n3:string .
+    
+    "="     a :Terminal;
+         :follow "(",
+                "@false",
+                "@true",
+                "[",
+                "{",
+                n3:decimal,
+                n3:double,
+                n3:explicituri,
+                n3:integer,
+                n3:qname,
+                n3:quickvariable,
+                n3:string .
+    
+    "=>"     a :Terminal;
+         :follow "(",
+                "@false",
+                "@true",
+                "[",
+                "{",
+                n3:decimal,
+                n3:double,
+                n3:explicituri,
+                n3:integer,
+                n3:qname,
+                n3:quickvariable,
+                n3:string .
+    
+    "@"     a :Terminal .
+    
+    "@a"     a :Terminal;
+         :follow "(",
+                "@false",
+                "@true",
+                "[",
+                "{",
+                n3:decimal,
+                n3:double,
+                n3:explicituri,
+                n3:integer,
+                n3:qname,
+                n3:quickvariable,
+                n3:string .
+    
+    "@false"     a :Terminal;
+         :follow "!",
+                "^" .
+    
+    "@forAll"     a :Terminal .
+    
+    "@forSome"     a :Terminal .
+    
+    "@has"     a :Terminal .
+    
+    "@is"     a :Terminal .
+    
+    "@keywords"     a :Terminal .
+    
+    "@of"     a :Terminal .
+    
+    "@prefix"     a :Terminal .
+    
+    "@true"     a :Terminal;
+         :follow "!",
+                "^" .
+    
+    "["     a :Terminal .
+    
+    "]"     a :Terminal .
+    
+    "^"     a :Terminal .
+    
+    "^^"     a :Terminal .
+    
+    "{"     a :Terminal .
+    
+    "}"     a :Terminal .
+    
+    <ebnf2bnf.n3>     <http://purl.org/dc/elements/1.1/description> "$Id$",
+                """reduce EBNF to BNF;
+i.e. rewrite ?, +, * operators using alt and seq
+""";
+         rdfs:seeAlso <ebnf>,
+                <ebnf.n3>,
+                <ebnf.rdf> .
+    
+    <first_follow.n3>     <http://purl.org/dc/elements/1.1/description> "$Id$";
+         <http://purl.org/dc/elements/1.1/source> <http://en.wikipedia.org/wiki/LL_parser#Constructing_an_LL.281.29_parsing_table>;
+         <http://purl.org/dc/elements/1.1/title> "first and follow rules for LL(1) grammars" .
+    
+    <http://en.wikipedia.org/wiki/LL_parser#Constructing_an_LL.281.29_parsing_table>     <http://purl.org/dc/elements/1.1/description> "The same material is covered in page 44-48 of Aho, Sethi, Ullman";
+         <http://purl.org/dc/elements/1.1/relation> <http://en.wikipedia.org/wiki/Compilers:_Principles%2C_Techniques%2C_and_Tools>;
+         <http://purl.org/dc/elements/1.1/title> "Constructing an LL(1) parsing table" .
+    
+    :alt     rdfs:domain :NonTerminal .
+    
+    :seq     rdfs:domain :NonTerminal .
+    
+    n3:ECHAR     a :Terminal;
+         rdf:value "82";
+         rdfs:comment """[82]    	ECHAR  	  ::=    	'\\\\' [tbnrf\\"']""";
+         rdfs:label "ECHAR";
+         re:seq  (
+        "\\\\"
+         [
+                 :matches "[tbnrf\\\"']" ] ) .
+    
+    n3:HEX     a :Terminal;
+         rdf:value "84";
+         rdfs:comment "[84]    \tHEX  \t  ::=    \t[0-9] | [A-F] | [a-f]";
+         rdfs:label "HEX";
+         re:alt  (
+         [
+                 :matches "[0-9]" ]
+         [
+                 :matches "[A-F]" ]
+         [
+                 :matches "[a-f]" ] ) .
+    
+    n3:NameChar3     a :Terminal;
+         rdf:value "31";
+         rdfs:comment """[31]   	NameChar3	   ::=   	NameStartChar3 | "-" | [0-9] | #xB7 | [#x0300-#x036F] | [#x203F-#x2040]""";
+         rdfs:label "NameChar3";
+         re:alt  (
+        n3:NameStartChar3
+        "-"
+         [
+                 :matches "[0-9]" ]
+         [
+                 :matches "\\xB7" ]
+         [
+                 :matches "[#x0300-#x036F]" ]
+         [
+                 :matches "[#x203F-#x2040]" ] ) .
+    
+    n3:NameStartChar3     a :Terminal;
+         rdf:value "30";
+         rdfs:comment """[30] NameStartChar3	   ::=   	[A-Z] | "_" | [a-z] | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF] | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D] | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]""";
+         rdfs:label "NameStartChar3";
+         re:alt  (
+         [
+                 :matches "[A-Z]" ]
+        "_"
+         [
+                 :matches "[a-z]" ]
+         [
+                 :matches "[#xC0-#xD6]" ]
+         [
+                 :matches "[#xD8-#xF6]" ]
+         [
+                 :matches "[#xF8-#x2FF]" ]
+         [
+                 :matches "[#x370-#x37D]" ]
+         [
+                 :matches "[#x37F-#x1FFF]" ]
+         [
+                 :matches "[#x200C-#x200D]" ]
+         [
+                 :matches "[#x2070-#x218F]" ]
+         [
+                 :matches "[#x2C00-#x2FEF]" ]
+         [
+                 :matches "[#x3001-#xD7FF]" ]
+         [
+                 :matches "[#xF900-#xFDCF]" ]
+         [
+                 :matches "[#xFDF0-#xFFFD]" ]
+         [
+                 :matches "[#x10000-#xEFFFF]" ] ) .
+    
+    n3:STRING_LITERAL2     a :Terminal;
+         rdf:value "79";
+         rdfs:comment """[79]    	STRING_LITERAL2  	  ::=    	'"' ( ([^#x22#x5C#x0A#x0D]) | ECHAR | UCHAR )* '"'""";
+         rdfs:label "STRING_LITERAL2";
+         re:seq  (
+        "\""
+         [
+                 re:star  [
+                     re:alt  (
+                     [
+                             :matches "[^#x22#x5C#x0A#x0D]" ]
+                    n3:ECHAR
+                    n3:UCHAR ) ] ]
+        "\"" ) .
+    
+    n3:STRING_LITERAL_LONG2     a :Terminal;
+         rdf:value "81";
+         rdfs:comment """[81]    	STRING_LITERAL_LONG2  	  ::=    	'\"""' ( ( '"' | '""' )? ( [^"\\\\] | ECHAR | UCHAR ) )* '\"""'""";
+         rdfs:label "STRING_LITERAL_LONG2";
+         re:seq  (
+        "\"\"\""
+         [
+                 re:star  [
+                     re:seq  (
+                     [
+                             re:opt  [
+                                 re:alt  (
+                                "\""
+                                "\"\"" ) ] ]
+                     [
+                             re:alt  (
+                             [
+                                     :matches "[^\"\\\\]" ]
+                            n3:ECHAR
+                            n3:UCHAR ) ] ) ] ]
+        "\"\"\"" ) .
+    
+    n3:UCHAR     a :Terminal;
+         rdf:value "83";
+         rdfs:comment "[83]    \tUCHAR  \t  ::=    \t'\\\\' ( 'u' HEX HEX HEX HEX | 'U' HEX HEX HEX HEX HEX HEX HEX HEX )";
+         rdfs:label "UCHAR";
+         re:seq  (
+        "\\\\"
+         [
+                 re:alt  (
+                 [
+                         re:seq  (
+                        "u"
+                        n3:HEX
+                        n3:HEX
+                        n3:HEX
+                        n3:HEX ) ]
+                 [
+                         re:seq  (
+                        "U"
+                        n3:HEX
+                        n3:HEX
+                        n3:HEX
+                        n3:HEX
+                        n3:HEX
+                        n3:HEX
+                        n3:HEX
+                        n3:HEX ) ] ) ] ) .
+    
+    n3:boolean     a :NonTerminal;
+         rdf:value "20";
+         rdfs:comment "[20] boolean ::= \"@true\" | \"@false\"";
+         rdfs:label "boolean";
+         :alt  (
+        "@true"
+        "@false" );
+         :first "@false",
+                "@true";
+         :follow "!",
+                "^" .
+    
+    n3:decimal     a :Terminal;
+         rdf:value "28";
+         rdfs:comment """[28] decimal	::= [+-]? [0-9]+ ("." [0-9]+)?""";
+         rdfs:label "decimal";
+         :follow "!",
+                "^";
+         re:seq  (
+         [
+                 re:opt  [
+                     :matches "[+-]" ] ]
+         [
+                 re:rep  [
+                     :matches "[0-9]" ] ]
+         [
+                 re:opt  [
+                     re:seq  (
+                    "."
+                     [
+                             re:rep  [
+                                 :matches "[0-9]" ] ] ) ] ] ) .
+    
+    n3:declaration     a :NonTerminal;
+         rdf:value "9";
+         rdfs:comment """[9] declaration ::= "@prefix" prefix explicituri|   "@keywords" (qname ("," qname)*)?""";
+         rdfs:label "declaration";
+         :alt  (
+         [
+                 a :NonTerminal;
+                 :first "@prefix";
+                 :follow ".";
+                 :seq  (
+                "@prefix"
+                n3:prefix
+                n3:explicituri ) ]
+         [
+                 a :NonTerminal;
+                 :first "@keywords";
+                 :follow ".";
+                 :seq  (
+                "@keywords"
+                <#_g8> ) ] );
+         :first "@keywords",
+                "@prefix";
+         :follow "." .
+    
+    n3:document     a :NonTerminal;
+         rdf:value "1";
+         rdfs:comment "[1] document ::= statements_optional";
+         rdfs:label "document";
+         :first "(",
+                "@false",
+                "@forAll",
+                "@forSome",
+                "@keywords",
+                "@prefix",
+                "@true",
+                "[",
+                "{",
+                :eps,
+                n3:decimal,
+                n3:double,
+                n3:explicituri,
+                n3:integer,
+                n3:qname,
+                n3:quickvariable,
+                n3:string;
+         :seq  (
+        n3:statements_optional ) .
+    
+    n3:double     a :Terminal;
+         rdf:value "27";
+         rdfs:comment """[27] double	::= [+-]? [0-9]+ ("." [0-9]+)? ( [eE] [+-]? [0-9]+)""";
+         rdfs:label "double";
+         :follow "!",
+                "^";
+         re:seq  (
+         [
+                 re:opt  [
+                     :matches "[+-]" ] ]
+         [
+                 re:rep  [
+                     :matches "[0-9]" ] ]
+         [
+                 re:opt  [
+                     re:seq  (
+                    "."
+                     [
+                             re:rep  [
+                                 :matches "[0-9]" ] ] ) ] ]
+         [
+                 re:seq  (
+                 [
+                         :matches "[eE]" ]
+                 [
+                         re:opt  [
+                             :matches "[+-]" ] ]
+                 [
+                         re:rep  [
+                             :matches "[0-9]" ] ] ) ] ) .
+    
+    n3:dtlang     a :NonTerminal;
+         rdf:value "25";
+         rdfs:comment """[25] dtlang ::=| "@" langcode| "^^" symbol""";
+         rdfs:label "dtlang";
+         :alt  (
+         [
+                 a :NonTerminal;
+                 :first :eps;
+                 :follow "!",
+                        "^";
+                 :seq () ]
+         [
+                 a :NonTerminal;
+                 :first "@";
+                 :follow "!",
+                        "^";
+                 :seq  (
+                "@"
+                n3:langcode ) ]
+         [
+                 a :NonTerminal;
+                 :first "^^";
+                 :follow "!",
+                        "^";
+                 :seq  (
+                "^^"
+                n3:symbol ) ] );
+         :first "@",
+                "^^",
+                :eps;
+         :follow "!",
+                "^" .
+    
+    n3:existential     a :NonTerminal;
+         rdf:value "8";
+         rdfs:comment """[8] existential ::= "@forSome" (symbol ("," symbol)*)?""";
+         rdfs:label "existential";
+         :first "@forSome";
+         :follow ".";
+         :seq  (
+        "@forSome"
+        <#_g4> ) .
+    
+    n3:explicituri     a :Terminal;
+         rdf:value "29";
+         rdfs:comment "[29] explicituri ::=\t\"<\" [^>]* \">\"";
+         rdfs:label "explicituri";
+         :follow "!",
+                ",",
+                "^";
+         re:seq  (
+        "<"
+         [
+                 re:star  [
+                     :matches "[^>]" ] ]
+        ">" ) .
+    
+    n3:expression     a :NonTerminal;
+         rdf:value "17";
+         rdfs:comment "[17] expression ::= pathitem pathtail";
+         rdfs:label "expression";
+         :first "(",
+                "@false",
+                "@true",
+                "[",
+                "{",
+                n3:decimal,
+                n3:double,
+                n3:explicituri,
+                n3:integer,
+                n3:qname,
+                n3:quickvariable,
+                n3:string;
+         :follow "(",
+                "@false",
+                "@of",
+                "@true",
+                "[",
+                "{",
+                n3:decimal,
+                n3:double,
+                n3:explicituri,
+                n3:integer,
+                n3:qname,
+                n3:quickvariable,
+                n3:string;
+         :seq  (
+        n3:pathitem
+        n3:pathtail ) .
+    
+    n3:formulacontent     a :NonTerminal;
+         rdf:value "3";
+         rdfs:comment "[3] formulacontent ::= statementlist";
+         rdfs:label "formulacontent";
+         :first "(",
+                "@false",
+                "@forAll",
+                "@forSome",
+                "@keywords",
+                "@prefix",
+                "@true",
+                "[",
+                "{",
+                :eps,
+                n3:decimal,
+                n3:double,
+                n3:explicituri,
+                n3:integer,
+                n3:qname,
+                n3:quickvariable,
+                n3:string;
+         :follow "}";
+         :seq  (
+        n3:statementlist ) .
+    
+    n3:integer     a :Terminal;
+         rdf:value "26";
+         rdfs:comment "[26] integer ::= [+-]? [0-9]+";
+         rdfs:label "integer";
+         :follow "!",
+                "^";
+         re:seq  (
+         [
+                 re:opt  [
+                     :matches "[+-]" ] ]
+         [
+                 re:rep  [
+                     :matches "[0-9]" ] ] ) .
+    
+    n3:langcode     a :Terminal;
+         rdf:value "33";
+         rdfs:comment """[33] langcode	::= [a-z]+ ("-" [a-z0-9]+)*""";
+         rdfs:label "langcode";
+         :follow "!",
+                "^";
+         re:seq  (
+         [
+                 re:rep  [
+                     :matches "[a-z]" ] ]
+         [
+                 re:star  [
+                     re:seq  (
+                    "-"
+                     [
+                             re:rep  [
+                                 :matches "[a-z0-9]" ] ] ) ] ] ) .
+    
+    n3:literal     a :NonTerminal;
+         rdf:value "24";
+         rdfs:comment "[24] literal ::= string dtlang";
+         rdfs:label "literal";
+         :first n3:string;
+         :follow "!",
+                "^";
+         :seq  (
+        n3:string
+        n3:dtlang ) .
+    
+    n3:numericliteral     a :NonTerminal;
+         rdf:value "23";
+         rdfs:comment "[23] numericliteral ::= integer| double| decimal";
+         rdfs:label "numericliteral";
+         :alt  (
+        n3:integer
+        n3:double
+        n3:decimal );
+         :first n3:decimal,
+                n3:double,
+                n3:integer;
+         :follow "!",
+                "^" .
+    
+    n3:object     a :NonTerminal;
+         rdf:value "16";
+         rdfs:comment "[16] object ::= expression";
+         rdfs:label "object";
+         :first "(",
+                "@false",
+                "@true",
+                "[",
+                "{",
+                n3:decimal,
+                n3:double,
+                n3:explicituri,
+                n3:integer,
+                n3:qname,
+                n3:quickvariable,
+                n3:string;
+         :follow ",",
+                ".",
+                ";",
+                "]";
+         :seq  (
+        n3:expression ) .
+    
+    n3:objecttail     a :NonTerminal;
+         rdf:value "13";
+         rdfs:comment """[13] objecttail ::=| ","   object objecttail""";
+         rdfs:label "objecttail";
+         :alt  (
+         [
+                 a :NonTerminal;
+                 :first :eps;
+                 :follow ";";
+                 :seq () ]
+         [
+                 a :NonTerminal;
+                 :first ",";
+                 :follow ";";
+                 :seq  (
+                ","
+                n3:object
+                n3:objecttail ) ] );
+         :first ",",
+                :eps;
+         :follow ";" .
+    
+    n3:pathitem     a :NonTerminal;
+         rdf:value "19";
+         rdfs:comment """[19] pathitem ::= symbol| "{" formulacontent "}"| quickvariable| numericliteral| literal| "[" propertylist "]"|  "("  pathlist ")"| boolean""";
+         rdfs:label "pathitem";
+         :alt  (
+        n3:symbol
+         [
+                 a :NonTerminal;
+                 :first "{";
+                 :follow "!",
+                        "^";
+                 :seq  (
+                "{"
+                n3:formulacontent
+                "}" ) ]
+        n3:quickvariable
+        n3:numericliteral
+        n3:literal
+         [
+                 a :NonTerminal;
+                 :first "[";
+                 :follow "!",
+                        "^";
+                 :seq  (
+                "["
+                n3:propertylist
+                "]" ) ]
+         [
+                 a :NonTerminal;
+                 :first "(";
+                 :follow "!",
+                        "^";
+                 :seq  (
+                "("
+                n3:pathlist
+                ")" ) ]
+        n3:boolean );
+         :first "(",
+                "@false",
+                "@true",
+                "[",
+                "{",
+                n3:decimal,
+                n3:double,
+                n3:explicituri,
+                n3:integer,
+                n3:qname,
+                n3:quickvariable,
+                n3:string;
+         :follow "!",
+                "^" .
+    
+    n3:pathlist     a :NonTerminal;
+         rdf:value "21";
+         rdfs:comment "[21] pathlist ::=| expression pathlist";
+         rdfs:label "pathlist";
+         :alt  (
+         [
+                 a :NonTerminal;
+                 :first :eps;
+                 :follow ")";
+                 :seq () ]
+         [
+                 a :NonTerminal;
+                 :first "(",
+                        "@false",
+                        "@true",
+                        "[",
+                        "{",
+                        n3:decimal,
+                        n3:double,
+                        n3:explicituri,
+                        n3:integer,
+                        n3:qname,
+                        n3:quickvariable,
+                        n3:string;
+                 :follow ")";
+                 :seq  (
+                n3:expression
+                n3:pathlist ) ] );
+         :first "(",
+                "@false",
+                "@true",
+                "[",
+                "{",
+                :eps,
+                n3:decimal,
+                n3:double,
+                n3:explicituri,
+                n3:integer,
+                n3:qname,
+                n3:quickvariable,
+                n3:string;
+         :follow ")" .
+    
+    n3:pathtail     a :NonTerminal;
+         rdf:value "18";
+         rdfs:comment """[18] pathtail ::=| "!" expression| "^" expression""";
+         rdfs:label "pathtail";
+         :alt  (
+         [
+                 a :NonTerminal;
+                 :first :eps;
+                 :follow "(",
+                        "@false",
+                        "@of",
+                        "@true",
+                        "[",
+                        "{",
+                        n3:decimal,
+                        n3:double,
+                        n3:explicituri,
+                        n3:integer,
+                        n3:qname,
+                        n3:quickvariable,
+                        n3:string;
+                 :seq () ]
+         [
+                 a :NonTerminal;
+                 :first "!";
+                 :follow "(",
+                        "@false",
+                        "@of",
+                        "@true",
+                        "[",
+                        "{",
+                        n3:decimal,
+                        n3:double,
+                        n3:explicituri,
+                        n3:integer,
+                        n3:qname,
+                        n3:quickvariable,
+                        n3:string;
+                 :seq  (
+                "!"
+                n3:expression ) ]
+         [
+                 a :NonTerminal;
+                 :first "^";
+                 :follow "(",
+                        "@false",
+                        "@of",
+                        "@true",
+                        "[",
+                        "{",
+                        n3:decimal,
+                        n3:double,
+                        n3:explicituri,
+                        n3:integer,
+                        n3:qname,
+                        n3:quickvariable,
+                        n3:string;
+                 :seq  (
+                "^"
+                n3:expression ) ] );
+         :first "!",
+                "^",
+                :eps;
+         :follow "(",
+                "@false",
+                "@of",
+                "@true",
+                "[",
+                "{",
+                n3:decimal,
+                n3:double,
+                n3:explicituri,
+                n3:integer,
+                n3:qname,
+                n3:quickvariable,
+                n3:string .
+    
+    n3:prefix     a :Terminal;
+         rdf:value "32";
+         rdfs:comment "[32] prefix ::= (NameStartChar3 NameChar3*)? \":\"";
+         rdfs:label "prefix";
+         re:seq  (
+         [
+                 re:opt  [
+                     re:seq  (
+                    n3:NameStartChar3
+                     [
+                             re:star n3:NameChar3 ] ) ] ]
+        ":" ) .
+    
+    n3:propertylist     a :NonTerminal;
+         rdf:value "11";
+         rdfs:comment "[11] propertylist ::=| verb object objecttail propertylisttail";
+         rdfs:label "propertylist";
+         :alt  (
+         [
+                 a :NonTerminal;
+                 :first :eps;
+                 :follow ".",
+                        "]";
+                 :seq () ]
+         [
+                 a :NonTerminal;
+                 :first "(",
+                        "<=",
+                        "=",
+                        "=>",
+                        "@a",
+                        "@false",
+                        "@has",
+                        "@is",
+                        "@true",
+                        "[",
+                        "{",
+                        n3:decimal,
+                        n3:double,
+                        n3:explicituri,
+                        n3:integer,
+                        n3:qname,
+                        n3:quickvariable,
+                        n3:string;
+                 :follow ".",
+                        "]";
+                 :seq  (
+                n3:verb
+                n3:object
+                n3:objecttail
+                n3:propertylisttail ) ] );
+         :first "(",
+                "<=",
+                "=",
+                "=>",
+                "@a",
+                "@false",
+                "@has",
+                "@is",
+                "@true",
+                "[",
+                "{",
+                :eps,
+                n3:decimal,
+                n3:double,
+                n3:explicituri,
+                n3:integer,
+                n3:qname,
+                n3:quickvariable,
+                n3:string;
+         :follow ".",
+                "]" .
+    
+    n3:propertylisttail     a :NonTerminal;
+         rdf:value "12";
+         rdfs:comment """[12] propertylisttail ::=| ";" propertylist""";
+         rdfs:label "propertylisttail";
+         :alt  (
+         [
+                 a :NonTerminal;
+                 :first :eps;
+                 :seq () ]
+         [
+                 a :NonTerminal;
+                 :first ";";
+                 :seq  (
+                ";"
+                n3:propertylist ) ] );
+         :first ";",
+                :eps .
+    
+    n3:qname     a :Terminal;
+         rdf:value "34";
+         rdfs:comment """[34] qname  ::= ( (NameStartChar3 NameChar3*)? ":")? NameStartChar3 NameChar3*""";
+         rdfs:label "qname";
+         :follow "!",
+                ",",
+                "^";
+         re:seq  (
+         [
+                 re:opt  [
+                     re:seq  (
+                     [
+                             re:opt  [
+                                 re:seq  (
+                                n3:NameStartChar3
+                                 [
+                                         re:star n3:NameChar3 ] ) ] ]
+                    ":" ) ] ]
+        n3:NameStartChar3
+         [
+                 re:star n3:NameChar3 ] ) .
+    
+    n3:quickvariable     a :Terminal;
+         rdf:value "35";
+         rdfs:comment """[35] quickvariable ::= "?" NameStartChar3 NameChar3*""";
+         rdfs:label "quickvariable";
+         :follow "!",
+                "^";
+         re:seq  (
+        "?"
+        n3:NameStartChar3
+         [
+                 re:star n3:NameChar3 ] ) .
+    
+    n3:simpleStatement     a :NonTerminal;
+         rdf:value "10";
+         rdfs:comment "[10] simpleStatement ::= subject propertylist";
+         rdfs:label "simpleStatement";
+         :first "(",
+                "@false",
+                "@true",
+                "[",
+                "{",
+                n3:decimal,
+                n3:double,
+                n3:explicituri,
+                n3:integer,
+                n3:qname,
+                n3:quickvariable,
+                n3:string;
+         :follow ".";
+         :seq  (
+        n3:subject
+        n3:propertylist ) .
+    
+    n3:statement     a :NonTerminal;
+         rdf:value "6";
+         rdfs:comment "[6] statement  ::= declaration| universal| existential| simpleStatement";
+         rdfs:label "statement";
+         :alt  (
+        n3:declaration
+        n3:universal
+        n3:existential
+        n3:simpleStatement );
+         :first "(",
+                "@false",
+                "@forAll",
+                "@forSome",
+                "@keywords",
+                "@prefix",
+                "@true",
+                "[",
+                "{",
+                n3:decimal,
+                n3:double,
+                n3:explicituri,
+                n3:integer,
+                n3:qname,
+                n3:quickvariable,
+                n3:string;
+         :follow "." .
+    
+    n3:statementlist     a :NonTerminal;
+         rdf:value "4";
+         rdfs:comment "[4] statementlist ::=| statement statementtail";
+         rdfs:label "statementlist";
+         :alt  (
+         [
+                 a :NonTerminal;
+                 :first :eps;
+                 :seq () ]
+         [
+                 a :NonTerminal;
+                 :first "(",
+                        "@false",
+                        "@forAll",
+                        "@forSome",
+                        "@keywords",
+                        "@prefix",
+                        "@true",
+                        "[",
+                        "{",
+                        n3:decimal,
+                        n3:double,
+                        n3:explicituri,
+                        n3:integer,
+                        n3:qname,
+                        n3:quickvariable,
+                        n3:string;
+                 :seq  (
+                n3:statement
+                n3:statementtail ) ] );
+         :first "(",
+                "@false",
+                "@forAll",
+                "@forSome",
+                "@keywords",
+                "@prefix",
+                "@true",
+                "[",
+                "{",
+                :eps,
+                n3:decimal,
+                n3:double,
+                n3:explicituri,
+                n3:integer,
+                n3:qname,
+                n3:quickvariable,
+                n3:string .
+    
+    n3:statements_optional     a :NonTerminal;
+         rdf:value "2";
+         rdfs:comment """[2] statements_optional ::=| statement "." statements_optional""";
+         rdfs:label "statements_optional";
+         :alt  (
+         [
+                 a :NonTerminal;
+                 :first :eps;
+                 :seq () ]
+         [
+                 a :NonTerminal;
+                 :first "(",
+                        "@false",
+                        "@forAll",
+                        "@forSome",
+                        "@keywords",
+                        "@prefix",
+                        "@true",
+                        "[",
+                        "{",
+                        n3:decimal,
+                        n3:double,
+                        n3:explicituri,
+                        n3:integer,
+                        n3:qname,
+                        n3:quickvariable,
+                        n3:string;
+                 :seq  (
+                n3:statement
+                "."
+                n3:statements_optional ) ] );
+         :first "(",
+                "@false",
+                "@forAll",
+                "@forSome",
+                "@keywords",
+                "@prefix",
+                "@true",
+                "[",
+                "{",
+                :eps,
+                n3:decimal,
+                n3:double,
+                n3:explicituri,
+                n3:integer,
+                n3:qname,
+                n3:quickvariable,
+                n3:string .
+    
+    n3:statementtail     a :NonTerminal;
+         rdf:value "5";
+         rdfs:comment """[5] statementtail ::=| "." statementlist""";
+         rdfs:label "statementtail";
+         :alt  (
+         [
+                 a :NonTerminal;
+                 :first :eps;
+                 :seq () ]
+         [
+                 a :NonTerminal;
+                 :first ".";
+                 :seq  (
+                "."
+                n3:statementlist ) ] );
+         :first ".",
+                :eps .
+    
+    n3:string     a :Terminal;
+         rdf:value "34";
+         rdfs:comment "[34] string ::= STRING_LITERAL2 | STRING_LITERAL_LONG2";
+         rdfs:label "string";
+         re:alt  (
+        n3:STRING_LITERAL2
+        n3:STRING_LITERAL_LONG2 ) .
+    
+    n3:subject     a :NonTerminal;
+         rdf:value "15";
+         rdfs:comment "[15] subject ::= expression";
+         rdfs:label "subject";
+         :first "(",
+                "@false",
+                "@true",
+                "[",
+                "{",
+                n3:decimal,
+                n3:double,
+                n3:explicituri,
+                n3:integer,
+                n3:qname,
+                n3:quickvariable,
+                n3:string;
+         :follow "(",
+                "<=",
+                "=",
+                "=>",
+                "@a",
+                "@false",
+                "@has",
+                "@is",
+                "@true",
+                "[",
+                "{",
+                n3:decimal,
+                n3:double,
+                n3:explicituri,
+                n3:integer,
+                n3:qname,
+                n3:quickvariable,
+                n3:string;
+         :seq  (
+        n3:expression ) .
+    
+    n3:symbol     a :NonTerminal;
+         rdf:value "22";
+         rdfs:comment "[22] symbol ::= explicituri| qname";
+         rdfs:label "symbol";
+         :alt  (
+        n3:explicituri
+        n3:qname );
+         :first n3:explicituri,
+                n3:qname;
+         :follow "!",
+                ",",
+                "^" .
+    
+    n3:universal     a :NonTerminal;
+         rdf:value "7";
+         rdfs:comment """[7] universal ::= "@forAll" (symbol ("," symbol)*)?""";
+         rdfs:label "universal";
+         :first "@forAll";
+         :follow ".";
+         :seq  (
+        "@forAll"
+        <#_g0> ) .
+    
+    n3:verb     a :NonTerminal;
+         rdf:value "14";
+         rdfs:comment "[14] verb ::= expression| \"@has\" expression| \"@is\" expression \"@of\"| \"@a\"| \"=\"| \"=>\"| \"<=\"";
+         rdfs:label "verb";
+         :alt  (
+        n3:expression
+         [
+                 a :NonTerminal;
+                 :first "@has";
+                 :follow "(",
+                        "@false",
+                        "@true",
+                        "[",
+                        "{",
+                        n3:decimal,
+                        n3:double,
+                        n3:explicituri,
+                        n3:integer,
+                        n3:qname,
+                        n3:quickvariable,
+                        n3:string;
+                 :seq  (
+                "@has"
+                n3:expression ) ]
+         [
+                 a :NonTerminal;
+                 :first "@is";
+                 :follow "(",
+                        "@false",
+                        "@true",
+                        "[",
+                        "{",
+                        n3:decimal,
+                        n3:double,
+                        n3:explicituri,
+                        n3:integer,
+                        n3:qname,
+                        n3:quickvariable,
+                        n3:string;
+                 :seq  (
+                "@is"
+                n3:expression
+                "@of" ) ]
+        "@a"
+        "="
+        "=>"
+        "<=" );
+         :first "(",
+                "<=",
+                "=",
+                "=>",
+                "@a",
+                "@false",
+                "@has",
+                "@is",
+                "@true",
+                "[",
+                "{",
+                n3:decimal,
+                n3:double,
+                n3:explicituri,
+                n3:integer,
+                n3:qname,
+                n3:quickvariable,
+                n3:string;
+         :follow "(",
+                "@false",
+                "@true",
+                "[",
+                "{",
+                n3:decimal,
+                n3:double,
+                n3:explicituri,
+                n3:integer,
+                n3:qname,
+                n3:quickvariable,
+                n3:string .
+    
+    <#_g0>     a :NonTerminal;
+         :alt  (
+         [
+                 a :NonTerminal;
+                 :first :eps;
+                 :follow ".";
+                 :seq () ]
+        <#_g1> );
+         :first :eps,
+                n3:explicituri,
+                n3:qname;
+         :follow ".";
+         :opt <#_g1> .
+    
+    <#_g1>     a :NonTerminal;
+         :first n3:explicituri,
+                n3:qname;
+         :follow ".";
+         :seq  (
+        n3:symbol
+        <#_g2> ) .
+    
+    <#_g2>     a :NonTerminal;
+         :alt  (
+         [
+                 a :NonTerminal;
+                 :first :eps;
+                 :follow ".";
+                 :seq () ]
+         [
+                 a :NonTerminal;
+                 :first ",";
+                 :follow ".";
+                 :seq  (
+                <#_g3>
+                <#_g2> ) ] );
+         :first ",",
+                :eps;
+         :follow ".";
+         :star <#_g3> .
+    
+    <#_g3>     a :NonTerminal;
+         :first ",";
+         :follow ",";
+         :seq  (
+        ","
+        n3:symbol ) .
+    
+    <#_g4>     a :NonTerminal;
+         :alt  (
+         [
+                 a :NonTerminal;
+                 :first :eps;
+                 :follow ".";
+                 :seq () ]
+        <#_g5> );
+         :first :eps,
+                n3:explicituri,
+                n3:qname;
+         :follow ".";
+         :opt <#_g5> .
+    
+    <#_g5>     a :NonTerminal;
+         :first n3:explicituri,
+                n3:qname;
+         :follow ".";
+         :seq  (
+        n3:symbol
+        <#_g6> ) .
+    
+    <#_g6>     a :NonTerminal;
+         :alt  (
+         [
+                 a :NonTerminal;
+                 :first :eps;
+                 :follow ".";
+                 :seq () ]
+         [
+                 a :NonTerminal;
+                 :first ",";
+                 :follow ".";
+                 :seq  (
+                <#_g7>
+                <#_g6> ) ] );
+         :first ",",
+                :eps;
+         :follow ".";
+         :star <#_g7> .
+    
+    <#_g7>     a :NonTerminal;
+         :first ",";
+         :follow ",";
+         :seq  (
+        ","
+        n3:symbol ) .
+    
+    <#_g8>     a :NonTerminal;
+         :alt  (
+         [
+                 a :NonTerminal;
+                 :first :eps;
+                 :follow ".";
+                 :seq () ]
+        <#_g9> );
+         :first :eps,
+                n3:qname;
+         :follow ".";
+         :opt <#_g9> .
+    
+    <#_g9>     a :NonTerminal;
+         :first n3:qname;
+         :follow ".";
+         :seq  (
+        n3:qname
+        <#_g10> ) .
+    
+    <#_g10>     a :NonTerminal;
+         :alt  (
+         [
+                 a :NonTerminal;
+                 :first :eps;
+                 :follow ".";
+                 :seq () ]
+         [
+                 a :NonTerminal;
+                 :first ",";
+                 :follow ".";
+                 :seq  (
+                <#_g11>
+                <#_g10> ) ] );
+         :first ",",
+                :eps;
+         :follow ".";
+         :star <#_g11> .
+    
+    <#_g11>     a :NonTerminal;
+         :first ",";
+         :follow ",";
+         :seq  (
+        ","
+        n3:qname ) .
+      [      a :NonTerminal;
+             :first :eps;
+             :seq () ].
+    
+      [      a :NonTerminal;
+             :first ".";
+             :seq  (
+            "."
+            n3:statements_optional ) ].
+    
+      [      a :NonTerminal;
+             :first ".",
+                    :eps;
+             :seq  (
+            n3:statementtail ) ].
+    
+      [      a :NonTerminal;
+             :first "(",
+                    "@false",
+                    "@forAll",
+                    "@forSome",
+                    "@keywords",
+                    "@prefix",
+                    "@true",
+                    "[",
+                    "{",
+                    :eps,
+                    n3:decimal,
+                    n3:double,
+                    n3:explicituri,
+                    n3:integer,
+                    n3:qname,
+                    n3:quickvariable,
+                    n3:string;
+             :seq  (
+            n3:statementlist ) ].
+    
+      [      a :NonTerminal;
+             :first n3:explicituri,
+                    n3:qname;
+             :seq  (
+            n3:symbol ) ].
+    
+      [      a :NonTerminal;
+             :first ",",
+                    :eps;
+             :seq  (
+            <#_g2> ) ].
+    
+      [      a :NonTerminal;
+             :first :eps,
+                    n3:explicituri,
+                    n3:qname;
+             :seq  (
+            <#_g0> ) ].
+    
+      [      a :NonTerminal;
+             :first ",",
+                    :eps;
+             :seq  (
+            <#_g6> ) ].
+    
+      [      a :NonTerminal;
+             :first :eps,
+                    n3:explicituri,
+                    n3:qname;
+             :seq  (
+            <#_g4> ) ].
+    
+      [      a :NonTerminal;
+             :first n3:prefix;
+             :seq  (
+            n3:prefix
+            n3:explicituri ) ].
+    
+      [      a :NonTerminal;
+             :first n3:qname;
+             :seq  (
+            n3:qname ) ].
+    
+      [      a :NonTerminal;
+             :first ",",
+                    :eps;
+             :seq  (
+            <#_g10> ) ].
+    
+      [      a :NonTerminal;
+             :first :eps,
+                    n3:qname;
+             :seq  (
+            <#_g8> ) ].
+    
+      [      a :NonTerminal;
+             :first "(",
+                    "<=",
+                    "=",
+                    "=>",
+                    "@a",
+                    "@false",
+                    "@has",
+                    "@is",
+                    "@true",
+                    "[",
+                    "{",
+                    :eps,
+                    n3:decimal,
+                    n3:double,
+                    n3:explicituri,
+                    n3:integer,
+                    n3:qname,
+                    n3:quickvariable,
+                    n3:string;
+             :seq  (
+            n3:propertylist ) ].
+    
+      [      a :NonTerminal;
+             :first "(",
+                    "@false",
+                    "@true",
+                    "[",
+                    "{",
+                    n3:decimal,
+                    n3:double,
+                    n3:explicituri,
+                    n3:integer,
+                    n3:qname,
+                    n3:quickvariable,
+                    n3:string;
+             :seq  (
+            n3:object
+            n3:objecttail
+            n3:propertylisttail ) ].
+    
+      [      a :NonTerminal;
+             :first "(",
+                    "@false",
+                    "@true",
+                    "[",
+                    "{",
+                    n3:decimal,
+                    n3:double,
+                    n3:explicituri,
+                    n3:integer,
+                    n3:qname,
+                    n3:quickvariable,
+                    n3:string;
+             :seq  (
+            n3:object
+            n3:objecttail ) ].
+    
+      [      a :NonTerminal;
+             :first "(",
+                    "@false",
+                    "@true",
+                    "[",
+                    "{",
+                    n3:decimal,
+                    n3:double,
+                    n3:explicituri,
+                    n3:integer,
+                    n3:qname,
+                    n3:quickvariable,
+                    n3:string;
+             :seq  (
+            n3:expression ) ].
+    
+      [      a :NonTerminal;
+             :first "(",
+                    "@false",
+                    "@true",
+                    "[",
+                    "{",
+                    n3:decimal,
+                    n3:double,
+                    n3:explicituri,
+                    n3:integer,
+                    n3:qname,
+                    n3:quickvariable,
+                    n3:string;
+             :seq  (
+            n3:expression
+            "@of" ) ].
+    
+      [      a :NonTerminal;
+             :first "!",
+                    "^",
+                    :eps;
+             :seq  (
+            n3:pathtail ) ].
+    
+      [      a :NonTerminal;
+             :first "(",
+                    "@false",
+                    "@forAll",
+                    "@forSome",
+                    "@keywords",
+                    "@prefix",
+                    "@true",
+                    "[",
+                    "{",
+                    :eps,
+                    n3:decimal,
+                    n3:double,
+                    n3:explicituri,
+                    n3:integer,
+                    n3:qname,
+                    n3:quickvariable,
+                    n3:string;
+             :seq  (
+            n3:formulacontent
+            "}" ) ].
+    
+      [      a :NonTerminal;
+             :first "(",
+                    "<=",
+                    "=",
+                    "=>",
+                    "@a",
+                    "@false",
+                    "@has",
+                    "@is",
+                    "@true",
+                    "[",
+                    "{",
+                    :eps,
+                    n3:decimal,
+                    n3:double,
+                    n3:explicituri,
+                    n3:integer,
+                    n3:qname,
+                    n3:quickvariable,
+                    n3:string;
+             :seq  (
+            n3:propertylist
+            "]" ) ].
+    
+      [      a :NonTerminal;
+             :first "(",
+                    "@false",
+                    "@true",
+                    "[",
+                    "{",
+                    :eps,
+                    n3:decimal,
+                    n3:double,
+                    n3:explicituri,
+                    n3:integer,
+                    n3:qname,
+                    n3:quickvariable,
+                    n3:string;
+             :seq  (
+            n3:pathlist
+            ")" ) ].
+    
+      [      a :NonTerminal;
+             :first "(",
+                    "@false",
+                    "@true",
+                    "[",
+                    "{",
+                    :eps,
+                    n3:decimal,
+                    n3:double,
+                    n3:explicituri,
+                    n3:integer,
+                    n3:qname,
+                    n3:quickvariable,
+                    n3:string;
+             :seq  (
+            n3:pathlist ) ].
+    
+      [      a :NonTerminal;
+             :first "@",
+                    "^^",
+                    :eps;
+             :seq  (
+            n3:dtlang ) ].
+    
+      [      a :NonTerminal;
+             :first n3:langcode;
+             :seq  (
+            n3:langcode ) ].
+    
+      [      a :NonTerminal;
+             :first "(",
+                    "@false",
+                    "@forAll",
+                    "@forSome",
+                    "@keywords",
+                    "@prefix",
+                    "@true",
+                    "[",
+                    "{",
+                    :eps,
+                    n3:decimal,
+                    n3:double,
+                    n3:explicituri,
+                    n3:integer,
+                    n3:qname,
+                    n3:quickvariable,
+                    n3:string;
+             :seq  (
+            n3:statements_optional ) ].
+    
+      [      a :NonTerminal;
+             :first n3:explicituri;
+             :seq  (
+            n3:explicituri ) ].
+    
+      [      a :NonTerminal;
+             :first ",",
+                    :eps;
+             :seq  (
+            n3:objecttail
+            n3:propertylisttail ) ].
+    
+      [      a :NonTerminal;
+             :first ",",
+                    :eps;
+             :seq  (
+            n3:objecttail ) ].
+    
+      [      a :NonTerminal;
+             :first "@of";
+             :seq  (
+            "@of" ) ].
+    
+      [      a :NonTerminal;
+             :first "}";
+             :seq  (
+            "}" ) ].
+    
+      [      a :NonTerminal;
+             :first "]";
+             :seq  (
+            "]" ) ].
+    
+      [      a :NonTerminal;
+             :first ")";
+             :seq  (
+            ")" ) ].
+    
+      [      a :NonTerminal;
+             :first ";",
+                    :eps;
+             :seq  (
+            n3:propertylisttail ) ].
+    
+#ENDS
