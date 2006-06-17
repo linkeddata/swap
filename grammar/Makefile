@@ -113,10 +113,18 @@ sparql-report.html : sparql-report.big
 	time $P $C  sparql-report.big --strings > $@
 
 
-ebnf: notation3.rdf ebnf.rdf
+ebnf: notation3.rdf ebnf.rdf notation3.json
+
+notation3.json: notation3-ll1.n3 gramLL1.py
+	PYTHONPATH=$(HOME)/lib/python:../.. $P gramLL1.py notation3-ll1.n3 >$@
+
+CHATTY=20
+notation3-ll1.n3: notation3.n3 ebnf2bnf.n3 first_follow.n3
+	$P $C notation3.n3 ebnf2bnf.n3 first_follow.n3 --chatty=$(CHATTY) \
+		--think --data >$@
 
 notation3.n3: notation3.bnf ebnf2turtle.py
-	$P ebnf2turtle.py notation3.bnf 'http://www.w3.org/2000/10/swap/grammar/notation3#' >$@
+	$P ebnf2turtle.py notation3.bnf n3 'http://www.w3.org/2000/10/swap/grammar/notation3#' >$@
 
 ebnf.rdf: ebnf.n3
 notation3.rdf: notation3.n3
