@@ -46,4 +46,15 @@
     test:arguments     "--n3 syntax/boolean.n3".
 
 
+:syn010 a test:CwmTest;
+    test:referenceOutput <space-in-uri-ref.n3>;
+    test:description   "Canonicalize spaces in URIs (n3)";
+    test:arguments     "--n3 syntax/space-in-uri.n3".
+
+:syn011 a test:CwmTest;
+    test:referenceOutput <space-in-uri-ref.n3>;
+    test:description   "Canonicalize spaces in URIs (rdf/xml)";
+    test:arguments     "--rdf syntax/space-in-uri-rdf.rdf --n3".
+
+
 #ends
