@@ -20,4 +20,4 @@ rdfs:seeAlso <ebnf>, <ebnf.n3>, <ebnf.rdf>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 g:alt rdfs:domain g:NonTerminal.
 g:seq rdfs:domain g:NonTerminal.
-{ ?S [ rdfs:somain ?C ] [] } => { ?S a ?C }.
+{ ?S [ rdfs:domain ?C ] [] } => { ?S a ?C }.
