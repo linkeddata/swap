@@ -115,12 +115,16 @@ sparql-report.html : sparql-report.big
 
 ebnf: notation3.rdf ebnf.rdf notation3.json
 
-notation3.json: notation3-ll1.n3 gramLL1.py
-	PYTHONPATH=$(HOME)/lib/python:../.. $P gramLL1.py notation3-ll1.n3 >$@
+notation3.json: notation3-bnf.n3 gramLL1.py
+	PYTHONPATH=$(HOME)/lib/python:../.. $P gramLL1.py notation3-bnf.n3 >$@
 
-CHATTY=20
+CHATTY=0
 notation3-ll1.n3: notation3.n3 ebnf2bnf.n3 first_follow.n3
 	$P $C notation3.n3 ebnf2bnf.n3 first_follow.n3 --chatty=$(CHATTY) \
+		--think --data >$@
+
+notation3-bnf.n3: notation3.n3 ebnf2bnf.n3 first_follow.n3
+	$P $C notation3.n3 ebnf2bnf.n3  --chatty=$(CHATTY) \
 		--think --data >$@
 
 notation3.n3: notation3.bnf ebnf2turtle.py
