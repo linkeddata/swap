@@ -1,3 +1,12 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/>.  # @@ no #
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<> dc:description """reduce EBNF to BNF;
+i.e. rewrite ?, +, * operators using alt and seq
+""",
+"$Id$";
+rdfs:seeAlso <ebnf>, <ebnf.n3>, <ebnf.rdf>.
+
 @prefix g: <http://www.w3.org/2000/10/swap/grammar/ebnf#>.
 
 { ?A g:opt ?B } => { ?A g:alt ( [ g:seq ()] ?B ) }.
@@ -7,3 +16,8 @@
 { ?A g:star ?B } => { ?A g:alt ( [ g:seq ()] [ g:seq (?B ?A) ] ) }.
 
 
+# find all the non-terminals
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+g:alt rdfs:domain g:NonTerminal.
+g:seq rdfs:domain g:NonTerminal.
+{ ?S [ rdfs:somain ?C ] [] } => { ?S a ?C }.
