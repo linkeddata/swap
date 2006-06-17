@@ -253,7 +253,69 @@ def _fixslash(str):
     if s[0] != "/" and s[1] == ":": s = s[2:]  # @@@ Hack when drive letter present
     return s
 
+URI_unreserved = "ABCDEFGHIJJLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~"
+    # unreserved  = ALPHA / DIGIT / "-" / "." / "_" / "~"
+    
+def canonical(str_in):
+    """Convert equivalent URIs (or parts) to the same string
+    
+    There are many differenet levels of URI canonicalization
+    which are possible.  See http://www.ietf.org/rfc/rfc3986.txt
+    Things we haven't put in this yet are
+    - de-escaping ALPHA etc if escaped  (Sect 2.4) ALPHA (%41-%5A and %61-%7A),
+     DIGIT (%30-%39), hyphen (%2D), period (%2E),
+   underscore (%5F), or tilde (%7E)
+    - making all escapes uppercase hexadecimal
+    - making scheme lowercase
+    
+    
+    >>> canonical("foo bar")
+    'foo%20bar'
+    
+    >>> canonical(u'http:')
+    'http:'
+    
+    >>> canonical('fran%c3%83%c2%a7ois')
+    'fran%C3%83%C2%A7ois'
+    
+    >>> canonical('a')
+    'a'
+    
+    >>> canonical('%4e')
+    'N'
 
+    >>> canonical('%9d')
+    '%9D'
+    
+    >>> canonical('%2f')
+    '%2F'
+
+    >>> canonical('%2F')
+    '%2F'
+
+    """
+    if type(str_in) == type(u''):
+	s8 = str_in.encode('utf-8')
+    else:
+	s8 = str_in
+    s = ''
+    i = 0
+    while i < len(s8):
+	ch = s8[i]; n = ord(ch)
+	if (n > 126) or (n < 33) :   # %-encode controls, SP, DEL, and utf-8
+	    s += "%%%02X" % ord(ch)
+	elif ch == '%' and i+2 < len(s8):
+	    ch2 = s8[i+1:i+3].decode('hex')
+	    if ch2 in URI_unreserved: s += ch2
+	    else: s += "%%%02X" % ord(ch2)
+	    i = i+3
+	    continue
+	else:
+	    s += ch
+	i = i +1
+    return s
+    
+    
 import unittest
 
 class Tests(unittest.TestCase):
@@ -389,7 +451,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.16  2004-03-21 04:24:35  timbl
+# Revision 1.17  2006-06-17 19:27:27  timbl
+# Add canonical() with unit tests
+#
+# Revision 1.16  2004/03/21 04:24:35  timbl
 # (See doc/changes.html)
 # on xml output, nodeID was incorrectly spelled.
 # update.py provides cwm's --patch option.
