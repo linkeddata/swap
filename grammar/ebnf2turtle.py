@@ -14,7 +14,7 @@ Usage
 
 Invoke a la::
 
-  python bnf2turtle.py foo.bnf >foo.ttl
+  python bnf2turtle.py foo.bnf pfx uri >foo.ttl
 
 where foo.bnf is full of lines like::
 
@@ -145,18 +145,16 @@ __version__ = "$Id$"
 
 import re
 
-def main():
-    import sys
-    if '--test' in sys.argv: _test()
-    else:
-        toTurtle(file(sys.argv[1]), sys.argv[2])
+def main(argv):
+    data, pfx, uri = argv[1:]
+    toTurtle(file(data), pfx, uri)
         
 
-def toTurtle(lines, ns):
+def toTurtle(lines, pfx, ns):
     """print a turtle version of the lines of a BNF file
     """
     
-    startTurtle(ns)
+    startTurtle(pfx, ns)
     token = 0
     for r in eachRule(lines):
         if r == '@terminals': token = 1
@@ -388,10 +386,12 @@ def token(s):
 # turtle generation
 #
 
-def startTurtle(ns):
+def startTurtle(pfx, ns):
     print "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>."
     print "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>."
+    print "@prefix %s: <%s>." % (pfx, ns)
     print "@prefix : <%s>." % ns
+    print "@prefix re: <http://www.w3.org/2000/10/swap/grammar/regex#>."
     print "@prefix g: <http://www.w3.org/2000/10/swap/grammar/ebnf#>."
     
 def asTurtle(num, sym, expr, isToken, orig):
@@ -402,11 +402,14 @@ def asTurtle(num, sym, expr, isToken, orig):
     else: print " a g:NonTerminal;",
     print
 
-    ttlExpr(expr, indent='  ', obj=0)
+    if isToken: pfx = 're'
+    else: pfx = 'g'
+
+    ttlExpr(expr, pfx, indent='  ', obj=0)
     print "."
 
 
-def ttlExpr(expr, indent, obj=1):
+def ttlExpr(expr, pfx, indent, obj=1):
     op, args = expr
 
     if obj:
@@ -416,36 +419,36 @@ def ttlExpr(expr, indent, obj=1):
         bra = ket = ''
 
     if op == ',':
-        print indent + bra + "g:seq ("
+        print indent + bra + "%s:seq (" % pfx
         for a in args:
-            ttlExpr(a, indent + '  ')
+            ttlExpr(a, pfx, indent + '  ')
         print indent + " )" + ket
 
     elif op == '|':
-        print indent + bra + "g:alt ("
+        print indent + bra + "%s:alt (" % pfx
         for a in args:
-            ttlExpr(a, indent + '  ')
+            ttlExpr(a, pfx, indent + '  ')
         print indent + " )" + ket
 
     elif op == '-':
-        print indent + bra + "g:diff ("
+        print indent + bra + "%s:diff (" % pfx
         for a in args:
-            ttlExpr(a, indent + '  ')
+            ttlExpr(a, pfx, indent + '  ')
         print indent + " )" + ket
 
     elif op == '?':
-        print indent + bra + "g:opt "
-        ttlExpr(args, indent + '  ')
+        print indent + bra + "%s:opt " % pfx
+        ttlExpr(args, pfx, indent + '  ')
         if ket: print indent + ket
 
     elif op == '+':
-        print indent + bra + "g:rep "
-        ttlExpr(args, indent + '  ')
+        print indent + bra + "%s:rep " % pfx
+        ttlExpr(args, pfx, indent + '  ')
         if ket: print indent + ket
 
     elif op == '*':
-        print indent + bra + "g:star "
-        ttlExpr(args, indent + '  ')
+        print indent + bra + "%s:star " % pfx
+        ttlExpr(args, pfx, indent + '  ')
         if ket: print indent + ket
 
     elif op == 'id':
@@ -489,10 +492,16 @@ def _test():
 
     
 if __name__ == '__main__':
-    main()
+    import sys
+    if '--test' in sys.argv: _test()
+    else: main(sys.argv)
 
 # $Log$
-# Revision 1.1  2006-06-16 15:35:28  connolly
+# Revision 1.2  2006-06-17 05:27:41  connolly
+# use separate namespaces for g:seq and re:seq
+# move --test arg check out of main
+#
+# Revision 1.1  2006/06/16 15:35:28  connolly
 # move bnf2turtle here; make a real EBNF ontology and use it
 #
 # Revision 1.14  2006/06/10 05:24:26  connolly
