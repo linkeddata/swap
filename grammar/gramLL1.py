@@ -1,17 +1,19 @@
 # $Id$
 from swap import myStore, term
 from swap.RDFSink import RDF_NS_URI
-from swap.term import Literal, Symbol
+from swap.term import Literal, Fragment #umm... why not Symbol?
 
 EBNF = myStore.Namespace('http://www.w3.org/2000/10/swap/grammar/ebnf#')
+REGEX = myStore.Namespace('http://www.w3.org/2000/10/swap/grammar/regex#')
 RDF = myStore.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
+
+import regex
 
 def main(argv):
     data = argv[-1]
     f = myStore.load(data)
     it = { 'rules': asGrammar(f),
-             'first': sets(f, EBNF.first),
-             'follow': sets(f, EBNF.follow)}
+           'tokens': tokens(f) }
 
     if '--pprint' in argv:
         from pprint import pprint
@@ -24,22 +26,73 @@ def main(argv):
 
 
 def asGrammar(f):
-    """find BNF grammar in f and return {rhs: [lhs, lhs, ...]} grammar
+    """find BNF grammar in f and return grammar rules array
+    as per http://www.navyrain.net/compilergeneratorinjavascript/
+    navyrain@navyrain.net
     """
-    rules = {}
+    rules = []
     for lhs in f.each(pred=RDF.type, obj=EBNF.NonTerminal):
         if lhs is EBNF.eps: continue
         alts = f.the(subj=lhs, pred=EBNF.alt)
-        if not alts: alts = [lhs]
-        rhss = []
+        if not alts:
+            alts = [lhs]
         for alt in alts:
+            s = asSymbol(f, lhs)
             seq = f.the(subj=alt, pred=EBNF.seq)
-            if seq:
-                rhss.append(tuple([asSymbol(f, x) for x in seq]))
-        if rhss: rules[asSymbol(f, lhs)] = rhss
+            if seq is not None:
+                r = [s] + [asSymbol(f, x) for x in seq]
+            else:
+                r = [s, asSymbol(f, alt)]
+            if s == 'document': #@@ parameterize start symbol
+                rules.insert(0, r)
+            else:
+                rules.append(r)
     return rules
 
 
+def tokens(f):
+    """find lexer rules f and return JSON struct
+    as per http://www.navyrain.net/compilergeneratorinjavascript/
+    navyrain@navyrain.net
+    """
+    tokens = []
+    for lhs in f.each(pred=RDF.type, obj=EBNF.Terminal):
+        tokens.append([pattern(f, lhs), asSymbol(f, lhs), None])
+    return tokens
+
+
+def pattern(f, s):
+    if isinstance(s, Literal):
+        return regex.escape(unicode(s))
+
+    #@@ matches should move from EBNF to REGEX
+    pat = f.the(subj=s, pred=EBNF.matches)
+    if pat:
+        pat = unicode(pat)
+        return pat.replace("#x", "\\x")
+
+    parts = f.the(subj=s, pred=REGEX.seq)
+    if parts:
+        return ''.join([pattern(f, i) for i in parts])
+    parts = f.the(subj=s, pred=REGEX.alt)
+    if parts:
+        return '|'.join([pattern(f, i) for i in parts])
+    parts = f.the(subj=s, pred=REGEX.diff)
+    if parts:
+        return '(?!%s)(%s)' % (pattern(f, parts[1]), pattern(f, parts[0]))
+    part = f.the(subj=s, pred=REGEX.star)
+    if part:
+        return '(?:%s)*' % pattern(f, part)
+    part = f.the(subj=s, pred=REGEX.rep)
+    if part:
+        #@@ look up non-grouping paren thingy
+        return '(?:%s)+' % pattern(f, part)
+    part = f.the(subj=s, pred=REGEX.opt)
+    if part:
+        #@@ look up non-grouping paren thingy
+        return '(?:%s)?' % pattern(f, part)
+    raise ValueError, s
+    
 def sets(f, pred=EBNF.first):
     """get LL(1) first/follow sets
     """
@@ -53,31 +106,25 @@ def sets(f, pred=EBNF.first):
     return fi
 
                     
-def terminal(x):
-    return type(x) is not type(())
-
 def asSymbol(f, x):
-    """return grammar symbol x as a JSON item:
-    non-terminals become strings
-    terminals become ('terminal': name)
-    and literals become ('string': str)
-
-    JSON doesn't really have () tuples, but we want something hashable.
+    """return grammar symbol x as a JSON string
+    We prefix Terminal names by TOK_ and then
+    assume disjointness of non-terminals, terminals, and literals
     """
     if isinstance(x, Literal):
-        return ('string', unicode(x))
+        return unicode(x) #hmm...
     elif x is EBNF.eps:
         #or f.the(subj=x, pred=EBNF.seq) == RDF.nil:
-        return ('eps',)
+        return 'EMPTY'
     elif x == EBNF.eof:
-        return ('EOF',)
+        return 'EOF'
     elif EBNF.NonTerminal in f.each(subj=x, pred=RDF.type):
-        if isinstance(x, Symbol):
-            return x.fragid
-        else:
+        if x in f.existentials():
             return 's_%d' % id(x)
+        else:
+            return x.fragid
     elif EBNF.Terminal in f.each(subj=x, pred=RDF.type):
-        return ('terminal', x.fragid)
+        return 'TOK_%s' % x.fragid
     else:
         raise ValueError, x
 
@@ -87,7 +134,13 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.2  2006-06-17 06:11:03  connolly
+# Revision 1.3  2006-06-17 08:32:20  connolly
+# found a javascript parser generator that implements SLR table generation
+# so we don't need first/follow.
+#
+# Got some terminal regex's working, e.g. uriref
+#
+# Revision 1.2  2006/06/17 06:11:03  connolly
 # support JSON output or python pretty-printed output
 # fix keys in first/follow sets to be strings
 # skip eps when it's not relevant
