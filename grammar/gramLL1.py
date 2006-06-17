@@ -1,18 +1,25 @@
 # $Id$
 from swap import myStore, term
 from swap.RDFSink import RDF_NS_URI
-from swap.term import Literal
+from swap.term import Literal, Symbol
 
 EBNF = myStore.Namespace('http://www.w3.org/2000/10/swap/grammar/ebnf#')
 RDF = myStore.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 
 def main(argv):
-    from pprint import pprint
-    data = argv[1]
+    data = argv[-1]
     f = myStore.load(data)
-    pprint({ 'rules': asGrammar(f),
+    it = { 'rules': asGrammar(f),
              'first': sets(f, EBNF.first),
-             'follow': sets(f, EBNF.follow)})
+             'follow': sets(f, EBNF.follow)}
+
+    if '--pprint' in argv:
+        from pprint import pprint
+        pprint(it)
+    else:
+        import simplejson #http://cheeseshop.python.org/pypi/simplejson
+        import sys
+        simplejson.dump(it, sys.stdout)
 
 
 
@@ -21,6 +28,7 @@ def asGrammar(f):
     """
     rules = {}
     for lhs in f.each(pred=RDF.type, obj=EBNF.NonTerminal):
+        if lhs is EBNF.eps: continue
         alts = f.the(subj=lhs, pred=EBNF.alt)
         if not alts: alts = [lhs]
         rhss = []
@@ -37,10 +45,11 @@ def sets(f, pred=EBNF.first):
     """
     fi = {}
     for lhs in f.each(pred=RDF.type, obj=EBNF.NonTerminal):
+        if lhs is EBNF.eps: continue
         fs = []
         for obj in f.each(subj=lhs, pred=pred):
             fs.append(asSymbol(f, obj))
-        fi[lhs] = fs
+        fi[asSymbol(f, lhs)] = fs
     return fi
 
                     
@@ -57,16 +66,20 @@ def asSymbol(f, x):
     """
     if isinstance(x, Literal):
         return ('string', unicode(x))
-    elif f.the(subj=x, pred=EBNF.seq) == RDF.nil:
+    elif x is EBNF.eps:
+        #or f.the(subj=x, pred=EBNF.seq) == RDF.nil:
         return ('eps',)
     elif x == EBNF.eof:
         return ('EOF',)
     elif EBNF.NonTerminal in f.each(subj=x, pred=RDF.type):
-        return x.fragid
+        if isinstance(x, Symbol):
+            return x.fragid
+        else:
+            return 's_%d' % id(x)
     elif EBNF.Terminal in f.each(subj=x, pred=RDF.type):
         return ('terminal', x.fragid)
     else:
-        return id(x)
+        raise ValueError, x
 
 if __name__ == '__main__':
     import sys
@@ -74,7 +87,13 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.1  2006-06-17 03:12:42  connolly
+# Revision 1.2  2006-06-17 06:11:03  connolly
+# support JSON output or python pretty-printed output
+# fix keys in first/follow sets to be strings
+# skip eps when it's not relevant
+# turn anonymous nodes into strings rather than ints, since JSON keys are strings
+#
+# Revision 1.1  2006/06/17 03:12:42  connolly
 # finds grammar rules, first sets, follow sets following EBNF ontology;
 # prints JSON-happy structure
 #
