@@ -1,6 +1,8 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix n3: <http://www.w3.org/2000/10/swap/grammar/notation3#>.
 @prefix : <http://www.w3.org/2000/10/swap/grammar/notation3#>.
+@prefix re: <http://www.w3.org/2000/10/swap/grammar/regex#>.
 @prefix g: <http://www.w3.org/2000/10/swap/grammar/ebnf#>.
 
 :document rdfs:label "document"; rdf:value "1";
@@ -337,11 +339,11 @@
 :integer rdfs:label "integer"; rdf:value "26";
  rdfs:comment "[26] integer ::= [+-]? [0-9]+";
  a g:Terminal;
-  g:seq (
-    [ g:opt 
+  re:seq (
+    [ re:opt 
       [  g:matches "[+-]"  ]
      ]
-    [ g:rep 
+    [ re:rep 
       [  g:matches "[0-9]"  ]
      ]
    )
@@ -350,27 +352,27 @@
 :double rdfs:label "double"; rdf:value "27";
  rdfs:comment "[27] double	::= [+-]? [0-9]+ (\".\" [0-9]+)? ( [eE] [+-]? [0-9]+)";
  a g:Terminal;
-  g:seq (
-    [ g:opt 
+  re:seq (
+    [ re:opt 
       [  g:matches "[+-]"  ]
      ]
-    [ g:rep 
+    [ re:rep 
       [  g:matches "[0-9]"  ]
      ]
-    [ g:opt 
-      [ g:seq (
+    [ re:opt 
+      [ re:seq (
         "."
-        [ g:rep 
+        [ re:rep 
           [  g:matches "[0-9]"  ]
          ]
        ) ]
      ]
-    [ g:seq (
+    [ re:seq (
       [  g:matches "[eE]"  ]
-      [ g:opt 
+      [ re:opt 
         [  g:matches "[+-]"  ]
        ]
-      [ g:rep 
+      [ re:rep 
         [  g:matches "[0-9]"  ]
        ]
      ) ]
@@ -380,17 +382,17 @@
 :decimal rdfs:label "decimal"; rdf:value "28";
  rdfs:comment "[28] decimal	::= [+-]? [0-9]+ (\".\" [0-9]+)?";
  a g:Terminal;
-  g:seq (
-    [ g:opt 
+  re:seq (
+    [ re:opt 
       [  g:matches "[+-]"  ]
      ]
-    [ g:rep 
+    [ re:rep 
       [  g:matches "[0-9]"  ]
      ]
-    [ g:opt 
-      [ g:seq (
+    [ re:opt 
+      [ re:seq (
         "."
-        [ g:rep 
+        [ re:rep 
           [  g:matches "[0-9]"  ]
          ]
        ) ]
@@ -401,9 +403,9 @@
 :explicituri rdfs:label "explicituri"; rdf:value "29";
  rdfs:comment "[29] explicituri ::=	\"<\" [^>]* \">\"";
  a g:Terminal;
-  g:seq (
+  re:seq (
     "<"
-    [ g:star 
+    [ re:star 
       [  g:matches "[^>]"  ]
      ]
     ">"
@@ -413,7 +415,7 @@
 :NameStartChar3 rdfs:label "NameStartChar3"; rdf:value "30";
  rdfs:comment "[30] NameStartChar3	   ::=   	[A-Z] | \"_\" | [a-z] | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF] | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D] | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]";
  a g:Terminal;
-  g:alt (
+  re:alt (
     [  g:matches "[A-Z]"  ]
     "_"
     [  g:matches "[a-z]"  ]
@@ -435,7 +437,7 @@
 :NameChar3 rdfs:label "NameChar3"; rdf:value "31";
  rdfs:comment "[31]   	NameChar3	   ::=   	NameStartChar3 | \"-\" | [0-9] | #xB7 | [#x0300-#x036F] | [#x203F-#x2040]";
  a g:Terminal;
-  g:alt (
+  re:alt (
     :NameStartChar3
     "-"
     [  g:matches "[0-9]"  ]
@@ -448,11 +450,11 @@
 :prefix rdfs:label "prefix"; rdf:value "32";
  rdfs:comment "[32] prefix ::= (NameStartChar3 NameChar3*)? \":\"";
  a g:Terminal;
-  g:seq (
-    [ g:opt 
-      [ g:seq (
+  re:seq (
+    [ re:opt 
+      [ re:seq (
         :NameStartChar3
-        [ g:star 
+        [ re:star 
           :NameChar3
          ]
        ) ]
@@ -464,13 +466,13 @@
 :qname rdfs:label "qname"; rdf:value "34";
  rdfs:comment "[34] qname  ::= ( (NameStartChar3 NameChar3*)? \":\")? NameStartChar3 NameChar3*";
  a g:Terminal;
-  g:seq (
-    [ g:opt 
-      [ g:seq (
-        [ g:opt 
-          [ g:seq (
+  re:seq (
+    [ re:opt 
+      [ re:seq (
+        [ re:opt 
+          [ re:seq (
             :NameStartChar3
-            [ g:star 
+            [ re:star 
               :NameChar3
              ]
            ) ]
@@ -479,7 +481,7 @@
        ) ]
      ]
     :NameStartChar3
-    [ g:star 
+    [ re:star 
       :NameChar3
      ]
    )
@@ -488,10 +490,10 @@
 :quickvariable rdfs:label "quickvariable"; rdf:value "35";
  rdfs:comment "[35] quickvariable ::= \"?\" NameStartChar3 NameChar3*";
  a g:Terminal;
-  g:seq (
+  re:seq (
     "?"
     :NameStartChar3
-    [ g:star 
+    [ re:star 
       :NameChar3
      ]
    )
@@ -500,14 +502,14 @@
 :langcode rdfs:label "langcode"; rdf:value "33";
  rdfs:comment "[33] langcode	::= [a-z]+ (\"-\" [a-z0-9]+)*";
  a g:Terminal;
-  g:seq (
-    [ g:rep 
+  re:seq (
+    [ re:rep 
       [  g:matches "[a-z]"  ]
      ]
-    [ g:star 
-      [ g:seq (
+    [ re:star 
+      [ re:seq (
         "-"
-        [ g:rep 
+        [ re:rep 
           [  g:matches "[a-z0-9]"  ]
          ]
        ) ]
@@ -518,7 +520,7 @@
 :string rdfs:label "string"; rdf:value "34";
  rdfs:comment "[34] string ::= STRING_LITERAL2 | STRING_LITERAL_LONG2";
  a g:Terminal;
-  g:alt (
+  re:alt (
     :STRING_LITERAL2
     :STRING_LITERAL_LONG2
    )
@@ -527,10 +529,10 @@
 :STRING_LITERAL2 rdfs:label "STRING_LITERAL2"; rdf:value "79";
  rdfs:comment "[79]    	STRING_LITERAL2  	  ::=    	'\"' ( ([^#x22#x5C#x0A#x0D]) | ECHAR | UCHAR )* '\"'";
  a g:Terminal;
-  g:seq (
+  re:seq (
     "\""
-    [ g:star 
-      [ g:alt (
+    [ re:star 
+      [ re:alt (
         [  g:matches "[^#x22#x5C#x0A#x0D]"  ]
         :ECHAR
         :UCHAR
@@ -543,17 +545,17 @@
 :STRING_LITERAL_LONG2 rdfs:label "STRING_LITERAL_LONG2"; rdf:value "81";
  rdfs:comment "[81]    	STRING_LITERAL_LONG2  	  ::=    	'\"\"\"' ( ( '\"' | '\"\"' )? ( [^\"\\\\] | ECHAR | UCHAR ) )* '\"\"\"'";
  a g:Terminal;
-  g:seq (
+  re:seq (
     "\"\"\""
-    [ g:star 
-      [ g:seq (
-        [ g:opt 
-          [ g:alt (
+    [ re:star 
+      [ re:seq (
+        [ re:opt 
+          [ re:alt (
             "\""
             "\"\""
            ) ]
          ]
-        [ g:alt (
+        [ re:alt (
           [  g:matches "[^\"\\\\]"  ]
           :ECHAR
           :UCHAR
@@ -567,7 +569,7 @@
 :ECHAR rdfs:label "ECHAR"; rdf:value "82";
  rdfs:comment "[82]    	ECHAR  	  ::=    	'\\\\' [tbnrf\\\"']";
  a g:Terminal;
-  g:seq (
+  re:seq (
     "\\\\"
     [  g:matches "[tbnrf\\\"']"  ]
    )
@@ -576,17 +578,17 @@
 :UCHAR rdfs:label "UCHAR"; rdf:value "83";
  rdfs:comment "[83]    	UCHAR  	  ::=    	'\\\\' ( 'u' HEX HEX HEX HEX | 'U' HEX HEX HEX HEX HEX HEX HEX HEX )";
  a g:Terminal;
-  g:seq (
+  re:seq (
     "\\\\"
-    [ g:alt (
-      [ g:seq (
+    [ re:alt (
+      [ re:seq (
         "u"
         :HEX
         :HEX
         :HEX
         :HEX
        ) ]
-      [ g:seq (
+      [ re:seq (
         "U"
         :HEX
         :HEX
@@ -604,7 +606,7 @@
 :HEX rdfs:label "HEX"; rdf:value "84";
  rdfs:comment "[84]    	HEX  	  ::=    	[0-9] | [A-F] | [a-f]";
  a g:Terminal;
-  g:alt (
+  re:alt (
     [  g:matches "[0-9]"  ]
     [  g:matches "[A-F]"  ]
     [  g:matches "[a-f]"  ]
