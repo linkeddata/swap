@@ -21,3 +21,16 @@ rdfs:seeAlso <ebnf>, <ebnf.n3>, <ebnf.rdf>.
 g:alt rdfs:domain g:NonTerminal.
 g:seq rdfs:domain g:NonTerminal.
 { ?S [ rdfs:domain ?C ] [] } => { ?S a ?C }.
+
+# and find all the terminals
+@prefix list: <http://www.w3.org/2000/10/swap/list#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+
+# promote literals to Terminals
+{ [] g:alt [ list:member ?T ].
+  ?T log:rawType log:Literal.
+} => { ?T a g:Terminal }.
+
+{ [] g:seq [ list:member ?T ].
+  ?T log:rawType log:Literal.
+} => { ?T a g:Terminal }.
