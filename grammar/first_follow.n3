@@ -2,7 +2,8 @@
 
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
-<> dc:title "first and follow rules";
+<> dc:title "first and follow rules for LL(1) grammars";
+dc:description "$Id$";
 dc:source [
  = <http://en.wikipedia.org/wiki/LL_parser#Constructing_an_LL.281.29_parsing_table>;
  dc:title "Constructing an LL(1) parsing table";
@@ -16,14 +17,15 @@ dc:source [
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 
-@prefix : <first_follow#>.
-@prefix ll1: <first_follow#>.
+@prefix : <http://www.w3.org/2000/10/swap/grammar/ebnf#>.
+@prefix ll1: <http://www.w3.org/2000/10/swap/grammar/ebnf#>.
+#@@ need to update ebnf schema with first, follow, eps, eof
 
 @keywords is, of, a.
 
 #hmm... perhaps g:NonTerminal and g:Terminal shoule be w.r.t. a language...
 
-
+######## first
 # from wikipedia:
 
 # Fi(a w' ) = { a } for every terminal a
@@ -54,7 +56,34 @@ dc:source [
 } => { ?A first ?T }.
 
 
+######## follow
 
+{ [] g:start ?A } => { ?A follow g:eof }.
+
+#if there is a rule of the form Aj → wAiw' , then
+#
+#    * if the terminal a is in Fi(w' ), then add a to Fo(Ai)
+{ ?AW g:seq [ rdf:first ?A; rdf:rest ?W ].
+  [ g:seq ?W ] first ?T.
+  ?A a g:NonTerminal.
+  ?T a g:Terminal.
+} => { ?A follow ?T }.
+
+#    * if ε is in Fi(w' ), then add Fo(Aj) to Fo(Ai)
+
+{ ?A g:seq [ rdf:rest ( ?B ) ].
+  ?A follow ?T }
+=> { ?B follow ?T }.
+{ ?A g:seq [ rdf:rest [ rdf:first ?B; rdf:rest ?W ] ].
+  [ :seq ?W ] first eps.
+  ?A follow ?T. }
+=> { ?B follow ?T }.
+
+#anything that follows this follows its members.
+{ ?A follow ?T; g:alt [ list:member ?B ] } => { ?B follow ?T }.
+
+
+############
 # Comprehension rule:
 # all shorter sequences exist.
 { ?X g:seq [ rdf:rest ?R] } => { [] g:seq ?R }.
@@ -63,13 +92,8 @@ dc:source [
 # promote literals to Terminals
 { [] g:alt [ list:member ?T ].
   ?T log:rawType log:Literal.
-} => {
- ?T a g:Terminal.
- # hmm...  g:Literal ?
- }.
+} => { ?T a g:Terminal }.
+
 { [] g:seq [ list:member ?T ].
   ?T log:rawType log:Literal.
-} => {
- ?T a g:Terminal.
- # hmm...  g:Literal ?
- }.
+} => { ?T a g:Terminal }.
