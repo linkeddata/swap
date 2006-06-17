@@ -107,13 +107,13 @@
 .
 
 :declaration rdfs:label "declaration"; rdf:value "9";
- rdfs:comment "[9] declaration ::= \"@prefix\" prefix explicituri|   \"@keywords\" (qname (\",\" qname)*)?";
+ rdfs:comment "[9] declaration ::= \"@prefix\" prefix uriref|   \"@keywords\" (qname (\",\" qname)*)?";
  a g:NonTerminal;
   g:alt (
     [ g:seq (
       "@prefix"
       :prefix
-      :explicituri
+      :uriref
      ) ]
     [ g:seq (
       "@keywords"
@@ -292,10 +292,10 @@
 .
 
 :symbol rdfs:label "symbol"; rdf:value "22";
- rdfs:comment "[22] symbol ::= explicituri| qname";
+ rdfs:comment "[22] symbol ::= uriref| qname";
  a g:NonTerminal;
   g:alt (
-    :explicituri
+    :uriref
     :qname
    )
 .
@@ -320,15 +320,12 @@
 .
 
 :dtlang rdfs:label "dtlang"; rdf:value "25";
- rdfs:comment "[25] dtlang ::=| \"@\" langcode| \"^^\" symbol";
+ rdfs:comment "[25] dtlang ::=| langcode| \"^^\" symbol";
  a g:NonTerminal;
   g:alt (
     [ g:seq (
      ) ]
-    [ g:seq (
-      "@"
-      :langcode
-     ) ]
+    :langcode
     [ g:seq (
       "^^"
       :symbol
@@ -400,13 +397,16 @@
    )
 .
 
-:explicituri rdfs:label "explicituri"; rdf:value "29";
- rdfs:comment "[29] explicituri ::=	\"<\" [^>]* \">\"";
+:uriref rdfs:label "uriref"; rdf:value "29";
+ rdfs:comment "[29] uriref ::=	'<' ([^<>'{}|^`]-[#x00-#x20])* '>'";
  a g:Terminal;
   re:seq (
     "<"
     [ re:star 
-      [  g:matches "[^>]"  ]
+      [ re:diff (
+        [  g:matches "[^<>'{}|^`]"  ]
+        [  g:matches "[#x00-#x20]"  ]
+       ) ]
      ]
     ">"
    )
@@ -500,9 +500,10 @@
 .
 
 :langcode rdfs:label "langcode"; rdf:value "33";
- rdfs:comment "[33] langcode	::= [a-z]+ (\"-\" [a-z0-9]+)*";
+ rdfs:comment "[33] langcode	::= \"@\" [a-z]+ (\"-\" [a-z0-9]+)*";
  a g:Terminal;
   re:seq (
+    "@"
     [ re:rep 
       [  g:matches "[a-z]"  ]
      ]
