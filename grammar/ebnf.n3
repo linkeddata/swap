@@ -37,15 +37,14 @@ short for [ :alt ([ :seq ()] X)]"""
          rdfs:label "star";
          rdfs:comment """[ :star X] is zero or more Xs.""".
 
-    :NonTerminal     a rdfs:Class;
-         rdfs:label "NonTerminal" .
+    :nonTerminal     a rdfs:Property;
+         rdfs:label "non terminal";
+         rdfs:comment "relates grammatical symbol to a language" .
     
-    :Terminal     a rdfs:Class;
-         rdfs:label "Terminal";
-         rdfs:comment "a lexical token; i.e. a symbol in a lower-level language" .
+    :terminal     a rdfs:Class;
+         rdfs:label "terminal";
+         rdfs:comment "relates a language to one of its lexical tokens; i.e. a symbol in a lower-level language" .
     
-    :matches     a owl:InverseFunctionalProperty;
-         rdfs:label "matches";
-         rdfs:range rdfs:Literal;
-         rdfs:comment """ [ :matches "x|y"] is the language of strings that matches the regex "x|y". """ .
-    
+:eof rdfs:label "EOF".
+:eps rdfs:label "epsilon"; rdfs:comment "the empty sequence";
+     :seq ().
