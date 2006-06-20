@@ -113,7 +113,10 @@ sparql-report.html : sparql-report.big
 	time $P $C  sparql-report.big --strings > $@
 
 
-ebnf: notation3.rdf ebnf.rdf notation3.json turtle.json
+ebnf: notation3.rdf ebnf.rdf notation3.json turtle_syntax
+
+turtle_syntax: turtle.json turtle-bnf.n3 turtle.n3 turtle.bnf
+
 CHATTY=0
 
 .SUFFIXES: .json .n3 .bnf
@@ -133,6 +136,8 @@ turtle.json: turtle-bnf.n3 gramLL1.py
 turtle-bnf.n3: turtle.n3 ebnf2bnf.n3
 	$P $C notation3.n3 ebnf2bnf.n3  --chatty=$(CHATTY) \
 		--think --data >$@
+
+turtle.n3: turtle.bnf ebnf2turtle.py
 
 notation3.json: notation3-bnf.n3 gramLL1.py
 	PYTHONPATH=$(HOME)/lib/python:../.. $P gramLL1.py notation3-bnf.n3 >$@
