@@ -411,7 +411,7 @@ def startTurtle(pfx, ns):
 def asTurtle(num, sym, expr, isToken, orig):
     print
     print ':%s rdfs:label "%s"; rdf:value "%s";' % (sym, sym, num)
-    print ' rdfs:comment "%s";' % esc(orig)
+    print ' rdfs:comment "%s";' % esc(orig.strip())
     if isToken: print " a g:Terminal;",
     else: print " a g:NonTerminal;",
     print
@@ -517,7 +517,10 @@ if __name__ == '__main__':
     else: main(sys.argv)
 
 # $Log$
-# Revision 1.6  2006-06-20 08:18:39  connolly
+# Revision 1.7  2006-06-20 08:21:52  connolly
+# strip trailing space from rdfs:comment
+#
+# Revision 1.6  2006/06/20 08:18:39  connolly
 # more line-splitting fixes
 #
 # Revision 1.5  2006/06/20 05:59:10  connolly
