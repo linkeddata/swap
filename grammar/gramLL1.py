@@ -18,6 +18,8 @@ def main(argv):
     if '--pprint' in argv:
         from pprint import pprint
         pprint(it)
+    elif '--yacc' in argv:
+        toYacc(it)
     else:
         import simplejson #http://cheeseshop.python.org/pypi/simplejson
         import sys
@@ -35,22 +37,26 @@ def asGrammar(f, start):
     rules = []
     for lhs in f.each(pred=RDF.type, obj=EBNF.NonTerminal):
         if lhs is EBNF.eps: continue
+
+        s = asSymbol(f, lhs)
+
         alts = f.the(subj=lhs, pred=EBNF.alt)
-        if not alts:
-            alts = [lhs]
-        for alt in alts:
-            s = asSymbol(f, lhs)
-            seq = f.the(subj=alt, pred=EBNF.seq)
-            if seq is not None:
-                r = [s] + [asSymbol(f, x) for x in seq]
-            else:
-                r = [s, asSymbol(f, alt)]
-            if s == start:
-                rules.insert(0, r)
-            else:
-                rules.append(r)
+        seq = f.the(subj=lhs, pred=EBNF.seq)
+
+        if alts is None and seq is None:
+            raise ValueError, "no alt nor seq for %s" % lhs
+
+        if alts:
+            for alt in alts:
+                addRule(rules, s, start, [s, asSymbol(f, alt)])
+        else:
+            r = [s] + [asSymbol(f, x) for x in seq]
+            addRule(rules, s, start, r)
     return rules
 
+def addRule(rules, s, start, r):
+    if s == start: rules.insert(0, r)
+    else: rules.append(r)
 
 def tokens(f):
     """find lexer rules f and return JSON struct
@@ -87,11 +93,9 @@ def pattern(f, s):
         return '(?:%s)*' % pattern(f, part)
     part = f.the(subj=s, pred=REGEX.rep)
     if part:
-        #@@ look up non-grouping paren thingy
         return '(?:%s)+' % pattern(f, part)
     part = f.the(subj=s, pred=REGEX.opt)
     if part:
-        #@@ look up non-grouping paren thingy
         return '(?:%s)?' % pattern(f, part)
     raise ValueError, s
     
@@ -122,7 +126,7 @@ def asSymbol(f, x):
         return 'EOF'
     elif EBNF.NonTerminal in f.each(subj=x, pred=RDF.type):
         if x in f.existentials():
-            return 's_%d' % id(x)
+            return 's_%d' % abs(id(x))
         else:
             return x.fragid
     elif EBNF.Terminal in f.each(subj=x, pred=RDF.type):
@@ -130,13 +134,50 @@ def asSymbol(f, x):
     else:
         raise ValueError, x
 
+def toYacc(it):
+    print """
+%{
+int yylex (void);
+void yyerror (char const *);
+%}
+"""
+    
+    tokens = {}
+    for pat, tok, dummy in it['tokens']:
+        tokens[tok] = 1
+        if tok.startswith("TOK"):
+            print "%%token %s" % tok
+
+    print "%%"
+    
+    for rule in it['rules']:
+        lhs = rule[0]
+        rhs = rule[1:]
+        print "%s: " % lhs,
+        for sym in rhs:
+            if tokens.has_key(sym):
+                if sym.startswith("TOK"):
+                    print sym,
+                else:
+                    print '"%s"' % sym,
+            else:
+                print sym,
+        print ";"
+    print "%%"
+
+
 if __name__ == '__main__':
     import sys
     main(sys.argv)
 
 
 # $Log$
-# Revision 1.5  2006-06-20 05:59:31  connolly
+# Revision 1.6  2006-06-20 08:10:35  connolly
+# added --yacc option
+# discovered asGrammar was talking the alt/seq tree all wrong; fixed it
+# removed '-' from symbol names
+#
+# Revision 1.5  2006/06/20 05:59:31  connolly
 # parameterize start symbol
 #
 # Revision 1.4  2006/06/20 04:46:23  connolly
