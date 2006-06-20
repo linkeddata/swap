@@ -121,8 +121,6 @@ CHATTY=0
 
 .SUFFIXES: .json .n3 .bnf
 
-.n3.json:
-	PYTHONPATH=$(HOME)/lib/python:../.. $P gramLL1.py $< >$@
 .bnf.n3:
 	$P ebnf2turtle.py $< n3 'http://www.w3.org/2000/10/swap/grammar/notation3#' >$@
 
