@@ -160,6 +160,9 @@ def toTurtle(lines, pfx, ns):
         if r == '@terminals': token = 1
         else:
             num, sym, expr = ruleParts(r)
+            # all caps symbols are tokens
+            import sys
+            if re.match("[A-Z_]+$", sym): token = 1
             asTurtle(num, sym, expr, token, r)
 
 
@@ -498,7 +501,10 @@ if __name__ == '__main__':
     else: main(sys.argv)
 
 # $Log$
-# Revision 1.3  2006-06-20 04:43:10  connolly
+# Revision 1.4  2006-06-20 04:57:16  connolly
+# all caps symbol signals a switch to terminals
+#
+# Revision 1.3  2006/06/20 04:43:10  connolly
 # be more discriminating about breaking lines in order to handle
 # Andy's turtle.html bnf
 #
