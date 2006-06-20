@@ -25,7 +25,6 @@ Terse RDF Triple Language::
 
   :document rdfs:label "document"; rdf:value "1";
    rdfs:comment "[1] document ::= prolog element Misc*";
-   a g:NonTerminal;
     g:seq (
       :prolog
       :element
@@ -146,23 +145,25 @@ __version__ = "$Id$"
 import re
 
 def main(argv):
-    data, pfx, uri = argv[1:]
-    toTurtle(file(data), pfx, uri)
+    data, pfx, lang, ns = argv[1:]
+    toTurtle(file(data), pfx, ns, lang)
         
 
-def toTurtle(lines, pfx, ns):
+def toTurtle(lines, pfx, ns, lang):
     """print a turtle version of the lines of a BNF file
     """
     
-    startTurtle(pfx, ns)
-    token = 0
+    started = False
+    token = False
     for r in eachRule(lines):
-        if r.strip() == '@terminals': token = 1
+        if r.strip() == '@terminals': token = True
         else:
             num, sym, expr = ruleParts(r)
+            if not started:
+                startTurtle(pfx, ns, lang, sym)
+                started = True
             # all caps symbols are tokens
-            import sys
-            if re.match("[A-Z_]+$", sym): token = 1
+            if re.match("[A-Z_]+$", sym): token = True
             asTurtle(num, sym, expr, token, r)
 
 
@@ -231,6 +232,8 @@ def ebnf(s):
     >>> ebnf("NCCHAR1 | '-' | [0-9] | #x00B7 | [#x0300-#x036F] | [#x203F-#x2040]")
     (('|', [('id', 'NCCHAR1'), ("'", '-'), ('[', '0-9'), ('#', '#x00B7'), ('[', '#x0300-#x036F'), ('[', '#x203F-#x2040')]), '')
     """
+
+    # " help emacs
 
     e, s = alt(s)
     if s:
@@ -396,25 +399,26 @@ def token(s):
         return ((s[0],) , s[1:])
     else:
         raise ValueError, "unrecognized token: %s" % s
+
+
 ##########
 # turtle generation
 #
 
-def startTurtle(pfx, ns):
+def startTurtle(pfx, ns, lang, start):
     print "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>."
     print "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>."
     print "@prefix %s: <%s>." % (pfx, ns)
     print "@prefix : <%s>." % ns
     print "@prefix re: <http://www.w3.org/2000/10/swap/grammar/regex#>."
     print "@prefix g: <http://www.w3.org/2000/10/swap/grammar/ebnf#>."
+    print
+    print ":%s rdfs:isDefinedBy <>; g:start :%s." % (lang, start)
     
 def asTurtle(num, sym, expr, isToken, orig):
     print
     print ':%s rdfs:label "%s"; rdf:value "%s";' % (sym, sym, num)
     print ' rdfs:comment "%s";' % esc(orig.strip())
-    if isToken: print " a g:Terminal;",
-    else: print " a g:NonTerminal;",
-    print
 
     if isToken: pfx = 're'
     else: pfx = 'g'
@@ -473,10 +477,10 @@ def ttlExpr(expr, pfx, indent, obj=1):
     elif op == "'":
         print '%s"%s"' %(indent, esc(args))
     elif op == "[":
-        print '%s%s g:matches "[%s]" %s' % (indent, bra, esc(args), ket)
+        print '%s%s re:matches "[%s]" %s' % (indent, bra, esc(args), ket)
     elif op == "#":
         assert not('"' in args)
-        print '%s%s g:matches "\\\\x%s" %s' % (indent, bra, args[2:], ket)
+        print '%s%s re:matches "\\\\x%s" %s' % (indent, bra, args[2:], ket)
     else:
         raise RuntimeError, op
 
@@ -517,7 +521,12 @@ if __name__ == '__main__':
     else: main(sys.argv)
 
 # $Log$
-# Revision 1.7  2006-06-20 08:21:52  connolly
+# Revision 1.8  2006-06-20 21:12:05  connolly
+# change terminal, nonterminal from classes to relationships to languages
+# add command-line arg for name of language
+# move :matches from EBNF to regex ns
+#
+# Revision 1.7  2006/06/20 08:21:52  connolly
 # strip trailing space from rdfs:comment
 #
 # Revision 1.6  2006/06/20 08:18:39  connolly
