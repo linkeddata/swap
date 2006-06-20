@@ -18,19 +18,51 @@ rdfs:seeAlso <ebnf>, <ebnf.n3>, <ebnf.rdf>.
 
 # find all the non-terminals
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-g:alt rdfs:domain g:NonTerminal.
-g:seq rdfs:domain g:NonTerminal.
-{ ?S [ rdfs:domain ?C ] [] } => { ?S a ?C }.
-
-# and find all the terminals
 @prefix list: <http://www.w3.org/2000/10/swap/list#>.
+
+g:seq rdfs:domain g:Production.
+g:alt rdfs:domain g:Production.
+{ ?S [ rdfs:domain ?C] [] } => { ?S a ?C }.
+
+{ ?L g:start ?A }
+ => { ?A g:nonTerminal ?L }.
+{ [ g:seq [ list:member ?A]] g:nonTerminal ?L.
+  ?A a g:Production.
+ }
+ => { ?A g:nonTerminal ?L }.
+{ [ g:alt [ list:member ?A]] g:nonTerminal ?L.
+  ?A a g:Production.
+ }
+ => { ?A g:nonTerminal ?L }.
+
+
+# and find all the terminals used in NonTerminal rules
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
 
 # promote literals to Terminals
-{ [] g:alt [ list:member ?T ].
+{
+  [ g:alt [ list:member ?T ]] g:nonTerminal ?L.
   ?T log:rawType log:Literal.
-} => { ?T a g:Terminal }.
+} => { ?L g:terminal ?T }.
 
-{ [] g:seq [ list:member ?T ].
+{ [ g:seq [ list:member ?T ]] g:nonTerminal ?L.
   ?T log:rawType log:Literal.
-} => { ?T a g:Terminal }.
+} => { ?L g:terminal ?T }.
+
+# find the Terminals that are used...
+@prefix re: <http://www.w3.org/2000/10/swap/grammar/regex#>.
+re:alt rdfs:domain re:Regex.
+re:seq rdfs:domain re:Regex.
+re:matches rdfs:domain re:Regex.
+re:diff rdfs:domain re:Regex.
+re:opt rdfs:domain re:Regex.
+re:rep rdfs:domain re:Regex.
+re:star rdfs:domain re:Regex.
+
+{ [ g:alt [ list:member ?T ]] g:nonTerminal ?L.
+  ?T a re:Regex.
+} => { ?L g:terminal ?T }.
+
+{ [ g:seq [ list:member ?T ]] g:nonTerminal ?L.
+  ?T a re:Regex.
+} => { ?L g:terminal ?T }.
