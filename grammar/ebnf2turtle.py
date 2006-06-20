@@ -180,7 +180,7 @@ def eachRule(lines):
             if r: yield r
             r = l.strip()
         else:
-            r += l.strip()
+            r += ' ' + l.strip()
     if r: yield r
 
 
@@ -227,6 +227,8 @@ def ebnf(s):
     >>> ebnf("BaseDecl? PrefixDecl*")
     ((',', [('?', ('id', 'BaseDecl')), ('*', ('id', 'PrefixDecl'))]), '')
 
+    >>> ebnf("NCCHAR1 | '-' | [0-9] | #x00B7 | [#x0300-#x036F] | [#x203F-#x2040]")
+    (('|', [('id', 'NCCHAR1'), ("'", '-'), ('[', '0-9'), ('#', '#x00B7'), ('[', '#x0300-#x036F'), ('[', '#x203F-#x2040')]), '')
     """
 
     e, s = alt(s)
@@ -358,8 +360,17 @@ def token(s):
     
     >>> token("'abc' def")
     (("'", 'abc'), ' def')
+
+    >>> token("[0-9]")
+    (('[', '0-9'), '')
+    >>> token("#x00B7")
+    (('#', '#x00B7'), '')
+    >>> token ("[#x0300-#x036F]")
+    (('[', '#x0300-#x036F'), '')
+    >>> token("[^<>'{}|^`]-[#x00-#x20]")
+    (('[', "^<>'{}|^`"), '-[#x00-#x20]')
     """
-    # ' help emacs
+    # '" help emacs
 
     s = s.strip()
     if s.startswith("'"):
@@ -479,11 +490,17 @@ def esc(st):
 
     >>> esc(r'[^"\\]')
     '[^\\"\\\\\\\\]'
+
+    >>> esc('#x00-#x20')
+    '\\\\\\\\x00-\\\\\\\\x20'
     """
     
-    if not ('"' in st or '\\' in st): return st
+    if not ('"' in st or '\\' in st or '#' in st): return st
     s = ''
     for c in st:
+        if c == '#':
+            s += r'\\\\'
+            continue
         if c == '"' or c == '\\':
             s += '\\'
         s += c
@@ -501,7 +518,11 @@ if __name__ == '__main__':
     else: main(sys.argv)
 
 # $Log$
-# Revision 1.4  2006-06-20 04:57:16  connolly
+# Revision 1.5  2006-06-20 05:59:10  connolly
+# properly escape #xNN notation in regex's
+# join lines with a space to avoid merging tokens
+#
+# Revision 1.4  2006/06/20 04:57:16  connolly
 # all caps symbol signals a switch to terminals
 #
 # Revision 1.3  2006/06/20 04:43:10  connolly
