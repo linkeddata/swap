@@ -170,8 +170,8 @@ class Checker(FormulaCache):
     def result(self, r, policy, level=0):
         """Get the result of a proof step.
 
-        r       is the step to be checked, or none if the root reason
-                The root reason is the reason of type reason:Proof
+        r       is the step to be checked; in the case of the root reason,
+                proof.the(pred=rdf.type, obj=reason.Proof)
 
         level   is just the nesting level for diagnostic output
 
