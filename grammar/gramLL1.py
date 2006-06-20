@@ -10,10 +10,11 @@ RDF = myStore.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 import regex
 
 def main(argv):
-    data, start = argv[-2:]
+    data, lang = argv[-2:]
     f = myStore.load(data)
-    it = { 'rules': asGrammar(f, start),
-           'tokens': tokens(f) }
+    lang = f.newSymbol(lang)
+    it = { 'rules': asGrammar(f, lang),
+           'tokens': tokens(f, lang) }
 
     if '--pprint' in argv:
         from pprint import pprint
@@ -29,13 +30,14 @@ def main(argv):
 
 
 
-def asGrammar(f, start):
+def asGrammar(f, lang):
     """find BNF grammar in f and return grammar rules array
     as per http://www.navyrain.net/compilergeneratorinjavascript/
     navyrain@navyrain.net
     """
     rules = []
-    for lhs in f.each(pred=RDF.type, obj=EBNF.NonTerminal):
+    start = asSymbol(f, f.the(subj=lang, pred=EBNF.start))
+    for lhs in f.each(pred=EBNF.nonTerminal, obj=lang):
         if lhs is EBNF.eps: continue
 
         s = asSymbol(f, lhs)
@@ -58,13 +60,13 @@ def addRule(rules, s, start, r):
     if s == start: rules.insert(0, r)
     else: rules.append(r)
 
-def tokens(f):
+def tokens(f, lang):
     """find lexer rules f and return JSON struct
     as per http://www.navyrain.net/compilergeneratorinjavascript/
     navyrain@navyrain.net
     """
     tokens = []
-    for lhs in f.each(pred=RDF.type, obj=EBNF.Terminal):
+    for lhs in f.each(subj=lang, pred=EBNF.terminal):
         tokens.append([pattern(f, lhs), asSymbol(f, lhs), None])
     return tokens
 
@@ -73,8 +75,7 @@ def pattern(f, s):
     if isinstance(s, Literal):
         return regex.escape(unicode(s))
 
-    #@@ matches should move from EBNF to REGEX
-    pat = f.the(subj=s, pred=EBNF.matches)
+    pat = f.the(subj=s, pred=REGEX.matches)
     if pat:
         pat = unicode(pat)
         return pat.replace("#x", "\\x")
@@ -99,11 +100,11 @@ def pattern(f, s):
         return '(?:%s)?' % pattern(f, part)
     raise ValueError, s
     
-def sets(f, pred=EBNF.first):
+def sets(f, lang, pred=EBNF.first):
     """get LL(1) first/follow sets
     """
     fi = {}
-    for lhs in f.each(pred=RDF.type, obj=EBNF.NonTerminal):
+    for lhs in f.each(pred=EBNF.nonTerminal, obj=lang):
         if lhs is EBNF.eps: continue
         fs = []
         for obj in f.each(subj=lhs, pred=pred):
@@ -124,12 +125,12 @@ def asSymbol(f, x):
         return 'EMPTY'
     elif x == EBNF.eof:
         return 'EOF'
-    elif EBNF.NonTerminal in f.each(subj=x, pred=RDF.type):
+    elif f.each(subj=x, pred=EBNF.nonTerminal):
         if x in f.existentials():
             return 's_%d' % abs(id(x))
         else:
             return x.fragid
-    elif EBNF.Terminal in f.each(subj=x, pred=RDF.type):
+    elif f.each(pred=EBNF.terminal, obj=x):
         return 'TOK_%s' % x.fragid
     else:
         raise ValueError, x
@@ -172,7 +173,12 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.6  2006-06-20 08:10:35  connolly
+# Revision 1.7  2006-06-20 21:13:08  connolly
+# add an arg for the URI of the language
+# change NonTerminal, Terminal from class to relationship to language
+# move matches to regex
+#
+# Revision 1.6  2006/06/20 08:10:35  connolly
 # added --yacc option
 # discovered asGrammar was talking the alt/seq tree all wrong; fixed it
 # removed '-' from symbol names
