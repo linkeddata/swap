@@ -9,7 +9,7 @@
                                         ObjectList )? )*
    [7]    ObjectList              ::=   Object ( ',' Object )*
    [8]    Object                  ::=   GraphNode
-   [9]    Verb                    ::=   IRIref | 'a' | ARROW
+   [9]    Verb                    ::=   IRIref | 'a' | '=>'
    [10]   TriplesNode             ::=   Collection | BlankNodePropertyList
    [11]   BlankNodePropertyList   ::=   '[' PropertyListNotEmpty ']'
    [12]   Collection              ::=   '(' GraphNode+ ')'
