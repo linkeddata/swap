@@ -121,24 +121,23 @@ CHATTY=0
 
 .SUFFIXES: .json .n3 .bnf
 
-.bnf.n3:
-	$P ebnf2turtle.py $< n3 'http://www.w3.org/2000/10/swap/grammar/notation3#' >$@
 
 LYNX=elinks
 turtle.bnf: turtle.html
 	$(LYNX) -no-references -no-numbering -dump turtle.html >$@
 
 turtle.json: turtle-bnf.n3 gramLL1.py
-	PYTHONPATH=$(HOME)/lib/python:../.. $P gramLL1.py turtle-bnf.n3 parse >$@
+	PYTHONPATH=$(HOME)/lib/python:../.. $P gramLL1.py turtle-bnf.n3 'http://www.w3.org/2000/10/swap/grammar/turtle#language' >$@
 
 turtle-bnf.n3: turtle.n3 ebnf2bnf.n3
 	$P $C turtle.n3 ebnf2bnf.n3  --chatty=$(CHATTY) \
 		--think --data >$@
 
 turtle.n3: turtle.bnf ebnf2turtle.py
+	$P ebnf2turtle.py $< ttl language 'http://www.w3.org/2000/10/swap/grammar/turtle#' >$@
 
 notation3.json: notation3-bnf.n3 gramLL1.py
-	PYTHONPATH=$(HOME)/lib/python:../.. $P gramLL1.py notation3-bnf.n3 document >$@
+	PYTHONPATH=$(HOME)/lib/python:../.. $P gramLL1.py notation3-bnf.n3 'http://www.w3.org/2000/10/swap/grammar/notation3#language' >$@
 
 notation3-ll1.n3: notation3.n3 ebnf2bnf.n3 first_follow.n3
 	$P $C notation3.n3 ebnf2bnf.n3 first_follow.n3 --chatty=$(CHATTY) \
@@ -149,6 +148,7 @@ notation3-bnf.n3: notation3.n3 ebnf2bnf.n3 first_follow.n3
 		--think --data >$@
 
 notation3.n3: notation3.bnf ebnf2turtle.py
+	$P ebnf2turtle.py $< n3 language 'http://www.w3.org/2000/10/swap/grammar/notation3#' >$@
 
 ebnf.rdf: ebnf.n3
 notation3.rdf: notation3.n3
