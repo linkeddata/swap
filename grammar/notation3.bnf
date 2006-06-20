@@ -6,96 +6,72 @@
 /* $Id$ */
 /* transcribe from n3.n3 revision 1.28 date: 2006/02/15 15:49:00 */
 
-[1] document ::= statements_optional
-
-[2] statements_optional ::= 
-                        | statement "." statements_optional
+[1] document ::= (statement ".")*
 
 /* Formula does NOT need period on last statement */
 
-[3] formulacontent ::= statementlist
+[2] formulacontent ::= (statement ("." statement)*)?
 
-[4] statementlist ::= 
-                  | statement statementtail
-
-[5] statementtail ::=
-                  | "." statementlist
-
-[6] statement  ::= declaration
+[3] statement  ::= declaration
 	       | universal
 	       | existential
 	       | simpleStatement
 
-[7] universal ::= "@forAll" (symbol ("," symbol)*)?
+[4] universal ::= "@forAll" varlist
 
-[8] existential ::= "@forSome" (symbol ("," symbol)*)?
+[5] existential ::= "@forSome" varlist
 
+[6] varlist ::= (symbol ("," symbol)*)?
 
-/* barename and qname were ambiguous */
-/* so the barename check will have to be extra-grammatical */
-[9] declaration ::= "@prefix" prefix uriref
-    		|   "@keywords" (qname ("," qname)*)?
+[7] declaration ::= "@prefix" prefix uriref
+    		|   "@keywords" (barename ("," barename)*)?
 
-[10] simpleStatement ::= subject propertylist
+[8] barename ::= qname
+/* barename constraint: no colon */
 
-[11] propertylist ::= 
-		  | verb object objecttail propertylisttail
+[9] simpleStatement ::= term propertylist
 
-[12] propertylisttail ::=
-     		      | ";" propertylist
+[10] propertylist ::= (verb term objecttail (";" propertylist)*)?
 
+[11] objecttail ::= ("," term)*
 
-[13] objecttail ::=
-		| ","   object objecttail
-
-[14] verb ::= expression 
-		| "@has" expression
-		| "@is" expression "@of"
+[12] verb ::= term
+		| "@has" term
+		| "@is" term "@of"
 		| "@a"
 		| "="
 		| "=>"
 		| "<=" 
 
-/* let's call it term rather than expression -DWC */
-[15] subject ::= expression
+[13] term ::= pathitem pathtail
 
-[16] object ::= expression
+[14] pathtail ::=
+     	      | "!" term
+	      | "^" term
 
-[17] expression ::= pathitem pathtail
-
-[18] pathtail ::=
-     	      | "!" expression
-	      | "^" expression
-
-[19] pathitem ::= symbol
-		| "{" formulacontent "}"
-		| quickvariable
-		| numericliteral
+[15] pathitem ::= symbol
+		| evar
+		| uvar
+		| numeral
 		| literal
+		| "{" formulacontent "}"
 		| "[" propertylist "]"
-		|  "("  pathlist ")"
+		|  "("  term* ")"
                 | boolean
 /*		| "@this"  #  Deprecated.  Was allowed for this log:forAll x */
 
+[16] literal ::= (STRING_LITERAL2 | STRING_LITERAL_LONG2)
+            ("^^" symbol)
+	    | langstring
 
-[20] boolean ::= "@true" | "@false"
+[17] boolean ::= "@true" | "@false"
 
-[21] pathlist ::= 
-     	      | expression pathlist
-
-[22] symbol ::= uriref
+[18] symbol ::= uriref
 	    | qname
 
-[23] numericliteral ::= integer
+[19] numeral ::= integer
           | double
           | decimal
-
-[24] literal ::= string dtlang
-
-[25] dtlang ::= 
-            | langcode
-            | "^^" symbol
-
 
 /***********/
 
@@ -105,37 +81,41 @@
 [27] double	::= [+-]? [0-9]+ ("." [0-9]+)? ( [eE] [+-]? [0-9]+)
 [28] decimal	::= [+-]? [0-9]+ ("." [0-9]+)?
 
-/* @@check SPARQL spec, which excludes newlines and some other nastiness */
+/* borrowed from SPARQL spec, which excludes newlines and other nastiness */
 [29] uriref ::=	'<' ([^<>'{}|^`]-[#x00-#x20])* '>'
 
+[30] qname  ::= prefix? localname
+[31] localname ::= (NameStartChar3|"_") NameChar3*
+[32] prefix  ::= (("_" NameChar3+) | (NameStartChar3 NameChar3*))? ":"
 
-/* [4]   	NameStartChar	from xml11, less ":" */
-[30] NameStartChar3	   ::=   	[A-Z] | "_" | [a-z] | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF] | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D] | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]
+/* [4]   	NameStartChar	from xml11, less ":", "_" */
+[33] NameStartChar3	   ::=   	[A-Z] | [a-z] | [#xC0-#xD6]
+      | [#xD8-#xF6] | [#xF8-#x2FF] | [#x370-#x37D] | [#x37F-#x1FFF]
+      | [#x200C-#x200D] | [#x2070-#x218F] | [#x2C00-#x2FEF]
+      | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD]
+      | [#x10000-#xEFFFF]
 
-/* [4a]   	NameChar from xml11 less ":" and "." */
-[31]   	NameChar3	   ::=   	NameStartChar3 | "-" | [0-9] | #xB7 | [#x0300-#x036F] | [#x203F-#x2040]
+/* [4a]   	NameChar from xml11 less ":" and ".", plus "_" */
+[34]   	NameChar3	   ::=   	NameStartChar3 | "-" | "_"
+	| [0-9] | #xB7 | [#x0300-#x036F] | [#x203F-#x2040]
 
-[32] prefix ::= (NameStartChar3 NameChar3*)? ":"
 
-[34] qname  ::= ( (NameStartChar3 NameChar3*)? ":")? NameStartChar3 NameChar3*
+[35] uvar ::= "?" localname
+[36] evar ::= "_:" localname
 
-[35] quickvariable ::= "?" NameStartChar3 NameChar3*
+[37] langstring ::= (STRING_LITERAL2 | STRING_LITERAL_LONG2)
+	    	"@" [a-z]+ ("-" [a-z0-9]+)*
 
-[33] langcode	::= "@" [a-z]+ ("-" [a-z0-9]+)*
 /* http://www.w3.org/TR/rdf-testcases/#language */
 
-[34] string ::= STRING_LITERAL2 | STRING_LITERAL_LONG2
 
-/* borrow from SPARQL... and double some \\ */
+/* borrow from SPARQL... and double some... and get rid of UCHAR \\ */
 
-[79]    	STRING_LITERAL2  	  ::=    	'"' ( ([^#x22#x5C#x0A#x0D]) | ECHAR | UCHAR )* '"'
+[79]    	STRING_LITERAL2  	  ::=    	'"' ( ([^#x22#x5C#x0A#x0D]) | ECHAR )* '"'
 
-[81]    	STRING_LITERAL_LONG2  	  ::=    	'"""' ( ( '"' | '""' )? ( [^"\\] | ECHAR | UCHAR ) )* '"""'
+[81]    	STRING_LITERAL_LONG2  	  ::=    	'"""' ( ( '"' | '""' )? ( [^"\\] | ECHAR ) )* '"""'
 
 [82]    	ECHAR  	  ::=    	'\\' [tbnrf\"']
 
-[83]    	UCHAR  	  ::=    	'\\' ( 'u' HEX HEX HEX HEX | 'U' HEX HEX HEX HEX HEX HEX HEX HEX )
-
-[84]    	HEX  	  ::=    	[0-9] | [A-F] | [a-f]
 
 

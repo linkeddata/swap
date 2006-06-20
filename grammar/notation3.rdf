@@ -48,7 +48,7 @@
 
     <Terminal rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#NameChar3">
         <rdf:value>31</rdf:value>
-        <rdfs:comment>[31]   	NameChar3	   ::=   	NameStartChar3 | "-" | [0-9] | #xB7 | [#x0300-#x036F] | [#x203F-#x2040]</rdfs:comment>
+        <rdfs:comment>[31]   	NameChar3	   ::=   	NameStartChar3 | "-" | [0-9] | \\xB7 | [\\x0300-\\x036F] | [\\x203F-\\x2040]</rdfs:comment>
         <rdfs:label>NameChar3</rdfs:label>
         <re:alt rdf:parseType="Resource">
             <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#NameStartChar3"/>
@@ -64,11 +64,11 @@
                         </rdf:first>
                         <rdf:rest rdf:parseType="Resource">
                             <rdf:first rdf:parseType="Resource">
-                                <matches>[#x0300-#x036F]</matches>
+                                <matches>[\\x0300-\\x036F]</matches>
                             </rdf:first>
                             <rdf:rest rdf:parseType="Resource">
                                 <rdf:first rdf:parseType="Resource">
-                                    <matches>[#x203F-#x2040]</matches>
+                                    <matches>[\\x203F-\\x2040]</matches>
                                 </rdf:first>
                                 <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
                             </rdf:rest>
@@ -81,7 +81,7 @@
 
     <Terminal rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#NameStartChar3">
         <rdf:value>30</rdf:value>
-        <rdfs:comment>[30] NameStartChar3	   ::=   	[A-Z] | "_" | [a-z] | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF] | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D] | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]</rdfs:comment>
+        <rdfs:comment>[30] NameStartChar3	   ::=   	[A-Z] | "_" | [a-z] | [\\xC0-\\xD6] | [\\xD8-\\xF6] | [\\xF8-\\x2FF] | [\\x370-\\x37D] | [\\x37F-\\x1FFF] | [\\x200C-\\x200D] | [\\x2070-\\x218F] | [\\x2C00-\\x2FEF] | [\\x3001-\\xD7FF] | [\\xF900-\\xFDCF] | [\\xFDF0-\\xFFFD] | [\\x10000-\\xEFFFF]</rdfs:comment>
         <rdfs:label>NameStartChar3</rdfs:label>
         <re:alt rdf:parseType="Resource">
             <rdf:first rdf:parseType="Resource">
@@ -95,51 +95,51 @@
                     </rdf:first>
                     <rdf:rest rdf:parseType="Resource">
                         <rdf:first rdf:parseType="Resource">
-                            <matches>[#xC0-#xD6]</matches>
+                            <matches>[\\xC0-\\xD6]</matches>
                         </rdf:first>
                         <rdf:rest rdf:parseType="Resource">
                             <rdf:first rdf:parseType="Resource">
-                                <matches>[#xD8-#xF6]</matches>
+                                <matches>[\\xD8-\\xF6]</matches>
                             </rdf:first>
                             <rdf:rest rdf:parseType="Resource">
                                 <rdf:first rdf:parseType="Resource">
-                                    <matches>[#xF8-#x2FF]</matches>
+                                    <matches>[\\xF8-\\x2FF]</matches>
                                 </rdf:first>
                                 <rdf:rest rdf:parseType="Resource">
                                     <rdf:first rdf:parseType="Resource">
-                                        <matches>[#x370-#x37D]</matches>
+                                        <matches>[\\x370-\\x37D]</matches>
                                     </rdf:first>
                                     <rdf:rest rdf:parseType="Resource">
                                         <rdf:first rdf:parseType="Resource">
-                                            <matches>[#x37F-#x1FFF]</matches>
+                                            <matches>[\\x37F-\\x1FFF]</matches>
                                         </rdf:first>
                                         <rdf:rest rdf:parseType="Resource">
                                             <rdf:first rdf:parseType="Resource">
-                                                <matches>[#x200C-#x200D]</matches>
+                                                <matches>[\\x200C-\\x200D]</matches>
                                             </rdf:first>
                                             <rdf:rest rdf:parseType="Resource">
                                                 <rdf:first rdf:parseType="Resource">
-                                                    <matches>[#x2070-#x218F]</matches>
+                                                    <matches>[\\x2070-\\x218F]</matches>
                                                 </rdf:first>
                                                 <rdf:rest rdf:parseType="Resource">
                                                     <rdf:first rdf:parseType="Resource">
-                                                        <matches>[#x2C00-#x2FEF]</matches>
+                                                        <matches>[\\x2C00-\\x2FEF]</matches>
                                                     </rdf:first>
                                                     <rdf:rest rdf:parseType="Resource">
                                                         <rdf:first rdf:parseType="Resource">
-                                                            <matches>[#x3001-#xD7FF]</matches>
+                                                            <matches>[\\x3001-\\xD7FF]</matches>
                                                         </rdf:first>
                                                         <rdf:rest rdf:parseType="Resource">
                                                             <rdf:first rdf:parseType="Resource">
-                                                                <matches>[#xF900-#xFDCF]</matches>
+                                                                <matches>[\\xF900-\\xFDCF]</matches>
                                                             </rdf:first>
                                                             <rdf:rest rdf:parseType="Resource">
                                                                 <rdf:first rdf:parseType="Resource">
-                                                                    <matches>[#xFDF0-#xFFFD]</matches>
+                                                                    <matches>[\\xFDF0-\\xFFFD]</matches>
                                                                 </rdf:first>
                                                                 <rdf:rest rdf:parseType="Resource">
                                                                     <rdf:first rdf:parseType="Resource">
-                                                                        <matches>[#x10000-#xEFFFF]</matches>
+                                                                        <matches>[\\x10000-\\xEFFFF]</matches>
                                                                     </rdf:first>
                                                                     <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
                                                                 </rdf:rest>
@@ -161,7 +161,7 @@
 
     <Terminal rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#STRING_LITERAL2">
         <rdf:value>79</rdf:value>
-        <rdfs:comment>[79]    	STRING_LITERAL2  	  ::=    	'"' ( ([^#x22#x5C#x0A#x0D]) | ECHAR | UCHAR )* '"'</rdfs:comment>
+        <rdfs:comment>[79]    	STRING_LITERAL2  	  ::=    	'"' ( ([^\\x22\\x5C\\x0A\\x0D]) | ECHAR | UCHAR )* '"'</rdfs:comment>
         <rdfs:label>STRING_LITERAL2</rdfs:label>
         <re:seq rdf:parseType="Resource">
             <rdf:first>"</rdf:first>
@@ -170,7 +170,7 @@
                     <re:star rdf:parseType="Resource">
                         <re:alt rdf:parseType="Resource">
                             <rdf:first rdf:parseType="Resource">
-                                <matches>[^#x22#x5C#x0A#x0D]</matches>
+                                <matches>[^\\x22\\x5C\\x0A\\x0D]</matches>
                             </rdf:first>
                             <rdf:rest rdf:parseType="Resource">
                                 <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#ECHAR"/>
@@ -359,7 +359,7 @@
 
     <NonTerminal rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#declaration">
         <rdf:value>9</rdf:value>
-        <rdfs:comment>[9] declaration ::= "@prefix" prefix uriref|   "@keywords" (qname ("," qname)*)?</rdfs:comment>
+        <rdfs:comment>[9] declaration ::= "@prefix" prefix uriref |   "@keywords" (qname ("," qname)*)?</rdfs:comment>
         <rdfs:label>declaration</rdfs:label>
         <alt rdf:parseType="Resource">
             <rdf:first rdf:parseType="Resource">
@@ -483,7 +483,7 @@
 
     <NonTerminal rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#dtlang">
         <rdf:value>25</rdf:value>
-        <rdfs:comment>[25] dtlang ::=| langcode| "^^" symbol</rdfs:comment>
+        <rdfs:comment>[25] dtlang ::= | langcode | "^^" symbol</rdfs:comment>
         <rdfs:label>dtlang</rdfs:label>
         <alt rdf:parseType="Resource">
             <rdf:first rdf:parseType="Resource">
@@ -633,7 +633,7 @@
 
     <NonTerminal rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#numericliteral">
         <rdf:value>23</rdf:value>
-        <rdfs:comment>[23] numericliteral ::= integer| double| decimal</rdfs:comment>
+        <rdfs:comment>[23] numericliteral ::= integer | double | decimal</rdfs:comment>
         <rdfs:label>numericliteral</rdfs:label>
         <alt rdf:parseType="Resource">
             <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#integer"/>
@@ -659,7 +659,7 @@
 
     <NonTerminal rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#objecttail">
         <rdf:value>13</rdf:value>
-        <rdfs:comment>[13] objecttail ::=| ","   object objecttail</rdfs:comment>
+        <rdfs:comment>[13] objecttail ::= | ","   object objecttail</rdfs:comment>
         <rdfs:label>objecttail</rdfs:label>
         <alt rdf:parseType="Resource">
             <rdf:first rdf:parseType="Resource">
@@ -685,7 +685,7 @@
 
     <NonTerminal rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#pathitem">
         <rdf:value>19</rdf:value>
-        <rdfs:comment>[19] pathitem ::= symbol| "{" formulacontent "}"| quickvariable| numericliteral| literal| "[" propertylist "]"|  "("  pathlist ")"| boolean</rdfs:comment>
+        <rdfs:comment>[19] pathitem ::= symbol | "{" formulacontent "}" | quickvariable | numericliteral | literal | "[" propertylist "]" |  "("  pathlist ")" | boolean</rdfs:comment>
         <rdfs:label>pathitem</rdfs:label>
         <alt rdf:parseType="Resource">
             <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#symbol"/>
@@ -749,7 +749,7 @@
 
     <NonTerminal rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#pathlist">
         <rdf:value>21</rdf:value>
-        <rdfs:comment>[21] pathlist ::=| expression pathlist</rdfs:comment>
+        <rdfs:comment>[21] pathlist ::= | expression pathlist</rdfs:comment>
         <rdfs:label>pathlist</rdfs:label>
         <alt rdf:parseType="Resource">
             <rdf:first rdf:parseType="Resource">
@@ -772,7 +772,7 @@
 
     <NonTerminal rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#pathtail">
         <rdf:value>18</rdf:value>
-        <rdfs:comment>[18] pathtail ::=| "!" expression| "^" expression</rdfs:comment>
+        <rdfs:comment>[18] pathtail ::= | "!" expression | "^" expression</rdfs:comment>
         <rdfs:label>pathtail</rdfs:label>
         <alt rdf:parseType="Resource">
             <rdf:first rdf:parseType="Resource">
@@ -831,7 +831,7 @@
 
     <NonTerminal rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#propertylist">
         <rdf:value>11</rdf:value>
-        <rdfs:comment>[11] propertylist ::=| verb object objecttail propertylisttail</rdfs:comment>
+        <rdfs:comment>[11] propertylist ::= | verb object objecttail propertylisttail</rdfs:comment>
         <rdfs:label>propertylist</rdfs:label>
         <alt rdf:parseType="Resource">
             <rdf:first rdf:parseType="Resource">
@@ -860,7 +860,7 @@
 
     <NonTerminal rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#propertylisttail">
         <rdf:value>12</rdf:value>
-        <rdfs:comment>[12] propertylisttail ::=| ";" propertylist</rdfs:comment>
+        <rdfs:comment>[12] propertylisttail ::= | ";" propertylist</rdfs:comment>
         <rdfs:label>propertylisttail</rdfs:label>
         <alt rdf:parseType="Resource">
             <rdf:first rdf:parseType="Resource">
@@ -954,7 +954,7 @@
 
     <NonTerminal rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#statement">
         <rdf:value>6</rdf:value>
-        <rdfs:comment>[6] statement  ::= declaration| universal| existential| simpleStatement</rdfs:comment>
+        <rdfs:comment>[6] statement  ::= declaration | universal | existential | simpleStatement</rdfs:comment>
         <rdfs:label>statement</rdfs:label>
         <alt rdf:parseType="Resource">
             <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#declaration"/>
@@ -973,7 +973,7 @@
 
     <NonTerminal rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#statementlist">
         <rdf:value>4</rdf:value>
-        <rdfs:comment>[4] statementlist ::=| statement statementtail</rdfs:comment>
+        <rdfs:comment>[4] statementlist ::= | statement statementtail</rdfs:comment>
         <rdfs:label>statementlist</rdfs:label>
         <alt rdf:parseType="Resource">
             <rdf:first rdf:parseType="Resource">
@@ -996,7 +996,7 @@
 
     <NonTerminal rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#statements_optional">
         <rdf:value>2</rdf:value>
-        <rdfs:comment>[2] statements_optional ::=| statement "." statements_optional</rdfs:comment>
+        <rdfs:comment>[2] statements_optional ::= | statement "." statements_optional</rdfs:comment>
         <rdfs:label>statements_optional</rdfs:label>
         <alt rdf:parseType="Resource">
             <rdf:first rdf:parseType="Resource">
@@ -1022,7 +1022,7 @@
 
     <NonTerminal rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#statementtail">
         <rdf:value>5</rdf:value>
-        <rdfs:comment>[5] statementtail ::=| "." statementlist</rdfs:comment>
+        <rdfs:comment>[5] statementtail ::= | "." statementlist</rdfs:comment>
         <rdfs:label>statementtail</rdfs:label>
         <alt rdf:parseType="Resource">
             <rdf:first rdf:parseType="Resource">
@@ -1068,7 +1068,7 @@
 
     <NonTerminal rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#symbol">
         <rdf:value>22</rdf:value>
-        <rdfs:comment>[22] symbol ::= uriref| qname</rdfs:comment>
+        <rdfs:comment>[22] symbol ::= uriref | qname</rdfs:comment>
         <rdfs:label>symbol</rdfs:label>
         <alt rdf:parseType="Resource">
             <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#uriref"/>
@@ -1114,7 +1114,7 @@
 
     <Terminal rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#uriref">
         <rdf:value>29</rdf:value>
-        <rdfs:comment>[29] uriref ::=	'&#60;' ([^&#60;&#62;'{}|^`]-[#x00-#x20])* '&#62;'</rdfs:comment>
+        <rdfs:comment>[29] uriref ::=	'&#60;' ([^&#60;&#62;'{}|^`]-[\\x00-\\x20])* '&#62;'</rdfs:comment>
         <rdfs:label>uriref</rdfs:label>
         <re:seq rdf:parseType="Resource">
             <rdf:first>&#60;</rdf:first>
@@ -1127,7 +1127,7 @@
                             </rdf:first>
                             <rdf:rest rdf:parseType="Resource">
                                 <rdf:first rdf:parseType="Resource">
-                                    <matches>[#x00-#x20]</matches>
+                                    <matches>[\\x00-\\x20]</matches>
                                 </rdf:first>
                                 <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
                             </rdf:rest>
@@ -1144,7 +1144,7 @@
 
     <NonTerminal rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#verb">
         <rdf:value>14</rdf:value>
-        <rdfs:comment>[14] verb ::= expression| "@has" expression| "@is" expression "@of"| "@a"| "="| "=&#62;"| "&#60;="</rdfs:comment>
+        <rdfs:comment>[14] verb ::= expression | "@has" expression | "@is" expression "@of" | "@a" | "=" | "=&#62;" | "&#60;="</rdfs:comment>
         <rdfs:label>verb</rdfs:label>
         <alt rdf:parseType="Resource">
             <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#expression"/>
