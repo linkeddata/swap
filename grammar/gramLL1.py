@@ -7,7 +7,7 @@ EBNF = myStore.Namespace('http://www.w3.org/2000/10/swap/grammar/ebnf#')
 REGEX = myStore.Namespace('http://www.w3.org/2000/10/swap/grammar/regex#')
 RDF = myStore.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 
-import regex
+import re
 
 def main(argv):
     data, lang = argv[-2:]
@@ -73,33 +73,40 @@ def tokens(f, lang):
 
 def pattern(f, s):
     if isinstance(s, Literal):
-        return regex.escape(unicode(s))
+        return reesc(unicode(s))
 
     pat = f.the(subj=s, pred=REGEX.matches)
     if pat:
-        pat = unicode(pat)
-        return pat.replace("#x", "\\x")
+        return '(?:%s)' % unicode(pat)
 
     parts = f.the(subj=s, pred=REGEX.seq)
     if parts:
-        return ''.join([pattern(f, i) for i in parts])
+        return '(?:%s)' % ''.join([pattern(f, i) for i in parts])
     parts = f.the(subj=s, pred=REGEX.alt)
     if parts:
-        return '|'.join([pattern(f, i) for i in parts])
+        return '(?:%s)' % '|'.join([pattern(f, i) for i in parts])
     parts = f.the(subj=s, pred=REGEX.diff)
     if parts:
         return '(?!%s)(%s)' % (pattern(f, parts[1]), pattern(f, parts[0]))
     part = f.the(subj=s, pred=REGEX.star)
     if part:
-        return '(?:%s)*' % pattern(f, part)
+        return '(?:%s*)' % pattern(f, part)
     part = f.the(subj=s, pred=REGEX.rep)
     if part:
-        return '(?:%s)+' % pattern(f, part)
+        return '(?:%s+)' % pattern(f, part)
     part = f.the(subj=s, pred=REGEX.opt)
     if part:
-        return '(?:%s)?' % pattern(f, part)
+        return '(?:%s?)' % pattern(f, part)
     raise ValueError, s
     
+def reesc(txt):
+    r"""turn a string into a regex string constant for that string
+    >>> reesc("(")
+    '\\('
+    """
+    return re.sub("(\W)", r"\\\1", txt)
+
+
 def sets(f, lang, pred=EBNF.first):
     """get LL(1) first/follow sets
     """
@@ -173,7 +180,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.7  2006-06-20 21:13:08  connolly
+# Revision 1.8  2006-06-20 23:25:58  connolly
+# regex escaping details. ugh!
+#
+# Revision 1.7  2006/06/20 21:13:08  connolly
 # add an arg for the URI of the language
 # change NonTerminal, Terminal from class to relationship to language
 # move matches to regex

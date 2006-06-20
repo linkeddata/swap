@@ -477,16 +477,49 @@ def ttlExpr(expr, pfx, indent, obj=1):
     elif op == "'":
         print '%s"%s"' %(indent, esc(args))
     elif op == "[":
-        print '%s%s re:matches "[%s]" %s' % (indent, bra, esc(args), ket)
+        print '%s%s re:matches "[%s]" %s' % (indent, bra, rehex(esc(args)), ket)
     elif op == "#":
         assert not('"' in args)
-        print '%s%s re:matches "\\\\x%s" %s' % (indent, bra, args[2:], ket)
+        print r'%s%s re:matches "[%s]" %s' % (indent, bra, rehex(args), ket)
     else:
         raise RuntimeError, op
 
 
+def rehex(txt):
+    r"""turn an XML BNF character class into an N3 literal for that
+    character class
+    
+    >>> rehex("^<>'{}|^`")
+    "^<>'{}|^`"
+    >>> rehex("#x0300-#x036F")
+    '\\u0300-\\u036F'
+    >>> rehex("#xC0-#xD6")
+    '\\u00C0-\\u00D6'
+    >>> rehex("#x370-#x37D")
+    '\\u0370-\\u037D'
+    """
+    # ' help out emacs
+
+    hexpat = re.compile("#x[0-9a-zA-Z]+")
+    ret = ''
+    while 1:
+        m = hexpat.search(txt)
+        if not m:
+            return ret + txt
+        ret += txt[:m.start(0)]
+        hx = m.group(0)[2:]
+        if len(hx) < 6: hx = ("0000" + hx)[-4:]
+        elif len(hx) < 10: hx = ("0000" + hx)[-8:]
+        if len(hx) == 4: ret += r"\u" + hx
+        elif len(hx) == 8: ret += r"\U" + hx
+        else:
+            raise ValueError, "#x must preceede 1 to 8 hex digits"
+        txt = txt[m.end(0):]
+
+
 def esc(st):
-    r"""escape a string
+    r"""turn a string into an N3 string literal for that string,
+    without the outer quote marks.
 
     >>> esc(r'abc')
     'abc'
@@ -494,16 +527,11 @@ def esc(st):
     >>> esc(r'[^"\\]')
     '[^\\"\\\\\\\\]'
 
-    >>> esc('#x00-#x20')
-    '\\\\\\\\x00-\\\\\\\\x20'
     """
     
-    if not ('"' in st or '\\' in st or '#' in st): return st
+    if not ('"' in st or '\\' in st): return st
     s = ''
     for c in st:
-        if c == '#':
-            s += r'\\\\'
-            continue
         if c == '"' or c == '\\':
             s += '\\'
         s += c
@@ -521,7 +549,10 @@ if __name__ == '__main__':
     else: main(sys.argv)
 
 # $Log$
-# Revision 1.8  2006-06-20 21:12:05  connolly
+# Revision 1.9  2006-06-20 23:26:29  connolly
+# regex escaping details. ugh!
+#
+# Revision 1.8  2006/06/20 21:12:05  connolly
 # change terminal, nonterminal from classes to relationships to languages
 # add command-line arg for name of language
 # move :matches from EBNF to regex ns
