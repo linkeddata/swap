@@ -1,0 +1,81 @@
+   [1]    parse                   ::=   Statement*
+   [2]    Statement               ::=   ( Directive | TriplesSameSubject )
+                                        '.'
+   [3]    Directive               ::=   'PREFIX' QNAME_NS Q_IRI_REF
+   [4]    TriplesSameSubject      ::=   VarOrTerm PropertyListNotEmpty |
+                                        TriplesNode PropertyList
+   [5]    PropertyList            ::=   PropertyListNotEmpty?
+   [6]    PropertyListNotEmpty    ::=   Verb ObjectList ( ';' ( Verb
+                                        ObjectList )? )*
+   [7]    ObjectList              ::=   Object ( ',' Object )*
+   [8]    Object                  ::=   GraphNode
+   [9]    Verb                    ::=   IRIref | 'a' | ARROW
+   [10]   TriplesNode             ::=   Collection | BlankNodePropertyList
+   [11]   BlankNodePropertyList   ::=   '[' PropertyListNotEmpty ']'
+   [12]   Collection              ::=   '(' GraphNode+ ')'
+   [13]   GraphNode               ::=   VarOrTerm | TriplesNode
+   [14]   VarOrTerm               ::=   Var | GraphTerm | Formula
+   [15]   Formula                 ::=   '{' TriplesSameSubject ( '.'
+                                        TriplesSameSubject? )* '}'
+   [16]   Var                     ::=   VAR1 | VAR2
+   [17]   GraphTerm               ::=   IRIref | RDFLiteral | ( '-' | '+' )?
+                                        NumericLiteral | BlankNode | NIL
+   [18]   NumericLiteral          ::=   INTEGER | DECIMAL | DOUBLE
+   [19]   RDFLiteral              ::=   String ( Langtag | ( '^^' IRIref ) )?
+   [20]   Langtag                 ::=   LANGTAG | 'PREFIX'
+   [21]   String                  ::=   STRING_LITERAL1 | STRING_LITERAL2 |
+                                        STRING_LITERAL_LONG1 |
+                                        STRING_LITERAL_LONG2
+   [22]   IRIref                  ::=   Q_IRI_REF | QName
+   [23]   QName                   ::=   QNAME | QNAME_NS
+   [24]   BlankNode               ::=   BLANK_NODE_LABEL | ANON
+   [25]   Q_IRI_REF               ::=   '<' ([^<>'{}|^`]-[#x00-#x20])* '>'
+   [26]   QNAME_NS                ::=   NCNAME_PREFIX? ':'
+   [27]   QNAME                   ::=   NCNAME_PREFIX? ':' NCNAME?
+   [28]   BLANK_NODE_LABEL        ::=   '_:' NCNAME
+   [29]   VAR1                    ::=   '?' VARNAME
+   [30]   VAR2                    ::=   '$' VARNAME
+   [31]   LANGTAG                 ::=   '@' [a-zA-Z]+ ('-' [a-zA-Z0-9]+)*
+   [32]   INTEGER                 ::=   [0-9]+
+   [33]   DECIMAL                 ::=   [0-9]+ '.' [0-9]* | '.' [0-9]+
+   [34]   DOUBLE                  ::=   [0-9]+ '.' [0-9]* EXPONENT | '.'
+                                        ([0-9])+ EXPONENT | ([0-9])+ EXPONENT
+   [35]   EXPONENT                ::=   [eE] [+-]? [0-9]+
+   [36]   STRING_LITERAL1         ::=   "'" ( ([^#x27#x5C#xA#xD]) | ECHAR |
+                                        UCHAR )* "'"
+   [37]   STRING_LITERAL2         ::=   '"' ( ([^#x22#x5C#xA#xD]) | ECHAR |
+                                        UCHAR )* '"'
+   [38]   STRING_LITERAL_LONG1    ::=   "'''" ( ( "'" | "''" )? ( [^'\] |
+                                        ECHAR | UCHAR ) )* "'''"
+   [39]   STRING_LITERAL_LONG2    ::=   '"""' ( ( '"' | '""' )? ( [^"\] |
+                                        ECHAR | UCHAR ) )* '"""'
+   [40]   ECHAR                   ::=   '\' [tbnrf\"']
+   [41]   UCHAR                   ::=   '\' ( 'u' HEX HEX HEX HEX | 'U' HEX
+                                        HEX HEX HEX HEX HEX HEX HEX )
+   [42]   HEX                     ::=   [0-9] | [A-F] | [a-f]
+   [43]   NIL                     ::=   '(' WS* ')'
+   [44]   WS                      ::=   #x20 | #x9 | #xD | #xA
+   [45]   ANON                    ::=   '[' WS* ']'
+   [46]   NCCHAR1p                ::=     [A-Z]
+                                        | [a-z]
+                                        | [#x00C0-#x00D6]
+                                        | [#x00D8-#x00F6]
+                                        | [#x00F8-#x02FF]
+                                        | [#x0370-#x037D]
+                                        | [#x037F-#x1FFF]
+                                        | [#x200C-#x200D]
+                                        | [#x2070-#x218F]
+                                        | [#x2C00-#x2FEF]
+                                        | [#x3001-#xD7FF]
+                                        | [#xF900-#xFDCF]
+                                        | [#xFDF0-#xFFFD]
+                                        | [#x10000-#xEFFFF]
+                                        | UCHAR
+   [47]   NCCHAR1                 ::=   NCCHAR1p | '_'
+   [48]   VARNAME                 ::=   ( NCCHAR1 | [0-9] ) ( NCCHAR1 | [0-9]
+                                        | #x00B7 | [#x0300-#x036F] |
+                                        [#x203F-#x2040] )*
+   [49]   NCCHAR                  ::=   NCCHAR1 | '-' | [0-9] | #x00B7 |
+                                        [#x0300-#x036F] | [#x203F-#x2040]
+   [50]   NCNAME_PREFIX           ::=   NCCHAR1p ((NCCHAR|'.')* NCCHAR)?
+   [51]   NCNAME                  ::=   NCCHAR1 ((NCCHAR|'.')* NCCHAR)?
