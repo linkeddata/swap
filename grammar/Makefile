@@ -131,16 +131,16 @@ turtle.bnf: turtle.html
 	$(LYNX) -no-references -no-numbering -dump turtle.html >$@
 
 turtle.json: turtle-bnf.n3 gramLL1.py
-	PYTHONPATH=$(HOME)/lib/python:../.. $P gramLL1.py turtle-bnf.n3 >$@
+	PYTHONPATH=$(HOME)/lib/python:../.. $P gramLL1.py turtle-bnf.n3 parse >$@
 
 turtle-bnf.n3: turtle.n3 ebnf2bnf.n3
-	$P $C notation3.n3 ebnf2bnf.n3  --chatty=$(CHATTY) \
+	$P $C turtle.n3 ebnf2bnf.n3  --chatty=$(CHATTY) \
 		--think --data >$@
 
 turtle.n3: turtle.bnf ebnf2turtle.py
 
 notation3.json: notation3-bnf.n3 gramLL1.py
-	PYTHONPATH=$(HOME)/lib/python:../.. $P gramLL1.py notation3-bnf.n3 >$@
+	PYTHONPATH=$(HOME)/lib/python:../.. $P gramLL1.py notation3-bnf.n3 document >$@
 
 notation3-ll1.n3: notation3.n3 ebnf2bnf.n3 first_follow.n3
 	$P $C notation3.n3 ebnf2bnf.n3 first_follow.n3 --chatty=$(CHATTY) \
