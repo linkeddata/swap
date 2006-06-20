@@ -10,9 +10,9 @@ RDF = myStore.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 import regex
 
 def main(argv):
-    data = argv[-1]
+    data, start = argv[-2:]
     f = myStore.load(data)
-    it = { 'rules': asGrammar(f),
+    it = { 'rules': asGrammar(f, start),
            'tokens': tokens(f) }
 
     if '--pprint' in argv:
@@ -27,7 +27,7 @@ def main(argv):
 
 
 
-def asGrammar(f):
+def asGrammar(f, start):
     """find BNF grammar in f and return grammar rules array
     as per http://www.navyrain.net/compilergeneratorinjavascript/
     navyrain@navyrain.net
@@ -45,7 +45,7 @@ def asGrammar(f):
                 r = [s] + [asSymbol(f, x) for x in seq]
             else:
                 r = [s, asSymbol(f, alt)]
-            if s == 'document': #@@ parameterize start symbol
+            if s == start:
                 rules.insert(0, r)
             else:
                 rules.append(r)
@@ -136,7 +136,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.4  2006-06-20 04:46:23  connolly
+# Revision 1.5  2006-06-20 05:59:31  connolly
+# parameterize start symbol
+#
+# Revision 1.4  2006/06/20 04:46:23  connolly
 # json version of turtle grammar from Andy Mon, 19 Jun 2006 16:12:03 +0100
 #
 # Revision 1.3  2006/06/17 08:32:20  connolly
