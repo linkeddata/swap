@@ -31,7 +31,8 @@
 
 [9] simpleStatement ::= term propertylist
 
-[10] propertylist ::= (verb term objecttail (";" propertylist)*)?
+[10] propertylist ::= (property (";" property)*)?
+[10a] property ::= verb term objecttail
 
 [11] objecttail ::= ("," term)*
 
