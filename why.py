@@ -174,8 +174,10 @@ def formulaStandIn(self, ko,f):
         #progress('cache hit, we save $$!')
         return m
     except KeyError:
+        from formula import Formula, StoredStatement
         standIn = ko.newBlankNode(why= dontAsk)
         self[(ko,f)] = standIn
+
         ko.add(subj=f, pred=ko.store.sameAs, obj=standIn, why=dontAsk)
         return standIn
 
@@ -470,6 +472,19 @@ def getStatementReason(s):
 
     return tracker.reasonForStatement.get(s, None)
     
+def subFormulaStandIn(self, ko,f):
+    try:
+        m = self[(ko,f)]
+        #progress('cache hit, we save $$!')
+        return m
+    except KeyError:
+        standIn = ko.newBlankNode(why= dontAsk)
+        self[(ko,f)] = standIn
+        ko.add(subj=f, pred=reason.representedBy, obj=standIn, why=dontAsk)
+        return standIn
+
+subFormulaStandIn = subFormulaStandIn.__get__({})
+
 
 def explainStatement(s, ko, ss=None):
     si = describeStatement(s, ko)
@@ -496,9 +511,18 @@ def explainStatement(s, ko, ss=None):
 
 def describeStatement(s, ko):
 	"Describe the statement into the output formula ko"
+        from formula import Formula, StoredStatement
+
+        con, pred, subj, obj = s
+        if isinstance(subj, Formula):
+            subj = subFormulaStandIn(ko, subj)
+        if isinstance(obj, Formula):
+            subj = subFormulaStandIn(ko, obj)
+        s = StoredStatement([con, pred, subj, obj])
+	
 	si = ko.newBlankNode(why=dontAsk)
 	ko.add(si, rdf.type, reason.Extraction, why=dontAsk)
-	standIn = formulaStandIn(ko,s.asFormula(why=dontAsk))
+	standIn = formulaStandIn(ko, s.asFormula(why=dontAsk))
 	ko.add(si, reason.gives, standIn, why=dontAsk)
 	return si
 
@@ -572,7 +596,7 @@ class BecauseBuiltIn(Reason):
 	me = self.meIn(ko)
 	if diag.chatty_flag>49: progress("Fact reason=%s ko=%s"%(self,me))
 	fact = ko.newFormula()
-	fact.add(subj=self._subject, pred=self._predicate, obj=self._object,
+	fact.add(subj=subFormulaStandIn(ko, self._subject), pred=self._predicate, obj=subFormulaStandIn(ko, self._object),
 							why=dontAsk)
 	fact = fact.close()
 	ko.add(me, rdf.type, reason.Fact, why=dontAsk)

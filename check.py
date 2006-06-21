@@ -84,7 +84,12 @@ class FormulaCache(object):
 def topLevelLoad(uri=None, flags=''):
         graph = formula()
         graph.setClosureMode("e")    # Implement sameAs by smushing
-        return load(uri, flags=flags, openFormula=graph)
+        graph = load(uri, flags=flags, openFormula=graph)
+        bindings = {}
+        for s in graph.statementsMatching(pred=reason.representedBy):
+            val, _, key = s.spo()
+            bindings[key] = val
+        return graph.substitution(bindings)
 
 
 def n3Entails(f, g, skipIncludes=0, level=0):
