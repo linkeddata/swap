@@ -61,6 +61,7 @@ import urllib # for log:content
 import md5, binascii  # for building md5 URIs
 
 import uripath
+from uripath import canonical
 
 from why import smushedFormula
 
@@ -1532,6 +1533,7 @@ class RDFStore(RDFSink) :
         if typ == LITERAL_LANG:
 	    return self.newLiteral(urirefString[0], None, urirefString[1])
         else:
+	    urirefString = canonical(urirefString)
             assert ':' in urirefString, "must be absolute: %s" % urirefString
 
             hash = string.rfind(urirefString, "#")
