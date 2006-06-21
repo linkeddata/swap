@@ -81,6 +81,11 @@ class FormulaCache(object):
             self._loaded[uri] = f
         return f
 
+def topLevelLoad(uri=None, flags=''):
+        graph = formula()
+        graph.setClosureMode("e")    # Implement sameAs by smushing
+        return load(uri, flags=flags, openFormula=graph)
+
 
 def n3Entails(f, g, skipIncludes=0, level=0):
     """Does f N3-entail g?
@@ -142,7 +147,7 @@ def n3Entails(f, g, skipIncludes=0, level=0):
 class InvalidProof(Exception):
     def __init__(self, s, level=0):
         self._s = s
-        if chatty > 0:
+        if True or chatty > 0:
             progress(" "*(level*4), "Proof failed: ", s)
 
     def __str__(self):
@@ -264,7 +269,7 @@ class Checker(FormulaCache):
             g = self.get(u)
         except IOError:
             raise InvalidProof("Can't retreive/parse <%s> because:\n  %s." 
-                                %(u, sys.exc_info()[1].__str__()), level)
+                                %(u, sys.exc_info()[1].__str__()), 0)
         setVerbosity(v)
         if f != None:  # Additional intermediate check not essential
             #@@ this code is untested, no? -DWC
@@ -652,10 +657,10 @@ def main(argv):
     
     if args:
         fyi("Reading proof from "+args[0])
-        proof = load(args[0], flags=flags)
+        proof = topLevelLoad(args[0], flags=flags)
     else:
 	fyi("Reading proof from standard input.", thresh=5)
-	proof = load(flags=flags)
+	proof = topLevelLoad(flags=flags)
 
     # setVerbosity(60)
     fyi("Length of proof formula: "+`len(proof)`, thresh=5)

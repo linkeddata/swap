@@ -171,7 +171,7 @@ class Reason:
 def formulaStandIn(self, ko,f):
     try:
         m = self[(ko,f)]
-        progress('cache hit, we save $$!')
+        #progress('cache hit, we save $$!')
         return m
     except KeyError:
         standIn = ko.newBlankNode(why= dontAsk)
