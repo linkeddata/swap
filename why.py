@@ -111,7 +111,13 @@ def _giveTerm(x, ko):
     This reifies symbols and bnodes.  Internal utility
     """
     #"
-    if isinstance(x, (Literal, CompoundTerm)):
+    from formula import Formula
+    if isinstance(x, Formula):
+	b = ko.newBlankNode(why=dontAsk)
+	ko.add(subj=x, pred=ko.store.sameAs, obj=b,
+			why=dontAsk)
+	return b
+    elif isinstance(x, (Literal, CompoundTerm)):
 	return x
     elif isinstance(x, AnonymousNode):
 	b = ko.newBlankNode(why=dontAsk)
@@ -161,6 +167,19 @@ class Reason:
 	"""
 	raise RuntimeError("What, no explain method for this class?")
 	
+
+def formulaStandIn(self, ko,f):
+    try:
+        m = self[(ko,f)]
+        progress('cache hit, we save $$!')
+        return m
+    except KeyError:
+        standIn = ko.newBlankNode(why= dontAsk)
+        self[(ko,f)] = standIn
+        ko.add(subj=f, pred=ko.store.sameAs, obj=standIn, why=dontAsk)
+        return standIn
+
+formulaStandIn = formulaStandIn.__get__({})
 
 	
 class KBReasonTracker(Reason):
@@ -230,8 +249,10 @@ class KBReasonTracker(Reason):
 	if g.occurringIn(e) != e: raise RuntimeError(g.debugString())
 	
 	qed = ko.newBlankNode(why= dontAsk)
+	standIn = formulaStandIn(ko,self.formula)
 	ko.add(subj=me, pred=rdf.type, obj=reason.Conjunction, why=dontAsk) 
-        ko.add(subj=me, pred=reason.gives, obj=self.formula, why=dontAsk)
+        ko.add(subj=me, pred=reason.gives, obj=standIn, why=dontAsk)
+        
     
 	statementsForReason = {}  # reverse index: group by reason
 	for s, rea in self.reasonForStatement.items():
@@ -274,7 +295,8 @@ class BecauseMerge(KBReasonTracker):
 	qed = ko.newBlankNode(why= dontAsk)
 	ko.add(subj=me, pred=rdf.type, obj=reason.Conjunction, why=dontAsk) 
         if giveForumlaArguments:
-	    ko.add(subj=me, pred=reason.gives, obj=self.formula, why=dontAsk)
+            standIn = formulaStandIn(ko,self.formula)
+	    ko.add(subj=me, pred=reason.gives, obj=standIn, why=dontAsk)
 	for x in self.fodder:
 	    ko.add(subj=me, pred=reason.mergeOf, obj=proofsOf[x][0]) 
     	return me
@@ -358,7 +380,8 @@ class Premise(Reason):
 	    raise RuntimeError("No given data for Premise %s" % self)
 	else:
 	    prem = _subsetFormula(self.statements)
-	    ko.add(me, reason.gives, prem, why=dontAsk)
+	    standIn = formulaStandIn(ko,prem)
+	    ko.add(me, reason.gives, standIn, why=dontAsk)
 	    if diag.chatty_flag >59:
 		progress("Premise (%s) is:\n%s" % 
 			( self._string, prem.n3String()))
@@ -475,7 +498,8 @@ def describeStatement(s, ko):
 	"Describe the statement into the output formula ko"
 	si = ko.newBlankNode(why=dontAsk)
 	ko.add(si, rdf.type, reason.Extraction, why=dontAsk)
-	ko.add(si, reason.gives, s.asFormula(why=dontAsk), why=dontAsk)
+	standIn = formulaStandIn(ko,s.asFormula(why=dontAsk))
+	ko.add(si, reason.gives, standIn, why=dontAsk)
 	return si
 
 	
@@ -552,7 +576,8 @@ class BecauseBuiltIn(Reason):
 							why=dontAsk)
 	fact = fact.close()
 	ko.add(me, rdf.type, reason.Fact, why=dontAsk)
-	ko.add(me, reason.gives, fact, why=dontAsk)
+	standIn = formulaStandIn(ko,fact)
+	ko.add(me, reason.gives, standIn, why=dontAsk)
 	if giveForumlaArguments:
 	    for x in self._subject, self._object:
 		proofs = proofsOf.get(x, None)
@@ -595,7 +620,8 @@ class BecauseSupports(BecauseBuiltIn):
                                                         why=dontAsk)
         fact = fact.close()
         ko.add(me, rdf.type, reason.Conclusion, why=dontAsk)
-        ko.add(me, reason.gives, fact, why=dontAsk)
+	standIn = formulaStandIn(ko,self.formula)
+        ko.add(me, reason.gives, standIn, why=dontAsk)
         ko.add(subj=m, pred=rdf.type, obj=reason.Conjunction, why=dontAsk) 
         ko.add(me, reason.because, m, why=dontAsk)
         statementsForReason = {}  # reverse index: group by reason
