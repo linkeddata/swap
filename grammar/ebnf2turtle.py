@@ -477,31 +477,40 @@ def ttlExpr(expr, pfx, indent, obj=1):
     elif op == "'":
         print '%s"%s"' %(indent, esc(args))
     elif op == "[":
-        print '%s%s re:matches "[%s]" %s' % (indent, bra, rehex(esc(args)), ket)
+        print '%s%s re:matches "[%s]" %s' % (indent, bra, cclass(args), ket)
     elif op == "#":
         assert not('"' in args)
-        print r'%s%s re:matches "[%s]" %s' % (indent, bra, rehex(args), ket)
+        print r'%s%s re:matches "[%s]" %s' % (indent, bra, cclass(args), ket)
     else:
         raise RuntimeError, op
 
 
-def rehex(txt):
+def cclass(txt):
     r"""turn an XML BNF character class into an N3 literal for that
-    character class
+    character class (less the outer quote marks)
     
-    >>> rehex("^<>'{}|^`")
+    >>> cclass("^<>'{}|^`")
     "^<>'{}|^`"
-    >>> rehex("#x0300-#x036F")
+    >>> cclass("#x0300-#x036F")
     '\\u0300-\\u036F'
-    >>> rehex("#xC0-#xD6")
+    >>> cclass("#xC0-#xD6")
     '\\u00C0-\\u00D6'
-    >>> rehex("#x370-#x37D")
+    >>> cclass("#x370-#x37D")
     '\\u0370-\\u037D'
+
+    as in: ECHAR ::= '\' [tbnrf\"']
+    >>> cclass("tbnrf\\\"'")
+    'tbnrf\\\\\\"\''
+
+
+    >>> cclass("^#x22#x5C#x0A#x0D")
+    '^\\u0022\\\\\\u005C\\u000A\\u000D'
     """
-    # ' help out emacs
+    # '" help out emacs
 
     hexpat = re.compile("#x[0-9a-zA-Z]+")
     ret = ''
+    txt=esc(txt)
     while 1:
         m = hexpat.search(txt)
         if not m:
@@ -510,6 +519,10 @@ def rehex(txt):
         hx = m.group(0)[2:]
         if len(hx) < 6: hx = ("0000" + hx)[-4:]
         elif len(hx) < 10: hx = ("0000" + hx)[-8:]
+
+        # This is just about hopelessly ugly
+        if unichr(int(hx, 16)) in "\\[]": ret += '\\\\'
+
         if len(hx) == 4: ret += r"\u" + hx
         elif len(hx) == 8: ret += r"\U" + hx
         else:
@@ -549,7 +562,10 @@ if __name__ == '__main__':
     else: main(sys.argv)
 
 # $Log$
-# Revision 1.9  2006-06-20 23:26:29  connolly
+# Revision 1.10  2006-06-21 00:53:31  connolly
+# added a special case for #x5c (\) in rehex/cclass
+#
+# Revision 1.9  2006/06/20 23:26:29  connolly
 # regex escaping details. ugh!
 #
 # Revision 1.8  2006/06/20 21:12:05  connolly
