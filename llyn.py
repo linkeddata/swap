@@ -355,7 +355,9 @@ class IndexedFormula(Formula):
 	if "e" in self._closureMode:
 	    if pred is store.sameAs:
 		if subj is obj: return 0 # ignore a = a
-		if ((subj in self.existentials() and obj not in self.existentials())
+		if obj in self.existentials() and subj not in self.existentials():
+                    var, val = obj, subj
+		elif ((subj in self.existentials() and obj not in self.existentials())
 		    or (subj.generated() and not obj.generated())
 		    or Term.compareAnyTerm(obj, subj) < 0): var, val = subj, obj
 		else: var, val = obj, subj
