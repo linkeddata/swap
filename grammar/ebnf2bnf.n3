@@ -9,20 +9,25 @@ rdfs:seeAlso <ebnf>, <ebnf.n3>, <ebnf.rdf>.
 
 @prefix g: <http://www.w3.org/2000/10/swap/grammar/ebnf#>.
 
-{ ?A g:opt ?B } => { ?A g:alt ( [ g:seq ()] ?B ) }.
+g:eps g:seq ().
+
+{ ?A g:opt ?B } => { ?A g:alt ( g:eps ?B ) }.
 
 { ?A g:rep ?B } => { ?A g:seq ( ?B [ g:star ?B] ) }.
 
-{ ?A g:star ?B } => { ?A g:alt ( [ g:seq ()] [ g:seq (?B ?A) ] ) }.
+{ ?A g:star ?B } => { ?A g:alt ( g:eps [ g:seq (?B ?A) ] ) }.
 
 
 # find all the non-terminals
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix list: <http://www.w3.org/2000/10/swap/list#>.
 
-g:seq rdfs:domain g:Production.
 g:alt rdfs:domain g:Production.
 { ?S [ rdfs:domain ?C] [] } => { ?S a ?C }.
+
+# eps is not a production
+{ ?S g:seq [ rdf:rest []] } => { ?S a g:Production }.
 
 { ?L g:start ?A }
  => { ?A g:nonTerminal ?L }.
