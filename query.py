@@ -1334,7 +1334,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 		    progress("log:Includes: Adding %i new terms and %s as new existentials."%
 			      (len(more_unmatched),
 			       seqToString(more_variables)))
-	    rea = BecauseBuiltInWill(con, subj, pred, obj)
+	    rea = BecauseBuiltInWill(con, oldsubj, pred, obj)
 ##	    nbs = [({oldsubj: subj}, rea)]
 	    nbs = [({}, rea)]
 	else:
