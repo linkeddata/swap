@@ -14,13 +14,18 @@ def main(argv):
     f = myStore.load(data)
     lang = f.newSymbol(lang)
     it = { 'rules': asGrammar(f, lang),
-           'tokens': tokens(f, lang) }
+           'tokens': tokens(f, lang),
+           'first': sets(f, lang, EBNF.first),
+           'follow': sets(f, lang, EBNF.follow),
+           }
 
     if '--pprint' in argv:
         from pprint import pprint
         pprint(it)
     elif '--yacc' in argv:
         toYacc(it)
+    elif '--ply' in argv:
+        toPly(it)
     else:
         import simplejson #http://cheeseshop.python.org/pypi/simplejson
         import sys
@@ -38,8 +43,6 @@ def asGrammar(f, lang):
     rules = []
     start = asSymbol(f, f.the(subj=lang, pred=EBNF.start))
     for lhs in f.each(pred=EBNF.nonTerminal, obj=lang):
-        if lhs is EBNF.eps: continue
-
         s = asSymbol(f, lhs)
 
         alts = f.the(subj=lhs, pred=EBNF.alt)
@@ -47,15 +50,26 @@ def asGrammar(f, lang):
 
         if alts is None and seq is None:
             raise ValueError, "no alt nor seq for %s" % lhs
-
-        if alts:
+        elif alts and seq:
+            raise ValueError, "both alt and seq for %s" % lhs
+        elif alts:
             for alt in alts:
-                addRule(rules, s, start, [s, asSymbol(f, alt)])
+                seq = f.the(subj=alt, pred=EBNF.seq)
+                if seq is None:
+                    r = [s, asSymbol(f, alt)]
+                elif seq is RDF.nil:
+                    r = [s]
+                elif alt in f.existentials():
+                    r = [s] + [asSymbol(f, x) for x in seq]
+                else:
+                    r = [s, asSymbol(f, alt)]
+                addRule(rules, s, start, r)
         else:
             r = [s] + [asSymbol(f, x) for x in seq]
             addRule(rules, s, start, r)
-    return rules
 
+    return rules
+                
 def addRule(rules, s, start, r):
     if s == start: rules.insert(0, r)
     else: rules.append(r)
@@ -123,18 +137,33 @@ def sets(f, lang, pred=EBNF.first):
 def asSymbol(f, x):
     """return grammar symbol x as a JSON string
     We prefix Terminal names by TOK_ and then
-    assume disjointness of non-terminals, terminals, and literals
+    assume disjointness of non-terminals, terminals, and literals.
+    And we assume no non-terminal fragids start with '_'.
     """
     if isinstance(x, Literal):
-        return unicode(x) #hmm...
-    elif x is EBNF.eps:
-        #or f.the(subj=x, pred=EBNF.seq) == RDF.nil:
+        return tokid(unicode(x)) #hmm...
+    elif x is EBNF.eps or f.the(subj=x, pred=EBNF.seq) == RDF.nil:
         return 'EMPTY'
     elif x == EBNF.eof:
         return 'EOF'
     elif f.each(subj=x, pred=EBNF.nonTerminal):
         if x in f.existentials():
-            return 's_%d' % abs(id(x))
+
+            # try to pin down an exact path
+            y = f.the(subj=x, pred=EBNF.rep)
+            if y: return "_%s_rep" % asSymbol(f, y)
+            y = f.the(subj=x, pred=EBNF.star)
+            if y: return "_%s_star" % asSymbol(f, y)
+            y = f.the(subj=x, pred=EBNF.opt)
+            if y: return "_%s_opt" % asSymbol(f, y)
+
+            # just say whether it's a seq or alt
+            y = f.the(subj=x, pred=EBNF.alt)
+            if y: return '_alt_%d' % abs(id(x))
+            y = f.the(subj=x, pred=EBNF.seq)
+            if y: return '_seq_%d' % abs(id(x))
+
+            raise ValueError, "umm...@@"
         else:
             return x.fragid
     elif f.each(pred=EBNF.terminal, obj=x):
@@ -174,13 +203,100 @@ void yyerror (char const *);
     print "%%"
 
 
+def toPly(it):
+    t2r = dict([(tokid(tok), pat) for pat, tok, func in it['tokens']])
+    t2t = dict([(tok, tokid(tok)) for pat, tok, func in it['tokens']])
+    print "tokens = ", `tuple(t2r.keys())`
+
+    print "# Tokens "
+
+    for t, pat in t2r.iteritems():
+        print "t_%s = %s" % (t, `pat`)
+
+    print
+    print "import lex"
+    print "lex.lex()"
+    print
+
+    # collect all the rules about one symbol...
+    rules = {}
+    for rule in it['rules']:
+        lhs = rule[0]
+        rhs = rule[1:]
+        rhss = rules.get(lhs, None)
+        if not rhss: rules[lhs] = rhss = []
+        rhss.append(rhs)
+
+    # find all the non-terminals; make sure the start symbol is 1st
+    start = it['rules'][0][0]
+    nts = rules.keys()
+    del nts[nts.index(start)]
+    nts.insert(0, start)
+    
+    for lhs in nts:
+        rhss = rules[lhs]
+        print "def p_%s(t):" % lhs
+        for rhs in rhss:
+            rhs = ' '.join([t2t.get(s, s) for s in rhs])
+            if lhs:
+                print '    """%s : %s' % (lhs, rhs)
+                lhs = None
+            else:
+                print '          | %s' % rhs
+        print '    """'
+        print "    pass"
+        print
+        
+    print
+    print "import yacc"
+    print "yacc.yacc()"
+    print
+    print """
 if __name__ == '__main__':
     import sys
-    main(sys.argv)
+    yacc.parse(file(sys.argv[1]).read())
+"""
+    
+    
+def tokid(s):
+    """turn a string into a python identifier
+
+    >>> tokid(u'TOK_STRING_LITERAL_2')
+    u'STRING_LITERAL_2'
+
+    >>> tokid(u'@a')
+    u'x40a'
+    """
+    r = ''
+    if s.startswith("TOK_"): s = s[4:]
+    for c in s:
+        if c == '_' or (r == '' and c.isalpha()) or c.isalnum():
+            r = r + c
+        else:
+            r = r + 'x%x' % ord(c)
+    return r.encode('us-ascii')
+
+def _test():
+    import doctest
+    doctest.testmod()
+
+if __name__ == '__main__':
+    import sys
+    if '--test' in sys.argv:
+        _test()
+    else:
+        main(sys.argv)
 
 
 # $Log$
-# Revision 1.8  2006-06-20 23:25:58  connolly
+# Revision 1.9  2006-06-22 22:08:37  connolly
+# trying to generate python ply module to test grammars
+# reworked asGrammar; not sure if it's got more or less bugs now...
+# use python-happy token names rather than literals
+# use more mnemonic symbol names for some bnodes
+# include first/follow stuff (usually empty... hmm...)
+#
+# Revision 1.8  2006/06/20 23:25:58  connolly
 # regex escaping details. ugh!
 #
 # Revision 1.7  2006/06/20 21:13:08  connolly
