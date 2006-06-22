@@ -32,17 +32,15 @@
 [9] simpleStatement ::= term propertylist
 
 [10] propertylist ::= (property (";" property)*)?
-[10a] property ::= verb term objecttail
+[11] property ::= (verb | inverb) term ("," term)*
 
-[11] objecttail ::= ("," term)*
-
-[12] verb ::= term
-		| "@has" term
-		| "@is" term "@of"
+[12] verb ::= "@has"? term
 		| "@a"
 		| "="
 		| "=>"
 		| "<=" 
+
+[12a] inverb ::= "@is" term "@of"
 
 [13] term ::= pathitem pathtail
 
