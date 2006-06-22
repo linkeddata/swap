@@ -168,7 +168,7 @@ class Reason:
 	raise RuntimeError("What, no explain method for this class?")
 	
 
-MAX_INLINE_SIZE = 2
+MAX_INLINE_SIZE = 10
 
 def formulaStandIn(self, ko,f):
     if len(f) <= MAX_INLINE_SIZE:
