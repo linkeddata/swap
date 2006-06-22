@@ -28,7 +28,7 @@ import md5, binascii  # for building md5 URIs
 
 from uripath import refTo
 from myStore  import Namespace
-from term import Literal, CompoundTerm, AnonymousNode
+from term import Literal, CompoundTerm, AnonymousNode, List
 # from formula import Formula
 
 import diag
@@ -168,7 +168,11 @@ class Reason:
 	raise RuntimeError("What, no explain method for this class?")
 	
 
+MAX_INLINE_SIZE = 2
+
 def formulaStandIn(self, ko,f):
+    if len(f) <= MAX_INLINE_SIZE:
+        return f
     try:
         m = self[(ko,f)]
         #progress('cache hit, we save $$!')
@@ -473,6 +477,11 @@ def getStatementReason(s):
     return tracker.reasonForStatement.get(s, None)
     
 def subFormulaStandIn(self, ko,f):
+    from formula import Formula
+    if isinstance(f, List):
+        return ko.store.newList([subFormulaStandIn(ko,x) for x in f])
+    if not isinstance(f, Formula) or len(f) <= MAX_INLINE_SIZE:
+        return f
     try:
         m = self[(ko,f)]
         #progress('cache hit, we save $$!')
@@ -511,13 +520,11 @@ def explainStatement(s, ko, ss=None):
 
 def describeStatement(s, ko):
 	"Describe the statement into the output formula ko"
-        from formula import Formula, StoredStatement
+        from formula import StoredStatement
 
         con, pred, subj, obj = s
-        if isinstance(subj, Formula):
-            subj = subFormulaStandIn(ko, subj)
-        if isinstance(obj, Formula):
-            subj = subFormulaStandIn(ko, obj)
+        subj = subFormulaStandIn(ko, subj)
+        obj = subFormulaStandIn(ko, obj)
         s = StoredStatement([con, pred, subj, obj])
 	
 	si = ko.newBlankNode(why=dontAsk)
