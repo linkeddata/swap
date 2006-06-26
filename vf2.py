@@ -17,6 +17,7 @@ verbose = False
 if verbose:
     progress = progress
 else:
+    progress2 = progress
     def progress(*x): pass
 
 class Problem(object):
@@ -27,6 +28,19 @@ class Problem(object):
         return self
 
 class BindingTree(object):
+    """
+    An or and ands of bindings that are needed before we go on
+    
+    >>> b1 = BindingTree()
+    >>> b1
+    BindingTree([[]])
+    >>> b1.int_and([1,2,3])
+    >>> b1
+    BindingTree([[1, 2, 3]])
+    >>> b1.int_or([[6,7],[3]])
+    >>> b1
+    BindingTree([[1, 2, 3, 6, 7], [1, 2, 3, 3]])
+"""
     def __init__(self):
         self._b = [[]]
 
@@ -71,11 +85,21 @@ class BindingTree(object):
 regular = []
 
 class OrderedNodeSet(set):
+    """A set with a first() method
+    
+    >>> o = OrderedNodeSet([5,3,1])
+    >>> o.first()
+    1
+"""
     def first(self):
         return iter(sorted(self)).next()
 
 
 class State(object):
+    """ The state of a match problem
+
+    It stores the current mapping, and creates values based on that
+    """
     def __init__(self, problem, oldDict={}, u=True):
         self.problem = problem
         self.map = oldDict.copy()
@@ -148,6 +172,11 @@ on our regularly scheduled P(s)
                 s2.undo()
 
 def finish(s, mapping):
+    """ Wrap up never seen bNode edges
+    Not written
+
+    We should never get here
+    """
     raise RuntimeError(s.problem.G2.allNodes() - set(mapping.values()), mapping)
         
 def P(s):
@@ -472,6 +501,12 @@ statement = re.compile( ws + objec + ws + objec + ws + objec  + com) #
 from sys import exit
 
 class Graph(object):
+    """A NTriples Graph
+
+This implementation is optimized for this algorithm.
+Any implementation used with this algorithm needs
+those methods implemented as O(1) operations.
+    """
     def __init__(self, fname):
         self.f = {}
         self.p = {}
@@ -539,19 +574,22 @@ class Graph(object):
 	    if verbose: stderr.write( "Triple: %s  %s  %s.\n" % (triple[0], triple[1], triple[2]))
 	    yield triple
 
-def matchFormula(f1, f2):
+def unifyFormulae(f1, f2):
+    """unify two graphs
+
+    It was for this function that this file was written
+    However, it cannot stand alone
+    """
     m = {}
-    for n1 in f1.nodes():
-        if n1 in f2.nodes() and \
-           representsSelf(n1):
-            m[n1]=n1
-        elif representsSelf(n1):
-            return []
     pr = Problem(G1=f1,G2=f2)
     s = State(pr,m)
     matches = [m for m in match(s)]
     return matches
             
+def _test():
+    import doctest
+    progress = progress2
+    doctest.testmod()
 
 ### testing stuff
 def main():
@@ -571,4 +609,8 @@ def main():
         print m
 
 if __name__ == '__main__':
-    main()
+    import sys
+    if sys.argv[1:2] == ['--test']:
+        _test()
+    else:
+        main()
