@@ -63,6 +63,9 @@ class BindingTree(object):
 
     __iter__ = choices
 
+    def __repr__(self):
+        return u'%s(%s)' % (self.__class__.__name__, self._b)
+
     def __len__(self):
         return len(self._b)
 
@@ -119,12 +122,17 @@ on our regularly scheduled P(s)
     progress( 'starting match')
     progress('s.map=%s' % s.map)
     G2 = s.problem.G2
-    if set(s.map.values()) == G2.nodes():
-        yield s.map
+    if not extras:
+        if set(s.map.values()) >= G2.allNodes():
+            yield s.map
+        elif set(s.map.values()) >= G2.nodes():
+            yield finish(s, s.map)
+            
     if extras:
         nodeList = extras.P()
     else:
         nodeList = P(s)
+    nodeList = [x for x in nodeList]
     progress('nodeList=', nodeList)
     for n,m, realExtras in nodeList:
         progress('... trying n,m=%s,%s' % (n,m))
@@ -135,6 +143,9 @@ on our regularly scheduled P(s)
             s2 = s.addNode(n,m)
             for x in match(s2, newExtras): yield x
             s2.undo()
+
+def finish(s, mapping):
+    raise RuntimeError(s.problem.G1.allNodes() - set(mapping))
         
 def P(s):
     """
@@ -175,8 +186,10 @@ def F(s, n, m, extras):
     except TypeError:
         return True
     if n in s.map or m in s.reverseMap:
-        progress(' -- failed because of used already')
-        return False
+        if extras is False:
+            progress(' -- failed because of used already')
+            return False
+        return True
     
     if not easyMatches(s, n, m):
         progress(' -- failed because of easymatches')
@@ -277,12 +290,18 @@ def isoCheck(termin1,termin2,termout1,termout2,new1,new2):
 
 
 ###################### everything after this begins to be implementation specific
-def easyMatches(s, n1, n2, newBindings=BindingTree()):
+def easyMatches(s, n1, n2, newBindings=BindingTree(), boring=True):
 ##    progress('easymatches on %s and %s' % (n1, n2))
     if isinstance(n1, set):
-        pass
-    else:
+        n1 = frozenset(n1)
+    if isinstance(n2, set):
+        n2 = frozenset(n2)
+    if n1 in s.map:
+        progress('Already known case')
+        return s.map[n1] == n2
+    if not boring:
         newBindings.int_and([(n1,n2)])
+    progress('newBindings=%s' % newBindings)
     if isLiteral(n1) and isLiteral(n2):
         return n1 == n2
     if isSymbol(n1) and isSymbol(n2):
@@ -292,13 +311,13 @@ def easyMatches(s, n1, n2, newBindings=BindingTree()):
     if isList(n1) and isList(n2):
         n3 = n1.first
         n4 = n2.first
-        if easyMatches(s, n3, n4, newBindings):
+        if easyMatches(s, n3, n4, newBindings, False):
             return easyMatches(s, n1.rest, n2.rest, newBindings)
     if isSet(n1) and isSet(n2):
         if len(n1) != len(n2):
             return False
         if len(n1) == 1:
-            return easyMatches(s, iter(n1).next(), iter(n2).next())
+            return easyMatches(s, iter(n1).next(), iter(n2).next(), newBindings, False)
         return True
     return False
 
@@ -345,10 +364,12 @@ class Graph(object):
         self.e = {}
         self.triples = set()
         self.nodeSet = set()
+        self.predSet = set()
         for triple in self.parseFile(fname):
             s, p, o = triple
             self.nodeSet.add(s)
             self.nodeSet.add(o)
+            self.predSet.add(p)
             if s not in self.f:
                 self.f[s] = {}
             if o not in self.p:
@@ -376,6 +397,9 @@ class Graph(object):
 
     def nodes(self):
         return self.nodeSet
+
+    def allNodes(self):
+        return self.nodeSet | self.predSet
     
     def parseFile(self, name):
         graph = []
@@ -406,8 +430,15 @@ def main():
     import sys
     g1 = Graph(sys.argv[1])
     g2 = Graph(sys.argv[2])
+    m = {}
+    for n1 in g1.nodes():
+        if n1 in g2.nodes() and \
+           (isLiteral(n1) or isSymbol(n1)):
+            m[n1]=n1
+        elif isLiteral(n1) or isSymbol(n1):
+            return False
     pr = Problem(G1=g1,G2=g2)
-    s = State(pr)
+    s = State(pr,m)
     for m in match(s):
         print m
 
