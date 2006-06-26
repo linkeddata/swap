@@ -1,7 +1,13 @@
 #!/usr/bin/env python
 """ Graph isomorphism algorithm
 
+as described in
+http://amalfi.dis.unina.it/people/vento/lavori/iciap99.pdf
 
+I hope to modify it to match
+http://amalfi.dis.unina.it/graph/db/papers/vf-algorithm.pdf
+
+Note that what I am doing here is not as simple as either.
 """
 
 from swap import uripath
@@ -162,12 +168,12 @@ def F(s, n, m, extras):
     Input: a state s, and a pair of node n and m
     Output: Whether adding n->m is worth persuing
     """
-    extras = BindingTree()
+##    extras = BindingTree()
     try:
         hash(n)
         hash(m)
     except TypeError:
-        return False
+        return True
     if n in s.map or m in s.reverseMap:
         progress(' -- failed because of used already')
         return False
@@ -273,7 +279,10 @@ def isoCheck(termin1,termin2,termout1,termout2,new1,new2):
 ###################### everything after this begins to be implementation specific
 def easyMatches(s, n1, n2, newBindings=BindingTree()):
 ##    progress('easymatches on %s and %s' % (n1, n2))
-    newBindings.int_and([(n1,n2)])
+    if isinstance(n1, set):
+        pass
+    else:
+        newBindings.int_and([(n1,n2)])
     if isLiteral(n1) and isLiteral(n2):
         return n1 == n2
     if isSymbol(n1) and isSymbol(n2):
