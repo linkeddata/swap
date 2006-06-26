@@ -1,18 +1,6 @@
 Design of the cwm proof format; and its issues.
 
- [] :A :B
-
-
-{ {?A a owl:Thing} => {?A = rdf:nil} }
-
-{ {?B a owl:Thing} => {?B = rdf:nil} }
-
-{:A a owl:Thing}
-
-{:B a owl:Thing}
-
-{ :Yosi :says {:A a owl:Thing} } .
-
+a proof follows.
 
 
 syosi@YOSI:~/SWAP/test/reason$ cwm socrates.n3 --think --base=foo: --why
@@ -141,3 +129,287 @@ F6 = {
            }, with F1:D1 -> F6:D1, F1:L1 -> F6:L1, F5:L1 -> F2:L2, F1:L2 -> F6:L3, F1:F1:L1 -> F6:F1:L1, F1:F2:L1 -> F6:F2:F1
 
 QED
+
+
+DanC seems to agree with me.
+
+-------------
+[06/22/2006 09:31 PM] [INFO] Now logging to <file:///home/syosi/.mozilla/firefox/default.4x3/chatzilla/logs/irc.freenode.net/channels/%23dig.2006-06-22.log>.
+[06/22/2006 09:31 PM] [INFO] Channel view for ``#dig'' opened.
+[06/22/2006 09:31 PM] === *** Your host is brown.freenode.net[brown.freenode.net/6667], running version hyperion-1.0.2
+[06/22/2006 09:31 PM] *nickserv* This nickname is owned by someone else
+[06/22/2006 09:31 PM] *nickserv* If this is your nickname, type /msg NickServIDENTIF <password>
+[06/22/2006 09:31 PM] =-= User mode for yosi_s is now +i
+[06/22/2006 09:31 PM] *nickserv* Password accepted - you are now recognized
+[06/22/2006 09:31 PM] =-= User mode for yosi_s is now +e
+[06/22/2006 09:31 PM] *MemoServ* You have no new memos
+[06/22/2006 09:31 PM] -->| YOU (yosi_s) have joined #dig
+[06/22/2006 09:31 PM] =-= Topic for #dig is ``Decentralized Information Group (DIG) <http://dig.csail.mit.edu/>''
+[06/22/2006 09:31 PM] =-= Topic for #dig was set by DanC on 06/05/2006 11:36:53 AM
+[06/22/2006 09:32 PM] <yosi_s> DanC, are you available?
+[06/22/2006 09:32 PM] <DanC> sorta
+[06/22/2006 09:34 PM] <yosi_s> I've been thinking about proofs too, my current thoughts are in http://www.w3.org/2000/10/swap/doc/proof_ont.txt
+[06/22/2006 09:34 PM] <yosi_s> should I blog about this?
+[06/22/2006 09:34 PM] <yosi_s> e-mail?
+[06/22/2006 09:35 PM] <yosi_s> I don't want to force the proof checker to do NP-Complete problems that were solved by the  proof generator
+[06/22/2006 09:35 PM] <DanC> amen to that...
+[06/22/2006 09:35 PM] <DanC> starting a blog is a non-trivial thing... mail to public-cwm-talk might be easiest...
+[06/22/2006 09:36 PM] * DanC is lost at { {?A a owl:Thing} => {?A = rdf:nil} }
+[06/22/2006 09:37 PM] <yosi_s> start at the proof
+[06/22/2006 09:37 PM] <yosi_s> the things before that are junk, I think
+[06/22/2006 09:37 PM] <DanC> I've done a few "What do I want?" sketches... yours doesn't look like RDF
+[06/22/2006 09:38 PM] <yosi_s> no it isn't
+[06/22/2006 09:38 PM] <yosi_s> I don't know how to make that RDF
+[06/22/2006 09:38 PM] <yosi_s> but it is a trivial proof to check --- we need an n3 version of that
+[06/22/2006 09:38 PM] <yosi_s> every triple, every formula, every variable, every bNode named
+[06/22/2006 09:39 PM] <DanC> I did a sketch of something in http://dig.csail.mit.edu/breadcrumbs/node/89
+[06/22/2006 09:39 PM] <DanC> look for the box that starts with: 2000/10/swap$ python cwm.py util/lp.n3 --think
+[06/22/2006 09:43 PM] <yosi_s> but you aren't doing what I am
+[06/22/2006 09:43 PM] <DanC> and see http://www.w3.org/2000/10/swap/util/lp.n3
+[06/22/2006 09:43 PM] <yosi_s> I see that file, I think
+[06/22/2006 09:43 PM] <DanC> did you have some reason to think I was doing what you are?
+[06/22/2006 09:43 PM] <DanC> I am doing what you are in that I'm sketching "what I want" in a proof format
+[06/22/2006 09:44 PM] <yosi_s> right
+[06/22/2006 09:44 PM] <yosi_s> I'm sorry, I misread you
+[06/22/2006 09:45 PM] <yosi_s> it will take me time to read lp.n3
+[06/22/2006 09:45 PM] <yosi_s> do you have any ideas of how to possibly write my format in rdf?
+[06/22/2006 09:45 PM] * yosi_s will have to think about it next
+[06/22/2006 09:46 PM] <yosi_s> I guess at that point I would be ready for an e-mail
+[06/22/2006 09:46 PM] <DanC> I did some more thinking about the proof format in http://lists.w3.org/Archives/Public/public-cwm-talk/2006AprJun/0021.html 
+[06/22/2006 09:46 PM] <yosi_s> DanC, what did you mean by starting a blog is non-trivial?
+[06/22/2006 09:47 PM] <yosi_s> I think I have an account at http://dig.csail.mit.edu/breadcrumbs/blog/10
+[06/22/2006 09:47 PM] <DanC> ok, then you're over one set of hurdles...
+[06/22/2006 09:47 PM] <DanC> ... what's non-trivial is to set expectations about what sort of stuff you'll blog about, and then meet them.
+[06/22/2006 09:48 PM] <DanC> it's also non-trivial to track comments. (though you can turn those off on a per-post basis)
+[06/22/2006 09:48 PM] <DanC> and it's non-trivial to be accountable for what you said forever (though that applies to public-cwm-talk too)
+[06/22/2006 09:49 PM] <yosi_s> how accountable am I for what I say right here in #dig?
+[06/22/2006 09:50 PM] <DanC> what you say here doesn't go into google-space
+[06/22/2006 09:50 PM] <DanC> and it probably isn't even world-readable in another week or two
+[06/22/2006 09:50 PM] * yosi_s does a google search for ``Yosi Scharf'' every once in a while to track my google karma
+[06/22/2006 09:51 PM] <yosi_s> ok, I'll think about n3izing my format
+[06/22/2006 09:51 PM] <DanC> re naming everything... life would be easier if that were possible, but I suspect it's not
+[06/22/2006 09:52 PM] <yosi_s> I've lost you
+[06/22/2006 09:52 PM] <DanC> i.e. I don't think you can pin everything down to a URI without changing the logical meaning of things.
+[06/22/2006 09:52 PM] <DanC> btw... did you see that 200-lines-of-scheme proof checker that I found back in '99?
+[06/22/2006 09:53 PM] <yosi_s> I don't need a URI --- I need an identifier that doesn't change at all within the document --- bNodes would work for the F1:F1:L3 id's
+[06/22/2006 09:53 PM] <DanC> http://lists.w3.org/Archives/Public/sw99/2000JanMar/0002.html
+[06/22/2006 09:53 PM] <yosi_s> proof checker are really simple, if the proof format is good --- ours isn't
+[06/22/2006 09:53 PM] |<-- jamesdh has left irc.freenode.net (Read error: 110 (Connection timed out))
+[06/22/2006 09:53 PM] <yosi_s> we also have buildins to make life difficult
+[06/22/2006 09:53 PM] <yosi_s> log:notIncludes is co-NP complete
+[06/22/2006 09:53 PM] <DanC> ok, so you're aware of how simple a proof checker could/should be
+[06/22/2006 09:54 PM] <yosi_s> log:notIncludes is therefor evil from the point of view of a proof checker
+[06/22/2006 09:55 PM] <DanC> I don't understand why log:notIncludes is not treated like a regular built-in, from the check.py's perspective. regex matching is EXPTIME too, but we don't worry about i
+[06/22/2006 09:55 PM] <DanC> it
+[06/22/2006 09:56 PM] <yosi_s> log:notIncludes should be normal
+[06/22/2006 09:56 PM] * DanC isn't sure about the complexity of regex matching, but hopes the point is clear
+[06/22/2006 09:57 PM] <yosi_s> log:includes is not a normal builtin
+[06/22/2006 09:57 PM] <DanC> interesting... from that sw99 msg: [[
+[06/22/2006 09:57 PM] <DanC> ; The steps contain detailed justifications, including substitutions and
+[06/22/2006 09:57 PM] <DanC> ; positions of terms/literals, so that this code doesn't have to know
+[06/22/2006 09:57 PM] <DanC> ; about unification
+[06/22/2006 09:57 PM] <DanC> ]]
+[06/22/2006 09:57 PM] <yosi_s> the weird stuff it is doing may be wrong
+[06/22/2006 09:57 PM] <yosi_s> correct
+[06/22/2006 09:57 PM] <yosi_s> You may notice, the format I'm trying to create would be the same in that regard
+[06/22/2006 09:58 PM] <yosi_s> only the log:notIncludes thing would have to know about graph-subgraph isomorphism
+[06/22/2006 09:58 PM] <yosi_s> and unification
+[06/22/2006 09:58 PM] <yosi_s> and other wonderful things
+[06/22/2006 09:59 PM] <DanC> and that would all be in built-in code, just like regex matching, yes?
+[06/22/2006 09:59 PM] <yosi_s> log:notIncludes?
+[06/22/2006 09:59 PM] <yosi_s> correct
+[06/22/2006 09:59 PM] <yosi_s> a builtin
+[06/22/2006 09:59 PM] <DanC> that appeals to me, indeed.
+[06/22/2006 09:59 PM] <yosi_s> I'm trying to rewrite that right now
+[06/22/2006 10:00 PM] * yosi_s shudders at getting cwm to remember and record the information this format would need
+[06/22/2006 10:00 PM] <yosi_s> can I copy this conversion into my file?
+[06/22/2006 10:00 PM] <DanC> yes.
+[06/22/2006 10:02 PM] <yosi_s> thanks DanC 
+[06/22/2006 10:02 PM] <DanC> sure
+ 
+=================
+
+
+Ok. We want this format to become N3. So we need a format for displaying a formula. Start out with LISP.
+
+
+F1 = (
+      (
+       (D1 soc:who)
+      )
+      (
+       (F1L1 soc:socrates a soc:Man)
+       (F1L2 F1F1 log:implies F1F2))) .
+
+F1F1 = (()
+        (F1F1L1 soc:who a soc:Man)) .
+F1F2 = (()
+        (F1F2L1 soc:who a soc:Mortal)) .
+
+F2 = (()
+      (F2L1 soc:socrates a soc:Man))
+
+F1 [ implication-binding (
+    (F1L1 F2L1
+) ] F2 .
+(rest of proof ommitted)
+
+
+
+Issue: This is not n3. It is reified, and is really much closer to LISP. We are not taking advantage of n3's advanced features. This makes me like it more. It is very clear, which nested quoting in n3 always leaves me wondering --- what does it mean?
+
+On the other hand, timbl will complain about the lack of quoting. Having a node stand itself, within a quoted formula, he will immidiately say is semantically wrong. Otherwise, however, I will simply have my own references in quoted formulae --- let the @forSomes multiply. We now have 
+
+@forSome F1, F1F1, F1F2, F1D1, soc:who, F1L1, F1L2, F1F1L1, F1F2L1, F2, F2L1 .
+
+F1 = (
+      (
+       [=F1D1 label soc:who]
+      )
+      (
+       [=F1L1 label {soc:socrates a soc:Man}] 
+       [=F1L2 label {F1F1 log:implies F1F2}])) .
+
+F1F1 = (()
+        [=F1F1L1 label {soc:who a soc:Man}]) .
+F1F2 = (()
+        [=F1F2L1 label {soc:who a soc:Mortal}]) .
+
+F2 = (()
+      [=F2L1 label {soc:socrates a soc:Man}])
+
+F1 [ implication-binding (
+    (F1L1 F2L1
+) ] F2 .
+
+which will be unreadable when printed. In particular, it turns into
+
+     @prefix : <#> .
+    @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    @prefix soc: <../test/reason/socrates.n3#> .
+
+     @forSome :F1,
+                :F1D1,
+                :F1F1,
+                :F1F1L1,
+                :F1F2,
+                :F1F2L1,
+                :F1L1,
+                :F1L2,
+                :F2,
+                :F2L1,
+                soc:who,
+                :_g0 .
+
+    :F1     =  (
+         (
+            :F1D1 )
+         (
+            :F1L1
+            :F1L2 ) );
+         :_g0 :F2 .
+
+    :F1D1     :label soc:who .
+
+    :F1F1     =  (
+        ()
+        :F1F1L1 ) .
+
+    :F1F1L1     :label {soc:who     a soc:Man .
+        } .
+
+    :F1F2     =  (
+        ()
+        :F1F2L1 ) .
+
+    :F1F2L1     :label {soc:who     a soc:Mortal .
+        } .
+
+    :F1L1     :label {soc:socrates     a soc:Man .
+        } .
+
+    :F1L2     :label {:F1F1     log:implies :F1F2 .
+        } .
+
+    :F2     =  (
+        ()
+        :F2L1 ) .
+
+    :F2L1     :label {soc:socrates     a soc:Man .
+        } .
+
+    :_g0     :implication-binding  (
+        :F1L1
+        :F2L1 ) .
+
+#ENDS
+
+ouch.
+Maybe I should go back to the (F1L1 {soc:socrates a soc:Man}) pair --- less meaning, but more readable when cwm prints it.
+
+We can even get to
+
+#   Base was: file:/home/syosi/CVS-local/WWW/2000/10/swap/doc/new_proof.n3
+     @prefix : <#> .
+    @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    @prefix soc: <../test/reason/socrates.n3#> .
+
+     @forSome :F1,
+                :F1D1,
+                :F1F1,
+                :F1F1L1,
+                :F1F2,
+                :F1F2L1,
+                :F1L1,
+                :F1L2,
+                :F2,
+                :F2L1,
+                soc:who,
+                :_g0 .
+
+    :F1     :existential  (
+        :F1D1
+        soc:who );
+         :statement  (
+        :F1L1
+        {soc:socrates     a soc:Man .
+            } ),
+                 (
+        :F1L2
+        {:F1F1     log:implies :F1F2 .
+            } );
+         :_g0 :F2 .
+
+    :F1F1     :statement  (
+        :F1F1L1
+        {soc:who     a soc:Man .
+            } ) .
+
+    :F1F2     :statement  (
+        :F1F2L1
+        {soc:who     a soc:Mortal .
+            } ) .
+
+    :F2     :statement  (
+        :F2L1
+        {soc:socrates     a soc:Man .
+            } ) .
+
+    :_g0     :implication-binding  (
+        :F1L1
+        :F2L1 ) .
+
+Which is in some ways nice, but Tim would complain that it is not CW enough --- even though existentials are used to insure more triples cannot be attached.
+
+
+What would it take to add this to cwm? Cwm would need to save how things mapped, StoredStatement by StoredStatement. Every StoredStatement has its own id (the python id() function) so we an do that. However, it does not know that currently.
+
+What would a proof object in this new format look like? I think I need to try it to find out. Let us start with BecauseOfRule.
+
+         reason = BecauseOfRule(self.rule, bindings=bindings, knownExistentials = extraBNodes,
+		      evidence=evidence, kb=self.workingContext)
+
+Note that it knows the evidence that the rule was fired, being its own rule and the evidence, a group of StoredStatements and BecauseFacts. However, it does not have what each line in the evidence bound to. The nested into formula version it certainly does not do. It knows nothing about that today. Getting the information out of the rule will be the first step. We never said this would be easy. Cwm currently stores bindings simply as
+
+({var1: b1, var2: b2}, reason)
+  This will not work at all for what I want.
