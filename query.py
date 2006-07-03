@@ -636,8 +636,8 @@ def n3Entails(f, g, vars=Set([]), existentials=Set([]),  bindings={}):
     f = f.renameVars()
     diag.chatty_flag = m
     unmatched = buildStrictPattern(f, g)
-    templateExistentials = g.existentials() | existentials
-    more_variables = g.universals() | vars
+    templateExistentials = g.existentials() | g.universals() | existentials
+    more_variables = Set(vars)
     _substitute({g: f}, unmatched)
     
     if bindings != {}: _substitute(bindings, unmatched)
@@ -890,7 +890,9 @@ class Query(Formula):
         delta = self.targetContext.loadFormulaWithSubstitution(
 		    self.conclusion, b2, why=reason)
         if diag.chatty_flag>9 and delta:
-            progress(" --- because of: %s => %s" % (self.template.debugString(), self.conclusion.debugString()))
+            progress(" --- because of: %s => %s, with bindings %s" % (self.template.debugString(),
+                                                                      self.conclusion.debugString(),
+                                                                      b2))
         if diag.chatty_flag>30:
             progress("Added %i, nominal size of store changed from %i to %i."%(delta, before, self.store.size))
         return delta #  self.store.size - before
@@ -932,6 +934,7 @@ class Query(Formula):
                 variables.remove(pair[0])
                 bindings.update({pair[0]: pair[1]})  # Record for posterity
             else:      # Formulae aren't needed as existentials, unlike lists. hmm.
+                ### bindings.update({pair[0]: pair[1]})  # remove me!!!!!
 #		if diag.tracking: raise RuntimeError(pair[0], pair[1])
 		#bindings.update({pair[0]: pair[1]})  # Record for proof only
 		if pair[0] not in existentials:
@@ -1475,11 +1478,13 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			if result != None:
 			    self.state = S_DONE
 			    rea=None
-			    if isinstance(result, Formula) and diag.tracking:
-                                result = result.renameVars()
-                                assert result.canonical is result, result.debugString()
-			    if diag.tracking:
-				rea = BecauseBuiltIn(con, subj, pred, result)
+			    if diag.tracking:                                
+                                if isinstance(result, Formula):
+                                    result2 = result.renameVars()
+                                    assert result.canonical is result, result.debugString()
+                                else:
+                                    result2 = result
+				rea = BecauseBuiltIn(con, subj, pred, result2)
 			    if isinstance(pred, MultipleFunction):
 				return [({obj:x}, rea) for x in result]
 			    else:
@@ -1592,6 +1597,8 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                                 if nb[binding[0]] is binding[1]:
                 		    del nb1[binding[0]] # duplicate  
                                 else: # don't bind same to var to 2 things!
+                                    if diag.chatty_flag > 570:
+                                        progress( "... can't do that because nb[%s]=%s, not %s" %(binding[0], nb[binding[0]], binding[1]))
                                     break # reject
 			else:
 			    nb.update(nb1)

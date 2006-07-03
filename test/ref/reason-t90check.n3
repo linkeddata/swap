@@ -1,7 +1,7 @@
-     @prefix : <http://example.com/swap/test/STDIN#> .
+     @prefix : <http://example.com/swap/test/daml-ex.n3#> .
     @prefix con: <http://example.com/swap/test/includes/conclusion.n3#> .
     @prefix dpo: <http://www.daml.org/2001/03/daml+oil#> .
-    @prefix ex_: <http://example.com/swap/test/daml-ex.n3#> .
+    @prefix fo: <http://example.com/swap/test/STDIN#> .
     @prefix foo: <http://example.com/swap/test/includes/foo.n3#> .
     @prefix inv: <http://example.com/swap/test/invalid-ex.n3#> .
     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
@@ -14,134 +14,134 @@
                 foo:x,
                 foo:y .
     
-    foo:result     foo:is { @forAll :_g1,
-                    :_g10,
-                    :_g11,
-                    :_g12,
-                    :_g13,
-                    :_g14,
-                    :_g15,
-                    :_g16,
-                    :_g17,
-                    :_g18,
-                    :_g19,
-                    :_g2,
-                    :_g20,
-                    :_g21,
-                    :_g3,
-                    :_g4,
-                    :_g5,
-                    :_g6,
-                    :_g7,
-                    :_g8,
-                    :_g9.
-             @forSome :_g22,
-                    :_g23,
-                    :_g24 .
-        :_g22     a dpo:Restriction;
-             dpo:onProperty ex_:parent;
-             dpo:toClass ex_:Person .
-        :_g23     a dpo:Restriction;
-             dpo:onProperty ex_:height;
-             dpo:toValue ex_:tall .
-        :_g24     a dpo:Class;
-             dpo:complementOf ex_:Person .
+    foo:result     foo:is { @forAll fo:_g13,
+                    fo:_g14,
+                    fo:_g15,
+                    fo:_g16,
+                    fo:_g17,
+                    fo:_g18,
+                    fo:_g19,
+                    fo:_g20,
+                    fo:_g21,
+                    fo:_g22,
+                    fo:_g23,
+                    fo:_g24,
+                    v:c,
+                    v:c1,
+                    v:c2,
+                    v:p,
+                    v:p1,
+                    v:p2,
+                    v:x,
+                    v:y,
+                    v:z.
+             @forSome fo:_g25,
+                    fo:_g26,
+                    fo:_g27 .
+        fo:_g25     a dpo:Class;
+             dpo:complementOf :Person .
+        fo:_g26     a dpo:Restriction;
+             dpo:onProperty :parent;
+             dpo:toClass :Person .
+        fo:_g27     a dpo:Restriction;
+             dpo:onProperty :height;
+             dpo:toValue :tall .
         <http://example.com/swap/test/daml-ex.n3>     a dpo:Ontology;
              dpo:comment "An example ontology";
              dpo:imports <http://www.daml.org/2000/10/daml-ont>;
              dpo:versionInfo "" .
-        ex_:Adam     a dpo:Person;
+        :Adam     a dpo:Person;
              dpo:comment "Adam is a person.";
              dpo:label "Adam" .
-        ex_:Animal     a dpo:Class;
+        :Animal     a dpo:Class;
              dpo:comment """This class of animals is illustrative of a number of
 	ontological idioms.""";
              dpo:label "Animal" .
-        ex_:Car     a dpo:Class;
+        :Car     a dpo:Class;
              dpo:comment "no car is a person";
-             dpo:subClassOf :_g24;
-             s:subClassOf :_g24 .
-        ex_:Female     a dpo:Class;
-             dpo:disjointFrom ex_:Male;
-             dpo:subClassOf ex_:Animal;
-             s:subClassOf ex_:Animal .
-        ex_:Height     a dpo:Class;
+             dpo:subClassOf fo:_g25;
+             s:subClassOf fo:_g25 .
+        :Female     a dpo:Class;
+             dpo:disjointFrom :Male;
+             dpo:subClassOf :Animal;
+             s:subClassOf :Animal .
+        :Height     a dpo:Class;
              dpo:oneOf  (
-            ex_:short
-            ex_:medium
-            ex_:tall ) .
-        ex_:Male     a dpo:Class;
-             dpo:subClassOf ex_:Animal;
-             s:subClassOf ex_:Animal .
-        ex_:Man     a dpo:Class;
-             dpo:subClassOf ex_:Male,
-                    ex_:Person;
-             s:subClassOf ex_:Animal,
-                    ex_:Male,
-                    ex_:Person .
-        ex_:Person     a dpo:Class;
+            :short
+            :medium
+            :tall ) .
+        :Male     a dpo:Class;
+             dpo:subClassOf :Animal;
+             s:subClassOf :Animal .
+        :Man     a dpo:Class;
+             dpo:subClassOf :Male,
+                    :Person;
+             s:subClassOf :Animal,
+                    :Male,
+                    :Person .
+        :Person     a dpo:Class;
              dpo:comment "every person is a man or a woman";
              dpo:disjointUnionOf  (
-            ex_:Man
-            ex_:Woman );
-             dpo:restrictedBy :_g22;
-             dpo:subClassOf ex_:Animal;
-             s:subClassOf ex_:Animal .
-        ex_:TallMan     a dpo:Class;
+            :Man
+            :Woman );
+             dpo:restrictedBy fo:_g26;
+             dpo:subClassOf :Animal;
+             s:subClassOf :Animal .
+        :TallMan     a dpo:Class;
              dpo:intersectionOf  (
-            ex_:TallThing
-            ex_:Man ) .
-        ex_:TallThing     a dpo:Class;
-             dpo:restrictedBy :_g23 .
-        ex_:Woman     a dpo:Class;
-             dpo:subClassOf ex_:Female,
-                    ex_:Person;
-             s:subClassOf ex_:Animal,
-                    ex_:Female,
-                    ex_:Person .
-        ex_:ancestor     a dpo:TransitiveProperty;
+            :TallThing
+            :Man ) .
+        :TallThing     a dpo:Class;
+             dpo:restrictedBy fo:_g27 .
+        :Woman     a dpo:Class;
+             dpo:subClassOf :Female,
+                    :Person;
+             s:subClassOf :Animal,
+                    :Female,
+                    :Person .
+        :ancestor     a dpo:TransitiveProperty;
              dpo:label "ancestor" .
-        ex_:child     a dpo:Property;
-             dpo:inverseOf ex_:parent .
-        ex_:descendant     a dpo:TransitiveProperty .
-        ex_:father     a dpo:Property;
+        :child     a dpo:Property;
+             dpo:inverseOf :parent .
+        :descendant     a dpo:TransitiveProperty .
+        :father     a dpo:Property;
              dpo:cardinality "1";
-             dpo:range ex_:Man;
-             dpo:subProperty ex_:parent;
-             s:range ex_:Man .
-        ex_:height     a dpo:Property;
-             dpo:domain ex_:Person;
-             dpo:range ex_:Height;
-             s:domain ex_:Person;
-             s:range ex_:Height .
-        ex_:mom     a dpo:Property;
-             = ex_:mother .
-        ex_:mother     a dpo:UniqueProperty;
-             dpo:range ex_:Woman;
-             dpo:subProperty ex_:parent;
-             s:range ex_:Woman .
-        ex_:occupation     a dpo:Property;
+             dpo:range :Man;
+             dpo:subProperty :parent;
+             s:range :Man .
+        :height     a dpo:Property;
+             dpo:domain :Person;
+             dpo:range :Height;
+             s:domain :Person;
+             s:range :Height .
+        :mom     a dpo:Property;
+             = :mother .
+        :mother     a dpo:UniqueProperty;
+             dpo:range :Woman;
+             dpo:subProperty :parent;
+             s:range :Woman .
+        :occupation     a dpo:Property;
              dpo:maxCardinality "1" .
-        ex_:parent     a dpo:Property;
+        :parent     a dpo:Property;
              dpo:cardinality "2";
-             dpo:domain ex_:Animal;
-             s:domain ex_:Animal .
+             dpo:domain :Animal;
+             s:domain :Animal .
         <http://example.com/swap/test/invalid-ex.n3>     dpo:imports <http://example.com/swap/test/daml-ex.n3> .
-        inv:alex     ex_:father inv:joe .
-        inv:bill     ex_:mother inv:joe .
-        inv:disjointTest     a ex_:Animal,
-                    ex_:Female,
-                    ex_:Male,
-                    ex_:Man,
-                    ex_:Person,
-                    ex_:Woman,
+        inv:alex     :father inv:joe .
+        inv:bill     :mother inv:joe .
+        inv:disjointTest     a :Animal,
+                    :Female,
+                    :Male,
+                    :Man,
+                    :Person,
+                    :Woman,
                     v:schemaInconsistency .
-        inv:joe     a ex_:Animal,
-                    ex_:Female,
-                    ex_:Male,
-                    ex_:Man,
-                    ex_:Person,
-                    ex_:Woman,
+        inv:joe     a :Animal,
+                    :Female,
+                    :Male,
+                    :Man,
+                    :Person,
+                    :Woman,
                     v:schemaInconsistency .
         v:schemaInconsistency     dpo:subPropertyOf log:Falsehood;
              s:subPropertyOf log:Falsehood .
@@ -152,78 +152,78 @@
         s:subClassOf     a dpo:TransitiveProperty .
         s:subPropertyOf     a dpo:TransitiveProperty .
         {
-            :_g21     a dpo:TransitiveProperty .
+            v:p     a dpo:TransitiveProperty .
             
-            }     log:implies { @forAll :_g25,
-                        :_g26,
-                        :_g27 .
+            }     log:implies { @forAll v:xx,
+                        v:yx,
+                        v:zx .
             {
-                :_g25     :_g21 :_g27 .
-                :_g26     :_g21 :_g25 .
+                v:xx     v:p v:yx .
+                v:yx     v:p v:zx .
                 
-                }     log:implies {:_g26     :_g21 :_g27 .
+                }     log:implies {v:xx     v:p v:zx .
                 } .
             } .
         {
-            :_g1     ex_:ancestor :_g2 .
-            :_g2     ex_:ancestor :_g11 .
+            fo:_g13     :ancestor fo:_g14 .
+            fo:_g14     :ancestor fo:_g15 .
             
-            }     log:implies {:_g1     ex_:ancestor :_g11 .
+            }     log:implies {fo:_g13     :ancestor fo:_g15 .
             } .
         {
-            :_g10     s:subPropertyOf :_g18 .
-            :_g18     s:range :_g20 .
+            fo:_g16     :descendant fo:_g17 .
+            fo:_g17     :descendant fo:_g18 .
             
-            }     log:implies {:_g10     s:range :_g20 .
+            }     log:implies {fo:_g16     :descendant fo:_g18 .
             } .
         {
-            :_g12     s:subPropertyOf :_g9 .
-            :_g8     s:subPropertyOf :_g12 .
+            fo:_g19     s:subClassOf fo:_g20 .
+            fo:_g20     s:subClassOf fo:_g21 .
             
-            }     log:implies {:_g8     s:subPropertyOf :_g9 .
+            }     log:implies {fo:_g19     s:subClassOf fo:_g21 .
             } .
         {
-            :_g13     s:subClassOf :_g16 .
-            :_g16     s:subClassOf :_g14 .
+            fo:_g22     s:subPropertyOf fo:_g23 .
+            fo:_g23     s:subPropertyOf fo:_g24 .
             
-            }     log:implies {:_g13     s:subClassOf :_g14 .
+            }     log:implies {fo:_g22     s:subPropertyOf fo:_g24 .
             } .
         {
-            :_g17     ex_:descendant :_g19 .
-            :_g19     ex_:descendant :_g15 .
+            v:c1     s:subClassOf v:c2 .
+            v:x     a v:c1 .
             
-            }     log:implies {:_g17     ex_:descendant :_g15 .
+            }     log:implies {v:x     a v:c2 .
             } .
         {
-            :_g18     = :_g10 .
-            :_g4     :_g18 :_g5 .
+            v:p     s:domain v:c .
+            v:x     v:p v:y .
             
-            }     log:implies {:_g4     :_g10 :_g5 .
+            }     log:implies {v:x     a v:c .
             } .
         {
-            :_g21     s:domain :_g20 .
-            :_g4     :_g21 :_g5 .
+            v:p     s:range v:c .
+            v:x     v:p v:y .
             
-            }     log:implies {:_g4     a :_g20 .
+            }     log:implies {v:y     a v:c .
             } .
         {
-            :_g21     s:range :_g20 .
-            :_g4     :_g21 :_g5 .
+            v:p1     s:range v:c .
+            v:p2     s:subPropertyOf v:p1 .
             
-            }     log:implies {:_g5     a :_g20 .
+            }     log:implies {v:p2     s:range v:c .
             } .
         {
-            :_g3     s:subClassOf :_g7 .
-            :_g4     a :_g3 .
+            v:p1     = v:p2 .
+            v:x     v:p1 v:y .
             
-            }     log:implies {:_g4     a :_g7 .
+            }     log:implies {v:x     v:p2 v:y .
             } .
         {
-            :_g4     a :_g5,
-                        :_g6 .
-            :_g5     dpo:disjointFrom :_g6 .
+            v:x     a v:y,
+                        v:z .
+            v:y     dpo:disjointFrom v:z .
             
-            }     log:implies {:_g4     a v:schemaInconsistency .
+            }     log:implies {v:x     a v:schemaInconsistency .
             } .
         } .
     {

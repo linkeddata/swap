@@ -436,6 +436,12 @@ class IndexedFormula(Formula):
 	if self._closureMode != "":
 	    self.checkClosure(subj, pred, obj)
 
+	try:
+            if self.isWorkingContext and diag.chatty_flag > 40:
+                progress("adding",  (subj, pred, obj))
+        except:
+            pass
+
         return 1  # One statement has been added  @@ ignore closure extras from closure
 		    # Obsolete this return value? @@@ 
 
@@ -1537,6 +1543,7 @@ class RDFStore(RDFSink) :
         else:
 	    urirefString = canonical(urirefString)
             assert ':' in urirefString, "must be absolute: %s" % urirefString
+
 
             hash = string.rfind(urirefString, "#")
             if hash < 0 :     # This is a resource with no fragment

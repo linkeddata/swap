@@ -140,7 +140,11 @@
     test:arguments     """--n3=B reason/t9.n3 --think --filter=reason/f9.n3 --base=foo --why | python ../check.py""".
 
 
-
+:t10 a test:CwmTest;
+    test:workingDirectory  <../>;
+    test:referenceOutput <../ref/reason-rename-loop.n3>;
+    test:description   "Renaming can lead to loops if not careful";
+    test:arguments     """--n3=aeiouB reason/rename-loop.n3 --think --base=foo --why | python ../check.py""".
 
 
 

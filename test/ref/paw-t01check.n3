@@ -1,0 +1,9 @@
+     @prefix : <http://dig.csail.mit.edu/2005/09/rein/network#> .
+    @prefix http: <http://dig.csail.mit.edu/2005/09/rein/examples/http-access#> .
+    @prefix judy: <http://dig.csail.mit.edu/2005/09/rein/examples/judy-req#> .
+    
+    judy:Req     :ans :Valid;
+         :requester  [
+             http:can-get <http://demo.policyawareweb.org/images/group.jpg> ] .
+    
+
