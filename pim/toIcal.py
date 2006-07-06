@@ -85,7 +85,7 @@ class CalWr:
             predName, valueType = props[prop][:2]
             for val in sts.each(comp, ICAL.sym(predName)):
                 if valueType == 'TEXT':
-                    self.doSIMPLE(mkTEXT(val), prop)
+                    self.doSIMPLE(mkTEXT(val, sts), prop)
                 elif valueType == 'INTEGER':
                     self.doSIMPLE(mkINTEGER(val), prop)
                 elif valueType == 'FLOAT':
@@ -293,6 +293,8 @@ def compKey(item):
     (None, '2002-12-23T12:32:31Z')
     """
 
+    # " help emacs
+
     sts, sub, subName, subs = item
     uid = sts.any(sub, ICAL.uid)
     if uid: uid = str(uid)
@@ -306,9 +308,12 @@ def compKey(item):
     return (uid, when)
 
 
-def mkTEXT(val):
+def mkTEXT(val, fmla=None):
     # @@TODO: wrap at 75 cols
-    text = val.string.encode('utf-8') #hmm...
+    try:
+        text = val.string.encode('utf-8')
+    except AttributeError:
+        text = fmla.the(val, RDF.value).string.encode('utf-8')
     for c in ('\\', ';', ','):
         text = text.replace(c, "\\"+c)
     text = text.replace('\n', "\\n")
@@ -391,7 +396,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.33  2005-11-10 14:40:32  connolly
+# Revision 2.34  2006-07-06 01:19:09  connolly
+# support rdf:value on text fields
+#
+# Revision 2.33  2005/11/10 14:40:32  connolly
 # updated duration handling
 #
 # Revision 2.32  2005/09/05 23:53:35  connolly
