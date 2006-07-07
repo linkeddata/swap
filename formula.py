@@ -29,7 +29,7 @@ import types
 import StringIO
 import sys # for outputstrings. shouldn't be here - DWC
 
-from set_importer import Set, ImmutableSet
+from set_importer import Set, ImmutableSet, sorted
 
 import notation3    # N3 parsers and generators, and RDF generator
 
@@ -214,8 +214,8 @@ For future reference, use newUniversal
 	if verbosity() > 90: progress("Declare existential:", v)
 	if v not in self._existentialVariables:  # Takes time
 	    self._existentialVariables.add(v)
-            if self.occurringIn(Set([v])):
-                raise ValueError
+            if self.occurringIn(Set([v])) and not v.generated():
+                raise ValueError("Are you trying to confuse me?")
 #	else:
 #	    raise RuntimeError("Redeclared %s in %s -- trying to erase that" %(v, self)) 
 	
@@ -682,6 +682,18 @@ For future reference, use newUniversal
                     return 1
         return 0
 
+    def freeVariables(self):
+        retVal = Set()
+        for statement in self:
+            for node in statement.spo():
+                retVal.update(node.freeVariables)
+        retVal.difference_update(self.existentials())
+        retVal.difference_update(self.universals())
+        if self.canonical:
+            self.freeVariablesCompute = self.freeVariables
+            self.freeVariables = lambda : retVal.copy()
+        return retVal.copy()
+
 
 #################################################################################
 
@@ -826,14 +838,6 @@ class StoredStatement:
 	return f.close()  # probably slow - much slower than statement subclass of formula
 
 
-
-try:
-   sorted
-except NameError:
-   def sorted(iterable, cmp=None, key=None, reverse=False):
-       m = list(iterable)
-       m.sort(cmp)
-       return m
 
 #ends
 

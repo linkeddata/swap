@@ -6,7 +6,7 @@
 QL_NS = "http://www.w3.org/2004/ql#"
 from sparql2cwm import SPARQL_NS
 
-from set_importer import Set, ImmutableSet
+from set_importer import Set, ImmutableSet, sorted
 
 from RDFSink import Logic_NS, RDFSink, forSomeSym, forAllSym
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
@@ -865,7 +865,7 @@ class Query(Formula):
         for x in poss.copy():
             if x in ok: poss.remove(x)
         poss_sorted = list(poss)
-        poss_sorted.sort()
+        poss_sorted.sort(Term.compareAnyTerm)
         #progress(poss)
 
 #        vars = self.conclusion.existentials() + poss  # Terms with arbitrary identifiers
@@ -876,7 +876,7 @@ class Query(Formula):
 	    v2 = self.targetContext.newUniversal()
 	    b2[v] =v2   # Regenerate names to avoid clash
 	    if diag.chatty_flag > 25: s = s + ",uni %s -> %s" %(v, v2)
-	for v in self.conclusion.existentials():
+	for v in sorted(list(self.conclusion.existentials()), Term.compareAnyTerm):
 	    if v not in exout:
 		v2 = self.targetContext.newBlankNode()
 		b2[v] =v2   # Regenerate names to avoid clash

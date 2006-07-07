@@ -4,6 +4,17 @@ A hack to import sets and frozensets, internally if possible
 """
 
 try:
+    my_sorted = sorted
+except NameError:
+    def my_sorted(iterable, cmp=None, key=None, reverse=False):
+       m = list(iterable)
+       m.sort(cmp)
+       return m
+
+sorted = my_sorted
+
+
+try:
     Set = set
 except NameError:
     from sets import Set
@@ -85,3 +96,4 @@ except NameError:
             for elt in ifilterfalse(otherdata.has_key, self):
                 data[elt] = value
             return self.__class__(data)
+

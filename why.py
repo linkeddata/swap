@@ -377,7 +377,6 @@ class Premise(Reason):
     has to tell a Premis what statements it has.
     """
     def __init__(self, str, because=None):
-#        raise RuntimeError
 	Reason.__init__(self)
 	self._string = str
 	self._reason = because
@@ -504,7 +503,10 @@ def subFormulaStandIn(self, ko,f, flags):
         return m
     except KeyError:
         if 'l' in flags:
-            pass
+            standIn = ko.newBlankNode(why= dontAsk)
+        else:
+            self[id(self)] += 1
+            standIn = ko.newSymbol(runNamespace()+'_fm' + str(self[id(self)]))
         self[(ko,f)] = standIn
         ko.add(subj=f, pred=reason.representedBy, obj=standIn, why=dontAsk)
         return standIn
@@ -632,7 +634,7 @@ class BecauseBuiltIn(Reason):
 	    for x in self._subject, self._object:
 		proofs = proofsOf.get(x, None)
 		if proofs != None:
-		    ko.add(me, reason.proof, proof[0].explain(ko, flags=flags), why=dontAsk)
+		    ko.add(me, reason.proof, proofs[0].explain(ko, flags=flags), why=dontAsk)
 
 #	if self._proof != None:
 #	    ko.add(me, reason.proof, self._proof.explain(ko), why=dontAsk)

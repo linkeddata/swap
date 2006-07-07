@@ -439,7 +439,7 @@ class IndexedFormula(Formula):
 	    self.checkClosure(subj, pred, obj)
 
 	try:
-            if self.isWorkingContext and diag.chatty_flag > 40:
+            if self.isWorkingContext and diag.chatty_flag > 20:
                 progress("adding",  (subj, pred, obj))
         except:
             pass

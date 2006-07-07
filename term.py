@@ -174,9 +174,7 @@ class Term(object):
         This non-overloaded function will simply return if I'm equal to him
         """
         return self == symbol
-##
-##    def doNodesAppear(self, symbols):
-##        return Set([a for a in symbols if a == self])
+
 
     def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
 	"""Unify this which may contain variables with the other,
@@ -205,6 +203,9 @@ class Term(object):
 	    progress("Failed Unifying symbol %s with %s vars=%s, so far=%s"%
 				    (self, other, vars, bindings))
 	return []
+
+    def freeVariables(self):
+        return Set()
 	
 class ErrorFlag(TypeError, Term):
     __init__ = TypeError.__init__
@@ -423,6 +424,9 @@ class AnonymousNode(Node):
     def asPair(self):
         return (ANONYMOUS, self.uriref())
 
+    def freeVariables(self):
+        return Set([self])
+
 class AnonymousVariable(AnonymousNode):
     """An anonymous node which is existentially quantified in a given context.
     Also known as a Blank Node, or "bnode" in RDF parlance."""
@@ -456,8 +460,8 @@ class AnonymousUniversal(AnonymousVariable):
             return AnonymousVariable.asPair(self)
         return (SYMBOL, self.uriref())
 
-    def __repr__(self):
-        return unicode(id(self))
+##    def __repr__(self):
+##        return unicode(id(self))
     
     
 ##########################################################################
@@ -554,6 +558,10 @@ class N3Set(ImmutableSet, CompoundTerm): #,
         if max1 is None: return -1
         if max2 is None: return 1
         return max1.compareAnyTerm(max2)
+
+    def freeVariables(self):
+        union = Set.union
+        return reduce(union, [x.freeVariables() for x in self], Set())
     
 class List(CompoundTerm):
     def __init__(self, store, first, rest):  # Do not use directly
@@ -673,12 +681,10 @@ class List(CompoundTerm):
                 print 'I won!'
                 return 1
         return 0
-##            
-##    def doNodesAppear(self, symbols):
-##        val = Set()
-##        for elt in self:
-##            val.update(elt.doNodesAppear(symbols))
-##        return val
+
+    def freeVariables(self):
+        union = Set.union
+        return reduce(union, [x.freeVariables() for x in self], Set())
 
 class NonEmptyList(List):
 

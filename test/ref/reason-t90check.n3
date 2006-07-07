@@ -165,28 +165,28 @@
                 } .
             } .
         {
+            fo:_g22     :ancestor fo:_g23 .
             fo:_g23     :ancestor fo:_g24 .
-            fo:_g24     :ancestor fo:_g22 .
             
-            }     log:implies {fo:_g23     :ancestor fo:_g22 .
+            }     log:implies {fo:_g22     :ancestor fo:_g24 .
             } .
         {
+            fo:_g25     :descendant fo:_g26 .
             fo:_g26     :descendant fo:_g27 .
-            fo:_g27     :descendant fo:_g25 .
             
-            }     log:implies {fo:_g26     :descendant fo:_g25 .
+            }     log:implies {fo:_g25     :descendant fo:_g27 .
             } .
         {
+            fo:_g28     s:subClassOf fo:_g29 .
             fo:_g29     s:subClassOf fo:_g30 .
-            fo:_g30     s:subClassOf fo:_g28 .
             
-            }     log:implies {fo:_g29     s:subClassOf fo:_g28 .
+            }     log:implies {fo:_g28     s:subClassOf fo:_g30 .
             } .
         {
+            fo:_g31     s:subPropertyOf fo:_g32 .
             fo:_g32     s:subPropertyOf fo:_g33 .
-            fo:_g33     s:subPropertyOf fo:_g31 .
             
-            }     log:implies {fo:_g32     s:subPropertyOf fo:_g31 .
+            }     log:implies {fo:_g31     s:subPropertyOf fo:_g33 .
             } .
         {
             v:c1     s:subClassOf v:c2 .
