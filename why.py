@@ -354,7 +354,7 @@ class Because(Reason):
 	"""Describe this reason to an RDF store
 	Returns the value of this reason as interned in the store.
 	"""
-	raise RuntimeError("You have got to be kidding me.")
+	raise RuntimeError("An internal Object slipped out, but we caught it.")
 	me = self.me.get(ko, None)
 	if me != None: return me  #  Only do this once
 	me = self.meIn(ko)

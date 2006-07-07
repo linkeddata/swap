@@ -381,7 +381,7 @@ For future reference, use newUniversal
                                  bindings2, why=subWhy).substitution(
                                     bindings3, why=subWhy),
 		              why=why)
-        return total
+        return bindings3, total
                 
     def substituteEquals(self, bindings, newBindings):
 	"""Return this or a version of me with subsitution made
@@ -686,7 +686,7 @@ For future reference, use newUniversal
         retVal = Set()
         for statement in self:
             for node in statement.spo():
-                retVal.update(node.freeVariables)
+                retVal.update(node.freeVariables())
         retVal.difference_update(self.existentials())
         retVal.difference_update(self.universals())
         if self.canonical:

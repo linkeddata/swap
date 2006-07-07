@@ -831,9 +831,9 @@ class Query(Formula):
                     evidence[loc] = BecauseSupports(*([smarterSubstitution(k, bindings,
                         r.args[1], why=Because("I support it: ")) for k in r.args] +
                         [[k for k in evidence if isinstance(k, (StoredStatement, Reason))]]))
-                if isinstance(r, BecauseBuiltInWill):                    
+                if isinstance(r, BecauseBuiltInWill):
                     evidence[loc] = BecauseBuiltIn(*[smarterSubstitution(k, bindings,
-                        r.args[1], why=Because("I include it: " + k.debugString() + `bindings`)) for k in r.args])
+                        r.args[0], why=Because("I include it: " + k.debugString() + `bindings`)) for k in r.args[1:]])
 	    reason = BecauseOfRule(self.rule, bindings=bindings, knownExistentials = extraBNodes,
 			    evidence=evidence, kb=self.workingContext)
 #	    progress("We have a reason for %s of %s with bindings %s" % (self.rule, reason, bindings))
@@ -891,7 +891,7 @@ class Query(Formula):
         if diag.chatty_flag>19:
             progress("Concluding DEFINITELY" + bindingsToString(b2) )
         before = self.store.size
-        delta = self.targetContext.loadFormulaWithSubstitution(
+        _, delta = self.targetContext.loadFormulaWithSubstitution(
 		    self.conclusion, b2, why=reason)
         if diag.chatty_flag>9 and delta:
             progress(" --- because of: %s => %s, with bindings %s" % (self.template.debugString(),
@@ -1341,7 +1341,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 		    progress("log:Includes: Adding %i new terms and %s as new existentials."%
 			      (len(more_unmatched),
 			       seqToString(more_variables)))
-	    rea = BecauseBuiltInWill(con, oldsubj, pred, obj)
+	    rea = BecauseBuiltInWill(subj, con, oldsubj, pred, obj)
 ##	    nbs = [({oldsubj: subj}, rea)]
 	    nbs = [({}, rea)]
 	else:
@@ -1875,15 +1875,22 @@ def hasFormula(l):
             return True
     return False
 
+from term import AnonymousNode, CompoundTerm
+
 def smarterSubstitution(f, bindings, source, why=None):
     if isinstance(f, Formula):
         f2 = f.newFormula()
-        f2.loadFormulaWithSubstitution(f, bindings, why=Because("I said so #2", why))
+        newBindings, _ = f2.loadFormulaWithSubstitution(f, bindings, why=Because("I said so #2", why))
         if f is not source:
             newExistentials = f2.occurringIn(source.existentials().intersection(Set(bindings.values())))
             for n in newExistentials:
                 f2.declareExistential(n)
-        return f2.close()
-    return f.substitution(bindings, why=Because("I said so #3", why))
+            for k in bindings.values():
+                if k not in newExistentials and isinstance(k, AnonymousNode) and not isinstance(k,CompoundTerm) and f2.occurringIn(Set([k])) and len(f2) < 20:
+                    raise RuntimeError('How did I get here? newBindings=%s, bindings=%s, k=%s, f=%s, source=%s' % (newBindings, bindings, k, f2.debugString(), source.debugString()))
+        rr = f2.close()
+        return rr
+    rr = f.substitution(bindings, why=Because("I said so #3", why))
+    return rr
 
 # ends
