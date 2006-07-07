@@ -46,6 +46,7 @@
           ( :QTY
             :RATE )
              math:quotient :Q2 .
+        qif:amount     m:priceCurrency :NATIVE .
         :EXCH     k:startingDate  [
                  xsdt:date  [
                      time:month :M;
@@ -54,12 +55,11 @@
              m:rate :RATE;
              m:sellCurrency :FOREIGN .
         :P     m:priceCurrency :FOREIGN .
-        :TRX     :P :QTY;
-             k:startingDate  [
+        :TRX     k:startingDate  [
                  xsdt:date  [
                      time:month :M;
-                     time:year :Y ] ] .
-        qif:amount     m:priceCurrency :NATIVE .
+                     time:year :Y ] ];
+             :P :QTY .
         
         }     log:implies {:TRX     qif:amount :Q2 .
         } .

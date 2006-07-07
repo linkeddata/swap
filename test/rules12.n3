@@ -15,8 +15,8 @@
 {  <#p> a daml:TransitiveProperty . } log:implies
 
 {
-    { <#x> <#p> <#y>. <#y> <#p> <#z>. } log:implies { <#x> <#p> <#z>. }.
     @forAll <#x> , <#y> , <#z>.
+    { <#x> <#p> <#y>. <#y> <#p> <#z>. } log:implies { <#x> <#p> <#z>. }.
 } .
 
 

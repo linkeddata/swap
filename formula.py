@@ -199,15 +199,23 @@ class Formula(AnonymousNode, CompoundTerm):
 	return x
 
     
-    def declareUniversal(self, v):
+    def declareUniversal(self, v, key=None):
+        if key is not AnonymousUniversal:
+            raise RuntimeError("""We have now disallowed the calling of declareUniversal.
+For future reference, use newUniversal
+""")
 	if verbosity() > 90: progress("Declare universal:", v)
 	if v not in self._universalVariables:
 	    self._universalVariables.add(v)
+            if self.occurringIn(Set([self.newSymbol(v.uriref())])):
+                raise ValueError
 	
     def declareExistential(self, v):
 	if verbosity() > 90: progress("Declare existential:", v)
 	if v not in self._existentialVariables:  # Takes time
 	    self._existentialVariables.add(v)
+            if self.occurringIn(Set([v])):
+                raise ValueError
 #	else:
 #	    raise RuntimeError("Redeclared %s in %s -- trying to erase that" %(v, self)) 
 	
@@ -225,7 +233,7 @@ class Formula(AnonymousNode, CompoundTerm):
 	
 	See also: universals()"""
 	x = AnonymousUniversal(self, uri)
-	self._universalVariables.add(x)
+##	self._universalVariables.add(x)
 	return x
 
     def newFormula(self, uri=None):
@@ -353,18 +361,26 @@ class Formula(AnonymousNode, CompoundTerm):
 	"""Load information from another formula, subsituting as we go
 	returns number of statements added (roughly)"""
         total = 0
-        subWhy=Because('I said so')
+        subWhy=Because('I said so #1', why)
+        bindings2 = bindings.copy()
+        bindings3 = {}
 	for v in old.universals():
-	    self.declareUniversal(bindings.get(v, v))
+            if v not in bindings:
+                bindings3[v] = self.newUniversal(bindings.get(v, v))
 	for v in old.existentials():
 	    self.declareExistential(bindings.get(v, v))
-	bindings2 = bindings.copy()
 	bindings2[old] = self
         for s in old.statements[:] :   # Copy list!
-	    total += self.add(subj=s[SUBJ].substitution(bindings2, why=subWhy),
-		    pred=s[PRED].substitution(bindings2, why=subWhy),
-		    obj=s[OBJ].substitution(bindings2, why=subWhy),
-		    why=why)
+	    total += self.add(subj=s[SUBJ].substitution(
+                                 bindings2, why=subWhy).substitution(
+                                    bindings3, why=subWhy),
+		              pred=s[PRED].substitution(
+                                 bindings2, why=subWhy).substitution(
+                                    bindings3, why=subWhy),
+		              obj=s[OBJ].substitution(
+                                 bindings2, why=subWhy).substitution(
+                                    bindings3, why=subWhy),
+		              why=why)
         return total
                 
     def substituteEquals(self, bindings, newBindings):
@@ -401,10 +417,10 @@ class Formula(AnonymousNode, CompoundTerm):
         n = {}
         F1 = self.newFormula()
         F1.loadFormulaWithSubstitution(self, m2, why=Because("Vars in subexpressions must be renamed"))
-        for v in F1.existentials().copy():
+        for v in sorted(list(F1.existentials()), Term.compareAnyTerm):
             m[v] = F1.newBlankNode()
-        for v in F1.universals().copy():
-            n[v] = F1.newUniversal()
+        for v in sorted(list(F1.universals()), Term.compareAnyTerm):
+            n[v] = F1.newUniversal(v)
         e = F1.existentials()
         u = F1.universals()
         for var in m:
@@ -797,19 +813,27 @@ class StoredStatement:
 	f.add(s, p, o, why=why)
 	uu = f.occurringIn(c.universals())
 	ee = f.occurringIn(c.existentials())
-	bindings = []
+	bindings = {}
+	
+	f = store.newFormula()   ## do it right this time, with vars
 	for v in uu:
 #	    progress("&&&&& New universal is %s\n\t in %s" % (v.uriref(), f))
-	    f.declareUniversal(v)
+	    bindings[v] = f.newUniversal(v)
 #	    progress("&&&&& Universals are %s\n\t in %s" % (f.universals(), f))
 	for v in ee:
 	    f.declareExistential(v)
+	f.add(s.substitution(bindings, why=why), p.substitution(bindings, why=why), o.substitution(bindings, why=why), why=why)
 	return f.close()  # probably slow - much slower than statement subclass of formula
 
 
 
-
-
+try:
+   sorted
+except NameError:
+   def sorted(iterable, cmp=None, key=None, reverse=False):
+       m = list(iterable)
+       m.sort(cmp)
+       return m
 
 #ends
 

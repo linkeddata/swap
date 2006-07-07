@@ -144,9 +144,13 @@
     test:workingDirectory  <../>;
     test:referenceOutput <../ref/reason-rename-loop.n3>;
     test:description   "Renaming can lead to loops if not careful";
-    test:arguments     """--n3=aeiouB reason/rename-loop.n3 --think --base=foo --why | python ../check.py""".
+    test:arguments     """--n3=eiouB reason/rename-loop.n3 --think --base=foo --why | python ../check.py""".
 
-
+:t11 a test:CwmTest;
+    test:workingDirectory  <../>;
+    test:referenceOutput <../ref/reason-poor-urop.n3>;
+    test:description   "Smushing of equal formulas can lead to proof issues";
+    test:arguments     """--n3=eiouB reason/poor-urop.n3 --think --base=foo --why | python ../check.py""".
 
 
 

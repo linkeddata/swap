@@ -121,6 +121,8 @@ class SinkParser:
 	self.keywords = ['a', 'this', 'bind', 'has', 'is', 'of', 'true', 'false' ]
 	self.keywordsSet = 0    # Then only can others be considerd qnames
         self._anonymousNodes = {} # Dict of anon nodes already declared ln: Term
+        self._variables  = {}
+        self._parentVariables = {}
 	self._reason = why	# Why the parser was asked to parse this
 
 	self._reason2 = None	# Why these triples
@@ -273,7 +275,8 @@ class SinkParser:
 	    if i <0: raise BadSyntax(self._thisDoc, self.lines, str, i,
 			"Bad variable list after @forAll")
 	    for x in res:
-		self._context.declareUniversal(x)
+		#self._context.declareUniversal(x)
+                self._variables[x] =  self._context.newUniversal(x.uriref())
 	    return i
 
 	j = self.tok('forSome', str, i)
@@ -563,7 +566,10 @@ class SinkParser:
                 oldParentContext = self._parentContext
                 self._parentContext = self._context
                 parentAnonymousNodes = self._anonymousNodes
+                grandParentVariables = self._parentVariables
+                self._parentVariables = self._variables
                 self._anonymousNodes = {}
+                self._variables = self._variables.copy()
                 if subj is None: subj = self._store.newFormula()
                 self._context = subj
                 
@@ -581,6 +587,8 @@ class SinkParser:
 				    str, i, "expected statement or '}'")
 
                 self._anonymousNodes = parentAnonymousNodes
+                self._variables = self._parentVariables
+                self._parentVariables = grandParentVariables
                 self._context = self._parentContext
                 self._parentContext = oldParentContext
                 res.append(subj.close())   #  No use until closed
@@ -756,7 +764,11 @@ class SinkParser:
                         return j
 		    raise BadSyntax(self._thisDoc, self.lines, str, i,
 				"Prefix %s not bound" % (pfx))
-            res.append(self._store.newSymbol(ns + ln)) # @@@ "#" CONVENTION
+	    symb = self._store.newSymbol(ns + ln)
+	    if symb in self._variables:
+                res.append(self._variables[symb])
+            else:
+                res.append(symb) # @@@ "#" CONVENTION
             if not string.find(ns, "#"):progress(
 			"Warning: no # on namespace %s," % ns)
 	    return j
@@ -786,7 +798,11 @@ class SinkParser:
 			    "With no base URI, cannot deal with relative URIs"
                     if str[i-1:i]=="#" and not uref[-1:]=="#":
                         uref = uref + "#" # She meant it! Weirdness in urlparse?
-                    res.append(self._store.newSymbol(uref))
+                    symb = self._store.newSymbol(uref)
+                    if symb in self._variables:
+                        res.append(self._variables[symb])
+                    else:
+                        res.append(symb)
                     return i+1
                 i = i + 1
             raise BadSyntax(self._thisDoc, self.lines, str, j,
@@ -840,9 +856,11 @@ class SinkParser:
 	    raise BadSyntax(self._thisDoc, self.lines, str, j,
 		"Can't use ?xxx syntax for variable in outermost level: %s"
 		% str[j-1:i])
-	var = self._store.newUniversal(self._parentContext,
-			    self._baseURI + "#" +str[j:i], why=self._reason2)
-        res.append(var)
+	varURI = self._baseURI + "#" +str[j:i]
+	if varURI not in self._parentVariables:
+            self._parentVariables[varURI] = self._parentContext.newUniversal(varURI
+			    , why=self._reason2) 
+        res.append(self._parentVariables[varURI])
         return i
 
     def bareWord(self, str, i, res):

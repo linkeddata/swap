@@ -14,18 +14,18 @@
                 foo:x,
                 foo:y .
     
-    foo:result     foo:is { @forAll fo:_g13,
-                    fo:_g14,
-                    fo:_g15,
-                    fo:_g16,
-                    fo:_g17,
-                    fo:_g18,
-                    fo:_g19,
-                    fo:_g20,
-                    fo:_g21,
-                    fo:_g22,
+    foo:result     foo:is { @forAll fo:_g22,
                     fo:_g23,
                     fo:_g24,
+                    fo:_g25,
+                    fo:_g26,
+                    fo:_g27,
+                    fo:_g28,
+                    fo:_g29,
+                    fo:_g30,
+                    fo:_g31,
+                    fo:_g32,
+                    fo:_g33,
                     v:c,
                     v:c1,
                     v:c2,
@@ -35,15 +35,15 @@
                     v:x,
                     v:y,
                     v:z.
-             @forSome fo:_g25,
-                    fo:_g26,
-                    fo:_g27 .
-        fo:_g25     a dpo:Class;
+             @forSome fo:_g6,
+                    fo:_g7,
+                    fo:_g8 .
+        fo:_g6     a dpo:Class;
              dpo:complementOf :Person .
-        fo:_g26     a dpo:Restriction;
+        fo:_g7     a dpo:Restriction;
              dpo:onProperty :parent;
              dpo:toClass :Person .
-        fo:_g27     a dpo:Restriction;
+        fo:_g8     a dpo:Restriction;
              dpo:onProperty :height;
              dpo:toValue :tall .
         <http://example.com/swap/test/daml-ex.n3>     a dpo:Ontology;
@@ -59,8 +59,8 @@
              dpo:label "Animal" .
         :Car     a dpo:Class;
              dpo:comment "no car is a person";
-             dpo:subClassOf fo:_g25;
-             s:subClassOf fo:_g25 .
+             dpo:subClassOf fo:_g6;
+             s:subClassOf fo:_g6 .
         :Female     a dpo:Class;
              dpo:disjointFrom :Male;
              dpo:subClassOf :Animal;
@@ -84,7 +84,7 @@
              dpo:disjointUnionOf  (
             :Man
             :Woman );
-             dpo:restrictedBy fo:_g26;
+             dpo:restrictedBy fo:_g7;
              dpo:subClassOf :Animal;
              s:subClassOf :Animal .
         :TallMan     a dpo:Class;
@@ -92,7 +92,7 @@
             :TallThing
             :Man ) .
         :TallThing     a dpo:Class;
-             dpo:restrictedBy fo:_g27 .
+             dpo:restrictedBy fo:_g8 .
         :Woman     a dpo:Class;
              dpo:subClassOf :Female,
                     :Person;
@@ -165,28 +165,28 @@
                 } .
             } .
         {
-            fo:_g13     :ancestor fo:_g14 .
-            fo:_g14     :ancestor fo:_g15 .
+            fo:_g23     :ancestor fo:_g24 .
+            fo:_g24     :ancestor fo:_g22 .
             
-            }     log:implies {fo:_g13     :ancestor fo:_g15 .
+            }     log:implies {fo:_g23     :ancestor fo:_g22 .
             } .
         {
-            fo:_g16     :descendant fo:_g17 .
-            fo:_g17     :descendant fo:_g18 .
+            fo:_g26     :descendant fo:_g27 .
+            fo:_g27     :descendant fo:_g25 .
             
-            }     log:implies {fo:_g16     :descendant fo:_g18 .
+            }     log:implies {fo:_g26     :descendant fo:_g25 .
             } .
         {
-            fo:_g19     s:subClassOf fo:_g20 .
-            fo:_g20     s:subClassOf fo:_g21 .
+            fo:_g29     s:subClassOf fo:_g30 .
+            fo:_g30     s:subClassOf fo:_g28 .
             
-            }     log:implies {fo:_g19     s:subClassOf fo:_g21 .
+            }     log:implies {fo:_g29     s:subClassOf fo:_g28 .
             } .
         {
-            fo:_g22     s:subPropertyOf fo:_g23 .
-            fo:_g23     s:subPropertyOf fo:_g24 .
+            fo:_g32     s:subPropertyOf fo:_g33 .
+            fo:_g33     s:subPropertyOf fo:_g31 .
             
-            }     log:implies {fo:_g22     s:subPropertyOf fo:_g24 .
+            }     log:implies {fo:_g32     s:subPropertyOf fo:_g31 .
             } .
         {
             v:c1     s:subClassOf v:c2 .

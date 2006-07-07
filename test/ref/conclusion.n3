@@ -13,16 +13,7 @@
                 foo:x,
                 foo:y .
     
-    foo:result     foo:is { @forAll v:c,
-                    v:c1,
-                    v:c2,
-                    v:p,
-                    v:p1,
-                    v:p2,
-                    v:x,
-                    v:y,
-                    v:z,
-                    con:_g0,
+    foo:result     foo:is { @forAll con:_g0,
                     con:_g1,
                     con:_g2,
                     con:_g3,
@@ -33,7 +24,16 @@
                     con:_g8,
                     con:_g9,
                     con:_g10,
-                    con:_g11.
+                    con:_g11,
+                    v:c,
+                    v:c1,
+                    v:c2,
+                    v:p,
+                    v:p1,
+                    v:p2,
+                    v:x,
+                    v:y,
+                    v:z.
              @forSome con:_g12 .
         <../daml-ex.n3>     a dpo:Ontology;
              dpo:comment "An example ontology";
@@ -162,6 +162,30 @@
                 } .
             } .
         {
+            con:_g0     :ancestor con:_g1 .
+            con:_g1     :ancestor con:_g2 .
+            
+            }     log:implies {con:_g0     :ancestor con:_g2 .
+            } .
+        {
+            con:_g3     :descendant con:_g4 .
+            con:_g4     :descendant con:_g5 .
+            
+            }     log:implies {con:_g3     :descendant con:_g5 .
+            } .
+        {
+            con:_g6     s:subPropertyOf con:_g7 .
+            con:_g7     s:subPropertyOf con:_g8 .
+            
+            }     log:implies {con:_g6     s:subPropertyOf con:_g8 .
+            } .
+        {
+            con:_g9     s:subClassOf con:_g10 .
+            con:_g10     s:subClassOf con:_g11 .
+            
+            }     log:implies {con:_g9     s:subClassOf con:_g11 .
+            } .
+        {
             v:c1     s:subClassOf v:c2 .
             v:x     a v:c1 .
             
@@ -190,30 +214,6 @@
             v:x     v:p1 v:y .
             
             }     log:implies {v:x     v:p2 v:y .
-            } .
-        {
-            con:_g0     :ancestor con:_g1 .
-            con:_g1     :ancestor con:_g2 .
-            
-            }     log:implies {con:_g0     :ancestor con:_g2 .
-            } .
-        {
-            con:_g3     :descendant con:_g4 .
-            con:_g4     :descendant con:_g5 .
-            
-            }     log:implies {con:_g3     :descendant con:_g5 .
-            } .
-        {
-            con:_g6     s:subPropertyOf con:_g7 .
-            con:_g7     s:subPropertyOf con:_g8 .
-            
-            }     log:implies {con:_g6     s:subPropertyOf con:_g8 .
-            } .
-        {
-            con:_g9     s:subClassOf con:_g10 .
-            con:_g10     s:subClassOf con:_g11 .
-            
-            }     log:implies {con:_g9     s:subClassOf con:_g11 .
             } .
         {
             v:x     a v:y,

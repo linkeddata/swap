@@ -8,6 +8,11 @@
          @forAll :A .
         :A     :b :c .
         
+        }     a :Thing2 .
+    {
+         @forAll :A .
+        :A     :b :c .
+        
         }     a :Thing .
     {
         :X     log:includes {
@@ -16,7 +21,7 @@
         :Z     a :Thing;
              log:conclusion :X .
         
-        }     log:implies {:X     a :Thing .
+        }     log:implies {:X     a :Thing2 .
         } .
     
 

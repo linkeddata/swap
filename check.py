@@ -111,7 +111,7 @@ def n3Entails(f, g, skipIncludes=0, level=0):
         f.resetRenames()
         try:
             if testIncludes(f,g):
-                fyi("Indexed query works looking in %s for %s" %(f,g), level)
+                fyi(lambda : "Indexed query works looking in %s for %s" %(f,g), level)
                 
                 return 1
         finally:
@@ -239,7 +239,7 @@ class Checker(FormulaCache):
         elif t is reason.Premise:
             g = proof.the(r, reason.gives)
             if g is None: raise InvalidProof("No given input for %s" % r)
-            fyi("Premise is: %s" % g.n3String(), level, thresh=25)
+            fyi(lambda : "Premise is: %s" % g.n3String(), level, thresh=25)
             if not policy.assumes(g):
                 raise PolicyViolation("I cannot assume %s" % g)
 
@@ -257,7 +257,7 @@ class Checker(FormulaCache):
                     (t, g.debugString(), f.debugString()))
     ##    setVerbosity(0)
         self._checked[r] = g
-        fyi("\n\nRESULT of %s %s is:\n%s\n\n" %(t,r,g.n3String()), level, thresh=100)
+        fyi(lambda : "\n\nRESULT of %s %s is:\n%s\n\n" %(t,r,g.n3String()), level, thresh=100)
         return g
 
 
@@ -325,9 +325,9 @@ def checkExtraction(r, f, checker, policy, level=0):
         raise InvalidProof("Extraction of %s gave something odd, %s" % (r2, f2), level)
 
     if not n3Entails(f2, f):
-        raise LogicalFallacy("""Extraction %s not included in formula  %s."""
+        raise LogicalFallacy("""Extraction %s=%s not included in formula  %s=%s."""
                     #    """ 
-                %(f, f2), level=level)
+                %(f, f.n3String(), f2, f2.n3String()), level=level)
     checker._checked[r] = f # hmm... why different between Extraction and GMP?
     return f
 
@@ -335,13 +335,13 @@ def checkExtraction(r, f, checker, policy, level=0):
 def checkConjunction(r, f, checker, policy, level):
     proof = checker._pf
     components = proof.each(subj=r, pred=reason.component)
-    fyi("Conjunction:  %i components" % len(components))
+    fyi("Conjunction:  %i components" % len(components), thresh=20)
     g = r.store.newFormula()
     for e in components:
         g1 = checker.result(e, policy, level)
         before = len(g)
         g.loadFormulaWithSubstitution(g1)
-        fyi("Conjunction: adding %i statements, was %i, total %i\nAdded: %s" %
+        fyi(lambda : "Conjunction: adding %i statements, was %i, total %i\nAdded: %s" %
                     (len(g1), before, len(g), g1.n3String()), level, thresh=80) 
     #@@ hmm... don't we check f against g? -DWC
     return g.close()
@@ -393,16 +393,28 @@ def checkGMP(r, f, checker, policy, level=0):
         # @@@ Check that they really are variables in the rule!
         val = getTerm(proof, val_rei)
         bindings[var] = val
-        if val_rei in proof.existentials():
+        if proof.contains(subj=val_rei, pred=proof.store.type, obj=reason.Existential):
+##        if val_rei in proof.existentials():
             existentials.add(val)
 
     rule = proof.the(subj=r, pred=reason.rule)
-    for s in proof.the(rule, reason.gives).statements:  #@@@@@@ why look here?
+
+    proofFormula = checker.result(rule, policy, level)
+    
+    for s in proofFormula.statements:  #@@@@@@ why look here?
         if s[PRED] is log.implies:
             ruleStatement = s
             break
     else: raise InvalidProof("Rule has %s instead of log:implies as predicate.",
         level)
+
+    for v in proofFormula.variables():
+        var = proof.newSymbol(v.uriref())
+        if var in bindings:
+            val = bindings[var]
+            del bindings[var]
+            bindings[v] = val
+            
 
     # Check the evidence is itself proved
     evidenceFormula = proof.newFormula()
@@ -413,18 +425,18 @@ def checkGMP(r, f, checker, policy, level=0):
 
     # Check: Every antecedent statement must be included as evidence
     antecedent = proof.newFormula()
-    antecedent.loadFormulaWithSubstitution(ruleStatement[SUBJ], bindings)
     for k in bindings.values():
         if k in existentials: #k in evidenceFormula.existentials() or 
             antecedent.declareExistential(k)
+    antecedent.loadFormulaWithSubstitution(ruleStatement[SUBJ], bindings)
     antecedent = antecedent.close()
 
     #antecedent = ruleStatement[SUBJ].substitution(bindings)
-    fyi("Bindings: %s\nAntecedent after subst: %s" % (
+    fyi(lambda : "Bindings: %s\nAntecedent after subst: %s" % (
         bindings, antecedent.debugString()),
         level, 195)
     fyi("about to test if n3Entails(%s, %s)" % (evidenceFormula, antecedent), level, 1)
-    fyi("about to test if n3Entails(%s, %s)" % (evidenceFormula.n3String(), antecedent.n3String()), level, 80)
+    fyi(lambda : "about to test if n3Entails(%s, %s)" % (evidenceFormula.n3String(), antecedent.n3String()), level, 80)
     if not n3Entails(evidenceFormula, antecedent,
                     skipIncludes=1, level=level+1):
         raise LogicalFallacy("Can't find %s in evidence for\n"
@@ -437,7 +449,17 @@ def checkGMP(r, f, checker, policy, level=0):
 
     fyi("Rule %s conditions met" % ruleStatement, level=level)
 
-    return ruleStatement[OBJ].substitution(bindings)
+    retVal = proof.newFormula()
+    for k in ruleStatement[OBJ].occurringIn(Set(bindings)):
+        v = bindings[k]
+        if v in existentials: #k in evidenceFormula.existentials() or
+            retVal.declareExistential(v)
+    retVal.loadFormulaWithSubstitution(ruleStatement[OBJ], bindings)
+    retVal = retVal.close()
+
+    return retVal
+
+###    return ruleStatement[OBJ].substitution(bindings)
 
 def getSymbol(proof, x):
     "De-reify a symbol: get the informatuion identifying it from the proof"
@@ -589,7 +611,7 @@ def checkSupports(r, f, checker, policy, level):
     fyi("... ended nested conclusion. success!", level=level)
     if not n3Entails(f2, obj):
         raise LogicalFallacy("""Extraction %s not included in formula  %s."""
-                %(f, f2), level=level)
+                %(obj.debugString(), f2.debugString()), level=level)
     checker._checked[r] = f
     return f
 
@@ -688,6 +710,8 @@ def main(argv):
 
 def fyi(str, level=0, thresh=50):
     if chatty >= thresh:
+        if isinstance(str, (lambda : True).__class__):
+            str = str()
 	progress(" "*(level*4),  str)
     return None
 

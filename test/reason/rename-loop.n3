@@ -6,4 +6,4 @@
 { ?Z a :Thing .
   ?Z log:conclusion ?X .
   ?X log:includes {_:a :b :Y} .
-} => {?X a :Thing} .
+} => {?X a :Thing2} .

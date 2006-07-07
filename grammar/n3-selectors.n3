@@ -1,10 +1,10 @@
 #Processed by Id: cwm.py,v 1.185 2006/05/30 21:08:05 syosi Exp 
-        #    using base file:/home/connolly/w3ccvs/WWW/2000/10/swap/grammar/
+        #    using base file:/home/syosi/CVS-local/WWW/2000/10/swap/grammar/
         
 #  Notation3 generation by
 #       notation3.py,v 1.187 2006/01/13 14:48:54 syosi Exp
 
-#   Base was: file:/home/connolly/w3ccvs/WWW/2000/10/swap/grammar/
+#   Base was: file:/home/syosi/CVS-local/WWW/2000/10/swap/grammar/
      @prefix : <http://www.w3.org/2000/10/swap/grammar/bnf#> .
     @prefix n3: <http://www.w3.org/2000/10/swap/grammar/n3#> .
     @prefix rul: <http://www.w3.org/2000/10/swap/grammar/bnf-rules#> .
@@ -177,6 +177,8 @@
                 "}",
                 n3:statementtail,
                 <#_g5>;
+         :canStartWith "_",
+                "a";
          :matches "[A-Z_a-zÀ-ÖØ-öø-˿Ͱ-ͽͿ-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�\U00010000-\U000EFFFF][\\-0-9A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿-⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�\U00010000-\U000EFFFF]*" .
     
     n3:boolean     :TEST "@false",
@@ -1678,12 +1680,16 @@
              :branchTail  (
             n3:barename
             <#_g5> );
+             :condition "_",
+                    "a";
              :sequence  (
             n3:barename
             <#_g5> ) ];
          :canPrecede ".",
                 "}",
                 n3:statementtail;
+         :canStartWith "_",
+                "a";
          :commaSeparatedListOf n3:barename;
          :mustBeOneSequence  (
         ()

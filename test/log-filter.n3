@@ -10,4 +10,4 @@
 
 { ?f a log:Truth . 
   ?f log:includes {:x :y :z} .
-} => {?x ?y ?z} .
+} => {:x :y :z} .

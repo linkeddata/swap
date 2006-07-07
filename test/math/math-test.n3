@@ -98,13 +98,13 @@
 { :x a :testValue. :y a :testValue.
   (:x [ is math:difference of (:y :x)]) math:sum :y } => {:x :worksWith :y}.
  
-{ ?x a :testValue. ?y a :testValue.
-  ?z is math:sum of (?x (?y ?x)!math:difference).
-  ?z math:notEqualTo :y } => {(?x ?y) :SumDifferenceFAILS ?z}.
+{ :x a :testValue. :y a :testValue.
+  :z is math:sum of (:x (:y :x)!math:difference).
+  :z math:notEqualTo :y } => {(:x :y) :SumDifferenceFAILS :z}.
 
-{ ?x a :testValue. ?y a :testValue.
-  (?x ?y) math:sum ?z.
-  (?x " + " ?y " = " ?z ) string:concatenation ?s
+{ :x a :testValue. :y a :testValue.
+  (:x :y) math:sum :z.
+  (:x " + " :y " = " :z ) string:concatenation ?s
 } => { ?s a :RESULT }.
 
 #ends

@@ -3,5 +3,6 @@
 
 [  a Mother; name "Mary" ].
 
-{ ?x  a Mother } => {  ?x  says { You listenTo ?x }}.
+@forAll :x .
+{ :x  a Mother } => {  :x  says { You listenTo :x }}.
 

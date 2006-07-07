@@ -434,7 +434,7 @@ def buildPattern(workingContext, template):
     unmatched = template.statements[:]
     for v in template.occurringIn(template.universals()):
 	if diag.chatty_flag > 100: progress(
-	    "Tempate %s has universalVariableName %s, formula is %s" % (template, v, template.debugString()))
+	    "Template %s has universalVariableName %s, formula is %s" % (template, v, template.debugString()))
 	unmatched.append(StoredStatement((workingContext,
 		template.store.universalVariableName,
 		workingContext,
@@ -584,7 +584,9 @@ def testIncludes(f, g, _variables=Set(),  bindings={}, interpretBuiltins = 0):
     assert g.canonical is g
     m = diag.chatty_flag
     diag.chatty_flag = 0
+    if m > 60: progress("Before rename: ", f.debugString())
     f = f.renameVars()
+    if m > 60: progress("After rename: ", f.debugString())
     diag.chatty_flag = m
     if diag.chatty_flag >100: progress("Formula we are searching in is\n%s" % f.debugString())
     unmatched = buildPattern(f, g)
@@ -633,7 +635,9 @@ def n3Entails(f, g, vars=Set([]), existentials=Set([]),  bindings={}):
 
     m = diag.chatty_flag
     diag.chatty_flag = 0
+    if m > 60: progress("Before rename: ", f.debugString())
     f = f.renameVars()
+    if m > 60: progress("After rename: ", f.debugString())
     diag.chatty_flag = m
     unmatched = buildStrictPattern(f, g)
     templateExistentials = g.existentials() | g.universals() | existentials
@@ -825,11 +829,11 @@ class Query(Formula):
                 
                 if isinstance(r, BecauseSupportsWill):                    
                     evidence[loc] = BecauseSupports(*([smarterSubstitution(k, bindings,
-                        r.args[1]) for k in r.args] +
+                        r.args[1], why=Because("I support it: ")) for k in r.args] +
                         [[k for k in evidence if isinstance(k, (StoredStatement, Reason))]]))
                 if isinstance(r, BecauseBuiltInWill):                    
                     evidence[loc] = BecauseBuiltIn(*[smarterSubstitution(k, bindings,
-                        r.args[1]) for k in r.args])
+                        r.args[1], why=Because("I include it: " + k.debugString() + `bindings`)) for k in r.args])
 	    reason = BecauseOfRule(self.rule, bindings=bindings, knownExistentials = extraBNodes,
 			    evidence=evidence, kb=self.workingContext)
 #	    progress("We have a reason for %s of %s with bindings %s" % (self.rule, reason, bindings))
@@ -1369,7 +1373,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 		if diag.chatty_flag > 10: progress("Bultin: " + `subj`+ " cached log:conclusion " + `F`)
             else:
                 oldSubj = subj
-#                subj = subj.renameVars()
+                newSubj = subj.renameVars()
 
                 F = subj.newFormula()
                 if diag.tracking:
@@ -1379,9 +1383,16 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
     #		proof.append(reason)
                 else: reason = None
                 if diag.chatty_flag > 10: progress("Bultin: " + `subj`+ " log:conclusion " + `F`)
-                store.copyFormula(subj, F, why=reason) # leave open
+                store.copyFormula(newSubj, F, why=reason) # leave open
                 think(F)
-                F = F.close()
+                F4 = F.close()
+                if F4 is not F:
+                    ### oh no! we've hit something old!
+                    if F is subj:
+                        ### absolute worst --- cannot be allowed!
+                        F.add(F.newBlankNode(), F.newBlankNode(), F.newBlankNode())
+                        F4 = F.close()
+                F = F4
                 assert subj.canonical != None
                 
                 store.storeQuad((store._experience, store.cufi, oldSubj, F),
@@ -1637,7 +1648,8 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
             else:
                 pred = self.quad[PRED]
                 return (isinstance(pred, Function)
-                          or pred is self.store.includes)  # Can use variables
+                          or pred is self.store.includes
+                          or pred is self.store.supports)  # Can use variables
         else:
             if (self.neededToRun[OBJ] == Set()):
                 return isinstance(self.quad[PRED], ReverseFunction)
@@ -1863,15 +1875,15 @@ def hasFormula(l):
             return True
     return False
 
-def smarterSubstitution(f, bindings, source):
+def smarterSubstitution(f, bindings, source, why=None):
     if isinstance(f, Formula):
         f2 = f.newFormula()
-        f2.loadFormulaWithSubstitution(f, bindings, why=Because("I said so"))
+        f2.loadFormulaWithSubstitution(f, bindings, why=Because("I said so #2", why))
         if f is not source:
             newExistentials = f2.occurringIn(source.existentials().intersection(Set(bindings.values())))
             for n in newExistentials:
                 f2.declareExistential(n)
         return f2.close()
-    return f.substitution(bindings, why=Because("I said so"))
+    return f.substitution(bindings, why=Because("I said so #3", why))
 
 # ends

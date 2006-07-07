@@ -569,7 +569,7 @@ class FromSparql(productionHandler):
         else:
             self.formula = formula
         self.prefixes = {}
-        self.vars = Set()
+        self.vars = {}
         self.base = 'http://yosi.us/sparql#'
         self.sparql = store.newSymbol(SPARQL_NS)
         self.xsd = store.newSymbol('http://www.w3.org/2001/XMLSchema')
@@ -659,7 +659,7 @@ class FromSparql(productionHandler):
                 else:
                     semantics = knowledge_base
                 tail.add(semantics, self.store.includes, graph, why=reason2())
-            includedVars = Set(self.vars)
+            includedVars = Set(self.vars.values())
             excludedVars = includedVars.difference(tail.occurringIn(includedVars))
 
             for nodeName, graphIntersection in notIncludedStuff.iteritems():
@@ -690,8 +690,8 @@ class FromSparql(productionHandler):
         sparql = self.sparql
         store = self.store
         f = self.formula
-        for v in self.vars:
-            f.declareUniversal(v)
+##        for v in self.vars:
+##            f.declareUniversal(v)
         q = f.newBlankNode()
         f.add(q, store.type, sparql['SelectQuery'], why=reason2())
         variable_results = store.newFormula()
@@ -727,8 +727,8 @@ class FromSparql(productionHandler):
         sparql = self.sparql
         store = self.store
         f = self.formula
-        for v in self.vars:
-            f.declareUniversal(v)
+##        for v in self.vars:
+##            f.declareUniversal(v)
         q = f.newBlankNode()
         f.add(q, store.type, sparql['ConstructQuery'])
         f.add(q, sparql['construct'], p[2])
@@ -743,8 +743,8 @@ class FromSparql(productionHandler):
         sparql = self.sparql
         store = self.store
         f = self.formula
-        for v in self.vars:
-            f.declareUniversal(v)
+##        for v in self.vars:
+##            f.declareUniversal(v)
         q = f.newBlankNode()
         f.add(q, store.type, sparql['AskQuery'])
         only_result = store.newFormula()
@@ -826,9 +826,11 @@ class FromSparql(productionHandler):
         raise NotImplementedError(`p`)
 
     def on_Var(self, p):
-        var = self.store.newSymbol(self.base + p[1][1][1:])
-        self.vars.add(var)
-        return ('Var', var)
+        uri = self.base + p[1][1][1:]
+        if uri not in self.vars:
+            self.vars[uri] = self.formula.newUniversal(uri)
+##        self.vars.add(var)
+        return ('Var', self.vars[uri])
 
     def on__QVar_E_Plus(self, p):
         if len(p) == 1:
@@ -839,7 +841,10 @@ class FromSparql(productionHandler):
         if len(p) == 3:
             varList = [x[1] for x in p[2] + [p[1]]]
         else:
-            varList = self.vars
+            class ___(object):
+                def __iter__(s):
+                    return iter(self.vars.values())
+            varList = ___()
         return ('SelectVars', varList)
 
     def on__QDatasetClause_E_Star(self, p):

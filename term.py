@@ -379,7 +379,13 @@ class AnonymousNode(Node):
 
     def __init__(self, store, uri=None):
 	global nextId
-	if uri: assert isinstance(uri, tuple(types.StringTypes))
+	try:
+            if uri: assert isinstance(uri, tuple(types.StringTypes))
+        except:
+            print uri
+            print type(uri)
+            print '---------=============------------'
+            raise
         Term.__init__(self, store)
 	self._diagnosticURI = uri
 	nextId += 1
@@ -387,6 +393,17 @@ class AnonymousNode(Node):
 
     def compareTerm(self, other):
 	"Assume is also a Formula - see function compareTerm below"
+	if hasattr(self, 'uri'):
+            selfSerial = self.uri
+        else:
+            selfSerial = self.serial
+        if hasattr(other, 'uri'):
+            otherSerial = other.uri
+        else:
+            otherSerial = other.serial
+        retVal = cmp(selfSerial, otherSerial)
+        if retVal:
+            return retVal
 	return cmp(self.serial, other.serial)
 
     def classOrder(self):
@@ -420,7 +437,27 @@ class AnonymousExistential(AnonymousVariable):
 class AnonymousUniversal(AnonymousVariable):
     """Nodes which are introduced as universally quantified variables with
     no quotable URI"""
-    pass
+
+    def __init__(self, scope, uri=None):
+        if isinstance(uri, Term):
+            if isinstance(uri, AnonymousUniversal):
+                uri = uri.uri
+            elif isinstance(uri, AnonymousNode):
+                uri = None
+            elif isinstance(uri, LabelledNode):
+                uri = uri.uriref()
+        self.scope = scope
+        self.uri = uri
+        AnonymousVariable.__init__(self, scope, uri)
+        scope.declareUniversal(self, key=self.__class__)
+
+    def asPair(self):
+        if not self.uri:
+            return AnonymousVariable.asPair(self)
+        return (SYMBOL, self.uriref())
+
+    def __repr__(self):
+        return unicode(id(self))
     
     
 ##########################################################################

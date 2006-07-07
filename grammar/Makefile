@@ -33,8 +33,8 @@ n3-checked.txt: n3-selectors.n3
 n3-selectors.n3 : n3.n3 bnf-rules.n3
 	time $P $C n3.n3 bnf-rules.n3 --think --purge --data > $@
 
-n3-i18n-selectors.n3 : n3-mine.n3 bnf-rules.n3
-	time $P $C n3-mine.n3 bnf-rules.n3 --think --purge --data > $@
+n3-i18n-selectors.n3 : n3-re.n3 bnf-rules.n3
+	time $P $C n3-re.n3 bnf-rules.n3 --think --purge --data > $@
 
 n3-report.big:  n3.n3 bnf2html.n3
 	time $P $C n3.n3 bnf2html.n3 --chatty=21 --think --data > $@

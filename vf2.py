@@ -334,7 +334,7 @@ def isoCheck(termin1,termin2,termout1,termout2,new1,new2):
 
 
 ###################### everything after this begins to be implementation specific
-def easyMatches(s, n1, n2, newBindings=BindingTree(), boring=True):
+def trueEasyMatches(self, s, n1, n2, newBindings=BindingTree(), boring=True):
 ##    progress('easymatches on %s and %s' % (n1, n2))
     if isinstance(n1, set):
         n1 = frozenset(n1)
@@ -355,13 +355,10 @@ def easyMatches(s, n1, n2, newBindings=BindingTree(), boring=True):
     if isList(n1) and isList(n2):
         n3 = n1.first
         n4 = n2.first
-        if easyMatches(s, n3, n4, newBindings, False):
-            return easyMatches(s, n1.rest, n2.rest, newBindings)
+        if self(s, n3, n4, newBindings, False):
+            return self(s, n1.rest, n2.rest, newBindings)
     if isFormula(n1) and isFormula(n2):
-        matches = match(n1, n2)
-        if not matches:
-            return False
-        newBindings.int_or([x.items() for x in matches])
+        ### This belongs in hard only
         return True
     if isSet(n1) and isSet(n2):
 ###  set matching
@@ -376,7 +373,7 @@ def easyMatches(s, n1, n2, newBindings=BindingTree(), boring=True):
     ## easy cases are easy
         if len(n1) == 1:
             progress('Size 1 --- easy')
-            return easyMatches(s, iter(n1).next(), iter(n2).next(), newBindings, False)
+            return self(s, iter(n1).next(), iter(n2).next(), newBindings, False)
     ## knock out everything we know
         for x1 in n1:
             if x1 in s.map and s.map[x1] not in n2:
@@ -429,6 +426,11 @@ def easyMatches(s, n1, n2, newBindings=BindingTree(), boring=True):
         return True
     return False
 
+### hack to get hardMatches to work
+def easyMatches(*args, **keywords):
+    return trueEasyMatches(easyMatches, *args, **keywords)
+
+
 def orderings(l):
     if not l:
         yield l
@@ -475,7 +477,15 @@ def isFormula(x):
 def isSet(x):
     return isinstance(x, (set, frozenset))
 
-def hardMatches(s, n1, n2, newBindings=BindingTree()):
+def hardMatches(s, n1, n2, newBindings=BindingTree(), boring=True)):
+    if not easyMatches(s, n1, n2, newBindings, boring):
+        return False
+    if isFormula(n1) and isFormula(n2):
+        matches = unifyFormulae(n1, n2)   ###@@@ bindings from higher up need to be taken into account
+        if not matches:
+            return False
+        newBindings.int_or([x.items() for x in matches])
+        return True
     return True
 
 

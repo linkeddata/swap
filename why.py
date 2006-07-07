@@ -10,7 +10,10 @@ The dontAsk constant reason is used as a reason for the explanations themselves-
 Assumes wwe are using the process-global store -- uses Namespace() @@@
 """
 
-giveForumlaArguments = 0 # How detailed do you want your proof?
+flagHelp = """
+n           use iNdirect formulas when they get too large 
+g           always give the :gives clause, even when not needed
+"""
 
 import string
 #import re
@@ -94,13 +97,13 @@ def report(statement, why):
     
     return collector.newStatement(statement, why)
     
-def explainFormula(f):
+def explainFormula(f, flags=""):
     "Return the explanation formula for f"
     tr = proofsOf.get(f, None)
     if tr is None:
 	raise RuntimeError(
 	    "No tracker. This may happen if the formula is validly empty.")
-    return tr[0].explanation()
+    return tr[0].explanation(flags=flags)
 
 
 # Internal utility
@@ -161,7 +164,7 @@ class Reason:
 	self.me[ko] = me
 	return me
 
-    def explain(self, ko):
+    def explain(self, ko, flags):
 	"""Describe this reason to an RDF store
 	Returns the value of this object as interned in the store.
 	"""
@@ -170,7 +173,9 @@ class Reason:
 
 MAX_INLINE_SIZE = 10
 
-def formulaStandIn(self, ko,f):
+def formulaStandIn(self, ko,f, flags):
+    if 'n' not in flags:
+        return f
     if len(f) <= MAX_INLINE_SIZE:
         return f
     try:
@@ -229,7 +234,7 @@ class KBReasonTracker(Reason):
 	    why.statements.add(s)
 
 
-    def explanation(self, ko=None):
+    def explanation(self, ko=None, flags=""):
 	"""Produce a justification for this formula into the output formula
 	
 	Creates an output formula if necessary.
@@ -241,11 +246,11 @@ class KBReasonTracker(Reason):
 	ko.bind("log", "http://www.w3.org/2000/10/swap/log#")
 	ko.bind("pr", "http://www.w3.org/2000/10/swap/reason#")
 	ko.bind("run", runNamespace())
-	me=self.explain(ko)
+	me=self.explain(ko, flags)
 	ko.add(me, rdf.type, reason.Proof, why=dontAsk)
 	return ko
 	
-    def explain(self, ko):
+    def explain(self, ko, flags):
 	me = self.me.get(ko, None)
 	if me != None: return me  #  Only do this once
     	me = self.meIn(ko)
@@ -255,8 +260,7 @@ class KBReasonTracker(Reason):
 	if g.occurringIn(e) != e: raise RuntimeError(g.debugString())
 	
 	qed = ko.newBlankNode(why= dontAsk)
-	standIn = formulaStandIn(ko,self.formula)
-	ko.add(subj=me, pred=rdf.type, obj=reason.Conjunction, why=dontAsk) 
+	standIn = formulaStandIn(ko,self.formula, flags)
         ko.add(subj=me, pred=reason.gives, obj=standIn, why=dontAsk)
         
     
@@ -272,20 +276,26 @@ class KBReasonTracker(Reason):
 	    progress("reasonForStatement", self.reasonForStatement)
 	    progress("statementsForReason", statementsForReason)
 	# @@ Should special case (no conjunction) if only one r
+	if len(statementsForReason) != 1:
+            ko.add(subj=me, pred=rdf.type, obj=reason.Conjunction, why=dontAsk) 
 	
 	for r, ss in statementsForReason.items():
             assert r is not self, ("Loop in reasons!", self, id(self), s)
-	    r1 = r.explain(ko)
+	    r1 = r.explain(ko, flags=flags)
 	    if diag.chatty_flag > 29:
 		progress(
 		"\tExplaining reason %s (->%s) for %i statements" % (r, r1, len(ss)))
 		for s in ss: progress("\t  Statement %s" % (s))
-	    ko.add(me, reason.component, r1, why=dontAsk)
+	    if len(statementsForReason) == 1:  ## No need for conjunction
+                ko.substituteEqualsInPlace({r1: me}, why=dontAsk)
+            else:
+                ko.add(me, reason.component, r1, why=dontAsk)
 	return me
 
 class BecauseMerge(KBReasonTracker):
     """Because this formula is a merging of others"""
     def __init__(self, f, set):
+        raise RuntimeError(f, set)
 	KBReasonTracker.__init__(self, f)
 	self.fodder = Set()
 
@@ -294,17 +304,17 @@ class BecauseMerge(KBReasonTracker):
 	self.fodder.add(why)
 	self.reasonForStatement[s] = why
 	
-    def explain(self, ko):
+    def explain(self, ko, flags):
 	me = self.me.get(ko, None)
 	if me != None: return me  #  Only do this once
     	me = self.meIn(ko)
 	qed = ko.newBlankNode(why= dontAsk)
 	ko.add(subj=me, pred=rdf.type, obj=reason.Conjunction, why=dontAsk) 
-        if giveForumlaArguments:
-            standIn = formulaStandIn(ko,self.formula)
+        if 'g' in flags:
+            standIn = formulaStandIn(ko,self.formula, flags=flags)
 	    ko.add(subj=me, pred=reason.gives, obj=standIn, why=dontAsk)
 	for x in self.fodder:
-	    ko.add(subj=me, pred=reason.mergeOf, obj=proofsOf[x][0]) 
+	    ko.add(subj=me, pred=reason.mergeOf, obj=x.explain(ko, flags), why=dontAsk) 
     	return me
 
 class BecauseSubexpression(Reason):
@@ -312,7 +322,7 @@ class BecauseSubexpression(Reason):
     
      It is is not necessarily believed"""
 
-    def explain(self, ko):
+    def explain(self, ko, flags):
 	"""Describe this reason to an RDF store
 	Returns the value of this reason as interned in the store.
 	"""
@@ -340,16 +350,20 @@ class Because(Reason):
 	self._reason = because
 	return
 
-    def explain(self, ko):
+    def explain(self, ko, flags):
 	"""Describe this reason to an RDF store
 	Returns the value of this reason as interned in the store.
 	"""
+	raise RuntimeError("You have got to be kidding me.")
 	me = self.me.get(ko, None)
 	if me != None: return me  #  Only do this once
 	me = self.meIn(ko)
 	ko.add(subj=me, pred=rdf.type, obj=reason.TextExplanation, why=dontAsk)
 	ko.add(subj=me, pred=reason.text, obj=ko.newLiteral(self._string),
 				why=dontAsk)
+	if self._reason is not None:
+            ko.add(subj=me, pred=reason.because, obj=self._reason.explain(ko, flags=flags),
+							why=dontAsk)
 	return me
 dontAsk = Because("Generating explanation")
 
@@ -370,7 +384,7 @@ class Premise(Reason):
 	self.statements = Set()
 	return
 
-    def explain(self, ko):
+    def explain(self, ko, flags):
 	"""Describe this reason to an RDF store
 	Returns the value of this reason as interned in the store.
 	"""
@@ -386,7 +400,7 @@ class Premise(Reason):
 	    raise RuntimeError("No given data for Premise %s" % self)
 	else:
 	    prem = _subsetFormula(self.statements)
-	    standIn = formulaStandIn(ko,prem)
+	    standIn = formulaStandIn(ko,prem, flags=flags)
 	    ko.add(me, reason.gives, standIn, why=dontAsk)
 	    if diag.chatty_flag >59:
 		progress("Premise (%s) is:\n%s" % 
@@ -409,7 +423,7 @@ class BecauseOfRule(Reason):
 	return
 
 
-    def explain(self, ko):
+    def explain(self, ko, flags):
 	"""Describe this reason to an RDF store
 	Returns the value of this reason as interned in the store.
 	"""
@@ -431,14 +445,14 @@ class BecauseOfRule(Reason):
                        obj=reason.Existential, why=dontAsk)
 	    
 	if diag.chatty_flag>49: progress("rule:")
-	ru = explainStatement(self._rule,ko)
+	ru = explainStatement(self._rule,ko, flags=flags)
 	ko.add(subj=me, pred=reason.rule, obj=ru, why=dontAsk)
 	    
 	if diag.chatty_flag>49: progress("evidence:")
 	ev = []  # For PML compatability we will store it as a collection
 	for s in self._evidence:
 	    if isinstance(s, BecauseBuiltIn):
-		e = s.explain(ko)
+		e = s.explain(ko, flags=flags)
 	    else:
 		f = s.context()
 		if f is self._kb: # Normal case
@@ -476,10 +490,12 @@ def getStatementReason(s):
 
     return tracker.reasonForStatement.get(s, None)
     
-def subFormulaStandIn(self, ko,f):
+def subFormulaStandIn(self, ko,f, flags):
+    if 'n' not in flags:
+        return f
     from formula import Formula
     if isinstance(f, List):
-        return ko.store.newList([subFormulaStandIn(ko,x) for x in f])
+        return ko.store.newList([subFormulaStandIn(ko,x, flags) for x in f])
     if not isinstance(f, Formula) or len(f) <= MAX_INLINE_SIZE:
         return f
     try:
@@ -487,16 +503,17 @@ def subFormulaStandIn(self, ko,f):
         #progress('cache hit, we save $$!')
         return m
     except KeyError:
-        standIn = ko.newBlankNode(why= dontAsk)
+        if 'l' in flags:
+            pass
         self[(ko,f)] = standIn
         ko.add(subj=f, pred=reason.representedBy, obj=standIn, why=dontAsk)
         return standIn
 
 subFormulaStandIn = subFormulaStandIn.__get__({})
+subFormulaStandIn.im_self[id(subFormulaStandIn.im_self)] = 0
 
-
-def explainStatement(s, ko, ss=None):
-    si = describeStatement(s, ko)
+def explainStatement(s, ko, ss=None, flags=""):
+    si = describeStatement(s, ko, flags=flags)
 
 
     statementReason = getStatementReason(s)
@@ -514,22 +531,22 @@ def explainStatement(s, ko, ss=None):
 	    f.debugString()))	
 
     if diag.chatty_flag >49: progress("explaining statement: %s" % (s))
-    ri = statementReason.explain(ko)
+    ri = statementReason.explain(ko, flags=flags)
     ko.add(subj=si, pred=reason.because, obj=ri, why=dontAsk)
     return si
 
-def describeStatement(s, ko):
+def describeStatement(s, ko, flags):
 	"Describe the statement into the output formula ko"
         from formula import StoredStatement
 
         con, pred, subj, obj = s
-        subj = subFormulaStandIn(ko, subj)
-        obj = subFormulaStandIn(ko, obj)
+        subj = subFormulaStandIn(ko, subj, flags)
+        obj = subFormulaStandIn(ko, obj, flags)
         s = StoredStatement([con, pred, subj, obj])
 	
 	si = ko.newBlankNode(why=dontAsk)
 	ko.add(si, rdf.type, reason.Extraction, why=dontAsk)
-	standIn = formulaStandIn(ko, s.asFormula(why=dontAsk))
+	standIn = formulaStandIn(ko, s.asFormula(why=dontAsk), flags=flags)
 	ko.add(si, reason.gives, standIn, why=dontAsk)
 	return si
 
@@ -551,7 +568,7 @@ class BecauseOfData(Because):
 	    raise RuntimeError("Why are we doing this?")
 	return
 
-    def explain(self, ko):
+    def explain(self, ko, flags):
 	"""Describe this reason to an RDF store
 	Returns the value of this reason as interned in the store.
 	"""
@@ -561,7 +578,7 @@ class BecauseOfData(Because):
 	if diag.chatty_flag>49: progress("Parsing reason=%s ko=%s"%(self,me))
 	ko.add(subj=me, pred=rdf.type, obj=reason.Parsing, why=dontAsk)
 	ko.add(subj=me, pred=reason.source, obj=self._source, why=dontAsk)
-	ko.add(subj=me, pred=reason.because, obj=self._reason.explain(ko),
+	ko.add(subj=me, pred=reason.because, obj=self._reason.explain(ko, flags=flags),
 							why=dontAsk)
 	return me
 
@@ -570,7 +587,7 @@ class BecauseOfCommandLine(Because):
     """Because of the command line given in the string"""
 
 
-    def explain(self, ko):
+    def explain(self, ko, flags):
 	"""Describe this reason to an RDF store
 	Returns the value of this reason as interned in the store.
 	"""
@@ -596,24 +613,26 @@ class BecauseBuiltIn(Reason):
 	self._object = obj
 	self._context = context
 	
-    def explain(self, ko):
+    def explain(self, ko, flags):
 	"This is just a plain fact - or was at the time."
 	me = self.me.get(ko, None)
 	if me != None: return me  #  Only do this once
 	me = self.meIn(ko)
 	if diag.chatty_flag>49: progress("Fact reason=%s ko=%s"%(self,me))
 	fact = ko.newFormula()
-	fact.add(subj=subFormulaStandIn(ko, self._subject), pred=self._predicate, obj=subFormulaStandIn(ko, self._object),
+	fact.add(subj=subFormulaStandIn(ko, self._subject, flags=flags),
+                 pred=self._predicate,
+                 obj=subFormulaStandIn(ko, self._object, flags=flags),
 							why=dontAsk)
 	fact = fact.close()
 	ko.add(me, rdf.type, reason.Fact, why=dontAsk)
-	standIn = formulaStandIn(ko,fact)
+	standIn = formulaStandIn(ko,fact, flags=flags)
 	ko.add(me, reason.gives, standIn, why=dontAsk)
-	if giveForumlaArguments:
+	if 'g' in flags:
 	    for x in self._subject, self._object:
 		proofs = proofsOf.get(x, None)
 		if proofs != None:
-		    ko.add(me, reason.proof, proof[0].explain(ko), why=dontAsk)
+		    ko.add(me, reason.proof, proof[0].explain(ko, flags=flags), why=dontAsk)
 
 #	if self._proof != None:
 #	    ko.add(me, reason.proof, self._proof.explain(ko), why=dontAsk)
@@ -638,7 +657,7 @@ class BecauseSupports(BecauseBuiltIn):
                     self.reason.append(statement)
         self.conclusion = conclusion
 
-    def explain(self, ko):
+    def explain(self, ko, flags):
         "This is just a plain fact - or was at the time."
         me = self.me.get(ko, None)
         if me != None: return me  #  Only do this once
@@ -651,7 +670,7 @@ class BecauseSupports(BecauseBuiltIn):
                                                         why=dontAsk)
         fact = fact.close()
         ko.add(me, rdf.type, reason.Conclusion, why=dontAsk)
-	standIn = formulaStandIn(ko,self.formula)
+	standIn = formulaStandIn(ko,fact, flags=flags)
         ko.add(me, reason.gives, standIn, why=dontAsk)
         ko.add(subj=m, pred=rdf.type, obj=reason.Conjunction, why=dontAsk) 
         ko.add(me, reason.because, m, why=dontAsk)
@@ -662,13 +681,13 @@ class BecauseSupports(BecauseBuiltIn):
 	    if x is None: statementsForReason[rea] = [s]
 	    else: x.append(s)
         for e in statementsForReason:
-            r1 = e.explain(ko)
+            r1 = e.explain(ko, flags=flags)
             ko.add(m, reason.component, r1, why=dontAsk)
-        if giveForumlaArguments:
+        if 'g' in flags:
             for x in self._subject, self._object:
                 proofs = proofsOf.get(x, None)
                 if proofs != None:
-                    ko.add(me, reason.proof, proof[0].explain(ko), why=dontAsk)
+                    ko.add(me, reason.proof, proof[0].explain(ko, flags=flags), why=dontAsk)
 
 #	if self._proof != None:
 #	    ko.add(me, reason.proof, self._proof.explain(ko), why=dontAsk)

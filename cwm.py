@@ -104,6 +104,7 @@ steps, in order left to right:
 --think       as -rules but continue until no more rule matches (or forever!)
 --engine=otter use otter (in your $PATH) instead of llyn for linking, etc
 --why         Replace the store with an explanation of its contents
+--why=u       proof tries to be shorter
 --mode=flags  Set modus operandi for inference (see below)
 --reify       Replace the statements in the store with statements describing them.
 --dereify     Undo the effects of --reify
@@ -150,7 +151,8 @@ the closure under the operation of looking up:
  i   any owl:imports documents
  r   any doc:rules documents
  E   errors are ignored --- This is independant of --mode=E
- 
+
+ n   Normalize IRIs to URIs
  e   Smush together any nodes which are = (owl:sameAs)
 
 See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
@@ -179,6 +181,7 @@ rdf/xml files. Note that this requires rdflib.
         option_outputStyle = "-best"
         _gotInput = 0     #  Do we not need to take input from stdin?
         option_meta = 0
+        option_normalize_iri = 0
         
 	option_flags = { "rdf":"l", "n3":"", "think":"", "sparql":""}
 	    # RDF/XML serializer can't do list ("collection") syntax.
@@ -186,6 +189,7 @@ rdf/xml files. Note that this requires rdflib.
         option_quiet = 0
         option_with = None  # Command line arguments made available to N3 processing
         option_engine = "llyn"
+        option_why = ""
         
         _step = 0           # Step number used for metadata
         _genid = 0
@@ -241,7 +245,8 @@ rdf/xml files. Note that this requires rdflib.
             elif _lhs == "-mode":
                 option_flags["think"] = _rhs
             elif _lhs == "-closure":
-		pass
+		if "n" in _rhs:
+                    option_normalize_iri = 1
 	    #elif _lhs == "-solve":
             #    sys.argv[argnum+1:argnum+1] = ['-think', '-filter=' + _rhs]
             elif _lhs == "-language":
@@ -253,9 +258,14 @@ rdf/xml files. Note that this requires rdflib.
             elif arg == "-quiet": option_quiet = 1
             elif arg == "-pipe": option_pipe = 1
             elif arg == "-crypto": option_crypto = 1
-            elif arg == "-why":
+            elif _lhs == "-why":
 		diag.tracking=1
 		diag.setTracking(1)
+		option_why = _rhs
+	    elif arg == "-why":
+		diag.tracking=1
+		diag.setTracking(1)
+		option_why = ""
             elif arg == "-track":
 		diag.tracking=1
 		diag.setTracking(1)
@@ -299,6 +309,9 @@ rdf/xml files. Note that this requires rdflib.
 
         # Between passes, prepare for processing
         setVerbosity(0)
+
+        if not option_normalize_iri:
+            llyn.canonical = lambda x: x
 
         #  Base defauts
         if option_baseURI == _baseURI:  # Base not specified explicitly - special case
@@ -538,10 +551,10 @@ rdf/xml files. Note that this requires rdflib.
 #		workingContext.close()
                 workingContext = _newContext
 
-            elif arg == "-why":
+            elif _lhs == "-why" or arg == "-why":
                 workingContext.stayOpen = False
 		workingContext = workingContext.close()
-		workingContext = explainFormula(workingContext)
+		workingContext = explainFormula(workingContext, option_why)
 
             elif arg == "-dump":
                 

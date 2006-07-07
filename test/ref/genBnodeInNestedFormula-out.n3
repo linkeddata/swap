@@ -1,7 +1,6 @@
      @prefix : <#> .
     
-         @forAll :x,
-                :_g0.
+     @forAll :x.
          @forSome :_g0 .
     
     :_g0     a :Mother;
@@ -11,8 +10,7 @@
     {
         :x     a :Mother .
         
-        }     <http://www.w3.org/2000/10/swap/log#implies> {     @forAll :x .
-        :x     :says {:You     :listenTo :x .
+        }     <http://www.w3.org/2000/10/swap/log#implies> {:x     :says {:You     :listenTo :x .
             } .
         } .
     

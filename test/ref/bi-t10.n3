@@ -1,8 +1,8 @@
      @prefix : <foo.n3#> .
-     @prefix local: <#> .
-     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    @prefix local: <#> .
+    @prefix log: <http://www.w3.org/2000/10/swap/log#> .
     
-    @forAll :F,
+     @forAll :F,
                 :G,
                 :d,
                 :x,
@@ -19,23 +19,23 @@
         }     log:implies {:test10b     a :success .
         } .
     {
+        <t10a.n3>     log:semantics :F .
         :F     log:includes {:theSky     :is :blue .
             } .
-        <t10a.n3>     log:semantics :F .
         
         }     log:implies {:test10a     a :success .
         } .
     {
+        <t10a.n3>     log:semantics :F .
         :F     log:includes {:theSky     :is :green .
             } .
-        <t10a.n3>     log:semantics :F .
         
         }     log:implies {:test10-bis     a :FAILURE .
         } .
     {
+        <t10a.n3>     log:semantics :F .
         :F     log:includes {:theSky     :is :x .
             } .
-        <t10a.n3>     log:semantics :F .
         
         }     log:implies {:fred     local:favoriteColor :x .
         } .

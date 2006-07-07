@@ -63,7 +63,7 @@ import md5, binascii  # for building md5 URIs
 import uripath
 from uripath import canonical
 
-from why import smushedFormula
+from why import smushedFormula, Premise
 
 import notation3    # N3 parsers and generators, and RDF generator
 from webAccess import urlopenForRDF   # http://www.w3.org/2000/10/swap/
@@ -213,9 +213,9 @@ class IndexedFormula(Formula):
 	hits = self._index.get((pred, subj, obj), [])
 	if not hits: return None
 	s = hits[0]
-	if pred == None: return s[PRED]
-	if subj == None: return s[SUBJ]
-	if obj == None: return s[OBJ]
+	if pred is None: return s[PRED]
+	if subj is None: return s[SUBJ]
+	if obj is None: return s[OBJ]
 	raise ParameterError("You must give one wildcard")
 
 
@@ -233,9 +233,9 @@ class IndexedFormula(Formula):
 	assert len(hits) == 1, """There should only be one match for (%s %s %s).
 	    Found: %s""" %(subj, pred, obj, self.each(subj, pred, obj))
 	s = hits[0]
-	if pred == None: return s[PRED]
-	if subj == None: return s[SUBJ]
-	if obj == None: return s[OBJ]
+	if pred is None: return s[PRED]
+	if subj is None: return s[SUBJ]
+	if obj is None: return s[OBJ]
 	raise parameterError("You must give one wildcard using the()")
 
     def each(self, subj=None, pred=None, obj=None):
@@ -249,9 +249,9 @@ class IndexedFormula(Formula):
 	"""
 	hits = self._index.get((pred, subj, obj), [])
 	if hits == []: return []
-	if pred == None: wc = PRED
-	elif subj == None: wc = SUBJ
-	elif obj == None: wc = OBJ
+	if pred is None: wc = PRED
+	elif subj is None: wc = SUBJ
+	elif obj is None: wc = OBJ
 	else: raise ParameterError("You must give one wildcard None for each()")
 	res = []
 	for s in hits:
@@ -369,7 +369,9 @@ class IndexedFormula(Formula):
 	if "T" in self._closureMode:
 	    if pred is store.type and obj is store.Truth:
 		assert isinstance(subj, Formula), "What are we doing concluding %s is true?" % subj
-		self.loadFormulaWithSubstitution(subj)
+                subj.resetRenames(True)
+		self.loadFormulaWithSubstitution(subj.renameVars())
+		subj.resetRenames(False)
 
 #########
 	if newBindings != {}:
@@ -380,7 +382,7 @@ class IndexedFormula(Formula):
         s = StoredStatement((self, pred, subj, obj))
 	
 	if diag.tracking:
-	    if (why == None): raise RuntimeError(
+	    if (why is None): raise RuntimeError(
 		"Tracking reasons but no reason given for"+`s`)
 	    report(s, why)
 
@@ -456,7 +458,7 @@ class IndexedFormula(Formula):
 	This is really a low-level method, used within add() and for cleaning up the store
 	to save space in purge() etc.
 	"""
-	assert self.canonical == None, "Cannot remove statement from canonnical"+`self`
+	assert self.canonical is None, "Cannot remove statement from canonnical"+`self`
         self.store.size = self.store.size-1
 	if diag.chatty_flag > 97:  progress("removing %s" % (s))
 	context, pred, subj, obj = s.quad
@@ -498,7 +500,7 @@ class IndexedFormula(Formula):
         l = len(fl), len(F.universals()), len(F.existentials()) 
         possibles = store._formulaeOfLength.get(l, None)  # Any of same length
 
-        if possibles == None:
+        if possibles is None:
             store._formulaeOfLength[l] = [F]
             if diag.chatty_flag > 70:
                 progress("End formula - first of length", l, F)
@@ -628,9 +630,9 @@ class IndexedFormula(Formula):
         such that the order of the keys is the order in which you want the corresponding
         strings output.
         """
-        if channel == None:
+        if channel is None:
             channel = sys.stdout
-        if relation == None:
+        if relation is None:
             relation = self.store.intern((SYMBOL, Logic_NS + "outputString"))
         list = self.statementsMatching(pred=relation)  # List of things of (subj, obj) pairs
         pairs = []
@@ -1021,7 +1023,8 @@ class BI_conclusion(HeavyBuiltIn, Function):
 
             F = self.store.newFormula()
 	    if diag.tracking:
-		reason = BecauseMerge(F, subj)
+                reason = Premise("Assumption of builtin", (subj, self))
+#		reason = BecauseMerge(F, subj)
 #		F.collector = reason
 #		proof.append(reason)
 	    else: reason = None
@@ -1140,7 +1143,8 @@ class BI_conjunction(LightBuiltIn, Function):      # Light? well, I suppose so.
 						% (x, x.size()))
         F = self.store.newFormula()
 	if diag.tracking:
-	    reason = BecauseMerge(F, subj_py)
+            reason = Because("I said so #4")
+	    #reason = BecauseMerge(F, subj_py)
 	else: reason = None
         for x in subj_py:
             if not isinstance(x, Formula): return None # Can't
@@ -1426,7 +1430,7 @@ class RDFStore(RDFSink) :
 	Raises IOError, SyntaxError
 	"""
 	assert type(uris) is type([])
-	if openFormula == None: F = self.newFormula()
+	if openFormula is None: F = self.newFormula()
 	else:  F = openFormula
 	f = F.uriref()
 	for u in uris:
@@ -1447,10 +1451,10 @@ class RDFStore(RDFSink) :
 		return uriRefString # ?!
 	    resid = uriRefString[:hash]
 	    r = self.resources.get(resid, None)
-	    if r == None: return uriRefString
+	    if r is None: return uriRefString
 	    fragid = uriRefString[hash+1:]
 	    f = r.fragments.get(fragid, None)
-	    if f == None: return uriRefString
+	    if f is None: return uriRefString
 	    if diag.chatty_flag > 70:
 		progress("llyn.genid Rejecting Id already used: "+uriRefString)
 		
@@ -1463,12 +1467,12 @@ class RDFStore(RDFSink) :
 	hash = string.rfind(urirefString, "#")
 	if hash < 0 :     # This is a resource with no fragment
 	    result = self.resources.get(urirefString, None)
-	    if result == None: return
+	    if result is None: return
 	else:
 	    r = self.resources.get(urirefString[:hash], None)
-	    if r == None: return
+	    if r is None: return
             f = r.fragments.get(urirefString[hash+1:], None)
-            if f == None: return
+            if f is None: return
 	raise ValueError("Ooops! Attempt to create new identifier hits on one already used: %s"%(urirefString))
 	return
 
@@ -1582,7 +1586,7 @@ class RDFStore(RDFSink) :
 
 
     def reopen(self, F):
-        if F.canonical == None:
+        if F.canonical is None:
             if diag.chatty_flag > 50:
                 progress("reopen formula -- @@ already open: "+`F`)
             return F # was open
@@ -1623,7 +1627,7 @@ class RDFStore(RDFSink) :
         list = q[CONTEXT].statementsMatching(q[PRED], q[SUBJ], q[OBJ])
         if list == []: return None
         for p in ALL4:
-            if q[p] == None:
+            if q[p] is None:
                 return list[0].quad[p]
 
 
@@ -1685,18 +1689,20 @@ class RDFStore(RDFSink) :
 # Must be done by caller.
 
     def copyFormula(self, old, new, why=None):
-	bindings = {old: new}
-	for v in old.universals():
-	    new.declareUniversal(bindings.get(v,v))
-	for v in old.existentials():
-	    new.declareExistential(bindings.get(v,v))
-        for s in old.statements[:] :   # Copy list!
-            q = s.quad
-            for p in CONTEXT, PRED, SUBJ, OBJ:
-                x = q[p]
-                if x is old:
-                    q = q[:p] + (new,) + q[p+1:]
-            self.storeQuad(q, why)
+        new.loadFormulaWithSubstitution(old, why=why)
+        return
+##	bindings = {old: new}
+##	for v in old.universals():
+##	    new.declareUniversal(bindings.get(v,v))
+##	for v in old.existentials():
+##	    new.declareExistential(bindings.get(v,v))
+##        for s in old.statements[:] :   # Copy list!
+##            q = s.quad
+##            for p in CONTEXT, PRED, SUBJ, OBJ:
+##                x = q[p]
+##                if x is old:
+##                    q = q[:p] + (new,) + q[p+1:]
+##            self.storeQuad(q, why)
                 
 
     def purge(self, context, boringClass=None):
@@ -1705,7 +1711,7 @@ class RDFStore(RDFSink) :
     Statements in the given context that a term is a Chaff cause
     any mentions of that term to be removed from the context.
     """
-        if boringClass == None:
+        if boringClass is None:
             boringClass = self.Chaff
         for subj in context.subjects(pred=self.type, obj=boringClass):
 	    self.purgeSymbol(context, subj)

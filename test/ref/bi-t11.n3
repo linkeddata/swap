@@ -1,9 +1,9 @@
      @prefix : <foo.n3#> .
-     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
-     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-     @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+    @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+    @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
     
-    @forAll :F,
+     @forAll :F,
                 :G,
                 :H,
                 :S,
@@ -70,18 +70,18 @@
         }     log:implies {:includesTest4     a :FAILURE .
         } .
     {
+        <t10a.n3>     log:semantics :F .
+        :F     log:includes {:s     :p :o .
+            } .
+        
+        }     log:implies {:p     a :UsedProperty .
+        } .
+    {
         :F     log:includes {:p     a rdf:Property .
             } .
         :p     :schemaFormula :F .
         
         }     log:implies {:p     a :Property_declared .
-        } .
-    {
-        :F     log:includes {:s     :p :o .
-            } .
-        <t10a.n3>     log:semantics :F .
-        
-        }     log:implies {:p     a :UsedProperty .
         } .
     {
         :F     log:notIncludes {:p     a rdf:Property .

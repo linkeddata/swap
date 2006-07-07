@@ -17,7 +17,7 @@ import string
 import diag
 from diag import progress, verbosity, tracking
 from term import   Literal, Symbol, Fragment, AnonymousNode, \
-    AnonymousVariable, FragmentNil, \
+    AnonymousVariable, FragmentNil, AnonymousUniversal, \
     Term, CompoundTerm, List, EmptyList, NonEmptyList, N3Set
 from formula import Formula, StoredStatement
 
@@ -54,7 +54,10 @@ def auPair(x):
 	if x.lang:
 	    return LITERAL_LANG, (x.string, x.lang)
 	return (LITERAL, x.string)
-    
+
+    if isinstance(x, AnonymousUniversal):
+        if x.uri:
+            return (SYMBOL, x.uriref())
     if isinstance(x, AnonymousNode):
 	return (ANONYMOUS, x.uriref())
     else:

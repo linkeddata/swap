@@ -1,12 +1,12 @@
      @prefix : <sameThing.n3#> .
-     @prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#> .
-     @prefix dc: <http://purl.org/dc/elements/1.1/> .
-     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
-     @prefix ont: <http://www.daml.org/2001/03/daml+oil#> .
-     @prefix rcs: <http://www.w3.org/2001/03swell/rcs#> .
-     @prefix sam: <sameDan.n3#> .
+    @prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#> .
+    @prefix dc: <http://purl.org/dc/elements/1.1/> .
+    @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    @prefix ont: <http://www.daml.org/2001/03/daml+oil#> .
+    @prefix rcs: <http://www.w3.org/2001/03swell/rcs#> .
+    @prefix sam: <sameDan.n3#> .
     
-         @forAll sam:x,
+     @forAll sam:x,
                 :p,
                 :q,
                 :x,
@@ -98,8 +98,8 @@ the same thing.""";
     {
         :p     log:notEqualTo log:forAll,
                     log:forSome .
-        :x     :p :y;
-             = :z .
+        :x     = :z;
+             :p :y .
         
         }     log:implies {:z     :p :y .
         } .

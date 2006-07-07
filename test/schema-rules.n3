@@ -28,6 +28,8 @@
 @forAll <#p>, <#p1>, <#p2>,	# Properties
 	 <#c>, <#c1>, <#c2>.   # Classes
 
+@forAll <#x>, <#y>, <#z> .
+
 # The following is a su bset of the properties of =, which should not need stating.
 # But cwm currently doesn't know a lot about = inherently. @@
 
@@ -94,7 +96,6 @@ rdfs:subClassOf 		a daml:TransitiveProperty .
 
 # The first NOT we come across is disjointWith:
 
-@forAll <#x>, <#y>, <#z> .
 { 	<#x> a <#y> .
 	<#x> a <#z> .
 	<#y> daml:disjointFrom <#z> } log:implies { <#x> a v:schemaInconsistency } .

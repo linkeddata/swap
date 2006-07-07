@@ -1,5 +1,5 @@
      @prefix : <#> .
-     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    @prefix log: <http://www.w3.org/2000/10/swap/log#> .
     
     log:implies     a log:Chaff .
     {
@@ -251,21 +251,21 @@
             this     log:forAll :fee .
             :fee     :bar :baz .
             
-            }     log:includes {:foo     :bar :baz .
+            }     log:includes {this     log:forSome :foo .
+            :foo     :bar :baz .
             } .
         
-        }     log:implies {:testc1d     a :success .
+        }     log:implies {:testc2d     a :success .
         } .
     {
         {
             this     log:forAll :fee .
             :fee     :bar :baz .
             
-            }     log:includes {this     log:forSome :foo .
-            :foo     :bar :baz .
+            }     log:includes {:foo     :bar :baz .
             } .
         
-        }     log:implies {:testc2d     a :success .
+        }     log:implies {:testc1d     a :success .
         } .
     {
         {
@@ -283,21 +283,21 @@
             this     log:forAll :fee .
             :fee     :bar :baz .
             
-            }     log:notIncludes {:foo     :bar :baz .
+            }     log:notIncludes {this     log:forSome :foo .
+            :foo     :bar :baz .
             } .
         
-        }     log:implies {:testc1nd     a :FAILURE .
+        }     log:implies {:testc2nd     a :FAILURE .
         } .
     {
         {
             this     log:forAll :fee .
             :fee     :bar :baz .
             
-            }     log:notIncludes {this     log:forSome :foo .
-            :foo     :bar :baz .
+            }     log:notIncludes {:foo     :bar :baz .
             } .
         
-        }     log:implies {:testc2nd     a :FAILURE .
+        }     log:implies {:testc1nd     a :FAILURE .
         } .
     {
         {
@@ -315,21 +315,21 @@
             this     log:forAll :foo .
             :foo     :bar :baz .
             
-            }     log:includes {:foo     :bar :baz .
+            }     log:includes {this     log:forSome :foo .
+            :foo     :bar :baz .
             } .
         
-        }     log:implies {:testc1     a :success .
+        }     log:implies {:testc2     a :success .
         } .
     {
         {
             this     log:forAll :foo .
             :foo     :bar :baz .
             
-            }     log:includes {this     log:forSome :foo .
-            :foo     :bar :baz .
+            }     log:includes {:foo     :bar :baz .
             } .
         
-        }     log:implies {:testc2     a :success .
+        }     log:implies {:testc1     a :success .
         } .
     {
         {
@@ -347,21 +347,21 @@
             this     log:forAll :foo .
             :foo     :bar :baz .
             
-            }     log:notIncludes {:foo     :bar :baz .
+            }     log:notIncludes {this     log:forSome :foo .
+            :foo     :bar :baz .
             } .
         
-        }     log:implies {:testc1n     a :FAILURE .
+        }     log:implies {:testc2n     a :FAILURE .
         } .
     {
         {
             this     log:forAll :foo .
             :foo     :bar :baz .
             
-            }     log:notIncludes {this     log:forSome :foo .
-            :foo     :bar :baz .
+            }     log:notIncludes {:foo     :bar :baz .
             } .
         
-        }     log:implies {:testc2n     a :FAILURE .
+        }     log:implies {:testc1n     a :FAILURE .
         } .
     {
         {
