@@ -83,7 +83,12 @@ def join(here, there):
         raise ValueError, here
     ValueError: Base <mid:foo@example> has no slash after colon - with relative '../foo'.
 
-
+    >>> join('http://example/x/y/z', '')
+    'http://example/x/y/z'
+    
+    >>> join('mid:foo@example', '#foo')
+    'mid:foo@example#foo'
+    
     We grok IRIs
 
     >>> len(u'Andr\\xe9')
@@ -105,6 +110,9 @@ def join(here, there):
     bcolonl = find(here, ':')
     assert(bcolonl >= 0), "Base uri '%s' is not absolute" % here # else it's not absolute
 
+    path, frag = splitFragP(there)
+    if not path: return here + frag
+    
     # join('mid:foo@example', '../foo') bzzt
     if here[bcolonl+1:bcolonl+2] <> '/':
         raise ValueError ("Base <%s> has no slash after colon - with relative '%s'." %(here, there))
@@ -129,9 +137,6 @@ def join(here, there):
 
     slashr = rfind(here, '/')
 
-    path, frag = splitFragP(there)
-    if not path: return here + frag
-    
     while 1:
         if path[:2] == './':
             path = path[2:]
@@ -451,7 +456,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.17  2006-06-17 19:27:27  timbl
+# Revision 1.18  2006-07-07 22:06:50  connolly
+# fix bug with joining mid:abc with #foo
+#
+# Revision 1.17  2006/06/17 19:27:27  timbl
 # Add canonical() with unit tests
 #
 # Revision 1.16  2004/03/21 04:24:35  timbl
