@@ -250,7 +250,7 @@ class Checker(FormulaCache):
     ##    setVerbosity(1000)
         fyi("About to check if proved %s matches given %s" % (g, f), level=level, thresh=100)
         if f is not None and f.unify(g) == []:
-            setVerbosity(1000)
+            diag.chatty_flag=1000
             f.unify(g)
             setVerbosity(0)
             raise LogicalFallacy("%s: Calculated formula: %s\ndoes not match given: %s" %
