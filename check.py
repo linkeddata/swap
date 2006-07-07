@@ -267,7 +267,7 @@ class Checker(FormulaCache):
         if res == None: raise InvalidProof("No source given to parse", level=level)
         u = res.uriref()
         if not policy.documentOK(u):
-            raise PolicyViolation("I cannot trust that source")
+            raise PolicyViolation("I cannot trust that source: %s" % u)
         v = verbosity()
         setVerbosity(debugLevelForParsing)
         try:
@@ -737,12 +737,19 @@ def _s2f(s, base):
     # """ emacs python mode needs help
 
     import notation3
-    p = notation3.SinkParser(formula().store, baseURI=base)
+    graph = formula()
+    graph.setClosureMode("e")    # Implement sameAs by smushing
+    p = notation3.SinkParser(graph.store, openFormula=graph, baseURI=base)
     p.startDoc()
     p.feed(s)
     f = p.endDoc()
     f.close()
-    return f
+    bindings = {}
+    for s in f.statementsMatching(pred=reason.representedBy):
+        val, _, key = s.spo()
+        bindings[key] = val
+    return f.substitution(bindings)
+
 
 ########
 
