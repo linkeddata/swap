@@ -1885,9 +1885,9 @@ def smarterSubstitution(f, bindings, source, why=None):
             newExistentials = f2.occurringIn(source.existentials().intersection(Set(bindings.values())))
             for n in newExistentials:
                 f2.declareExistential(n)
-            for k in bindings.values():
-                if k not in newExistentials and isinstance(k, AnonymousNode) and not isinstance(k,CompoundTerm) and f2.occurringIn(Set([k])) and len(f2) < 20:
-                    raise RuntimeError('How did I get here? newBindings=%s, bindings=%s, k=%s, f=%s, source=%s' % (newBindings, bindings, k, f2.debugString(), source.debugString()))
+##            for k in bindings.values():
+##                if k not in newExistentials and isinstance(k, AnonymousNode) and not isinstance(k,CompoundTerm) and f2.occurringIn(Set([k])) and len(f2) < 20:
+##                    raise RuntimeError('How did I get here? newBindings=%s, bindings=%s, k=%s, f=%s, source=%s' % (newBindings, bindings, k, f2.debugString(), source.debugString()))
         rr = f2.close()
         return rr
     rr = f.substitution(bindings, why=Because("I said so #3", why))
