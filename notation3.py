@@ -98,6 +98,8 @@ interesting = re.compile(r'[\\\r\n\"]')
 langcode = re.compile(r'[a-zA-Z0-9]+(-[a-zA-Z0-9]+)?')
 #"
 
+
+
 class SinkParser:
     def __init__(self, store, openFormula=None, thisDoc="", baseURI=None,
                  genPrefix = "", metaURI=None, flags="",
@@ -276,7 +278,7 @@ class SinkParser:
 			"Bad variable list after @forAll")
 	    for x in res:
 		#self._context.declareUniversal(x)
-                self._variables[x] =  self._context.newUniversal(x.uriref())
+                self._variables[x.uriref()] =  self._context.newUniversal(x)
 	    return i
 
 	j = self.tok('forSome', str, i)
