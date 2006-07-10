@@ -177,11 +177,17 @@ class Checker(FormulaCache):
         self._pf = proof
         
 
+    def proofStep(self):
+        """from the formula containing the proof, get the root reason
+        """
+        return self._pf.the(pred=rdf.type, obj=reason.Proof)
+        
     def result(self, r, policy, level=0):
         """Get the result of a proof step.
 
         r       is the step to be checked; in the case of the root reason,
-                proof.the(pred=rdf.type, obj=reason.Proof)
+                proof.the(pred=rdf.type, obj=reason.Proof),
+                as from `proofStep()`
 
         level   is just the nesting level for diagnostic output
 
@@ -211,8 +217,9 @@ class Checker(FormulaCache):
     #    fyi("Validating: Reason for %s is %s."%(f, r), level, 60)
 
         if r == None:
-            str = f.n3String() #@@fails if f is None
-            raise InvalidProof("No reason for "+`f` + " :\n\n"+str +"\n\n", level=level)
+            if f is None: txt = 'None'
+            else: txt = f.n3String()
+            raise InvalidProof("No reason for "+`f` + " :\n\n"+ txt +"\n\n", level=level)
         classesOfReason = knownReasons.intersection(proof.each(subj=r, pred=rdf.type))
         if len(classesOfReason) < 1:
             raise InvalidProof("%s does not have the type of any reason" % r)
