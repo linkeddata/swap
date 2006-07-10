@@ -278,7 +278,8 @@ class SinkParser:
 			"Bad variable list after @forAll")
 	    for x in res:
 		#self._context.declareUniversal(x)
-                self._variables[x.uriref()] =  self._context.newUniversal(x)
+                if x not in self._variables or x in self._parentVariables:
+                    self._variables[x] =  self._context.newUniversal(x)
 	    return i
 
 	j = self.tok('forSome', str, i)
@@ -858,7 +859,7 @@ class SinkParser:
 	    raise BadSyntax(self._thisDoc, self.lines, str, j,
 		"Can't use ?xxx syntax for variable in outermost level: %s"
 		% str[j-1:i])
-	varURI = self._baseURI + "#" +str[j:i]
+	varURI = self._store.newSymbol(self._baseURI + "#" +str[j:i])
 	if varURI not in self._parentVariables:
             self._parentVariables[varURI] = self._parentContext.newUniversal(varURI
 			    , why=self._reason2) 
