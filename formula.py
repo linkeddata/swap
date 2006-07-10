@@ -208,7 +208,7 @@ For future reference, use newUniversal
 	if v not in self._universalVariables:
 	    self._universalVariables.add(v)
             if self.occurringIn(Set([self.newSymbol(v.uriref())])):
-                raise ValueError
+                raise ValueError("Are you trying to confuse me with %s?" % v)
 	
     def declareExistential(self, v):
 	if verbosity() > 90: progress("Declare existential:", v)

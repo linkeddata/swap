@@ -736,8 +736,8 @@ class IndexedFormula(Formula):
 
     def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
         from query import n3Entails, testIncludes
-        freeVars = self.freeVariables()
-        return n3Entails(other, self, vars=vars | existentials | freeVars,
+        freeVars = self.freeVariables()   ## We can't use these
+        return n3Entails(other, self, vars=vars | existentials,
                          existentials=Set(), bindings=bindings) # \
 ##               and n3Entails(self, other, vars=vars, existentials=existentials, bindings=bindings)
 

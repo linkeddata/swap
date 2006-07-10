@@ -427,18 +427,25 @@ class AnonymousNode(Node):
     def freeVariables(self):
         return Set([self])
 
+
+class Universal(Term):
+    pass
+
+class Existential(Term):
+    pass
+
 class AnonymousVariable(AnonymousNode):
     """An anonymous node which is existentially quantified in a given context.
     Also known as a Blank Node, or "bnode" in RDF parlance."""
     def __init__(self, scope, uri=None):
 	AnonymousNode.__init__(self, scope.store, uri)
 	 
-class AnonymousExistential(AnonymousVariable):
+class AnonymousExistential(AnonymousVariable, Existential):
     """An anonymous node which is existentially quantified in a given context.
     Also known as a Blank Node, or "bnode" in RDF parlance."""
     pass
 	 
-class AnonymousUniversal(AnonymousVariable):
+class AnonymousUniversal(AnonymousVariable, Universal):
     """Nodes which are introduced as universally quantified variables with
     no quotable URI"""
 
@@ -460,8 +467,8 @@ class AnonymousUniversal(AnonymousVariable):
             return AnonymousVariable.asPair(self)
         return (SYMBOL, self.uriref())
 
-##    def __repr__(self):
-##        return unicode(id(self))
+    def __repr__(self):
+        return unicode(abs(id(self)))
     
     
 ##########################################################################

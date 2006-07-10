@@ -588,7 +588,7 @@ def testIncludes(f, g, _variables=Set(),  bindings={}, interpretBuiltins = 0):
     f = f.renameVars()
     if m > 60: progress("After rename: ", f.debugString())
     diag.chatty_flag = m
-    if diag.chatty_flag >100: progress("Formula we are searching in is\n%s" % f.debugString())
+    if diag.chatty_flag >100: progress("Formula we are searching in is\n%s" % g.debugString())
     unmatched = buildPattern(f, g)
     templateExistentials = g.existentials()
     more_variables = g.universals().copy()
@@ -1244,6 +1244,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
         self.interpretBuiltins = interpretBuiltins
 	self.service = None
 
+        if diag.chatty_flag > 800: progress("setup:" + `allvars`)
 	if "r" in mode:
 	    schema = None
 	    if "s" in mode:
