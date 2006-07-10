@@ -177,10 +177,15 @@ class Checker(FormulaCache):
         self._pf = proof
         
 
-    def proofStep(self):
-        """from the formula containing the proof, get the root reason
+    def conjecture(self):
+        """return the formula that is claimed to be proved and
+        the main justification step.
         """
-        return self._pf.the(pred=rdf.type, obj=reason.Proof)
+        s = self._pf.the(pred=rdf.type, obj=reason.Proof)
+        if not s: raise InvalidProof("no main :Proof step")
+        f = self._pf.the(subj=s, pred=reason.gives)
+        if not f: raise InvalidProof("main Proof step has no :gives")
+        return f, s
         
     def result(self, r, policy, level=0):
         """Get the result of a proof step.
