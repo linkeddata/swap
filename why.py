@@ -396,7 +396,8 @@ class Premise(Reason):
 				why=dontAsk)
 
 	if not self.statements:
-	    raise RuntimeError("No given data for Premise %s" % self)
+            pass
+##	    raise RuntimeError("No given data for Premise %s" % self)
 	else:
 	    prem = _subsetFormula(self.statements)
 	    standIn = formulaStandIn(ko,prem, flags=flags)
