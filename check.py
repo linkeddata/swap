@@ -671,7 +671,7 @@ def main(argv):
     try:
         opts, args = getopt.getopt(argv[1:], "hv:c:p:B:a",
 	    [ "help", "verbose=", "chatty=", "parsing=", "nameBlankNodes",
-              "allPremises"])
+              "allPremises", "profile"])
     except getopt.GetoptError:
 	sys.stderr.write("check.py:  Command line syntax error.\n\n")
         usage()
@@ -691,6 +691,8 @@ def main(argv):
 	    nameBlankNodes = 1
         if o in ("-a", "--allPremises"):
 	    policy = AllPremises()
+	if o in ("--profile"):
+            pass
     if nameBlankNodes: flags="B"
     else: flags=""
     
@@ -765,11 +767,31 @@ def _s2f(s, base):
 
 ########
 
+
+def _profile(argv):
+    from tempfile import mktemp
+    logfile = mktemp()
+    import hotshot, hotshot.stats
+    profiler = hotshot.Profile(logfile)
+    saveout = sys.stdout
+    fsock = open('/dev/null', 'w')
+    sys.stdout = fsock
+    profiler.runcall(main, argv)
+    sys.stdout = saveout
+    fsock.close()
+    profiler.close()
+    stats = hotshot.stats.load(logfile)
+    stats.strip_dirs()
+    stats.sort_stats('time', 'calls')
+    stats.print_stats(50)
+
 if __name__ == "__main__": # we're running as a script, not imported...
     import sys, getopt
 
     if '--test' in sys.argv:
         _test()
+    if '--profile' in sys.argv:
+        _profile(sys.argv)
     else:
         main(sys.argv)
 
