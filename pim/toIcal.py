@@ -101,8 +101,8 @@ class CalWr:
                 elif valueType == 'CAL-ADDRESS':
                     self.doCalAddress(sts, val, prop, predName)
                 elif type(valueType) == tuple: 
-                    valueType = valueType[0]
-                    if valueType not in ('TEXT', 'INTEGER', 'FLOAT'): 
+                    itemType = valueType[0]
+                    if itemType not in ('TEXT', 'INTEGER', 'FLOAT'): 
                         raise RuntimeError, "list value type not implemented"
                     values = []
                     while 1: 
@@ -110,7 +110,7 @@ class CalWr:
                         val = val.rest
                         mkSIMPLE = {'TEXT': mkTEXT, 
                                     'INTEGER': mkINTEGER, 
-                                    'FLOAT': mkFLOAT}[valueType]
+                                    'FLOAT': mkFLOAT}[itemType]
                         v = mkSIMPLE(first)
                         values.append(v)
                         if val == RDF.nil: break
@@ -396,7 +396,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.34  2006-07-06 01:19:09  connolly
+# Revision 2.35  2006-07-13 23:04:10  connolly
+# fix name clobbering with more than one value of a list-typed property
+#
+# Revision 2.34  2006/07/06 01:19:09  connolly
 # support rdf:value on text fields
 #
 # Revision 2.33  2005/11/10 14:40:32  connolly
