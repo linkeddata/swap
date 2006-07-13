@@ -4,10 +4,12 @@
 #
 # See http://www.w3.org/DesignIssues/RDB-RDF.html#table
 #
+#  2006/7 changed daml to owl  timbl
 
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
+# @prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 @prefix db: <http://www.w3.org/2000/10/swap/db#> .
 @prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#>.
@@ -101,8 +103,8 @@ are followed.
 """.
 
 db:primaryKey rdfs:subPropertyOf db:column;
-    a daml:UniqueProperty;    # You can only have one primary key in a table
-    rdfs:range daml:UnambiguousProperty; # No two rows can have same value of a key
+    a owl:FunctionalProperty;    # You can only have one primary key in a table
+    rdfs:range  owl:InverseFunctionalProperty; # No two rows can have same value of a key
     rdfs:comment"""
 The fact that a table has primary key means that a row document exists
 whose URI is formed by concatenating the URI of the table, a slash, and

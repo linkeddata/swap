@@ -1,15 +1,13 @@
 
-<!-- Processed by Id: cwm.py,v 1.96 2002/06/07 20:07:17 timbl Exp -->
+<!-- Processed by Id: cwm.py,v 1.186 2006/07/07 03:30:52 syosi Exp -->
 <!--     using base file:/devel/WWW/2000/10/swap/db.n3-->
 
 
-<rdf:RDF xmlns="http://www.w3.org/2000/10/swap/db#"
+<rdf:RDF xmlns="http://www.w3.org/2000/01/rdf-schema#"
     xmlns:con="http://www.w3.org/2000/10/swap/pim/contact#"
-    xmlns:daml="http://www.daml.org/2001/03/daml+oil#"
-    xmlns:db="http://www.w3.org/2000/10/swap/db#"
     xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:doc="http://www.w3.org/2000/10/swap/pim/doc#"
-    xmlns:log="http://www.w3.org/2000/10/swap/log#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
 
@@ -29,27 +27,27 @@ then the table document automatically an RDF schema for the namespace.
         <doc:version>$Id$</doc:version>
     </rdf:Description>
 
-    <rdfs:Class rdf:about="http://www.w3.org/2000/10/swap/db#Column">
-        <rdfs:comment>A property corresponding to a database column name.</rdfs:comment>
-        <rdfs:label>column</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
-    </rdfs:Class>
+    <Class rdf:about="http://www.w3.org/2000/10/swap/db#Column">
+        <comment>A property corresponding to a database column name.</comment>
+        <label>column</label>
+        <subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    </Class>
 
-    <rdfs:Class rdf:about="http://www.w3.org/2000/10/swap/db#Database">
-        <rdfs:comment> </rdfs:comment>
-        <rdfs:label>database</rdfs:label>
-    </rdfs:Class>
+    <Class rdf:about="http://www.w3.org/2000/10/swap/db#Database">
+        <comment> </comment>
+        <label>database</label>
+    </Class>
 
-    <rdfs:Class rdf:about="http://www.w3.org/2000/10/swap/db#DatabaseDocument">
-        <rdfs:comment>The resource on the web which describes a database, though not
+    <Class rdf:about="http://www.w3.org/2000/10/swap/db#DatabaseDocument">
+        <comment>The resource on the web which describes a database, though not
     the one which contains all the data.
-    Convention: Any database &#60;xxx#f&#62; has a databaseDocumemnt &#60;xxx&#62;.</rdfs:comment>
-        <rdfs:label>database document</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
-    </rdfs:Class>
+    Convention: Any database &#60;xxx#f&#62; has a databaseDocumemnt &#60;xxx&#62;.</comment>
+        <label>database document</label>
+        <subClassOf rdf:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+    </Class>
 
-    <rdfs:Class rdf:about="http://www.w3.org/2000/10/swap/db#RowDocument">
-        <rdfs:comment>A row document exists for each row of a table which 
+    <Class rdf:about="http://www.w3.org/2000/10/swap/db#RowDocument">
+        <comment>A row document exists for each row of a table which 
 has a primary key.  Its URI is formed by convention by concatenating the
 the URI of the table, a slash, and the URI-encoded value of the
 primary key value for that row. 
@@ -57,20 +55,20 @@ primary key value for that row.
 The row document gives the value of each cell in the row.
 It identifies the row with a local &#60;#item&#62; URI.
 It must also identify &#60;#item&#62; as being of rdf$type of the Table.
-</rdfs:comment>
-        <rdfs:label>row document</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
-    </rdfs:Class>
+</comment>
+        <label>row document</label>
+        <subClassOf rdf:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+    </Class>
 
-    <rdfs:Class rdf:about="http://www.w3.org/2000/10/swap/db#Table">
-        <rdfs:comment>A Table is a class which has in it a finite
-    set of things each of which is described by a row in the database table</rdfs:comment>
-        <rdfs:label>Table</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
-    </rdfs:Class>
+    <Class rdf:about="http://www.w3.org/2000/10/swap/db#Table">
+        <comment>A Table is a class which has in it a finite
+    set of things each of which is described by a row in the database table</comment>
+        <label>Table</label>
+        <subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    </Class>
 
-    <rdfs:Class rdf:about="http://www.w3.org/2000/10/swap/db#TableDocument">
-        <rdfs:comment>The resource on the web which describes a Table, though not
+    <Class rdf:about="http://www.w3.org/2000/10/swap/db#TableDocument">
+        <comment>The resource on the web which describes a Table, though not
     the one which contains all the data.
     Convention: Any table &#60;xxx#f&#62; has a tabledocumemnt &#60;xxx&#62;.
 
@@ -82,60 +80,60 @@ It must also identify &#60;#item&#62; as being of rdf$type of the Table.
    is in.  It is sufficent to quote the URI of the database, as the database document's
    URI follows from the convention.
    This allows a client application to find the other properties of the database.
-</rdfs:comment>
-        <rdfs:label>table document</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
-    </rdfs:Class>
+</comment>
+        <label>table document</label>
+        <subClassOf rdf:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+    </Class>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/db#column">
-        <rdfs:comment>The relationship between a table and one of its columns.
+        <comment>The relationship between a table and one of its columns.
 
 The fact that a table has a db:column in this sense assures that certain conventions
 are followed.
 1. For any Column &#60;xxx#f&#62; there is always a corresponding table document &#60;xxx&#62;
     which defines it (i.e. says something about it, at least that it is a colmn of the
     table).
-</rdfs:comment>
-        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/db#Table"/>
-        <rdfs:label>column</rdfs:label>
-        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/db#Column"/>
+</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/db#Table"/>
+        <label>column</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/db#Column"/>
     </rdf:Property>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/db#databaseSchema">
-        <rdfs:comment>The document which describes the form of this database</rdfs:comment>
-        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/db#Database"/>
-        <rdfs:label>database schema</rdfs:label>
-        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/db#DatabaseDocument"/>
+        <comment>The document which describes the form of this database</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/db#Database"/>
+        <label>database schema</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/db#DatabaseDocument"/>
     </rdf:Property>
 
-    <daml:UniqueProperty rdf:about="http://www.w3.org/2000/10/swap/db#primaryKey">
-        <rdfs:comment>
+    <owl:FunctionalProperty rdf:about="http://www.w3.org/2000/10/swap/db#primaryKey">
+        <comment>
 The fact that a table has primary key means that a row document exists
 whose URI is formed by concatenating the URI of the table, a slash, and
 the URI-encoded value of the primary key value for that row.
-</rdfs:comment>
-        <rdfs:range rdf:resource="http://www.daml.org/2001/03/daml+oil#UnambiguousProperty"/>
-        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2000/10/swap/db#column"/>
-    </daml:UniqueProperty>
+</comment>
+        <range rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
+        <subPropertyOf rdf:resource="http://www.w3.org/2000/10/swap/db#column"/>
+    </owl:FunctionalProperty>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/db#table">
-        <rdfs:comment>A table in the database</rdfs:comment>
-        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/db#Database"/>
-        <rdfs:label>table</rdfs:label>
-        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/db#Table"/>
+        <comment>A table in the database</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/db#Database"/>
+        <label>table</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/db#Table"/>
     </rdf:Property>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/db#tableData">
-        <rdfs:comment>The document which gives the data in this table</rdfs:comment>
-        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/db#Table"/>
-        <rdfs:label>table data</rdfs:label>
-        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+        <comment>The document which gives the data in this table</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/db#Table"/>
+        <label>table data</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
     </rdf:Property>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/db#tableSchema">
-        <rdfs:comment>The document which describes the form of this table</rdfs:comment>
-        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/db#Table"/>
-        <rdfs:label>table schema</rdfs:label>
-        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/db#TableDocument"/>
+        <comment>The document which describes the form of this table</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/db#Table"/>
+        <label>table schema</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/db#TableDocument"/>
     </rdf:Property>
 </rdf:RDF>
