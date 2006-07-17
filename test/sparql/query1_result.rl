@@ -45,7 +45,7 @@
                 <unbound/>
             </binding>
             <binding name="friend">
-                <bnode>http://example.com/swap/test/run#_g138</bnode>
+                <bnode>http://example.com/swap/test/run#_g126</bnode>
             </binding>
             <binding name="hpage">
                 <uri>http://work.example.org/bob/</uri>
@@ -57,7 +57,7 @@
                 <literal xml:lang="en">Bob</literal>
             </binding>
             <binding name="x">
-                <bnode>http://example.com/swap/test/run#_g139</bnode>
+                <bnode>http://example.com/swap/test/run#_g127</bnode>
             </binding>
         </result>
     </results>

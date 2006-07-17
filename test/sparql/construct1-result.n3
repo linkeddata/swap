@@ -2,9 +2,9 @@
     
       [      :N  [
                  :familyName "Hacker";
-                 :givenName "Bob" ] ].
+                 :givenName "Alice" ] ].
     
       [      :N  [
                  :familyName "Hacker";
-                 :givenName "Alice" ] ].
+                 :givenName "Bob" ] ].
     

@@ -271,6 +271,7 @@ rdf/xml files. Note that this requires rdflib.
 		diag.setTracking(1)
             elif arg == "-bySubject": option_outputStyle = arg
             elif arg == "-no": option_outputStyle = "-no"
+            elif arg == "-debugString": option_outputStyle = "-debugString"
             elif arg == "-strings": option_outputStyle = "-no"
             elif arg == "-sparqlResults": option_outputStyle = "-no"
             elif arg == "-triples" or arg == "-ntriples":
@@ -493,7 +494,10 @@ rdf/xml files. Note that this requires rdflib.
                 option_quiet = 1
 
             elif arg == "-bySubject":
-                option_outputStyle = arg            
+                option_outputStyle = arg
+
+            elif arg == "-debugString":
+                option_outputStyle = arg
 
             elif arg[:7] == "-apply=":
 		workingContext = workingContext.canonicalize()
@@ -714,6 +718,8 @@ rdf/xml files. Note that this requires rdflib.
                     _store.dumpBySubject(workingContext, _outSink)
                 elif option_outputStyle == "-no":
                     pass
+                elif option_outputStyle == "-debugString":
+                    print workingContext.debugString()
                 else:  # "-best"
                     _store.dumpNested(workingContext, _outSink,
 			    flags=option_flags[option_format])

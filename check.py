@@ -567,6 +567,7 @@ def checkBuiltin(r, f, checker, policy, level=0):
                 fyi("Failed reverse n3Entails!\n\n\n")
         else:
             global debugLevelForInference
+            raise StopIteration
             fyi("Failed forward n3Entails!\n\n\n")
             debugLevelForInference = 1000
             n3Entails(obj, result)

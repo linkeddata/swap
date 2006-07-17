@@ -472,8 +472,23 @@ class IndexedFormula(Formula):
         self._index[(pred, subj, obj)].remove(s)
         #raise RuntimeError("The triple is %s: %s %s %s"%(context, pred, subj, obj))
 	return
+
+    def newCanonicalize(F):  ## Horrible name!
+        if self._hashval is not None:
+            return
+        from term import Existential, Universal
+        statements = []
+        def convert(n):
+            if isinstance(n, Universal):
+                return Universal
+            if isinstance(n, Existential):
+                return Existential
+            return n
+        for statement in self.statements:
+            statements.append(tuple([convert(x) for x in statement]))
+        self._hashval = hash(ImmutableSet(statements))
     
-    def canonicalize(F):
+    def canonicalize(F, cannon=False):
         """If this formula already exists, return the master version.
         If not, record this one and return it.
         Call this when the formula is in its final form, with all its
@@ -494,6 +509,10 @@ class IndexedFormula(Formula):
 	if F.stayOpen:
             if diag.chatty_flag > 70:
                 progress("Canonicalizion ignored: @@ Knowledge base mode:"+`F`)
+            return F
+
+        if F._renameVarsMaps and not cannon:  ## we are sitting in renameVars --- don't bother
+            F.canonical = F
             return F
  
         fl = F.statements
@@ -652,7 +671,7 @@ class IndexedFormula(Formula):
 	Then, each nested formula mentioned is dumped."""
 	red = ""
 	if self._redirections != {}: red = " redirections:" + `self._redirections`
-	str = `self`+ red + " is {"
+	str = `self`+ red + unicode(id(self)) + " is {"
 	for vv, ss in ((self.universals().copy(), "@forAll"),(self.existentials().copy(), "@forSome")):
 	    if vv != Set():
 		str = str + " " + ss + " " + `vv.pop()`
@@ -1090,6 +1109,8 @@ class BI_universalVariableName(RDFBuiltIn): #, MultipleFunction):
     def eval(self, subj, obj, queue, bindings, proof, query):
 	if not isinstance(subj, Formula): return None
 	s = str(obj)
+	if diag.chatty_flag > 180:
+            progress(`subj.universals()`)
 	return obj in subj.universals()
 	for v in subj.universals():
 	    if v.uriref() == s: return 1

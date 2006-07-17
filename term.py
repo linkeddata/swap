@@ -151,7 +151,7 @@ class Term(object):
 	string for literals"""
         return (SYMBOL, self.uriref())
     
-    def substitution(self, bindings, why=None):
+    def substitution(self, bindings, why=None, cannon=False):
 	"Return this or a version of me with subsitution made"
 	return bindings.get(self, self)
 
@@ -519,12 +519,12 @@ class N3Set(ImmutableSet, CompoundTerm): #,
     def uriref(self):
         raise NotImplementedError
 
-    def substitution(self, bindings, why=None):
+    def substitution(self, bindings, why=None, cannon=False):
 	"Return this or a version of me with variable substitution made"
 	if self.occurringIn(bindings.keys()) == Set():
 	    return self # phew!
 
-	return self.__class__([x.substitution(bindings, why=why) for x in self])
+	return self.__class__([x.substitution(bindings, why=why, cannon=cannon) for x in self])
 
     def substituteEquals(self, bindings, newBindings):
 	"Return this or a version of me with substitution of equals made"
@@ -616,7 +616,7 @@ class List(CompoundTerm):
 	    res.append(x.value())
 	return res
 
-    def substitution(self, bindings, why=None):
+    def substitution(self, bindings, why=None, cannon=False):
 	"Return this or a version of me with variable substitution made"
 	if self.occurringIn(bindings.keys()) == Set():
 	    return self # phew!
@@ -624,7 +624,7 @@ class List(CompoundTerm):
 	s.reverse()
 	tail = self.store.nil
 	for x in s:
-	    tail = tail.prepend(x.substitution(bindings, why=why))
+	    tail = tail.prepend(x.substitution(bindings, why=why, cannon=cannon))
 	if diag.chatty_flag > 90:
 	    progress("Substition of variables %s in list %s" % (bindings, self))
 	    progress("...yields NEW %s = %s" % (tail, tail.value()))
@@ -751,7 +751,7 @@ class EmptyList(List):
     def uriref(self):
         return List_NS + "nil"
 
-    def substitution(self, bindings, why=None):
+    def substitution(self, bindings, why=None, cannon=False):
 	"Return this or a version of me with substitution made"
 	return self
 
@@ -1108,7 +1108,7 @@ class Literal(Term):
         b16=binascii.hexlify(d)
         return "md5:" + b16
 
-    def substitution(self, bindings, why=None):
+    def substitution(self, bindings, why=None, cannon=False):
 	"Return this or a version of me with subsitution made"
 	return self
 

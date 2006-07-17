@@ -156,6 +156,8 @@ class InferenceTask:
                 for r2 in rules:
                     vars2 = r2.templateExistentials | r2.variablesUsed
                     for s1 in r1.conclusion.statements:
+                        s2 = None
+                        p = None	
                         for s2 in r2.template.statements:
                             for p in PRED, SUBJ, OBJ:
                                 if ((s1[p] not in vars1
@@ -351,6 +353,7 @@ class InferenceTask:
                 where_clause = where_triple.object()
                 #where_clause is the tail of the rule
                 implies_clause = ruleFormula.the(subj=where_clause, pred=store.implies)
+                assert implies_clause is not None, ("where=%s, f=%s" % (where_clause.debugString(), ruleFormula.debugString()))
                 #implies_clause is the head of the rule
                 v2 = ruleFormula.universals().copy()
                 r = Rule(self, antecedent=where_clause, consequent=implies_clause,
@@ -892,7 +895,7 @@ class Query(Formula):
             progress("Concluding DEFINITELY" + bindingsToString(b2) )
         before = self.store.size
         _, delta = self.targetContext.loadFormulaWithSubstitution(
-		    self.conclusion, b2, why=reason)
+		    self.conclusion, b2, why=reason, cannon=True)
         if diag.chatty_flag>9 and delta:
             progress(" --- because of: %s => %s, with bindings %s" % (self.template.debugString(),
                                                                       self.conclusion.debugString(),
@@ -1496,7 +1499,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                                     assert result.canonical is result, result.debugString()
                                 else:
                                     result2 = result
-				rea = BecauseBuiltIn(con, subj, pred, result2)
+				rea = BecauseBuiltIn(con, subj, pred, result)
 			    if isinstance(pred, MultipleFunction):
 				return [({obj:x}, rea) for x in result]
 			    else:

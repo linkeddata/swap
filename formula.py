@@ -342,7 +342,7 @@ For future reference, use newUniversal
 	return difficulty, self.statementsMatching(subj, pred, obj) # use lazy eval here
 
 
-    def substitution(self, bindings, why=None):
+    def substitution(self, bindings, why=None, cannon=False, keepOpen=False):
 	"Return this or a version of me with subsitution made"
 	assert type(bindings) is type({})
 	store = self.store
@@ -355,9 +355,11 @@ For future reference, use newUniversal
 	if verbosity() > 90: progress("substitution: formula"+`self`+" becomes new "+`y`,
 				    " because of ", oc)
 	y.loadFormulaWithSubstitution(self, bindings, why=why)
-	return y.canonicalize()
+	if keepOpen:
+            return y
+	return y.canonicalize(cannon=cannon)
 
-    def loadFormulaWithSubstitution(self, old, bindings={}, why=None):
+    def loadFormulaWithSubstitution(self, old, bindings={}, why=None, cannon=False):
 	"""Load information from another formula, subsituting as we go
 	returns number of statements added (roughly)"""
         total = 0
@@ -371,15 +373,25 @@ For future reference, use newUniversal
 	    self.declareExistential(bindings.get(v, v))
 	bindings2[old] = self
         for s in old.statements[:] :   # Copy list!
-	    total += self.add(subj=s[SUBJ].substitution(
-                                 bindings2, why=subWhy).substitution(
-                                    bindings3, why=subWhy),
-		              pred=s[PRED].substitution(
-                                 bindings2, why=subWhy).substitution(
-                                    bindings3, why=subWhy),
-		              obj=s[OBJ].substitution(
-                                 bindings2, why=subWhy).substitution(
-                                    bindings3, why=subWhy),
+            subj=s[SUBJ].substitution(
+                                 bindings2, why=subWhy, cannon=cannon).substitution(
+                                    bindings3, why=subWhy, cannon=cannon)
+            if subj is not s[SUBJ]:
+                bindings2[s[SUBJ]] = subj
+	    pred=s[PRED].substitution(
+                                 bindings2, why=subWhy, cannon=cannon).substitution(
+                                    bindings3, why=subWhy, cannon=cannon)
+	    if pred is not s[PRED]:
+                bindings2[s[PRED]] = pred
+	    obj=s[OBJ].substitution(
+                                 bindings2, why=subWhy, cannon=cannon).substitution(
+                                    bindings3, why=subWhy, cannon=cannon)
+	    if obj is not s[OBJ]:
+                bindings2[s[OBJ]] = obj
+                
+	    total += self.add(subj=subj,
+		              pred=pred,
+		              obj=obj,
 		              why=why)
         return bindings3, total
                 
@@ -432,7 +444,8 @@ For future reference, use newUniversal
         #progress('F1 is %s' % F1.debugString())
         #progress('bindings are %s' % m)
 
-        retVal = F1.substitution(m, why=Because("Vars must be renamed")).close()
+        retVal = F1.substitution(m, why=Because("Vars must be renamed"), cannon=False, keepOpen=True)
+        retVal.canonical = retVal
         if self._renameVarsMaps:
             self._renameVarsMaps[-1][self] = retVal
             self._renameVarsMaps[-1][retVal] = retVal

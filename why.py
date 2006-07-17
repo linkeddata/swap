@@ -579,8 +579,8 @@ class BecauseOfData(Because):
 	if diag.chatty_flag>49: progress("Parsing reason=%s ko=%s"%(self,me))
 	ko.add(subj=me, pred=rdf.type, obj=reason.Parsing, why=dontAsk)
 	ko.add(subj=me, pred=reason.source, obj=self._source, why=dontAsk)
-        if self._reason:
-            ko.add(subj=me, pred=reason.because,
+	if self._reason:
+            ko.add(subj=me, pred=reason.because, 
                    obj=self._reason.explain(ko, flags=flags),
                    why=dontAsk)
 	return me
