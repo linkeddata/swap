@@ -445,7 +445,9 @@ For future reference, use newUniversal
         #progress('bindings are %s' % m)
 
         retVal = F1.substitution(m, why=Because("Vars must be renamed"), cannon=False, keepOpen=True)
-        retVal.canonical = retVal
+        self._renameVarsMaps.append(0)
+        retVal = retVal.canonicalize()
+        self._renameVarsMaps.pop()
         if self._renameVarsMaps:
             self._renameVarsMaps[-1][self] = retVal
             self._renameVarsMaps[-1][retVal] = retVal

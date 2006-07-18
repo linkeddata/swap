@@ -146,6 +146,33 @@ class DataObject:
 	    yield DataObject(self.context, v)
 
 
+def arg_hash(arg):
+    if isinstance(arg, dict):
+        g = []
+        for k, v in arg.items():
+            g.append((arg_hash(k), arg_hash(v)))
+        return hash(tuple(g))
+    if isinstance(arg, (tuple, list)):
+        g = []
+        for k in arg:
+            g.append(arg_hash(k))
+        return hash(tuple(g))
+    if isinstance(arg, Set):
+        g = []
+        for k in arg:
+            g.append(arg_hash(k))
+        return hash(ImmutableSet(g))
+    return hash(arg)
+
+def memoize(f):
+    mymap = {}
+    def k(*args, **keywords):
+        n = arg_hash((args, keywords))
+        if n not in mymap:
+            mymap[n] = f(*args, **keywords)
+        return mymap[n]
+    return k
+
 
 ###################################### Forumula
 #
@@ -511,6 +538,8 @@ class IndexedFormula(Formula):
                 progress("Canonicalizion ignored: @@ Knowledge base mode:"+`F`)
             return F
 
+        F.store._equivalentFormulae.add(F)
+
         if F._renameVarsMaps and not cannon:  ## we are sitting in renameVars --- don't bother
             F.canonical = F
             return F
@@ -754,11 +783,18 @@ class IndexedFormula(Formula):
 	return
 
     def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
+        if self.canonical and other.canonical and self.store._equivalentFormulae.connected(self, other):
+            return [({}, None)]
         from query import n3Entails, testIncludes
         freeVars = self.freeVariables()   ## We can't use these
-        return n3Entails(other, self, vars=vars | existentials,
+        retVal = n3Entails(other, self, vars=vars | existentials,
                          existentials=Set(), bindings=bindings) # \
 ##               and n3Entails(self, other, vars=vars, existentials=existentials, bindings=bindings)
+        if len(retVal) == 1 and retVal[0][0] == {}:
+            self.store._equivalentFormulae.merge(self, other)
+        return retVal
+
+    unify = memoize(unify)
 
 
 
@@ -1207,6 +1243,45 @@ class BI_reification(HeavyBuiltIn, Function, ReverseFunction):
         self.store.storeQuad((self.store._experience, self.store.type, f, 3), why=BecauseOfExperience("SomethingOrOther"))
         return q
 
+class Disjoint_set(object):
+    class disjoint_set_node(object):
+        def __init__(self, val):
+            self.value = val
+            self.parent = None
+            self.rank = 0
+        def link(self, other):
+            if other.parent or self.parent:
+                raise RuntimeError
+            if self.rank > other.rank:
+                other.parent = self
+            else:
+                self.parent = other
+                if self.rank == other.rank:
+                    other.rank += 1
+        def find_set(self):
+            if self.parent is None:
+                return self
+            self.parent = self.parent.find_set()
+            return self.parent
+        def disjoint(self, other):
+            return self() is not other()
+        def connected(self, other):
+            return self() is other()
+        __call__ = find_set
+
+    def __init__(self):
+        self.map = {}
+
+    def add(self, f):
+        self.map[f] = self.disjoint_set_node(f)
+
+    def connected(self, f, g):
+        return self.map[f].connected(self.map[g])
+
+    def merge(self, s1, s2):
+        s1 = self.map[s1]()
+        s2 = self.map[s2]()
+        s1.link(s2)
     
 ################################################################################################
 
@@ -1221,6 +1296,7 @@ class RDFStore(RDFSink) :
         self._experience = None   #  A formula of all the things program run knows from direct experience
         self._formulaeOfLength = {} # A dictionary of all the constant formuale in the store, lookup by length key.
         self.size = 0
+        self._equivalentFormulae = Disjoint_set()
         
     def __init__(self, genPrefix=None, metaURI=None, argv=None, crypto=0):
         RDFSink.__init__(self, genPrefix=genPrefix)
