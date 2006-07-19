@@ -7,7 +7,6 @@
     xmlns:con="http://www.w3.org/2000/10/swap/pim/contact#"
     xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:doc="http://www.w3.org/2000/10/swap/pim/doc#"
-    xmlns:owl="http://www.w3.org/2002/07/owl#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
 
@@ -106,15 +105,14 @@ are followed.
         <range rdf:resource="http://www.w3.org/2000/10/swap/db#DatabaseDocument"/>
     </rdf:Property>
 
-    <owl:FunctionalProperty rdf:about="http://www.w3.org/2000/10/swap/db#primaryKey">
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/db#primaryKeyColumn">
         <comment>
-The fact that a table has primary key means that a row document exists
-whose URI is formed by concatenating the URI of the table, a slash, and
-the URI-encoded value of the primary key value for that row.
+A primary key column is a column which is either the primary
+key, or is one of several columns which form the primary key, of a table.
 </comment>
-        <range rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
+        <label>primary key column</label>
         <subPropertyOf rdf:resource="http://www.w3.org/2000/10/swap/db#column"/>
-    </owl:FunctionalProperty>
+    </rdf:Description>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/db#table">
         <comment>A table in the database</comment>
