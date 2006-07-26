@@ -10,6 +10,38 @@ http://amalfi.dis.unina.it/graph/db/papers/vf-algorithm.pdf
 Note that what I am doing here is not as simple as either.
 """
 
+###
+### An issue: Free variables.
+### @forAll :X .
+### { { {:c :a :b; :e :f } a :R } log:includes { {:X :a :b . :c :e :f } a :R } } => {...}
+### That is TRUE --- the issue is that ?X is actually the same node as :c
+### What do we need? --- another layer or preprocessing
+### This is starting to get quite ugly
+### It gets interesting, though. What about ...
+### { { {:c :a :b; :e :f } a :R } log:includes {@forSome _:x {_:x :a :b . :c :e :f } a :R } } => {...}
+### Is that true? --- evidently yes. _:x is a variable, in the full meaning of the term
+### Free variables mean that this algorithm cannot be used without major help!
+### 
+### Def of equivalence used here
+### Two n3 graphs are equivalent under a set of bindings if the bindings applied to the
+### free variables make them isomophic graphs
+### Good --- but does that help us find the bindings to be able to test the isomorphism?
+### We need a way of finding bindings incrementally --- anything else is asking for doom
+### ?x ?x ?y --- what to do with that while prefinding bindings?
+###
+### Big idea --- ignore leftover nodes for now
+### If I'm matching a node, I look around for local topology
+### Need to allow for uncertainty to the point of number of free
+###  variables --- They may all cancel out.
+### This makes life harder
+### Second problem --- I may be equal to a previously matched node, which means I
+### match a matched node, which is bad --- need to account for those nodes.
+### In general, the algorithm becomes far more complicated, and approaches AC unification.
+### I don't think it is quite AC unification --- but it is getting close.
+### This needs more thought.
+### For proof checking, you should not run into any of these problems ever. There are no free variables.
+### For proof checking, with a smarter format you don't need this.
+###
 from swap import uripath
 from swap.diag import progress
 
