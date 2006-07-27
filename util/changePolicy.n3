@@ -27,10 +27,15 @@ I'd also like to formalize policies like the RDF Calendar
 """,
   "$Id$";
   s:seeAlso <http://www.w3.org/2001/tag/webarch/#language-extensibility>,
-   <http://www.w3.org/1999/10/nsuri>;
+   <http://www.w3.org/1999/10/nsuri>,
+   <http://www.w3.org/2001/tag/2006/ext-vers/>,
+   <http://dig.csail.mit.edu/breadcrumbs/node/87>;
   s:seeAlso
    <http://en.wikipedia.org/wiki/Liskov_substitution_principle>. #tx roy
 
+<http://dig.csail.mit.edu/breadcrumbs/node/87>
+ dc:title "Using RDF and OWL to model language evolution";
+ dc:date "2006-02-15".
 
 :Communication s:label "Communication";
   is s:domain of mime:body, mime:bodyText, mime:charset, :language.
