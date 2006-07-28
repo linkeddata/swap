@@ -7,11 +7,8 @@ query module.
 2004-03-17 written as an extension of query.py
 """
 
-try:
-    Set = set
-except NameError:
-    from sets import Set
 
+from set_importer import Set, sorted
 
 import diag
 from diag import chatty_flag, tracking, progress
@@ -41,7 +38,7 @@ def patch(workingContext, patchFormula):
 		dict = {store.insertion: [], store.deletion: []}
 		agenda[s.subject()] = dict
 	    dict[pred].append(s.object())
-    for lhs, dict in agenda.items():
+    for lhs, dict in sorted(agenda.items()):
 	if diag.chatty_flag > 19: progress("Patches lhs= %s: %s" %(lhs, dict))
 	if isinstance(lhs, Formula):
 	    if lhs.universals() != Set():
@@ -63,7 +60,7 @@ def patch(workingContext, patchFormula):
 		variablesMentioned = lhs.occurringIn(patchFormula.universals())
 		variablesUsed = conclusion.occurringIn(variablesMentioned) | \
 				retraction.occurringIn(variablesMentioned)
-		for x in variablesMentioned:
+		for x in sorted(variablesMentioned):
 		    if x not in variablesUsed:
 			templateExistentials.add(x)
 		if diag.chatty_flag >20:
