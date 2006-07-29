@@ -15,6 +15,7 @@
 
 @prefix r:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
 
 @prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#> .
 @prefix :    <http://www.w3.org/2000/10/swap/pim/contact#> .
@@ -29,7 +30,7 @@ doc:Work a s:Class;
     s:comment   "An abstract information thing of value, typically intellectual property".
 
 doc:version a r:Property;
-    s:label 	"vesrion";
+    s:label 	"version";
     s:comment   "This version of this document (eg number, date, etc). A string".
     
 doc:creator a r:Property;
@@ -39,21 +40,29 @@ doc:creator a r:Property;
     s:range	    :SocialEntity .
 
 doc:derivedFrom a r:Property;
-    s:label	"derived from"
+    s:label	"derived from";
     s:comment   "A work wholey or partly used in the creation of this one.";
     s:domain    doc:Work;
     s:range     doc:Work .
 
+doc:derivativeWork a r:Property;
+    s:label	"derivative work";
+    s:comment   "A work wholey or partly used in the creation of this one.";
+    s:domain    doc:Work;
+    s:range     doc:Work;
+    owl:inverseOf doc:derivedFrom.
+
 doc:ipr a r:Property;
-    s:label	"IPR";
-    s:comment   "Terms and interllectual property rights licencing condidtions.";
+    s:label	"rights";
+    s:comment   "Terms and intellectual property rights licensing conditions.";
     s:domain    doc:Work;
     s:range     doc:Work .
 
-doc:subLicense a r:Property;
-    s:label	"sub-property";
+doc:subLicense a r:Property, owl:TransitiveProperty;
+    s:label	"sub-license";
     s:comment 
-"""For any licence, a sublicense is a licensing offering a subset of the rights.  If A doc:sublicense B then anything under licence A can be released under
+"""For any license, a sublicense is a licensing offering a subset of the rights. 
+If A doc:sublicense B then anything under license A can be released under
 licence B.""";
     s:domain    doc:Work;
     s:range     doc:Work .
@@ -83,9 +92,10 @@ doc:version a r:Property;
     
 doc:versionOf a r:Property;
     s:comment   """This work is a a specific version of the follwing generic document.
-		OBSOLETE - use its converse, version.""";
+		OBSOLETE - use its inverse, version.""";
     s:domain    doc:Work;
-    s:range     doc:Work .
+    s:range     doc:Work;
+    owl:inverseOf doc:version. # This will get "version" label used for backward links
     
 doc:obsoletes a r:Property;
     s:label	"obsoletes";
@@ -139,7 +149,7 @@ doc:rules a r:Property;
 	The subject is a namespace document; the object is a document
 	containing rules. The rules are valid information about the terms
 	defined in the namespace document.
-	""".
+	""";
     s:range :Work;
     s:domain :Work.
 

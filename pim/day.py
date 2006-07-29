@@ -111,7 +111,7 @@ class Map:
 	    saveStream.write(gifData)
 	    saveStream.close()
 	except IOError:
-	    print "Offline? No tigermap"
+	    progress("Offline? No tigermap.")
 	    
 #	tigerURI = ("http://tiger.census.gov/cgi-bin/mapper/map.gif?&lat=%f&lon=%f&ht=%f"
 #	    +"&wid=%f&&on=majroads&on=miscell&tlevel=-&tvar=-&tmeth=i&mlat=&mlon=&msym=bigdot&mlabel=&murl="
@@ -235,9 +235,9 @@ if __name__ == '__main__':
 	for track in tracks:
 	    points = f.each(subj=track, pred=GPS.trackpoint)
 	    for point in points:
-		t = str(f.the(subj=point, pred=GPS.time))
-		la = str(f.the(subj=point, pred=GPS.lat))
-		lo = str(f.the(subj=point, pred=GPS.long))
+		t = str(f.the(subj=point, pred=WGS.time))
+		la = str(f.the(subj=point, pred=WGS.lat))
+		lo = str(f.the(subj=point, pred=WGS.long))
 		events.append((t, "T", (la, lo)))
 
     events.sort(compareByTime)
@@ -291,14 +291,14 @@ if __name__ == '__main__':
 	    
 	    where = conclusions.newBlankNode()
 	    conclusions.add(ph, GPS.approxLocation, where)
-	    conclusions.add(where, GPS.lat, lat)
-	    conclusions.add(where, GPS.long, long)
+	    conclusions.add(where, WGS.lat, lat)
+	    conclusions.add(where, WGS.long, long)
 
     
 #	    guess = isodate.fullString(...)
 
     progress("Start Output")
-    print conclusions.close().n3String()
+    print conclusions.close().n3String(base=base())
 
     svgStream = open("map.svg", "w")
     map = Map(minla, maxla, minlo, maxlo, svgStream=svgStream)
@@ -321,8 +321,8 @@ if __name__ == '__main__':
     for st in conclusions.statementsMatching(pred=GPS.approxLocation):
 	photo = st.subject()
 	loc = st.object()
-	long = conclusions.the(subj=loc, pred=GPS.long)
-	lat = conclusions.the(subj=loc, pred=GPS.lat)
+	long = conclusions.the(subj=loc, pred=WGS.long)
+	lat = conclusions.the(subj=loc, pred=WGS.lat)
 	progress("Photo %s at lat=%s, long=%s" %(photo.uriref(), lat, long))
 	la, lo = float(lat), float(long)
 	map.photo(photo.uriref(), lo, la)

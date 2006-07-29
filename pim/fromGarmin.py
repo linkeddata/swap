@@ -83,8 +83,8 @@ def doCommand(serialDevice=None, outputURI=None, doTracks=1, doWaypoints=1, verb
 	    if verbose: progress(`w`)
 	    wpt = symbol(uripath.join(base, w.ident))
 	    f.add(record, GPS.waypoint, wpt)
-	    f.add(wpt, GPS.lat, obj=intern(degrees(w.slat)))
-	    f.add(wpt, GPS.long, obj=intern(degrees(w.slon)))
+	    f.add(wpt, WGS.lat, obj=intern(degrees(w.slat)))
+	    f.add(wpt, WGS.long, obj=intern(degrees(w.slon)))
 
 
    if doTracks:
@@ -104,12 +104,12 @@ def doCommand(serialDevice=None, outputURI=None, doTracks=1, doWaypoints=1, verb
 		if verbose: progress(`p`)
 		point = f.newBlankNode()
 		f.add(track, GPS.trackpoint, point)
-		f.add(point, GPS.lat, obj=intern(degrees(p.slat)))
-		f.add(point, GPS.long, obj=intern(degrees(p.slon)))
+		f.add(point, WGS.lat, obj=intern(degrees(p.slat)))
+		f.add(point, WGS.long, obj=intern(degrees(p.slon)))
 #		if verbose: progress("    time=", p.time)
 		if p.time == 0 or p.time == 0xffffffffL:
 		    if verbose: progress("time=%8x, ignoring" % p.time)
-		f.add(point, GPS.time, obj=intern(isodate.fullString(TimeEpoch+p.time)))
+		f.add(point, WGS.time, obj=intern(isodate.fullString(TimeEpoch+p.time)))
 
    phys.f.close()  # Should really be done by the del() below, but isn't
    del(phys) # close serial link (?)
