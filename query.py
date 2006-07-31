@@ -1069,6 +1069,8 @@ class Query(Formula):
 		assert type(nb) is types.DictType, nb
 		q2 = Queue([], queue)
 		if query.justReturn:
+                    ### What does the following do?
+                    ### If we are doing a 1::1 match, record everything we have matched
 		    if isinstance(reason, StoredStatement):
 			if reason not in q2.statements and \
 			   reason[CONTEXT] is query.workingContext:
@@ -1081,6 +1083,8 @@ class Query(Formula):
                             if m in reason[CONTEXT].existentials():
                                 q2.bNodes.add(m)
                                 if diag.chatty_flag > 80:
+                                    ### These get picked up from log:includes
+                                    ### {[:b :c] log:includes {?X :b :c} ...
                                     progress('Adding bNode %s, now %s' % (m, q2.bNodes))
 		for i in queue:
 		    newItem = i.clone()

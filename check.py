@@ -783,7 +783,7 @@ def _profile(argv):
     profiler.close()
     stats = hotshot.stats.load(logfile)
     stats.strip_dirs()
-    stats.sort_stats('time', 'calls')
+    stats.sort_stats('cumulative', 'time', 'calls')
     stats.print_stats(50)
 
 if __name__ == "__main__": # we're running as a script, not imported...

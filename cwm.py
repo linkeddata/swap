@@ -320,6 +320,9 @@ rdf/xml files. Note that this requires rdflib.
                 if _gotInput == 1:  # But input file *is*, 
                     _outURI = option_inputs[0]        # Just output to same URI
                     option_baseURI = _outURI          # using that as base.
+                if diag.tracking:
+                    _outURI = RDFSink.runNamespace()[:-1]
+                    option_baseURI = _outURI
 
         #  Fix the output sink
         if option_format == "rdf":

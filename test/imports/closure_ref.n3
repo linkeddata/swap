@@ -26,16 +26,6 @@
             }     log:implies {closure:x     a closure:Answer .
             } .
         
-        }     :a :Step22 .
-    {
-         @forAll closure:x .
-        <rules_included.n3>     owl:imports <rules_closure.n3> .
-          [      a <rules_included.n3#Triple> ].
-        {
-            closure:x     a data:Query .
-            
-            }     log:implies {closure:x     a closure:Answer .
-            } .
-        
-        }     :a :Step2 .
+        }     :a :Step2,
+                :Step22 .
     

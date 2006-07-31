@@ -14,18 +14,18 @@
                 foo:x,
                 foo:y .
     
-    foo:result     foo:is { @forAll fo:_g22,
-                    fo:_g23,
-                    fo:_g24,
-                    fo:_g25,
-                    fo:_g26,
-                    fo:_g27,
-                    fo:_g28,
-                    fo:_g29,
-                    fo:_g30,
-                    fo:_g31,
-                    fo:_g32,
-                    fo:_g33,
+    foo:result     foo:is { @forAll fo:_g10,
+                    fo:_g11,
+                    fo:_g12,
+                    fo:_g13,
+                    fo:_g14,
+                    fo:_g15,
+                    fo:_g16,
+                    fo:_g17,
+                    fo:_g18,
+                    fo:_g19,
+                    fo:_g20,
+                    fo:_g9,
                     v:c,
                     v:c1,
                     v:c2,
@@ -165,28 +165,28 @@
                 } .
             } .
         {
-            fo:_g22     :ancestor fo:_g23 .
-            fo:_g23     :ancestor fo:_g24 .
+            fo:_g10     :ancestor fo:_g11 .
+            fo:_g9     :ancestor fo:_g10 .
             
-            }     log:implies {fo:_g22     :ancestor fo:_g24 .
+            }     log:implies {fo:_g9     :ancestor fo:_g11 .
             } .
         {
-            fo:_g25     :descendant fo:_g26 .
-            fo:_g26     :descendant fo:_g27 .
+            fo:_g12     :descendant fo:_g13 .
+            fo:_g13     :descendant fo:_g14 .
             
-            }     log:implies {fo:_g25     :descendant fo:_g27 .
+            }     log:implies {fo:_g12     :descendant fo:_g14 .
             } .
         {
-            fo:_g28     s:subClassOf fo:_g29 .
-            fo:_g29     s:subClassOf fo:_g30 .
+            fo:_g15     s:subPropertyOf fo:_g16 .
+            fo:_g16     s:subPropertyOf fo:_g17 .
             
-            }     log:implies {fo:_g28     s:subClassOf fo:_g30 .
+            }     log:implies {fo:_g15     s:subPropertyOf fo:_g17 .
             } .
         {
-            fo:_g31     s:subPropertyOf fo:_g32 .
-            fo:_g32     s:subPropertyOf fo:_g33 .
+            fo:_g18     s:subClassOf fo:_g19 .
+            fo:_g19     s:subClassOf fo:_g20 .
             
-            }     log:implies {fo:_g31     s:subPropertyOf fo:_g33 .
+            }     log:implies {fo:_g18     s:subClassOf fo:_g20 .
             } .
         {
             v:c1     s:subClassOf v:c2 .

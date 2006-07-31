@@ -344,7 +344,7 @@ For future reference, use newUniversal
 
     def substitution(self, bindings, why=None, cannon=False, keepOpen=False):
 	"Return this or a version of me with subsitution made"
-	assert type(bindings) is type({})
+	assert isinstance(bindings, dict)
 	store = self.store
 	if self in bindings:
             return bindings[self]

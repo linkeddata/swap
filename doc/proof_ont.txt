@@ -401,6 +401,19 @@ We can even get to
 
 Which is in some ways nice, but Tim would complain that it is not CW enough --- even though existentials are used to insure more triples cannot be attached.
 
+It is becoming increasingly apparent that notation3 cannot talk about notation3 very well. It talks about rdf fine. however, when talking about notation3, it would be nice to be able to say.
+:Bob :says
+   { _:g1 :: @forAll :X .
+     _:g2 :: :X :madeOf :Chocolate;
+     _:g3 ::    a rdfs:Resource .
+   } .
+_:g2 a rediculous . 
+_:g3 :does_not_make_use_of _:g1 . 
+
+We would need to work out the grammar of this language --- _:gx are NOT defined inside of the subformula.
+call this language notation4
+
+What needs to be said about notation4? I don't know right now. This would be useful to know. Can we reach lisp? (fully capable of talking about itself)?
 
 What would it take to add this to cwm? Cwm would need to save how things mapped, StoredStatement by StoredStatement. Every StoredStatement has its own id (the python id() function) so we an do that. However, it does not know that currently.
 

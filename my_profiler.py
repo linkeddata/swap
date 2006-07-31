@@ -21,8 +21,8 @@ def runProfile(logfile):
     profiler.close()
     stats = hotshot.stats.load(logfile)
     stats.strip_dirs()
-    stats.sort_stats('time', 'calls')
-    stats.print_stats(30)
+    stats.sort_stats('cumulative', 'time', 'calls')
+    stats.print_stats(60)
 
 if __name__ == '__main__':
     try:

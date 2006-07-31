@@ -19,7 +19,7 @@ import string
 #import re
 #import StringIO
 import sys
-
+import weakref
 from set_importer import Set
 
 # import notation3    # N3 parsers and generators, and RDF generator
@@ -51,7 +51,7 @@ reason=Namespace("http://www.w3.org/2000/10/swap/reason#")
 
 global 	dontAsk
 global	proofsOf
-proofsOf = {} # Track collectors for formulae
+proofsOf = weakref.WeakKeyDictionary() # Track collectors for formulae
 
 # origin = {}   # track (statement, formula) to reason
 
@@ -184,13 +184,18 @@ def formulaStandIn(self, ko,f, flags):
         return m
     except KeyError:
         from formula import Formula, StoredStatement
-        standIn = ko.newBlankNode(why= dontAsk)
+        if 'l' in flags:
+            standIn = ko.newBlankNode(why= dontAsk)
+        else:
+            self[id(self)] += 1
+            standIn = ko.newSymbol(runNamespace()+'_efm' + str(self[id(self)]))
         self[(ko,f)] = standIn
 
         ko.add(subj=f, pred=ko.store.sameAs, obj=standIn, why=dontAsk)
         return standIn
 
 formulaStandIn = formulaStandIn.__get__({})
+formulaStandIn.im_self[id(formulaStandIn.im_self)] = 0
 
 	
 class KBReasonTracker(Reason):
@@ -230,7 +235,7 @@ class KBReasonTracker(Reason):
 	    progress("Believing %s because of %s"%(s, why))
 	assert why is not self
 	self.reasonForStatement[s]=why
-	if isinstance(why, Premise):
+	if isinstance(why, Premise, BecauseOfRule):
 	    why.statements.add(s)
 
 
@@ -420,6 +425,7 @@ class BecauseOfRule(Reason):
 	self._kb = kb # The formula the rule was trusting at base
 	self._reason = because
 	self._existentials = knownExistentials
+	self.statements = Set()
 	return
 
 
@@ -467,7 +473,13 @@ class BecauseOfRule(Reason):
 #		    progress("Included statement found:" + `s`)
 	    ev.append(e)
 	ko.add(subj=me, pred=reason.evidence, obj=ev, why= dontAsk)
-
+        if "g" in flags:
+	    prem = _subsetFormula(self.statements)
+	    standIn = formulaStandIn(ko,prem, flags=flags)
+	    ko.add(me, reason.gives, standIn, why=dontAsk)
+	    if diag.chatty_flag >59:
+		progress("Rule (%s) is:\n%s" % 
+			( self._string, prem.n3String()))
 	return me
 
 
@@ -631,11 +643,11 @@ class BecauseBuiltIn(Reason):
 	ko.add(me, rdf.type, reason.Fact, why=dontAsk)
 	standIn = formulaStandIn(ko,fact, flags=flags)
 	ko.add(me, reason.gives, standIn, why=dontAsk)
-	if 'g' in flags:
-	    for x in self._subject, self._object:
-		proofs = proofsOf.get(x, None)
-		if proofs != None:
-		    ko.add(me, reason.proof, proofs[0].explain(ko, flags=flags), why=dontAsk)
+##	if (1==0) and False and 'g' in flags:
+##	    for x in self._subject, self._object:
+##		proofs = proofsOf.get(x, None)
+##		if proofs != None:
+##		    ko.add(me, reason.proof, proofs[0].explain(ko, flags=flags), why=dontAsk)
 
 #	if self._proof != None:
 #	    ko.add(me, reason.proof, self._proof.explain(ko), why=dontAsk)
@@ -686,11 +698,11 @@ class BecauseSupports(BecauseBuiltIn):
         for e in statementsForReason:
             r1 = e.explain(ko, flags=flags)
             ko.add(m, reason.component, r1, why=dontAsk)
-        if 'g' in flags:
-            for x in self._subject, self._object:
-                proofs = proofsOf.get(x, None)
-                if proofs != None:
-                    ko.add(me, reason.proof, proof[0].explain(ko, flags=flags), why=dontAsk)
+##        if 'g' in flags:
+##            for x in self._subject, self._object:
+##                proofs = proofsOf.get(x, None)
+##                if proofs != None:
+##                    ko.add(me, reason.proof, proof[0].explain(ko, flags=flags), why=dontAsk)
 
 #	if self._proof != None:
 #	    ko.add(me, reason.proof, self._proof.explain(ko), why=dontAsk)

@@ -57,6 +57,48 @@ import sys
 if sys.hexversion < 0x02030000:
     raise RuntimeError("Sorry, this software requires python2.3 or newer.")
 
+
+class Env(dict):
+    """An env is an immutable dict
+
+you can hash it (if you want to)
+    """
+    __slots__ = ['_hashval']
+    
+    def newBinding(self, var, val):
+        retVal = Env(self, **{var: val})
+        return retVal
+    bind = newBinding
+
+    def __setitem__(self, item, val):
+        raise TypeError
+
+    def dereference(self, var):
+        if isinstance(var, list):
+            return [self.dereference(x) for x in var]
+        if var in self:
+            return self[var]
+        if isinstance(var, tuple):
+            return tuple([self.dereference(x) for x in var])
+        if isinstance(var, (StoredStatement, Term)):
+            return var.substitution(self)
+        return var
+
+    def canBind(self, var, val):
+        if var in self:
+            return self[var] == val
+        return True
+
+    def __repr__(self):
+        return "%s(%s)" % (self.__class__.__name__, dict.__repr__(self))
+
+    def __hash__(self):
+        try:
+            return self._hashval
+        except AttributeError:
+            self._hashval = hash(ImmutableSet(self.items()))
+        return self._hashval
+
 ########################################  Storage URI Handling
 #
 #  In general a Term has a URI which may or may not have
@@ -429,7 +471,7 @@ class AnonymousNode(Node):
 
 
 class Universal(Term):
-    pass
+    __repr__ = object.__repr__
 
 class Existential(Term):
     pass
@@ -977,6 +1019,64 @@ def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
         raise RuntimeError(other, other.__class__)
     return k
 
+
+##def unify(self, other, bindings=Env(), otherBindings=Env(),
+##          vars=Set([]), universals=Set([]), existentials=Set([])):
+##    """Unify this which may contain variables with the other,
+##        which may contain existentials but not variables.
+##        
+##        vars   are variables we want a binding for if matched
+##        existentials are things we don't need a binding returned for
+##        bindings are those bindings already made in this unification
+##        
+##        Return [] if impossible.
+##        return [({}, reason] if no new bindings
+##        Return [( {var1: val1, var2: val2,...}, reason), ...] if match
+##    """
+##    assert type(bindings) is Env
+##    assert type(otherBindings) is Env
+##    if diag.chatty_flag > 97:
+##        progress("Unifying symbol %s with %s vars=%s, so far=%s"%
+##                                    (self, other,vars, bindings))
+##    if isinstance(other, list):
+##        other = tuple(other)
+##    n1 = bindings.dereference(self)
+##    n2 = otherBindings.dereference(other)
+##
+##    env1 = bindings
+##    env2 = otherBindings
+##
+##    if n1 in vars:   ## external vars
+##        if n2 in vars:   ### all good
+##            if n1 == n2:
+##                yield (env1, env2)
+##            else:
+##                ### bind one to the other. It really does not matter
+##                if env1.canBind(n1, n2):
+##                    yield (env1.bind(n1,n2), env2)
+##        else:       ## only n1 is a variable
+##            if occurs_check(n1, n2, env2):
+##                if env1.canBind(n1, n2):
+##                    yield (env1.bind(n1, n2), env2)
+##    elif n2 in vars:
+##        if occurs_check(n2, n1, env1):
+##            if env2.canBind(n2, n1):
+##                yield (env1, env2.bind(n2, n1))
+##    elif n1 in universals and n2 in universals:
+##        if env1.canBind(n1, n2):
+##            yield (env1.bind(n1,n2), env2)
+##    elif n1 in existentials and n2 in existentials:
+##        if env1.canBind(n1, n2):
+##            yield (env1.bind(n1,n2), env2)
+##    elif isinstance(self, (Set, ImmutableSet)):
+##	for x in unifySet(self, other, env1, env2, vars, existentials):
+##            yield x
+##    elif type(self) is type([]):
+##	for x in unifySequence(self, other, env1, env2, vars, existentials):
+##            yield x
+##    else:
+##        for x in n1.unifySecondary(n2, env1, env2, vars, universals, existentials):
+##            yield x
 
 ##########################################################################
 #
