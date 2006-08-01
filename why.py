@@ -235,7 +235,7 @@ class KBReasonTracker(Reason):
 	    progress("Believing %s because of %s"%(s, why))
 	assert why is not self
 	self.reasonForStatement[s]=why
-	if isinstance(why, Premise, BecauseOfRule):
+	if isinstance(why, (Premise, BecauseOfRule)):
 	    why.statements.add(s)
 
 
