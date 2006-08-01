@@ -45,7 +45,7 @@ from RDFSink import  LITERAL, LITERAL_DT, LITERAL_LANG, ANONYMOUS, SYMBOL
 from RDFSink import Logic_NS
 import diag
 
-from why import BecauseOfData
+from why import BecauseOfData, becauseSubexpression
 
 N3_forSome_URI = RDFSink.forSomeSym
 N3_forAll_URI = RDFSink.forAllSym
@@ -573,6 +573,8 @@ class SinkParser:
                 self._parentVariables = self._variables
                 self._anonymousNodes = {}
                 self._variables = self._variables.copy()
+                reason2 = self._reason2
+                self._reason2 = becauseSubexpression
                 if subj is None: subj = self._store.newFormula()
                 self._context = subj
                 
@@ -593,6 +595,7 @@ class SinkParser:
                 self._variables = self._parentVariables
                 self._parentVariables = grandParentVariables
                 self._context = self._parentContext
+                self._reason2 = reason2
                 self._parentContext = oldParentContext
                 res.append(subj.close())   #  No use until closed
                 return j
