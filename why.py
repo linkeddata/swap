@@ -235,7 +235,7 @@ class KBReasonTracker(Reason):
 	    progress("Believing %s because of %s"%(s, why))
 	assert why is not self
 	self.reasonForStatement[s]=why
-	if isinstance(why, (Premise, BecauseOfRule)):
+	if isinstance(why, (Premise, BecauseOfRule, BecauseOfData)):
 	    why.statements.add(s)
 
 
@@ -579,6 +579,7 @@ class BecauseOfData(Because):
 	Reason.__init__(self)
 	self._source = source
 	self._reason = because
+	self.statements = Set()
 	return
 
     def explain(self, ko, flags):
@@ -595,6 +596,13 @@ class BecauseOfData(Because):
             ko.add(subj=me, pred=reason.because, 
                    obj=self._reason.explain(ko, flags=flags),
                    why=dontAsk)
+        if "g" in flags:
+	    prem = _subsetFormula(self.statements)
+	    standIn = formulaStandIn(ko,prem, flags=flags)
+	    ko.add(me, reason.gives, standIn, why=dontAsk)
+	    if diag.chatty_flag >59:
+		progress("Rule (%s) is:\n%s" % 
+			( self._string, prem.n3String()))
 	return me
 
 
