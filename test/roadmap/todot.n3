@@ -103,7 +103,7 @@ label="W3C Technology Roadmap";
  } log:implies { :F  :includesNode :n }.
 
 {  :p a gv:nodeAttribute.
-  :x a :target_resource; log:semantics :F.
+  :F a :target .
   :F :includesNode :n; log:notIncludes { :n :p [] }.
 } log:implies { [:fornode :n; :property :p; :nstring ""] }.
 

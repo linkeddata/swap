@@ -24,8 +24,8 @@ OFFLINETESTS=regression.n3 list/detailed.tests \
 #	reify/detailed.tests \
 # 	i18n/detailed.tests \
 
-TESTS=online.tests n3parser.tests rdfcore-tests.n3 delta/detailed.tests paw/detailed.tests \
-	$(OFFLINETESTS)
+TESTS=online.tests  rdfcore-tests.n3 delta/detailed.tests paw/detailed.tests \
+	$(OFFLINETESTS) #n3parser.tests
 
 quick : pyc-check $(CODE) $(OFFLINETESTS)
 	PYTHONPATH=`/bin/pwd`/..:`/bin/pwd`/../.. $P retest.py -c $(OFFLINETESTS)

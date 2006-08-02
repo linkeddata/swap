@@ -58,12 +58,37 @@ if sys.hexversion < 0x02030000:
     raise RuntimeError("Sorry, this software requires python2.3 or newer.")
 
 
+
+
+########################################  Storage URI Handling
+#
+#  In general a Term has a URI which may or may not have
+# a "#" and fragment identifier.  This code keeps track of URIs
+# which are the same up to the hash, so as to make it easy to discover
+# for example whether a term is a local identifier within a document
+# which we know about.  This is relevant to the URI-spec related processing
+# rather than the RDF-spec related processing.
+#
+# than just a URI.  It has subclasses of Symbol and Fragment.
+#
+# (libwww equivalent HTParentAnchor and HTChildAnchor IIRC)
+#
+# Every resource has a symbol table of fragments.
+# A resource may (later) have a connection to a bunch of parsed stuff.
+#
+# We are nesting symbols two deep let's make a symbol table for each resource
+#
+#  The statement store lists are to reduce the search time
+# for triples in some cases. Of course, indexes would be faster.
+# but we can figure out what to optimize later.  The target for now
+# is being able to find synonyms and so translate documents.
+
 class Env(dict):
     """An env is an immutable dict
 
 you can hash it (if you want to)
     """
-    __slots__ = ['_hashval']
+    __slots__ = ['_hashval', '__weakref__']
     
     def newBinding(self, var, val):
         retVal = Env(self, **{var: val})
@@ -98,31 +123,6 @@ you can hash it (if you want to)
         except AttributeError:
             self._hashval = hash(ImmutableSet(self.items()))
         return self._hashval
-
-########################################  Storage URI Handling
-#
-#  In general a Term has a URI which may or may not have
-# a "#" and fragment identifier.  This code keeps track of URIs
-# which are the same up to the hash, so as to make it easy to discover
-# for example whether a term is a local identifier within a document
-# which we know about.  This is relevant to the URI-spec related processing
-# rather than the RDF-spec related processing.
-#
-# than just a URI.  It has subclasses of Symbol and Fragment.
-#
-# (libwww equivalent HTParentAnchor and HTChildAnchor IIRC)
-#
-# Every resource has a symbol table of fragments.
-# A resource may (later) have a connection to a bunch of parsed stuff.
-#
-# We are nesting symbols two deep let's make a symbol table for each resource
-#
-#  The statement store lists are to reduce the search time
-# for triples in some cases. Of course, indexes would be faster.
-# but we can figure out what to optimize later.  The target for now
-# is being able to find synonyms and so translate documents.
-
-
         
 class Term(object):
     """The Term object represents an RDF term.

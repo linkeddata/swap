@@ -46,7 +46,7 @@ import string, sys
 
 # From  http://www.w3.org/2000/10/swap/
 from swap import  diag
-from swap.why import  explainFormula
+from swap.why import  explainFormula, newTopLevelFormula
 from swap.diag import verbosity, setVerbosity, progress, tracking, setTracking
 from swap.uripath import join
 from swap.webAccess import urlopenForRDF, load, sandBoxed 
@@ -375,6 +375,7 @@ rdf/xml files. Note that this requires rdflib.
 
 	    if  _gotInput: 
 		workingContext = _store.newFormula(option_inputs [0]+"#_work")
+		newTopLevelFormula(workingContext)
 	    else: # default input
 		if option_first_format is None: option_first_format = option_format
 		ContentType={ "rdf": "application/xml+rdf", "n3":
@@ -386,7 +387,7 @@ rdf/xml files. Note that this requires rdflib.
 				flags = option_flags[option_first_format],
 				remember = 0,
 				referer = "",
-				why = myReason)
+				why = myReason, topLevel=True)
 		workingContext.reopen()
 	workingContext.stayOpen = 1 # Never canonicalize this. Never share it.
 	
@@ -407,10 +408,13 @@ rdf/xml files. Note that this requires rdflib.
             global workingContext
             global r
             workingContext = workingContext.canonicalize()
+            _store._formulaeOfLength = {}
             filterContext = _store.newFormula()
+            newTopLevelFormula(filterContext)
             _store.load(_uri, openFormula=filterContext,
 					why=myReason, referer="")
             _newContext = _store.newFormula()
+            newTopLevelFormula(_newContext)
             applyRules(workingContext, filterContext, _newContext)
             workingContext.close()
             workingContext = _newContext
@@ -508,7 +512,7 @@ rdf/xml files. Note that this requires rdflib.
                 filterContext = _store.load(_uri, 
 			    flags=option_flags[option_format],
                             referer="",
-			    why=myReason)
+			    why=myReason, topLevel=True)
 		workingContext.reopen()
                 applyRules(workingContext, filterContext);
 
@@ -518,7 +522,7 @@ rdf/xml files. Note that this requires rdflib.
                 filterContext = _store.load(_uri, 
 			    flags=option_flags[option_format],
                             referer="",
-			    why=myReason)
+			    why=myReason, topLevel=True)
 		workingContext.reopen()
                 applyRules(workingContext, filterContext);
 
@@ -528,7 +532,7 @@ rdf/xml files. Note that this requires rdflib.
                 filterContext = _store.load(_uri, 
 			    flags=option_flags[option_format],
                             referer="",
-			    why=myReason)
+			    why=myReason, topLevel=True)
 		workingContext.reopen()
                 patch(workingContext, filterContext);
 
@@ -540,7 +544,7 @@ rdf/xml files. Note that this requires rdflib.
 		filterContext = _store.load(_uri, 
 			    flags=option_flags[option_format],
                             referer="",
-			    why=myReason)
+			    why=myReason, topLevel=True)
 		_newContext = _store.newFormula()
                 applyQueries(workingContext, filterContext, _newContext)
 		workingContext.close()
@@ -585,7 +589,7 @@ rdf/xml files. Note that this requires rdflib.
 
             elif arg[:7] == "-think=":
                 
-                filterContext = _store.load(_uri, referer="", why=myReason)
+                filterContext = _store.load(_uri, referer="", why=myReason, topLevel=True)
                 if verbosity() > 4:
 		    progress( "Input rules to --think from " + _uri)
 		workingContext.reopen()

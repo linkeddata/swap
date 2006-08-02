@@ -63,7 +63,7 @@ import md5, binascii  # for building md5 URIs
 import uripath
 from uripath import canonical
 
-from why import smushedFormula, Premise
+from why import smushedFormula, Premise, newTopLevelFormula, isTopLevel
 
 import notation3    # N3 parsers and generators, and RDF generator
 from webAccess import urlopenForRDF   # http://www.w3.org/2000/10/swap/
@@ -543,7 +543,7 @@ class IndexedFormula(Formula):
 
         F.store._equivalentFormulae.add(F)
 
-        if F._renameVarsMaps and not cannon:  ## we are sitting in renameVars --- don't bother
+        if isTopLevel(F) or (F._renameVarsMaps and not cannon):  ## we are sitting in renameVars --- don't bother
             F.canonical = F
             return F
  
@@ -1494,7 +1494,7 @@ class RDFStore(RDFSink) :
 	assert isinstance(self._experience, Formula)
 
     def load(store, uri=None, openFormula=None, asIfFrom=None, contentType=None, remember=1,
-		    flags="", referer=None, why=None):
+		    flags="", referer=None, why=None, topLevel=False):
 	"""Get and parse document.  Guesses format if necessary.
 
 	uri:      if None, load from standard input.
@@ -1508,6 +1508,11 @@ class RDFStore(RDFSink) :
 	And a proliferation of APIs confuses.
 	"""
 	baseURI = uripath.base()
+	givenOpenFormula = openFormula
+	if openFormula is None:
+            openFormula = store.newFormula()
+        if topLevel:
+            newTopLevelFormula(openFormula)
 	if uri != None and openFormula==None and remember:
 	    addr = uripath.join(baseURI, uri) # Make abs from relative
 	    source = store.newSymbol(addr)
@@ -1698,8 +1703,11 @@ class RDFStore(RDFSink) :
             return F # was open
         if diag.chatty_flag > 00:
             progress("warning - reopen formula:"+`F`)
-	key = len(F.statements), len(F.universals()), len(F.existentials()) 
-        self._formulaeOfLength[key].remove(F)  # Formulae of same length
+	key = len(F.statements), len(F.universals()), len(F.existentials())
+	try:
+            self._formulaeOfLength[key].remove(F)  # Formulae of same length
+        except (KeyError, ValueError):
+            pass
         F.canonical = None
         return F
 

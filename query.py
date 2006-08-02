@@ -25,7 +25,7 @@ from term import BuiltIn, LightBuiltIn, RDFBuiltIn, ArgumentNotLiteral, \
 from formula import StoredStatement, Formula
 from why import Because, BecauseBuiltIn, BecauseOfRule, \
     BecauseOfExperience, becauseSubexpression, Reason, \
-    BecauseSupports, BecauseMerge ,report, Premise
+    BecauseSupports, BecauseMerge ,report, Premise, newTopLevelFormula
 
 
 BuiltinFeedError = (ArgumentNotLiteral, UnknownType)
@@ -832,7 +832,7 @@ class Query(Formula):
                 
                 if isinstance(r, BecauseSupportsWill):                    
                     evidence[loc] = BecauseSupports(*([smarterSubstitution(k, bindings,
-                        r.args[1], why=Because("I support it: ")) for k in r.args] +
+                        r.args[1], why=Because("I support it: "), exception=[r.args[2]]) for k in r.args] +
                         [[k for k in evidence if isinstance(k, (StoredStatement, Reason))]]))
                 if isinstance(r, BecauseBuiltInWill):
                     evidence[loc] = BecauseBuiltIn(*[smarterSubstitution(k, bindings,
@@ -1384,6 +1384,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                 newSubj = subj.renameVars()
 
                 F = subj.newFormula()
+                newTopLevelFormula(F)
                 if diag.tracking:
                     reason = Premise("Assumption of builtin", item)
                     #reason = BecauseMerge(F, subj)
@@ -1497,6 +1498,11 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			if result != None:
 			    self.state = S_DONE
 			    rea=None
+                            if isinstance(result, Formula):
+                                if self.quad[OBJ] in self.query.variables:
+                                    result.reopen()
+                                    result = result.canonicalize(cannon=True)
+                                    assert result.canonical is result
 			    if diag.tracking:                                
                                 if isinstance(result, Formula):
                                     result2 = result.renameVars()
@@ -1885,7 +1891,9 @@ def hasFormula(l):
 
 from term import AnonymousNode, CompoundTerm
 
-def smarterSubstitution(f, bindings, source, why=None):
+def smarterSubstitution(f, bindings, source, why=None, exception=[]):
+    if f in exception:
+        return f
     if isinstance(f, Formula):
         f2 = f.newFormula()
         newBindings, _ = f2.loadFormulaWithSubstitution(f, bindings, why=Because("I said so #2", why))

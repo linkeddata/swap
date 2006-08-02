@@ -71,18 +71,29 @@ def smushedFormula(F, G):
     proofsOf[G] = pF + pG
     del proofsOf[F]
 
+def newTopLevelFormula(f):
+    if f not in proofsOf:
+        proofsOf[f] = [ KBReasonTracker(f) ]
+
+def isTopLevel(f):
+    return f in proofsOf
+
 
 def report(statement, why):
     """Report a new statement to the reason tracking software
     
     This module stores the reasons.  The store should call this
-    method to report new data. See the KBReasonTracker class"""
+    method to report new data. See the KBReasonTracker class
+
+    Most formulas don't need collectors. Let's see if we can change that.
+    """
     if why is dontAsk: return
     
     f = statement.context()
     collectors = proofsOf.get(f, [])
 
     if collectors == []:
+        return None
 	if diag.chatty_flag>50:
 	    progress("Adding %s. New collector for  %s" % (statement, why))
 	collector = KBReasonTracker(f)
@@ -103,6 +114,8 @@ def explainFormula(f, flags=""):
     if tr is None:
 	raise ValueError(
 	    "No tracker. This may happen if the formula is validly empty.")
+    if not tr:
+        raise ValueError(dict(proofsOf))
     return tr[0].explanation(flags=flags)
 
 
@@ -675,8 +688,10 @@ class BecauseSupports(BecauseBuiltIn):
                 if isinstance(statement, BecauseBuiltIn):
                     if statement._context is conclusion:
                         self.reason.append(statement)
+                        progress(statement)
+                        progress("Is anybody home?")
             else:
-                if statement in conclusion:
+                if statement.context() is conclusion:
                     self.reason.append(statement)
         self.conclusion = conclusion
 

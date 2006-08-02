@@ -15,7 +15,7 @@
     test:workingDirectory  <../>;
     test:referenceOutput <../ref/paw-t01check.n3>;
     test:description   "main paw example";
-    test:arguments     """--closure=e --rdf http://dig.csail.mit.edu/2005/09/rein/examples/judy-req.rdf --n3 http://dig.csail.mit.edu/2005/09/rein/engine.n3 --think --filter="http://dig.csail.mit.edu/2005/09/rein/filter.n3" --base=foo: --why | python ../check.py""".
+    test:arguments     """--closure=e --rdf http://dig.csail.mit.edu/2005/09/rein/examples/judy-req.rdf --n3 http://dig.csail.mit.edu/2005/09/rein/engine.n3 --think --filter="http://dig.csail.mit.edu/2005/09/rein/filter.n3" --why | python ../check.py""".
 
 
 
@@ -23,4 +23,4 @@
     test:workingDirectory  <../>;
     test:referenceOutput <../ref/paw-t02check.n3>;
     test:description   "main paw lean example";
-    test:arguments     """--closure=e --n3=Bir paw/alice-req2.n3 http://dig.csail.mit.edu/2006/06/rein/src/lean-engine.n3 --think --filter="http://dig.csail.mit.edu/2006/06/rein/src/lean-filter.n3" --base=foo: --why | python ../check.py -v100""".
+    test:arguments     """--closure=e --n3=Bir paw/alice-req2.n3 http://dig.csail.mit.edu/2006/06/rein/src/lean-engine.n3 --think --filter="http://dig.csail.mit.edu/2006/06/rein/src/lean-filter.n3" --why | python ../check.py """.

@@ -132,6 +132,9 @@ class Formula(AnonymousNode, CompoundTerm):
 	for i in range(ls):
 	    diff = cmp(s[i],o[i])
 	    if diff != 0: return diff
+	return 0
+	import why
+	raise RuntimeError("%s\n%s" % (dict(why.proofsOf), self.debugString()))
 	raise RuntimeError("Identical formulae not interned! Length %i: %s\n\t%s\n vs\t%s" % (
 		    ls, `s`, self.debugString(), other.debugString()))
 

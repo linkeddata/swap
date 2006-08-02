@@ -17,6 +17,8 @@ import sys, os
 #import urllib
 import urllib2, urllib  # Python standard
 
+from why import newTopLevelFormula
+
 import uripath # http://www.w3.org/2000/10/swap/uripath.py
 import diag
 from diag import progress
@@ -79,7 +81,7 @@ def urlopenForRDF(addr, referer=None):
     return q
 
 def load(store, uri=None, openFormula=None, asIfFrom=None, contentType=None,
-		flags="", referer=None, why=None):
+		flags="", referer=None, why=None, topLevel=False):
     """Get and parse document.  Guesses format if necessary.
 
     uri:      if None, load from standard input.
@@ -155,6 +157,8 @@ def load(store, uri=None, openFormula=None, asIfFrom=None, contentType=None,
 	F = openFormula
     else:
 	F = store.newFormula()
+    if topLevel:
+        newTopLevelFormula(F)
     import os
     if guess == "x-application/sparql":
         if diag.chatty_flag > 49: progress("Parsing as SPARQL")
