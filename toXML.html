@@ -102,11 +102,15 @@ Methods defined here:<br>
 
 <dl><dt><a name="ToRDF-endAnonymousNode"><strong>endAnonymousNode</strong></a>(self, subj<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="ToRDF-endBagObject"><strong>endBagObject</strong></a>(self, pred, subj)</dt></dl>
-
-<dl><dt><a name="ToRDF-endBagSubject"><strong>endBagSubject</strong></a>(self, subj)</dt></dl>
-
 <dl><dt><a name="ToRDF-endDoc"><strong>endDoc</strong></a>(self, rootFormulaPair<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="ToRDF-endFormulaObject"><strong>endFormulaObject</strong></a>(self, pred, subj)</dt></dl>
+
+<dl><dt><a name="ToRDF-endFormulaSubject"><strong>endFormulaSubject</strong></a>(self, subj)</dt></dl>
+
+<dl><dt><a name="ToRDF-endListObject"><strong>endListObject</strong></a>(self, subject, verb)</dt></dl>
+
+<dl><dt><a name="ToRDF-endListSubject"><strong>endListSubject</strong></a>(self, subj)</dt></dl>
 
 <dl><dt><a name="ToRDF-flushStart"><strong>flushStart</strong></a>(self)</dt></dl>
 
@@ -116,25 +120,25 @@ Methods defined here:<br>
 
 <dl><dt><a name="ToRDF-referenceTo"><strong>referenceTo</strong></a>(self, uri)</dt><dd><tt>Conditional&nbsp;relative&nbsp;URI</tt></dd></dl>
 
-<dl><dt><a name="ToRDF-startAnonymous"><strong>startAnonymous</strong></a>(self, tuple, isList<font color="#909090">=0</font>)</dt></dl>
+<dl><dt><a name="ToRDF-startAnonymous"><strong>startAnonymous</strong></a>(self, tuple)</dt></dl>
 
-<dl><dt><a name="ToRDF-startAnonymousNode"><strong>startAnonymousNode</strong></a>(self, subj, li<font color="#909090">=0</font>)</dt></dl>
-
-<dl><dt><a name="ToRDF-startBagObject"><strong>startBagObject</strong></a>(self, tuple)</dt></dl>
-
-<dl><dt><a name="ToRDF-startBagSubject"><strong>startBagSubject</strong></a>(self, context)</dt></dl>
+<dl><dt><a name="ToRDF-startAnonymousNode"><strong>startAnonymousNode</strong></a>(self, subj, isList<font color="#909090">=0</font>)</dt></dl>
 
 <dl><dt><a name="ToRDF-startDoc"><strong>startDoc</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ToRDF-startFormulaObject"><strong>startFormulaObject</strong></a>(self, tuple)</dt></dl>
+
+<dl><dt><a name="ToRDF-startFormulaSubject"><strong>startFormulaSubject</strong></a>(self, context)</dt></dl>
+
+<dl><dt><a name="ToRDF-startListObject"><strong>startListObject</strong></a>(self, tuple, isList<font color="#909090">=0</font>)</dt></dl>
+
+<dl><dt><a name="ToRDF-startListSubject"><strong>startListSubject</strong></a>(self, subj)</dt></dl>
+
+<dl><dt><a name="ToRDF-startWithParseType"><strong>startWithParseType</strong></a>(self, parseType, tuple)</dt></dl>
 
 <hr>
 Data and other attributes defined here:<br>
 <dl><dt><strong>flagDocumentation</strong> = '<font color="#c040c0">\n</font>Flags to control RDF/XML output (after --rdf=) ...e URIs.<font color="#c040c0">\n</font>z  - Allow relative URIs for namespaces<font color="#c040c0">\n\n</font>'</dl>
-
-<hr>
-Methods inherited from <a href="RDFSink.html#RDFStructuredOutput">RDFSink.RDFStructuredOutput</a>:<br>
-<dl><dt><a name="ToRDF-endBagNamed"><strong>endBagNamed</strong></a>(self, subj)</dt></dl>
-
-<dl><dt><a name="ToRDF-startBagNamed"><strong>startBagNamed</strong></a>(self, context, subj)</dt></dl>
 
 <hr>
 Methods inherited from <a href="RDFSink.html#RDFSink">RDFSink.RDFSink</a>:<br>
@@ -292,21 +296,17 @@ Methods defined here:<br>
 Methods inherited from <a href="RDFSink.html#RDFStructuredOutput">RDFSink.RDFStructuredOutput</a>:<br>
 <dl><dt><a name="tmToRDF-endAnonymousNode"><strong>endAnonymousNode</strong></a>(self, endAnonymousNode)</dt></dl>
 
-<dl><dt><a name="tmToRDF-endBagNamed"><strong>endBagNamed</strong></a>(self, subj)</dt></dl>
+<dl><dt><a name="tmToRDF-endFormulaObject"><strong>endFormulaObject</strong></a>(self, pred, subj)</dt></dl>
 
-<dl><dt><a name="tmToRDF-endBagObject"><strong>endBagObject</strong></a>(self, pred, subj)</dt></dl>
-
-<dl><dt><a name="tmToRDF-endBagSubject"><strong>endBagSubject</strong></a>(self, subj)</dt></dl>
+<dl><dt><a name="tmToRDF-endFormulaSubject"><strong>endFormulaSubject</strong></a>(self, subj)</dt></dl>
 
 <dl><dt><a name="tmToRDF-startAnonymous"><strong>startAnonymous</strong></a>(self, triple, isList<font color="#909090">=0</font>)</dt></dl>
 
 <dl><dt><a name="tmToRDF-startAnonymousNode"><strong>startAnonymousNode</strong></a>(self, subj)</dt></dl>
 
-<dl><dt><a name="tmToRDF-startBagNamed"><strong>startBagNamed</strong></a>(self, context, subj)</dt></dl>
+<dl><dt><a name="tmToRDF-startFormulaObject"><strong>startFormulaObject</strong></a>(self, triple)</dt></dl>
 
-<dl><dt><a name="tmToRDF-startBagObject"><strong>startBagObject</strong></a>(self, triple)</dt></dl>
-
-<dl><dt><a name="tmToRDF-startBagSubject"><strong>startBagSubject</strong></a>(self, context)</dt></dl>
+<dl><dt><a name="tmToRDF-startFormulaSubject"><strong>startFormulaSubject</strong></a>(self, context)</dt></dl>
 
 <hr>
 Methods inherited from <a href="RDFSink.html#RDFSink">RDFSink.RDFSink</a>:<br>
@@ -412,15 +412,15 @@ avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;ugly.</tt
 <strong>LITERAL</strong> = 2<br>
 <strong>LITERAL_DT</strong> = 21<br>
 <strong>LITERAL_LANG</strong> = 22<br>
-<strong>List_NS</strong> = 'http://www.daml.org/2001/03/daml+oil#'<br>
+<strong>List_NS</strong> = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'<br>
 <strong>Logic_NS</strong> = 'http://www.w3.org/2000/10/swap/log#'<br>
-<strong>N3_Empty</strong> = (0, 'http://www.daml.org/2001/03/daml+oil#Empty')<br>
-<strong>N3_List</strong> = (0, 'http://www.daml.org/2001/03/daml+oil#List')<br>
-<strong>N3_first</strong> = (0, 'http://www.daml.org/2001/03/daml+oil#first')<br>
+<strong>N3_Empty</strong> = (0, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#Empty')<br>
+<strong>N3_List</strong> = (0, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#List')<br>
+<strong>N3_first</strong> = (0, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#first')<br>
 <strong>N3_forAll_URI</strong> = 'http://www.w3.org/2000/10/swap/log#forAll'<br>
 <strong>N3_forSome_URI</strong> = 'http://www.w3.org/2000/10/swap/log#forSome'<br>
-<strong>N3_nil</strong> = (0, 'http://www.daml.org/2001/03/daml+oil#nil')<br>
-<strong>N3_rest</strong> = (0, 'http://www.daml.org/2001/03/daml+oil#rest')<br>
+<strong>N3_nil</strong> = (0, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#nil')<br>
+<strong>N3_rest</strong> = (0, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#rest')<br>
 <strong>NCNameChar</strong> = 0<br>
 <strong>NCNameStartChar</strong> = 1<br>
 <strong>NODE_MERGE_URI</strong> = 'http://www.w3.org/2000/10/swap/log#is'<br>
@@ -428,6 +428,7 @@ avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;ugly.</tt
 <strong>PARTS</strong> = (1, 2, 3)<br>
 <strong>PRED</strong> = 1<br>
 <strong>RDF_NS_URI</strong> = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'<br>
+<strong>RDF_li</strong> = (0, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#li')<br>
 <strong>RDF_spec</strong> = 'http://www.w3.org/TR/REC-rdf-syntax/'<br>
 <strong>RDF_type</strong> = (0, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type')<br>
 <strong>RDF_type_URI</strong> = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'<br>

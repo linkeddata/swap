@@ -15,9 +15,10 @@ Closed&nbsp;World&nbsp;Machine<br>
 &nbsp;<br>
 (also,&nbsp;in&nbsp;Wales,&nbsp;a&nbsp;valley&nbsp;&nbsp;-&nbsp;topologiclly&nbsp;a&nbsp;partially&nbsp;closed&nbsp;world&nbsp;perhaps?)<br>
 &nbsp;<br>
-This&nbsp;is&nbsp;an&nbsp;application&nbsp;which&nbsp;knows&nbsp;a&nbsp;certian&nbsp;amount&nbsp;of&nbsp;stuff&nbsp;and&nbsp;can&nbsp;manipulate&nbsp;it.<br>
-It&nbsp;uses&nbsp;llyn,&nbsp;a&nbsp;(forward&nbsp;chaining)&nbsp;query&nbsp;engine,&nbsp;not&nbsp;an&nbsp;(backward&nbsp;chaining)&nbsp;inference&nbsp;engine:<br>
-that&nbsp;is,&nbsp;it&nbsp;will&nbsp;apply&nbsp;all&nbsp;rules&nbsp;it&nbsp;can&nbsp;but&nbsp;won't&nbsp;figure&nbsp;out&nbsp;which&nbsp;ones&nbsp;to&nbsp;apply&nbsp;to&nbsp;prove&nbsp;something.&nbsp;<br>
+This&nbsp;is&nbsp;an&nbsp;application&nbsp;which&nbsp;knows&nbsp;a&nbsp;certian&nbsp;amount&nbsp;of&nbsp;stuff&nbsp;and&nbsp;can&nbsp;manipulate<br>
+it.&nbsp;It&nbsp;uses&nbsp;llyn,&nbsp;a&nbsp;(forward&nbsp;chaining)&nbsp;query&nbsp;engine,&nbsp;not&nbsp;an&nbsp;(backward&nbsp;chaining)<br>
+inference&nbsp;engine:&nbsp;that&nbsp;is,&nbsp;it&nbsp;will&nbsp;apply&nbsp;all&nbsp;rules&nbsp;it&nbsp;can&nbsp;but&nbsp;won't&nbsp;figure&nbsp;out<br>
+which&nbsp;ones&nbsp;to&nbsp;apply&nbsp;to&nbsp;prove&nbsp;something.&nbsp;<br>
 &nbsp;<br>
 &nbsp;<br>
 License<br>
@@ -71,7 +72,7 @@ steps,&nbsp;in&nbsp;order&nbsp;left&nbsp;to&nbsp;right:<br>
 --n3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Input&nbsp;&amp;&nbsp;Output&nbsp;in&nbsp;N3&nbsp;from&nbsp;now&nbsp;on.&nbsp;(Default)<br>
 --rdf=flags&nbsp;&nbsp;&nbsp;Input&nbsp;&amp;&nbsp;Output&nbsp;**&nbsp;in&nbsp;RDF&nbsp;and&nbsp;set&nbsp;given&nbsp;RDF&nbsp;flags<br>
 --n3=flags&nbsp;&nbsp;&nbsp;&nbsp;Input&nbsp;&amp;&nbsp;Output&nbsp;in&nbsp;N3&nbsp;and&nbsp;set&nbsp;N3&nbsp;flags<br>
---ntriples&nbsp;&nbsp;&nbsp;&nbsp;Input&nbsp;&amp;&nbsp;Output&nbsp;in&nbsp;NTriples&nbsp;(equiv&nbsp;--n3=uspartane&nbsp;-bySubject&nbsp;-quiet)<br>
+--ntriples&nbsp;&nbsp;&nbsp;&nbsp;Input&nbsp;&amp;&nbsp;Output&nbsp;in&nbsp;NTriples&nbsp;(equiv&nbsp;--n3=usbpartane&nbsp;-bySubject&nbsp;-quiet)<br>
 --language=x&nbsp;&nbsp;Input&nbsp;&amp;&nbsp;Output&nbsp;in&nbsp;"x"&nbsp;(rdf,&nbsp;n3,&nbsp;etc)&nbsp;&nbsp;--rdf&nbsp;same&nbsp;as:&nbsp;--language=rdf<br>
 --languageOptions=y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--n3=sp&nbsp;same&nbsp;as:&nbsp;&nbsp;--language=n3&nbsp;--languageOptions=sp<br>
 --ugly&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Store&nbsp;input&nbsp;and&nbsp;regurgitate,&nbsp;data&nbsp;only,&nbsp;fastest&nbsp;*<br>
@@ -91,6 +92,7 @@ steps,&nbsp;in&nbsp;order&nbsp;left&nbsp;to&nbsp;right:<br>
 --think&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;as&nbsp;-rules&nbsp;but&nbsp;continue&nbsp;until&nbsp;no&nbsp;more&nbsp;rule&nbsp;matches&nbsp;(or&nbsp;forever!)<br>
 --engine=otter&nbsp;use&nbsp;otter&nbsp;(in&nbsp;your&nbsp;$PATH)&nbsp;instead&nbsp;of&nbsp;llyn&nbsp;for&nbsp;linking,&nbsp;etc<br>
 --why&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Replace&nbsp;the&nbsp;store&nbsp;with&nbsp;an&nbsp;explanation&nbsp;of&nbsp;its&nbsp;contents<br>
+--why=u&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;proof&nbsp;tries&nbsp;to&nbsp;be&nbsp;shorter<br>
 --mode=flags&nbsp;&nbsp;Set&nbsp;modus&nbsp;operandi&nbsp;for&nbsp;inference&nbsp;(see&nbsp;below)<br>
 --reify&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Replace&nbsp;the&nbsp;statements&nbsp;in&nbsp;the&nbsp;store&nbsp;with&nbsp;statements&nbsp;describing&nbsp;them.<br>
 --dereify&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Undo&nbsp;the&nbsp;effects&nbsp;of&nbsp;--reify<br>
@@ -138,6 +140,7 @@ the&nbsp;closure&nbsp;under&nbsp;the&nbsp;operation&nbsp;of&nbsp;looking&nbsp;up
 &nbsp;r&nbsp;&nbsp;&nbsp;any&nbsp;doc:rules&nbsp;documents<br>
 &nbsp;E&nbsp;&nbsp;&nbsp;errors&nbsp;are&nbsp;ignored&nbsp;---&nbsp;This&nbsp;is&nbsp;independant&nbsp;of&nbsp;--mode=E<br>
 &nbsp;<br>
+&nbsp;n&nbsp;&nbsp;&nbsp;Normalize&nbsp;IRIs&nbsp;to&nbsp;URIs<br>
 &nbsp;e&nbsp;&nbsp;&nbsp;Smush&nbsp;together&nbsp;any&nbsp;nodes&nbsp;which&nbsp;are&nbsp;=&nbsp;(owl:sameAs)<br>
 &nbsp;<br>
 See&nbsp;<a href="http://www.w3.org/2000/10/swap/doc/cwm">http://www.w3.org/2000/10/swap/doc/cwm</a>&nbsp;&nbsp;for&nbsp;more&nbsp;documentation.<br>
@@ -155,7 +158,7 @@ Return&nbsp;a&nbsp;string&nbsp;representing&nbsp;the&nbsp;current&nbsp;working&n
     
 <tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><strong>cvsRevision</strong> = '$Revision$'<br>
-<strong>path</strong> = ['.', '/home/syosi/CVS-local/WWW/2000/10/swap', '/home/syosi/pychinko', '/home/syosi/CVS-local/WWW/2000/10', '/usr/lib/python23.zip', '/usr/lib/python2.3', '/usr/lib/python2.3/plat-linux2', '/usr/lib/python2.3/lib-tk', '/usr/lib/python2.3/lib-dynload', '/usr/local/lib/python2.3/site-packages', '/usr/lib/python2.3/site-packages', '/usr/lib/python2.3/site-packages/HTMLgen', '/usr/lib/python2.3/site-packages/Numeric', '/usr/lib/python2.3/site-packages/gtk-2.0', '/usr/lib/python2.3/site-packages/wx-2.5.3-gtk2-unicode', '/usr/lib/site-python', '/home/syosi/CVS-local/WWW/2000/10']<br>
+<strong>path</strong> = ['.', '/home/syosi/CVS-local/WWW/2000/10/swap', '/home/syosi/pychinko', '/home/syosi/CVS-local/WWW/2000/10', '/usr/lib/python23.zip', '/usr/lib/python2.3', '/usr/lib/python2.3/plat-linux2', '/usr/lib/python2.3/lib-tk', '/usr/lib/python2.3/lib-dynload', '/usr/local/lib/python2.3/site-packages', '/usr/lib/python2.3/site-packages', '/usr/lib/python2.3/site-packages/Numeric', '/usr/lib/python2.3/site-packages/cairo', '/usr/lib/python2.3/site-packages/gnuradio', '/var/lib/python-support/python2.3', '/usr/lib/python2.3/site-packages/gtk-2.0', '/var/lib/python-support/python2.3/gtk-2.0', '/usr/lib/site-python', '/home/syosi/CVS-local/WWW/2000/10']<br>
 <strong>qqq</strong> = '/home/syosi/CVS-local/WWW/2000/10/swap'<br>
 <strong>tracking</strong> = 0</td></tr></table>
 </body></html>

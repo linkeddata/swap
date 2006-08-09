@@ -13,7 +13,7 @@ from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
 from RDFSink import N3_nil, N3_first, N3_rest, OWL_NS, N3_Empty, N3_List, List_NS
 from RDFSink import RDF_NS_URI
 
-from OrderedSequence import merge, intersection, minus, indentString
+from OrderedSequence import intersection, minus, indentString
 
 import diag
 from diag import chatty_flag, tracking, progress
@@ -25,7 +25,7 @@ from term import BuiltIn, LightBuiltIn, RDFBuiltIn, ArgumentNotLiteral, \
 from formula import StoredStatement, Formula
 from why import Because, BecauseBuiltIn, BecauseOfRule, \
     BecauseOfExperience, becauseSubexpression, Reason, \
-    BecauseSupports, BecauseMerge ,report, Premise, newTopLevelFormula
+    BecauseSupports, BecauseMerge ,report, Premise, newTopLevelFormula, isTopLevel
 
 
 BuiltinFeedError = (ArgumentNotLiteral, UnknownType)
@@ -709,6 +709,13 @@ class Queue([].__class__):
 
 #Queue = [].__class__
 
+def returnWrapper(f):
+    def g(*args, **keywords):
+        retVal = f(*args, **keywords)
+        progress('%s() returns %s' % (f.func_name, retVal))
+        return retVal
+    return g
+
 class Query(Formula):
     """A query holds a hypothesis/antecedent/template which is being matched aginst (unified with)
     the knowledge base."""
@@ -900,7 +907,7 @@ class Query(Formula):
             progress(" --- because of: %s => %s, with bindings %s" % (self.template.debugString(),
                                                                       self.conclusion.debugString(),
                                                                       b2))
-        if diag.chatty_flag>30:
+        if diag.chatty_flag> 30:
             progress("Added %i, nominal size of store changed from %i to %i."%(delta, before, self.store.size))
         return delta #  self.store.size - before
 
@@ -1052,7 +1059,7 @@ class Query(Formula):
                         progress( "   state is %s, queue length %i" % (state, len(queue)+1))
                         progress("@@ Current item: %s" % `item`)
                         progress(queueToString(queue))
-                    return 0  # Forget it
+                    return total  # Forget it
             else:
                 raise RuntimeError, "Unknown state " + `state`
 		
@@ -1118,9 +1125,11 @@ class Query(Formula):
                 raise
             if len(queue.statements) != len(query.workingContext):
                 return total
-        return query.conclude(bindings,  evidence=evidence, extraBNodes = queue.bNodes)  # No terms left .. success!
-
-
+        newTotal = query.conclude(bindings,  evidence=evidence, extraBNodes = queue.bNodes) + total  # No terms left .. success!
+        if total:
+            progress('newTotal=%s, total=%s' % (newTotal, total))
+            raise RuntimeError('How did I get here?')
+        return newTotal
 
     def remoteQuery(query, items):
 	"""Perform remote query as client on remote store
@@ -1392,10 +1401,11 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
     #		proof.append(reason)
                 else: reason = None
                 if diag.chatty_flag > 10: progress("Bultin: " + `subj`+ " log:conclusion " + `F`)
-                store.copyFormula(newSubj, F, why=reason) # leave open
+                F.loadFormulaWithSubstitution(subj, why=reason, cannon=True) # leave open
                 think(F)
                 F4 = F.close()
                 if F4 is not F:
+                    raise RuntimeError
                     ### oh no! we've hit something old!
                     if F is subj:
                         ### absolute worst --- cannot be allowed!

@@ -88,26 +88,70 @@ class Env(dict):
 
 you can hash it (if you want to)
     """
-    __slots__ = ['_hashval', '__weakref__']
+    __slots__ = ['_hashval', '__weakref__', 'id']
+
+    def __init__(self, other=None, keywords={}):
+        if other is None:
+            dict.__init__(self)
+        else:
+            dict.__init__(self, other, **keywords)
+        self.id = self
     
     def newBinding(self, var, val):
-        retVal = Env(self, **{var: val})
+        retVal = Env(self, {var: val})
+        retVal.id = self.id
         return retVal
     bind = newBinding
 
     def __setitem__(self, item, val):
         raise TypeError
 
+    def __getitem__(self, item):
+        return super(dict, self).__getitem__(item)[0]
+
+    def get(self, item, default=None):
+        return dict.get(self, item, (default,))[0] 
+
     def dereference(self, var):
-        if isinstance(var, list):
-            return [self.dereference(x) for x in var]
-        if var in self:
-            return self[var]
-        if isinstance(var, tuple):
-            return tuple([self.dereference(x) for x in var])
-        if isinstance(var, (StoredStatement, Term)):
-            return var.substitution(self)
-        return var
+        try:
+            hash(var)
+        except TypeError:
+            return var
+        return dict.get(self, var, (var, self.id))
+
+    def flatten(self, other):
+        """Pull all of the bindings of other into a copy of self
+        """
+        from backward import progress
+        progress(lambda : 'Env.flatten(%s,%s)' % (self, other))
+        retVal = {}
+        for key, (val, source) in self.items():
+            if source is other.id:
+                retVal[key] = (other.substitution(val, self), self.id)
+            else:
+                retVal[key] = (val, source)
+        retVal = self.__class__(retVal)
+        retVal.id = self.id
+        progress(lambda : '... returns %s' % retVal)
+        return retVal
+
+    def substitution(self, node, *otherEnvs):
+        if self not in otherEnvs:
+            envs = (self,) + otherEnvs
+        if node in self:
+            k, s = self.dereference(node)
+            for env in envs:
+                if s is env.id:
+                    return env.substitution(k, *envs)
+                
+        elif isinstance(node, list):
+            return [self.substitution(x, otherEnvs) for x in node]
+        if isinstance(node, tuple):
+            return tuple([self.substitution(x, otherEnvs) for x in node])
+        if isinstance(node, (formula.StoredStatement, term.Term)):
+            return node.substitution(self)  ## Wrong!
+        return node
+            
 
     def canBind(self, var, val):
         if var in self:
@@ -123,6 +167,12 @@ you can hash it (if you want to)
         except AttributeError:
             self._hashval = hash(ImmutableSet(self.items()))
         return self._hashval
+
+def pickEnv(choice, *envs):
+    for env in envs:
+        if choice is env.id:
+            return env
+    return []  ## Not here.
         
 class Term(object):
     """The Term object represents an RDF term.
@@ -1021,53 +1071,75 @@ def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
 
 
 ##def unify(self, other, bindings=Env(), otherBindings=Env(),
-##          vars=Set([]), universals=Set([]), existentials=Set([])):
-##    """Unify this which may contain variables with the other,
-##        which may contain existentials but not variables.
-##        
-##        vars   are variables we want a binding for if matched
-##        existentials are things we don't need a binding returned for
-##        bindings are those bindings already made in this unification
-##        
-##        Return [] if impossible.
-##        return [({}, reason] if no new bindings
-##        Return [( {var1: val1, var2: val2,...}, reason), ...] if match
-##    """
-##    assert type(bindings) is Env
-##    assert type(otherBindings) is Env
-##    if diag.chatty_flag > 97:
-##        progress("Unifying symbol %s with %s vars=%s, so far=%s"%
-##                                    (self, other,vars, bindings))
-##    if isinstance(other, list):
+##          vars=Set([]), universals=Set([]), existentials=Set([]), n1Source=32, n2Source=32):
+##    from backward import progress
+##    if isinstance(self, list):
+##        self = tuple(self)
+##    if isinstance(n2, list):
 ##        other = tuple(other)
-##    n1 = bindings.dereference(self)
-##    n2 = otherBindings.dereference(other)
 ##
-##    env1 = bindings
-##    env2 = otherBindings
+##    if n1Source == 32: ## magic value:
+##        n1Source = env1.id
+##    if n2Source == 32:
+##        n2Source = env2.id
 ##
-##    if n1 in vars:   ## external vars
-##        if n2 in vars:   ### all good
-##            if n1 == n2:
+##    if n1Source is env1.id:
+##        n1SourceString = 'env1.id'
+##    elif n1Source is env2.id:
+##        n1SourceString = 'env2.id'
+##    else:
+##        n1SourceString = 'unknown.id'
+##    if n2Source is env1.id:
+##        n2SourceString = 'env1.id'
+##    elif n2Source is env2.id:
+##        n2SourceString = 'env2.id'
+##    else:
+##        n2SourceString = 'unknown.id'    
+##    progress(lambda: "Running unify(vars=%s, n1=%s, env1=%s, n2=%s, env2=%s, n1Source=%s, n2Source=%s)" % (vars, n1, env1, n2, env2, n1SourceString, n2SourceString))
+##
+##
+##    self, n1Source = dereference(self, env1, env2, n1Source)
+##    assert self not in env1
+##    other, n2Source = dereference(other, env1, env2, n2Source)
+##
+##    if self in vars and (pickEnv(n1Source, env1, env2) is not None):   ## external vars
+##        if other in vars:   ### all good
+##            if self == other and n1Source == n2Source:
 ##                yield (env1, env2)
 ##            else:
 ##                ### bind one to the other. It really does not matter
-##                if env1.canBind(n1, n2):
-##                    yield (env1.bind(n1,n2), env2)
+##                ### we need to be careful about envs
+##                envWithBinding = pickEnv(n1Source, env1, env2).bind(self,(other, n2Source))
+##                if n1Source is env1.id:
+##                    yield (envWithBinding, env2)
+##                elif n1Source is env2.id:
+##                    yield (env1, envWithBinding)
+##                else:
+##                    raise ValueError(id(n1Source), id(env1.id), id(env2.id))
 ##        else:       ## only n1 is a variable
-##            if occurs_check(n1, n2, env2):
-##                if env1.canBind(n1, n2):
-##                    yield (env1.bind(n1, n2), env2)
-##    elif n2 in vars:
-##        if occurs_check(n2, n1, env1):
-##            if env2.canBind(n2, n1):
-##                yield (env1, env2.bind(n2, n1))
-##    elif n1 in universals and n2 in universals:
-##        if env1.canBind(n1, n2):
-##            yield (env1.bind(n1,n2), env2)
-##    elif n1 in existentials and n2 in existentials:
-##        if env1.canBind(n1, n2):
-##            yield (env1.bind(n1,n2), env2)
+##            if occurs_check(self, other, env2):  ## This needs help
+##                ### we need to be careful about envs
+##                envWithBinding = pickEnv(n1Source, env1, env2).bind(self,(other, n2Source))
+##                if n1Source is env1.id:
+##                    yield (envWithBinding, env2)
+##                elif n1Source is env2.id:
+##                    yield (env1, envWithBinding)
+##                else:
+##                    raise ValueError
+##    elif other in vars and (pickEnv(n2Source, env1, env2) is not None):
+##        if occurs_check(other, self, env1): ## This needs help
+##            ### we need to be careful about envs
+##            envWithBinding = pickEnv(n2Source, env1, env2).bind(other,(self, n1Source))
+##            if n2Source is env1.id:
+##                yield (envWithBinding, env2)
+##            elif n2Source is env2.id:
+##                yield (env1, envWithBinding)
+##            else:
+##                raise ValueError
+##    elif self in universals and other in universals:
+##        yield (env1.bind(self,other), env2)
+##    elif self in existentials and other in existentials:
+##        yield (env1.bind(n1,n2), env2)
 ##    elif isinstance(self, (Set, ImmutableSet)):
 ##	for x in unifySet(self, other, env1, env2, vars, existentials):
 ##            yield x

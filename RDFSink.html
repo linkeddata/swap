@@ -167,21 +167,17 @@ avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;ugly.</tt
 
 <dl><dt><a name="RDFStructuredOutput-endAnonymousNode"><strong>endAnonymousNode</strong></a>(self, endAnonymousNode)</dt></dl>
 
-<dl><dt><a name="RDFStructuredOutput-endBagNamed"><strong>endBagNamed</strong></a>(self, subj)</dt></dl>
+<dl><dt><a name="RDFStructuredOutput-endFormulaObject"><strong>endFormulaObject</strong></a>(self, pred, subj)</dt></dl>
 
-<dl><dt><a name="RDFStructuredOutput-endBagObject"><strong>endBagObject</strong></a>(self, pred, subj)</dt></dl>
-
-<dl><dt><a name="RDFStructuredOutput-endBagSubject"><strong>endBagSubject</strong></a>(self, subj)</dt></dl>
+<dl><dt><a name="RDFStructuredOutput-endFormulaSubject"><strong>endFormulaSubject</strong></a>(self, subj)</dt></dl>
 
 <dl><dt><a name="RDFStructuredOutput-startAnonymous"><strong>startAnonymous</strong></a>(self, triple, isList<font color="#909090">=0</font>)</dt></dl>
 
 <dl><dt><a name="RDFStructuredOutput-startAnonymousNode"><strong>startAnonymousNode</strong></a>(self, subj)</dt></dl>
 
-<dl><dt><a name="RDFStructuredOutput-startBagNamed"><strong>startBagNamed</strong></a>(self, context, subj)</dt></dl>
+<dl><dt><a name="RDFStructuredOutput-startFormulaObject"><strong>startFormulaObject</strong></a>(self, triple)</dt></dl>
 
-<dl><dt><a name="RDFStructuredOutput-startBagObject"><strong>startBagObject</strong></a>(self, triple)</dt></dl>
-
-<dl><dt><a name="RDFStructuredOutput-startBagSubject"><strong>startBagSubject</strong></a>(self, context)</dt></dl>
+<dl><dt><a name="RDFStructuredOutput-startFormulaSubject"><strong>startFormulaSubject</strong></a>(self, context)</dt></dl>
 
 <hr>
 Methods inherited from <a href="RDFSink.html#RDFSink">RDFSink</a>:<br>
@@ -286,11 +282,11 @@ bash-2.04$&nbsp;python&nbsp;cwm.py&nbsp;test/rules12.n3&nbsp;--bySubject&nbsp;--
 
 <dl><dt><a name="TracingRDFSink-bind"><strong>bind</strong></a>(self, prefix, uri)</dt></dl>
 
-<dl><dt><a name="TracingRDFSink-endBagObject"><strong>endBagObject</strong></a>(self, pred, subj)</dt></dl>
-
-<dl><dt><a name="TracingRDFSink-endBagSubject"><strong>endBagSubject</strong></a>(self, subj)</dt></dl>
-
 <dl><dt><a name="TracingRDFSink-endDoc"><strong>endDoc</strong></a>(self, rootFormulaPair<font color="#909090">='&lt;&lt;strangely omitted&gt;&gt;'</font>)</dt></dl>
+
+<dl><dt><a name="TracingRDFSink-endFormulaObject"><strong>endFormulaObject</strong></a>(self, pred, subj)</dt></dl>
+
+<dl><dt><a name="TracingRDFSink-endFormulaSubject"><strong>endFormulaSubject</strong></a>(self, subj)</dt></dl>
 
 <dl><dt><a name="TracingRDFSink-makeComment"><strong>makeComment</strong></a>(self, comment)</dt></dl>
 
@@ -304,11 +300,11 @@ bash-2.04$&nbsp;python&nbsp;cwm.py&nbsp;test/rules12.n3&nbsp;--bySubject&nbsp;--
 
 <dl><dt><a name="TracingRDFSink-setDefaultNamespace"><strong>setDefaultNamespace</strong></a>(self, ns)</dt></dl>
 
-<dl><dt><a name="TracingRDFSink-startBagObject"><strong>startBagObject</strong></a>(self, triple)</dt></dl>
-
-<dl><dt><a name="TracingRDFSink-startBagSubject"><strong>startBagSubject</strong></a>(self, context)</dt></dl>
-
 <dl><dt><a name="TracingRDFSink-startDoc"><strong>startDoc</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="TracingRDFSink-startFormulaObject"><strong>startFormulaObject</strong></a>(self, triple)</dt></dl>
+
+<dl><dt><a name="TracingRDFSink-startFormulaSubject"><strong>startFormulaSubject</strong></a>(self, context)</dt></dl>
 
 </td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -369,6 +365,7 @@ Fractions&nbsp;of&nbsp;a&nbsp;second&nbsp;may&nbsp;be&nbsp;present&nbsp;if&nbsp;
 <strong>N3_Empty</strong> = (0, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#Empty')<br>
 <strong>N3_List</strong> = (0, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#List')<br>
 <strong>N3_first</strong> = (0, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#first')<br>
+<strong>N3_li</strong> = (0, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#li')<br>
 <strong>N3_nil</strong> = (0, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#nil')<br>
 <strong>N3_rest</strong> = (0, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#rest')<br>
 <strong>NODE_MERGE_URI</strong> = 'http://www.w3.org/2000/10/swap/log#is'<br>
@@ -382,7 +379,7 @@ Fractions&nbsp;of&nbsp;a&nbsp;second&nbsp;may&nbsp;be&nbsp;present&nbsp;if&nbsp;
 <strong>SUBJ</strong> = 2<br>
 <strong>SYMBOL</strong> = 0<br>
 <strong>__version__</strong> = '$Id$'<br>
-<strong>environ</strong> = {'GNOME_DESKTOP_SESSION_ID': 'Default', 'COLORTE....xwd=01;35:*.ogg=01;35:*.mp3=01;35:*.wav=01;35:'}<br>
+<strong>environ</strong> = {'GNOME_DESKTOP_SESSION_ID': 'Default', 'COLORTE....mp3=01;35:*.mpc=01;35:*.ogg=01;35:*.wav=01;35:'}<br>
 <strong>forAllSym</strong> = 'http://www.w3.org/2000/10/swap/log#forAll'<br>
 <strong>forSomeSym</strong> = 'http://www.w3.org/2000/10/swap/log#forSome'<br>
 <strong>nextu</strong> = 0<br>

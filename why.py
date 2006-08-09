@@ -113,10 +113,14 @@ def explainFormula(f, flags=""):
     tr = proofsOf.get(f, None)
     if tr is None:
 	raise ValueError(
-	    "No tracker. This may happen if the formula is validly empty.")
+	    "No tracker. This may happen if the formula is validly empty. f=%s, proofsOf=%s" % (f, dict(proofsOf)))
     if not tr:
         raise ValueError(dict(proofsOf))
-    return tr[0].explanation(flags=flags)
+    try:
+        return tr[0].explanation(flags=flags)
+    except:
+        print f.debugString()
+        raise
 
 
 # Internal utility
@@ -299,7 +303,11 @@ class KBReasonTracker(Reason):
 	
 	for r, ss in statementsForReason.items():
             assert r is not self, ("Loop in reasons!", self, id(self), s)
-	    r1 = r.explain(ko, flags=flags)
+            try:
+	       r1 = r.explain(ko, flags=flags)
+            except:
+               print ss
+               raise
 	    if diag.chatty_flag > 29:
 		progress(
 		"\tExplaining reason %s (->%s) for %i statements" % (r, r1, len(ss)))
@@ -471,7 +479,11 @@ class BecauseOfRule(Reason):
 	ev = []  # For PML compatability we will store it as a collection
 	for s in self._evidence:
 	    if isinstance(s, BecauseBuiltIn):
-		e = s.explain(ko, flags=flags)
+                try:
+		    e = s.explain(ko, flags=flags)
+                except:
+                    print s
+                    raise
 	    else:
 		f = s.context()
 		if f is self._kb: # Normal case
@@ -480,8 +492,12 @@ class BecauseOfRule(Reason):
 			for t in self.evidence:
 			    if t.context() is s.subject():
 				progress("Included statement used:" + `t`)
-				ko.add(e, reason.includeEvidence,
+                                try:
+				    ko.add(e, reason.includeEvidence,
 				    explainStatement(t, ko)) 
+                                except:
+                                    print s
+                                    raise 
 #		else:
 #		    progress("Included statement found:" + `s`)
 	    ev.append(e)
@@ -509,7 +525,7 @@ def getStatementReason(s):
 	Only have proofs for %s.
 	Formula contents as follows:
 	%s
-	""" % ( f, s, proofsOf, f.debugString()))	
+	""" % ( f, s, dict(proofsOf), f.debugString()))	
 
     tracker = KBReasonTrackers[0]
 
@@ -694,6 +710,17 @@ class BecauseSupports(BecauseBuiltIn):
                 if statement.context() is conclusion:
                     self.reason.append(statement)
         self.conclusion = conclusion
+        assert isTopLevel(conclusion)
+
+    def __repr__(self):
+        return '%s(%s,%s,%s,%s,%s,%s)' % (self.__class__.__name__,
+                                             self._context,
+                                             self._subject,
+                                             self.conclusion,
+                                             self._predicate,
+                                             self._object,
+                                             self.reason
+                                    )
 
     def explain(self, ko, flags):
         "This is just a plain fact - or was at the time."
@@ -714,7 +741,11 @@ class BecauseSupports(BecauseBuiltIn):
         ko.add(me, reason.because, m, why=dontAsk)
         statementsForReason = {}  # reverse index: group by reason
         for s in self.reason:
-            rea = getStatementReason(s)
+            try:
+                rea = getStatementReason(s)
+            except:
+                print s
+                raise
 	    x = statementsForReason.get(rea, None)
 	    if x is None: statementsForReason[rea] = [s]
 	    else: x.append(s)

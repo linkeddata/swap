@@ -77,7 +77,6 @@ from term import BuiltIn, LightBuiltIn, RDFBuiltIn, HeavyBuiltIn, Function, \
     MultipleFunction, ReverseFunction, MultipleReverseFunction, \
     Literal, Symbol, Fragment, FragmentNil, Term,\
     CompoundTerm, List, EmptyList, NonEmptyList, AnonymousNode, N3Set
-from OrderedSequence import merge
 from formula import Formula, StoredStatement
 import reify
 
@@ -97,7 +96,6 @@ from RDFSink import RDF_NS_URI
 from RDFSink import FORMULA, LITERAL, LITERAL_DT, LITERAL_LANG, ANONYMOUS, SYMBOL
 
 from pretty import Serializer
-from OrderedSequence import indentString
 
 LITERAL_URI_prefix = "data:application/rdf+n3-literal;"
 Delta_NS = "http://www.w3.org/2004/delta#"
@@ -204,7 +202,8 @@ class IndexedFormula(Formula):
 	self._closureMode = ""
 	self._closureAgenda = []
 	self._closureAlready = []
-	
+        self.reallyCanonical = False
+
 
     def statementsMatching(self, pred=None, subj=None, obj=None):
         """Return a READ-ONLY list of StoredStatement objects matching the parts given
@@ -341,6 +340,12 @@ class IndexedFormula(Formula):
 		or subj.canonical is subj), "subj Should be closed or self"+`subj`
 	assert not isinstance(obj, Formula) or obj.canonical is obj, "obj Should be closed"+`obj`
         store.size = store.size+1 # rather nominal but should be monotonic
+
+        if False and isTopLevel(self):
+            if isinstance(subj, Formula) and not subj.reallyCanonical:
+                raise RuntimeError(subj.debugString())
+            if isinstance(obj, Formula) and not obj.reallyCanonical:
+                raise RuntimeError(obj.debugString())
 
 # We collapse lists from the declared daml first,rest structure into List objects.
 # To do this, we need a bnode with (a) a first; (b) a rest, and (c) the rest being a list.
@@ -543,7 +548,7 @@ class IndexedFormula(Formula):
 
         F.store._equivalentFormulae.add(F)
 
-        if isTopLevel(F) or (F._renameVarsMaps and not cannon):  ## we are sitting in renameVars --- don't bother
+        if (diag.tracking and isTopLevel(F)) or (F._renameVarsMaps and not cannon):  ## we are sitting in renameVars --- don't bother
             F.canonical = F
             return F
  
@@ -556,6 +561,8 @@ class IndexedFormula(Formula):
             if diag.chatty_flag > 70:
                 progress("End formula - first of length", l, F)
             F.canonical = F
+            F.reallyCanonical = True
+ 
             return F
         if diag.chatty_flag > 70:
             progress('I got here, possibles = ', possibles)
@@ -618,6 +625,7 @@ class IndexedFormula(Formula):
 
         possibles.append(F)
         F.canonical = F
+        F.reallyCanonical = True
         if diag.chatty_flag > 70:
             progress("End formula, a fresh one:"+`F`)
 ##            for k in possibles:
@@ -1083,6 +1091,7 @@ class BI_conclusion(HeavyBuiltIn, Function):
 		return F
 
             F = self.store.newFormula()
+            newTopLevelFormula(F)
 	    if diag.tracking:
                 reason = Premise("Assumption of builtin", (subj, self))
 #		reason = BecauseMerge(F, subj)

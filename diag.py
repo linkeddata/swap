@@ -22,6 +22,7 @@ def progress(*args):
         sys.stderr.write(q)
     sys.stderr.write("\n")
 
+
 global chatty_flag # verbosity debug flag
 #chatty_flag  =0
 chatty_flag = int(os.environ.get("CWM_VERBOSITY", 0))

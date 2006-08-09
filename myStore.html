@@ -32,12 +32,15 @@ History:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Spilt&nbsp;off&nbsp;from&nbsp;&nbsp;thing.py&nbsp;2003-08-19<br>
 &nbsp;<br>
 $Log$
-Revision 1.10  2004-08-08 01:44:49  syosi
-undo what I did last thing Friday. Those changes are nowhere near ready for the trunk
-
-Revision 1.8  2004/08/03 18:56:57  syosi
-make sure make dist_tarball does not leave around a swap/swap directory to confuse things
+Revision 1.11  2006-08-09 23:20:42  syosi
+proof that release process still works
 <br>
+Revision&nbsp;1.12&nbsp;&nbsp;2005/10/24&nbsp;16:58:38&nbsp;&nbsp;timbl<br>
+--n3=B&nbsp;flag&nbsp;introduced.&nbsp;--why&nbsp;improved&nbsp;but&nbsp;not&nbsp;perfect.<br>
+&nbsp;<br>
+Revision&nbsp;1.11&nbsp;&nbsp;2004/08/08&nbsp;01:44:49&nbsp;&nbsp;syosi<br>
+undo&nbsp;what&nbsp;I&nbsp;did&nbsp;last&nbsp;thing&nbsp;Friday.&nbsp;Those&nbsp;changes&nbsp;are&nbsp;nowhere&nbsp;near&nbsp;ready&nbsp;for&nbsp;the&nbsp;trunk<br>
+&nbsp;<br>
 Revision&nbsp;1.9&nbsp;&nbsp;2004/07/29&nbsp;16:16:11&nbsp;&nbsp;syosi<br>
 rdflib&nbsp;tests&nbsp;in&nbsp;the&nbsp;default&nbsp;test&nbsp;suite<br>
 &nbsp;<br>
@@ -149,7 +152,7 @@ the&nbsp;given&nbsp;literal&nbsp;string&nbsp;and&nbsp;return&nbsp;it&nbsp;for&nb
 &gt;&gt;&gt;&nbsp;y&nbsp;=&nbsp;<a href="#-literal">literal</a>("#Andr\xe9")<br>
 &gt;&gt;&gt;&nbsp;x&nbsp;is&nbsp;y<br>
 1</tt></dd></dl>
- <dl><dt><a name="-load"><strong>load</strong></a>(uri<font color="#909090">=None</font>, openFormula<font color="#909090">=None</font>, contentType<font color="#909090">=None</font>, remember<font color="#909090">=1</font>)</dt><dd><tt>Get&nbsp;and&nbsp;parse&nbsp;document.&nbsp;&nbsp;Guesses&nbsp;format&nbsp;if&nbsp;necessary.<br>
+ <dl><dt><a name="-load"><strong>load</strong></a>(uri<font color="#909090">=None</font>, openFormula<font color="#909090">=None</font>, contentType<font color="#909090">=None</font>, remember<font color="#909090">=1</font>, flags<font color="#909090">=''</font>)</dt><dd><tt>Get&nbsp;and&nbsp;parse&nbsp;document.&nbsp;&nbsp;Guesses&nbsp;format&nbsp;if&nbsp;necessary.<br>
 &nbsp;<br>
 uri:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;None,&nbsp;load&nbsp;from&nbsp;standard&nbsp;input.<br>
 remember:&nbsp;if&nbsp;1,&nbsp;store&nbsp;as&nbsp;metadata&nbsp;the&nbsp;relationship&nbsp;between&nbsp;this&nbsp;URI&nbsp;and&nbsp;this&nbsp;formula.<br>

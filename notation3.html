@@ -12,12 +12,8 @@
     <p><tt>$Id$<br>
 &nbsp;<br>
 &nbsp;<br>
-This&nbsp;module&nbsp;implements&nbsp;basic&nbsp;sources&nbsp;and&nbsp;sinks&nbsp;for&nbsp;RDF&nbsp;data.<br>
-It&nbsp;defines&nbsp;a&nbsp;stream&nbsp;interface&nbsp;for&nbsp;such&nbsp;data.<br>
-It&nbsp;has&nbsp;a&nbsp;command&nbsp;line&nbsp;interface,&nbsp;can&nbsp;work&nbsp;as&nbsp;a&nbsp;web&nbsp;query&nbsp;engine,<br>
-and&nbsp;has&nbsp;built&nbsp;in&nbsp;test(),&nbsp;all&nbsp;of&nbsp;which&nbsp;demosntrate&nbsp;how&nbsp;it&nbsp;is&nbsp;used.<br>
-&nbsp;<br>
-To&nbsp;make&nbsp;a&nbsp;new&nbsp;RDF&nbsp;processor,&nbsp;subclass&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.<br>
+This&nbsp;module&nbsp;implements&nbsp;a&nbsp;Nptation3&nbsp;parser,&nbsp;and&nbsp;the&nbsp;final<br>
+part&nbsp;of&nbsp;a&nbsp;notation3&nbsp;serializer.<br>
 &nbsp;<br>
 See&nbsp;also:<br>
 &nbsp;<br>
@@ -25,41 +21,18 @@ Notation&nbsp;3<br>
 <a href="http://www.w3.org/DesignIssues/Notation3">http://www.w3.org/DesignIssues/Notation3</a><br>
 &nbsp;<br>
 Closed&nbsp;World&nbsp;Machine&nbsp;-&nbsp;and&nbsp;RDF&nbsp;Processor<br>
-http;//www.w3.org/2000/10/swap/cwm<br>
+<a href="http://www.w3.org/2000/10/swap/cwm">http://www.w3.org/2000/10/swap/cwm</a><br>
 &nbsp;<br>
 To&nbsp;DO:&nbsp;See&nbsp;also&nbsp;"@@"&nbsp;in&nbsp;comments<br>
 &nbsp;<br>
-Internationlization:<br>
--&nbsp;Decode&nbsp;incoming&nbsp;N3&nbsp;file&nbsp;as&nbsp;unicode<br>
--&nbsp;Encode&nbsp;outgoing&nbsp;file<br>
--&nbsp;unicode&nbsp;\u&nbsp;&nbsp;(??)&nbsp;escapes&nbsp;in&nbsp;parse<br>
--&nbsp;unicode&nbsp;\u&nbsp;&nbsp;(??)&nbsp;escapes&nbsp;in&nbsp;string&nbsp;output<br>
-&nbsp;<br>
-Note&nbsp;currently&nbsp;unicode&nbsp;strings&nbsp;work&nbsp;in&nbsp;this&nbsp;code<br>
-but&nbsp;fail&nbsp;when&nbsp;they&nbsp;are&nbsp;output&nbsp;into&nbsp;the&nbsp;python&nbsp;debugger<br>
-interactive&nbsp;window.<br>
-&nbsp;<br>
+-&nbsp;Clean&nbsp;up&nbsp;interfaces<br>
 ______________________________________________<br>
 &nbsp;<br>
 Module&nbsp;originally&nbsp;by&nbsp;Dan&nbsp;Connolly,&nbsp;includeing&nbsp;notation3<br>
 parser&nbsp;and&nbsp;RDF&nbsp;generator.&nbsp;TimBL&nbsp;added&nbsp;RDF&nbsp;stream&nbsp;model<br>
 and&nbsp;N3&nbsp;generation,&nbsp;replaced&nbsp;stream&nbsp;model&nbsp;with&nbsp;use<br>
-of&nbsp;common&nbsp;store/formula&nbsp;API.<br>
-&nbsp;<br>
-DWC:<br>
-oops...&nbsp;I'm&nbsp;not&nbsp;doing&nbsp;qname&nbsp;expansion&nbsp;as&nbsp;described<br>
-there&nbsp;(i.e.&nbsp;adding&nbsp;a&nbsp;#&nbsp;if&nbsp;it's&nbsp;not&nbsp;already&nbsp;there).<br>
-&nbsp;<br>
-I&nbsp;allow&nbsp;unprefixed&nbsp;qnames,&nbsp;so&nbsp;not&nbsp;all&nbsp;barenames<br>
-are&nbsp;keywords.<br>
-&nbsp;<br>
-----&nbsp;hmmmm&nbsp;...&nbsp;not&nbsp;expandable&nbsp;-&nbsp;a&nbsp;bit&nbsp;of&nbsp;a&nbsp;trap.<br>
-&nbsp;<br>
-I&nbsp;haven't&nbsp;done&nbsp;quoting&nbsp;yet.<br>
-&nbsp;<br>
-idea:&nbsp;migrate&nbsp;toward&nbsp;CSS&nbsp;notation?<br>
-&nbsp;<br>
-idea:&nbsp;use&nbsp;notation3&nbsp;for&nbsp;wiki&nbsp;record&nbsp;keeping.</tt></p>
+of&nbsp;common&nbsp;store/formula&nbsp;API.&nbsp;&nbsp;Yosi&nbsp;Scharf&nbsp;developped<br>
+the&nbsp;module,&nbsp;including&nbsp;tests&nbsp;and&nbsp;test&nbsp;harness.</tt></p>
 <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#aa55cc">
@@ -156,6 +129,8 @@ the&nbsp;#&nbsp;will&nbsp;get&nbsp;added&nbsp;during&nbsp;qname&nbsp;processing<
 
 <dl><dt><a name="SinkParser-bind"><strong>bind</strong></a>(self, qn, uri)</dt></dl>
 
+<dl><dt><a name="SinkParser-blankNode"><strong>blankNode</strong></a>(self, uri<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="SinkParser-checkDot"><strong>checkDot</strong></a>(self, str, i)</dt></dl>
 
 <dl><dt><a name="SinkParser-commaSeparatedList"><strong>commaSeparatedList</strong></a>(self, str, j, res, what)</dt><dd><tt>return&nbsp;value:&nbsp;-1&nbsp;bad&nbsp;syntax;&nbsp;&gt;1&nbsp;new&nbsp;position&nbsp;in&nbsp;str<br>
@@ -183,7 +158,7 @@ This&nbsp;is&nbsp;for&nbsp;repeatability&nbsp;when&nbsp;refering&nbsp;people&nbs
 This&nbsp;has&nbsp;diagnostic&nbsp;uses&nbsp;less&nbsp;formally,&nbsp;as&nbsp;it&nbsp;should&nbsp;point&nbsp;one&nbsp;to&nbsp;which&nbsp;<br>
 bnode&nbsp;the&nbsp;arbitrary&nbsp;identifier&nbsp;actually&nbsp;is.&nbsp;It&nbsp;gives&nbsp;the<br>
 line&nbsp;and&nbsp;character&nbsp;number&nbsp;of&nbsp;the&nbsp;'['&nbsp;charcacter&nbsp;or&nbsp;path&nbsp;character<br>
-which&nbsp;introduced&nbsp;the&nbsp;blank&nbsp;node.&nbsp;&nbsp;The&nbsp;first&nbsp;blank&nbsp;node&nbsp;is&nbsp;boringly&nbsp;_L1C1.<br>
+which&nbsp;introduced&nbsp;the&nbsp;blank&nbsp;node.&nbsp;The&nbsp;first&nbsp;blank&nbsp;node&nbsp;is&nbsp;boringly&nbsp;_L1C1.<br>
 It&nbsp;used&nbsp;to&nbsp;be&nbsp;used&nbsp;only&nbsp;for&nbsp;tracking,&nbsp;but&nbsp;for&nbsp;tests&nbsp;in&nbsp;general<br>
 it&nbsp;makes&nbsp;the&nbsp;canonical&nbsp;ordering&nbsp;of&nbsp;bnodes&nbsp;repeatable.</tt></dd></dl>
 
@@ -275,13 +250,15 @@ Adapted&nbsp;from&nbsp;Dan's&nbsp;ToRDFParser(Parser);<br>&nbsp;</tt></td></tr>
 
 <dl><dt><a name="ToN3-endAnonymousNode"><strong>endAnonymousNode</strong></a>(self, subj<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="ToN3-endBagNamed"><strong>endBagNamed</strong></a>(self, subj)</dt></dl>
-
-<dl><dt><a name="ToN3-endBagObject"><strong>endBagObject</strong></a>(self, pred, subj)</dt></dl>
-
-<dl><dt><a name="ToN3-endBagSubject"><strong>endBagSubject</strong></a>(self, subj)</dt></dl>
-
 <dl><dt><a name="ToN3-endDoc"><strong>endDoc</strong></a>(self, rootFormulaPair<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="ToN3-endFormulaObject"><strong>endFormulaObject</strong></a>(self, pred, subj)</dt></dl>
+
+<dl><dt><a name="ToN3-endFormulaSubject"><strong>endFormulaSubject</strong></a>(self, subj)</dt></dl>
+
+<dl><dt><a name="ToN3-endListObject"><strong>endListObject</strong></a>(self, subject, verb)</dt></dl>
+
+<dl><dt><a name="ToN3-endListSubject"><strong>endListSubject</strong></a>(self, subj<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="ToN3-makeComment"><strong>makeComment</strong></a>(self, str)</dt></dl>
 
@@ -294,23 +271,25 @@ Uses&nbsp;prefix&nbsp;dictionary&nbsp;to&nbsp;use&nbsp;qname&nbsp;syntax&nbsp;if
 
 <dl><dt><a name="ToN3-setDefaultNamespace"><strong>setDefaultNamespace</strong></a>(self, uri)</dt></dl>
 
-<dl><dt><a name="ToN3-startAnonymous"><strong>startAnonymous</strong></a>(self, triple, isList<font color="#909090">=0</font>)</dt></dl>
+<dl><dt><a name="ToN3-startAnonymous"><strong>startAnonymous</strong></a>(self, triple)</dt></dl>
 
-<dl><dt><a name="ToN3-startAnonymousNode"><strong>startAnonymousNode</strong></a>(self, subj, isList<font color="#909090">=0</font>)</dt></dl>
-
-<dl><dt><a name="ToN3-startBagNamed"><strong>startBagNamed</strong></a>(self, context, subj)</dt></dl>
-
-<dl><dt><a name="ToN3-startBagObject"><strong>startBagObject</strong></a>(self, triple)</dt></dl>
-
-<dl><dt><a name="ToN3-startBagSubject"><strong>startBagSubject</strong></a>(self, context)</dt></dl>
+<dl><dt><a name="ToN3-startAnonymousNode"><strong>startAnonymousNode</strong></a>(self, subj)</dt></dl>
 
 <dl><dt><a name="ToN3-startDoc"><strong>startDoc</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ToN3-startFormulaObject"><strong>startFormulaObject</strong></a>(self, triple)</dt></dl>
+
+<dl><dt><a name="ToN3-startFormulaSubject"><strong>startFormulaSubject</strong></a>(self, context)</dt></dl>
+
+<dl><dt><a name="ToN3-startListObject"><strong>startListObject</strong></a>(self, triple)</dt></dl>
+
+<dl><dt><a name="ToN3-startListSubject"><strong>startListSubject</strong></a>(self, subj)</dt></dl>
 
 <dl><dt><a name="ToN3-writeEncoded"><strong>writeEncoded</strong></a>(self, str)</dt><dd><tt>Write&nbsp;a&nbsp;possibly&nbsp;unicode&nbsp;string&nbsp;out&nbsp;to&nbsp;the&nbsp;output</tt></dd></dl>
 
 <hr>
 Data and other attributes defined here:<br>
-<dl><dt><strong>flagDocumentation</strong> = 'Flags for N3 output are as follows:-<font color="#c040c0">\n</font>        <font color="#c040c0">\n</font>a ... assume it ends at the last slash if outputting.<font color="#c040c0">\n</font>'</dl>
+<dl><dt><strong>flagDocumentation</strong> = 'Flags for N3 output are as follows:-<font color="#c040c0">\n</font>        <font color="#c040c0">\n</font>a ...a existentially qualified explicitly named node.<font color="#c040c0">\n</font>'</dl>
 
 <hr>
 Methods inherited from <a href="RDFSink.html#RDFSink">RDFSink.RDFSink</a>:<br>
@@ -471,16 +450,19 @@ is&nbsp;again&nbsp;acceptable.&nbsp;Remember&nbsp;to&nbsp;end&nbsp;the&nbsp;docu
 <font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
     
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><dl><dt><a name="-backslashUify"><strong>backslashUify</strong></a>(ustr)</dt><dd><tt>Use&nbsp;URL&nbsp;encoding&nbsp;to&nbsp;return&nbsp;an&nbsp;ASCII&nbsp;string&nbsp;corresponding&nbsp;to&nbsp;the&nbsp;given&nbsp;unicode</tt></dd></dl>
+<td width="100%"><dl><dt><a name="-backslashUify"><strong>backslashUify</strong></a>(ustr)</dt><dd><tt>Use&nbsp;URL&nbsp;encoding&nbsp;to&nbsp;return&nbsp;an&nbsp;ASCII&nbsp;string&nbsp;corresponding<br>
+to&nbsp;the&nbsp;given&nbsp;unicode</tt></dd></dl>
  <dl><dt><a name="-dummy"><strong>dummy</strong></a>()</dt></dl>
  <dl><dt><a name="-dummyWrite"><strong>dummyWrite</strong></a>(x)</dt></dl>
- <dl><dt><a name="-hexify"><strong>hexify</strong></a>(ustr)</dt><dd><tt>Use&nbsp;URL&nbsp;encoding&nbsp;to&nbsp;return&nbsp;an&nbsp;ASCII&nbsp;string&nbsp;corresponding&nbsp;to&nbsp;the&nbsp;given&nbsp;UTF8&nbsp;string<br>
+ <dl><dt><a name="-hexify"><strong>hexify</strong></a>(ustr)</dt><dd><tt>Use&nbsp;URL&nbsp;encoding&nbsp;to&nbsp;return&nbsp;an&nbsp;ASCII&nbsp;string<br>
+corresponding&nbsp;to&nbsp;the&nbsp;given&nbsp;UTF8&nbsp;string<br>
 &nbsp;<br>
 &gt;&gt;&gt;&nbsp;<a href="#-hexify">hexify</a>("<a href="http://example/a">http://example/a</a>&nbsp;b")<br>
 '<a href="http://example/a%20b">http://example/a%20b</a>'</tt></dd></dl>
  <dl><dt><a name="-nothing"><strong>nothing</strong></a>()</dt></dl>
  <dl><dt><a name="-stringToN3"><strong>stringToN3</strong></a>(str, singleLine<font color="#909090">=0</font>, flags<font color="#909090">=''</font>)</dt><dd><tt>#"</tt></dd></dl>
  <dl><dt><a name="-stripCR"><strong>stripCR</strong></a>(str)</dt></dl>
+ <dl><dt><a name="-toBool"><strong>toBool</strong></a>(s)</dt></dl>
 </td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">
@@ -491,6 +473,7 @@ is&nbsp;again&nbsp;acceptable.&nbsp;Remember&nbsp;to&nbsp;end&nbsp;the&nbsp;docu
 <td width="100%"><strong>ADDED_HASH</strong> = '#'<br>
 <strong>ALL4</strong> = (0, 1, 2, 3)<br>
 <strong>ANONYMOUS</strong> = 3<br>
+<strong>BOOLEAN_DATATYPE</strong> = 'http://www.w3.org/2001/XMLSchema#boolean'<br>
 <strong>CONTEXT</strong> = 0<br>
 <strong>DAML_sameAs</strong> = (0, 'http://www.w3.org/2002/07/owl#sameAs')<br>
 <strong>DAML_sameAs_URI</strong> = 'http://www.w3.org/2002/07/owl#sameAs'<br>
@@ -511,6 +494,7 @@ is&nbsp;again&nbsp;acceptable.&nbsp;Remember&nbsp;to&nbsp;end&nbsp;the&nbsp;docu
 <strong>N3_first</strong> = (0, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#first')<br>
 <strong>N3_forAll_URI</strong> = 'http://www.w3.org/2000/10/swap/log#forAll'<br>
 <strong>N3_forSome_URI</strong> = 'http://www.w3.org/2000/10/swap/log#forSome'<br>
+<strong>N3_li</strong> = (0, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#li')<br>
 <strong>N3_nil</strong> = (0, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#nil')<br>
 <strong>N3_rest</strong> = (0, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#rest')<br>
 <strong>OBJ</strong> = 3<br>
@@ -523,6 +507,7 @@ is&nbsp;again&nbsp;acceptable.&nbsp;Remember&nbsp;to&nbsp;end&nbsp;the&nbsp;docu
 <strong>RDF_type_URI</strong> = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'<br>
 <strong>SUBJ</strong> = 2<br>
 <strong>SYMBOL</strong> = 0<br>
+<strong>becauseSubexpression</strong> = &lt;why.BecauseSubexpression instance&gt;<br>
 <strong>digitstring</strong> = &lt;_sre.SRE_Pattern object&gt;<br>
 <strong>eof</strong> = &lt;_sre.SRE_Pattern object&gt;<br>
 <strong>eol</strong> = &lt;_sre.SRE_Pattern object&gt;<br>

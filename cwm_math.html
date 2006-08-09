@@ -6,7 +6,7 @@
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
 <tr bgcolor="#7799ee">
 <td valign=bottom>&nbsp;<br>
-<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>cwm_math</strong></big></big> (version 1.24)</font></td
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>cwm_math</strong></big></big> (version 1.25)</font></td
 ><td align=right valign=bottom
 ><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/syosi/CVS-local/WWW/2000/10/swap/cwm_math.py">/home/syosi/CVS-local/WWW/2000/10/swap/cwm_math.py</a></font></td></tr></table>
     <p><tt>Matematical&nbsp;Built-Ins&nbsp;for&nbsp;CWM/Llyn<br>
@@ -181,7 +181,8 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 <dl><dt><a name="BI_absoluteValue-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
-see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,<br>
+string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <dl><dt><a name="BI_absoluteValue-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
 This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
@@ -196,26 +197,28 @@ Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nb
 a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
 This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
-<dl><dt><a name="BI_absoluteValue-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+<dl><dt><a name="BI_absoluteValue-debugString"><strong>debugString</strong></a>(self, already<font color="#909090">=[]</font>)</dt></dl>
 
 <dl><dt><a name="BI_absoluteValue-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
 
+<dl><dt><a name="BI_absoluteValue-freeVariables"><strong>freeVariables</strong></a>(self)</dt></dl>
+
 <dl><dt><a name="BI_absoluteValue-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_absoluteValue-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_absoluteValue-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+<dl><dt><a name="BI_absoluteValue-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>, cannon<font color="#909090">=False</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_absoluteValue-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+<dl><dt><a name="BI_absoluteValue-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
 &nbsp;<br>
 vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
 existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
 bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
 &nbsp;<br>
-Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
 
@@ -309,7 +312,8 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 <dl><dt><a name="BI_bit-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
-see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,<br>
+string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <dl><dt><a name="BI_bit-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
 This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
@@ -324,26 +328,28 @@ Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nb
 a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
 This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
-<dl><dt><a name="BI_bit-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+<dl><dt><a name="BI_bit-debugString"><strong>debugString</strong></a>(self, already<font color="#909090">=[]</font>)</dt></dl>
 
 <dl><dt><a name="BI_bit-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
 
+<dl><dt><a name="BI_bit-freeVariables"><strong>freeVariables</strong></a>(self)</dt></dl>
+
 <dl><dt><a name="BI_bit-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_bit-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_bit-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+<dl><dt><a name="BI_bit-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>, cannon<font color="#909090">=False</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_bit-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+<dl><dt><a name="BI_bit-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
 &nbsp;<br>
 vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
 existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
 bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
 &nbsp;<br>
-Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
 
@@ -435,7 +441,8 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 <dl><dt><a name="BI_difference-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
-see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,<br>
+string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <dl><dt><a name="BI_difference-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
 This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
@@ -450,26 +457,28 @@ Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nb
 a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
 This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
-<dl><dt><a name="BI_difference-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+<dl><dt><a name="BI_difference-debugString"><strong>debugString</strong></a>(self, already<font color="#909090">=[]</font>)</dt></dl>
 
 <dl><dt><a name="BI_difference-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
 
+<dl><dt><a name="BI_difference-freeVariables"><strong>freeVariables</strong></a>(self)</dt></dl>
+
 <dl><dt><a name="BI_difference-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_difference-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_difference-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+<dl><dt><a name="BI_difference-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>, cannon<font color="#909090">=False</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_difference-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+<dl><dt><a name="BI_difference-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
 &nbsp;<br>
 vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
 existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
 bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
 &nbsp;<br>
-Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
 
@@ -558,7 +567,8 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 <dl><dt><a name="BI_differenceOf-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
-see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,<br>
+string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <dl><dt><a name="BI_differenceOf-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
 This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
@@ -573,26 +583,28 @@ Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nb
 a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
 This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
-<dl><dt><a name="BI_differenceOf-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+<dl><dt><a name="BI_differenceOf-debugString"><strong>debugString</strong></a>(self, already<font color="#909090">=[]</font>)</dt></dl>
 
 <dl><dt><a name="BI_differenceOf-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
 
+<dl><dt><a name="BI_differenceOf-freeVariables"><strong>freeVariables</strong></a>(self)</dt></dl>
+
 <dl><dt><a name="BI_differenceOf-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_differenceOf-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_differenceOf-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+<dl><dt><a name="BI_differenceOf-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>, cannon<font color="#909090">=False</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_differenceOf-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+<dl><dt><a name="BI_differenceOf-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
 &nbsp;<br>
 vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
 existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
 bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
 &nbsp;<br>
-Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
 
@@ -636,7 +648,8 @@ Methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
-use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use<br>
+evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
 
 <hr>
 Static methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
@@ -681,7 +694,8 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 <dl><dt><a name="BI_equalTo-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
-see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,<br>
+string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <dl><dt><a name="BI_equalTo-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
 This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
@@ -696,26 +710,28 @@ Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nb
 a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
 This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
-<dl><dt><a name="BI_equalTo-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+<dl><dt><a name="BI_equalTo-debugString"><strong>debugString</strong></a>(self, already<font color="#909090">=[]</font>)</dt></dl>
 
 <dl><dt><a name="BI_equalTo-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
 
+<dl><dt><a name="BI_equalTo-freeVariables"><strong>freeVariables</strong></a>(self)</dt></dl>
+
 <dl><dt><a name="BI_equalTo-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_equalTo-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_equalTo-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+<dl><dt><a name="BI_equalTo-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>, cannon<font color="#909090">=False</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_equalTo-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+<dl><dt><a name="BI_equalTo-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
 &nbsp;<br>
 vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
 existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
 bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
 &nbsp;<br>
-Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
 
@@ -807,7 +823,8 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 <dl><dt><a name="BI_exponentiation-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
-see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,<br>
+string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <dl><dt><a name="BI_exponentiation-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
 This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
@@ -822,26 +839,28 @@ Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nb
 a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
 This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
-<dl><dt><a name="BI_exponentiation-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+<dl><dt><a name="BI_exponentiation-debugString"><strong>debugString</strong></a>(self, already<font color="#909090">=[]</font>)</dt></dl>
 
 <dl><dt><a name="BI_exponentiation-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
 
+<dl><dt><a name="BI_exponentiation-freeVariables"><strong>freeVariables</strong></a>(self)</dt></dl>
+
 <dl><dt><a name="BI_exponentiation-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_exponentiation-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_exponentiation-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+<dl><dt><a name="BI_exponentiation-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>, cannon<font color="#909090">=False</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_exponentiation-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+<dl><dt><a name="BI_exponentiation-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
 &nbsp;<br>
 vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
 existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
 bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
 &nbsp;<br>
-Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
 
@@ -930,7 +949,8 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 <dl><dt><a name="BI_exponentiationOf-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
-see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,<br>
+string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <dl><dt><a name="BI_exponentiationOf-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
 This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
@@ -945,26 +965,28 @@ Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nb
 a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
 This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
-<dl><dt><a name="BI_exponentiationOf-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+<dl><dt><a name="BI_exponentiationOf-debugString"><strong>debugString</strong></a>(self, already<font color="#909090">=[]</font>)</dt></dl>
 
 <dl><dt><a name="BI_exponentiationOf-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
 
+<dl><dt><a name="BI_exponentiationOf-freeVariables"><strong>freeVariables</strong></a>(self)</dt></dl>
+
 <dl><dt><a name="BI_exponentiationOf-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_exponentiationOf-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_exponentiationOf-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+<dl><dt><a name="BI_exponentiationOf-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>, cannon<font color="#909090">=False</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_exponentiationOf-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+<dl><dt><a name="BI_exponentiationOf-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
 &nbsp;<br>
 vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
 existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
 bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
 &nbsp;<br>
-Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
 
@@ -1053,7 +1075,8 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 <dl><dt><a name="BI_factors-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
-see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,<br>
+string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <dl><dt><a name="BI_factors-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
 This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
@@ -1068,26 +1091,28 @@ Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nb
 a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
 This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
-<dl><dt><a name="BI_factors-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+<dl><dt><a name="BI_factors-debugString"><strong>debugString</strong></a>(self, already<font color="#909090">=[]</font>)</dt></dl>
 
 <dl><dt><a name="BI_factors-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
 
+<dl><dt><a name="BI_factors-freeVariables"><strong>freeVariables</strong></a>(self)</dt></dl>
+
 <dl><dt><a name="BI_factors-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_factors-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_factors-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+<dl><dt><a name="BI_factors-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>, cannon<font color="#909090">=False</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_factors-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+<dl><dt><a name="BI_factors-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
 &nbsp;<br>
 vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
 existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
 bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
 &nbsp;<br>
-Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
 
@@ -1131,7 +1156,8 @@ Methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
-use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use<br>
+evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
 
 <hr>
 Static methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
@@ -1176,7 +1202,8 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 <dl><dt><a name="BI_greaterThan-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
-see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,<br>
+string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <dl><dt><a name="BI_greaterThan-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
 This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
@@ -1191,26 +1218,28 @@ Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nb
 a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
 This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
-<dl><dt><a name="BI_greaterThan-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+<dl><dt><a name="BI_greaterThan-debugString"><strong>debugString</strong></a>(self, already<font color="#909090">=[]</font>)</dt></dl>
 
 <dl><dt><a name="BI_greaterThan-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
 
+<dl><dt><a name="BI_greaterThan-freeVariables"><strong>freeVariables</strong></a>(self)</dt></dl>
+
 <dl><dt><a name="BI_greaterThan-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_greaterThan-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_greaterThan-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+<dl><dt><a name="BI_greaterThan-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>, cannon<font color="#909090">=False</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_greaterThan-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+<dl><dt><a name="BI_greaterThan-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
 &nbsp;<br>
 vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
 existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
 bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
 &nbsp;<br>
-Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
 
@@ -1302,7 +1331,8 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 <dl><dt><a name="BI_integerQuotient-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
-see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,<br>
+string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <dl><dt><a name="BI_integerQuotient-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
 This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
@@ -1317,26 +1347,28 @@ Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nb
 a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
 This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
-<dl><dt><a name="BI_integerQuotient-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+<dl><dt><a name="BI_integerQuotient-debugString"><strong>debugString</strong></a>(self, already<font color="#909090">=[]</font>)</dt></dl>
 
 <dl><dt><a name="BI_integerQuotient-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
 
+<dl><dt><a name="BI_integerQuotient-freeVariables"><strong>freeVariables</strong></a>(self)</dt></dl>
+
 <dl><dt><a name="BI_integerQuotient-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_integerQuotient-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_integerQuotient-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+<dl><dt><a name="BI_integerQuotient-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>, cannon<font color="#909090">=False</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_integerQuotient-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+<dl><dt><a name="BI_integerQuotient-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
 &nbsp;<br>
 vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
 existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
 bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
 &nbsp;<br>
-Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
 
@@ -1380,7 +1412,8 @@ Methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
-use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use<br>
+evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
 
 <hr>
 Static methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
@@ -1425,7 +1458,8 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 <dl><dt><a name="BI_lessThan-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
-see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,<br>
+string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <dl><dt><a name="BI_lessThan-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
 This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
@@ -1440,26 +1474,28 @@ Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nb
 a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
 This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
-<dl><dt><a name="BI_lessThan-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+<dl><dt><a name="BI_lessThan-debugString"><strong>debugString</strong></a>(self, already<font color="#909090">=[]</font>)</dt></dl>
 
 <dl><dt><a name="BI_lessThan-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
 
+<dl><dt><a name="BI_lessThan-freeVariables"><strong>freeVariables</strong></a>(self)</dt></dl>
+
 <dl><dt><a name="BI_lessThan-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_lessThan-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_lessThan-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+<dl><dt><a name="BI_lessThan-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>, cannon<font color="#909090">=False</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_lessThan-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+<dl><dt><a name="BI_lessThan-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
 &nbsp;<br>
 vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
 existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
 bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
 &nbsp;<br>
-Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
 
@@ -1551,7 +1587,8 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 <dl><dt><a name="BI_memberCount-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
-see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,<br>
+string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <dl><dt><a name="BI_memberCount-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
 This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
@@ -1566,26 +1603,28 @@ Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nb
 a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
 This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
-<dl><dt><a name="BI_memberCount-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+<dl><dt><a name="BI_memberCount-debugString"><strong>debugString</strong></a>(self, already<font color="#909090">=[]</font>)</dt></dl>
 
 <dl><dt><a name="BI_memberCount-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
 
+<dl><dt><a name="BI_memberCount-freeVariables"><strong>freeVariables</strong></a>(self)</dt></dl>
+
 <dl><dt><a name="BI_memberCount-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_memberCount-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_memberCount-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+<dl><dt><a name="BI_memberCount-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>, cannon<font color="#909090">=False</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_memberCount-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+<dl><dt><a name="BI_memberCount-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
 &nbsp;<br>
 vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
 existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
 bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
 &nbsp;<br>
-Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
 
@@ -1685,7 +1724,8 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 <dl><dt><a name="BI_negation-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
-see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,<br>
+string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <dl><dt><a name="BI_negation-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
 This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
@@ -1700,26 +1740,28 @@ Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nb
 a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
 This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
-<dl><dt><a name="BI_negation-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+<dl><dt><a name="BI_negation-debugString"><strong>debugString</strong></a>(self, already<font color="#909090">=[]</font>)</dt></dl>
 
 <dl><dt><a name="BI_negation-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
 
+<dl><dt><a name="BI_negation-freeVariables"><strong>freeVariables</strong></a>(self)</dt></dl>
+
 <dl><dt><a name="BI_negation-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_negation-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_negation-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+<dl><dt><a name="BI_negation-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>, cannon<font color="#909090">=False</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_negation-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+<dl><dt><a name="BI_negation-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
 &nbsp;<br>
 vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
 existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
 bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
 &nbsp;<br>
-Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
 
@@ -1763,7 +1805,8 @@ Methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
-use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use<br>
+evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
 
 <hr>
 Static methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
@@ -1808,7 +1851,8 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 <dl><dt><a name="BI_notEqualTo-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
-see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,<br>
+string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <dl><dt><a name="BI_notEqualTo-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
 This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
@@ -1823,26 +1867,28 @@ Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nb
 a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
 This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
-<dl><dt><a name="BI_notEqualTo-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+<dl><dt><a name="BI_notEqualTo-debugString"><strong>debugString</strong></a>(self, already<font color="#909090">=[]</font>)</dt></dl>
 
 <dl><dt><a name="BI_notEqualTo-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
 
+<dl><dt><a name="BI_notEqualTo-freeVariables"><strong>freeVariables</strong></a>(self)</dt></dl>
+
 <dl><dt><a name="BI_notEqualTo-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_notEqualTo-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_notEqualTo-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+<dl><dt><a name="BI_notEqualTo-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>, cannon<font color="#909090">=False</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_notEqualTo-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+<dl><dt><a name="BI_notEqualTo-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
 &nbsp;<br>
 vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
 existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
 bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
 &nbsp;<br>
-Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
 
@@ -1886,7 +1932,8 @@ Methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
-use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use<br>
+evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
 
 <hr>
 Static methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
@@ -1931,7 +1978,8 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 <dl><dt><a name="BI_notGreaterThan-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
-see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,<br>
+string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <dl><dt><a name="BI_notGreaterThan-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
 This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
@@ -1946,26 +1994,28 @@ Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nb
 a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
 This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
-<dl><dt><a name="BI_notGreaterThan-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+<dl><dt><a name="BI_notGreaterThan-debugString"><strong>debugString</strong></a>(self, already<font color="#909090">=[]</font>)</dt></dl>
 
 <dl><dt><a name="BI_notGreaterThan-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
 
+<dl><dt><a name="BI_notGreaterThan-freeVariables"><strong>freeVariables</strong></a>(self)</dt></dl>
+
 <dl><dt><a name="BI_notGreaterThan-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_notGreaterThan-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_notGreaterThan-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+<dl><dt><a name="BI_notGreaterThan-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>, cannon<font color="#909090">=False</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_notGreaterThan-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+<dl><dt><a name="BI_notGreaterThan-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
 &nbsp;<br>
 vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
 existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
 bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
 &nbsp;<br>
-Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
 
@@ -2009,7 +2059,8 @@ Methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
-use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use<br>
+evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
 
 <hr>
 Static methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
@@ -2054,7 +2105,8 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 <dl><dt><a name="BI_notLessThan-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
-see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,<br>
+string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <dl><dt><a name="BI_notLessThan-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
 This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
@@ -2069,26 +2121,28 @@ Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nb
 a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
 This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
-<dl><dt><a name="BI_notLessThan-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+<dl><dt><a name="BI_notLessThan-debugString"><strong>debugString</strong></a>(self, already<font color="#909090">=[]</font>)</dt></dl>
 
 <dl><dt><a name="BI_notLessThan-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
 
+<dl><dt><a name="BI_notLessThan-freeVariables"><strong>freeVariables</strong></a>(self)</dt></dl>
+
 <dl><dt><a name="BI_notLessThan-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_notLessThan-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_notLessThan-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+<dl><dt><a name="BI_notLessThan-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>, cannon<font color="#909090">=False</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_notLessThan-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+<dl><dt><a name="BI_notLessThan-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
 &nbsp;<br>
 vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
 existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
 bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
 &nbsp;<br>
-Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
 
@@ -2180,7 +2234,8 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 <dl><dt><a name="BI_product-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
-see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,<br>
+string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <dl><dt><a name="BI_product-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
 This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
@@ -2195,26 +2250,28 @@ Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nb
 a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
 This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
-<dl><dt><a name="BI_product-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+<dl><dt><a name="BI_product-debugString"><strong>debugString</strong></a>(self, already<font color="#909090">=[]</font>)</dt></dl>
 
 <dl><dt><a name="BI_product-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
 
+<dl><dt><a name="BI_product-freeVariables"><strong>freeVariables</strong></a>(self)</dt></dl>
+
 <dl><dt><a name="BI_product-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_product-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_product-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+<dl><dt><a name="BI_product-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>, cannon<font color="#909090">=False</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_product-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+<dl><dt><a name="BI_product-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
 &nbsp;<br>
 vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
 existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
 bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
 &nbsp;<br>
-Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
 
@@ -2306,7 +2363,8 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 <dl><dt><a name="BI_quotient-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
-see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,<br>
+string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <dl><dt><a name="BI_quotient-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
 This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
@@ -2321,26 +2379,28 @@ Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nb
 a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
 This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
-<dl><dt><a name="BI_quotient-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+<dl><dt><a name="BI_quotient-debugString"><strong>debugString</strong></a>(self, already<font color="#909090">=[]</font>)</dt></dl>
 
 <dl><dt><a name="BI_quotient-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
 
+<dl><dt><a name="BI_quotient-freeVariables"><strong>freeVariables</strong></a>(self)</dt></dl>
+
 <dl><dt><a name="BI_quotient-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_quotient-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_quotient-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+<dl><dt><a name="BI_quotient-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>, cannon<font color="#909090">=False</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_quotient-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+<dl><dt><a name="BI_quotient-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
 &nbsp;<br>
 vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
 existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
 bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
 &nbsp;<br>
-Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
 
@@ -2429,7 +2489,8 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 <dl><dt><a name="BI_quotientOf-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
-see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,<br>
+string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <dl><dt><a name="BI_quotientOf-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
 This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
@@ -2444,26 +2505,28 @@ Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nb
 a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
 This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
-<dl><dt><a name="BI_quotientOf-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+<dl><dt><a name="BI_quotientOf-debugString"><strong>debugString</strong></a>(self, already<font color="#909090">=[]</font>)</dt></dl>
 
 <dl><dt><a name="BI_quotientOf-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
 
+<dl><dt><a name="BI_quotientOf-freeVariables"><strong>freeVariables</strong></a>(self)</dt></dl>
+
 <dl><dt><a name="BI_quotientOf-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_quotientOf-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_quotientOf-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+<dl><dt><a name="BI_quotientOf-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>, cannon<font color="#909090">=False</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_quotientOf-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+<dl><dt><a name="BI_quotientOf-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
 &nbsp;<br>
 vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
 existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
 bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
 &nbsp;<br>
-Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
 
@@ -2555,7 +2618,8 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 <dl><dt><a name="BI_remainder-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
-see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,<br>
+string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <dl><dt><a name="BI_remainder-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
 This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
@@ -2570,26 +2634,28 @@ Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nb
 a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
 This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
-<dl><dt><a name="BI_remainder-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+<dl><dt><a name="BI_remainder-debugString"><strong>debugString</strong></a>(self, already<font color="#909090">=[]</font>)</dt></dl>
 
 <dl><dt><a name="BI_remainder-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
 
+<dl><dt><a name="BI_remainder-freeVariables"><strong>freeVariables</strong></a>(self)</dt></dl>
+
 <dl><dt><a name="BI_remainder-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_remainder-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_remainder-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+<dl><dt><a name="BI_remainder-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>, cannon<font color="#909090">=False</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_remainder-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+<dl><dt><a name="BI_remainder-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
 &nbsp;<br>
 vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
 existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
 bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
 &nbsp;<br>
-Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
 
@@ -2678,7 +2744,8 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 <dl><dt><a name="BI_remainderOf-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
-see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,<br>
+string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <dl><dt><a name="BI_remainderOf-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
 This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
@@ -2693,26 +2760,28 @@ Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nb
 a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
 This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
-<dl><dt><a name="BI_remainderOf-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+<dl><dt><a name="BI_remainderOf-debugString"><strong>debugString</strong></a>(self, already<font color="#909090">=[]</font>)</dt></dl>
 
 <dl><dt><a name="BI_remainderOf-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
 
+<dl><dt><a name="BI_remainderOf-freeVariables"><strong>freeVariables</strong></a>(self)</dt></dl>
+
 <dl><dt><a name="BI_remainderOf-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_remainderOf-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_remainderOf-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+<dl><dt><a name="BI_remainderOf-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>, cannon<font color="#909090">=False</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_remainderOf-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+<dl><dt><a name="BI_remainderOf-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
 &nbsp;<br>
 vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
 existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
 bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
 &nbsp;<br>
-Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
 
@@ -2804,7 +2873,8 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 <dl><dt><a name="BI_rounded-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
-see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,<br>
+string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <dl><dt><a name="BI_rounded-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
 This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
@@ -2819,26 +2889,28 @@ Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nb
 a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
 This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
-<dl><dt><a name="BI_rounded-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+<dl><dt><a name="BI_rounded-debugString"><strong>debugString</strong></a>(self, already<font color="#909090">=[]</font>)</dt></dl>
 
 <dl><dt><a name="BI_rounded-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
 
+<dl><dt><a name="BI_rounded-freeVariables"><strong>freeVariables</strong></a>(self)</dt></dl>
+
 <dl><dt><a name="BI_rounded-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_rounded-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_rounded-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+<dl><dt><a name="BI_rounded-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>, cannon<font color="#909090">=False</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_rounded-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+<dl><dt><a name="BI_rounded-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
 &nbsp;<br>
 vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
 existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
 bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
 &nbsp;<br>
-Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
 
@@ -2930,7 +3002,8 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 <dl><dt><a name="BI_sum-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
-see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,<br>
+string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <dl><dt><a name="BI_sum-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
 This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
@@ -2945,26 +3018,28 @@ Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nb
 a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
 This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
-<dl><dt><a name="BI_sum-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+<dl><dt><a name="BI_sum-debugString"><strong>debugString</strong></a>(self, already<font color="#909090">=[]</font>)</dt></dl>
 
 <dl><dt><a name="BI_sum-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
 
+<dl><dt><a name="BI_sum-freeVariables"><strong>freeVariables</strong></a>(self)</dt></dl>
+
 <dl><dt><a name="BI_sum-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_sum-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_sum-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+<dl><dt><a name="BI_sum-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>, cannon<font color="#909090">=False</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_sum-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+<dl><dt><a name="BI_sum-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
 &nbsp;<br>
 vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
 existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
 bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
 &nbsp;<br>
-Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
 
@@ -3053,7 +3128,8 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 <dl><dt><a name="BI_sumOf-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
-see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,<br>
+string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <dl><dt><a name="BI_sumOf-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
 This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
@@ -3068,26 +3144,28 @@ Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nb
 a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
 This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
-<dl><dt><a name="BI_sumOf-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+<dl><dt><a name="BI_sumOf-debugString"><strong>debugString</strong></a>(self, already<font color="#909090">=[]</font>)</dt></dl>
 
 <dl><dt><a name="BI_sumOf-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
 &nbsp;<br>
 This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
 
+<dl><dt><a name="BI_sumOf-freeVariables"><strong>freeVariables</strong></a>(self)</dt></dl>
+
 <dl><dt><a name="BI_sumOf-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_sumOf-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_sumOf-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+<dl><dt><a name="BI_sumOf-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>, cannon<font color="#909090">=False</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
 
-<dl><dt><a name="BI_sumOf-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+<dl><dt><a name="BI_sumOf-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
 &nbsp;<br>
 vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
 existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
 bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
 &nbsp;<br>
-Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
 return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
 Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
 

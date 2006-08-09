@@ -46,7 +46,7 @@ from RDFSink import FORMULA, SYMBOL
 
 
 
-from why import Because
+from why import Because, isTopLevel
 
 
 ###################################### Forumula
@@ -379,6 +379,9 @@ For future reference, use newUniversal
             subj=s[SUBJ].substitution(
                                  bindings2, why=subWhy, cannon=cannon).substitution(
                                     bindings3, why=subWhy, cannon=cannon)
+            if isTopLevel(self) and isinstance(subj, Formula) and not subj.reallyCanonical:
+                subj = subj.reopen()
+                subj = subj.canonicalize(cannon=True)
             if subj is not s[SUBJ]:
                 bindings2[s[SUBJ]] = subj
 	    pred=s[PRED].substitution(

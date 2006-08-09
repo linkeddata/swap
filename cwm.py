@@ -573,8 +573,7 @@ rdf/xml files. Note that this requires rdflib.
 		progress("\nDump of working formula:\n" + workingContext.debugString())
 		
             elif arg == "-purge":
-                
-		workingContext.reopen()
+    		workingContext.reopen()
                 _store.purge(workingContext)
 		
             elif arg == "-purge-rules" or arg == "-data":
