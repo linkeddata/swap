@@ -19,7 +19,7 @@ import diag
 from diag import chatty_flag, tracking, progress
 from term import BuiltIn, LightBuiltIn, RDFBuiltIn, ArgumentNotLiteral, \
     HeavyBuiltIn, Function, ReverseFunction, MultipleFunction, \
-    MultipleReverseFunction, UnknownType, \
+    MultipleReverseFunction, UnknownType, Env, \
     Literal, Symbol, Fragment, FragmentNil,  Term, \
     CompoundTerm, List, EmptyList, NonEmptyList, ErrorFlag
 from formula import StoredStatement, Formula
@@ -624,51 +624,60 @@ def testIncludes(f, g, _variables=Set(),  bindings={}, interpretBuiltins = 0):
     return result
 
 
-def n3Entails(f, g, vars=Set([]), existentials=Set([]),  bindings={}):    
+def n3Equivalent(g, f, env1, env2, vars=Set([]),
+                 universals=Set(), existentials=Set([]),
+                 n1Source=42, n2Source=42):    
     """Return whether or nor f contains a top-level formula equvalent to g.
     Just a test: no bindings returned."""
-    if diag.chatty_flag >30: progress("Query.py n3Entails ============\nseeing if %s equals %s" % (f, g))
+    if diag.chatty_flag >30: progress("Query.py n3Equivalent ============\nseeing if %s equals %s" % (f, g))
 #    raise RuntimeError()
-    if not(isinstance(f, Formula) and isinstance(g, Formula)): return []
+    if not(isinstance(f, Formula) and isinstance(g, Formula)): pass
+    elif f is g:
+        yield env1, env2
+    elif len(f) > len(g):
+        pass
+    else:
 
-    assert f.canonical is f
-    assert g.canonical is g
-    if f is g: return [({}, None)]
-    if len(f) > len(g): return []
+        assert f.canonical is f
+        assert g.canonical is g
 
-    m = diag.chatty_flag
-    diag.chatty_flag = 0
-    if m > 60: progress("Before rename: ", f.debugString())
-    f = f.renameVars()
-    if m > 60: progress("After rename: ", f.debugString())
-    diag.chatty_flag = m
-    unmatched = buildStrictPattern(f, g)
-    templateExistentials = g.existentials() | g.universals() | existentials
-    more_variables = Set(vars)
-    _substitute({g: f}, unmatched)
-    
-    if bindings != {}: _substitute(bindings, unmatched)
+        m = diag.chatty_flag
+        diag.chatty_flag = 0
+        if m > 60: progress("Before rename: ", f.debugString())
+        f = f.renameVars()
+        if m > 60: progress("After rename: ", f.debugString())
+        diag.chatty_flag = m
+        unmatched = buildStrictPattern(f, g)
+        templateExistentials = g.existentials() | g.universals() | existentials
+        more_variables = Set(vars)
+        _substitute({g: f}, unmatched)
+        
+        if env1: _substitute(env1.asDict(), unmatched)
 
-    if diag.chatty_flag > 20:
-	progress( "# testIncludes BUILTIN, %i terms in template %s, %i unmatched, %i template variables" % (
-	    len(g.statements),
-	    `g`[-8:], len(unmatched), len(templateExistentials)))
-	if diag.chatty_flag > 80:
-	    for v in vars:
-		progress( "    Variable: " + `v`[-8:])
+        if diag.chatty_flag > 20:
+            progress( "# testEqual BUILTIN, %i terms in template %s, %i unmatched, %i template variables" % (
+                len(g.statements),
+                `g`[-8:], len(unmatched), len(templateExistentials)))
+            if diag.chatty_flag > 80:
+                for v in vars:
+                    progress( "    Variable: " + `v`[-8:])
 
-    result = Query(f.store,
-		unmatched=unmatched,
-		template = g,
-		variables=more_variables,
-                workingContext = f,
-                interpretBuiltins = False,
-		existentials= templateExistentials ,
-		justReturn=1, mode="").resolve()
+        result = Query(f.store,
+                    unmatched=unmatched,
+                    template = g,
+                    variables=more_variables,
+                    workingContext = f,
+                    interpretBuiltins = False,
+                    existentials= templateExistentials ,
+                    justReturn=1, mode="").resolve()
 
-    if diag.chatty_flag >30: progress("=================== end n3Entails =" + `result`)
-    if not result: return []
-    return [(x, None) for x in result]
+        if diag.chatty_flag >30: progress("=================== end n3Equivalent =" + `result`)
+        if not result: result = []
+        for x in result:
+            for k, (v, source) in x.items():
+                env1 = env1.bind(k, (v, env2.id))
+            yield env1, env2
+##    return [(x, None) for x in result]
 
 
 
@@ -707,7 +716,39 @@ class Queue([].__class__):
             self.bNodes = Set()
             pass #fill in slots here
 
+    def popBest(self):
+        best = len(self) -1 # , say...
+        i = best - 1
+        while i >=0:
+            if (self[i].state > self[best].state
+                or (self[i].state == self[best].state
+                    and self[i].short < self[best].short)): best=i
+            i = i - 1                
+        item = self[best]
+        self.remove(item)
+        return item
+
 #Queue = [].__class__
+
+class Chain_Step(object):
+    def __init__(self, queue, env, parent=None, evidence=[]):
+        self.lines = queue
+        self.env = env
+        self.parent = parent
+        self.evidence = evidence
+
+    def popBest(self):
+        return self.lines.popBest()
+
+    def copy(self):
+        retVal = self.__class__(self.lines, self.env, self.parent, self.evidence)
+
+    def done(self):
+        return not self.lines
+
+    def __cmp__(self, other):
+        return cmp(len(other.lines), len(self.lines))
+
 
 def returnWrapper(f):
     def g(*args, **keywords):
@@ -825,7 +866,7 @@ class Query(Formula):
 	    self.checkRedirectsInAlready() # @@@ KLUDGE - use delegation and notification systme instead
             if bindings in self.already:
                 if diag.chatty_flag > 30:
-		    progress("@@ Duplicate result: %r" %  bindings)
+		    progress("@@ Duplicate result: %r is in %r" %  (bindings, self.already))
                 return 0
             if diag.chatty_flag > 30: progress("Not duplicate: %r" % bindings)
             self.already.append(bindings)
@@ -851,7 +892,7 @@ class Query(Formula):
 	    reason = None
 
 	es, exout = (extraBNodes), Set() #self.workingContext.existentials() | 
-	for var, val in bindings.items():
+	for var, (val, source) in bindings.items():
             if isinstance(val, Exception):
                 if "q" in self.mode: # How nice are we?
                     raise ValueError(val)
@@ -867,7 +908,7 @@ class Query(Formula):
 
 	# Variable renaming
 
-        b2 = bindings.copy()
+        b2 = bindings.asDict()
 	b2[self.conclusion] = self.targetContext
         ok = self.targetContext.universals() 
 	# It is actually ok to share universal variables with other stuff
@@ -914,14 +955,115 @@ class Query(Formula):
 
 ##################################################################################
 
+    def matchFormula(query, queue, env=Env()):
+        stack = [Chain_Step(queue, env)]
+        while stack:
+            workingStep = stack.pop()
+            if not workingStep.done():
+                queue = workingStep.lines
+                evidence = workingStep.evidence
+                bindings = workingStep.env
+                
+                item = workingStep.popBest()
+
+                con, pred, subj, obj = item.quad
+                state = item.state
+                if state == S_DONE:  # After bindNew, could be undoable.
+                    nbs = []
+                if state == S_LIGHT_UNS_READY:		# Search then 
+                    nbs = item.tryBuiltin(queue, bindings, evidence=evidence)
+                    item.state = S_LIGHT_EARLY   # Unsearched, try builtin @@@@@@@@@ <== need new state here
+                elif state == S_LIGHT_GO:
+                    nbs = item.tryBuiltin(queue, bindings, evidence=evidence)
+                    item.state = S_DONE   # Searched.
+                elif (state == S_LIGHT_EARLY or state == S_NOT_LIGHT or
+                                        state == S_NEED_DEEP): #  Not searched yet
+                    nbs = item.tryDeepSearch(queue)
+                elif state == S_HEAVY_READY:  # not light, may be heavy; or heavy ready to run
+                    if pred is query.store.includes: # and not diag.tracking:  # don't optimize when tracking?
+                        nbs = item.doIncludes(queue, existentials, variables, bindings)
+                    elif pred is query.store.supports:
+                        nbs = item.doSupports(queue, existentials, variables, bindings)
+                    else:
+                        item.state = S_HEAVY_WAIT  # Assume can't resolve
+                        nbs = item.tryBuiltin(queue, bindings, evidence=evidence)
+                    item.state = S_DONE
+                elif state == S_REMOTE: # Remote query -- need to find all of them for the same service
+                    items = [item]
+                    for i in queue[:]:
+                        if i.state == S_REMOTE and i.service is item.service: #@@ optimize which group is done first!
+                            items.append(i)
+                            queue.remove(i)
+                    nbs = query.remoteQuery(items)
+                    item.state = S_DONE  # do not put back on list
+                elif state ==S_HEAVY_WAIT or state == S_LIGHT_WAIT:
+                    if item.quad[PRED] is query.store.universalVariableName or \
+                       item.quad[PRED] is query.store.existentialVariableName:
+                        ### We will never bind this variable in the first place
+                        item.state = S_DONE
+                        nbs = []
+                    else:
+                        if diag.chatty_flag > 20 :
+                            progress("@@@@ Warning: query can't find term which will work.")
+                            progress( "   state is %s, queue length %i" % (state, len(queue)+1))
+                            progress("@@ Current item: %s" % `item`)
+                            progress(queueToString(queue))
+                        return total  # Forget it
+                else:
+                    raise RuntimeError, "Unknown state " + `state`
+
+
+                stack_extent = []
+                for nb, reason in nbs:
+                    assert type(nb) is types.DictType, nb
+                    q2 = Queue([], queue)
+                    if query.justReturn:
+                        ### What does the following do?
+                        ### If we are doing a 1::1 match, record everything we have matched
+                        if isinstance(reason, StoredStatement):
+                            if reason not in q2.statements and \
+                               reason[CONTEXT] is query.workingContext:
+                                q2.statements.add(reason)
+                            else:
+                                continue
+                    if isinstance(reason, StoredStatement):
+                        if True or reason[CONTEXT] is not query.workingContext:
+                            for m in nb.values():
+                                if m in reason[CONTEXT].existentials():
+                                    q2.bNodes.add(m)
+                                    if diag.chatty_flag > 80:
+                                        ### These get picked up from log:includes
+                                        ### {[:b :c]} log:includes {?X :b :c} ...
+                                        progress('Adding bNode %s, now %s' % (m, q2.bNodes))
+                    for i in queue:
+                        newItem = i.clone()
+                        q2.append(newItem)  #@@@@@@@@@@  If exactly 1 binding, loop (tail recurse)
+
+                    new_step = Chain_Step(q2, new_env, workingStep.parent, workingStep.evidence + [reason])
+                    stack_extent.append(new_step)
+
+                if item.state != S_DONE:
+                    queue.append(item)
+                    new_step = workingStep.copy()
+                    stack_extent.append(new_step)
+                stack.extend(stack_extent)
+
+                    
+
+            else:
+                if workingStep.parent is not None:
+                    raise RuntimeError("We are not chaining yet.\n How did I get here?")
+                else:
+                    pass
+
 
     def matchFormula(query,
                queue,               # Set of items we are trying to match CORRUPTED
                variables,           # List of variables to match and return CORRUPTED
                existentials,        # List of variables to match to anything
                                     # Existentials or any kind of variable in subexpression
-               bindings = {},       # Bindings discovered so far
-               newBindings = {},    # New bindings not yet incorporated
+               bindings = Env(),       # Bindings discovered so far
+               newBindings = Env(),    # New bindings not yet incorporated
 	       evidence = []):	    # List of statements supporting the bindings so far
         """ Iterate on the remaining query items
     bindings      collected matches already found
@@ -932,8 +1074,8 @@ class Query(Formula):
     even if it is a bit out of date.
         """
         total = 0
-	assert type(bindings) is type({})
-	assert type(newBindings) is type({})
+	assert isinstance(bindings, Env)
+	assert isinstance(newBindings, Env)
         if diag.chatty_flag > 59:
             progress( "QUERY2: called %i terms, %i bindings %s, (new: %s)" %
                       (len(queue), len(bindings), `bindings`,
@@ -943,10 +1085,14 @@ class Query(Formula):
         newBindingItems = newBindings.items()
         while newBindingItems:   # Take care of business left over from recursive call
             pair = newBindingItems.pop(0)
+            if isinstance(pair[1], tuple):
+                pair = (pair[0], pair[1][0])
+            else:
+                raise RuntimeError
             if diag.chatty_flag>95: progress("    new binding:  %s -> %s" % (`pair[0]`, `pair[1]`))
             if pair[0] in variables:
                 variables.remove(pair[0])
-                bindings.update({pair[0]: pair[1]})  # Record for posterity
+                bindings = bindings.newBinding(pair[0], (pair[1], None))
             else:      # Formulae aren't needed as existentials, unlike lists. hmm.
                 ### bindings.update({pair[0]: pair[1]})  # remove me!!!!!
 #		if diag.tracking: raise RuntimeError(pair[0], pair[1])
@@ -958,11 +1104,12 @@ class Query(Formula):
                         #We can accidently bind a list using (1 2 3) rdf:rest (?x 3).
                         #This finds the true binding
                         reallyNewBindingsList = pair[0].unify(
-                                    pair[1], variables, existentials, bindings)
+                                    pair[1], bindings, Env(), variables | existentials)
                         ## I'm a bit parenoid. If we did not find a binding ...
                         if not reallyNewBindingsList or not hasattr(
 					reallyNewBindingsList, '__iter__'):
                             return 0
+                        reallyNewBindingsList = [x for x in reallyNewBindingsList]
                         try:
                             reallyNewBindings = reallyNewBindingsList[0][0] #We don't deal
                             # with multiple ways to bind
@@ -976,11 +1123,11 @@ class Query(Formula):
                             print a[0][0]
                             raise
                         newBindingItems.extend(reallyNewBindings.items())
-                        newBindings.update(reallyNewBindings)
+                        newBindings = newBindings.update2(reallyNewBindings)
                     else:
                         if diag.chatty_flag > 40:  # Reasonable
                             progress("Not in existentials or variables but now bound:", `pair[0]`)
-                elif diag.tracking: bindings.update({pair[0]: pair[1]})
+                elif diag.tracking: bindings = bindings.newBinding(pair[0], (pair[1], None))
                 if not isinstance(pair[0], CompoundTerm) and ( # Hack - else rules13.n3 fails @@
 		    pair[0] in existentials):    # Hack ... could be bnding from nested expression
                     existentials.remove(pair[0]) # Can't match anything anymore, need exact match
@@ -1004,15 +1151,8 @@ class Query(Formula):
 
             # Take best.  (Design choice: search here or keep queue in order)
             # item = queue.pop()
-            best = len(queue) -1 # , say...
-            i = best - 1
-            while i >=0:
-                if (queue[i].state > queue[best].state
-                    or (queue[i].state == queue[best].state
-                        and queue[i].short < queue[best].short)): best=i
-                i = i - 1                
-            item = queue[best]
-            queue.remove(item)
+            item = queue.popBest()
+            
             if diag.chatty_flag>49:
                 progress( "Looking at " + `item`)
                 progress( "...with vars("+seqToString(variables)+")"
@@ -1073,7 +1213,7 @@ class Query(Formula):
 #		continue # Loop around and do the next one. optimization.
 
 	    for nb, reason in nbs:
-		assert type(nb) is types.DictType, nb
+		assert isinstance(nb,types.DictType), nb
 		q2 = Queue([], queue)
 		if query.justReturn:
                     ### What does the following do?
@@ -1087,6 +1227,8 @@ class Query(Formula):
 		if isinstance(reason, StoredStatement):
                     if True or reason[CONTEXT] is not query.workingContext:
                         for m in nb.values():
+                            if isinstance(m, tuple):
+                                m = m[0]
                             if m in reason[CONTEXT].existentials():
                                 q2.bNodes.add(m)
                                 if diag.chatty_flag > 80:
@@ -1360,7 +1502,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			       seqToString(more_variables)))
 	    rea = BecauseBuiltInWill(subj, con, oldsubj, pred, obj)
 ##	    nbs = [({oldsubj: subj}, rea)]
-	    nbs = [({}, rea)]
+	    nbs = [(Env(), rea)]
 	else:
             if isinstance(subj, Formula): subj = subj.n3String()
             if isinstance(obj, Formula): obj = obj.n3String()
@@ -1435,7 +1577,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			       seqToString(more_variables)))
 	    rea = BecauseSupportsWill(con, subj, F, pred, obj)
 ##	    nbs = [({oldsubj: subj}, rea)]
-	    nbs = [({}, rea)]
+	    nbs = [(Env(), rea)]
 	else:
             if isinstance(subj, Formula): subj = subj.n3String()
             if isinstance(obj, Formula): obj = obj.n3String()
@@ -1470,8 +1612,8 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 				"Builtin buinary relation operator succeeds")
                             if diag.tracking:
                                 rea = BecauseBuiltIn(con, subj, pred, obj)
-				return [({}, rea)]  # Involves extra recursion just to track reason
-                            return [({}, None)]   # No new bindings but success in logical operator
+				return [(Env(), rea)]  # Involves extra recursion just to track reason
+                            return [(Env(), None)]   # No new bindings but success in logical operator
                         else: return []   # We absoluteley know this won't match with this in it
 
                     except caughtErrors:
@@ -1521,9 +1663,9 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                                     result2 = result
 				rea = BecauseBuiltIn(con, subj, pred, result)
 			    if isinstance(pred, MultipleFunction):
-				return [({obj:x}, rea) for x in result]
+				return [(Env({obj:(x, None)}), rea) for x in result]
 			    else:
-				return [({obj: result}, rea)]
+				return [(Env({obj: (result, None)}), rea)]
                         else:
 			    return []
 	    else:
@@ -1554,9 +1696,9 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			    if diag.tracking:
 				rea = BecauseBuiltIn(con, result, pred, obj)
 			    if isinstance(pred, MultipleReverseFunction):
-				return [({subj:x}, rea) for x in result]
+				return [(Env({subj:(x,None)}), rea) for x in result]
 			    else:
-				return [({subj: result}, rea)]
+				return [(Env({subj: (result,None)}), rea)]
                         else:
 			    return []
 		else:
@@ -1600,46 +1742,30 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
             for s in self.myIndex :  # for everything matching what we know,
                 if self.query.justReturn and s in queue.statements:
                     continue
-                nb = {}
+                env_queue = [(Env(), Env())]
+                ### Why not just unify here?
 		if diag.chatty_flag > 106: progress("...checking %r" % s)
                 for p in PRED, SUBJ, OBJ:
                     if self.searchPattern[p] == None: # Need to check
-			x = self.quad[p]
-			if self.neededToRun[p] == Set([x]):   # a term with no variables
-			    nb1 = {x: s.quad[p]}
-			else:  # Deep case   
-			    if diag.chatty_flag > 70:
-				progress( "Deep: Unify %s with %s vars=%s; ee=%s" %
-				(x, s.quad[p], `self.query.variables`[4:-1],
-				`self.query._existentialVariables`[4:-1]))
-			    nbs1 = x.unify(s.quad[p], self.neededToRun[p] & self.query.variables,
-				self.neededToRun[p] & self.query._existentialVariables, {})  # Bindings have all been bound
-			    if diag.chatty_flag > 70:
-				progress( "Unification in %s result binding %s" %(self, nbs1))
-			    if nbs1 == []:
-				if diag.chatty_flag > 106: progress("......fail: %s" % self)
-				break  # reject this statement
-			    if len(nbs1) > 1:
-#				raise RuntimeError(
-				progress(
- "@@@ Not implemented multiple bindings here yet - call timbl. Returned bindings are:"+`nbs1`)
-			    nb1, rea = nbs1[0]
-			if diag.chatty_flag > 120:
-                            progress("nb1 = %s" % `nb1`)
-                            progress("nb  = %s" % `nb`)
-			for binding in nb1.items():
-                            if binding[0] in nb.keys():
-                                if nb[binding[0]] is binding[1]:
-                		    del nb1[binding[0]] # duplicate  
-                                else: # don't bind same to var to 2 things!
-                                    if diag.chatty_flag > 570:
-                                        progress( "... can't do that because nb[%s]=%s, not %s" %(binding[0], nb[binding[0]], binding[1]))
-                                    break # reject
-			else:
-			    nb.update(nb1)
-			    continue
-			break # reject
-                else:
+                        eq = env_queue
+                        env_queue = []
+                        for nb, env2 in eq:
+                            x = self.quad[p]
+                            if self.neededToRun[p] == Set([x]):   # a term with no variables
+                                if x not in nb:
+                                    nb = nb.bind(x, (s.quad[p], env2))
+                                    env_queue.append((nb, env2))
+                            else:  # Deep case   
+                                if diag.chatty_flag > 70:
+                                    progress( "Deep: Unify %s with %s vars=%s; ee=%s" %
+                                    (x, s.quad[p], `self.query.variables`[4:-1],
+                                    `self.query._existentialVariables`[4:-1]))
+                                for nb1, env3 in x.unify(s.quad[p], nb, env2, self.neededToRun[p]):
+                                    env_queue.append((nb1, env3))
+##                                nbs1 = x.unify(s.quad[p], self.neededToRun[p] & self.query.variables,
+##                                    self.neededToRun[p] & self.query._existentialVariables, {})  # Bindings have all been bound
+                                
+                for nb, _ in env_queue: 
                     nbs.append((nb, s))  # Add the new bindings into the set
 
         self.searchDone()  # State transitions
@@ -1705,7 +1831,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                     changed = 1
                     self.neededToRun[p].clear() # Now it is definitely all bound
             if changed:
-                q[p] = q[p].substitution(newBindings, why=becauseSubexpression)   # possibly expensive
+                q[p] = q[p].substitution(newBindings.asDict(), why=becauseSubexpression)   # possibly expensive
 		if self.searchPattern[p] != None: self.searchPattern[p] = q[p]
                 
         self.quad = q[0], q[1], q[2], q[3]  # yuk
@@ -1902,6 +2028,7 @@ def hasFormula(l):
 from term import AnonymousNode, CompoundTerm
 
 def smarterSubstitution(f, bindings, source, why=None, exception=[]):
+    bindings = bindings.asDict()
     if f in exception:
         return f
     if isinstance(f, Formula):

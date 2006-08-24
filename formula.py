@@ -38,7 +38,7 @@ from diag import progress, verbosity, tracking
 from term import matchSet, \
     AnonymousNode , AnonymousExistential, AnonymousUniversal, \
     Term, CompoundTerm, List, \
-    unifySequence
+    unifySequence, unify
 
 from RDFSink import Logic_NS
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ
@@ -476,26 +476,37 @@ For future reference, use newUniversal
     resetRenames = staticmethod(resetRenames)
     _renameVarsMaps = []
 
-    def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
-	"""See Term.unify()
-	"""
-	if diag.chatty_flag > 99: progress("Unifying formula %s with %s" %
-	    (`self`, `other`))
-	if diag.chatty_flag > 139: progress("Self is %s\n\nOther is %s" %
-	    (self.debugString(), other.debugString()))
-	if not isinstance(other, Formula): return []
-	if self is other: return [({}, None)]
-	if (len(self) != len(other)
-	    or len(self. _existentialVariables) != len(other._existentialVariables)
-	    or len(self. _universalVariables) != len(other._universalVariables)
-	    ): return []
-	    
-	ex = existentials | self.existentials()  # @@ Add unis to make var names irrelevant?
-	return unifySequence(
-	    [Set(self.statements), self.universals(), self.existentials()],
-	    [Set(other.statements), other.universals(), other.existentials()],
-	     vars | self.existentials() | self.universals(),
-	     existentials , bindings) 
+##    def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
+##	"""See Term.unify()
+##	"""
+##	if diag.chatty_flag > 99: progress("Unifying formula %s with %s" %
+##	    (`self`, `other`))
+##	if diag.chatty_flag > 139: progress("Self is %s\n\nOther is %s" %
+##	    (self.debugString(), other.debugString()))
+##	if not isinstance(other, Formula): return []
+##	if self is other: return [({}, None)]
+##	if (len(self) != len(other)
+##	    or len(self. _existentialVariables) != len(other._existentialVariables)
+##	    or len(self. _universalVariables) != len(other._universalVariables)
+##	    ): return []
+##	    
+##	ex = existentials | self.existentials()  # @@ Add unis to make var names irrelevant?
+##	return unifySequence(
+##	    [Set(self.statements), self.universals(), self.existentials()],
+##	    [Set(other.statements), other.universals(), other.existentials()],
+##	     vars | self.existentials() | self.universals(),
+##	     existentials , bindings)
+    
+    def unifySecondary(self, other, env1, env2, vars,
+                       universals, existentials,
+                       n1Source, n2Source):
+        MyStatements = ImmutableSet(self.statements)
+        OtherStatements = ImmutableSet(other.statements)
+        for x in unify(MyStatements, OtherStatements, env1, env2, vars,
+                       universals | self.universals() | other.universals(),
+                       existentials | self.existentials() | other.existentials(),
+                       n1Source, n2Source):
+            yield x
 		    
     def n3EntailedBy(pattern, kb, vars=Set([]), existentials=Set([]),  bindings={}):
 	"""See Term.unify() and term.matchSet()
@@ -817,17 +828,30 @@ class StoredStatement:
     def universals(self):
 	return self.occuringIn(self.quad[CONTEXT].universals())
 
-    def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
-	"""See Term.unify()
-	"""
+##    def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
+##	"""See Term.unify()
+##	"""
+##	if diag.chatty_flag > 99: progress("Unifying statement %s with %s" %
+##	    (`self`, `other`))
+##	if not isinstance(other, StoredStatement): raise TypeError
+##	return unifySequence([self[PRED], self[SUBJ], self[OBJ]],
+##	    [other[PRED], other[SUBJ], other[OBJ]], 
+##	    vars, existentials, bindings)
 
-	if diag.chatty_flag > 99: progress("Unifying statement %s with %s" %
-	    (`self`, `other`))
-	if not isinstance(other, StoredStatement): raise TypeError
-	return unifySequence([self[PRED], self[SUBJ], self[OBJ]],
-	    [other[PRED], other[SUBJ], other[OBJ]], 
-	    vars, existentials, bindings)
-	
+    def unify(self, other, env1, env2, vars,
+                       universals, existentials,
+                       n1Source=32, n2Source=32):
+        return unify(self, other, env1, env2, vars,
+                       universals, existentials,
+                       n1Source, n2Source)
+    
+    def unifySecondary(self, other, env1, env2, vars,
+                       universals, existentials,
+                       n1Source, n2Source):
+        return unifySequence([self[PRED], self[SUBJ], self[OBJ]],
+	    [other[PRED], other[SUBJ], other[OBJ]], env1, env2, vars,
+                             universals, existentials,
+                             n1Source, n2Source)
 
 
     def asFormula(self, why=None):

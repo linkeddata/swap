@@ -96,6 +96,26 @@ you can hash it (if you want to)
         else:
             dict.__init__(self, other, **keywords)
         self.id = self
+        for k, (a,b) in self.iteritems():
+            if isinstance(a, tuple):
+                raise RuntimeError("%s : (%s, %s)" % (k,a,b))
+
+    def copy(self):
+        return self  ## I'm immutable!
+
+    def update(self, d2):
+        k = self.__class__(self, d2)
+        raise RuntimeError("I'm immutable!, %s" % k)
+
+    def update2(self, d2):
+        k = self.__class__(self, d2)
+        return k
+
+    def asDict(self):
+        retVal = {}
+        for k in self:
+            retVal[k] = self[k]
+        return retVal
     
     def newBinding(self, var, val):
         retVal = Env(self, {var: val})
@@ -107,7 +127,7 @@ you can hash it (if you want to)
         raise TypeError
 
     def __getitem__(self, item):
-        return super(dict, self).__getitem__(item)[0]
+        return dict.__getitem__(self, item)[0]
 
     def get(self, item, default=None):
         return dict.get(self, item, (default,))[0] 
@@ -268,33 +288,48 @@ class Term(object):
         return self == symbol
 
 
-    def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
-	"""Unify this which may contain variables with the other,
-	    which may contain existentials but not variables.
-	    
-	    vars   are variables we want a binding for if matched
-	    existentials are things we don't need a binding returned for
-	    bindings are those bindings already made in this unification
-	    
-	    Return [] if impossible.
-	    return [({}, reason] if no new bindings
-	    Return [( {var1: val1, var2: val2,...}, reason), ...] if match
-	"""
-	assert type(bindings) is types.DictType
-	if diag.chatty_flag > 97:
-	    progress("Unifying symbol %s with %s vars=%s, so far=%s"%
-					(self, other,vars, bindings))
-	s = bindings.get(self, self)
-	if s is other:
-	    return [ ({}, None)]
-	if s in vars|existentials:
-	    if diag.chatty_flag > 80:
-		progress("Unifying var or exi MATCHED %s to %s"%(s, other))
-	    return [ ({s: other}, None) ]
-	if diag.chatty_flag > 99:
-	    progress("Failed Unifying symbol %s with %s vars=%s, so far=%s"%
-				    (self, other, vars, bindings))
-	return []
+    def unify(self, other, env1=Env(), env2=Env(), vars=Set(),
+                       universals=Set(), existentials=Set(),
+                       n1Source=32, n2Source=32):
+        return unify(self, other, env1, env2, vars,
+                       universals, existentials,
+                       n1Source, n2Source)
+        
+
+##    def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
+##	"""Unify this which may contain variables with the other,
+##	    which may contain existentials but not variables.
+##	    
+##	    vars   are variables we want a binding for if matched
+##	    existentials are things we don't need a binding returned for
+##	    bindings are those bindings already made in this unification
+##	    
+##	    Return [] if impossible.
+##	    return [({}, reason] if no new bindings
+##	    Return [( {var1: val1, var2: val2,...}, reason), ...] if match
+##	"""
+##	assert type(bindings) is types.DictType
+##	if diag.chatty_flag > 97:
+##	    progress("Unifying symbol %s with %s vars=%s, so far=%s"%
+##					(self, other,vars, bindings))
+##	s = bindings.get(self, self)
+##	if s is other:
+##	    return [ ({}, None)]
+##	if s in vars|existentials:
+##	    if diag.chatty_flag > 80:
+##		progress("Unifying var or exi MATCHED %s to %s"%(s, other))
+##	    return [ ({s: other}, None) ]
+##	if diag.chatty_flag > 99:
+##	    progress("Failed Unifying symbol %s with %s vars=%s, so far=%s"%
+##				    (self, other, vars, bindings))
+##	return []
+
+    def unifySecondary(self, other, env1, env2, vars,
+                       universals, existentials,
+                       n1Source=55, n2Source=55):
+        if self is other:
+            yield (env1, env2)
+
 
     def freeVariables(self):
         return Set()
@@ -524,7 +559,7 @@ class Universal(Term):
     __repr__ = object.__repr__
 
 class Existential(Term):
-    pass
+    __repr__ = object.__repr__
 
 class AnonymousVariable(AnonymousNode):
     """An anonymous node which is existentially quantified in a given context.
@@ -638,6 +673,13 @@ class N3Set(ImmutableSet, CompoundTerm): #,
 
     def classOrder(self):
         return 10
+
+    def unifySecondary(self, other, env1, env2, vars,
+                       universals, existentials,
+                       n1Source=55, n2Source=55):
+        return unifySet(self, other, env1, env2, vars,
+                       universals, existentials,
+                       n1Source, n2Source)
 
     def compareTerm(self, other):
         """This is annoying
@@ -802,16 +844,23 @@ class NonEmptyList(List):
 	    s = s.rest
 	    o = o.rest
 
-    def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
-	"""See Term.unify()"""
-	if diag.chatty_flag > 90:
-	    progress("Unifying list %s with %s vars=%s, so far=%s"%
-		    (self.value(), other.value(),vars, bindings))
-	if not isinstance(other, NonEmptyList): return []
-	if other is self: return [ ({}, None)]
+##    def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
+##	"""See Term.unify()"""
+##	if diag.chatty_flag > 90:
+##	    progress("Unifying list %s with %s vars=%s, so far=%s"%
+##		    (self.value(), other.value(),vars, bindings))
+##	if not isinstance(other, NonEmptyList): return []
+##	if other is self: return [ ({}, None)]
+##
+##	# Using the sequence-like properties of lists:
+##	return unifySequence(self, other, vars, existentials,  bindings)
 
-	# Using the sequence-like properties of lists:
-	return unifySequence(self, other, vars, existentials,  bindings)
+    def unifySecondary(self, other, env1, env2, vars,
+                       universals, existentials,
+                       n1Source=55, n2Source=55):
+        return unifySequence(self, other, env1, env2, vars,
+                       universals, existentials,
+                       n1Source, n2Source)
 	
     def debugString(self, already=[]):
 	s = `self`+" is ("
@@ -870,17 +919,17 @@ class EmptyList(List):
                 x = x.prepend(value[l])
         return x
 
-    def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
-	"""Unify the substitution of this using bindings found so far
-	    with the other. This may contain variables, the other may contain
-	    existentials but not variables.
-	    Return [] if impossible.
-	    Return [({}, None)] if no new bindings
-	    Return [( {var1: val1, var2: val2, ...}, reason) ...] if match.
-	    bindings is a dictionary."""
-	assert type(bindings) is type({})
-	if self is other: return [({}, None)]
-	return []
+##    def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
+##	"""Unify the substitution of this using bindings found so far
+##	    with the other. This may contain variables, the other may contain
+##	    existentials but not variables.
+##	    Return [] if impossible.
+##	    Return [({}, None)] if no new bindings
+##	    Return [( {var1: val1, var2: val2, ...}, reason) ...] if match.
+##	    bindings is a dictionary."""
+##	assert type(bindings) is type({})
+##	if self is other: return [({}, None)]
+##	return []
 	
     def occurringIn(self, vars):
 	return Set()
@@ -1054,6 +1103,19 @@ def matchSet(pattern, kb, vars=Set([]),  bindings={}):
 		nb3.update(nb)
 		res.append((nb3, None))
     return res  # Failed to match the one we picked
+
+class ListView(object):
+    def __init__(self, list, start=0):
+        self.list = list
+        self.start = start
+    def _car(self):
+        return self.list[self.start]
+    car = property(_car)
+    def _cdr(self):
+        return ListView(self.list, self.start+1)
+    cdr = property(_cdr)
+    def __len__(self):
+        return len(self.list) - self.start
 	    
 def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
     """Unify something whatever it is
@@ -1069,86 +1131,181 @@ def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
         raise RuntimeError(other, other.__class__)
     return k
 
+def pickEnv(choice, *envs):
+    for env in envs:
+        if choice is env.id:
+            return env
+    return []  ## Not here.
 
-##def unify(self, other, bindings=Env(), otherBindings=Env(),
-##          vars=Set([]), universals=Set([]), existentials=Set([]), n1Source=32, n2Source=32):
-##    from backward import progress
-##    if isinstance(self, list):
-##        self = tuple(self)
-##    if isinstance(n2, list):
-##        other = tuple(other)
-##
-##    if n1Source == 32: ## magic value:
-##        n1Source = env1.id
-##    if n2Source == 32:
-##        n2Source = env2.id
-##
-##    if n1Source is env1.id:
-##        n1SourceString = 'env1.id'
-##    elif n1Source is env2.id:
-##        n1SourceString = 'env2.id'
-##    else:
-##        n1SourceString = 'unknown.id'
-##    if n2Source is env1.id:
-##        n2SourceString = 'env1.id'
-##    elif n2Source is env2.id:
-##        n2SourceString = 'env2.id'
-##    else:
-##        n2SourceString = 'unknown.id'    
-##    progress(lambda: "Running unify(vars=%s, n1=%s, env1=%s, n2=%s, env2=%s, n1Source=%s, n2Source=%s)" % (vars, n1, env1, n2, env2, n1SourceString, n2SourceString))
-##
-##
-##    self, n1Source = dereference(self, env1, env2, n1Source)
-##    assert self not in env1
-##    other, n2Source = dereference(other, env1, env2, n2Source)
-##
-##    if self in vars and (pickEnv(n1Source, env1, env2) is not None):   ## external vars
-##        if other in vars:   ### all good
-##            if self == other and n1Source == n2Source:
-##                yield (env1, env2)
-##            else:
-##                ### bind one to the other. It really does not matter
-##                ### we need to be careful about envs
-##                envWithBinding = pickEnv(n1Source, env1, env2).bind(self,(other, n2Source))
-##                if n1Source is env1.id:
-##                    yield (envWithBinding, env2)
-##                elif n1Source is env2.id:
-##                    yield (env1, envWithBinding)
-##                else:
-##                    raise ValueError(id(n1Source), id(env1.id), id(env2.id))
-##        else:       ## only n1 is a variable
-##            if occurs_check(self, other, env2):  ## This needs help
-##                ### we need to be careful about envs
-##                envWithBinding = pickEnv(n1Source, env1, env2).bind(self,(other, n2Source))
-##                if n1Source is env1.id:
-##                    yield (envWithBinding, env2)
-##                elif n1Source is env2.id:
-##                    yield (env1, envWithBinding)
-##                else:
-##                    raise ValueError
-##    elif other in vars and (pickEnv(n2Source, env1, env2) is not None):
-##        if occurs_check(other, self, env1): ## This needs help
-##            ### we need to be careful about envs
-##            envWithBinding = pickEnv(n2Source, env1, env2).bind(other,(self, n1Source))
-##            if n2Source is env1.id:
-##                yield (envWithBinding, env2)
-##            elif n2Source is env2.id:
-##                yield (env1, envWithBinding)
-##            else:
-##                raise ValueError
-##    elif self in universals and other in universals:
-##        yield (env1.bind(self,other), env2)
-##    elif self in existentials and other in existentials:
-##        yield (env1.bind(n1,n2), env2)
-##    elif isinstance(self, (Set, ImmutableSet)):
-##	for x in unifySet(self, other, env1, env2, vars, existentials):
-##            yield x
-##    elif type(self) is type([]):
-##	for x in unifySequence(self, other, env1, env2, vars, existentials):
-##            yield x
-##    else:
-##        for x in n1.unifySecondary(n2, env1, env2, vars, universals, existentials):
-##            yield x
+
+def dereference(node, env1, env2, source):
+    s = pickEnv(source, env1, env2)
+    while node in s:
+        node, source = s.dereference(node)
+        s = pickEnv(source, env1, env2)
+    return node, source
+
+
+def unify(self, other, bindings=Env(), otherBindings=Env(),
+          vars=Set([]), universals=Set([]), existentials=Set([]), n1Source=32, n2Source=32):
+    if isinstance(self, list):
+        self = tuple(self)
+    if isinstance(other, list):
+        other = tuple(other)
+    env1 = bindings
+    env2 = otherBindings
+
+    if n1Source == 32: ## magic value:
+        n1Source = env1.id
+    if n2Source == 32:
+        n2Source = env2.id
+
+    if n1Source is env1.id:
+        n1SourceString = 'env1.id'
+    elif n1Source is env2.id:
+        n1SourceString = 'env2.id'
+    else:
+        n1SourceString = 'unknown.id'
+    if n2Source is env1.id:
+        n2SourceString = 'env1.id'
+    elif n2Source is env2.id:
+        n2SourceString = 'env2.id'
+    else:
+        n2SourceString = 'unknown.id'
+    if diag.chatty_flag > 500:
+        progress("Running unify(vars=%s, n1=%s, env1=%s, n2=%s, env2=%s, n1Source=%s, n2Source=%s)" %
+                 (vars, self, env1, other, env2, n1SourceString, n2SourceString))
+
+
+    self, n1Source = dereference(self, env1, env2, n1Source)
+    assert self not in env1
+    other, n2Source = dereference(other, env1, env2, n2Source)
+
+    if self in vars and (pickEnv(n1Source, env1, env2) is not None):   ## external vars
+        if other in vars:   ### all good
+            if self == other and n1Source == n2Source:
+                yield (env1, env2)
+            else:
+                ### bind one to the other. It really does not matter
+                ### we need to be careful about envs
+                envWithBinding = pickEnv(n1Source, env1, env2).bind(self,(other, n2Source))
+                if n1Source is env1.id:
+                    yield (envWithBinding, env2)
+                elif n1Source is env2.id:
+                    yield (env1, envWithBinding)
+                else:
+                    raise ValueError(id(n1Source), id(env1.id), id(env2.id))
+        else:       ## only n1 is a variable
+            if occurs_check(self, other, env2):  ## This needs help
+                ### we need to be careful about envs
+                envWithBinding = pickEnv(n1Source, env1, env2).bind(self,(other, n2Source))
+                if n1Source is env1.id:
+                    yield (envWithBinding, env2)
+                elif n1Source is env2.id:
+                    yield (env1, envWithBinding)
+                else:
+                    raise ValueError
+    elif other in vars and (pickEnv(n2Source, env1, env2) is not None):
+        if occurs_check(other, self, env1): ## This needs help
+            ### we need to be careful about envs
+            envWithBinding = pickEnv(n2Source, env1, env2).bind(other,(self, n1Source))
+            if n2Source is env1.id:
+                yield (envWithBinding, env2)
+            elif n2Source is env2.id:
+                yield (env1, envWithBinding)
+            else:
+                raise ValueError
+    elif self is other:
+        yield (env1, env2) ## life is good
+    elif self in universals and other in universals:
+        ### we need to be careful about envs
+        newUniversal = Universal(self.store)
+        envWithBinding = pickEnv(n1Source, env1, env2).bind(self,(newUniversal, -1))
+        if n1Source is env1.id:
+            (env11, env21) = (envWithBinding, env2)
+        elif n1Source is env2.id:
+            (env11, env21) = (env1, envWithBinding)
+        else:
+            raise ValueError
+        envWithBinding = pickEnv(n2Source, env11, env21).bind(other,(newUniversal, -1))
+        if n2Source is env1.id:
+            yield (envWithBinding, env21)
+        elif n2Source is env2.id:
+            yield (env11, envWithBinding)
+        else:
+            raise ValueError        
+    elif self in existentials and other in existentials:
+        ### we need to be careful about envs
+        newExistential = Existential(self.store)
+        envWithBinding = pickEnv(n1Source, env1, env2).bind(self,(newExistential, -1))
+        if n1Source is env1.id:
+            (env11, env21) = (envWithBinding, env2)
+        elif n1Source is env2.id:
+            (env11, env21) = (env1, envWithBinding)
+        else:
+            raise ValueError
+        envWithBinding = pickEnv(n2Source, env11, env21).bind(other,(newExistential, -1))
+        if n2Source is env1.id:
+            yield (envWithBinding, env21)
+        elif n2Source is env2.id:
+            yield (env11, envWithBinding)
+        else:
+            raise ValueError 
+    elif isinstance(self, (Set, ImmutableSet)):
+	for x in unifySet(self, other, env1, env2, vars, existentials, n1Source=n1Source, n2Source=n2Source):
+            yield x
+    elif type(self) is type([]):
+	for x in unifySequence(self, other, env1, env2, vars, existentials, n1Source=n1Source, n2Source=n2Source):
+            yield x
+    elif self.unifySecondary.im_func is other.unifySecondary.im_func:  # A reasonable definition of same type
+        for x in self.unifySecondary(other, env1, env2, vars, universals, existentials, n1Source=n1Source, n2Source=n2Source):
+            yield x
+
+def unifySequence(self, other, bindings=Env(), otherBindings=Env(),
+          vars=Set([]), universals=Set([]), existentials=Set([]), 
+                       n1Source=32, n2Source=32):
+    if not isinstance(self, ListView):
+        self = ListView([x for x in self])
+    if not isinstance(other, ListView):
+        other = ListView([x for x in other])
+    def car(x):
+        return x.car
+    def cdr(x):
+        return x.cdr
+    if len(self) == len(other):
+        if self:
+            for (env11, env21) in unify(car(self), car(other), bindings,
+                                        otherBindings, vars, universals, existentials,
+                                        n1Source, n2Source):
+                for (env12, env22) in unifySequence(cdr(self), cdr(other), env11,
+                                        env21, vars, universals, existentials,
+                                        n1Source, n2Source):
+                    yield (env12, env22)
+        else:
+            yield (bindings, otherBindings)
+
+def unifySet(self, other, bindings=Env(), otherBindings=Env(),
+          vars=Set([]), universals=Set([]), existentials=Set([]), 
+                       n1Source=32, n2Source=32):
+    if len(self) == len(other):
+        if self:
+            self = Set(self)
+            me = self.pop()
+            for k in other:
+                other2 = Set(other)
+                other2.remove(k)
+                for (env11, env21) in unify(me, k,  env1,
+                                                env2, vars, universals, existentials,
+                                                n1Source, n2Source):
+                    for (env12, env22) in unify(self, other2, env11,
+                                                env21, vars, universals, existentials,
+                                                n1Source, n2Source):
+                        yield(env12, env22)
+        else:
+            yield (env1, env2)
+
+def occurs_check(self, other, env2):
+    return True ### @@@ Need real check
 
 ##########################################################################
 #
@@ -1226,7 +1383,7 @@ class Literal(Term):
         Term.__init__(self, store)
         self.string = str    #  n3 notation EXcluding the "  "
 	self.datatype = dt
-	assert dt is None or isinstance(dt, Fragment)
+#	assert dt is None or isinstance(dt, Fragment)
 	self.lang=lang
 
     def __str__(self):
@@ -1318,13 +1475,13 @@ class Literal(Term):
         return self.asHashURI() #something of a kludge?
         #return  LITERAL_URI_prefix + uri_encode(self.representation())    # tbl preferred
 
-    def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
-	"""Unify this which may contain variables with the other,
-	    which may contain existentials but not variables.
-	    Return [] if impossible.
-	    Return [(var1, val1), (var2,val2)...] if match"""
-	if self is other: return [({}, None)]
-	return []
+##    def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
+##	"""Unify this which may contain variables with the other,
+##	    which may contain existentials but not variables.
+##	    Return [] if impossible.
+##	    Return [(var1, val1), (var2,val2)...] if match"""
+##	if self is other: return [({}, None)]
+##	return []
 	
 
 #class Integer(Literal):

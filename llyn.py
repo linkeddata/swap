@@ -75,7 +75,7 @@ import diag  # problems importing the tracking flag,
 from diag import progress, verbosity, tracking
 from term import BuiltIn, LightBuiltIn, RDFBuiltIn, HeavyBuiltIn, Function, \
     MultipleFunction, ReverseFunction, MultipleReverseFunction, \
-    Literal, Symbol, Fragment, FragmentNil, Term,\
+    Literal, Symbol, Fragment, FragmentNil, Term, LabelledNode, \
     CompoundTerm, List, EmptyList, NonEmptyList, AnonymousNode, N3Set
 from formula import Formula, StoredStatement
 import reify
@@ -793,19 +793,25 @@ class IndexedFormula(Formula):
 	    if diag.chatty_flag>70: progress("Substitions %s generated %s" %(bindings, newBindings))
 	return
 
-    def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
+##    def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
+    def unifySecondary(self, other, env1, env2, vars,
+                       universals, existentials,
+                       n1Source, n2Source):
         if self.canonical and other.canonical and self.store._equivalentFormulae.connected(self, other):
-            return [({}, None)]
-        from query import n3Entails, testIncludes
-        freeVars = self.freeVariables()   ## We can't use these
-        retVal = n3Entails(other, self, vars=vars | existentials,
-                         existentials=Set(), bindings=bindings) # \
-##               and n3Entails(self, other, vars=vars, existentials=existentials, bindings=bindings)
-        if len(retVal) == 1 and retVal[0][0] == {}:
-            self.store._equivalentFormulae.merge(self, other)
-        return retVal
+            yield (env1, env2)
+        else:
+            from query import n3Equivalent, testIncludes
+            freeVars = self.freeVariables()   ## We can't use these
+            retVal = n3Equivalent(self, other, env1, env2, vars,
+                       universals, existentials,
+                       n1Source, n2Source) # \
+    ##               and n3Entails(self, other, vars=vars, existentials=existentials, bindings=bindings)
+            for (env11, env12) in retVal:
+                if env11 == env1 and env12 == env2:
+                    self.store._equivalentFormulae.merge(self, other)
+                yield (env11, env12)
 
-    unify = memoize(unify)
+##    unify = memoize(unify)
 
 
 
@@ -1461,7 +1467,9 @@ class RDFStore(RDFSink) :
 	result = self.resources.get(key, None)
 	if result != None: return result
 #	if dt is not None: dt = self.newSymbol(dt)
-	assert dt is None or isinstance(dt, Fragment)
+	assert dt is None or isinstance(dt, LabelledNode)
+	if dt is not None and not isinstance(dt, Fragment):
+            progress("Warning: <%s> is not a fragment!" % dt)
 	result = Literal(self, str, dt, lang)
 	self.resources[key] = result
 	return result

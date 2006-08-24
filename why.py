@@ -459,7 +459,7 @@ class BecauseOfRule(Reason):
 	me = self.meIn(ko)
 	if diag.chatty_flag>49: progress("Inference=%s ko=%s"%(self,me))
 	ko.add(subj=me, pred=rdf.type, obj=reason.Inference, why=dontAsk) 
-	for var, val in self._bindings.items():
+	for var, (val, source) in self._bindings.items():
 	    b = ko.newBlankNode(why= dontAsk)
 	    ko.add(subj=me, pred=reason.binding, obj=b, why= dontAsk)
 	    ko.add(subj=b, pred=reason.variable,
