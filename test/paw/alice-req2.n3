@@ -1,0 +1,13 @@
+    @prefix session: <http://redfoot.net/2005/session#> .
+@prefix : <http://dig.csail.mit.edu/2005/09/rein/network#> .
+
+    {
+        <mid:1025@example.org>     a :Request;
+             :requester  [
+                 session:secret "alice-passwd" ];
+             :resource <http://demo.policyawareweb.org/images/alice-award.jpg> .
+
+        }     a :RequestFormula .
+
+
+    <http://demo.policyawareweb.org/images/alice-award.jpg>     :policy <http://dig.csail.mit.edu/2006/06/rein/example/troop42-policy3.n3> .
