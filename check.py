@@ -792,7 +792,7 @@ if __name__ == "__main__": # we're running as a script, not imported...
 
     if '--test' in sys.argv:
         _test()
-    if '--profile' in sys.argv:
+    elif '--profile' in sys.argv:
         _profile(sys.argv)
     else:
         main(sys.argv)
