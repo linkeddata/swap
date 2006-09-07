@@ -176,7 +176,11 @@ class Checker(FormulaCache):
 
         self._checked = {}
         self._pf = proof
-        
+
+        # step numbers for report() method
+        self._num = {}
+        self._maxn = 0
+
 
     def conjecture(self):
         """return the formula that is claimed to be proved and
@@ -299,10 +303,101 @@ class Checker(FormulaCache):
         return g
 
 
+    def report(self, out, f=None, step=None):
+        try:
+            return self._num[step]
+        except KeyError:
+            pass
+
+        proof = self._pf
+        if step is None:
+            f, step = self.conjecture()
+        if f is None:
+            f = proof.the(subj=step, pred=reason.gives)
+
+        t = knownReasons.intersection(proof.each(subj=step,
+                                                 pred=rdf.type)).pop()
+
+        if f:
+            # get rid of the prefix lines
+            body = f.n3String().split("\n")
+            while body[0].strip().startswith("@"):
+                del body[0]
+            body = " ".join(body) # put the lines back together
+            body = " ".join(body.split()) # normalize whitespace
+        else:
+            body = "..." #hmm...
+
+        if t is reason.Parsing:
+            res = proof.any(subj=step, pred=reason.source)
+
+            self._maxn += 1
+            num = self._maxn
+            out.write("%d: %s\n [by parsing <%s>]\n\n" %
+                      (num, body, res))
+        elif t is reason.Inference:
+            evidence = proof.the(subj=step, pred=reason.evidence)
+            ej = []
+            for e in evidence:
+                n = self.report(out, None, e)
+                ej.append(n)
+            rule = proof.the(subj=step, pred=reason.rule)
+            rn = self.report(out, None, rule)
+
+            self._maxn += 1
+            num = self._maxn
+            out.write("%d: %s\n [by GMP on %s, %s]\n\n" %
+                      (num, body, rn, ej))
+        
+        elif t is reason.Conjunction:
+            components = proof.each(subj=step, pred=reason.component)
+            num = 1
+            js = []
+            for e in components:
+                n = self.report(out, None, e)
+                js.append(n)
+
+            self._maxn += 1
+            num = self._maxn
+            out.write("%d: %s\n [by CI on %s]\n\n" %
+                      (num, body, js))
+        
+        elif t is reason.Fact:
+            pred, subj, obj = atomicFormulaTerms(f)
+            self._maxn += 1
+            num = self._maxn
+            out.write("%d: %s\n [by built-in Axiom %s]\n\n" %
+                      (num, body, pred))
+        elif t is reason.Conclusion:
+            self._maxn += 1
+            num = self._maxn
+            out.write("%d: %s\n [by CP on @@]\n\n" %
+                      (num, body))
+        elif t is reason.Extraction:
+            r2 = proof.the(step, reason.because)
+            n = self.report(out, None, r2)
+            self._maxn += 1
+            num = self._maxn
+            out.write("%d: %s\n [by CE on %s (@@%s)]\n\n" %
+                      (num, body, n, step.uriref().split("#")[1]))
+        elif t is reason.Premise:
+            self._maxn += 1
+            num = self._maxn
+            out.write("@@num/name: %s [Premise]\n\n" %
+                      body)
+        else:
+            raise RuntimeError, t
+
+
+        self._num[step] = num
+        return num
+
     #
     # some of the check* routines below should probably be
     # methods on Checker too.
     #
+
+
 
 _TestCEstep = """
 @prefix soc: <http://example/socrates#>.
@@ -710,12 +805,13 @@ def main(argv):
 
     try:
         c = Checker(proof)
-        proved = c.result(proof.the(pred=rdf.type, obj=reason.Proof),
-                          policy=policy)
+        proved = c.result(c.conjecture()[1], policy=policy)
 
 	fyi("Proof looks OK.   %i Steps" % proofSteps, thresh=5)
 	setVerbosity(0)
 	print proved.n3String().encode('utf-8')
+
+        c.report(sys.stdout) #@@ make this a command-line arg
     except InvalidProof, e:
         progress("Proof invalid:", e)
         sys.exit(-1)
@@ -730,7 +826,6 @@ def fyi(str, level=0, thresh=50):
             str = str()
 	progress(" "*(level*4),  str)
     return None
-
 
 
 def _test():
