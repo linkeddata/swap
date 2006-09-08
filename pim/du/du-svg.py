@@ -154,7 +154,7 @@ def escape(s):
 try: start = sys.argv[1]
 except IndexError: start = "."
 
-svg("<svg>\n")
+svg("<svg xmlns=\"http://www.w3.org/2000/svg\">\n")
 top = File(start)
 x = top.measure()
 threshold = x/1000.0  # say ... try that
