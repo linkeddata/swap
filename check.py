@@ -378,8 +378,8 @@ class Checker(FormulaCache):
             n = self.report(out, None, r2)
             self._maxn += 1
             num = self._maxn
-            out.write("%d: %s\n [by CE on %s (@@%s)]\n\n" %
-                      (num, body, n, step.uriref().split("#")[1]))
+            out.write("%d: %s\n [by CE on %s]\n\n" %
+                      (num, body, n))
         elif t is reason.Premise:
             self._maxn += 1
             num = self._maxn
