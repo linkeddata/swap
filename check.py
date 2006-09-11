@@ -805,13 +805,14 @@ def main(argv):
 
     try:
         c = Checker(proof)
+        c.report(sys.stdout) #@@ make this a command-line arg
+
         proved = c.result(c.conjecture()[1], policy=policy)
 
 	fyi("Proof looks OK.   %i Steps" % proofSteps, thresh=5)
 	setVerbosity(0)
 	print proved.n3String().encode('utf-8')
 
-        c.report(sys.stdout) #@@ make this a command-line arg
     except InvalidProof, e:
         progress("Proof invalid:", e)
         sys.exit(-1)
