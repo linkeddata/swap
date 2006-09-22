@@ -1,0 +1,5 @@
+@keywords is, of, a.
+@prefix : <conf_reg_ex#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+
+<#joe> foaf:homepage <>; a Vegetarian.
