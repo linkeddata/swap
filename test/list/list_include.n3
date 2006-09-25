@@ -1,0 +1,11 @@
+@keywords is, of, a.
+@prefix : <list_include#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+
+{
+  { bob likes (apple banana) }
+  log:includes
+  { bob likes [ rdf:first apple] }
+}
+ => { thisTest a Pass }.
