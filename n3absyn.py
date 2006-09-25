@@ -223,7 +223,7 @@ def xml_form(f):
         # data
         elif head == 'data':
             assert(len(f) == 3)
-            yield '<Data type="%s">' % f[1]
+            yield '<Data type="%s">' % f[1][0]
             yield escape(f[2])
             yield "</Data>"
             rest = f[1:]
@@ -259,13 +259,14 @@ def xml_form(f):
             
         # quantifiers
         elif head == 'exists':
-            yield "<Exists>\n" % tagname
+            yield "<Exists>\n"
             for v in f[1]:
                 yield "<Var>%s</Var>" % v
             yield '\n'
             for part in f[2:]:
                 for s in xml_form(part):
                     yield s
+            yield "</Exists>\n"
 
         elif head == 'forall':
             #@@hmm... treat other vars as implicitly universally quanitified?
