@@ -2,6 +2,7 @@
 
 Part 1: convert to lisp-ish JSON structure
 Part 2: generate lisp s-expression from JSON structure
+Part 3: generate XML from JSON structure, following RIF design sketches
 
 So far, we handle just the N3-rules subset of N3;
 we deal with:
@@ -17,7 +18,6 @@ import sys
 from swap import uripath, llyn, formula, term
 
 
-
 def main(argv):
     path = argv[1]
 
@@ -26,12 +26,17 @@ def main(argv):
     f = kb.load(addr)
 
     j = json_formula(f)
-    
-    #import pprint
-    #pprint.pprint(j)
 
-    for s in lisp_form(j):
-        sys.stdout.write(s)
+    if '--pprint' in argv:
+        import pprint
+        pprint.pprint(j)
+    elif '--lisp' in argv:
+        for s in lisp_form(j):
+            sys.stdout.write(s)
+    elif '--rif' in argv:
+        for s in xml_form(j):
+            sys.stdout.write(s)
+
 
 def json_formula(fmla, vars={}):
     varnames = {}
@@ -87,10 +92,10 @@ def json_term(t, varmap):
     elif isinstance(t, term.Literal):
         if t.datatype:
             dt = t.datatype.uriref()
-            if dt in('http://www.w3.org/2001/XMLSchema#integer',
-                     'http://www.w3.org/2001/XMLSchema#nonNegativeInteger'):
+            if dt in(DT.integer,
+                     DT.nonNegativeInteger):
                 return int(t.string)
-            if dt == 'http://www.w3.org/2001/XMLSchema#double':
+            if dt == DT.double:
                 return float(t.string)
             return ['data', [dt], t.string]
         else:
@@ -175,7 +180,116 @@ def lisp_form(f):
 
     else:
         raise RuntimeError, 'unimplemented syntactic type: %s %s' % (f, type(f))
+
     
+def xml_form(f):
+    """generate XML version of JSON formula f
+    see http://www.w3.org/2005/rules/wg/wiki/CORE
+    and http://www.w3.org/2005/rules/wg/wiki/B.1_Horn_Rules
+    """
+
+    from xml.sax.saxutils import escape
+    
+    # integer
+    if type(f) is type(1):
+        #@@ I'm making up type; I don't see it in the draft
+        yield '<Data type="%s">%d</Data>\n' % (DT.integer, f)
+
+    elif type(f) is type(1.1):
+        yield '<Data type="%s">%f</Data>\n' % (DT.double, f)
+
+    # string
+    elif type(f) in (type(''), type(u'')):
+        yield '<Data>'
+        yield escape(f)
+        yield '</Data>\n'
+
+
+    # variable
+    elif type(f) is type({}):
+        yield "<Var>%s</Var>\n" % f['var']
+
+    # compound forms
+    elif type(f) is type([]):
+        head = f[0]
+
+        # URI, i.e. a 0-ary function symbol
+        if ':' in head:
+            assert(len(f) == 1)
+            yield '<Ind iri="'
+            yield escape(head)
+            yield '"/>\n'
+
+        # data
+        elif head == 'data':
+            assert(len(f) == 3)
+            yield '<Data type="%s">' % f[1]
+            yield escape(f[2])
+            yield "</Data>"
+            rest = f[1:]
+
+        elif head == 'n3-quote':
+            raise RuntimeError, 'n3-quote not yet implemented'
+
+        # list function symbol
+        elif head == 'list':
+            yield "<Expr><Fun>list</Fun>\n"
+            for part in f[1:]:
+                for s in xml_form(part):
+                    yield s
+            yield "</Expr>\n"
+
+        # Atomic formula
+        elif head == 'holds':
+            yield "<Atom><Rel>holds</Rel>\n"
+            for part in f[1:]:
+                for s in xml_form(part):
+                    yield s
+            yield "</Atom>\n"
+            
+        # connectives
+        elif head in ('and', 'implies'):
+            tagname = {'and': 'And',
+                       'implies': 'Implies'}[head]
+            yield "<%s>\n" % tagname
+            for part in f[1:]:
+                for s in xml_form(part):
+                    yield s
+            yield "</%s>\n" % tagname
+            
+        # quantifiers
+        elif head == 'exists':
+            yield "<Exists>\n" % tagname
+            for v in f[1]:
+                yield "<Var>%s</Var>" % v
+            yield '\n'
+            for part in f[2:]:
+                for s in xml_form(part):
+                    yield s
+
+        elif head == 'forall':
+            #@@hmm... treat other vars as implicitly universally quanitified?
+            #@@how to assert that we're at the top level?
+            for part in f[2:]:
+                for s in xml_form(part):
+                    yield s
+
+        else:
+            raise RuntimeError, 'unimplemented list head: %s' % head
+        
+    else:
+        raise RuntimeError, 'unimplemented syntactic type: %s %s' % (f, type(f))
+
+
+class Namespace(object):
+    def __init__(self, nsname):
+        self._ns = nsname
+    def __getattr__(self, ln):
+        return self._ns + ln
+
+DT = Namespace('http://www.w3.org/2001/XMLSchema#')
+
+
 if __name__ == '__main__':
     main(sys.argv)
 
