@@ -1,6 +1,7 @@
 @keywords is, of, a.
 @prefix : <list_include#>.
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix math: <http://www.w3.org/2000/10/swap/math#>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 
 {
@@ -9,3 +10,15 @@
   { bob likes [ rdf:first apple] }
 }
  => { thisTest a Pass }.
+
+{ { bob eats peas } log:includes { (1 1) math:sum 2 }
+} => { includesDoesBuiltinsTest a Pass }.
+
+{ { bob eats peas } log:notIncludes { (1 1) math:sum 2 }
+} => { sumNotIncluded a Pass }.
+
+{ {  } log:includes {  }
+} => { emptyIncludesEmpty a Pass }.
+
+
+{ (1 1) math:sum ?X } => { ?X a Answer }.
