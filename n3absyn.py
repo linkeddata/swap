@@ -20,6 +20,13 @@ References:
  Boley, Harold (Thursday, 14 September)
  http://lists.w3.org/Archives/Public/public-rif-wg/2006Sep/thread.html#msg35
 
+ N3 Syntax and Semantics
+  a sketch by Dan Connolly
+ http://dig.csail.mit.edu/2006/Papers/TPLP/n3absyn.html
+
+ Notation 3 Logic
+  a draft by TimBL and others
+ http://www.w3.org/DesignIssues/N3Logic
 """
 
 __version__ = '$Id$'
