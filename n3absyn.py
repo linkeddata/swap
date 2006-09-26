@@ -9,6 +9,17 @@ we deal with:
   { ... } => { ... }
 but not other occurrences of {}.
 
+
+References:
+
+ ACL 2 seminar at U.T. Austin: Toward proof exchange in the Semantic Web
+ Submitted by connolly on Sat, 2006-09-16
+ http://dig.csail.mit.edu/breadcrumbs/node/160
+
+ [RIF] Extensible Design: Horn semantics and syntax actions completed
+ Boley, Harold (Thursday, 14 September)
+ http://lists.w3.org/Archives/Public/public-rif-wg/2006Sep/thread.html#msg35
+
 """
 
 __version__ = '$Id$'
@@ -19,6 +30,10 @@ from swap import uripath, llyn, formula, term
 
 
 def main(argv):
+    """Usage: n3absyn.py foo.n3 --pprint | --lisp | --rif
+    --pprint to print the JSON structure using python's pretty printer
+    --lisp to print a lisp s-expression for use with ACL2
+    """
     path = argv[1]
 
     addr = uripath.join(uripath.base(), path)
@@ -39,6 +54,9 @@ def main(argv):
 
 
 def json_formula(fmla, vars={}):
+    """reduce a swap.formula.Formula to a JSON structure,
+    i.e. strings, ints, lists, and dictionaries
+    """
     varnames = {}
     varnames.update(vars)
     
@@ -87,6 +105,9 @@ def json_formula(fmla, vars={}):
 
 
 def json_term(t, varmap):
+    """reduce a swap.term to a JSON structure,
+    i.e. strings, ints, lists, and dictionaries
+    """
     if t in varmap:
         return {'var': varmap[t]}
     elif isinstance(t, term.Literal):
@@ -113,6 +134,9 @@ def json_term(t, varmap):
         raise RuntimeError, "huh? + %s %s" % (t, t.__class__)
 
 def lisp_form(f):
+    """generate an s-expression from a formula JSON structure.
+    """
+
     # integer
     if type(f) is type(1):
         yield "%d " % f
