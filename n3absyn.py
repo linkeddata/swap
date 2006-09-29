@@ -3,6 +3,7 @@
 Part 1: convert to lisp-ish JSON structure
 Part 2: generate lisp s-expression from JSON structure
 Part 3: generate XML from JSON structure, following RIF design sketches
+Part 4: generate MathML from JSON structure
 
 So far, we handle just the N3-rules subset of N3;
 we deal with:
@@ -37,9 +38,11 @@ from swap import uripath, llyn, formula, term
 
 
 def main(argv):
-    """Usage: n3absyn.py foo.n3 --pprint | --lisp | --rif
+    """Usage: n3absyn.py foo.n3 --pprint | --lisp | --rif | --mathml
     --pprint to print the JSON structure using python's pretty printer
     --lisp to print a lisp s-expression for use with ACL2
+    --rif for Rule Interchange Format (RIF)
+    --mathml for MathML
     """
     path = argv[1]
 
@@ -57,6 +60,9 @@ def main(argv):
             sys.stdout.write(s)
     elif '--rif' in argv:
         for s in xml_form(j):
+            sys.stdout.write(s)
+    elif '--mathml' in argv:
+        for s in mathml_form(j):
             sys.stdout.write(s)
 
 
@@ -213,13 +219,14 @@ def lisp_form(f):
         raise RuntimeError, 'unimplemented syntactic type: %s %s' % (f, type(f))
 
     
+from xml.sax.saxutils import escape
+
 def xml_form(f):
     """generate XML version of JSON formula f
     see http://www.w3.org/2005/rules/wg/wiki/CORE
     and http://www.w3.org/2005/rules/wg/wiki/B.1_Horn_Rules
     """
 
-    from xml.sax.saxutils import escape
     
     # integer
     if type(f) is type(1):
@@ -312,6 +319,95 @@ def xml_form(f):
     else:
         raise RuntimeError, 'unimplemented syntactic type: %s %s' % (f, type(f))
 
+
+def mathml_form(f):
+    """generate MathML version of JSON formula
+    """
+
+
+    yield '<?xml-stylesheet type="text/xsl" href="http://www.w3.org/Math/XSL/mathml.xsl"?>\n'
+    yield '<math xmlns="http://www.w3.org/1998/Math/MathML">\n'
+    for s in mathml_fmla(f):
+        yield s
+    yield "</math>\n"
+    
+def mathml_fmla(f):
+    """generate MathML version of JSON formula
+    """
+    if type(f) is type([]):
+        head = f[0]
+        
+        if head in ('forall', 'exists'):
+            yield "<apply>\n" \
+                  "<%s/>\n" % head
+            for v in f[1]:
+                # per 5 Using definitionURL for Bound Variable Identification.
+                # http://www.w3.org/TR/mathml-bvar/#proposal
+                yield '<bvar><ci id="%s">%s</ci></bvar>\n' % (v, v)
+                
+            assert(len(f) == 3)
+            for s in mathml_fmla(f[2]):
+                yield s
+            yield "</apply>\n"
+
+        elif head in ('and', 'implies'):
+            yield "<apply><%s/>\n" % head
+            for part in f[1:]:
+                for s in mathml_fmla(part):
+                    yield s
+            yield "</apply>\n"
+
+        elif head == 'holds':
+            yield "<apply><ci>holds</ci>\n" #@@hmm...
+            for part in f[1:]:
+                for s in mathml_fmla(part):
+                    yield s
+            yield "</apply>\n"
+        elif ':' in head:
+            assert(len(f) == 1)
+            u = f[0]
+            try:
+                ln = u.split("#")[1]
+            except IndexError:
+                ln = u
+            yield '<csymbol definitionURL="'
+            yield escape(u)
+            yield '" encoding="RDF"><mi>'
+            yield escape(ln)
+            yield '</mi></csymbol>\n'
+
+        # list function symbol
+        elif head == 'list':
+            yield "<apply><list/>\n"
+            for part in f[1:]:
+                for s in mathml_fmla(part):
+                    yield s
+            yield "</apply>\n"
+
+        else:
+            raise RuntimeError, 'unimplemented list head: %s' % head
+
+    # variable
+    elif type(f) is type({}):
+        v = f['var']
+        yield '<ci definitionURL="#%s">%s</ci>\n' % (v, v)
+
+    # integer
+    elif type(f) is type(1):
+        yield '<cn type="integer">%d</cn>\n' % f
+
+    elif type(f) is type(1.1):
+        yield '<cn type="rational">%f</cn>\n' % f
+
+    # string
+    elif type(f) in (type(''), type(u'')):
+        yield '<ms>'
+        yield escape(f)
+        yield '</ms>\n'
+
+
+    else:
+        raise RuntimeError, 'unimplemented syntactic type: %s %s' % (f, type(f))
 
 class Namespace(object):
     def __init__(self, nsname):
