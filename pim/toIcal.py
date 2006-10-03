@@ -6,6 +6,9 @@ USAGE:
   python toIcal.py foo.n3 > foo.ics
   python toIcal.py http://example/foo.rdf > foo.ics
 
+To override floating times and put them in a timezone:
+  python toIcal.py --floattz America/Chicago work.rdf > work.ics
+
 see also:
   RDF Calendar Workspace
   http://www.w3.org/2002/12/cal/
@@ -63,6 +66,7 @@ XMLSchema = Namespace('http://www.w3.org/2001/XMLSchema#')
 class CalWr:
     def __init__(self, writeFun):
         self._w = writeFun
+        self.floatTZ = None # timezone for floating times
         
     def export(self, sts, addr):
         """export calendar objects from an RDF graph in iCalendar syntax
@@ -186,6 +190,9 @@ class CalWr:
                     z = "Z"
                     tlit = tlit[:-1]
                 tlit = (tlit + "000000")[:15] # Must include seconds
+
+                if self.floatTZ and dt == ICAL.dateTime.uriref():
+                    dt = TZD + self.floatTZ
 
                 if dt == XMLSchema.dateTime.uriref():
                     w("%s:%s%s%s" % (propName, tlit, z, CRLF))
@@ -336,13 +343,15 @@ def mkDATE(val):
     return translate(str(val), maketrans("", ""), "-:")
 
 
+TZD = "http://www.w3.org/2002/12/cal/tzd/"
+
 def tzid(tzi):
     """convert timezones from RdfCalendar norms to iCalendar norms
 
     ASSUME we're using one of the 2002/12/cal timezones. @@
     """
     
-    rel = uripath.refTo("http://www.w3.org/2002/12/cal/tzd/", tzi)
+    rel = uripath.refTo(TZD, tzi)
     short = uripath.splitFrag(rel)[0]
     return "/softwarestudio.org/Olson_20011030_5/" + short
 
@@ -359,13 +368,13 @@ def main(args):
         usage()
         sys.exit(1)
 
-    if args[1] == '--test':
-        test()
-        sys.exit(0)
+    c = CalWr(sys.stdout.write)
+    if args[3:] and args[1] == '--floattz':
+        c.floatTZ = args[2]
+        del args[1:3]
 
     addr = uripath.join("file:" + os.getcwd() + "/", args[1])
     
-    c = CalWr(sys.stdout.write)
     progress("loading...", addr)
 
     sts = load(addr)
@@ -396,7 +405,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.35  2006-07-13 23:04:10  connolly
+# Revision 2.36  2006-10-03 05:09:35  connolly
+# add --floattz option to override timezone of floating events
+#
+# Revision 2.35  2006/07/13 23:04:10  connolly
 # fix name clobbering with more than one value of a list-typed property
 #
 # Revision 2.34  2006/07/06 01:19:09  connolly
