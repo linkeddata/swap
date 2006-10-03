@@ -370,7 +370,10 @@ def main(args):
 
     c = CalWr(sys.stdout.write)
     if args[3:] and args[1] == '--floattz':
-        c.floatTZ = args[2]
+        tz = args[2]
+        progress("loading timezone...", TZD + tz)
+        c.export(load(TZD + tz), TZD + tz)
+        c.floatTZ = tz
         del args[1:3]
 
     addr = uripath.join("file:" + os.getcwd() + "/", args[1])
@@ -405,7 +408,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.36  2006-10-03 05:09:35  connolly
+# Revision 2.37  2006-10-03 05:31:23  connolly
+# for --floattz, add timezone component by reading from the web
+#
+# Revision 2.36  2006/10/03 05:09:35  connolly
 # add --floattz option to override timezone of floating events
 #
 # Revision 2.35  2006/07/13 23:04:10  connolly
