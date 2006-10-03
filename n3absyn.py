@@ -28,6 +28,28 @@ References:
  Notation 3 Logic
   a draft by TimBL and others
  http://www.w3.org/DesignIssues/N3Logic
+
+
+
+
+MathML musings...
+
+ import functions and operators from MathML rather than XPath/XQuery? (valueTesting)
+ 02 Jun 2005
+ http://lists.w3.org/Archives/Public/public-rdf-dawg/2005AprJun/0304
+  -> http://www.w3.org/2001/sw/DataAccess/mathml-rules.xml
+
+ inference rule markup?
+ 12 Feb 2001
+ http://lists.w3.org/Archives/Public/spec-prod/2001JanMar/0024.html
+
+ Note HELM seems to be still going...
+   http://helm.cs.unibo.it/software/index.html
+
+ inference rule markup in W3C specs?
+ 11 Apr 2002
+ http://lists.w3.org/Archives/Public/www-math/2002Apr/0044.html
+
 """
 
 __version__ = '$Id$'
