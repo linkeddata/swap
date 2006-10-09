@@ -168,7 +168,7 @@ def doProduction(lhs):
 	try:
             tokenRegexps[lhs] = re.compile(rhs.value(), re.U)
         except:
-            print rhs.value()
+            print rhs.value().encode('utf-8')
             raise
 	cc = g.each(subj=lhs, pred=BNF.canStartWith)
 	if cc == []: progress (recordError(
