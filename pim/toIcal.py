@@ -83,6 +83,21 @@ class CalWr:
 
         className, props, subs = decls[name]
 
+        if self.floatTZ and name == "VCALENDAR":
+            # In the floatTZ case, we write out a timezone decl,
+            # but it has a fully-qualified TZID, which Apple iCal doesn't
+            # seem to grok (@@bug report pending).
+            # So we use the short TZID to refer to this timezone,
+            # which works even though it shouldn't.
+            tzaddr = TZD + self.floatTZ
+            progress("loading timezone...", tzaddr)
+            tzkb = load(tzaddr)
+            for tzc in tzkb.each(pred = RDF.type, obj = ICAL.Vtimezone):
+                progress("exporting timezone...", tzc)
+                save, self.floatTZ = self.floatTZ, None
+                self.doComponent(tzkb, tzc, "VTIMEZONE", subs)
+                self.floatTZ = save
+
         propNames = props.keys()
         propNames.sort()
         for prop in propNames:
@@ -132,7 +147,7 @@ class CalWr:
                     compToDo.append((sts, sub, subName, subs))
                     break
             else:
-                raise ValueError, "no component class found"
+                raise ValueError, "no component class found: %s" % subName
 
         # compToDo.sort(key=compKey) # darn... only in python 2.4
         compToDo.sort(componentOrder)
@@ -143,16 +158,21 @@ class CalWr:
         # timezone standard/daylight components use a different structure
         # hmm... is this a good idea?
         if name == 'VTIMEZONE':
-            partNames = subs.keys()
-            partNames.sort()
-            for part in partNames:
-                n, p, c = subs[part]
-                sub = sts.any(subj = comp, pred=ICAL.sym(n))
-                if sub:
-                    self.doComponent(sts, sub, part, subs)
+            self.doTimeZone(sts, comp, subs)
+
         w("END:%s%s" % (name, CRLF))
 
 
+    def doTimeZone(self, sts, comp, subs):
+        partNames = subs.keys()
+        partNames.sort()
+        for part in partNames:
+            n, p, c = subs[part]
+            sub = sts.any(subj = comp, pred=ICAL.sym(n))
+            if sub:
+                self.doComponent(sts, sub, part, subs)
+
+        
     def doSIMPLE(self, v, propName): 
         w = self._w
         w("%s:%s%s" % (propName, v, CRLF))
@@ -191,13 +211,14 @@ class CalWr:
                     tlit = tlit[:-1]
                 tlit = (tlit + "000000")[:15] # Must include seconds
 
-                if self.floatTZ and dt == ICAL.dateTime.uriref():
-                    dt = TZD + self.floatTZ
-
                 if dt == XMLSchema.dateTime.uriref():
                     w("%s:%s%s%s" % (propName, tlit, z, CRLF))
                 elif dt == ICAL.dateTime.uriref():
-                    w("%s:%s%s%s" % (propName, tlit, z, CRLF))
+                    if self.floatTZ:
+                        w("%s;TZID=%s:%s%s%s" % (propName,
+                                                 self.floatTZ, tlit, z, CRLF))
+                    else:
+                        w("%s:%s%s%s" % (propName, tlit, z, CRLF))
                 else:
                     whenTZ = tzid(dt)
                     w("%s;VALUE=DATE-TIME;TZID=%s:%s%s" %  
@@ -371,8 +392,6 @@ def main(args):
     c = CalWr(sys.stdout.write)
     if args[3:] and args[1] == '--floattz':
         tz = args[2]
-        progress("loading timezone...", TZD + tz)
-        c.export(load(TZD + tz), TZD + tz)
         c.floatTZ = tz
         del args[1:3]
 
@@ -408,7 +427,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.37  2006-10-03 05:31:23  connolly
+# Revision 2.38  2006-10-09 13:32:20  connolly
+# refine the --floattz hack
+#
+# Revision 2.37  2006/10/03 05:31:23  connolly
 # for --floattz, add timezone component by reading from the web
 #
 # Revision 2.36  2006/10/03 05:09:35  connolly
