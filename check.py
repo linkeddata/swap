@@ -176,7 +176,11 @@ class Checker(FormulaCache):
 
         self._checked = {}
         self._pf = proof
-        
+
+        # step numbers for report() method
+        self._num = {}
+        self._maxn = 0
+
 
     def conjecture(self):
         """return the formula that is claimed to be proved and
@@ -299,10 +303,125 @@ class Checker(FormulaCache):
         return g
 
 
+    def report(self, out, f=None, step=None):
+        try:
+            return self._num[step]
+        except KeyError:
+            pass
+
+        proof = self._pf
+        if step is None:
+            f, step = self.conjecture()
+        if f is None:
+            f = proof.the(subj=step, pred=reason.gives)
+
+        t = knownReasons.intersection(proof.each(subj=step,
+                                                 pred=rdf.type)).pop()
+
+        if f:
+            # get rid of the prefix lines
+            body = f.n3String().split("\n")
+            while body[0].strip().startswith("@"):
+                del body[0]
+            body = " ".join(body) # put the lines back together
+            body = " ".join(body.split()) # normalize whitespace
+        else:
+            body = "..." #hmm...
+
+        if t is reason.Parsing:
+            res = proof.any(subj=step, pred=reason.source)
+
+            self._maxn += 1
+            num = self._maxn
+            out.write("%d: %s\n [by parsing <%s>]\n\n" %
+                      (num, body, res))
+        elif t is reason.Inference:
+            evidence = proof.the(subj=step, pred=reason.evidence)
+            ej = []
+            for e in evidence:
+                n = self.report(out, None, e)
+                ej.append(n)
+            rule = proof.the(subj=step, pred=reason.rule)
+            rn = self.report(out, None, rule)
+
+            bindings={}
+            for b in proof.each(subj=step, pred=reason.binding):
+                varq = proof.the(subj=b, pred=reason.variable)
+                var = proof.any(subj=varq, pred=rei.nodeId)
+                # get VAR from "...foo.n3#VAR"
+                varname = str(var).split("#")[1]
+                
+                termq = proof.the(subj=b, pred=reason.boundTo)
+
+                if isinstance(termq, Literal) \
+                       or isinstance(termq, Formula):
+                    bindings[varname] = `termq`
+                else:
+                    term = proof.any(subj=termq, pred=rei.uri)
+                    if term:
+                        bindings[varname] = "<%s>" % term
+                    else:
+                        term = proof.any(subj=termq, pred=rei.nodeId)
+                        if term:
+                            bindings[varname] = "[...]"
+                        else:
+                            bindings[varname] = "?"
+                            fyi("what sort of term is this? %s, %s" % (termq, rn))
+
+            self._maxn += 1
+            num = self._maxn
+            out.write("%d: %s\n [by rule from step %s applied to steps %s\n  with bindings %s]\n\n" %
+                      (num, body, rn, ej, bindings))
+        
+        elif t is reason.Conjunction:
+            components = proof.each(subj=step, pred=reason.component)
+            num = 1
+            js = []
+            for e in components:
+                n = self.report(out, None, e)
+                js.append(n)
+
+            self._maxn += 1
+            num = self._maxn
+            out.write("%d: %s\n [by conjoining steps %s]\n\n" %
+                      (num, body, js))
+        
+        elif t is reason.Fact:
+            pred, subj, obj = atomicFormulaTerms(f)
+            self._maxn += 1
+            num = self._maxn
+            out.write("%d: %s\n [by built-in Axiom %s]\n\n" %
+                      (num, body, pred))
+        elif t is reason.Conclusion:
+            self._maxn += 1
+            num = self._maxn
+            out.write("%d: %s\n [by conditional proof on @@]\n\n" %
+                      (num, body))
+        elif t is reason.Extraction:
+            r2 = proof.the(step, reason.because)
+            n = self.report(out, None, r2)
+            self._maxn += 1
+            num = self._maxn
+            out.write("%d: %s\n [by erasure from step %s]\n\n" %
+                      (num, body, n))
+        elif t is reason.Premise:
+            self._maxn += 1
+            num = self._maxn
+            out.write("@@num/name: %s [Premise]\n\n" %
+                      body)
+        else:
+            raise RuntimeError, t
+
+
+        self._num[step] = num
+        return num
+
     #
     # some of the check* routines below should probably be
     # methods on Checker too.
     #
+
+
 
 _TestCEstep = """
 @prefix soc: <http://example/socrates#>.
@@ -673,12 +792,13 @@ def main(argv):
     try:
         opts, args = getopt.getopt(argv[1:], "hv:c:p:B:a",
 	    [ "help", "verbose=", "chatty=", "parsing=", "nameBlankNodes",
-              "allPremises", "profile"])
+              "allPremises", "profile", "report"])
     except getopt.GetoptError:
 	sys.stderr.write("check.py:  Command line syntax error.\n\n")
         usage()
         sys.exit(2)
     output = None
+    report = False
     for o, a in opts:
         if o in ("-h", "--help"):
             usage()
@@ -695,6 +815,8 @@ def main(argv):
 	    policy = AllPremises()
 	if o in ("--profile"):
             pass
+	if o in ("--report"):
+            report = True
     if nameBlankNodes: flags="B"
     else: flags=""
     
@@ -710,12 +832,15 @@ def main(argv):
 
     try:
         c = Checker(proof)
-        proved = c.result(proof.the(pred=rdf.type, obj=reason.Proof),
-                          policy=policy)
+        if report:
+            c.report(sys.stdout)
+
+        proved = c.result(c.conjecture()[1], policy=policy)
 
 	fyi("Proof looks OK.   %i Steps" % proofSteps, thresh=5)
 	setVerbosity(0)
 	print proved.n3String().encode('utf-8')
+
     except InvalidProof, e:
         progress("Proof invalid:", e)
         sys.exit(-1)
@@ -730,7 +855,6 @@ def fyi(str, level=0, thresh=50):
             str = str()
 	progress(" "*(level*4),  str)
     return None
-
 
 
 def _test():
@@ -755,7 +879,8 @@ def _s2f(s, base):
     import notation3
     graph = formula()
     graph.setClosureMode("e")    # Implement sameAs by smushing
-    p = notation3.SinkParser(graph.store, openFormula=graph, baseURI=base)
+    p = notation3.SinkParser(graph.store, openFormula=graph, baseURI=base,
+                             thisDoc="data:@@some-formula-string")
     p.startDoc()
     p.feed(s)
     f = p.endDoc()
