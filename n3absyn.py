@@ -84,8 +84,31 @@ def main(argv):
         for s in xml_form(j):
             sys.stdout.write(s)
     elif '--mathml' in argv:
+        for s in mathml_top():
+            sys.stdout.write(s)
         for s in mathml_form(j):
             sys.stdout.write(s)
+    elif '--defns' in argv:
+        # split top-level N3 constructs
+        assert(j[0]) == 'forall'
+        assert(j[2][0]) == 'and'
+
+        for s in mathml_top():
+            sys.stdout.write(s)
+
+        sys.stdout.write('<html xmlns="http://www.w3.org/1999/xhtml">\n')
+        sys.stdout.write('<head><title>defns</title></head>\n')
+        sys.stdout.write('<body>\n')
+        sys.stdout.write("<ul>\n")
+        for expr in j[2][1:]:
+            sys.stdout.write("<li>\n")
+            for s in mathml_form(expr):
+                sys.stdout.write(s)
+            sys.stdout.write("</li>\n")
+        sys.stdout.write("</ul>\n")
+        sys.stdout.write("</body>\n")
+        sys.stdout.write("</html>\n")
+            
 
 
 def json_formula(fmla, vars={}):
@@ -342,12 +365,17 @@ def xml_form(f):
         raise RuntimeError, 'unimplemented syntactic type: %s %s' % (f, type(f))
 
 
+def mathml_top():
+    yield '<?xml version="1.0" ?>'
+    # hmm... local or global link?
+    #yield '<?xml-stylesheet type="text/xsl" href="http://www.w3.org/Math/XSL/mathml.xsl"?>\n'
+    yield '<?xml-stylesheet type="text/xsl" href="mathml.xsl"?>\n'
+
 def mathml_form(f):
     """generate MathML version of JSON formula
     """
 
 
-    yield '<?xml-stylesheet type="text/xsl" href="http://www.w3.org/Math/XSL/mathml.xsl"?>\n'
     yield '<math xmlns="http://www.w3.org/1998/Math/MathML">\n'
     for s in mathml_fmla(f):
         yield s
@@ -380,8 +408,14 @@ def mathml_fmla(f):
             yield "</apply>\n"
 
         elif head == 'holds':
-            yield "<apply><ci>holds</ci>\n" #@@hmm...
-            for part in f[1:]:
+
+            # Not only are we not using a holds predicate,
+            # but we're going classes as unary predicates.
+            if f[1] == [RDF.type]: args = [f[3], f[2]]
+            else: args = f[1:]
+            
+            yield "<apply>\n"
+            for part in args:
                 for s in mathml_fmla(part):
                     yield s
             yield "</apply>\n"
@@ -399,15 +433,19 @@ def mathml_fmla(f):
             yield '</mi></csymbol>\n'
 
         # list function symbol
-        elif head == 'list':
-            yield "<apply><list/>\n"
+        elif head == 'n3-quote':
+            yield "<apply><ci>n3_quote</ci>\n" #@@hmm...
             for part in f[1:]:
                 for s in mathml_fmla(part):
                     yield s
             yield "</apply>\n"
 
         else:
-            raise RuntimeError, 'unimplemented list head: %s' % head
+            yield "<list>\n"
+            for part in f[1:]:
+                for s in mathml_fmla(part):
+                    yield s
+            yield "</list>\n"
 
     # variable
     elif type(f) is type({}):
@@ -438,6 +476,7 @@ class Namespace(object):
         return self._ns + ln
 
 DT = Namespace('http://www.w3.org/2001/XMLSchema#')
+RDF = Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 
 
 if __name__ == '__main__':
