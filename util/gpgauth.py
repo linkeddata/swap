@@ -21,7 +21,7 @@ import dbus
 bus = dbus.SessionBus()
 proxy = bus.get_object('org.gnome.seahorse', '/org/gnome/seahorse/keys/openpgp')
 i = dbus.Interface(proxy, 'org.freedesktop.DBus.Introspectable')
-print i.Introspect()
+#print i.Introspect()
 c = dbus.Interface(proxy, 'org.gnome.seahorse.Keys')
 
 keys = c.ListKeys()
@@ -30,11 +30,14 @@ print "connolly keys", conkeys
 mykey = conkeys[0][0]
 proxy2 = bus.get_object('org.gnome.seahorse', '/org/gnome/seahorse/crypto')
 i = dbus.Interface(proxy2, 'org.freedesktop.DBus.Introspectable')
-print i.Introspect()
+#print i.Introspect()
 c = dbus.Interface(proxy2, 'org.gnome.seahorse.CryptoService')
-print c.EncryptText([mykey], mykey,
-                    0, "hello world")
+cryp = c.EncryptText([mykey], mykey,
+                     0, "hello world")
+print cryp
 
+clear, signer = c.DecryptText("openpgp", 0, cryp, )
+print clear, signer
 
 import sys
 sys.exit(0)
