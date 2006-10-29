@@ -1,6 +1,23 @@
-# Schema
-@prefix : <#> .
+# RAW Ontology for MSOutlook dumps in CVS format
+
+@prefix : <MSOutlookContacts#> .
+@prefix mso: <MSOutlookContacts#> .
+
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix link: <http://www.w3.org/2006/link#>.
+@prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#> .
+
+
+
+##################### Rules for conversion
+
+contact:personalTitle link:obsoletes	mso:Title .
+contact:firstName  link:obsoletes 	mso:First_Name .
+contact:middleName  link:obsoletes 	mso:Middle_Name .
+contact:lastName  link:obsoletes 	mso:Last_Name .	
+contact:personalSuffix  link:obsoletes 	mso:Suffix .
+
+
 
   :Title  a rdfs:Property .
   :First_Name  a rdfs:Property .
@@ -33,7 +50,7 @@
   :Other_Country  a rdfs:Property .
   :Assistant_s_Phone  a rdfs:Property .
   :Business_Fax  a rdfs:Property .
-  :Business_Phone  a rdfs:Property .
+  :Business_Phone  a rdfs:Property .  
   :Business_Phone_2  a rdfs:Property .
   :Callback  a rdfs:Property .
   :Car_Phone  a rdfs:Property .
@@ -55,8 +72,11 @@
   :Assistant_s_Name  a rdfs:Property .
   :Billing_Information  a rdfs:Property .
   :Birthday  a rdfs:Property .
+  
+	contact:birthday link:obsoletes  mso:Birthday.
+  
   :Categories  a rdfs:Property .
-  :Children  a rdfs:Property .
+  :Children  a rdfs:Property .	    # instead use with contact:child?
   :Directory_Server  a rdfs:Property .
   :E-mail_Address  a rdfs:Property .
   :E-mail_Display_Name  a rdfs:Property .
@@ -84,6 +104,11 @@
   :Referred_By  a rdfs:Property .
   :Sensitivity  a rdfs:Property .
   :Spouse  a rdfs:Property .
+
+    contact:partner is rdfs:subPropertyOf of mso:Spouse .
+
+  
+  
   :User_1  a rdfs:Property .
   :User_2  a rdfs:Property .
   :User_3  a rdfs:Property .

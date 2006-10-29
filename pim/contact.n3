@@ -18,8 +18,8 @@ dc:description """
 
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . # type, Property
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-# @prefix ont:  <http://www.daml.org/2001/03/daml+oil#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix link: <http://www.w3.org/2006/link#>.
 @prefix doc:  <http://www.w3.org/2000/10/swap/pim/doc#> .
 
 <> doc:persistencePolicy [ a :_SubjectToChange;
@@ -59,11 +59,13 @@ vCard.Business.URL, vCard.Business.Zipcode""" .
 
 
 # Let's start with Contact information. See also
-
-@prefix mso: <../MSOutlookContacts.n3#> .
+#
+# @prefix mso: <../MSOutlookContacts#> .  # From CSV extraction
+# which used to be related to this ontology here, now there.
+# That ontology may be quite historical now.
 
 :SocialEntity a rdfs:Class;
-    rdfs:comment  "The sort of thing which can have a phone number.".
+    rdfs:comment  """The sort of thing which can have a phone number.""".
 
 :Person rdfs:subClassOf :SocialEntity;
     is rdfs:domain of :personalTitle,
@@ -76,12 +78,6 @@ vCard.Business.URL, vCard.Business.Zipcode""" .
 	:departmentName ;
 	rdfs:comment """A person in the normal sense of the word.""".
 
-
-:personalTitle = 	mso:Title .
-:firstName = 		mso:First_Name .   #  @@@ not in general
-:middleName = 		mso:Middle_Name .
-:lastName = 		mso:Last_Name .	    # @@@ not in general - culture dependent
-:personalSuffix = 	mso:Suffix .
 
 :fullName a rdf:Property; rdfs:label "full name".
 
@@ -110,9 +106,6 @@ vCard.Business.URL, vCard.Business.Zipcode""" .
     rdfs:comment  "A place with address, phone number, fax, etc";
 	is rdfs:domain of :phone, :fax.
 
-# Probably reasonable to assume that a person has only one office, home
-# etc - so you can convert from things like mso:OfficePhone and officeStreet
-# to assume teh phone is at the same office as the address.
 
 :office a rdf:Property;
     rdfs:domain :Person; rdfs:range :ContactLocation.
@@ -137,83 +130,20 @@ vCard.Business.URL, vCard.Business.Zipcode""" .
 
 
 
-##################### Rules for conversion
-
-:personalTitle = 	mso:Title .
-:firstName = 		mso:First_Name .
-:middleName = 		mso:Middle_Name .
-:lastName = 		mso:Last_Name .
-:personalSuffix = 	mso:Suffix .
 
 # MSO stuff:
 
-#  mso:Title  a rdf:Property .
-#  mso:First_Name  a rdf:Property .
-#  mso:Middle_Name  a rdf:Property .
-#  mso:Last_Name  a rdf:Property .
-#  mso:Suffix  a rdf:Property .
-#  mso:Company  a rdf:Property .
-#  mso:Department  a rdf:Property .
-#  mso:Job_Title  a rdf:Property .
-#  mso:Business_Street  a rdf:Property .
-#  mso:Business_Street_2  a rdf:Property .
-#  mso:Business_Street_3  a rdf:Property .
-#  mso:Business_City  a rdf:Property .
-#  mso:Business_State  a rdf:Property .
-#  mso:Business_Postal_Code  a rdf:Property .
-#  mso:Business_Country  a rdf:Property .
-#  mso:Home_Street  a rdf:Property .
-#  mso:Home_Street_2  a rdf:Property .
-#  mso:Home_Street_3  a rdf:Property .
-#  mso:Home_City  a rdf:Property .
-#  mso:Home_State  a rdf:Property .
-#  mso:Home_Postal_Code  a rdf:Property .
-#  mso:Home_Country  a rdf:Property .
-#  mso:Other_Street  a rdf:Property .
-#  mso:Other_Street_2  a rdf:Property .
-#  mso:Other_Street_3  a rdf:Property .
-#  mso:Other_City  a rdf:Property .
-#  mso:Other_State  a rdf:Property .
-#  mso:Other_Postal_Code  a rdf:Property .
-#  mso:Other_Country  a rdf:Property .
-#  mso:Assistant's_Phone  a rdf:Property .
-#  mso:Business_Fax  a rdf:Property .
-#  mso:Business_Phone  a rdf:Property .
-#  mso:Business_Phone_2  a rdf:Property .
-#  mso:Callback  a rdf:Property .
-#  mso:Car_Phone  a rdf:Property .
-#  mso:Company_Main_Phone  a rdf:Property .
-#  mso:Home_Fax  a rdf:Property .
-#  mso:Home_Phone  a rdf:Property .
-#  mso:Home_Phone_2  a rdf:Property .
-#  mso:ISDN  a rdf:Property .
-#  mso:Mobile_Phone  a rdf:Property .
-#  mso:Other_Fax  a rdf:Property .
-#  mso:Other_Phone  a rdf:Property .
-#  mso:Pager  a rdf:Property .
-#  mso:Primary_Phone  a rdf:Property .
-#  mso:Radio_Phone  a rdf:Property .
-#  mso:TTY/TDD_Phone  a rdf:Property .
-#  mso:Telex  a rdf:Property .
-#  mso:Account  a rdf:Property .
-#  mso:Anniversary  a rdf:Property .  # Assume we mean anniversay of celebration of union
-#  mso:Assistant's_Name  a rdf:Property .
-#  mso:Billing_Information  a rdf:Property .
 
-:birthday a rdf:Property; =  mso:Birthday; rdfs:range :Date .
+:birthday a rdf:Property; rdfs:range :Date .
 
 :Data a rdfs:Class.    # See ... ICalendar, etc etc
 
-#  mso:Categories  a rdf:Property .   # replace with RDF individual classes.
-#  mso:Children  a rdf:Property .
-#		replace with :child
 
 :child a rdf:Property .
 # { :x :child :y } log:implies {{ :x a :Person } means { y a :person } }
 
-#  mso:Directory_Server  a rdf:Property .
 
-#  mso:E-mail_Address  a rdf:Property    # Problmem: not as a URI
+
 :mailbox a owl:InverseFunctionalProperty;
   rdfs:domain :SocialEntity;
   rdfs:range :Mailbox;
@@ -238,59 +168,17 @@ vCard.Business.URL, vCard.Business.Zipcode""" .
 
 #  { :ent :mailboxURI [ log:equalTo [ is log:concat of ( "mailto:" [ :_uriEncode :addr ] ) ] ] } log:implies { :ent :emailAddress :addr }. # only goes one way because we could use PUT to HTTP resources to deliver mail.
 
-#  mso:E-mail_Display_Name  a rdf:Property .   # Seems redundant and useless IMHO
-
-#  mso:E-mail_2_Address  a rdf:Property .    # Just have multiple email addresses.
-#  mso:E-mail_2_Display_Name  a rdf:Property . # One thing which RDF simplifies
-#  mso:E-mail_3_Address  a rdf:Property .
-#  mso:E-mail_3_Display_Name  a rdf:Property .
-
-#  mso:Gender  a rdf:Property .
-# Replace with:
 
 :Male a rdfs:Class.
-
-
-#mso:Government_ID_Number  a rdf:Property .   # Let's keep to the topic now.
-#	rdfs:subClassOf gen:ssn.
-#
-#  mso:Hobby  a rdf:Property .   # Let's keep to the topic now.
-#  mso:Initials  a rdf:Property .  # Do WE HAVE to have this?! ;-)
-#  mso:Internet_Free_Busy  a rdf:Property .  # MSO specific I guess
-#  mso:Keywords  a rdf:Property .
-#  mso:Language  a rdf:Property .    # Hmmm. interesting See I18n. Try:
+:Female a rdfs:Class.
 
 :motherTongue a rdf:Property; rdfs:domain :Person; rdfs:range :LanguageCode .
 
 :LanguageCode a rdfs:Class. # A ISO langiuage 1 or 2 part string: a  datatype
-
-#  mso:Location  a rdf:Property .
-#  mso:Manager's_Name  a rdf:Property .
-#  mso:Mileage  a rdf:Property .
-#  mso:Notes  a rdf:Property .
-
 :description a rdf:Property .
 
-#  mso:Office_Location  a rdfs:Property .
-#  mso:Organizational_ID_Number  a rdfs:Property .
-#  mso:PO_Box  a rdfs:Property .
-#  mso:Priority  a rdfs:Property .
-#  mso:Private  a rdfs:Property .
-#  mso:Profession  a rdfs:Property .
-#  mso:Referred_By  a rdfs:Property .
-#  mso:Sensitivity  a rdfs:Property .
+:partner a rdf:Property.
 
-:partner is rdfs:subPropertyOf of mso:Spouse .
-
-mso:Spouse  a rdfs:Property;  .
-#  mso:User_1  a rdfs:Property .   # Use new pererties and namespaces!
-#  mso:User_2  a rdfs:Property .
-#  mso:User_3  a rdfs:Property .
-#  mso:User_4  a rdfs:Property .
-
-mso:WebPage  a rdf:Property.
-
-#= :publicHomePage .              # I have many home pages, some for me some for others
 
 :publicHomePage rdfs:subPropertyOf :homePage.
 :homePage a owl:InverseFunctionalProperty;
@@ -302,7 +190,10 @@ mso:WebPage  a rdf:Property.
 
 <> dc:description """
 $Log$
-Revision 1.25  2006-03-09 17:11:42  timbl
+Revision 1.26  2006-10-29 19:44:09  timbl
+mso to contact relationships are now in MSO file not pim/contact
+
+Revision 1.25  2006/03/09 17:11:42  timbl
 Update API to import from swap
 
 Revision 1.24  2005/12/06 22:20:32  timbl

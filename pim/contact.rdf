@@ -1,5 +1,5 @@
 
-<!-- Processed by Id: cwm.py,v 1.181 2005/11/04 14:19:22 timbl Exp -->
+<!-- Processed by Id: cwm.py,v 1.190 2006/08/09 23:20:42 syosi Exp -->
 <!--     using base file:/devel/WWW/2000/10/swap/pim/contact.n3-->
 
 
@@ -10,14 +10,6 @@
     xmlns:owl="http://www.w3.org/2002/07/owl#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
-
-    <Property rdf:about="../MSOutlookContacts.n3#Spouse">
-        <subPropertyOf rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#partner"/>
-    </Property>
-
-    <rdf:Property rdf:about="../MSOutlookContacts.n3#WebPage">
-        <owl:sameAs rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#publicHomePage"/>
-    </rdf:Property>
 
     <rdf:Description rdf:about="contact">
         <doc:rules rdf:resource="contact-rules"/>
@@ -34,7 +26,13 @@
 </dc:description>
         <dc:description>
 $Log$
-Revision 1.9  2005-12-06 22:20:32  timbl
+Revision 1.10  2006-10-29 19:44:09  timbl
+mso to contact relationships are now in MSO file not pim/contact
+
+Revision 1.25  2006/03/09 17:11:42  timbl
+Update API to import from swap
+
+Revision 1.24  2005/12/06 22:20:32  timbl
 Add InverseFunctionalProperties
 
 Revision 1.23  2003/12/04 21:20:17  timbl
@@ -135,6 +133,9 @@ vCard.Business.URL, vCard.Business.Zipcode</owl:sameAs>
     <Class rdf:about="http://www.w3.org/2000/10/swap/pim/contact#Data">
     </Class>
 
+    <Class rdf:about="http://www.w3.org/2000/10/swap/pim/contact#Female">
+    </Class>
+
     <Class rdf:about="http://www.w3.org/2000/10/swap/pim/contact#LanguageCode">
     </Class>
 
@@ -164,7 +165,6 @@ vCard.Business.URL, vCard.Business.Zipcode</owl:sameAs>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#birthday">
         <range rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Date"/>
-        <owl:sameAs rdf:resource="../MSOutlookContacts.n3#Birthday"/>
     </rdf:Property>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#child">
@@ -201,7 +201,6 @@ vCard.Business.URL, vCard.Business.Zipcode</owl:sameAs>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#firstName">
         <domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Person"/>
-        <owl:sameAs rdf:resource="../MSOutlookContacts.n3#First_Name"/>
     </rdf:Description>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#fullName">
@@ -229,7 +228,6 @@ vCard.Business.URL, vCard.Business.Zipcode</owl:sameAs>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#lastName">
         <domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Person"/>
-        <owl:sameAs rdf:resource="../MSOutlookContacts.n3#Last_Name"/>
     </rdf:Description>
 
     <owl:InverseFunctionalProperty rdf:about="http://www.w3.org/2000/10/swap/pim/contact#mailbox">
@@ -259,7 +257,6 @@ vCard.Business.URL, vCard.Business.Zipcode</owl:sameAs>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#middleName">
         <domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Person"/>
-        <owl:sameAs rdf:resource="../MSOutlookContacts.n3#Middle_Name"/>
     </rdf:Description>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#mobile">
@@ -294,14 +291,15 @@ vCard.Business.URL, vCard.Business.Zipcode</owl:sameAs>
         <domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Person"/>
     </rdf:Description>
 
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#partner">
+    </rdf:Property>
+
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#personalSuffix">
         <domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Person"/>
-        <owl:sameAs rdf:resource="../MSOutlookContacts.n3#Suffix"/>
     </rdf:Description>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#personalTitle">
         <domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Person"/>
-        <owl:sameAs rdf:resource="../MSOutlookContacts.n3#Title"/>
     </rdf:Description>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#phone">
