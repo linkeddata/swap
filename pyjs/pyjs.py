@@ -46,7 +46,7 @@ class Translator:
         self.method_imported_globals = set()
 
         if mod.doc:
-            print >>self.output, mod.doc
+            print >>self.output, self.comment(mod.doc)
 
         for child in mod.node:
             if isinstance(child, ast.Function):
@@ -72,17 +72,19 @@ class Translator:
                 raise TranslationError("unsupported type (in __init__)", child)
 
 
+    def comment(self, text):
+	return "/*\n" + text + "*/\n"
+	
     def _function(self, node):
         function_name = self.module_prefix + node.name
         function_args = "(" + ", ".join(node.argnames) + ")"
         print >>self.output, "function %s%s {" % (function_name, function_args)
     
         if node.doc:
-            print >>self.output, node.doc
+            print >>self.output, self.comment(node.doc)
         
-        else:
-            for child in node.code:
-                self._stmt(child, None)
+	for child in node.code:
+	    self._stmt(child, None)
             
         print >>self.output, "}"
         print >>self.output, "\n"
@@ -328,11 +330,10 @@ class Translator:
                 print >>self.output, "    if (typeof %s == 'undefined') %s=%s;" % (default_name, default_name, default_value)
 
         if node.doc:
-            print >>self.output, node.doc
+            print >>self.output, self.comment(node.doc)
         
-        else:
-            for child in node.code:
-                self._stmt(child, current_klass)
+	for child in node.code:
+	    self._stmt(child, current_klass)
             
         if node.name == "__init__":
             print >>self.output, "}"
@@ -599,7 +600,7 @@ class Translator:
         if isinstance(node.value, int):
             return str(node.value)
         elif isinstance(node.value, str):
-            return '"' + node.value + '"'
+            return  stringToN3(node.value, 1) #  '"' + node.value + '"'
         elif node.value is None:
             return "null"
         else:
@@ -873,6 +874,81 @@ class AppTranslator:
             imported_modules_str += self.translate(library, False)
         
         return imported_modules_str
+
+
+###################################################
+#
+#   Utilities
+#
+
+import re, string
+
+Escapes = {'a':  '\a',
+           'b':  '\b',
+           'f':  '\f',
+           'r':  '\r',
+           't':  '\t',
+           'v':  '\v',
+           'n':  '\n',
+           '\\': '\\',
+           '"':  '"'}
+
+forbidden1 = re.compile(ur'[\\\"\a\b\f\r\v\u0080-\U0000ffff]')
+forbidden2 = re.compile(ur'[\\\"\a\b\f\r\v\t\n\u0080-\U0000ffff]')
+#"
+def stringToN3(str, singleLine=0, flags=""):
+    res = ''
+    if (len(str) > 20 and
+        str[-1] <> '"' and
+	not singleLine and
+        (string.find(str, "\n") >=0 
+         or string.find(str, '"') >=0)):
+        delim= '"""'
+        forbidden = forbidden1   # (allow tabs too now)
+    else:
+        delim = '"'
+        forbidden = forbidden2
+        
+    i = 0
+
+    while i < len(str):
+        m = forbidden.search(str, i)
+        if not m:
+            break
+
+        j = m.start()
+        res = res + str[i:j]
+        ch = m.group(0)
+        if ch == '"' and delim == '"""' and str[j:j+3] != '"""':  #"
+            res = res + ch
+        else:
+            k = string.find('\a\b\f\r\t\v\n\\"', ch)
+            if k >= 0: res = res + "\\" + 'abfrtvn\\"'[k]
+            else:
+                if 'e' in flags:
+#                res = res + ('\\u%04x' % ord(ch))
+                    res = res + ('\\u%04X' % ord(ch)) 
+		    # http://www.w3.org/TR/rdf-testcases/#ntriples
+                else:
+                    res = res + ch
+        i = j + 1
+
+    # The following code fixes things for really high range Unicode
+    newstr = ""
+    for ch in res + str[i:]:
+        if ord(ch)>65535:
+            newstr = newstr + ('\\U%08X' % ord(ch)) 
+		# http://www.w3.org/TR/rdf-testcases/#ntriples
+        else:
+            newstr = newstr + ch
+    #
+
+    return delim + newstr + delim
+
+############### Main
+
+
+
 
 
 if __name__ == "__main__":
