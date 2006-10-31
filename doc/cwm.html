@@ -1,375 +1,481 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
-  <title>cwm - a general purpose data processor for the semantic web</title>
-  <link rel="meta" href="../data">
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 1st December 2004), see www.w3.org" />
+  <meta http-equiv="content-type" content=
+  "text/html; charset=us-ascii" />
+
+  <title>cwm - a general purpose data processor for the semantic
+  web</title>
+  <link rel="meta" href="../data" />
   <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body xml:lang="en" lang="en">
-<p><a href="/">W3C</a> | <a href="/2001/sw/">Semantic Web</a> | <a
-href="../">SWAP</a></p>
-<a href="../../../../DesignIssues/Notation3.html"><img align="right" alt="n3"
-src="../../../../RDF/icons/n3_small" /></a>
+  <p><a href="/">W3C</a> | <a href="/2001/sw/">Semantic Web</a> |
+  <a href="../">SWAP</a></p><a href=
+  "../../../../DesignIssues/Notation3.html"><img align="right" alt=
+  "n3" src="../../../../RDF/icons/n3_small" /></a>
 
-<h1>Cwm</h1>
+  <h1>Cwm</h1>
 
-<div class="nav" style="text-align:center">
-<a href="#disc">Discussion</a> | <a href="#Closed">Features</a> | <a
-href="#Related">Related Work</a> | <a href="#dev">Development</a> | <a
-href="#acks">Acks</a></div>
+  <div class="nav" style="text-align:center">
+    <a href="#disc">Discussion</a> | <a href="#Closed">Features</a>
+    | <a href="#Related">Related Work</a> | <a href=
+    "#dev">Development</a> | <a href="#acks">Acks</a>
+  </div>
 
-<p>Cwm (pronounced coom) is a general-purpose data processor for the semantic
-web, somewhat like sed, awk, etc. for text files or XSLT for XML. It is a
-forward chaining reasoner which can be used for querying, checking,
-transforming and filtering information. Its core language is RDF, extended to
-include rules, and it uses RDF/XML or RDF/N3 (see <a
-href="../Primer">Notation3 Primer</a>) serializations as required.</p>
+  <p>Cwm (pronounced coom) is a general-purpose data processor for
+  the semantic web, somewhat like sed, awk, etc. for text files or
+  XSLT for XML. It is a forward chaining reasoner which can be used
+  for querying, checking, transforming and filtering information.
+  Its core language is RDF, extended to include rules, and it uses
+  RDF/XML or RDF/N3 (see <a href="../Primer">Notation3 Primer</a>)
+  serializations as required.</p>
 
-<p>Cwm is <a href="../#L88">written in python</a>; it is part of <a
-href="../">SWAP</a>, a Semantic Web Application Platform. It is open source
-under the <a href="/Consortium/Legal/2002/copyright-software-20021231">W3C
-software license</a>.</p>
+  <p>Cwm is <a href="../#L88">written in python</a>; it is part of
+  <a href="../">SWAP</a>, a Semantic Web Application Platform. It
+  is open source under the <a href=
+  "/Consortium/Legal/2002/copyright-software-20021231">W3C software
+  license</a>.</p>
 
-<p style="text-align: right"><a href="../cwm.tar.gz"><strong>[Download
-cwm.tar.gz now]</strong></a></p>
+  <p style="text-align: right"><a href=
+  "../cwm.tar.gz"><strong>[Download cwm.tar.gz
+  now]</strong></a></p>
 
-<p>Quick Reference:</p>
-<ul>
-  <li><a href="CwmHelp">Command line syntax</a></li>
-  <li><a href="CwmBuiltins">Built-in functions</a></li>
-  <li><a href="CwmInstall">Installation</a></li>
-  <li><a href="changes.html">Change log</a>, <a href="plans.html">Plans</a>,
-    <a href="../admin/bugStatus.html">Bugs</a></li>
-</ul>
+  <p>Quick Reference:</p>
 
-<h2 id="disc">Discussion -- places to talk about this</h2>
+  <ul>
+    <li><a href="CwmHelp">Command line syntax</a></li>
 
-<p></p>
-<dl>
-  <dt><a
-  href="http://lists.w3.org/Archives/Public/public-cwm-announce">public-cwm-announce</a></dt>
-    <dd>This low-traffic is for announcements about releases of cwm software,
-      and monthly summaries of changes to the <a
-      href="../admin/N3-Bugs">bug/RFE list</a>. You might find the <a
-      href="http://www.w3.org/2002/09/Lists2RSS?ml=public-cwm-announce&amp;realm=Public">cwm-announce
-      RSS feed</a> handy.</dd>
-  <dt><a
-  href="http://lists.w3.org/Archives/Public/public-cwm-bugs/">public-cwm-bugs</a><a></a></dt>
-    <dd>This is for the announcement and brief discussion/clarification of
-      cwm bugs or Requests For Enhancement (RFE). If responding to an
-      existing bug, only use mailers which send the <a
-      href="http://cr.yp.to/immhf/thread.html">refernce headers</a> so that
-      the threads on this mail ling list work. For new threads, please make
-      the subject line informative, and use the word "bug" or "RFE" as
-      appopriate. The current plan is to review changes in this monthly and
-      send it to the announce list.</dd>
-  <dt><a
-  href="http://lists.w3.org/Archives/Public/public-cwm-talk/">public-cwm-talk</a></dt>
-    <dd>Discussion by users and/or developers of the use and abuse of project
-      software.</dd>
-  <dt>Semantic Web Interest group</dt>
-    <dd><ul>
-        <li><a
-          href="http://lists.w3.org/Archives/Public/www-rdf-interest/">The
-          RDF Interest group discussion list</a></li>
-        <li><a href="irc://irc.freenode.net/swig">#swig irc channel</a> with
-          <a href="http://rdfig.xmlhack.com/">scratchpad/weblog</a></li>
+    <li><a href="CwmBuiltins">Built-in functions</a></li>
+
+    <li><a href="CwmInstall">Installation</a></li>
+
+    <li><a href="changes.html">Change log</a>, <a href=
+    "plans.html">Plans</a>, <a href=
+    "../admin/bugStatus.html">Bugs</a></li>
+  </ul>
+
+  <h2 id="disc">Discussion -- places to talk about this</h2>
+
+  <dl>
+    <dt><a href=
+    "http://lists.w3.org/Archives/Public/public-cwm-announce">public-cwm-announce</a></dt>
+
+    <dd>This low-traffic is for announcements about releases of cwm
+    software, and monthly summaries of changes to the <a href=
+    "../admin/N3-Bugs">bug/RFE list</a>. You might find the
+    <a href="http://www.w3.org/2002/09/Lists2RSS?ml=public-cwm-announce&amp;realm=Public">
+    cwm-announce RSS feed</a> handy.</dd>
+
+    <dt><a href=
+    "http://lists.w3.org/Archives/Public/public-cwm-bugs/">public-cwm-bugs</a></dt>
+
+    <dd>This is for the announcement and brief
+    discussion/clarification of cwm bugs or Requests For
+    Enhancement (RFE). If responding to an existing bug, only use
+    mailers which send the <a href=
+    "http://cr.yp.to/immhf/thread.html">refernce headers</a> so
+    that the threads on this mail ling list work. For new threads,
+    please make the subject line informative, and use the word
+    "bug" or "RFE" as appopriate. The current plan is to review
+    changes in this monthly and send it to the announce list.</dd>
+
+    <dt><a href=
+    "http://lists.w3.org/Archives/Public/public-cwm-talk/">public-cwm-talk</a></dt>
+
+    <dd>Discussion by users and/or developers of the use and abuse
+    of project software.</dd>
+
+    <dt>Semantic Web Interest group</dt>
+
+    <dd>
+      <ul>
+        <li><a href=
+        "http://lists.w3.org/Archives/Public/www-rdf-interest/">The
+        RDF Interest group discussion list</a></li>
+
+        <li><a href="irc://irc.freenode.net/swig">#swig irc
+        channel</a> with <a href=
+        "http://rdfig.xmlhack.com/">scratchpad/weblog</a></li>
       </ul>
     </dd>
-  <dt></dt>
-</dl>
+  </dl>
 
-<p></p>
+  <h2 id="Closed">Features and Tutorial</h2>
 
-<h2 id="Closed">Features and Tutorial</h2>
+  <p>The <a id="Tutorial" href="./" name="Tutorial">Semantic Web
+  Tutorial Using N3</a> covers features such as:</p>
 
-<p>The <a id="Tutorial" href="./">Semantic Web Tutorial Using N3</a> covers
-features such as:</p>
-<ul>
-  <li><a
-    href="../../../../2003/Talks/0520-www-tf1-a4-commandline/slide2-0.html">Loading
-    files in RDF/XML and/or N3</a>, generating RDF or N3 files from the
-    result.
-    <ul>
-      <li>(The obscure<a href="../test/triage.n3">boring</a> parts of RDF/XML
-        syntax, specifically reification and XML Literal parse type,
-        are<strong></strong><strong>not</strong> handled by the
-        mai<strong></strong>n parser).</li>
-    </ul>
-  </li>
-  <li>Pretty printing data so that anonymous nodes are used creatively to
-    minimize the number of explicit existentials (generated Ids).</li>
-  <li><a
-    href="../../../../2003/Talks/0520-www-tf1-b3-rules/slide1-0.html">Applying
+  <ul>
+    <li>
+      <a href=
+      "../../../../2003/Talks/0520-www-tf1-a4-commandline/slide2-0.html">
+      Loading files in RDF/XML and/or N3</a>, generating RDF or N3
+      files from the result.
+
+      <ul>
+        <li>(The obscure<a href="../test/triage.n3">boring</a>
+        parts of RDF/XML syntax, specifically reification and XML
+        Literal parse type, are<strong>not</strong> handled by the
+        main parser).</li>
+      </ul>
+    </li>
+
+    <li>Pretty printing data so that anonymous nodes are used
+    creatively to minimize the number of explicit existentials
+    (generated Ids).</li>
+
+    <li><a href=
+    "../../../../2003/Talks/0520-www-tf1-b3-rules/slide1-0.html">Applying
     rules written in N3 to the data</a></li>
-  <li><a
-    href="../../../../2003/Talks/0520-www-tf1-b3-rules/slide19-0.html">Filtering
+
+    <li><a href=
+    "../../../../2003/Talks/0520-www-tf1-b3-rules/slide19-0.html">Filtering
     the data to the result of a particular query</a></li>
-  <li>Generating arbitrary formats (<a
-    href="../../../../2003/Talks/0520-www-tf1-b3-rules/slide26-0.html">using
+
+    <li>Generating arbitrary formats (<a href=
+    "../../../../2003/Talks/0520-www-tf1-b3-rules/slide26-0.html">using
     --strings</a>)</li>
-  <li>Using an <a href="Built-in">internal knowledge of functions</a> to
-    resolve them within a query, including:
-    <ul>
-      <li>Simple math and string operations</li>
-      <li>Getting and parsing documents from the web</li>
-      <li>Accessing command line arguments and environment variables</li>
-      <li><a href="Trust">Cryptography</a>: hashing, generating keys, signing
-        things and checking signatures.</li>
-    </ul>
-  </li>
-</ul>
 
-<p id="Command">See also: <a href="CwmHelp">Cwm command line arguments
-reference</a>.</p>
+    <li>Using an <a href="Built-in">internal knowledge of
+    functions</a> to resolve them within a query, including:
 
-<p>Other features are in development, and haven't been documented as
-thoroughly:</p>
-<ul>
-  <li>Accessing the web to directly or indirectly resolve a query, including:
-    <ul>
-      <li>Getting schemas for terms in the query</li>
-      <li>Using metadata to point to definitive documents</li>
-      <li>Looking up data in local or remote SQL servers</li>
-    </ul>
-  </li>
-</ul>
+      <ul>
+        <li>Simple math and string operations</li>
 
-<h3><a name="Environmen" id="Environmen">Environment Variables</a></h3>
-<dl>
-  <dt>CWM_RDF_PARSER</dt>
-    <dd>rdflib2rdf or sax2rdf (default). Affects the choice of RDF parser
-      module used by cwm.</dd>
-</dl>
+        <li>Getting and parsing documents from the web</li>
 
-<h3><a name="Security" id="Security">Security Issues</a></h3>
+        <li>Accessing command line arguments and environment
+        variables</li>
 
-<p>Be careful when using rules from an untrusted source.</p>
-<ul>
-  <li>Rules can read data from the web, indirectly letting data out by the
-    URIs they use.</li>
-  <li>Rules can take up your resources such as processor time and memory.</li>
-  <li>Rules can pick data up from within the web you have access to,
-    including confidential files.</li>
-</ul>
+        <li><a href="Trust">Cryptography</a>: hashing, generating
+        keys, signing things and checking signatures.</li>
+      </ul>
+    </li>
+  </ul>
 
-<p>Be carfeul even when using cryptography. I am not an expert but a few
-things to watch are:</p>
-<ul>
-  <li>Allways think where the weakest link is. It is not always on the
-  net.</li>
-  <li>Where do you keep the private key, anyway?</li>
-  <li>Beware of all forms of attack, including replay and man in the
-  middle.</li>
-  <li>Always sign some random junk as well as the critical data to prevent
-    the reverse engineering of the key.</li>
-  <li>Ask a crypto specialist to look over your stuff</li>
-  <li>Make the techniques, rules, code. public. Public debugging is valuable.
-    Trying to hide it from attackers by keeping it secret doesn't pay.</li>
-  <li>This code is not guaranteed anyway, or made for production use. It is
-    designed for prototyping new semantic web applications. Use at your own
-    risk.</li>
-</ul>
+  <p id="Command">See also: <a href="CwmHelp">Cwm command line
+  arguments reference</a>.</p>
 
-<h3 id="name">About the name <em>cwm</em></h3>
+  <p>Other features are in development, and haven't been documented
+  as thoroughly:</p>
 
-<p>Originally, the name is from from "Closed World Machine" because it
-processed information in a limited space, cwm does <em>not</em> make any
-assumptions about a closed world. Think of it as defined area but with
-openings - like a valley.</p>
+  <ul>
+    <li>Accessing the web to directly or indirectly resolve a
+    query, including:
 
-<h2 id="Related">Related Work</h2>
+      <ul>
+        <li>Getting schemas for terms in the query</li>
 
-<p>see also Sean Palmer's <a href="http://infomesh.net/2001/cwm/">guide to
-cwm</a> -- sometimes it is more up to date than this!</p>
+        <li>Using metadata to point to definitive documents</li>
 
-<p><a id="Check" name="Check">Check out other programs which use the same
-language</a>:</p>
-<ul>
-  <li><a href="http://www.agfa.com/w3c/euler/">Euler</a> - a
-    backward-chaining reasoner by Jos de Roo. Euler will tell you whether a
-    give set of facts and rules supports a give conclusion.</li>
-  <li><a
-    href="http://www.google.com/search?q=eulersharp&amp;ie=UTF-8&amp;oe=UTF-8">EulerSharp</a>
-    - a C# port of Euler</li>
-  <li><a
-    href="http://www.unc.edu/~bparsia/sw/cwmclone/cwmclone.html">cwmclone</a>
-    - a partial clone of cwm by Bijan Parsia to XSB prolog engine - to
-    demonstrate that conventional logica programming tools are efficent and
-    straightforwradly adapted to semantic web work.</li>
-  <li>Jena RDF toolkit now accepts N3 as well as RDF/XML (2003/2)</li>
-  <li>RDF::Notation3 perl module (<a
-    href="http://archive.develooper.com/modules@perl.org/msg08120.html">submission</a>
+        <li>Looking up data in local or remote SQL servers</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h3><a name="Environmen" id="Environmen">Environment
+  Variables</a></h3>
+
+  <dl>
+    <dt>CWM_RDF_PARSER</dt>
+
+    <dd>rdflib2rdf or sax2rdf (default). Affects the choice of RDF
+    parser module used by cwm.</dd>
+  </dl>
+
+  <h3><a name="Security" id="Security">Security Issues</a></h3>
+
+  <p>Be careful when using rules from an untrusted source.</p>
+
+  <ul>
+    <li>Rules can read data from the web, indirectly letting data
+    out by the URIs they use.</li>
+
+    <li>Rules can take up your resources such as processor time and
+    memory.</li>
+
+    <li>Rules can pick data up from within the web you have access
+    to, including confidential files.</li>
+  </ul>
+
+  <p>Be carfeul even when using cryptography. I am not an expert
+  but a few things to watch are:</p>
+
+  <ul>
+    <li>Allways think where the weakest link is. It is not always
+    on the net.</li>
+
+    <li>Where do you keep the private key, anyway?</li>
+
+    <li>Beware of all forms of attack, including replay and man in
+    the middle.</li>
+
+    <li>Always sign some random junk as well as the critical data
+    to prevent the reverse engineering of the key.</li>
+
+    <li>Ask a crypto specialist to look over your stuff</li>
+
+    <li>Make the techniques, rules, code. public. Public debugging
+    is valuable. Trying to hide it from attackers by keeping it
+    secret doesn't pay.</li>
+
+    <li>This code is not guaranteed anyway, or made for production
+    use. It is designed for prototyping new semantic web
+    applications. Use at your own risk.</li>
+  </ul>
+
+  <h3 id="name">About the name <em>cwm</em></h3>
+
+  <p>Originally, the name is from from "Closed World Machine"
+  because it processed information in a limited space, cwm does
+  <em>not</em> make any assumptions about a closed world. Think of
+  it as defined area but with openings - like a valley.</p>
+
+  <h2 id="Related">Related Work</h2>
+
+  <p>see also Sean Palmer's <a href=
+  "http://infomesh.net/2001/cwm/">guide to cwm</a> -- sometimes it
+  is more up to date than this!</p>
+
+  <p><a id="Check" name="Check">Check out other programs which use
+  the same language</a>:</p>
+
+  <ul>
+    <li><a href="http://www.agfa.com/w3c/euler/">Euler</a> - a
+    backward-chaining reasoner by Jos de Roo. Euler will tell you
+    whether a give set of facts and rules supports a give
+    conclusion.</li>
+
+    <li><a href=
+    "http://www.google.com/search?q=eulersharp&amp;ie=UTF-8&amp;oe=UTF-8">
+    EulerSharp</a> - a C# port of Euler</li>
+
+    <li><a href=
+    "http://www.unc.edu/~bparsia/sw/cwmclone/cwmclone.html">cwmclone</a>
+    - a partial clone of cwm by Bijan Parsia to XSB prolog engine -
+    to demonstrate that conventional logica programming tools are
+    efficent and straightforwradly adapted to semantic web
+    work.</li>
+
+    <li>Jena RDF toolkit now accepts N3 as well as RDF/XML
+    (2003/2)</li>
+
+    <li>RDF::Notation3 perl module (<a href=
+    "http://archive.develooper.com/modules@perl.org/msg08120.html">submission</a>
     10 Oct 2001 by Petr Cimprich )</li>
-  <li><a href="http://www.ninebynine.org/Software/swish-0.1.html">Swish</a> -
-    N3 -capable semantic web code Haskell by Graham Kline (2003/6)</li>
-  <li><a href="http://www.mindswap.org/~katz/pychinko/">Pychinko</a> is a
+
+    <li><a href=
+    "http://www.ninebynine.org/Software/swish-0.1.html">Swish</a> -
+    N3 -capable semantic web code Haskell by Graham Kline
+    (2003/6)</li>
+
+    <li><a href=
+    "http://www.mindswap.org/~katz/pychinko/">Pychinko</a> is a
     rete-based cwm clone - should be much faster.</li>
-</ul>
+  </ul>
 
-<h2 id="dev">Development</h2>
+  <h2 id="dev">Development</h2>
 
-<p>This <a href="http://dev.w3.org/cvsweb/2000/10/swap/">swap code</a> is
-open source and available for those that want to play with it, but comes with
-no warranty.</p>
-<dl>
-  <dt>Using CVS</dt>
-    <dd>from the <a href="http://dev.w3.org/cvsweb/">public w3c CVS
-      repository</a>. Check out the whole tree to develop. This includes the
-      test data - if you don't need that, delete the test subdirectory. Make
-      a fresh directory where you want to put stuff from dev.w3.org.
-      <pre>$ <span style="color: #007F00">cvs -d:pserver:anonymous@dev.w3.org:/sources/public login</span>
+  <p>This <a href="http://dev.w3.org/cvsweb/2000/10/swap/">swap
+  code</a> is open source and available for those that want to play
+  with it, but comes with no warranty.</p>
+
+  <dl>
+    <dt>Using CVS</dt>
+
+    <dd>
+      from the <a href="http://dev.w3.org/cvsweb/">public w3c CVS
+      repository</a>. Check out the whole tree to develop. This
+      includes the test data - if you don't need that, delete the
+      test subdirectory. Make a fresh directory where you want to
+      put stuff from dev.w3.org.
+      <pre>
+$ <span style=
+"color: #007F00">cvs -d:pserver:anonymous@dev.w3.org:/sources/public login</span>
 password? <span style="color: #007F00">anonymous</span>
-$ <span style="color: #007F00">cvs -d:pserver:anonymous@dev.w3.org:/sources/public get 2000/10/swap</span></pre>
+$ <span style=
+"color: #007F00">cvs -d:pserver:anonymous@dev.w3.org:/sources/public get 2000/10/swap</span>
+</pre>
     </dd>
-  <dt>From the web</dt>
-    <dd>Get the files one by one. <a href="/2000/10/swap/cwm.py">cwm.py</a>
-      is the main application file. You can browse the source files on the
-      web, but this is <strong>not</strong> a practical way to install the
-      system.
-      <p>In the following, we assume $SWAP expands to the place where you
-      have code checked out.</p>
+
+    <dt>From the web</dt>
+
+    <dd>
+      Get the files one by one. <a href=
+      "/2000/10/swap/cwm.py">cwm.py</a> is the main application
+      file. You can browse the source files on the web, but this is
+      <strong>not</strong> a practical way to install the system.
+
+      <p>In the following, we assume $SWAP expands to the place
+      where you have code checked out.</p>
     </dd>
-</dl>
+  </dl>
 
-<h3>Test Driven Development (Don't trust the docs ;-)</h3>
+  <h3>Test Driven Development (Don't trust the docs ;-)</h3>
 
-<p>The best test of works is what has been tested. So the list of files in
-the <a href="../test/regression.n3">regression test</a> defines the set of
-features which are generally checked on each checkin. Cwm developers agree
-that all the tests have to pass before code is checked in. To run the tests,
-do <tt>make</tt> in the <tt>swap/test</tt> directory. We reckon to add a test
-for a new bug, so that bugs don't recur in future versions.</p>
+  <p>The best test of works is what has been tested. So the list of
+  files in the <a href="../test/regression.n3">regression test</a>
+  defines the set of features which are generally checked on each
+  checkin. Cwm developers agree that all the tests have to pass
+  before code is checked in. To run the tests, do <tt>make</tt> in
+  the <tt>swap/test</tt> directory. We reckon to add a test for a
+  new bug, so that bugs don't recur in future versions.</p>
 
-<p>Each subdirectory of test has its own detailed.tests file. In that you can
-put tests for new features. Note that the test commands are all writted to be
-run in $SWAP/test.</p>
+  <p>Each subdirectory of test has its own detailed.tests file. In
+  that you can put tests for new features. Note that the test
+  commands are all writted to be run in $SWAP/test.</p>
 
-<h3>How to make a release</h3>
-<ol>
-  <li>Remember to <code>cvs update</code> to ensure you have any changes
-    other people have done before running tests.</li>
-  <li>A quick test that your code still works is <code>cd $SWAP/test; make
-    fast</code></li>
-  <li>The test a release must pass before you make it is cd $SWAP/test; make
-    pre-release</li>
-  <li>Update the releases page with details of the new bug fixes and/or
-    features.</li>
-  <li>Edit $SWAP/Makefile
-    <ul>
-      <li>Make sure the HTML files generated from any new .py files are added
-        to the list HTMLS</li>
-      <li>Change the version number if you are going to make a new
-      tarball</li>
-    </ul>
-  </li>
-</ol>
+  <h3>How to make a release</h3>
 
-<h3>Code Overview</h3>
+  <ol>
+    <li>Remember to <code>cvs update</code> to ensure you have any
+    changes other people have done before running tests.</li>
 
-<p>Cwm developers agree to keep line lengths below 80 characters, though we
-have some code that predates that agreement.</p>
+    <li>A quick test that your code still works is <code>cd
+    $SWAP/test; make fast</code></li>
 
-<h4>llyn.py - The Store</h4>
+    <li>The test a release must pass before you make it is cd
+    $SWAP/test; make pre-release</li>
 
-<p>An in-memory store which does the inference. See the <a href="">Formula
-class methods</a> for a more or less conventional RDF API. A Forumula is a
-set of statements.</p>
+    <li>Update the releases page with details of the new bug fixes
+    and/or features.</li>
 
-<h4 id="L133">notation3.py - Serializing/deserializaing RDF/N3</h4>
+    <li>Edit $SWAP/Makefile
 
-<p>Originally written by Dan Connolly, uses a basic RDF stream parser
-interface, migrating to API</p>
-<ul>
-  <li>Parses N3</li>
-  <li>Generates N3</li>
-</ul>
+      <ul>
+        <li>Make sure the HTML files generated from any new .py
+        files are added to the list HTMLS</li>
 
-<p>The command line form (alias n3 python notation3.py; n3 -help) allows RDF
-to be parsed and re-output.</p>
+        <li>Change the version number if you are going to make a
+        new tarball</li>
+      </ul>
+    </li>
+  </ol>
 
-<p>The module will also run as a CGI script to convert N3 to RDF M&amp;S 1.0
-- by DanC magic.</p>
-<ul>
-  <li><a href="notation3.py">Source</a></li>
-</ul>
+  <h3>Code Overview</h3>
 
-<h4 id="L311">xml2rdf.py Parsing RDF/XML</h4>
+  <p>Cwm developers agree to keep line lengths below 80 characters,
+  though we have some code that predates that agreement.</p>
 
-<p>Based on Python's xmllib, this parser is compatible with the RDF stream
-interface of, notation3.py. It completes the square of parsers and
-generators. <strong>Defunct. Now use sax parser and sax2rdf.py.</strong></p>
-<ul>
-  <li>Parses RDF</li>
-</ul>
+  <h4>llyn.py - The Store</h4>
 
-<p>It has a command line mode for self-test purposes.</p>
-<ul>
-  <li><a href="xml2rdf.py">Source</a></li>
-</ul>
+  <p>An in-memory store which does the inference. See the Formula
+  class methods for a more or less conventional RDF API. A Forumula
+  is a set of statements.</p>
 
-<h4>cwm_xxx.py - builtin modules</h4>
+  <h4 id="L133">notation3.py - Serializing/deserializaing
+  RDF/N3</h4>
 
-<p>These are quite easy to add to. Look at a few and clone a similar one to
-the one you have made.</p>
+  <p>Originally written by Dan Connolly, uses a basic RDF stream
+  parser interface, migrating to API</p>
 
-<h3><a id="Design" name="Design">Design issues</a></h3>
+  <ul>
+    <li>Parses N3</li>
 
-<p>The code above investigated and raised issues discussed in the following
-documents.</p>
-<ul>
-  <li><a href="/DesignIssues/Notation3.html">Notation 3 - an alternative RDF
-    syntax</a></li>
-  <li><a href="/DesignIssues/Anonymous.html">Quantification implicit in
-    anonymous nodes</a></li>
-</ul>
+    <li>Generates N3</li>
+  </ul>
 
-<p>not to mention</p>
-<ul>
-  <li>RDFM&amp;S and schema issues</li>
-  <li>The question of quoting and BagIDs etc</li>
-</ul>
+  <p>The command line form (alias n3 python notation3.py; n3 -help)
+  allows RDF to be parsed and re-output.</p>
 
-<h2 id="acks">Acknowledgements</h2>
+  <p>The module will also run as a CGI script to convert N3 to RDF
+  M&amp;S 1.0 - by DanC magic.</p>
 
-<p>Thanks to Dan Connolly for writing the first code and thereby <a
-href="./#L88">introducing me to Python</a>, and to him and Sean Palmer and
-Mark Nottingham for writing built-in function modules. Eric Prud'hommeaux
-wrote the remote database query and mySQL interface. Sandro Hawke has made
-various contributions. Yosi Scharf engineered the cwm 1.0.0 release and fixed
-various bugs and added SPARQL support. Thanks to Sean for his <a
-href="http://infomesh.net/2001/cwm/">guide</a> to cwm. Thanks for all on
-#RDFIG for being everything which is #RDFIG.</p>
+  <ul>
+    <li><a href="notation3.py">Source</a></li>
+  </ul>
 
-<p>Development of cwm is supported in part by funding from US Defense
-Advanced Research Projects Agency (DARPA) and Air Force Research Laboratory,
-Air Force Materiel Command, USAF, under agreement number F30602-00-2-0593,
-"Semantic Web Development".</p>
+  <h4 id="L311">xml2rdf.py Parsing RDF/XML</h4>
 
-<h2>License</h2>
+  <p>Based on Python's xmllib, this parser is compatible with the
+  RDF stream interface of, notation3.py. It completes the square of
+  parsers and generators. <strong>Defunct. Now use sax parser and
+  sax2rdf.py.</strong></p>
 
-<p>Cwm: http://www.w3.org/2000/10/swap/doc/cwm.html</p>
+  <ul>
+    <li>Parses RDF</li>
+  </ul>
 
-<p>Copyright © 2000-2004 World Wide Web Consortium, (Massachusetts Institute
-of Technology, European Research Consortium for Informatics and Mathematics,
-Keio University). All Rights Reserved. This work is distributed under the
-W3C¨ Software License [1] in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. [1] <a
-href="/Consortium/Legal/2002/copyright-software-20021231 ">http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231</a><a></a></p>
+  <p>It has a command line mode for self-test purposes.</p>
 
-<p></p>
+  <ul>
+    <li><a href="xml2rdf.py">Source</a></li>
+  </ul>
 
-<p><a href="cwm-historical.html">Historical stuff from this page</a></p>
-<hr />
-<address>
-  <a href="http://www.w3.org/People/Berners-Lee/Research.html">Tim BL, with
-  his director hat off</a><br />
-  $Id$
-</address>
+  <h4>cwm_xxx.py - builtin modules</h4>
+
+  <p>These are quite easy to add to. Look at a few and clone a
+  similar one to the one you have made.</p>
+
+  <h3><a id="Design" name="Design">Design issues</a></h3>
+
+  <p>The code above investigated and raised issues discussed in the
+  following documents.</p>
+
+  <ul>
+    <li><a href="/DesignIssues/Notation3.html">Notation 3 - an
+    alternative RDF syntax</a></li>
+
+    <li><a href="/DesignIssues/Anonymous.html">Quantification
+    implicit in anonymous nodes</a></li>
+  </ul>
+
+  <p>not to mention</p>
+
+  <ul>
+    <li>RDFM&amp;S and schema issues</li>
+
+    <li>The question of quoting and BagIDs etc</li>
+  </ul>
+
+  <h2 id="acks">Acknowledgements</h2>
+
+  <p>Thanks to Dan Connolly for writing the first code and thereby
+  <a href="./#L88">introducing me to Python</a>, and to him and
+  Sean Palmer and Mark Nottingham for writing built-in function
+  modules. Eric Prud'hommeaux wrote the remote database query and
+  mySQL interface. Sandro Hawke has made various contributions.
+  Yosi Scharf engineered the cwm 1.0.0 release and fixed various
+  bugs and added SPARQL support. Thanks to Sean for his <a href=
+  "http://infomesh.net/2001/cwm/">guide</a> to cwm. Thanks for all
+  on #RDFIG for being everything which is #RDFIG.</p>
+
+  <p>Development of cwm is supported in part by funding from US
+  Defense Advanced Research Projects Agency (DARPA) and Air Force
+  Research Laboratory, Air Force Materiel Command, USAF, under
+  agreement number F30602-00-2-0593, "Semantic Web
+  Development".</p>
+
+  <h2>License</h2>
+
+  <p>Cwm: http://www.w3.org/2000/10/swap/doc/cwm.html</p>
+
+  <p>Copyright &Acirc;&copy; 2000-2004 World Wide Web Consortium,
+  (Massachusetts Institute of Technology, European Research
+  Consortium for Informatics and Mathematics, Keio University). All
+  Rights Reserved. This work is distributed under the
+  W3C&Acirc;&uml; Software License [1] in the hope that it will be
+  useful, but WITHOUT ANY WARRANTY; without even the implied
+  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  [1] <a href=
+  "/Consortium/Legal/2002/copyright-software-20021231">http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231</a></p>
+
+  <p><a href="cwm-historical.html">Historical stuff from this
+  page</a></p>
+  <hr />
+
+  <address>
+    <a href=
+    "http://www.w3.org/People/Berners-Lee/Research.html">Tim BL,
+    with his director hat off</a><br />
+    $Id$
+  </address>
 </body>
 </html>
