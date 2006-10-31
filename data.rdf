@@ -1,0 +1,37 @@
+
+<!-- Processed by Id: cwm.py,v 1.190 2006/08/09 23:20:42 syosi Exp -->
+<!--     using base file:/devel/WWW/2000/10/swap/data.n3-->
+
+
+<rdf:RDF xmlns="http://usefulinc.com/ns/doap#"
+    xmlns:cc="http://web.resource.org/cc/"
+    xmlns:doap="http://usefulinc.com/ns/doap#"
+    xmlns:foaf="http://xmlns.com/foaf/0.1/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+
+    <Project rdf:about="#Cwm">
+        <bug-database rdf:resource="http://www.w3.org/2000/10/swap/admin/bugStatus.html"/>
+        <description>Cwm (pronounced coom) is a general-purpose data processor for the
+     semantic web, somewhat like sed, awk, etc. for text files or XSLT for XML.
+      It is a forward chaining reasoner which can be used for querying, checking,
+       transforming and filtering information. Its core language is RDF, extended
+        to include rules, and it uses RDF/XML or RDF/N3 (see Notation3 Primer)
+	 serializations as required.
+
+Cwm is written in python; it is part of SWAP, 
+a Semantic Web Application Platform. It is open source under the W3C software license.</description>
+        <developer rdf:resource="http://www.w3.org/People/Berners-Lee/card#i"/>
+        <developer rdf:resource="http://www.w3.org/People/Connolly/#me"/>
+        <helper rdf:resource="http://dig.csail.mit.edu/People/RRS"/>
+        <homepage rdf:resource="cwm.html"/>
+        <mailing-list rdf:resource="mailto:public-cwm-bugs@w3.org"/>
+        <name>The Cwm Project</name>
+        <programming-language>Python</programming-language>
+        <shortdesc>An general Semantic Web data procesing tool</shortdesc>
+        <cc:license rdf:resource="http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231"/>
+    </Project>
+
+    <rdf:Description rdf:about="http://www.w3.org/People/Berners-Lee/card#i">
+        <foaf:name>Timothy Berners-Lee</foaf:name>
+    </rdf:Description>
+</rdf:RDF>

@@ -1,0 +1,57 @@
+@prefix doap: <http://usefulinc.com/ns/doap#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix cc: <http://web.resource.org/cc/>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix q: <http://dig.csail.mit.edu/2005/ajar/ajaw/query#>.
+@prefix tab: <http://dig.csail.mit.edu/2005/ajar/ajaw/ont#>.
+
+# 
+@keywords a, is, of.
+
+Cwm a doap:Project;
+    
+    doap:name "The Cwm Project";
+    
+    doap:shortdesc "An general Semantic Web data procesing tool";
+
+    doap:description """Cwm (pronounced coom) is a general-purpose data processor for the
+     semantic web, somewhat like sed, awk, etc. for text files or XSLT for XML.
+      It is a forward chaining reasoner which can be used for querying, checking,
+       transforming and filtering information. Its core language is RDF, extended
+        to include rules, and it uses RDF/XML or RDF/N3 (see Notation3 Primer)
+	 serializations as required.
+
+Cwm is written in python; it is part of SWAP, 
+a Semantic Web Application Platform. It is open source under the W3C software license.""";
+
+    cc:license
+        <http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231>;
+
+    # add yourself here and below
+    doap:developer <http://www.w3.org/People/Berners-Lee/card#i>, #@@@
+                   <http://www.w3.org/People/Connolly/#me>;
+
+    doap:helper 
+                <http://dig.csail.mit.edu/People/RRS>;
+    
+    doap:programming-language "Python";    
+    doap:homepage <cwm.html>;
+    doap:mailing-list <mailto:public-cwm-bugs@w3.org>;
+    doap:bug-database <http://www.w3.org/2000/10/swap/admin/bugStatus.html>.
+    
+ #   doap:release <#0.7>;
+ #   doap:release <#0.8>.
+
+# Versions
+#
+#<#0.7> a doap:Version;
+#    doap:file-release
+#    <http://dig.csail.mit.edu/2005/ajar/release/Cwm-0.7-2006-07-15T00-38Z.tgz>;
+#    foaf:webpage <http://dig.csail.mit.edu/2005/ajar/release/Cwm/0.7/tab.html>.
+#
+#<#0.8> a doap:Version.
+
+# People
+    
+<http://www.w3.org/People/Berners-Lee/card#i> foaf:name "Timothy Berners-Lee".
