@@ -1,6 +1,15 @@
 """
 access to ssh-agent from python
 
+------
+Well, after going at this for a while, I think I actually
+need ssh-agent to do decryption; I was thinking that's
+the same as signature, but I think it's not.
+
+see http://dev.w3.org/cvsweb/2001/palmagent/credstore.py for
+using PGP and seahorse-agent via DBus
+------
+
 $Id$
 see log at end
 
@@ -23,6 +32,8 @@ SSH_AUTH_SOCK = "SSH_AUTH_SOCK"
 
 # from authfd.h
 SSH_AGENT_FAILURE = 5
+SSH2_AGENTC_REQUEST_IDENTITIES = 11
+SSH2_AGENT_IDENTITIES_ANSWER = 12
 SSH2_AGENTC_SIGN_REQUEST = 13
 SSH2_AGENT_SIGN_RESPONSE = 14
 SSH2_AGENT_FAILURE = 30
@@ -42,6 +53,21 @@ def main():
     ap = os.getenv(SSH_AUTH_SOCK)
     as = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
     as.connect(ap)
+
+    progress("getting identities...")
+    msg = request_reply(as, chr(SSH2_AGENTC_REQUEST_IDENTITIES))
+    progress("identities reply length:", len(msg))
+    progress("identities reply type:", ord(msg[0]))
+    if ord(msg[0]) == SSH2_AGENT_IDENTITIES_ANSWER:
+        keys = []
+        qty, msg = getInt(msg[1:])
+        for i in range(qty):
+            k, msg = getString(msg)
+            keys.append(k)
+        progress("identities:", len(keys))
+    else:
+        progress("huh?", ord(msg[0]))
+
     progress("requesting signature of:", data)
     sig = ssh_agent_sign(as, key, data)
 
@@ -122,31 +148,25 @@ def ssh_agent_sign(auth, key, data):
 
 
 def request_reply(auth, buf):
-    atomicio_w(auth, struct.pack(">I" , len(buf)))
-    atomicio_w(auth, buf)
+    auth.send(struct.pack(">I" , len(buf)) + buf)
 
-    ln = 4
-    rx = ''
-    while ln > 0:
-	r = auth.recv(ln)
-	rx += r
-	ln -= len(r)
+    rx = read_all(auth, 4)
     (ln,) = struct.unpack(">I", rx)
-    if ln > 256 * 1024: raise IOError, ("response size too big", ln)
+    reply = read_all(auth, ln)
+    progress("reply size:", len(reply))
+    return reply
+
+def read_all(auth, ln):
+    progress("read_all:", ln)
     rx = ''
     while ln > 0:
 	r = auth.recv(ln)
+        if not r:
+            raise IOError, "lost ssh-agent"
+        progress("rxd:", len(r))
 	rx += r
 	ln -= len(r)
     return rx
-
-
-def atomicio_w(sock, buf):
-    dx = 0
-    while 1:
-	sent = sock.send(buf[dx:])
-	if dx + sent >= len(buf): break
-	dx += sent
 
 import binascii
 
@@ -169,6 +189,10 @@ def getString(buf):
     s = buf[4:4+ln]
     return s, buf[4+ln:]
     
+def getInt(buf):
+    (i, ) = struct.unpack(">I", buf[:4])
+    return i, buf[4:]
+    
 def packString(s):
     """ala buffer_put_cstring"""
     return struct.pack(">I", len(s)) + s
@@ -184,8 +208,8 @@ def getBignum(buf):
     progress("getBignum bytes:", ln)
     x = 0L
     for byte in bin:
-	progress("byte: %02x" % ord(byte))
-	x = x * 256 + ord(byte)
+	#@@progress("byte: %02x" % ord(byte))
+	x = (x << 8) + ord(byte)
     return x, buf[4+ln:]
 
 def packBignum(n):
@@ -218,7 +242,10 @@ if __name__ == '__main__':
     main()
 
 # $Log$
-# Revision 1.5  2004-06-10 12:44:58  connolly
+# Revision 1.6  2006-11-02 05:27:25  connolly
+# end-of-life in favor of credstore
+#
+# Revision 1.5  2004/06/10 12:44:58  connolly
 # more diagnostics. 16 Sep 2004
 #
 # Revision 1.4  2003/09/16 04:36:24  connolly
