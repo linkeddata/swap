@@ -1649,7 +1649,6 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                             return []
 			if result != None:
 			    self.state = S_DONE
-			    rea=None
                             if isinstance(result, Formula):
                                 if self.quad[OBJ] in self.query.variables:
                                     result.reopen()
@@ -1661,11 +1660,13 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                                     assert result.canonical is result, result.debugString()
                                 else:
                                     result2 = result
-				rea = BecauseBuiltIn(con, subj, pred, result)
 			    if isinstance(pred, MultipleFunction):
-				return [(Env({obj:(x, None)}), rea) for x in result]
+				return [(Env({obj:(x, None)}),
+                                         diag.tracking and BecauseBuiltIn(con, subj, pred, x)
+                                         ) for x in result]
 			    else:
-				return [(Env({obj: (result, None)}), rea)]
+				return [(Env({obj: (result, None)}),
+                                         diag.tracking and BecauseBuiltIn(con, subj, pred, result))]
                         else:
 			    return []
 	    else:
