@@ -1692,13 +1692,16 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                             return []
 			if result != None:
 			    self.state = S_DONE
-			    rea=None
-			    if diag.tracking:
-				rea = BecauseBuiltIn(con, result, pred, obj)
 			    if isinstance(pred, MultipleReverseFunction):
-				return [(Env({subj:(x,None)}), rea) for x in result]
+                                return [(Env({subj:(x,None)}),
+                                         diag.tracking and \
+                                         BecauseBuiltIn(con, x, pred, obj)) \
+                                        for x in result]
 			    else:
-				return [(Env({subj: (result,None)}), rea)]
+				return [(Env({subj: (result,None)}),
+                                         diag.tracking and \
+                                         BecauseBuiltIn(con, result, pred, obj)
+                                         )]
                         else:
 			    return []
 		else:
