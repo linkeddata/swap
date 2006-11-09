@@ -247,7 +247,7 @@ def base():
 
         """
 #	return "file://" + hostname + os.getcwd() + "/"
-	return "file:" + _fixslash(os.getcwd()) + "/"
+	return "file://" + _fixslash(os.getcwd()) + "/"
 
 
 def _fixslash(str):
@@ -456,7 +456,11 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.18  2006-07-07 22:06:50  connolly
+# Revision 1.19  2006-11-09 22:44:12  connolly
+# start base with file:// rather than just file:/
+# for interop with xsltproc
+#
+# Revision 1.18  2006/07/07 22:06:50  connolly
 # fix bug with joining mid:abc with #foo
 #
 # Revision 1.17  2006/06/17 19:27:27  timbl
