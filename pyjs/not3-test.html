@@ -1,0 +1,45 @@
+<html>
+  <head>
+       <title>Test notation3 parser conversion from py to js</title>
+
+    <script src="http://dig.csail.mit.edu/2005/ajar/ajaw/rdfutil.js" type="text/javascript"> </script>
+    <script src="http://dig.csail.mit.edu/2005/ajar/ajaw/rdfuri.js" type="text/javascript"> </script>
+    <script src="http://dig.csail.mit.edu/2005/ajar/ajaw/rdf/term.js"  type="text/javascript"></script>
+    <script src="http://dig.csail.mit.edu/2005/ajar/ajaw/rdf/match.js"  type="text/javascript"></script>
+    <script src="http://dig.csail.mit.edu/2005/ajar/ajaw/rdf/identity.js"  type="text/javascript"></script>
+
+
+    <script type="text/javascript" src="missing.js" />
+    <script type="text/javascript" src="not3.js" />
+    <script type="text/javascript" src="not3-test-script.js" />
+
+  </head>
+  <body>
+
+
+<h1 id="header">RDF n3 parser tests</h1>
+<p>Click the beanie any time to dump the store into the log.</p>
+</p>
+<h2>Status log:</h2>
+<hr>
+<pre id=status>
+Initial status. Version $Id$<br/>
+</pre>
+
+<img src="http://dig.csail.mit.edu/2005/ajar/ajaw/icons/beanie-a.gif"
+ onmousedown="dumpStore()" alt="dump" align="right">
+<span onmousedown="setLogging(true)">[loggingOn]</span> 
+<span onmousedown="setLogging(false)">[loggingOff]</span> 
+<span onmousedown="clearStatus()">[clear log]</span> 
+</br>
+
+<hr>
+<h2>Test controls</h2>
+
+
+    <h1>Test notation3 parser conversion</h1>
+    <p><span onmousedown="test1()">[1]</span>
+    test one
+    </p>
+  </body>
+</html>

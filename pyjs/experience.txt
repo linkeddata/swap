@@ -1,0 +1,22 @@
+
+@@@ See also paste in my email to danc etc
+
+A sed file post-processes re.compile(foo) to \foo\
+
+A problem exists that the parser uses python extensions ?P<name> in the regxp for numbers
+Error: invalid quantifier ?P<integer>[-+]?[0-9]+)(?P<decimal>\\.[0-9]+)?(?P<exponent>e[-+]?[0-9]+)?
+Source File: file:///devel/WWW/2000/10/swap/pyjs/not3.js
+Line: 49, Column: 20
+Source Code:
+var number_syntax = /(?P<integer>[-+]?[0-9]+)(?P<decimal>\\.[0-9]+)?(?P<exponent>e[-+]?[0-9]+)?/;
+
+
+See http://docs.python.org/lib/re-syntax.html
+
+
+See for regexps in Javascript: http://www.regular-expressions.info/javascript.html
+
+The .exec() has to be used instead of .match() in python, and named substrings are not supported. 
+
+myregexp = new RegExp(regexstring, "gims")  instead of myregexp = re.compile()
+
