@@ -105,7 +105,7 @@ def pattern(f, s):
     part = f.the(subj=s, pred=REGEX.star)
     if part:
         return '(?:%s*)' % pattern(f, part)
-    part = f.the(subj=s, pred=REGEX.rep)
+    part = f.the(subj=s, pred=REGEX.plus)
     if part:
         return '(?:%s+)' % pattern(f, part)
     part = f.the(subj=s, pred=REGEX.opt)
@@ -126,7 +126,7 @@ def sets(f, lang, pred=EBNF.first):
     """
     fi = {}
     for lhs in f.each(pred=EBNF.nonTerminal, obj=lang):
-        if lhs is EBNF.eps: continue
+        if lhs is EBNF.empty: continue
         fs = []
         for obj in f.each(subj=lhs, pred=pred):
             fs.append(asSymbol(f, obj))
@@ -142,7 +142,7 @@ def asSymbol(f, x):
     """
     if isinstance(x, Literal):
         return tokid(unicode(x)) #hmm...
-    elif x is EBNF.eps or f.the(subj=x, pred=EBNF.seq) == RDF.nil:
+    elif x is EBNF.empty or f.the(subj=x, pred=EBNF.seq) == RDF.nil:
         return 'EMPTY'
     elif x == EBNF.eof:
         return 'EOF'
@@ -150,8 +150,8 @@ def asSymbol(f, x):
         if x in f.existentials():
 
             # try to pin down an exact path
-            y = f.the(subj=x, pred=EBNF.rep)
-            if y: return "_%s_rep" % asSymbol(f, y)
+            y = f.the(subj=x, pred=EBNF.plus)
+            if y: return "_%s_plus" % asSymbol(f, y)
             y = f.the(subj=x, pred=EBNF.star)
             if y: return "_%s_star" % asSymbol(f, y)
             y = f.the(subj=x, pred=EBNF.opt)
@@ -289,7 +289,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.9  2006-06-22 22:08:37  connolly
+# Revision 1.10  2006-11-15 19:59:25  connolly
+# change rep to plus, eps to empty
+#
+# Revision 1.9  2006/06/22 22:08:37  connolly
 # trying to generate python ply module to test grammars
 # reworked asGrammar; not sure if it's got more or less bugs now...
 # use python-happy token names rather than literals

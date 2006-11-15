@@ -460,7 +460,7 @@ def ttlExpr(expr, pfx, indent, obj=1):
         if ket: print indent + ket
 
     elif op == '+':
-        print indent + bra + "%s:rep " % pfx
+        print indent + bra + "%s:plus " % pfx
         ttlExpr(args, pfx, indent + '  ')
         if ket: print indent + ket
 
@@ -562,7 +562,10 @@ if __name__ == '__main__':
     else: main(sys.argv)
 
 # $Log$
-# Revision 1.10  2006-06-21 00:53:31  connolly
+# Revision 1.11  2006-11-15 19:59:25  connolly
+# change rep to plus, eps to empty
+#
+# Revision 1.10  2006/06/21 00:53:31  connolly
 # added a special case for #x5c (\) in rehex/cclass
 #
 # Revision 1.9  2006/06/20 23:26:29  connolly
