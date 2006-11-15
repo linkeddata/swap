@@ -8,6 +8,8 @@
 @prefix ss: <http://www.w3.org/2000/10/swap/util/sniffSchema#> .
 
 <> rdfs:seeAlso <http://en.wikipedia.org/wiki/Extended_Backus-Naur_form>,
+   <http://en.wikipedia.org/wiki/Compilers:_Principles,_Techniques,_and_Tools>,
+   <http://c2.com/cgi/wiki?TheDragonBook>,
    <ebnf2turtle.py>,
    <ebnf2bnf>, <ebnf2bnf.n3>.
     
@@ -28,9 +30,9 @@
 short for [ :alt ([ :seq ()] X)]"""
 .
     
-    :rep     a owl:InverseFunctionalProperty;
-         rdfs:label "rep";
-         rdfs:comment """[ :rep X] is one or more Xs.""".
+    :plus     a owl:InverseFunctionalProperty;
+         rdfs:label "plus";
+         rdfs:comment """[ :plus X] is one or more Xs.""".
 
     
     :star     a owl:InverseFunctionalProperty;
@@ -46,5 +48,5 @@ short for [ :alt ([ :seq ()] X)]"""
          rdfs:comment "relates a language to one of its lexical tokens; i.e. a symbol in a lower-level language" .
     
 :eof rdfs:label "EOF".
-:eps rdfs:label "epsilon"; rdfs:comment "the empty sequence";
+:empty rdfs:label "empty"; rdfs:comment "the empty sequence";
      :seq ().
