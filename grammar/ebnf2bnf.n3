@@ -9,13 +9,13 @@ rdfs:seeAlso <ebnf>, <ebnf.n3>, <ebnf.rdf>.
 
 @prefix g: <http://www.w3.org/2000/10/swap/grammar/ebnf#>.
 
-g:eps g:seq ().
+g:empty g:seq ().
 
-{ ?A g:opt ?B } => { ?A g:alt ( g:eps ?B ) }.
+{ ?A g:opt ?B } => { ?A g:alt ( g:empty ?B ) }.
 
-{ ?A g:rep ?B } => { ?A g:seq ( ?B [ g:star ?B] ) }.
+{ ?A g:plus ?B } => { ?A g:seq ( ?B [ g:star ?B] ) }.
 
-{ ?A g:star ?B } => { ?A g:alt ( g:eps [ g:seq (?B ?A) ] ) }.
+{ ?A g:star ?B } => { ?A g:alt ( g:empty [ g:seq (?B ?A) ] ) }.
 
 
 # find all the non-terminals
@@ -26,7 +26,7 @@ g:eps g:seq ().
 g:alt rdfs:domain g:Production.
 { ?S [ rdfs:domain ?C] [] } => { ?S a ?C }.
 
-# eps is not a production
+# empty is not a production
 { ?S g:seq [ rdf:rest []] } => { ?S a g:Production }.
 
 { ?L g:start ?A }
@@ -61,7 +61,7 @@ re:seq rdfs:domain re:Regex.
 re:matches rdfs:domain re:Regex.
 re:diff rdfs:domain re:Regex.
 re:opt rdfs:domain re:Regex.
-re:rep rdfs:domain re:Regex.
+re:plus rdfs:domain re:Regex.
 re:star rdfs:domain re:Regex.
 
 { [ g:alt [ list:member ?T ]] g:nonTerminal ?L.
