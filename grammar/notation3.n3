@@ -122,41 +122,45 @@
      ) ]
 .
 
-:property rdfs:label "property"; rdf:value "10a";
- rdfs:comment "[10a] property ::= verb term objecttail";
+:property rdfs:label "property"; rdf:value "11";
+ rdfs:comment "[11] property ::= (verb | inverb) term (\",\" term)*";
   g:seq (
-    :verb
+    [ g:alt (
+      :verb
+      :inverb
+     ) ]
     :term
-    :objecttail
+    [ g:star 
+      [ g:seq (
+        ","
+        :term
+       ) ]
+     ]
    )
 .
 
-:objecttail rdfs:label "objecttail"; rdf:value "11";
- rdfs:comment "[11] objecttail ::= (\",\" term)*";
-  g:star 
-    [ g:seq (
-      ","
-      :term
-     ) ]
-.
-
 :verb rdfs:label "verb"; rdf:value "12";
- rdfs:comment "[12] verb ::= term | \"@has\" term | \"@is\" term \"@of\" | \"@a\" | \"=\" | \"=>\" | \"<=\"";
+ rdfs:comment "[12] verb ::= \"@has\"? term | \"@a\" | \"=\" | \"=>\" | \"<=\"";
   g:alt (
-    :term
     [ g:seq (
-      "@has"
+      [ g:opt 
+        "@has"
+       ]
       :term
-     ) ]
-    [ g:seq (
-      "@is"
-      :term
-      "@of"
      ) ]
     "@a"
     "="
     "=>"
     "<="
+   )
+.
+
+:inverb rdfs:label "inverb"; rdf:value "12a";
+ rdfs:comment "[12a] inverb ::= \"@is\" term \"@of\"";
+  g:seq (
+    "@is"
+    :term
+    "@of"
    )
 .
 
@@ -261,7 +265,7 @@
     [ re:opt 
       [  re:matches "[+-]"  ]
      ]
-    [ re:rep 
+    [ re:plus 
       [  re:matches "[0-9]"  ]
      ]
    )
@@ -273,13 +277,13 @@
     [ re:opt 
       [  re:matches "[+-]"  ]
      ]
-    [ re:rep 
+    [ re:plus 
       [  re:matches "[0-9]"  ]
      ]
     [ re:opt 
       [ re:seq (
         "."
-        [ re:rep 
+        [ re:plus 
           [  re:matches "[0-9]"  ]
          ]
        ) ]
@@ -289,7 +293,7 @@
       [ re:opt 
         [  re:matches "[+-]"  ]
        ]
-      [ re:rep 
+      [ re:plus 
         [  re:matches "[0-9]"  ]
        ]
      ) ]
@@ -302,13 +306,13 @@
     [ re:opt 
       [  re:matches "[+-]"  ]
      ]
-    [ re:rep 
+    [ re:plus 
       [  re:matches "[0-9]"  ]
      ]
     [ re:opt 
       [ re:seq (
         "."
-        [ re:rep 
+        [ re:plus 
           [  re:matches "[0-9]"  ]
          ]
        ) ]
@@ -360,7 +364,7 @@
       [ re:alt (
         [ re:seq (
           "_"
-          [ re:rep 
+          [ re:plus 
             :NameChar3
            ]
          ) ]
@@ -451,13 +455,13 @@
       :STRING_LITERAL_LONG2
      ) ]
     "@"
-    [ re:rep 
+    [ re:plus 
       [  re:matches "[a-z]"  ]
      ]
     [ re:star 
       [ re:seq (
         "-"
-        [ re:rep 
+        [ re:plus 
           [  re:matches "[a-z0-9]"  ]
          ]
        ) ]
