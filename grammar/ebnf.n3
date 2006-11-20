@@ -43,7 +43,7 @@ short for [ :alt ([ :seq ()] X)]"""
          rdfs:label "non terminal";
          rdfs:comment "relates grammatical symbol to a language" .
     
-    :terminal     a rdfs:Class;
+    :terminal     a rdfs:Property;
          rdfs:label "terminal";
          rdfs:comment "relates a language to one of its lexical tokens; i.e. a symbol in a lower-level language" .
     
