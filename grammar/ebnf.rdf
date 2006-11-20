@@ -1,6 +1,6 @@
 
-<!-- Processed by Id: cwm.py,v 1.185 2006/05/30 21:08:05 syosi Exp -->
-<!--     using base file:/home/connolly/w3ccvs/WWW/2000/10/swap/grammar/ebnf.n3-->
+<!-- Processed by Id: cwm.py,v 1.190 2006/08/09 23:20:42 syosi Exp -->
+<!--     using base file:///home/connolly/w3ccvs/WWW/2000/10/swap/grammar/ebnf.n3-->
 
 
 <rdf:RDF xmlns="http://www.w3.org/2000/01/rdf-schema#"
@@ -13,6 +13,8 @@
         <seeAlso rdf:resource="ebnf2bnf"/>
         <seeAlso rdf:resource="ebnf2bnf.n3"/>
         <seeAlso rdf:resource="ebnf2turtle.py"/>
+        <seeAlso rdf:resource="http://c2.com/cgi/wiki?TheDragonBook"/>
+        <seeAlso rdf:resource="http://en.wikipedia.org/wiki/Compilers:_Principles,_Techniques,_and_Tools"/>
         <seeAlso rdf:resource="http://en.wikipedia.org/wiki/Extended_Backus-Naur_form"/>
     </rdf:Description>
 
@@ -21,14 +23,14 @@
         <label>alt</label>
     </owl:InverseFunctionalProperty>
 
-    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/ebnf#eof">
-        <label>EOF</label>
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/ebnf#empty">
+        <comment>the empty sequence</comment>
+        <label>empty</label>
+        <ebnf:seq rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
     </rdf:Description>
 
-    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/ebnf#eps">
-        <comment>the empty sequence</comment>
-        <label>epsilon</label>
-        <ebnf:seq rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/ebnf#eof">
+        <label>EOF</label>
     </rdf:Description>
 
     <Property rdf:about="http://www.w3.org/2000/10/swap/grammar/ebnf#nonTerminal">
@@ -43,9 +45,9 @@ short for [ :alt ([ :seq ()] X)]</comment>
         <label>opt</label>
     </owl:InverseFunctionalProperty>
 
-    <owl:InverseFunctionalProperty rdf:about="http://www.w3.org/2000/10/swap/grammar/ebnf#rep">
-        <comment>[ :rep X] is one or more Xs.</comment>
-        <label>rep</label>
+    <owl:InverseFunctionalProperty rdf:about="http://www.w3.org/2000/10/swap/grammar/ebnf#plus">
+        <comment>[ :plus X] is one or more Xs.</comment>
+        <label>plus</label>
     </owl:InverseFunctionalProperty>
 
     <owl:InverseFunctionalProperty rdf:about="http://www.w3.org/2000/10/swap/grammar/ebnf#seq">
