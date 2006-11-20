@@ -60,8 +60,8 @@ short for [ :alt ([ :seq ()] X)]</comment>
         <label>star</label>
     </owl:InverseFunctionalProperty>
 
-    <Class rdf:about="http://www.w3.org/2000/10/swap/grammar/ebnf#terminal">
+    <Property rdf:about="http://www.w3.org/2000/10/swap/grammar/ebnf#terminal">
         <comment>relates a language to one of its lexical tokens; i.e. a symbol in a lower-level language</comment>
         <label>terminal</label>
-    </Class>
+    </Property>
 </rdf:RDF>
