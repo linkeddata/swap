@@ -44,7 +44,7 @@ A cwm built-in logical operator.
 
 log:rawType a rdf:Property;
     rdfs:comment """
-This is a low-level langauge type, one of log:Formula, log:Literal, 
+This is a low-level language type, one of log:Formula, log:Literal, 
 log:List, log:Set or log:Other. 
 Example: log:semanticsOrError returns either a formula or a string,
 and you can check which using log:rawType.
@@ -57,9 +57,9 @@ log:Other   a rdfs:Class.     # Not one of the above.
 
 #   The following are inherent in the translation of N3 syntax to quad representation:
 
-#log:forSome a rdf:SyntaxArc;  #@@@@@   NOT a real property. A psedoproperty
+#log:forSome a rdf:SyntaxArc;  #@@@@@   NOT a real property. A pseudo property
 #    rdfs:comment """A is true for some object for which here we use B. This
-#        is NOT a real rdf property in its behaviour - a pseudoproperty.
+#        is NOT a real rdf property in its behavior - a pseudo-property.
 #	For example, removal of it from a formula does nor
 #	preserve truth, and substitution is not permitted on its object.""" ;
 #	   rdfs:domain log:Formula.
@@ -68,8 +68,8 @@ log:Other   a rdfs:Class.     # Not one of the above.
 #log:forAll a log:SyntaxArc;
 #    rdfs:label 	"for All";
 #    rdfs:comment """A is true for any object in place of B.
-#	This is NOT a real rdf property in its behaviour - a pseudoproperty.
-#	For examplem substitution is not permitted on its object.""".
+#	This is NOT a real rdf property in its behavior - a pseudo-property.
+#	For examples substitution is not permitted on its object.""".
 
 
 #########################################################
@@ -78,7 +78,7 @@ log:Other   a rdfs:Class.     # Not one of the above.
 #
 
 log:Truth a rdfs:Class;
-    rdfs:comment """Something which is true: belive it as you would belive this.
+    rdfs:comment """Something which is true: believe it as you would believe this.
     
 	Understood natively by cwm in that it will execute rules in a formula
 	declared a Truth within a formula it is already taking rules from.""".
@@ -92,11 +92,11 @@ log:implies a rdf:Property;
     rdfs:comment """Logical implication. 
 This is the relation between the antecedent (subject) and
 conclusion (object) of a rule.
-The application of a rule to a knowledgebase is as follows.
+The application of a rule to a knowledge-base is as follows.
 For every substitution which, applied to the antecedent,
-gives a formula which is a subset of the knowledgebase,
+gives a formula which is a subset of the knowledge-base,
 then the result of applying that same substitution to the
-conclusion may be added to the knowledgebase.
+conclusion may be added to the knowledge-base.
 
 related: See log:conclusion. 
 (See the CWM manual for command line options to determine how
@@ -115,10 +115,10 @@ every statement in B' is also in A, every variable
 universally (or existentially) quantified in B' is quantified in
 the same way in A. 
 
-Variable subsitution is applied recursively to nested compound terms such as
+Variable substitution is applied recursively to nested compound terms such as
 formulae, lists and sets.
 
-(Understood natively by cwm when in in the antecendent of a rule.
+(Understood natively by cwm when in in the antecedent of a rule.
 You can use this to peer inside nested formulae.)""";
     rdfs:range log:Formula;
     rdfs:isDefinedBy <>;
@@ -159,14 +159,14 @@ log:semantics a rdf:Property;
     rdfs:range  log:Formula;
     rdfs:label  "semantics";
     rdfs:comment """The log:semantics of a document is the formula.
-acheived by parsing representation of the document.
+achieved by parsing representation of the document.
  For a document in Notation3, log:semantics is the
 log:parsedAsN3 of the log:contents of the document.
 For a document in RDF/XML, it is parsed according to the
-RDF/XML specification to yeild an RDF formula
+RDF/XML specification to yield an RDF formula
 (a subclass of N3 log:Formula).
 
-[Aside: Philosophers will be distrated here into worrying about the meaning
+[Aside: Philosophers will be distracted here into worrying about the meaning
 of meaning. At least we didn't call this function "meaning"!
 In as much as N3 is used as an interlingua for interoperability
 for different systems, this for an N3 based system is the meaning 
@@ -175,15 +175,15 @@ expressed by a document.]
 (Cwm knows how to go get a document and parse N3 and RDF/XML
 it in order to evaluate this.
 Other languages for web documents 
-mau be defined whose N3 semantics are therefore
+may be defined whose N3 semantics are therefore
 also calculable, and so they could be added in due course.
-See for example GRDDL, RDF/A, etc)""".
+See for example GRDDL, RDFa, etc)""".
 
 log:semanticsOrError a rdf:Property;
     rdfs:domain doc:Work;
     rdfs:label  "semantics or error message";
     rdfs:comment """This connects a document and either the formula it parses to,
-or an error message explaining what went wromg with trying. See log:semantics.
+or an error message explaining what went wrong with trying. See log:semantics.
 (Cwm knows how to go get a document and parse it in order to evaluate this.)
 """.
 
@@ -310,7 +310,9 @@ thing identified by the same URI without a hash or fragid.
 For anything else, it is itself.""".
 
 log:dtlit a rdf:Property;
-    rdfs:comment """Takes a list of a string and a URI and creates a datatyped literal. For example, { ("2005-03-30T11:00:00" :tz) log:dtlit ?X } => { ?X a :Answer } . will produce "2005-03-30T11:00:00"^^:tz a :Answer .""" .
+    rdfs:comment """Takes a list of a string and a URI and creates a datatyped
+     literal. For example, { ("2005-03-30T11:00:00" :tz) log:dtlit ?X } => { ?X a :Answer } .
+    will produce "2005-03-30T11:00:00"^^:tz a :Answer .""" .
 
 
 # ends
