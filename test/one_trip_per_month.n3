@@ -1,0 +1,72 @@
+@keywords is, of, a.
+
+@prefix : <one_trip_per_month#>.
+
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix dt: <http://www.w3.org/2001/XMLSchema#>.
+
+@prefix str: <http://www.w3.org/2000/10/swap/string#>.
+@prefix math: <http://www.w3.org/2000/10/swap/math#>.
+
+@prefix cal: <http://www.w3.org/2002/12/cal/icaltzd#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix k: <http://www.cyc.com/2004/06/04/cyc#>.
+
+
+DanC a foaf:Person, OneTripPerMonthAgent.
+
+WWW2007
+  cal:dtstart "2006-05-08"^^dt:date;
+  cal:attendee DanC.
+
+XTech
+  cal:dtstart "2006-05-18"^^dt:date;
+  cal:attendee DanC.
+
+
+PersonMonth
+ s:subClassOf [ owl:onProperty trip; owl:maxCardinality 1].
+
+
+###
+# A bit of RDFS
+{ ?S a [ s:subClassOf ?C ] } => { ?S a ?C }.
+{ [] [ s:range ?C] ?O } => { ?O a ?C }.
+
+###
+# A bit of OWL
+{ ?S ?P ?O1, ?O2.
+  ?S a [ owl:onProperty ?P; owl:maxCardinality 1]
+} => { ?O1 = ?O2 }.
+
+###
+# Relate Cyc YearFn and MonthFn to cal:dtstart
+
+{ ?E cal:dtstart ?WHEN.
+  # can we skip the dtlit step of splitting ?WHEN apart?
+  (?WHEN "(\\d\\d\\d\\d)-" ) str:search (?YYYY).
+  (?YYYY 0) math:sum ?YEARNUM.
+} => { ?E k:temporallyIntersects [ is k:YearFn of ?YEARNUM ] }.
+
+{ ?E cal:dtstart ?WHEN.
+  # can we skip the dtlit step of splitting ?WHEN apart?
+  (?WHEN "(\\d\\d\\d\\d)-(\\d\\d)-" ) str:search (?YYYY ?MM).
+  (?YYYY 0) math:sum [ k:YearFn ?YEAR].
+  (?MM 0) math:sum [ is k:MonthOfYearFn of ?MONTH_TYPE]
+} => {
+ (?MONTH_TYPE ?YEAR) k:MonthFn _:WHEN.
+ ?E k:temporallyIntersects _:WHEN.
+ }.
+
+k:YearFn s:range k:CalendarYear.
+
+5 k:MonthOfYearFn May.
+k:MonthOfYearFn s:range k:MonthOfYearType.
+
+###
+#@@
+{ ?E cal:attendee [ k:subAbstractions ?WHO_WHEN];
+     k:temporallyIntersects ?WHO_WHEN.
+} => { ?WHO_WHEN trip ?E }.
+
