@@ -1,6 +1,14 @@
 """
 Use this with diagnostics so that it can be changed as necessary
 For example, sometimes want on stdout maybe or in a scroll window....
+
+Let's replace this with pythong logging stuff.
+at least get it to the point where "make quick" in swap/test works.
+
+There is some wierd stuff here because TimBL and I couldn't
+figure out how to share the chatty global across modules.
+Surely Daniel K and DanC should be able figure that out.
+
 """
 
 import sys
