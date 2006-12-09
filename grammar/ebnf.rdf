@@ -33,10 +33,10 @@
         <label>EOF</label>
     </rdf:Description>
 
-    <Property rdf:about="http://www.w3.org/2000/10/swap/grammar/ebnf#nonTerminal">
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/grammar/ebnf#nonTerminal">
         <comment>relates grammatical symbol to a language</comment>
         <label>non terminal</label>
-    </Property>
+    </rdf:Property>
 
     <owl:InverseFunctionalProperty rdf:about="http://www.w3.org/2000/10/swap/grammar/ebnf#opt">
         <comment>[ :opt X] is an optional X,
@@ -60,8 +60,8 @@ short for [ :alt ([ :seq ()] X)]</comment>
         <label>star</label>
     </owl:InverseFunctionalProperty>
 
-    <Property rdf:about="http://www.w3.org/2000/10/swap/grammar/ebnf#terminal">
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/grammar/ebnf#terminal">
         <comment>relates a language to one of its lexical tokens; i.e. a symbol in a lower-level language</comment>
         <label>terminal</label>
-    </Property>
+    </rdf:Property>
 </rdf:RDF>

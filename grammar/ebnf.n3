@@ -39,11 +39,11 @@ short for [ :alt ([ :seq ()] X)]"""
          rdfs:label "star";
          rdfs:comment """[ :star X] is zero or more Xs.""".
 
-    :nonTerminal     a rdfs:Property;
+    :nonTerminal     a rdf:Property;
          rdfs:label "non terminal";
          rdfs:comment "relates grammatical symbol to a language" .
     
-    :terminal     a rdfs:Property;
+    :terminal     a rdf:Property;
          rdfs:label "terminal";
          rdfs:comment "relates a language to one of its lexical tokens; i.e. a symbol in a lower-level language" .
     
