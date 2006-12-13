@@ -18,7 +18,7 @@
 @prefix time: <http://www.w3.org/2000/10/swap/time#>.
 @prefix : <#>.
 
-<> <http://www.w3.org/2000/10/swap/pim/doc.n3#@@> <http://www.w3.org/Consortium/Legal/copyright-software-19980720>.
+<> <http://www.w3.org/2000/10/swap/pim/doc.n3#licence> <http://www.w3.org/Consortium/Legal/copyright-software-19980720>.
 
 # This is a class for strings which are the lexical representations of datetimes
 # 
@@ -45,7 +45,7 @@ time:year a rdf:Property,
 	ont:UniqueProperty;
     rdfs:label "year";
     rdfs:comment """
-For a date-time, its time:inSeconds is the (string representation of)
+For a date-time, its time:year is the (string representation of)
 the four-digit year.
 
 Cwm implements this as a function.
@@ -57,7 +57,7 @@ time:month a rdf:Property,
 	ont:UniqueProperty;
     rdfs:label "month";
     rdfs:comment """
-For a date-time, its time:inSeconds is the two-digit month.
+For a date-time, its time:month is the two-digit month.
 
 Cwm implements this as a function.
 """;
@@ -68,7 +68,7 @@ time:day a rdf:Property,
 	ont:UniqueProperty;
     rdfs:label "day";
     rdfs:comment """
-For a date-time, its time:inSeconds is the (string represntation of)
+For a date-time, its time:day is the (string represntation of)
 the two-digitday of the month.
 
 Cwm implements this as a function.
@@ -80,7 +80,7 @@ time:hour a rdf:Property,
 	ont:UniqueProperty;
     rdfs:label "hour";
     rdfs:comment """
-For a date-time, its time:inSeconds is the two-digit hour in the 24 hour clock.
+For a date-time, its time:hour is the two-digit hour in the 24 hour clock.
 
 Cwm implements this as a function.
 """;

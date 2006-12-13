@@ -1,40 +1,37 @@
 
-<!-- Processed by Id: cwm.py,v 1.123 2003/02/11 04:43:13 timbl Exp -->
-<!--     using base file:/devel/WWW/2000/10/swap/time.n3-->
+<!-- Processed by Id: cwm.py,v 1.190 2006/08/09 23:20:42 syosi Exp -->
+<!--     using base file:///devel/WWW/2000/10/swap/time.n3-->
 
 
-<rdf:RDF xmlns="http://www.w3.org/2000/10/swap/time#"
-    xmlns:doc="http://www.w3.org/2000/10/swap/pim/doc#"
-    xmlns:log="http://www.w3.org/2000/10/swap/log#"
+<rdf:RDF xmlns="http://www.w3.org/2000/01/rdf-schema#"
     xmlns:ont="http://www.daml.org/2000/10/daml-ont#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-    xmlns:time="http://www.w3.org/2000/10/swap/time#">
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
 
     <rdf:Description rdf:about="">
-        < xmlns="http://www.w3.org/2000/10/swap/pim/doc.n3#@@"
+        <licence xmlns="http://www.w3.org/2000/10/swap/pim/doc.n3#"
             rdf:resource="http://www.w3.org/Consortium/Legal/copyright-software-19980720"/>
     </rdf:Description>
 
-    <rdfs:Class rdf:about="http://www.w3.org/2000/10/swap/time#ISOTime">
-    </rdfs:Class>
+    <Class rdf:about="http://www.w3.org/2000/10/swap/time#ISOTime">
+    </Class>
 
     <ont:UniqueProperty rdf:about="http://www.w3.org/2000/10/swap/time#day">
         <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
-        <rdfs:comment>
-For a date-time, its time:inSeconds is the (string represntation of)
+        <comment>
+For a date-time, its time:day is the (string represntation of)
 the two-digitday of the month.
 
 Cwm implements this as a function.
-</rdfs:comment>
-        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/time#ISOTime"/>
-        <rdfs:isDefinedBy rdf:resource=""/>
-        <rdfs:label>day</rdfs:label>
+</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/time#ISOTime"/>
+        <isDefinedBy rdf:resource=""/>
+        <label>day</label>
     </ont:UniqueProperty>
 
     <ont:UniqueProperty rdf:about="http://www.w3.org/2000/10/swap/time#dayOfWeek">
         <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
-        <rdfs:comment>
+        <comment>
 For a date-time, its time:dayOfWeek is the (string reopresntation of)
 the day number within the week, Sunday being 0.
 
@@ -42,15 +39,15 @@ Currently the result is a sinbgle digit string but don't count on it
 being anything other than a valid integer represetnation.
 
 Cwm implements this as a function.
-</rdfs:comment>
-        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/time#ISOTime"/>
-        <rdfs:isDefinedBy rdf:resource=""/>
-        <rdfs:label>day of week</rdfs:label>
+</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/time#ISOTime"/>
+        <isDefinedBy rdf:resource=""/>
+        <label>day of week</label>
     </ont:UniqueProperty>
 
     <ont:UniqueProperty rdf:about="http://www.w3.org/2000/10/swap/time#gmTime">
         <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
-        <rdfs:comment>
+        <comment>
 For a date-time format string, its time:gmtime is the 
 result of formatting the Universal Time of processing
 in the format given.   If teh fiormat string has zero length,
@@ -60,43 +57,43 @@ It will end with "Z" as a timezone code.
 
 Cwm implements this as a function.
 Rules which use this function will of course NOT be repeatable.
-</rdfs:comment>
-        <rdfs:isDefinedBy rdf:resource=""/>
-        <rdfs:label>Universal Time</rdfs:label>
-        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/time#format"/>
+</comment>
+        <isDefinedBy rdf:resource=""/>
+        <label>Universal Time</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/time#format"/>
     </ont:UniqueProperty>
 
     <ont:UniqueProperty rdf:about="http://www.w3.org/2000/10/swap/time#hour">
         <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
-        <rdfs:comment>
-For a date-time, its time:inSeconds is the two-digit hour in the 24 hour clock.
+        <comment>
+For a date-time, its time:hour is the two-digit hour in the 24 hour clock.
 
 Cwm implements this as a function.
-</rdfs:comment>
-        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/time#ISOTime"/>
-        <rdfs:isDefinedBy rdf:resource=""/>
-        <rdfs:label>hour</rdfs:label>
+</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/time#ISOTime"/>
+        <isDefinedBy rdf:resource=""/>
+        <label>hour</label>
     </ont:UniqueProperty>
 
     <ont:UnambiguousProperty rdf:about="http://www.w3.org/2000/10/swap/time#inSeconds">
         <rdf:type rdf:resource="http://www.daml.org/2000/10/daml-ont#UniqueProperty"/>
         <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
-        <rdfs:comment>
+        <comment>
 For a date-time, its time:inSeconds is the (string reopresntation of)
 the floating point number of seconds since the beginning of the era
 on the given system. Don't assume a particular value, always test for it.
 
 Cwm implements this as a bidirectional function: you can calculae the
 ISO date from the seconds since the beginning of the era, or vice-versa.
-</rdfs:comment>
-        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/time#ISOTime"/>
-        <rdfs:isDefinedBy rdf:resource=""/>
-        <rdfs:label>in era seconds</rdfs:label>
+</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/time#ISOTime"/>
+        <isDefinedBy rdf:resource=""/>
+        <label>in era seconds</label>
     </ont:UnambiguousProperty>
 
     <ont:UniqueProperty rdf:about="http://www.w3.org/2000/10/swap/time#localTime">
         <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
-        <rdfs:comment>
+        <comment>
 For a date-time format string, its time:localTime is the 
 result of formatting the current time of processing and local timezone
 in the format given.   If the format string has zero length,
@@ -106,69 +103,69 @@ It will end with a numeric timezone code or "Z" for UTC (GMT).
 
 Cwm implements this as a function.
 Rules which use this function will of course NOT be repeatable.
-</rdfs:comment>
-        <rdfs:isDefinedBy rdf:resource=""/>
-        <rdfs:label>local time</rdfs:label>
-        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/time#format"/>
+</comment>
+        <isDefinedBy rdf:resource=""/>
+        <label>local time</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/time#format"/>
     </ont:UniqueProperty>
 
     <ont:UniqueProperty rdf:about="http://www.w3.org/2000/10/swap/time#minute">
         <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
-        <rdfs:comment>
+        <comment>
 For a date-time, its time:minute is the two-digit number of seconds.
 
 Cwm implements this as a function.
-</rdfs:comment>
-        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/time#ISOTime"/>
-        <rdfs:isDefinedBy rdf:resource=""/>
-        <rdfs:label>minute</rdfs:label>
+</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/time#ISOTime"/>
+        <isDefinedBy rdf:resource=""/>
+        <label>minute</label>
     </ont:UniqueProperty>
 
     <ont:UniqueProperty rdf:about="http://www.w3.org/2000/10/swap/time#month">
         <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
-        <rdfs:comment>
-For a date-time, its time:inSeconds is the two-digit month.
+        <comment>
+For a date-time, its time:month is the two-digit month.
 
 Cwm implements this as a function.
-</rdfs:comment>
-        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/time#ISOTime"/>
-        <rdfs:isDefinedBy rdf:resource=""/>
-        <rdfs:label>month</rdfs:label>
+</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/time#ISOTime"/>
+        <isDefinedBy rdf:resource=""/>
+        <label>month</label>
     </ont:UniqueProperty>
 
     <ont:UniqueProperty rdf:about="http://www.w3.org/2000/10/swap/time#second">
         <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
-        <rdfs:comment>
+        <comment>
 For a date-time, its time:second is the two-digit number of seconds.
 Cwm implements this as a function.
-</rdfs:comment>
-        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/time#ISOTime"/>
-        <rdfs:isDefinedBy rdf:resource=""/>
-        <rdfs:label>second</rdfs:label>
+</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/time#ISOTime"/>
+        <isDefinedBy rdf:resource=""/>
+        <label>second</label>
     </ont:UniqueProperty>
 
     <ont:UniqueProperty rdf:about="http://www.w3.org/2000/10/swap/time#timeZone">
         <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
-        <rdfs:comment>
+        <comment>
 For a date-time, its time:timeZone is the trailing timezone offset
 part, e.g.  "-05:00".
 Cwm implements this as a function.
-</rdfs:comment>
-        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/time#ISOTime"/>
-        <rdfs:isDefinedBy rdf:resource=""/>
-        <rdfs:label>timezone offset</rdfs:label>
+</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/time#ISOTime"/>
+        <isDefinedBy rdf:resource=""/>
+        <label>timezone offset</label>
     </ont:UniqueProperty>
 
     <ont:UniqueProperty rdf:about="http://www.w3.org/2000/10/swap/time#year">
         <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
-        <rdfs:comment>
-For a date-time, its time:inSeconds is the (string representation of)
+        <comment>
+For a date-time, its time:year is the (string representation of)
 the four-digit year.
 
 Cwm implements this as a function.
-</rdfs:comment>
-        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/time#ISOTime"/>
-        <rdfs:isDefinedBy rdf:resource=""/>
-        <rdfs:label>year</rdfs:label>
+</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/time#ISOTime"/>
+        <isDefinedBy rdf:resource=""/>
+        <label>year</label>
     </ont:UniqueProperty>
 </rdf:RDF>
