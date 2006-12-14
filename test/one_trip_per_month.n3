@@ -24,7 +24,6 @@ dwc:me a OneTripPerMonthAgent.
 
 # supplement geo info from home page just a bit
 dwc:_5055_www2007
-  cal:dtend "2007-05-12"^^dt:date;
   cal:location Banf.
 <../,danc_home.rdf> a cal:Vcalendar.
 
