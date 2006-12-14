@@ -24,6 +24,7 @@ dwc:me a OneTripPerMonthAgent.
 
 # supplement geo info from home page just a bit
 dwc:_5055_www2007
+  cal:dtend "2007-05-12"^^dt:date;
   cal:location Banf.
 <../,danc_home.rdf> a cal:Vcalendar.
 
@@ -37,8 +38,8 @@ Banf far Paris. # one trip to both places is a no-go
 # the conjecture/invitation/proposal
 <> a cal:Vcalendar; cal:component XTech.
 XTech
-  cal:dtstart "2006-05-15"^^dt:date;
-  cal:dtend "2006-05-18"^^dt:date;
+  cal:dtstart "2007-05-15"^^dt:date;
+  cal:dtend "2007-05-18"^^dt:date;
   cal:location Paris.
 
 XTech cal:attendee dwc:me.
