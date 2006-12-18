@@ -29,57 +29,101 @@ import sys, os
 from swap.myStore import load, Namespace
 
 GV = Namespace('http://www.w3.org/2001/02pd/gv#')
-RDF = Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns')
+RDF = Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 
 RCSId='$Id$'
 
 def dotTop(text):
-    text("/* transformed by " + RCSId + " */\n")
+    text("/* transformed by %s */\n" % RCSId)
+
+
+EdgeAttributes = (
+    GV.label,
+    GV.color,
+    GV.shape,
+    GV.style,
+    GV.fontcolor,
+    GV.fontname,
+    GV.fontsize,
+    GV.height,
+    GV.width,
+    GV.layer,
+    GV.URL,
+    GV.sides,
+    GV.shapefile,
+    )
+
+# graph attributes see Graphviz spec table 3
+GraphAttributes = (
+    GV.center,
+    GV.clusterrank,
+    GV.color,
+    GV.compound,
+    GV.concentrate,
+    GV.fontcolor,
+    GV.fontname,
+    GV.fontsize,
+    GV.label,
+    GV.layerseq,
+    GV.margin,
+    GV.mclimit,
+    GV.nodesep,
+    GV.nslimit,
+    GV.ordering,
+    GV.orientation,
+    GV.page,
+    GV.rank,
+    GV.rankdir,
+    GV.ranksep,
+    GV.ratio,
+    GV.size,
+    GV.style,
+    )
 
 def rdf2dot(text, f):
-    props = (GV.label,
-             GV.size,
-             GV.rankdir,
-             GV.color,
-             GV.shape,
-             GV.style,
-             )
     dotTop(text)
     for s in f.statementsMatching(pred=GV.digraph):
             text("digraph ")
-            eachGraph(text, f, s.object(), props)
+            eachGraph(text, f, s.object(), GraphAttributes)
 
 def eachGraph(text, store, it, props, cluster=''):
-    text(cluster + 'N' + `hash(it.uriref())`)
+    text("%s N%d" % (cluster, abs(hash(it.uriref()))))
     text(" {\n")
     for p in props:
 	for o in store.each(subj = it, pred = p):
-            text(p.fragid)
-            text('="')
-            text(str(o)) # @@ quoting
-            text('";\n')
+            text('%s="%s";\n' % (p.fragid, o)) # @@ quoting o
 
     for n in store.each(subj=it, pred=GV.hasNode):
-	eachNode(text, store, n, props)
+	eachNode(text, store, n, props) #@@hmm... node props = graph props?
 
-    print "@@ carry on with subgraphs"
+    for sub in store.each(subj=it, pred=GV.subgraph):
+        raise RuntimeError, "subgraph not yet implemented@@"
+    text("}\n")
 
 def eachNode(text, store, gnode, props):
-    text('"' + gnode.uriref() + '" [')
+    text('"%s" [' % gnode.uriref())
 
     for p in props:
 	for o in store.each(subj = gnode, pred = p):
-            text(p.fragid)
-            text('="')
-            text(str(o)) # @@ quoting
-            text('",\n')
+            text('%s="%s",\n' % (p.fragid, o)) # @@ quoting o
     text("];\n")
 
     for p in store.each(pred=RDF.type, obj=GV.EdgeProperty):
 	for o in store.each(subj=gnode, pred = p):
-	    text('"' + gnode.uriref() + " -> "
-		 + o.uriref() + '"')
-	    print "@@edge attributes..."
+	    text('"%s" -> "%s"' % (gnode.uriref(), o.uriref()))
+
+            text(" [\n")
+            for attr in EdgeAttributes:
+                for o in store.each(subj=p, pred=attr):
+                    text('%s="%s",\n' % (attr.fragid, o)) # @@ quoting o
+            text("];\n")
+                    
+
+def progress(*args):
+    import sys
+    for a in args:
+        sys.stderr.write(str(a))
+    sys.stderr.write("\n")
 
 def main(argv):
     try:
