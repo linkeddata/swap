@@ -13,6 +13,10 @@ but not other occurrences of {}.
 
 References:
 
+ AI: A Modern Approach by Stuart Russell and Peter Norvig
+ AIMA Python file: logic.py Jul 18, 2005
+ http://aima.cs.berkeley.edu/python/logic.html
+
  ACL 2 seminar at U.T. Austin: Toward proof exchange in the Semantic Web
  Submitted by connolly on Sat, 2006-09-16
  http://dig.csail.mit.edu/breadcrumbs/node/160
@@ -28,8 +32,6 @@ References:
  Notation 3 Logic
   a draft by TimBL and others
  http://www.w3.org/DesignIssues/N3Logic
-
-
 
 
 MathML musings...
@@ -140,25 +142,28 @@ def json_formula(fmla, vars={}):
         # when we get n3-quote figured out, we can take this special-case out.
         if s.predicate().uriref() == 'http://www.w3.org/2000/10/swap/log#implies':
             
-            parts.append(['implies',
-                          json_formula(s.subject(), varnames), #@@
-                          json_formula(s.object(), varnames)])
+            parts.append({'op': 'implies',
+                          'parts': [json_formula(s.subject(), varnames), #@@
+                                   json_formula(s.object(), varnames)]
+                          })
         else:
-            parts.append(['holds',
-                          json_term(s.predicate(), varnames),
-                          json_term(s.subject(), varnames),
-                          json_term(s.object(), varnames)])
+            parts.append({'op': 'holds',
+                          'parts': [json_term(s.predicate(), varnames),
+                                   json_term(s.subject(), varnames),
+                                   json_term(s.object(), varnames)]})
 
     if len(parts) == 1:
         ret = parts[0]
     else:
-        ret = ['and'] + parts
+        ret = {'op': 'and', 'parts': parts}
     if fmla.universals():
-        ret = ['forall', [varnames[v] for v in fmla.universals()],
-               ret]
+        ret = {'Q': 'forall',
+               'Vars': [varnames[v] for v in fmla.universals()],
+               'f': ret}
     if fmla.existentials():
-        ret = ['exists', [varnames[v] for v in fmla.existentials()],
-               ret]
+        ret = {'Q':'exists',
+               'Vars': [varnames[v] for v in fmla.existentials()],
+               'f': ret}
     return ret
 
 
@@ -176,18 +181,18 @@ def json_term(t, varmap):
                 return int(t.string)
             if dt == DT.double:
                 return float(t.string)
-            return ['data', [dt], t.string]
+            return {'op': 'data', 'parts': [{'op': dt}, t.string]}
         else:
             return t.string
 
     elif isinstance(t, term.LabelledNode): # ugh.
-        return [t.uriref()]
+        return {'op': t.uriref()}
 
     # hmm... are lists part of the N3 abstract syntax?
     elif isinstance(t, term.List):
-        return ['list'] + [json_term(i, varmap) for i in t]
+        return [json_term(i, varmap) for i in t]
     elif isinstance(t, formula.Formula):
-        return ['n3-quote', json_formula(t, varmap)]
+        return {'op': 'n3-quote', 'parts': [json_formula(t, varmap)]}
     else:
         raise RuntimeError, "huh? + %s %s" % (t, t.__class__)
 
@@ -209,54 +214,66 @@ def lisp_form(f):
         # @@ hmm... non-ascii chars?
         yield '"%s" ' % f
 
-    # variable
-    elif type(f) is type({}):
-        yield f['var']
-        yield ' '
-
-    # compound forms
+    # list
     elif type(f) is type([]):
-        head = f[0]
+        yield '(list '
+        for expr in f:
+            for s in lisp_form(expr):
+                yield s
+        yield ')\n'
 
-        # URI, i.e. a 0-ary function symbol
-        if ':' in head:
-            if '|' in head:
-                raise RuntimeError, "quoting | in symbols not yet implemented"
-            yield '(URI::|%s|' % head
-            assert(len(f) == 1)
-            rest = []
 
-        # function symbols
-        #@@ interaction of n3-quote with variables needs work.
-        elif head in ('holds', 'list', 'data', 'n3-quote'):
-            yield '('
-            yield head
+    elif type(f) is type({}):
+        # variable
+        if 'var' in f:
+            yield f['var'] #@@ quoting?
             yield ' '
-            rest = f[1:]
+            return
 
-        # connectives
-        elif head in ('and', 'implies'):
-            yield '('
-            yield head
-            yield ' '
-            rest = f[1:]
+        elif 'op' in f:
+            head = f['op']
+
+            # URI, i.e. a 0-ary function symbol
+            if ':' in head:
+                if '|' in head:
+                    raise RuntimeError, \
+                          "quoting | in symbols not yet implemented"
+                yield '(URI::|%s|' % head
+                rest = f.get('parts', [])
+                assert(len(rest) == 0)
+
+            # function symbols
+            #@@ interaction of n3-quote with variables needs work.
+            elif head in ('holds', 'data', 'n3-quote'):
+                yield '('
+                yield head
+                yield ' '
+                rest = f['parts']
+
+            # connectives
+            elif head in ('and', 'implies'):
+                yield '('
+                yield head
+                yield ' '
+                rest = f['parts']
 
         # quantifiers
-        elif head in ('exists', 'forall'):
+        elif 'Q' in f:
+            head = f['Q']
             yield '('
             yield head
             yield ' ('
-            for v in f[1]:
+            for v in f['Vars']:
                 yield v
                 yield ' '
             yield ')\n'
-            rest = f[2:]
+            rest = [f['f']]
 
         else:
             raise RuntimeError, 'unimplemented list head: %s' % head
         
-        for clause in rest:
-            for s in lisp_form(clause):
+        for expr in rest:
+            for s in lisp_form(expr):
                 yield s
         yield ')\n'
 
@@ -288,75 +305,76 @@ def xml_form(f):
         yield '</Data>\n'
 
 
-    # variable
-    elif type(f) is type({}):
-        yield "<Var>%s</Var>\n" % f['var']
-
-    # compound forms
+    # list function symbol
     elif type(f) is type([]):
-        head = f[0]
+        yield "<Expr><Fun>list</Fun>\n"
+        for part in f:
+            for s in xml_form(part):
+                yield s
+        yield "</Expr>\n"
 
-        # URI, i.e. a 0-ary function symbol
-        if ':' in head:
-            assert(len(f) == 1)
-            yield '<Ind iri="'
-            yield escape(head)
-            yield '"/>\n'
+    elif type(f) is type({}):
+        # variable
+        if 'var' in f:
+            yield "<Var>%s</Var>\n" % f['var']
 
-        # data
-        elif head == 'data':
-            assert(len(f) == 3)
-            yield '<Data type="%s">' % f[1][0]
-            yield escape(f[2])
-            yield "</Data>"
-            rest = f[1:]
+        elif 'op' in f:
+            head = f['op']
 
-        elif head == 'n3-quote':
-            raise RuntimeError, 'n3-quote not yet implemented'
+            # URI, i.e. a 0-ary function symbol
+            if ':' in head:
+                assert(len(f.get('args', [])) == 0)
+                yield '<Ind iri="'
+                yield escape(head)
+                yield '"/>\n'
 
-        # list function symbol
-        elif head == 'list':
-            yield "<Expr><Fun>list</Fun>\n"
-            for part in f[1:]:
-                for s in xml_form(part):
-                    yield s
-            yield "</Expr>\n"
+            # data
+            elif head == 'data':
+                ty, lit = f['args']
+                yield '<Data type="%s">' % ty['op']
+                yield escape(lit)
+                yield "</Data>"
 
-        # Atomic formula
-        elif head == 'holds':
-            yield "<Atom><Rel>holds</Rel>\n"
-            for part in f[1:]:
-                for s in xml_form(part):
-                    yield s
-            yield "</Atom>\n"
-            
-        # connectives
-        elif head in ('and', 'implies'):
-            tagname = {'and': 'And',
-                       'implies': 'Implies'}[head]
-            yield "<%s>\n" % tagname
-            for part in f[1:]:
-                for s in xml_form(part):
-                    yield s
-            yield "</%s>\n" % tagname
-            
+            elif head == 'n3-quote':
+                raise RuntimeError, 'n3-quote not yet implemented'
+
+            # Atomic formula
+            elif head == 'holds':
+                yield "<Atom><Rel>holds</Rel>\n"
+                for part in f.get('parts', []):
+                    for s in xml_form(part):
+                        yield s
+                yield "</Atom>\n"
+
+            # connectives
+            elif head in ('and', 'implies'):
+                tagname = {'and': 'And',
+                           'implies': 'Implies'}[head]
+                yield "<%s>\n" % tagname
+                for part in f.get('parts', []):
+                    for s in xml_form(part):
+                        yield s
+                yield "</%s>\n" % tagname
+
         # quantifiers
-        elif head == 'exists':
-            yield "<Exists>\n"
-            for v in f[1]:
-                yield "<Var>%s</Var>" % v
-            yield '\n'
-            for part in f[2:]:
-                for s in xml_form(part):
-                    yield s
-            yield "</Exists>\n"
+        elif 'Q' in f:
+            tagname = {'exists': 'Exists',
+                       'forall': 'Forall', #@@
+                       }[f['Q']]
 
-        elif head == 'forall':
-            #@@hmm... treat other vars as implicitly universally quanitified?
-            #@@how to assert that we're at the top level?
-            for part in f[2:]:
-                for s in xml_form(part):
+            if tagname == 'Forall':
+                #@@hmm... treat other vars as implicitly universally quanitified?
+                #@@how to assert that we're at the top level?
+                for s in xml_form(f['f']):
                     yield s
+            else:
+                yield "<%s>\n" % tagname
+                for v in f['Vars']:
+                    yield "<Var>%s</Var>" % v
+                yield '\n'
+                for s in xml_form(f['f']):
+                    yield s
+                yield "</%s>\n" % tagname
 
         else:
             raise RuntimeError, 'unimplemented list head: %s' % head
@@ -385,72 +403,65 @@ def mathml_fmla(f):
     """generate MathML version of JSON formula
     """
     if type(f) is type([]):
-        head = f[0]
-        
-        if head in ('forall', 'exists'):
+        yield "<list>\n"
+        for part in f:
+            for s in mathml_fmla(part):
+                yield s
+        yield "</list>\n"
+    elif type(f) is type({}):
+        if 'Q' in f:
+            q = f['Q']
             yield "<apply>\n" \
-                  "<%s/>\n" % head
-            for v in f[1]:
+                  "<%s/>\n" % q
+            for v in f['Vars']:
                 # per 5 Using definitionURL for Bound Variable Identification.
                 # http://www.w3.org/TR/mathml-bvar/#proposal
                 yield '<bvar><ci id="%s">%s</ci></bvar>\n' % (v, v)
                 
-            assert(len(f) == 3)
-            for s in mathml_fmla(f[2]):
+            for s in mathml_fmla(f['f']):
                 yield s
             yield "</apply>\n"
 
-        elif head in ('and', 'implies'):
-            yield "<apply><%s/>\n" % head
-            for part in f[1:]:
-                for s in mathml_fmla(part):
-                    yield s
-            yield "</apply>\n"
+        elif 'op' in f:
+            head = f['op']
 
-        elif head == 'holds':
+            if head == 'holds':
 
-            # Not only are we not using a holds predicate,
-            # but we're going classes as unary predicates.
-            if f[1] == [RDF.type]: args = [f[3], f[2]]
-            else: args = f[1:]
-            
-            yield "<apply>\n"
-            for part in args:
-                for s in mathml_fmla(part):
-                    yield s
-            yield "</apply>\n"
-        elif ':' in head:
-            assert(len(f) == 1)
-            u = f[0]
-            try:
-                ln = u.split("#")[1]
-            except IndexError:
-                ln = u
-            yield '<csymbol definitionURL="'
-            yield escape(u)
-            yield '" encoding="RDF"><mi>'
-            yield escape(ln)
-            yield '</mi></csymbol>\n'
+                # Not only are we not using a holds predicate,
+                # but we're going classes as unary predicates.
+                if f['parts'][0]['op'] == RDF.type:
+                    args = [f['parts'][2], f['parts'][1]]
+                else: args = f['parts']
 
-        # list function symbol
-        elif head == 'n3-quote':
-            yield "<apply><ci>n3_quote</ci>\n" #@@hmm...
-            for part in f[1:]:
-                for s in mathml_fmla(part):
-                    yield s
-            yield "</apply>\n"
+                yield "<apply>\n"
+                for part in args:
+                    for s in mathml_fmla(part):
+                        yield s
+                yield "</apply>\n"
+            elif ':' in head:
+                assert(len(f.get('parts', [])) == 0)
+                u = f['op']
+                try:
+                    ln = u.split("#")[1]
+                except IndexError:
+                    ln = u
+                yield '<csymbol definitionURL="'
+                yield escape(u)
+                yield '" encoding="RDF"><mi>'
+                yield escape(ln)
+                yield '</mi></csymbol>\n'
+            else:
+                #hmm... n3-quote...
+                yield "<apply><%s/>\n" % head
+                for part in f.get('parts', []):
+                    for s in mathml_fmla(part):
+                        yield s
+                yield "</apply>\n"
 
-        else:
-            yield "<list>\n"
-            for part in f[1:]:
-                for s in mathml_fmla(part):
-                    yield s
-            yield "</list>\n"
-
-    # variable
-    elif type(f) is type({}):
-        v = f['var']
-        yield '<ci definitionURL="#%s">%s</ci>\n' % (v, v)
+        # variable
+        elif 'var' in f:
+            v = f['var']
+            yield '<ci definitionURL="#%s">%s</ci>\n' % (v, v)
 
     # integer
     elif type(f) is type(1):
