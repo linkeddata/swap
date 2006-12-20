@@ -31,13 +31,13 @@ n3-checked.txt: n3-selectors.n3
 		--parse=n3.n3 && touch $@
 
 n3-selectors.n3 : n3.n3 bnf-rules.n3
-	time $P $C n3.n3 bnf-rules.n3 --think --purge --data > $@
+	time $P $C n3.n3 bnf-rules.n3 --think --purge --data --quiet > $@
 
 n3-i18n-selectors.n3 : n3-re.n3 bnf-rules.n3
-	time $P $C n3-re.n3 bnf-rules.n3 --think --purge --data > $@
+	time $P $C n3-re.n3 bnf-rules.n3 --think --purge --data --quiet > $@
 
 n3-report.big:  n3.n3 bnf2html.n3
-	time $P $C n3.n3 bnf2html.n3 --chatty=21 --think --data > $@
+	time $P $C n3.n3 bnf2html.n3 --chatty=21 --think --data --quiet > $@
 
 n3-report.html : n3-report.big
 	time $P $C  n3-report.big --strings > $@
