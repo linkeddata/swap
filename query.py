@@ -1756,7 +1756,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                         for nb, env2 in eq:
                             x = self.quad[p]
                             if self.neededToRun[p] == Set([x]):   # a term with no variables
-                                if x not in nb:
+                                if nb.canBind(x, s.quad[p]):
                                     nb = nb.bind(x, (s.quad[p], env2))
                                     env_queue.append((nb, env2))
                             else:  # Deep case   
