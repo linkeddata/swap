@@ -33,6 +33,7 @@ BuiltinFeedError = (ArgumentNotLiteral, UnknownType)
 import types
 import sys
 # from sets import Set  # only in python 2.3 and following
+                        # set_importer does a cleaner job
 
 INFINITY = 1000000000           # @@ larger than any number occurences
 
@@ -742,12 +743,16 @@ class Chain_Step(object):
 
     def copy(self):
         retVal = self.__class__(self.lines, self.env, self.parent, self.evidence)
+        return retVal
 
     def done(self):
         return not self.lines
 
     def __cmp__(self, other):
         return cmp(len(other.lines), len(self.lines))
+
+    def __repr__(self):
+        return "%s(%r,%r,%r,%r)" % (self.__class__.__name__, self.lines, self.env, self.parent, self.evidence)
 
 
 def returnWrapper(f):
@@ -955,9 +960,11 @@ class Query(Formula):
 
 ##################################################################################
 
-    def matchFormula(query, queue, env=Env()):
+    def matchFormula(query, queue, _, __, env=Env()):
+        total = 0
         stack = [Chain_Step(queue, env)]
         while stack:
+            print stack
             workingStep = stack.pop()
             if not workingStep.done():
                 queue = workingStep.lines
@@ -1015,7 +1022,7 @@ class Query(Formula):
 
                 stack_extent = []
                 for nb, reason in nbs:
-                    assert type(nb) is types.DictType, nb
+                    assert isinstance(nb, dict), nb
                     q2 = Queue([], queue)
                     if query.justReturn:
                         ### What does the following do?
@@ -1038,7 +1045,8 @@ class Query(Formula):
                     for i in queue:
                         newItem = i.clone()
                         q2.append(newItem)  #@@@@@@@@@@  If exactly 1 binding, loop (tail recurse)
-
+                    new_env = bindings.flatten(nb)
+                    print bindings, nb, new_env
                     new_step = Chain_Step(q2, new_env, workingStep.parent, workingStep.evidence + [reason])
                     stack_extent.append(new_step)
 
@@ -1054,7 +1062,11 @@ class Query(Formula):
                 if workingStep.parent is not None:
                     raise RuntimeError("We are not chaining yet.\n How did I get here?")
                 else:
+                    total = query.conclude(workingStep.env,
+                                           evidence=workingStep.evidence, extraBNodes = queue.bNodes) + total  # No terms left .. success!
+                    #raise RuntimeError("I need to conclude here, workingStep=%s" % workingStep)
                     pass
+        return total
 
 
     def matchFormula(query,

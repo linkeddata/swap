@@ -1,14 +1,15 @@
-     @prefix : <http://example.com/swap/test/reason/socrates.n3#> .
+     @prefix : <http://example.com/swap/test/reason/socrates#> .
     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    @prefix so: <http://example.com/swap/test/reason/socrates.n3#> .
     
-     @forAll :who .
+     @forAll so:who .
     
     :socrates     a :Man,
                 :Mortal .
     {
-        :who     a :Man .
+        so:who     a :Man .
         
-        }     log:implies {:who     a :Mortal .
+        }     log:implies {so:who     a :Mortal .
         } .
     
 

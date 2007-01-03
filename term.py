@@ -144,7 +144,7 @@ you can hash it (if you want to)
         """
         from backward import progress
         progress(lambda : 'Env.flatten(%s,%s)' % (self, other))
-        retVal = {}
+        retVal = dict(other)
         for key, (val, source) in self.items():
             if source is other.id:
                 retVal[key] = (other.substitution(val, self), self.id)
@@ -218,11 +218,11 @@ class Term(object):
         if (p>=0 and s[p+1:].find(".") <0 ):
 	    # Can't use prefix if localname includes "."
             prefix = self.store.prefixes.get(s[:p+1], None) # @@ #CONVENTION
-            if prefix != None : return prefix + ":" + s[p+1:]
+            if prefix != None : return (prefix + ":" + s[p+1:]).encode('unicode_escape')
 	if s.endswith("#_formula"):
 	    return "`"+s[-22:-9]+"`" # Hack - debug notation for formula
-        if p >= 0: return s[p+1:]
-        return s
+        if p >= 0: return s[p+1:].encode('unicode_escape')
+        return s.encode('unicode_escape')
 
     def debugString(self, already=[]):
 	return `self`  # unless more eleborate in superclass
@@ -595,7 +595,7 @@ class AnonymousUniversal(AnonymousVariable, Universal):
         return (SYMBOL, self.uriref())
 
     def __repr__(self):
-        return unicode(abs(id(self)))
+        return str(abs(id(self)))
     
     
 ##########################################################################
@@ -1402,8 +1402,7 @@ class Literal(Term):
 	return Set()
 
     def __repr__(self):
-        return '"' + self.string[0:4] + '...' + self.string[-4:] + '"'
-#        return self.string
+        return unicode('"' + self.string[0:4] + '...' + self.string[-4:] + '"').encode('unicode_escape')#        return self.string
 
     def asPair(self):
 	if self.datatype:

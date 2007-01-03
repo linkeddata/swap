@@ -19,11 +19,10 @@ and the redfoot/rdflib interface, a python RDF API:
    http://rdflib.net/latest/doc/triple_store.html
 
 """
+from __future__ import generators
+
 
 __version__ = '$Id$'[1:-1]
-
-
-from __future__ import generators
 
 import types
 import StringIO
@@ -348,7 +347,7 @@ For future reference, use newUniversal
     def substitution(self, bindings, why=None, cannon=False, keepOpen=False):
 	"Return this or a version of me with subsitution made"
 	assert isinstance(bindings, dict)
-	store = self.store
+        store = self.store
 	if self in bindings:
             return bindings[self]
 	oc = self.occurringIn(bindings.keys())

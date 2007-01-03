@@ -24,7 +24,7 @@ def value(self, newVal=None):
 verbose = value.__get__([0])
 reason2 = value.__get__([0])
 
-def abbr(prodURI): 
+def abbr(prodURI):
    return prodURI.split('#').pop()
 
 class typedThing(unicode):

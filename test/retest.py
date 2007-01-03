@@ -226,7 +226,7 @@ def main():
     problems = []
     
     REFWD="http://example.com/swap/test"
-    WD = "file:" + os.getcwd()
+    WD = base()[:-1] 
     
     #def basicTest(case, desc, args)
 
