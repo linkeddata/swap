@@ -4,17 +4,12 @@ import sys
 import string
 import os
 import re
+import sha, binascii, base64
 
 version = "$Id$"[1:-1]
 
-# import  notation3  # from http://www.w3.org/2000/10/swap/notation3.py
-
 global verbose
-global recursive
-
-#def ss(str):
-#    """Format string for output"""
-#    return notation3.stringToN3(str)
+global hideMailbox
 
 def macroSubstitute(line, dict):
     return line  #@@@@@@
@@ -23,6 +18,8 @@ def convert(path):
     """Convert LDIF format to n3"""
     global nochange
     global verbose
+    global hideMailbox
+
     dict = {}
 
     print "# http://www.w3.org/DesignIssues/Notation3"
@@ -39,22 +36,11 @@ def convert(path):
 
     line = 0
     
-#    comment = re.compile(r'^(.*?)#.*$')
-#    macro = re.compile(r'([-_a-zA-Z0-9\.]+)=(.*)')
-#    macro1 = re.compile(r'^(.*?)\$([a-zA-Z0-9\$@])(.*)$')
-#    macron = re.compile(r'^(.*?)\$\(([a-zA-Z0-9\$@]+)\)(.*)$')
-#    include = re.compile(r'include *([-_a-zA-Z0-9\./,]+)')
-#    target = re.compile(r'^(.*?)\$@(.*)$')
-#    dependency = re.compile( r'^([-_a-zA-Z0-9,][-_a-zA-Z0-9\.,]*) *:(.*)$' )
-#    rule = re.compile(r'^\.([-_a-zA-Z0-9,]*)\.([-_a-zA-Z0-9,]*)')
-#    recipe = re.compile( r'^\t.*')
-#    filename = re.compile( r'[-_a-zA-Z0-9\./,]+')
     blank = re.compile(r" *\r?\n")  #"
-#    recipeList = []
-#    subj = None
     lines = []
     inPerson = 0
-    dataline = re.compile(r'([a-zA-Z0-9_]*):[ \t]*(.*)')
+    dataline = re.compile(r'([a-zA-Z0-9_]*): +(.*)')
+    base64line = re.compile(r'([a-zA-Z0-9_]*):: +(.*)')
 
     
     asFoaf = { "cn": "foaf:name" }
@@ -76,22 +62,38 @@ def convert(path):
 	if m:
 	    field = m.group(1)
 	    value = m.group(2)
-	    
+	else:
+	    m = base64line.match(buf, line)
+	    if m:
+		field = m.group(1)
+		value = m.group(2)
+		value = base64.decodestring(m.group(2))
+	if m:
 	    if not inPerson:
 		print "    ["
 		inPerson = 1
 		
 	    if field == "objectclass":
+		if value == "top": continue # Zero content info
 		print '\ta ldif:%s; '% (value[0:1].upper() + value[1:])
 	    
 	    elif field =="mail":
-		print '\tfoaf:mailbox <mailto:%s>;' % (value)
+		mboxUri = "mailto:" + value
+		hash = binascii.hexlify(sha.new(mboxUri).digest())
+		print '\tfoaf:mbox_sha1sum "%s";' % (hash)
+		if not hideMailbox:
+		    print '\tfoaf:mbox <%s>;' % (mboxUri)
 	    else:
+	    
+		if field == "modifytimestamp" and value == "0Z":
+		    continue;  # ignore
+		    
 		foaf = asFoaf.get(field, None)
 		if foaf:
 		    print '\t%s "%s"; '% (foaf, value)
 		else:
-		    print '\tldif:%s "%s"; '% (field, value)
+		    if not (hideMailbox and field == "dn"):
+			print '\tldif:%s "%s"; '% (field, value)
 	    continue
 
 	print "# ERROR: Unknown line format:" + buf[line:line+20]
@@ -104,9 +106,9 @@ def do(path):
         
 ######################################## Main program
 
-recursive = 0
 nochange = 1
 verbose = 0
+hideMailbox = 0
 doall = 0
 files = []
 
@@ -122,8 +124,10 @@ Syntax:    make2n3  <file>
     $Id$
     
     -v  verbose
+    -m  hide mailbox
 """
         elif arg == "-v": verbose = 1
+        elif arg == "-m": hideMailbox = 1
 	else:
             print """Bad option argument."""
             sys.exit(-1)
