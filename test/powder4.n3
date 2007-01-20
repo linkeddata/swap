@@ -1,0 +1,170 @@
+@keywords is, of, a.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+
+@prefix webarch: <webarch@@#>.
+@prefix mobilebp: <mobilebp@@#>.
+@prefix icra: <childProtection@@#>.
+@prefix wai: <childProtection@@#>.
+
+@prefix : <powder4#>.
+@prefix powder: <powder4#>.
+
+# http://www.w3.org/2006/12/powder_charter
+
+#   1.  All resources on the travel.example.com domain are suitable for display on mobile devices.
+suitableFor s:domain webarch:InformationResource;
+ s:range webarch:Agent.
+
+mobilebp:MobileDevice s:subClassOf webarch:Agent.
+
+[ owl:onProperty inDomain; owl:hasValue "travel.example.com" ]
+s:subClassOf [ suitableForAll mobilebp:MobileDevice ].
+
+# test data for 1.
+
+<http://travel.example.com/pg1> a webarch:InformationResource.
+myPhone a mobilebp:MobileDevice.
+
+
+
+# 2. All resources on broadcast.example.com/clips are video clips that are suitable for all ages.
+icra:Person s:subClassOf webarch:Agent.
+
+[ owl:onProperty inPath; owl:hasValue "broadcast.example.com/clips" ]
+s:subClassOf [ suitableForAll icra:Person ].
+
+<http://broadcast.example.com/clips/clip1> a webarch:InformationResource.
+bobby a icra:Person.
+
+# 3. All resources on example.com are accessible for all users and
+#    meet WAI AA guidelines except those on visual.example.com which
+#    are not suitable for users with impaired vision.
+wai:AA s:subClassOf webarch:InformationResource.
+
+[] owl:intersectionOf (
+ [ owl:onProperty inDomain; owl:hasValue "example.com" ]
+ [ owl:complementOf [ 
+   owl:onProperty inDomain; owl:hasValue "visual.example.com" ] ]
+);
+ s:subClassOf wai:AA.
+
+#hmm... not suitable for all users... just absence of info, right?
+
+<http://example.com/pg1simple> a webarch:InformationResource.
+<http://visual.example.com/pg2needsVision> a webarch:InformationResource.
+
+# 4. Web crawlers are welcome to explore all resources on example.com
+#      except those with a path beginning with 'private'.
+WebCrawler s:subClassOf webarch:Agent.
+
+[] owl:intersectionOf (
+ [ owl:onProperty inDomain; owl:hasValue "example.com" ]
+ [ owl:complementOf [
+   owl:onProperty inPath; owl:hasValue "example.com/private" ]
+ ] );
+ s:subClassOf [ suitableForAll WebCrawler ].
+
+<http://example.com/crawlaway> a webarch:InformationResource.
+<http://example.com/private/sekret> a webarch:InformationResource.
+gcrawl a WebCrawler.
+
+###
+
+{ ?X a [ suitableForAll ?C ].
+  ?Y a ?C.
+} => { ?X suitableFor ?Y }.
+
+
+
+#########
+# supporting rules
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#>. #@@ move down
+@prefix str: <http://www.w3.org/2000/10/swap/string#>.
+
+####
+# URI stuff
+inDomain s:domain webarch:InformationResource; s:range webarch:DomainName.
+
+# @@See also URISpaces submission
+{ ?DOC log:uri [ uriDomain ?D ] } => { ?DOC inDomain ?D }.
+{ ?DOC inDomain [ is subdomain of ?D] } => { ?I inDomain ?D }.
+
+{
+ ?I a webarch:URI.
+ (?I "http://([^/]+)/") str:search (?DOMAIN). }
+=> { ?I uriDomain ?DOMAIN }.
+
+{
+  ?LONGER a webarch:DomainName.
+  (?LONGER "[^\\.]*\\.(.*)") str:search (?SHORTER).
+} => { ?SHORTER subdomain ?LONGER }.
+
+{
+  ?DOC a webarch:InformationResource.
+  ?DOC log:uri [ uriDomain ?D ].
+  ?D2 a webarch:DomainName.
+  ?D str:doesNotContain ?D2. #@@ a little sloppy?
+  ?C2 owl:complementOf [ owl:onProperty inDomain; owl:hasValue ?D2].
+} => { ?DOC a ?C2 }.
+
+
+uriPath s:range webarch:URIPath.
+pathPrefix s:domain webarch:URIPath; s:range webarch:URIPath.
+inPath s:range webarch:URIPath.
+
+{ ?DOC log:uri ?I. ?I uriDomain ?D. (?I ?D) uriPath ?P.
+  ( ?D ?P ) str:concatenation ?TXT.
+ }
+ => { ?DOC inPath ?TXT }.
+
+# a bit contrived for example 4, but might work reasonably well
+{
+  ?IND owl:onProperty inDomain; owl:hasValue ?D.
+  ?INPATH owl:onProperty inPath; owl:hasValue ?P.
+  ?DOC inDomain ?D.
+  ?DOC log:uri [ str:doesNotContain ?P ].
+  ?C owl:intersectionOf (?IND [owl:complementOf ?INPATH]).
+} => { ?DOC a ?C }.
+
+  
+{ ?I uriDomain ?D.
+  (?I "\\w+://[^/]*(/.*)") str:search (?TXT).
+} => { (?I ?D) uriPath ?TXT }.
+
+{ (?I ?D) uriPath [ pathPrefix ?P ] } => { (?I ?D) uriPath ?P }.
+
+{
+  ?LONGER a webarch:URIPath.
+  (?LONGER "(/[^/]*)+/[^/]+$") str:search (?SHORTER).
+} => { ?LONGER pathPrefix ?SHORTER }.
+
+
+
+#@@ help cwm fire rules
+{ ?DOC a webarch:InformationResource; log:uri ?I }
+=> { ?I a webarch:URI }.
+  
+####
+# some rules from OWL pd*
+
+#rdf14bx
+{ ?v owl:hasValue ?w.
+  ?v owl:onProperty ?p.
+  ?u ?p ?w.
+} => { ?u a ?v }.
+
+# ad-hoc OWL
+{ ?C owl:intersectionOf (?A ?B).
+  ?X a ?A, ?B
+} => { ?X a ?C }.
+
+###
+# RDFS
+
+{ ?S a [ s:subClassOf ?C ] } => { ?S a ?C }.
+{ ?S [ s:domain ?C ] [] } => { ?S a ?C }.
+{ [] [ s:range ?C ] ?O } => { ?O a ?C }.
+
