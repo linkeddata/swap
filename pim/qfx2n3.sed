@@ -10,21 +10,25 @@ s?^\([A-Za-z0-9-]*\):\(.*\)$?    ofxh:\1 "\2";?
 s?<OFX>?]; ofx:OFX [?
 s?</OFX>?]. # OFX?
 s?^<\([A-Z][A-Z0-9]*\)>$?   ofx:\1[?
-#s?<BANKMSGSRSV1>?    ofx:BANKMSGSRSV1[?
-#s?<BANKACCTFROM>?     ofx:BANKACCTFROM [?
-#s?<BANKTRANLIST>?     ofx:BANKTRANLIST [?
-#s?<LEDGERBAL>?     ofx:LEDGERBAL [?
-#s?<STATUS>?     ofx:STATUS [?
-#s?<SONRS>?      ofx:SONRS [?
-#s?<STMTTRN>?    ofx:STMTTRN [?
-#s?<STMTTRNRS>?   ofx:STMTTRNRS  [?
-#s?<STMTRS>?    ofx:STMTTRN [?
-#s?<FI>?    ofx:FI [?
+#
+# End tag:
 s?</\([A-Z0-9]*\)>?    ];   # \1?
+#
+# Special case remove .
 s?<INTU.BID>\(..*\)?    ofx:INTU_BID "\1"?
+#
+# Start with data is assumeD implcit end tag
 s?<\([A-Z][A-Z0-9]*\)>\(..*\)?        ofx:\1 "\2";?
-s?<\([A-Z][A-Z0-9]*\)>$?        a ofx:\1;?
+#
+# Start tag without data is assumed to be closed later
+s?<\([A-Z][A-Z0-9]*\)>$?        ofx:\1 [?
+#
+# Strip trailing spaces at ends of values:
 s? *";?";?
+#
+# Convert datetime format to W3C standard
 /ofx:DT/s?"\([0-9][0-9][0-9][0-9]\)\([0-9][0-9]\)\([0-9][0-9]\)\([0-9][0-9]\)\([0-9][0-9]\)\([0-9][0-9]\)"?"\1-\2-\3T\4:\5:\6"?
+# Convert datetime format to W3C standard with timezone
+/ofx:DT/s?"\([0-9][0-9][0-9][0-9]\)\([0-9][0-9]\)\([0-9][0-9]\)\([0-9][0-9]\)\([0-9][0-9]\)\([0-9][0-9]\)\[\([-+]\)\([0-9]\):[A-Z]*\]"?"\1-\2-\3T\4:\5:\6\70\800"?
 s/&amp;/\&/g
 /ofx:FITID/s?\([0-9]\) \([0-9]\)?\1_\2?
