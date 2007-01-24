@@ -11,13 +11,17 @@
     <r:Description r:about="">
         <comment>An ontology for data exported, for example, by Quicken,
 	as an interchange format. Also a generally useful ontology for
-	bank tranactions.</comment>
+	bank tranactions.  See also the OFX ontology</comment>
         <seeAlso r:resource="qif2n3.py"/>
         <seeAlso r:resource="http://dev.w3.org/cvsweb/2000/quacken/"/>
         <seeAlso r:resource="http://dev.w3.org/cvsweb/~checkout~/2000/quacken/vocab.n3?rev=1.1"/>
         <seeAlso r:resource="http://www.intuit.com/support/quicken/2002/win/1177.html"/>
         <doc:version>$Id$</doc:version>
     </r:Description>
+
+    <Class r:about="http://www.w3.org/2000/10/swap/pim/qif#Account">
+        <label>account</label>
+    </Class>
 
     <Class r:about="http://www.w3.org/2000/10/swap/pim/qif#Bank">
     </Class>

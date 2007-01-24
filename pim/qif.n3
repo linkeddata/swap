@@ -14,12 +14,14 @@
         <http://www.intuit.com/support/quicken/2002/win/1177.html>;
 	s:comment """An ontology for data exported, for example, by Quicken,
 	as an interchange format. Also a generally useful ontology for
-	bank tranactions.""".
+	bank tranactions.  See also the OFX ontology""".
 
 
 q:Transaction a s:Class; s:label "transaction".
 
-q:Bank a s:Class.  # should be Bank_transaction probably
+q:Account a s:Class; s:label "account".
+
+q:Bank a s:Class.  # should be Bank_transaction probably (where used? - in .qif)
 
 q:Cat a s:Class; s:label "category".
 q:category a r:Property; s:label "category"; s:domain q:Transaction.
