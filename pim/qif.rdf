@@ -1,0 +1,60 @@
+
+<!-- Processed by Id: cwm.py,v 1.190 2006/08/09 23:20:42 syosi Exp -->
+<!--     using base file:///devel/WWW/2000/10/swap/pim/qif.n3-->
+
+
+<r:RDF xmlns="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:doc="http://www.w3.org/2000/10/swap/pim/doc#"
+    xmlns:r="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:s="http://www.w3.org/2000/01/rdf-schema#">
+
+    <r:Description r:about="">
+        <comment>An ontology for data exported, for example, by Quicken,
+	as an interchange format. Also a generally useful ontology for
+	bank tranactions.</comment>
+        <seeAlso r:resource="qif2n3.py"/>
+        <seeAlso r:resource="http://dev.w3.org/cvsweb/2000/quacken/"/>
+        <seeAlso r:resource="http://dev.w3.org/cvsweb/~checkout~/2000/quacken/vocab.n3?rev=1.1"/>
+        <seeAlso r:resource="http://www.intuit.com/support/quicken/2002/win/1177.html"/>
+        <doc:version>$Id$</doc:version>
+    </r:Description>
+
+    <Class r:about="http://www.w3.org/2000/10/swap/pim/qif#Bank">
+    </Class>
+
+    <Class r:about="http://www.w3.org/2000/10/swap/pim/qif#Cat">
+        <label>category</label>
+    </Class>
+
+    <Class r:about="http://www.w3.org/2000/10/swap/pim/qif#Transaction">
+        <label>transaction</label>
+    </Class>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/qif#amount">
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/qif#Transaction"/>
+        <label>amount</label>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/qif#category">
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/qif#Transaction"/>
+        <label>category</label>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/qif#date">
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/qif#Transaction"/>
+        <label>date</label>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/qif#payee">
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/qif#Transaction"/>
+        <label>payee</label>
+        <subPropertyOf r:resource="http://www.w3.org/2000/01/rdf-schema#label"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/qif#toAccount">
+        <comment>The account to which money flows when the amount is positive.</comment>
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/qif#Transaction"/>
+        <label>account</label>
+        <range r:resource="http://www.w3.org/2000/10/swap/pim/qif#Account"/>
+    </r:Property>
+</r:RDF>
