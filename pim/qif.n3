@@ -35,4 +35,8 @@ q:toAccount a r:Property; s:label "account"; s:domain q:Transaction;
     s:range :Account;
     s:comment"The account to which money flows when the amount is positive.".
 
+q:accordingTo a r:Property; s:label "statement";
+    s:domain q:Transaction; s:range doc:Work;
+    s:comment "The document which is the source of data for this transaction.".
+
 #ENDS
