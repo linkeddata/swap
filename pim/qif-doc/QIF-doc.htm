@@ -1,0 +1,605 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0177)http://www.google.com/search?q=cache:bn9zMAKRVmoC:www.intuit.com/quicken/technical-support/quicken/old-faqs/dosfaqs/60006.html+QIF+quicken+interchange+format&hl=en&ie=ISO-8859-1 -->
+<HTML><HEAD><TITLE>What is the Quicken interchange format (QIF)?</TITLE>
+<META content="text/html; charset=ISO-8859-1" http-equiv=Content-Type>
+<META content="MSHTML 5.00.2920.0" name=GENERATOR></HEAD>
+<BODY bgColor=#ffffff>
+<TABLE border=1 width="100%">
+  <TBODY>
+  <TR>
+    <TD>
+      <TABLE bgColor=#ffffff border=1 cellPadding=10 cellSpacing=0 width="100%" 
+      color="#ffffff">
+        <TBODY>
+        <TR>
+          <TD><FONT color=black face=arial,sans-serif size=-1>This is <B><FONT 
+            color=#0039b6>G</FONT> <FONT color=#c41200>o</FONT> <FONT 
+            color=#f3c518>o</FONT> <FONT color=#0039b6>g</FONT> <FONT 
+            color=#30a72f>l</FONT> <FONT color=#c41200>e</FONT></B>'s <A 
+            href="http://www.google.com/help/features.html#cached"><FONT 
+            color=blue>cache</FONT></A> of <A 
+            href="http://www.intuit.com/quicken/technical-support/quicken/old-faqs/dosfaqs/60006.html"><FONT 
+            color=blue>http://www.intuit.com/quicken/technical-support/quicken/old-faqs/dosfaqs/60006.html</FONT></A>.<BR><B><FONT 
+            color=#0039b6>G</FONT> <FONT color=#c41200>o</FONT> <FONT 
+            color=#f3c518>o</FONT> <FONT color=#0039b6>g</FONT> <FONT 
+            color=#30a72f>l</FONT> <FONT color=#c41200>e</FONT></B>'s cache is 
+            the snapshot that we took of the page as we crawled the web.<BR>The 
+            page may have changed since that time. Click here for the <A 
+            href="http://www.intuit.com/quicken/technical-support/quicken/old-faqs/dosfaqs/60006.html"><FONT 
+            color=blue>current page</FONT></A> without 
+            highlighting.</FONT><BR><BR>
+            <CENTER><FONT size=-2><I>Google is not affiliated with the authors 
+            of this page nor responsible for its 
+        content.</I></FONT></CENTER></TD></TR>
+        <TR>
+          <TD>
+            <TABLE border=0 cellPadding=0 cellSpacing=0>
+              <TBODY>
+              <TR>
+                <TD><FONT color=black face=arial,sans-serif size=-1>These 
+                  search terms have been highlighted:&nbsp;</FONT></TD>
+                <TD bgColor=#ffff66><B><FONT color=black face=arial,sans-serif 
+                  size=-1>qif&nbsp;</FONT></B></TD>
+                <TD bgColor=#a0ffff><B><FONT color=black face=arial,sans-serif 
+                  size=-1>quicken&nbsp;</FONT></B></TD>
+                <TD bgColor=#99ff99><B><FONT color=black face=arial,sans-serif 
+                  size=-1>interchange&nbsp;</FONT></B></TD>
+                <TD bgColor=#ff9999><B><FONT color=black face=arial,sans-serif 
+                  size=-1>format&nbsp;</FONT></B></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+<HR>
+
+<META content="FILE I/O" name=CATEGORY>
+<P><A href="http://www.intuit.com/images/maps/nav-tech-support.map"><IMG 
+border=0 isMap src="QIF-doc_files/ts-banner.gif"></A><BR>
+<H4>Q: What is the <B style="BACKGROUND-COLOR: #a0ffff; COLOR: black">Quicken 
+</B><B style="BACKGROUND-COLOR: #99ff99; COLOR: black">interchange </B><B 
+style="BACKGROUND-COLOR: #ff9999; COLOR: black">format</B> (<B 
+style="BACKGROUND-COLOR: #ffff66; COLOR: black">QIF</B>)?<BR></H4>
+<P><B>A: </B>The <B style="BACKGROUND-COLOR: #a0ffff; COLOR: black">Quicken 
+</B><B style="BACKGROUND-COLOR: #99ff99; COLOR: black">interchange </B><B 
+style="BACKGROUND-COLOR: #ff9999; COLOR: black">format</B> (<B 
+style="BACKGROUND-COLOR: #ffff66; COLOR: black">QIF</B>) is a specially 
+formatted text (ASCII) file that lets you to move <B 
+style="BACKGROUND-COLOR: #a0ffff; COLOR: black">Quicken</B> transactions: <BR>
+<UL>
+  <LI>From one <B style="BACKGROUND-COLOR: #a0ffff; COLOR: black">Quicken</B> 
+  account register into another <B 
+  style="BACKGROUND-COLOR: #a0ffff; COLOR: black">Quicken</B> account register, 
+  or 
+  <LI>To/From another application that supports the <B 
+  style="BACKGROUND-COLOR: #ffff66; COLOR: black">QIF </B><B 
+  style="BACKGROUND-COLOR: #ff9999; COLOR: black">format</B>. </LI></UL>
+<P><U><B>Note:</B></U> For <B 
+style="BACKGROUND-COLOR: #a0ffff; COLOR: black">Quicken</B> to translate data 
+from a text file into the <B 
+style="BACKGROUND-COLOR: #a0ffff; COLOR: black">Quicken</B> register as 
+transactions, the text file <U>must</U><B> </B>be in the <B 
+style="BACKGROUND-COLOR: #ffff66; COLOR: black">QIF </B><B 
+style="BACKGROUND-COLOR: #ff9999; COLOR: black">format</B>. <BR>
+<P><B>Required File Formatting</B>: <BR>
+<UL>
+  <LI>Each transaction must end with a symbol, indicating the end of entry. 
+  <LI>Each item in the transaction must display on a separate line. 
+  <LI>When <B style="BACKGROUND-COLOR: #a0ffff; COLOR: black">Quicken</B> 
+  exports an account register or list, it adds a line to the top of the file 
+  that identifies the type of account or list. Listed below are the header lines 
+  <B style="BACKGROUND-COLOR: #a0ffff; COLOR: black">Quicken</B> adds to the 
+  exported files: </LI></UL>
+<P>
+<TABLE>
+  <TBODY>
+  <TR>
+    <TD width=183><B>Header</B></TD>
+    <TD width=267><B>Type of data</B> </TD></TR>
+  <TR>
+    <TD width=183>!Type:Bank</TD>
+    <TD width=267>Bank account transactions </TD></TR>
+  <TR>
+    <TD width=183>!Type:Cash</TD>
+    <TD width=267>Cash account transactions </TD></TR>
+  <TR>
+    <TD width=183>!Type:CCard</TD>
+    <TD width=267>Credit card account transactions </TD></TR>
+  <TR>
+    <TD width=183>!Type:Invst</TD>
+    <TD width=267>Investment account transactions </TD></TR>
+  <TR>
+    <TD width=183>!Type:Oth A</TD>
+    <TD width=267>Asset account transactions </TD></TR>
+  <TR>
+    <TD width=183>!Type:Oth L</TD>
+    <TD width=267>Liability account transactions </TD></TR>
+  <TR>
+    <TD width=183>!Account</TD>
+    <TD width=267>Account list or which account follows </TD></TR>
+  <TR>
+    <TD width=183>!Type:Cat</TD>
+    <TD width=267>Category list</TD></TR>
+  <TR>
+    <TD width=183>!Type:Class</TD>
+    <TD width=267>Class list</TD></TR>
+  <TR>
+    <TD width=183>!Type:Memorized</TD>
+    <TD width=267>Memorized transaction list </TD></TR></TBODY></TABLE>
+<P>
+<P>You can force <B style="BACKGROUND-COLOR: #a0ffff; COLOR: black">Quicken</B> 
+to import all transfers, regardless of whether Ignore Transfers is selected when 
+the file is imported. You must add a line to the file being imported into a <B 
+style="BACKGROUND-COLOR: #a0ffff; COLOR: black">Quicken</B> account. Use a text 
+editor or word processor to put the following line right after the header line 
+at the top of the file:<BR>
+<P>!Option:AllXfr<BR>
+<P><B>Items for Non-Investment Accounts <BR></B>
+<P>Each item in a bank, cash, credit card, other liability, or other asset 
+account must begin with a letter that indicates the field in the <B 
+style="BACKGROUND-COLOR: #a0ffff; COLOR: black">Quicken</B> register. The 
+non-split items can be in any sequence: <BR>
+<P>
+<TABLE>
+  <TBODY>
+  <TR>
+    <TD width=66><B>Field</B></TD>
+    <TD width=390><B>Indicator</B> <B>Explanation</B> </TD></TR>
+  <TR>
+    <TD width=66>D</TD>
+    <TD width=390>Date</TD></TR>
+  <TR>
+    <TD width=66>T</TD>
+    <TD width=390>Amount</TD></TR>
+  <TR>
+    <TD width=66>C</TD>
+    <TD width=390>Cleared status</TD></TR>
+  <TR>
+    <TD width=66>N</TD>
+    <TD width=390>Num (check or reference number) </TD></TR>
+  <TR>
+    <TD width=66>P</TD>
+    <TD width=390>Payee</TD></TR>
+  <TR>
+    <TD width=66>M</TD>
+    <TD width=390>Memo</TD></TR>
+  <TR>
+    <TD width=66>A</TD>
+    <TD width=390>Address (up to five lines; the sixth line is an optional 
+      message) </TD></TR>
+  <TR>
+    <TD width=66>L</TD>
+    <TD width=390>Category (Category/Subcategory/Transfer/Class) </TD></TR>
+  <TR>
+    <TD width=66>S</TD>
+    <TD width=390>Category in split (Category/Transfer/Class) </TD></TR>
+  <TR>
+    <TD width=66>E</TD>
+    <TD width=390>Memo in split</TD></TR>
+  <TR>
+    <TD width=66>$</TD>
+    <TD width=390>Dollar amount of split</TD></TR>
+  <TR>
+    <TD width=66>^</TD>
+    <TD width=390>End of the entry</TD></TR></TBODY></TABLE>
+<P><U><B>Note:</B></U> Repeat the S, E, and $ lines as many times as needed for 
+additional items in a split. If an item is omitted from the transaction in the 
+<B style="BACKGROUND-COLOR: #ffff66; COLOR: black">QIF</B> file, <B 
+style="BACKGROUND-COLOR: #a0ffff; COLOR: black">Quicken</B> treats it as a blank 
+item.<BR>
+<P><B>Items for Investment Accounts <BR></B>
+<P>
+<TABLE>
+  <TBODY>
+  <TR>
+    <TD width=60><B>Field</B></TD>
+    <TD width=288><B>Indicator</B> <B>Explanation</B> </TD></TR>
+  <TR>
+    <TD width=60>D</TD>
+    <TD width=288>Date</TD></TR>
+  <TR>
+    <TD width=60>N</TD>
+    <TD width=288>Action</TD></TR>
+  <TR>
+    <TD width=60>Y</TD>
+    <TD width=288>Security</TD></TR>
+  <TR>
+    <TD width=60>I</TD>
+    <TD width=288>Price</TD></TR>
+  <TR>
+    <TD width=60>Q</TD>
+    <TD width=288>Quantity (number of shares or split ratio) </TD></TR>
+  <TR>
+    <TD width=60>T</TD>
+    <TD width=288>Transaction amount</TD></TR>
+  <TR>
+    <TD width=60>C</TD>
+    <TD width=288>Cleared status</TD></TR>
+  <TR>
+    <TD width=60>P</TD>
+    <TD width=288>Text in the first line for transfers and reminders </TD></TR>
+  <TR>
+    <TD width=60>M</TD>
+    <TD width=288>Memo</TD></TR>
+  <TR>
+    <TD width=60>O</TD>
+    <TD width=288>Commission</TD></TR>
+  <TR>
+    <TD width=60>L</TD>
+    <TD width=288>Account for the transfer </TD></TR>
+  <TR>
+    <TD width=60>$</TD>
+    <TD width=288>Amount transferred</TD></TR>
+  <TR>
+    <TD width=60>^</TD>
+    <TD width=288>End of the entry</TD></TR></TBODY></TABLE>
+<P><B>Items for Account Information <BR></B>
+<P>The account header !Account is used in two places-at the start of an account 
+list and the start of a list of transactions to specify to which account they 
+belong. <BR>
+<P>
+<TABLE>
+  <TBODY>
+  <TR>
+    <TD width=60><B>Field</B></TD>
+    <TD width=300><B>Indicator</B> <B>Explanation</B> </TD></TR>
+  <TR>
+    <TD width=60>N</TD>
+    <TD width=300>Name</TD></TR>
+  <TR>
+    <TD width=60>T</TD>
+    <TD width=300>Type of account</TD></TR>
+  <TR>
+    <TD width=60>D</TD>
+    <TD width=300>Description</TD></TR>
+  <TR>
+    <TD width=60>L</TD>
+    <TD width=300>Credit limit (only for credit card accounts) </TD></TR>
+  <TR>
+    <TD width=60>/</TD>
+    <TD width=300>Statement balance date</TD></TR>
+  <TR>
+    <TD width=60>$</TD>
+    <TD width=300>Statement balance amount </TD></TR>
+  <TR>
+    <TD width=60>^</TD>
+    <TD width=300>End of entry</TD></TR></TBODY></TABLE>
+<P><B>Items for a Category List<BR></B>
+<P>
+<TABLE>
+  <TBODY>
+  <TR>
+    <TD width=60><B>Field</B></TD>
+    <TD width=540><B>Indicator</B> <B>Explanation</B> </TD></TR>
+  <TR>
+    <TD width=60>N</TD>
+    <TD width=540>Category name:subcategory name </TD></TR>
+  <TR>
+    <TD width=60>D</TD>
+    <TD width=540>Description</TD></TR>
+  <TR>
+    <TD width=60>T</TD>
+    <TD width=540>Tax related if included, not tax related if omitted </TD></TR>
+  <TR>
+    <TD width=60>I</TD>
+    <TD width=540>Income category</TD></TR>
+  <TR>
+    <TD width=60>E</TD>
+    <TD width=540>Expense category (if category type is unspecified, <B 
+      style="BACKGROUND-COLOR: #a0ffff; COLOR: black">quicken</B> assumes 
+      expense type) </TD></TR>
+  <TR>
+    <TD width=60>B</TD>
+    <TD width=540>Budget amount (only in a Budget Amounts <B 
+      style="BACKGROUND-COLOR: #ffff66; COLOR: black">QIF</B> file) </TD></TR>
+  <TR>
+    <TD width=60>R</TD>
+    <TD width=540>Tax schedule information </TD></TR>
+  <TR>
+    <TD width=60>^</TD>
+    <TD width=540>End of entry</TD></TR></TBODY></TABLE>
+<P><B>Items for a Class List<BR></B>
+<P>
+<TABLE>
+  <TBODY>
+  <TR>
+    <TD width=60><B>Field</B></TD>
+    <TD width=192><B>Indicator</B> <B>Explanation</B> </TD></TR>
+  <TR>
+    <TD width=60>N</TD>
+    <TD width=192>Class name</TD></TR>
+  <TR>
+    <TD width=60>D</TD>
+    <TD width=192>Description</TD></TR>
+  <TR>
+    <TD width=60>^</TD>
+    <TD width=192>End of entry </TD></TR></TBODY></TABLE>
+<P><B>Items for a Memorized Transaction List<BR></B>
+<P>Immediately preceding the ^ character, each entry must end with one of the 
+following file indicators to specify the transaction type. <BR>
+<UL>
+  <LI>KC 
+  <LI>KD 
+  <LI>KP 
+  <LI>KI 
+  <LI>KE </LI></UL>
+<P>With that exception, memorized transaction entries have the same <B 
+style="BACKGROUND-COLOR: #ff9999; COLOR: black">format</B> as regular 
+transaction entries (non-investment accounts). However, the Date or Num field is 
+included. All items are optional, but if an amortization record is included, all 
+seven amortization lines must also be included.<BR>
+<P>
+<TABLE>
+  <TBODY>
+  <TR>
+    <TD width=60><B>Field</B></TD>
+    <TD width=330><B>Indicator</B> <B>Explanation</B> </TD></TR>
+  <TR>
+    <TD width=60>KC</TD>
+    <TD width=330>Check transaction</TD></TR>
+  <TR>
+    <TD width=60>KD</TD>
+    <TD width=330>Deposit transaction</TD></TR>
+  <TR>
+    <TD width=60>KP</TD>
+    <TD width=330>Payment transaction</TD></TR>
+  <TR>
+    <TD width=60>KI</TD>
+    <TD width=330>Investment transaction</TD></TR>
+  <TR>
+    <TD width=60>KE</TD>
+    <TD width=330>Electronic payee transaction </TD></TR>
+  <TR>
+    <TD width=60>T</TD>
+    <TD width=330>Amount</TD></TR>
+  <TR>
+    <TD width=60>C</TD>
+    <TD width=330>Cleared status</TD></TR>
+  <TR>
+    <TD width=60>P</TD>
+    <TD width=330>Payee</TD></TR>
+  <TR>
+    <TD width=60>M</TD>
+    <TD width=330>Memo</TD></TR>
+  <TR>
+    <TD width=60>A</TD>
+    <TD width=330>Address</TD></TR>
+  <TR>
+    <TD width=60>L</TD>
+    <TD width=330>Category or Transfer/Class </TD></TR>
+  <TR>
+    <TD width=60>S</TD>
+    <TD width=330>Category/class in split</TD></TR>
+  <TR>
+    <TD width=60>E</TD>
+    <TD width=330>Memo in split</TD></TR>
+  <TR>
+    <TD width=60>$</TD>
+    <TD width=330>Dollar amount of split</TD></TR>
+  <TR>
+    <TD width=60>1</TD>
+    <TD width=330>Amortization: First payment date </TD></TR>
+  <TR>
+    <TD width=60>2</TD>
+    <TD width=330>Amortization: Total years for loan </TD></TR>
+  <TR>
+    <TD width=60>3</TD>
+    <TD width=330>Amortization: Number of payments already made </TD></TR>
+  <TR>
+    <TD width=60>4</TD>
+    <TD width=330>Amortization: Number of periods per year </TD></TR>
+  <TR>
+    <TD width=60>5</TD>
+    <TD width=330>Amortization: Interest rate </TD></TR>
+  <TR>
+    <TD width=60>6</TD>
+    <TD width=330>Amortization: Current loan balance </TD></TR>
+  <TR>
+    <TD width=60>7</TD>
+    <TD width=330>Amortization: Original loan amount </TD></TR>
+  <TR>
+    <TD width=60>^</TD>
+    <TD width=330>End of entry</TD></TR></TBODY></TABLE>
+<P>
+<P><B>Examples of <B style="BACKGROUND-COLOR: #ffff66; COLOR: black">QIF</B> 
+files<BR></B>
+<P><B>Normal Transactions Example<BR></B>
+<P>
+<TABLE>
+  <TBODY>
+  <TR>
+    <TD width=192><B>Transaction Item</B></TD>
+    <TD width=192><B>Comment (not in file)</B> </TD></TR>
+  <TR>
+    <TD width=192>!Type:Bank</TD>
+    <TD width=192>Header</TD></TR>
+  <TR>
+    <TD width=192>D6/ 1/94</TD>
+    <TD width=192>Date</TD></TR>
+  <TR>
+    <TD width=192>T-1,000.00</TD>
+    <TD width=192>Amount</TD></TR>
+  <TR>
+    <TD width=192>N1005</TD>
+    <TD width=192>Check number</TD></TR>
+  <TR>
+    <TD width=192>PBank Of Mortgage</TD>
+    <TD width=192>Payee </TD></TR>
+  <TR>
+    <TD width=192>L[linda]</TD>
+    <TD width=192>Category</TD></TR>
+  <TR>
+    <TD width=192>S[linda]</TD>
+    <TD width=192>First category in split </TD></TR>
+  <TR>
+    <TD width=192>$-253.64</TD>
+    <TD width=192>First amount in split </TD></TR>
+  <TR>
+    <TD width=192>SMort Int</TD>
+    <TD width=192>Second category in split </TD></TR>
+  <TR>
+    <TD width=192>$-746.36</TD>
+    <TD width=192>Second amount in split </TD></TR>
+  <TR>
+    <TD width=192>^</TD>
+    <TD width=192>End of the transaction</TD></TR>
+  <TR>
+    <TD width=192>D6/ 2/94</TD>
+    <TD width=192>Date</TD></TR>
+  <TR>
+    <TD width=192>T75.00</TD>
+    <TD width=192>Amount</TD></TR>
+  <TR>
+    <TD width=192>PDeposit</TD>
+    <TD width=192>Payee</TD></TR>
+  <TR>
+    <TD width=192>^</TD>
+    <TD width=192>End of the transaction</TD></TR>
+  <TR>
+    <TD width=192>D6/ 3/94</TD>
+    <TD width=192>Date</TD></TR>
+  <TR>
+    <TD width=192>T-10.00</TD>
+    <TD width=192>Amount</TD></TR>
+  <TR>
+    <TD width=192>PJoBob Biggs</TD>
+    <TD width=192>Payee</TD></TR>
+  <TR>
+    <TD width=192>MJ.B. gets bucks</TD>
+    <TD width=192>Memo</TD></TR>
+  <TR>
+    <TD width=192>LEntertain</TD>
+    <TD width=192>Category</TD></TR>
+  <TR>
+    <TD width=192>A1010 Rodeo Dr.</TD>
+    <TD width=192>Address (line 1) </TD></TR>
+  <TR>
+    <TD width=192>AWaco, Tx</TD>
+    <TD width=192>Address (line 2) </TD></TR>
+  <TR>
+    <TD width=192>A80505</TD>
+    <TD width=192>Address (line 3)</TD></TR>
+  <TR>
+    <TD width=192>A</TD>
+    <TD width=192>Address (line 4)</TD></TR>
+  <TR>
+    <TD width=192>A</TD>
+    <TD width=192>Address (line 5)</TD></TR>
+  <TR>
+    <TD width=192>A</TD>
+    <TD width=192>Address (line 6)</TD></TR>
+  <TR>
+    <TD width=192>^</TD>
+    <TD width=192>End of the transaction</TD></TR></TBODY></TABLE>
+<P>
+<P><B>Investment Example<BR></B>
+<P>
+<TABLE>
+  <TBODY>
+  <TR>
+    <TD width=174><B>Transaction Item</B></TD>
+    <TD width=210><B>Comment (not in file)</B> </TD></TR>
+  <TR>
+    <TD width=174>!Type:Invst</TD>
+    <TD width=210>Header line</TD></TR>
+  <TR>
+    <TD width=174>D8/25/93</TD>
+    <TD width=210>Date</TD></TR>
+  <TR>
+    <TD width=174>NShrsIn</TD>
+    <TD width=210>Action (optional) </TD></TR>
+  <TR>
+    <TD width=174>Yibm4</TD>
+    <TD width=210>Security</TD></TR>
+  <TR>
+    <TD width=174>I11.260</TD>
+    <TD width=210>Price</TD></TR>
+  <TR>
+    <TD width=174>Q88.81</TD>
+    <TD width=210>Quantity</TD></TR>
+  <TR>
+    <TD width=174>CX</TD>
+    <TD width=210>Cleared Status</TD></TR>
+  <TR>
+    <TD width=174>T1,000.00</TD>
+    <TD width=210>Amount</TD></TR>
+  <TR>
+    <TD width=174>MOpening</TD>
+    <TD width=210>Balance Memo</TD></TR>
+  <TR>
+    <TD width=174>^</TD>
+    <TD width=210>End of the transaction</TD></TR>
+  <TR>
+    <TD width=174>D8/25/93</TD>
+    <TD width=210>Date</TD></TR>
+  <TR>
+    <TD width=174>NBuyX</TD>
+    <TD width=210>Action</TD></TR>
+  <TR>
+    <TD width=174>Yibm4</TD>
+    <TD width=210>Security</TD></TR>
+  <TR>
+    <TD width=174>I11.030</TD>
+    <TD width=210>Price</TD></TR>
+  <TR>
+    <TD width=174>Q9.066</TD>
+    <TD width=210>Quantity</TD></TR>
+  <TR>
+    <TD width=174>T100.00</TD>
+    <TD width=210>Amount</TD></TR>
+  <TR>
+    <TD width=174>MEst. price as of 8/25/93</TD>
+    <TD width=210>Memo </TD></TR>
+  <TR>
+    <TD width=174>L[CHECKING]</TD>
+    <TD width=210>Account for transfer </TD></TR>
+  <TR>
+    <TD width=174>$100.00</TD>
+    <TD width=210>Amount transferred </TD></TR>
+  <TR>
+    <TD width=174>^</TD>
+    <TD width=210>End of the transaction</TD></TR></TBODY></TABLE>
+<P>
+<P><B>Memorized List Example<BR></B>
+<P>
+<TABLE>
+  <TBODY>
+  <TR>
+    <TD width=162><B>Transaction Item</B></TD>
+    <TD width=162><B>Comment (not in file)</B> </TD></TR>
+  <TR>
+    <TD width=162>!Type:Memorized</TD>
+    <TD width=162>Header line </TD></TR>
+  <TR>
+    <TD width=162>T-50.00</TD>
+    <TD width=162>Amount</TD></TR>
+  <TR>
+    <TD width=162>PJoe Hayes</TD>
+    <TD width=162>Payee</TD></TR>
+  <TR>
+    <TD width=162>MRent</TD>
+    <TD width=162>Memo</TD></TR>
+  <TR>
+    <TD width=162>KC</TD>
+    <TD width=162>Check transaction</TD></TR>
+  <TR>
+    <TD width=162>^</TD>
+    <TD width=162>End of the transaction</TD></TR>
+  <TR>
+    <TD width=162>T-25.00</TD>
+    <TD width=162>Amount</TD></TR>
+  <TR>
+    <TD width=162>T-25.00</TD>
+    <TD width=162>Company Payee</TD></TR>
+  <TR>
+    <TD width=162>LTelephone</TD>
+    <TD width=162>Category</TD></TR>
+  <TR>
+    <TD width=162>KP</TD>
+    <TD width=162>Payment transaction</TD></TR>
+  <TR>
+    <TD width=162>^</TD>
+    <TD width=162>End of the transaction</TD></TR></TBODY></TABLE>
+<P>
+<HR>
+
+<H5>
+<CENTER>©Intuit Inc. 1997 </CENTER></H5><!--brpod--><TT>
+<HR>
+
+<P><FONT size=-4>QNFAQ QNDOS QNOTHER</FONT></TT><!--eprod--> </P></BODY></HTML>
