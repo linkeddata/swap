@@ -17,7 +17,9 @@
 
 { ?x a rdft:PositiveParserTest; rdft:inputDocument ?i.
   ?i.log:content string:contains "parseType=\"Literal\"".
-} => { ?x a :ParseTypeLiteralTest, :BoringTest }.
+} => { ?x a :ParseTypeLiteralTest
+	    # , :BoringTest
+				}.
 
 
 #ends

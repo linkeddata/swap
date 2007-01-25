@@ -14,7 +14,7 @@ Cwm a doap:Project;
     doap:name "The Cwm Project";
     
     doap:shortdesc "An general Semantic Web data procesing tool";
-
+    doap:homepage <http://www.w3.org/2000/10/swap/doc/cwm>;
     doap:description """Cwm (pronounced coom) is a general-purpose data processor for the
      semantic web, somewhat like sed, awk, etc. for text files or XSLT for XML.
       It is a forward chaining reasoner which can be used for querying, checking,
@@ -30,6 +30,7 @@ a Semantic Web Application Platform. It is open source under the W3C software li
 
     # add yourself here and below
     doap:developer <http://www.w3.org/People/Berners-Lee/card#i>, #@@@
+		    <http://dig.csail.mit.edu/People/yosi#YES>,
                    <http://www.w3.org/People/Connolly/#me>;
 
     doap:helper 
@@ -55,3 +56,5 @@ a Semantic Web Application Platform. It is open source under the W3C software li
 # People
     
 <http://www.w3.org/People/Berners-Lee/card#i> foaf:name "Timothy Berners-Lee".
+<http://dig.csail.mit.edu/People/yosi#YES> foaf:name "Joseph Scharf".
+<http://www.w3.org/People/Connolly/#me> foaf:name "Dan Connolly".

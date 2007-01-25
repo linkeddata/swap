@@ -1,3 +1,4 @@
+from __future__ import generators
 #! /usr/bin/python
 """
 
@@ -19,8 +20,6 @@ and the redfoot/rdflib interface, a python RDF API:
    http://rdflib.net/latest/doc/triple_store.html
 
 """
-from __future__ import generators
-
 
 __version__ = '$Id$'[1:-1]
 
@@ -187,6 +186,12 @@ class Formula(AnonymousNode, CompoundTerm):
 	
 	The literal is created in the same store as the formula."""
 	return self.store.newLiteral(str, dt, lang)
+
+    def newXMLLiteral(self, doc):
+	"""Create or reuse the internal representation of the RDF literal whose string is given
+	
+	The literal is created in the same store as the formula."""
+	return self.store.newXMLLiteral(doc)
 
     def intern(self, value):
 	return self.store.intern(value)

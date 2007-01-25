@@ -69,6 +69,7 @@ def smushedFormula(F, G):
     pF = proofsOf[F]
     pG = proofsOf[G]
     proofsOf[G] = pF + pG
+    raise RuntimeError("@@@@ temp flag - we got to line 71 of why.py")
     del proofsOf[F]
 
 def newTopLevelFormula(f):
@@ -479,6 +480,7 @@ class BecauseOfRule(Reason):
 	ev = []  # For PML compatability we will store it as a collection
 	for s in self._evidence:
 	    if isinstance(s, BecauseBuiltIn):
+		raise "eh? this is silly - ever reached? s is statment not step"
                 try:
 		    e = s.explain(ko, flags=flags)
                 except:

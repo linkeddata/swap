@@ -11,7 +11,7 @@ HTMLS= term.html formula.html pretty.html myStore.html check.html query.html RDF
 
 ## SOURCES = cwm.py cant.py delta.py notation3.py query.py llyn.py uripath.py diag.py RDFSink.py reify.py why.py myStore.py webAccess.py OrderedSequence.py term.py formula.py pretty.py cwm_list.py cwm_string.py cwm_os.py cwm_time.py isodate.py cwm_math.py cwm_trigo.py cwm_times.py cwm_maths.py cwm_sparql.py cwm_set.py toXML.py update.py sax2rdf.py rdflib_user.py rdfxml.py  __init__.py local_decimal.py isXML.py my_profiler.py cwm_crypto.py set_importer.py triple_maker.py mixin.py sparql2cwm.py sparql/sparql_parser.py sparql/sparql_tokens.py sparql/sparqlClient.py sparql/sparql_tokens_table.py sparql/sparql_table.py sparql/table_generator.py sparql/__init__.py sparql/webserver.py
 
-SOURCES := $(shell python importList.py my_profiler.py cant.py check.py delta.py) sparql/Makefile
+SOURCES := $(shell python importList.py my_profiler.py cant.py check.py delta.py cwm.py) sparql/Makefile
 
 DOC=doc/CwmHelp.htm
 

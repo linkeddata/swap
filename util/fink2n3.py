@@ -30,7 +30,8 @@ qualified = re.compile(r'(.*)(\(.*\)) *')
 terminator = re.compile(r'^ *<< *$')   # must be on a line all by itself, save whitespace
 blank = re.compile(r'[ \t]*')
 commaEnd = re.compile(r'.*, *$')
-import  notation3
+
+from swap import  notation3  # http://www.w3.org/2000/10/swap
 
 def ss(str):
     """Format string for output"""

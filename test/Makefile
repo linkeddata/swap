@@ -69,9 +69,8 @@ rules12.rdf : rules12.n3
 rdfcore-tests.n3: ../../rdf-tests/rdfcore/Manifest.rdf
 	$P $C --rdf ../../rdf-tests/rdfcore/Manifest.rdf --n3 > $@
 
-# Crashes :-(
-#testmeta.n3 : rdfcore-tests triage.n3
-#	$P $C rdfcore-tests --filter=triage.n3 > $@
+testmeta.n3 : rdfcore-tests.n3 triage.n3
+	$P $C rdfcore-tests.n3 --filter=triage.n3 > $@
 
 rdfcore-tests.sh: rdfcore-tests.n3 gentest.n3
 	$P $C rdfcore-tests.n3 gentest.n3 -think --strings | sed -e 's?http://www.w3.org?/devel/WWW?g' > $@

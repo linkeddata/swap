@@ -41,9 +41,10 @@ from uripath import refTo, join
 import uripath
 import RDFSink
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
-from RDFSink import  LITERAL, LITERAL_DT, LITERAL_LANG, ANONYMOUS, SYMBOL
+from RDFSink import  LITERAL, XMLLITERAL, LITERAL_DT, LITERAL_LANG, ANONYMOUS, SYMBOL
 from RDFSink import Logic_NS
 import diag
+from xmlC14n import Canonicalize
 
 from why import BecauseOfData, becauseSubexpression
 
@@ -1545,6 +1546,12 @@ B   Turn any blank node into a existentially qualified explicitly named node.
         singleLine = "n" in self._flags
         if ty == LITERAL:
 	    return stringToN3(value, singleLine=singleLine, flags = self._flags)
+
+        if ty == XMLLITERAL:
+	    st = Canonicalize(value, None, unsuppressedPrefixes=['foo'])
+	    st = stringToN3(st, singleLine=singleLine, flags=self._flags)
+	    return st + "^^" + self.representationOf(context, (SYMBOL,
+		    "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"))
 
         if ty == LITERAL_DT:
 	    s, dt = value

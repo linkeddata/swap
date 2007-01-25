@@ -2,7 +2,7 @@
 
 # The year being processed, typically this year
 
-YYYY=2004
+YYYY=2006
 
 PERL=perl
 PYTHON=python
@@ -20,7 +20,7 @@ CAL=$W/2002/12/cal
 #
 ICAL=$(HOME)/Library/Calendars
 ITUNES=$(HOME)/Music/iTunes/iTunes\ Music
-IPHOTO=$(HOME)/Pictures/iPhoto\ Library
+IPHOTO=$(HOME)/Pictures/2006\ iPhoto\ Library
 SLIFE=$(HOME)/Documents/SemLife
 DOCYYYY=$(HOME)/Documents/$(YYYY)
 
@@ -30,6 +30,9 @@ include $(UMLP)/XSLTPROC.mak
 
 .xml.rdf:
 	$(XSLTPROC) --novalid $(UMLP)/dia2owl.xsl $< > $@
+
+.plist.rdf:
+	$(XSLTPROC) --novalid $(SWAP)/util/plist2rdf.xsl $< > $@
 
 .n3.rdf:
 	$(PYTHON) $(CWM) $< --rdf >$@
@@ -80,7 +83,7 @@ calIntFig.png: calIntFig.dot
 
 # Semantic Web Life
 
-slife: $(DOCYYYY)/PhotoMeta.n3 $(ICAL)/Photos.ics
+slife: $(SLIFE)/iPhotoAlbumData.rdf $(DOCYYYY)/PhotoMeta.n3 $(ICAL)/Photos.ics
 
 $(SLIFE):
 	mkdir $(SLIFE)
@@ -94,6 +97,13 @@ $(SLIFE)/PhotoCalendar.cal3: $(DOCYYYY)/PhotoMeta.n3 PhotoEvent.n3
 
 $(ICAL)/Photos.ics: $(SLIFE)/PhotoCalendar.cal3 toIcal.py
 	PYTHONPATH=..:$(CAL) $(PYTHON) toIcal.py $(SLIFE)/PhotoCalendar.cal3 > $@
+	
+
+# iPhoto
+
+$(SLIFE)/iPhotoAlbumData.rdf : $(SLIFE) $(IPHOTO)/AlbumData.xml $(SWAP)/util/plist2rdf.xsl
+	$(XSLTPROC) --novalid $(SWAP)/util/plist2rdf.xsl $(IPHOTO)/AlbumData.xml > $@
+
 
 clean:
 	$(RM) $(PIMTEST)/testCal.rdf $(PIMTEST)/testTasks.rdf ,chi.rdf ical.n3 ical.rdf

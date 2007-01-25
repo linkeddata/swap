@@ -64,12 +64,14 @@ def urlopenForRDF(addr, referer=None):
     This is now uses urllib2.urlopen(), in order to get better error handling
     """
 
+    if diag.chatty_flag > 7: progress("Accessing: " + addr)
     if sandBoxed():
         if addr[:5] == 'file:':
             raise SecurityError('Nice try')
     addr = cacheHack(addr) # @@ hack
     if addr[:5] == 'data:':
-        return urllib.urlopen(addr)
+#        return open_data(addr)
+        return urllib.urlopen(addr)   # buggy in 2.4.2 with CStringIO
     z = urllib2.Request(addr)
     z.add_header('Accept', 'text/rdf+n3, application/rdf+xml')
     if referer: #consistently misspelt
@@ -220,6 +222,74 @@ def loadMany(store, uris, openFormula=None):
 	F.reopen()  # should not be necessary
 	store.load(u, openFormula=F, remember=0)
     return F.close()
+    
+    
+    
+# @@@@@@@@@@@@@ Ripped from python2.4/lib/urllib which is buggy
+
+
+#  File "/devel/WWW/2000/10/swap/webAccess.py", line 104, in load
+#    netStream = urlopenForRDF(addr, referer)
+#  File "/devel/WWW/2000/10/swap/webAccess.py", line 72, in urlopenForRDF
+#    return urllib.urlopen(addr)
+#  File "/sw/lib/python2.4/urllib.py", line 77, in urlopen
+#    return opener.open(url)
+#  File "/sw/lib/python2.4/urllib.py", line 185, in open
+#    return getattr(self, name)(url)
+#  File "/sw/lib/python2.4/urllib.py", line 559, in open_data
+#    f.fileno = None     # needed for addinfourl
+#AttributeError: 'cStringIO.StringI' object has no attribute 'fileno'
+# $ cwm 'data:text/rdf+n3;charset=utf-8;base64,QHByZWZpeCBsb2c6IDxodHRwOi8vd3d3LnczLm9yZy8yMDAwLzEwL3N3YXAvbG9nIz4gLgp7fSA9PiB7OmEgOmIgOmN9IC4g'
+
+# Found the bug in python bug traker.
+# http://sourceforge.net/tracker/index.php?func=detail&aid=1365984&group_id=5470&atid=105470
+# "Fixed in revision 41548 and 41549 (2.4). by birkenfeld"
+# It is in effect fixed in python 2.4.4 
+
+def open_data(url, data=None):
+    """Use "data" URL."""
+    # ignore POSTed data
+    #
+    # syntax of data URLs:
+    # dataurl   := "data:" [ mediatype ] [ ";base64" ] "," data
+    # mediatype := [ type "/" subtype ] *( ";" parameter )
+    # data      := *urlchar
+    # parameter := attribute "=" value
+    import mimetools, time
+    from StringIO import StringIO
+    try:
+	[type, data] = url.split(',', 1)
+    except ValueError:
+	raise IOError, ('data error', 'bad data URL')
+    if not type:
+	type = 'text/plain;charset=US-ASCII'
+    semi = type.rfind(';')
+    if semi >= 0 and '=' not in type[semi:]:
+	encoding = type[semi+1:]
+	type = type[:semi]
+    else:
+	encoding = ''
+    msg = []
+    msg.append('Date: %s'%time.strftime('%a, %d %b %Y %T GMT',
+					time.gmtime(time.time())))
+    msg.append('Content-type: %s' % type)
+    if encoding == 'base64':
+	import base64
+	data = base64.decodestring(data)
+    else:
+	data = unquote(data)
+    msg.append('Content-length: %d' % len(data))
+    msg.append('')
+    msg.append(data)
+    msg = '\n'.join(msg)
+    f = StringIO(msg)
+    headers = mimetools.Message(f, 0)
+    f.fileno = None     # needed for addinfourl
+    return urllib.addinfourl(f, headers, url)
+
+
+    
+    
     
     
 #@@@@@@@@@@  Junk - just to keep track iof the interface to sandros stuff and rdflib

@@ -92,6 +92,11 @@ import xml.sax._exceptions
 from xml.sax.saxutils import quoteattr
 from xml.sax.handler import feature_namespaces
 
+
+XMLLiteralsAsDomTrees = 1
+if XMLLiteralsAsDomTrees: 
+    import xml.dom  # for XMLLiterals
+
 import RDFSink
 from RDFSink import FORMULA,  ANONYMOUS, NODE_MERGE_URI
 
@@ -101,7 +106,7 @@ STATE_OUTERMOST =   "outermost level"     # Before <rdf:RDF>
 STATE_NOT_RDF =     "not RDF"     # Before <rdf:RDF>
 STATE_NO_SUBJECT =  "no context"  # @@@@@@@@@ use numbers for speed
 STATE_DESCRIPTION = "Description (have subject)" #
-STATE_LITERAL =     "within literal"
+STATE_LITERAL =     "within XML literal"
 STATE_VALUE =       "plain value"
 STATE_NOVALUE =     "no value"     # We already have an object, another would be error
 STATE_LIST =        "within list"
@@ -144,6 +149,10 @@ class RDFHandler(xml.sax.ContentHandler):
 
     def __init__(self, sink, openFormula, thisDoc, baseURI=None, flags="", why=None):
         self.testdata = ""
+	if XMLLiteralsAsDomTrees:
+	    self.domImplementation = xml.dom.getDOMImplementation()
+	    self.domDocument = None
+	    self.domElement = None
 	self.flags = flags
         self._stack =[]  # Stack of states
         self._nsmap = [] # stack of namespace bindings
@@ -186,6 +195,10 @@ class RDFHandler(xml.sax.ContentHandler):
 
 
     def characters(self, data):
+	if XMLLiteralsAsDomTrees and (self._state == STATE_LITERAL):
+	    t = self.domDocument.createTextNode(data)
+	    self.domElement.appendChild(t)
+	    return
         if self._state == STATE_VALUE or \
            self._state == STATE_LITERAL:
             self.testdata += data
@@ -408,6 +421,9 @@ class RDFHandler(xml.sax.ContentHandler):
 	x = self._base.find("#")
 	if x >= 0: self._base = self._base[:x] # See rdf-tests/rdfcore/xmlbase/test013.rdf
 	
+	tagURI = uripath.join(self._base, tagURI)  # If relative, make absolute. Not needed for standard.
+					     # Needed for portable RDF generated with --rdf=z 
+	
 	self._language = attrs.get((XML_NS_URI, "lang"), None)
 
 	value = attrs.get((RDF_NS_URI, "datatype"), None)
@@ -499,7 +515,11 @@ class RDFHandler(xml.sax.ContentHandler):
                         self.LiteralNS = [{}]
                         self.testdata = '' #"@@sax2rdf.py bug@@" # buggy implementation
 			self._datatype = self.sink.newSymbol("http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral")
-#			raise RuntimeError("This version of sax2rdf.py does not support parseType=Literal.")
+			if XMLLiteralsAsDomTrees:
+			    self.domDocument = self.domImplementation.createDocument(
+				'http://www.w3.org/1999/02/22-rdf-syntax-ns', 'envelope', None)
+			    self.domElement = self.domDocument.documentElement
+			    
 		    else:
 			raise SyntaxError("Unknown parse type '%s'" % value )
                 elif name == "nodeID":
@@ -599,7 +619,11 @@ class RDFHandler(xml.sax.ContentHandler):
 
         elif self._state == STATE_LITERAL:
             self._litDepth = self._litDepth + 1
-            self.literal_element_start(name, qname, attrs)
+	    if XMLLiteralsAsDomTrees:
+#	        progress("@@@ XML literal name: ", name)
+		self.literal_element_start_DOM(name, qname, attrs)
+	    else:
+		self.literal_element_start(name, qname, attrs)
             #@@ need to capture the literal
         else:
             raise RuntimeError, ("Unknown state in RDF parser", self._stack) # Unknown state
@@ -623,14 +647,29 @@ class RDFHandler(xml.sax.ContentHandler):
             if self._litDepth == 0:
                 buf = self.testdata
                 self._datatype = self.sink.newSymbol("http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral")
-                self.sink.makeStatement(( self._context,
-                                          self._predicate,
-                                          self._subject,
-                                          self.sink.newLiteral(buf, self._datatype) ), why=self._reason2)
-                self.testdata = ""
+		if XMLLiteralsAsDomTrees:
+		    e = self.domDocument.documentElement.firstChild
+		    while e.nodeType == e.TEXT_NODE:
+			e = e.nextSibling
+		    self.sink.makeStatement(( self._context,
+					      self._predicate,
+					      self._subject,
+					      self.sink.newXMLLiteral(e) ),
+					       why=self._reason2)
+		    self.domDocument = None
+		    self.domElement = None
+		else:
+		    self.sink.makeStatement(( self._context,
+					      self._predicate,
+					      self._subject,
+					      self.sink.newLiteral(buf, self._datatype) ), why=self._reason2)
+		self.testdata = ""
 
             else:
-                self.literal_element_end(name, qname)
+		if XMLLiteralsAsDomTrees:
+		    self.literal_element_end_DOM(name, qname)
+		else:
+		    self.literal_element_end(name, qname)
                 self._stack.pop()
                 return # don't pop state
             
@@ -708,7 +747,14 @@ class RDFHandler(xml.sax.ContentHandler):
             for ns in [name] + attrs.keys():
                 ns = ns[0]
                 if not ns in declared:
-                    prefix = nsMap[ns]
+                    prefix = nsMap.get(ns, None)
+		    if prefix is None:
+			columnNumber = self._p.getColumnNumber()
+			lineNumber = self._p.getLineNumber()
+			where = "Undefined namespace '%s' parsing XML at column %i in line %i of <%s>\n\t" % (
+				    ns, columnNumber, lineNumber, self._thisDoc)
+			raise SyntaxError(where + sys.exc_info()[1].__str__())
+
                     declared[ns] = prefix
                     if prefix:
                         self.testdata += (' xmlns:%s="%s"' % (prefix, ns))
@@ -725,6 +771,26 @@ class RDFHandler(xml.sax.ContentHandler):
             self.testdata += (' %s=%s' % (name, quoteattr(value)))
         self.testdata += ">"
         
+    def literal_element_start_DOM(self, name, qname, attrs):
+
+        declared = self.LiteralNS[-1].copy()
+        self.LiteralNS.append(declared)
+        nsMap = self._prefixMap[-1]
+        if name[0]:
+	    e = self.domDocument.createElementNS(name[0], name[1])
+#	    progress("@@@ XML literal name: ", name)
+	else:
+	    e = self.domDocument.createElement(name[1])
+	self.domElement.appendChild(e)
+	self.domElement = e
+
+        for (name, value) in attrs.items():
+            if name[0]:
+		e.setAttributeNS(name[0],name[1], value)
+            else:
+		e.setAttribute(name[1], value) #@@@ Missing prefix on qname
+		#@@@ may need calculating as in the non-dom case, alas.
+        
     def literal_element_end(self, name, qname):
         if name[0]:
             prefix = self._prefixMap[-1][name[0]]
@@ -736,6 +802,9 @@ class RDFHandler(xml.sax.ContentHandler):
             end = u"</%s>" % name[1]
         self.testdata += end
         self.LiteralNS.pop()
+
+    def literal_element_end_DOM(self, name, qname):
+	self.domElement = self.domElement.parentNode
 
 
 
@@ -800,6 +869,35 @@ class RDFXMLParser(RDFHandler):
         self.flush()
         self.sink.endDoc(self._formula)
 	return self._formula
+
+
+class XMLDOMParser(RDFXMLParser):
+    """XML DOM to RDF Graph parser based on sax XML interface"""
+
+
+    def __init__(self, sink, openFormula, thisDoc=None,  flags="", why=None):
+        RDFHandler.__init__(self, sink, openFormula, thisDoc, flags=flags,
+	    why=why)
+
+        RDFXMLParser.__init__(self, sink, openFormula, thisDoc=thisDoc,  flags=flags, why=why)
+	    
+	self._state = STATE_LITERAL
+	self._litDepth = 1
+	self.LiteralNS = [{}]
+	self.testdata = ''
+	self._datatype = self.sink.newSymbol("http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral")
+	self.domDocument = self.domImplementation.createDocument(
+	    'http://www.w3.org/1999/02/22-rdf-syntax-ns', 'envelope', None) # @@ get rid of this somehow
+	self.domElement = self.domDocument.documentElement
+	self._subject = self.sink.newSymbol(thisDoc)
+	self.sink.makeStatement(( self._context,
+				self.sink.newSymbol(pred),
+				self._subject,
+				self.sink.newSymbol(self.uriref(obj)) ), why=self._reason2)
+	
+
+
+
 
 class BadSyntax(SyntaxError):
     def __init__(self, info, message):

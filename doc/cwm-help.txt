@@ -12,7 +12,7 @@ steps, in order left to right:
 --n3          Input &amp; Output in N3 from now on. (Default)
 --rdf=flags   Input &amp; Output ** in RDF and set given RDF flags
 --n3=flags    Input &amp; Output in N3 and set N3 flags
---ntriples    Input &amp; Output in NTriples (equiv --n3=uspartane -bySubject -quiet)
+--ntriples    Input &amp; Output in NTriples (equiv --n3=usbpartane -bySubject -quiet)
 --language=x  Input &amp; Output in "x" (rdf, n3, etc)  --rdf same as: --language=rdf
 --languageOptions=y     --n3=sp same as:  --language=n3 --languageOptions=sp
 --ugly        Store input and regurgitate, data only, fastest *
@@ -32,6 +32,7 @@ steps, in order left to right:
 --think       as -rules but continue until no more rule matches (or forever!)
 --engine=otter use otter (in your $PATH) instead of llyn for linking, etc
 --why         Replace the store with an explanation of its contents
+--why=u       proof tries to be shorter
 --mode=flags  Set modus operandi for inference (see below)
 --reify       Replace the statements in the store with statements describing them.
 --dereify     Undo the effects of --reify
@@ -78,7 +79,8 @@ the closure under the operation of looking up:
  i   any owl:imports documents
  r   any doc:rules documents
  E   errors are ignored --- This is independant of --mode=E
- 
+
+ n   Normalize IRIs to URIs
  e   Smush together any nodes which are = (owl:sameAs)
 
 See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
@@ -95,13 +97,17 @@ i   Use identifiers from store - don't regen on output
 l   List syntax suppression. Don't use (..)
 n   No numeric syntax - use strings typed with ^^ syntax
 p   Prefix suppression - don't use them, always URIs in &lt;> instead of qnames.
-q   Quiet - don't make comments about the environment in which processing was done.
+q   Quiet - don't output comments about version and base URI used.
 r   Relative URI suppression. Always use absolute URIs.
 s   Subject must be explicit for every statement. Don't use ";" shorthand.
 t   "this" and "()" special syntax should be suppresed.
 u   Use \u for unicode escaping in URIs instead of utf-8 %XX
-v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSome".
+v   Use  "this log:forAll" for @forAll, and "this log:forAll" for "@forSome".
 /   If namespace has no # in it, assume it ends at the last slash if outputting.
+
+Flags for N3 input:
+
+B   Turn any blank node into a existentially qualified explicitly named node.
 
 
 Flags to control RDF/XML output (after --rdf=) areas follows:

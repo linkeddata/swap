@@ -1474,14 +1474,102 @@ class Literal(Term):
         return self.asHashURI() #something of a kludge?
         #return  LITERAL_URI_prefix + uri_encode(self.representation())    # tbl preferred
 
-##    def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
-##	"""Unify this which may contain variables with the other,
-##	    which may contain existentials but not variables.
-##	    Return [] if impossible.
-##	    Return [(var1, val1), (var2,val2)...] if match"""
-##	if self is other: return [({}, None)]
-##	return []
+from xmlC14n import Canonicalize # http://dev.w3.org/cvsweb/2001/xmlsec-python/c14n.py?rev=1.10
+
+class XMLLiteral(Literal):
+    """ A Literal is a representation of an RDF literal
+
+    really, data:text/rdf+n3;%22hello%22 == "hello" but who
+    wants to store it that way?  Maybe we do... at least in theory and maybe
+    practice but, for now, we keep them in separate subclases of Term.
+    An RDF literal has a value - by default a string, and a datattype, and a
+    language.
+    """
+
+
+    def __init__(self, store, dom):
+        Term.__init__(self, store)
+        self.dom = dom    #  n3 notation EXcluding the "  "
+	self.string = None  # Only made when needed but then cached
+	self.datatype = store.symbol("http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral")
+#	assert dt is None or isinstance(dt, Fragment)
+	self.lang=None
+
+    def __str__(self):
+	if not self.string:
+	    self.string = Canonicalize(self.dom, None, exclude=1) 
+	return self.string 
+
+    def __int__(self):
+	return int(self.__str__())
+
+    def __float__(self):
+	return float(self.__str__())
+
+    def __decimal__(self):
+        return Decimal(self.__str__())
+
+    def occurringIn(self, vars):
+	return Set()
+
+    def __repr__(self):
+        return '"' + self.string[0:7] + '...' + self.string[-4:] + '"'
+#        return self.string
+
+    def asPair(self):
+	return (XMLLITERAL, self.dom)
+	    
+    def classOrder(self):
+	return	1.5
+
+    def compareTerm(self, other):
+	"Assume is also a literal - see function compareTerm in formula.py"
+	if self.datatype == other.datatype:
+	    diff = cmp(str(self), str(other))
+	    return diff
+	    return cmp(self.lang, other.lang)
+	else:
+	    if self.datatype == None: return -1
+	    if other.datatype == None: return 1
+	    return self.datatype.compareAnyTerm(other.datatype)
+
+    def asHashURI(self):
+        """return a md5: URI for this literal.
+        Hmm... encoding... assuming utf8? @@test this.
+        Hmm... for a class of literals including this one,
+        strictly speaking."""
+        x=md5.new()
+        x.update(self.__str__())
+        d=x.digest()
+        b16=binascii.hexlify(d)
+        return "md5:" + b16
+
+    def substitution(self, bindings, why=None, cannon=False):
+	"Return this or a version of me with subsitution made"
+	return self
+
+    def substituteEquals(self, bindings, newBindings):
+	"Return this or a version of me with subsitution made"
+	return self
+
+    def representation(self, base=None):
+        return '"' + str(self) + '"' 
+	# @@@ encode quotes; @@@@ strings containing \n
+
+    def value(self):
+	"""Datatype conversion XSD to Python
 	
+	The internal reopresentation is the dom tree
+	"""
+	return self.dom
+
+    def uriref(self):
+        # Unused at present but interesting! 2000/10/14
+        # used in test/sameTerm.n3 testing 2001/07/19
+        return self.asHashURI() #something of a kludge?
+        #return  LITERAL_URI_prefix + uri_encode(self.representation())    # tbl preferred
+
+
 
 #class Integer(Literal):
 #	"""Unused"""

@@ -75,7 +75,7 @@ import diag  # problems importing the tracking flag,
 from diag import progress, verbosity, tracking
 from term import BuiltIn, LightBuiltIn, RDFBuiltIn, HeavyBuiltIn, Function, \
     MultipleFunction, ReverseFunction, MultipleReverseFunction, \
-    Literal, Symbol, Fragment, FragmentNil, Term, LabelledNode, \
+    Literal, XMLLiteral, Symbol, Fragment, FragmentNil, Term, LabelledNode, \
     CompoundTerm, List, EmptyList, NonEmptyList, AnonymousNode, N3Set
 from formula import Formula, StoredStatement
 import reify
@@ -1016,7 +1016,8 @@ class BI_semanticsWithImportsClosure(HeavyBuiltIn, Function):
         F = F.close()
         store.storeQuad((store._experience, store.semanticsWithImportsClosure, doc, F))
         return F
-    
+	
+import httplib    
 class BI_semanticsOrError(BI_semantics):
     """ Either get and parse to semantics or return an error message on any error """
     def evalObj(self, subj, queue, bindings, proof, query):
@@ -1028,10 +1029,11 @@ class BI_semanticsOrError(BI_semantics):
             return x
         try:
             return BI_semantics.evalObj(self, subj, queue, bindings, proof, query)
-        except (IOError, SyntaxError, DocumentAccessError, xml.sax._exceptions.SAXParseException):
+        except (IOError, SyntaxError, DocumentAccessError,
+		xml.sax._exceptions.SAXParseException, httplib.BadStatusLine):
             message = sys.exc_info()[1].__str__()
             result = store.intern((LITERAL, message))
-            if diag.chatty_flag > 0: progress(`store.semanticsOrError`+": Error trying to resolve <" + `subj` + ">: "+ message) 
+            if diag.chatty_flag > 0: progress(`store.semanticsOrError`+": Error trying to access <" + `subj` + ">: "+ message) 
             store.storeQuad((store._experience,
                              store.semanticsOrError,
                              subj,
@@ -1057,6 +1059,10 @@ class BI_content(HeavyBuiltIn, Function):
             return None
         
         str = netStream.read() # May be big - buffered in memory!
+#	try:
+	str = str.decode('utf-8')
+#	except :
+#	    progress('UTF-8 encoding asumed but fails for '+inputURI)
         C = store.intern((LITERAL, str))
         store.storeQuad((store._experience,
                          store.content,
@@ -1226,7 +1232,9 @@ class BI_conjunction(LightBuiltIn, Function):      # Light? well, I suppose so.
 	else: reason = None
         for x in subj_py:
             if not isinstance(x, Formula): return None # Can't
-
+	    if (x.canonical == None): # Not closed! !!
+	        F.canonical != None
+		progress("Conjunction input NOT CLOSED:"+`x`) #@@@
             self.store.copyFormula(x, F, why=reason)   #  No, that is 
             if diag.chatty_flag > 74:
                 progress("    Formula %s now has %i" % (`F`,len(F.statements)))
@@ -1473,6 +1481,10 @@ class RDFStore(RDFSink) :
 	result = Literal(self, str, dt, lang)
 	self.resources[key] = result
 	return result
+	
+    def newXMLLiteral(self, dom):
+        # We do NOT intern these so they will NOT have 'is' same as '=='
+	return XMLLiteral(self, dom)
 	
     def newFormula(self, uri=None):
 	return IndexedFormula(self, uri)

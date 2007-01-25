@@ -284,7 +284,7 @@ z  - Allow relative URIs for namespaces
                  start_tag = obj[1]
             else:
                  start_tag = RDF_NS_URI+'Description'
-#            progress("@@@@@@@@@@@@ Start tag: %s" % start_tag)    
+#            progress("@@ Start tag: %s" % start_tag)    
 	    if subj[0] == SYMBOL or subj[0] == ANONYMOUS:
 		nid = self._nodeID.get(subj, None)
 		if nid == None:
@@ -309,7 +309,7 @@ z  - Allow relative URIs for namespaces
 		attrs = []  # Literal
 		if type(v) is type((1,1)):
 		    v, dt, lang = v
-		    if dt != None: attrs.append((RDF_NS_URI+' datatype', dt))
+		    if dt != None: attrs.append((RDF_NS_URI+'datatype', dt))
 		    if lang != None: attrs.append((XML_NS_URI+' lang', lang))
 		self._xwr.startElement(RDF_NS_URI+'Description',
 				    [], self.prefixes)
@@ -322,6 +322,7 @@ z  - Allow relative URIs for namespaces
 	    nid = self._nodeID.get(obj, None)
 	    if nid == None:
 		objn = self.referenceTo( obj[1])
+		progress("@@@ objn=%s, obj[1]=%s" %(objn, obj[1]))
 		nid2 = self._nodeID.get(pred, None)
 		if nid2 is None:
                     self._xwr.emptyElement(pred[1], [(RDF_NS_URI+' resource', objn)], self.prefixes)
@@ -467,7 +468,7 @@ z  - Allow relative URIs for namespaces
 		self._xwr.endElement()
 	    nid = self._nodeID.get(subj, None)
 	    if nid == None:
-		progress("@@@@@@Start anonymous node but not nodeID?", subj)
+		progress("@@@Start anonymous node but not nodeID?", subj)
 		subjn = self.referenceTo( subj[1])
 		self._xwr.startElement(RDF_NS_URI + 'Description',
 				    ((RDF_NS_URI+' about', subjn),), self.prefixes)
@@ -633,7 +634,7 @@ class XMLWriter:
                 self._encwr("   ")
 	    self._encwr(" %s=\"" % (n, ))
 	    if type(v) is type((1,1)):
-		progress("@@@@@@ toXML.py 382: ", `v`)
+#		progress("@@@@@@ toXML.py 382: ", `v`)
 		v = `v`
             xmldata(self._encwr, v, self.attrEsc)
             self._encwr("\"")
@@ -829,7 +830,7 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
         if self._modes[-1] == tm.FORMULA or self._modes[-1] == tm.ANONYMOUS:
             self._parts[-1] = self._parts[-1] + 1
             if self._parts[-1] > 3:
-                raise ValueError('Try ending the statement')
+                raise ValueError('Too many parts in statement: Try ending the statement')
             if node is not None:
                 #print node, '+', self._triples, '++', self._parts
                 if self._parts[-1] == tm.PREDICATE and self._predIsOfs[-1] == tm.STALE:
@@ -975,7 +976,7 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
                 elif pred == self.forAll:
                     formula.declareUniversal(obj)
                 else:
-                    raise ValueError("This is useless!")
+                    raise ValueError("Internal error: unknown quntifier with '@this'")
             else:
                 formula.add(subj, pred, obj)
         self._parts[-1] = tm.NOTHING
@@ -992,10 +993,10 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
         self.addNode(a)
     
     def beginFormula(self):
-        raise ValueError("How do you intend to do that?")
+        raise ValueError("The XML serializer does not support nested graphs.")
 
     def endFormula(self):
-        raise ValueError("Try beginning a formula first")
+        raise ValueError("The XML serializer does not support nested graphs.")
 
     def beginList(self):
         self.lists.append(0)

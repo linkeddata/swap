@@ -266,12 +266,15 @@ def canonical(str_in):
     
     There are many differenet levels of URI canonicalization
     which are possible.  See http://www.ietf.org/rfc/rfc3986.txt
-    Things we haven't put in this yet are
-    - de-escaping ALPHA etc if escaped  (Sect 2.4) ALPHA (%41-%5A and %61-%7A),
-     DIGIT (%30-%39), hyphen (%2D), period (%2E),
-   underscore (%5F), or tilde (%7E)
-    - making all escapes uppercase hexadecimal
-    - making scheme lowercase
+    Done:
+    - Converfting unicode IRI to utf-8
+    - Escaping all non-ASCII
+    - De-escaping, if escaped, ALPHA (%41-%5A and %61-%7A), DIGIT (%30-%39),
+      hyphen (%2D), period (%2E), underscore (%5F), or tilde (%7E) (Sect 2.4) 
+    - Making all escapes uppercase hexadecimal
+    Not done:
+    - Making URI scheme lowercase
+    - changing /./ or  /foo/../ to / with care not to change host part
     
     
     >>> canonical("foo bar")
@@ -456,7 +459,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.19  2006-11-09 22:44:12  connolly
+# Revision 1.20  2007-01-25 20:26:50  timbl
+# @@@ BEWARE UNTESTED PARTIAL VERSION -- Introducing XML Literals as DOM objects
+#
+# Revision 1.19  2006/11/09 22:44:12  connolly
 # start base with file:// rather than just file:/
 # for interop with xsltproc
 #

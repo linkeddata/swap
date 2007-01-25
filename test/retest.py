@@ -64,7 +64,7 @@ no_action = 0
 
 def localize(uri):
     """Get URI relative to where this lives"""
-    import uripath
+    from swap import uripath
     return uripath.refTo("http://www.w3.org/2000/10/swap/test/retest.py", uri)
 
 def problem(str):

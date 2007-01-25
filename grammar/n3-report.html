@@ -11,13 +11,23 @@
   </p>
   <dl>
   <dt><a name='barename'>barename</a></dt><dd>
-	<p><em>[a-zA-Z_][a-zA-Z0-9_]*</em></p>
+	<p><em>[A-Z_a-zÀ-ÖØ-öø-˿Ͱ-ͽͿ-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿][\-0-9A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿-⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿]*</em></p>
+	</dd>
+  <dt><a name='boolean'>boolean</a></dt><dd>
+		<p><b><code>"@false"</code></b></p>
+		<p><b><code>"@true"</code></b></p>
+	</dd>
+  <dt><a name='decimal'>decimal</a></dt><dd>
+	<p><em>[-+]?[0-9]+(\.[0-9]+)?</em></p>
 	</dd>
   <dt><a name='declaration'>declaration</a></dt><dd>
 		<p><b><code>"@prefix"</code></b> <a href='#prefix'>prefix</a> <a href='#explicituri'>explicituri</a></p>
 	</dd>
   <dt><a name='document'>document</a></dt><dd>
 		<p><a href='#statements_optional'>statements_optional</a> <em>EOF</em></p>
+	</dd>
+  <dt><a name='double'>double</a></dt><dd>
+	<p><em>[-+]?[0-9]+(\.[0-9]+)?([eE][-+]?[0-9]+)</em></p>
 	</dd>
   <dt><a name='dtlang'>dtlang</a></dt><dd>
 		<p><b><code>"@"</code></b> <a href='#langcode'>langcode</a></p>
@@ -29,9 +39,14 @@
   <dt><a name='explicituri'>explicituri</a></dt><dd>
 	<p><em><[^>]*></em></p>
 	</dd>
+  <dt><a name='expression'>expression</a></dt><dd>
+		<p><a href='#pathitem'>pathitem</a> <a href='#pathtail'>pathtail</a></p>
+	</dd>
   <dt><a name='formulacontent'>formulacontent</a></dt><dd>
 		<p><a href='#statementlist'>statementlist</a></p>
-		<p><em>void</em></p>
+	</dd>
+  <dt><a name='integer'>integer</a></dt><dd>
+	<p><em>[-+]?[0-9]+</em></p>
 	</dd>
   <dt><a name='langcode'>langcode</a></dt><dd>
 	<p><em>[a-z]+(-[a-z0-9]+)*</em></p>
@@ -39,40 +54,39 @@
   <dt><a name='literal'>literal</a></dt><dd>
 		<p><a href='#string'>string</a> <a href='#dtlang'>dtlang</a></p>
 	</dd>
-  <dt><a name='node'>node</a></dt><dd>
-		<p><a href='#literal'>literal</a></p>
-		<p><a href='#numericliteral'>numericliteral</a></p>
-		<p><a href='#symbol'>symbol</a></p>
-		<p><a href='#variable'>variable</a></p>
-		<p><b><code>"("</code></b> <a href='#pathlist'>pathlist</a> <b><code>")"</code></b></p>
-		<p><b><code>"@this"</code></b></p>
-		<p><b><code>"["</code></b> <a href='#propertylist'>propertylist</a> <b><code>"]"</code></b></p>
-		<p><b><code>"{"</code></b> <a href='#formulacontent'>formulacontent</a> <b><code>"}"</code></b></p>
-	</dd>
   <dt><a name='numericliteral'>numericliteral</a></dt><dd>
-	<p><em>[-+]?[0-9]+(\.[0-9]+)?(e[-+]?[0-9]+)?</em></p>
+		<p><a href='#decimal'>decimal</a></p>
+		<p><a href='#double'>double</a></p>
+		<p><a href='#integer'>integer</a></p>
 	</dd>
   <dt><a name='object'>object</a></dt><dd>
-		<p><a href='#path'>path</a></p>
+		<p><a href='#expression'>expression</a></p>
 	</dd>
   <dt><a name='objecttail'>objecttail</a></dt><dd>
 		<p><b><code>","</code></b> <a href='#object'>object</a> <a href='#objecttail'>objecttail</a></p>
 		<p><em>void</em></p>
 	</dd>
-  <dt><a name='path'>path</a></dt><dd>
-		<p><a href='#node'>node</a> <a href='#pathtail'>pathtail</a></p>
+  <dt><a name='pathitem'>pathitem</a></dt><dd>
+		<p><a href='#boolean'>boolean</a></p>
+		<p><a href='#literal'>literal</a></p>
+		<p><a href='#numericliteral'>numericliteral</a></p>
+		<p><a href='#quickvariable'>quickvariable</a></p>
+		<p><a href='#symbol'>symbol</a></p>
+		<p><b><code>"("</code></b> <a href='#pathlist'>pathlist</a> <b><code>")"</code></b></p>
+		<p><b><code>"["</code></b> <a href='#propertylist'>propertylist</a> <b><code>"]"</code></b></p>
+		<p><b><code>"{"</code></b> <a href='#formulacontent'>formulacontent</a> <b><code>"}"</code></b></p>
 	</dd>
   <dt><a name='pathlist'>pathlist</a></dt><dd>
-		<p><a href='#path'>path</a> <a href='#pathlist'>pathlist</a></p>
+		<p><a href='#expression'>expression</a> <a href='#pathlist'>pathlist</a></p>
 		<p><em>void</em></p>
 	</dd>
   <dt><a name='pathtail'>pathtail</a></dt><dd>
-		<p><b><code>"!"</code></b> <a href='#path'>path</a></p>
-		<p><b><code>"^"</code></b> <a href='#path'>path</a></p>
+		<p><b><code>"!"</code></b> <a href='#expression'>expression</a></p>
+		<p><b><code>"^"</code></b> <a href='#expression'>expression</a></p>
 		<p><em>void</em></p>
 	</dd>
   <dt><a name='prefix'>prefix</a></dt><dd>
-	<p><em>([a-zA-Z_][a-zA-Z0-9_]*)?:</em></p>
+	<p><em>([A-Z_a-zÀ-ÖØ-öø-˿Ͱ-ͽͿ-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿][\-0-9A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿-⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿]*)?:</em></p>
 	</dd>
   <dt><a name='propertylist'>propertylist</a></dt><dd>
 		<p><a href='#verb'>verb</a> <a href='#object'>object</a> <a href='#objecttail'>objecttail</a> <a href='#propertylisttail'>propertylisttail</a></p>
@@ -83,7 +97,10 @@
 		<p><em>void</em></p>
 	</dd>
   <dt><a name='qname'>qname</a></dt><dd>
-	<p><em>(([a-zA-Z_][a-zA-Z0-9_]*)?:)?[a-zA-Z_][a-zA-Z0-9_]*</em></p>
+	<p><em>(([A-Z_a-zÀ-ÖØ-öø-˿Ͱ-ͽͿ-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿][\-0-9A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿-⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿]*)?:)?[A-Z_a-zÀ-ÖØ-öø-˿Ͱ-ͽͿ-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿][\-0-9A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿-⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿]*</em></p>
+	</dd>
+  <dt><a name='quickvariable'>quickvariable</a></dt><dd>
+	<p><em>\?[A-Z_a-zÀ-ÖØ-öø-˿Ͱ-ͽͿ-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿][\-0-9A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿-⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿]*</em></p>
 	</dd>
   <dt><a name='simpleStatement'>simpleStatement</a></dt><dd>
 		<p><a href='#subject'>subject</a> <a href='#propertylist'>propertylist</a></p>
@@ -110,7 +127,7 @@
 	<p><em>("""[^"\\]*(?:(?:\\.|"(?!""))[^"\\]*)*""")|("[^"\\]*(?:\\.[^"\\]*)*")</em></p>
 	</dd>
   <dt><a name='subject'>subject</a></dt><dd>
-		<p><a href='#path'>path</a></p>
+		<p><a href='#expression'>expression</a></p>
 	</dd>
   <dt><a name='symbol'>symbol</a></dt><dd>
 		<p><a href='#explicituri'>explicituri</a></p>
@@ -118,17 +135,14 @@
 	</dd>
   <dt><a name='universal'>universal</a></dt><dd>
 	</dd>
-  <dt><a name='variable'>variable</a></dt><dd>
-	<p><em>\?[a-zA-Z_][a-zA-Z0-9_]*</em></p>
-	</dd>
   <dt><a name='verb'>verb</a></dt><dd>
-		<p><a href='#path'>path</a></p>
+		<p><a href='#expression'>expression</a></p>
 		<p><b><code>"<="</code></b></p>
 		<p><b><code>"="</code></b></p>
 		<p><b><code>"=>"</code></b></p>
 		<p><b><code>"@a"</code></b></p>
-		<p><b><code>"@has"</code></b> <a href='#path'>path</a></p>
-		<p><b><code>"@is"</code></b> <a href='#path'>path</a> <b><code>"@of"</code></b></p>
+		<p><b><code>"@has"</code></b> <a href='#expression'>expression</a></p>
+		<p><b><code>"@is"</code></b> <a href='#expression'>expression</a> <b><code>"@of"</code></b></p>
 	</dd>
 
 </dl>

@@ -949,11 +949,11 @@ class Query(Formula):
         before = self.store.size
         _, delta = self.targetContext.loadFormulaWithSubstitution(
 		    self.conclusion, b2, why=reason, cannon=True)
-        if diag.chatty_flag>9 and delta:
+        if diag.chatty_flag>29 and delta:
             progress(" --- because of: %s => %s, with bindings %s" % (self.template.debugString(),
                                                                       self.conclusion.debugString(),
                                                                       b2))
-        if diag.chatty_flag> 30:
+        if diag.chatty_flag> 40:
             progress("Added %i, nominal size of store changed from %i to %i."%(delta, before, self.store.size))
         return delta #  self.store.size - before
 
@@ -1516,11 +1516,11 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 ##	    nbs = [({oldsubj: subj}, rea)]
 	    nbs = [(Env(), rea)]
 	else:
-            if isinstance(subj, Formula): subj = subj.n3String()
-            if isinstance(obj, Formula): obj = obj.n3String()
+#            if isinstance(subj, Formula): subj = subj.n3String()
+#            if isinstance(obj, Formula): obj = obj.n3String()
             #raise RuntimeError("Cannot do {%s} log:includes {%s} " % (subj, obj))
 	    progress("""Warning: Type error ignored on builtin:
-		log:include only on formulae """+`item`)
+		log:includes only on formulae """+`item`)
 		 #@@ was RuntimeError exception
 	    item.state = S_DONE
 	return nbs

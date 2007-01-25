@@ -76,6 +76,9 @@ class ContextSink(object):
     def newLiteral(self, s):
         return self.sink.newLiteral(s)
 
+    def newXMLLiteral(self, s):
+        return self.sink.newXMLLiteral(s)
+
     def newBlankNode(self):
         return self.sink.newBlankNode(self._context)
 

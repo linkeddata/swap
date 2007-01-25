@@ -7,7 +7,7 @@ import re
 
 version = "$Id$"[1:-1]
 
-import  notation3  # from http://www.w3.org/2000/10/swap/notation3.py
+from swap import notation3  # from http://www.w3.org/2000/10/swap/notation3.py
 
 global verbose
 global recursive

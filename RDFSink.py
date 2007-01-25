@@ -46,6 +46,7 @@ LITERAL = 2         # string, untyped RDF literal.  x[1] is a string or unicode 
 LITERAL_DT = 21     # typed RDF literal x[1] is a pair (string, datatype URI)
 LITERAL_LANG = 22   # Language RDF literal x[1] is a pair (string, langauge)
 ANONYMOUS = 3       # As SYMBOL except actual symbol is arbitrary, can be regenerated
+XMLLITERAL = 25	    # A DOM tree encases in a dummy document level
 
 
 # quanitifiers... @@it's misleading to treat these as predicates...
@@ -287,6 +288,9 @@ class RDFSink:
 	    return (LITERAL_LANG, (str, lang))
 	    # raise ValueError("This sink cannot accept values with languages")
 	return (LITERAL, str)
+
+    def newXMLLiteral(self, doc):
+	return (XMLLITERAL, doc)
 
     def newSymbol(self, uri):
 	return (SYMBOL, uri)

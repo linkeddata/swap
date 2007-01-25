@@ -149,7 +149,7 @@ class BI_objects(LightBuiltIn, Function):
         return N3Set([x.object() for x in subj])
 
 class BI_triples(LightBuiltIn, Function):
-    """Return the set of subjects used in a formula
+    """Return the set of triple used in a formula
 
     """
     def evalObj(self, subj, queue, bindings, proof, query):
