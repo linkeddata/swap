@@ -1,5 +1,4 @@
-    #RDF parsed by Id: sax2rdf.py,v 1.45 2005/10/24 16:58:38 timbl Exp 
-        @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+    @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
     @prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
     @prefix : <http://www.daml.org/2000/12/daml+oil#> .
@@ -16,8 +15,7 @@
     <animal.rdf#_L10C8>     :onProperty <animal.rdf#parent>;
          :cardinality "2" .
     
-    #RDF parsed by Id: sax2rdf.py,v 1.45 2005/10/24 16:58:38 timbl Exp 
-        @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+    @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
     @prefix : <http://www.w3.org/2002/07/owl#> .
     @prefix dpo: <http://www.w3.org/2002/07/owl#> .
     @prefix ex: <owl-ex.rdf#> .
@@ -182,8 +180,7 @@
     ex:_L142C4     rdf:first ex:Man;
          rdf:rest () .
     
-    #RDF parsed by Id: sax2rdf.py,v 1.45 2005/10/24 16:58:38 timbl Exp 
-        @prefix web: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+    @prefix web: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
     @prefix : <http://example.com/xmlns/aggregation-demo#> .
     
      @forSome <smush-examples.rdf#_L8C0> .

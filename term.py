@@ -1497,7 +1497,7 @@ class XMLLiteral(Literal):
 
     def __str__(self):
 	if not self.string:
-	    self.string = Canonicalize(self.dom, None, exclude=1) 
+	    self.string = Canonicalize(self.dom, None, unsuppressedPrefixes=[]) 
 	return self.string 
 
     def __int__(self):

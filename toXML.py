@@ -322,7 +322,7 @@ z  - Allow relative URIs for namespaces
 	    nid = self._nodeID.get(obj, None)
 	    if nid == None:
 		objn = self.referenceTo( obj[1])
-		progress("@@@ objn=%s, obj[1]=%s" %(objn, obj[1]))
+		# progress("@@@ objn=%s, obj[1]=%s" %(objn, obj[1]))
 		nid2 = self._nodeID.get(pred, None)
 		if nid2 is None:
                     self._xwr.emptyElement(pred[1], [(RDF_NS_URI+' resource', objn)], self.prefixes)
