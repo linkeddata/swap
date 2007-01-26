@@ -1,0 +1,15 @@
+#Processed by Id: cwm.py,v 1.190 2006/08/09 23:20:42 syosi Exp 
+        #    using base file:///devel/WWW/2000/10/swap/test/xml-syntax/xmllit.rdf
+        
+#  Notation3 generation by
+#       notation3.py,v 1.192 2007/01/25 20:26:50 timbl Exp
+
+#   Base was: file:///devel/WWW/2000/10/swap/test/xml-syntax/xmllit.rdf
+     @prefix : <#> .
+    @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+    
+    :John_Smith     <http://my.example.org/Name> """<html:h1 xmlns:html="http://NoHTML.example.org" xmlns:my="http://my.example.org/" my:thing="hello">
+        <b xmlns="http://www.w3.org/1999/xhtml"><i>John</i></b>
+      </html:h1>"""^^rdf:XMLLiteral .
+    
+#ENDS

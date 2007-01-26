@@ -35,6 +35,8 @@ import codecs # python 2-ism; for writing utf-8 in RDF/xml output
 import urllib
 import re
 
+from sax2rdf import XMLtoDOM # Incestuous.. would be nice to separate N3 and XML
+
 # SWAP http://www.w3.org/2000/10/swap
 from diag import verbosity, setVerbosity, progress
 from uripath import refTo, join
@@ -997,6 +999,10 @@ class SinkParser:
 		    res2 = []
 		    j = self.uri_ref2(str, j+2, res2) # Read datatype URI
 		    dt = res2[0]
+		    if dt.uriref() == "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral":
+			dom = XMLtoDOM(s)
+			res.append(self._store.newXMLLiteral(dom))
+			return j
                 res.append(self._store.newLiteral(s, dt, lang))
 		return j
 	    else:

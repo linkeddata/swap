@@ -53,11 +53,13 @@ from diag import progress
 from random import choice, seed
 seed(23)
 
+from xmlC14n import Canonicalize
+
 import RDFSink
 from set_importer import Set
 
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
-from RDFSink import FORMULA, LITERAL, LITERAL_DT, LITERAL_LANG, ANONYMOUS, SYMBOL
+from RDFSink import FORMULA, LITERAL, XMLLITERAL, LITERAL_DT, LITERAL_LANG, ANONYMOUS, SYMBOL
 from RDFSink import Logic_NS, NODE_MERGE_URI
 
 from isXML import isXMLChar, NCNameChar, NCNameStartChar, setXMLVersion, getXMLVersion
@@ -318,7 +320,8 @@ z  - Allow relative URIs for namespaces
 		self._xwr.endElement()
 	    else:
 		raise RuntimeError("Unexpected subject", `subj`)
-	if obj[0] not in (LITERAL, LITERAL_DT, LITERAL_LANG):
+
+	elif obj[0] not in (XMLLITERAL, LITERAL, LITERAL_DT, LITERAL_LANG):
 	    nid = self._nodeID.get(obj, None)
 	    if nid == None:
 		objn = self.referenceTo( obj[1])
@@ -334,7 +337,9 @@ z  - Allow relative URIs for namespaces
 
 	attrs = []  # Literal
 	v = obj[1]
-	if obj[0] == LITERAL_DT:
+	if obj[0] == XMLLITERAL:
+	    attrs.append((RDF_NS_URI+' parseType', 'Literal'))
+	elif obj[0] == LITERAL_DT:
 	    v, dt = v
 	    if dt != None: attrs.append((RDF_NS_URI+' datatype', dt))
 	elif obj[0] == LITERAL_LANG:
@@ -345,7 +350,12 @@ z  - Allow relative URIs for namespaces
             self._xwr.startElement(pred[1], attrs, self.prefixes)
         else:
             bNodePredicate()            
-        self._xwr.data(v)
+	if obj[0] == XMLLITERAL:
+	    # XML literal
+	    dom = obj[1]
+	    self._xwr.passXML(Canonicalize(dom))
+	else:
+	    self._xwr.data(v)
         self._xwr.endElement()
 
 # Below is for writing an anonymous node which is the object of only one arc
@@ -545,6 +555,9 @@ class XMLWriter:
             self._encwr(">")
             self.needClose = 0
 
+    def passXML(self, st):
+	self.flushClose()
+	self._encwr(st)
 
     def figurePrefix(self, uriref, rawAttrs, prefixes):
 	i = len(uriref)

@@ -77,7 +77,7 @@ import uripath
 from why import BecauseOfData
 import isXML
 import diag
-from webAccess import urlopenForRDF   # http://www.w3.org/2000/10/swap/
+#from webAccess import urlopenForRDF   # http://www.w3.org/2000/10/swap/
 
 import xml.sax # PyXML stuff
                #   http://sourceforge.net/projects/pyxml
@@ -164,12 +164,18 @@ class RDFHandler(xml.sax.ContentHandler):
 	if baseURI != None: self._base = baseURI
 	else: self._base = thisDoc
         self._state = STATE_OUTERMOST  # Maybe should ignore RDF outside <rdf:RDF>??
-        if openFormula==None:
-            self._context = sink.newFormula(thisDoc + "#_formula")
+	if sink:
+	    if openFormula==None:
+		self._context = sink.newFormula(thisDoc + "#_formula")
+	    else:
+		self._context = openFormula
+	    self._formula = self._context  # Root formula
+	    self._genPrefix = uripath.join(thisDoc, "#_rdfxg")    # allow parameter override?
+	    self.sink.setGenPrefix(self._genPrefix)
+	    self.sink.startDoc()
+	    self.merge = self.sink.newSymbol(NODE_MERGE_URI)
 	else:
-	    self._context = openFormula
-        self._formula = self._context  # Root formula
-
+	    self._context = None
 	self._reason = why	# Why the parser w
 	self._reason2 = None	# Why these triples
 	if diag.tracking: self._reason2 = BecauseOfData(
@@ -181,16 +187,13 @@ class RDFHandler(xml.sax.ContentHandler):
 	self._language = None
 	self._nodeIDs = {}
         self._items = [] # for <rdf:li> containers
-        self._genPrefix = uripath.join(thisDoc, "#_rdfxg")    # allow parameter override?
-	self.sink.setGenPrefix(self._genPrefix)
         self._litDepth = 0
-	self.merge = self.sink.newSymbol(NODE_MERGE_URI)
-        self.sink.startDoc()
+	
         version = "$Id$"
 #        self.sink.makeComment("RDF parsed by "+version[1:-1])
 
 	if "D" in self.flags:  # Assume default namespace declaration
-	    self.sink.setDefaultNamespace(self._thisDoc+"#")
+	    if sink: self.sink.setDefaultNamespace(self._thisDoc+"#")
 	    self._nsmap = [ { "": "#"} ]
 
 
@@ -385,7 +388,7 @@ class RDFHandler(xml.sax.ContentHandler):
         self._nsmap.append(b)
         self._prefixMap.append(c)
 
-        self.sink.bind(prefix, uri)
+        if self.sink: self.sink.bind(prefix, uri)
 
     def endPrefixMapping(self, prefix):
         del self._nsmap[-1]
@@ -645,19 +648,20 @@ class RDFHandler(xml.sax.ContentHandler):
             self._litDepth = self._litDepth - 1
             if self._litDepth == 0:
                 buf = self.testdata
-                self._datatype = self.sink.newSymbol("http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral")
 		if XMLLiteralsAsDomTrees:
 		    e = self.domDocument.documentElement.firstChild
 		    while e.nodeType == e.TEXT_NODE:
 			e = e.nextSibling
-		    self.sink.makeStatement(( self._context,
+		    progress("@@@ e=", e, e.nodeName)
+		    self.domElement = e   # Leave for literal parser to pick up
+		    if self.sink:
+			self.sink.makeStatement(( self._context,
 					      self._predicate,
 					      self._subject,
 					      self.sink.newXMLLiteral(e) ),
 					       why=self._reason2)
-		    self.domDocument = None
-		    self.domElement = None
 		else:
+		    self._datatype = self.sink.newSymbol("http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral")
 		    self.sink.makeStatement(( self._context,
 					      self._predicate,
 					      self._subject,
@@ -869,7 +873,7 @@ class RDFXMLParser(RDFHandler):
     def __init__(self, sink, openFormula, thisDoc=None,  flags="", why=None):
         RDFHandler.__init__(self, sink, openFormula, thisDoc, flags=flags,
 	    why=why)
-	assert thisDoc != None, "Need document URI at the moment, sorry"
+	assert (not sink) or (thisDoc is not None), "Need document URI at the moment, sorry"
         p = xml.sax.make_parser()
         p.setFeature(feature_namespaces, 1)
         p.setContentHandler(self)
@@ -879,17 +883,6 @@ class RDFXMLParser(RDFHandler):
     def feed(self, data):
         self._p.feed(data)
 
-    def load(self, uri, baseURI=""):
-	progress("obsolete: use llyn.load()")
-	"""Parse a document identified bythe URI, return the top level formula"""
-        if uri:
-            _inputURI = uripath.join(baseURI, uri) # Make abs from relative
-            f = urlopenForRDF(_inputURI)
-        else:
-            _inputURI = uripath.join(baseURI, "STDIN") # Make abs from relative
-            f = sys.stdin
-        return self.loadStream(f)
-#	return self._formula
 
     def loadStream(self, stream):
         s = xml.sax.InputSource()
@@ -914,28 +907,28 @@ class RDFXMLParser(RDFHandler):
 
 
 class XMLDOMParser(RDFXMLParser):
-    """XML DOM to RDF Graph parser based on sax XML interface"""
+    """XML format to RDF Graph parser based on sax XML interface"""
 
 
-    def __init__(self, sink, openFormula, thisDoc=None,  flags="", why=None):
-        RDFHandler.__init__(self, sink, openFormula, thisDoc, flags=flags,
+    def __init__(self,   thisDoc=None,  flags="", why=None):
+        RDFHandler.__init__(self, None, None, thisDoc, flags=flags,
 	    why=why)
 
-        RDFXMLParser.__init__(self, sink, openFormula, thisDoc=thisDoc,  flags=flags, why=why)
+        RDFXMLParser.__init__(self, None, None, thisDoc=thisDoc,  flags=flags, why=why)
 	    
 	self._state = STATE_LITERAL
-	self._litDepth = 1
+	self._litDepth = 0
 	self.LiteralNS = [{}]
 	self.testdata = ''
-	self._datatype = self.sink.newSymbol("http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral")
+#	self._datatype = self.sink.newSymbol("http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral")
 	self.domDocument = self.domImplementation.createDocument(
 	    'http://www.w3.org/1999/02/22-rdf-syntax-ns', 'envelope', None) # @@ get rid of this somehow
 	self.domElement = self.domDocument.documentElement
-	self._subject = self.sink.newSymbol(thisDoc)
-	self.sink.makeStatement(( self._context,
-				self.sink.newSymbol(pred),
-				self._subject,
-				self.sink.newSymbol(self.uriref(obj)) ), why=self._reason2)
+#	self._subject = self.sink.newSymbol(thisDoc)
+#	self.sink.makeStatement(( self._context,
+#				self.sink.newSymbol(pred),
+#				self._subject,
+#				self.sink.newSymbol(self.uriref(obj)) ), why=self._reason2)
 	
 
 
@@ -949,7 +942,11 @@ class BadSyntax(SyntaxError):
     def __str__(self):
 	return self._message
 
-
+def XMLtoDOM(str):
+    p = XMLDOMParser("foobar:") # Shouldn't need Doc URI etc
+    p.feed(str)
+    return p.domElement
+    
 def test(args = None):
     import sys, getopt
     import notation3

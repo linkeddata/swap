@@ -53,7 +53,7 @@ import string
 import re
 import StringIO
 import sys
-import time
+import time, xml
 from warnings import warn
 
 
@@ -1451,6 +1451,7 @@ class RDFStore(RDFSink) :
 	import cwm_list	   # List handling operations
 	import cwm_set     # Set operations
 	import cwm_sparql  # builtins for sparql
+	import cwm_xml     # XML Document Object Model operations
         cwm_string.register(self)
         cwm_math.register(self)
         cwm_trigo.register(self)
@@ -1461,6 +1462,7 @@ class RDFStore(RDFSink) :
 	cwm_list.register(self)
 	cwm_set.register(self)
 	cwm_sparql.register(self)
+	cwm_xml.register(self)
 	import cwm_crypto  # Cryptography
 	if crypto:
             if cwm_crypto.USE_PKC == 0:
@@ -1636,6 +1638,8 @@ class RDFStore(RDFSink) :
             return self.newLiteral(str(x), self.decimal)
         elif isinstance(x, bool):
             return self.newLiteral(x and 'true' or 'false', self.boolean)
+	elif isinstance(x, xml.dom.minidom.Document):
+	    return self.newXMLLiteral(x)
         elif type(x) is types.FloatType:
 	    if `x`.lower() == "nan":  # We can get these form eg 2.math:asin
 		return None
