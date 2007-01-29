@@ -63,6 +63,8 @@ import md5, binascii  # for building md5 URIs
 import uripath
 from uripath import canonical
 
+from sax2rdf import XMLtoDOM
+
 from why import smushedFormula, Premise, newTopLevelFormula, isTopLevel
 
 import notation3    # N3 parsers and generators, and RDF generator
@@ -1069,6 +1071,12 @@ class BI_content(HeavyBuiltIn, Function):
                          doc,
                          C))
         return C
+
+class BI_xmlTree(HeavyBuiltIn, Function):
+    def evalObj(self, subj, queue, bindings, proof, query):
+	x= BI_content.evalObj(self, subj, queue, bindings, proof, query)
+	dom = XMLtoDOM(x.value())
+	return subj.store.intern((XMLLITERAL, dom))
 
 class BI_parsedAsN3(HeavyBuiltIn, Function):
     def evalObj(self, subj, queue, bindings, proof, query):
