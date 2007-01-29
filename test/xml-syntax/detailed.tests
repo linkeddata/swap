@@ -1,0 +1,33 @@
+# List of regression tests
+#
+#      Syntax tests: details
+#
+# Note: Command lines must be for running in the directory above.
+#
+@prefix : <#>.
+@prefix x: <#>.
+@prefix test: <http://www.w3.org/2000/10/swap/test.n3#>.
+
+
+:xmllit001 a test:CwmTest;
+    test:referenceOutput <xmllit-ref.rdf>;
+    test:description   "Basic rdf:parseType='Literal' in XML, output in RDF/XML";
+    test:arguments     "--rdf xml-syntax/xmllit.rdf --rdf".
+
+:xmllit002 a test:CwmTest;
+    test:referenceOutput <xmllit-ref.n3>;
+    test:description   "Basic N3 XML Literal, output in N3";
+    test:arguments     "--n3 xml-syntax/xmllit.n3 --n3".
+
+:xmllit003 a test:CwmTest;
+    test:referenceOutput <xmllit-ref.n3>;
+    test:description   "Basic rdf:parseType='Literal' in XML, output in N3";
+    test:arguments     "--rdf xml-syntax/xmllit.rdf --n3".
+
+:xmllit004 a test:CwmTest;
+    test:referenceOutput <xmllit-ref.rdf>;
+    test:description   "Basic N3 XML Literal, output in N3";
+    test:arguments     "--n3 xml-syntax/xmllit.n3 --rdf".
+
+
+#ends

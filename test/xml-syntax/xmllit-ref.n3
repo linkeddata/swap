@@ -1,0 +1,7 @@
+     @prefix : <#> .
+    @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+    
+    :John_Smith     <http://my.example.org/Name> """<html:h1 xmlns:html="http://NoHTML.example.org" xmlns:my="http://my.example.org/" my:thing="hello">
+        <b xmlns="http://www.w3.org/1999/xhtml"><i>John</i></b>
+      </html:h1>"""^^rdf:XMLLiteral .
+    

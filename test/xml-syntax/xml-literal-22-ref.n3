@@ -1,0 +1,6 @@
+     @prefix : <http://www.example.com/books#> .
+    
+    :book12345     <http://purl.org/dc/elements/1.1/title> """<span lang="en">
+         The <em>&lt;br /&gt;</em> Element Considered Harmful.
+       </span>"""^^<http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral> .
+    
