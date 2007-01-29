@@ -73,7 +73,9 @@ def urlopenForRDF(addr, referer=None):
 #        return open_data(addr)
         return urllib.urlopen(addr)   # buggy in 2.4.2 with CStringIO
     z = urllib2.Request(addr)
-    z.add_header('Accept', 'text/rdf+n3, application/rdf+xml')
+#    z.add_header('Accept', 'text/rdf+n3, application/rdf+xml')  # Fine
+    z.add_header('Accept', 'text/rdf+n3')   # Split for some broken sites
+    z.add_header('Accept', 'application/rdf+xml')
     if referer: #consistently misspelt
         z.add_header('Referer', referer)
 #    z.add_header('Accept', 'text/plain q=0.1')
