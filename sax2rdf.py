@@ -652,7 +652,7 @@ class RDFHandler(xml.sax.ContentHandler):
 		    e = self.domDocument.documentElement.firstChild
 		    while e.nodeType == e.TEXT_NODE:
 			e = e.nextSibling
-		    progress("@@@ e=", e, e.nodeName)
+		    #progress("@@@ e=", e, e.nodeName)
 		    self.domElement = e   # Leave for literal parser to pick up
 		    if self.sink:
 			self.sink.makeStatement(( self._context,
