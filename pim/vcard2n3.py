@@ -27,6 +27,8 @@ and python iCalendar (vcard?) implementtions
 """
 
 import sys, string, re, os
+
+# export PYTHONPATH=$PYTHONPATH:/devel/WWW/2002/12/cal
 import icslex # from http://www.w3.org/2002/12/cal/icslex.py
 
 # From http://www.ietf.org/rfc/rfc2426.txt  adr-type
@@ -49,6 +51,9 @@ typeFields = {
     'url':  [ 'home', 'work', 'foaf'] #unofficial
 	    }
 
+relationshipModifiers  = { 'home':1, 'work':1, 'main':1 } # These make work-adr etc
+# Others are a class of phone/email/etc
+ 
 fieldProperties = {   # @@@ These are rather long localnames IMHO
     'n': [ 'family-name', 'given-name', 'additional-name', 'prefix', 'suffix' ],
 
@@ -78,6 +83,29 @@ def zapOut(str, allowed):
 def munge(str):
     return zapOut(str, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
 
+def splitBy(stri, delim, unescape=1):
+    "Split by unescaped delimiters"
+    result = []
+    begin = 0
+    escaped = 0
+    escape = '\\'
+    while begin < len(stri):
+	i, unesc = begin, ""
+	while i < len(stri):
+	    ch = stri[i]
+	    if escaped:
+		escaped = 0
+		unesc += ch
+	    else:
+		if ch == delim: break
+		if ch == escape: escaped = 1
+		else: unesc += ch
+	    i = i + 1
+	if unescape: result.append(unesc)
+	else: result.append(stri[begin:i])
+	begin = i+1
+    return result
+
 wr = sys.stdout.write
 	
 def extract(path):
@@ -89,15 +117,15 @@ def extract(path):
     print "# From vCard data in ", path
     print "# Extracted by $Id$ "
     print
-    print """
-    @prefix : <#>.
-    @prefix loc: <#loc_>.
-    @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
-    @prefix log: <http://www.w3.org/2000/10/swap/log#>.
-    @prefix v:  <http://www.w3.org/2006/vcard/ns#>.
-    @prefix abl:  <http://www.w3.org/2006/vcard/abl#>.
-    @prefix user: <#>.
-    """
+    print """@prefix : <#>.
+@prefix loc: <#loc_>.
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix v:  <http://www.w3.org/2006/vcard/ns#>.
+@prefix vc:  <http://www.w3.org/2006/vcard/class#>.
+@prefix abl:  <http://www.w3.org/2006/vcard/abl#>.
+@prefix user: <#>.
+"""
 
     input = open(path, "r")
     inRecord = 0
@@ -124,10 +152,16 @@ def extract(path):
 
     def endGroup(g):
 #        print "# End group <%s>" % `g`
-	return " %s [ # %s\n%s]\n" % (groupPred[g], g, groupData[g])
+	if len(groupData[g] == 2):
+	    if groupData[g][1][0] == 'v:x-ablabel':
+		return "%s "
+	res = []
+	for p,o in  groupData[g]:
+	    res += " %s %s" %(p,o)
+	return "%s [ # %s\n%s]\n" % (groupPred[g], g, res)
 	
     def orderedFields(value, map):
-    	    cardData = "["
+    	    cardData = ""
 	    beg = 0
 	    for i in range(len(map)):
 		end = beg
@@ -139,34 +173,37 @@ def extract(path):
 		    break
 		if end < 0:
 		    end = len(value)
-		st = value[beg:end].replace(',', ' ')
+		st = " ".join(splitBy(value[beg:end], ','))
 		if st: cardData += ' v:%s "%s";' % (map[i], st)
 		beg=end+1
 		if beg > len(value):
 		    break
-	    cardData += "]\n"
 	    return cardData
 
     def predicateObject(n, props, value):
 	"Return a pair of the predicate and object as N3 strings"
 	modifiers = ""
 	datatype = None
-	for prop, val in props:
+	classes = []
+	for prop, vals in props:
 	    if prop == 'type':
-		val = val.lower()
-		if val == 'internet' and n == 'email':
-		    pass
-		elif val == 'pref':   # Preferred @@ - how represent?
-		    pass
-		elif val in typeFields.get(n, []):
-		    if modifiers: print "# @@ multiple modifiers in: "+line
-		    modifiers = val + '-' + modifiers
-		else:
-		    raise ValueError("Unhandled type %s in: %s" %(val, line))
+		vals = vals.lower()
+		for val in splitBy(vals, ','):
+		    if val == 'internet' and n == 'email':
+			pass
+		    elif val == 'pref':   # Preferred @@ - how represent?
+			pass
+		    elif val in typeFields.get(n, []):
+			if relationshipModifiers.get(val, 0):
+			    if modifiers: print "# @@ multiple modifiers in: "+line
+			    modifiers = val + '-' + modifiers
+			else: classes.append('vc:'+val[0].upper()+val[1:])
+		    else:
+			raise ValueError("Unhandled type %s in: %s" %(val, line))
 	    elif prop == 'value':  # This means datatype
 		datatype = val
 		if val == 'date':
-		    pass # Date-tiems from AB certainly look like w3c not iCal dates
+		    pass # Date-times from AB certainly look like w3c not iCal dates
 		elif val == 'uri':
 		    pass
 		else:
@@ -177,32 +214,43 @@ def extract(path):
 		while value:
 		    res += value[:76] + "\n"
 		    value = value[76:]
-		return 'v:'+n, '[ v:base64 """%s"""];\n' % (res)  # Special case
+		return 'v:'+n, '[ v:base64 """%s"""]\n' % (res)  # Special case
 				
 	    else: raise ValueError('Unknown property %s with value %s' & (prop, val))
 
+	classSpec = ""
+	if classes: classSpec = 'a '+(', '.join(classes))
+
 	map = fieldProperties.get(n,None)
+	pred = 'v:%s%s' % (modifiers, n)
 	if map:
-	     return 'v:%s%s' % (modifiers, n), orderedFields(value, map)
+	    if classSpec: classSpec = '\n\t'+classSpec
+	    return pred, '[' + orderedFields(value, map) + classSpec + ']'
 	if n == 'version':
 	    assert value == "3.0", "value found: "+`value`
 	    return "", ""
+	if n == 'x.ablabel':
+	    return "", "" # used elsewhere
+	obj = None
 	if n == 'tel':
 	    if value[0] != '+':
 		print "# @@ Warning: not international form tel: "+value
-	    return 'v:%s%s' % (modifiers, n),  '<tel:%s>;\n' % (value.replace(' ','-'))
-	if n == 'url':
-	    return 'v:%s%s' % (modifiers, n),  '<%s>;\n' % (value)
-	if n == 'x.ablabel':
-	    return "", "" # used elsewhere
-	if n == 'email':
-	    return 'v:%s%s' %(modifiers, n),  '<mailto:%s>;\n' % (value)
+	    obj = '<tel:%s>' % (value.replace(' ','-'))
+	elif n == 'url':
+	    obj = '<%s>' % (value)
+	elif n == 'email':
+	    obj = '<mailto:%s>' % (value)
+
+	if obj:  # Any case so far is a form of URI
+	    if classSpec: wr('%s %s.\n'  %(obj, classSpec))
+	    return pred, obj
+
 	if n == 'categories':   # Really should relate these to classes, but this roundtrips
-	    value = ", ".join(['"'+x+'"' for x in value.split(',')])
-	    return 'v:%s%s' % (modifiers, n),  '%s;\n' % (value) 
-	if n in [ 'fn',  'title', 'bday', 'description',
+	    obj = ", ".join(['"'+x+'"' for x in splitBy(value, ',')])
+	    return pred,  obj 
+	elif n in [ 'fn',  'title', 'bday', 'description',
 	    'x-abuid','x-abadr', 'x-aim', 'x-abrelatednames', 'x-abshowas' ]:  # Single text
-	    return 'v:%s%s' % (modifiers, n), '"%s";\n' % (value) # de-escape \:
+	    return pred, '"%s"' % (value) # de-escape \:
 
 	raise ValueError('Unknown tag:'+n)
     
@@ -210,14 +258,14 @@ def extract(path):
     nextLine = readBareLine(input)
     while 1:
 
-        line = nextLine;
+        line = nextLine
 	while 1:
 	    nextLine = readBareLine(input)
 	    if not nextLine or nextLine[0] != ' ': break
 	    line += nextLine[1:]
 
         if line=="": break # EOF
-	print "# line:", line[:100]
+	#print "# line:", line[:100]
 	m = group_line.match(line)
 	if m:
 	    g = m.group(1)
@@ -257,7 +305,7 @@ def extract(path):
 		wr("%s %s." % (cardID, cardData))
 	    else:
 		p, o = predicateObject(n, props, value)
-		cardData+= "    %s %s" %(p, o)
+		cardData+= "    %s %s;\n" %(p, o)
 	    
     wr("\n\n#ends\n")            
     input.close()
@@ -272,7 +320,13 @@ def do(path):
 #    else:
 #	if path[-4:].lower() == ".vcr" or path[-6:] == ".vcard":
     extract(path) 
-        
+###################################
+
+def _test():
+    import doctest
+    doctest.testmod()
+
+
 ######################################## Main program
 
 recursive = 0
@@ -285,6 +339,9 @@ for arg in sys.argv[1:]:
 #        if arg == "-r": recursive = 1    # Recursive
 #        elif arg == "-f": nochange = 0   # Fix
         if arg == "-v": verbose = 1   # Tell me even about files which were ok
+	if arg == '-t':
+	    _test()
+	    sys.exit(0)
         else:
             print """Bad option argument.
             -v  verbose
