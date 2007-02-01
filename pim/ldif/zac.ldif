@@ -1,0 +1,44 @@
+dn: cn=Zackery Zephyr,mail=zac@example.com
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+objectclass: mozillaAbPersonAlpha
+givenName: Zackery
+sn: Zephyr
+cn: Zackery Zephyr
+mozillaNickname: testnick
+mail: zac@example.com
+mozillaSecondEmail: zackery@example.org 
+nsAIMid: zaco
+mozillaUseHtmlMail: false
+modifytimestamp: 0Z
+telephoneNumber: +1 202 250 2525
+homePhone: +1 202 250 2526
+fax: +1 202 250 2527
+pager: +1 202 555 2525
+mobile: +1 202 555 2526
+homeStreet: 1 Zephyr Drive
+mozillaHomeStreet2: Apt 26
+mozillaHomeLocalityName: Zoaloc
+mozillaHomeState: MA
+mozillaHomePostalCode: 02999
+mozillaHomeCountryName: USA
+street: 1 Enterprise Way
+mozillaWorkStreet2: Suite 260
+l: Zoaloc Heights
+st: MA
+postalCode: 02998
+c: USA
+title: Chief Test dataset
+department: Testing
+company: Zacme Widgets
+mozillaWorkUrl: http://example.com/test/zac
+mozillaHomeUrl: http://zac.example.net/zac
+mozillaCustom1: custom1 value
+mozillaCustom2: custom2 value
+mozillaCustom3: custom3 value
+mozillaCustom4: custom4 value
+description: This is a n imaginary person whose address is used fro checking the fromat saved by Thund
+erbird Addressbok.
+
