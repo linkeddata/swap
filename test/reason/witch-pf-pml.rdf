@@ -17,7 +17,7 @@
         <source rdf:resource="test/reason/witch.n3"/>
     </Parsing>
 
-    <rdf:Description>
+    <rdf:Description rdf:ID="pf1">
         <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/reason#Inference"/>
         <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/reason#Proof"/>
         <evidence rdf:parseType="Resource">
