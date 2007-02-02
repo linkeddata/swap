@@ -23,13 +23,11 @@ basedir = os.getcwd()
 while basedir:
     path = basedir + '/.web_base'
     try:
-	print "opening ", path
 	f = open(path)
 	break
     except IOError:
 	slash = basedir.rfind('/')
 	if slash < 0:
-	    print "Can't find .web_base file.\n" + __doc__
 	    sys.exit(-1)
 	basedir = basedir[:slash]
 	print "trying ", basedir
