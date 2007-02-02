@@ -196,6 +196,18 @@ class BI_tokenize(LightBuiltIn, Function):
         return patc.split(str)
 
 
+class BI_normalize_space(LightBuiltIn, Function):
+    """Returns the value of $arg with whitespace normalized by
+    stripping leading and trailing whitespace and replacing sequences
+    of one or more than one whitespace character with a single space,
+    #x20 -- http://www.w3.org/2006/xpath-functions#normalize-space
+    """
+    
+    def evaluateObject(self, subj_py):
+        store = self.store
+        return ' '.join(subj_py.split())
+
+
 class BI_stringToList(LightBuiltIn, Function, ReverseFunction):
     """You need nothing else. Makes a string a list of characters, and visa versa.
 
@@ -330,4 +342,5 @@ def register(store):
     fn = store.symbol("http://www.w3.org/2006/xpath-functions")
     fn.internFrag("resolve-uri", BI_resolve_uri)
     fn.internFrag("tokenize", BI_tokenize)
+    fn.internFrag("normalize-space", BI_normalize_space)
 
