@@ -1,0 +1,143 @@
+
+<!-- Processed by Id: cwm.py,v 1.190 2006/08/09 23:20:42 syosi Exp -->
+<!--     using base file:///Users/connolly/w3ccvs/WWW/2000/10/swap/test/reason/-->
+
+
+<rdf:RDF xmlns="http://www.w3.org/2000/10/swap/reason#"
+    xmlns:n3="http://www.w3.org/2004/06/rei#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rea="http://www.w3.org/2000/10/swap/reason#">
+
+    <CommandLine rdf:nodeID="b1">
+        <args>['cwm.py', 'test/reason/witch.n3', '--think', '--filter=test/reason/witch-goal.n3', '--why']</args>
+    </CommandLine>
+
+    <Parsing rdf:nodeID="b2">
+        <because rdf:nodeID="b1"/>
+        <source rdf:resource="test/reason/witch.n3"/>
+    </Parsing>
+
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/reason#Inference"/>
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/reason#Proof"/>
+        <evidence rdf:parseType="Resource">
+            <rdf:first rdf:parseType="Resource">
+                <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/reason#Extraction"/>
+                <because rdf:parseType="Resource">
+                    <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/reason#Inference"/>
+                    <binding rdf:parseType="Resource">
+                        <boundTo rdf:parseType="Resource">
+                            <n3:uri>file:///home/connolly/w3ccvs/WWW/2000/10/swap/test/reason/witch#GIRL</n3:uri>
+                        </boundTo>
+                        <variable rdf:parseType="Resource">
+                            <n3:nodeId>file:///home/connolly/w3ccvs/WWW/2000/10/swap/test/reason/witch.n3#x</n3:nodeId>
+                        </variable>
+                    </binding>
+                    <evidence rdf:parseType="Resource">
+                        <rdf:first rdf:parseType="Resource">
+                            <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/reason#Extraction"/>
+                            <because rdf:nodeID="b2"/>
+                        </rdf:first>
+                        <rdf:rest rdf:parseType="Resource">
+                            <rdf:first rdf:parseType="Resource">
+                                <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/reason#Extraction"/>
+                                <because rdf:parseType="Resource">
+                                    <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/reason#Inference"/>
+                                    <binding rdf:parseType="Resource">
+                                        <boundTo rdf:parseType="Resource">
+                                            <n3:uri>file:///home/connolly/w3ccvs/WWW/2000/10/swap/test/reason/witch#GIRL</n3:uri>
+                                        </boundTo>
+                                        <variable rdf:parseType="Resource">
+                                            <n3:nodeId>file:///home/connolly/w3ccvs/WWW/2000/10/swap/test/reason/witch.n3#x</n3:nodeId>
+                                        </variable>
+                                    </binding>
+                                    <evidence rdf:parseType="Resource">
+                                        <rdf:first rdf:parseType="Resource">
+                                            <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/reason#Extraction"/>
+                                            <because rdf:parseType="Resource">
+                                                <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/reason#Inference"/>
+                                                <binding rdf:parseType="Resource">
+                                                    <boundTo rdf:parseType="Resource">
+                                                        <n3:uri>file:///home/connolly/w3ccvs/WWW/2000/10/swap/test/reason/witch#GIRL</n3:uri>
+                                                    </boundTo>
+                                                    <variable rdf:parseType="Resource">
+                                                        <n3:nodeId>file:///home/connolly/w3ccvs/WWW/2000/10/swap/test/reason/witch.n3#x</n3:nodeId>
+                                                    </variable>
+                                                </binding>
+                                                <evidence rdf:parseType="Resource">
+                                                    <rdf:first rdf:parseType="Resource">
+                                                        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/reason#Extraction"/>
+                                                        <because rdf:parseType="Resource">
+                                                            <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/reason#Inference"/>
+                                                            <binding rdf:parseType="Resource">
+                                                                <boundTo rdf:parseType="Resource">
+                                                                    <n3:uri>file:///home/connolly/w3ccvs/WWW/2000/10/swap/test/reason/witch#DUCK</n3:uri>
+                                                                </boundTo>
+                                                                <variable rdf:parseType="Resource">
+                                                                    <n3:nodeId>file:///home/connolly/w3ccvs/WWW/2000/10/swap/test/reason/witch.n3#x</n3:nodeId>
+                                                                </variable>
+                                                            </binding>
+                                                            <binding rdf:parseType="Resource">
+                                                                <boundTo rdf:parseType="Resource">
+                                                                    <n3:uri>file:///home/connolly/w3ccvs/WWW/2000/10/swap/test/reason/witch#GIRL</n3:uri>
+                                                                </boundTo>
+                                                                <variable rdf:parseType="Resource">
+                                                                    <n3:nodeId>file:///home/connolly/w3ccvs/WWW/2000/10/swap/test/reason/witch.n3#y</n3:nodeId>
+                                                                </variable>
+                                                            </binding>
+                                                            <evidence rdf:parseType="Resource">
+                                                                <rdf:first rdf:parseType="Resource">
+                                                                    <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/reason#Extraction"/>
+                                                                    <because rdf:nodeID="b2"/>
+                                                                </rdf:first>
+                                                                <rdf:rest rdf:parseType="Resource">
+                                                                    <rdf:first rdf:parseType="Resource">
+                                                                        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/reason#Extraction"/>
+                                                                        <because rdf:nodeID="b2"/>
+                                                                    </rdf:first>
+                                                                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                                                </rdf:rest>
+                                                            </evidence>
+                                                            <rule rdf:parseType="Resource">
+                                                                <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/reason#Extraction"/>
+                                                                <because rdf:nodeID="b2"/>
+                                                            </rule>
+                                                        </because>
+                                                    </rdf:first>
+                                                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                                </evidence>
+                                                <rule rdf:parseType="Resource">
+                                                    <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/reason#Extraction"/>
+                                                    <because rdf:nodeID="b2"/>
+                                                </rule>
+                                            </because>
+                                        </rdf:first>
+                                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                    </evidence>
+                                    <rule rdf:parseType="Resource">
+                                        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/reason#Extraction"/>
+                                        <because rdf:nodeID="b2"/>
+                                    </rule>
+                                </because>
+                            </rdf:first>
+                            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                        </rdf:rest>
+                    </evidence>
+                    <rule rdf:parseType="Resource">
+                        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/reason#Extraction"/>
+                        <because rdf:nodeID="b2"/>
+                    </rule>
+                </because>
+            </rdf:first>
+            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </evidence>
+        <rule rdf:parseType="Resource">
+            <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/reason#Extraction"/>
+            <because rdf:parseType="Resource">
+                <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/reason#Parsing"/>
+                <because rdf:nodeID="b1"/>
+                <source rdf:resource="test/reason/witch-goal.n3"/>
+            </because>
+        </rule>
+    </rdf:Description>
+</rdf:RDF>
