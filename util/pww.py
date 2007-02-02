@@ -30,7 +30,6 @@ while basedir:
 	if slash < 0:
 	    sys.exit(-1)
 	basedir = basedir[:slash]
-	print "trying ", basedir
 	continue
 
 base = f.readline()
