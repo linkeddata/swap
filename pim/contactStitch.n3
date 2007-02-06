@@ -210,7 +210,7 @@ dc:description """
 	ldif:homeStreet o2:chain (con:home con:address con:street).
 	
 #        ldif:mozillaHomeStreet2 "Apt 26"; 
-	ldif:mozillaHomeStreet2 (con:home con:address con:street2);
+	ldif:mozillaHomeStreet2 o2:chain (con:home con:address con:street2).
 	
 #        ldif:mozillaHomeLocalityName "Zoaloc"; 
 	ldif:mozillaHomeLocalityName o2:chain (con:home con:address con:city).
@@ -248,7 +248,7 @@ dc:description """
 
 
 #        ldif:title "Chief Test dataset"; 
-    ldif:title = con:title;
+    ldif:title = con:title.
 
 #        ldif:department "Testing"; 
 	 ldif:department = con:departmentName.
@@ -270,5 +270,5 @@ dc:description """
 
 
 #        ldif:description "This is a n imaginary person "
-    ldif:description = con:description = v:note.
+    ldif:description = con:description, v:note.
     
