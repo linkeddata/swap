@@ -21,6 +21,7 @@ dc:description """
 @prefix owl: <http://www.w3.org/2002/07/owl#>.
 @prefix link: <http://www.w3.org/2006/link#>.
 @prefix doc:  <http://www.w3.org/2000/10/swap/pim/doc#> .
+@keywords is, of, a.
 
 <> doc:persistencePolicy [ a :_SubjectToChange;
    dc:description """If you change this, you have to tell the W3C SemWeb AD
@@ -36,36 +37,11 @@ doc:persistencePolicy
 
 <contact> doc:rules <contact-rules>.
 
-##################################### CONTACT INFORMATION ######
-#
-#  @@ check out vcard
-#  http://www.imc.org/pdi/vcardwhite.html
-#  Eg http://msdn.microsoft.com/workshop/essentials/versions/vcard.asp
 
-
-<#vcard_list> = """ vCard.Cellular, vCard.Company, vCard.Department, 
-vCard.DisplayName,
-vCard.Email,
-vCard.FirstName, 
-vCard.Gender, vCard.Home.City, vCard.Home.Country, 
-vCard.Home.Fax, vCard.Home.Phone, vCard.Home.State, 
-vCard.Home.StreetAddress, vCard.Home.Zipcode, vCard.Homepage, 
-vCard.JobTitle, vCard.LastName, vCard.MiddleName, 
-vCard.Notes, vCard.Office,  # ??? Office what? Number?
-vCard.Pager, 
-vCard.Business.City, vCard.Business.Country, vCard.Business.Fax, 
-vCard.Business.Phone, vCard.Business.State, vCard.Business.StreetAddress, 
-vCard.Business.URL, vCard.Business.Zipcode""" .
-
-
-# Let's start with Contact information. See also
-#
-# @prefix mso: <../MSOutlookContacts#> .  # From CSV extraction
-# which used to be related to this ontology here, now there.
-# That ontology may be quite historical now.
 
 :SocialEntity a rdfs:Class;
-    rdfs:comment  """The sort of thing which can have a phone number.""".
+    rdfs:comment  """The sort of thing which can have a phone number.
+    Typically a person or an incorporated company, or unincorporated group.""".
 
 :Person rdfs:subClassOf :SocialEntity;
     is rdfs:domain of :personalTitle,
@@ -74,6 +50,7 @@ vCard.Business.URL, vCard.Business.Zipcode""" .
 	:middleInitial,
 	:lastName,
 	:personalSuffix,
+	:title;			# In the organization @ ?wise? 2007-02
 	:organization,         # SocialEntity, was company
 	:departmentName ;
 	rdfs:comment """A person in the normal sense of the word.""".
@@ -103,18 +80,40 @@ vCard.Business.URL, vCard.Business.Zipcode""" .
 	then it is reasonable to assume that there are :knownAs that.""".
 
 :ContactLocation a rdfs:Class;
-    rdfs:comment  "A place with address, phone number, fax, etc";
+    rdfs:label "contact point";
+    rdfs:comment  """A place, or mobile situation, with address, phone number, fax, etc. 
+    Related to a person by home, office, etc.
+    Note one person's workplace may be another person's home.
+    A person may have more than one home and more than one workplace.
+    (In practice it sometimes maybe useful with restriucted datasets to
+    assume that this is not the case, when extracting data from other ontologies
+    with no concept of ContactLocation).  Strongly related to a person: 
+    in some ways a role that a person can be in.""";
 	is rdfs:domain of :phone, :fax.
 
 
 :office a rdf:Property;
+    rdfs:label "work";  # Would have been better :work
+    rdfs:comment 
     rdfs:domain :Person; rdfs:range :ContactLocation.
+    
 :home a rdf:Property;
+    rdfs:label "home";
     rdfs:domain :Person; rdfs:range :ContactLocation.
+
 :vacationHome a rdf:Property;
+    rdfs:label "vacation";
     rdfs:domain :Person; rdfs:range :ContactLocation.
+
 :mobile a rdf:Property;
+    rdfs:label "mobile";
     rdfs:domain :Person; rdfs:range :ContactLocation.
+
+:emergency a rdf:Property;
+    rdfs:label "emergency only";
+    rdfs:domain :Person; rdfs:range :ContactLocation.
+
+########## Properties of the ConactLocation
 
 :address a rdf:Property; rdfs:domain :ContactLocation; rdfs:range :Address.
 
@@ -123,20 +122,26 @@ vCard.Business.URL, vCard.Business.Zipcode""" .
 		:city, :stateOrProvince, :postalCode, :country .
 
 
-:zip rdfs:subClassOf :postalCode.
+:zip rdfs:subPropertyOf :postalCode.
 
-:phone a rdf:Property.
-:fax a rdf:Property .
+:Phone a rdfs:Class;
+    rdfs:label "phone"; rdfs:comment"""
+    An end-point in the public swiitched telephone system.
+    Anything identified by a URI with tel: scheme is in this class.
+    """.
+    
+:Fax rdfs:subClassOf :Phone.
+:MobilePhone rdfs:subClassOf :Phone.
+:Pager rdfs:subClassOf :Phone.
 
+:phone a rdf:Property; rdfs:domain :ContactLocation; rdfs:range :Phone. # Added 2007-02-02
+:fax a rdf:Property ; rdfs:domain :ContactLocation; rdfs:range :Fax.   # 
 
+#  vcard:homePhone   o2:chain (home phone). 
 
+:birthday a rdf:Property; rdfs:domain :SocialEntity; rdfs:range :Date .
 
-# MSO stuff:
-
-
-:birthday a rdf:Property; rdfs:range :Date .
-
-:Data a rdfs:Class.    # See ... ICalendar, etc etc
+# :Data a rdfs:Class.    # See ... ICalendar, etc etc ???
 
 
 :child a rdf:Property .
@@ -149,7 +154,10 @@ vCard.Business.URL, vCard.Business.Zipcode""" .
   rdfs:range :Mailbox;
   :_example { :_Dan :mailbox <mailto:connolly@w3.org> }.
 
+
 :emailAddress a owl:InverseFunctionalProperty;
+  rdfs:label "email";
+  rdfs:comment "emailAddress is a string.  Use of this is discouraged. Use :mailbox instead ";
   rdfs:domain :SocialEntity;
   rdfs:range :_EmailAddress;
   :_example { :_Dan :emailAddress "connolly@w3.org" }.
@@ -157,16 +165,18 @@ vCard.Business.URL, vCard.Business.Zipcode""" .
 # :_EmailAddress rdfs:subClassOf dt:string; dt:pattern "[^@]+@[^@]+". # or something like that. Check RFC822
 
 :mailboxURI a  owl:InverseFunctionalProperty;
+  rdfs:comment "mailboxURI is a string.  Use of this is discouraged. Use :mailbox instead ";
   rdfs:domain :SocialEntity;
   rdfs:range :_URI;
   :_example { :_Dan :mailboxURI "mailto:connolly@w3.org" }.
 
 # move these rules to a transcription of the mailto: URI scheme spec.
+
 :_addressProperty a rdf:Property.
 :mailbox :_addressProperty :mailboxURI.
 
 
-#  { :ent :mailboxURI [ log:equalTo [ is log:concat of ( "mailto:" [ :_uriEncode :addr ] ) ] ] } log:implies { :ent :emailAddress :addr }. # only goes one way because we could use PUT to HTTP resources to deliver mail.
+#  { :ent :mailboxURI [ log:equalTo [ is string:concatenation of ( "mailto:" [ :_uriEncode :addr ] ) ] ] } log:implies { :ent :emailAddress :addr }. # only goes one way because we could use PUT to HTTP resources to deliver mail.
 
 
 :Male a rdfs:Class.
@@ -175,22 +185,34 @@ vCard.Business.URL, vCard.Business.Zipcode""" .
 :motherTongue a rdf:Property; rdfs:domain :Person; rdfs:range :LanguageCode .
 
 :LanguageCode a rdfs:Class. # A ISO langiuage 1 or 2 part string: a  datatype
+			    # IETF RFC____ obsoletes ISO codes (2006)
+			    
 :description a rdf:Property .
 
-:partner a rdf:Property.
+:partner a rdf:Property;
+    rdfs:range :Person; rdfs:domain Person.
 
+# Web pages of various kinds
+
+:webPage a rdf:Property;
+    rdfs:label "web page";
+    rdfs:comment "A related web page".   # NOT inverse functional
 
 :publicHomePage rdfs:subPropertyOf :homePage.
 :homePage a owl:InverseFunctionalProperty;
-	
+	    rdfs:subPropertyOf webPage;
   :_addressProperty :homePageAddress.
-:homePageAddress a  owl:InverseFunctionalProperty.
+:homePageAddress a  owl:InverseFunctionalProperty;
+    rdfs:comment """Use is discouraged""".
 
 
 
 <> dc:description """
 $Log$
-Revision 1.26  2006-10-29 19:44:09  timbl
+Revision 1.27  2007-02-06 01:00:39  timbl
+Mainly added comment, added a few terms, removed Data class, see diff fo all changes
+
+Revision 1.26  2006/10/29 19:44:09  timbl
 mso to contact relationships are now in MSO file not pim/contact
 
 Revision 1.25  2006/03/09 17:11:42  timbl
