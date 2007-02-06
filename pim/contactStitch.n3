@@ -1,0 +1,152 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+…
+
+<> dc:title	"Mappings between contact information vocabularies";
+
+
+dc:description """
+ Contact, FOAF, vCard and LDIF vocabularies all cover contact information 
+ for people.  Here we express some mappings.
+ The N3 file takes the from of a lin e from an example data file in comments,
+ followed by the crosss-definition with the contact vocabulary.
+""",
+"$Id$".
+
+
+@prefix : <http://www.w3.org/2000/10/swap/pim/contact#> .
+@prefix con: <http://www.w3.org/2000/10/swap/pim/contact#> . # Hint
+@prefix v: <http://www.w3.org/2007/vcard/ns#>.
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix link: <http://www.w3.org/2006/link#>.
+@prefix doc:  <http://www.w3.org/2000/10/swap/pim/doc#> .
+@prefix o2:  <http://www.w3.org/2007/ont/o2#>.
+
+
+        # ldif:dn "cn=Zackery Zephyr,mail=zac@example.com"; 
+	ldif:dn = v:n.
+	
+        # a ldif:Person; 
+	ldif:Person = con:Person.
+	
+#        a ldif:OrganizationalPerson; 
+#        a ldif:InetOrgPerson; 
+#        a ldif:MozillaAbPersonAlpha; 
+
+#        ldif:givenName "Zackery"; 
+        ldif:givenName o2:chain (v:n v:given).
+
+#        ldif:sn "Zephyr"; 
+	ldif:sn o2:chain (v:n v:family).
+	
+#        foaf:name "Zackery Zephyr"; 
+	ldif:@@ = 
+#        ldif:mozillaNickname "testnick"; 
+	ldif:mozillaNickname = foaf:nick.
+
+#	ldif:email @@
+#        dif:mozillaSecondEmail "zackery@example.org "; 
+
+#        ldif:nsAIMid "zaco"; 
+
+	 v:x-aim = ldif:nsAIMid.
+
+#        ldif:mozillaUseHtmlMail "false"; 
+#        ldif:telephoneNumber "+1 202 250 2525";     @@@@ reformat as URI
+
+
+#  Fixed ldif vocab and conversion to use tel: and mailto:
+ 
+	ldif:telephoneNumber = v:work-tel;
+	    o2:chain (con:work con:phone).
+	
+#        ldif:homePhone <tel:+1-202-250-2526>; 
+
+	ldif:homePhone o2:chain(con:home con:phone). 
+	ldif:homePhone = v:home-tel.
+
+# The following are all assumed "work" by Mozilla
+	
+#	ldif:telephoneNumber    formatted as URI
+	ldif:telephoneNumber o2:chain (con:work con:phone).
+
+
+#        ldif:fax "+1 202 250 2527";      @@ work-tel <...> a vc:Fax
+	ldif:fax rdfs:range con:Fax; rdfs:subpropertyOf con:phone.
+	
+#        ldif:pager "+1 202 555 2525"; 
+	ldif:page rdfs:range con:Pager; rdfs:subpropertyOf con:phone.
+
+#        ldif:mobile "+1 202 555 2526"; 
+	ldif:mobile rdfs:range con:MobilePhone; rdfs:subpropertyOf con:phone.
+
+
+######### Addresses
+
+#        ldif:homeStreet "1 Zephyr Drive"; 
+	ldif:homeStreet o2:chain (con:home con:address con:street).
+	
+#        ldif:mozillaHomeStreet2 "Apt 26"; 
+	ldif:mozillaHomeStreet2 (con:home con:address con:street2);
+	
+#        ldif:mozillaHomeLocalityName "Zoaloc"; 
+	ldif:mozillaHomeLocalityName o2:chain (con:home con:address con:city).
+	
+#        ldif:mozillaHomeState "MA"; 
+	ldif:mozillaHomeState o2:chain (con:home con:address con:stateOrProvince).
+
+#        ldif:mozillaHomePostalCode "02999"; 
+    
+    ldif:mozillaHomePostalCode o2:Chain (con:home con:address con:postalCode).    
+
+#        ldif:mozillaHomeCountryName "USA"; 
+    ldif:mozillaHomeCountryName o2:Chain (con:home con:address con:country).
+
+
+
+
+#        ldif:street "1 Enterprise Way"; 
+    ldif:street o2:Chain (con:work con:address con:street).
+    
+#        ldif:mozillaWorkStreet2 "Suite 260"; 
+    ldif:mozillaWorkStreet2 o2:Chain (con:work con:address con:street2).
+
+#        ldif:l "Zoaloc Heights"; 
+    ldif: o2:Chain (con:work con:address con:city).
+
+#        ldif:st "MA"; 
+    ldif: o2:Chain (con:work con:address con:stateorProvince).
+
+#        ldif:postalCode "02998"; 
+    ldif:postalCode o2:Chain (con:work con:address con:postalCode).
+
+#        ldif:c "USA"; 
+    ldif:c o2:Chain (con:work con:address con:country).
+
+
+#        ldif:title "Chief Test dataset"; 
+    ldif:title = con:title;
+
+#        ldif:department "Testing"; 
+	 ldif:department = con:departmentName.
+	 
+#        ldif:company "Zacme Widgets"; 
+    ldif:company o2:chain (con:organization foaf:name).
+
+#        ldif:mozillaWorkUrl "http://example.com/test/zac";
+    ldif:mozillaWorkUrl o2:chain(con:work foaf:homePage).
+ 
+#        ldif:mozillaHomeUrl "http://zac.example.net/zac"; 
+
+
+
+#        ldif:mozillaCustom1 "custom1 value"; 
+#        ldif:mozillaCustom2 "custom2 value"; 
+#        ldif:mozillaCustom3 "custom3 value"; 
+#        ldif:mozillaCustom4 "custom4 value"; 
+
+
+#        ldif:description "This is a n imaginary person "
+    ldif:description = con:description = v:note.
+    
