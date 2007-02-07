@@ -1,0 +1,53 @@
+
+
+
+<rdf:RDF xmlns="http://www.w3.org/2007/ont/ldif#"
+    xmlns:foaf="http://xmlns.com/foaf/0.1/"
+    xmlns:ldif="http://www.w3.org/2007/ont/ldif#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.w3.org/2007/ont/ldif#InetOrgPerson"/>
+        <rdf:type rdf:resource="http://www.w3.org/2007/ont/ldif#MozillaAbPersonAlpha"/>
+        <rdf:type rdf:resource="http://www.w3.org/2007/ont/ldif#OrganizationalPerson"/>
+        <rdf:type rdf:resource="http://www.w3.org/2007/ont/ldif#Person"/>
+        <c>USA</c>
+        <company>Zacme Widgets</company>
+        <department>Testing</department>
+        <description>This is a n imaginary person whose address is used fro checking the fromat saved by Thunderbird Addressbok.</description>
+        <dn>cn=Zackery Zephyr,mail=zac@example.com</dn>
+        <fax rdf:resource="tel:+1-202-250-2527"/>
+        <givenName>Zackery</givenName>
+        <homePhone rdf:resource="tel:+1-202-250-2526"/>
+        <homeStreet>1 Zephyr Drive</homeStreet>
+        <l>Zoaloc Heights</l>
+        <mobile rdf:resource="tel:+1-202-555-2526"/>
+        <mozillaCustom1>custom1 value</mozillaCustom1>
+        <mozillaCustom2>custom2 value</mozillaCustom2>
+        <mozillaCustom3>custom3 value</mozillaCustom3>
+        <mozillaCustom4>custom4 value</mozillaCustom4>
+        <mozillaHomeCountryName>USA</mozillaHomeCountryName>
+        <mozillaHomeLocalityName>Zoaloc</mozillaHomeLocalityName>
+        <mozillaHomePostalCode>02999</mozillaHomePostalCode>
+        <mozillaHomeState>MA</mozillaHomeState>
+        <mozillaHomeStreet2>Apt 26</mozillaHomeStreet2>
+        <mozillaHomeUrl>http://zac.example.net/zac</mozillaHomeUrl>
+        <mozillaNickname>testnick</mozillaNickname>
+        <mozillaUseHtmlMail>false</mozillaUseHtmlMail>
+        <mozillaWorkStreet2>Suite 260</mozillaWorkStreet2>
+        <mozillaWorkUrl>http://example.com/test/zac</mozillaWorkUrl>
+        <nsAIMid>zaco</nsAIMid>
+        <pager rdf:resource="tel:+1-202-555-2525"/>
+        <postalCode>02998</postalCode>
+        <sn>Zephyr</sn>
+        <st>MA</st>
+        <street>1 Enterprise Way</street>
+        <telephoneNumber rdf:resource="tel:+1-202-250-2525"/>
+        <title>Chief Test dataset</title>
+        <foaf:mbox rdf:resource="mailto:zac@example.com"/>
+        <foaf:mbox rdf:resource="mailto:zackery@example.org "/>
+        <foaf:mbox_sha1sum>18e80faea96d4984ebc8c5b51dbb8ab484c1f4be</foaf:mbox_sha1sum>
+        <foaf:mbox_sha1sum>cd1b2f71cab5e32293f3c73b06294100abc39c6f</foaf:mbox_sha1sum>
+        <foaf:name>Zackery Zephyr</foaf:name>
+    </rdf:Description>
+</rdf:RDF>
