@@ -54,6 +54,7 @@ EdgeAttributes = (
     )
 
 # graph attributes see Graphviz spec table 3
+# hmm... needs update w.r.t http://www.graphviz.org/doc/info/attrs.html
 GraphAttributes = (
     GV.center,
     GV.clusterrank,
@@ -77,6 +78,7 @@ GraphAttributes = (
     GV.ranksep,
     GV.ratio,
     GV.size,
+    GV.shape,
     GV.style,
     )
 
