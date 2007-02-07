@@ -1,10 +1,24 @@
 #!/usr/bin/python
-#
+"""Convert ldif to n3 format.
+
+Syntax:    python ldif2n3.py  <file>
+
+    This program is or was http://www.w3.org/2000/10/swap/pim/ldif2p3.py
+    $Id$
+    
+    -v  verbose
+    -l  pure ldiff vocabulary in output, no translation to foaf etc 
+    -m  hide mailbox for privacy, only generate hash
+"""
 import sys
 import string
 import os
 import re
 import sha, binascii, base64
+
+
+from swap.notation3 import stringToN3 # http://www.w3.org/2000/10/swap/notation3.py
+
 
 version = "$Id$"[1:-1]
 
@@ -13,6 +27,8 @@ global hideMailbox
 
 def macroSubstitute(line, dict):
     return line  #@@@@@@
+
+# map = { 'telephone:Number': 'v:work-tel' }.
 
 def convert(path):
     """Convert LDIF format to n3"""
@@ -34,10 +50,10 @@ def convert(path):
     buf = input.read()  # Read the file
     input.close()
 
-    line = 0
+    nextLine = 0
     
     blank = re.compile(r" *\r?\n")  #"
-    lines = []
+#    lines = []
     inPerson = 0
     dataline = re.compile(r'([a-zA-Z0-9_]*): +(.*)')
     base64line = re.compile(r'([a-zA-Z0-9_]*):: +(.*)')
@@ -45,25 +61,35 @@ def convert(path):
     
     asFoaf = { "cn": "foaf:name" }
     
-    while 1:
-        lines.append(line)
-	line = buf.find("\n", line)
-	if line <0: break
-	line += 1
+    while nextLine < len(buf):  # Iterate over lines
+	l = ""
+	while 1:  # unfold continuation lines
+	    eol = buf.find("\n", nextLine)
+	    if eol <0:
+		l += buf[nextLine:]
+		nextLine = len(buf);
+		break
+	    if eol+1 < len(buf) and buf[eol+1] == ' ':  # DOES LDIF fold lines??
+		l += buf[nextLine:eol]
+		nextLine = eol+2 # After the '\n '		
+		continue
+	    l += buf[nextLine:eol]
+	    nextLine = eol+1
+	    break
+	while l and l[-1:] in "\r\n": l = l[:-1]
 	
-	here = 0
-	m = blank.match(buf, line)
+	m = blank.match(l)
 	if m:
 	    print "    ]."
 	    inPerson = 0
 	    continue
 	
-	m = dataline.match(buf, line)
+	m = dataline.match(l)
 	if m:
 	    field = m.group(1)
 	    value = m.group(2)
 	else:
-	    m = base64line.match(buf, line)
+	    m = base64line.match(l)
 	    if m:
 		field = m.group(1)
 		value = m.group(2)
@@ -77,27 +103,30 @@ def convert(path):
 		if value == "top": continue # Zero content info
 		print '\ta ldif:%s; '% (value[0:1].upper() + value[1:])
 	    
-	    elif field =="mail":
+	    elif field in ["mail", "email", "mozillaSecondEmail"]:  ## @@ distinguish?
 		mboxUri = "mailto:" + value
 		hash = binascii.hexlify(sha.new(mboxUri).digest())
-		print '\tfoaf:mbox_sha1sum "%s";' % (hash)
+		print '\tfoaf:mbox_sha1sum %s;' % (stringToN3(hash, singleLine=1))
 		if not hideMailbox:
 		    print '\tfoaf:mbox <%s>;' % (mboxUri)
+		    
+	    elif field in ["telephoneNumber", "homePhone", 'fax', 'pager', 'mobile']:
+		print '\tldif:%s <tel:%s>;' % (field, value.replace(' ','-'))
+
 	    else:
 	    
 		if field == "modifytimestamp" and value == "0Z":
 		    continue;  # ignore
-		    
-		foaf = asFoaf.get(field, None)
-		if foaf:
-		    print '\t%s "%s"; '% (foaf, value)
-		else:
-		    if not (hideMailbox and field == "dn"):
-			print '\tldif:%s "%s"; '% (field, value)
+
+		obj = stringToN3(value, singleLine=0)
+		pred = asFoaf.get(field, '\tldif:'+field)
+		if not (hideMailbox and field == "dn"):
+		    print '\t%s %s; '% (pred, obj)
+
 	    continue
 
-	print "# ERROR: Unknown line format:" + buf[line:line+20]
-#    print "]."
+	print "# ERROR: Unknown line format:", l
+    print "]."
 	
 
 def do(path):
@@ -109,32 +138,24 @@ def do(path):
 nochange = 1
 verbose = 0
 hideMailbox = 0
+pureLDIF = 0
 doall = 0
 files = []
 
 for arg in sys.argv[1:]:
     if arg[0:1] == "-":
         if arg == "-?" or arg == "--help":
-	    print """Convert Makfile format of make(1) to n3 format.
-
-Syntax:    make2n3  <file>
-
-    where <file> can be omitted and if so defaults to Makefile.
-    This program was http://www.w3.org/2000/10/swap/util/make2p3.py
-    $Id$
-    
-    -v  verbose
-    -m  hide mailbox
-"""
+	    print 
         elif arg == "-v": verbose = 1
         elif arg == "-m": hideMailbox = 1
+	elif arg == "-l": pureLDIF = 1
 	else:
-            print """Bad option argument."""
+            print """Bad option argument.""" + __doc__
             sys.exit(-1)
     else:
         files.append(arg)
 
-if files == []: files = [ "Makefile" ] # Default to Makefile
+# if files == []: files = [ "Makefile" ] # Default to Makefile
 
 for path in files:
     do(path)

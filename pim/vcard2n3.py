@@ -31,6 +31,17 @@ import sys, string, re, os
 # export PYTHONPATH=$PYTHONPATH:/devel/WWW/2002/12/cal
 import icslex # from http://www.w3.org/2002/12/cal/icslex.py
 
+import notation3 # http://www.w3.org/2000/10/swap/notation3.py
+
+from notation3 import stringToN3
+
+lineLength = 76 # A few clear of 80, as used by AB base64 wrapping
+
+singleTextField = [ 'fn',  'title', 'bday', 'description', 'note',
+	    'x-abuid','x-abadr', 'x-aim', 'x-abrelatednames', 'x-abshowas' ]
+
+kludgeTags = [ 'v:x-ablabel', 'v:x-abadr']  # These have sideeffects
+
 # From http://www.ietf.org/rfc/rfc2426.txt  adr-type
 typeFields = {
     'adr':   [ "dom" , "intl" , "postal" , "parcel" , "home"
@@ -61,16 +72,10 @@ fieldProperties = {   # @@@ These are rather long localnames IMHO
 	    'locality', 'region', 'postal-code', 'country-name' ],
     'org': [ 'organization-name', 'organization-unit']
 	    }
-	    
-def stripOut(str, characters):
-    str2 = ""
-    for i in range(len(str)):
-        if str[i] not in characters:
-            str2 = str2 + str[i]
-    return str2
-
+	   
+	     
 def zapOut(str, allowed):
-    """Only allow the characters give. Strings of consecutive
+    """Only allow the characters given. Strings of consecutive
     unallowed characters are replaced with a single underscore character"""
     str2 = ""
     for i in range(len(str)):
@@ -95,7 +100,8 @@ def splitBy(stri, delim, unescape=1):
 	    ch = stri[i]
 	    if escaped:
 		escaped = 0
-		unesc += ch
+		if ch in "nN": unesc += '\n'
+		else: unesc += ch
 	    else:
 		if ch == delim: break
 		if ch == escape: escaped = 1
@@ -106,18 +112,18 @@ def splitBy(stri, delim, unescape=1):
 	begin = i+1
     return result
 
-wr = sys.stdout.write
-	
+def wr(s):
+    sys.stdout.write(s.encode('utf-8'))
+
 def extract(path):
     global nochange
     global verbose
     total = 0
     
-    print "# n3  http://www.w3.org/DesignIssues/Notation3."
-    print "# From vCard data in ", path
-    print "# Extracted by $Id$ "
-    print
-    print """@prefix : <#>.
+    wr( """# n3  http://www.w3.org/DesignIssues/Notation3.
+# From vCard data in %s
+# Extracted by $Id$ 
+@prefix : <#>.
 @prefix loc: <#loc_>.
 @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
@@ -125,10 +131,23 @@ def extract(path):
 @prefix vc:  <http://www.w3.org/2006/vcard/class#>.
 @prefix abl:  <http://www.w3.org/2006/vcard/abl#>.
 @prefix user: <#>.
-"""
+""" % path)
 
     input = open(path, "r")
-    inRecord = 0
+
+    x = open('vCards.vcf')
+    b = input.read()
+    input.close()
+    
+    wr("# Length: " + `len(b)`+ "starts ")
+    for i in range(8): wr(" %2x"%ord(b[i]))
+    wr("\n")
+    if ord(b[0])==0 and ord(b[1]) == ord('B'):  #  UTF16 with MSB byte order unmarked    
+	d = "\xfe\xff"   # Add byte order mark
+	buf = (d+b).decode('utf-16')
+	wr( " #Warning:  UTF-16 was not byte order marked.\n")
+    else:
+	buf = b.decode('utf-8')
 
     group_line = re.compile(r'^([a-zA-Z0-9]+)\.(.*)')
     field_value = re.compile(r'^([A-Za-z0-9_-]*):(.*)')
@@ -137,10 +156,21 @@ def extract(path):
     cardData = ""
     groupData = {}
     groupPred = {}
+    
 
-    def readBareLine(input):
-	line = input.readline()
-        if line [-1:] == "\n": line = line[:-1] # Strip triling LF
+    def readBareLine(buf):
+	"Return None for EOF or a line, even including a final widowed line"
+	global bufpo # can't pass by ref
+	begin = bufpo
+	if begin == len(buf): return None
+	bufpo = buf.find('\n', begin)
+	if bufpo < 0:
+	    bufpo = len(buf)
+	    line = buf[begin:]
+	else:
+	    line = buf[begin:bufpo]
+	    bufpo += 1  # After \n
+
         while line [-1:] == "\r": line = line[:-1] # Strip triling CRs
 	return line
 	
@@ -151,15 +181,38 @@ def extract(path):
 
 
     def endGroup(g):
-#        print "# End group <%s>" % `g`
-	if len(groupData[g] == 2):
-	    if groupData[g][1][0] == 'v:x-ablabel':
-		return "%s "
-	res = []
-	for p,o in  groupData[g]:
-	    res += " %s %s" %(p,o)
-	return "%s [ # %s\n%s]\n" % (groupPred[g], g, res)
-	
+        #print "# End group <%s> data:%s" % (`g`, groupData[g])
+	pos = groupData[g]
+	kludges, data = [], []
+	for i in range(len(pos)):
+	    p, o = pos[i]
+	    if p in kludgeTags: kludges.append((p,o))
+	    else: data.append((p,o))
+	if len(data) == 1:  # The AddressBook model, one data item + kludges
+	    dp, do = data[0]
+	    for p,o in kludges:
+		if p == 'v:x-ablabel':
+		    dp = o  # Override predicate
+		if p == 'v:x-abadr':
+		    assert do[-1:] == ']';
+		    do = do[:-1]+' '+ p +' '+ o +';]' # annnotate object
+	    return "%s %s;\n" % (dp, do)
+
+	if len(kludges) != 0:
+	    raise ValueError("Unknown Group pattern:"+`pos`)
+
+	res = ""
+	for p,o in  pos:
+	    res += " %s %s;" %(p,o)
+	return "%s [ # %s\n%s];\n" % (groupPred[g], g, res)
+
+    def lineFold(str1, str1):
+	x = str1.rfind('\n')
+	if x < 0: x = 0
+	if len(str1) - x + len(str2) > lineLength:
+	    return str1+ "\n\t" + str2
+	return str1 + str2
+
     def orderedFields(value, map):
     	    cardData = ""
 	    beg = 0
@@ -174,7 +227,8 @@ def extract(path):
 		if end < 0:
 		    end = len(value)
 		st = " ".join(splitBy(value[beg:end], ','))
-		if st: cardData += ' v:%s "%s";' % (map[i], st)
+		if st: cardData = lineFold(cardData, ' v:%s %s;' % \
+				    (map[i], stringToN3(st, singleLine=1))
 		beg=end+1
 		if beg > len(value):
 		    break
@@ -185,9 +239,9 @@ def extract(path):
 	modifiers = ""
 	datatype = None
 	classes = []
-	for prop, vals in props:
+	for prop, val in props:
 	    if prop == 'type':
-		vals = vals.lower()
+		vals = val.lower()
 		for val in splitBy(vals, ','):
 		    if val == 'internet' and n == 'email':
 			pass
@@ -212,8 +266,8 @@ def extract(path):
 		value = value.replace(' ','')
 		res = ""
 		while value:
-		    res += value[:76] + "\n"
-		    value = value[76:]
+		    res += value[:lineLength] + "\n"
+		    value = value[lineLength:]
 		return 'v:'+n, '[ v:base64 """%s"""]\n' % (res)  # Special case
 				
 	    else: raise ValueError('Unknown property %s with value %s' & (prop, val))
@@ -231,6 +285,16 @@ def extract(path):
 	    return "", ""
 	if n == 'x.ablabel':
 	    return "", "" # used elsewhere
+
+	if n == 'categories':   # Really should relate these to classes, but this roundtrips
+	    obj = ", ".join(['"'+x+'"' for x in splitBy(value, ',')])
+	    return pred,  obj 
+
+
+	unesc = splitBy(value, ';')
+	if len(unesc) != 1: raise ValueError("Unescaped semicolon in value: "+ value)
+	unesc = unesc[0]
+
 	obj = None
 	if n == 'tel':
 	    if value[0] != '+':
@@ -245,27 +309,26 @@ def extract(path):
 	    if classSpec: wr('%s %s.\n'  %(obj, classSpec))
 	    return pred, obj
 
-	if n == 'categories':   # Really should relate these to classes, but this roundtrips
-	    obj = ", ".join(['"'+x+'"' for x in splitBy(value, ',')])
-	    return pred,  obj 
-	elif n in [ 'fn',  'title', 'bday', 'description',
-	    'x-abuid','x-abadr', 'x-aim', 'x-abrelatednames', 'x-abshowas' ]:  # Single text
-	    return pred, '"%s"' % (value) # de-escape \:
+	elif n in singleTextField :  # Single text
+	    if classSpec:
+		raiseValueError("Unexpected class on %s: %s"%(n,`classSpec`))
+	    return pred, stringToN3(unesc, singleLine=0) # @@@ N3 escaping
 
 	raise ValueError('Unknown tag:'+n)
     
-
-    nextLine = readBareLine(input)
+    global bufpo
+    bufpo = 0
+    nextLine = readBareLine(buf)
     while 1:
 
         line = nextLine
 	while 1:
-	    nextLine = readBareLine(input)
+	    nextLine = readBareLine(buf)
 	    if not nextLine or nextLine[0] != ' ': break
 	    line += nextLine[1:]
 
-        if line=="": break # EOF
-	#print "# line:", line[:100]
+        if line is None : break # EOF
+#	wr( "# line: " +line[:100])
 	m = group_line.match(line)
 	if m:
 	    g = m.group(1)
@@ -276,20 +339,21 @@ def extract(path):
 	    group = g
 	    
 	    n, props, value = icslex.parseLine(line)
-	    for prop, val in props:
-		if prop == 'type':
-		    val = val.lower()
-		    if group .startswith("item"): # AB hack
-			groupPred[group] = "loc:"+val
+#	    for prop, val in props:
+#		if prop == 'type':
+#		    val = val.lower()
+#		    if group .startswith("item"): # AB hack
+#			groupPred[group] = "loc:"+val
 			
 	    if n == 'x-ablabel':
+		pred = 'v:'+n
 		if value[:4] == "_$!<" and value[-4:] == ">!$_": # [sic]
-		    groupPred[group] = "abl:"+value[4:-4]
+		    obj = "abl:"+munge(value[4:-4])
 		else:  # User generated
-		    groupPred[group] = "user:"+munge(value)
+		    obj = "user:"+munge(value)
 	    else:
-		p, o = predicateObject(n, props, value)
-		groupData[group].append((p, o))
+		pred, obj = predicateObject(n, props, value)
+	    groupData[group].append((pred, obj))
 
 	else:
 	    if group is not None:  # End group
@@ -305,7 +369,7 @@ def extract(path):
 		wr("%s %s." % (cardID, cardData))
 	    else:
 		p, o = predicateObject(n, props, value)
-		cardData+= "    %s %s;\n" %(p, o)
+		if p: cardData+= "    %s %s;\n" %(p, o)
 	    
     wr("\n\n#ends\n")            
     input.close()
@@ -345,6 +409,7 @@ for arg in sys.argv[1:]:
         else:
             print """Bad option argument.
             -v  verbose
+	    -t  self-test
             -f  fix files instead of just looking
 
 """
