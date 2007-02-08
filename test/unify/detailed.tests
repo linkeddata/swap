@@ -17,6 +17,11 @@
     test:description   "Query looking for @forAll";
     test:arguments     """unify/unify2.n3 --think --data""".
 
+:t555 a  a test:CwmTest;
+    test:referenceOutput <ref/reflexive_include.out>;
+    test:description   "Include using the same var twice";
+    test:arguments     """unify/reflexive_include.n3 --think --data""".
+
 
 #:t555 a test:CwmTest;
 #    test:referenceOutput <ref/unify3.out>;

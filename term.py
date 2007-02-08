@@ -1513,6 +1513,7 @@ class XMLLiteral(Literal):
 	return Set()
 
     def __repr__(self):
+        self.__str__()
         return '"' + self.string[0:7] + '...' + self.string[-4:] + '"'
 #        return self.string
 

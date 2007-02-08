@@ -114,7 +114,7 @@ def explainFormula(f, flags=""):
     tr = proofsOf.get(f, None)
     if tr is None:
 	raise ValueError(
-	    "No tracker. This may happen if the formula is validly empty. f=%s, proofsOf=%s" % (f, dict(proofsOf)))
+	    "No tracker. This may happen if the formula is validly empty. f=%s, proofsOf=%s" % (f.debugString(), dict(proofsOf)))
     if not tr:
         raise ValueError(dict(proofsOf))
     try:
@@ -480,7 +480,6 @@ class BecauseOfRule(Reason):
 	ev = []  # For PML compatability we will store it as a collection
 	for s in self._evidence:
 	    if isinstance(s, BecauseBuiltIn):
-		raise "eh? this is silly - ever reached? s is statment not step"
                 try:
 		    e = s.explain(ko, flags=flags)
                 except:

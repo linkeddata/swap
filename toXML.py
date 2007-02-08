@@ -238,6 +238,7 @@ z  - Allow relative URIs for namespaces
     def makeStatement(self,  tuple, why=None, aIsPossible=0):
         context, pred, subj, obj = tuple # Context is ignored
 
+
         if self.stack[-1]:
 	    if pred == N3_first:
 		pred = RDF_li
@@ -321,7 +322,7 @@ z  - Allow relative URIs for namespaces
 	    else:
 		raise RuntimeError("Unexpected subject", `subj`)
 
-	elif obj[0] not in (XMLLITERAL, LITERAL, LITERAL_DT, LITERAL_LANG):
+	if obj[0] not in (XMLLITERAL, LITERAL, LITERAL_DT, LITERAL_LANG):
 	    nid = self._nodeID.get(obj, None)
 	    if nid == None:
 		objn = self.referenceTo( obj[1])
