@@ -1,31 +1,9 @@
-#
-#  Note - see also times for string-oriented versions
-#
-# TODO:
-# - extraction os fields should extend date time if necessary
-#
-# See http://www.python.org/doc/current/lib/module-time.html
-#
-
+"""XML built-ins for cwm
 """
-The time built-ins concern dates and times expressed in a specific
-version of ISO date-time format.  These functions allow the various
-parts of the date and time to be compared, and converted
-into interger second GMT era format for arithmetic.
-
-Be aware that ISo times carry timezone offset information:  they cannot be
-converted to integer second times without a valid timezone offset, such as "Z".
-"""
-
-import string
-import re
-import notation3    # N3 parsers and generators, and RDF generator
-import isodate	    # Local, by mnot. implements <http://www.w3.org/TR/NOTE-datetime>
-
 
 from diag import progress, verbosity
-from term import LightBuiltIn, Function, ReverseFunction
-import time, calendar # Python standard distribution
+from term import LightBuiltIn, Function, ReverseFunction, MultipleFunction
+import xml.xpath # http://packages.debian.org/unstable/python/python-xml
 
 
 XMLBI_NS_URI = "http://www.w3.org/2007/ont/xml#"
@@ -34,7 +12,8 @@ XMLBI_NS_URI = "http://www.w3.org/2007/ont/xml#"
 __version__ = "0.1"
 
 
-#   Node properties   -- see http://www.python.org/doc/current/lib/dom-node-objects.html
+# Node properties
+# see http://www.python.org/doc/current/lib/dom-node-objects.html
 
 
 class BI_nodeType(LightBuiltIn, Function):
@@ -152,6 +131,13 @@ class BI_isSameNode(LightBuiltIn):
 	return subj_py.sSameNode(obj_py)
 
 
+class BI_xpath(LightBuiltIn, MultipleFunction):
+    """Evaluate XPath expression and bind to each resulting node."""
+    def evaluateObject(self, subj_py):
+        node, expr = subj_py
+        out = xml.xpath.Evaluate(expr, node)
+        progress("xpath out node:", out)
+        return [self.store.newXMLLiteral(n) for n in out]
 
 #  Register the string built-ins with the store
 def register(store):
@@ -172,6 +158,6 @@ def register(store):
     str.internFrag("hasAttributes", BI_hasAttributes)
     str.internFrag("hasChildNodes", BI_hasChildNodes)
     str.internFrag("isSameNode", BI_isSameNode)
-
+    str.internFrag("xpath", BI_xpath)
 
 # ends
