@@ -1,0 +1,108 @@
+     @prefix : <http://www.w3.org/2000/10/swap/reason#> .
+    @prefix dou: <reason/double.n3#> .
+    @prefix gmp: <reason/gmpbnode#> .
+    @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    @prefix n3: <http://www.w3.org/2004/06/rei#> .
+    
+     @forSome run:_g33,
+                run:_g41 .
+      [      a :Conjunction,
+                    :Proof;
+             :component  [
+                 a :Inference;
+                 :binding  [
+                     :boundTo  [
+                         n3:uri "http://example.com/swap/test/reason/gmpbnode#Texas" ];
+                     :variable  [
+                         n3:nodeId "http://example.com/swap/test/reason/double.n3#REGION" ] ],
+                         [
+                     :boundTo  [
+                         a :Existential;
+                         n3:uri "http://example.com/swap/test/reason/double.n3#_g_L3C17" ];
+                     :variable  [
+                         n3:nodeId "http://example.com/swap/test/reason/double.n3#WHERE" ] ],
+                         [
+                     :boundTo  [
+                         n3:uri "http://example.com/swap/test/reason/gmpbnode#dan" ];
+                     :variable  [
+                         n3:nodeId "http://example.com/swap/test/reason/double.n3#WHO" ] ];
+                 :evidence  (
+                 [
+                         a :Extraction;
+                         :because run:_g33;
+                         :gives { @forSome dou:_g_L3C17 .
+                        gmp:dan     gmp:home dou:_g_L3C17 .
+                        } ]
+                 [
+                         a :Extraction;
+                         :because run:_g41;
+                         :gives { @forSome dou:_g_L3C17 .
+                        dou:_g_L3C17     gmp:in gmp:Texas .
+                        } ] );
+                 :rule  [
+                     a :Extraction;
+                     :because run:_g33;
+                     :gives { @forAll dou:REGION,
+                                dou:WHERE,
+                                dou:WHO .
+                    {
+                        dou:WHERE     gmp:in dou:REGION .
+                        dou:WHO     gmp:home dou:WHERE .
+                        
+                        }     log:implies {dou:WHO     gmp:homeRegion dou:REGION .
+                        } .
+                    } ] ],
+                    run:_g33,
+                    run:_g41;
+             :gives { @forAll dou:REGION,
+                        dou:WHERE,
+                        dou:WHO.
+                 @forSome dou:_g_L3C17 .
+            dou:_g_L3C17     gmp:in gmp:Texas .
+            gmp:dan     a gmp:Man;
+                 gmp:home dou:_g_L3C17;
+                 gmp:homeRegion gmp:Texas .
+            {
+                gmp:dan     gmp:home dou:WHERE .
+                
+                }     log:implies {dou:WHERE     gmp:in gmp:Texas .
+                } .
+            {
+                dou:WHERE     gmp:in dou:REGION .
+                dou:WHO     gmp:home dou:WHERE .
+                
+                }     log:implies {dou:WHO     gmp:homeRegion dou:REGION .
+                } .
+            } ].
+    
+    run:_g33     a :Parsing;
+         :because  [
+             a :CommandLine;
+             :args "['../cwm.py', '--quiet', '--n3=eiouB', 'reason/double.n3', '--think', '--base=foo', '--why']" ];
+         :source <reason/double.n3> .
+    
+    run:_g41     a :Inference;
+         :binding  [
+             :boundTo  [
+                 a :Existential;
+                 n3:uri "http://example.com/swap/test/reason/double.n3#_g_L3C17" ];
+             :variable  [
+                 n3:nodeId "http://example.com/swap/test/reason/double.n3#WHERE" ] ];
+         :evidence  (
+         [
+                 a :Extraction;
+                 :because run:_g33;
+                 :gives { @forSome dou:_g_L3C17 .
+                gmp:dan     gmp:home dou:_g_L3C17 .
+                } ] );
+         :rule  [
+             a :Extraction;
+             :because run:_g33;
+             :gives { @forAll dou:WHERE .
+            {
+                gmp:dan     gmp:home dou:WHERE .
+                
+                }     log:implies {dou:WHERE     gmp:in gmp:Texas .
+                } .
+            } ] .
+    

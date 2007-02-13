@@ -152,6 +152,11 @@
     test:description   "Smushing of equal formulas can lead to proof issues";
     test:arguments     """--n3=eiouB reason/poor-urop.n3 --think --base=foo --why | python ../check.py""".
 
+:t12 a test:CwmTest;
+    test:workingDirectory  <../>;
+    test:referenceOutput <../ref/double-proof.n3>;
+    test:description   "Are we splitting bNodes in proofs with no good reason?";
+    test:arguments     """--n3=eiouB reason/double.n3 --think --base=foo --why""".
 
 
 :t90check a test:CwmTest;

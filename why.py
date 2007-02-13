@@ -114,7 +114,7 @@ def explainFormula(f, flags=""):
     tr = proofsOf.get(f, None)
     if tr is None:
 	raise ValueError(
-	    "No tracker. This may happen if the formula is validly empty. f=%s, proofsOf=%s" % (f.debugString(), dict(proofsOf)))
+	    "No tracker. This may happen if the formula is validly empty. f=%s, proofsOf=%s" % (f, dict(proofsOf)))
     if not tr:
         raise ValueError(dict(proofsOf))
     try:
@@ -478,6 +478,7 @@ class BecauseOfRule(Reason):
 	    
 	if diag.chatty_flag>49: progress("evidence:")
 	ev = []  # For PML compatability we will store it as a collection
+	realStatements = []
 	for s in self._evidence:
 	    if isinstance(s, BecauseBuiltIn):
                 try:
@@ -485,10 +486,12 @@ class BecauseOfRule(Reason):
                 except:
                     print s
                     raise
+                ev.append(e)
 	    else:
 		f = s.context()
 		if f is self._kb: # Normal case
-		    e = explainStatement(s, ko)
+                    ## We need something a little more complicated
+		    realStatements.append(s)
 		    if s.predicate() is f.store.includes:
 			for t in self.evidence:
 			    if t.context() is s.subject():
@@ -501,7 +504,7 @@ class BecauseOfRule(Reason):
                                     raise 
 #		else:
 #		    progress("Included statement found:" + `s`)
-	    ev.append(e)
+        ev.extend(explainStatements(realStatements, ko))
 	ko.add(subj=me, pred=reason.evidence, obj=ev, why= dontAsk)
         if "g" in flags:
 	    prem = _subsetFormula(self.statements)
@@ -558,7 +561,7 @@ subFormulaStandIn = subFormulaStandIn.__get__({})
 subFormulaStandIn.im_self[id(subFormulaStandIn.im_self)] = 0
 
 def explainStatement(s, ko, ss=None, flags=""):
-    si = describeStatement(s, ko, flags=flags)
+    si = describeStatement([s], ko, flags=flags)
 
 
     statementReason = getStatementReason(s)
@@ -580,18 +583,50 @@ def explainStatement(s, ko, ss=None, flags=""):
     ko.add(subj=si, pred=reason.because, obj=ri, why=dontAsk)
     return si
 
-def describeStatement(s, ko, flags):
+def explainStatements(s_l, ko, ss=None, flags=""):
+    if not s_l:
+        return []
+    reasonsForStatement = {}
+    f = s_l[0].context()
+    for s in s_l:
+        statementReason = getStatementReason(s)
+
+        if statementReason == None:
+            raise RuntimeError(
+            """Ooops, no reason for this statement?! 
+            Collector: %s
+            Formula: %s
+            No reason for statement: %s
+            Reasons for statements we do have: %s
+            Formula contents as follows:
+            %s
+            """ % (tracker, f, s, tracker.reasonForStatement,
+                f.debugString()))
+        reasonsForStatement.setdefault(statementReason, []).append(s)
+    si_l = []
+    for r, statements in reasonsForStatement.items():
+        si = describeStatement(statements, ko, flags=flags)
+        si_l.append(si)
+        ri = r.explain(ko, flags=flags)
+        ko.add(subj=si, pred=reason.because, obj=ri, why=dontAsk)
+    return si_l
+    
+
+def describeStatement(s_l, ko, flags):
 	"Describe the statement into the output formula ko"
         from formula import StoredStatement
-
-        con, pred, subj, obj = s
-        subj = subFormulaStandIn(ko, subj, flags)
-        obj = subFormulaStandIn(ko, obj, flags)
-        s = StoredStatement([con, pred, subj, obj])
+        f = s_l[0].context()
+        s_l2 = []
+        for s in s_l:
+            con, pred, subj, obj = s
+            subj = subFormulaStandIn(ko, subj, flags)
+            obj = subFormulaStandIn(ko, obj, flags)
+            s = StoredStatement([con, pred, subj, obj])
+            s_l2.append(s)
 	
 	si = ko.newBlankNode(why=dontAsk)
 	ko.add(si, rdf.type, reason.Extraction, why=dontAsk)
-	standIn = formulaStandIn(ko, s.asFormula(why=dontAsk), flags=flags)
+	standIn = formulaStandIn(ko, f.subSet(s_l2, why=dontAsk), flags=flags)
 	ko.add(si, reason.gives, standIn, why=dontAsk)
 	return si
 

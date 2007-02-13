@@ -404,6 +404,30 @@ For future reference, use newUniversal
 		              obj=obj,
 		              why=why)
         return bindings3, total
+
+    def subSet(self, statements, why=None):
+        f = self.newFormula()
+        for s in statements:
+            c, p, s, o = s.quad
+            f.add(s, p, o, why=why)
+            assert c is self
+
+	uu = f.occurringIn(self.universals())
+	ee = f.occurringIn(self.existentials())
+	bindings = {}
+	
+	f = self.newFormula()   ## do it right this time, with vars
+	for v in uu:
+#	    progress("&&&&& New universal is %s\n\t in %s" % (v.uriref(), f))
+	    bindings[v] = f.newUniversal(v)
+#	    progress("&&&&& Universals are %s\n\t in %s" % (f.universals(), f))
+	for v in ee:
+	    f.declareExistential(v)
+	for s in statements:
+            c, p, s, o = s.quad
+            f.add(s.substitution(bindings, why=why), p.substitution(bindings, why=why), o.substitution(bindings, why=why), why=why)
+	return f.close()  # probably slow - much slower than statement subclass of formula
+
                 
     def substituteEquals(self, bindings, newBindings):
 	"""Return this or a version of me with subsitution made
