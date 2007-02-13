@@ -349,7 +349,8 @@ class Checker(FormulaCache):
             bindings={}
             for b in proof.each(subj=step, pred=reason.binding):
                 varq = proof.the(subj=b, pred=reason.variable)
-                var = proof.any(subj=varq, pred=rei.nodeId)
+                var = proof.any(subj=varq, pred=rei.nodeId) or \
+                      proof.any(subj=varq, pred=rei.uri)
                 # get VAR from "...foo.n3#VAR"
                 varname = str(var).split("#")[1]
                 
@@ -623,6 +624,7 @@ def getTerm(proof, x):
 _TestBuiltinStep = """
 @keywords is, of, a.
 @prefix math: <http://www.w3.org/2000/10/swap/math#>.
+@prefix list: <http://www.w3.org/2000/10/swap/list#>.
 @prefix str: <http://www.w3.org/2000/10/swap/string#>.
 @prefix : <http://www.w3.org/2000/10/swap/reason#>.
 
@@ -635,6 +637,14 @@ def checkBuiltin(r, f, checker, policy, level=0):
     @@hmm... integrate with Policy more?
     
     >>> soc = Namespace("http://example/socrates#")
+    >>> pf = _s2f(_TestBuiltinStep % '"a" list:in ("b" "a" "c")',
+    ...           "http://example/socrates")
+    >>> f = checkBuiltin(soc.step1,
+    ...                 pf.the(subj=soc.step1, pred=reason.gives),
+    ...                 Checker(pf), AllPremises())
+    >>> len(f)
+    1
+
     >>> pf = _s2f(_TestBuiltinStep % '"abc" str:startsWith "a"',
     ...           "http://example/socrates")
     >>> f = checkBuiltin(soc.step1,
