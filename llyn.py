@@ -39,7 +39,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  FOR A PARTICULAR PURPOSE.
 """
 
-# emacsbug="""emacs got confused by long string above@@"""
+# emacsbug="""emacs got confused by long string above"""
 
 from __future__ import generators
 # see http://www.amk.ca/python/2.2/index.html#SECTION000500000000000000000
@@ -78,7 +78,8 @@ from diag import progress, verbosity, tracking
 from term import BuiltIn, LightBuiltIn, RDFBuiltIn, HeavyBuiltIn, Function, \
     MultipleFunction, ReverseFunction, MultipleReverseFunction, \
     Literal, XMLLiteral, Symbol, Fragment, FragmentNil, Term, LabelledNode, \
-    CompoundTerm, List, EmptyList, NonEmptyList, AnonymousNode, N3Set
+    CompoundTerm, List, EmptyList, NonEmptyList, AnonymousNode, N3Set, \
+    UnknownType
 from formula import Formula, StoredStatement
 import reify
 
@@ -887,7 +888,15 @@ class BI_dtlit(LightBuiltIn, Function):
     """built a datatype literal from a string and a uri"""
      
     def evaluateObject(self, subj_py):
-	return self.store.newLiteral(subj_py[0], subj_py[1])
+        lex, dt = subj_py
+        if dt is self.store.symbol("http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"):
+            try:
+                dom = XMLtoDOM(lex)
+            except SyntaxError, e:
+                raise UnknownType # really malformed literal
+            return self.store.newXMLLiteral(dom)
+        else:
+            return self.store.newLiteral(lex, dt)
 
 
 class BI_rawUri(BI_uri):

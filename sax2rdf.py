@@ -787,7 +787,7 @@ class RDFHandler(xml.sax.ContentHandler):
 		e = self.domDocument.createElementNS(name[0], name[1])
             for ns in [name] + attrs.keys():
                 ns = ns[0]
-                if not ns in declared:
+                if ns and not ns in declared:
                     prefix = nsMap.get(ns, None)
 		    if prefix is None:
 			columnNumber = self._p.getColumnNumber()
@@ -814,7 +814,7 @@ class RDFHandler(xml.sax.ContentHandler):
             if name[0]:
 		e.setAttributeNS(name[0], declared[name[0]] + ":" + name[1], value)
             else:
-		e.setAttributeNS(name[1], value) #@@@ Missing prefix on qname
+		e.setAttributeNS(None, name[1], value)
         
     def literal_element_start_DOM_OLD(self, name, qname, attrs):
 
