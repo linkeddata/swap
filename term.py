@@ -1526,7 +1526,7 @@ class XMLLiteral(Literal):
     def compareTerm(self, other):
 	"Assume is also a literal - see function compareTerm in formula.py"
 	if self.datatype == other.datatype:
-	    diff = cmp(str(self), str(other))
+	    diff = cmp(unicode(self), unicode(other))
 	    return diff
 	    return cmp(self.lang, other.lang)
 	else:
