@@ -1,0 +1,42 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix fn: <http://www.w3.org/2006/xpath-functions#>.
+
+@prefix x: <http://www.w3.org/2007/ont/xml#>.
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix str: <http://www.w3.org/2000/10/swap/string#> .
+
+# an implementaion of fn:doc
+
+<http://www.w3.org/2001/sw/grddl-wg/td/titleauthor.html> a :InformationResource.
+
+{
+ ?IR a :InformationResource; log:uri ?I.
+ ?IR log:content ?TXT.
+ (?TXT rdf:XMLLiteral) log:dtlit ?NODE
+} => { ?I fn:doc ?NODE }.
+
+{
+ ?I fn:doc ?NODE.
+ (?NODE """/*/*/@*[local-name() = "transformation"
+    and namespace-uri()=
+    "http://www.w3.org/2003/g/data-view#"]""") x:xpath [ fn:string ?TXT ].
+} => { :test :txattrval ?TXT }.
+
+{
+ ?I fn:doc ?NODE.
+ (?NODE """/*/*/@*[local-name() = "transformation"
+    and namespace-uri()=
+    "http://www.w3.org/2003/g/data-view#"]""") x:xpath [ log:rawType ?T ].
+} => { :test :txattrtype ?T }.
+
+{
+ ?I fn:doc ?NODE.
+ (?NODE """/*/*""") x:xpath [ x:nodeName ?N ].
+} => { :test :envEltName ?N }.
+
+{
+ ?I fn:doc ?NODE.
+ (?NODE """/*/*/@*""") x:xpath [ x:nodeName ?N ].
+} => { :test :envEltAttrName ?N }.
+
