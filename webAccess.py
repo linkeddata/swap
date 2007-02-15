@@ -30,9 +30,11 @@ HTTP_Content_Type = 'content-type' #@@ belongs elsewhere?
 
 print_all_file_names = diag.print_all_file_names   # for listing test files
 
-class SecurityError(RuntimeError):
+class SecurityError(IOError):
     pass
 
+# this setting code is too tricky to go without a comment. Please explain.
+# --DWC
 def setting(self, val=None):
     if val is not None:
         self[0] = val
@@ -59,30 +61,47 @@ def cacheHack(addr):
     return addr
 		
 def urlopenForRDF(addr, referer=None):
-    """A version of urllib.urlopen() which asks for RDF by preference
+    """Access the web, with a preference for RDF
+    """
+    return webget(addr,
+                  types=['text/rdf+n3',
+                         'application/rdf+xml'],
+                  referer = referer)
 
-    This is now uses urllib2.urlopen(), in order to get better error handling
+
+def webget(addr, referer=None, types=[]):
+    """Open a URI for reading; return a file-like object with .headers
+    cf http://www.w3.org/TR/2004/REC-webarch-20041215/#dereference-uri
     """
 
     if diag.chatty_flag > 7: progress("Accessing: " + addr)
     if sandBoxed():
         if addr[:5] == 'file:':
-            raise SecurityError('Nice try')
-    addr = cacheHack(addr) # @@ hack
+            raise SecurityError('local file access prohibited')
+
+    addr = cacheHack(addr)
+
+    # work around python stdlib bugs with data: URIs
+    # buggy in 2.4.2 with CStringIO
     if addr[:5] == 'data:':
-#        return open_data(addr)
-        return urllib.urlopen(addr)   # buggy in 2.4.2 with CStringIO
-    z = urllib2.Request(addr)
-#    z.add_header('Accept', 'text/rdf+n3, application/rdf+xml')  # Fine
-    z.add_header('Accept', 'text/rdf+n3')   # Split for some broken sites
-    z.add_header('Accept', 'application/rdf+xml')
+        # return open_data(addr)
+        return urllib.urlopen(addr)
+
+    req = urllib2.Request(addr)
+
+    for t in types:
+        req.add_header('Accept', t)
+
     if referer: #consistently misspelt
-        z.add_header('Referer', referer)
-#    z.add_header('Accept', 'text/plain q=0.1')
-    q =  urllib2.urlopen(z)
+        req.add_header('Referer', referer)
+
+    stream =  urllib2.urlopen(req)
+
     if print_all_file_names:
         diag.file_list.append(addr)
-    return q
+
+    return stream
+
 
 def load(store, uri=None, openFormula=None, asIfFrom=None, contentType=None,
 		flags="", referer=None, why=None, topLevel=False):

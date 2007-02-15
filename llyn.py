@@ -68,8 +68,7 @@ import xml.dom.minidom
 from why import smushedFormula, Premise, newTopLevelFormula, isTopLevel
 
 import notation3    # N3 parsers and generators, and RDF generator
-from webAccess import urlopenForRDF   # http://www.w3.org/2000/10/swap/
-# import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
+from webAccess import webget
 
 import diag  # problems importing the tracking flag,
 	     # and chatty_flag must be explicit it seems: use diag.tracking
@@ -1057,34 +1056,47 @@ class BI_semanticsOrError(BI_semantics):
             return result
     
 
+def loadToStore(term, types):
+    """load content from the web and keep it in the store's experience.
+    return resulting literal term
+    
+    raises IOError
+    
+    <DanC> the log:content built-in could keep an HTTP response
+           object around a la tabulator too.
+    <timbl> yes.
+    <timbl> You learn a lot from a recode.
+    """
+
+    if isinstance(term, Fragment): doc = term.resource # i.e. racine
+    else: doc = term
+    store = term.store #hmm... separate store from term?
+    C = store.any((store._experience, store.content, doc, None))
+    if C != None:
+        if diag.chatty_flag > 10: progress("already read " + `doc`)
+        return C
+
+    if diag.chatty_flag > 10: progress("Reading " + `doc`)
+    inputURI = doc.uriref()
+
+    netStream = webget(inputURI, types)
+
+    #@@ get charset from headers
+    str = netStream.read().decode('utf-8')
+    C = store.intern((LITERAL, str))
+    store.storeQuad((store._experience,
+                     store.content,
+                     doc,
+                     C))
+    return C
 
 class BI_content(HeavyBuiltIn, Function):
     def evalObj(self, subj, queue, bindings, proof, query):
-        store = subj.store
-        if isinstance(subj, Fragment): doc = subj.resource
-        else: doc = subj
-        C = store.any((store._experience, store.content, doc, None))
-        if C != None:
-            if diag.chatty_flag > 10: progress("already read " + `doc`)
-            return C
-        if diag.chatty_flag > 10: progress("Reading " + `doc`)
-        inputURI = doc.uriref()
         try:
-            netStream = urlopenForRDF(inputURI)
+            return loadToStore(subj, [])
         except IOError:
-            return None
-        
-        str = netStream.read() # May be big - buffered in memory!
-#	try:
-	str = str.decode('utf-8')
-#	except :
-#	    progress('UTF-8 encoding asumed but fails for '+inputURI)
-        C = store.intern((LITERAL, str))
-        store.storeQuad((store._experience,
-                         store.content,
-                         doc,
-                         C))
-        return C
+            return None # hmm... is built-in API evolving to support exceptions?
+
 
 class BI_xmlTree(HeavyBuiltIn, Function):
     def evalObj(self, subj, queue, bindings, proof, query):

@@ -2,8 +2,15 @@
 """
 
 from diag import progress, verbosity
-from term import LightBuiltIn, Function, ReverseFunction, MultipleFunction
-import xml.xpath # http://packages.debian.org/unstable/python/python-xml
+from term import LightBuiltIn, Function, ReverseFunction, MultipleFunction, \
+     HeavyBuiltIn
+
+from llyn import loadToStore # for caching in store's experience
+from sax2rdf import XMLtoDOM # for fn:doc
+
+#from Ft.Xml.XPath import Evaluate as evalXPath
+# http://packages.debian.org/unstable/python/python-xml
+from xml.xpath import Evaluate as evalXPath 
 
 
 XMLBI_NS_URI = "http://www.w3.org/2007/ont/xml#"
@@ -135,9 +142,32 @@ class BI_xpath(LightBuiltIn, MultipleFunction):
     """Evaluate XPath expression and bind to each resulting node."""
     def evaluateObject(self, subj_py):
         node, expr = subj_py
-        out = xml.xpath.Evaluate(expr, node)
-        progress("xpath out node:", out)
+        out = evalXPath(expr, node)
         return [self.store.newXMLLiteral(n) for n in out]
+
+class BI_doc(HeavyBuiltIn, Function):
+    """Load XML document from the web. subject is a string, per XQuery.
+
+    see test/xml-syntax/fn_doc1.n3
+    
+    see also llyn.BI_xmlTree, which seems to be dead code
+    """
+    def evalObj(self, subj, queue, bindings, proof, query):
+        progress("@@fn:doc", subj)
+
+        # fn:doc takes a string, but the llyn cache keys of symbols
+        sym = subj.store.newSymbol(subj.value())
+
+        try:
+            lit = loadToStore(sym, ["application/xml", "text/xml"])
+        except IOError, e:
+            progress("@@ioerror", e)
+            return None # hmm... is built-in API evolving to support exceptions?
+
+        dom = XMLtoDOM(lit.value())
+        # odd... why does BI_xmlTree use the pair API rather than newXMLLiteral?
+        progress("@@fn:doc returning")
+        return lit.store.newXMLLiteral(dom)
 
 #  Register the string built-ins with the store
 def register(store):
@@ -158,6 +188,10 @@ def register(store):
     str.internFrag("hasAttributes", BI_hasAttributes)
     str.internFrag("hasChildNodes", BI_hasChildNodes)
     str.internFrag("isSameNode", BI_isSameNode)
-    str.internFrag("xpath", BI_xpath)
 
+    str.internFrag("xpath", BI_xpath) # needs test, docs
+
+    fn = store.symbol("http://www.w3.org/2006/xpath-functions")
+    fn.internFrag("string", BI_nodeValue) # probably not an exact match
+    fn.internFrag("doc", BI_doc)
 # ends
