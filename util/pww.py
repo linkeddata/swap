@@ -17,25 +17,27 @@ import re
 
 version = "$Id$"[1:-1]
 
+
+def findbase(abs):
+    basedir, tail = os.path.split(abs)
+    while basedir:
+	wb = basedir + '/.web_base'
+	try:
+	    f = open(wb)
+	    break
+	except IOError:
+	    basedir, tail = os.path.split(basedir)
+	    if basedir != '': continue
+	    print "No .web_base file for ", path
+	    f = None
+    if f:
+	base = f.readline()
+	while base[-1:] in "\n\r \t": base = base[:-1]
+
+
+
 files = []
 
-basedir = os.getcwd()
-while basedir:
-    path = basedir + '/.web_base'
-    try:
-	f = open(path)
-	break
-    except IOError:
-	slash = basedir.rfind('/')
-	if slash < 0:
-	    sys.exit(-1)
-	basedir = basedir[:slash]
-	continue
-
-base = f.readline()
-while base[-1:] in "\n\r \t": base = base[:-1]
-    
-	
 for arg in sys.argv[1:]:
     if arg[0:1] == "-":
         if arg == "-?" or arg == "--help":
@@ -51,6 +53,12 @@ cwd = os.getcwd()
 if files == []: print cwd.replace(basedir, base) # Default to this directory
 
 
+
+
 for path in files:
-    print (cwd + '/' + path).replace(basedir, base)
+    abs = os.path.abspath(path)
+
+	
+	print abs.replace(basedir, base)
+
 #ends
