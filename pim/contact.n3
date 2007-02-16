@@ -48,6 +48,7 @@ doc:persistencePolicy
 	:firstName,
 	:middleName,
 	:middleInitial,
+	:familyName, :givenName,   # Added 2007-02
 	:lastName,
 	:personalSuffix,
 	:title,			# In the organization @ ?wise? 2007-02
@@ -208,7 +209,10 @@ doc:persistencePolicy
 
 <> dc:description """
 $Log$
-Revision 1.28  2007-02-06 01:02:05  timbl
+Revision 1.29  2007-02-16 01:57:27  timbl
+incremental improvemenys
+
+Revision 1.28  2007/02/06 01:02:05  timbl
 Mainly added comment, added a few terms, removed Data class, see diff fo all changes
 
 Revision 1.27  2007/02/06 01:00:39  timbl

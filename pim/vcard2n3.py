@@ -134,8 +134,6 @@ def extract(path):
 """ % path)
 
     input = open(path, "r")
-
-    x = open('vCards.vcf')
     b = input.read()
     input.close()
     
@@ -206,7 +204,7 @@ def extract(path):
 	    res += " %s %s;" %(p,o)
 	return "%s [ # %s\n%s];\n" % (groupPred[g], g, res)
 
-    def lineFold(str1, str1):
+    def lineFold(str1, str2):
 	x = str1.rfind('\n')
 	if x < 0: x = 0
 	if len(str1) - x + len(str2) > lineLength:
@@ -228,7 +226,7 @@ def extract(path):
 		    end = len(value)
 		st = " ".join(splitBy(value[beg:end], ','))
 		if st: cardData = lineFold(cardData, ' v:%s %s;' % \
-				    (map[i], stringToN3(st, singleLine=1))
+				    (map[i], stringToN3(st, singleLine=1)))
 		beg=end+1
 		if beg > len(value):
 		    break
@@ -279,6 +277,9 @@ def extract(path):
 	pred = 'v:%s%s' % (modifiers, n)
 	if map:
 	    if classSpec: classSpec = '\n\t'+classSpec
+	    if n == 'n': # Special case 
+		assert classSpec == ""
+		return  '', orderedFields(value, map)  # Naked fields - see notes
 	    return pred, '[' + orderedFields(value, map) + classSpec + ']'
 	if n == 'version':
 	    assert value == "3.0", "value found: "+`value`
@@ -368,8 +369,12 @@ def extract(path):
 	    elif n == 'end':
 		wr("%s %s." % (cardID, cardData))
 	    else:
-		p, o = predicateObject(n, props, value)
-		if p: cardData+= "    %s %s;\n" %(p, o)
+		if n == 'n': # ugh special case
+		    map = fieldProperties.get(n,None)
+		    cardData +=  orderedFields(value, map) +'\n' # Naked fields - see notes
+		else:
+		    p, o = predicateObject(n, props, value)
+		    if p: cardData+= "    %s %s;\n" %(p, o)
 	    
     wr("\n\n#ends\n")            
     input.close()
