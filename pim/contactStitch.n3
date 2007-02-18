@@ -42,8 +42,6 @@ dc:description """
     
     v:latitude     owl:equivalentProperty wgs:lat .
     
-    v:locality     owl:equivalentProperty con:city . #yes
-    
     v:logo     owl:equivalentProperty foaf:logo .
     
     v:longitude     owl:equivalentProperty wgs:long .
@@ -60,11 +58,6 @@ dc:description """
     
     v:tel     owl:equivalentProperty con:phone,
                 foaf:phone .
-    
-    v:title     owl:equivalentProperty con:personalTitle,
-                foaf:title .
-    
-    v:unlabelledAdr     rdfs:subPropertyOf con:address .   # = ?  Do you mean' can't have a label' or 'no label known'?
     
     v:unlabelledEmail     rdfs:subPropertyOf con:emailAddress,  # = ?  Do you mean' can't have a label' or 'no label known'?
                 foaf:mbox .
@@ -206,17 +199,24 @@ dc:description """
     
 
 
-#    v:post-office-box     rdfs:subPropertyOf con:_addressProperty . # @@ no equiv
-    
-    v:region     owl:equivalentProperty con:stateOrProvince.  
-    
-    v:street-address     owl:equivalentProperty con:street.
+    v:street-address	owl:equivalentProperty con:street.
 
-    v:extended-address owl:equivalentProperty con:street2. 
+    v:extended-address	owl:equivalentProperty con:street2. 
 
-    con:postalCode  owl:equivalentProperty v:postal-code.    
+#   v:post-office-box   rdfs:subPropertyOf con:_addressProperty . # @@ no equiv
     
-    v:country-name     owl:equivalentProperty con:country. 
+    v:locality		owl:equivalentProperty con:city.
+    
+    v:region		owl:equivalentProperty con:stateOrProvince.  
+    
+    con:postalCode	owl:equivalentProperty v:postal-code.    
+    
+    v:country-name	owl:equivalentProperty con:country. 
+    
+
+    v:unlabelledAdr     rdfs:subPropertyOf con:address .   # = ? @@HH Do you mean' can't have a label' or 'no label known'?
+    
+    
     
 #### Home-specific
 
@@ -227,53 +227,58 @@ dc:description """
     
 
 #        ldif:homeStreet "1 Zephyr Drive"; 
-	ldif:homeStreet o2:chain (con:home con:address con:street).
+	ldif:homeStreet o2:chain (v:home-adr con:street).
 	
 #        ldif:mozillaHomeStreet2 "Apt 26"; 
-	ldif:mozillaHomeStreet2 o2:chain (con:home con:address con:street2).
+	ldif:mozillaHomeStreet2 o2:chain (v:home-adr con:street2).
 	
 #        ldif:mozillaHomeLocalityName "Zoaloc"; 
-	ldif:mozillaHomeLocalityName o2:chain (con:home con:address con:city).
+	ldif:mozillaHomeLocalityName o2:chain (v:home-adr con:city).
 	
 #        ldif:mozillaHomeState "MA"; 
-	ldif:mozillaHomeState o2:chain (con:home con:address con:stateOrProvince).
+	ldif:mozillaHomeState o2:chain (v:home-adr con:stateOrProvince).
 
 #        ldif:mozillaHomePostalCode "02999"; 
     
-    ldif:mozillaHomePostalCode o2:chain (con:home con:address con:postalCode).
+    ldif:mozillaHomePostalCode o2:chain (v:home-adr con:postalCode).
 
 #        ldif:mozillaHomeCountryName "USA"; 
-    ldif:mozillaHomeCountryName o2:chain (con:home con:address con:country).
+    ldif:mozillaHomeCountryName o2:chain (v:home-adr con:country).
 
 #### Work
 
     v:work-adr o2:chain(con:work con:address).
 
 #        ldif:street "1 Enterprise Way"; 
-    ldif:street o2:chain (con:work con:address con:street).
+    ldif:street o2:chain (v:work-adr con:street).
     
 #        ldif:mozillaWorkStreet2 "Suite 260"; 
-    ldif:mozillaWorkStreet2 o2:chain (con:work con:address con:street2).
+    ldif:mozillaWorkStreet2 o2:chain (v:work-adr con:street2).
 
 #        ldif:l "Zoaloc Heights"; 
-    ldif: o2:chain (con:work con:address con:city).
+    ldif: o2:chain (v:work-adr con:city).
 
 #        ldif:st "MA"; 
-    ldif:st o2:chain (con:work con:address con:stateOrProvince).
+    ldif:st o2:chain (v:work-adr con:stateOrProvince).
 
 #        ldif:postalCode "02998"; 
 	ldif:postalCode owl:equivalentProperty con:postalCode.
 
-    ldif:postalCode o2:chain (con:work con:address con:postalCode).
+    ldif:postalCode o2:chain (v:work-adr con:postalCode).
 
 #        ldif:c "USA"; 
-    ldif:c o2:chain (con:work con:address con:country).
+    ldif:c o2:chain (v:work-adr con:country).
     con:country owl:equivalentProperty v:country-name.
 
 ########  Title and Organization
 
 #        ldif:title "Chief Test dataset"; 
-    ldif:title = con:title.  # @@ really?
+    ldif:title = con:title.
+
+    v:title     owl:equivalentProperty
+		con:title,
+                foaf:title .
+    
 
 #        ldif:department "Testing"; 
 
