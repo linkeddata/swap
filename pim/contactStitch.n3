@@ -20,35 +20,23 @@ dc:description """
 @prefix o2:  <http://www.w3.org/2007/ont/o2#>.   # Just for 'chain' missing from owl
 
 @prefix wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
-@prefix v: v:.
-@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix v: <http://www.w3.org/2006/vcard/ns#>.
+@prefix foaf: foaf:.
 @prefix con: <http://www.w3.org/2000/10/swap/pim/contact#> .
 @prefix ldif: <http://www.w3.org/2007/ont/ldif#>.
 @prefix link: <http://www.w3.org/2006/link#>.
 @prefix doc:  <http://www.w3.org/2000/10/swap/pim/doc#> .
 
-@prefix vca: <http://www.ibiblio.org/hhalpin/homepage/notes/vcardtable.html#> . # artefact
-
     v:bday     owl:equivalentProperty con:birthday.  # yes
 
-# v:bday     owl:equivalentProperty  <http://xmlns.com/foaf/0.1/phone> .			    # No .   (eh?))
+    v:email     owl:equivalentProperty con:mbox,   # @@HH Assume these all use <mailto:x> and not "x"? 
+                foaf:mbox .	 # foaf:mbox = con:mailbox
     
-#    v:country-name     owl:equivalentProperty con:country .  # yes
-    
-    v:email     owl:equivalentProperty con:emailAddress,   # Which of these use <mailto:x> and which use "x"? 
-                <http://xmlns.com/foaf/0.1/mbox> .				    # <http://xmlns.com/foaf/0.1/mbox> = con:mailbox
-    
-# No    v:extended-address     rdfs:subPropertyOf con:_addressProperty . # I guess (useful?)  I think this maps to con:
-    
-    v:fax     rdfs:subPropertyOf <http://xmlns.com/foaf/0.1/mbox>;
+    v:fax     rdfs:subPropertyOf foaf:mbox;
          owl:equivalentProperty con:fax .
     
-    v:fn     owl:equivalentProperty <http://xmlns.com/foaf/0.1/fullName> .
-    
-    v:homeAdr     rdfs:subPropertyOf con:address .
-    
     v:homeTel     rdfs:subPropertyOf con:phone,
-                <http://xmlns.com/foaf/0.1/phone> .
+                foaf:phone .
     
     v:key     owl:equivalentProperty <http://xmlns.com/wot/0.1/pubkeyAddress> .  # Address or value? @@HH
     
@@ -56,53 +44,43 @@ dc:description """
     
     v:locality     owl:equivalentProperty con:city . #yes
     
-    v:logo     owl:equivalentProperty <http://xmlns.com/foaf/0.1/logo> .
+    v:logo     owl:equivalentProperty foaf:logo .
     
     v:longitude     owl:equivalentProperty wgs:long .
     
     v:mobileEmail     rdfs:subPropertyOf con:emailAddress,  # @@HH No, con:mailbox
-                <http://xmlns.com/foaf/0.1/mbox> .   
+                foaf:mbox .   
     
-    v:n     owl:equivalentProperty <http://xmlns.com/foaf/0.1/name> .   # @@HH No, -- N is structured thing, name  is a srtring.
+    v:n     owl:equivalentProperty foaf:name .   # @@HH No, -- N is structured thing, name  is a srtring.
     
     v:nickname     rdfs:subPropertyOf con:knownAs;    #  @@HH No, knownAs means   v:commonName. 
-         owl:equivalentProperty <http://xmlns.com/foaf/0.1/nick> .
+         owl:equivalentProperty foaf:nick .
     
-    v:org     owl:equivalentProperty <http://xmlns.com/foaf/0.1/organization>, con:organization .
-    
-    v:organization-name     rdfs:subPropertyOf <http://xmlns.com/foaf/0.1/name> .
-    
-    v:photo     rdfs:subPropertyOf <http://xmlns.com/foaf/0.1/img> .
-    
-#    v:post-office-box     rdfs:subPropertyOf con:_addressProperty .
-    
-    v:region     owl:equivalentProperty con:stateOrProvince.  
-    
-    v:street-address     owl:equivalentProperty con:street .    # Why sub, not =?
+    v:photo     rdfs:subPropertyOf foaf:img .
     
     v:tel     owl:equivalentProperty con:phone,
-                <http://xmlns.com/foaf/0.1/phone> .
+                foaf:phone .
     
     v:title     owl:equivalentProperty con:personalTitle,
-                <http://xmlns.com/foaf/0.1/title> .
+                foaf:title .
     
     v:unlabelledAdr     rdfs:subPropertyOf con:address .   # = ?  Do you mean' can't have a label' or 'no label known'?
     
     v:unlabelledEmail     rdfs:subPropertyOf con:emailAddress,  # = ?  Do you mean' can't have a label' or 'no label known'?
-                <http://xmlns.com/foaf/0.1/mbox> .
+                foaf:mbox .
     
 #    v:unlabelledTel     rdfs:subPropertyOf vca:phone,   # @@@ ????  vca:?
 #                con:phone .
     
     v:url     owl:equivalentProperty con:homepage,
-                <http://xmlns.com/foaf/0.1/homePage> .
+                foaf:homePage .
     
     v:workAdr     rdfs:subPropertyOf con:address .
     
     v:workEmail     rdfs:subPropertyOf con:emailAddress,
-                <http://xmlns.com/foaf/0.1/mbox> .
+                foaf:mbox .
     
-    v:workTel     rdfs:subClassOf <http://xmlns.com/foaf/0.1/phone>;
+    v:workTel     rdfs:subClassOf foaf:phone;
          rdfs:subPropertyOf con:phone .
  
     # End f HH's table   
@@ -132,6 +110,14 @@ dc:description """
 
 #  NAMES
 
+
+#        foaf:name "Zackery Zephyr"; 
+
+    ldif:cn = foaf:name, v:fn, contact:knownAs.  # An atual usable name string
+
+    v:fn     owl:equivalentProperty foaf:fullName.
+    
+
 #        ldif:givenName "Zackery"; 
 
     con:givenName  owl:equivalentProperty v:given-name, ldif:givenName .  # USe FOAF? Not yet set
@@ -141,15 +127,13 @@ dc:description """
     v:family-name     owl:equivalentProperty
     
     #  con:lastName,                                             # No - order is cultural
-                <http://xmlns.com/foaf/0.1/family_name>,
-                <http://xmlns.com/foaf/0.1/surname> .
+                foaf:family_name,
+                foaf:surname .
     
 
-    v:honorific-prefix   = con:personalTitle,   # Why subropery not =?
-  #  v:honorific-prefix     rdfs:subPropertyOf con:personalTitle,   # Why subropery not =?
-                <http://xmlns.com/foaf/0.1/title> .
+    v:honorific-prefix    owl:equivalentProperty con:personalTitle,
+                foaf:title .
     
-    v:honorific-suffix     rdfs:subPropertyOf con:personalSuffix .  # Ok, I would go so far as to say...
        v:honorific-suffix     owl:equivalentProperty con:personalSuffix .  # This
     
 
@@ -157,10 +141,6 @@ dc:description """
 #        ldif:sn "Zephyr"; 
  con:familyName  owl:equivalentProperty  ldif:sn, v:family-name.
 	
-#        foaf:name "Zackery Zephyr"; 
-	ldif:cn = foaf:name, v:fn, contact:knownAs.
-
-
 	
 #        ldif:mozillaNickname "testnick"; 
 	ldif:mozillaNickname = foaf:nick.
@@ -180,7 +160,8 @@ dc:description """
 
 	 v:x-aim = ldif:nsAIMid.
 
-#        ldif:mozillaUseHtmlMail "false"; 
+#        ldif:mozillaUseHtmlMail "false";    @@ No analog
+
 #        ldif:telephoneNumber "+1 202 250 2525";     @@@@ reformat as URI
 
 
@@ -215,6 +196,7 @@ dc:description """
 
 
 # Classes    
+
     v:Address     = con:Address .  # yes
     
 #    v:Location     = con:Location .  # @@HH Don't think so. con:Location is contact point, home or work or mobile. @@TBL should rename
@@ -223,7 +205,25 @@ dc:description """
 #   v:adr     rdfs:subPropertyOf con:address .  # No. Diff domain. (person, contact point)
     
 
+
+#    v:post-office-box     rdfs:subPropertyOf con:_addressProperty . # @@ no equiv
+    
+    v:region     owl:equivalentProperty con:stateOrProvince.  
+    
+    v:street-address     owl:equivalentProperty con:street.
+
+    v:extended-address owl:equivalentProperty con:street2. 
+
+    con:postalCode  owl:equivalentProperty v:postal-code.    
+    
+    v:country-name     owl:equivalentProperty con:country. 
+    
+#### Home-specific
+
     v:home-adr o2:chain(con:home con:address).
+
+    v:homeAdr     rdfs:subPropertyOf con:address .
+    
     
 
 #        ldif:homeStreet "1 Zephyr Drive"; 
@@ -231,7 +231,6 @@ dc:description """
 	
 #        ldif:mozillaHomeStreet2 "Apt 26"; 
 	ldif:mozillaHomeStreet2 o2:chain (con:home con:address con:street2).
-	v:extended-address owl:equivalentProperty con:street2. 
 	
 #        ldif:mozillaHomeLocalityName "Zoaloc"; 
 	ldif:mozillaHomeLocalityName o2:chain (con:home con:address con:city).
@@ -242,7 +241,6 @@ dc:description """
 #        ldif:mozillaHomePostalCode "02999"; 
     
     ldif:mozillaHomePostalCode o2:chain (con:home con:address con:postalCode).
-    con:postalCode  owl:equivalentProperty v:postal-code.    
 
 #        ldif:mozillaHomeCountryName "USA"; 
     ldif:mozillaHomeCountryName o2:chain (con:home con:address con:country).
@@ -272,12 +270,20 @@ dc:description """
     ldif:c o2:chain (con:work con:address con:country).
     con:country owl:equivalentProperty v:country-name.
 
+########  Title and Organization
 
 #        ldif:title "Chief Test dataset"; 
-    ldif:title = con:title.
+    ldif:title = con:title.  # @@ really?
 
 #        ldif:department "Testing"; 
+
 	 ldif:department = con:departmentName.
+	 
+    v:org     owl:equivalentProperty foaf:organization, con:organization .
+    
+    v:organization-name     rdfs:subPropertyOf foaf:name .
+    
+
 	 
 #        ldif:company "Zacme Widgets"; 
     ldif:company o2:chain (con:organization foaf:name).
@@ -295,6 +301,6 @@ dc:description """
 #        ldif:mozillaCustom4 "custom4 value"; 
 
 
-#        ldif:description "This is a n imaginary person "
+#        ldif:description "This is an imaginary person "
     ldif:description = con:description, v:note.
     
