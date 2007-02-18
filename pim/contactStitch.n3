@@ -52,12 +52,6 @@ dc:description """
     
 # No    <http://www.w3.org/2006/vcard/ns#extended-address>     rdfs:subPropertyOf con:_addressProperty . # I guess (useful?)  I think this maps to con:
     
-    <http://www.w3.org/2006/vcard/ns#family-name>     owl:equivalentProperty
-    
-    #  con:lastName,                                             # No - order is cultural
-                <http://xmlns.com/foaf/0.1/family_name>,
-                <http://xmlns.com/foaf/0.1/surname> .
-    
     <http://www.w3.org/2006/vcard/ns#fax>     rdfs:subPropertyOf <http://xmlns.com/foaf/0.1/mbox>;
          owl:equivalentProperty con:fax .
     
@@ -162,6 +156,12 @@ con:givenName        owl:equivalentProperty v:given-name, ldif:givenName .  # US
 con:givenName  owl:equivalentProperty con:firstName.   # @@@ Western assumption only
 #                foaf:givenname .
     
+    v:family-name     owl:equivalentProperty
+    
+    #  con:lastName,                                             # No - order is cultural
+                <http://xmlns.com/foaf/0.1/family_name>,
+                <http://xmlns.com/foaf/0.1/surname> .
+    
 
 
 
@@ -215,6 +215,7 @@ con:givenName  owl:equivalentProperty con:firstName.   # @@@ Western assumption 
 ######### Addresses
 
     v:home-adr o2:chain(con:home con:address).
+    
 
 #        ldif:homeStreet "1 Zephyr Drive"; 
 	ldif:homeStreet o2:chain (con:home con:address con:street).
