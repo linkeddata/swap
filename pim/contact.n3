@@ -48,7 +48,7 @@ doc:persistencePolicy
 	:firstName,
 	:middleName,
 	:middleInitial,
-	:familyName, :givenName,   # Added 2007-02
+	:familyName, :givenName,   # Added 2007-02, not force first,last or last,first
 	:lastName,
 	:personalSuffix,
 	:title,			# In the organization @ ?wise? 2007-02
@@ -75,6 +75,7 @@ doc:persistencePolicy
 	<http://www.w3.org/2001/tag/ilist#httpRange-14>.
 
 :knownAs a rdf:Property;
+	rdfs:label "name";
     	rdfs:comment """A person may be known as various strings.
 	For example, an email friendly name string.
 	If you have an email from someone using a string as the human-readable phrase,
@@ -115,23 +116,28 @@ doc:persistencePolicy
 
 ########## Properties of the ConactLocation
 
-:address a rdf:Property; rdfs:domain :ContactLocation; rdfs:range :Address.
+:address a rdf:Property, owl:FunctionalProperty, owl:InnverseFunctionalProperty;
+    rdfs:domain :ContactLocation; rdfs:range :Address;
+    rdfs:label "address"@en .
 
 :Address a rdfs:Class;
     is rdfs:domain of :street, :street2, :street3,
 		:city, :stateOrProvince, :postalCode, :country .
 
-
+stateOrProvince a rdfs:Property;
+    rdfs:label "region".
+    
 :zip rdfs:subPropertyOf :postalCode.
 
 :Phone a rdfs:Class;
-    rdfs:label "phone"; rdfs:comment"""
+    rdfs:label "phone"@en, "tel."@fr;
+    rdfs:comment"""
     An end-point in the public swiitched telephone system.
     Anything identified by a URI with tel: scheme is in this class.
     """.
     
-:Fax rdfs:subClassOf :Phone.
-:MobilePhone rdfs:subClassOf :Phone.
+:Fax rdfs:subClassOf :Phone; rdfs:label "fax".
+:MobilePhone rdfs:subClassOf :Phone; rdfs:label "mobile".
 :Pager rdfs:subClassOf :Phone.
 
 :phone a rdf:Property; rdfs:domain :ContactLocation; rdfs:range :Phone. # Added 2007-02-02
@@ -209,8 +215,8 @@ doc:persistencePolicy
 
 <> dc:description """
 $Log$
-Revision 1.29  2007-02-16 01:57:27  timbl
-incremental improvemenys
+Revision 1.30  2007-02-19 02:22:31  timbl
+*** empty log message ***
 
 Revision 1.28  2007/02/06 01:02:05  timbl
 Mainly added comment, added a few terms, removed Data class, see diff fo all changes

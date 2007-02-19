@@ -21,7 +21,7 @@ dc:description """
 
 @prefix wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
 @prefix v: <http://www.w3.org/2006/vcard/ns#>.
-@prefix foaf: foaf:.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
 @prefix con: <http://www.w3.org/2000/10/swap/pim/contact#> .
 @prefix ldif: <http://www.w3.org/2007/ont/ldif#>.
 @prefix link: <http://www.w3.org/2006/link#>.
@@ -29,9 +29,6 @@ dc:description """
 
     v:bday     owl:equivalentProperty con:birthday.  # yes
 
-    v:email     owl:equivalentProperty con:mbox,   # @@HH Assume these all use <mailto:x> and not "x"? 
-                foaf:mbox .	 # foaf:mbox = con:mailbox
-    
     v:fax     rdfs:subPropertyOf foaf:mbox;
          owl:equivalentProperty con:fax .
     
@@ -49,18 +46,10 @@ dc:description """
     v:mobileEmail     rdfs:subPropertyOf con:emailAddress,  # @@HH No, con:mailbox
                 foaf:mbox .   
     
-    v:n     owl:equivalentProperty foaf:name .   # @@HH No, -- N is structured thing, name  is a srtring.
-    
-    v:nickname     rdfs:subPropertyOf con:knownAs;    #  @@HH No, knownAs means   v:commonName. 
-         owl:equivalentProperty foaf:nick .
-    
     v:photo     rdfs:subPropertyOf foaf:img .
     
     v:tel     owl:equivalentProperty con:phone,
                 foaf:phone .
-    
-    v:unlabelledEmail     rdfs:subPropertyOf con:emailAddress,  # = ?  Do you mean' can't have a label' or 'no label known'?
-                foaf:mbox .
     
 #    v:unlabelledTel     rdfs:subPropertyOf vca:phone,   # @@@ ????  vca:?
 #                con:phone .
@@ -68,18 +57,14 @@ dc:description """
     v:url     owl:equivalentProperty con:homepage,
                 foaf:homePage .
     
-    v:workAdr     rdfs:subPropertyOf con:address .
-    
     v:workEmail     rdfs:subPropertyOf con:emailAddress,
                 foaf:mbox .
     
     v:workTel     rdfs:subClassOf foaf:phone;
          rdfs:subPropertyOf con:phone .
  
-    # End f HH's table   
- ######################################################################################################### End of HH Table
 
-
+########################
 
 
 
@@ -106,22 +91,24 @@ dc:description """
 
 #        foaf:name "Zackery Zephyr"; 
 
-    ldif:cn = foaf:name, v:fn, contact:knownAs.  # An atual usable name string
+    ldif:cn = foaf:name, v:fn, con:knownAs.  # An actual usable name string
 
-    v:fn     owl:equivalentProperty foaf:fullName.
+#    v:fn     owl:equivalentProperty foaf:fullName.
     
 
 #        ldif:givenName "Zackery"; 
 
-    con:givenName  owl:equivalentProperty v:given-name, ldif:givenName .  # USe FOAF? Not yet set
-    con:givenName  owl:equivalentProperty con:firstName.   # @@@ Western assumption only
-#                foaf:givenname .
+     v:given-name owl:equivalentProperty
+	con:givenName,
+#       foaf:givenname ,
+	ldif:givenName .  # USe FOAF? Not yet set
     
-    v:family-name     owl:equivalentProperty
-    
-    #  con:lastName,                                             # No - order is cultural
+    v:family-name     owl:equivalentProperty #  con:lastName, @@HH No - order is cultural
                 foaf:family_name,
-                foaf:surname .
+		con:familyName,
+		ldif:sn.
+#                foaf:surname.
+					    
     
 
     v:honorific-prefix    owl:equivalentProperty con:personalTitle,
@@ -132,12 +119,13 @@ dc:description """
 
 
 #        ldif:sn "Zephyr"; 
- con:familyName  owl:equivalentProperty  ldif:sn, v:family-name.
-	
-	
-#        ldif:mozillaNickname "testnick"; 
-	ldif:mozillaNickname = foaf:nick.
 
+
+#    v:n     owl:equivalentProperty foaf:name .   # @@HH No, -- N is structured thing, name  is a srtring.
+    
+    v:nickname   #     rdfs:subPropertyOf con:knownAs;   @@HH No, knownAs means common name. 
+         owl:equivalentProperty foaf:nick, ldif:mozillaNickname.
+    
 
 ########### Email, accounts etc
 
@@ -146,8 +134,27 @@ dc:description """
 
 
 	ldif:email = foaf:mailbox.  # @@@ Assumption ofIFP
+
 #	ldif:email @@
 #        ldif:mozillaSecondEmail "zackery@example.org "; 
+
+
+    v:email     owl:equivalentProperty   # @@HH Assume these all use <mailto:x> and not "x"? 
+		ldif:mail.		# @HH not IFP
+
+    foaf:mbox owl:equivalentProperty con:mailbox. # InverseFunctionalProperty
+		
+    v:work-email rdfs:subPropertyOf v:email.
+    
+    v:home-email rdfs:subPropertyOf v:email.
+    
+    v:unlabelledEmail     rdfs:subPropertyOf con:emailAddress,  # = ?  Do you mean' can't have a label' or 'no label known'?
+                foaf:mbox .
+    
+
+
+
+
 
 #        ldif:nsAIMid "zaco"; 
 
@@ -209,7 +216,7 @@ dc:description """
     
     v:region		owl:equivalentProperty con:stateOrProvince.  
     
-    con:postalCode	owl:equivalentProperty v:postal-code.    
+    v:postal-code	owl:equivalentProperty con:postalCode.
     
     v:country-name	owl:equivalentProperty con:country. 
     
@@ -245,8 +252,12 @@ dc:description """
 #        ldif:mozillaHomeCountryName "USA"; 
     ldif:mozillaHomeCountryName o2:chain (v:home-adr con:country).
 
-#### Work
 
+
+#### Work-specific
+
+    v:workAdr     rdfs:subPropertyOf con:address .
+    
     v:work-adr o2:chain(con:work con:address).
 
 #        ldif:street "1 Enterprise Way"; 
@@ -262,29 +273,29 @@ dc:description """
     ldif:st o2:chain (v:work-adr con:stateOrProvince).
 
 #        ldif:postalCode "02998"; 
-	ldif:postalCode owl:equivalentProperty con:postalCode.
 
     ldif:postalCode o2:chain (v:work-adr con:postalCode).
 
 #        ldif:c "USA"; 
     ldif:c o2:chain (v:work-adr con:country).
-    con:country owl:equivalentProperty v:country-name.
 
 ########  Title and Organization
 
 #        ldif:title "Chief Test dataset"; 
-    ldif:title = con:title.
 
-    v:title     owl:equivalentProperty
-		con:title,
-                foaf:title .
+    v:title     owl:equivalentProperty ldif:title,
+		con:title.
+
+#   NOT foaf:title or con:personalTitle which are Mr. etc
     
 
 #        ldif:department "Testing"; 
 
-	 ldif:department = con:departmentName.
-	 
+	 ldif:department = con:departmentName.  #  A string, property of person
+
     v:org     owl:equivalentProperty foaf:organization, con:organization .
+    
+    
     
     v:organization-name     rdfs:subPropertyOf foaf:name .
     

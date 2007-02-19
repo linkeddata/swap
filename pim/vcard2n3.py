@@ -138,7 +138,7 @@ def extract(path):
     input.close()
     
     wr("# Length: " + `len(b)`+ "starts ")
-    for i in range(8): wr(" %2x"%ord(b[i]))
+    wr(" ".join(["%2x"%ord(ch) for ch in b[:8]]))
     wr("\n")
     if ord(b[0])==0 and ord(b[1]) == ord('B'):  #  UTF16 with MSB byte order unmarked    
 	d = "\xfe\xff"   # Add byte order mark
