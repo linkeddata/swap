@@ -349,9 +349,9 @@ def extract(path):
 	    if n == 'x-ablabel':
 		pred = 'v:'+n
 		if value[:4] == "_$!<" and value[-4:] == ">!$_": # [sic]
-		    obj = "abl:"+munge(value[4:-4])
+		    obj = "abl:"+munge(value[4:-4]).lower()
 		else:  # User generated
-		    obj = "user:"+munge(value)
+		    obj = "user:"+munge(value).lower()
 	    else:
 		pred, obj = predicateObject(n, props, value)
 	    groupData[group].append((pred, obj))
