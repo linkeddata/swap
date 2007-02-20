@@ -26,15 +26,19 @@ __version__ = '$Id$'
 
 
 from string import maketrans, translate
+import sha, binascii, base64
 
 from swap.myStore import Namespace, load, setStore # http://www.w3.org/2000/10/swap/
 from swap import uripath
+from swap.term import Symbol
+
 
 #hmm... generate from schema?
 # from fromIcal import iCalendarDefs # http://www.w3.org/2002/12/cal/ 
 
 
 CRLF = chr(13) + chr(10)
+WRAP = 76   # Chars per line
 
 RDF = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
 ICAL = Namespace('http://www.w3.org/2002/12/cal/icaltzd#')
@@ -53,7 +57,7 @@ fields = [  # Examples in comments from zac.ldif
     'mozillaSecondEmail',   #: zackery@example.org 
     'nsAIMid',	#: zaco
     'mozillaUseHtmlMail', #: false
-#    'modifytimestamp', #: 0Z
+#    'modifytimestamp', #: 0Z   -- not a property of the person
     'telephoneNumber', #: +1 202 250 2525
     'homePhone', #: +1 202 250 2526
     'fax',  #: +1 202 250 2527
@@ -84,47 +88,75 @@ fields = [  # Examples in comments from zac.ldif
     
 def wr(buf):
     return sys.stdout.write(buf)
-    
+
+def backslashEncode(val):
+    text = val.encode('ascii') # Just check
+    # @@TODO: wrap at 75 cols
+    for c in ('\\'):  # cal: ('\\', ';', ',')
+        text = text.replace(c, "\\"+c)
+    text = text.replace('\n', "\\n")
+    result = ""
+    while text:
+	result = result +  '\n ' + text[:WRAP]
+	text = text[WRAP:]
+    return result[2:]  # chop zeroth fold
+
+
+def encodeLine(key, val):
+    try:
+	text = val.encode('ascii')
+    except UnicodeEncodeError:
+	text = base64.encodestring(val.encode('utf-8')) # Comes wrapped by \n
+	while text[-1:] == '\n': text = text[:-1]
+	text = text.replace('\n', '\n ')  # Proper folding
+	return "%s:: %s\n" %(key, text)
+    else:
+	return "%s: %s\n" %(key, backslashEncode(text))
+
+
 def extractLDIF(kb):
     progress('Found %i statements' % len(kb))
     cn = kb.newSymbol(LDIF_NS+'cn')
     sts = kb.statementsMatching( cn, None, None) # p s o
     progress('Found %i common names' % len(sts))
+    wr("version: 1\n")  # Mandatory in sepc, not given by Tbird.
+    emails = 0
     for st in sts:
 	person = st.subject()
 	name = st.object()
 	email = kb.any(person, LDIF.mail)  # s p o
 	if not email:
-	    progress ("No email for "+`name`)
+	    progress ("No email for "+ name.value().encode('utf-8'))
 	    continue
 	assert email.uriref().startswith("mailto:")
+	emails += 1
 	emailad = email.uriref()[7:]
-	wr( "dn: cn=%s,mail=%s\n" %(name, emailad))
-	progress("  %s <%s>" % (name, emailad)) 
+	wr(encodeLine("dn", "cn=%s,mail=%s" %(name, emailad)))
+#	wr( "dn: cn=%s,mail=%s\n" %(name, emailad))
+	progress("  %s <%s>" % (name.value().encode('utf-8'), emailad)) 
 	wr( """objectclass: top
 objectclass: person
 objectclass: organizationalPerson
 objectclass: inetOrgPerson
 objectclass: mozillaAbPersonAlpha
-""")
+""") #
 	for key in fields:
 	    pred = kb.newSymbol(LDIF_NS+key)
 	    obj = kb.any(person, pred)
 	    if obj:
-		try:
+	        if isinstance(obj, Symbol):
 		    uri = obj.uriref()
-		except AttributeError:
-		    print '@@@', type(obj), `obj` 
-		    val = obj.value()
-		else:
 		    colon = uri.find(':')
 		    assert colon > 0
 		    if uri[:colon] in ['tel', 'mailto']:
 			val = uri[colon+1:]
 		    else:
-			val = obj.value()
-		wr('%s: %s\n' %(key, val))  # @@ bsasse64 if utf8
+			progress("eh? URI not tel or mailto", uri)
+		else:
+		    val = obj.value()
+		wr(encodeLine(key, val))  # base64 if utf8
 	wr('\n') # Blank line netween records
+	progress('Total of %i emails' % emails)
 	    
 #
 
