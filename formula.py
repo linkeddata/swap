@@ -383,6 +383,8 @@ For future reference, use newUniversal
             subj=s[SUBJ].substitution(
                                  bindings2, why=subWhy, cannon=cannon).substitution(
                                     bindings3, why=subWhy, cannon=cannon)
+            ### Make sure we don't keep making copies of the same formula from running
+            ##  the same rule again and again
             if isTopLevel(self) and isinstance(subj, Formula) and not subj.reallyCanonical:
                 subj = subj.reopen()
                 subj = subj.canonicalize(cannon=True)
@@ -396,7 +398,11 @@ For future reference, use newUniversal
 	    obj=s[OBJ].substitution(
                                  bindings2, why=subWhy, cannon=cannon).substitution(
                                     bindings3, why=subWhy, cannon=cannon)
+            if isTopLevel(self) and isinstance(obj, Formula) and not obj.reallyCanonical:
+                obj = obj.reopen()
+                obj = obj.canonicalize(cannon=True)
 	    if obj is not s[OBJ]:
+                ### Question to self: What is this doing?
                 bindings2[s[OBJ]] = obj
                 
 	    total += self.add(subj=subj,

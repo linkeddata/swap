@@ -1015,7 +1015,7 @@ class Query(Formula):
                             progress( "   state is %s, queue length %i" % (state, len(queue)+1))
                             progress("@@ Current item: %s" % `item`)
                             progress(queueToString(queue))
-                        return total  # Forget it
+                        continue  # Forget it
                 else:
                     raise RuntimeError, "Unknown state " + `state`
 
