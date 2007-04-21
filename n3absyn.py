@@ -1,7 +1,8 @@
 """n3absyn.py -- exploring Notation3 (N3) abstract syntax
 
 Part 1: convert to lisp-ish JSON structure
-Part 2: generate lisp s-expression from JSON structure
+Part 2: generate ACL2 lisp s-expression from JSON structure
+        in progress: IKL s-expressions
 Part 3: generate XML from JSON structure, following RIF design sketches
 Part 4: generate MathML from JSON structure
 
@@ -82,6 +83,9 @@ def main(argv):
     elif '--lisp' in argv:
         for s in lisp_form(j):
             sys.stdout.write(s)
+    elif '--ikl' in argv:
+        for s in ikl_sentence(j):
+            sys.stdout.write(s)
     elif '--rif' in argv:
         for s in xml_form(j):
             sys.stdout.write(s)
@@ -126,7 +130,10 @@ def json_formula(fmla, vars={}):
             vn = v.uri
             if '#' in vn: vn = vn.split('#')[1]
         except AttributeError:
-            vn = "g%d" % v.serial
+	    try:
+		vn = "g%d" % v.serial
+	    except AttributeError:
+		vn = v.fragid
 
 
         i = 0
@@ -191,6 +198,8 @@ def json_term(t, varmap):
     # hmm... are lists part of the N3 abstract syntax?
     elif isinstance(t, term.List):
         return [json_term(i, varmap) for i in t]
+    elif isinstance(t, term.N3Set):
+        return {'op': 'n3-set', 'parts': [json_term(i, varmap) for i in t]}
     elif isinstance(t, formula.Formula):
         return {'op': 'n3-quote', 'parts': [json_formula(t, varmap)]}
     else:
@@ -274,6 +283,141 @@ def lisp_form(f):
         
         for expr in rest:
             for s in lisp_form(expr):
+                yield s
+        yield ')\n'
+
+    else:
+        raise RuntimeError, 'unimplemented syntactic type: %s %s' % (f, type(f))
+
+    
+def ikl_sentence(f):
+    """generate an IKL s-expression from a formula JSON structure.
+
+    IKL Specification Document
+    Pat Hayes, IHMC & Chris Menzel, TAMU
+    On behalf of the IKRIS Interoperability Group
+    rev July 20 2006
+    http://www.ihmc.us/users/phayes/IKL/SPEC/SPEC.html
+    """
+
+    if 'op' in f:
+	head = f['op']
+
+	if head == 'holds':
+	    yield '('
+	    yield head
+	    yield ' '
+	    for t in f['parts']:
+		for s in ikl_term(t):
+		    yield s
+	    return
+
+	# connectives
+	elif head in ('and', 'implies'):
+	    if head == 'implies': head = 'if'
+	    yield '('
+	    yield head
+	    yield ' '
+	    rest = f['parts']
+
+        # quantifiers
+        elif 'Q' in f:
+            head = f['Q']
+            yield '('
+            yield head
+            yield ' ('
+            for v in f['Vars']:
+                yield v
+                yield ' '
+            yield ')\n'
+            rest = [f['f']]
+
+        else:
+            raise RuntimeError, 'unimplemented IKL sentence head: %s' % head
+        
+        for expr in rest:
+            for s in ikl_sentence(expr):
+                yield s
+        yield ')\n'
+
+    else:
+        raise RuntimeError, 'unimplemented syntactic type: %s %s' % (f, type(f))
+
+    
+def ikl_term(f):
+    """generate an IKL term s-expression from a formula JSON structure.
+
+    """
+
+    # integer
+    if type(f) is type(1):
+        yield "%d " % f
+
+    elif type(f) is type(1.1):
+	#@@refactor ikl_data()?
+        yield "(xsd:double %f)" % f #@@long uri form
+
+    # string
+    elif type(f) in (type(''), type(u'')):
+        if "\\" in f or '"' in f:
+            raise RuntimeError, 'string quoting TODO: %s' % f
+        yield "'%s' " % f
+
+    # list
+    elif type(f) is type([]):
+        yield '(list '
+        for expr in f:
+            for s in ikl_term(expr):
+                yield s
+        yield ')\n'
+
+
+    elif type(f) is type({}):
+        # variable.
+        if 'var' in f:
+            yield f['var'] #@@ quoting?
+            yield ' '
+            return
+
+        elif 'op' in f:
+            head = f['op']
+
+            # URI, i.e. a 0-ary function symbol
+	    # contextualize?
+            if ':' in head:
+                if '"' in head:
+                    raise RuntimeError, \
+                          "quoting | in symbols not yet implemented"
+                yield '"%s" ' % head
+                rest = f.get('parts', [])
+                assert(len(rest) == 0)
+		return
+
+            # function symbols
+            # data
+            elif head == 'data':
+                ty, lit = f['args']
+                yield '("%s" \'%s\') ' % (ty['op'], lit) #@@ escaping
+		return
+
+            elif head == 'n3-set':
+                yield '(n3-set '
+                rest = f['parts']
+
+            elif head == 'holds':
+		for s in ikl_sentence(f): #@@ context
+		    yield s
+		return
+
+            elif head == 'n3-quote':
+                yield '(that '
+		rest = f['parts']
+
+        else:
+            raise RuntimeError, 'unimplemented IKL term head: %s' % head
+        
+        for expr in rest:
+            for s in ikl_term(expr):
                 yield s
         yield ')\n'
 
