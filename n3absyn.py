@@ -84,7 +84,7 @@ def main(argv):
         for s in lisp_form(j):
             sys.stdout.write(s)
     elif '--ikl' in argv:
-        for s in ikl_sentence(j):
+        for s in ikl_sentence(j, []):
             sys.stdout.write(s)
     elif '--rif' in argv:
         for s in xml_form(j):
@@ -290,7 +290,7 @@ def lisp_form(f):
         raise RuntimeError, 'unimplemented syntactic type: %s %s' % (f, type(f))
 
     
-def ikl_sentence(f):
+def ikl_sentence(f, subscripts):
     """generate an IKL s-expression from a formula JSON structure.
 
     IKL Specification Document
@@ -308,8 +308,9 @@ def ikl_sentence(f):
 	    yield head
 	    yield ' '
 	    for t in f['parts']:
-		for s in ikl_term(t):
+		for s in ikl_term(t, subscripts):
 		    yield s
+	    yield ')\n'
 	    return
 
 	# connectives
@@ -336,7 +337,7 @@ def ikl_sentence(f):
             raise RuntimeError, 'unimplemented IKL sentence head: %s' % head
         
         for expr in rest:
-            for s in ikl_sentence(expr):
+            for s in ikl_sentence(expr, subscripts):
                 yield s
         yield ')\n'
 
@@ -344,7 +345,7 @@ def ikl_sentence(f):
         raise RuntimeError, 'unimplemented syntactic type: %s %s' % (f, type(f))
 
     
-def ikl_term(f):
+def ikl_term(f, subscripts):
     """generate an IKL term s-expression from a formula JSON structure.
 
     """
@@ -361,13 +362,24 @@ def ikl_term(f):
     elif type(f) in (type(''), type(u'')):
         if "\\" in f or '"' in f:
             raise RuntimeError, 'string quoting TODO: %s' % f
-        yield "'%s' " % f
+	if subscripts:
+	    yield "('%s' " % f # string
+	    sub = subscripts[0]
+	    s2 = subscripts[1:]
+	    if s2:
+		for s in ikl_term(sub, s2):
+		    yield s
+		yield ") "
+	    else:
+		yield "%s) " % sub
+	else:
+	    yield "'%s' " % f
 
     # list
     elif type(f) is type([]):
         yield '(list '
         for expr in f:
-            for s in ikl_term(expr):
+            for s in ikl_term(expr, subscripts):
                 yield s
         yield ')\n'
 
@@ -383,12 +395,15 @@ def ikl_term(f):
             head = f['op']
 
             # URI, i.e. a 0-ary function symbol
-	    # contextualize?
             if ':' in head:
                 if '"' in head:
                     raise RuntimeError, \
-                          "quoting | in symbols not yet implemented"
-                yield '"%s" ' % head
+                          "quoting \" in IKL names not yet implemented"
+		if subscripts:
+		    for s in ikl_term(head, subscripts):
+			yield s
+		else:
+		    yield '"%s" ' % head
                 rest = f.get('parts', [])
                 assert(len(rest) == 0)
 		return
@@ -404,14 +419,13 @@ def ikl_term(f):
                 yield '(n3-set '
                 rest = f['parts']
 
-            elif head == 'holds':
-		for s in ikl_sentence(f): #@@ context
-		    yield s
-		return
-
             elif head == 'n3-quote':
                 yield '(that '
-		rest = f['parts']
+		for s in ikl_sentence(f['parts'][0],
+				      ['c%d' % id(f)] + subscripts):
+		    yield s
+		yield ') '
+		return
 
         else:
             raise RuntimeError, 'unimplemented IKL term head: %s' % head
