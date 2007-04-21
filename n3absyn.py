@@ -321,28 +321,25 @@ def ikl_sentence(f, subscripts):
 	    yield ' '
 	    rest = f['parts']
 
-        # quantifiers
-        elif 'Q' in f:
-            head = f['Q']
-            yield '('
-            yield head
-            yield ' ('
-            for v in f['Vars']:
-                yield v
-                yield ' '
-            yield ')\n'
-            rest = [f['f']]
-
-        else:
-            raise RuntimeError, 'unimplemented IKL sentence head: %s' % head
-        
-        for expr in rest:
-            for s in ikl_sentence(expr, subscripts):
-                yield s
-        yield ')\n'
+    # quantifiers
+    elif 'Q' in f:
+	head = f['Q']
+	yield '('
+	yield head
+	yield ' ('
+	for v in f['Vars']:
+	    yield v
+	    yield ' '
+	yield ')\n'
+	rest = [f['f']]
 
     else:
-        raise RuntimeError, 'unimplemented syntactic type: %s %s' % (f, type(f))
+	raise RuntimeError, 'unimplemented IKL sentence head: %s' % head
+
+    for expr in rest:
+	for s in ikl_sentence(expr, subscripts):
+	    yield s
+    yield ')\n'
 
     
 def ikl_term(f, subscripts):
