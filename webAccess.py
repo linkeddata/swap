@@ -33,8 +33,9 @@ print_all_file_names = diag.print_all_file_names   # for listing test files
 class SecurityError(IOError):
     pass
 
-# this setting code is too tricky to go without a comment. Please explain.
-# --DWC
+# A little code to represent a value that can be set
+# and read; a singleton. In essence, this is a little
+# prettier than a one element list
 def setting(self, val=None):
     if val is not None:
         self[0] = val
@@ -157,7 +158,7 @@ def load(store, uri=None, openFormula=None, asIfFrom=None, contentType=None,
 	    elif contentType.find('n3') >= 0:
 		guess = "text/rdf+n3"
 	    elif contentType.find('sparql') >= 0 or contentType.find('rq'):
-                guess = "x-application/sparql"
+                            guess = "x-application/sparql"
 	buffer = netStream.read()
 	if guess == None:
 

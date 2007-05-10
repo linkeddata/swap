@@ -561,6 +561,9 @@ class Universal(Term):
 class Existential(Term):
     __repr__ = object.__repr__
 
+class SkolemFunction(Existential):
+    pass
+
 class AnonymousVariable(AnonymousNode):
     """An anonymous node which is existentially quantified in a given context.
     Also known as a Blank Node, or "bnode" in RDF parlance."""

@@ -1610,6 +1610,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
         con, pred, subj, obj = self.quad
 	proof = []  # place for built-in to hang a justification
 	rea = None  # Reason for believing this item is true
+	print "tryBuiltin"
 	if "q" in self.query.mode:
             caughtErrors = (TypeError, ValueError, AttributeError, AssertionError, ArgumentNotLiteral, UnknownType)
         else:

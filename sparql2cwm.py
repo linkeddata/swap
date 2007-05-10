@@ -69,6 +69,12 @@ def getExtra(ex):
     return []
 
 class multimap(dict):
+    """ A class to handle where each element maps to a set of elements
+
+It would perhaps be simpler to have used dict.setdefault(), but this has the
+advantage of merging instead of nesting sets
+
+"""
     class innerSet(Set):
         pass
     def __init__(self, olddict={}, **values):
@@ -227,6 +233,9 @@ class Coerce(object):
         return [p[0], self(p[1], False)]
 
 class NotNot(object):
+    """ This class is used to figure out the inverses of all SPARQL boolean tests, and invert all functions
+
+"""
     inverse_operators = {'less' : 'notLess',
                          'greater' : 'notGreater',
                          'notLess' : 'less',
@@ -764,6 +773,7 @@ class FromSparql(productionHandler):
         for k in stuff2:
             append = True
             positiveTriples = None
+            freeVariables = None
             included = k[5]+k[3]+{None: k[1]}
             notIncluded =  k[6]
 ##            print '+++++++++++++'
@@ -776,13 +786,14 @@ class FromSparql(productionHandler):
                         for form in formSet:
                             positiveTriples.loadFormulaWithSubstitution(form)
                     positiveTriples = positiveTriples.close()
+                    freeVariables = Set([x.uriref() for x in positiveTriples.freeVariables()])
                 if pred is self.sparql['bound']:
-                    variable = self.store.newSymbol(str(obj))
-                    if not positiveTriples.doesNodeAppear(variable):
+                    variable = unicode(obj)
+                    if variable not in freeVariables:
                         append = False
-                elif pred is self.sparql['notBound']:
-                    variable = self.store.newSymbol(str(obj))
-                    if positiveTriples.doesNodeAppear(variable):
+                elif pred is self.sparql['notBound']:  ##@@@ This is broken!!
+                    variable = unicode(obj)
+                    if variable in freeVariables:
                         append = False
             if append:
                 stuff.append((k[0], k[2], k[3], k[4], included, notIncluded))
@@ -1621,3 +1632,9 @@ def intConvert(self, keepGoing, val):
     return self.typeConvert(keepGoing, 'http://www.w3.org/2001/XMLSchema#integer', val)
 
 knownFunctions['http://www.w3.org/2001/XMLSchema#integer'] = intConvert
+
+
+def sparqlLookup(uri, server, property):
+    pass
+
+

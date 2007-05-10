@@ -10,8 +10,11 @@ from sax2rdf import XMLtoDOM # for fn:doc
 
 #from Ft.Xml.XPath import Evaluate as evalXPath
 # http://packages.debian.org/unstable/python/python-xml
-from xml.xpath import Evaluate as evalXPath 
-
+try:
+    from xml.xpath import Evaluate as evalXPath 
+except ImportError:
+    progress("Try getting python-xml from http://downloads.sourceforge.net/pyxml/PyXML-0.8.4.tar.gz")
+    evalXPath = progress
 
 XMLBI_NS_URI = "http://www.w3.org/2007/ont/xml#"
 
