@@ -16,18 +16,20 @@ import os
 import re
 
 version = "$Id$"[1:-1]
-
+verbose = 0
 
 def baseDirBase(abs):
-    basedir, tail = os.path.split(abs)
-    while basedir:
+    basedir = abs
+#    basedir, tail = os.path.split(abs)
+    while basedir  != '/':
 	wb = basedir + '/.web_base'
+	if verbose: print "# trying "+wb
 	try:
 	    f = open(wb)
 	    break
 	except IOError:
 	    basedir, tail = os.path.split(basedir)
-	    if basedir != '': continue
+	    if basedir != '/': continue
 	    print "No .web_base file for ", path
 	    return None, None
     if f:
@@ -55,6 +57,7 @@ if files == []:
 
 for path in files:
     abs = os.path.abspath(path)
+    if verbose: print "# abs = "+abs
     basedir, base = baseDirBase(abs)
     if basedir:
 	print abs.replace(basedir, base)
