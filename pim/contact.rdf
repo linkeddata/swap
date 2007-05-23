@@ -12,7 +12,7 @@
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
 
     <rdf:Description rdf:about="contact">
-        <doc:rules>file:///devel/WWW/2000/10/swap/pim/contact-rules</doc:rules>
+        <doc:rules rdf:resource="contact-rules"/>
     </rdf:Description>
 
     <rdf:Description rdf:about="">
@@ -26,7 +26,13 @@
 </dc:description>
         <dc:description>
 $Log$
-Revision 1.11  2007-02-06 01:02:05  timbl
+Revision 1.12  2007-05-23 18:51:42  timbl
+had bug in rdf
+
+Revision 1.30  2007/02/19 02:22:31  timbl
+*** empty log message ***
+
+Revision 1.28  2007/02/06 01:02:05  timbl
 Mainly added comment, added a few terms, removed Data class, see diff fo all changes
 
 Revision 1.27  2007/02/06 01:00:39  timbl
@@ -129,7 +135,8 @@ updated ont: to March 2001 DAML namespace.
     </Class>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#Fax">
-        <subClassOf>http://www.w3.org/2000/10/swap/pim/contact#Phone</subClassOf>
+        <label>fax</label>
+        <subClassOf rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Phone"/>
     </rdf:Description>
 
     <Class rdf:about="http://www.w3.org/2000/10/swap/pim/contact#Female">
@@ -142,11 +149,12 @@ updated ont: to March 2001 DAML namespace.
     </Class>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#MobilePhone">
-        <subClassOf>http://www.w3.org/2000/10/swap/pim/contact#Phone</subClassOf>
+        <label>mobile</label>
+        <subClassOf rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Phone"/>
     </rdf:Description>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#Pager">
-        <subClassOf>http://www.w3.org/2000/10/swap/pim/contact#Phone</subClassOf>
+        <subClassOf rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Phone"/>
     </rdf:Description>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#Person">
@@ -159,7 +167,8 @@ updated ont: to March 2001 DAML namespace.
     An end-point in the public swiitched telephone system.
     Anything identified by a URI with tel: scheme is in this class.
     </comment>
-        <label>phone</label>
+        <label xml:lang="en">phone</label>
+        <label xml:lang="fr">tel.</label>
     </Class>
 
     <Class rdf:about="http://www.w3.org/2000/10/swap/pim/contact#SocialEntity">
@@ -175,7 +184,10 @@ updated ont: to March 2001 DAML namespace.
     </rdf:Property>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#address">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InnverseFunctionalProperty"/>
         <domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#ContactLocation"/>
+        <label xml:lang="en">address</label>
         <range rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Address"/>
     </rdf:Property>
 
@@ -188,15 +200,15 @@ updated ont: to March 2001 DAML namespace.
     </rdf:Property>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#city">
-        <domain>http://www.w3.org/2000/10/swap/pim/contact#Address</domain>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Address"/>
     </rdf:Description>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#country">
-        <domain>http://www.w3.org/2000/10/swap/pim/contact#Address</domain>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Address"/>
     </rdf:Description>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#departmentName">
-        <domain>http://www.w3.org/2000/10/swap/pim/contact#Person</domain>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Person"/>
     </rdf:Description>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#description">
@@ -220,18 +232,26 @@ updated ont: to March 2001 DAML namespace.
         <range rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#ContactLocation"/>
     </rdf:Property>
 
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#familyName">
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Person"/>
+    </rdf:Description>
+
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#fax">
         <domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#ContactLocation"/>
         <range rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Fax"/>
     </rdf:Property>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#firstName">
-        <domain>http://www.w3.org/2000/10/swap/pim/contact#Person</domain>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Person"/>
     </rdf:Description>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#fullName">
         <label>full name</label>
     </rdf:Property>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#givenName">
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Person"/>
+    </rdf:Description>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#home">
         <domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Person"/>
@@ -253,10 +273,11 @@ updated ont: to March 2001 DAML namespace.
 	For example, an email friendly name string.
 	If you have an email from someone using a string as the human-readable phrase,
 	then it is reasonable to assume that there are :knownAs that.</comment>
+        <label>name</label>
     </rdf:Property>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#lastName">
-        <domain>http://www.w3.org/2000/10/swap/pim/contact#Person</domain>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Person"/>
     </rdf:Description>
 
     <owl:InverseFunctionalProperty rdf:about="http://www.w3.org/2000/10/swap/pim/contact#mailbox">
@@ -265,7 +286,7 @@ updated ont: to March 2001 DAML namespace.
         <con:_addressProperty rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#mailboxURI"/>
         <con:_example rdf:parseType="Quote">
             <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#_Dan">
-                <con:mailbox>mailto:connolly@w3.org</con:mailbox>
+                <con:mailbox rdf:resource="mailto:connolly@w3.org"/>
             </rdf:Description>
         </con:_example>
     </owl:InverseFunctionalProperty>
@@ -282,11 +303,11 @@ updated ont: to March 2001 DAML namespace.
     </owl:InverseFunctionalProperty>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#middleInitial">
-        <domain>http://www.w3.org/2000/10/swap/pim/contact#Person</domain>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Person"/>
     </rdf:Description>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#middleName">
-        <domain>http://www.w3.org/2000/10/swap/pim/contact#Person</domain>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Person"/>
     </rdf:Description>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#mobile">
@@ -320,7 +341,7 @@ updated ont: to March 2001 DAML namespace.
     </rdf:Property>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#organization">
-        <domain>http://www.w3.org/2000/10/swap/pim/contact#Person</domain>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Person"/>
     </rdf:Description>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#partner">
@@ -329,11 +350,11 @@ updated ont: to March 2001 DAML namespace.
     </rdf:Property>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#personalSuffix">
-        <domain>http://www.w3.org/2000/10/swap/pim/contact#Person</domain>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Person"/>
     </rdf:Description>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#personalTitle">
-        <domain>http://www.w3.org/2000/10/swap/pim/contact#Person</domain>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Person"/>
     </rdf:Description>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#phone">
@@ -342,11 +363,11 @@ updated ont: to March 2001 DAML namespace.
     </rdf:Property>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#postalCode">
-        <domain>http://www.w3.org/2000/10/swap/pim/contact#Address</domain>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Address"/>
     </rdf:Description>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#publicHomePage">
-        <subPropertyOf>http://www.w3.org/2000/10/swap/pim/contact#homePage</subPropertyOf>
+        <subPropertyOf rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#homePage"/>
     </rdf:Description>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#sortName">
@@ -354,24 +375,25 @@ updated ont: to March 2001 DAML namespace.
         <label>sort name</label>
     </rdf:Property>
 
-    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#stateOrProvince">
-        <domain>http://www.w3.org/2000/10/swap/pim/contact#Address</domain>
-    </rdf:Description>
+    <Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#stateOrProvince">
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Address"/>
+        <label>region</label>
+    </Property>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#street">
-        <domain>http://www.w3.org/2000/10/swap/pim/contact#Address</domain>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Address"/>
     </rdf:Description>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#street2">
-        <domain>http://www.w3.org/2000/10/swap/pim/contact#Address</domain>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Address"/>
     </rdf:Description>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#street3">
-        <domain>http://www.w3.org/2000/10/swap/pim/contact#Address</domain>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Address"/>
     </rdf:Description>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#title">
-        <domain>http://www.w3.org/2000/10/swap/pim/contact#Person</domain>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Person"/>
     </rdf:Description>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#vacationHome">
@@ -386,10 +408,10 @@ updated ont: to March 2001 DAML namespace.
     </rdf:Property>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#zip">
-        <subPropertyOf>http://www.w3.org/2000/10/swap/pim/contact#postalCode</subPropertyOf>
+        <subPropertyOf rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#postalCode"/>
     </rdf:Description>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/doc#persistencePolicy">
-        <seeAlso>http://www.w3.org/1999/10/nsuri</seeAlso>
+        <seeAlso rdf:resource="http://www.w3.org/1999/10/nsuri"/>
     </rdf:Description>
 </rdf:RDF>
