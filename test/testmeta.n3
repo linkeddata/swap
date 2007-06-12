@@ -1,3 +1,125 @@
 #Processed by Id: cwm.py,v 1.190 2006/08/09 23:20:42 syosi Exp 
-        #    using base file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/rdfcore-tests.n3
+        #    using base file:///devel/WWW/2000/10/swap/test/rdfcore-tests.n3
         
+#  Notation3 generation by
+#       notation3.py,v 1.191 2006/08/01 01:14:04 syosi Exp
+
+#   Base was: file:///devel/WWW/2000/10/swap/test/rdfcore-tests.n3
+     @prefix : <http://www.w3.org/2000/10/swap/test/triage#> .
+    @prefix M: <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#> .
+    @prefix Man14: <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-syntax-incomplete/Manifest.rdf#> .
+    @prefix Man15: <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/Manifest.rdf#> .
+    @prefix Man2: <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-literal-is-xml-structure/Manifest.rdf#> .
+    @prefix Man20: <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/Manifest.rdf#> .
+    @prefix Man24: <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#> .
+    @prefix Man25: <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xml-literal-namespaces/Manifest.rdf#> .
+    @prefix Man3: <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/Manifest.rdf#> .
+    @prefix Man8: <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/Manifest.rdf#> .
+    @prefix Man9: <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-not-id-and-resource-attr/Manifest.rdf#> .
+    @prefix Manif: <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/Manifest.rdf#> .
+    
+    Manif:test004     a :BoringTest,
+                :ParseTypeLiteralTest,
+                :ReificationTest .
+    
+    Man15:test0002     a :BoringTest,
+                :ReificationTest .
+    
+    Man24:test003     a :ParseTypeLiteralTest .
+    
+    Man24:test005     a :BoringTest,
+                :ReificationTest .
+    
+    Man24:test006     a :BoringTest,
+                :ReificationTest .
+    
+    Man24:test009     a :ParseTypeLiteralTest .
+    
+    Man24:test011     a :BoringTest,
+                :ReificationTest .
+    
+    Man24:test012     a :BoringTest,
+                :ReificationTest .
+    
+    Man2:test001     a :ParseTypeLiteralTest .
+    
+    Man2:test002     a :ParseTypeLiteralTest .
+    
+    Man2:test003     a :ParseTypeLiteralTest .
+    
+    Man2:test004     a :ParseTypeLiteralTest .
+    
+    Man8:test001     a :BoringTest,
+                :ReificationTest .
+    
+    Man8:test002     a :BoringTest,
+                :ReificationTest .
+    
+    Man8:test003     a :BoringTest,
+                :ReificationTest .
+    
+    Man8:test004     a :BoringTest,
+                :ReificationTest .
+    
+    Man8:test005     a :BoringTest,
+                :ReificationTest .
+    
+    Man8:test006     a :BoringTest,
+                :ReificationTest .
+    
+    Man8:test008     a :BoringTest,
+                :ReificationTest .
+    
+    Man8:test009     a :BoringTest,
+                :ReificationTest .
+    
+    Man8:test010a     a :BoringTest,
+                :ReificationTest .
+    
+    Man8:test010b     a :BoringTest,
+                :ReificationTest .
+    
+    Man8:test011a     a :BoringTest,
+                :ReificationTest .
+    
+    Man8:test011b     a :BoringTest,
+                :ReificationTest .
+    
+    Man8:test012a     a :BoringTest,
+                :ReificationTest .
+    
+    Man8:test012b     a :BoringTest,
+                :ReificationTest .
+    
+    Man9:test001     a :BoringTest,
+                :ReificationTest .
+    
+    Man9:test003     a :BoringTest,
+                :ReificationTest .
+    
+    Man9:test004     a :BoringTest,
+                :ReificationTest .
+    
+    Man9:test005     a :BoringTest,
+                :ReificationTest .
+    
+    M:test-024     a :BoringTest,
+                :ReificationTest .
+    
+    Man14:test004     a :BoringTest,
+                :ReificationTest .
+    
+    Man25:test001     a :ParseTypeLiteralTest .
+    
+    Man25:test002     a :ParseTypeLiteralTest .
+    
+    Man20:test001     a :ParseTypeLiteralTest .
+    
+    Man20:test002     a :ParseTypeLiteralTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/xml-canon/Manifest.rdf#test001>     a :ParseTypeLiteralTest .
+    
+    Man3:test004     a :BoringTest,
+                :ReificationTest .
+    
+#ENDS
