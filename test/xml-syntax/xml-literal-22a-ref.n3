@@ -2,7 +2,7 @@
     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
     
     :book12345     <http://purl.org/dc/elements/1.1/title> """
-       <span xml:lang="en">
+       <span xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
          The <em>&lt;br /&gt;</em> Element Considered Harmful.
        </span>
      """^^rdf:XMLLiteral .

@@ -1554,7 +1554,7 @@ B   Turn any blank node into a existentially qualified explicitly named node.
 	    return stringToN3(value, singleLine=singleLine, flags = self._flags)
 
         if ty == XMLLITERAL:
-	    st = Canonicalize(value, None, unsuppressedPrefixes=['foo'])
+	    st = ''.join([Canonicalize(x, None, unsuppressedPrefixes=['foo']) for x in value.childNodes])
 	    st = stringToN3(st, singleLine=singleLine, flags=self._flags)
 	    return st + "^^" + self.representationOf(context, (SYMBOL,
 		    "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"))

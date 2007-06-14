@@ -128,6 +128,8 @@ class _implementation:
                 self._do_element(node, inherited)
         elif node.nodeType == Node.DOCUMENT_TYPE_NODE:
             pass
+        elif node.nodeType == Node.TEXT_NODE:
+            self._do_text(node)
         else:
             raise TypeError, str(node)
 

@@ -354,7 +354,7 @@ z  - Allow relative URIs for namespaces
 	if obj[0] == XMLLITERAL:
 	    # XML literal
 	    dom = obj[1]
-	    self._xwr.passXML(Canonicalize(dom))
+	    self._xwr.passXML(''.join([Canonicalize(x) for x in dom.childNodes]))
 	else:
 	    self._xwr.data(v)
         self._xwr.endElement()

@@ -1087,7 +1087,7 @@ class Query(Formula):
         """
         total = 0
 	assert isinstance(bindings, Env)
-	assert isinstance(newBindings, Env)
+	assert isinstance(newBindings, Env), 'env is an %s, not an %s' % (newBindings.__class__, Env)
         if diag.chatty_flag > 59:
             progress( "QUERY2: called %i terms, %i bindings %s, (new: %s)" %
                       (len(queue), len(bindings), `bindings`,
@@ -1250,7 +1250,6 @@ class Query(Formula):
 		for i in queue:
 		    newItem = i.clone()
 		    q2.append(newItem)  #@@@@@@@@@@  If exactly 1 binding, loop (tail recurse)
-		
 		found = query.matchFormula(q2, variables.copy(), existentials.copy(),
 			bindings.copy(), nb, evidence = evidence + [reason])
 
@@ -1374,15 +1373,15 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
         quad = lookupQuad(quad[CONTEXT]._redirections, quad)
         #print quad[CONTEXT]._redirections
         self.quad = quad
-	self.query = query
+        self.query = query
         self.searchPattern = None # Will be list of variables
         self.store = query.store
         self.state = S_UNKNOWN  # Invalid
         self.short = INFINITY
         self.neededToRun = None   # see setup()
         self.myIndex = None     # will be list of satistfying statements
-	self.service = None   # Remote database server for this predicate?
-	self.builtIn = False
+        self.service = None   # Remote database server for this predicate?
+        self.builtIn = False
         return
 
     def clone(self):
@@ -1412,7 +1411,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 	The mode is a set of character flags about how we think."""
         con, pred, subj, obj = self.quad
         self.interpretBuiltins = interpretBuiltins
-	self.service = None
+        self.service = None
 
         if diag.chatty_flag > 800: progress("setup:" + `allvars`)
 	if "r" in mode:
@@ -1610,7 +1609,10 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
         con, pred, subj, obj = self.quad
 	proof = []  # place for built-in to hang a justification
 	rea = None  # Reason for believing this item is true
+<<<<<<< query.py
+=======
 	#print "tryBuiltin"
+>>>>>>> 1.84
 	if "q" in self.query.mode:
             caughtErrors = (TypeError, ValueError, AttributeError, AssertionError, ArgumentNotLiteral, UnknownType)
         else:

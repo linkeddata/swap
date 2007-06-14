@@ -597,8 +597,8 @@ class AnonymousUniversal(AnonymousVariable, Universal):
             return AnonymousVariable.asPair(self)
         return (SYMBOL, self.uriref())
 
-    def __repr__(self):
-        return str(abs(id(self)))
+##    def __repr__(self):
+##        return str(abs(id(self)))
     
     
 ##########################################################################
@@ -1405,6 +1405,8 @@ class Literal(Term):
 	return Set()
 
     def __repr__(self):
+        if len(self.string) < 8:
+            return '"%s"' % self.string.encode('unicode_escape') 
         return unicode('"' + self.string[0:4] + '...' + self.string[-4:] + '"').encode('unicode_escape')#        return self.string
 
     def asPair(self):
@@ -1500,7 +1502,7 @@ class XMLLiteral(Literal):
 
     def __str__(self):
 	if not self.string:
-	    self.string = Canonicalize(self.dom, None, unsuppressedPrefixes=[]) 
+	    self.string = ''.join([Canonicalize(x, None, unsuppressedPrefixes=[]) for x in self.dom.childNodes])
 	return self.string 
 
     def __int__(self):

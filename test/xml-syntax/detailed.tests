@@ -29,5 +29,30 @@
     test:description   "Basic N3 XML Literal, output in N3";
     test:arguments     "--n3 xml-syntax/xmllit.n3 --rdf".
 
+:xmllit005 a test:CwmTest;
+    test:referenceOutput <xml-literal-22-ref.n3>;
+    test:description   "Test 22";
+    test:arguments     "-rdf xml-syntax/xml-literal-22.rdf  --n3" .
+
+:xmllit006 a test:CwmTest;
+    test:referenceOutput <xml-literal-22a-ref.n3>;
+    test:description   "Test 22";
+    test:arguments     "-rdf xml-syntax/xml-literal-22a.rdf  --n3" .
+
+:xmllit007 a test:CwmTest;
+    test:referenceOutput <xml-literal-text.rdf.ref>;
+    test:description   "Test 22";
+    test:arguments     "-rdf xml-syntax/xml-literal-text.rdf " .
+
+
+:xmllit008 a test:CwmTest;
+    test:referenceOutput <xml-literal-mixed.rdf.ref>;
+    test:description   "Test 22";
+    test:arguments     "-rdf xml-syntax/xml-literal-mixed.rdf " .
+
+:xmllit009 a test:CwmTest;
+    test:referenceOutput <xml-literal-mixed.n3.ref>;
+    test:description   "Test 22";
+    test:arguments     "xml-syntax/xml-literal-mixed.rdf " .
 
 #ends

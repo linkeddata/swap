@@ -648,25 +648,28 @@ class RDFHandler(xml.sax.ContentHandler):
             self._litDepth = self._litDepth - 1
             if self._litDepth == 0:
                 buf = self.testdata
-		if XMLLiteralsAsDomTrees:
-		    e = self.domDocument.documentElement.firstChild
-		    while e.nodeType == e.TEXT_NODE:
-			e = e.nextSibling
-		    #progress("@@@ e=", e, e.nodeName)
-		    self.domElement = e   # Leave for literal parser to pick up
-		    if self.sink:
-			self.sink.makeStatement(( self._context,
-					      self._predicate,
-					      self._subject,
-					      self.sink.newXMLLiteral(e) ),
-					       why=self._reason2)
-		else:
-		    self._datatype = self.sink.newSymbol("http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral")
-		    self.sink.makeStatement(( self._context,
-					      self._predicate,
-					      self._subject,
-					      self.sink.newLiteral(buf, self._datatype) ), why=self._reason2)
-		self.testdata = ""
+                if XMLLiteralsAsDomTrees:
+#                    e = self.domDocument.documentElement.firstChild
+#                    while e.nodeType == e.TEXT_NODE:
+#                        e = e.nextSibling
+                    #progress("@@@ e=", e, e.nodeName)
+#                    self.domElement = e   # Leave for literal parser to pick up
+                    self.domElement = self.domDocument.documentElement
+                    #print self.domDocument.toxml()
+                    #raise SystemExit()
+                    if self.sink:
+                        self.sink.makeStatement(( self._context,
+                                              self._predicate,
+                                              self._subject,
+                                              self.sink.newXMLLiteral(self.domDocument.documentElement) ),
+                                               why=self._reason2)
+                else:
+                    self._datatype = self.sink.newSymbol("http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral")
+                    self.sink.makeStatement(( self._context,
+                                              self._predicate,
+                                              self._subject,
+                                              self.sink.newLiteral(buf, self._datatype) ), why=self._reason2)
+                self.testdata = ""
 
             else:
 		if XMLLiteralsAsDomTrees:
@@ -777,6 +780,7 @@ class RDFHandler(xml.sax.ContentHandler):
     def literal_element_start_DOM(self, name, qname, attrs):
 
         declared = self.LiteralNS[-1].copy()
+        declared[u'http://www.w3.org/XML/1998/namespace'] = 'xml'
         self.LiteralNS.append(declared)
         nsMap = self._prefixMap[-1]
         if name[0]:
@@ -851,6 +855,7 @@ class RDFHandler(xml.sax.ContentHandler):
 
     def literal_element_end_DOM(self, name, qname):
 	self.domElement = self.domElement.parentNode
+	self.LiteralNS.pop()
 
 
 

@@ -4,10 +4,11 @@
             xml:base="http://www.example.com/books">
 
   <rdf:Description rdf:ID="book12345">
-     <dc:title xmlns="http://www.w3.org/1999/xhtml" rdf:parseType="Literal">
+     <dc:title xmlns:html="http://www.w3.org/1999/xhtml" rdf:parseType="Literal">
 	Foo
-	<b>bar</b>
+	<html:b xmlns:a="foo:" html:a="b">bar<rdf:Thing><a:b />here<a:c /></rdf:Thing></html:b>
 	baz
+        <html:i>more</html:i>
      </dc:title>
   </rdf:Description>
 

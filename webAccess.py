@@ -80,7 +80,7 @@ def webget(addr, referer=None, types=[]):
         if addr[:5] == 'file:':
             raise SecurityError('local file access prohibited')
 
-    addr = cacheHack(addr)
+#    addr = cacheHack(addr)
 
     # work around python stdlib bugs with data: URIs
     # buggy in 2.4.2 with CStringIO

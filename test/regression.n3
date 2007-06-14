@@ -16,6 +16,11 @@
     test:description   "Parse a small RDF file, generate N3";
     test:arguments     """-rdf animal.rdf -n3""".
 
+:t1001b a test:CwmTest;
+    test:referenceOutput <ref/animal.n3>;
+    test:description   "Ignore superfluous #stuff at end of URI";
+    test:arguments    """ ref/animal.n3#something """ . 
+
 :t1001a a test:CwmTest, test:CwmProofTest;
     test:referenceOutput <ref/base64.n3>;
     test:description   "Read a data: uri";

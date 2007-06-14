@@ -48,7 +48,7 @@ import string, sys
 from swap import  diag
 from swap.why import  explainFormula, newTopLevelFormula
 from swap.diag import verbosity, setVerbosity, progress, tracking, setTracking
-from swap.uripath import join
+from swap.uripath import join, splitFrag
 from swap.webAccess import urlopenForRDF, load, sandBoxed 
 
 from swap import  notation3    	# N3 parsers and generators
@@ -323,6 +323,7 @@ rdf/xml files. Note that this requires rdflib.
                 if diag.tracking:
                     _outURI = RDFSink.runNamespace()[:-1]
                     option_baseURI = _outURI
+        option_baseURI = splitFrag(option_baseURI)[0]
 
         #  Fix the output sink
         if option_format == "rdf":
@@ -437,7 +438,7 @@ rdf/xml files. Note that this requires rdflib.
 	    except ValueError:
 		_uri =_rhs
             if arg[0] != "-":
-                _inputURI = join(option_baseURI, arg)
+                _inputURI = join(option_baseURI, splitFrag(arg)[0])
                 assert ':' in _inputURI
 		ContentType={ "rdf": "application/xml+rdf", "n3":
 				"text/rdf+n3",
