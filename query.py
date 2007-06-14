@@ -8,7 +8,7 @@ from sparql2cwm import SPARQL_NS
 
 from set_importer import Set, ImmutableSet, sorted
 
-from RDFSink import Logic_NS, RDFSink, forSomeSym, forAllSym
+from RDFSink import Logic_S, RDFSink, forSomeSym, forAllSym
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
 from RDFSink import N3_nil, N3_first, N3_rest, OWL_NS, N3_Empty, N3_List, List_NS
 from RDFSink import RDF_NS_URI
@@ -1609,10 +1609,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
         con, pred, subj, obj = self.quad
 	proof = []  # place for built-in to hang a justification
 	rea = None  # Reason for believing this item is true
-<<<<<<< query.py
-=======
-	#print "tryBuiltin"
->>>>>>> 1.84
+
 	if "q" in self.query.mode:
             caughtErrors = (TypeError, ValueError, AttributeError, AssertionError, ArgumentNotLiteral, UnknownType)
         else:
