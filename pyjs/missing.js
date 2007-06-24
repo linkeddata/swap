@@ -34,6 +34,10 @@ pyjslib_Iterator = function(theList) {
     return this;
 }
 
+ord = function(str) {
+    return str.charCodeAt(0)
+}
+
 assertFudge = function(condition, desc) {
     if (condition) return;
     if (desc) throw "python Assertion failed: "+desc;

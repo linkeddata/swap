@@ -297,10 +297,10 @@ class SinkParser:
 	if j<0: raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
 			    "expected <uriref> after @prefix _qname_")
 
-	if isinstance(t[1], types.TupleType):
-	    ns = t[1][1] # old system for --pipe
-        else:
-	    ns = t[1].uriref()
+#	if isinstance(t[1], types.TupleType):
+#	    ns = t[1][1] # old system for --pipe
+#        else:     #pjys no isinstance and this is obsolete anyway
+	ns = t[1].uri # pyjs was uriref()
 
         if self._baseURI:
 	    ns = join(self._baseURI, ns)
@@ -312,8 +312,10 @@ class SinkParser:
 	return j
 
     def bind(self, qn, uri):
-	assertFudge( isinstance(uri,
-		    types.StringType), "Any unicode must be %x-encoded already")
+#	assertFudge( isinstance(uri,     # pyjs
+#		    types.StringType), "Any unicode must be %x-encoded already")
+	return  # pyjs  store does not support bind() or setDefaultNamespace
+	
         if qn == "":
             self._store.setDefaultNamespace(uri)
         else:
@@ -475,8 +477,8 @@ class SinkParser:
 
     def anonymousNode(self, ln):
 	"""Remember or generate a term for one of these _: anonymous nodes"""
-	term = self._anonymousNodes.get(ln, None)
-	if term != None: return term
+	term = self._anonymousNodes[ln]  # pyjs
+	if term: return term   # pyjs
 	term = self._store.newBlankNode(self._context, self._reason2)
 	self._anonymousNodes[ln] = term
 	return term
@@ -765,8 +767,8 @@ class SinkParser:
 		assertFudge( 0, "not used?")
 		ns = self._baseURI + ADDED_HASH
 	    else:
-		ns = self._bindings.get(pfx, None)
-		if ns is None:
+		ns = self._bindings[pfx]
+		if not ns:  # @@ pyjs should test undefined
                     if pfx == "_":  # Magic prefix 2001/05/30, can be overridden
                         res.append(self.anonymousNode(ln))
                         return j
@@ -1183,6 +1185,29 @@ def stripCR(str):
 
 def dummyWrite(x):
     pass
+    
+    
+    
+def hexify(ustr):
+    """Use URL encoding to return an ASCII string
+    corresponding to the given UTF8 string
+
+    >>> hexify("http://example/a b")
+    'http://example/a%20b'
+    
+    """   #"
+#    progress("String is "+`ustr`)
+#    s1=ustr.encode('utf-8')
+    str  = ""
+    for ch in ustr:  # .encode('utf-8'):
+	if ord(ch) > 126 or ord(ch) < 33 :
+	    ch = "%%%02X" % ord(ch)
+	else:
+	    ch = "%c" % ord(ch)
+	str = str + ch
+    return str
+    
+    
 
 ################################################################################
 #ends
