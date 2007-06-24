@@ -38,6 +38,10 @@ ord = function(str) {
     return str.charCodeAt(0)
 }
 
+string_find = function(str, s) {
+    return str.indexOf(s)
+}
+
 assertFudge = function(condition, desc) {
     if (condition) return;
     if (desc) throw "python Assertion failed: "+desc;
@@ -52,10 +56,9 @@ var diag_tracking = 0;
 
 // why_BecauseOfData = function(doc, reason) { return doc };
 
-SYMBOL = 1; // @@check
 
-RDF_type_URI = "@@";
-DAML_sameAs_URI = "@@";
+RDF_type_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+DAML_sameAs_URI = "http://www.w3.org/2002/07/owl#sameAs";
 
 function SyntaxError(details) {
     return new __SyntaxError(details);

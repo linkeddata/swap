@@ -61,8 +61,6 @@ from local_decimal import Decimal
 ADDED_HASH = "#"  # Stop where we use this in case we want to remove it!
 # This is the hash on namespace URIs
 
-RDF_type = ( SYMBOL , RDF_type_URI )
-DAML_sameAs = ( SYMBOL, DAML_sameAs_URI )
 
 from RDFSink import N3_first, N3_rest, N3_nil, N3_li, N3_List, N3_Empty
 
@@ -95,7 +93,7 @@ ws = re.compile(r'^[ \t]*')			# Whitespace not including NL
 signed_integer = re.compile(r'^[-+]?[0-9]+')	# integer
 number_syntax = re.compile(r'^(?P<integer>[-+]?[0-9]+)(?P<decimal>\.[0-9]+)?(?P<exponent>e[-+]?[0-9]+)?')
 digitstring = re.compile(r'^[0-9]+')		# Unsigned integer	
-interesting = re.compile(r'^[\\\r\n\"]')   #@@ pyjs: Anchar all regexps to ^
+interesting = re.compile(r'^[\\\r\n\"]')   # Things to be quoted @@ pyjs: Anchar all regexps to ^
 langcode = re.compile(r'^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)?')
 #"
 
@@ -159,16 +157,8 @@ class SinkParser:
         self._context = self._formula
 	self._parentContext = None
         
-        if metaURI:
-            self.makeStatement((SYMBOL, metaURI), # relate doc to parse tree
-                            (SYMBOL, PARSES_TO_URI ), #pred
-                            (SYMBOL, thisDoc),  #subj
-                            self._context)                      # obj
-            self.makeStatement(((SYMBOL, metaURI), # quantifiers - use inverse?
-                            (SYMBOL, N3_forSome_URI), #pred
-                            self._context,  #subj
-                            subj))                      # obj
-
+	# META INFROMATION NOT THE PARSER'S JOB (PYJS)
+	
     def here(self, i):
 
 	return "%s_L%iC%i" % (self._genPrefix , self.lines,
@@ -404,7 +394,7 @@ class SinkParser:
 
 	j = self.tok('a', str, i)
 	if j>=0:
-	    res.append(('->', RDF_type))
+	    res.append(('->', self._store.newSymbol(RDF_type_URI)))
 	    return j
 
 	    
@@ -416,7 +406,7 @@ class SinkParser:
 	    if str[i+1:i+2] == ">":
 		res.append(('->', self._store.newSymbol(Logic_NS+"implies")))
 		return i+2
-	    res.append(('->', DAML_sameAs))
+	    res.append(('->', self._store.newSymbol(DAML_sameAs_URI)))
 	    return i+1
 
 	if str[i:i+2] == ":=":
@@ -509,7 +499,8 @@ class SinkParser:
                     if len(objs)>1:
                         for obj in objs:
                             self.makeStatement((self._context,
-                                                DAML_sameAs, subj, obj))
+                                                self._store.newSymbol(DAML_sameAs_URI),
+						subj, obj))
 		    j = self.skipSpace(str, j)
 		    if j<0: raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
 			"EOF when objectList expected after [ = ")
@@ -779,8 +770,6 @@ class SinkParser:
                 res.append(self._variables[symb])
             else:
                 res.append(symb) # @@@ "#" CONVENTION
-            if not string.find(ns, "#"):progress(
-			"Warning: no # on namespace %s," % ns)
 	    return j
 
         
@@ -1035,12 +1024,13 @@ class SinkParser:
                 ustr = ustr + '"'
                 j = j + 1
                 continue
-            m = interesting.search(str, j)  # was str[j:].
+	    interesting.lastIndex = 0
+            m = interesting.execFudge(str.slice(j))  # was str[j:].
 	    # Note for pos param to work, MUST be compiled  ... re bug?
 	    assertFudge( m , "Quote expected in string at ^ in %s^%s" %(
 		str[j-20:j], str[j:j+20])) # we at least have to find a quote
-
-            i = m.start()
+            i += m.lastIndex
+	    
 #	    try:
 	    ustr = ustr + str[j:i]
 #	    except UnicodeError:

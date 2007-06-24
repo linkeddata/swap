@@ -38,6 +38,10 @@ ord = function(str) {
     return str.charCodeAt(0)
 }
 
+string_find = function(str, s) {
+    return str.indexOf(s)
+}
+
 assertFudge = function(condition, desc) {
     if (condition) return;
     if (desc) throw "python Assertion failed: "+desc;
@@ -52,10 +56,9 @@ var diag_tracking = 0;
 
 // why_BecauseOfData = function(doc, reason) { return doc };
 
-SYMBOL = 1; // @@check
 
-RDF_type_URI = "@@";
-DAML_sameAs_URI = "@@";
+RDF_type_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+DAML_sameAs_URI = "http://www.w3.org/2002/07/owl#sameAs";
 
 function SyntaxError(details) {
     return new __SyntaxError(details);
@@ -98,8 +101,6 @@ the module, including tests and test harness.
 var N3_forSome_URI = RDFSink_forSomeSym;
 var N3_forAll_URI = RDFSink_forAllSym;
 var ADDED_HASH = "#";
-var RDF_type = new pyjslib_Tuple([SYMBOL, RDF_type_URI]);
-var DAML_sameAs = new pyjslib_Tuple([SYMBOL, DAML_sameAs_URI]);
 var LOG_implies_URI = "http://www.w3.org/2000/10/swap/log#implies";
 var INTEGER_DATATYPE = "http://www.w3.org/2001/XMLSchema#integer";
 var FLOAT_DATATYPE = "http://www.w3.org/2001/XMLSchema#double";
@@ -192,10 +193,6 @@ function __SinkParser(store, openFormula, thisDoc, baseURI, genPrefix, metaURI, 
     }
     this._context = this._formula;
     this._parentContext = null;
-    if (metaURI) {
-    this.makeStatement(new pyjslib_Tuple([SYMBOL, metaURI]), new pyjslib_Tuple([SYMBOL, PARSES_TO_URI]), new pyjslib_Tuple([SYMBOL, thisDoc]), this._context);
-    this.makeStatement(new pyjslib_Tuple([new pyjslib_Tuple([SYMBOL, metaURI]), new pyjslib_Tuple([SYMBOL, N3_forSome_URI]), this._context, subj]));
-    }
 }
 __SinkParser.prototype.here = function(i) {
     return "%s_L%iC%i" % new pyjslib_Tuple([this._genPrefix, this.lines,  (  ( i - this.startOfLine )  + 1 ) ]);
@@ -465,7 +462,7 @@ __SinkParser.prototype.verb = function(str, i, res) {
     }
     var j = this.tok("a", str, i);
     if ((j >= 0)) {
-    res.push(new pyjslib_Tuple(["->", RDF_type]));
+    res.push(new pyjslib_Tuple(["->", this._store.sym(RDF_type_URI)]));
     return j;
     }
     if ((pyjslib_slice(str, i,  ( i + 2 ) ) == "<=")) {
@@ -477,7 +474,7 @@ __SinkParser.prototype.verb = function(str, i, res) {
     res.push(new pyjslib_Tuple(["->", this._store.sym( ( Logic_NS + "implies" ) )]));
     return  ( i + 2 ) ;
     }
-    res.push(new pyjslib_Tuple(["->", DAML_sameAs]));
+    res.push(new pyjslib_Tuple(["->", this._store.sym(DAML_sameAs_URI)]));
     return  ( i + 1 ) ;
     }
     if ((pyjslib_slice(str, i,  ( i + 2 ) ) == ":=")) {
@@ -585,7 +582,7 @@ None
                 var obj = __obj.next();
                 
         
-    this.makeStatement(new pyjslib_Tuple([this._context, DAML_sameAs, subj, obj]));
+    this.makeStatement(new pyjslib_Tuple([this._context, this._store.sym(DAML_sameAs_URI), subj, obj]));
 
             }
         } catch (e) {
@@ -929,9 +926,6 @@ Generate uri from n3 representation.
     else {
     res.push(symb);
     }
-    if (!(string_find(ns, "#"))) {
-    diag_progress("Warning: no # on namespace %s," % ns);
-    }
     return j;
     }
     var i = this.skipSpace(str, i);
@@ -1245,9 +1239,10 @@ parse an N3 string constant delimited by delim.
     var j =  ( j + 1 ) ;
     continue;
     }
-    var m = interesting.search(str, j);
+    interesting.lastIndex = 0;
+    var m = interesting.exec(str.slice(j));
     assertFudge(m, "Quote expected in string at ^ in %s^%s" % new pyjslib_Tuple([pyjslib_slice(str,  ( j - 20 ) , j), pyjslib_slice(str, j,  ( j + 20 ) )]));
-    var i = m.start();
+    i += m.lastIndex;
     var ustr =  ( ustr + pyjslib_slice(str, j, i) ) ;
     var ch = str[i];
     if ((ch == "\"")) {
