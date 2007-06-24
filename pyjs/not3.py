@@ -2,6 +2,7 @@
 """
 $Id$
 
+HAND EDITED FOR CONVERSION TO JAVASCRIPT
 
 This module implements a Nptation3 parser, and the final
 part of a notation3 serializer.
@@ -88,14 +89,14 @@ N3CommentCharacter = "#"     # For unix script #! compatabilty
 ########################################## Parse string to sink
 #
 # Regular expressions:
-eol = re.compile(r'[ \t]*(#[^\n]*)?\r?\n')	# end  of line, poss. w/comment
-eof = re.compile(r'[ \t]*(#[^\n]*)?$')      	# end  of file, poss. w/comment
-ws = re.compile(r'[ \t]*')			# Whitespace not including NL
-signed_integer = re.compile(r'[-+]?[0-9]+')	# integer
-number_syntax = re.compile(r'(?P<integer>[-+]?[0-9]+)(?P<decimal>\.[0-9]+)?(?P<exponent>e[-+]?[0-9]+)?')
-digitstring = re.compile(r'[0-9]+')		# Unsigned integer	
-interesting = re.compile(r'[\\\r\n\"]')
-langcode = re.compile(r'[a-zA-Z0-9]+(-[a-zA-Z0-9]+)?')
+eol = re.compile(r'^[ \t]*(#[^\n]*)?\r?\n')	# end  of line, poss. w/comment
+eof = re.compile(r'^[ \t]*(#[^\n]*)?$')      	# end  of file, poss. w/comment
+ws = re.compile(r'^[ \t]*')			# Whitespace not including NL
+signed_integer = re.compile(r'^[-+]?[0-9]+')	# integer
+number_syntax = re.compile(r'^(?P<integer>[-+]?[0-9]+)(?P<decimal>\.[0-9]+)?(?P<exponent>e[-+]?[0-9]+)?')
+digitstring = re.compile(r'^[0-9]+')		# Unsigned integer	
+interesting = re.compile(r'^[\\\r\n\"]')   #@@ pyjs: Anchar all regexps to ^
+langcode = re.compile(r'^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)?')
 #"
 
 
@@ -117,8 +118,10 @@ class SinkParser:
 	if genPrefix: store.setGenPrefix(genPrefix) # pass it on
 	
 	self._thisDoc = thisDoc
+	self.source = store.sym(thisDoc)
         self.lines = 0              # for error handling
 	self.startOfLine = 0	    # For calculating character number
+	self.previousLine = 0	    # For calculating character number
         self._genPrefix = genPrefix
 	self.keywords = ['a', 'this', 'bind', 'has', 'is', 'of', 'true', 'false' ]
 	self.keywordsSet = 0    # Then only can others be considerd qnames
@@ -192,7 +195,9 @@ class SinkParser:
 	remainder after any statements have been parsed.
 	So if there is more data to feed to the
 	parser, it should be straightforward to recover."""
-	str = octets.decode('utf-8')
+	# str = octets.decode('utf-8')
+	# str = decodeURIComponent( escape(octets))
+	str = octets # @@@@@@@ DECODE
         i = 0
 	while i >= 0:
 	    j = self.skipSpace(str, i)
@@ -225,7 +230,7 @@ class SinkParser:
         """Check for keyword.  Space must have been stripped on entry and
 	we must not be at end of file."""
 	
-	assertFudge( tok[0] not in _notNameChars) # not for punctuation
+	# assertFudge( tok[0] not in _notNameChars) # not for punctuation pyjs
 	# was: string.whitespace which is '\t\n\x0b\x0c\r \xa0' -- not ascii
 	whitespace = '\t\n\x0b\x0c\r ' 
 	if str[i:i+1] == "@":
@@ -234,10 +239,10 @@ class SinkParser:
 	    if tok not in self.keywords:
 		return -1   # No, this has neither keywords declaration nor "@"
 
-	if (str[i:i+len(tok)] == tok
-            and (str[i+len(tok)] in  _notQNameChars )): 
-	    i = i + len(tok)
-	    return i
+	k = i + len(tok)
+	if (str[i:k] == tok
+            and (str[k] in  _notQNameChars )): 
+	    return k
 	else:
 	    return -1
 
@@ -324,18 +329,19 @@ class SinkParser:
 
 
     def startDoc(self):
-        self._store.startDoc()
+        pass
+	#self._store.startDoc()
 
     def endDoc(self):
 	"""Signal end of document and stop parsing. returns formula"""
-	self._store.endDoc(self._formula)  # don't canonicalize yet
+	# self._store.endDoc(self._formula)  # don't canonicalize yet
 	return self._formula
 
-    def makeStatement(self, quadruple):
+    def makeStatement(self, quad):
         #$$$$$$$$$$$$$$$$$$$$$
-#        print "# Parser output: ", `quadruple`
-#        self._store.makeStatement(quadruple, why=self._reason2)
-        self._store.makeStatement(quadruple, self._reason2)
+        alert( "Parser output: " + quad)
+#        self._store.makeStatement(quad, why=self._reason2)
+        quad[0].add(quad[2], quad[1], quad[3], self.source)
 
 
 
@@ -433,12 +439,14 @@ class SinkParser:
     def item(self, str, i, res):
 	return self.path(str, i, res)
 
-    def blankNode(self, None):
-	if "B" not in self._flags:
-	    return self._context.newBlankNode(uri, self._reason2)
-	x = self._context.newSymbol(uri)
-	self._context.declareExistential(x)
-	return x
+    def blankNode(self, uri):
+#	if "B" not in self._flags:
+	    return self._context.bnode(uri, self._reason2)
+#	return self._context.blankNode();  # pyjs
+	
+#	x = self._context.newSymbol(uri)
+#	self._context.declareExistential(x)
+#	return x
 	
     def path(self, str, i, res):
 	"""Parse the path production.
@@ -824,16 +832,22 @@ class SinkParser:
 	"""Skip white space, newlines and comments.
 	return -1 if EOF, else position of first non-ws character"""
 	while 1:
-            m = eol.match(str, i)
-	    if m == None: break
+	    eol.lastIndex = 0
+            m = eol.execFudge(str.slice(i))
+	    if (m == None): break
 	    self.lines = self.lines + 1
-	    i = m.end()   # Point to first character unmatched
+	    i += eol.lastIndex   # Point to first character unmatched
+	    self.previousLine = self.startOfLine
 	    self.startOfLine = i
-	m = ws.match(str, i)
-	if m != None:
-	    i = m.end()
-	m = eof.match(str, i)
-	if m != None: return -1
+	    log.debug('line '+self.lines+ ' ' +
+		str.slice(self.previousLine, self.startOfLine))  # pyjs
+	ws.lastIndex = 0
+	m = ws.execFudge(str.slice(i))
+	if m != None and m[0] != "":
+	    i += ws.lastIndex
+	if i ==len(str): return -1
+#	m = eof.execFudge(str.slice(i))
+#	if m != None: return -1
 	return i
 
     def variable(self, str, i, res):
@@ -955,11 +969,12 @@ class SinkParser:
 
 	    ch = str[i]
 	    if ch in "-+0987654321":
-		m = number_syntax.match(str, i)
+		number_syntax.lastIndex = i
+		m = number_syntax.match(str)
 		if m == None:
 		    raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
 				"Bad number syntax")
-		j = m.end()
+		j = number_syntax.lastIndex
 		if m.group('exponent') != None: # includes decimal exponent
 		    res.append(float(str[i:j]))
 #		    res.append(self._store.newLiteral(str[i:j],
@@ -1133,7 +1148,10 @@ class SinkParser:
 
 class BadSyntax(SyntaxError):
     def __init__(self, uri, lines, str, i, why):
-	self._str = str.encode('utf-8') # Better go back to strings for errors
+#	self._str = str.encode('utf-8') # Better go back to strings for errors
+#	self._str = decodeURIComponent( escape( str ) ) 
+# decodeURIComponent( escape( s ) )   doesn't work if not a URI
+	self._str = str # @@ pyjs
 	self._i = i
 	self._why = why
 	self.lines = lines

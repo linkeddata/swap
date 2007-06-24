@@ -2,17 +2,21 @@
   <head>
        <title>Test notation3 parser conversion from py to js</title>
 
-    <script src="http://dig.csail.mit.edu/2005/ajar/ajaw/rdfutil.js" type="text/javascript"> </script>
-    <script src="http://dig.csail.mit.edu/2005/ajar/ajaw/rdfuri.js" type="text/javascript"> </script>
-    <script src="http://dig.csail.mit.edu/2005/ajar/ajaw/rdf/term.js"  type="text/javascript"></script>
-    <script src="http://dig.csail.mit.edu/2005/ajar/ajaw/rdf/match.js"  type="text/javascript"></script>
-    <script src="http://dig.csail.mit.edu/2005/ajar/ajaw/rdf/identity.js"  type="text/javascript"></script>
+    <script src="http://dig.csail.mit.edu/2005/ajar/ajaw/js/util.js" type="text/javascript"> </script>
+    <script src="http://dig.csail.mit.edu/2005/ajar/ajaw/js/log.js" type="text/javascript"> </script>
+    <script src="http://dig.csail.mit.edu/2005/ajar/ajaw/js/uri.js" type="text/javascript"> </script>
+    <script src="http://dig.csail.mit.edu/2005/ajar/ajaw/js/rdf/term.js"  type="text/javascript"></script>
+    <script src="http://dig.csail.mit.edu/2005/ajar/ajaw/js/rdf/match.js"  type="text/javascript"></script>
+    <script src="http://dig.csail.mit.edu/2005/ajar/ajaw/js/rdf/identity.js"  type="text/javascript"></script>
 
 
     <script type="text/javascript" src="missing.js" />
     <script type="text/javascript" src="not3.js" />
     <script type="text/javascript" src="not3-test-script.js" />
 
+  <style>
+    .live { background-color: grey }
+  </style>
   </head>
   <body>
 
@@ -36,10 +40,13 @@ Initial status. Version $Id$<br/>
 <hr>
 <h2>Test controls</h2>
 
-
-    <h1>Test notation3 parser conversion</h1>
-    <p><span onmousedown="test1()">[1]</span>
-    test one
+    <p><span class="live"
+	onmousedown="test_buf('<a> <b> <c>.')">[*]</span>
+	Add <a> <b> <c>.
+    </p>
+    <p><span class="live"
+	onmousedown="test_buf('[] <p> <o>.')">[*]</span>
+	Add [] <p> <o>.
     </p>
   </body>
 </html>
