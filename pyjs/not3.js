@@ -77,6 +77,7 @@ function __SinkParser(store, openFormula, thisDoc, baseURI, genPrefix, metaURI, 
     this._thisDoc = thisDoc;
     this.source = store.sym(thisDoc);
     this.lines = 0;
+    this.statementCount = 0;
     this.startOfLine = 0;
     this.previousLine = 0;
     this._genPrefix = genPrefix;
@@ -328,8 +329,9 @@ Signal end of document and stop parsing. returns formula*/
     return this._formula;
 };
 __SinkParser.prototype.makeStatement = function(quad) {
-    alert( ( "Parser output: " + quad ) );
+    alert( ( "Parser output SPO: " + new pyjslib_List([quad[2], quad[1], quad[3]]) ) );
     quad[0].add(quad[2], quad[1], quad[3], this.source);
+    this.statementCount += 1;
 };
 __SinkParser.prototype.statement = function(str, i) {
     var r = new pyjslib_List([]);
