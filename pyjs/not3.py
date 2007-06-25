@@ -86,14 +86,14 @@ N3CommentCharacter = "#"     # For unix script #! compatabilty
 
 ########################################## Parse string to sink
 #
-# Regular expressions:
+# Regular expressions:   In pythn, match() is anchored, serarch() not. In js, just exec()
 eol = re.compile(r'^[ \t]*(#[^\n]*)?\r?\n')	# end  of line, poss. w/comment
 eof = re.compile(r'^[ \t]*(#[^\n]*)?$')      	# end  of file, poss. w/comment
 ws = re.compile(r'^[ \t]*')			# Whitespace not including NL
 signed_integer = re.compile(r'^[-+]?[0-9]+')	# integer
 number_syntax = re.compile(r'^(?P<integer>[-+]?[0-9]+)(?P<decimal>\.[0-9]+)?(?P<exponent>e[-+]?[0-9]+)?')
 digitstring = re.compile(r'^[0-9]+')		# Unsigned integer	
-interesting = re.compile(r'^[\\\r\n\"]')   # Things to be quoted @@ pyjs: Anchar all regexps to ^
+interesting = re.compile(r'[\\\r\n\"]')   # Things to be quoted @@ pyjs: Anchar all OTHER regexps to ^
 langcode = re.compile(r'^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)?')
 #"
 
@@ -332,7 +332,7 @@ class SinkParser:
 
     def makeStatement(self, quad):
         #$$$$$$$$$$$$$$$$$$$$$
-        alert( "Parser output SPO: " + [quad[2], quad[1], quad[3]] )
+#        alert( "Parser output SPO: " + [quad[2], quad[1], quad[3]] )
 #        self._store.makeStatement(quad, why=self._reason2)
         quad[0].add(quad[2], quad[1], quad[3], self.source)
 	self.statementCount += 1
@@ -945,7 +945,7 @@ class SinkParser:
 		j = pairFudge[0]
 		s = pairFudge[1]
 
-                res.append(self._store.newLiteral(s))
+                res.append(self._store.literal(s))
 		progress("New string const ", s, j)
 		return j
 	    else:
@@ -1002,7 +1002,7 @@ class SinkParser:
 		    res2 = []
 		    j = self.uri_ref2(str, j+2, res2) # Read datatype URI
 		    dt = res2[0]
-                res.append(self._store.newLiteral(s, dt, lang))
+                res.append(self._store.literal(s, lang, dt))
 		return j
 	    else:
 		return -1
@@ -1029,9 +1029,11 @@ class SinkParser:
 	    interesting.lastIndex = 0
             m = interesting.execFudge(str.slice(j))  # was str[j:].
 	    # Note for pos param to work, MUST be compiled  ... re bug?
-	    assertFudge( m , "Quote expected in string at ^ in %s^%s" %(
-		str[j-20:j], str[j:j+20])) # we at least have to find a quote
-            i += m.lastIndex
+	    if not m:
+		raiseFudge2 = BadSyntax(self._thisDoc, startline, str, j,
+			"Closing quote missing in string at ^ in %s^%s" %(
+		    str[j-20:j], str[j:j+20])) # we at least have to find a quote
+            i = j + interesting.lastIndex - 1 # The start of this match  [sic - why?]
 	    
 #	    try:
 	    ustr = ustr + str[j:i]
@@ -1060,6 +1062,7 @@ class SinkParser:
                 self.lines = self.lines + 1
                 ustr = ustr + ch
                 j = i + 1
+		self.previousLine = self.startOfLine
 		self.startOfLine = j
 
             elif ch == "\\":

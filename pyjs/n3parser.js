@@ -20,6 +20,7 @@ pyjslib_Dict = function(listOfPairs) {
 pyjslib_len = function(s) { return s.length }
 
 pyjslib_slice = function(str, i, j) {
+    if ((typeof j == 'undefined') || (j ==null)) return str.slice(i);
     return str.slice(i, j) // @ exactly the same spec?
 }
 StopIteration = Error('dummy error stop iteration')
@@ -117,7 +118,7 @@ var ws = new RegExp("^[ \\t]*", 'g');
 var signed_integer = new RegExp("^[-+]?[0-9]+", 'g');
 var number_syntax = new RegExp("^([-+]?[0-9]+)(\\.[0-9]+)?(e[-+]?[0-9]+)?", 'g');
 var digitstring = new RegExp("^[0-9]+", 'g');
-var interesting = new RegExp("^[\\\\\\r\\n\\\"]", 'g');
+var interesting = new RegExp("[\\\\\\r\\n\\\"]", 'g');
 var langcode = new RegExp("^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)?", 'g');
 function SinkParser(store, openFormula, thisDoc, baseURI, genPrefix, metaURI, flags, why) {
     return new __SinkParser(store, openFormula, thisDoc, baseURI, genPrefix, metaURI, flags, why);
@@ -399,7 +400,6 @@ Signal end of document and stop parsing. returns formula*/
     return this._formula;
 };
 __SinkParser.prototype.makeStatement = function(quad) {
-    alert( ( "Parser output SPO: " + new pyjslib_List([quad[2], quad[1], quad[3]]) ) );
     quad[0].add(quad[2], quad[1], quad[3], this.source);
     this.statementCount += 1;
 };
@@ -1146,7 +1146,7 @@ __SinkParser.prototype.object = function(str, i, res) {
     var pairFudge = this.strconst(str, i, delim);
     var j = pairFudge[0];
     var s = pairFudge[1];
-    res.push(this._store.newLiteral(s));
+    res.push(this._store.literal(s));
     diag_progress("New string const ", s, j);
     return j;
     }
@@ -1214,7 +1214,7 @@ __SinkParser.prototype.nodeOrLiteral = function(str, i, res) {
     var j = this.uri_ref2(str,  ( j + 2 ) , res2);
     var dt = res2[0];
     }
-    res.push(this._store.newLiteral(s, dt, lang));
+    res.push(this._store.literal(s, lang, dt));
     return j;
     }
     else {
@@ -1243,8 +1243,10 @@ parse an N3 string constant delimited by delim.
     }
     interesting.lastIndex = 0;
     var m = interesting.exec(str.slice(j));
-    assertFudge(m, "Quote expected in string at ^ in %s^%s" % new pyjslib_Tuple([pyjslib_slice(str,  ( j - 20 ) , j), pyjslib_slice(str, j,  ( j + 20 ) )]));
-    i += m.lastIndex;
+    if (!(m)) {
+    throw BadSyntax(this._thisDoc, startline, str, j, "Closing quote missing in string at ^ in %s^%s" % new pyjslib_Tuple([pyjslib_slice(str,  ( j - 20 ) , j), pyjslib_slice(str, j,  ( j + 20 ) )]));
+    }
+    var i =  (  ( j + interesting.lastIndex )  - 1 ) ;
     var ustr =  ( ustr + pyjslib_slice(str, j, i) ) ;
     var ch = str[i];
     if ((ch == "\"")) {
@@ -1262,6 +1264,7 @@ parse an N3 string constant delimited by delim.
     this.lines =  ( this.lines + 1 ) ;
     var ustr =  ( ustr + ch ) ;
     var j =  ( i + 1 ) ;
+    this.previousLine = this.startOfLine;
     this.startOfLine = j;
     }
     else if ((ch == "\\")) {

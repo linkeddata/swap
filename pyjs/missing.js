@@ -20,6 +20,7 @@ pyjslib_Dict = function(listOfPairs) {
 pyjslib_len = function(s) { return s.length }
 
 pyjslib_slice = function(str, i, j) {
+    if ((typeof j == 'undefined') || (j ==null)) return str.slice(i);
     return str.slice(i, j) // @ exactly the same spec?
 }
 StopIteration = Error('dummy error stop iteration')
