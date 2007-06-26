@@ -80,85 +80,85 @@ class Formula(AnonymousNode, CompoundTerm):
     def __init__(self, store, uri=None):
         AnonymousNode.__init__(self, store, uri)
         self.canonical = None # Set to self if this has been canonicalized
-	self.statements = []
-	self._existentialVariables = Set()
-	self._universalVariables = Set()
-	self.stayOpen = 0   # If set, works as a knowledegbase, never canonicalized.
-	self._redirections = {}  # Used for equalities
-	
+        self.statements = []
+        self._existentialVariables = Set()
+        self._universalVariables = Set()
+        self.stayOpen = 0   # If set, works as a knowledegbase, never canonicalized.
+        self._redirections = {}  # Used for equalities
+        
     def __repr__(self):
-	if self.statements == []:
-	    return "{}"
-	if len(self.statements) == 1:
-	    st = self.statements[0]
-	    return "{"+`st[SUBJ]`+" "+`st[PRED]`+" "+`st[OBJ]`+"}"
+        if self.statements == []:
+            return "{}"
+        if len(self.statements) == 1:
+            st = self.statements[0]
+            return "{"+`st[SUBJ]`+" "+`st[PRED]`+" "+`st[OBJ]`+"}"
 
-	s = Term.__repr__(self)
-	return "{%i}" % len(self.statements)
-	
+        s = Term.__repr__(self)
+        return "{%i}" % len(self.statements)
+        
     def classOrder(self):
-	return	11  # Put at the end of a listing because it makes it easier to read
+        return  11  # Put at the end of a listing because it makes it easier to read
 
     def compareTerm(self, other):
-	"Assume is also a Formula - see function compareTerm below"
-	for f in self, other:
-	    if f.canonical is not f:
-		progress("@@@@@ Comparing formula NOT canonical", `f`)
-	s = self.statements
-	o = other.statements
-	ls = len(s)
-	lo = len(o)
-	if ls > lo: return 1
-	if ls < lo: return -1
+        "Assume is also a Formula - see function compareTerm below"
+        for f in self, other:
+            if f.canonical is not f:
+                progress("@@@@@ Comparing formula NOT canonical", `f`)
+        s = self.statements
+        o = other.statements
+        ls = len(s)
+        lo = len(o)
+        if ls > lo: return 1
+        if ls < lo: return -1
 
-	for se, oe, in  ((list(self.universals()), list(other.universals())),
-			    (list(self.existentials()), list(other.existentials()))
-			):
-	    lse = len(se)
-	    loe = len(oe)
-	    if lse > loe: return 1
-	    if lse < loe: return -1
-	    se.sort(Term.compareAnyTerm)
-	    oe.sort(Term.compareAnyTerm)
-	    for i in range(lse):
-		diff = se[i].compareAnyTerm(oe[i])
-		if diff != 0: return diff
+        for se, oe, in  ((list(self.universals()), list(other.universals())),
+                            (list(self.existentials()), list(other.existentials()))
+                        ):
+            lse = len(se)
+            loe = len(oe)
+            if lse > loe: return 1
+            if lse < loe: return -1
+            se.sort(Term.compareAnyTerm)
+            oe.sort(Term.compareAnyTerm)
+            for i in range(lse):
+                diff = se[i].compareAnyTerm(oe[i])
+                if diff != 0: return diff
 
-#		@@@@ No need - canonical formulae are always sorted
-	s.sort() # forumulae are all the same
-	o.sort()
-	for i in range(ls):
-	    diff = cmp(s[i],o[i])
-	    if diff != 0: return diff
-	return 0
-	import why
-	raise RuntimeError("%s\n%s" % (dict(why.proofsOf), self.debugString()))
-	raise RuntimeError("Identical formulae not interned! Length %i: %s\n\t%s\n vs\t%s" % (
-		    ls, `s`, self.debugString(), other.debugString()))
+#               @@@@ No need - canonical formulae are always sorted
+        s.sort() # forumulae are all the same
+        o.sort()
+        for i in range(ls):
+            diff = cmp(s[i],o[i])
+            if diff != 0: return diff
+        return 0
+        import why
+        raise RuntimeError("%s\n%s" % (dict(why.proofsOf), self.debugString()))
+        raise RuntimeError("Identical formulae not interned! Length %i: %s\n\t%s\n vs\t%s" % (
+                    ls, `s`, self.debugString(), other.debugString()))
 
 
     def existentials(self):
         """Return a list of existential variables with this formula as scope.
-	
-	Implementation:
-	we may move to an internal storage rather than these pseudo-statements"""
+        
+        Implementation:
+        we may move to an internal storage rather than these pseudo-statements"""
         return self._existentialVariables
 
 
     def universals(self):
         """Return a set of variables universally quantified with this formula as scope.
 
-	Implementation:
-	We may move to an internal storage rather than these statements."""
-	return self._universalVariables
+        Implementation:
+        We may move to an internal storage rather than these statements."""
+        return self._universalVariables
     
     def variables(self):
         """Return a set of all variables quantified within this scope."""
         return self.existentials() | self.universals()
-	
+        
     def size(self):
         """Return the number statements.
-	Obsolete: use len(F)."""
+        Obsolete: use len(F)."""
         return len(self.statements)
 
     def __len__(self):
@@ -166,44 +166,44 @@ class Formula(AnonymousNode, CompoundTerm):
         return len(self.statements)
 
     def __iter__(self):
-	"""The internal method which allows one to iterate over the statements
-	as though a formula were a sequence.
-	"""
-	for s in self.statements:
-	    yield s
+        """The internal method which allows one to iterate over the statements
+        as though a formula were a sequence.
+        """
+        for s in self.statements:
+            yield s
 
     def newSymbol(self, uri):
-	"""Create or reuse the internal representation of the RDF node whose uri is given
-	
-	The symbol is created in the same store as the formula."""
-	return self.store.newSymbol(uri)
+        """Create or reuse the internal representation of the RDF node whose uri is given
+        
+        The symbol is created in the same store as the formula."""
+        return self.store.newSymbol(uri)
 
     def newList(self, list):
-	return self.store.nil.newList(list)
+        return self.store.nil.newList(list)
 
     def newLiteral(self, str, dt=None, lang=None):
-	"""Create or reuse the internal representation of the RDF literal whose string is given
-	
-	The literal is created in the same store as the formula."""
-	return self.store.newLiteral(str, dt, lang)
+        """Create or reuse the internal representation of the RDF literal whose string is given
+        
+        The literal is created in the same store as the formula."""
+        return self.store.newLiteral(str, dt, lang)
 
     def newXMLLiteral(self, doc):
-	"""Create or reuse the internal representation of the RDF literal whose string is given
-	
-	The literal is created in the same store as the formula."""
-	return self.store.newXMLLiteral(doc)
+        """Create or reuse the internal representation of the RDF literal whose string is given
+        
+        The literal is created in the same store as the formula."""
+        return self.store.newXMLLiteral(doc)
 
     def intern(self, value):
-	return self.store.intern(value)
-	
+        return self.store.intern(value)
+        
     def newBlankNode(self, uri=None, why=None):
-	"""Create a new unnamed node with this formula as context.
-	
-	The URI is typically omitted, and the system will make up an internal idnetifier.
+        """Create a new unnamed node with this formula as context.
+        
+        The URI is typically omitted, and the system will make up an internal idnetifier.
         If given is used as the (arbitrary) internal identifier of the node."""
-	x = AnonymousExistential(self, uri)
-	self._existentialVariables.add(x)
-	return x
+        x = AnonymousExistential(self, uri)
+        self._existentialVariables.add(x)
+        return x
 
     
     def declareUniversal(self, v, key=None):
@@ -211,174 +211,174 @@ class Formula(AnonymousNode, CompoundTerm):
             raise RuntimeError("""We have now disallowed the calling of declareUniversal.
 For future reference, use newUniversal
 """)
-	if verbosity() > 90: progress("Declare universal:", v)
-	if v not in self._universalVariables:
-	    self._universalVariables.add(v)
+        if verbosity() > 90: progress("Declare universal:", v)
+        if v not in self._universalVariables:
+            self._universalVariables.add(v)
             if self.occurringIn(Set([self.newSymbol(v.uriref())])):
                 raise ValueError("Are you trying to confuse me with %s?" % v)
-	
+        
     def declareExistential(self, v):
-	if verbosity() > 90: progress("Declare existential:", v)
-	if v not in self._existentialVariables:  # Takes time
-	    self._existentialVariables.add(v)
+        if verbosity() > 90: progress("Declare existential:", v)
+        if v not in self._existentialVariables:  # Takes time
+            self._existentialVariables.add(v)
             if self.occurringIn(Set([v])) and not v.generated():
                 raise ValueError("Are you trying to confuse me?")
-#	else:
-#	    raise RuntimeError("Redeclared %s in %s -- trying to erase that" %(v, self)) 
-	
+#       else:
+#           raise RuntimeError("Redeclared %s in %s -- trying to erase that" %(v, self)) 
+        
     def newExistential(self, uri=None, why=None):
-	"""Create a named variable existentially qualified within this formula
-	
-	See also: existentials()  and newBlankNode()."""
-	if uri == None:
-	    raise RuntimeError("Please use newBlankNode with no URI")
-	    return self.newBlankNode()  # Please ask for a bnode next time
-	return self.store.newExistential(self, uri, why=why)
+        """Create a named variable existentially qualified within this formula
+        
+        See also: existentials()  and newBlankNode()."""
+        if uri == None:
+            raise RuntimeError("Please use newBlankNode with no URI")
+            return self.newBlankNode()  # Please ask for a bnode next time
+        return self.store.newExistential(self, uri, why=why)
     
     def newUniversal(self, uri=None, why=None):
-	"""Create a named variable universally qualified within this formula
-	
-	See also: universals()"""
-	x = AnonymousUniversal(self, uri)
-##	self._universalVariables.add(x)
-	return x
+        """Create a named variable universally qualified within this formula
+        
+        See also: universals()"""
+        x = AnonymousUniversal(self, uri)
+##      self._universalVariables.add(x)
+        return x
 
     def newFormula(self, uri=None):
-	"""Create a new open, empty, formula in the same store as this one.
-	
-	The URI is typically omitted, and the system will make up an internal idnetifier.
+        """Create a new open, empty, formula in the same store as this one.
+        
+        The URI is typically omitted, and the system will make up an internal idnetifier.
         If given is used as the (arbitrary) internal identifier of the formula."""
-	return self.store.newFormula(uri)
+        return self.store.newFormula(uri)
 
     def statementsMatching(self, pred=None, subj=None, obj=None):
         """Return a READ-ONLY list of StoredStatement objects matching the parts given
-	
-	For example:
-	for s in f.statementsMatching(pred=pantoneColor):
-	    print "We've got one which is ", `s[OBJ]`
-	    
-	If none, returns []
-	"""
+        
+        For example:
+        for s in f.statementsMatching(pred=pantoneColor):
+            print "We've got one which is ", `s[OBJ]`
+            
+        If none, returns []
+        """
         for s in self.statements:
-	    if ((pred == None or pred is s.predicate()) and
-		    (subj == None or subj is s.subject()) and
-		    (obj == None or obj is s.object())):
-		yield s
+            if ((pred == None or pred is s.predicate()) and
+                    (subj == None or subj is s.subject()) and
+                    (obj == None or obj is s.object())):
+                yield s
 
     def contains(self, pred=None, subj=None, obj=None):
         """Return boolean true iff formula contains statement(s) matching the parts given
-	
-	For example:
-	if f.contains(pred=pantoneColor):
-	    print "We've got one statement about something being some color"
-	"""
+        
+        For example:
+        if f.contains(pred=pantoneColor):
+            print "We've got one statement about something being some color"
+        """
         for s in self.statements:
-	    if ((pred == None or pred is s.predicate()) and
-		    (subj == None or subj is s.subject()) and
-		    (obj == None or obj is s.object())):
-		return 1
-	return 0
+            if ((pred == None or pred is s.predicate()) and
+                    (subj == None or subj is s.subject()) and
+                    (obj == None or obj is s.object())):
+                return 1
+        return 0
 
 
     def any(self, subj=None, pred=None, obj=None):
         """Return None or the value filing the blank in the called parameters.
-	
-	Specifiy exactly two of the arguments.
-	color = f.any(pred=pantoneColor, subj=myCar)
-	somethingRed = f.any(pred=pantoneColor, obj=red)
-	
-	Note difference from the old store.any!!
-	Note SPO order not PSO.
-	To aboid confusion, use named parameters.
-	"""
+        
+        Specifiy exactly two of the arguments.
+        color = f.any(pred=pantoneColor, subj=myCar)
+        somethingRed = f.any(pred=pantoneColor, obj=red)
+        
+        Note difference from the old store.any!!
+        Note SPO order not PSO.
+        To aboid confusion, use named parameters.
+        """
         for s in self.statements:
-	    if ((pred == None or pred is s.predicate()) and
-		    (subj == None or subj is s.subject()) and
-		    (obj == None or obj is s.object())):
-		break
-	else: return None
-	if obj == None: return s.object()
-	if subj == None: return s.subject()
-	if pred == None: return s.predicate()
-	raise ValueError("You must give one wildcard in (%s, %s, %s)" %(subj, pred, obj))
+            if ((pred == None or pred is s.predicate()) and
+                    (subj == None or subj is s.subject()) and
+                    (obj == None or obj is s.object())):
+                break
+        else: return None
+        if obj == None: return s.object()
+        if subj == None: return s.subject()
+        if pred == None: return s.predicate()
+        raise ValueError("You must give one wildcard in (%s, %s, %s)" %(subj, pred, obj))
 
 
     def the(self, subj=None, pred=None, obj=None):
         """Return None or the value filing the blank in the called parameters
-	
-	This is just like any() except it checks that there is only
-	one answer in the store. It wise to use this when you expect only one.
-	
-	color = f.the(pred=pantoneColor, subj=myCar)
-	redCar = f.the(pred=pantoneColor, obj=red)
-	"""
-	return self.any(subj, pred, obj) # @@check >1
+        
+        This is just like any() except it checks that there is only
+        one answer in the store. It wise to use this when you expect only one.
+        
+        color = f.the(pred=pantoneColor, subj=myCar)
+        redCar = f.the(pred=pantoneColor, obj=red)
+        """
+        return self.any(subj, pred, obj) # @@check >1
 
     def each(self, subj=None, pred=None, obj=None):
         """Return a list of values value filing the blank in the called parameters
-	
-	Examples:
-	colors = f.each(pred=pantoneColor, subj=myCar)
-	
-	for redthing in f.each(pred=pantoneColor, obj=red): ...
-	
-	"""
+        
+        Examples:
+        colors = f.each(pred=pantoneColor, subj=myCar)
+        
+        for redthing in f.each(pred=pantoneColor, obj=red): ...
+        
+        """
         for s in self.statements:
-	    if ((pred == None or pred is s.predicate()) and
-		    (subj == None or subj is s.subject()) and
-		    (obj == None or obj is s.object())):
-		if pred == None: yield s.predicate()
-		elif subj == None: yield s.subject()
-		elif obj == None: yield s.object()
-		else: raise ValueError(
-		  "You must give one wildcard in (%s, %s, %s)" %(subj, pred, obj))
+            if ((pred == None or pred is s.predicate()) and
+                    (subj == None or subj is s.subject()) and
+                    (obj == None or obj is s.object())):
+                if pred == None: yield s.predicate()
+                elif subj == None: yield s.subject()
+                elif obj == None: yield s.object()
+                else: raise ValueError(
+                  "You must give one wildcard in (%s, %s, %s)" %(subj, pred, obj))
 
     def searchable(self, subj=None, pred=None, obj=None):
-	"""A pair of the difficulty of searching and a statement iterator of found statements
-	
-	The difficulty is a store-portable measure of how long the store
-	thinks (in arbitrary units) it will take to search.
-	This will only be used for choisng which part of the query to search first.
-	If it is 0 there is no solution to the query, we know now.
-	
-	In this implementation, we use the length of the sequence to be searched."""
-	difficulty = 1
-	for p in subj, pred, obj:
-	    if p == None:
-		difficulty += 1
-	return difficulty, self.statementsMatching(subj, pred, obj) # use lazy eval here
+        """A pair of the difficulty of searching and a statement iterator of found statements
+        
+        The difficulty is a store-portable measure of how long the store
+        thinks (in arbitrary units) it will take to search.
+        This will only be used for choisng which part of the query to search first.
+        If it is 0 there is no solution to the query, we know now.
+        
+        In this implementation, we use the length of the sequence to be searched."""
+        difficulty = 1
+        for p in subj, pred, obj:
+            if p == None:
+                difficulty += 1
+        return difficulty, self.statementsMatching(subj, pred, obj) # use lazy eval here
 
 
     def substitution(self, bindings, why=None, cannon=False, keepOpen=False):
-	"Return this or a version of me with subsitution made"
-	assert isinstance(bindings, dict)
+        "Return this or a version of me with subsitution made"
+        assert isinstance(bindings, dict)
         store = self.store
-	if self in bindings:
+        if self in bindings:
             return bindings[self]
-	oc = self.occurringIn(bindings.keys())
-	if oc == Set(): return self # phew!
+        oc = self.occurringIn(bindings.keys())
+        if oc == Set(): return self # phew!
 
-	y = store.newFormula()
-	if verbosity() > 90: progress("substitution: formula"+`self`+" becomes new "+`y`,
-				    " because of ", oc)
-	y.loadFormulaWithSubstitution(self, bindings, why=why)
-	if keepOpen:
+        y = store.newFormula()
+        if verbosity() > 90: progress("substitution: formula"+`self`+" becomes new "+`y`,
+                                    " because of ", oc)
+        y.loadFormulaWithSubstitution(self, bindings, why=why)
+        if keepOpen:
             return y
-	return y.canonicalize(cannon=cannon)
+        return y.canonicalize(cannon=cannon)
 
     def loadFormulaWithSubstitution(self, old, bindings={}, why=None, cannon=False):
-	"""Load information from another formula, subsituting as we go
-	returns number of statements added (roughly)"""
+        """Load information from another formula, subsituting as we go
+        returns number of statements added (roughly)"""
         total = 0
         subWhy=Because('I said so #1', why)
         bindings2 = bindings.copy()
         bindings3 = {}
-	for v in old.universals():
+        for v in old.universals():
             if v not in bindings:
                 bindings3[v] = self.newUniversal(bindings.get(v, v))
-	for v in old.existentials():
-	    self.declareExistential(bindings.get(v, v))
-	bindings2[old] = self
+        for v in old.existentials():
+            self.declareExistential(bindings.get(v, v))
+        bindings2[old] = self
         for s in old.statements[:] :   # Copy list!
             subj=s[SUBJ].substitution(
                                  bindings2, why=subWhy, cannon=cannon).substitution(
@@ -390,25 +390,25 @@ For future reference, use newUniversal
                 subj = subj.canonicalize(cannon=True)
             if subj is not s[SUBJ]:
                 bindings2[s[SUBJ]] = subj
-	    pred=s[PRED].substitution(
+            pred=s[PRED].substitution(
                                  bindings2, why=subWhy, cannon=cannon).substitution(
                                     bindings3, why=subWhy, cannon=cannon)
-	    if pred is not s[PRED]:
+            if pred is not s[PRED]:
                 bindings2[s[PRED]] = pred
-	    obj=s[OBJ].substitution(
+            obj=s[OBJ].substitution(
                                  bindings2, why=subWhy, cannon=cannon).substitution(
                                     bindings3, why=subWhy, cannon=cannon)
             if isTopLevel(self) and isinstance(obj, Formula) and not obj.reallyCanonical:
                 obj = obj.reopen()
                 obj = obj.canonicalize(cannon=True)
-	    if obj is not s[OBJ]:
+            if obj is not s[OBJ]:
                 ### Question to self: What is this doing?
                 bindings2[s[OBJ]] = obj
                 
-	    total += self.add(subj=subj,
-		              pred=pred,
-		              obj=obj,
-		              why=why)
+            total += self.add(subj=subj,
+                              pred=pred,
+                              obj=obj,
+                              why=why)
         return bindings3, total
 
     def subSet(self, statements, why=None):
@@ -418,41 +418,41 @@ For future reference, use newUniversal
             f.add(s, p, o, why=why)
             assert c is self
 
-	uu = f.occurringIn(self.universals())
-	ee = f.occurringIn(self.existentials())
-	bindings = {}
-	
-	f = self.newFormula()   ## do it right this time, with vars
-	for v in uu:
-#	    progress("&&&&& New universal is %s\n\t in %s" % (v.uriref(), f))
-	    bindings[v] = f.newUniversal(v)
-#	    progress("&&&&& Universals are %s\n\t in %s" % (f.universals(), f))
-	for v in ee:
-	    f.declareExistential(v)
-	for s in statements:
+        uu = f.occurringIn(self.universals())
+        ee = f.occurringIn(self.existentials())
+        bindings = {}
+        
+        f = self.newFormula()   ## do it right this time, with vars
+        for v in uu:
+#           progress("&&&&& New universal is %s\n\t in %s" % (v.uriref(), f))
+            bindings[v] = f.newUniversal(v)
+#           progress("&&&&& Universals are %s\n\t in %s" % (f.universals(), f))
+        for v in ee:
+            f.declareExistential(v)
+        for s in statements:
             c, p, s, o = s.quad
             f.add(s.substitution(bindings, why=why), p.substitution(bindings, why=why), o.substitution(bindings, why=why), why=why)
-	return f.close()  # probably slow - much slower than statement subclass of formula
+        return f.close()  # probably slow - much slower than statement subclass of formula
 
                 
     def substituteEquals(self, bindings, newBindings):
-	"""Return this or a version of me with subsitution made
-	
-	Subsitution of = for = does NOT happen inside a formula,
-	as the formula is a form of quotation."""
-	return self
+        """Return this or a version of me with subsitution made
+        
+        Subsitution of = for = does NOT happen inside a formula,
+        as the formula is a form of quotation."""
+        return self
 
     def occurringIn(self, vars):
-	"Which variables in the list occur in this?"
-	set = Set()
-	for s in self.statements:
-	    for p in PRED, SUBJ, OBJ:
-		y = s[p]
-		if y is self:
-		    pass
-		else:
-		    set = set | y.occurringIn(vars)
-	return set
+        "Which variables in the list occur in this?"
+        set = Set()
+        for s in self.statements:
+            for p in PRED, SUBJ, OBJ:
+                y = s[p]
+                if y is self:
+                    pass
+                else:
+                    set = set | y.occurringIn(vars)
+        return set
 
     def renameVars(self):
         if self._renameVarsMaps:
@@ -511,25 +511,25 @@ For future reference, use newUniversal
     _renameVarsMaps = []
 
 ##    def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
-##	"""See Term.unify()
-##	"""
-##	if diag.chatty_flag > 99: progress("Unifying formula %s with %s" %
-##	    (`self`, `other`))
-##	if diag.chatty_flag > 139: progress("Self is %s\n\nOther is %s" %
-##	    (self.debugString(), other.debugString()))
-##	if not isinstance(other, Formula): return []
-##	if self is other: return [({}, None)]
-##	if (len(self) != len(other)
-##	    or len(self. _existentialVariables) != len(other._existentialVariables)
-##	    or len(self. _universalVariables) != len(other._universalVariables)
-##	    ): return []
-##	    
-##	ex = existentials | self.existentials()  # @@ Add unis to make var names irrelevant?
-##	return unifySequence(
-##	    [Set(self.statements), self.universals(), self.existentials()],
-##	    [Set(other.statements), other.universals(), other.existentials()],
-##	     vars | self.existentials() | self.universals(),
-##	     existentials , bindings)
+##      """See Term.unify()
+##      """
+##      if diag.chatty_flag > 99: progress("Unifying formula %s with %s" %
+##          (`self`, `other`))
+##      if diag.chatty_flag > 139: progress("Self is %s\n\nOther is %s" %
+##          (self.debugString(), other.debugString()))
+##      if not isinstance(other, Formula): return []
+##      if self is other: return [({}, None)]
+##      if (len(self) != len(other)
+##          or len(self. _existentialVariables) != len(other._existentialVariables)
+##          or len(self. _universalVariables) != len(other._universalVariables)
+##          ): return []
+##          
+##      ex = existentials | self.existentials()  # @@ Add unis to make var names irrelevant?
+##      return unifySequence(
+##          [Set(self.statements), self.universals(), self.existentials()],
+##          [Set(other.statements), other.universals(), other.existentials()],
+##           vars | self.existentials() | self.universals(),
+##           existentials , bindings)
     
     def unifySecondary(self, other, env1, env2, vars,
                        universals, existentials,
@@ -541,91 +541,91 @@ For future reference, use newUniversal
                        existentials | self.existentials() | other.existentials(),
                        n1Source, n2Source):
             yield x
-		    
+                    
     def n3EntailedBy(pattern, kb, vars=Set([]), existentials=Set([]),  bindings={}):
-	"""See Term.unify() and term.matchSet()
-	
-	KB is a stronger statement han other.
-	Bindings map variables in pattern onto kb.
-	Self n3-entails other.
-	Criteria:  Subset of self statements must match other statements.
-	  Self's exisetntials must be subset of other's
-	  Self's universals must be superset.
-	"""
+        """See Term.unify() and term.matchSet()
+        
+        KB is a stronger statement han other.
+        Bindings map variables in pattern onto kb.
+        Self n3-entails other.
+        Criteria:  Subset of self statements must match other statements.
+          Self's exisetntials must be subset of other's
+          Self's universals must be superset.
+        """
 
-	if diag.chatty_flag > 99: progress("n3EntailedBy:  %s entailed by %s ?" %
-	    (`pattern`, `kb`))
-	if diag.chatty_flag > 139: progress("Pattern is %s\n\nKB is %s" %
-	    (pattern.debugString(), kb.debugString()))
-	assert isinstance(kb, Formula), kb 
-	if pattern is kb: return [({}, None)]
-	nbs = matchSet(Set(pattern.statements), Set(kb.statements),
-			vars | pattern.existentials(),
-			# | pattern.universals(),
-			bindings)
-	if diag.chatty_flag > 99: progress("n3EntailedBy: match result: ", `nbs`)
-	if nbs == []: return []
-	res = []
-	for nb, rea in nbs:
-	    # We have matched the statements, now the lists of vars.
-	    ke = Set([ nb.get(e,e) for e in kb.existentials()])
-	    ke = pattern.occurringIn(ke) #Only ones mentioned count
-	    pe = Set([ nb.get(e,e) for e in pattern.existentials()])
-	    if diag.chatty_flag > 99: progress("\tpe=%s; ke=%s" %(pe,ke))
-	    if not ke.issubset(pe): return [] # KB must be stronger - less e's
-	    ku = Set([ nb.get(v,v) for v in kb.universals()])
-	    pu = Set([ nb.get(v,v) for v in pattern.universals()])
-	    if diag.chatty_flag > 99: progress("\tpu=%s; ku=%s" %(pu,ku))
-	    if not pu.issubset(ku): return [] # KB stronger -  more u's
-	    if diag.chatty_flag > 99: progress("n3EntailwsBy: success with ", `nb`)
-	    res.append((nb, None))    # That works
-	return res
-	    
+        if diag.chatty_flag > 99: progress("n3EntailedBy:  %s entailed by %s ?" %
+            (`pattern`, `kb`))
+        if diag.chatty_flag > 139: progress("Pattern is %s\n\nKB is %s" %
+            (pattern.debugString(), kb.debugString()))
+        assert isinstance(kb, Formula), kb 
+        if pattern is kb: return [({}, None)]
+        nbs = matchSet(Set(pattern.statements), Set(kb.statements),
+                        vars | pattern.existentials(),
+                        # | pattern.universals(),
+                        bindings)
+        if diag.chatty_flag > 99: progress("n3EntailedBy: match result: ", `nbs`)
+        if nbs == []: return []
+        res = []
+        for nb, rea in nbs:
+            # We have matched the statements, now the lists of vars.
+            ke = Set([ nb.get(e,e) for e in kb.existentials()])
+            ke = pattern.occurringIn(ke) #Only ones mentioned count
+            pe = Set([ nb.get(e,e) for e in pattern.existentials()])
+            if diag.chatty_flag > 99: progress("\tpe=%s; ke=%s" %(pe,ke))
+            if not ke.issubset(pe): return [] # KB must be stronger - less e's
+            ku = Set([ nb.get(v,v) for v in kb.universals()])
+            pu = Set([ nb.get(v,v) for v in pattern.universals()])
+            if diag.chatty_flag > 99: progress("\tpu=%s; ku=%s" %(pu,ku))
+            if not pu.issubset(ku): return [] # KB stronger -  more u's
+            if diag.chatty_flag > 99: progress("n3EntailwsBy: success with ", `nb`)
+            res.append((nb, None))    # That works
+        return res
+            
 
 
 
     def bind(self, prefix, uri):
-	"""Give a prefix and associated URI as a hint for output
-	
-	The store does not use prefixes internally, but keeping track
-	of those usedd in the input data makes for more human-readable output.
-	"""
-	return self.store.bind(prefix, uri)
+        """Give a prefix and associated URI as a hint for output
+        
+        The store does not use prefixes internally, but keeping track
+        of those usedd in the input data makes for more human-readable output.
+        """
+        return self.store.bind(prefix, uri)
 
     def add(self, subj, pred, obj, why=None):
-	"""Add a triple to the formula.
-	
-	The formula must be open.
-	subj, pred and obj must be objects as for example generated 
-	by Formula.newSymbol() and newLiteral(), or else literal
-	values which can be interned.
-	why 	may be a reason for use when a proof will be required.
-	"""
+        """Add a triple to the formula.
+        
+        The formula must be open.
+        subj, pred and obj must be objects as for example generated 
+        by Formula.newSymbol() and newLiteral(), or else literal
+        values which can be interned.
+        why     may be a reason for use when a proof will be required.
+        """
         if self.canonical != None:
             raise RuntimeError("Attempt to add statement to canonical formula "+`self`)
 
         self.store.size += 1
 
         s = StoredStatement((self, pred, subj, obj))
-	
+        
         self.statements.append(s)
        
         return 1  # One statement has been added  @@ ignore closure extras from closure
-		    # Obsolete this return value? @@@ 
+                    # Obsolete this return value? @@@ 
     
     def removeStatement(self, s):
-	"""Removes a statement The formula must be open.
-	
-	This implementation is alas slow, as removal of items from tha hash is slow.
-	"""
+        """Removes a statement The formula must be open.
+        
+        This implementation is alas slow, as removal of items from tha hash is slow.
+        """
         assert self.canonical == None, "Cannot remove statement from canonical "+`self`
-	self.store.size = self.store.size-1
+        self.store.size = self.store.size-1
         self.statements.remove(s)
-	return
+        return
     
     def close(self):
         """No more to add. Please return interned value.
-	NOTE You must now use the interned one, not the original!"""
+        NOTE You must now use the interned one, not the original!"""
         return self.canonicalize()
 
     def canonicalize(F):
@@ -633,18 +633,18 @@ For future reference, use newUniversal
         If not, record this one and return it.
         Call this when the formula is in its final form, with all its statements.
         Make sure no one else has a copy of the pointer to the smushed one.
-	 
-	LIMITATION: The basic Formula class does NOT canonicalize. So
-	it won't spot idenical formulae. The IndexedFormula will.
+         
+        LIMITATION: The basic Formula class does NOT canonicalize. So
+        it won't spot idenical formulae. The IndexedFormula will.
         """
-	store = F.store
-	if F.canonical != None:
+        store = F.store
+        if F.canonical != None:
             if verbosity() > 70:
                 progress("Canonicalize -- @@ already canonical:"+`F`)
             return F.canonical
-	# @@@@@@@@ no canonicalization @@ warning
-	F.canonical = F
-	return F
+        # @@@@@@@@ no canonicalization @@ warning
+        F.canonical = F
+        return F
 
 
     def n3String(self, base=None, flags=""):
@@ -686,46 +686,46 @@ For future reference, use newUniversal
             channel.write(str.string.encode('utf-8'))
 
     def reopen(self):
-	"""Make a formula which was once closed oopen for input again.
-	
-	NOT Recommended.  Dangers: this formula will be, because of interning,
-	the same objet as a formula used elsewhere which happens to have the same content.
-	You mess with this one, you mess with that one.
-	Much better to keep teh formula open until you don't needed it open any more.
-	The trouble is, the parsers close it at the moment automatically. To be fixed."""
+        """Make a formula which was once closed oopen for input again.
+        
+        NOT Recommended.  Dangers: this formula will be, because of interning,
+        the same objet as a formula used elsewhere which happens to have the same content.
+        You mess with this one, you mess with that one.
+        Much better to keep teh formula open until you don't needed it open any more.
+        The trouble is, the parsers close it at the moment automatically. To be fixed."""
         return self.store.reopen(self)
 
 
 #    def includes(f, g, _variables=[],  bindings=[]):
-#	"""Does this formula include the information in the other?
-#	
-#	bindings is for use within a query.
-#	"""
-#	from swap.query import testIncludes  # Nor a dependency we want to make from here
-#	return  testIncludes(f, g, _variables=_variables,  bindings=bindings)
+#       """Does this formula include the information in the other?
+#       
+#       bindings is for use within a query.
+#       """
+#       from swap.query import testIncludes  # Nor a dependency we want to make from here
+#       return  testIncludes(f, g, _variables=_variables,  bindings=bindings)
 
     def generated(self):
-	"""Yes, any identifier you see for this is arbitrary."""
+        """Yes, any identifier you see for this is arbitrary."""
         return 1
 
     def asPair(self):
-	"""Return an old representation. Obsolete"""
+        """Return an old representation. Obsolete"""
         return (FORMULA, self.uriref())
 
     def subjects(self, pred=None, obj=None):
         """Obsolete - use each(pred=..., obj=...)"""
-	for s in self.statementsMatching(pred=pred, obj=obj)[:]:
-	    yield s[SUBJ]
+        for s in self.statementsMatching(pred=pred, obj=obj)[:]:
+            yield s[SUBJ]
 
     def predicates(self, subj=None, obj=None):
         """Obsolete - use each(subj=..., obj=...)"""
-	for s in self.statementsMatching(subj=subj, obj=obj)[:]:
-	    yield s[PRED]
+        for s in self.statementsMatching(subj=subj, obj=obj)[:]:
+            yield s[PRED]
 
     def objects(self, pred=None, subj=None):
         """Obsolete - use each(subj=..., pred=...)"""
-	for s in self.statementsMatching(pred=pred, subj=subj)[:]:
-	    yield s[OBJ]
+        for s in self.statementsMatching(pred=pred, subj=subj)[:]:
+            yield s[OBJ]
 
 
 
@@ -820,57 +820,57 @@ class StoredStatement:
 
 
     def context(self):
-	"""Return the context of the statement"""
-	return self.quad[CONTEXT]
+        """Return the context of the statement"""
+        return self.quad[CONTEXT]
     
     def predicate(self):
-	"""Return the predicate of the statement"""
-	return self.quad[PRED]
+        """Return the predicate of the statement"""
+        return self.quad[PRED]
     
     def subject(self):
-	"""Return the subject of the statement"""
-	return self.quad[SUBJ]
+        """Return the subject of the statement"""
+        return self.quad[SUBJ]
     
     def object(self):
-	"""Return the object of the statement"""
-	return self.quad[OBJ]
+        """Return the object of the statement"""
+        return self.quad[OBJ]
 
     def spo(self):
-	return (self.quad[SUBJ], self.quad[PRED], self.quad[OBJ])
+        return (self.quad[SUBJ], self.quad[PRED], self.quad[OBJ])
 
     def __len__(self):
-	return 1
+        return 1
 
     def statements(self):
-	return [self]
+        return [self]
 
     def occurringIn(self, vars):
-	"Which variables in the list occur in this?"
-	set = Set()
-	if verbosity() > 98: progress("----occuringIn: ", `self`)
-	for p in PRED, SUBJ, OBJ:
-	    y = self[p]
-	    if y is self:
-		pass
-	    else:
-		set = set | y.occurringIn(vars)
-	return set
+        "Which variables in the list occur in this?"
+        set = Set()
+        if verbosity() > 98: progress("----occuringIn: ", `self`)
+        for p in PRED, SUBJ, OBJ:
+            y = self[p]
+            if y is self:
+                pass
+            else:
+                set = set | y.occurringIn(vars)
+        return set
 
     def existentials(self):
-	return self.occuringIn(self.quad[CONTEXT].existentials())
+        return self.occuringIn(self.quad[CONTEXT].existentials())
 
     def universals(self):
-	return self.occuringIn(self.quad[CONTEXT].universals())
+        return self.occuringIn(self.quad[CONTEXT].universals())
 
 ##    def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
-##	"""See Term.unify()
-##	"""
-##	if diag.chatty_flag > 99: progress("Unifying statement %s with %s" %
-##	    (`self`, `other`))
-##	if not isinstance(other, StoredStatement): raise TypeError
-##	return unifySequence([self[PRED], self[SUBJ], self[OBJ]],
-##	    [other[PRED], other[SUBJ], other[OBJ]], 
-##	    vars, existentials, bindings)
+##      """See Term.unify()
+##      """
+##      if diag.chatty_flag > 99: progress("Unifying statement %s with %s" %
+##          (`self`, `other`))
+##      if not isinstance(other, StoredStatement): raise TypeError
+##      return unifySequence([self[PRED], self[SUBJ], self[OBJ]],
+##          [other[PRED], other[SUBJ], other[OBJ]], 
+##          vars, existentials, bindings)
 
     def unify(self, other, env1, env2, vars,
                        universals, existentials,
@@ -883,38 +883,38 @@ class StoredStatement:
                        universals, existentials,
                        n1Source, n2Source):
         return unifySequence([self[PRED], self[SUBJ], self[OBJ]],
-	    [other[PRED], other[SUBJ], other[OBJ]], env1, env2, vars,
+            [other[PRED], other[SUBJ], other[OBJ]], env1, env2, vars,
                              universals, existentials,
                              n1Source, n2Source)
 
 
     def asFormula(self, why=None):
-	"""The formula which contains only a statement like this.
-	
-	When we split the statement up, we lose information in any existentials which are
-	shared with other statements. So we introduce a skolem constant to tie the
-	statements together.  We don't have access to any enclosing formula 
-	so we can't express its quantification.  This @@ not ideal.
-	
-	This extends the StoredStatement class with functionality we only need with "why" module."""
-	
-	store = self.quad[CONTEXT].store
-	c, p, s, o = self.quad
-	f = store.newFormula()   # @@@CAN WE DO THIS BY CLEVER SUBCLASSING? statement subclass of f?
-	f.add(s, p, o, why=why)
-	uu = f.freeVariables().intersection(c.universals())
-	ee = f.occurringIn(c.existentials())
-	bindings = {}
-	
-	f = store.newFormula()   ## do it right this time, with vars
-	for v in uu:
-#	    progress("&&&&& New universal is %s\n\t in %s" % (v.uriref(), f))
-	    bindings[v] = f.newUniversal(v)
-#	    progress("&&&&& Universals are %s\n\t in %s" % (f.universals(), f))
-	for v in ee:
-	    f.declareExistential(v)
-	f.add(s.substitution(bindings, why=why), p.substitution(bindings, why=why), o.substitution(bindings, why=why), why=why)
-	return f.close()  # probably slow - much slower than statement subclass of formula
+        """The formula which contains only a statement like this.
+        
+        When we split the statement up, we lose information in any existentials which are
+        shared with other statements. So we introduce a skolem constant to tie the
+        statements together.  We don't have access to any enclosing formula 
+        so we can't express its quantification.  This @@ not ideal.
+        
+        This extends the StoredStatement class with functionality we only need with "why" module."""
+        
+        store = self.quad[CONTEXT].store
+        c, p, s, o = self.quad
+        f = store.newFormula()   # @@@CAN WE DO THIS BY CLEVER SUBCLASSING? statement subclass of f?
+        f.add(s, p, o, why=why)
+        uu = f.freeVariables().intersection(c.universals())
+        ee = f.occurringIn(c.existentials())
+        bindings = {}
+        
+        f = store.newFormula()   ## do it right this time, with vars
+        for v in uu:
+#           progress("&&&&& New universal is %s\n\t in %s" % (v.uriref(), f))
+            bindings[v] = f.newUniversal(v)
+#           progress("&&&&& Universals are %s\n\t in %s" % (f.universals(), f))
+        for v in ee:
+            f.declareExistential(v)
+        f.add(s.substitution(bindings, why=why), p.substitution(bindings, why=why), o.substitution(bindings, why=why), why=why)
+        return f.close()  # probably slow - much slower than statement subclass of formula
 
 
 

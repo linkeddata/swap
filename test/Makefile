@@ -28,7 +28,7 @@ TESTS=online.tests  rdfcore-tests.n3 delta/detailed.tests paw/detailed.tests \
 	$(OFFLINETESTS) #n3parser.tests
 
 quick : pyc-check $(CODE) $(OFFLINETESTS)
-	PYTHONPATH=`/bin/pwd`/..:`/bin/pwd`/../.. $P retest.py  $(OFFLINETESTS)
+	PYTHONPATH=`/bin/pwd`/..:`/bin/pwd`/../.. $P retest.py $(OFFLINETESTS)
 
 pre-release : pyc-check $(CODE) $(TESTS) rdflib
 	PYTHONPATH=`/bin/pwd`/..:`/bin/pwd`/../.. $P retest.py -c $(TESTS)

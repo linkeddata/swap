@@ -752,7 +752,7 @@ class Chain_Step(object):
         return cmp(len(other.lines), len(self.lines))
 
     def __repr__(self):
-        return "%s(%r,%r,%r,%r)" % (self.__class__.__name__, self.lines, self.env, self.parent, self.evidence)
+        return "%s(lines=%r,\n\tenv=%r,\n\tparent=%r,\n\tevidence=%r)" % (self.__class__.__name__, self.lines, self.env, self.parent, self.evidence)
 
 
 def returnWrapper(f):
@@ -961,10 +961,13 @@ class Query(Formula):
 ##################################################################################
 
     def matchFormula(query, queue, _, __, env=Env()):
+        from terminalController import TerminalController
+        t = TerminalController()
         total = 0
         stack = [Chain_Step(queue, env)]
         while stack:
-            print stack
+            if diag.chatty_flag > 150:
+                progress(t.BLUE, stack, t.NORMAL)
             workingStep = stack.pop()
             if not workingStep.done():
                 queue = workingStep.lines
@@ -1045,10 +1048,15 @@ class Query(Formula):
                     for i in queue:
                         newItem = i.clone()
                         q2.append(newItem)  #@@@@@@@@@@  If exactly 1 binding, loop (tail recurse)
-                    new_env = bindings.flatten(nb)
-                    print bindings, nb, new_env
-                    new_step = Chain_Step(q2, new_env, workingStep.parent, workingStep.evidence + [reason])
-                    stack_extent.append(new_step)
+                    try:
+                        new_env = bindings.flatten(nb)
+                    except ValueError:
+                        pass
+                    else:
+                        if diag.chatty_flag > 70:
+                            progress(t.RED, bindings, nb, new_env, t.NORMAL)
+                        new_step = Chain_Step(q2, new_env, workingStep.parent, workingStep.evidence + [reason])
+                        stack_extent.append(new_step)
 
                 if item.state != S_DONE:
                     queue.append(item)

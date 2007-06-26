@@ -146,6 +146,9 @@ you can hash it (if you want to)
         progress(lambda : 'Env.flatten(%s,%s)' % (self, other))
         retVal = dict(other)
         for key, (val, source) in self.items():
+            if key in other:
+                if source == dict.__getitem__(other, key)[1] and val != other[key]:
+                    raise ValueError(self[key], other[key])
             if source is other.id:
                 retVal[key] = (other.substitution(val, self), self.id)
             else:
@@ -573,8 +576,8 @@ class AnonymousVariable(AnonymousNode):
 class AnonymousExistential(AnonymousVariable, Existential):
     """An anonymous node which is existentially quantified in a given context.
     Also known as a Blank Node, or "bnode" in RDF parlance."""
-    pass
-         
+    __repr__= AnonymousVariable.__repr__
+
 class AnonymousUniversal(AnonymousVariable, Universal):
     """Nodes which are introduced as universally quantified variables with
     no quotable URI"""
@@ -596,6 +599,7 @@ class AnonymousUniversal(AnonymousVariable, Universal):
         if not self.uri:
             return AnonymousVariable.asPair(self)
         return (SYMBOL, self.uriref())
+    __repr__= AnonymousVariable.__repr__
 
 ##    def __repr__(self):
 ##        return str(abs(id(self)))

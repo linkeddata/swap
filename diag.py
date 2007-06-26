@@ -15,19 +15,24 @@ import sys
 import os, traceback
 from codecs import utf_8_encode
 
+##lineCount = [0]
 def progress(*args):
     level = len(traceback.extract_stack())
     sys.stderr.write(" "*level)
     for a in args:
-	i = 0
-	a = unicode(a)
-	while 1:
-	    i = a.find("\n", i)
-	    if i < 0: break
-	    a = a[:i+1] + (" "*level) + a[i+1:]
-	    i = i+1
+        i = 0
+        a = unicode(a)
+        while 1:
+##    lineCount[0] += 1
+            i = a.find("\n", i)
+            if i < 0: break
+            a = a[:i+1] + (" "*level) + a[i+1:]
+            i = i+1
         q = utf_8_encode(u"%s " % (a,))[0]
         sys.stderr.write(q)
+##        if lineCount[0] > 20:
+##            lineCount[0] = 0
+##            sys.stdin.readline()
     sys.stderr.write("\n")
 
 
