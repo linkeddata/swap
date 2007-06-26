@@ -59,7 +59,7 @@ def convertDate(qdate):
         if qdate[i] == " ":
             qdate = qdate[:i] + "0" + qdate[i+1:]
     if len(qdate) == 10: # new form with YYYY date
-	return qdate[6:10] + "-" + qdate[0:2] + "-" + qdate[3:5]	
+        return qdate[6:10] + "-" + qdate[0:2] + "-" + qdate[3:5]        
     if qdate[5] == "'": C="20"
     else: C="19"
     return C + qdate[6:8] + "-" + qdate[0:2] + "-" + qdate[3:5]
@@ -162,11 +162,11 @@ def extract(path):
                 print "]",
                 split = 0
             if (what == "Bank" or what == "CCard"):
-		if toAccount!= None: #@@ mising from citibank download
-		    print "qu:toAccount ",toAccount,
-		else:
-		    print "qu:toAccount acc:Default",
-		    defaultUsed = 1
+                if toAccount!= None: #@@ mising from citibank download
+                    print "qu:toAccount ",toAccount,
+                else:
+                    print "qu:toAccount acc:Default",
+                    defaultUsed = 1
             print "."
             inSentence = 0
         else:
@@ -232,7 +232,7 @@ def do(path):
 #                do(path + "/" + name)
 #    else:
     if path[-4:] == ".QIF" or path[-4:] == ".qif":
-	extract(path) 
+        extract(path) 
         
 ######################################## Main program
 

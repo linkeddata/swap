@@ -214,7 +214,7 @@ def refTo(base, uri):
 
     m = commonHost.match(base[:i])
     if m:
-	k=uri.find("//")
+        k=uri.find("//")
         if k<0: k=-2 # no host
         l=uri.find("/", k+2)
         if uri[l+1:l+2] != "/" and base[l+1:l+2] != "/" and uri[:l]==base[:l]:
@@ -239,15 +239,15 @@ def refTo(base, uri):
 import os
 def base():
         """The base URI for this process - the Web equiv of cwd
-	
-	Relative or abolute unix-standard filenames parsed relative to
-	this yeild the URI of the file.
-	If we had a reliable way of getting a computer name,
-	we should put it in the hostname just to prevent ambiguity
+        
+        Relative or abolute unix-standard filenames parsed relative to
+        this yeild the URI of the file.
+        If we had a reliable way of getting a computer name,
+        we should put it in the hostname just to prevent ambiguity
 
         """
-#	return "file://" + hostname + os.getcwd() + "/"
-	return "file://" + _fixslash(os.getcwd()) + "/"
+#       return "file://" + hostname + os.getcwd() + "/"
+        return "file://" + _fixslash(os.getcwd()) + "/"
 
 
 def _fixslash(str):
@@ -303,24 +303,24 @@ def canonical(str_in):
 
     """
     if type(str_in) == type(u''):
-	s8 = str_in.encode('utf-8')
+        s8 = str_in.encode('utf-8')
     else:
-	s8 = str_in
+        s8 = str_in
     s = ''
     i = 0
     while i < len(s8):
-	ch = s8[i]; n = ord(ch)
-	if (n > 126) or (n < 33) :   # %-encode controls, SP, DEL, and utf-8
-	    s += "%%%02X" % ord(ch)
-	elif ch == '%' and i+2 < len(s8):
-	    ch2 = s8[i+1:i+3].decode('hex')
-	    if ch2 in URI_unreserved: s += ch2
-	    else: s += "%%%02X" % ord(ch2)
-	    i = i+3
-	    continue
-	else:
-	    s += ch
-	i = i +1
+        ch = s8[i]; n = ord(ch)
+        if (n > 126) or (n < 33) :   # %-encode controls, SP, DEL, and utf-8
+            s += "%%%02X" % ord(ch)
+        elif ch == '%' and i+2 < len(s8):
+            ch2 = s8[i+1:i+3].decode('hex')
+            if ch2 in URI_unreserved: s += ch2
+            else: s += "%%%02X" % ord(ch2)
+            i = i+3
+            continue
+        else:
+            s += ch
+        i = i +1
     return s
     
     
@@ -459,7 +459,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.20  2007-01-25 20:26:50  timbl
+# Revision 1.21  2007-06-26 02:36:16  syosi
+# fix tabs
+#
+# Revision 1.20  2007/01/25 20:26:50  timbl
 # @@@ BEWARE UNTESTED PARTIAL VERSION -- Introducing XML Literals as DOM objects
 #
 # Revision 1.19  2006/11/09 22:44:12  connolly

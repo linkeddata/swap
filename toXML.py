@@ -105,9 +105,9 @@ option_noregen = 0   # If set, do not regenerate genids on output
 
 ########################## RDF 1.0 Syntax generator
 
-global _namechars	
+global _namechars       
 _namechars = string.lowercase + string.uppercase + string.digits + '_-'
-	    
+            
 def dummyWrite(x):
     pass
 
@@ -119,35 +119,35 @@ class ToRDF(RDFSink.RDFStructuredOutput):
     #@ Not actually complete, and can encode anyway
     def __init__(self, outFp, thisURI=None, base=None, flags=""):
         RDFSink.RDFSink.__init__(self)
-	if outFp == None:
-	    self._xwr = XMLWriter(dummyWrite, self)
-	else:
-	    dummyEnc, dummyDec, dummyReader, encWriter = codecs.lookup('utf-8')
-	    z = encWriter(outFp)
-	    zw = z.write
-	    self._xwr = XMLWriter(zw, self)
-	self._subj = None
-	self._base = base
-	self._formula = None   # Where do we get this from? The outermost formula
-	if base == None: self._base = thisURI
-	self._thisDoc = thisURI
-	self._flags = flags
-	self._nodeID = {}
-	self._nextnodeID = 0
-	self._docOpen = 0  # Delay doc open <rdf:RDF .. till after binds
+        if outFp == None:
+            self._xwr = XMLWriter(dummyWrite, self)
+        else:
+            dummyEnc, dummyDec, dummyReader, encWriter = codecs.lookup('utf-8')
+            z = encWriter(outFp)
+            zw = z.write
+            self._xwr = XMLWriter(zw, self)
+        self._subj = None
+        self._base = base
+        self._formula = None   # Where do we get this from? The outermost formula
+        if base == None: self._base = thisURI
+        self._thisDoc = thisURI
+        self._flags = flags
+        self._nodeID = {}
+        self._nextnodeID = 0
+        self._docOpen = 0  # Delay doc open <rdf:RDF .. till after binds
         def doNothing():
             pass
-	self._toDo = doNothing
-	self.namespace_redirections = {}
-	self.illegals = Set()
-	self.stack = [0]
+        self._toDo = doNothing
+        self.namespace_redirections = {}
+        self.illegals = Set()
+        self.stack = [0]
 
     #@@I18N
     _rdfns = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
 
     def dummyClone(self):
-	"retun a version of myself which will only count occurrences"
-	return ToRDF(None, self._thisDoc, base=self._base, flags=self._flags )
+        "retun a version of myself which will only count occurrences"
+        return ToRDF(None, self._thisDoc, base=self._base, flags=self._flags )
 
     def bind(self, prefix, namespace):
         if prefix in self.namespace_redirections:
@@ -177,13 +177,13 @@ z  - Allow relative URIs for namespaces
 """
 
     def endDoc(self, rootFormulaPair=None):
-	if self.stayOpen: return # Ignore close if stayOpen is set, (for concatenation)
+        if self.stayOpen: return # Ignore close if stayOpen is set, (for concatenation)
         self.flushStart()  # Note: can't just leave empty doc if not started: bad XML
-	if self._subj:
-	    self._xwr.endElement()  # </rdf:Description>
-	self._subj = None
-	self._xwr.endElement()  # </rdf:RDF>
-	self._xwr.endDocument()
+        if self._subj:
+            self._xwr.endElement()  # </rdf:Description>
+        self._subj = None
+        self._xwr.endElement()  # </rdf:RDF>
+        self._xwr.endDocument()
 
     def makeComment(self, str):
         if self._docOpen:
@@ -196,10 +196,10 @@ z  - Allow relative URIs for namespaces
         self._toDo = toDoMore
 
     def referenceTo(self, uri):
-	"Conditional relative URI"
-	if "r" in self._flags or self._base == None:
-	    return uri
-	return refTo(self._base, uri)
+        "Conditional relative URI"
+        if "r" in self._flags or self._base == None:
+            return uri
+        return refTo(self._base, uri)
 
     def flushStart(self):
         if not self._docOpen:
@@ -219,16 +219,16 @@ z  - Allow relative URIs for namespaces
             ps = self.prefixes.values()
             ps.sort()    # Cannonicalize output somewhat
             if self.defaultNamespace and "d" not in self._flags:
-		if "z" in self._flags:
-		    ats.append(('xmlns',
-			self.referenceTo(self.defaultNamespace)))
-		else:
-		    ats.append(('xmlns',self.defaultNamespace))
+                if "z" in self._flags:
+                    ats.append(('xmlns',
+                        self.referenceTo(self.defaultNamespace)))
+                else:
+                    ats.append(('xmlns',self.defaultNamespace))
             for pfx in ps:
-		nsvalue = self.namespaces[pfx]
-		if "z" in self._flags:
-		    nsvalue = self.referenceTo( nsvalue)
-		ats.append(('xmlns:'+pfx, nsvalue))
+                nsvalue = self.namespaces[pfx]
+                if "z" in self._flags:
+                    nsvalue = self.referenceTo( nsvalue)
+                ats.append(('xmlns:'+pfx, nsvalue))
 
             self._xwr.startElement(RDF_NS_URI+'RDF', ats, self.prefixes)
             self._subj = None
@@ -240,45 +240,45 @@ z  - Allow relative URIs for namespaces
 
 
         if self.stack[-1]:
-	    if pred == N3_first:
-		pred = RDF_li
-	    elif pred == RDF_type and obj == N3_List:
-		return  # We knew
-	    elif pred == RDF_type and obj == N3_Empty:
-		return  # not how we would have put it but never mind
-	    elif pred == N3_rest:
-		return # Ignore rest
-	    else: raise RuntimeError ("Should only see %s and %s in list mode, for tuple %s and stack %s" 
-				    %(N3_first, N3_rest, `tuple`, `self.stack`))
+            if pred == N3_first:
+                pred = RDF_li
+            elif pred == RDF_type and obj == N3_List:
+                return  # We knew
+            elif pred == RDF_type and obj == N3_Empty:
+                return  # not how we would have put it but never mind
+            elif pred == N3_rest:
+                return # Ignore rest
+            else: raise RuntimeError ("Should only see %s and %s in list mode, for tuple %s and stack %s" 
+                                    %(N3_first, N3_rest, `tuple`, `self.stack`))
 
-	if subj == context: # and context == self._formula:
-	    if pred == (SYMBOL, N3_forAll_URI):
-		progress("Ignoring universal quantification of ", obj)
-		return
-	    elif pred == (SYMBOL, N3_forSome_URI):
-		nid = self._nodeID.get(obj, None)
-		if nid == None and not("b" in self._flags):
-		    self._nextnodeID += 1
-		    nid = 'b'+`self._nextnodeID`
-		    self._nodeID[obj] = nid
+        if subj == context: # and context == self._formula:
+            if pred == (SYMBOL, N3_forAll_URI):
+                progress("Ignoring universal quantification of ", obj)
+                return
+            elif pred == (SYMBOL, N3_forSome_URI):
+                nid = self._nodeID.get(obj, None)
+                if nid == None and not("b" in self._flags):
+                    self._nextnodeID += 1
+                    nid = 'b'+`self._nextnodeID`
+                    self._nodeID[obj] = nid
                     #progress("object is now", obj, nid)
-		return
-	    
-	if subj[0] not in (SYMBOL, ANONYMOUS, LITERAL, LITERAL_DT, LITERAL_LANG):
-	    progress("Warning:  because subject is not symbol, bnode or literal, Ignoring ", tuple)
-	    return
+                return
+            
+        if subj[0] not in (SYMBOL, ANONYMOUS, LITERAL, LITERAL_DT, LITERAL_LANG):
+            progress("Warning:  because subject is not symbol, bnode or literal, Ignoring ", tuple)
+            return
 #        progress("@@@ subject node is ", subj)
 
         self.flushStart()
-	if self._formula == None:
-	    self._formula = context   # Asssume first statement is in outermost context @@
-	predn = self.referenceTo( pred[1])
-	subjn = self.referenceTo( subj[1])
+        if self._formula == None:
+            self._formula = context   # Asssume first statement is in outermost context @@
+        predn = self.referenceTo( pred[1])
+        subjn = self.referenceTo( subj[1])
 
-	if self._subj != subj:
-	    if self._subj:
-		self._xwr.endElement()
-	    self._subj = subj
+        if self._subj != subj:
+            if self._subj:
+                self._xwr.endElement()
+            self._subj = subj
             if (pred == (SYMBOL, RDF_type_URI)# Special case starting with rdf:type as element name
                 and obj[0] != LITERAL
                 and "c" not in self._flags): # "c" flag suppresses class element syntax on RDF output
@@ -288,75 +288,75 @@ z  - Allow relative URIs for namespaces
             else:
                  start_tag = RDF_NS_URI+'Description'
 #            progress("@@ Start tag: %s" % start_tag)    
-	    if subj[0] == SYMBOL or subj[0] == ANONYMOUS:
-		nid = self._nodeID.get(subj, None)
-		if nid == None:
-		    if subj[0] == ANONYMOUS:
-			self._xwr.startElement(start_tag,
-				[], self.prefixes)
-		    else:
-			self._xwr.startElement(start_tag,
-				[(RDF_NS_URI+" about", subjn),], self.prefixes)
-		else:
-		    self._xwr.startElement(start_tag,
-					[(RDF_NS_URI+" nodeID", nid),], self.prefixes)
-		if start_tag != RDF_NS_URI+'Description':
+            if subj[0] == SYMBOL or subj[0] == ANONYMOUS:
+                nid = self._nodeID.get(subj, None)
+                if nid == None:
+                    if subj[0] == ANONYMOUS:
+                        self._xwr.startElement(start_tag,
+                                [], self.prefixes)
+                    else:
+                        self._xwr.startElement(start_tag,
+                                [(RDF_NS_URI+" about", subjn),], self.prefixes)
+                else:
+                    self._xwr.startElement(start_tag,
+                                        [(RDF_NS_URI+" nodeID", nid),], self.prefixes)
+                if start_tag != RDF_NS_URI+'Description':
                     return
                 
-	    elif subj[0] == LITERAL:
-		raise ValueError(
-		"""Bad subject of statement: %s.
-		RDF/XML cannot serialize a graph in which a subject is a literal.""" % subj[1])
-		# See http://lists.w3.org/Archives/Public/public-cwm-bugs/2004Aug/0014.html
-		v = subj[1]
-		attrs = []  # Literal
-		if type(v) is type((1,1)):
-		    v, dt, lang = v
-		    if dt != None: attrs.append((RDF_NS_URI+'datatype', dt))
-		    if lang != None: attrs.append((XML_NS_URI+' lang', lang))
-		self._xwr.startElement(RDF_NS_URI+'Description',
-				    [], self.prefixes)
-		self._xwr.startElement(RDF_NS_URI+"is", attrs, self.prefixes)
-		self._xwr.data(v)
-		self._xwr.endElement()
-	    else:
-		raise RuntimeError("Unexpected subject", `subj`)
+            elif subj[0] == LITERAL:
+                raise ValueError(
+                """Bad subject of statement: %s.
+                RDF/XML cannot serialize a graph in which a subject is a literal.""" % subj[1])
+                # See http://lists.w3.org/Archives/Public/public-cwm-bugs/2004Aug/0014.html
+                v = subj[1]
+                attrs = []  # Literal
+                if type(v) is type((1,1)):
+                    v, dt, lang = v
+                    if dt != None: attrs.append((RDF_NS_URI+'datatype', dt))
+                    if lang != None: attrs.append((XML_NS_URI+' lang', lang))
+                self._xwr.startElement(RDF_NS_URI+'Description',
+                                    [], self.prefixes)
+                self._xwr.startElement(RDF_NS_URI+"is", attrs, self.prefixes)
+                self._xwr.data(v)
+                self._xwr.endElement()
+            else:
+                raise RuntimeError("Unexpected subject", `subj`)
 
-	if obj[0] not in (XMLLITERAL, LITERAL, LITERAL_DT, LITERAL_LANG):
-	    nid = self._nodeID.get(obj, None)
-	    if nid == None:
-		objn = self.referenceTo( obj[1])
-		# progress("@@@ objn=%s, obj[1]=%s" %(objn, obj[1]))
-		nid2 = self._nodeID.get(pred, None)
-		if nid2 is None:
+        if obj[0] not in (XMLLITERAL, LITERAL, LITERAL_DT, LITERAL_LANG):
+            nid = self._nodeID.get(obj, None)
+            if nid == None:
+                objn = self.referenceTo( obj[1])
+                # progress("@@@ objn=%s, obj[1]=%s" %(objn, obj[1]))
+                nid2 = self._nodeID.get(pred, None)
+                if nid2 is None:
                     self._xwr.emptyElement(pred[1], [(RDF_NS_URI+' resource', objn)], self.prefixes)
                 else:
                     bNodePredicate()
-	    else:
-		self._xwr.emptyElement(pred[1], [(RDF_NS_URI+' nodeID', nid)], self.prefixes)		
-	    return
+            else:
+                self._xwr.emptyElement(pred[1], [(RDF_NS_URI+' nodeID', nid)], self.prefixes)           
+            return
 
-	attrs = []  # Literal
-	v = obj[1]
-	if obj[0] == XMLLITERAL:
-	    attrs.append((RDF_NS_URI+' parseType', 'Literal'))
-	elif obj[0] == LITERAL_DT:
-	    v, dt = v
-	    if dt != None: attrs.append((RDF_NS_URI+' datatype', dt))
-	elif obj[0] == LITERAL_LANG:
-	    v, lang = v
-	    if lang != None: attrs.append((XML_NS_URI+' lang', lang))
-	nid = self._nodeID.get(pred, None)
-	if nid is None:
+        attrs = []  # Literal
+        v = obj[1]
+        if obj[0] == XMLLITERAL:
+            attrs.append((RDF_NS_URI+' parseType', 'Literal'))
+        elif obj[0] == LITERAL_DT:
+            v, dt = v
+            if dt != None: attrs.append((RDF_NS_URI+' datatype', dt))
+        elif obj[0] == LITERAL_LANG:
+            v, lang = v
+            if lang != None: attrs.append((XML_NS_URI+' lang', lang))
+        nid = self._nodeID.get(pred, None)
+        if nid is None:
             self._xwr.startElement(pred[1], attrs, self.prefixes)
         else:
             bNodePredicate()            
-	if obj[0] == XMLLITERAL:
-	    # XML literal
-	    dom = obj[1]
-	    self._xwr.passXML(''.join([Canonicalize(x) for x in dom.childNodes]))
-	else:
-	    self._xwr.data(v)
+        if obj[0] == XMLLITERAL:
+            # XML literal
+            dom = obj[1]
+            self._xwr.passXML(''.join([Canonicalize(x) for x in dom.childNodes]))
+        else:
+            self._xwr.data(v)
         self._xwr.endElement()
 
 # Below is for writing an anonymous node which is the object of only one arc
@@ -365,7 +365,7 @@ z  - Allow relative URIs for namespaces
 # As object
 
     def startAnonymous(self,  tuple):
-	self.startWithParseType("Resource", tuple)
+        self.startWithParseType("Resource", tuple)
 
     def endAnonymous(self, subject, verb):    # Remind me where we are
         self._xwr.endElement()
@@ -389,9 +389,9 @@ z  - Allow relative URIs for namespaces
 
     def endAnonymousNode(self, subj=None):    # Remove context
         return #If a new subject is started, they'll know to close this one
-    	self._xwr.endElement()
-	self._subj = None
-	
+        self._xwr.endElement()
+        self._subj = None
+        
 #  LISTS
 #
 
@@ -401,52 +401,52 @@ z  - Allow relative URIs for namespaces
 # As object
 
     def startListObject(self,  tuple, isList =0):
-	self._pred = RDF_li
-	self.startWithParseType('Collection', tuple)
-	return
+        self._pred = RDF_li
+        self.startWithParseType('Collection', tuple)
+        return
 
 
     def endListObject(self, subject, verb):    # Remind me where we are
         self._xwr.endElement()
         self._subj = subject       # @@@ This all needs to be thought about!
-	return
+        return
 
 
     def startWithParseType(self, parseType, tuple):
         self.flushStart()
         context, pred, subj, obj = tuple 
-	if self._subj != subj:
-	    if self._subj:
-		self._xwr.endElement()
-	    nid = self._nodeID.get(subj, None)
-	    if nid == None:
-		subjn = self.referenceTo( subj[1])
-		attr = ((RDF_NS_URI+' about', subjn),)
-		if subj[0] == ANONYMOUS: attr = []
-		self._xwr.startElement(RDF_NS_URI + 'Description',
-				    attr, self.prefixes)
-	    else:
-		self._xwr.startElement(RDF_NS_URI + 'Description',
-				    ((RDF_NS_URI+' nodeID', nid),), self.prefixes)
-	    self._subj = subj
+        if self._subj != subj:
+            if self._subj:
+                self._xwr.endElement()
+            nid = self._nodeID.get(subj, None)
+            if nid == None:
+                subjn = self.referenceTo( subj[1])
+                attr = ((RDF_NS_URI+' about', subjn),)
+                if subj[0] == ANONYMOUS: attr = []
+                self._xwr.startElement(RDF_NS_URI + 'Description',
+                                    attr, self.prefixes)
+            else:
+                self._xwr.startElement(RDF_NS_URI + 'Description',
+                                    ((RDF_NS_URI+' nodeID', nid),), self.prefixes)
+            self._subj = subj
         nid = self._nodeID.get(pred, None)
-	if nid is None:
+        if nid is None:
             self._xwr.startElement(pred[1],
-		    [(RDF_NS_URI+' parseType',parseType)], self.prefixes)
+                    [(RDF_NS_URI+' parseType',parseType)], self.prefixes)
         else:
             bNodePredicate()             
 
         self._subj = obj    # The object is now the current subject
-	return
+        return
 
 # As subject:
 
     def startListSubject(self, subj):
-	self.startAnonymousNode(self)
-	# @@@@@@ set flaf to do first/rest decomp
-	
+        self.startAnonymousNode(self)
+        # @@@@@@ set flaf to do first/rest decomp
+        
     def endListSubject(self, subj):
-	self.endAnonymousNode(subj)
+        self.endAnonymousNode(subj)
 
 # Below we notate a nested formula
 
@@ -456,11 +456,11 @@ z  - Allow relative URIs for namespaces
             self._xwr.endElement()
             self._subj = None
         self._xwr.startElement(RDF_NS_URI+'Description', 
-			      [],
+                              [],
                               self.prefixes)
         
         self._xwr.startElement(NODE_MERGE_URI,
-		    [(RDF_NS_URI+' parseType', "Quote")], self.prefixes)
+                    [(RDF_NS_URI+' parseType', "Quote")], self.prefixes)
         self._subj = None
 
 
@@ -474,23 +474,23 @@ z  - Allow relative URIs for namespaces
     def startFormulaObject(self, tuple):
         self.flushStart()
         context, pred, subj, obj = tuple 
-	if self._subj != subj:
-	    if self._subj:
-		self._xwr.endElement()
-	    nid = self._nodeID.get(subj, None)
-	    if nid == None:
-		progress("@@@Start anonymous node but not nodeID?", subj)
-		subjn = self.referenceTo( subj[1])
-		self._xwr.startElement(RDF_NS_URI + 'Description',
-				    ((RDF_NS_URI+' about', subjn),), self.prefixes)
-	    else:
-		self._xwr.startElement(RDF_NS_URI + 'Description',
-				    ((RDF_NS_URI+' nodeID', nid),), self.prefixes)
-	    self._subj = subj
+        if self._subj != subj:
+            if self._subj:
+                self._xwr.endElement()
+            nid = self._nodeID.get(subj, None)
+            if nid == None:
+                progress("@@@Start anonymous node but not nodeID?", subj)
+                subjn = self.referenceTo( subj[1])
+                self._xwr.startElement(RDF_NS_URI + 'Description',
+                                    ((RDF_NS_URI+' about', subjn),), self.prefixes)
+            else:
+                self._xwr.startElement(RDF_NS_URI + 'Description',
+                                    ((RDF_NS_URI+' nodeID', nid),), self.prefixes)
+            self._subj = subj
 
 #        log_quote = self.prefixes[(SYMBOL, Logic_NS)] + ":Quote"  # Qname yuk
         self._xwr.startElement(pred[1], [(RDF_NS_URI+' parseType', "Quote")],
-				self.prefixes)  # @@? Parsetype RDF? Formula?
+                                self.prefixes)  # @@? Parsetype RDF? Formula?
         self._subj = None
 
 
@@ -500,7 +500,7 @@ z  - Allow relative URIs for namespaces
             self._subj = None
         self._xwr.endElement()           # end quote
         self._subj = subj   # restore context from start
-#	print "Ending formula, pred=", pred, "\n   subj=", subj
+#       print "Ending formula, pred=", pred, "\n   subj=", subj
 #        print "\nEnd bag object, pred=", `pred`[-12:]
 
             
@@ -515,16 +515,16 @@ class XMLWriter:
     """
 
     def __init__(self, encodingWriter, counter, squeaky=0, version='1.0'):
-#	self._outFp = outFp
-	self._encwr = encodingWriter
-	self._elts = []
-	self.squeaky = squeaky  # No, not squeaky clean output
-	self.tab = 4        # Number of spaces to indent per level
+#       self._outFp = outFp
+        self._encwr = encodingWriter
+        self._elts = []
+        self.squeaky = squeaky  # No, not squeaky clean output
+        self.tab = 4        # Number of spaces to indent per level
         self.needClose = 0  # 1 Means we need a ">" but save till later
         self.noWS = 0       # 1 Means we cant use white space for prettiness
         self.currentNS = None # @@@ Hack
-	self.counter = counter
-	self.version = version
+        self.counter = counter
+        self.version = version
         
     #@@ on __del__, close all open elements?
 
@@ -557,17 +557,17 @@ class XMLWriter:
             self.needClose = 0
 
     def passXML(self, st):
-	self.flushClose()
-	self._encwr(st)
+        self.flushClose()
+        self._encwr(st)
 
     def figurePrefix(self, uriref, rawAttrs, prefixes):
-	i = len(uriref)
-	while i>0:
-	    if isXMLChar(uriref[i-1], NCNameChar): # uriref[i-1] in self._namechars:
-		i = i - 1
-	    else:
-		break
-	while i<len(uriref):
+        i = len(uriref)
+        while i>0:
+            if isXMLChar(uriref[i-1], NCNameChar): # uriref[i-1] in self._namechars:
+                i = i - 1
+            else:
+                break
+        while i<len(uriref):
             if (not isXMLChar(uriref[i], NCNameStartChar)) or (uriref[i-1] == ':' and
                                                                uriref.rfind(':', 0, i-1) < 0):
                 i = i+1
@@ -588,12 +588,12 @@ class XMLWriter:
             else:
                 i = j
                 break
-	ln = uriref[i:]
-	#progress(ln)
-	ns = uriref[:i]
-	self.counter.countNamespace(ns)
+        ln = uriref[i:]
+        #progress(ln)
+        ns = uriref[:i]
+        self.counter.countNamespace(ns)
 #        print "@@@ ns=",`ns`, "@@@ prefixes =", `prefixes`
-	nsSet = False
+        nsSet = False
         prefix = prefixes.get(ns, ":::")
         attrs = []
         for a, v in rawAttrs:   # Caller can set default namespace
@@ -621,38 +621,38 @@ class XMLWriter:
                 continue
             ans = at[:i]
             lan = at[i+1:]
-	    if ans == XML_NS_URI: prefix = "xml"
+            if ans == XML_NS_URI: prefix = "xml"
             else:
-		self.counter.countNamespace(ans)
-		prefix = prefixes.get(ans,":::")
-		if prefix == ":::":
+                self.counter.countNamespace(ans)
+                prefix = prefixes.get(ans,":::")
+                if prefix == ":::":
                     #print "finding prefix for '%s'" % ans
                     prefix = findLegal(prefixes, ans)
                     #print "--found '%s'" % prefix
                     attrs.append(( 'xmlns:' + prefix, ans))
                     prefixes[ans] = prefix
-##		    raise RuntimeError("#@@@@@ tag %s: atr %s has no prefix :-( in prefix table:\n%s" %
-##			(uriref, at, `prefixes`))
-	    if prefix:
+##                  raise RuntimeError("#@@@@@ tag %s: atr %s has no prefix :-( in prefix table:\n%s" %
+##                      (uriref, at, `prefixes`))
+            if prefix:
                 attrs.append(( prefix+":"+lan, val))
             else:
                 attrs.append(( lan, val))
 
-	self.newline(3-len(self._elts))    # Newlines separate higher levels
-	self._encwr("<%s" % (ln,))
+        self.newline(3-len(self._elts))    # Newlines separate higher levels
+        self._encwr("<%s" % (ln,))
 
         needNL = 0
-	for n, v in attrs:
+        for n, v in attrs:
             if needNL:
                 self.newline()
                 self._encwr("   ")
-	    self._encwr(" %s=\"" % (n, ))
-	    if type(v) is type((1,1)):
-#		progress("@@@@@@ toXML.py 382: ", `v`)
-		v = `v`
+            self._encwr(" %s=\"" % (n, ))
+            if type(v) is type((1,1)):
+#               progress("@@@@@@ toXML.py 382: ", `v`)
+                v = `v`
             xmldata(self._encwr, v, self.attrEsc)
             self._encwr("\"")
-	    needNL = 1
+            needNL = 1
 
             
         return (ln, attrs)
@@ -667,37 +667,37 @@ class XMLWriter:
     def startElement(self, n, attrs = [], prefixes={}):
         oldNS = self.currentNS
         ln, at2 = self.figurePrefix(n, attrs, prefixes)
-	
-	self._elts.append((ln, oldNS))
-	self.closeTag()
+        
+        self._elts.append((ln, oldNS))
+        self.closeTag()
 
     def emptyElement(self, n, attrs=[], prefixes={}):
         oldNS = self.currentNS
         ln, at2 = self.figurePrefix(n, attrs, prefixes)
 
-	self.currentNS = oldNS  # Forget change - no nesting
-	self._encwr("/")
+        self.currentNS = oldNS  # Forget change - no nesting
+        self._encwr("/")
         self.closeTag()
 
     def endElement(self):
 
-	n, self.currentNS = self._elts.pop()
+        n, self.currentNS = self._elts.pop()
         self.newline()
-	self._encwr("</%s" % n)
-	self.closeTag()
+        self._encwr("</%s" % n)
+        self.closeTag()
 
 
     dataEsc = re.compile(r"[\r<>&]")  # timbl removed \n as can be in data
     attrEsc = re.compile(r"[\r<>&'\"\n]")
 
     def data(self, str):
-	#@@ throw an exception if the element stack is empty
-#	o = self._outFp
+        #@@ throw an exception if the element stack is empty
+#       o = self._outFp
         self.flushClose()
 #        xmldata(o.write, str, self.dataEsc)
         xmldata(self._encwr, str, self.dataEsc)
 
-	self.noWS = 1  # Suppress whitespace - we are in data
+        self.noWS = 1  # Suppress whitespace - we are in data
 
     def endDocument(self):
         while len(self._elts) > 0:
@@ -757,31 +757,31 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
     """
     def __init__(self, outFp, thisURI=None, base=None, flags=""):
         RDFSink.RDFSink.__init__(self)
-	if outFp == None:
-	    self._xwr = XMLWriter(dummyWrite, self)
-	else:
-	    dummyEnc, dummyDec, dummyReader, encWriter = codecs.lookup('utf-8')
-	    z = encWriter(outFp)
-	    zw = z.write
-	    self._xwr = XMLWriter(zw, self)
-	self._subj = None
-	self._base = base
-	self._formula = None   # Where do we get this from? The outermost formula
-	if base == None: self._base = thisURI
-	self._thisDoc = thisURI
-	self._flags = flags
-	self._nodeID = {}
-	self._nextNodeID = 0
-	self.namedAnonID = 0
-	self._docOpen = 0  # Delay doc open <rdf:RDF .. till after binds
+        if outFp == None:
+            self._xwr = XMLWriter(dummyWrite, self)
+        else:
+            dummyEnc, dummyDec, dummyReader, encWriter = codecs.lookup('utf-8')
+            z = encWriter(outFp)
+            zw = z.write
+            self._xwr = XMLWriter(zw, self)
+        self._subj = None
+        self._base = base
+        self._formula = None   # Where do we get this from? The outermost formula
+        if base == None: self._base = thisURI
+        self._thisDoc = thisURI
+        self._flags = flags
+        self._nodeID = {}
+        self._nextNodeID = 0
+        self.namedAnonID = 0
+        self._docOpen = 0  # Delay doc open <rdf:RDF .. till after binds
         def doNothing():
             pass
-	self._toDo = doNothing
+        self._toDo = doNothing
 
-	def dummyClone(self):
+        def dummyClone(self):
             "retun a version of myself which will only count occurrences"
             return tmToRDF(None, self._thisDoc, base=self._base, flags=self._flags )
-	
+        
     def start(self):
         self._parts = [tm.NOTHING]
         self._triples = [[None, None, None]]
@@ -805,16 +805,16 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
             ps = self.prefixes.values()
             ps.sort()    # Cannonicalize output somewhat
             if self.defaultNamespace and "d" not in self._flags:
-		if "z" in self._flags:
-		    ats.append(('xmlns',
-			self.referenceTo(self.defaultNamespace)))
-		else:
-		    ats.append(('xmlns',self.defaultNamespace))
+                if "z" in self._flags:
+                    ats.append(('xmlns',
+                        self.referenceTo(self.defaultNamespace)))
+                else:
+                    ats.append(('xmlns',self.defaultNamespace))
             for pfx in ps:
-		nsvalue = self.namespaces[pfx]
-		if "z" in self._flags:
-		    nsvalue = self.referenceTo( nsvalue)
-		ats.append(('xmlns:'+pfx, nsvalue))
+                nsvalue = self.namespaces[pfx]
+                if "z" in self._flags:
+                    nsvalue = self.referenceTo( nsvalue)
+                ats.append(('xmlns:'+pfx, nsvalue))
 
             self._xwr.startElement(RDF_NS_URI+'RDF', ats, self.prefixes)
             self._nextId = 0
@@ -832,10 +832,10 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
         self._xwr.endDocument()
 
     def referenceTo(self, uri):
-	"Conditional relative URI"
-	if "r" in self._flags or self._base == None:
-	    return uri
-	return refTo(self._base, uri)
+        "Conditional relative URI"
+        if "r" in self._flags or self._base == None:
+            return uri
+        return refTo(self._base, uri)
 
 
     def addNode(self, node, nameLess = 0):
@@ -912,11 +912,11 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
             q = []
         if self._classes[-1] is None:
             self._xwr.startElement(RDF_NS_URI + 'Description',
-				    q, self.prefixes)
+                                    q, self.prefixes)
             self._classes[-1] = subject
         else:
             self._xwr.startElement(self._classes[-1][1],
-				    q, self.prefixes)
+                                    q, self.prefixes)
 
     def _closeSubject(self):
         self._xwr.endElement()
@@ -1096,10 +1096,10 @@ def xmldata(write, str, markupChars):
     while i < len(str):
         m = markupChars.search(str, i)
         if not m:
-	    t = str[i:]
-#	    for ch in str[i:]: progress( "Char ", ord(ch))
-#	    progress("Writer is %s" %(`write`))
-#	    progress("t = "+t.encode(u)
+            t = str[i:]
+#           for ch in str[i:]: progress( "Char ", ord(ch))
+#           progress("Writer is %s" %(`write`))
+#           progress("t = "+t.encode(u)
             write(t)
             break
         j = m.start()

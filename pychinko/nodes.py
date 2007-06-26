@@ -706,7 +706,7 @@ class AlphaStore(object):
             inDegrees[node] = 0
         for node in unsorted:
             for parent in node.dependents:
-		if parent in inDegrees:
+                if parent in inDegrees:
                     inDegrees[parent] = inDegrees[parent] + 1
         zeros = set()
         simpleZeros = set()
@@ -723,7 +723,7 @@ class AlphaStore(object):
                 top = zeros.pop()
             sorted.append(top)
             for node in top.dependents:
-		if node in inDegrees:
+                if node in inDegrees:
                     inDegrees[node] = inDegrees[node] - 1
                     if inDegrees[node] == 0:
                         if funcBuiltinp(node):
@@ -732,7 +732,7 @@ class AlphaStore(object):
                             simpleZeros.add(node)
         if inDegrees and max(inDegrees.values()) != 0:
             raise ValueError
-	return sorted
+        return sorted
             
            
     def sort(self):

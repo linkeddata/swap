@@ -61,13 +61,13 @@ class ContextSink(object):
     def __init__(self, sink, openFormula,
                  thisDoc=None,  flags="", why=None):
         self.sink = sink
-	assert thisDoc != None, "Need document URI at the moment, sorry"
+        assert thisDoc != None, "Need document URI at the moment, sorry"
         self.thisDoc = thisDoc
         self.formulaURI = formulaURI
-	self._context = openFormula
-	self._reason = why	# Why the parser w
-	self._reason2 = None	# Why these triples
-	if diag.tracking: self._reason2 = BecauseOfData(sink.newSymbol(thisDoc), because=self._reason)
+        self._context = openFormula
+        self._reason = why      # Why the parser w
+        self._reason2 = None    # Why these triples
+        if diag.tracking: self._reason2 = BecauseOfData(sink.newSymbol(thisDoc), because=self._reason)
             
         
     def newSymbol(self, uri):

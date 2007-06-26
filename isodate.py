@@ -82,7 +82,7 @@ def parse(s):
         raise ValueError, 'invalid date string format:'+s
     y = int(a['year'])
     if y < 1970:
-	raise ValueError, 'Sorry, date must be in Unix era (1970 or after):'+s
+        raise ValueError, 'Sorry, date must be in Unix era (1970 or after):'+s
     d = calendar.timegm((   int(a['year']), 
                         int(a['month']) or 1, 
                         int(a['day']) or 1, 

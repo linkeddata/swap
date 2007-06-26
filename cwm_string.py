@@ -90,10 +90,10 @@ def normalizeWhitespace(s):
     "Normalize whitespace sequences in a string to single spaces"
     res = ""
     for ch in s:
-	if ch in " \t\r\n":
-	    if res[-1:]!=" ": res = res + " " 
-	else:
-	    res = res + ch
+        if ch in " \t\r\n":
+            if res[-1:]!=" ": res = res + " " 
+        else:
+            res = res + ch
     return res
 
 #  String Constructors - more light built-ins
@@ -118,8 +118,8 @@ class BI_concatenation(LightBuiltIn, Function):
                     x = make_string(x)
                 else:
                     x = `x`
-		if verbosity() > 34: progress("Warning: Coercing to string for concat:"+`x`)
-#		return None # Can't
+                if verbosity() > 34: progress("Warning: Coercing to string for concat:"+`x`)
+#               return None # Can't
             str = str + x 
         return str
 
@@ -253,14 +253,14 @@ class BI_xmlEscapeData(LightBuiltIn, Function):
     You will need the BI_xmlEscapeAttribute on for attributes, escaping quotes."""
     
     def evaluateObject(self, subj_py):
-	return xmlEscape(subj_py, dataEsc)
-	
+        return xmlEscape(subj_py, dataEsc)
+        
 class BI_xmlEscapeAttribute(LightBuiltIn, Function):
     """Take a unicode string and return it encoded so as to pass in an XML data
     You may need stg different for attributes, escaping quotes."""
     
     def evaluateObject(self, subj_py):
-	return xmlEscape(subj_py, attrEsc)
+        return xmlEscape(subj_py, attrEsc)
 
 def xmlEscape(subj_py, markupChars):
     """Escape a string given a regex of the markup chars to be escaped
@@ -268,14 +268,14 @@ def xmlEscape(subj_py, markupChars):
     i = 0
     result = ""
     while i < len(subj_py):
-	m = markupChars.search(subj_py, i)
-	if not m:
-	    result = result + subj_py[i:]
-	    break
-	j = m.start()
-	result = result + subj_py[i:j]
-	result = result +  ("&#%d;" % (ord(subj_py[j]),))
-	i = j + 1
+        m = markupChars.search(subj_py, i)
+        if not m:
+            result = result + subj_py[i:]
+            break
+        j = m.start()
+        result = result + subj_py[i:j]
+        result = result +  ("&#%d;" % (ord(subj_py[j]),))
+        i = j + 1
     return result
 
 
@@ -285,14 +285,14 @@ class BI_encodeForURI(LightBuiltIn, Function):
     http://www.w3.org/TR/2005/CR-xpath-functions-20051103/#func-encode-for-uri"""
     
     def evaluateObject(self, subj_py):
-	return urllib.quote(subj_py, "#!~*'()")
+        return urllib.quote(subj_py, "#!~*'()")
 
 class BI_encodeForFragID(LightBuiltIn, Function):
     """Take a unicode string and return it encoded so as to pass in
     a URI grament identifier."""
     
     def evaluateObject(self, subj_py):
-	return urllib.quote(subj_py)
+        return urllib.quote(subj_py)
 
 class BI_resolve_uri(LightBuiltIn, Function):
     """see http://www.w3.org/2006/xpath-functions#resolve-uri"""
@@ -300,7 +300,7 @@ class BI_resolve_uri(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
         import uripath
         there, base = subj_py
-	return uripath.join(base, there)
+        return uripath.join(base, there)
 
 
 #  Register the string built-ins with the store

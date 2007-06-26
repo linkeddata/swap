@@ -10,10 +10,10 @@ import llyn
 from diag import verbosity, setVerbosity, progress
 
 
-import notation3    	# N3 parsers and generators
+import notation3        # N3 parsers and generators
 from term import Literal
 
-# import toXML 		#  RDF generator
+# import toXML          #  RDF generator
 
 #from RDFSink import FORMULA, LITERAL, ANONYMOUS, Logic_NS
 import uripath
@@ -45,32 +45,32 @@ cat = cat_ns
 def doCommand(inputURI="/dev/stdin"):
         import sys
         global sax2rdf
-	global kb
-	import os
+        global kb
+        import os
 
 # Load the data:
-	 
-	progress("Data from", inputURI)
-	kb=load(inputURI)
-#	print "# Size of kb: ", len(kb)
+         
+        progress("Data from", inputURI)
+        kb=load(inputURI)
+#       print "# Size of kb: ", len(kb)
 
-	totals = {}
-	for s in kb.statements:
-	    obj = s.object()
-	    if isinstance(obj, Literal):
-		try:
-		    value = float(obj.string)
-		except:
-		    continue
-		tot = totals.get(s.predicate(), 0) + value
-		totals[s.predicate()] = tot
+        totals = {}
+        for s in kb.statements:
+            obj = s.object()
+            if isinstance(obj, Literal):
+                try:
+                    value = float(obj.string)
+                except:
+                    continue
+                tot = totals.get(s.predicate(), 0) + value
+                totals[s.predicate()] = tot
 
-	ko = kb.newFormula()
-	for pred in totals.keys():
-	    ko.add(subj=pred, pred=qu.total, obj=ko.newLiteral("%7.2f" % totals[pred]))
-	print ko.close().n3String()
+        ko = kb.newFormula()
+        for pred in totals.keys():
+            ko.add(subj=pred, pred=qu.total, obj=ko.newLiteral("%7.2f" % totals[pred]))
+        print ko.close().n3String()
 
-	
+        
         
 ############################################################ Main program
     
@@ -85,7 +85,7 @@ if __name__ == '__main__':
     verbose = 0
     try:
         opts, args = getopt.getopt(sys.argv[1:], "hvy:i:",
-	    ["help",  "verbose", "year=", "input="])
+            ["help",  "verbose", "year=", "input="])
     except getopt.GetoptError:
         # print help information and exit:
         print __doc__
@@ -96,7 +96,7 @@ if __name__ == '__main__':
             usage()
             sys.exit()
         if o in ("-v", "--verbose"):
-	    verbose = 1
+            verbose = 1
         if o in ("-i", "--input"):
             inputURI = a
 

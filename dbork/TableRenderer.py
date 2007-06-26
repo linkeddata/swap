@@ -67,8 +67,8 @@ The test included in __main__ should produce this output:
 """
 
 # Classes of data cells
-DATUM = 1	# normal
-HEADER = 2	# underlined
+DATUM = 1       # normal
+HEADER = 2      # underlined
 
 import string
 from diag import progress # @@ for debugging
@@ -88,10 +88,10 @@ class TableRenderer:
     def __init__(self, firstTitle=None, headerFilter=None, dataFilter=None):
         self.headerFilter = headerFilter
         self.dataFilter = dataFilter
-        self.data = []		# [rows x columns] matrix of added data
-        self.types = []		# type (DATUM or HEADER) of each row
-        self.widths = []	# widths of each row
-        self.heights = []	# heights of each row
+        self.data = []          # [rows x columns] matrix of added data
+        self.types = []         # type (DATUM or HEADER) of each row
+        self.widths = []        # widths of each row
+        self.heights = []       # heights of each row
         if (firstTitle):
             self.addHeaders(firstTitle)
 
@@ -117,9 +117,9 @@ class TableRenderer:
         return string.join(ret, "\n")
 
     def _addData(self, data, theType, filter):
-	progress("@@ _addData data=%s theType=%s filter=%s " %(data, theType, filter))
-	progress("@@@ type ", type(data))
-	if type(data[0]) is not type([]): data = [data]   # resolve ambiguous calling convention
+        progress("@@ _addData data=%s theType=%s filter=%s " %(data, theType, filter))
+        progress("@@@ type ", type(data))
+        if type(data[0]) is not type([]): data = [data]   # resolve ambiguous calling convention
         try:
             data[0].isdigit() # Lord, there's got to be a better way. @@@   (@@ to do what? --tim)
             data = [data]

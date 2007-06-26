@@ -71,7 +71,7 @@ import notation3    # N3 parsers and generators, and RDF generator
 from webAccess import webget
 
 import diag  # problems importing the tracking flag,
-	     # and chatty_flag must be explicit it seems: use diag.tracking
+             # and chatty_flag must be explicit it seems: use diag.tracking
 
 from diag import progress, verbosity, tracking
 from term import BuiltIn, LightBuiltIn, RDFBuiltIn, HeavyBuiltIn, Function, \
@@ -92,7 +92,7 @@ from local_decimal import Decimal
 from RDFSink import Logic_NS, RDFSink, forSomeSym, forAllSym
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
 from RDFSink import N3_nil, N3_first, N3_rest, OWL_NS, N3_Empty, N3_List, \
-		    N3_li, List_NS
+                    N3_li, List_NS
 from RDFSink import RDF_NS_URI
 
 from RDFSink import FORMULA, LITERAL, LITERAL_DT, LITERAL_LANG, ANONYMOUS, SYMBOL
@@ -137,13 +137,13 @@ class DataObject:
     for y in x[color][label]
     """
     def __init__(context, term):
-	self.context = context
-	self.term = term
-	
+        self.context = context
+        self.term = term
+        
     def __getItem__(pred):   #   Use . or [] ?
-	values = context.objects(pred=pred, subj=self.term)
-	for v in value:
-	    yield DataObject(self.context, v)
+        values = context.objects(pred=pred, subj=self.term)
+        for v in value:
+            yield DataObject(self.context, v)
 
 
 def arg_hash(arg):
@@ -194,153 +194,153 @@ class IndexedFormula(Formula):
     """
     def __init__(self, store, uri=None):
         Formula.__init__(self, store, uri)
-#	self._redirections = {}
+#       self._redirections = {}
         self.descendents = None   # Placeholder for list of closure under subcontext
-#	self.collector = None # Object collecting evidence, if any 
-	self._newRedirections = {}  # not subsituted yet
-	self._index = {}
-	self._index[(None,None,None)] = self.statements
+#       self.collector = None # Object collecting evidence, if any 
+        self._newRedirections = {}  # not subsituted yet
+        self._index = {}
+        self._index[(None,None,None)] = self.statements
 
-	self._closureMode = ""
-	self._closureAgenda = []
-	self._closureAlready = []
+        self._closureMode = ""
+        self._closureAgenda = []
+        self._closureAlready = []
         self.reallyCanonical = False
 
 
     def statementsMatching(self, pred=None, subj=None, obj=None):
         """Return a READ-ONLY list of StoredStatement objects matching the parts given
-	
-	For example:
-	for s in f.statementsMatching(pred=pantoneColor):
-	    print "We've got one which is ", `s[OBJ]`
-	    
-	If none, returns []
-	"""
+        
+        For example:
+        for s in f.statementsMatching(pred=pantoneColor):
+            print "We've got one which is ", `s[OBJ]`
+            
+        If none, returns []
+        """
         return self._index.get((pred, subj, obj), [])
 
     def contains(self, pred=None, subj=None, obj=None):
         """Return boolean true iff formula contains statement(s) matching the parts given
-	
-	For example:
-	if f.contains(pred=pantoneColor):
-	    print "We've got one statement about something being some color"
-	"""
+        
+        For example:
+        if f.contains(pred=pantoneColor):
+            print "We've got one statement about something being some color"
+        """
         x =  self._index.get((pred, subj, obj), [])
-	if x : return 1
-	return 0
+        if x : return 1
+        return 0
 
 
     def any(self, subj=None, pred=None, obj=None):
         """Return None or the value filing the blank in the called parameters.
-	
-	Specifiy exactly two of the arguments.
-	color = f.any(pred=pantoneColor, subj=myCar)
-	somethingRed = f.any(pred=pantoneColor, obj=red)
-	
-	Note difference from the old store.any!!
-	Note SPO order not PSO.
-	To aboid confusion, use named parameters.
-	"""
-	hits = self._index.get((pred, subj, obj), [])
-	if not hits: return None
-	s = hits[0]
-	if pred is None: return s[PRED]
-	if subj is None: return s[SUBJ]
-	if obj is None: return s[OBJ]
-	raise ParameterError("You must give one wildcard")
+        
+        Specifiy exactly two of the arguments.
+        color = f.any(pred=pantoneColor, subj=myCar)
+        somethingRed = f.any(pred=pantoneColor, obj=red)
+        
+        Note difference from the old store.any!!
+        Note SPO order not PSO.
+        To aboid confusion, use named parameters.
+        """
+        hits = self._index.get((pred, subj, obj), [])
+        if not hits: return None
+        s = hits[0]
+        if pred is None: return s[PRED]
+        if subj is None: return s[SUBJ]
+        if obj is None: return s[OBJ]
+        raise ParameterError("You must give one wildcard")
 
 
     def the(self, subj=None, pred=None, obj=None):
         """Return None or the value filing the blank in the called parameters
-	
-	This is just like any() except it checks that there is only
-	one answer in the store. It wise to use this when you expect only one.
-	
-	color = f.the(pred=pantoneColor, subj=myCar)
-	redCar = f.the(pred=pantoneColor, obj=red)
-	"""
-	hits = self._index.get((pred, subj, obj), [])
-	if not hits: return None
-	assert len(hits) == 1, """There should only be one match for (%s %s %s).
-	    Found: %s""" %(subj, pred, obj, self.each(subj, pred, obj))
-	s = hits[0]
-	if pred is None: return s[PRED]
-	if subj is None: return s[SUBJ]
-	if obj is None: return s[OBJ]
-	raise parameterError("You must give one wildcard using the()")
+        
+        This is just like any() except it checks that there is only
+        one answer in the store. It wise to use this when you expect only one.
+        
+        color = f.the(pred=pantoneColor, subj=myCar)
+        redCar = f.the(pred=pantoneColor, obj=red)
+        """
+        hits = self._index.get((pred, subj, obj), [])
+        if not hits: return None
+        assert len(hits) == 1, """There should only be one match for (%s %s %s).
+            Found: %s""" %(subj, pred, obj, self.each(subj, pred, obj))
+        s = hits[0]
+        if pred is None: return s[PRED]
+        if subj is None: return s[SUBJ]
+        if obj is None: return s[OBJ]
+        raise parameterError("You must give one wildcard using the()")
 
     def each(self, subj=None, pred=None, obj=None):
         """Return a list of values value filing the blank in the called parameters
-	
-	Examples:
-	colors = f.each(pred=pantoneColor, subj=myCar)
-	
-	for redthing in f.each(pred=pantoneColor, obj=red): ...
-	
-	"""
-	hits = self._index.get((pred, subj, obj), [])
-	if hits == []: return []
-	if pred is None: wc = PRED
-	elif subj is None: wc = SUBJ
-	elif obj is None: wc = OBJ
-	else: raise ParameterError("You must give one wildcard None for each()")
-	res = []
-	for s in hits:
-	    res.append(s[wc])   # should use yeild @@ when we are ready
-	return res
+        
+        Examples:
+        colors = f.each(pred=pantoneColor, subj=myCar)
+        
+        for redthing in f.each(pred=pantoneColor, obj=red): ...
+        
+        """
+        hits = self._index.get((pred, subj, obj), [])
+        if hits == []: return []
+        if pred is None: wc = PRED
+        elif subj is None: wc = SUBJ
+        elif obj is None: wc = OBJ
+        else: raise ParameterError("You must give one wildcard None for each()")
+        res = []
+        for s in hits:
+            res.append(s[wc])   # should use yeild @@ when we are ready
+        return res
 
     def searchable(self, subj=None, pred=None, obj=None):
-	"""A pair of the difficulty of searching and a statement iterator of found statements
-	
-	The difficulty is a store-portable measure of how long the store
-	thinks (in arbitrary units) it will take to search.
-	This will only be used for choisng which part of the query to search first.
-	If it is 0 there is no solution to the query, we know now.
-	
-	In this implementation, we use the length of the sequence to be searched."""
+        """A pair of the difficulty of searching and a statement iterator of found statements
+        
+        The difficulty is a store-portable measure of how long the store
+        thinks (in arbitrary units) it will take to search.
+        This will only be used for choisng which part of the query to search first.
+        If it is 0 there is no solution to the query, we know now.
+        
+        In this implementation, we use the length of the sequence to be searched."""
         res = self._index.get((pred, subj, obj), [])
 #        progress("searchable  %s, %s" %(self.statements, (pred, subj, obj))
-	return len(res), res
+        return len(res), res
 
 
     def add(self, subj, pred, obj, why=None):
-	"""Add a triple to the formula.
-	
-	The formula must be open.
-	subj, pred and obj must be objects as for example generated by Formula.newSymbol()
-	and newLiteral(), or else literal values which can be interned.
-	why 	may be a reason for use when a proof will be required.
-	"""
+        """Add a triple to the formula.
+        
+        The formula must be open.
+        subj, pred and obj must be objects as for example generated by Formula.newSymbol()
+        and newLiteral(), or else literal values which can be interned.
+        why     may be a reason for use when a proof will be required.
+        """
         if self.canonical != None:
             raise RuntimeError("Attempt to add statement to closed formula "+`self`)
-	store = self.store
-	
-	if not isinstance(subj, Term): subj = store.intern(subj)
-	if not isinstance(pred, Term): pred = store.intern(pred)
-	if not isinstance(obj, Term): obj = store.intern(obj)
-	newBindings = {}
+        store = self.store
+        
+        if not isinstance(subj, Term): subj = store.intern(subj)
+        if not isinstance(pred, Term): pred = store.intern(pred)
+        if not isinstance(obj, Term): obj = store.intern(obj)
+        newBindings = {}
 
-#	Smushing of things which are equal into a single node
-#	Even if we do not do this with owl:sameAs, we do with lists
+#       Smushing of things which are equal into a single node
+#       Even if we do not do this with owl:sameAs, we do with lists
 
-	subj = subj.substituteEquals(self._redirections, newBindings)
-	pred = pred.substituteEquals(self._redirections, newBindings)
-	obj = obj.substituteEquals(self._redirections, newBindings)
-	    
+        subj = subj.substituteEquals(self._redirections, newBindings)
+        pred = pred.substituteEquals(self._redirections, newBindings)
+        obj = obj.substituteEquals(self._redirections, newBindings)
+            
         if diag.chatty_flag > 90:
             progress(u"Add statement (size before %i, %i statements) to %s:\n {%s %s %s}" % (
-		self.store.size, len(self.statements),`self`,  `subj`, `pred`, `obj`) )
+                self.store.size, len(self.statements),`self`,  `subj`, `pred`, `obj`) )
         if self.statementsMatching(pred, subj, obj):
             if diag.chatty_flag > 97:
-		progress("Add duplicate SUPPRESSED %s: {%s %s %s}" % (
-		    self,  subj, pred, obj) )
+                progress("Add duplicate SUPPRESSED %s: {%s %s %s}" % (
+                    self,  subj, pred, obj) )
             return 0  # Return no change in size of store
-	    
-	assert not isinstance(pred, Formula) or pred.canonical is pred, "pred Should be closed"+`pred`
-	assert (not isinstance(subj, Formula)
-		or subj is self
-		or subj.canonical is subj), "subj Should be closed or self"+`subj`
-	assert not isinstance(obj, Formula) or obj.canonical is obj, "obj Should be closed"+`obj`
+            
+        assert not isinstance(pred, Formula) or pred.canonical is pred, "pred Should be closed"+`pred`
+        assert (not isinstance(subj, Formula)
+                or subj is self
+                or subj.canonical is subj), "subj Should be closed or self"+`subj`
+        assert not isinstance(obj, Formula) or obj.canonical is obj, "obj Should be closed"+`obj`+`obj.canonical`
         store.size = store.size+1 # rather nominal but should be monotonic
 
         if False and isTopLevel(self):
@@ -358,88 +358,88 @@ class IndexedFormula(Formula):
 # for variables I guess as everyone has been saying.
 # When that happens, expend smushing to symbols.)
 
-	if pred is store.rest:
-	    if isinstance(obj, List) and  subj in self._existentialVariables:
-		ss = self.statementsMatching(pred=store.first, subj=subj)
-		if ss:
-		    s = ss[0]
-		    self.removeStatement(s)
-		    first = s[OBJ]
-		    list = obj.prepend(first)
-		    self._noteNewList(subj, list, newBindings)
-		    self.substituteEqualsInPlace(newBindings, why=why)
-		    return 1  # Added a statement but ... it is hidden in lists
+        if pred is store.rest:
+            if isinstance(obj, List) and  subj in self._existentialVariables:
+                ss = self.statementsMatching(pred=store.first, subj=subj)
+                if ss:
+                    s = ss[0]
+                    self.removeStatement(s)
+                    first = s[OBJ]
+                    list = obj.prepend(first)
+                    self._noteNewList(subj, list, newBindings)
+                    self.substituteEqualsInPlace(newBindings, why=why)
+                    return 1  # Added a statement but ... it is hidden in lists
     
-	elif pred is store.first  and  subj in self._existentialVariables:
-	    ss = self.statementsMatching(pred=store.rest, subj=subj)
-	    if ss:
-		s = ss[0]
-		rest = s[OBJ]
-		if isinstance(rest, List):
-		    list = rest.prepend(obj)
-		    self.removeStatement(s)
-		    self._noteNewList(subj, list, newBindings)
-		    self.substituteEqualsInPlace(newBindings)
-		    return 1
+        elif pred is store.first  and  subj in self._existentialVariables:
+            ss = self.statementsMatching(pred=store.rest, subj=subj)
+            if ss:
+                s = ss[0]
+                rest = s[OBJ]
+                if isinstance(rest, List):
+                    list = rest.prepend(obj)
+                    self.removeStatement(s)
+                    self._noteNewList(subj, list, newBindings)
+                    self.substituteEqualsInPlace(newBindings)
+                    return 1
 
-	if pred is store.owlOneOf:
+        if pred is store.owlOneOf:
             if isinstance(obj, List) and subj in self._existentialVariables:
                 new_set = store.newSet(obj)
                 self._noteNewSet(subj, new_set, newBindings)
                 self.substituteEqualsInPlace(newBindings)
                 return 1
 
-	if "e" in self._closureMode:
-	    if pred is store.sameAs:
-		if subj is obj: return 0 # ignore a = a
-		if obj in self.existentials() and subj not in self.existentials():
+        if "e" in self._closureMode:
+            if pred is store.sameAs:
+                if subj is obj: return 0 # ignore a = a
+                if obj in self.existentials() and subj not in self.existentials():
                     var, val = obj, subj
-		elif ((subj in self.existentials() and obj not in self.existentials())
-		    or (subj.generated() and not obj.generated())
-		    or Term.compareAnyTerm(obj, subj) < 0): var, val = subj, obj
-		else: var, val = obj, subj
-		newBindings[var] = val
-		if diag.chatty_flag > 90: progress("Equality: %s = %s" % (`var`, `val`))
-		self.substituteEqualsInPlace(newBindings)		
-		return 1
+                elif ((subj in self.existentials() and obj not in self.existentials())
+                    or (subj.generated() and not obj.generated())
+                    or Term.compareAnyTerm(obj, subj) < 0): var, val = subj, obj
+                else: var, val = obj, subj
+                newBindings[var] = val
+                if diag.chatty_flag > 90: progress("Equality: %s = %s" % (`var`, `val`))
+                self.substituteEqualsInPlace(newBindings)               
+                return 1
 
-	if "T" in self._closureMode:
-	    if pred is store.type and obj is store.Truth:
-		assert isinstance(subj, Formula), "What are we doing concluding %s is true?" % subj
+        if "T" in self._closureMode:
+            if pred is store.type and obj is store.Truth:
+                assert isinstance(subj, Formula), "What are we doing concluding %s is true?" % subj
                 subj.resetRenames(True)
-		self.loadFormulaWithSubstitution(subj.renameVars())
-		subj.resetRenames(False)
+                self.loadFormulaWithSubstitution(subj.renameVars())
+                subj.resetRenames(False)
 
 #########
-	if newBindings != {}:
-	    self.substituteEqualsInPlace(newBindings)
+        if newBindings != {}:
+            self.substituteEqualsInPlace(newBindings)
 #######
 
 
         s = StoredStatement((self, pred, subj, obj))
-	
-	if diag.tracking:
-	    if (why is None): raise RuntimeError(
-		"Tracking reasons but no reason given for"+`s`)
-	    report(s, why)
+        
+        if diag.tracking:
+            if (why is None): raise RuntimeError(
+                "Tracking reasons but no reason given for"+`s`)
+            report(s, why)
 
         # Build 8 indexes.
 #       This now takes a lot of the time in a typical  cwm run! :-(
 #       I honestly think the above line is a bit pessemistic. The below lines scale.
 #       The above lines do not (removeStatement does not scale)
 
-	if subj is self:  # Catch variable declarations
-	    if pred is self.store.forAll:
-		if obj not in self._universalVariables:
-		    if diag.chatty_flag > 50: progress("\tUniversal ", obj)
-		    self._universalVariables.add(obj)
-		return 1
-	    if pred is self.store.forSome:
-		if obj not in self._existentialVariables:
-		    if diag.chatty_flag > 50: progress("\tExistential ", obj)
-		    self._existentialVariables.add(obj)
-		return 1
-	    raise ValueError("You cannot use 'this' except as subject of forAll or forSome")
+        if subj is self:  # Catch variable declarations
+            if pred is self.store.forAll:
+                if obj not in self._universalVariables:
+                    if diag.chatty_flag > 50: progress("\tUniversal ", obj)
+                    self._universalVariables.add(obj)
+                return 1
+            if pred is self.store.forSome:
+                if obj not in self._existentialVariables:
+                    if diag.chatty_flag > 50: progress("\tExistential ", obj)
+                    self._existentialVariables.add(obj)
+                return 1
+            raise ValueError("You cannot use 'this' except as subject of forAll or forSome")
 
         self.statements.append(s)
        
@@ -472,33 +472,33 @@ class IndexedFormula(Formula):
         if list is None: self._index[(pred, subj, obj)]=[s]
         else: list.append(s)
 
-	if self._closureMode != "":
-	    self.checkClosure(subj, pred, obj)
+        if self._closureMode != "":
+            self.checkClosure(subj, pred, obj)
 
-	try:
+        try:
             if self.isWorkingContext and diag.chatty_flag > 20:
                 progress("adding",  (subj, pred, obj))
         except:
             pass
 
         return 1  # One statement has been added  @@ ignore closure extras from closure
-		    # Obsolete this return value? @@@ 
+                    # Obsolete this return value? @@@ 
 
-		
+                
     def removeStatement(self, s):
-	"""Removes a statement The formula must be open.
-	
-	This implementation is alas slow, as removal of items from tha hash is slow.
-	The above statement is false. Removing items from a hash is easily over five times
-	faster than removing them from a list.
-	Also, truth mainainance is not done.  You can't undeclare things equal.
-	This is really a low-level method, used within add() and for cleaning up the store
-	to save space in purge() etc.
-	"""
-	assert self.canonical is None, "Cannot remove statement from canonnical"+`self`
+        """Removes a statement The formula must be open.
+        
+        This implementation is alas slow, as removal of items from tha hash is slow.
+        The above statement is false. Removing items from a hash is easily over five times
+        faster than removing them from a list.
+        Also, truth mainainance is not done.  You can't undeclare things equal.
+        This is really a low-level method, used within add() and for cleaning up the store
+        to save space in purge() etc.
+        """
+        assert self.canonical is None, "Cannot remove statement from canonnical"+`self`
         self.store.size = self.store.size-1
-	if diag.chatty_flag > 97:  progress("removing %s" % (s))
-	context, pred, subj, obj = s.quad
+        if diag.chatty_flag > 97:  progress("removing %s" % (s))
+        context, pred, subj, obj = s.quad
         self.statements.remove(s)
         self._index[(None, None, obj)].remove(s)
         self._index[(None, subj, None)].remove(s)
@@ -508,7 +508,7 @@ class IndexedFormula(Formula):
         self._index[(pred, subj, None)].remove(s)
         self._index[(pred, subj, obj)].remove(s)
         #raise RuntimeError("The triple is %s: %s %s %s"%(context, pred, subj, obj))
-	return
+        return
 
     def newCanonicalize(F):  ## Horrible name!
         if self._hashval is not None:
@@ -529,21 +529,21 @@ class IndexedFormula(Formula):
         """If this formula already exists, return the master version.
         If not, record this one and return it.
         Call this when the formula is in its final form, with all its
-	statements.  Make sure no one else has a copy of the pointer to the
-	smushed one.  In canonical form,
-	 - the statments are ordered
-	 - the lists are all internalized as lists
-	 
-	Store dependency: Uses store._formulaeOfLength
+        statements.  Make sure no one else has a copy of the pointer to the
+        smushed one.  In canonical form,
+         - the statments are ordered
+         - the lists are all internalized as lists
+         
+        Store dependency: Uses store._formulaeOfLength
         """
         if diag.chatty_flag > 70:
             progress('I got here')
-	store = F.store
-	if F.canonical != None:
+        store = F.store
+        if F.canonical != None:
             if diag.chatty_flag > 70:
                 progress("End formula -- @@ already canonical:"+`F`)
             return F.canonical
-	if F.stayOpen:
+        if F.stayOpen:
             if diag.chatty_flag > 70:
                 progress("Canonicalizion ignored: @@ Knowledge base mode:"+`F`)
             return F
@@ -569,58 +569,59 @@ class IndexedFormula(Formula):
         if diag.chatty_flag > 70:
             progress('I got here, possibles = ', possibles)
         fl.sort()
-	fe = F.existentials()
-	#fe.sort(Term.compareAnyTerm)
-	fu = F.universals ()
-	#fu.sort(Term.compareAnyTerm)
+        fe = F.existentials()
+        #fe.sort(Term.compareAnyTerm)
+        fu = F.universals ()
+        #fu.sort(Term.compareAnyTerm)
 
         for G in possibles:
-	
-#	    progress("Just checking.\n",
-#		    "\n", "_"*80, "\n", F.debugString(),
-#		    "\n", "_"*80, "\n", G.debugString(),
-#		    )
-	    gl = G.statements
-	    gkey = len(gl), len(G.universals()), len(G.existentials())
+        
+#           progress("Just checking.\n",
+#                   "\n", "_"*80, "\n", F.debugString(),
+#                   "\n", "_"*80, "\n", G.debugString(),
+#                   )
+            gl = G.statements
+            gkey = len(gl), len(G.universals()), len(G.existentials())
             if gkey != l: raise RuntimeError("@@Key of %s is %s instead of %s"
-		%(G, `gkey`, `l`))
+                %(G, `gkey`, `l`))
 
-	    gl.sort()
+            gl.sort()
             for se, oe, in  ((fe, G.existentials()),
-			     (fu, G.universals())):
+                             (fu, G.universals())):
                 if se != oe:
                     break
             
             for i in range(l[0]):
                 for p in PRED, SUBJ, OBJ:
                     if (fl[i][p] is not gl[i][p]):
-#			progress("""Mismatch on part %i on statement %i.
-#	    Becaue  %s  is not   %s"""
-#			% (p, i, `fl[i][p].uriref()`, `gl[i][p].uriref()`),
-#				)
-#			for  x in (fl[i][p], gl[i][p]):
-#			    progress("Class %s, id=%i" %(x.__class__, id(x)))
+#                       progress("""Mismatch on part %i on statement %i.
+#           Becaue  %s  is not   %s"""
+#                       % (p, i, `fl[i][p].uriref()`, `gl[i][p].uriref()`),
+#                               )
+#                       for  x in (fl[i][p], gl[i][p]):
+#                           progress("Class %s, id=%i" %(x.__class__, id(x)))
 #
-#			if Formula.unify(F,G):
-#			    progress("""Unifies but did not match on part %i on statement %i.
-#			    Because  %s  is not   %s"""
-#					% (p, i, `fl[i][p].uriref()`, `gl[i][p].uriref()`),
-#				    "\n", "_"*80, "\n", F.debugString(),
-#				    "\n", "_"*80, "\n", G.debugString()
-#				    )
-#			    raise RuntimeError("foundOne")
+#                       if Formula.unify(F,G):
+#                           progress("""Unifies but did not match on part %i on statement %i.
+#                           Because  %s  is not   %s"""
+#                                       % (p, i, `fl[i][p].uriref()`, `gl[i][p].uriref()`),
+#                                   "\n", "_"*80, "\n", F.debugString(),
+#                                   "\n", "_"*80, "\n", G.debugString()
+#                                   )
+#                           raise RuntimeError("foundOne")
 
                         break # mismatch
                 else: #match one statement
                     continue
                 break
             else: #match
-#		if not Formula.unify(F,G):
-#		    raise RuntimeError("Look the same but don't unify")
-		if tracking: smushedFormula(F,G)
+#               if not Formula.unify(F,G):
+#                   raise RuntimeError("Look the same but don't unify")
+                if tracking: smushedFormula(F,G)
                 if diag.chatty_flag > 70: progress(
-		    "** End Formula: Smushed new formula %s giving old %s" % (F, G))
-		del(F)  # Make sure it ain't used again
+                    "** End Formula: Smushed new formula %s giving old %s" % (F, G))
+                F.canonical = G
+                del(F)  # Make sure it ain't used again
                 return G
 
 
@@ -639,49 +640,49 @@ class IndexedFormula(Formula):
 
 
     def reopen(self):
-	"""Make a formula which was once closed oopen for input again.
-	
-	NOT Recommended.  Dangers: this formula will be, because of interning,
-	the same objet as a formula used elsewhere which happens to have the same content.
-	You mess with this one, you mess with that one.
-	Much better to keep teh formula open until you don't needed it open any more.
-	The trouble is, the parsers close it at the moment automatically. To be fixed."""
+        """Make a formula which was once closed oopen for input again.
+        
+        NOT Recommended.  Dangers: this formula will be, because of interning,
+        the same objet as a formula used elsewhere which happens to have the same content.
+        You mess with this one, you mess with that one.
+        Much better to keep teh formula open until you don't needed it open any more.
+        The trouble is, the parsers close it at the moment automatically. To be fixed."""
         return self.store.reopen(self)
 
     def setClosureMode(self, x):
-	self._closureMode = x
+        self._closureMode = x
 
     def checkClosure(self, subj, pred, obj):
-	"""Check the closure of the formula given new contents
-	
-	The s p o flags cause llyn to follow those parts of the new statement.
-	i asks it to follow owl:imports
-	r ask it to follow doc:rules
-	"""
-	firstCall = (self._closureAgenda == [])
-	if "s" in self._closureMode: self.checkClosureOfSymbol(subj)
-	if "p" in self._closureMode: self.checkClosureOfSymbol(pred)
-	if ("o" in self._closureMode or
-	    "t" in self._closureMode and pred is self.store.type):
-	    self.checkClosureOfSymbol(obj)
-	if (("r" in self._closureMode and
-	      pred is self.store.docRules) or
-	    ("i" in self._closureMode and
-	      pred is self.store.imports)):   # check subject? @@@  semantics?
-	    self.checkClosureDocument(obj)
-	if firstCall:
-	    while self._closureAgenda != []:
-		x = self._closureAgenda.pop()
-		self._closureAlready.append(x)
-		x.dereference("m" + self._closureMode, self)
+        """Check the closure of the formula given new contents
+        
+        The s p o flags cause llyn to follow those parts of the new statement.
+        i asks it to follow owl:imports
+        r ask it to follow doc:rules
+        """
+        firstCall = (self._closureAgenda == [])
+        if "s" in self._closureMode: self.checkClosureOfSymbol(subj)
+        if "p" in self._closureMode: self.checkClosureOfSymbol(pred)
+        if ("o" in self._closureMode or
+            "t" in self._closureMode and pred is self.store.type):
+            self.checkClosureOfSymbol(obj)
+        if (("r" in self._closureMode and
+              pred is self.store.docRules) or
+            ("i" in self._closureMode and
+              pred is self.store.imports)):   # check subject? @@@  semantics?
+            self.checkClosureDocument(obj)
+        if firstCall:
+            while self._closureAgenda != []:
+                x = self._closureAgenda.pop()
+                self._closureAlready.append(x)
+                x.dereference("m" + self._closureMode, self)
     
     def checkClosureOfSymbol(self, y):
-	if not isinstance(y, Fragment): return
-	return self.checkClosureDocument(y.resource)
+        if not isinstance(y, Fragment): return
+        return self.checkClosureDocument(y.resource)
 
     def checkClosureDocument(self, x):
-	if x != None and x not in self._closureAlready and x not in self._closureAgenda:
-	    self._closureAgenda.append(x)
+        if x != None and x not in self._closureAlready and x not in self._closureAgenda:
+            self._closureAgenda.append(x)
 
 
     def outputStrings(self, channel=None, relation=None):
@@ -707,65 +708,65 @@ class IndexedFormula(Formula):
 
 
     def debugString(self, already=[]):
-	"""A simple dump of a formula in debug form.
-	
-	This formula is dumped, using ids for nested formula.
-	Then, each nested formula mentioned is dumped."""
-	red = ""
-	if self._redirections != {}: red = " redirections:" + `self._redirections`
-	str = `self`+ red + unicode(id(self)) + " is {"
-	for vv, ss in ((self.universals().copy(), "@forAll"),(self.existentials().copy(), "@forSome")):
-	    if vv != Set():
-		str = str + " " + ss + " " + `vv.pop()`
-		for v in vv:
-		    str = str + ", " + `v`
-		str = str + "."
-	todo = []
-	for s in self.statements:
-	    subj, pred, obj = s.spo()
-	    str = str + "\n%28s  %20s %20s ." % (`subj`, `pred`, `obj`)
-	    for p in PRED, SUBJ, OBJ:
-		if (isinstance(s[p], CompoundTerm)
-		    and s[p] not in already and s[p] not in todo and s[p] is not self):
-		    todo.append(s[p])
-	str = str+ "}.\n"
-	already = already + todo + [ self ]
-	for f in todo:
-	    str = str + "        " + f.debugString(already)
-	return str
+        """A simple dump of a formula in debug form.
+        
+        This formula is dumped, using ids for nested formula.
+        Then, each nested formula mentioned is dumped."""
+        red = ""
+        if self._redirections != {}: red = " redirections:" + `self._redirections`
+        str = `self`+ red + unicode(id(self)) + " is {"
+        for vv, ss in ((self.universals().copy(), "@forAll"),(self.existentials().copy(), "@forSome")):
+            if vv != Set():
+                str = str + " " + ss + " " + `vv.pop()`
+                for v in vv:
+                    str = str + ", " + `v`
+                str = str + "."
+        todo = []
+        for s in self.statements:
+            subj, pred, obj = s.spo()
+            str = str + "\n%28s  %20s %20s ." % (`subj`, `pred`, `obj`)
+            for p in PRED, SUBJ, OBJ:
+                if (isinstance(s[p], CompoundTerm)
+                    and s[p] not in already and s[p] not in todo and s[p] is not self):
+                    todo.append(s[p])
+        str = str+ "}.\n"
+        already = already + todo + [ self ]
+        for f in todo:
+            str = str + "        " + f.debugString(already)
+        return str
 
     def _noteNewList(self,  bnode, list, newBindings):
         """Note that we have a new list.
-	
-	Check whether this new list (given as bnode) causes other things to become lists.
-	Set up redirection so the list is used from now on instead of the bnode.	
-	Internal function.
+        
+        Check whether this new list (given as bnode) causes other things to become lists.
+        Set up redirection so the list is used from now on instead of the bnode.        
+        Internal function.
 
-	This function is extraordinarily slow, .08 seconds per call on reify/reify3.n3"""
+        This function is extraordinarily slow, .08 seconds per call on reify/reify3.n3"""
         if diag.chatty_flag > 80: progress("New list was %s, now %s = %s"%(`bnode`, `list`, `list.value()`))
-	if isinstance(bnode, List): return  ##@@@@@ why is this necessary? weid.
-	newBindings[bnode] = list
+        if isinstance(bnode, List): return  ##@@@@@ why is this necessary? weid.
+        newBindings[bnode] = list
         if diag.chatty_flag > 80: progress("...New list newBindings %s"%(`newBindings`))
-	self._existentialVariables.discard(bnode)
+        self._existentialVariables.discard(bnode)
         possibles = self.statementsMatching(pred=self.store.rest, obj=bnode)  # What has this as rest?
         for s in possibles[:]:
             L2 = s[SUBJ]
             ff = self.statementsMatching(pred=self.store.first, subj=L2)
             if ff != []:
                 first = ff[0][OBJ]
-		self.removeStatement(s) 
-		self.removeStatement(ff[0])
-		list2 = list.prepend(first)
-		self._noteNewList(L2, list2, newBindings)
-	possibleSets = self.statementsMatching(pred=self.store.owlOneOf, obj=bnode)
-	if possibleSets:
+                self.removeStatement(s) 
+                self.removeStatement(ff[0])
+                list2 = list.prepend(first)
+                self._noteNewList(L2, list2, newBindings)
+        possibleSets = self.statementsMatching(pred=self.store.owlOneOf, obj=bnode)
+        if possibleSets:
             new_set = self.store.newSet(list)
-	for s in possibleSets[:]:
+        for s in possibleSets[:]:
             s2 = s[SUBJ]
             if s2 in self._existentialVariables:
                 self.removeStatement(s)
                 self._noteNewSet(s2, new_set, newBindings)
-	return
+        return
 
     def _noteNewSet(self, bnode, set, newBindings):
         newBindings[bnode] = set
@@ -773,27 +774,27 @@ class IndexedFormula(Formula):
         self._existentialVariables.discard(bnode)
 
     def substituteEqualsInPlace(self, redirections, why=None):
-	"""Slow ... does not use indexes"""
-	bindings = redirections
-	while bindings != {}:
-	    self._redirections.update(bindings)
-	    newBindings = {}
-	    for s in self.statements[:]:  # take a copy!
-		changed = 0
-		quad = [self, s[PRED], s[SUBJ], s[OBJ]]
-		for p in PRED, SUBJ, OBJ:
-		    x = s[p]
-		    y = x.substituteEquals(bindings, newBindings)
-		    if y is not x:
-			if diag.chatty_flag>90: progress("Substituted %s -> %s in place" %(x, y))
-			changed = 1
-			quad[p] = y
-		if changed:
-		    self.removeStatement(s)
-		    self.add(subj=quad[SUBJ], pred=quad[PRED], obj=quad[OBJ], why=why)
-	    bindings = newBindings
-	    if diag.chatty_flag>70: progress("Substitions %s generated %s" %(bindings, newBindings))
-	return
+        """Slow ... does not use indexes"""
+        bindings = redirections
+        while bindings != {}:
+            self._redirections.update(bindings)
+            newBindings = {}
+            for s in self.statements[:]:  # take a copy!
+                changed = 0
+                quad = [self, s[PRED], s[SUBJ], s[OBJ]]
+                for p in PRED, SUBJ, OBJ:
+                    x = s[p]
+                    y = x.substituteEquals(bindings, newBindings)
+                    if y is not x:
+                        if diag.chatty_flag>90: progress("Substituted %s -> %s in place" %(x, y))
+                        changed = 1
+                        quad[p] = y
+                if changed:
+                    self.removeStatement(s)
+                    self.add(subj=quad[SUBJ], pred=quad[PRED], obj=quad[OBJ], why=why)
+            bindings = newBindings
+            if diag.chatty_flag>70: progress("Substitions %s generated %s" %(bindings, newBindings))
+        return
 
 ##    def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
     def unifySecondary(self, other, env1, env2, vars,
@@ -862,19 +863,19 @@ BI_SameAs = BI_EqualTo
 class BI_uri(LightBuiltIn, Function, ReverseFunction):
 
     def evalObj(self, subj, queue, bindings, proof, query):
-	type, value = subj.asPair()
-	if type == SYMBOL:
-	    return self.store.intern((LITERAL, value))
+        type, value = subj.asPair()
+        if type == SYMBOL:
+            return self.store.intern((LITERAL, value))
 
     def evaluateSubject(self, object):
-	"""Return the object which has this string as its URI
-	
+        """Return the object which has this string as its URI
+        
         #@@hm... check string for URI syntax?
         # or at least for non-uri chars, such as space?
-	Note that relative URIs can be OK as the whole process
-	has a base, which may be irrelevant. Eg see roadmap-test in retest.sh
-	"""
-	store = self.store
+        Note that relative URIs can be OK as the whole process
+        has a base, which may be irrelevant. Eg see roadmap-test in retest.sh
+        """
+        store = self.store
         if ':' not in object:
             progress("Warning: taking log:uri of non-abs: %s" % object)
             return None
@@ -903,8 +904,8 @@ class BI_rawUri(BI_uri):
     identifiers for anonymous nodes and formuale etc."""
      
     def evalObj(self, subj, queue, bindings, proof, query):
-	type, value = subj.asPair()
-	return self.store.intern((LITERAL, value))
+        type, value = subj.asPair()
+        return self.store.intern((LITERAL, value))
 
 
 class BI_rawType(LightBuiltIn, Function):
@@ -915,7 +916,7 @@ class BI_rawType(LightBuiltIn, Function):
     """
 
     def evalObj(self, subj,  queue, bindings, proof, query):
-	store = self.store
+        store = self.store
         if isinstance(subj, Literal): y = store.Literal
         elif isinstance(subj, Formula): y = store.Formula
         elif isinstance(subj, List): y = store.List
@@ -975,7 +976,7 @@ class BI_notIncludesWithBuiltins(HeavyBuiltIn):
         store = subj.store
         if isinstance(subj, Formula) and isinstance(obj, Formula):
             return not testIncludes(subj, obj,  bindings=bindings,
-		    interpretBuiltins=1) # No (relevant) variables
+                    interpretBuiltins=1) # No (relevant) variables
         return 0   # Can't say it *doesn't* include it if it ain't a formula
 
 
@@ -991,13 +992,13 @@ class BI_semantics(HeavyBuiltIn, Function):
         F = store.any((store._experience, store.semantics, doc, None))
         if F != None:
             if diag.chatty_flag > 10:
-		progress("Already read and parsed "+`doc`+" to "+ `F`)
+                progress("Already read and parsed "+`doc`+" to "+ `F`)
             return F
 
         if diag.chatty_flag > 10: progress("Reading and parsing " + doc.uriref())
         inputURI = doc.uriref()
-#	if diag.tracking: flags="B"   # @@@@@@@@@@@ Yuk
-#	else: flags=""
+#       if diag.tracking: flags="B"   # @@@@@@@@@@@ Yuk
+#       else: flags=""
         F = self.store.load(inputURI, why=becauseSubexpression)
         if diag.chatty_flag>10: progress("    semantics: %s" % (F))
         return F.canonicalize()
@@ -1021,17 +1022,17 @@ class BI_semanticsWithImportsClosure(HeavyBuiltIn, Function):
         if diag.chatty_flag > 10: progress("Reading and parsing with closure " + doc.uriref())
         inputURI = doc.uriref()
   
-  	F = store.newFormula()
-  	F.setClosureMode("i")
-  	F = store.load(uri=inputURI, openFormula=F)
+        F = store.newFormula()
+        F.setClosureMode("i")
+        F = store.load(uri=inputURI, openFormula=F)
           
         if diag.chatty_flag>10: progress("Reading and parsing with closure done.    semantics: %s" % (F))
-#  	if diag.tracking:
+#       if diag.tracking:
 #            proof.append(F.collector)
         F = F.close()
         store.storeQuad((store._experience, store.semanticsWithImportsClosure, doc, F))
         return F
-	
+        
 import httplib    
 class BI_semanticsOrError(BI_semantics):
     """ Either get and parse to semantics or return an error message on any error """
@@ -1045,7 +1046,7 @@ class BI_semanticsOrError(BI_semantics):
         try:
             return BI_semantics.evalObj(self, subj, queue, bindings, proof, query)
         except (IOError, SyntaxError, DocumentAccessError,
-		xml.sax._exceptions.SAXParseException, httplib.BadStatusLine):
+                xml.sax._exceptions.SAXParseException, httplib.BadStatusLine):
             message = sys.exc_info()[1].__str__()
             result = store.intern((LITERAL, message))
             if diag.chatty_flag > 0: progress(`store.semanticsOrError`+": Error trying to access <" + `subj` + ">: "+ message) 
@@ -1100,9 +1101,9 @@ class BI_content(HeavyBuiltIn, Function):
 
 class BI_xmlTree(HeavyBuiltIn, Function):
     def evalObj(self, subj, queue, bindings, proof, query):
-	x= BI_content.evalObj(self, subj, queue, bindings, proof, query)
-	dom = XMLtoDOM(x.value())
-	return subj.store.intern((XMLLITERAL, dom))
+        x= BI_content.evalObj(self, subj, queue, bindings, proof, query)
+        dom = XMLtoDOM(x.value())
+        return subj.store.intern((XMLLITERAL, dom))
 
 class BI_parsedAsN3(HeavyBuiltIn, Function):
     def evalObj(self, subj, queue, bindings, proof, query):
@@ -1118,8 +1119,8 @@ class BI_parsedAsN3(HeavyBuiltIn, Function):
             p.feed(subj.string.encode('utf-8')) #@@ catch parse errors
             F = p.endDoc()
             F = F.close()
-	    store._experience.add(subj=subj, pred=store.parsedAsN3, obj=F)
-	    return F
+            store._experience.add(subj=subj, pred=store.parsedAsN3, obj=F)
+            return F
 
 class BI_conclusion(HeavyBuiltIn, Function):
     """ Deductive Closure
@@ -1130,28 +1131,28 @@ class BI_conclusion(HeavyBuiltIn, Function):
     def evalObj(self, subj, queue, bindings, proof, query):
         store = subj.store
         if isinstance(subj, Formula):
-	    assert subj.canonical != None
+            assert subj.canonical != None
             F = self.store.any((store._experience, store.cufi, subj, None))  # Cached value?
             if F != None:
-		if diag.chatty_flag > 10: progress("Bultin: " + `subj`+ " cached log:conclusion " + `F`)
-		return F
+                if diag.chatty_flag > 10: progress("Bultin: " + `subj`+ " cached log:conclusion " + `F`)
+                return F
 
             F = self.store.newFormula()
             newTopLevelFormula(F)
-	    if diag.tracking:
+            if diag.tracking:
                 reason = Premise("Assumption of builtin", (subj, self))
-#		reason = BecauseMerge(F, subj)
-#		F.collector = reason
-#		proof.append(reason)
-	    else: reason = None
+#               reason = BecauseMerge(F, subj)
+#               F.collector = reason
+#               proof.append(reason)
+            else: reason = None
             if diag.chatty_flag > 10: progress("Bultin: " + `subj`+ " log:conclusion " + `F`)
             self.store.copyFormula(subj, F, why=reason) # leave open
             think(F)
-	    F = F.close()
-	    assert subj.canonical != None
-	    
+            F = F.close()
+            assert subj.canonical != None
+            
             self.store.storeQuad((store._experience, store.cufi, subj, F),
-		    why=BecauseOfExperience("conclusion"))  # Cache for later
+                    why=BecauseOfExperience("conclusion"))  # Cache for later
             return F
 
 class BI_supports(HeavyBuiltIn):
@@ -1203,37 +1204,37 @@ class BI_universalVariableName(RDFBuiltIn): #, MultipleFunction):
     Can be used as a test, or returns a sequence of values."""
 
     def eval(self, subj, obj, queue, bindings, proof, query):
-	if not isinstance(subj, Formula): return None
-	s = str(obj)
-	if diag.chatty_flag > 180:
+        if not isinstance(subj, Formula): return None
+        s = str(obj)
+        if diag.chatty_flag > 180:
             progress(`subj.universals()`)
-	return obj in subj.universals()
-	for v in subj.universals():
-	    if v.uriref() == s: return 1
-	return 0
+        return obj in subj.universals()
+        for v in subj.universals():
+            if v.uriref() == s: return 1
+        return 0
 
     def evalObj(self,subj, queue, bindings, proof, query):
-	if not isinstance(subj, Formula): return None
-	return [subj.newLiteral(x.uriref()) for x in subj.universals()]
+        if not isinstance(subj, Formula): return None
+        return [subj.newLiteral(x.uriref()) for x in subj.universals()]
 
 class BI_existentialVariableName(RDFBuiltIn): #, MultipleFunction):
     """Is the object the name of a existential variable in the subject?
     Can be used as a test, or returns a sequence of values.
     Currently gives BNode names too.  Maybe we make sep function for that?"""
     def eval(self, subj, obj, queue, bindings, proof, query):
-	if not isinstance(subj, Formula): return None
-	s = str(obj)
-	if obj not in subj.existentials() and diag.chatty_flag > 25:
+        if not isinstance(subj, Formula): return None
+        s = str(obj)
+        if obj not in subj.existentials() and diag.chatty_flag > 25:
             progress('Failed, which is odd. Subj="%s", Obj="%s"' % (subj.debugString(), obj.debugString()))
-	return obj in subj.existentials()
-	for v in subj.existentials():
-	    if v.uriref() == s: return 1
-	return 0
+        return obj in subj.existentials()
+        for v in subj.existentials():
+            if v.uriref() == s: return 1
+        return 0
 
     def evalObj(self,subj, queue, bindings, proof, query):
-	if not isinstance(subj, Formula): return None
-	rea = None
-	return [subj.newLiteral(x.uriref()) for x in subj.existentials()]
+        if not isinstance(subj, Formula): return None
+        rea = None
+        return [subj.newLiteral(x.uriref()) for x in subj.existentials()]
 
 
 class BI_enforceUniqueBinding(RDFBuiltIn):
@@ -1241,9 +1242,9 @@ class BI_enforceUniqueBinding(RDFBuiltIn):
 
     """
     def eval(self, subj, obj, queue, bindings, proof, query):
-	if not isinstance(subj, Formula): return None
-	s = str(obj)
-	if subj not in query.backwardMappings:
+        if not isinstance(subj, Formula): return None
+        s = str(obj)
+        if subj not in query.backwardMappings:
             query.backwardMappings[subj] = s
             return True
         return query.backwardMappings[subj] == s
@@ -1253,22 +1254,22 @@ class BI_conjunction(LightBuiltIn, Function):      # Light? well, I suppose so.
     just the union of the sets of statements
     modulo non-duplication of course."""
     def evalObj(self, subj, queue, bindings, proof, query):
-	subj_py = subj.value()
+        subj_py = subj.value()
         if diag.chatty_flag > 50:
             progress("Conjunction input:"+`subj_py`)
             for x in subj_py:
                 progress("    conjunction input formula %s has %i statements" 
-						% (x, x.size()))
+                                                % (x, x.size()))
         F = self.store.newFormula()
-	if diag.tracking:
+        if diag.tracking:
             reason = Because("I said so #4")
-	    #reason = BecauseMerge(F, subj_py)
-	else: reason = None
+            #reason = BecauseMerge(F, subj_py)
+        else: reason = None
         for x in subj_py:
             if not isinstance(x, Formula): return None # Can't
-	    if (x.canonical == None): # Not closed! !!
-	        F.canonical != None
-		progress("Conjunction input NOT CLOSED:"+`x`) #@@@
+            if (x.canonical == None): # Not closed! !!
+                F.canonical != None
+                progress("Conjunction input NOT CLOSED:"+`x`) #@@@
             self.store.copyFormula(x, F, why=reason)   #  No, that is 
             if diag.chatty_flag > 74:
                 progress("    Formula %s now has %i" % (`F`,len(F.statements)))
@@ -1368,20 +1369,20 @@ class RDFStore(RDFSink) :
         self.clear()
         self.argv = argv     # List of command line arguments for N3 scripts
 
-	run = uripath.join(uripath.base(), ".RUN/") + `time.time()`  # Reserrved URI @@
+        run = uripath.join(uripath.base(), ".RUN/") + `time.time()`  # Reserrved URI @@
 
         if metaURI != None: meta = metaURI
-	else: meta = run + "meta#formula"
-	self.reset(meta)
+        else: meta = run + "meta#formula"
+        self.reset(meta)
 
 
         # Constants, as interned:
         
         self.forSome = self.symbol(forSomeSym)
-	self.integer = self.symbol(INTEGER_DATATYPE)
-	self.float  = self.symbol(FLOAT_DATATYPE)
-	self.boolean = self.symbol(BOOL_DATATYPE)
-	self.decimal = self.symbol(DECIMAL_DATATYPE)
+        self.integer = self.symbol(INTEGER_DATATYPE)
+        self.float  = self.symbol(FLOAT_DATATYPE)
+        self.boolean = self.symbol(BOOL_DATATYPE)
+        self.decimal = self.symbol(DECIMAL_DATATYPE)
         self.forAll  = self.symbol(forAllSym)
         self.implies = self.symbol(Logic_NS + "implies")
         self.insertion = self.symbol(Delta_NS + "insertion")
@@ -1408,9 +1409,9 @@ class RDFStore(RDFSink) :
         self.Other =    log.internFrag("Other", Fragment) # syntactic type possible value - a class
         self.filter  =  log.internFrag("filter", BI_filter) # equivilent of --filter
         self.vars    =  log.internFrag("vars", BI_vars) # variables of formula
-	
+        
         self.universalVariableName = log.internFrag(
-			    "universalVariableName", BI_universalVariableName)
+                            "universalVariableName", BI_universalVariableName)
         self.existentialVariableName = log.internFrag(
                             "existentialVariableName", BI_existentialVariableName)
         self.enforceUniqueBinding = log.internFrag(
@@ -1450,9 +1451,9 @@ class RDFStore(RDFSink) :
 
 # Remote service flag in metadata:
 
-	self.definitiveService = log.internFrag("definitiveService", Fragment)
-	self.definitiveDocument = log.internFrag("definitiveDocument", Fragment)
-	self.pointsAt = log.internFrag("pointsAt", Fragment)  # This was EricP's
+        self.definitiveService = log.internFrag("definitiveService", Fragment)
+        self.definitiveDocument = log.internFrag("definitiveDocument", Fragment)
+        self.pointsAt = log.internFrag("pointsAt", Fragment)  # This was EricP's
 
 # Constants:
 
@@ -1460,15 +1461,15 @@ class RDFStore(RDFSink) :
         self.Falsehood = self.symbol(Logic_NS + "Falsehood")
         self.type = self.symbol(RDF_type_URI)
         self.Chaff = self.symbol(Logic_NS + "Chaff")
-	self.docRules = self.symbol("http://www.w3.org/2000/10/swap/pim/doc#rules")
-	self.imports = self.symbol("http://www.w3.org/2002/07/owl#imports")
-	self.owlOneOf = self.symbol('http://www.w3.org/2002/07/owl#oneOf')
+        self.docRules = self.symbol("http://www.w3.org/2000/10/swap/pim/doc#rules")
+        self.imports = self.symbol("http://www.w3.org/2002/07/owl#imports")
+        self.owlOneOf = self.symbol('http://www.w3.org/2002/07/owl#oneOf')
 
 # List stuff - beware of namespace changes! :-(
 
-	from cwm_list import BI_first, BI_rest
+        from cwm_list import BI_first, BI_rest
         rdf = self.symbol(List_NS[:-1])
-	self.first = rdf.internFrag("first", BI_first)
+        self.first = rdf.internFrag("first", BI_first)
         self.rest = rdf.internFrag("rest", BI_rest)
         self.nil = self.intern(N3_nil, FragmentNil)
         self.Empty = self.intern(N3_Empty)
@@ -1482,10 +1483,10 @@ class RDFStore(RDFSink) :
         import cwm_trigo   # Trignometry
         import cwm_times    # time and date builtins
         import cwm_maths   # Mathematics, perl/string style
-	import cwm_list	   # List handling operations
-	import cwm_set     # Set operations
-	import cwm_sparql  # builtins for sparql
-	import cwm_xml     # XML Document Object Model operations
+        import cwm_list    # List handling operations
+        import cwm_set     # Set operations
+        import cwm_sparql  # builtins for sparql
+        import cwm_xml     # XML Document Object Model operations
         cwm_string.register(self)
         cwm_math.register(self)
         cwm_trigo.register(self)
@@ -1493,40 +1494,40 @@ class RDFStore(RDFSink) :
         cwm_os.register(self)
         cwm_time.register(self)
         cwm_times.register(self)
-	cwm_list.register(self)
-	cwm_set.register(self)
-	cwm_sparql.register(self)
-	cwm_xml.register(self)
-	import cwm_crypto  # Cryptography
-	if crypto:
+        cwm_list.register(self)
+        cwm_set.register(self)
+        cwm_sparql.register(self)
+        cwm_xml.register(self)
+        import cwm_crypto  # Cryptography
+        if crypto:
             if cwm_crypto.USE_PKC == 0:
                 raise RuntimeError("Try installing pycrypto, and make sure it is in you PYTHONPATH")
-	else:
+        else:
             cwm_crypto.USE_PKC = 0       
-	cwm_crypto.register(self)  # would like to anyway to catch bug if used but not available
+        cwm_crypto.register(self)  # would like to anyway to catch bug if used but not available
 
     def newLiteral(self, str, dt=None, lang=None):
-	"Interned version: generate new literal object as stored in this store"
-	key = (str, dt, lang)
-	result = self.resources.get(key, None)
-	if result != None: return result
-#	if dt is not None: dt = self.newSymbol(dt)
-	assert dt is None or isinstance(dt, LabelledNode)
-	if dt is not None and not isinstance(dt, Fragment):
+        "Interned version: generate new literal object as stored in this store"
+        key = (str, dt, lang)
+        result = self.resources.get(key, None)
+        if result != None: return result
+#       if dt is not None: dt = self.newSymbol(dt)
+        assert dt is None or isinstance(dt, LabelledNode)
+        if dt is not None and not isinstance(dt, Fragment):
             progress("Warning: <%s> is not a fragment!" % dt)
-	result = Literal(self, str, dt, lang)
-	self.resources[key] = result
-	return result
-	
+        result = Literal(self, str, dt, lang)
+        self.resources[key] = result
+        return result
+        
     def newXMLLiteral(self, dom):
         # We do NOT intern these so they will NOT have 'is' same as '=='
-	return XMLLiteral(self, dom)
-	
+        return XMLLiteral(self, dom)
+        
     def newFormula(self, uri=None):
-	return IndexedFormula(self, uri)
+        return IndexedFormula(self, uri)
 
     def newSymbol(self, uri):
-	return self.intern(RDFSink.newSymbol(self, uri))
+        return self.intern(RDFSink.newSymbol(self, uri))
 
     def newSet(self, iterator=[], context=None):
         new_set = N3Set(iterator)
@@ -1534,21 +1535,21 @@ class RDFStore(RDFSink) :
         return new_set
 
     def newBlankNode(self, context, uri=None, why=None):
-	"""Create or reuse, in the default store, a new unnamed node within the given
-	formula as context, and return it for future use"""
-	return context.newBlankNode(uri=uri)
+        """Create or reuse, in the default store, a new unnamed node within the given
+        formula as context, and return it for future use"""
+        return context.newBlankNode(uri=uri)
 
     def newExistential(self, context, uri=None, why=None):
-	"""Create or reuse, in the default store, a new named variable
-	existentially qualified within the given
-	formula as context, and return it for future use"""
-	return self.intern(RDFSink.newExistential(self, context, uri, why=why))
+        """Create or reuse, in the default store, a new named variable
+        existentially qualified within the given
+        formula as context, and return it for future use"""
+        return self.intern(RDFSink.newExistential(self, context, uri, why=why))
     
     def newUniversal(self, context, uri=None, why=None):
-	"""Create or reuse, in the default store, a named variable
-	universally qualified within the given
-	formula as context, and return it for future use"""
-	return self.intern(RDFSink.newUniversal(self, context, uri, why=why))
+        """Create or reuse, in the default store, a named variable
+        universally qualified within the given
+        formula as context, and return it for future use"""
+        return self.intern(RDFSink.newUniversal(self, context, uri, why=why))
 
 
 
@@ -1556,42 +1557,42 @@ class RDFStore(RDFSink) :
 
     def reset(self, metaURI): # Set the metaURI
         self._experience = self.newFormula(metaURI + "_formula")
-	assert isinstance(self._experience, Formula)
+        assert isinstance(self._experience, Formula)
 
     def load(store, uri=None, openFormula=None, asIfFrom=None, contentType=None, remember=1,
-		    flags="", referer=None, why=None, topLevel=False):
-	"""Get and parse document.  Guesses format if necessary.
+                    flags="", referer=None, why=None, topLevel=False):
+        """Get and parse document.  Guesses format if necessary.
 
-	uri:      if None, load from standard input.
-	remember: if 1, store as metadata the relationship between this URI and this formula.
-	
-	Returns:  top-level formula of the parsed document.
-	Raises:   IOError, SyntaxError, DocumentError
-	
-	This was and could be an independent function, as it is fairly independent
-	of the store. However, it is natural to call it as a method on the store.
-	And a proliferation of APIs confuses.
-	"""
-	baseURI = uripath.base()
-	givenOpenFormula = openFormula
-	if openFormula is None:
+        uri:      if None, load from standard input.
+        remember: if 1, store as metadata the relationship between this URI and this formula.
+        
+        Returns:  top-level formula of the parsed document.
+        Raises:   IOError, SyntaxError, DocumentError
+        
+        This was and could be an independent function, as it is fairly independent
+        of the store. However, it is natural to call it as a method on the store.
+        And a proliferation of APIs confuses.
+        """
+        baseURI = uripath.base()
+        givenOpenFormula = openFormula
+        if openFormula is None:
             openFormula = store.newFormula()
         if topLevel:
             newTopLevelFormula(openFormula)
-	if uri != None and openFormula==None and remember:
-	    addr = uripath.join(baseURI, uri) # Make abs from relative
-	    source = store.newSymbol(addr)
-	    F = store._experience.the(source, store.semantics)
-	    if F != None:
-		if diag.chatty_flag > 40: progress("Using cached semantics for",addr)
-		return F 
-	    F = webAccess.load(store, uri, openFormula, asIfFrom, contentType, flags, referer, why)  
-	    store._experience.add(
-		    store.intern((SYMBOL, addr)), store.semantics, F,
-		    why=BecauseOfExperience("load document"))
-	    return F
-	    
-	return webAccess.load(store, uri, openFormula, asIfFrom, contentType, flags, \
+        if uri != None and openFormula==None and remember:
+            addr = uripath.join(baseURI, uri) # Make abs from relative
+            source = store.newSymbol(addr)
+            F = store._experience.the(source, store.semantics)
+            if F != None:
+                if diag.chatty_flag > 40: progress("Using cached semantics for",addr)
+                return F 
+            F = webAccess.load(store, uri, openFormula, asIfFrom, contentType, flags, referer, why)  
+            store._experience.add(
+                    store.intern((SYMBOL, addr)), store.semantics, F,
+                    why=BecauseOfExperience("load document"))
+            return F
+            
+        return webAccess.load(store, uri, openFormula, asIfFrom, contentType, flags, \
                               referer=referer, why=why)  
 
     
@@ -1599,58 +1600,58 @@ class RDFStore(RDFSink) :
 
 
     def loadMany(self, uris, openFormula=None, referer=None):
-	"""Get, parse and merge serveral documents, given a list of URIs. 
-	
-	Guesses format if necessary.
-	Returns top-level formula which is the parse result.
-	Raises IOError, SyntaxError
-	"""
-	assert type(uris) is type([])
-	if openFormula is None: F = self.newFormula()
-	else:  F = openFormula
-	f = F.uriref()
-	for u in uris:
-	    F.reopen()  # should not be necessary
-	    self.load(u, openFormula=F, remember=0, referer=referer)
-	return F.close()
+        """Get, parse and merge serveral documents, given a list of URIs. 
+        
+        Guesses format if necessary.
+        Returns top-level formula which is the parse result.
+        Raises IOError, SyntaxError
+        """
+        assert type(uris) is type([])
+        if openFormula is None: F = self.newFormula()
+        else:  F = openFormula
+        f = F.uriref()
+        for u in uris:
+            F.reopen()  # should not be necessary
+            self.load(u, openFormula=F, remember=0, referer=referer)
+        return F.close()
 
     def genId(self):
-	"""Generate a new identifier
-	
-	This uses the inherited class, but also checks that we haven't for some pathalogical reason
-	ended up generating the same one as for example in another run of the same system. 
-	"""
-	while 1:
-	    uriRefString = RDFSink.genId(self)
+        """Generate a new identifier
+        
+        This uses the inherited class, but also checks that we haven't for some pathalogical reason
+        ended up generating the same one as for example in another run of the same system. 
+        """
+        while 1:
+            uriRefString = RDFSink.genId(self)
             hash = string.rfind(uriRefString, "#")
             if hash < 0 :     # This is a resource with no fragment
-		return uriRefString # ?!
-	    resid = uriRefString[:hash]
-	    r = self.resources.get(resid, None)
-	    if r is None: return uriRefString
-	    fragid = uriRefString[hash+1:]
-	    f = r.fragments.get(fragid, None)
-	    if f is None: return uriRefString
-	    if diag.chatty_flag > 70:
-		progress("llyn.genid Rejecting Id already used: "+uriRefString)
-		
+                return uriRefString # ?!
+            resid = uriRefString[:hash]
+            r = self.resources.get(resid, None)
+            if r is None: return uriRefString
+            fragid = uriRefString[hash+1:]
+            f = r.fragments.get(fragid, None)
+            if f is None: return uriRefString
+            if diag.chatty_flag > 70:
+                progress("llyn.genid Rejecting Id already used: "+uriRefString)
+                
     def checkNewId(self, urirefString):
-	"""Raise an exception if the id is not in fact new.
-	
-	This is useful because it is usfeul
-	to generate IDs with useful diagnostic ways but this lays them
-	open to possibly clashing in pathalogical cases."""
-	hash = string.rfind(urirefString, "#")
-	if hash < 0 :     # This is a resource with no fragment
-	    result = self.resources.get(urirefString, None)
-	    if result is None: return
-	else:
-	    r = self.resources.get(urirefString[:hash], None)
-	    if r is None: return
+        """Raise an exception if the id is not in fact new.
+        
+        This is useful because it is usfeul
+        to generate IDs with useful diagnostic ways but this lays them
+        open to possibly clashing in pathalogical cases."""
+        hash = string.rfind(urirefString, "#")
+        if hash < 0 :     # This is a resource with no fragment
+            result = self.resources.get(urirefString, None)
+            if result is None: return
+        else:
+            r = self.resources.get(urirefString[:hash], None)
+            if r is None: return
             f = r.fragments.get(urirefString[hash+1:], None)
             if f is None: return
-	raise ValueError("Ooops! Attempt to create new identifier hits on one already used: %s"%(urirefString))
-	return
+        raise ValueError("Ooops! Attempt to create new identifier hits on one already used: %s"%(urirefString))
+        return
 
 
     def internURI(self, str, why=None):
@@ -1658,12 +1659,12 @@ class RDFStore(RDFSink) :
         return self.intern((SYMBOL,str), why)
 
     def symbol(self, str, why=None):
-	"""Intern a URI for a symvol, returning a symbol object"""
+        """Intern a URI for a symvol, returning a symbol object"""
         return self.intern((SYMBOL,str), why)
 
     
     def _fromPython(self, x, queue=None):
-	"""Takem a python string, seq etc and represent as a llyn object"""
+        """Takem a python string, seq etc and represent as a llyn object"""
         if isinstance(x, tuple(types.StringTypes)):
             return self.newLiteral(x)
         elif type(x) is types.LongType or type(x) is types.IntType:
@@ -1672,18 +1673,18 @@ class RDFStore(RDFSink) :
             return self.newLiteral(str(x), self.decimal)
         elif isinstance(x, bool):
             return self.newLiteral(x and 'true' or 'false', self.boolean)
-	elif isinstance(x, xml.dom.minidom.Document):
-	    return self.newXMLLiteral(x)
+        elif isinstance(x, xml.dom.minidom.Document):
+            return self.newXMLLiteral(x)
         elif type(x) is types.FloatType:
-	    if `x`.lower() == "nan":  # We can get these form eg 2.math:asin
-		return None
+            if `x`.lower() == "nan":  # We can get these form eg 2.math:asin
+                return None
             return self.newLiteral(`x`, self.float)
         elif isinstance(x, Set) or isinstance(x, ImmutableSet):
             return self.newSet([self._fromPython(y) for y in x])
         elif isinstance(x, Term):
             return x
         elif hasattr(x,'__getitem__'): #type(x) == type([]):
-	    return self.nil.newList([self._fromPython(y) for y in x])
+            return self.nil.newList([self._fromPython(y) for y in x])
         return x
 
     def intern(self, what, dt=None, lang=None, why=None, ):
@@ -1695,41 +1696,41 @@ class RDFStore(RDFSink) :
         This is the way they are actually made.
         """
 
-	if isinstance(what, Term): return what # Already interned.  @@Could mask bugs
-	if type(what) is not types.TupleType:
-	    if isinstance(what, tuple(types.StringTypes)):
-		return self.newLiteral(what, dt, lang)
-#	    progress("llyn1450 @@@ interning non-string", `what`)
-	    if type(what) is types.LongType:
-		return self.newLiteral(str(what),  self.integer)
-	    if type(what) is types.IntType:
-		return self.newLiteral(`what`,  self.integer)
-	    if type(what) is types.FloatType:
-		return self.newLiteral(repr(what),  self.float)
-	    if isinstance(what,Decimal):
+        if isinstance(what, Term): return what # Already interned.  @@Could mask bugs
+        if type(what) is not types.TupleType:
+            if isinstance(what, tuple(types.StringTypes)):
+                return self.newLiteral(what, dt, lang)
+#           progress("llyn1450 @@@ interning non-string", `what`)
+            if type(what) is types.LongType:
+                return self.newLiteral(str(what),  self.integer)
+            if type(what) is types.IntType:
+                return self.newLiteral(`what`,  self.integer)
+            if type(what) is types.FloatType:
+                return self.newLiteral(repr(what),  self.float)
+            if isinstance(what,Decimal):
                 return self.newLiteral(str(what), self.decimal)
             if isinstance(what, bool):
                 return self.newLiteral(what and 'true' or 'false', self.boolean)
-	    if type(what) is types.ListType: #types.SequenceType:
-		return self.newList(what)
-	    raise RuntimeError("Eh?  can't intern "+`what`+" of type: "+`what.__class__`)
+            if type(what) is types.ListType: #types.SequenceType:
+                return self.newList(what)
+            raise RuntimeError("Eh?  can't intern "+`what`+" of type: "+`what.__class__`)
 
         typ, urirefString = what
 
         if typ == LITERAL:
-	    return self.newLiteral(urirefString, dt, lang)
+            return self.newLiteral(urirefString, dt, lang)
         if typ == LITERAL_DT:
-	    return self.newLiteral(urirefString[0], self.intern(SYMBOL, urirefString[1]))
+            return self.newLiteral(urirefString[0], self.intern(SYMBOL, urirefString[1]))
         if typ == LITERAL_LANG:
-	    return self.newLiteral(urirefString[0], None, urirefString[1])
+            return self.newLiteral(urirefString[0], None, urirefString[1])
         else:
-	    urirefString = canonical(urirefString)
+            urirefString = canonical(urirefString)
             assert ':' in urirefString, "must be absolute: %s" % urirefString
 
 
             hash = string.rfind(urirefString, "#")
             if hash < 0 :     # This is a resource with no fragment
-		assert typ == SYMBOL, "If URI <%s>has no hash, must be symbol" % urirefString
+                assert typ == SYMBOL, "If URI <%s>has no hash, must be symbol" % urirefString
                 result = self.resources.get(urirefString, None)
                 if result != None: return result
                 result = Symbol(urirefString, self)
@@ -1746,15 +1747,15 @@ class RDFStore(RDFSink) :
                     else:
                         result = r.internFrag(urirefString[hash+1:], Fragment)
                 elif typ == ANONYMOUS:
-		    result = r.internFrag(urirefString[hash+1:], AnonymousNode)
+                    result = r.internFrag(urirefString[hash+1:], AnonymousNode)
                 elif typ == FORMULA:
-		    raise RuntimeError("obsolete")
-		    result = r.internFrag(urirefString[hash+1:], IndexedFormula)
+                    raise RuntimeError("obsolete")
+                    result = r.internFrag(urirefString[hash+1:], IndexedFormula)
                 else: raise RuntimeError, "did not expect other type:"+`typ`
         return result
 
     def newList(self, value, context=None):
-	return self.nil.newList(value)
+        return self.nil.newList(value)
 
 #    def deleteFormula(self,F):
 #        if diag.chatty_flag > 30: progress("Deleting formula %s %ic" %
@@ -1770,8 +1771,8 @@ class RDFStore(RDFSink) :
             return F # was open
         if diag.chatty_flag > 00:
             progress("warning - reopen formula:"+`F`)
-	key = len(F.statements), len(F.universals()), len(F.existentials())
-	try:
+        key = len(F.statements), len(F.universals()), len(F.existentials())
+        try:
             self._formulaeOfLength[key].remove(F)  # Formulae of same length
         except (KeyError, ValueError):
             pass
@@ -1785,7 +1786,7 @@ class RDFStore(RDFSink) :
             return RDFSink.bind(self, prefix, uri) # Otherwise, do as usual.
     
     def makeStatement(self, tuple, why=None):
-	"""Add a quad to the store, each part of the quad being in pair form."""
+        """Add a quad to the store, each part of the quad being in pair form."""
         q = ( self.intern(tuple[CONTEXT]),
               self.intern(tuple[PRED]),
               self.intern(tuple[SUBJ]),
@@ -1801,10 +1802,10 @@ class RDFStore(RDFSink) :
 
     def any(self, q):
         """Query the store for the first match.
-	
-	Quad contains one None as wildcard. Returns first value
+        
+        Quad contains one None as wildcard. Returns first value
         matching in that position.
-	"""
+        """
         list = q[CONTEXT].statementsMatching(q[PRED], q[SUBJ], q[OBJ])
         if list == []: return None
         for p in ALL4:
@@ -1815,15 +1816,15 @@ class RDFStore(RDFSink) :
     def storeQuad(self, q, why=None):
         """ intern quads, in that dupliates are eliminated.
 
-	subject, predicate and object are terms - or atomic values to be interned.
+        subject, predicate and object are terms - or atomic values to be interned.
         Builds the indexes and does stuff for lists.
-	Deprocated: use Formula.add()         
+        Deprocated: use Formula.add()         
         """
         
         context, pred, subj, obj = q
-	assert isinstance(context, Formula), "Should be a Formula: "+`context`
-	return context.add(subj=subj, pred=pred, obj=obj, why=why)
-	
+        assert isinstance(context, Formula), "Should be a Formula: "+`context`
+        return context.add(subj=subj, pred=pred, obj=obj, why=why)
+        
 
     def startDoc(self):
         pass
@@ -1839,24 +1840,24 @@ class RDFStore(RDFSink) :
 # Output methods:
 #
     def dumpChronological(self, context, sink):
-	"Fast as possible. Only dumps data. No formulae or universals."
-	pp = Serializer(context, sink)
-	pp. dumpChronological()
-	del(pp)
-	
+        "Fast as possible. Only dumps data. No formulae or universals."
+        pp = Serializer(context, sink)
+        pp. dumpChronological()
+        del(pp)
+        
     def dumpBySubject(self, context, sink, sorting=1):
         """ Dump by order of subject except forSome's first for n3=a mode"""
-	pp = Serializer(context, sink, sorting=sorting)
-	pp. dumpBySubject()
-	del(pp)
-	
+        pp = Serializer(context, sink, sorting=sorting)
+        pp. dumpBySubject()
+        del(pp)
+        
 
     def dumpNested(self, context, sink, flags=""):
         """ Iterates over all URIs ever seen looking for statements
         """
-	pp = Serializer(context, sink, flags=flags)
-	pp. dumpNested()
-	del(pp)
+        pp = Serializer(context, sink, flags=flags)
+        pp. dumpNested()
+        del(pp)
 
 
 
@@ -1872,11 +1873,11 @@ class RDFStore(RDFSink) :
     def copyFormula(self, old, new, why=None):
         new.loadFormulaWithSubstitution(old, why=why)
         return
-##	bindings = {old: new}
-##	for v in old.universals():
-##	    new.declareUniversal(bindings.get(v,v))
-##	for v in old.existentials():
-##	    new.declareExistential(bindings.get(v,v))
+##      bindings = {old: new}
+##      for v in old.universals():
+##          new.declareUniversal(bindings.get(v,v))
+##      for v in old.existentials():
+##          new.declareExistential(bindings.get(v,v))
 ##        for s in old.statements[:] :   # Copy list!
 ##            q = s.quad
 ##            for p in CONTEXT, PRED, SUBJ, OBJ:
@@ -1895,40 +1896,40 @@ class RDFStore(RDFSink) :
         if boringClass is None:
             boringClass = self.Chaff
         for subj in context.subjects(pred=self.type, obj=boringClass):
-	    self.purgeSymbol(context, subj)
+            self.purgeSymbol(context, subj)
 
     def purgeSymbol(self, context, subj):
-	"""Purge all triples in which a symbol occurs.
-	"""
-	total = 0
-	for t in context.statementsMatching(subj=subj)[:]:
-		    context.removeStatement(t)    # SLOW
-		    total = total + 1
-	for t in context.statementsMatching(pred=subj)[:]:
-		    context.removeStatement(t)    # SLOW
-		    total = total + 1
-	for t in context.statementsMatching(obj=subj)[:]:
-		    context.removeStatement(t)    # SLOW
-		    total = total + 1
-	if diag.chatty_flag > 30:
-	    progress("Purged %i statements with %s" % (total,`subj`))
-	return total
+        """Purge all triples in which a symbol occurs.
+        """
+        total = 0
+        for t in context.statementsMatching(subj=subj)[:]:
+                    context.removeStatement(t)    # SLOW
+                    total = total + 1
+        for t in context.statementsMatching(pred=subj)[:]:
+                    context.removeStatement(t)    # SLOW
+                    total = total + 1
+        for t in context.statementsMatching(obj=subj)[:]:
+                    context.removeStatement(t)    # SLOW
+                    total = total + 1
+        if diag.chatty_flag > 30:
+            progress("Purged %i statements with %s" % (total,`subj`))
+        return total
 
 
 #    def removeStatement(self, s):
 #        "Remove statement from store"
-# 	return s[CONTEXT].removeStatement(s)
+#       return s[CONTEXT].removeStatement(s)
 
     def purgeExceptData(self, context):
-	"""Remove anything which can't be expressed in plain RDF"""
-	uu = context.universals()
-	for s in context.statements[:]:
-	    for p in PRED, SUBJ, OBJ:
-		x = s[p]
-		if x in uu or isinstance(x, Formula):
-		    context.removeStatement(s)
-		    break
-	context._universalVariables.clear()  # Cheat! @ use API
+        """Remove anything which can't be expressed in plain RDF"""
+        uu = context.universals()
+        for s in context.statements[:]:
+            for p in PRED, SUBJ, OBJ:
+                x = s[p]
+                if x in uu or isinstance(x, Formula):
+                    context.removeStatement(s)
+                    break
+        context._universalVariables.clear()  # Cheat! @ use API
 
 
 

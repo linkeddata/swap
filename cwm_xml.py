@@ -30,7 +30,7 @@ class BI_nodeType(LightBuiltIn, Function):
     """An integer representing the node type
     """
     def evaluateObject(self, subj_py):
-	return subj_py.nodeType
+        return subj_py.nodeType
 
 class BI_parentNode(LightBuiltIn, Function):
     """The parent of the current node, or None for the document node.
@@ -39,14 +39,14 @@ class BI_parentNode(LightBuiltIn, Function):
      in which case it will be the Document object. For Attr nodes, this is always None.
     """
     def evaluateObject(self, subj_py):
-	return subj_py.parentNode
+        return subj_py.parentNode
 
 class BI_attributes(LightBuiltIn, Function):
     """A NamedNodeMap of attribute objects. Only elements have
      actual values for this.
     """
     def evaluateObject(self, subj_py):
-	return subj_py.attributes
+        return subj_py.attributes
 
 class BI_previousSibling(LightBuiltIn, Function):
     """The node that immediately precedes this one with the same parent.
@@ -57,50 +57,50 @@ class BI_previousSibling(LightBuiltIn, Function):
      If this node is the first child of the parent, this property will not exist.
     """
     def evaluateObject(self, subj_py):
-	return subj_py.previousSibling
+        return subj_py.previousSibling
 
 class BI_nextSibling(LightBuiltIn, Function):
     """The node that immediately follows this one with the same parent. See also previousSibling.
     If this is the last child of the parent, this property will not exist.
     """
     def evaluateObject(self, subj_py):
-	return subj_py.nextSibling
+        return subj_py.nextSibling
 
 class BI_childNodes(LightBuiltIn, Function):
     """A list of nodes contained within this node.
     """
     def evaluateObject(self, subj_py):
-	return subj_py.childNodes
+        return subj_py.childNodes
 
 class BI_firstChild(LightBuiltIn, Function):
     """The first child of the node, if there are any.
     """
     def evaluateObject(self, subj_py):
-	return subj_py.firstChild
+        return subj_py.firstChild
 
 class BI_lastChild(LightBuiltIn, Function):
     """The last child of the node, if there are any.
     """
     def evaluateObject(self, subj_py):
-	return subj_py.lastChild
+        return subj_py.lastChild
 
 class BI_localName(LightBuiltIn, Function):
     """The part of the tagName following the colon if there is one, else the entire tagName
     """
     def evaluateObject(self, subj_py):
-	return subj_py.localName
+        return subj_py.localName
 
 class BI_prefix(LightBuiltIn, Function):
     """The part of the tagName preceding the colon if there is one, else the empty string
     """
     def evaluateObject(self, subj_py):
-	return subj_py.prefix
+        return subj_py.prefix
 
 class BI_namespaceURI(LightBuiltIn, Function):
     """The namespace associated with the element name.
     """
     def evaluateObject(self, subj_py):
-	return subj_py.namespaceURI
+        return subj_py.namespaceURI
 
 class BI_nodeName(LightBuiltIn, Function):
     """This has a different meaning for each node type; see the DOM 
@@ -110,7 +110,7 @@ class BI_nodeName(LightBuiltIn, Function):
      the name property for attributes.
     """
     def evaluateObject(self, subj_py):
-	return subj_py.nodeName
+        return subj_py.nodeName
 
 class BI_nodeValue(LightBuiltIn, Function):
     """This has a different meaning for each node type;
@@ -118,19 +118,19 @@ class BI_nodeValue(LightBuiltIn, Function):
      The situation is similar to that with nodeName
     """
     def evaluateObject(self, subj_py):
-	return subj_py.nodeValue
+        return subj_py.nodeValue
 
 class BI_hasAttributes(LightBuiltIn, Function):
     """True if the node has any attributes.
     """
     def evaluateObject(self, subj_py):
-	return subj_py.hasAttributes()
+        return subj_py.hasAttributes()
 
 class BI_hasChildNodes(LightBuiltIn, Function):
     """True if the node has any child nodes
     """
     def evaluateObject(self, subj_py):
-	return subj_py.hasChildNodes()
+        return subj_py.hasChildNodes()
 
 class BI_isSameNode(LightBuiltIn):
     """Returns true if other refers to the same node as this node.
@@ -138,7 +138,7 @@ class BI_isSameNode(LightBuiltIn):
      any sort of proxy architecture (because more than one object can refer to the same node).
     """
     def evaluate(self, subj_py, obj_py):
-	return subj_py.sSameNode(obj_py)
+        return subj_py.sSameNode(obj_py)
 
 
 class BI_xpath(LightBuiltIn, MultipleFunction):

@@ -18,10 +18,10 @@ class Usage(Exception):
     """python rdf2dot.py foo.rdf > foo.dot
     """
     def __init__(self, msg):
-	self._msg = msg
+        self._msg = msg
 
     def __str__(self):
-	return "%s\nUsage: %s" % (self._msg, self.__doc__)
+        return "%s\nUsage: %s" % (self._msg, self.__doc__)
 
 
 import sys, os
@@ -92,11 +92,11 @@ def eachGraph(text, store, it, props, cluster=''):
     text("%s N%d" % (cluster, abs(hash(it.uriref()))))
     text(" {\n")
     for p in props:
-	for o in store.each(subj = it, pred = p):
+        for o in store.each(subj = it, pred = p):
             text('%s="%s";\n' % (p.fragid, o)) # @@ quoting o
 
     for n in store.each(subj=it, pred=GV.hasNode):
-	eachNode(text, store, n, props) #@@hmm... node props = graph props?
+        eachNode(text, store, n, props) #@@hmm... node props = graph props?
 
     for sub in store.each(subj=it, pred=GV.subgraph):
         raise RuntimeError, "subgraph not yet implemented@@"
@@ -106,13 +106,13 @@ def eachNode(text, store, gnode, props):
     text('"%s" [' % gnode.uriref())
 
     for p in props:
-	for o in store.each(subj = gnode, pred = p):
+        for o in store.each(subj = gnode, pred = p):
             text('%s="%s",\n' % (p.fragid, o)) # @@ quoting o
     text("];\n")
 
     for p in store.each(pred=RDF.type, obj=GV.EdgeProperty):
-	for o in store.each(subj=gnode, pred = p):
-	    text('"%s" -> "%s"' % (gnode.uriref(), o.uriref()))
+        for o in store.each(subj=gnode, pred = p):
+            text('"%s" -> "%s"' % (gnode.uriref(), o.uriref()))
 
             text(" [\n")
             for attr in EdgeAttributes:
@@ -129,9 +129,9 @@ def progress(*args):
 
 def main(argv):
     try:
-	ref = argv[1]
+        ref = argv[1]
     except:
-	raise Usage("missing input file/URI")
+        raise Usage("missing input file/URI")
 
     f = load(ref)
 
@@ -140,6 +140,6 @@ def main(argv):
 
 if __name__ == '__main__':
     try:
-	main(sys.argv)
+        main(sys.argv)
     except Usage, e:
-	print >>sys.stderr, e
+        print >>sys.stderr, e

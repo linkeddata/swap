@@ -339,13 +339,13 @@ def askdb(db, dbaddr, sink, fields, tables, keys, joins, condextra):
 
 
     while 1:
-	row=c.fetchone()
-	if not row:
+        row=c.fetchone()
+        if not row:
             break
 
         things = [None] * len(tables)
 
-	col = 0
+        col = 0
         for ti in range(len(tables)):
             if fields[ti]:
                 tbl = tables[ti]
@@ -787,7 +787,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.20  2006-05-18 19:53:54  connolly
+# Revision 1.21  2007-06-26 02:36:16  syosi
+# fix tabs
+#
+# Revision 1.20  2006/05/18 19:53:54  connolly
 # note development has moved
 #
 # Revision 1.19  2003/03/02 06:07:46  connolly

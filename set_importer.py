@@ -3,13 +3,24 @@ A hack to import sets and frozensets, internally if possible
 
 """
 
+realcmp = cmp
 try:
     my_sorted = sorted
 except NameError:
     def my_sorted(iterable, cmp=None, key=None, reverse=False):
-       m = list(iterable)
-       m.sort(cmp)
-       return m
+        m = list(iterable)
+        if cmp is None and (key is not None or reverse is not None):
+           cmp = realcmp
+        if key is not None:
+            cmp2 = cmp
+            def cmp(x,y):
+                return cmp2(key(x), key(y))
+        if reverse is not None:
+            cmp3 = cmp
+            def cmp(x,y):
+                return cmp3(y,x)
+        m.sort(cmp)
+        return m
 
 sorted = my_sorted
 

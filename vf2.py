@@ -509,7 +509,7 @@ def isFormula(x):
 def isSet(x):
     return isinstance(x, (set, frozenset))
 
-def hardMatches(s, n1, n2, newBindings=BindingTree(), boring=True)):
+def hardMatches(s, n1, n2, newBindings=BindingTree(), boring=True):
     if not easyMatches(s, n1, n2, newBindings, boring):
         return False
     if isFormula(n1) and isFormula(n2):
@@ -596,25 +596,25 @@ those methods implemented as O(1) operations.
         graph = []
         WD = "file://" + os.getcwd() + "/"
 
-	if verbose: stderr.write("Loading data from %s\n" % name)
+        if verbose: stderr.write("Loading data from %s\n" % name)
 
-	uri = uripath.join(WD, name)
-	inStream = urllib.urlopen(uri)
-	for line in inStream:
-	    if line == "" : break	    
-#	    if verbose: stderr.write("%s\n" % line)
-	    m = comment.match(line)
-	    if m != None: continue
-	    m = statement.match(line)
-	    if m == None:
-		stderr.write("Syntax error: "+line+"\n")
-		if verbose:
+        uri = uripath.join(WD, name)
+        inStream = urllib.urlopen(uri)
+        for line in inStream:
+            if line == "" : break           
+#           if verbose: stderr.write("%s\n" % line)
+            m = comment.match(line)
+            if m != None: continue
+            m = statement.match(line)
+            if m == None:
+                stderr.write("Syntax error: "+line+"\n")
+                if verbose:
                     [stderr.write('%2x ' % ord(c)) for c in line]
                     stderr.write('\n')
-		exit(-1)
-	    triple = m.group(1), m.group(2), m.group(3)
-	    if verbose: stderr.write( "Triple: %s  %s  %s.\n" % (triple[0], triple[1], triple[2]))
-	    yield triple
+                exit(-1)
+            triple = m.group(1), m.group(2), m.group(3)
+            if verbose: stderr.write( "Triple: %s  %s  %s.\n" % (triple[0], triple[1], triple[2]))
+            yield triple
 
 def unifyFormulae(f1, f2):
     """unify two graphs

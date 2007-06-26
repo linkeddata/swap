@@ -130,10 +130,10 @@ def json_formula(fmla, vars={}):
             vn = v.uri
             if '#' in vn: vn = vn.split('#')[1]
         except AttributeError:
-	    try:
-		vn = "g%d" % v.serial
-	    except AttributeError:
-		vn = v.fragid
+            try:
+                vn = "g%d" % v.serial
+            except AttributeError:
+                vn = v.fragid
 
 
         i = 0
@@ -301,44 +301,44 @@ def ikl_sentence(f, subscripts):
     """
 
     if 'op' in f:
-	head = f['op']
+        head = f['op']
 
-	if head == 'holds':
-	    yield '('
-	    yield head
-	    yield ' '
-	    for t in f['parts']:
-		for s in ikl_term(t, subscripts):
-		    yield s
-	    yield ')\n'
-	    return
+        if head == 'holds':
+            yield '('
+            yield head
+            yield ' '
+            for t in f['parts']:
+                for s in ikl_term(t, subscripts):
+                    yield s
+            yield ')\n'
+            return
 
-	# connectives
-	elif head in ('and', 'implies'):
-	    if head == 'implies': head = 'if'
-	    yield '('
-	    yield head
-	    yield ' '
-	    rest = f['parts']
+        # connectives
+        elif head in ('and', 'implies'):
+            if head == 'implies': head = 'if'
+            yield '('
+            yield head
+            yield ' '
+            rest = f['parts']
 
     # quantifiers
     elif 'Q' in f:
-	head = f['Q']
-	yield '('
-	yield head
-	yield ' ('
-	for v in f['Vars']:
-	    yield v
-	    yield ' '
-	yield ')\n'
-	rest = [f['f']]
+        head = f['Q']
+        yield '('
+        yield head
+        yield ' ('
+        for v in f['Vars']:
+            yield v
+            yield ' '
+        yield ')\n'
+        rest = [f['f']]
 
     else:
-	raise RuntimeError, 'unimplemented IKL sentence head: %s' % head
+        raise RuntimeError, 'unimplemented IKL sentence head: %s' % head
 
     for expr in rest:
-	for s in ikl_sentence(expr, subscripts):
-	    yield s
+        for s in ikl_sentence(expr, subscripts):
+            yield s
     yield ')\n'
 
     
@@ -352,25 +352,25 @@ def ikl_term(f, subscripts):
         yield "%d " % f
 
     elif type(f) is type(1.1):
-	#@@refactor ikl_data()?
+        #@@refactor ikl_data()?
         yield "(xsd:double %f)" % f #@@long uri form
 
     # string
     elif type(f) in (type(''), type(u'')):
         if "\\" in f or '"' in f:
             raise RuntimeError, 'string quoting TODO: %s' % f
-	if subscripts:
-	    yield "('%s' " % f # string
-	    sub = subscripts[0]
-	    s2 = subscripts[1:]
-	    if s2:
-		for s in ikl_term(sub, s2):
-		    yield s
-		yield ") "
-	    else:
-		yield "%s) " % sub
-	else:
-	    yield "'%s' " % f
+        if subscripts:
+            yield "('%s' " % f # string
+            sub = subscripts[0]
+            s2 = subscripts[1:]
+            if s2:
+                for s in ikl_term(sub, s2):
+                    yield s
+                yield ") "
+            else:
+                yield "%s) " % sub
+        else:
+            yield "'%s' " % f
 
     # list
     elif type(f) is type([]):
@@ -396,21 +396,21 @@ def ikl_term(f, subscripts):
                 if '"' in head:
                     raise RuntimeError, \
                           "quoting \" in IKL names not yet implemented"
-		if subscripts:
-		    for s in ikl_term(head, subscripts):
-			yield s
-		else:
-		    yield '"%s" ' % head
+                if subscripts:
+                    for s in ikl_term(head, subscripts):
+                        yield s
+                else:
+                    yield '"%s" ' % head
                 rest = f.get('parts', [])
                 assert(len(rest) == 0)
-		return
+                return
 
             # function symbols
             # data
             elif head == 'data':
                 ty, lit = f['args']
                 yield '("%s" \'%s\') ' % (ty['op'], lit) #@@ escaping
-		return
+                return
 
             elif head == 'n3-set':
                 yield '(n3-set '
@@ -418,11 +418,11 @@ def ikl_term(f, subscripts):
 
             elif head == 'n3-quote':
                 yield '(that '
-		for s in ikl_sentence(f['parts'][0],
-				      ['c%d' % id(f)] + subscripts):
-		    yield s
-		yield ') '
-		return
+                for s in ikl_sentence(f['parts'][0],
+                                      ['c%d' % id(f)] + subscripts):
+                    yield s
+                yield ') '
+                return
 
         else:
             raise RuntimeError, 'unimplemented IKL term head: %s' % head

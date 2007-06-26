@@ -302,28 +302,28 @@ class SqlDBAlgae(RdfDBAlgae):
                 self._buildTableDesc(tableName_[0], meta, pointsAt)
 
         # SQL query components:
-        self.tableAliases = [];		# FROM foo AS bar
-        self.selects = [];		# SELECT foo
-        self.labels = [];		#            AS bar
-        self.selectPunct = [];		# pretty printing
-        self.wheres = [];		# WHERE foo=bar
+        self.tableAliases = [];         # FROM foo AS bar
+        self.selects = [];              # SELECT foo
+        self.labels = [];               #            AS bar
+        self.selectPunct = [];          # pretty printing
+        self.wheres = [];               # WHERE foo=bar
 
         # Variable, table, column state:
-        self.whereStack = [];		# Save WHERES for paren exprs.
-        self.symbolBindings = {};	# Table alias for a given symbol.
-        self.tableBindings = {};	# Next number for a table alias.
-        self.objectBindings = [];	# External key targs in SELECT.
-        self.scalarBindings = [];	# Literals in SELECT.
-        self.fieldBindings = {};	# Which alias.fields are in SELECT.
-        self.disjunctionBindings = {};	# Which OR clauses are in SELECT.
-        self.scalarReferences = {};	# Where scalar variables were used.
+        self.whereStack = [];           # Save WHERES for paren exprs.
+        self.symbolBindings = {};       # Table alias for a given symbol.
+        self.tableBindings = {};        # Next number for a table alias.
+        self.objectBindings = [];       # External key targs in SELECT.
+        self.scalarBindings = [];       # Literals in SELECT.
+        self.fieldBindings = {};        # Which alias.fields are in SELECT.
+        self.disjunctionBindings = {};  # Which OR clauses are in SELECT.
+        self.scalarReferences = {};     # Where scalar variables were used.
 
         # Keeping track of [under]constraints
-        self.constraintReaches = {};	# Transitive closure of all aliases
-					# constrained with other aliases.
-        self.constraintHints = {};	# Aliases constrained in some but not
-					# all paths of an OR. Handy diagnostic.
-        self.overConstraints = {};	# Redundent constraints between aliases.
+        self.constraintReaches = {};    # Transitive closure of all aliases
+                                        # constrained with other aliases.
+        self.constraintHints = {};      # Aliases constrained in some but not
+                                        # all paths of an OR. Handy diagnostic.
+        self.overConstraints = {};      # Redundent constraints between aliases.
 
     def _buildTableDesc(self, table, meta, pointsAt):
         self.structure[table] = { '-fields' : {},
@@ -358,7 +358,7 @@ class SqlDBAlgae(RdfDBAlgae):
         #    print implQuerySets[iC]
 
         for term in implQuerySets.getList():
-	    self._walkQuery(term, row, flags)
+            self._walkQuery(term, row, flags)
 
         if (self.checkUnderConstraintsBeforeQuery):
             self._checkForUnderConstraint()
@@ -386,9 +386,9 @@ class SqlDBAlgae(RdfDBAlgae):
     def _walkQuery (self, term, row, flags):
         if (0):
             # Handle ORs here.
-	    tmpWheres = self.wheres
+            tmpWheres = self.wheres
         else:
-            c = term	# @@@ NUKE c
+            c = term    # @@@ NUKE c
             p = c[PRED]
             s = c[SUBJ]
             o = c[OBJ]
@@ -510,7 +510,7 @@ class SqlDBAlgae(RdfDBAlgae):
 
     def _lookupPredicate(self, predicate):
         m = self.predicateRE.match(predicate)
-	assert m, "Oops    predicate=%s doesn't match %s" %(predicate, self.predicateRE.pattern)
+        assert m, "Oops    predicate=%s doesn't match %s" %(predicate, self.predicateRE.pattern)
         table = m.group("table")
         field = m.group("field")
         try:
@@ -540,15 +540,15 @@ class SqlDBAlgae(RdfDBAlgae):
         except AttributeError, e:
             pk = pk
         for field in pk:
-	    lvalue = CGI_escape(field)
+            lvalue = CGI_escape(field)
             rvalue = CGI_escape(str(values[field]))
-	    segments.append(lvalue+"."+rvalue)
+            segments.append(lvalue+"."+rvalue)
         value = string.join(segments, '.')
         return self.baseUri.uri+table+'#'+value; # '.'+value+"#item"
 
     def _decomposeUniques(self, uri, tableAs, table):
         m = self.predicateRE.match(uri)
-	assert m, "Oops    term=%s doesn't match %s" %(uri, self.predicateRE.pattern)
+        assert m, "Oops    term=%s doesn't match %s" %(uri, self.predicateRE.pattern)
         table1 = m.group("table")
         field = m.group("field")
         if (table1 != table):
@@ -568,7 +568,7 @@ class SqlDBAlgae(RdfDBAlgae):
         # assemble the query
         segments = [];
         segments.append('SELECT ')
-	tmp = []
+        tmp = []
         for i in range(len(self.selects)):
             # Note, the " AS self.labels[$i]" is just gravy -- nice in logs.
             if (i == len(self.selects) - 1):
@@ -580,7 +580,7 @@ class SqlDBAlgae(RdfDBAlgae):
             else:
                 asStr = " AS "+self.labels[i]
             tmp.append(self.selects[i]+asStr+comma+self.selectPunct[i])
-	segments.append(string.join(tmp, ''))
+        segments.append(string.join(tmp, ''))
 
         segments.append("\nFROM ")
         tmp = []
@@ -592,13 +592,13 @@ class SqlDBAlgae(RdfDBAlgae):
             segments.append("\nWHERE ")
             segments.append(whereStr)
         #    if ($flags->{-uniqueResults}) {
-        #	push (@$segments, ' GROUP BY ');
-        #	push (@$segments, CORE::join (',', @{self.labels}));
+        #       push (@$segments, ' GROUP BY ');
+        #       push (@$segments, CORE::join (',', @{self.labels}));
         #    } elsif (my $groupBy = $flags->{-groupBy}) {
-        #	if (@$groupBy) {
-        #	    push (@$segments, ' GROUP BY ');
-        #	    push (@$segments, CORE::join (',', @$groupBy));
-        #	}
+        #       if (@$groupBy) {
+        #           push (@$segments, ' GROUP BY ');
+        #           push (@$segments, CORE::join (',', @$groupBy));
+        #       }
         #    }
         return string.join(segments, '')
 
@@ -646,10 +646,10 @@ class SqlDBAlgae(RdfDBAlgae):
             foo = self._bindingsToStatements(implQuerySets, rowBindings, uniqueStatementsCheat)
             for statement in foo:
                 nextStatements[-1].append(statement)
-	    #for s in nextStatements->[-1]
+            #for s in nextStatements->[-1]
             #    $self->{-db}->applyClosureRules($self->{-db}{INTERFACES_implToAPI}, 
-            #				    $s->getPredicate, $s->getSubject, $s->getObject, 
-            #				    $s->getReifiedAs, $s->getReifiedIn, $s->getAttribution);
+            #                               $s->getPredicate, $s->getSubject, $s->getObject, 
+            #                               $s->getReifiedAs, $s->getReifiedIn, $s->getAttribution);
         return nextResults, nextStatements
 
     def _bindingsToStatements (self, term, rowBindings, uniqueStatementsCheat):
@@ -664,8 +664,8 @@ class SqlDBAlgae(RdfDBAlgae):
                             foo = self._bindingsToStatements(subTerm, rowBindings, uniqueStatementsCheat)
                             for statement in foo:
                                 ret.append(statement)
-		    else:
-		        foo = self._bindingsToStatements(subTerm, rowBindings, uniqueStatementsCheat)
+                    else:
+                        foo = self._bindingsToStatements(subTerm, rowBindings, uniqueStatementsCheat)
                         for statement in foo:
                             ret.append(statement)
             return ret
@@ -708,7 +708,7 @@ class SqlDBAlgae(RdfDBAlgae):
         try:
             self.overConstraints[frm][to].append(path)
         except KeyError, e:
-            #	print "  [c]-[g]->[p]\n"
+            #   print "  [c]-[g]->[p]\n"
             try:
                 for toTo in self.constraintReaches[to].keys():
                     toPath = [self.constraintReaches[to][toTo], path]
@@ -742,7 +742,7 @@ class SqlDBAlgae(RdfDBAlgae):
                     self.constraintHints[fromTable]
                 except KeyError, e:
                     self.constraintHints[fromTable] = {}
-                    #			    push (@{self.constraintHints[fromTable]}, "for fromTable")
+                    #                       push (@{self.constraintHints[fromTable]}, "for fromTable")
             for toTable in self.constraintReaches[fromTable].keys():
                 try:
                     reachesSoFar[fromTable][toTable]
@@ -757,7 +757,7 @@ class SqlDBAlgae(RdfDBAlgae):
                     self.constraintHints[fromTable]
                 except KeyError, e:
                     self.constraintHints[fromTable] = {}
-                    #			    push (@{self.constraintHints[fromTable]}, "for fromTable")
+                    #                       push (@{self.constraintHints[fromTable]}, "for fromTable")
             for toTable in reachesSoFar[fromTable].keys():
                 try:
                     self.constraintReaches[fromTable][toTable]

@@ -242,7 +242,7 @@ class Checker(FormulaCache):
         level = level + 1
 
         if t is reason.Parsing:
-            return self.checkParsing(r, f, policy)
+            return self.checkParsing(r, f, policy, level)
         elif t is reason.Inference:
             g = checkGMP(r, f, self, policy, level)
         elif t is reason.Conjunction:
@@ -280,7 +280,7 @@ class Checker(FormulaCache):
         return g
 
 
-    def checkParsing(self, r, f, policy):
+    def checkParsing(self, r, f, policy, level):
         proof = self._pf
         res = proof.any(subj=r, pred=reason.source)
         if res == None: raise InvalidProof("No source given to parse", level=level)
@@ -608,7 +608,7 @@ def getSymbol(proof, x):
                     y.string, level=0, thresh=20)
         return proof.newSymbol(y.string)
     raise RuntimeError("Can't de-reify %s" % x)
-	
+        
 
 def getTerm(proof, x):
     "De-reify a term: get the informatuion about it from the proof"
@@ -712,9 +712,9 @@ def checkBuiltin(r, f, checker, policy, level=0):
     if isinstance(obj, Formula): o = obj.n3String()
     if isinstance(result, Formula): r = obj.n3String()
 
-##	if n3Entails(result, obj) and not n3Entails(obj, result): a = 0
-##	elif n3Entails(obj, result) and not n3Entails(result, obj): a = 1
-##	else: a = 2
+##      if n3Entails(result, obj) and not n3Entails(obj, result): a = 0
+##      elif n3Entails(obj, result) and not n3Entails(result, obj): a = 1
+##      else: a = 2
     raise LogicalFallacy("Built-in fact does not give correct results: "
                          "predicate: %s "
                          "subject: %s "
@@ -803,10 +803,10 @@ def main(argv):
 
     try:
         opts, args = getopt.getopt(argv[1:], "hv:c:p:B:a",
-	    [ "help", "verbose=", "chatty=", "parsing=", "nameBlankNodes",
+            [ "help", "verbose=", "chatty=", "parsing=", "nameBlankNodes",
               "allPremises", "profile", "report"])
     except getopt.GetoptError:
-	sys.stderr.write("check.py:  Command line syntax error.\n\n")
+        sys.stderr.write("check.py:  Command line syntax error.\n\n")
         usage()
         sys.exit(2)
     output = None
@@ -816,18 +816,18 @@ def main(argv):
             usage()
             sys.exit()
         if o in ("-v", "--verbose"):
-	    chatty = int(a)
+            chatty = int(a)
         if o in ("-p", "--verboseParsing"):
-	    debugLevelForParsing = int(a)
+            debugLevelForParsing = int(a)
         if o in ("-c", "--chatty"):
-	    debugLevelForInference = int(a)
+            debugLevelForInference = int(a)
         if o in ("-B", "--nameBlankNodes"):
-	    nameBlankNodes = 1
+            nameBlankNodes = 1
         if o in ("-a", "--allPremises"):
-	    policy = AllPremises()
-	if o in ("--profile"):
+            policy = AllPremises()
+        if o in ("--profile"):
             pass
-	if o in ("--report"):
+        if o in ("--report"):
             report = True
     if nameBlankNodes: flags="B"
     else: flags=""
@@ -836,8 +836,8 @@ def main(argv):
         fyi("Reading proof from "+args[0])
         proof = topLevelLoad(args[0], flags=flags)
     else:
-	fyi("Reading proof from standard input.", thresh=5)
-	proof = topLevelLoad(flags=flags)
+        fyi("Reading proof from standard input.", thresh=5)
+        proof = topLevelLoad(flags=flags)
 
     # setVerbosity(60)
     fyi("Length of proof formula: "+`len(proof)`, thresh=5)
@@ -849,9 +849,9 @@ def main(argv):
 
         proved = c.result(c.conjecture()[1], policy=policy)
 
-	fyi("Proof looks OK.   %i Steps" % proofSteps, thresh=5)
-	setVerbosity(0)
-	print proved.n3String().encode('utf-8')
+        fyi("Proof looks OK.   %i Steps" % proofSteps, thresh=5)
+        setVerbosity(0)
+        print proved.n3String().encode('utf-8')
 
     except InvalidProof, e:
         progress("Proof invalid:", e)
@@ -865,7 +865,7 @@ def fyi(str, level=0, thresh=50):
     if chatty >= thresh:
         if isinstance(str, (lambda : True).__class__):
             str = str()
-	progress(" "*(level*4),  str)
+        progress(" "*(level*4),  str)
     return None
 
 

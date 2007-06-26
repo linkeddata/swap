@@ -47,9 +47,9 @@ class BI_atan2(LightBuiltIn, Function):
         
         Return the arc tangent (measured in radians) of y/x.
         Unlike atan(y/x), the signs of both x and y are considered.
-	-- Karl""" 
+        -- Karl""" 
         if len(numeric(subj_py)) == 2:
-        	return atan2(numeric(subj_py[0]),numeric(subj_py[1]))
+                return atan2(numeric(subj_py[0]),numeric(subj_py[1]))
         else: return None
 
 class BI_cos(LightBuiltIn, Function, ReverseFunction):
@@ -60,7 +60,7 @@ class BI_cos(LightBuiltIn, Function, ReverseFunction):
         return cos(numeric(subj_py))
 
     def evaluateSubject(self, x):
-	try:
+        try:
             return acos(numeric(x))
         except ValueError:
             return None

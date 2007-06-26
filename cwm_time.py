@@ -20,7 +20,7 @@ converted to integer second times without a valid timezone offset, such as "Z".
 import string
 import re
 import notation3    # N3 parsers and generators, and RDF generator
-import isodate	    # Local, by mnot. implements <http://www.w3.org/TR/NOTE-datetime>
+import isodate      # Local, by mnot. implements <http://www.w3.org/TR/NOTE-datetime>
 
 
 from diag import progress, verbosity
@@ -42,16 +42,16 @@ class BI_inSeconds(LightBuiltIn, Function, ReverseFunction):
         try:
             return float(isodate.parse(subj_py))
         except ValueError, AssertionError:
-	    progress("Warning: Failed to parse time string '%s'" % subj_py)
+            progress("Warning: Failed to parse time string '%s'" % subj_py)
             return None
 
     def evaluateSubject(self, obj_py):
-	return isodate.fullString(int(obj_py))
+        return isodate.fullString(int(obj_py))
 
 class BI_equalTo(LightBuiltIn):
     def evaluate(self, subj_py, obj_py):
-	try:
-	    return isodate.parse(subj_py) == isodate.parse(obj_py)
+        try:
+            return isodate.parse(subj_py) == isodate.parse(obj_py)
         except ValueError:
             return None
 
@@ -107,20 +107,20 @@ class BI_second(LightBuiltIn, Function):
 tzone = re.compile(r'.*([-+]\d{1,2}:\d{2,2})')
 class BI_timeZone(LightBuiltIn, Function):
     def evaluateObject(self,  subj_py):
-	m = tzone.match(subj_py)
-	if m == None: return None
-	return m.group(1)
+        m = tzone.match(subj_py)
+        if m == None: return None
+        return m.group(1)
 
 class BI_dayOfWeek(LightBuiltIn, Function):
     def evaluateObject(self,  subj_py):
-	weekdayZero = time.gmtime(0)[6]
-	return (weekdayZero + int(isodate.parse(subj_py)/DAY)) % 7 
+        weekdayZero = time.gmtime(0)[6]
+        return (weekdayZero + int(isodate.parse(subj_py)/DAY)) % 7 
 
 
 #
 class BI_format(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
-	"""params are ISO time string, format string. Returns reformatted. Ignores TZ@@"""
+        """params are ISO time string, format string. Returns reformatted. Ignores TZ@@"""
         if verbosity() > 80: progress("strTime:format input:"+`subj_py`)
         str, format = subj_py
         try:
@@ -131,11 +131,11 @@ class BI_format(LightBuiltIn, Function):
 #
 class BI_gmTime(LightBuiltIn, Function):
     def evaluateObject(self,  subj_py):
-	"""Subject is  (empty string for standard formatting or) format string.
-	Returns formatted."""
+        """Subject is  (empty string for standard formatting or) format string.
+        Returns formatted."""
         if verbosity() > 80: progress("time:gmTime input:"+`subj_py`)
         format = subj_py
-	if format =="" : format="%Y-%m-%dT%H:%M:%SZ"
+        if format =="" : format="%Y-%m-%dT%H:%M:%SZ"
         try:
             return time.strftime(format, time.gmtime(time.time()))
         except:
@@ -143,12 +143,12 @@ class BI_gmTime(LightBuiltIn, Function):
 
 class BI_localTime(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
-	"""Subject is format string or empty string for std formatting.
-	Returns reformatted. @@@@ Ignores TZ"""
+        """Subject is format string or empty string for std formatting.
+        Returns reformatted. @@@@ Ignores TZ"""
         if verbosity() > 80: progress("time:localTime input:"+`subj_py`)
         format = subj_py
-	if format =="" : return   isodate.asString(time.time())
-	return   time.strftime(format, time.localtime(time.time()))
+        if format =="" : return   isodate.asString(time.time())
+        return   time.strftime(format, time.localtime(time.time()))
 
 
 
@@ -158,7 +158,7 @@ class BI_localTime(LightBuiltIn, Function):
 #
 class BI_formatSeconds(LightBuiltIn, Function):
     def evaluateObject(self,  subj_py):
-	"""params are epoch-seconds time string, format string. Returns reformatted"""
+        """params are epoch-seconds time string, format string. Returns reformatted"""
         if verbosity() > 80: progress("strTime:format input:"+`subj_py`)
         str, format = subj_py
         try:

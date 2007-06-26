@@ -49,9 +49,9 @@ class N3Metaparser(object):
    def __call__(self, start): 
       self.doProduction(start)
       while self.todo: 
-	first = self.todo.pop(0)
-	self.done.append(first)
-	self.doProduction(first)
+        first = self.todo.pop(0)
+        self.done.append(first)
+        self.doProduction(first)
 
    def progress(self, msg, err=False): 
       if err or self.verbose: 

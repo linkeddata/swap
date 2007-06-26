@@ -22,7 +22,7 @@ Open source W3C licence.
 """
 # Map from filenames to URIs
 map = { 'file:///devel/WWW/': 'http://www.w3.org/',
-	'file:///devel/dig/': 'http://dig.csail.mit.edu/'}
+        'file:///devel/dig/': 'http://dig.csail.mit.edu/'}
 service = 'http://pingthesemanticweb.com/rest/?url='
 
 import os, sys # http://pydoc.org/1.6/os.html
@@ -39,14 +39,14 @@ base = 'file://' + cwd  + "/"
 for arg in sys.argv[1:]:
     uri = join(base, arg)
     for local, web in map.items():
-	uri = uri.replace(local, web)
+        uri = uri.replace(local, web)
     if uri.endswith('.rdf'): uri = uri[:-4]
     if uri.endswith('.n3'): uri = uri[:-3]
     print "Ping: ",uri
     encoded = ""
     for ch in uri:
-	if ch in URI_unreserved: encoded += ch
-	else: encoded += "%%%2x" % ord(ch)
+        if ch in URI_unreserved: encoded += ch
+        else: encoded += "%%%2x" % ord(ch)
 #    print "  with ", service+encoded
     x = urlopen(service+encoded)
     buf = x.read()

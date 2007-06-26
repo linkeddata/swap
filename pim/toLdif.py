@@ -51,11 +51,11 @@ LDIF = Namespace(LDIF_NS)
 fields = [  # Examples in comments from zac.ldif
     'givenName', #: Zackery
     'sn',   #: Zephyr
-    'cn',	#: Zackery Zephyr
+    'cn',       #: Zackery Zephyr
     'mozillaNickname', #: testnick
     'mail', #: zac@example.com
     'mozillaSecondEmail',   #: zackery@example.org 
-    'nsAIMid',	#: zaco
+    'nsAIMid',  #: zaco
     'mozillaUseHtmlMail', #: false
 #    'modifytimestamp', #: 0Z   -- not a property of the person
     'telephoneNumber', #: +1 202 250 2525
@@ -97,21 +97,21 @@ def backslashEncode(val):
     text = text.replace('\n', "\\n")
     result = ""
     while text:
-	result = result +  '\n ' + text[:WRAP]
-	text = text[WRAP:]
+        result = result +  '\n ' + text[:WRAP]
+        text = text[WRAP:]
     return result[2:]  # chop zeroth fold
 
 
 def encodeLine(key, val):
     try:
-	text = val.encode('ascii')
+        text = val.encode('ascii')
     except UnicodeEncodeError:
-	text = base64.encodestring(val.encode('utf-8')) # Comes wrapped by \n
-	while text[-1:] == '\n': text = text[:-1]
-	text = text.replace('\n', '\n ')  # Proper folding
-	return "%s:: %s\n" %(key, text)
+        text = base64.encodestring(val.encode('utf-8')) # Comes wrapped by \n
+        while text[-1:] == '\n': text = text[:-1]
+        text = text.replace('\n', '\n ')  # Proper folding
+        return "%s:: %s\n" %(key, text)
     else:
-	return "%s: %s\n" %(key, backslashEncode(text))
+        return "%s: %s\n" %(key, backslashEncode(text))
 
 
 def extractLDIF(kb):
@@ -122,42 +122,42 @@ def extractLDIF(kb):
     wr("version: 1\n")  # Mandatory in sepc, not given by Tbird.
     emails = 0
     for st in sts:
-	person = st.subject()
-	name = st.object()
-	email = kb.any(person, LDIF.mail)  # s p o
-	if not email:
-	    progress ("No email for "+ name.value().encode('utf-8'))
-	    continue
-	assert email.uriref().startswith("mailto:")
-	emails += 1
-	emailad = email.uriref()[7:]
-	wr(encodeLine("dn", "cn=%s,mail=%s" %(name, emailad)))
-#	wr( "dn: cn=%s,mail=%s\n" %(name, emailad))
-	progress("  %s <%s>" % (name.value().encode('utf-8'), emailad)) 
-	wr( """objectclass: top
+        person = st.subject()
+        name = st.object()
+        email = kb.any(person, LDIF.mail)  # s p o
+        if not email:
+            progress ("No email for "+ name.value().encode('utf-8'))
+            continue
+        assert email.uriref().startswith("mailto:")
+        emails += 1
+        emailad = email.uriref()[7:]
+        wr(encodeLine("dn", "cn=%s,mail=%s" %(name, emailad)))
+#       wr( "dn: cn=%s,mail=%s\n" %(name, emailad))
+        progress("  %s <%s>" % (name.value().encode('utf-8'), emailad)) 
+        wr( """objectclass: top
 objectclass: person
 objectclass: organizationalPerson
 objectclass: inetOrgPerson
 objectclass: mozillaAbPersonAlpha
 """) #
-	for key in fields:
-	    pred = kb.newSymbol(LDIF_NS+key)
-	    obj = kb.any(person, pred)
-	    if obj:
-	        if isinstance(obj, Symbol):
-		    uri = obj.uriref()
-		    colon = uri.find(':')
-		    assert colon > 0
-		    if uri[:colon] in ['tel', 'mailto']:
-			val = uri[colon+1:]
-		    else:
-			progress("eh? URI not tel or mailto", uri)
-		else:
-		    val = obj.value()
-		wr(encodeLine(key, val))  # base64 if utf8
-	wr('\n') # Blank line netween records
-	progress('Total of %i emails' % emails)
-	    
+        for key in fields:
+            pred = kb.newSymbol(LDIF_NS+key)
+            obj = kb.any(person, pred)
+            if obj:
+                if isinstance(obj, Symbol):
+                    uri = obj.uriref()
+                    colon = uri.find(':')
+                    assert colon > 0
+                    if uri[:colon] in ['tel', 'mailto']:
+                        val = uri[colon+1:]
+                    else:
+                        progress("eh? URI not tel or mailto", uri)
+                else:
+                    val = obj.value()
+                wr(encodeLine(key, val))  # base64 if utf8
+        wr('\n') # Blank line netween records
+        progress('Total of %i emails' % emails)
+            
 #
 
 ######################

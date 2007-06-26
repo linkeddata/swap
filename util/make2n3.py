@@ -54,104 +54,104 @@ def convert(path):
 
     while 1:
         lines.append(i)
-	j = buf.find("\n", i)
-	if j <0: break
-	if buf[j-1:j] == "\\":
-	    buf = buf[:j-1] + " " + buf[j+1:]  # Chop out escaped newline
-	    continue
-	e = j
-	if e>i and buf[e-1]=='\r':
-	    e = e-1
+        j = buf.find("\n", i)
+        if j <0: break
+        if buf[j-1:j] == "\\":
+            buf = buf[:j-1] + " " + buf[j+1:]  # Chop out escaped newline
+            continue
+        e = j
+        if e>i and buf[e-1]=='\r':
+            e = e-1
         line = buf[i:e]
-	if verbose:  sys.stderr.write("# ... "+line+"\n")
-	last = 0
-	i = j+1
+        if verbose:  sys.stderr.write("# ... "+line+"\n")
+        last = 0
+        i = j+1
 
-	k = line.find("#") # Chop comments
-	if k >= 0:
-	    comment = line[k:]
-	    line = line[:k]
-	else:
-	    comment = ""
+        k = line.find("#") # Chop comments
+        if k >= 0:
+            comment = line[k:]
+            line = line[:k]
+        else:
+            comment = ""
 
-	here = 0
-	while 1:
-	    m = macron.match(line, here)
-	    if not m:
-		m = macro1.match(line, here)
-		if not m: break
-	    var = m.group(2)
-	    if len(var)==1 and var in "$@<>":  # move on
-		here = m.start(3)  # skip $$ and don't use the second $
-		continue
-	    res = dict.get(var, None)
-	    if res == None:
-		raise RuntimeError("No macro value for "+var+ (" around line %i:\n"%len(lines))+buf[lines[-2]:i])
-	    line =  m.group(1) + res + m.group(3) #1
+        here = 0
+        while 1:
+            m = macron.match(line, here)
+            if not m:
+                m = macro1.match(line, here)
+                if not m: break
+            var = m.group(2)
+            if len(var)==1 and var in "$@<>":  # move on
+                here = m.start(3)  # skip $$ and don't use the second $
+                continue
+            res = dict.get(var, None)
+            if res == None:
+                raise RuntimeError("No macro value for "+var+ (" around line %i:\n"%len(lines))+buf[lines[-2]:i])
+            line =  m.group(1) + res + m.group(3) #1
 #line[:here] +
-	if verbose:  sys.stderr.write("# >>> "+line+"\n")
-	m = include.match(line)
-	if m:
-	    path2 = m.group(1)  # @@@@@@@@@@@@ Relative addressing in nested makefiles: @@ won't work
-	    if verbose: sys.stderr.write("make2n3: including " + path2 + "\n")
-	    print "# start include", path2
-	    input2 = open(path2, "r")
-	    buf2 = input2.read()  # Read the file
-	    input2.close()
-	    buf = buf[:i] + buf2 + "# end include"+ path2 +"\n" + buf[i:]
-	    continue
+        if verbose:  sys.stderr.write("# >>> "+line+"\n")
+        m = include.match(line)
+        if m:
+            path2 = m.group(1)  # @@@@@@@@@@@@ Relative addressing in nested makefiles: @@ won't work
+            if verbose: sys.stderr.write("make2n3: including " + path2 + "\n")
+            print "# start include", path2
+            input2 = open(path2, "r")
+            buf2 = input2.read()  # Read the file
+            input2.close()
+            buf = buf[:i] + buf2 + "# end include"+ path2 +"\n" + buf[i:]
+            continue
 
-	m = recipe.search(line)
-	if m:
-	    rec = line[1:]
-	    if subj[0] == "<":  # If an file not a rule
-	        while 1:
-		    m = target.match(rec)
-            	    if not m: break
-		    rec = m.group(1) + subj[1:-1] + m.group(2)
-	    recipeList.append(rec)
-	    continue
+        m = recipe.search(line)
+        if m:
+            rec = line[1:]
+            if subj[0] == "<":  # If an file not a rule
+                while 1:
+                    m = target.match(rec)
+                    if not m: break
+                    rec = m.group(1) + subj[1:-1] + m.group(2)
+            recipeList.append(rec)
+            continue
 
 
-	# Not a recipe - if list, dump it now.,
-	if len(recipeList) > 0:
-	    print "%s make:recipeList (" % subj
-	    for r in recipeList:
-		print '    %s' % ss(r)
-	    print "    )."
-	    recipeList = []
-	    subj = None
+        # Not a recipe - if list, dump it now.,
+        if len(recipeList) > 0:
+            print "%s make:recipeList (" % subj
+            for r in recipeList:
+                print '    %s' % ss(r)
+            print "    )."
+            recipeList = []
+            subj = None
 
-	m = rule.match(line)
-	if m:
-	    subj = """[make:fromExt "%s"; make:toExt "%s"]""" %(
-			m.group(1), m.group(2))
-	    if comment != "": print comment
-	    continue
+        m = rule.match(line)
+        if m:
+            subj = """[make:fromExt "%s"; make:toExt "%s"]""" %(
+                        m.group(1), m.group(2))
+            if comment != "": print comment
+            continue
 
-	m = dependency.search(line)
-	if m:
-	    subj = "<"+m.group(1)+">"
-	    objl = filename.findall(m.group(2))
-	    if len(objl) > 0:
-	    	print "%s make:dependsOn <%s>" %(subj, objl[0]),
-	    	for obj in objl[1:]:
-		    print ", <%s>" % obj,
-	        print ".",
-	    print comment
-	    continue
+        m = dependency.search(line)
+        if m:
+            subj = "<"+m.group(1)+">"
+            objl = filename.findall(m.group(2))
+            if len(objl) > 0:
+                print "%s make:dependsOn <%s>" %(subj, objl[0]),
+                for obj in objl[1:]:
+                    print ", <%s>" % obj,
+                print ".",
+            print comment
+            continue
 
         m = macro.match(line)
-	if m:
-	    dict[m.group(1)]=m.group(2)
-#	    print "# macro %s = %s" %(m.group(1), m.group(2))  #cut
-	    continue
+        if m:
+            dict[m.group(1)]=m.group(2)
+#           print "# macro %s = %s" %(m.group(1), m.group(2))  #cut
+            continue
 
-	m = blank.match(line)
-	if m:
-	    print comment
-	    continue
-	print "#@@", line, comment
+        m = blank.match(line)
+        if m:
+            print comment
+            continue
+        print "#@@", line, comment
 
 def do(path):
     if verbose: sys.stderr.write("# make2n3: converting " + path + "\n")
@@ -168,7 +168,7 @@ files = []
 for arg in sys.argv[1:]:
     if arg[0:1] == "-":
         if arg == "-?" or arg == "--help":
-	    print """Convert Makfile format of make(1) to n3 format.
+            print """Convert Makfile format of make(1) to n3 format.
 
 Syntax:    make2n3  <file>
 
@@ -179,7 +179,7 @@ Syntax:    make2n3  <file>
     -v  verbose
 """
         elif arg == "-v": verbose = 1
-	else:
+        else:
             print """Bad option argument."""
             sys.exit(-1)
     else:

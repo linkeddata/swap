@@ -42,7 +42,7 @@ LITERAL_URI_prefix = "data:application/rdf+n3-literal;"
 from RDFSink import List_NS
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
 from RDFSink import FORMULA, LITERAL, LITERAL_LANG, LITERAL_DT, ANONYMOUS, \
-			    SYMBOL, RDF_type_URI
+                            SYMBOL, RDF_type_URI
 from RDFSink import Logic_NS
 
 from OrderedSequence import merge, intersection, minus
@@ -204,29 +204,29 @@ class Term(object):
         self.store = store
             
     def __repr__(self):
-	"""This method only used for debugging output - it can be ambiguous,
-	as it is is deliberately short to make debug printout readable.
+        """This method only used for debugging output - it can be ambiguous,
+        as it is is deliberately short to make debug printout readable.
 
         output as XML qnames [http://www.w3.org/TR/REC-xml-names/#NT-QName].
         This could be beefed up to guarantee unambiguity.
         """
         s = self.uriref()
         p = string.rfind(s, "#")
-	if p<0:  # No hash, use slash
-	    p=s.rfind("/", 0, len(s)-2) 
-	    # Allow "/" namespaces as a second best, not a trailing one
+        if p<0:  # No hash, use slash
+            p=s.rfind("/", 0, len(s)-2) 
+            # Allow "/" namespaces as a second best, not a trailing one
         if (p>=0 and s[p+1:].find(".") <0 ):
-	    # Can't use prefix if localname includes "."
+            # Can't use prefix if localname includes "."
             prefix = self.store.prefixes.get(s[:p+1], None) # @@ #CONVENTION
             if prefix != None : return (prefix + ":" + s[p+1:]).encode('unicode_escape')
-	if s.endswith("#_formula"):
-	    return "`"+s[-22:-9]+"`" # Hack - debug notation for formula
+        if s.endswith("#_formula"):
+            return "`"+s[-22:-9]+"`" # Hack - debug notation for formula
         if p >= 0: return s[p+1:].encode('unicode_escape')
         return s.encode('unicode_escape')
 
     def debugString(self, already=[]):
-	return `self`  # unless more eleborate in superclass
-	
+        return `self`  # unless more eleborate in superclass
+        
     def representation(self, base=None):
         """The string represnting this in N3 """
         return "<" + self.uriref(base) + ">"
@@ -236,49 +236,49 @@ class Term(object):
         return 0    # unless overridden
   
     def compareAnyTerm(self, other):
-	"""Compare two langauge items
-	    This is a cannoncial ordering in that is designed to allow
-	    the same graph always to be printed in the same order.
-	    This makes the regression tests possible.
-	    The literals are deemed smaller than symbols, which are smaller
-	    than formulae.  This puts the rules at the botom of a file where
-	    they tend to take a lot of space anyway.
-	    Formulae have to be compared as a function of their sorted contents.
-	    
-	    @@ Anonymous nodes have to, within a given Formula, be compared as
-	    a function of the sorted information about them in that context.
-	    This is not done yet
-	    """
-	if self is other: return 0
-	diff = cmp(self.classOrder(), other.classOrder())
-	if diff != 0: return diff
-	return self.compareTerm(other)
+        """Compare two langauge items
+            This is a cannoncial ordering in that is designed to allow
+            the same graph always to be printed in the same order.
+            This makes the regression tests possible.
+            The literals are deemed smaller than symbols, which are smaller
+            than formulae.  This puts the rules at the botom of a file where
+            they tend to take a lot of space anyway.
+            Formulae have to be compared as a function of their sorted contents.
+            
+            @@ Anonymous nodes have to, within a given Formula, be compared as
+            a function of the sorted information about them in that context.
+            This is not done yet
+            """
+        if self is other: return 0
+        diff = cmp(self.classOrder(), other.classOrder())
+        if diff != 0: return diff
+        return self.compareTerm(other)
     
 
     def asPair(self):
-	"""Representation in an earlier format, being phased out 2002/08
-	
-	The first part of the pair is a constant number represnting the type
-	see RDFSink.py.  the second is the value -- uri for symbols,
-	string for literals"""
+        """Representation in an earlier format, being phased out 2002/08
+        
+        The first part of the pair is a constant number represnting the type
+        see RDFSink.py.  the second is the value -- uri for symbols,
+        string for literals"""
         return (SYMBOL, self.uriref())
     
     def substitution(self, bindings, why=None, cannon=False):
-	"Return this or a version of me with subsitution made"
-	return bindings.get(self, self)
+        "Return this or a version of me with subsitution made"
+        return bindings.get(self, self)
 
     def substituteEquals(self, bindings, newRedirections):
-	"Return this or a version of me with substitution made"
-	return bindings.get(self, self)
+        "Return this or a version of me with substitution made"
+        return bindings.get(self, self)
 
     def occurringIn(self, vars):
-	if self in vars:
-	    return Set([self])
-	return Set()
+        if self in vars:
+            return Set([self])
+        return Set()
 
     def value(self):
-	"As a python value - by default, none exists, use self"
-	return self
+        "As a python value - by default, none exists, use self"
+        return self
     
     def doesNodeAppear(self, symbol):
         """Does that node appear within this one
@@ -297,32 +297,32 @@ class Term(object):
         
 
 ##    def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
-##	"""Unify this which may contain variables with the other,
-##	    which may contain existentials but not variables.
-##	    
-##	    vars   are variables we want a binding for if matched
-##	    existentials are things we don't need a binding returned for
-##	    bindings are those bindings already made in this unification
-##	    
-##	    Return [] if impossible.
-##	    return [({}, reason] if no new bindings
-##	    Return [( {var1: val1, var2: val2,...}, reason), ...] if match
-##	"""
-##	assert type(bindings) is types.DictType
-##	if diag.chatty_flag > 97:
-##	    progress("Unifying symbol %s with %s vars=%s, so far=%s"%
-##					(self, other,vars, bindings))
-##	s = bindings.get(self, self)
-##	if s is other:
-##	    return [ ({}, None)]
-##	if s in vars|existentials:
-##	    if diag.chatty_flag > 80:
-##		progress("Unifying var or exi MATCHED %s to %s"%(s, other))
-##	    return [ ({s: other}, None) ]
-##	if diag.chatty_flag > 99:
-##	    progress("Failed Unifying symbol %s with %s vars=%s, so far=%s"%
-##				    (self, other, vars, bindings))
-##	return []
+##      """Unify this which may contain variables with the other,
+##          which may contain existentials but not variables.
+##          
+##          vars   are variables we want a binding for if matched
+##          existentials are things we don't need a binding returned for
+##          bindings are those bindings already made in this unification
+##          
+##          Return [] if impossible.
+##          return [({}, reason] if no new bindings
+##          Return [( {var1: val1, var2: val2,...}, reason), ...] if match
+##      """
+##      assert type(bindings) is types.DictType
+##      if diag.chatty_flag > 97:
+##          progress("Unifying symbol %s with %s vars=%s, so far=%s"%
+##                                      (self, other,vars, bindings))
+##      s = bindings.get(self, self)
+##      if s is other:
+##          return [ ({}, None)]
+##      if s in vars|existentials:
+##          if diag.chatty_flag > 80:
+##              progress("Unifying var or exi MATCHED %s to %s"%(s, other))
+##          return [ ({s: other}, None) ]
+##      if diag.chatty_flag > 99:
+##          progress("Failed Unifying symbol %s with %s vars=%s, so far=%s"%
+##                                  (self, other, vars, bindings))
+##      return []
 
     def unifySecondary(self, other, env1, env2, vars,
                        universals, existentials,
@@ -333,7 +333,7 @@ class Term(object):
 
     def freeVariables(self):
         return Set()
-	
+        
 class ErrorFlag(TypeError, Term):
     __init__ = TypeError.__init__
     __repr__ = TypeError.__str__
@@ -342,7 +342,7 @@ class ErrorFlag(TypeError, Term):
     value = lambda s: s
 
     def classOrder(self):
-	return 99
+        return 99
 
 
 class Node(Term):
@@ -354,24 +354,24 @@ class LabelledNode(Node):
     "The labelled node is one which has a URI."
         
     def compareTerm(self, other):
-	"Assume is also a LabelledNode - see function compareTerm in formula.py"
-	_type = RDF_type_URI
-	s = self.uriref()
-	if self is self.store.type:
-		return -1
-	o = other.uriref()
-	if other is self.store.type:
-		return 1
-	retVal = cmp(s, o)
-	if retVal:
+        "Assume is also a LabelledNode - see function compareTerm in formula.py"
+        _type = RDF_type_URI
+        s = self.uriref()
+        if self is self.store.type:
+                return -1
+        o = other.uriref()
+        if other is self.store.type:
+                return 1
+        retVal = cmp(s, o)
+        if retVal:
             return retVal
-	progress( "Error with '%s' being the same as '%s'" %(s,o))
-	raise RuntimeError(
-	"""Internal error: URIref strings should not match if not same object,
-	comparing %s and %s""" % (s, o))
+        progress( "Error with '%s' being the same as '%s'" %(s,o))
+        raise RuntimeError(
+        """Internal error: URIref strings should not match if not same object,
+        comparing %s and %s""" % (s, o))
 
     def classOrder(self):
-	return	6
+        return  6
 
 class Symbol(LabelledNode):
     """   A Term which has no fragment
@@ -397,8 +397,8 @@ class Symbol(LabelledNode):
             if f != None:
                 if not isinstance(f, thetype):
                     raise RuntimeError(
-		    "Oops.. %s exists already but not with type %s"
-			%(f, thetype))
+                    "Oops.. %s exists already but not with type %s"
+                        %(f, thetype))
                 return f    # (Could check that types match just to be sure)
             f = thetype(self, fragid)
             self.fragments[fragid] = f
@@ -416,11 +416,11 @@ class Symbol(LabelledNode):
 
      
     def dereference(self, mode="", workingContext=None):
-	"""dereference an identifier, finding the semantics of its schema if any
-	
-	Returns None if it cannot be retreived.
-	"""
-	if hasattr(self, "_semantics"):
+        """dereference an identifier, finding the semantics of its schema if any
+        
+        Returns None if it cannot be retreived.
+        """
+        if hasattr(self, "_semantics"):
             F = self._semantics
         else:
             inputURI = self.uriref()
@@ -431,23 +431,23 @@ class Symbol(LabelledNode):
                     F = self.store.load(inputURI)
                 except:
                 #except (IOError, SyntaxError, DocumentAccessError,
-		#    xml.sax._exceptions.SAXParseException):
+                #    xml.sax._exceptions.SAXParseException):
                     F = None
-	if F != None:
-	    if "m" in mode:
-		workingContext.reopen()
-		if diag.chatty_flag > 45:
-		    progress("Web: dereferenced %s  added to %s" %(
-			    self, workingContext))
-		workingContext.store.copyFormula(F, workingContext)
-	    if "x" in mode:   # capture experience
-		workingContext.add(r, self.store.semantics, F)
-	if not hasattr(self, "_semantics"):
+        if F != None:
+            if "m" in mode:
+                workingContext.reopen()
+                if diag.chatty_flag > 45:
+                    progress("Web: dereferenced %s  added to %s" %(
+                            self, workingContext))
+                workingContext.store.copyFormula(F, workingContext)
+            if "x" in mode:   # capture experience
+                workingContext.add(r, self.store.semantics, F)
+        if not hasattr(self, "_semantics"):
             setattr(self, "_semantics", F)
-	if diag.chatty_flag > 25:
-	    progress("Web: Dereferencing %s gave %s" %(self, F))
-	return F
-		
+        if diag.chatty_flag > 25:
+            progress("Web: Dereferencing %s gave %s" %(self, F))
+        return F
+                
 
 class Fragment(LabelledNode):
     """    A Term which DOES have a fragment id in its URI
@@ -486,16 +486,16 @@ class Fragment(LabelledNode):
          It is useful to know that its ID has no use outside that
          context.
          """
-	 return 0   # Use class Anonymous for generated IDs
+         return 0   # Use class Anonymous for generated IDs
 
     def dereference(self, mode="", workingContext=None):
-	"""dereference an identifyer, finding the semantics of its schema if any
-	
-	Returns None if it cannot be retreived.
-	"""
-	return self.resource.dereference(mode, workingContext)
+        """dereference an identifyer, finding the semantics of its schema if any
+        
+        Returns None if it cannot be retreived.
+        """
+        return self.resource.dereference(mode, workingContext)
 
-		
+                
 nextId = 0
 class AnonymousNode(Node):
     """Has no real URI except when needed for output.
@@ -506,8 +506,8 @@ class AnonymousNode(Node):
     which has a scope."""
 
     def __init__(self, store, uri=None):
-	global nextId
-	try:
+        global nextId
+        try:
             if uri: assert isinstance(uri, tuple(types.StringTypes))
         except:
             print uri
@@ -515,13 +515,13 @@ class AnonymousNode(Node):
             print '---------=============------------'
             raise
         Term.__init__(self, store)
-	self._diagnosticURI = uri
-	nextId += 1
-	self.serial = nextId
+        self._diagnosticURI = uri
+        nextId += 1
+        self.serial = nextId
 
     def compareTerm(self, other):
-	"Assume is also a Formula - see function compareTerm below"
-	if hasattr(self, 'uri'):
+        "Assume is also a Formula - see function compareTerm below"
+        if hasattr(self, 'uri'):
             selfSerial = self.uri
         else:
             selfSerial = self.serial
@@ -532,21 +532,21 @@ class AnonymousNode(Node):
         retVal = cmp(selfSerial, otherSerial)
         if retVal:
             return retVal
-	return cmp(self.serial, other.serial)
+        return cmp(self.serial, other.serial)
 
     def classOrder(self):
-	"""Anonymous ndoes are higher than symbols as the = smushing
-	tries to minimize the order rank of the node which it adopts
-	as the epresentative node of an equivalence class."""
-	return	9
+        """Anonymous ndoes are higher than symbols as the = smushing
+        tries to minimize the order rank of the node which it adopts
+        as the epresentative node of an equivalence class."""
+        return  9
 
     def uriref(self):
-	if self._diagnosticURI: return self._diagnosticURI
-	return runNamespace() + "_g" + `self.serial`
-#	return runNamespace() + "_b" + `id(self)`
-	
+        if self._diagnosticURI: return self._diagnosticURI
+        return runNamespace() + "_g" + `self.serial`
+#       return runNamespace() + "_b" + `id(self)`
+        
     def generated(self):
-	return 1
+        return 1
 
     def asPair(self):
         return (ANONYMOUS, self.uriref())
@@ -568,13 +568,13 @@ class AnonymousVariable(AnonymousNode):
     """An anonymous node which is existentially quantified in a given context.
     Also known as a Blank Node, or "bnode" in RDF parlance."""
     def __init__(self, scope, uri=None):
-	AnonymousNode.__init__(self, scope.store, uri)
-	 
+        AnonymousNode.__init__(self, scope.store, uri)
+         
 class AnonymousExistential(AnonymousVariable, Existential):
     """An anonymous node which is existentially quantified in a given context.
     Also known as a Blank Node, or "bnode" in RDF parlance."""
     pass
-	 
+         
 class AnonymousUniversal(AnonymousVariable, Universal):
     """Nodes which are introduced as universally quantified variables with
     no quotable URI"""
@@ -603,7 +603,7 @@ class AnonymousUniversal(AnonymousVariable, Universal):
     
 ##########################################################################
 #
-#		L I S T S
+#               L I S T S
 #
 # Lists are interned, so python object comparison works for log:equalTo.
 # For this reason, do NOT use a regular init, always use rest.prepend(first)
@@ -650,22 +650,22 @@ class N3Set(ImmutableSet, CompoundTerm): #,
         raise NotImplementedError
 
     def substitution(self, bindings, why=None, cannon=False):
-	"Return this or a version of me with variable substitution made"
-	if self.occurringIn(bindings.keys()) == Set():
-	    return self # phew!
+        "Return this or a version of me with variable substitution made"
+        if self.occurringIn(bindings.keys()) == Set():
+            return self # phew!
 
-	return self.__class__([x.substitution(bindings, why=why, cannon=cannon) for x in self])
+        return self.__class__([x.substitution(bindings, why=why, cannon=cannon) for x in self])
 
     def substituteEquals(self, bindings, newBindings):
-	"Return this or a version of me with substitution of equals made"
-	if diag.chatty_flag > 100:
-	    progress("SubstituteEquals list %s with %s" % (self, bindings))
-	if self.occurringIn(bindings.keys()) == Set():
-	    return self # phew!
+        "Return this or a version of me with substitution of equals made"
+        if diag.chatty_flag > 100:
+            progress("SubstituteEquals list %s with %s" % (self, bindings))
+        if self.occurringIn(bindings.keys()) == Set():
+            return self # phew!
 
-	new = self.__class__([x.substitution(bindings, why=why) for x in self])
-	newBindings[self] = new
-	return new
+        new = self.__class__([x.substitution(bindings, why=why) for x in self])
+        newBindings[self] = new
+        return new
 
     def occurringIn(self, vars):
         union = Set.union
@@ -728,90 +728,90 @@ class List(CompoundTerm):
         return x
 
     def __iter__(self):
-	"""The internal method which allows one to iterate over the statements
-	as though a formula were a sequence.
-	"""
-	x = self
-	while x is not self.store.nil:
-	    yield x.first
-	    x = x.rest
+        """The internal method which allows one to iterate over the statements
+        as though a formula were a sequence.
+        """
+        x = self
+        while x is not self.store.nil:
+            yield x.first
+            x = x.rest
 
     def __len__(self):
-	"""The internal method which allows one to count the statements
-	as though a formula were a sequence.
-	"""
-	x = self
-	i = 0
-	while x is not self.store.nil:
-	    i = i + 1
-	    x = x.rest
-	return i
+        """The internal method which allows one to count the statements
+        as though a formula were a sequence.
+        """
+        x = self
+        i = 0
+        while x is not self.store.nil:
+            i = i + 1
+            x = x.rest
+        return i
 
     def value(self):
-	res = []
-	for x in self:
-	    res.append(x.value())
-	return res
+        res = []
+        for x in self:
+            res.append(x.value())
+        return res
 
     def substitution(self, bindings, why=None, cannon=False):
-	"Return this or a version of me with variable substitution made"
-	if self.occurringIn(bindings.keys()) == Set():
-	    return self # phew!
-	s = self.asSequence()
-	s.reverse()
-	tail = self.store.nil
-	for x in s:
-	    tail = tail.prepend(x.substitution(bindings, why=why, cannon=cannon))
-	if diag.chatty_flag > 90:
-	    progress("Substition of variables %s in list %s" % (bindings, self))
-	    progress("...yields NEW %s = %s" % (tail, tail.value()))
-	return tail
-	    
+        "Return this or a version of me with variable substitution made"
+        if self.occurringIn(bindings.keys()) == Set():
+            return self # phew!
+        s = self.asSequence()
+        s.reverse()
+        tail = self.store.nil
+        for x in s:
+            tail = tail.prepend(x.substitution(bindings, why=why, cannon=cannon))
+        if diag.chatty_flag > 90:
+            progress("Substition of variables %s in list %s" % (bindings, self))
+            progress("...yields NEW %s = %s" % (tail, tail.value()))
+        return tail
+            
     def substituteEquals(self, bindings, newBindings):
-	"Return this or a version of me with substitution of equals made"
-	if diag.chatty_flag > 100:
-	    progress("SubstituteEquals list %s with %s" % (self, bindings))
-	if self.occurringIn(bindings.keys()) == Set():
-	    return self # phew!
-	s = self.asSequence()
-	s.reverse()
-	tail = self.store.nil
-	for x in s:
-	    tail = tail.prepend(x.substituteEquals(bindings, newBindings))
-	newBindings[self] = tail # record a new equality
-	self.generated = lambda : True
-	if diag.chatty_flag > 90:
-	    progress("SubstitueEquals list CHANGED %s -> %s" % (self, tail))
-	return tail
-	    
+        "Return this or a version of me with substitution of equals made"
+        if diag.chatty_flag > 100:
+            progress("SubstituteEquals list %s with %s" % (self, bindings))
+        if self.occurringIn(bindings.keys()) == Set():
+            return self # phew!
+        s = self.asSequence()
+        s.reverse()
+        tail = self.store.nil
+        for x in s:
+            tail = tail.prepend(x.substituteEquals(bindings, newBindings))
+        newBindings[self] = tail # record a new equality
+        self.generated = lambda : True
+        if diag.chatty_flag > 90:
+            progress("SubstitueEquals list CHANGED %s -> %s" % (self, tail))
+        return tail
+            
 
     def occurringIn(self, vars):
-	"Which variables in the list occur in this list?"
-	set = Set()
-	x = self
-	while not isinstance(x, EmptyList):
-	    y = x.first
-	    x = x.rest
-	    import types
-	    set = set | y.occurringIn(vars)
-	if self in vars:
+        "Which variables in the list occur in this list?"
+        set = Set()
+        x = self
+        while not isinstance(x, EmptyList):
+            y = x.first
+            x = x.rest
+            import types
+            set = set | y.occurringIn(vars)
+        if self in vars:
             set.add(self)
-	return set
+        return set
 
     def asSequence(self):
-	"Convert to a python sequence - NOT recursive"
-	res = []
-	x = self
-	while x is not self.store.nil:
-	    res.append(x.first)
-	    x = x.rest
-	return res
+        "Convert to a python sequence - NOT recursive"
+        res = []
+        x = self
+        while x is not self.store.nil:
+            res.append(x.first)
+            x = x.rest
+        return res
     
     def doesNodeAppear(self, symbol):
         """Does that particular node appear anywhere in this list
 
         This function is necessarily recursive, and is useful for the pretty
-	printer. It will also be useful for the flattener, when we write it.
+        printer. It will also be useful for the flattener, when we write it.
         """
         for elt in self:
             val = 0
@@ -833,30 +833,30 @@ class List(CompoundTerm):
 class NonEmptyList(List):
 
     def classOrder(self):
-	return	3
+        return  3
 
     def compareTerm(self, other):
-	"Assume is also a NonEmptyList - see function compareTerm in formula.py"
-	s = self
-	o = other
-	while 1:
-	    if isinstance(o, EmptyList): return -1
-	    if isinstance(s, EmptyList): return 1
-	    diff = s.first.compareAnyTerm(o.first)
-	    if diff != 0: return diff
-	    s = s.rest
-	    o = o.rest
+        "Assume is also a NonEmptyList - see function compareTerm in formula.py"
+        s = self
+        o = other
+        while 1:
+            if isinstance(o, EmptyList): return -1
+            if isinstance(s, EmptyList): return 1
+            diff = s.first.compareAnyTerm(o.first)
+            if diff != 0: return diff
+            s = s.rest
+            o = o.rest
 
 ##    def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
-##	"""See Term.unify()"""
-##	if diag.chatty_flag > 90:
-##	    progress("Unifying list %s with %s vars=%s, so far=%s"%
-##		    (self.value(), other.value(),vars, bindings))
-##	if not isinstance(other, NonEmptyList): return []
-##	if other is self: return [ ({}, None)]
+##      """See Term.unify()"""
+##      if diag.chatty_flag > 90:
+##          progress("Unifying list %s with %s vars=%s, so far=%s"%
+##                  (self.value(), other.value(),vars, bindings))
+##      if not isinstance(other, NonEmptyList): return []
+##      if other is self: return [ ({}, None)]
 ##
-##	# Using the sequence-like properties of lists:
-##	return unifySequence(self, other, vars, existentials,  bindings)
+##      # Using the sequence-like properties of lists:
+##      return unifySequence(self, other, vars, existentials,  bindings)
 
     def unifySecondary(self, other, env1, env2, vars,
                        universals, existentials,
@@ -864,30 +864,30 @@ class NonEmptyList(List):
         return unifySequence(self, other, env1, env2, vars,
                        universals, existentials,
                        n1Source, n2Source)
-	
+        
     def debugString(self, already=[]):
-	s = `self`+" is ("
-	for i in self:
-	    s = s + i.debugString(already) + " "
-	return s + ")"
-	
+        s = `self`+" is ("
+        for i in self:
+            s = s + i.debugString(already) + " "
+        return s + ")"
+        
 #    def __repr__(self):
-#	return "(" + `self.first` + "...)"
+#       return "(" + `self.first` + "...)"
 
     def __getitem__(self, i):
-	p = self
-	while 1:
-	    if i == 0: return p.first
-	    p = p.rest
-	    if not isinstance(p, NonEmptyList):
-		raise ValueError("Index %i exceeds size of list %s"
-			% (i, `self`))
-	    i = i - 1
+        p = self
+        while 1:
+            if i == 0: return p.first
+            p = p.rest
+            if not isinstance(p, NonEmptyList):
+                raise ValueError("Index %i exceeds size of list %s"
+                        % (i, `self`))
+            i = i - 1
 
 class EmptyList(List):
         
     def classOrder(self):
-	return	2
+        return  2
 
     def value(self):
         return []
@@ -896,16 +896,16 @@ class EmptyList(List):
         return List_NS + "nil"
 
     def substitution(self, bindings, why=None, cannon=False):
-	"Return this or a version of me with substitution made"
-	return self
+        "Return this or a version of me with substitution made"
+        return self
 
     def substituteEquals(self, bindings, newBindings):
-	"Return this or a version of me with substitution of equals made"
-	return self
+        "Return this or a version of me with substitution of equals made"
+        return self
 
     def __repr__(self):
-	return "()"
-	
+        return "()"
+        
     def newList(self, value):
         x = self
         l = len(value)
@@ -923,33 +923,33 @@ class EmptyList(List):
         return x
 
 ##    def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
-##	"""Unify the substitution of this using bindings found so far
-##	    with the other. This may contain variables, the other may contain
-##	    existentials but not variables.
-##	    Return [] if impossible.
-##	    Return [({}, None)] if no new bindings
-##	    Return [( {var1: val1, var2: val2, ...}, reason) ...] if match.
-##	    bindings is a dictionary."""
-##	assert type(bindings) is type({})
-##	if self is other: return [({}, None)]
-##	return []
-	
+##      """Unify the substitution of this using bindings found so far
+##          with the other. This may contain variables, the other may contain
+##          existentials but not variables.
+##          Return [] if impossible.
+##          Return [({}, None)] if no new bindings
+##          Return [( {var1: val1, var2: val2, ...}, reason) ...] if match.
+##          bindings is a dictionary."""
+##      assert type(bindings) is type({})
+##      if self is other: return [({}, None)]
+##      return []
+        
     def occurringIn(self, vars):
-	return Set()
+        return Set()
 
     def __repr__(self):
-	return "()"
+        return "()"
 
     def __getitem__(self, i):
-	raise ValueError("Index %i exceeds size of empty list %s" % (i, `self`))
+        raise ValueError("Index %i exceeds size of empty list %s" % (i, `self`))
 
 
 class FragmentNil(EmptyList, Fragment):
     " This is unique in being both a symbol and a list"
     def __init__(self, resource, fragid):
-	Fragment.__init__(self, resource, fragid)
-	EmptyList.__init__(self, self.store, None, None)
-	self._asList = self
+        Fragment.__init__(self, resource, fragid)
+        EmptyList.__init__(self, self.store, None, None)
+        self._asList = self
 
 
 
@@ -959,15 +959,15 @@ def unifySequence(self, other, vars=Set([]), existentials=Set([]),  bindings={},
     """
 
     if diag.chatty_flag > 99: progress("Unifying sequence %s with %s" %
-	(`self`, `other`))
+        (`self`, `other`))
     i = start
     if len(self) != len(other): return []
     while 1:
-	nbs = unify(self[i], other[i], vars, existentials, bindings)
-	if nbs == []: return []	 # Match fail
-	i = i +1
-	if i == len(self): return nbs
-	if nbs != [({}, None)]: break   # Multiple bundings
+        nbs = unify(self[i], other[i], vars, existentials, bindings)
+        if nbs == []: return []  # Match fail
+        i = i +1
+        if i == len(self): return nbs
+        if nbs != [({}, None)]: break   # Multiple bundings
 
     try:
         for a,b in nbs: pass
@@ -976,17 +976,17 @@ def unifySequence(self, other, vars=Set([]), existentials=Set([]),  bindings={},
         raise
     res = []
     for nb, reason in nbs:
-	b2 = bindings.copy()
-	b2.update(nb)
-	done = Set(nb.keys())
-	nbs2 = unifySequence(self, other,
-		    vars.difference(done),
-		    existentials.difference(done), b2, start=i)
-#	if nbs2 == []: return []   No, don't return ... may be others
-	for nb2, reason2 in nbs2:
-	    nb3 = nb2.copy()
-	    nb3.update(nb)
-	    res.append((nb3, None))
+        b2 = bindings.copy()
+        b2.update(nb)
+        done = Set(nb.keys())
+        nbs2 = unifySequence(self, other,
+                    vars.difference(done),
+                    existentials.difference(done), b2, start=i)
+#       if nbs2 == []: return []   No, don't return ... may be others
+        for nb2, reason2 in nbs2:
+            nb3 = nb2.copy()
+            nb3.update(nb)
+            res.append((nb3, None))
     return res
     
 def unifySet(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
@@ -995,29 +995,29 @@ def unifySet(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
     implemented with indexing, and built-in functions, in query.py.
     """
     if diag.chatty_flag > 99: progress("Unifying set %s with %s" %
-	(`self`, `other`))
+        (`self`, `other`))
     if len(self) != len(other): return []    # Match fail
     if self == Set([]): return [ ({}, None) ] # Perfect match
     self2 = self.copy() # Don't mess with parameters
     s = self2.pop()   # Pick one
     res = []
     for o in other:
-	nbs = unify(s, o, vars, existentials, bindings)
-	if nbs == []: continue
-	other2 = other.copy()
-	other2.remove(o)
-	for nb, reason in nbs:  # For each way the object matched,
-	    b2 = bindings.copy()
-	    b2.update(nb)
-	    done = Set(nb.keys())
-	    nbs2 = unifySet(self2, other2,  # Try the rest of the set
-			vars.difference(done),
-			existentials.difference(done), b2)
-	    if nbs2 == []: continue # try next case for the object
-	    for nb2, reason2 in nbs2:
-		nb3 = nb2.copy()
-		nb3.update(nb)
-		res.append((nb3, None))  # Add next total case
+        nbs = unify(s, o, vars, existentials, bindings)
+        if nbs == []: continue
+        other2 = other.copy()
+        other2.remove(o)
+        for nb, reason in nbs:  # For each way the object matched,
+            b2 = bindings.copy()
+            b2.update(nb)
+            done = Set(nb.keys())
+            nbs2 = unifySet(self2, other2,  # Try the rest of the set
+                        vars.difference(done),
+                        existentials.difference(done), b2)
+            if nbs2 == []: continue # try next case for the object
+            for nb2, reason2 in nbs2:
+                nb3 = nb2.copy()
+                nb3.update(nb)
+                res.append((nb3, None))  # Add next total case
     return res
 
 
@@ -1083,7 +1083,7 @@ def matchSet(pattern, kb, vars=Set([]),  bindings={}):
     bindings map from pattern to kb.
     """
     if diag.chatty_flag > 99: progress("Matching pattern %s against %s, vars=%s" %
-	(`pattern`, `kb`, `vars`))
+        (`pattern`, `kb`, `vars`))
     if len(pattern) > len(kb): return []    # Match fail  @@@discuss corner cases
     if len(pattern) == 0: return [(bindings, None)] # Success
     
@@ -1091,20 +1091,20 @@ def matchSet(pattern, kb, vars=Set([]),  bindings={}):
     o = pattern2.pop()   # Pick one
     res = []
     for s in kb:   # Really slow recursion unaided by indexes
-	nbs = unify(o, s, vars, Set([]), bindings)
-	if nbs == []: continue
-	kb2 = kb.copy()
-	kb2.remove(s)
-	for nb, reason in nbs:
-	    b2 = bindings.copy()
-	    b2.update(nb)
-	    done = Set(nb.keys())
-	    nbs2 = matchSet(pattern2, kb2, vars.difference(done), b2)
-	    if nbs2 == []: continue
-	    for nb2, reason2 in nbs2:
-		nb3 = nb2.copy()
-		nb3.update(nb)
-		res.append((nb3, None))
+        nbs = unify(o, s, vars, Set([]), bindings)
+        if nbs == []: continue
+        kb2 = kb.copy()
+        kb2.remove(s)
+        for nb, reason in nbs:
+            b2 = bindings.copy()
+            b2.update(nb)
+            done = Set(nb.keys())
+            nbs2 = matchSet(pattern2, kb2, vars.difference(done), b2)
+            if nbs2 == []: continue
+            for nb2, reason2 in nbs2:
+                nb3 = nb2.copy()
+                nb3.update(nb)
+                res.append((nb3, None))
     return res  # Failed to match the one we picked
 
 class ListView(object):
@@ -1119,16 +1119,16 @@ class ListView(object):
     cdr = property(_cdr)
     def __len__(self):
         return len(self.list) - self.start
-	    
+            
 def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
     """Unify something whatever it is
     See Term.unify
     """
     if diag.chatty_flag > 100: progress("Unifying %s with %s" %(self, other))
     if isinstance(self, (Set, ImmutableSet)):
-	return unifySet(self, other, vars, existentials, bindings)
+        return unifySet(self, other, vars, existentials, bindings)
     if type(self) is type([]):
-	return unifySequence(self, other, vars, existentials, bindings)
+        return unifySequence(self, other, vars, existentials, bindings)
     k = self.unify(other, vars, existentials, bindings)
     if k == 0:
         raise RuntimeError(other, other.__class__)
@@ -1255,10 +1255,10 @@ def unify(self, other, bindings=Env(), otherBindings=Env(),
         else:
             raise ValueError 
     elif isinstance(self, (Set, ImmutableSet)):
-	for x in unifySet(self, other, env1, env2, vars, existentials, n1Source=n1Source, n2Source=n2Source):
+        for x in unifySet(self, other, env1, env2, vars, existentials, n1Source=n1Source, n2Source=n2Source):
             yield x
     elif type(self) is type([]):
-	for x in unifySequence(self, other, env1, env2, vars, existentials, n1Source=n1Source, n2Source=n2Source):
+        for x in unifySequence(self, other, env1, env2, vars, existentials, n1Source=n1Source, n2Source=n2Source):
             yield x
     elif self.unifySecondary.im_func is other.unifySecondary.im_func:  # A reasonable definition of same type
         for x in self.unifySecondary(other, env1, env2, vars, universals, existentials, n1Source=n1Source, n2Source=n2Source):
@@ -1312,7 +1312,7 @@ def occurs_check(self, other, env2):
 
 ##########################################################################
 #
-#		L I T E R A L S
+#               L I T E R A L S
 
 def toBool(val, dt=None):
     if dt == 'boolean':
@@ -1385,24 +1385,24 @@ class Literal(Term):
     def __init__(self, store, str, dt=None, lang=None):
         Term.__init__(self, store)
         self.string = str    #  n3 notation EXcluding the "  "
-	self.datatype = dt
-#	assert dt is None or isinstance(dt, Fragment)
-	self.lang=lang
+        self.datatype = dt
+#       assert dt is None or isinstance(dt, Fragment)
+        self.lang=lang
 
     def __str__(self):
         return self.string
 
     def __int__(self):
-	return int(self.string)
+        return int(self.string)
 
     def __float__(self):
-	return float(self.string)
+        return float(self.string)
 
     def __decimal__(self):
         return Decimal(self.string)
 
     def occurringIn(self, vars):
-	return Set()
+        return Set()
 
     def __repr__(self):
         if len(self.string) < 8:
@@ -1410,25 +1410,25 @@ class Literal(Term):
         return unicode('"' + self.string[0:4] + '...' + self.string[-4:] + '"').encode('unicode_escape')#        return self.string
 
     def asPair(self):
-	if self.datatype:
-	    return LITERAL_DT, (self.string, self.datatype.uriref())
-	if self.lang:
-	    return LITERAL_LANG, (self.string, self.lang)
-	return (LITERAL, self.string)
-	    
+        if self.datatype:
+            return LITERAL_DT, (self.string, self.datatype.uriref())
+        if self.lang:
+            return LITERAL_LANG, (self.string, self.lang)
+        return (LITERAL, self.string)
+            
     def classOrder(self):
-	return	1
+        return  1
 
     def compareTerm(self, other):
-	"Assume is also a literal - see function compareTerm in formula.py"
-	if self.datatype == other.datatype:
-	    diff = cmp(self.string, other.string)
-	    if diff != 0 : return diff
-	    return cmp(self.lang, other.lang)
-	else:
-	    if self.datatype == None: return -1
-	    if other.datatype == None: return 1
-	    return self.datatype.compareAnyTerm(other.datatype)
+        "Assume is also a literal - see function compareTerm in formula.py"
+        if self.datatype == other.datatype:
+            diff = cmp(self.string, other.string)
+            if diff != 0 : return diff
+            return cmp(self.lang, other.lang)
+        else:
+            if self.datatype == None: return -1
+            if other.datatype == None: return 1
+            return self.datatype.compareAnyTerm(other.datatype)
 
     def asHashURI(self):
         """return a md5: URI for this literal.
@@ -1442,36 +1442,36 @@ class Literal(Term):
         return "md5:" + b16
 
     def substitution(self, bindings, why=None, cannon=False):
-	"Return this or a version of me with subsitution made"
-	return self
+        "Return this or a version of me with subsitution made"
+        return self
 
     def substituteEquals(self, bindings, newBindings):
-	"Return this or a version of me with subsitution made"
-	return self
+        "Return this or a version of me with subsitution made"
+        return self
 
     def representation(self, base=None):
         return '"' + self.string + '"' 
-	# @@@ encode quotes; @@@@ strings containing \n
+        # @@@ encode quotes; @@@@ strings containing \n
 
     def value(self):
-	"""Datatype conversion XSD to Python
-	
-	RDF primitive datatypes are XML schema datatypes, in the XSD namespace.
-	see http://www.w3.org/TR/xmlschema-2
-	"""
-	global typeMap
-	if self.datatype == None: return self.string
-	xsd = self.store.integer.resource
-	if self.datatype.resource is xsd:
-	    try:
-		return typeMap[self.datatype.fragid](self.string)
-	    except KeyError:
-		raise UnknownType(
-	  "Attempt to run built-in on unsupported XSD datatype %s of value %s." 
-			% (`self.datatype`, self.string))
+        """Datatype conversion XSD to Python
+        
+        RDF primitive datatypes are XML schema datatypes, in the XSD namespace.
+        see http://www.w3.org/TR/xmlschema-2
+        """
+        global typeMap
+        if self.datatype == None: return self.string
+        xsd = self.store.integer.resource
+        if self.datatype.resource is xsd:
+            try:
+                return typeMap[self.datatype.fragid](self.string)
+            except KeyError:
+                raise UnknownType(
+          "Attempt to run built-in on unsupported XSD datatype %s of value %s." 
+                        % (`self.datatype`, self.string))
 
-	raise UnknownType("Attempt to run built-in on unknown datatype %s of value %s." 
-			% (`self.datatype`, self.string))
+        raise UnknownType("Attempt to run built-in on unknown datatype %s of value %s." 
+                        % (`self.datatype`, self.string))
 
     def uriref(self):
         # Unused at present but interesting! 2000/10/14
@@ -1495,27 +1495,27 @@ class XMLLiteral(Literal):
     def __init__(self, store, dom):
         Term.__init__(self, store)
         self.dom = dom    #  n3 notation EXcluding the "  "
-	self.string = None  # Only made when needed but then cached
-	self.datatype = store.symbol("http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral")
-#	assert dt is None or isinstance(dt, Fragment)
-	self.lang=None
+        self.string = None  # Only made when needed but then cached
+        self.datatype = store.symbol("http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral")
+#       assert dt is None or isinstance(dt, Fragment)
+        self.lang=None
 
     def __str__(self):
-	if not self.string:
-	    self.string = ''.join([Canonicalize(x, None, unsuppressedPrefixes=[]) for x in self.dom.childNodes])
-	return self.string 
+        if not self.string:
+            self.string = ''.join([Canonicalize(x, None, unsuppressedPrefixes=[]) for x in self.dom.childNodes])
+        return self.string 
 
     def __int__(self):
-	return int(self.__str__())
+        return int(self.__str__())
 
     def __float__(self):
-	return float(self.__str__())
+        return float(self.__str__())
 
     def __decimal__(self):
         return Decimal(self.__str__())
 
     def occurringIn(self, vars):
-	return Set()
+        return Set()
 
     def __repr__(self):
         self.__str__()
@@ -1523,21 +1523,21 @@ class XMLLiteral(Literal):
 #        return self.string
 
     def asPair(self):
-	return (XMLLITERAL, self.dom)
-	    
+        return (XMLLITERAL, self.dom)
+            
     def classOrder(self):
-	return	1.5
+        return  1.5
 
     def compareTerm(self, other):
-	"Assume is also a literal - see function compareTerm in formula.py"
-	if self.datatype == other.datatype:
-	    diff = cmp(unicode(self), unicode(other))
-	    return diff
-	    return cmp(self.lang, other.lang)
-	else:
-	    if self.datatype == None: return -1
-	    if other.datatype == None: return 1
-	    return self.datatype.compareAnyTerm(other.datatype)
+        "Assume is also a literal - see function compareTerm in formula.py"
+        if self.datatype == other.datatype:
+            diff = cmp(unicode(self), unicode(other))
+            return diff
+            return cmp(self.lang, other.lang)
+        else:
+            if self.datatype == None: return -1
+            if other.datatype == None: return 1
+            return self.datatype.compareAnyTerm(other.datatype)
 
     def asHashURI(self):
         """return a md5: URI for this literal.
@@ -1551,23 +1551,23 @@ class XMLLiteral(Literal):
         return "md5:" + b16
 
     def substitution(self, bindings, why=None, cannon=False):
-	"Return this or a version of me with subsitution made"
-	return self
+        "Return this or a version of me with subsitution made"
+        return self
 
     def substituteEquals(self, bindings, newBindings):
-	"Return this or a version of me with subsitution made"
-	return self
+        "Return this or a version of me with subsitution made"
+        return self
 
     def representation(self, base=None):
         return '"' + str(self) + '"' 
-	# @@@ encode quotes; @@@@ strings containing \n
+        # @@@ encode quotes; @@@@ strings containing \n
 
     def value(self):
-	"""Datatype conversion XSD to Python
-	
-	The internal reopresentation is the dom tree
-	"""
-	return self.dom
+        """Datatype conversion XSD to Python
+        
+        The internal reopresentation is the dom tree
+        """
+        return self.dom
 
     def uriref(self):
         # Unused at present but interesting! 2000/10/14
@@ -1578,15 +1578,15 @@ class XMLLiteral(Literal):
 
 
 #class Integer(Literal):
-#	"""Unused"""
+#       """Unused"""
 #    def __init__(self, store, str):
 #        Term.__init__(self, store)
-#	self.datatype = store.integer
-#	self.lang=None
-#	self._value = int(str)
+#       self.datatype = store.integer
+#       self.lang=None
+#       self._value = int(str)
 #
 #    def __int__(self):
-#	return self._value
+#       return self._value
 #
 #    def __str__(self):
 #        return str(self._value)
@@ -1595,10 +1595,10 @@ class XMLLiteral(Literal):
 #        return str(self._value)
 #
 #    def representation(self, base=None):
-#	return str(self._value)
+#       return str(self._value)
 #
 #    def value(self):
-#	return self._value
+#       return self._value
 
 #I think I'll replace this with urllib.quote
 ##def uri_encode(str):
@@ -1640,22 +1640,22 @@ class BuiltIn(Fragment):
         Fragment.__init__(self, resource, fragid)
 
     def eval(self, subj, obj, queue, bindings, proof, query):
-	"""This function which has access to the store, unless overridden,
-	calls a simpler one which uses python conventions.
-	
-	To reduce confusion, the inital ones called with the internals available
-	use abreviations "eval", "subj" etc while the python-style ones use
-	evaluate, subject, etc."""
-	if hasattr(self, "evaluate"):
+        """This function which has access to the store, unless overridden,
+        calls a simpler one which uses python conventions.
+        
+        To reduce confusion, the inital ones called with the internals available
+        use abreviations "eval", "subj" etc while the python-style ones use
+        evaluate, subject, etc."""
+        if hasattr(self, "evaluate"):
             if (not isinstance(subj, (Literal, CompoundTerm)) or
-			not isinstance(obj, (Literal, CompoundTerm))):
+                        not isinstance(obj, (Literal, CompoundTerm))):
                 raise ArgumentNotLiteral(subj, obj)
-	    return self.evaluate(subj.value(), obj.value())
-	elif isinstance(self, Function):
-	    return Function.eval(self, subj, obj, queue, bindings, proof, query)
-	elif isinstance(self, ReverseFunction):
-	    return ReverseFunction.eval(self, subj, obj, queue, bindings, proof, query)
-	raise RuntimeError("Instance %s of built-in has no eval() or subsititue for it" %`self`)
+            return self.evaluate(subj.value(), obj.value())
+        elif isinstance(self, Function):
+            return Function.eval(self, subj, obj, queue, bindings, proof, query)
+        elif isinstance(self, ReverseFunction):
+            return ReverseFunction.eval(self, subj, obj, queue, bindings, proof, query)
+        raise RuntimeError("Instance %s of built-in has no eval() or subsititue for it" %`self`)
 
 class GenericBuiltIn(BuiltIn):
     def __init__(self, resource, fragid):
@@ -1702,11 +1702,11 @@ class Function(BuiltIn):
     
 
     def evalObj(self, subj, queue, bindings, proof, query):
-	"""This function which has access to the store, unless overridden,
-	calls a simpler one which uses python conventions.
+        """This function which has access to the store, unless overridden,
+        calls a simpler one which uses python conventions.
 
-	To reduce confusion, the inital ones called with the internals available
-	use abreviations "eval", "subj" etc while the python-style ones use "evaluate", "subject", etc."""
+        To reduce confusion, the inital ones called with the internals available
+        use abreviations "eval", "subj" etc while the python-style ones use "evaluate", "subject", etc."""
         if not isinstance(subj, (Literal, CompoundTerm)):
             raise ArgumentNotLiteral
         return self.store._fromPython(self.evaluateObject(subj.value()))
@@ -1715,8 +1715,8 @@ class Function(BuiltIn):
 # This version is used by functions by default:
 
     def eval(self, subj, obj, queue, bindings, proof, query):
-	F = self.evalObj(subj, queue, bindings, proof, query)
-	return F is obj
+        F = self.evalObj(subj, queue, bindings, proof, query)
+        return F is obj
 
 class ReverseFunction(BuiltIn):
     """A reverse function is a builtin which can calculate its subject given its object.
@@ -1730,8 +1730,8 @@ class ReverseFunction(BuiltIn):
         pass
 
     def eval(self, subj, obj, queue, bindings, proof, query):
-	F = self.evalSubj(obj, queue, bindings, proof, query)
-	return F is subj
+        F = self.evalSubj(obj, queue, bindings, proof, query)
+        return F is subj
 
     def evalSubj(self, obj,  queue, bindings, proof, query):
         """This function which has access to the store, unless overridden,
@@ -1746,16 +1746,16 @@ class MultipleFunction(Function):
     The result is different, as multiple versions are returned. Example: member of list.
     """
     def evalSubj(self, obj,  queue, bindings, proof, query):
-	"""This function which has access to the store, unless overridden,
-	calls a simpler one which uses python conventions.
-	The python one returns a list of function values.
-	This returns a 'new bindings' structure (nbs) which is a sequence of
-	(bindings, reason) pairs."""
+        """This function which has access to the store, unless overridden,
+        calls a simpler one which uses python conventions.
+        The python one returns a list of function values.
+        This returns a 'new bindings' structure (nbs) which is a sequence of
+        (bindings, reason) pairs."""
         if not isinstance(obj, (Literal, CompoundTerm)):
             raise ArgumentNotLiteral(obj)
         return self.store._fromPython(self.evaluateSubject(subj.value()))
-#	results = self.store._fromPython(self.evaluateSubject(obj.value()))
-#	return [ ({subj: x}, None) for x in results]
+#       results = self.store._fromPython(self.evaluateSubject(obj.value()))
+#       return [ ({subj: x}, None) for x in results]
     
 class MultipleReverseFunction(ReverseFunction):
     """Multiple return values"""
@@ -1763,8 +1763,8 @@ class MultipleReverseFunction(ReverseFunction):
         if not isinstance(subj, (Literal, CompoundTerm)):
             raise ArgumentNotLiteral(subj)
         return self.store._fromPython(self.evaluateObject(obj.value()))
-#	results = self.store._fromPython(self.evaluateObject(obj.value()))
-#	return [ ({subj: x}, None) for x in results]
+#       results = self.store._fromPython(self.evaluateObject(obj.value()))
+#       return [ ({subj: x}, None) for x in results]
     
 class FiniteProperty(GenericBuiltIn, Function, ReverseFunction):
     """A finite property has a finite set of pairs of (subj, object) values
@@ -1776,31 +1776,31 @@ class FiniteProperty(GenericBuiltIn, Function, ReverseFunction):
 #        Fragment.__init__(self, resource, fragid)
     
     def enn(self):
-	" Return list of pairs [(subj, obj)]"
-	for s, o in self.ennumerate():
-	    yield self.store._fromPython(s), self.store._fromPython(o)
-	    
+        " Return list of pairs [(subj, obj)]"
+        for s, o in self.ennumerate():
+            yield self.store._fromPython(s), self.store._fromPython(o)
+            
     def ennumerate(self):
-	raise RuntimeError("Not implemented fbuilt-in")
+        raise RuntimeError("Not implemented fbuilt-in")
 
 
     def evalSubj(self, obj,  queue, bindings, proof, query):
-	"""This is of course   very inefficient except for really small ones like argv."""
-	for s, o in self.ennum():
-	    if o is obj: return s
-	return None
+        """This is of course   very inefficient except for really small ones like argv."""
+        for s, o in self.ennum():
+            if o is obj: return s
+        return None
 
     def evalObj(self, subj,  queue, bindings, proof, query):
-	"""This is of course   very inefficient except for really small ones like argv."""
-	for s, o in self.ennum():
-	    if s is subj: return o
-	return None
+        """This is of course   very inefficient except for really small ones like argv."""
+        for s, o in self.ennum():
+            if s is subj: return o
+        return None
 
     def eval(self, subj, obj, queue, bindings, proof, query):
-	"""This is of course   very inefficient except for really small ones like argv."""
-	for s, o in self.ennum():
-	    if s is subj: return o
-	return (subj, obj) in self.ennum()
+        """This is of course   very inefficient except for really small ones like argv."""
+        for s, o in self.ennum():
+            if s is subj: return o
+        return (subj, obj) in self.ennum()
 
 
 #  For examples of use, see, for example, cwm_*.py

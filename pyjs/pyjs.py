@@ -73,8 +73,8 @@ class Translator:
 
 
     def comment(self, text):
-	return "/*\n" + text + "*/\n"
-	
+        return "/*\n" + text + "*/\n"
+        
     def _function(self, node):
         function_name = self.module_prefix + node.name
         function_args = "(" + ", ".join(node.argnames) + ")"
@@ -83,8 +83,8 @@ class Translator:
         if node.doc:
             print >>self.output, self.comment(node.doc)
         
-	for child in node.code:
-	    self._stmt(child, None)
+        for child in node.code:
+            self._stmt(child, None)
             
         print >>self.output, "}"
         print >>self.output, "\n"
@@ -332,8 +332,8 @@ class Translator:
         if node.doc:
             print >>self.output, self.comment(node.doc)
         
-	for child in node.code:
-	    self._stmt(child, current_klass)
+        for child in node.code:
+            self._stmt(child, current_klass)
             
         if node.name == "__init__":
             print >>self.output, "}"
@@ -900,7 +900,7 @@ def stringToN3(str, singleLine=0, flags=""):
     res = ''
     if (len(str) > 20 and
         str[-1] <> '"' and
-	not singleLine and
+        not singleLine and
         (string.find(str, "\n") >=0 
          or string.find(str, '"') >=0)):
         delim= '"""'
@@ -928,7 +928,7 @@ def stringToN3(str, singleLine=0, flags=""):
                 if 'e' in flags:
 #                res = res + ('\\u%04x' % ord(ch))
                     res = res + ('\\u%04X' % ord(ch)) 
-		    # http://www.w3.org/TR/rdf-testcases/#ntriples
+                    # http://www.w3.org/TR/rdf-testcases/#ntriples
                 else:
                     res = res + ch
         i = j + 1
@@ -938,7 +938,7 @@ def stringToN3(str, singleLine=0, flags=""):
     for ch in res + str[i:]:
         if ord(ch)>65535:
             newstr = newstr + ('\\U%08X' % ord(ch)) 
-		# http://www.w3.org/TR/rdf-testcases/#ntriples
+                # http://www.w3.org/TR/rdf-testcases/#ntriples
         else:
             newstr = newstr + ch
     #

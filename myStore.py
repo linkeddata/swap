@@ -23,7 +23,10 @@ History:
     Spilt off from  thing.py 2003-08-19
 
 $Log$
-Revision 1.12  2005-10-24 16:58:38  timbl
+Revision 1.13  2007-06-26 02:36:15  syosi
+fix tabs
+
+Revision 1.12  2005/10/24 16:58:38  timbl
 --n3=B flag introduced. --why improved but not perfect.
 
 Revision 1.11  2004/08/08 01:44:49  syosi
@@ -91,7 +94,7 @@ def _checkStore(s=None):
     if s != None: return s
     if store != None: return store
     if storeClass == None:
-	import llyn   # default 
+        import llyn   # default 
     assert storeClass!= None, "Some storage module must register with myStore.py before you can use it"
     store = storeClass() # Make new one
     return store
@@ -157,7 +160,7 @@ def load(uri=None, openFormula=None, contentType=None, remember=1, flags=""):
     Raises:   IOError, SyntaxError, DocumentError
     """
     return _checkStore().load(uri, openFormula=openFormula, contentType=contentType,
-			remember=remember, flags=flags)
+                        remember=remember, flags=flags)
 
 def loadMany(uris, openFormula=None, referer=None):
     """Load a number of resources into the same formula
@@ -183,17 +186,17 @@ class Namespace(object):
     
     def __init__(self, name, store=None):
         if ':' not in name:    #, "must be absolute: %s" % name
-	    base = uripath.base()
-	    name = uripath.join(base, name)
+            base = uripath.base()
+            name = uripath.join(base, name)
         self._name = name
-	self.store = store
+        self.store = store
         self._seen = {}
     
     def __getattr__(self, lname):
         """get the lname Symbol in this namespace.
 
         lname -- an XML name (limited to URI characters)
-	I hope this is only called *after* the ones defines above have been checked
+        I hope this is only called *after* the ones defines above have been checked
         """
         if lname.startswith("__"): # python internal
             raise AttributeError, lname
@@ -201,9 +204,9 @@ class Namespace(object):
         return _checkStore(self.store).symbol(self._name+lname)
 
     def sym(self, lname):
-	"""For getting a symbol for an expression, rather than a constant.
-	For, and from, pim/toIcal.py"""
-	return  _checkStore(self.store).symbol(self._name + lname)
+        """For getting a symbol for an expression, rather than a constant.
+        For, and from, pim/toIcal.py"""
+        return  _checkStore(self.store).symbol(self._name + lname)
 
 
 

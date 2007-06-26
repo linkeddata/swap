@@ -81,15 +81,15 @@ def main():
     # reading http://www.faqs.org/rfcs/rfc2437.html
     #  RFC 2437 - PKCS #1: RSA Cryptography Specifications Version 2.0
     if 1:
-	# http://www.amk.ca/python/writing/pycrypt/pycrypt.html
-	# and debian python23-crypto package
-	from Crypto.PublicKey import RSA
-	from Crypto.Hash import SHA
-	k = RSA.construct((key._n, key._e))
-	dh = SHA.new(data).digest()
-	progress("hash length: ", len(dh))
-	result = k.verify(dh, (signum,))
-	progress("result:", result)
+        # http://www.amk.ca/python/writing/pycrypt/pycrypt.html
+        # and debian python23-crypto package
+        from Crypto.PublicKey import RSA
+        from Crypto.Hash import SHA
+        k = RSA.construct((key._n, key._e))
+        dh = SHA.new(data).digest()
+        progress("hash length: ", len(dh))
+        result = k.verify(dh, (signum,))
+        progress("result:", result)
 
 def pycryptest():
     from Crypto.PublicKey import RSA
@@ -109,13 +109,13 @@ def pycryptest():
 
 class RSAKey:
     def __init__(self, e, n):
-	self._e = e
-	self._n = n
-	
+        self._e = e
+        self._n = n
+        
     def to_blob(self):
-	return packString("ssh-rsa") + \
-	       packBignum(self._e) + \
-	       packBignum(self._n)
+        return packString("ssh-rsa") + \
+               packBignum(self._e) + \
+               packBignum(self._n)
 
 
 class AgentFailed(IOError):
@@ -139,9 +139,9 @@ def ssh_agent_sign(auth, key, data):
     ty = ord(msg[0])
     if ty == SSH_AGENT_FAILURE or ty == SSH_COM_AGENT2_FAILURE or \
        ty == SSH2_AGENT_FAILURE:
-	raise AgentFailed, ty
+        raise AgentFailed, ty
     if ty != SSH2_AGENT_SIGN_RESPONSE:
-	raise ProtocolError, ("expected", SSH2_AGENT_SIGN_RESPONSE, "got", ty)
+        raise ProtocolError, ("expected", SSH2_AGENT_SIGN_RESPONSE, "got", ty)
     (ln,) = struct.unpack(">I", msg[1:5])
     assert(len(msg) == 1+4+ln)
     return msg[5:]
@@ -160,12 +160,12 @@ def read_all(auth, ln):
     progress("read_all:", ln)
     rx = ''
     while ln > 0:
-	r = auth.recv(ln)
+        r = auth.recv(ln)
         if not r:
             raise IOError, "lost ssh-agent"
         progress("rxd:", len(r))
-	rx += r
-	ln -= len(r)
+        rx += r
+        ln -= len(r)
     return rx
 
 import binascii
@@ -208,8 +208,8 @@ def getBignum(buf):
     progress("getBignum bytes:", ln)
     x = 0L
     for byte in bin:
-	#@@progress("byte: %02x" % ord(byte))
-	x = (x << 8) + ord(byte)
+        #@@progress("byte: %02x" % ord(byte))
+        x = (x << 8) + ord(byte)
     return x, buf[4+ln:]
 
 def packBignum(n):
@@ -220,14 +220,14 @@ def packBignum(n):
     if n<0: raise RuntimeError, "packing negative numbers not implemented"
     bs = ''
     while n > 0:
-	n, b = divmod(n, 256)
-	bs = chr(b) + bs
+        n, b = divmod(n, 256)
+        bs = chr(b) + bs
     return packString(bs)
 
 def progress(*args):
     import sys
     for a in args:
-	sys.stderr.write("%s " % a)
+        sys.stderr.write("%s " % a)
     sys.stderr.write("\n")
 
 def _test():
@@ -242,7 +242,10 @@ if __name__ == '__main__':
     main()
 
 # $Log$
-# Revision 1.6  2006-11-02 05:27:25  connolly
+# Revision 1.7  2007-06-26 02:36:17  syosi
+# fix tabs
+#
+# Revision 1.6  2006/11/02 05:27:25  connolly
 # end-of-life in favor of credstore
 #
 # Revision 1.5  2004/06/10 12:44:58  connolly

@@ -38,9 +38,9 @@ class rdflib_handoff:
         self.ns_prefix_map = {}
         self.prefix_ns_map = {}
         self.anonymousNodes = {}
-	self._reason = why	# Why the parser w
-	self._reason2 = None	# Why these triples
-	if diag.tracking: self._reason2 = BecauseOfData(sink.newSymbol(thisDoc), because=self._reason)
+        self._reason = why      # Why the parser w
+        self._reason2 = None    # Why these triples
+        if diag.tracking: self._reason2 = BecauseOfData(sink.newSymbol(thisDoc), because=self._reason)
 
     def prefix_mapping(self, prefix, uri, override=False):
         self.prefix_ns_map[prefix] = uri

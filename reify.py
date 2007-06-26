@@ -29,33 +29,33 @@ class rTerm(Mixin, Term):
 
 class rLabelledNode(Mixin, LabelledNode):
     def reification(self, sink, bnodeMap={}, why=None):
-	"""Describe myself in RDF to the given context
-	
-	[ reify:uri "http://example.org/whatever"]
-	""" #"
-	b = sink.newBlankNode(why=why)
-	uri = sink.newSymbol(REIFY_NS + "uri")
-	sink.add(subj=b, pred=uri, obj=sink.newLiteral(self.uriref()), why=why)
-	return b
+        """Describe myself in RDF to the given context
+        
+        [ reify:uri "http://example.org/whatever"]
+        """ #"
+        b = sink.newBlankNode(why=why)
+        uri = sink.newSymbol(REIFY_NS + "uri")
+        sink.add(subj=b, pred=uri, obj=sink.newLiteral(self.uriref()), why=why)
+        return b
 
     def flatten(self, sink, why=None):
         return self
 
 class rAnonymousNode(Mixin, AnonymousNode):
     def reification(self, sink, bnodeMap={}, why=None):
-	"""Describe myself in RDF to the given context
-	
-	[ reify:items ( [ reify:value "foo"]  .... ) ]
-	"""
-	try:
-	    return bnodeMap[self]
-	except KeyError:
-	    b = sink.newBlankNode()
-	    bnodeMap[self] = b
-	q = sink.newSymbol(RDF_type_URI)
-	r = sink.newSymbol(REIFY_NS+"BlankNode")
-	sink.add(subj=b, pred=q, obj=r, why=why)
-	return b
+        """Describe myself in RDF to the given context
+        
+        [ reify:items ( [ reify:value "foo"]  .... ) ]
+        """
+        try:
+            return bnodeMap[self]
+        except KeyError:
+            b = sink.newBlankNode()
+            bnodeMap[self] = b
+        q = sink.newSymbol(RDF_type_URI)
+        r = sink.newSymbol(REIFY_NS+"BlankNode")
+        sink.add(subj=b, pred=q, obj=r, why=why)
+        return b
 
     def flatten(self, sink, why=None):
         sink.declareExistential(self)
@@ -70,17 +70,17 @@ class rAnonymousNode(Mixin, AnonymousNode):
 
 class rN3Set(Mixin, N3Set):
     def reification(self, sink, bnodeMap={}, why=None):
-	"""Describe myself in RDF to the given context
-	
-	[ reify:items ( [ reify:value "foo"]  .... ) ]
-	"""
-	m = [x for x in self]
-	m.sort(Term.compareAnyTerm)
-	mm = [x.reification(sink, bnodeMap, why) for x in m]
-	elements = sink.store.newSet(mm)
-	b = sink.newBlankNode()
-	sink.add(subj=b, pred=sink.newSymbol(REIFY_NS+"items"), obj=elements, why=why)
-	return b
+        """Describe myself in RDF to the given context
+        
+        [ reify:items ( [ reify:value "foo"]  .... ) ]
+        """
+        m = [x for x in self]
+        m.sort(Term.compareAnyTerm)
+        mm = [x.reification(sink, bnodeMap, why) for x in m]
+        elements = sink.store.newSet(mm)
+        b = sink.newBlankNode()
+        sink.add(subj=b, pred=sink.newSymbol(REIFY_NS+"items"), obj=elements, why=why)
+        return b
 
     def flatten(self, sink, why=None):
         newlist = sink.store.newSet([x.flatten(sink, why=why) for x in self])
@@ -93,14 +93,14 @@ class rN3Set(Mixin, N3Set):
 
 class rList(Mixin, List):
     def reification(self, sink, bnodeMap={}, why=None):
-	"""Describe myself in RDF to the given context
-	
-	[ reify:items ( [ reify:value "foo"]  .... ) ]
-	"""
-	elements = sink.newList([ x.reification(sink, bnodeMap, why) for x in self])
-	b = sink.newBlankNode()
-	sink.add(subj=b, pred=sink.newSymbol(REIFY_NS+"items"), obj=elements, why=why)
-	return b
+        """Describe myself in RDF to the given context
+        
+        [ reify:items ( [ reify:value "foo"]  .... ) ]
+        """
+        elements = sink.newList([ x.reification(sink, bnodeMap, why) for x in self])
+        b = sink.newBlankNode()
+        sink.add(subj=b, pred=sink.newSymbol(REIFY_NS+"items"), obj=elements, why=why)
+        return b
 
     def flatten(self, sink, why=None):
         newlist = sink.newList([x.flatten(sink, why=why) for x in self])
@@ -112,13 +112,13 @@ class rList(Mixin, List):
 
 class rLiteral(Mixin, Literal):
     def reification(self, sink, bnodeMap={}, why=None):
-	"""Describe myself in RDF to the given context
-	
-	[ reify:value "un expression quelconque"@fr ]
-	"""
-	b = sink.newBlankNode(why=why)
-	sink.add(subj=b, pred=sink.newSymbol(REIFY_NS+"value"), obj=self, why=why)
-	return b
+        """Describe myself in RDF to the given context
+        
+        [ reify:value "un expression quelconque"@fr ]
+        """
+        b = sink.newBlankNode(why=why)
+        sink.add(subj=b, pred=sink.newSymbol(REIFY_NS+"value"), obj=self, why=why)
+        return b
 
     def flatten(self, sink, why=None):
         return self
@@ -126,42 +126,42 @@ class rLiteral(Mixin, Literal):
 
 class rFormula(Mixin, Formula):
     def reification(self, sink, bnodeMap={}, why=None):
-	"""Describe myself in RDF to the given context
-	
-	
-	"""
-	list = [].__class__
-	try:
-	    return bnodeMap[self]
-	except KeyError:
-	    F = sink.newBlankNode()
-	    bnodeMap[self] = F
-	rei = sink.newSymbol(reifyNS[:-1])
-	myMap = {}
-	ooo = sink.newSymbol(owlOneOf)
-	es = list(self.existentials())
-	es.sort(Term.compareAnyTerm)
-	us = list(self.universals())
-	us.sort(Term.compareAnyTerm)
-	for vars, vocab in ((es,  rei["existentials"]), 
-			(us, rei["universals"])):
-	    if diag.chatty_flag > 54:
-        	progress("vars=", vars)
+        """Describe myself in RDF to the given context
+        
+        
+        """
+        list = [].__class__
+        try:
+            return bnodeMap[self]
+        except KeyError:
+            F = sink.newBlankNode()
+            bnodeMap[self] = F
+        rei = sink.newSymbol(reifyNS[:-1])
+        myMap = {}
+        ooo = sink.newSymbol(owlOneOf)
+        es = list(self.existentials())
+        es.sort(Term.compareAnyTerm)
+        us = list(self.universals())
+        us.sort(Term.compareAnyTerm)
+        for vars, vocab in ((es,  rei["existentials"]), 
+                        (us, rei["universals"])):
+            if diag.chatty_flag > 54:
+                progress("vars=", vars)
                 progress("vars=", [v.uriref() for v in vars])
-	    list = sink.store.nil.newList([sink.newLiteral(x.uriref()) for x in vars])
-	    klass = sink.newBlankNode()
+            list = sink.store.nil.newList([sink.newLiteral(x.uriref()) for x in vars])
+            klass = sink.newBlankNode()
             sink.add(klass, ooo, list)
-	    sink.add(F, vocab, klass, why) 
+            sink.add(F, vocab, klass, why) 
 
 
-	#The great list of statements
+        #The great list of statements
         statementList = []
         for s in self.statements:
             subj = sink.newBlankNode()
-	    sink.add(subj, rei["subject"], s[SUBJ].reification(sink, myMap, why), why) 
-	    sink.add(subj, rei["predicate"], s[PRED].reification(sink, myMap, why), why )
-	    sink.add(subj, rei["object"], s[OBJ].reification(sink, myMap, why), why) 
-	    statementList.append(subj)
+            sink.add(subj, rei["subject"], s[SUBJ].reification(sink, myMap, why), why) 
+            sink.add(subj, rei["predicate"], s[PRED].reification(sink, myMap, why), why )
+            sink.add(subj, rei["object"], s[OBJ].reification(sink, myMap, why), why) 
+            statementList.append(subj)
             
     #The great class of statements
         StatementClass = sink.newBlankNode()
@@ -169,8 +169,8 @@ class rFormula(Mixin, Formula):
         sink.add(StatementClass, ooo, realStatementList,  why)
     #We now know something!
         sink.add(F, rei["statements"], StatementClass, why)
-	    
-	return F
+            
+        return F
 
     def flatten(self, sink, why=None):
         return self.reification(sink, {}, why=why)
@@ -264,7 +264,7 @@ def unflatten(formula, sink=None):
     """
     store = formula.store
     if sink == None:
-	sink = formula.newFormula()
+        sink = formula.newFormula()
     bNodes = {}     #to track bNodes that bacome formulae
     rei = formula.newSymbol(reifyNS[:-1])
     formulaList = formula.each(pred=rei["statements"])
@@ -296,11 +296,11 @@ def unflatten(formula, sink=None):
 def dereify(formula, sink=None, xList=[]):
     store = formula.store
     if sink == None:
-	sink = formula.newFormula()
+        sink = formula.newFormula()
     weKnowList = formula.each(pred=store.type, obj=store.Truth)
     for weKnow in weKnowList:
-	f = dereification(weKnow, formula, sink, xList=xList)
-	sink.loadFormulaWithSubstitution(f)
+        f = dereification(weKnow, formula, sink, xList=xList)
+        sink.loadFormulaWithSubstitution(f)
     return sink
 
 def dereification(x, f, sink, bnodes={}, xList=[]):
@@ -308,10 +308,10 @@ def dereification(x, f, sink, bnodes={}, xList=[]):
     xList.append(x)
     
     if x == None:
-	raise ValueError, "Can't dereify nothing. Suspect missing information in reified form."
+        raise ValueError, "Can't dereify nothing. Suspect missing information in reified form."
     y = f.the(subj=x, pred=rei["uri"])
     if y != None: return sink.newSymbol(y.value())
-	
+        
     y = f.the(subj=x, pred=rei["value"])
     if y != None: return y
     
@@ -325,38 +325,38 @@ def dereification(x, f, sink, bnodes={}, xList=[]):
     
     y = f.the(subj=x, pred=rei["statements"])
     if y != None:
-	z = sink.newFormula()
-	zbNodes = {}  # Bnode map for this formula
-	
-	uset = f.the(subj=x, pred=rei["universals"])
-	xList.append(uset)
-	ulist = uset #f.the(subj=uset, pred=f.newSymbol(owlOneOf))
-	xList.append(ulist)
-	from diag import progress
-	if diag.chatty_flag > 54:
+        z = sink.newFormula()
+        zbNodes = {}  # Bnode map for this formula
+        
+        uset = f.the(subj=x, pred=rei["universals"])
+        xList.append(uset)
+        ulist = uset #f.the(subj=uset, pred=f.newSymbol(owlOneOf))
+        xList.append(ulist)
+        from diag import progress
+        if diag.chatty_flag > 54:
             progress("universals = ",ulist)
-	for v in ulist:
-	    z.declareUniversal(f.newSymbol(v.value()))
+        for v in ulist:
+            z.declareUniversal(f.newSymbol(v.value()))
 
-	uset = f.the(subj=x, pred=rei["existentials"])
-	xList.append(uset)
-	ulist = uset #f.the(subj=uset, pred=f.newSymbol(owlOneOf))
-	xList.append(ulist)
-	if diag.chatty_flag > 54:
+        uset = f.the(subj=x, pred=rei["existentials"])
+        xList.append(uset)
+        ulist = uset #f.the(subj=uset, pred=f.newSymbol(owlOneOf))
+        xList.append(ulist)
+        if diag.chatty_flag > 54:
             progress("existentials %s =  %s"%(ulist, ulist.value()))
-	for v in ulist:
+        for v in ulist:
             if diag.chatty_flag > 54:
                 progress("Variable is ", v)
-	    z.declareExistential(f.newSymbol(v.value()))
-	yy = y #f.the(subj=y, pred=f.newSymbol(owlOneOf))
-	xList.append(yy)
-	if diag.chatty_flag > 54:
+            z.declareExistential(f.newSymbol(v.value()))
+        yy = y #f.the(subj=y, pred=f.newSymbol(owlOneOf))
+        xList.append(yy)
+        if diag.chatty_flag > 54:
             progress("Statements:  set=%s, list=%s = %s" %(y,yy, yy.value()))
-	for stmt in yy:
-	    z.add(dereification(f.the(subj=stmt, pred=rei["subject"]), f, sink, zbNodes, xList),
-		dereification(f.the(subj=stmt, pred=rei["predicate"]), f, sink, zbNodes, xList),
-		dereification(f.the(subj=stmt, pred=rei["object"]), f, sink, zbNodes, xList))
-	return z.close()
+        for stmt in yy:
+            z.add(dereification(f.the(subj=stmt, pred=rei["subject"]), f, sink, zbNodes, xList),
+                dereification(f.the(subj=stmt, pred=rei["predicate"]), f, sink, zbNodes, xList),
+                dereification(f.the(subj=stmt, pred=rei["object"]), f, sink, zbNodes, xList))
+        return z.close()
     y = f.the(subj=x, pred=f.newSymbol(RDF_type_URI))
     if y is not None:
         if x in bnodes:

@@ -23,7 +23,7 @@ import string
 import re
 
 import notation3    # N3 parsers and generators, and RDF generator
-import isodate	    # Local, by mnot. implements <http://www.w3.org/TR/NOTE-datetime>
+import isodate      # Local, by mnot. implements <http://www.w3.org/TR/NOTE-datetime>
 from diag import progress, verbosity
 from term import LightBuiltIn, Function, ReverseFunction
 
@@ -41,7 +41,7 @@ class BI_uri_canon(LightBuiltIn, Function):
         try:
             return uripath.canon(subj_py)
         except ValueError, AssertionError:
-	    progress("Warning: Failed to parse uri string '%s'" % subj_py)
+            progress("Warning: Failed to parse uri string '%s'" % subj_py)
             return None
 
 class BI_uri_scheme(LightBuiltIn, Function):
@@ -51,7 +51,7 @@ class BI_uri_scheme(LightBuiltIn, Function):
         try:
             return uripath.scheme(subj_py)
         except ValueError, AssertionError:
-	    progress("Warning: Failed to parse uri string '%s'" % subj_py)
+            progress("Warning: Failed to parse uri string '%s'" % subj_py)
             return None
 
 class BI_uri_host(LightBuiltIn, Function):
@@ -61,7 +61,7 @@ class BI_uri_host(LightBuiltIn, Function):
         try:
             return uripath.host(subj_py)
         except ValueError, AssertionError:
-	    progress("Warning: Failed to parse uri string '%s'" % subj_py)
+            progress("Warning: Failed to parse uri string '%s'" % subj_py)
             return None
 
 

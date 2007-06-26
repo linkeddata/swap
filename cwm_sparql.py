@@ -326,8 +326,8 @@ class BI_semantics(HeavyBuiltIn, Function):
         inputURI = doc.uriref()
         F = self.store.load(inputURI, contentType="x-application/sparql")
         if diag.chatty_flag>10: progress("    semantics: %s" % (F))
-	if diag.tracking:
-	    proof.append(F.collector)
+        if diag.tracking:
+            proof.append(F.collector)
         return F.canonicalize()
 
 def register(store):

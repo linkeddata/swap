@@ -34,14 +34,14 @@ makeExistential = makeVarCounter('_:a')
 
 def SparqlQuery(query, items, serviceURI):
     """Perform remote query as client on remote store.
-	See $SWAP/query.py
+        See $SWAP/query.py
     """
 ##    diag.chatty_flag = 99    # @@@@@@
     if diag.chatty_flag > 10:
-	progress("SPARQL Query on service %s,\n\tvariables: %s;\n\texistentials: %s" %
-			    (serviceURI, query.variables, query.existentials()))
-	for item in items:
-	    progress("\tSparql query line: %s" % (`item`))
+        progress("SPARQL Query on service %s,\n\tvariables: %s;\n\texistentials: %s" %
+                            (serviceURI, query.variables, query.existentials()))
+        for item in items:
+            progress("\tSparql query line: %s" % (`item`))
     
 #    s = query.n3String()
 #    progress("QUERY IS ", s)
@@ -262,7 +262,7 @@ def representationOf(pair):
                 return toBool(s) and "true" or "false"
         if "n" not in _flags:
             dt_uri = dt
-#		dt_uri = dt.uriref()		 
+#               dt_uri = dt.uriref()             
             if (dt_uri == INTEGER_DATATYPE):
                 return str(long(s))
             if (dt_uri == FLOAT_DATATYPE):

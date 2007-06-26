@@ -38,26 +38,26 @@ class BI_in(LightBuiltIn, MultipleReverseFunction):
     """Is the subject in the object?
     Returnes a sequence of values."""
     def eval(self, subj, obj, queue, bindings, proof, query):
-	if not isinstance(obj, CompoundTerm): return None
-	return subj in obj
+        if not isinstance(obj, CompoundTerm): return None
+        return subj in obj
         
 
     def evalSubj(self, obj, queue, bindings, proof, query):
-	if not isinstance(obj, NonEmptyList) and not isinstance(obj, N3Set): return None
-	rea = None
-	return [x or x in obj]  # [({subj:x}, rea) for x in obj]
+        if not isinstance(obj, NonEmptyList) and not isinstance(obj, N3Set): return None
+        rea = None
+        return [x or x in obj]  # [({subj:x}, rea) for x in obj]
 
 class BI_member(LightBuiltIn, MultipleFunction):
     """Is the subject in the object?
     Returnes a sequence of values."""
     def eval(self, subj, obj, queue, bindings, proof, query):
-	if not isinstance(subj, CompoundTerm): return None
-	return obj in subj
+        if not isinstance(subj, CompoundTerm): return None
+        return obj in subj
 
     def evalObj(self,subj, queue, bindings, proof, query):
-	if not isinstance(subj, NonEmptyList) and not isinstance(subj, N3Set): return None
-	rea = None
-	return subj # [({obj:x}, rea) for x in subj]
+        if not isinstance(subj, NonEmptyList) and not isinstance(subj, N3Set): return None
+        rea = None
+        return subj # [({obj:x}, rea) for x in subj]
 
 
 class BI_union(LightBuiltIn, Function):

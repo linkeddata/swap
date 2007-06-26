@@ -15,8 +15,8 @@ import llyn
 from diag import verbosity, setVerbosity, progress
 
 
-import notation3    	# N3 parsers and generators
-# import toXML 		#  RDF generator
+import notation3        # N3 parsers and generators
+# import toXML          #  RDF generator
 
 from RDFSink import FORMULA, LITERAL, ANONYMOUS, Logic_NS
 import uripath
@@ -179,11 +179,11 @@ def substitute(form, dict):
     str = form[:]
     r = re.compile(r"^(.*)(\$[_A-Za-z0-9]*\$)(.*)$", re.MULTILINE)
     while 1:
-	m = r.search(str)
-	if m == None: break
-	start, end = m.start(2), m.end(2)
-	progress( "Matched start, end", start, end, str[start:end])
-	str = str[:start] + dict[str[start:end][1:-1]] + str[end:]
+        m = r.search(str)
+        if m == None: break
+        start, end = m.start(2), m.end(2)
+        progress( "Matched start, end", start, end, str[start:end])
+        str = str[:start] + dict[str[start:end][1:-1]] + str[end:]
     return str
 
 def doCommand(year, inputURI="/dev/stdin"):
@@ -198,89 +198,89 @@ def doCommand(year, inputURI="/dev/stdin"):
         import sys
         global sax2rdf
         import thing
-	from thing import load
-	global kb
+        from thing import load
+        global kb
         #from thing import chatty
         #import sax2rdf
-	import os
+        import os
 
 # Load the data:
-	home = os.environ["HOME"]
-	personalInfo = load(home + "/.personal.n3")
-	me = personalInfo.statementsMatching(pred=contact.ssn)[0].subject()
-	myname = (personalInfo.the(subj=me, pred=contact.givenName).string + " " +
-	    personalInfo.the(subj=me, pred=contact.familyName).string)
-	myssn = personalInfo.the(subj=me, pred=contact.ssn).string
-	myhome = personalInfo.the(subj=me, pred=contact.home)
-	mystreet = personalInfo.the(subj=myhome, pred=contact.street).string
-	mystate = personalInfo.the(subj=myhome, pred=contact.stateOrProvince).string
-	myzip = personalInfo.the(subj=myhome, pred=contact.postalCode).string
-	assert myname and myssn and mystreet and mystate and myzip
-	 
-	progress("Data from", inputURI)
-	kb=load(inputURI)
-#	print "# Size of kb: ", len(kb)
-	
-	# for /devel/WWW read http://www.w3.org/ when we have persistent cache
-	stateInfo = load("/devel/WWW/2000/10/swap/test/dbork/data/USRegionState.n3")
-	stateCodes = []
-	for s in stateInfo.statementsMatching(pred=state.code):
-	    stateCodes.append(s.object().string)
-	progress("#", len(stateCodes), "state codes")
-	
-	categories = kb.each(pred=rdf.type, obj=qu.Cat)
-	progress("%i categories found" % len(categories))
+        home = os.environ["HOME"]
+        personalInfo = load(home + "/.personal.n3")
+        me = personalInfo.statementsMatching(pred=contact.ssn)[0].subject()
+        myname = (personalInfo.the(subj=me, pred=contact.givenName).string + " " +
+            personalInfo.the(subj=me, pred=contact.familyName).string)
+        myssn = personalInfo.the(subj=me, pred=contact.ssn).string
+        myhome = personalInfo.the(subj=me, pred=contact.home)
+        mystreet = personalInfo.the(subj=myhome, pred=contact.street).string
+        mystate = personalInfo.the(subj=myhome, pred=contact.stateOrProvince).string
+        myzip = personalInfo.the(subj=myhome, pred=contact.postalCode).string
+        assert myname and myssn and mystreet and mystate and myzip
+         
+        progress("Data from", inputURI)
+        kb=load(inputURI)
+#       print "# Size of kb: ", len(kb)
+        
+        # for /devel/WWW read http://www.w3.org/ when we have persistent cache
+        stateInfo = load("/devel/WWW/2000/10/swap/test/dbork/data/USRegionState.n3")
+        stateCodes = []
+        for s in stateInfo.statementsMatching(pred=state.code):
+            stateCodes.append(s.object().string)
+        progress("#", len(stateCodes), "state codes")
+        
+        categories = kb.each(pred=rdf.type, obj=qu.Cat)
+        progress("%i categories found" % len(categories))
 
-	maUseTaxable = kb.each(pred=rdf.type, obj=ma.useTaxable)
+        maUseTaxable = kb.each(pred=rdf.type, obj=ma.useTaxable)
 
-	total = 0
-	rows = ""
-	for s in maUseTaxable:
-	    date = kb.any(subj=s, pred=qu.date).__str__()
-	    year = int(date[0:4])
-	    if  int(year) != int(yearInQuestion): continue
-	    
-	    payees = kb.each(subj=s, pred=qu.payee)
-	    if str(payees[0]) == "Check" and len(payees) >1: payee = payees[1]
-	    else: payee = payees[0]
-	    payee=payee.string
-	    if payee[-3:-2] == " ":
-		sc = payee [-2:]
-		if sc in stateCodes and sc != "MA":
-		    amount = -float(kb.the(subj=s, pred=qu.amount).__str__())
-		    mycat = "@@@"
-		    classes = kb.each(subj=s, pred=rdf.type)
-		    for c in classes:
-			if c in categories:
-			    mycat = kb.the(subj=c, pred=rdfs.label)
-		    progress( "# %s  %40s  %10s" %(date, payee, `amount`))
-		    rows = rows + """    <tr><td>%s</td><td>%s</td><td>%s</td>
-		    <td class='amount'>%7.2f</td><td class='amount'>0</td></tr>\n""" %(
-			date[:10], payee, mycat, amount)
-		    total = total + amount
-		
-	progress('<%s>\n\t<%s> "%7.2f".' % ( ma.useTaxable.uriref(), qu.total.uriref(), total))
-	progress( "# ie sales tax of 5%% would be $%7.2f" % (total*0.05))
+        total = 0
+        rows = ""
+        for s in maUseTaxable:
+            date = kb.any(subj=s, pred=qu.date).__str__()
+            year = int(date[0:4])
+            if  int(year) != int(yearInQuestion): continue
+            
+            payees = kb.each(subj=s, pred=qu.payee)
+            if str(payees[0]) == "Check" and len(payees) >1: payee = payees[1]
+            else: payee = payees[0]
+            payee=payee.string
+            if payee[-3:-2] == " ":
+                sc = payee [-2:]
+                if sc in stateCodes and sc != "MA":
+                    amount = -float(kb.the(subj=s, pred=qu.amount).__str__())
+                    mycat = "@@@"
+                    classes = kb.each(subj=s, pred=rdf.type)
+                    for c in classes:
+                        if c in categories:
+                            mycat = kb.the(subj=c, pred=rdfs.label)
+                    progress( "# %s  %40s  %10s" %(date, payee, `amount`))
+                    rows = rows + """    <tr><td>%s</td><td>%s</td><td>%s</td>
+                    <td class='amount'>%7.2f</td><td class='amount'>0</td></tr>\n""" %(
+                        date[:10], payee, mycat, amount)
+                    total = total + amount
+                
+        progress('<%s>\n\t<%s> "%7.2f".' % ( ma.useTaxable.uriref(), qu.total.uriref(), total))
+        progress( "# ie sales tax of 5%% would be $%7.2f" % (total*0.05))
 
-	
-	values = { "name": myname, "ssn": myssn,
-		    "address": 	mystreet,
-		    "state": 	mystate,
-		    "zip":	myzip,
-		    "l1":	yearInQuestion,
-		    "l2":	"%7.2f" % total,
-		    "l3":	"%7.2f" % (total * 0.05),
-		    "l4":	"0",
-		    "l5":	"%7.2f" % (total * 0.05),
-		    "l6":	"0",
-		    "l7":	"0",
-		    "l8":	"%7.2f" % (total * 0.05),
-		    "l9":	"%7.2f" % total,
-		    "l10":	"0",
-		    "rows":	rows
-		     }
+        
+        values = { "name": myname, "ssn": myssn,
+                    "address":  mystreet,
+                    "state":    mystate,
+                    "zip":      myzip,
+                    "l1":       yearInQuestion,
+                    "l2":       "%7.2f" % total,
+                    "l3":       "%7.2f" % (total * 0.05),
+                    "l4":       "0",
+                    "l5":       "%7.2f" % (total * 0.05),
+                    "l6":       "0",
+                    "l7":       "0",
+                    "l8":       "%7.2f" % (total * 0.05),
+                    "l9":       "%7.2f" % total,
+                    "l10":      "0",
+                    "rows":     rows
+                     }
 
-	print substitute(form, values)
+        print substitute(form, values)
         
 ############################################################ Main program
     
@@ -296,7 +296,7 @@ if __name__ == '__main__':
     verbose = 0
     try:
         opts, args = getopt.getopt(sys.argv[1:], "hvy:i:",
-	    ["help",  "verbose", "year=", "input="])
+            ["help",  "verbose", "year=", "input="])
     except getopt.GetoptError:
         # print help information and exit:
         print __doc__
@@ -307,7 +307,7 @@ if __name__ == '__main__':
             usage()
             sys.exit()
         if o in ("-v", "--verbose"):
-	    verbose = 1
+            verbose = 1
         if o in ("-y", "--year"):
             yearInQuestion = a
         if o in ("-i", "--input"):

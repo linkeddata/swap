@@ -76,11 +76,11 @@ def numeric(s):
 
 class BI_absoluteValue(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
-	return abs(numeric(subj_py))
+        return abs(numeric(subj_py))
 
 class BI_rounded(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
-	return round(float(subj_py))
+        return round(float(subj_py))
 
 class BI_sum(LightBuiltIn, Function):
     def evaluateObject(self,  subj_py):
@@ -92,7 +92,7 @@ class BI_sum(LightBuiltIn, Function):
 class BI_sumOf(LightBuiltIn, ReverseFunction):
     def evaluateSubject(self, obj_py): 
         t = 0
-	obsolete()
+        obsolete()
         for x in obj_py: t += numeric(x)
         return t
 
@@ -100,11 +100,11 @@ class BI_sumOf(LightBuiltIn, ReverseFunction):
 class BI_difference(LightBuiltIn, Function):
     def evaluateObject(self, subj_py): 
         if len(subj_py) == 2:
-	    return numeric(subj_py[0]) - numeric(subj_py[1])
+            return numeric(subj_py[0]) - numeric(subj_py[1])
 
 class BI_differenceOf(LightBuiltIn, ReverseFunction):
     def evaluateSubject(self,  obj_py): 
-	obsolete()
+        obsolete()
         if len(obj_py) == 2: return numeric(obj_py[0]) - numeric(obj_py[1])
 
 
@@ -116,7 +116,7 @@ class BI_product(LightBuiltIn, Function):
 
 class BI_factors(LightBuiltIn, ReverseFunction):
     def evaluateSubject(self, obj_py): 
-	obsolete()
+        obsolete()
         t = 1
         for x in obj_py: t *= numeric(x)
         return t
@@ -202,12 +202,12 @@ class BI_equalTo(LightBuiltIn):
 
 class BI_notEqualTo(LightBuiltIn):
     def evaluate(self, subject, object):
-	try:
-	    return (float(subject) != float(object))
-	except  (ValueError, AttributeError):
-	    return None # AttributeError: Symbol instance has no attribute '__float__'
-	# or: ValueError: invalid literal for float(): PT1H
-	    
+        try:
+            return (float(subject) != float(object))
+        except  (ValueError, AttributeError):
+            return None # AttributeError: Symbol instance has no attribute '__float__'
+        # or: ValueError: invalid literal for float(): PT1H
+            
 # memberCount - this is a proper forward function
 
 class BI_memberCount(LightBuiltIn, Function):

@@ -244,7 +244,7 @@ class Parser(_Parser):
     def __init__(self, scanner, sink, baseURI):
         _Parser.__init__(self, scanner)
         self._sink = sink
-	self._docScope = sink.newFormula()
+        self._docScope = sink.newFormula()
         self._baseURI = baseURI
         self._prefixes = {}
         self._serial = 1
@@ -252,7 +252,7 @@ class Parser(_Parser):
         self._vnames = {}
 
     def docScope(self):
-	return self._docScope
+        return self._docScope
 
     def uriref(self, str):
         return Symbol(uripath.join(self._baseURI, str[1:-1]))
@@ -315,39 +315,39 @@ class Parser(_Parser):
         self._prefixes[pfx] = addr
 
     def gotStatement(self, scp, subj, verb, obj):
-	#DEBUG("gotStatement:", scp, subj, verb, obj)
+        #DEBUG("gotStatement:", scp, subj, verb, obj)
         
         dir, pred = verb
         if dir<0: subj, obj = obj, subj
-	if scp is subj and pred is LOG['forAll']:
-	    DEBUG("@@bogus forAll", obj)
-	elif scp is subj and pred is LOG['forSome']:
-	    DEBUG("@@bogus forSome", obj)
-	else:
-	    scp.add(pred, subj, obj)
+        if scp is subj and pred is LOG['forAll']:
+            DEBUG("@@bogus forAll", obj)
+        elif scp is subj and pred is LOG['forSome']:
+            DEBUG("@@bogus forSome", obj)
+        else:
+            scp.add(pred, subj, obj)
 
     def newScope(self):
         return self._sink.newFormula()
 
     def something(self, scp, hint="thing",
                   univ = 0):
-	return scp.mkVar(hint, univ)
+        return scp.mkVar(hint, univ)
 
 
     def mkList(self, scp, items):
-	tail = None
-	head = LIST['nil']
-	say = scp.add
-	for term in items:
-	    cons = scp.mkVar("cons")
-	    say(LIST['first'], cons, term)
-	    if tail:
-	        say(LIST['rest'], tail, cons)
-	    tail = cons
-	    if not head: head = cons
-	if tail:
-	    say(LIST['rest'], tail, LIST['nil'])
-	return head
+        tail = None
+        head = LIST['nil']
+        say = scp.add
+        for term in items:
+            cons = scp.mkVar("cons")
+            say(LIST['first'], cons, term)
+            if tail:
+                say(LIST['rest'], tail, cons)
+            tail = cons
+            if not head: head = cons
+        if tail:
+            say(LIST['rest'], tail, LIST['nil'])
+        return head
 
 
 def DEBUG(*args):
@@ -357,7 +357,10 @@ def DEBUG(*args):
     sys.stderr.write("\n")
     
 # $Log$
-# Revision 1.6  2003-09-14 20:20:24  timbl
+# Revision 1.7  2007-06-26 02:36:15  syosi
+# fix tabs
+#
+# Revision 1.6  2003/09/14 20:20:24  timbl
 # Merged runSmart branh, which now passes tests.
 # The main change is that query.n3 mapps the rules before executing them,
 # and then exeutes them in an order which takes account of the

@@ -101,10 +101,10 @@ advantage of merging instead of nesting sets
         del self[fromkey]
         self[tokey] = m
     def __add__(self, other):
-	k = self.__class__()
-	k.update(self)
-	k.update(other)
-	return k
+        k = self.__class__()
+        k.update(self)
+        k.update(other)
+        return k
     def _fromTuples(cls, iterator):
         m = cls()
         for key, val in iterator:
@@ -590,11 +590,11 @@ class FromSparql(productionHandler):
         self.uribase = uripath.base()
         self.dataSets = None
         NotNot.on_Boolean = on_Boolean_Gen(self.true, self.false)
-        self._reason = why	# Why the parser w
-	_reason2 = None	# Why these triples
-	if diag.tracking: _reason2 = BecauseOfData(store.newSymbol(self.base), because=self._reason)
-	reason2(_reason2)
-	self.anNodes = {}
+        self._reason = why      # Why the parser w
+        _reason2 = None # Why these triples
+        if diag.tracking: _reason2 = BecauseOfData(store.newSymbol(self.base), because=self._reason)
+        reason2(_reason2)
+        self.anNodes = {}
 
     def anonymize(self, formula, uri = None):
         if uri is not None:

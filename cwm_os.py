@@ -60,7 +60,7 @@ class BI_baseRelative(LightBuiltIn, Function, ReverseFunction):
         progress("Warning: os:baseRelative input is not a string: "+`subj_py`)
 
     def evaluateSubject(self, subj_py):
-	return BI_baseAbsolute.evaluateObject(self, subj_py)
+        return BI_baseAbsolute.evaluateObject(self, subj_py)
 
 # Command line argument: read-only
 #  The command lines are passed though cwm using "--with" and into the RDFStore when init'ed.

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #
 """Print web URIs for files
-	    
+            
 To make this work:
 Put a .web_base file in the highest directory of a tree exported to the
 web giving the web address of the pace that directory is exported to.
@@ -22,19 +22,19 @@ def baseDirBase(abs):
     basedir = abs
 #    basedir, tail = os.path.split(abs)
     while basedir  != '/':
-	wb = basedir + '/.web_base'
-	if verbose: print "# trying "+wb
-	try:
-	    f = open(wb)
-	    break
-	except IOError:
-	    basedir, tail = os.path.split(basedir)
-	    if basedir != '/': continue
-	    print "No .web_base file for ", path
-	    return None, None
+        wb = basedir + '/.web_base'
+        if verbose: print "# trying "+wb
+        try:
+            f = open(wb)
+            break
+        except IOError:
+            basedir, tail = os.path.split(basedir)
+            if basedir != '/': continue
+            print "No .web_base file for ", path
+            return None, None
     if f:
-	base = f.readline()
-	while base[-1:] in "\n\r \t": base = base[:-1]
+        base = f.readline()
+        while base[-1:] in "\n\r \t": base = base[:-1]
     return basedir, base
 
 
@@ -43,9 +43,9 @@ files = []
 for arg in sys.argv[1:]:
     if arg[0:1] == "-":
         if arg == "-?" or arg == "--help":
-	    print__doc__
+            print__doc__
         elif arg == "-v": verbose = 1
-	else:
+        else:
             print """Bad option argument.""" + __doc__
             sys.exit(-1)
     else:
@@ -60,6 +60,6 @@ for path in files:
     if verbose: print "# abs = "+abs
     basedir, base = baseDirBase(abs)
     if basedir:
-	print abs.replace(basedir, base)
+        print abs.replace(basedir, base)
 
 #ends

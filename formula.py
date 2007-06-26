@@ -260,7 +260,7 @@ For future reference, use newUniversal
 	If none, returns []
 	"""
         for s in self.statements:
-	    if ((pred == None or pred is s.predciate()) and
+	    if ((pred == None or pred is s.predicate()) and
 		    (subj == None or subj is s.subject()) and
 		    (obj == None or obj is s.object())):
 		yield s
@@ -273,7 +273,7 @@ For future reference, use newUniversal
 	    print "We've got one statement about something being some color"
 	"""
         for s in self.statements:
-	    if ((pred == None or pred is s.predciate()) and
+	    if ((pred == None or pred is s.predicate()) and
 		    (subj == None or subj is s.subject()) and
 		    (obj == None or obj is s.object())):
 		return 1
@@ -902,7 +902,7 @@ class StoredStatement:
 	c, p, s, o = self.quad
 	f = store.newFormula()   # @@@CAN WE DO THIS BY CLEVER SUBCLASSING? statement subclass of f?
 	f.add(s, p, o, why=why)
-	uu = f.occurringIn(c.universals())
+	uu = f.freeVariables().intersection(c.universals())
 	ee = f.occurringIn(c.existentials())
 	bindings = {}
 	

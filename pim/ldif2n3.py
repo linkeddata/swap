@@ -62,72 +62,72 @@ def convert(path):
     asFoaf = { "cn": "foaf:name" }
     
     while nextLine < len(buf):  # Iterate over lines
-	l = ""
-	while 1:  # unfold continuation lines
-	    eol = buf.find("\n", nextLine)
-	    if eol <0:
-		l += buf[nextLine:]
-		nextLine = len(buf);
-		break
-	    if eol+1 < len(buf) and buf[eol+1] == ' ':  # DOES LDIF fold lines??
-		l += buf[nextLine:eol]
-		nextLine = eol+2 # After the '\n '		
-		continue
-	    l += buf[nextLine:eol]
-	    nextLine = eol+1
-	    break
-	while l and l[-1:] in "\r\n": l = l[:-1]
-	
-	m = blank.match(l)
-	if m:
-	    print "    ]."
-	    inPerson = 0
-	    continue
-	
-	m = dataline.match(l)
-	if m:
-	    field = m.group(1)
-	    value = m.group(2)
-	else:
-	    m = base64line.match(l)
-	    if m:
-		field = m.group(1)
-		value = m.group(2)
-		value = base64.decodestring(m.group(2))
-	if m:
-	    if not inPerson:
-		print "    ["
-		inPerson = 1
-		
-	    if field == "objectclass":
-		if value == "top": continue # Zero content info
-		print '\ta ldif:%s; '% (value[0:1].upper() + value[1:])
-	    
-	    elif field in ["mail", "email", "mozillaSecondEmail"]:  ## @@ distinguish?
-		mboxUri = "mailto:" + value
-		hash = binascii.hexlify(sha.new(mboxUri).digest())
-		print '\tfoaf:mbox_sha1sum %s;' % (stringToN3(hash, singleLine=1))
-		if not hideMailbox:
-		    print '\tfoaf:mbox <%s>;' % (mboxUri)
-		    
-	    elif field in ["telephoneNumber", "homePhone", 'fax', 'pager', 'mobile']:
-		print '\tldif:%s <tel:%s>;' % (field, value.replace(' ','-'))
+        l = ""
+        while 1:  # unfold continuation lines
+            eol = buf.find("\n", nextLine)
+            if eol <0:
+                l += buf[nextLine:]
+                nextLine = len(buf);
+                break
+            if eol+1 < len(buf) and buf[eol+1] == ' ':  # DOES LDIF fold lines??
+                l += buf[nextLine:eol]
+                nextLine = eol+2 # After the '\n '              
+                continue
+            l += buf[nextLine:eol]
+            nextLine = eol+1
+            break
+        while l and l[-1:] in "\r\n": l = l[:-1]
+        
+        m = blank.match(l)
+        if m:
+            print "    ]."
+            inPerson = 0
+            continue
+        
+        m = dataline.match(l)
+        if m:
+            field = m.group(1)
+            value = m.group(2)
+        else:
+            m = base64line.match(l)
+            if m:
+                field = m.group(1)
+                value = m.group(2)
+                value = base64.decodestring(m.group(2))
+        if m:
+            if not inPerson:
+                print "    ["
+                inPerson = 1
+                
+            if field == "objectclass":
+                if value == "top": continue # Zero content info
+                print '\ta ldif:%s; '% (value[0:1].upper() + value[1:])
+            
+            elif field in ["mail", "email", "mozillaSecondEmail"]:  ## @@ distinguish?
+                mboxUri = "mailto:" + value
+                hash = binascii.hexlify(sha.new(mboxUri).digest())
+                print '\tfoaf:mbox_sha1sum %s;' % (stringToN3(hash, singleLine=1))
+                if not hideMailbox:
+                    print '\tfoaf:mbox <%s>;' % (mboxUri)
+                    
+            elif field in ["telephoneNumber", "homePhone", 'fax', 'pager', 'mobile']:
+                print '\tldif:%s <tel:%s>;' % (field, value.replace(' ','-'))
 
-	    else:
-	    
-		if field == "modifytimestamp" and value == "0Z":
-		    continue;  # ignore
+            else:
+            
+                if field == "modifytimestamp" and value == "0Z":
+                    continue;  # ignore
 
-		obj = stringToN3(value, singleLine=0)
-		pred = asFoaf.get(field, '\tldif:'+field)
-		if not (hideMailbox and field == "dn"):
-		    print '\t%s %s; '% (pred, obj)
+                obj = stringToN3(value, singleLine=0)
+                pred = asFoaf.get(field, '\tldif:'+field)
+                if not (hideMailbox and field == "dn"):
+                    print '\t%s %s; '% (pred, obj)
 
-	    continue
+            continue
 
-	print "# ERROR: Unknown line format:", l
+        print "# ERROR: Unknown line format:", l
     print "]."
-	
+        
 
 def do(path):
     if verbose: sys.stderr.write("# make2n3: converting " + path + "\n")
@@ -145,11 +145,11 @@ files = []
 for arg in sys.argv[1:]:
     if arg[0:1] == "-":
         if arg == "-?" or arg == "--help":
-	    print 
+            print 
         elif arg == "-v": verbose = 1
         elif arg == "-m": hideMailbox = 1
-	elif arg == "-l": pureLDIF = 1
-	else:
+        elif arg == "-l": pureLDIF = 1
+        else:
             print """Bad option argument.""" + __doc__
             sys.exit(-1)
     else:
