@@ -8,7 +8,7 @@
 <td valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>RDFSink</strong></big></big> (version $Id$)</font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/syosi/CVS-local/WWW/2000/10/swap/RDFSink.py">/home/syosi/CVS-local/WWW/2000/10/swap/RDFSink.py</a></font></td></tr></table>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/yosi/CVSROOT/WWW/2000/10/swap/RDFSink.py">/Users/yosi/CVSROOT/WWW/2000/10/swap/RDFSink.py</a></font></td></tr></table>
     <p><tt><a href="#RDFSink">RDFSink</a>&nbsp;--&nbsp;RDF&nbsp;parser/serializer/store&nbsp;interface<br>
 &nbsp;<br>
 This&nbsp;is&nbsp;a&nbsp;simple&nbsp;API&nbsp;for&nbsp;a&nbsp;push-stream&nbsp;of&nbsp;RDF&nbsp;data.&nbsp;It&nbsp;doesn't&nbsp;use<br>
@@ -137,6 +137,8 @@ why&nbsp;is&nbsp;reason&nbsp;for&nbsp;the&nbsp;statement.</tt></dd></dl>
 
 <dl><dt><a name="RDFSink-newUniversal"><strong>newUniversal</strong></a>(self, context, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt></dl>
 
+<dl><dt><a name="RDFSink-newXMLLiteral"><strong>newXMLLiteral</strong></a>(self, doc)</dt></dl>
+
 <dl><dt><a name="RDFSink-reopen"><strong>reopen</strong></a>(self)</dt><dd><tt>Un-End&nbsp;a&nbsp;document<br>
 &nbsp;<br>
 If&nbsp;you&nbsp;have&nbsp;added&nbsp;stuff&nbsp;to&nbsp;a&nbsp;document,&nbsp;thought&nbsp;you&nbsp;were&nbsp;done,&nbsp;and<br>
@@ -236,6 +238,8 @@ why&nbsp;is&nbsp;reason&nbsp;for&nbsp;the&nbsp;statement.</tt></dd></dl>
 <dl><dt><a name="RDFStructuredOutput-newSymbol"><strong>newSymbol</strong></a>(self, uri)</dt></dl>
 
 <dl><dt><a name="RDFStructuredOutput-newUniversal"><strong>newUniversal</strong></a>(self, context, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="RDFStructuredOutput-newXMLLiteral"><strong>newXMLLiteral</strong></a>(self, doc)</dt></dl>
 
 <dl><dt><a name="RDFStructuredOutput-reopen"><strong>reopen</strong></a>(self)</dt><dd><tt>Un-End&nbsp;a&nbsp;document<br>
 &nbsp;<br>
@@ -378,8 +382,9 @@ Fractions&nbsp;of&nbsp;a&nbsp;second&nbsp;may&nbsp;be&nbsp;present&nbsp;if&nbsp;
 <strong>RDF_type_URI</strong> = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'<br>
 <strong>SUBJ</strong> = 2<br>
 <strong>SYMBOL</strong> = 0<br>
+<strong>XMLLITERAL</strong> = 25<br>
 <strong>__version__</strong> = '$Id$'<br>
-<strong>environ</strong> = {'GNOME_DESKTOP_SESSION_ID': 'Default', 'COLORTE....mp3=01;35:*.mpc=01;35:*.ogg=01;35:*.wav=01;35:'}<br>
+<strong>environ</strong> = {'XDG_DATA_HOME': '/Users/yosi/.local/share', 'T...P', 'SGML_CATALOG_FILES': '/sw/etc/sgml/catalog'}<br>
 <strong>forAllSym</strong> = 'http://www.w3.org/2000/10/swap/log#forAll'<br>
 <strong>forSomeSym</strong> = 'http://www.w3.org/2000/10/swap/log#forSome'<br>
 <strong>nextu</strong> = 0<br>

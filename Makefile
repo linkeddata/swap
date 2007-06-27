@@ -17,9 +17,9 @@ DOC=doc/CwmHelp.htm
 
 GRAMMAR =  grammar/n3.n3 grammar/README.txt grammar/predictiveParser.py grammar/bnf2html.n3 grammar/Makefile grammar/bnf2html.n3 grammar/bnf.n3 grammar/bnf-rules.n3 grammar/n3-rdf.n3 grammar/n3-rules.n3 grammar/n3-yacc.c grammar/n3-ql.n3 grammar/sparql.n3
 
-TESTS = test/Makefile test/regression.n3 test/list/detailed.tests test/ql/detailed.tests test/math/detailed.tests test/norm/detailed.tests test/n3parser.tests test/cwm/detailed.tests test/ntriples/detailed.tests test/delta/detailed.tests test/syntax/detailed.tests test/reify/detailed.tests test/testmeta.n3 test/retest.py test/sparql/detailed.tests test/sets/detailed.tests test/reason/detailed.tests test/delta/t3/from.n3 test/delta/t3/to-same.n3 test/delta/t3/to-diff.n3 test/string/detailed.tests test/paw/detailed.tests test/includes/detailed.tests
+TESTS = test/Makefile test/rdfcore-tests.n3 test/regression.n3 test/list/detailed.tests test/ql/detailed.tests test/math/detailed.tests test/norm/detailed.tests test/n3parser.tests test/cwm/detailed.tests test/ntriples/detailed.tests test/delta/detailed.tests test/syntax/detailed.tests test/reify/detailed.tests test/testmeta.n3 test/retest.py test/sparql/detailed.tests test/sets/detailed.tests test/reason/detailed.tests test/delta/t3/from.n3 test/delta/t3/to-same.n3 test/delta/t3/to-diff.n3 test/string/detailed.tests test/paw/detailed.tests test/includes/detailed.tests
 
-VERSION = 1.1.9b1
+VERSION = 1.2.0a1
 TARNAME = cwm-$(VERSION)
 
 TARBALL_STUFF = README LICENSE LICENSE.rdf LICENSE.n3

@@ -8,7 +8,7 @@
 <td valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>notation3</strong></big></big></font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/syosi/CVS-local/WWW/2000/10/swap/notation3.py">/home/syosi/CVS-local/WWW/2000/10/swap/notation3.py</a></font></td></tr></table>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/yosi/CVSROOT/WWW/2000/10/swap/notation3.py">/Users/yosi/CVSROOT/WWW/2000/10/swap/notation3.py</a></font></td></tr></table>
     <p><tt>$Id$<br>
 &nbsp;<br>
 &nbsp;<br>
@@ -65,14 +65,14 @@ the&nbsp;module,&nbsp;including&nbsp;tests&nbsp;and&nbsp;test&nbsp;harness.</tt>
 </font></dt><dt><font face="helvetica, arial"><a href="notation3.html#tmToN3">tmToN3</a>
 </font></dt></dl>
 </dd>
-<dt><font face="helvetica, arial"><a href="notation3.html#SinkParser">SinkParser</a>
-</font></dt><dt><font face="helvetica, arial"><a href="exceptions.html#SyntaxError">exceptions.SyntaxError</a>(<a href="exceptions.html#StandardError">exceptions.StandardError</a>)
+<dt><font face="helvetica, arial"><a href="exceptions.html#SyntaxError">exceptions.SyntaxError</a>(<a href="exceptions.html#StandardError">exceptions.StandardError</a>)
 </font></dt><dd>
 <dl>
 <dt><font face="helvetica, arial"><a href="notation3.html#BadSyntax">BadSyntax</a>
 </font></dt></dl>
 </dd>
-</dl>
+<dt><font face="helvetica, arial"><a href="notation3.html#SinkParser">SinkParser</a>
+</font></dt></dl>
  <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
@@ -320,6 +320,8 @@ open&nbsp;to&nbsp;possibly&nbsp;clashing&nbsp;in&nbsp;pathalogical&nbsp;cases.</
 
 <dl><dt><a name="ToN3-newUniversal"><strong>newUniversal</strong></a>(self, context, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt></dl>
 
+<dl><dt><a name="ToN3-newXMLLiteral"><strong>newXMLLiteral</strong></a>(self, doc)</dt></dl>
+
 <dl><dt><a name="ToN3-reopen"><strong>reopen</strong></a>(self)</dt><dd><tt>Un-End&nbsp;a&nbsp;document<br>
 &nbsp;<br>
 If&nbsp;you&nbsp;have&nbsp;added&nbsp;stuff&nbsp;to&nbsp;a&nbsp;document,&nbsp;thought&nbsp;you&nbsp;were&nbsp;done,&nbsp;and<br>
@@ -433,6 +435,8 @@ why&nbsp;is&nbsp;reason&nbsp;for&nbsp;the&nbsp;statement.</tt></dd></dl>
 
 <dl><dt><a name="tmToN3-newUniversal"><strong>newUniversal</strong></a>(self, context, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt></dl>
 
+<dl><dt><a name="tmToN3-newXMLLiteral"><strong>newXMLLiteral</strong></a>(self, doc)</dt></dl>
+
 <dl><dt><a name="tmToN3-reopen"><strong>reopen</strong></a>(self)</dt><dd><tt>Un-End&nbsp;a&nbsp;document<br>
 &nbsp;<br>
 If&nbsp;you&nbsp;have&nbsp;added&nbsp;stuff&nbsp;to&nbsp;a&nbsp;document,&nbsp;thought&nbsp;you&nbsp;were&nbsp;done,&nbsp;and<br>
@@ -507,6 +511,7 @@ corresponding&nbsp;to&nbsp;the&nbsp;given&nbsp;UTF8&nbsp;string<br>
 <strong>RDF_type_URI</strong> = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'<br>
 <strong>SUBJ</strong> = 2<br>
 <strong>SYMBOL</strong> = 0<br>
+<strong>XMLLITERAL</strong> = 25<br>
 <strong>becauseSubexpression</strong> = &lt;why.BecauseSubexpression instance&gt;<br>
 <strong>digitstring</strong> = &lt;_sre.SRE_Pattern object&gt;<br>
 <strong>eof</strong> = &lt;_sre.SRE_Pattern object&gt;<br>
@@ -519,6 +524,6 @@ corresponding&nbsp;to&nbsp;the&nbsp;given&nbsp;UTF8&nbsp;string<br>
 <strong>option_noregen</strong> = 0<br>
 <strong>parsesTo_URI</strong> = 'http://www.w3.org/2000/10/swap/log#parsesTo'<br>
 <strong>signed_integer</strong> = &lt;_sre.SRE_Pattern object&gt;<br>
-<strong>wide_build</strong> = True<br>
+<strong>wide_build</strong> = False<br>
 <strong>ws</strong> = &lt;_sre.SRE_Pattern object&gt;</td></tr></table>
 </body></html>

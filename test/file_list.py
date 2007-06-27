@@ -26,27 +26,28 @@ chdir(qqq)
 from swap import diag
 from swap import uripath
 
-def main():
+
+
+if __name__ == '__main__':
     diag.print_all_file_names = 1
     import os
     import sys
-    if len(sys.argv) > 1 and sys.argv[1] == 'delta':
+    if False and len(sys.argv) > 1 and sys.argv[1] == 'delta':
         from delta import main
         sys.argv = sys.argv[:1] + sys.argv[2:]
         main()
     else:
         from cwm import doCommand
+        sys.argv[0] = '../cwm.py'
         doCommand()
+        
     file_list = diag.file_list
     file_list = [a for a in file_list if a[0:4] == 'file']
     base = uripath.base()
     file_list = [uripath.refTo(base,a) for a in file_list]
-    a = file('testfilelist','a')
-    a.write('\n'.join(file_list))
-    a.write('\n')
-    a.close()
-
-
-
-if __name__ == '__main__':
-    main()
+    try:
+        a = file('testfilelist','a')
+        a.write('\n'.join(file_list))
+        a.write('\n')
+    finally:
+        a.close()

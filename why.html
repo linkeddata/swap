@@ -8,7 +8,7 @@
 <td valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>why</strong></big></big></font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/syosi/CVS-local/WWW/2000/10/swap/why.py">/home/syosi/CVS-local/WWW/2000/10/swap/why.py</a></font></td></tr></table>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/yosi/CVSROOT/WWW/2000/10/swap/why.py">/Users/yosi/CVSROOT/WWW/2000/10/swap/why.py</a></font></td></tr></table>
     <p><tt>$Id$<br>
 &nbsp;<br>
 A&nbsp;class&nbsp;for&nbsp;storing&nbsp;the&nbsp;reason&nbsp;why&nbsp;something&nbsp;is&nbsp;known.<br>
@@ -409,9 +409,10 @@ Returns&nbsp;the&nbsp;value&nbsp;of&nbsp;this&nbsp;object&nbsp;as&nbsp;interned&
 <font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
     
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><dl><dt><a name="-describeStatement"><strong>describeStatement</strong></a>(s, ko, flags)</dt><dd><tt>Describe&nbsp;the&nbsp;statement&nbsp;into&nbsp;the&nbsp;output&nbsp;formula&nbsp;ko</tt></dd></dl>
+<td width="100%"><dl><dt><a name="-describeStatement"><strong>describeStatement</strong></a>(s_l, ko, flags)</dt><dd><tt>Describe&nbsp;the&nbsp;statement&nbsp;into&nbsp;the&nbsp;output&nbsp;formula&nbsp;ko</tt></dd></dl>
  <dl><dt><a name="-explainFormula"><strong>explainFormula</strong></a>(f, flags<font color="#909090">=''</font>)</dt><dd><tt>Return&nbsp;the&nbsp;explanation&nbsp;formula&nbsp;for&nbsp;f</tt></dd></dl>
  <dl><dt><a name="-explainStatement"><strong>explainStatement</strong></a>(s, ko, ss<font color="#909090">=None</font>, flags<font color="#909090">=''</font>)</dt></dl>
+ <dl><dt><a name="-explainStatements"><strong>explainStatements</strong></a>(s_l, ko, ss<font color="#909090">=None</font>, flags<font color="#909090">=''</font>)</dt></dl>
  <dl><dt><a name="-formulaStandIn"><strong>formulaStandIn</strong></a>(self, ko, f, flags)<font color="#909090"><font face="helvetica, arial"> method of <a href="__builtin__.html#dict">__builtin__.dict</a> instance</font></font></dt></dl>
  <dl><dt><a name="-getStatementReason"><strong>getStatementReason</strong></a>(s)</dt></dl>
  <dl><dt><a name="-isTopLevel"><strong>isTopLevel</strong></a>(f)</dt></dl>
@@ -427,6 +428,7 @@ Most&nbsp;formulas&nbsp;don't&nbsp;need&nbsp;collectors.&nbsp;Let's&nbsp;see&nbs
 <a href="#Because">Because</a>&nbsp;this&nbsp;module&nbsp;tracks&nbsp;formula&nbsp;in&nbsp;stores,&nbsp;if&nbsp;ever&nbsp;the&nbsp;address<br>
 of&nbsp;a&nbsp;formula&nbsp;is&nbsp;changed,&nbsp;that&nbsp;is&nbsp;(currently)&nbsp;when&nbsp;it&nbsp;is&nbsp;<br>
 canonicalized,&nbsp;then&nbsp;the&nbsp;fact&nbsp;must&nbsp;be&nbsp;reported&nbsp;here.</tt></dd></dl>
+ <dl><dt><a name="-sorted"><strong>sorted</strong></a>(...)</dt><dd><tt><a href="#-sorted">sorted</a>(iterable,&nbsp;cmp=None,&nbsp;key=None,&nbsp;reverse=False)&nbsp;--&gt;&nbsp;new&nbsp;sorted&nbsp;list</tt></dd></dl>
  <dl><dt><a name="-subFormulaStandIn"><strong>subFormulaStandIn</strong></a>(self, ko, f, flags)<font color="#909090"><font face="helvetica, arial"> method of <a href="__builtin__.html#dict">__builtin__.dict</a> instance</font></font></dt></dl>
 </td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -441,7 +443,7 @@ canonicalized,&nbsp;then&nbsp;the&nbsp;fact&nbsp;must&nbsp;be&nbsp;reported&nbsp
 <strong>dontAsk</strong> = &lt;why.Because instance&gt;<br>
 <strong>flagHelp</strong> = '<font color="#c040c0">\n</font>n           use iNdirect formulas when they get...ays give the :gives clause, even when not needed<font color="#c040c0">\n</font>'<br>
 <strong>log</strong> = &lt;myStore.Namespace object&gt;<br>
-<strong>proofsOf</strong> = &lt;WeakKeyDictionary at 1078324588&gt;<br>
+<strong>proofsOf</strong> = &lt;WeakKeyDictionary at 17029280&gt;<br>
 <strong>rdf</strong> = &lt;myStore.Namespace object&gt;<br>
 <strong>reason</strong> = &lt;myStore.Namespace object&gt;</td></tr></table>
 </body></html>

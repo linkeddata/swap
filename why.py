@@ -20,7 +20,7 @@ import string
 #import StringIO
 import sys
 import weakref
-from set_importer import Set
+from set_importer import Set, sorted
 
 # import notation3    # N3 parsers and generators, and RDF generator
 # import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
@@ -299,7 +299,7 @@ class KBReasonTracker(Reason):
         
     
         statementsForReason = {}  # reverse index: group by reason
-        for s, rea in self.reasonForStatement.items():
+        for s, rea in sorted(self.reasonForStatement.items()):
             x = statementsForReason.get(rea, None)
             if x is None: statementsForReason[rea] = [s]
             else: x.append(s)

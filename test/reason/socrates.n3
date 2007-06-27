@@ -1,4 +1,5 @@
 @prefix : <socrates#>.
+@prefix vars: <socrates.n3#> .
 :socrates a :Man.
 { ?who a :Man } => { ?who a :Mortal }.
 

@@ -5,10 +5,11 @@
     @prefix n3: <http://www.w3.org/2004/06/rei#> .
     
      @forSome run:_g15,
-                run:_g38 .
+                run:_g25 .
       [      a :Conjunction,
                     :Proof;
              :component run:_g15,
+                    run:_g25,
                      [
                  a :Inference;
                  :binding  [
@@ -30,19 +31,19 @@
                  :evidence  (
                  [
                          a :Extraction;
-                         :because run:_g38;
+                         :because run:_g15;
                          :gives { @forSome dou:_g_L3C17 .
                         dou:_g_L3C17     gmp:in gmp:Texas .
                         } ]
                  [
                          a :Extraction;
-                         :because run:_g15;
+                         :because run:_g25;
                          :gives { @forSome dou:_g_L3C17 .
                         gmp:dan     gmp:home dou:_g_L3C17 .
                         } ] );
                  :rule  [
                      a :Extraction;
-                     :because run:_g15;
+                     :because run:_g25;
                      :gives { @forAll dou:REGION,
                                 dou:WHERE,
                                 dou:WHO .
@@ -52,8 +53,7 @@
                         
                         }     log:implies {dou:WHO     gmp:homeRegion dou:REGION .
                         } .
-                    } ] ],
-                    run:_g38;
+                    } ] ];
              :gives { @forAll dou:REGION,
                         dou:WHERE,
                         dou:WHO.
@@ -75,13 +75,7 @@
                 } .
             } ].
     
-    run:_g15     a :Parsing;
-         :because  [
-             a :CommandLine;
-             :args "['../cwm.py', '--quiet', '--n3=eiouB', 'reason/double.n3', '--think', '--base=foo', '--why']" ];
-         :source <reason/double.n3> .
-    
-    run:_g38     a :Inference;
+    run:_g15     a :Inference;
          :binding  [
              :boundTo  [
                  a :Existential;
@@ -91,13 +85,13 @@
          :evidence  (
          [
                  a :Extraction;
-                 :because run:_g15;
+                 :because run:_g25;
                  :gives { @forSome dou:_g_L3C17 .
                 gmp:dan     gmp:home dou:_g_L3C17 .
                 } ] );
          :rule  [
              a :Extraction;
-             :because run:_g15;
+             :because run:_g25;
              :gives { @forAll dou:WHERE .
             {
                 gmp:dan     gmp:home dou:WHERE .
@@ -105,4 +99,10 @@
                 }     log:implies {dou:WHERE     gmp:in gmp:Texas .
                 } .
             } ] .
+    
+    run:_g25     a :Parsing;
+         :because  [
+             a :CommandLine;
+             :args "['../cwm.py', '--quiet', '--n3=eiouB', 'reason/double.n3', '--think', '--base=foo', '--why']" ];
+         :source <reason/double.n3> .
     

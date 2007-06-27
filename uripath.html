@@ -8,7 +8,7 @@
 <td valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>uripath</strong></big></big> (version $Id$)</font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/syosi/CVS-local/WWW/2000/10/swap/uripath.py">/home/syosi/CVS-local/WWW/2000/10/swap/uripath.py</a></font></td></tr></table>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/yosi/CVSROOT/WWW/2000/10/swap/uripath.py">/Users/yosi/CVSROOT/WWW/2000/10/swap/uripath.py</a></font></td></tr></table>
     <p><tt>Uniform&nbsp;Resource&nbsp;Identifier&nbsp;(URI)&nbsp;path&nbsp;manipulation,<br>
 above&nbsp;the&nbsp;access&nbsp;layer<br>
 &nbsp;<br>
@@ -74,7 +74,7 @@ Methods defined here:<br>
 
 <hr>
 Methods inherited from <a href="unittest.html#TestCase">unittest.TestCase</a>:<br>
-<dl><dt><a name="Tests-__call__"><strong>__call__</strong></a>(self, result<font color="#909090">=None</font>)</dt></dl>
+<dl><dt><a name="Tests-__call__"><strong>__call__</strong></a>(self, *args, **kwds)</dt></dl>
 
 <dl><dt><a name="Tests-__init__"><strong>__init__</strong></a>(self, methodName<font color="#909090">='runTest'</font>)</dt><dd><tt>Create&nbsp;an&nbsp;instance&nbsp;of&nbsp;the&nbsp;class&nbsp;that&nbsp;will&nbsp;use&nbsp;the&nbsp;named&nbsp;test<br>
 method&nbsp;when&nbsp;executed.&nbsp;Raises&nbsp;a&nbsp;ValueError&nbsp;if&nbsp;the&nbsp;instance&nbsp;does<br>
@@ -88,14 +88,14 @@ not&nbsp;have&nbsp;a&nbsp;method&nbsp;with&nbsp;the&nbsp;specified&nbsp;name.</t
 difference&nbsp;rounded&nbsp;to&nbsp;the&nbsp;given&nbsp;number&nbsp;of&nbsp;decimal&nbsp;places<br>
 (default&nbsp;7)&nbsp;and&nbsp;comparing&nbsp;to&nbsp;zero.<br>
 &nbsp;<br>
-Note&nbsp;that&nbsp;decimal&nbsp;places&nbsp;(from&nbsp;zero)&nbsp;is&nbsp;usually&nbsp;not&nbsp;the&nbsp;same<br>
+Note&nbsp;that&nbsp;decimal&nbsp;places&nbsp;(from&nbsp;zero)&nbsp;are&nbsp;usually&nbsp;not&nbsp;the&nbsp;same<br>
 as&nbsp;significant&nbsp;digits&nbsp;(measured&nbsp;from&nbsp;the&nbsp;most&nbsp;signficant&nbsp;digit).</tt></dd></dl>
 
 <dl><dt><a name="Tests-assertAlmostEquals"><strong>assertAlmostEquals</strong></a> = failUnlessAlmostEqual(self, first, second, places<font color="#909090">=7</font>, msg<font color="#909090">=None</font>)</dt><dd><tt>Fail&nbsp;if&nbsp;the&nbsp;two&nbsp;objects&nbsp;are&nbsp;unequal&nbsp;as&nbsp;determined&nbsp;by&nbsp;their<br>
 difference&nbsp;rounded&nbsp;to&nbsp;the&nbsp;given&nbsp;number&nbsp;of&nbsp;decimal&nbsp;places<br>
 (default&nbsp;7)&nbsp;and&nbsp;comparing&nbsp;to&nbsp;zero.<br>
 &nbsp;<br>
-Note&nbsp;that&nbsp;decimal&nbsp;places&nbsp;(from&nbsp;zero)&nbsp;is&nbsp;usually&nbsp;not&nbsp;the&nbsp;same<br>
+Note&nbsp;that&nbsp;decimal&nbsp;places&nbsp;(from&nbsp;zero)&nbsp;are&nbsp;usually&nbsp;not&nbsp;the&nbsp;same<br>
 as&nbsp;significant&nbsp;digits&nbsp;(measured&nbsp;from&nbsp;the&nbsp;most&nbsp;signficant&nbsp;digit).</tt></dd></dl>
 
 <dl><dt><a name="Tests-assertEqual"><strong>assertEqual</strong></a> = failUnlessEqual(self, first, second, msg<font color="#909090">=None</font>)</dt><dd><tt>Fail&nbsp;if&nbsp;the&nbsp;two&nbsp;objects&nbsp;are&nbsp;unequal&nbsp;as&nbsp;determined&nbsp;by&nbsp;the&nbsp;'=='<br>
@@ -104,18 +104,20 @@ operator.</tt></dd></dl>
 <dl><dt><a name="Tests-assertEquals"><strong>assertEquals</strong></a> = failUnlessEqual(self, first, second, msg<font color="#909090">=None</font>)</dt><dd><tt>Fail&nbsp;if&nbsp;the&nbsp;two&nbsp;objects&nbsp;are&nbsp;unequal&nbsp;as&nbsp;determined&nbsp;by&nbsp;the&nbsp;'=='<br>
 operator.</tt></dd></dl>
 
+<dl><dt><a name="Tests-assertFalse"><strong>assertFalse</strong></a> = failIf(self, expr, msg<font color="#909090">=None</font>)</dt><dd><tt>Fail&nbsp;the&nbsp;test&nbsp;if&nbsp;the&nbsp;expression&nbsp;is&nbsp;true.</tt></dd></dl>
+
 <dl><dt><a name="Tests-assertNotAlmostEqual"><strong>assertNotAlmostEqual</strong></a> = failIfAlmostEqual(self, first, second, places<font color="#909090">=7</font>, msg<font color="#909090">=None</font>)</dt><dd><tt>Fail&nbsp;if&nbsp;the&nbsp;two&nbsp;objects&nbsp;are&nbsp;equal&nbsp;as&nbsp;determined&nbsp;by&nbsp;their<br>
 difference&nbsp;rounded&nbsp;to&nbsp;the&nbsp;given&nbsp;number&nbsp;of&nbsp;decimal&nbsp;places<br>
 (default&nbsp;7)&nbsp;and&nbsp;comparing&nbsp;to&nbsp;zero.<br>
 &nbsp;<br>
-Note&nbsp;that&nbsp;decimal&nbsp;places&nbsp;(from&nbsp;zero)&nbsp;is&nbsp;usually&nbsp;not&nbsp;the&nbsp;same<br>
+Note&nbsp;that&nbsp;decimal&nbsp;places&nbsp;(from&nbsp;zero)&nbsp;are&nbsp;usually&nbsp;not&nbsp;the&nbsp;same<br>
 as&nbsp;significant&nbsp;digits&nbsp;(measured&nbsp;from&nbsp;the&nbsp;most&nbsp;signficant&nbsp;digit).</tt></dd></dl>
 
 <dl><dt><a name="Tests-assertNotAlmostEquals"><strong>assertNotAlmostEquals</strong></a> = failIfAlmostEqual(self, first, second, places<font color="#909090">=7</font>, msg<font color="#909090">=None</font>)</dt><dd><tt>Fail&nbsp;if&nbsp;the&nbsp;two&nbsp;objects&nbsp;are&nbsp;equal&nbsp;as&nbsp;determined&nbsp;by&nbsp;their<br>
 difference&nbsp;rounded&nbsp;to&nbsp;the&nbsp;given&nbsp;number&nbsp;of&nbsp;decimal&nbsp;places<br>
 (default&nbsp;7)&nbsp;and&nbsp;comparing&nbsp;to&nbsp;zero.<br>
 &nbsp;<br>
-Note&nbsp;that&nbsp;decimal&nbsp;places&nbsp;(from&nbsp;zero)&nbsp;is&nbsp;usually&nbsp;not&nbsp;the&nbsp;same<br>
+Note&nbsp;that&nbsp;decimal&nbsp;places&nbsp;(from&nbsp;zero)&nbsp;are&nbsp;usually&nbsp;not&nbsp;the&nbsp;same<br>
 as&nbsp;significant&nbsp;digits&nbsp;(measured&nbsp;from&nbsp;the&nbsp;most&nbsp;signficant&nbsp;digit).</tt></dd></dl>
 
 <dl><dt><a name="Tests-assertNotEqual"><strong>assertNotEqual</strong></a> = failIfEqual(self, first, second, msg<font color="#909090">=None</font>)</dt><dd><tt>Fail&nbsp;if&nbsp;the&nbsp;two&nbsp;objects&nbsp;are&nbsp;equal&nbsp;as&nbsp;determined&nbsp;by&nbsp;the&nbsp;'=='<br>
@@ -130,6 +132,8 @@ arguments&nbsp;kwargs.&nbsp;If&nbsp;a&nbsp;different&nbsp;type&nbsp;of&nbsp;exce
 thrown,&nbsp;it&nbsp;will&nbsp;not&nbsp;be&nbsp;caught,&nbsp;and&nbsp;the&nbsp;test&nbsp;case&nbsp;will&nbsp;be<br>
 deemed&nbsp;to&nbsp;have&nbsp;suffered&nbsp;an&nbsp;error,&nbsp;exactly&nbsp;as&nbsp;for&nbsp;an<br>
 unexpected&nbsp;exception.</tt></dd></dl>
+
+<dl><dt><a name="Tests-assertTrue"><strong>assertTrue</strong></a> = failUnless(self, expr, msg<font color="#909090">=None</font>)</dt><dd><tt>Fail&nbsp;the&nbsp;test&nbsp;unless&nbsp;the&nbsp;expression&nbsp;is&nbsp;true.</tt></dd></dl>
 
 <dl><dt><a name="Tests-assert_"><strong>assert_</strong></a> = failUnless(self, expr, msg<font color="#909090">=None</font>)</dt><dd><tt>Fail&nbsp;the&nbsp;test&nbsp;unless&nbsp;the&nbsp;expression&nbsp;is&nbsp;true.</tt></dd></dl>
 
@@ -147,7 +151,7 @@ unexpected&nbsp;exception.</tt></dd></dl>
 difference&nbsp;rounded&nbsp;to&nbsp;the&nbsp;given&nbsp;number&nbsp;of&nbsp;decimal&nbsp;places<br>
 (default&nbsp;7)&nbsp;and&nbsp;comparing&nbsp;to&nbsp;zero.<br>
 &nbsp;<br>
-Note&nbsp;that&nbsp;decimal&nbsp;places&nbsp;(from&nbsp;zero)&nbsp;is&nbsp;usually&nbsp;not&nbsp;the&nbsp;same<br>
+Note&nbsp;that&nbsp;decimal&nbsp;places&nbsp;(from&nbsp;zero)&nbsp;are&nbsp;usually&nbsp;not&nbsp;the&nbsp;same<br>
 as&nbsp;significant&nbsp;digits&nbsp;(measured&nbsp;from&nbsp;the&nbsp;most&nbsp;signficant&nbsp;digit).</tt></dd></dl>
 
 <dl><dt><a name="Tests-failIfEqual"><strong>failIfEqual</strong></a>(self, first, second, msg<font color="#909090">=None</font>)</dt><dd><tt>Fail&nbsp;if&nbsp;the&nbsp;two&nbsp;objects&nbsp;are&nbsp;equal&nbsp;as&nbsp;determined&nbsp;by&nbsp;the&nbsp;'=='<br>
@@ -159,7 +163,7 @@ operator.</tt></dd></dl>
 difference&nbsp;rounded&nbsp;to&nbsp;the&nbsp;given&nbsp;number&nbsp;of&nbsp;decimal&nbsp;places<br>
 (default&nbsp;7)&nbsp;and&nbsp;comparing&nbsp;to&nbsp;zero.<br>
 &nbsp;<br>
-Note&nbsp;that&nbsp;decimal&nbsp;places&nbsp;(from&nbsp;zero)&nbsp;is&nbsp;usually&nbsp;not&nbsp;the&nbsp;same<br>
+Note&nbsp;that&nbsp;decimal&nbsp;places&nbsp;(from&nbsp;zero)&nbsp;are&nbsp;usually&nbsp;not&nbsp;the&nbsp;same<br>
 as&nbsp;significant&nbsp;digits&nbsp;(measured&nbsp;from&nbsp;the&nbsp;most&nbsp;signficant&nbsp;digit).</tt></dd></dl>
 
 <dl><dt><a name="Tests-failUnlessEqual"><strong>failUnlessEqual</strong></a>(self, first, second, msg<font color="#909090">=None</font>)</dt><dd><tt>Fail&nbsp;if&nbsp;the&nbsp;two&nbsp;objects&nbsp;are&nbsp;unequal&nbsp;as&nbsp;determined&nbsp;by&nbsp;the&nbsp;'=='<br>
@@ -209,39 +213,42 @@ If&nbsp;we&nbsp;had&nbsp;a&nbsp;reliable&nbsp;way&nbsp;of&nbsp;getting&nbsp;a&nb
 we&nbsp;should&nbsp;put&nbsp;it&nbsp;in&nbsp;the&nbsp;hostname&nbsp;just&nbsp;to&nbsp;prevent&nbsp;ambiguity</tt></dd></dl>
  <dl><dt><a name="-canonical"><strong>canonical</strong></a>(str_in)</dt><dd><tt>Convert&nbsp;equivalent&nbsp;URIs&nbsp;(or&nbsp;parts)&nbsp;to&nbsp;the&nbsp;same&nbsp;string<br>
 &nbsp;<br>
-&nbsp;There&nbsp;are&nbsp;many&nbsp;differenet&nbsp;levels&nbsp;of&nbsp;URI&nbsp;canonicalization<br>
-&nbsp;which&nbsp;are&nbsp;possible.&nbsp;&nbsp;See&nbsp;<a href="http://www.ietf.org/rfc/rfc3986.txt">http://www.ietf.org/rfc/rfc3986.txt</a><br>
-&nbsp;Things&nbsp;we&nbsp;haven't&nbsp;put&nbsp;in&nbsp;this&nbsp;yet&nbsp;are<br>
-&nbsp;-&nbsp;de-escaping&nbsp;ALPHA&nbsp;etc&nbsp;if&nbsp;escaped&nbsp;&nbsp;(Sect&nbsp;2.4)&nbsp;ALPHA&nbsp;(%41-%5A&nbsp;and&nbsp;%61-%7A),<br>
-&nbsp;&nbsp;DIGIT&nbsp;(%30-%39),&nbsp;hyphen&nbsp;(%2D),&nbsp;period&nbsp;(%2E),<br>
-underscore&nbsp;(%5F),&nbsp;or&nbsp;tilde&nbsp;(%7E)<br>
-&nbsp;-&nbsp;making&nbsp;all&nbsp;escapes&nbsp;uppercase&nbsp;hexadecimal<br>
-&nbsp;-&nbsp;making&nbsp;scheme&nbsp;lowercase<br>
+There&nbsp;are&nbsp;many&nbsp;differenet&nbsp;levels&nbsp;of&nbsp;URI&nbsp;canonicalization<br>
+which&nbsp;are&nbsp;possible.&nbsp;&nbsp;See&nbsp;<a href="http://www.ietf.org/rfc/rfc3986.txt">http://www.ietf.org/rfc/rfc3986.txt</a><br>
+Done:<br>
+-&nbsp;Converfting&nbsp;unicode&nbsp;IRI&nbsp;to&nbsp;utf-8<br>
+-&nbsp;Escaping&nbsp;all&nbsp;non-ASCII<br>
+-&nbsp;De-escaping,&nbsp;if&nbsp;escaped,&nbsp;ALPHA&nbsp;(%41-%5A&nbsp;and&nbsp;%61-%7A),&nbsp;DIGIT&nbsp;(%30-%39),<br>
+&nbsp;&nbsp;hyphen&nbsp;(%2D),&nbsp;period&nbsp;(%2E),&nbsp;underscore&nbsp;(%5F),&nbsp;or&nbsp;tilde&nbsp;(%7E)&nbsp;(Sect&nbsp;2.4)&nbsp;<br>
+-&nbsp;Making&nbsp;all&nbsp;escapes&nbsp;uppercase&nbsp;hexadecimal<br>
+Not&nbsp;done:<br>
+-&nbsp;Making&nbsp;URI&nbsp;scheme&nbsp;lowercase<br>
+-&nbsp;changing&nbsp;/./&nbsp;or&nbsp;&nbsp;/foo/../&nbsp;to&nbsp;/&nbsp;with&nbsp;care&nbsp;not&nbsp;to&nbsp;change&nbsp;host&nbsp;part<br>
 &nbsp;<br>
 &nbsp;<br>
-&nbsp;&gt;&gt;&gt;&nbsp;<a href="#-canonical">canonical</a>("foo&nbsp;bar")<br>
-&nbsp;'foo%20bar'<br>
+&gt;&gt;&gt;&nbsp;<a href="#-canonical">canonical</a>("foo&nbsp;bar")<br>
+'foo%20bar'<br>
 &nbsp;<br>
-&nbsp;&gt;&gt;&gt;&nbsp;<a href="#-canonical">canonical</a>(u'http:')<br>
-&nbsp;'http:'<br>
+&gt;&gt;&gt;&nbsp;<a href="#-canonical">canonical</a>(u'http:')<br>
+'http:'<br>
 &nbsp;<br>
-&nbsp;&gt;&gt;&gt;&nbsp;<a href="#-canonical">canonical</a>('fran%c3%83%c2%a7ois')<br>
-&nbsp;'fran%C3%83%C2%A7ois'<br>
+&gt;&gt;&gt;&nbsp;<a href="#-canonical">canonical</a>('fran%c3%83%c2%a7ois')<br>
+'fran%C3%83%C2%A7ois'<br>
 &nbsp;<br>
-&nbsp;&gt;&gt;&gt;&nbsp;<a href="#-canonical">canonical</a>('a')<br>
-&nbsp;'a'<br>
+&gt;&gt;&gt;&nbsp;<a href="#-canonical">canonical</a>('a')<br>
+'a'<br>
 &nbsp;<br>
-&nbsp;&gt;&gt;&gt;&nbsp;<a href="#-canonical">canonical</a>('%4e')<br>
-&nbsp;'N'<br>
+&gt;&gt;&gt;&nbsp;<a href="#-canonical">canonical</a>('%4e')<br>
+'N'<br>
 &nbsp;<br>
-&nbsp;&gt;&gt;&gt;&nbsp;<a href="#-canonical">canonical</a>('%9d')<br>
-&nbsp;'%9D'<br>
+&gt;&gt;&gt;&nbsp;<a href="#-canonical">canonical</a>('%9d')<br>
+'%9D'<br>
 &nbsp;<br>
-&nbsp;&gt;&gt;&gt;&nbsp;<a href="#-canonical">canonical</a>('%2f')<br>
-&nbsp;'%2F'<br>
+&gt;&gt;&gt;&nbsp;<a href="#-canonical">canonical</a>('%2f')<br>
+'%2F'<br>
 &nbsp;<br>
-&nbsp;&gt;&gt;&gt;&nbsp;<a href="#-canonical">canonical</a>('%2F')<br>
-&nbsp;'%2F'</tt></dd></dl>
+&gt;&gt;&gt;&nbsp;<a href="#-canonical">canonical</a>('%2F')<br>
+'%2F'</tt></dd></dl>
  <dl><dt><a name="-join"><strong>join</strong></a>(here, there)</dt><dd><tt>join&nbsp;an&nbsp;absolute&nbsp;URI&nbsp;and&nbsp;URI&nbsp;reference<br>
 (non-ascii&nbsp;characters&nbsp;are&nbsp;supported/doctested;<br>
 haven't&nbsp;checked&nbsp;the&nbsp;details&nbsp;of&nbsp;the&nbsp;IRI&nbsp;spec&nbsp;though)<br>

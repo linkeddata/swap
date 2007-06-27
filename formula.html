@@ -6,25 +6,10 @@
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
 <tr bgcolor="#7799ee">
 <td valign=bottom>&nbsp;<br>
-<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>formula</strong></big></big> (version Id: formula.py,v 1.49 2006/08/02 16:59:14 syosi Exp )</font></td
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>formula</strong></big></big> (version Id: formula.py,v 1.57 2007/06/26 15:30:53 syosi Exp )</font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/syosi/CVS-local/WWW/2000/10/swap/formula.py">/home/syosi/CVS-local/WWW/2000/10/swap/formula.py</a></font></td></tr></table>
-    <p><tt>$Id$<br>
-&nbsp;<br>
-<a href="#Formula">Formula</a><br>
-See:&nbsp;&nbsp;<a href="http://www.w3.org/DesignIssues/Notation3">http://www.w3.org/DesignIssues/Notation3</a><br>
-&nbsp;<br>
-Interfaces<br>
-==========<br>
-&nbsp;<br>
-The&nbsp;store&nbsp;stores&nbsp;many&nbsp;formulae,&nbsp;where&nbsp;one&nbsp;formula&nbsp;is&nbsp;what&nbsp;in<br>
-straight&nbsp;RDF&nbsp;implementations&nbsp;is&nbsp;known&nbsp;as&nbsp;a&nbsp;"triple&nbsp;store".<br>
-So&nbsp;look&nbsp;at&nbsp;the&nbsp;<a href="#Formula">Formula</a>&nbsp;class&nbsp;for&nbsp;a&nbsp;triple&nbsp;store&nbsp;interface.<br>
-&nbsp;<br>
-See&nbsp;also&nbsp;for&nbsp;comparison,&nbsp;a&nbsp;python&nbsp;RDF&nbsp;API&nbsp;for&nbsp;the&nbsp;Redland&nbsp;library&nbsp;(in&nbsp;C):<br>
-&nbsp;&nbsp;&nbsp;<a href="http://www.redland.opensource.ac.uk/docs/api/index.html">http://www.redland.opensource.ac.uk/docs/api/index.html</a>&nbsp;<br>
-and&nbsp;the&nbsp;redfoot/rdflib&nbsp;interface,&nbsp;a&nbsp;python&nbsp;RDF&nbsp;API:<br>
-&nbsp;&nbsp;&nbsp;<a href="http://rdflib.net/latest/doc/triple_store.html">http://rdflib.net/latest/doc/triple_store.html</a></tt></p>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/yosi/CVSROOT/WWW/2000/10/swap/formula.py">/Users/yosi/CVSROOT/WWW/2000/10/swap/formula.py</a></font></td></tr></table>
+    <p></p>
 <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#aa55cc">
@@ -45,7 +30,8 @@ and&nbsp;the&nbsp;redfoot/rdflib&nbsp;interface,&nbsp;a&nbsp;python&nbsp;RDF&nbs
     
 <tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><dl>
-<dt><font face="helvetica, arial"><a href="term.html#AnonymousNode">term.AnonymousNode</a>(<a href="term.html#Node">term.Node</a>)
+<dt><font face="helvetica, arial"><a href="formula.html#StoredStatement">StoredStatement</a>
+</font></dt><dt><font face="helvetica, arial"><a href="term.html#AnonymousNode">term.AnonymousNode</a>(<a href="term.html#Node">term.Node</a>)
 </font></dt><dd>
 <dl>
 <dt><font face="helvetica, arial"><a href="formula.html#Formula">Formula</a>(<a href="term.html#AnonymousNode">term.AnonymousNode</a>, <a href="term.html#CompoundTerm">term.CompoundTerm</a>)
@@ -57,8 +43,7 @@ and&nbsp;the&nbsp;redfoot/rdflib&nbsp;interface,&nbsp;a&nbsp;python&nbsp;RDF&nbs
 <dt><font face="helvetica, arial"><a href="formula.html#Formula">Formula</a>(<a href="term.html#AnonymousNode">term.AnonymousNode</a>, <a href="term.html#CompoundTerm">term.CompoundTerm</a>)
 </font></dt></dl>
 </dd>
-<dt><font face="helvetica, arial"><a href="formula.html#StoredStatement">StoredStatement</a>
-</font></dt></dl>
+</dl>
  <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
@@ -178,7 +163,7 @@ we&nbsp;may&nbsp;move&nbsp;to&nbsp;an&nbsp;internal&nbsp;storage&nbsp;rather&nbs
 <dl><dt><a name="Formula-loadFormulaWithSubstitution"><strong>loadFormulaWithSubstitution</strong></a>(self, old, bindings<font color="#909090">={}</font>, why<font color="#909090">=None</font>, cannon<font color="#909090">=False</font>)</dt><dd><tt>Load&nbsp;information&nbsp;from&nbsp;another&nbsp;formula,&nbsp;subsituting&nbsp;as&nbsp;we&nbsp;go<br>
 returns&nbsp;number&nbsp;of&nbsp;statements&nbsp;added&nbsp;(roughly)</tt></dd></dl>
 
-<dl><dt><a name="Formula-n3EntailedBy"><strong>n3EntailedBy</strong></a>(pattern, kb, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>See&nbsp;Term.<a href="#Formula-unify">unify</a>()&nbsp;and&nbsp;term.matchSet()<br>
+<dl><dt><a name="Formula-n3EntailedBy"><strong>n3EntailedBy</strong></a>(pattern, kb, vars<font color="#909090">=set([])</font>, existentials<font color="#909090">=set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>See&nbsp;Term.<a href="#Formula-unify">unify</a>()&nbsp;and&nbsp;term.matchSet()<br>
 &nbsp;<br>
 KB&nbsp;is&nbsp;a&nbsp;stronger&nbsp;statement&nbsp;han&nbsp;other.<br>
 Bindings&nbsp;map&nbsp;variables&nbsp;in&nbsp;pattern&nbsp;onto&nbsp;kb.<br>
@@ -216,6 +201,10 @@ The&nbsp;symbol&nbsp;is&nbsp;created&nbsp;in&nbsp;the&nbsp;same&nbsp;store&nbsp;
 <dl><dt><a name="Formula-newUniversal"><strong>newUniversal</strong></a>(self, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Create&nbsp;a&nbsp;named&nbsp;variable&nbsp;universally&nbsp;qualified&nbsp;within&nbsp;this&nbsp;formula<br>
 &nbsp;<br>
 See&nbsp;also:&nbsp;<a href="#Formula-universals">universals</a>()</tt></dd></dl>
+
+<dl><dt><a name="Formula-newXMLLiteral"><strong>newXMLLiteral</strong></a>(self, doc)</dt><dd><tt>Create&nbsp;or&nbsp;reuse&nbsp;the&nbsp;internal&nbsp;representation&nbsp;of&nbsp;the&nbsp;RDF&nbsp;literal&nbsp;whose&nbsp;string&nbsp;is&nbsp;given<br>
+&nbsp;<br>
+The&nbsp;literal&nbsp;is&nbsp;created&nbsp;in&nbsp;the&nbsp;same&nbsp;store&nbsp;as&nbsp;the&nbsp;formula.</tt></dd></dl>
 
 <dl><dt><a name="Formula-objects"><strong>objects</strong></a>(self, pred<font color="#909090">=None</font>, subj<font color="#909090">=None</font>)</dt><dd><tt>Obsolete&nbsp;-&nbsp;use&nbsp;<a href="#Formula-each">each</a>(subj=...,&nbsp;pred=...)</tt></dd></dl>
 
@@ -267,6 +256,8 @@ for&nbsp;s&nbsp;in&nbsp;f.<a href="#Formula-statementsMatching">statementsMatchi
 &nbsp;&nbsp;&nbsp;&nbsp;<br>
 If&nbsp;none,&nbsp;returns&nbsp;[]</tt></dd></dl>
 
+<dl><dt><a name="Formula-subSet"><strong>subSet</strong></a>(self, statements, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="Formula-subjects"><strong>subjects</strong></a>(self, pred<font color="#909090">=None</font>, obj<font color="#909090">=None</font>)</dt><dd><tt>Obsolete&nbsp;-&nbsp;use&nbsp;<a href="#Formula-each">each</a>(pred=...,&nbsp;obj=...)</tt></dd></dl>
 
 <dl><dt><a name="Formula-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newBindings)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made<br>
@@ -284,7 +275,7 @@ one&nbsp;answer&nbsp;in&nbsp;the&nbsp;store.&nbsp;It&nbsp;wise&nbsp;to&nbsp;use&
 color&nbsp;=&nbsp;f.<a href="#Formula-the">the</a>(pred=pantoneColor,&nbsp;subj=myCar)<br>
 redCar&nbsp;=&nbsp;f.<a href="#Formula-the">the</a>(pred=pantoneColor,&nbsp;obj=red)</tt></dd></dl>
 
-<dl><dt><a name="Formula-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>See&nbsp;Term.<a href="#Formula-unify">unify</a>()</tt></dd></dl>
+<dl><dt><a name="Formula-unifySecondary"><strong>unifySecondary</strong></a>(self, other, env1, env2, vars, universals, existentials, n1Source, n2Source)</dt></dl>
 
 <dl><dt><a name="Formula-universals"><strong>universals</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;set&nbsp;of&nbsp;variables&nbsp;universally&nbsp;quantified&nbsp;with&nbsp;this&nbsp;formula&nbsp;as&nbsp;scope.<br>
 &nbsp;<br>
@@ -319,6 +310,8 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 <dl><dt><a name="Formula-debugString"><strong>debugString</strong></a>(self, already<font color="#909090">=[]</font>)</dt></dl>
 
 <dl><dt><a name="Formula-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>The&nbsp;string&nbsp;represnting&nbsp;this&nbsp;in&nbsp;N3</tt></dd></dl>
+
+<dl><dt><a name="Formula-unify"><strong>unify</strong></a>(self, other, env1<font color="#909090">=Env({})</font>, env2<font color="#909090">=Env({})</font>, vars<font color="#909090">=set([])</font>, universals<font color="#909090">=set([])</font>, existentials<font color="#909090">=set([])</font>, n1Source<font color="#909090">=32</font>, n2Source<font color="#909090">=32</font>)</dt></dl>
 
 <dl><dt><a name="Formula-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
@@ -378,11 +371,21 @@ This&nbsp;extends&nbsp;the&nbsp;<a href="#StoredStatement">StoredStatement</a>&n
 
 <dl><dt><a name="StoredStatement-subject"><strong>subject</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;subject&nbsp;of&nbsp;the&nbsp;statement</tt></dd></dl>
 
-<dl><dt><a name="StoredStatement-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>See&nbsp;Term.<a href="#StoredStatement-unify">unify</a>()</tt></dd></dl>
+<dl><dt><a name="StoredStatement-unify"><strong>unify</strong></a>(self, other, env1, env2, vars, universals, existentials, n1Source<font color="#909090">=32</font>, n2Source<font color="#909090">=32</font>)</dt></dl>
+
+<dl><dt><a name="StoredStatement-unifySecondary"><strong>unifySecondary</strong></a>(self, other, env1, env2, vars, universals, existentials, n1Source, n2Source)</dt></dl>
 
 <dl><dt><a name="StoredStatement-universals"><strong>universals</strong></a>(self)</dt></dl>
 
 </td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-sorted"><strong>sorted</strong></a>(...)</dt><dd><tt><a href="#-sorted">sorted</a>(iterable,&nbsp;cmp=None,&nbsp;key=None,&nbsp;reverse=False)&nbsp;--&gt;&nbsp;new&nbsp;sorted&nbsp;list</tt></dd></dl>
+</td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">
 <td colspan=3 valign=bottom>&nbsp;<br>
@@ -396,7 +399,7 @@ This&nbsp;extends&nbsp;the&nbsp;<a href="#StoredStatement">StoredStatement</a>&n
 <strong>PRED</strong> = 1<br>
 <strong>SUBJ</strong> = 2<br>
 <strong>SYMBOL</strong> = 0<br>
-<strong>__version__</strong> = 'Id: formula.py,v 1.49 2006/08/02 16:59:14 syosi Exp '<br>
+<strong>__version__</strong> = 'Id: formula.py,v 1.57 2007/06/26 15:30:53 syosi Exp '<br>
 <strong>generators</strong> = _Feature((2, 2, 0, 'alpha', 1), (2, 3, 0, 'final', 0), 4096)<br>
 <strong>tracking</strong> = 0</td></tr></table>
 </body></html>

@@ -19,12 +19,11 @@ OFFLINETESTS=regression.n3 list/detailed.tests \
 	ntriples/detailed.tests \
 	string/detailed.tests \
 	syntax/detailed.tests \
-	includes/detailed.tests \
-	testmeta.n3
+	includes/detailed.tests
 #	reify/detailed.tests \
 # 	i18n/detailed.tests \
 
-TESTS=online.tests  rdfcore-tests.n3 delta/detailed.tests paw/detailed.tests \
+TESTS=online.tests  rdfcore-tests.n3 delta/detailed.tests paw/detailed.tests testmeta.n3 \
 	$(OFFLINETESTS) #n3parser.tests
 
 quick : pyc-check $(CODE) $(OFFLINETESTS)

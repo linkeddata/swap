@@ -423,7 +423,8 @@ def main():
         print "%3i/%i %-30s  %s" %(tests, totalTests, urel, description)
     #    print "      %scwm %s   giving %s" %(arguments, case)
         assert case and description and arguments
-        cleanup = """sed -e 's/\$[I]d.*\$//g' -e "s;%s;%s;g" -e '/@prefix run/d'""" % (WD, REFWD)
+        cleanup = """sed -e 's/\$[I]d.*\$//g' -e "s;%s;%s;g" -e '/@prefix run/d' -e 's;%s;%s;g'""" % (WD, REFWD,
+                                                                                                      cwm_command, '../cwm.py')
         
         if normal:
             execute("""CWM_RUN_NS="run#" %s %s %s --quiet %s | %s > ,temp/%s""" %

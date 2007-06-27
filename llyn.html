@@ -8,7 +8,7 @@
 <td valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>llyn</strong></big></big></font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/syosi/CVS-local/WWW/2000/10/swap/llyn.py">/home/syosi/CVS-local/WWW/2000/10/swap/llyn.py</a></font></td></tr></table>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/yosi/CVSROOT/WWW/2000/10/swap/llyn.py">/Users/yosi/CVSROOT/WWW/2000/10/swap/llyn.py</a></font></td></tr></table>
     <p><tt>$Id$<br>
 &nbsp;<br>
 &nbsp;<br>
@@ -56,18 +56,20 @@ ANY&nbsp;WARRANTY;&nbsp;without&nbsp;even&nbsp;the&nbsp;implied&nbsp;warranty&nb
 <td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="StringIO.html">StringIO</a><br>
 <a href="binascii.html">binascii</a><br>
 <a href="diag.html">diag</a><br>
+<a href="httplib.html">httplib</a><br>
 <a href="md5.html">md5</a><br>
 </td><td width="25%" valign=top><a href="notation3.html">notation3</a><br>
 <a href="re.html">re</a><br>
 <a href="reify.html">reify</a><br>
 <a href="string.html">string</a><br>
-</td><td width="25%" valign=top><a href="sys.html">sys</a><br>
-<a href="time.html">time</a><br>
+<a href="sys.html">sys</a><br>
+</td><td width="25%" valign=top><a href="time.html">time</a><br>
 <a href="types.html">types</a><br>
 <a href="uripath.html">uripath</a><br>
-</td><td width="25%" valign=top><a href="urllib.html">urllib</a><br>
+<a href="urllib.html">urllib</a><br>
 <a href="weakref.html">weakref</a><br>
-<a href="webAccess.html">webAccess</a><br>
+</td><td width="25%" valign=top><a href="webAccess.html">webAccess</a><br>
+<a href="xml.html">xml</a><br>
 </td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ee77aa">
@@ -76,14 +78,32 @@ ANY&nbsp;WARRANTY;&nbsp;without&nbsp;even&nbsp;the&nbsp;implied&nbsp;warranty&nb
     
 <tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><dl>
-<dt><font face="helvetica, arial"><a href="llyn.html#DataObject">DataObject</a>
-</font></dt><dt><font face="helvetica, arial"><a href="formula.html#Formula">formula.Formula</a>(<a href="term.html#AnonymousNode">term.AnonymousNode</a>, <a href="term.html#CompoundTerm">term.CompoundTerm</a>)
+<dt><font face="helvetica, arial"><a href="RDFSink.html#RDFSink">RDFSink.RDFSink</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="llyn.html#RDFStore">RDFStore</a>
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="__builtin__.html#object">__builtin__.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="llyn.html#Disjoint_set">Disjoint_set</a>
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="exceptions.html#ValueError">exceptions.ValueError</a>(<a href="exceptions.html#StandardError">exceptions.StandardError</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="llyn.html#URISyntaxError">URISyntaxError</a>
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="formula.html#Formula">formula.Formula</a>(<a href="term.html#AnonymousNode">term.AnonymousNode</a>, <a href="term.html#CompoundTerm">term.CompoundTerm</a>)
 </font></dt><dd>
 <dl>
 <dt><font face="helvetica, arial"><a href="llyn.html#IndexedFormula">IndexedFormula</a>
 </font></dt></dl>
 </dd>
-<dt><font face="helvetica, arial"><a href="term.html#Function">term.Function</a>(<a href="term.html#BuiltIn">term.BuiltIn</a>)
+<dt><font face="helvetica, arial"><a href="llyn.html#DataObject">DataObject</a>
+</font></dt><dt><font face="helvetica, arial"><a href="term.html#Function">term.Function</a>(<a href="term.html#BuiltIn">term.BuiltIn</a>)
 </font></dt><dd>
 <dl>
 <dt><font face="helvetica, arial"><a href="llyn.html#BI_EqualTo">BI_EqualTo</a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>, <a href="term.html#Function">term.Function</a>, <a href="term.html#ReverseFunction">term.ReverseFunction</a>)
@@ -112,6 +132,7 @@ ANY&nbsp;WARRANTY;&nbsp;without&nbsp;even&nbsp;the&nbsp;implied&nbsp;warranty&nb
 </font></dt></dl>
 </dd>
 <dt><font face="helvetica, arial"><a href="llyn.html#BI_vars">BI_vars</a>(<a href="term.html#LightBuiltIn">term.LightBuiltIn</a>, <a href="term.html#Function">term.Function</a>)
+</font></dt><dt><font face="helvetica, arial"><a href="llyn.html#BI_xmlTree">BI_xmlTree</a>(<a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a>, <a href="term.html#Function">term.Function</a>)
 </font></dt></dl>
 </dd>
 <dt><font face="helvetica, arial"><a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a>(<a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a>)
@@ -132,6 +153,7 @@ ANY&nbsp;WARRANTY;&nbsp;without&nbsp;even&nbsp;the&nbsp;implied&nbsp;warranty&nb
 </dd>
 <dt><font face="helvetica, arial"><a href="llyn.html#BI_semanticsWithImportsClosure">BI_semanticsWithImportsClosure</a>(<a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a>, <a href="term.html#Function">term.Function</a>)
 </font></dt><dt><font face="helvetica, arial"><a href="llyn.html#BI_supports">BI_supports</a>
+</font></dt><dt><font face="helvetica, arial"><a href="llyn.html#BI_xmlTree">BI_xmlTree</a>(<a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a>, <a href="term.html#Function">term.Function</a>)
 </font></dt></dl>
 </dd>
 <dt><font face="helvetica, arial"><a href="term.html#LightBuiltIn">term.LightBuiltIn</a>(<a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a>)
@@ -163,12 +185,6 @@ ANY&nbsp;WARRANTY;&nbsp;without&nbsp;even&nbsp;the&nbsp;implied&nbsp;warranty&nb
 </font></dt><dt><font face="helvetica, arial"><a href="llyn.html#BI_universalVariableName">BI_universalVariableName</a>
 </font></dt></dl>
 </dd>
-<dt><font face="helvetica, arial"><a href="RDFSink.html#RDFSink">RDFSink.RDFSink</a>
-</font></dt><dd>
-<dl>
-<dt><font face="helvetica, arial"><a href="llyn.html#RDFStore">RDFStore</a>
-</font></dt></dl>
-</dd>
 <dt><font face="helvetica, arial"><a href="term.html#ReverseFunction">term.ReverseFunction</a>(<a href="term.html#BuiltIn">term.BuiltIn</a>)
 </font></dt><dd>
 <dl>
@@ -182,18 +198,6 @@ ANY&nbsp;WARRANTY;&nbsp;without&nbsp;even&nbsp;the&nbsp;implied&nbsp;warranty&nb
 </font></dt></dl>
 </dd>
 </dl>
-</dd>
-<dt><font face="helvetica, arial"><a href="exceptions.html#ValueError">exceptions.ValueError</a>(<a href="exceptions.html#StandardError">exceptions.StandardError</a>)
-</font></dt><dd>
-<dl>
-<dt><font face="helvetica, arial"><a href="llyn.html#URISyntaxError">URISyntaxError</a>
-</font></dt></dl>
-</dd>
-<dt><font face="helvetica, arial"><a href="__builtin__.html#object">__builtin__.object</a>
-</font></dt><dd>
-<dl>
-<dt><font face="helvetica, arial"><a href="llyn.html#Disjoint_set">Disjoint_set</a>
-</font></dt></dl>
 </dd>
 </dl>
  <p>
@@ -309,16 +313,9 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_EqualTo-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="BI_EqualTo-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
-which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
-&nbsp;<br>
-vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
-existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
-bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
-&nbsp;<br>
-Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
-return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
-Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+<dl><dt><a name="BI_EqualTo-unify"><strong>unify</strong></a>(self, other, env1<font color="#909090">=Env({})</font>, env2<font color="#909090">=Env({})</font>, vars<font color="#909090">=set([])</font>, universals<font color="#909090">=set([])</font>, existentials<font color="#909090">=set([])</font>, n1Source<font color="#909090">=32</font>, n2Source<font color="#909090">=32</font>)</dt></dl>
+
+<dl><dt><a name="BI_EqualTo-unifySecondary"><strong>unifySecondary</strong></a>(self, other, env1, env2, vars, universals, existentials, n1Source<font color="#909090">=55</font>, n2Source<font color="#909090">=55</font>)</dt></dl>
 
 <dl><dt><a name="BI_EqualTo-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
@@ -441,16 +438,9 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_EqualTo-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="BI_EqualTo-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
-which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
-&nbsp;<br>
-vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
-existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
-bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
-&nbsp;<br>
-Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
-return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
-Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+<dl><dt><a name="BI_EqualTo-unify"><strong>unify</strong></a>(self, other, env1<font color="#909090">=Env({})</font>, env2<font color="#909090">=Env({})</font>, vars<font color="#909090">=set([])</font>, universals<font color="#909090">=set([])</font>, existentials<font color="#909090">=set([])</font>, n1Source<font color="#909090">=32</font>, n2Source<font color="#909090">=32</font>)</dt></dl>
+
+<dl><dt><a name="BI_EqualTo-unifySecondary"><strong>unifySecondary</strong></a>(self, other, env1, env2, vars, universals, existentials, n1Source<font color="#909090">=55</font>, n2Source<font color="#909090">=55</font>)</dt></dl>
 
 <dl><dt><a name="BI_EqualTo-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
@@ -577,16 +567,9 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_conclusion-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="BI_conclusion-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
-which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
-&nbsp;<br>
-vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
-existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
-bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
-&nbsp;<br>
-Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
-return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
-Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+<dl><dt><a name="BI_conclusion-unify"><strong>unify</strong></a>(self, other, env1<font color="#909090">=Env({})</font>, env2<font color="#909090">=Env({})</font>, vars<font color="#909090">=set([])</font>, universals<font color="#909090">=set([])</font>, existentials<font color="#909090">=set([])</font>, n1Source<font color="#909090">=32</font>, n2Source<font color="#909090">=32</font>)</dt></dl>
+
+<dl><dt><a name="BI_conclusion-unifySecondary"><strong>unifySecondary</strong></a>(self, other, env1, env2, vars, universals, existentials, n1Source<font color="#909090">=55</font>, n2Source<font color="#909090">=55</font>)</dt></dl>
 
 <dl><dt><a name="BI_conclusion-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
@@ -712,16 +695,9 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_conjunction-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="BI_conjunction-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
-which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
-&nbsp;<br>
-vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
-existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
-bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
-&nbsp;<br>
-Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
-return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
-Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+<dl><dt><a name="BI_conjunction-unify"><strong>unify</strong></a>(self, other, env1<font color="#909090">=Env({})</font>, env2<font color="#909090">=Env({})</font>, vars<font color="#909090">=set([])</font>, universals<font color="#909090">=set([])</font>, existentials<font color="#909090">=set([])</font>, n1Source<font color="#909090">=32</font>, n2Source<font color="#909090">=32</font>)</dt></dl>
+
+<dl><dt><a name="BI_conjunction-unifySecondary"><strong>unifySecondary</strong></a>(self, other, env1, env2, vars, universals, existentials, n1Source<font color="#909090">=55</font>, n2Source<font color="#909090">=55</font>)</dt></dl>
 
 <dl><dt><a name="BI_conjunction-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
@@ -843,16 +819,9 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_content-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="BI_content-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
-which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
-&nbsp;<br>
-vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
-existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
-bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
-&nbsp;<br>
-Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
-return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
-Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+<dl><dt><a name="BI_content-unify"><strong>unify</strong></a>(self, other, env1<font color="#909090">=Env({})</font>, env2<font color="#909090">=Env({})</font>, vars<font color="#909090">=set([])</font>, universals<font color="#909090">=set([])</font>, existentials<font color="#909090">=set([])</font>, n1Source<font color="#909090">=32</font>, n2Source<font color="#909090">=32</font>)</dt></dl>
+
+<dl><dt><a name="BI_content-unifySecondary"><strong>unifySecondary</strong></a>(self, other, env1, env2, vars, universals, existentials, n1Source<font color="#909090">=55</font>, n2Source<font color="#909090">=55</font>)</dt></dl>
 
 <dl><dt><a name="BI_content-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
@@ -982,16 +951,9 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_dtlit-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="BI_dtlit-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
-which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
-&nbsp;<br>
-vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
-existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
-bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
-&nbsp;<br>
-Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
-return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
-Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+<dl><dt><a name="BI_dtlit-unify"><strong>unify</strong></a>(self, other, env1<font color="#909090">=Env({})</font>, env2<font color="#909090">=Env({})</font>, vars<font color="#909090">=set([])</font>, universals<font color="#909090">=set([])</font>, existentials<font color="#909090">=set([])</font>, n1Source<font color="#909090">=32</font>, n2Source<font color="#909090">=32</font>)</dt></dl>
+
+<dl><dt><a name="BI_dtlit-unifySecondary"><strong>unifySecondary</strong></a>(self, other, env1, env2, vars, universals, existentials, n1Source<font color="#909090">=55</font>, n2Source<font color="#909090">=55</font>)</dt></dl>
 
 <dl><dt><a name="BI_dtlit-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
@@ -1111,16 +1073,9 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_enforceUniqueBinding-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="BI_enforceUniqueBinding-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
-which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
-&nbsp;<br>
-vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
-existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
-bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
-&nbsp;<br>
-Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
-return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
-Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+<dl><dt><a name="BI_enforceUniqueBinding-unify"><strong>unify</strong></a>(self, other, env1<font color="#909090">=Env({})</font>, env2<font color="#909090">=Env({})</font>, vars<font color="#909090">=set([])</font>, universals<font color="#909090">=set([])</font>, existentials<font color="#909090">=set([])</font>, n1Source<font color="#909090">=32</font>, n2Source<font color="#909090">=32</font>)</dt></dl>
+
+<dl><dt><a name="BI_enforceUniqueBinding-unifySecondary"><strong>unifySecondary</strong></a>(self, other, env1, env2, vars, universals, existentials, n1Source<font color="#909090">=55</font>, n2Source<font color="#909090">=55</font>)</dt></dl>
 
 <dl><dt><a name="BI_enforceUniqueBinding-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
@@ -1244,16 +1199,9 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_existentialVariableName-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="BI_existentialVariableName-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
-which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
-&nbsp;<br>
-vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
-existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
-bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
-&nbsp;<br>
-Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
-return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
-Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+<dl><dt><a name="BI_existentialVariableName-unify"><strong>unify</strong></a>(self, other, env1<font color="#909090">=Env({})</font>, env2<font color="#909090">=Env({})</font>, vars<font color="#909090">=set([])</font>, universals<font color="#909090">=set([])</font>, existentials<font color="#909090">=set([])</font>, n1Source<font color="#909090">=32</font>, n2Source<font color="#909090">=32</font>)</dt></dl>
+
+<dl><dt><a name="BI_existentialVariableName-unifySecondary"><strong>unifySecondary</strong></a>(self, other, env1, env2, vars, universals, existentials, n1Source<font color="#909090">=55</font>, n2Source<font color="#909090">=55</font>)</dt></dl>
 
 <dl><dt><a name="BI_existentialVariableName-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
@@ -1377,16 +1325,9 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_filter-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="BI_filter-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
-which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
-&nbsp;<br>
-vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
-existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
-bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
-&nbsp;<br>
-Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
-return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
-Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+<dl><dt><a name="BI_filter-unify"><strong>unify</strong></a>(self, other, env1<font color="#909090">=Env({})</font>, env2<font color="#909090">=Env({})</font>, vars<font color="#909090">=set([])</font>, universals<font color="#909090">=set([])</font>, existentials<font color="#909090">=set([])</font>, n1Source<font color="#909090">=32</font>, n2Source<font color="#909090">=32</font>)</dt></dl>
+
+<dl><dt><a name="BI_filter-unifySecondary"><strong>unifySecondary</strong></a>(self, other, env1, env2, vars, universals, existentials, n1Source<font color="#909090">=55</font>, n2Source<font color="#909090">=55</font>)</dt></dl>
 
 <dl><dt><a name="BI_filter-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
@@ -1507,16 +1448,9 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_includes-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="BI_includes-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
-which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
-&nbsp;<br>
-vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
-existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
-bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
-&nbsp;<br>
-Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
-return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
-Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+<dl><dt><a name="BI_includes-unify"><strong>unify</strong></a>(self, other, env1<font color="#909090">=Env({})</font>, env2<font color="#909090">=Env({})</font>, vars<font color="#909090">=set([])</font>, universals<font color="#909090">=set([])</font>, existentials<font color="#909090">=set([])</font>, n1Source<font color="#909090">=32</font>, n2Source<font color="#909090">=32</font>)</dt></dl>
+
+<dl><dt><a name="BI_includes-unifySecondary"><strong>unifySecondary</strong></a>(self, other, env1, env2, vars, universals, existentials, n1Source<font color="#909090">=55</font>, n2Source<font color="#909090">=55</font>)</dt></dl>
 
 <dl><dt><a name="BI_includes-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
@@ -1646,16 +1580,9 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_n3String-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="BI_n3String-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
-which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
-&nbsp;<br>
-vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
-existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
-bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
-&nbsp;<br>
-Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
-return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
-Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+<dl><dt><a name="BI_n3String-unify"><strong>unify</strong></a>(self, other, env1<font color="#909090">=Env({})</font>, env2<font color="#909090">=Env({})</font>, vars<font color="#909090">=set([])</font>, universals<font color="#909090">=set([])</font>, existentials<font color="#909090">=set([])</font>, n1Source<font color="#909090">=32</font>, n2Source<font color="#909090">=32</font>)</dt></dl>
+
+<dl><dt><a name="BI_n3String-unifySecondary"><strong>unifySecondary</strong></a>(self, other, env1, env2, vars, universals, existentials, n1Source<font color="#909090">=55</font>, n2Source<font color="#909090">=55</font>)</dt></dl>
 
 <dl><dt><a name="BI_n3String-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
@@ -1772,16 +1699,9 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_notEqualTo-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="BI_notEqualTo-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
-which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
-&nbsp;<br>
-vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
-existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
-bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
-&nbsp;<br>
-Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
-return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
-Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+<dl><dt><a name="BI_notEqualTo-unify"><strong>unify</strong></a>(self, other, env1<font color="#909090">=Env({})</font>, env2<font color="#909090">=Env({})</font>, vars<font color="#909090">=set([])</font>, universals<font color="#909090">=set([])</font>, existentials<font color="#909090">=set([])</font>, n1Source<font color="#909090">=32</font>, n2Source<font color="#909090">=32</font>)</dt></dl>
+
+<dl><dt><a name="BI_notEqualTo-unifySecondary"><strong>unifySecondary</strong></a>(self, other, env1, env2, vars, universals, existentials, n1Source<font color="#909090">=55</font>, n2Source<font color="#909090">=55</font>)</dt></dl>
 
 <dl><dt><a name="BI_notEqualTo-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
@@ -1912,16 +1832,9 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_notIncludes-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="BI_notIncludes-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
-which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
-&nbsp;<br>
-vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
-existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
-bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
-&nbsp;<br>
-Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
-return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
-Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+<dl><dt><a name="BI_notIncludes-unify"><strong>unify</strong></a>(self, other, env1<font color="#909090">=Env({})</font>, env2<font color="#909090">=Env({})</font>, vars<font color="#909090">=set([])</font>, universals<font color="#909090">=set([])</font>, existentials<font color="#909090">=set([])</font>, n1Source<font color="#909090">=32</font>, n2Source<font color="#909090">=32</font>)</dt></dl>
+
+<dl><dt><a name="BI_notIncludes-unifySecondary"><strong>unifySecondary</strong></a>(self, other, env1, env2, vars, universals, existentials, n1Source<font color="#909090">=55</font>, n2Source<font color="#909090">=55</font>)</dt></dl>
 
 <dl><dt><a name="BI_notIncludes-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
@@ -2038,16 +1951,9 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_notIncludesWithBuiltins-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="BI_notIncludesWithBuiltins-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
-which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
-&nbsp;<br>
-vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
-existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
-bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
-&nbsp;<br>
-Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
-return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
-Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+<dl><dt><a name="BI_notIncludesWithBuiltins-unify"><strong>unify</strong></a>(self, other, env1<font color="#909090">=Env({})</font>, env2<font color="#909090">=Env({})</font>, vars<font color="#909090">=set([])</font>, universals<font color="#909090">=set([])</font>, existentials<font color="#909090">=set([])</font>, n1Source<font color="#909090">=32</font>, n2Source<font color="#909090">=32</font>)</dt></dl>
+
+<dl><dt><a name="BI_notIncludesWithBuiltins-unifySecondary"><strong>unifySecondary</strong></a>(self, other, env1, env2, vars, universals, existentials, n1Source<font color="#909090">=55</font>, n2Source<font color="#909090">=55</font>)</dt></dl>
 
 <dl><dt><a name="BI_notIncludesWithBuiltins-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
@@ -2169,16 +2075,9 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_parsedAsN3-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="BI_parsedAsN3-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
-which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
-&nbsp;<br>
-vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
-existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
-bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
-&nbsp;<br>
-Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
-return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
-Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+<dl><dt><a name="BI_parsedAsN3-unify"><strong>unify</strong></a>(self, other, env1<font color="#909090">=Env({})</font>, env2<font color="#909090">=Env({})</font>, vars<font color="#909090">=set([])</font>, universals<font color="#909090">=set([])</font>, existentials<font color="#909090">=set([])</font>, n1Source<font color="#909090">=32</font>, n2Source<font color="#909090">=32</font>)</dt></dl>
+
+<dl><dt><a name="BI_parsedAsN3-unifySecondary"><strong>unifySecondary</strong></a>(self, other, env1, env2, vars, universals, existentials, n1Source<font color="#909090">=55</font>, n2Source<font color="#909090">=55</font>)</dt></dl>
 
 <dl><dt><a name="BI_parsedAsN3-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
@@ -2300,16 +2199,9 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_racine-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="BI_racine-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
-which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
-&nbsp;<br>
-vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
-existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
-bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
-&nbsp;<br>
-Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
-return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
-Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+<dl><dt><a name="BI_racine-unify"><strong>unify</strong></a>(self, other, env1<font color="#909090">=Env({})</font>, env2<font color="#909090">=Env({})</font>, vars<font color="#909090">=set([])</font>, universals<font color="#909090">=set([])</font>, existentials<font color="#909090">=set([])</font>, n1Source<font color="#909090">=32</font>, n2Source<font color="#909090">=32</font>)</dt></dl>
+
+<dl><dt><a name="BI_racine-unifySecondary"><strong>unifySecondary</strong></a>(self, other, env1, env2, vars, universals, existentials, n1Source<font color="#909090">=55</font>, n2Source<font color="#909090">=55</font>)</dt></dl>
 
 <dl><dt><a name="BI_racine-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
@@ -2435,16 +2327,9 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_rawType-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="BI_rawType-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
-which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
-&nbsp;<br>
-vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
-existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
-bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
-&nbsp;<br>
-Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
-return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
-Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+<dl><dt><a name="BI_rawType-unify"><strong>unify</strong></a>(self, other, env1<font color="#909090">=Env({})</font>, env2<font color="#909090">=Env({})</font>, vars<font color="#909090">=set([])</font>, universals<font color="#909090">=set([])</font>, existentials<font color="#909090">=set([])</font>, n1Source<font color="#909090">=32</font>, n2Source<font color="#909090">=32</font>)</dt></dl>
+
+<dl><dt><a name="BI_rawType-unifySecondary"><strong>unifySecondary</strong></a>(self, other, env1, env2, vars, universals, existentials, n1Source<font color="#909090">=55</font>, n2Source<font color="#909090">=55</font>)</dt></dl>
 
 <dl><dt><a name="BI_rawType-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
@@ -2585,16 +2470,9 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_rawUri-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="BI_rawUri-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
-which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
-&nbsp;<br>
-vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
-existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
-bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
-&nbsp;<br>
-Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
-return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
-Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+<dl><dt><a name="BI_rawUri-unify"><strong>unify</strong></a>(self, other, env1<font color="#909090">=Env({})</font>, env2<font color="#909090">=Env({})</font>, vars<font color="#909090">=set([])</font>, universals<font color="#909090">=set([])</font>, existentials<font color="#909090">=set([])</font>, n1Source<font color="#909090">=32</font>, n2Source<font color="#909090">=32</font>)</dt></dl>
+
+<dl><dt><a name="BI_rawUri-unifySecondary"><strong>unifySecondary</strong></a>(self, other, env1, env2, vars, universals, existentials, n1Source<font color="#909090">=55</font>, n2Source<font color="#909090">=55</font>)</dt></dl>
 
 <dl><dt><a name="BI_rawUri-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
@@ -2719,16 +2597,9 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_reification-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="BI_reification-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
-which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
-&nbsp;<br>
-vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
-existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
-bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
-&nbsp;<br>
-Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
-return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
-Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+<dl><dt><a name="BI_reification-unify"><strong>unify</strong></a>(self, other, env1<font color="#909090">=Env({})</font>, env2<font color="#909090">=Env({})</font>, vars<font color="#909090">=set([])</font>, universals<font color="#909090">=set([])</font>, existentials<font color="#909090">=set([])</font>, n1Source<font color="#909090">=32</font>, n2Source<font color="#909090">=32</font>)</dt></dl>
+
+<dl><dt><a name="BI_reification-unifySecondary"><strong>unifySecondary</strong></a>(self, other, env1, env2, vars, universals, existentials, n1Source<font color="#909090">=55</font>, n2Source<font color="#909090">=55</font>)</dt></dl>
 
 <dl><dt><a name="BI_reification-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
@@ -2854,16 +2725,9 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_semantics-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="BI_semantics-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
-which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
-&nbsp;<br>
-vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
-existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
-bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
-&nbsp;<br>
-Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
-return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
-Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+<dl><dt><a name="BI_semantics-unify"><strong>unify</strong></a>(self, other, env1<font color="#909090">=Env({})</font>, env2<font color="#909090">=Env({})</font>, vars<font color="#909090">=set([])</font>, universals<font color="#909090">=set([])</font>, existentials<font color="#909090">=set([])</font>, n1Source<font color="#909090">=32</font>, n2Source<font color="#909090">=32</font>)</dt></dl>
+
+<dl><dt><a name="BI_semantics-unifySecondary"><strong>unifySecondary</strong></a>(self, other, env1, env2, vars, universals, existentials, n1Source<font color="#909090">=55</font>, n2Source<font color="#909090">=55</font>)</dt></dl>
 
 <dl><dt><a name="BI_semantics-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
@@ -2988,16 +2852,9 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_semanticsOrError-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="BI_semanticsOrError-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
-which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
-&nbsp;<br>
-vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
-existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
-bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
-&nbsp;<br>
-Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
-return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
-Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+<dl><dt><a name="BI_semanticsOrError-unify"><strong>unify</strong></a>(self, other, env1<font color="#909090">=Env({})</font>, env2<font color="#909090">=Env({})</font>, vars<font color="#909090">=set([])</font>, universals<font color="#909090">=set([])</font>, existentials<font color="#909090">=set([])</font>, n1Source<font color="#909090">=32</font>, n2Source<font color="#909090">=32</font>)</dt></dl>
+
+<dl><dt><a name="BI_semanticsOrError-unifySecondary"><strong>unifySecondary</strong></a>(self, other, env1, env2, vars, universals, existentials, n1Source<font color="#909090">=55</font>, n2Source<font color="#909090">=55</font>)</dt></dl>
 
 <dl><dt><a name="BI_semanticsOrError-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
@@ -3124,16 +2981,9 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_semanticsWithImportsClosure-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="BI_semanticsWithImportsClosure-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
-which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
-&nbsp;<br>
-vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
-existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
-bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
-&nbsp;<br>
-Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
-return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
-Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+<dl><dt><a name="BI_semanticsWithImportsClosure-unify"><strong>unify</strong></a>(self, other, env1<font color="#909090">=Env({})</font>, env2<font color="#909090">=Env({})</font>, vars<font color="#909090">=set([])</font>, universals<font color="#909090">=set([])</font>, existentials<font color="#909090">=set([])</font>, n1Source<font color="#909090">=32</font>, n2Source<font color="#909090">=32</font>)</dt></dl>
+
+<dl><dt><a name="BI_semanticsWithImportsClosure-unifySecondary"><strong>unifySecondary</strong></a>(self, other, env1, env2, vars, universals, existentials, n1Source<font color="#909090">=55</font>, n2Source<font color="#909090">=55</font>)</dt></dl>
 
 <dl><dt><a name="BI_semanticsWithImportsClosure-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
@@ -3253,16 +3103,9 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_supports-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="BI_supports-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
-which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
-&nbsp;<br>
-vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
-existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
-bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
-&nbsp;<br>
-Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
-return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
-Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+<dl><dt><a name="BI_supports-unify"><strong>unify</strong></a>(self, other, env1<font color="#909090">=Env({})</font>, env2<font color="#909090">=Env({})</font>, vars<font color="#909090">=set([])</font>, universals<font color="#909090">=set([])</font>, existentials<font color="#909090">=set([])</font>, n1Source<font color="#909090">=32</font>, n2Source<font color="#909090">=32</font>)</dt></dl>
+
+<dl><dt><a name="BI_supports-unifySecondary"><strong>unifySecondary</strong></a>(self, other, env1, env2, vars, universals, existentials, n1Source<font color="#909090">=55</font>, n2Source<font color="#909090">=55</font>)</dt></dl>
 
 <dl><dt><a name="BI_supports-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
@@ -3387,16 +3230,9 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_universalVariableName-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="BI_universalVariableName-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
-which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
-&nbsp;<br>
-vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
-existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
-bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
-&nbsp;<br>
-Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
-return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
-Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+<dl><dt><a name="BI_universalVariableName-unify"><strong>unify</strong></a>(self, other, env1<font color="#909090">=Env({})</font>, env2<font color="#909090">=Env({})</font>, vars<font color="#909090">=set([])</font>, universals<font color="#909090">=set([])</font>, existentials<font color="#909090">=set([])</font>, n1Source<font color="#909090">=32</font>, n2Source<font color="#909090">=32</font>)</dt></dl>
+
+<dl><dt><a name="BI_universalVariableName-unifySecondary"><strong>unifySecondary</strong></a>(self, other, env1, env2, vars, universals, existentials, n1Source<font color="#909090">=55</font>, n2Source<font color="#909090">=55</font>)</dt></dl>
 
 <dl><dt><a name="BI_universalVariableName-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
@@ -3531,16 +3367,9 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_uri-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="BI_uri-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
-which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
-&nbsp;<br>
-vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
-existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
-bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
-&nbsp;<br>
-Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
-return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
-Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+<dl><dt><a name="BI_uri-unify"><strong>unify</strong></a>(self, other, env1<font color="#909090">=Env({})</font>, env2<font color="#909090">=Env({})</font>, vars<font color="#909090">=set([])</font>, universals<font color="#909090">=set([])</font>, existentials<font color="#909090">=set([])</font>, n1Source<font color="#909090">=32</font>, n2Source<font color="#909090">=32</font>)</dt></dl>
+
+<dl><dt><a name="BI_uri-unifySecondary"><strong>unifySecondary</strong></a>(self, other, env1, env2, vars, universals, existentials, n1Source<font color="#909090">=55</font>, n2Source<font color="#909090">=55</font>)</dt></dl>
 
 <dl><dt><a name="BI_uri-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
@@ -3664,18 +3493,135 @@ This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if
 
 <dl><dt><a name="BI_vars-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="BI_vars-unify"><strong>unify</strong></a>(self, other, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
-which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
-&nbsp;<br>
-vars&nbsp;&nbsp;&nbsp;are&nbsp;variables&nbsp;we&nbsp;want&nbsp;a&nbsp;binding&nbsp;for&nbsp;if&nbsp;matched<br>
-existentials&nbsp;are&nbsp;things&nbsp;we&nbsp;don't&nbsp;need&nbsp;a&nbsp;binding&nbsp;returned&nbsp;for<br>
-bindings&nbsp;are&nbsp;those&nbsp;bindings&nbsp;already&nbsp;made&nbsp;in&nbsp;this&nbsp;unification<br>
-&nbsp;<br>
-Return&nbsp;[]&nbsp;if&nbsp;impossible.<br>
-return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
-Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+<dl><dt><a name="BI_vars-unify"><strong>unify</strong></a>(self, other, env1<font color="#909090">=Env({})</font>, env2<font color="#909090">=Env({})</font>, vars<font color="#909090">=set([])</font>, universals<font color="#909090">=set([])</font>, existentials<font color="#909090">=set([])</font>, n1Source<font color="#909090">=32</font>, n2Source<font color="#909090">=32</font>)</dt></dl>
+
+<dl><dt><a name="BI_vars-unifySecondary"><strong>unifySecondary</strong></a>(self, other, env1, env2, vars, universals, existentials, n1Source<font color="#909090">=55</font>, n2Source<font color="#909090">=55</font>)</dt></dl>
 
 <dl><dt><a name="BI_vars-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
+
+<hr>
+Data and other attributes inherited from <a href="term.html#Term">term.Term</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dictproxy object&gt;<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;attribute '__weakref__' of 'Term' objects&gt;<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;(if&nbsp;defined)</tt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="BI_xmlTree">class <strong>BI_xmlTree</strong></a>(<a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a>, <a href="term.html#Function">term.Function</a>)</font></td></tr>
+    
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="llyn.html#BI_xmlTree">BI_xmlTree</a></dd>
+<dd><a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a></dd>
+<dd><a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a></dd>
+<dd><a href="term.html#Function">term.Function</a></dd>
+<dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
+<dd><a href="term.html#Fragment">term.Fragment</a></dd>
+<dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
+<dd><a href="term.html#Node">term.Node</a></dd>
+<dd><a href="term.html#Term">term.Term</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="BI_xmlTree-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#GenericBuiltIn">term.GenericBuiltIn</a>:<br>
+<dl><dt><a name="BI_xmlTree-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#Function">term.Function</a>:<br>
+<dl><dt><a name="BI_xmlTree-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
+
+<hr>
+Static methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
+<dl><dt><a name="BI_xmlTree-__new__"><strong>__new__</strong></a>(cls, *args, **keywords)</dt></dl>
+
+<hr>
+Data and other attributes inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
+<dl><dt><strong>all</strong> = []</dl>
+
+<hr>
+Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_xmlTree-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt></dl>
+
+<dl><dt><a name="BI_xmlTree-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
+&nbsp;<br>
+Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
+
+<dl><dt><a name="BI_xmlTree-generated"><strong>generated</strong></a>(self)</dt><dd><tt>A&nbsp;generated&nbsp;identifier?<br>
+This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
+name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
+It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
+context.</tt></dd></dl>
+
+<dl><dt><a name="BI_xmlTree-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
+
+<dl><dt><a name="BI_xmlTree-uriref"><strong>uriref</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BI_xmlTree-uriref2"><strong>uriref2</strong></a>(self, base)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
+<dl><dt><a name="BI_xmlTree-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BI_xmlTree-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="BI_xmlTree-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/whatever">http://example.org/whatever</a>"]</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
+<dl><dt><a name="BI_xmlTree-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
+&nbsp;<br>
+output&nbsp;as&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity.</tt></dd></dl>
+
+<dl><dt><a name="BI_xmlTree-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
+&nbsp;<br>
+The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
+see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,<br>
+string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="BI_xmlTree-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;Anonymous&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;<a href="formula.html#Formula">Formula</a>,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
+
+<dl><dt><a name="BI_xmlTree-debugString"><strong>debugString</strong></a>(self, already<font color="#909090">=[]</font>)</dt></dl>
+
+<dl><dt><a name="BI_xmlTree-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
+<dl><dt><a name="BI_xmlTree-freeVariables"><strong>freeVariables</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BI_xmlTree-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
+
+<dl><dt><a name="BI_xmlTree-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_xmlTree-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>, cannon<font color="#909090">=False</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_xmlTree-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="BI_xmlTree-unify"><strong>unify</strong></a>(self, other, env1<font color="#909090">=Env({})</font>, env2<font color="#909090">=Env({})</font>, vars<font color="#909090">=set([])</font>, universals<font color="#909090">=set([])</font>, existentials<font color="#909090">=set([])</font>, n1Source<font color="#909090">=32</font>, n2Source<font color="#909090">=32</font>)</dt></dl>
+
+<dl><dt><a name="BI_xmlTree-unifySecondary"><strong>unifySecondary</strong></a>(self, other, env1, env2, vars, universals, existentials, n1Source<font color="#909090">=55</font>, n2Source<font color="#909090">=55</font>)</dt></dl>
+
+<dl><dt><a name="BI_xmlTree-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
 <hr>
 Data and other attributes inherited from <a href="term.html#Term">term.Term</a>:<br>
@@ -3868,7 +3814,7 @@ one&nbsp;answer&nbsp;in&nbsp;the&nbsp;store.&nbsp;It&nbsp;wise&nbsp;to&nbsp;use&
 color&nbsp;=&nbsp;f.<a href="#IndexedFormula-the">the</a>(pred=pantoneColor,&nbsp;subj=myCar)<br>
 redCar&nbsp;=&nbsp;f.<a href="#IndexedFormula-the">the</a>(pred=pantoneColor,&nbsp;obj=red)</tt></dd></dl>
 
-<dl><dt><a name="IndexedFormula-unify"><strong>unify</strong></a> = k(*args, **keywords)</dt></dl>
+<dl><dt><a name="IndexedFormula-unifySecondary"><strong>unifySecondary</strong></a>(self, other, env1, env2, vars, universals, existentials, n1Source, n2Source)</dt></dl>
 
 <hr>
 Methods inherited from <a href="formula.html#Formula">formula.Formula</a>:<br>
@@ -3918,7 +3864,7 @@ we&nbsp;may&nbsp;move&nbsp;to&nbsp;an&nbsp;internal&nbsp;storage&nbsp;rather&nbs
 <dl><dt><a name="IndexedFormula-loadFormulaWithSubstitution"><strong>loadFormulaWithSubstitution</strong></a>(self, old, bindings<font color="#909090">={}</font>, why<font color="#909090">=None</font>, cannon<font color="#909090">=False</font>)</dt><dd><tt>Load&nbsp;information&nbsp;from&nbsp;another&nbsp;formula,&nbsp;subsituting&nbsp;as&nbsp;we&nbsp;go<br>
 returns&nbsp;number&nbsp;of&nbsp;statements&nbsp;added&nbsp;(roughly)</tt></dd></dl>
 
-<dl><dt><a name="IndexedFormula-n3EntailedBy"><strong>n3EntailedBy</strong></a>(pattern, kb, vars<font color="#909090">=Set([])</font>, existentials<font color="#909090">=Set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>See&nbsp;Term.<a href="#IndexedFormula-unify">unify</a>()&nbsp;and&nbsp;term.matchSet()<br>
+<dl><dt><a name="IndexedFormula-n3EntailedBy"><strong>n3EntailedBy</strong></a>(pattern, kb, vars<font color="#909090">=set([])</font>, existentials<font color="#909090">=set([])</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>See&nbsp;Term.<a href="#IndexedFormula-unify">unify</a>()&nbsp;and&nbsp;term.matchSet()<br>
 &nbsp;<br>
 KB&nbsp;is&nbsp;a&nbsp;stronger&nbsp;statement&nbsp;han&nbsp;other.<br>
 Bindings&nbsp;map&nbsp;variables&nbsp;in&nbsp;pattern&nbsp;onto&nbsp;kb.<br>
@@ -3957,6 +3903,10 @@ The&nbsp;symbol&nbsp;is&nbsp;created&nbsp;in&nbsp;the&nbsp;same&nbsp;store&nbsp;
 &nbsp;<br>
 See&nbsp;also:&nbsp;<a href="#IndexedFormula-universals">universals</a>()</tt></dd></dl>
 
+<dl><dt><a name="IndexedFormula-newXMLLiteral"><strong>newXMLLiteral</strong></a>(self, doc)</dt><dd><tt>Create&nbsp;or&nbsp;reuse&nbsp;the&nbsp;internal&nbsp;representation&nbsp;of&nbsp;the&nbsp;RDF&nbsp;literal&nbsp;whose&nbsp;string&nbsp;is&nbsp;given<br>
+&nbsp;<br>
+The&nbsp;literal&nbsp;is&nbsp;created&nbsp;in&nbsp;the&nbsp;same&nbsp;store&nbsp;as&nbsp;the&nbsp;formula.</tt></dd></dl>
+
 <dl><dt><a name="IndexedFormula-objects"><strong>objects</strong></a>(self, pred<font color="#909090">=None</font>, subj<font color="#909090">=None</font>)</dt><dd><tt>Obsolete&nbsp;-&nbsp;use&nbsp;<a href="#IndexedFormula-each">each</a>(subj=...,&nbsp;pred=...)</tt></dd></dl>
 
 <dl><dt><a name="IndexedFormula-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt><dd><tt>Which&nbsp;variables&nbsp;in&nbsp;the&nbsp;list&nbsp;occur&nbsp;in&nbsp;this?</tt></dd></dl>
@@ -3971,6 +3921,8 @@ See&nbsp;also:&nbsp;<a href="#IndexedFormula-universals">universals</a>()</tt></
 
 <dl><dt><a name="IndexedFormula-size"><strong>size</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;number&nbsp;statements.<br>
 Obsolete:&nbsp;use&nbsp;len(F).</tt></dd></dl>
+
+<dl><dt><a name="IndexedFormula-subSet"><strong>subSet</strong></a>(self, statements, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="IndexedFormula-subjects"><strong>subjects</strong></a>(self, pred<font color="#909090">=None</font>, obj<font color="#909090">=None</font>)</dt><dd><tt>Obsolete&nbsp;-&nbsp;use&nbsp;<a href="#IndexedFormula-each">each</a>(pred=...,&nbsp;obj=...)</tt></dd></dl>
 
@@ -4014,6 +3966,8 @@ a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;th
 This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="IndexedFormula-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>The&nbsp;string&nbsp;represnting&nbsp;this&nbsp;in&nbsp;N3</tt></dd></dl>
+
+<dl><dt><a name="IndexedFormula-unify"><strong>unify</strong></a>(self, other, env1<font color="#909090">=Env({})</font>, env2<font color="#909090">=Env({})</font>, vars<font color="#909090">=set([])</font>, universals<font color="#909090">=set([])</font>, existentials<font color="#909090">=set([])</font>, n1Source<font color="#909090">=32</font>, n2Source<font color="#909090">=32</font>)</dt></dl>
 
 <dl><dt><a name="IndexedFormula-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
@@ -4117,6 +4071,8 @@ formula&nbsp;as&nbsp;context,&nbsp;and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&
 universally&nbsp;qualified&nbsp;within&nbsp;the&nbsp;given<br>
 formula&nbsp;as&nbsp;context,&nbsp;and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&nbsp;use</tt></dd></dl>
 
+<dl><dt><a name="RDFStore-newXMLLiteral"><strong>newXMLLiteral</strong></a>(self, dom)</dt></dl>
+
 <dl><dt><a name="RDFStore-purge"><strong>purge</strong></a>(self, context, boringClass<font color="#909090">=None</font>)</dt><dd><tt>Clean&nbsp;up&nbsp;intermediate&nbsp;results<br>
 &nbsp;<br>
 Statements&nbsp;in&nbsp;the&nbsp;given&nbsp;context&nbsp;that&nbsp;a&nbsp;term&nbsp;is&nbsp;a&nbsp;Chaff&nbsp;cause<br>
@@ -4189,6 +4145,15 @@ Methods inherited from <a href="exceptions.html#Exception">exceptions.Exception<
 <td width="100%"><dl><dt><a name="-arg_hash"><strong>arg_hash</strong></a>(arg)</dt></dl>
  <dl><dt><a name="-comparePair"><strong>comparePair</strong></a>(self, other)</dt><dd><tt>Used&nbsp;only&nbsp;in&nbsp;outputString</tt></dd></dl>
  <dl><dt><a name="-isString"><strong>isString</strong></a>(x)</dt></dl>
+ <dl><dt><a name="-loadToStore"><strong>loadToStore</strong></a>(term, types)</dt><dd><tt>load&nbsp;content&nbsp;from&nbsp;the&nbsp;web&nbsp;and&nbsp;keep&nbsp;it&nbsp;in&nbsp;the&nbsp;store's&nbsp;experience.<br>
+return&nbsp;resulting&nbsp;literal&nbsp;term<br>
+&nbsp;<br>
+raises&nbsp;IOError<br>
+&nbsp;<br>
+&lt;DanC&gt;&nbsp;the&nbsp;log:content&nbsp;built-in&nbsp;could&nbsp;keep&nbsp;an&nbsp;HTTP&nbsp;response<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;around&nbsp;a&nbsp;la&nbsp;tabulator&nbsp;too.<br>
+&lt;timbl&gt;&nbsp;yes.<br>
+&lt;timbl&gt;&nbsp;You&nbsp;learn&nbsp;a&nbsp;lot&nbsp;from&nbsp;a&nbsp;recode.</tt></dd></dl>
  <dl><dt><a name="-memoize"><strong>memoize</strong></a>(f)</dt></dl>
 </td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">

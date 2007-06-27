@@ -6,9 +6,9 @@
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
 <tr bgcolor="#7799ee">
 <td valign=bottom>&nbsp;<br>
-<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>check</strong></big></big> (version Id: check.py,v 1.54 2006/08/02 16:59:14 syosi Exp )</font></td
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>check</strong></big></big> (version Id: check.py,v 1.59 2007/06/26 02:36:15 syosi Exp )</font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/syosi/CVS-local/WWW/2000/10/swap/check.py">/home/syosi/CVS-local/WWW/2000/10/swap/check.py</a></font></td></tr></table>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/yosi/CVSROOT/WWW/2000/10/swap/check.py">/Users/yosi/CVSROOT/WWW/2000/10/swap/check.py</a></font></td></tr></table>
     <p><tt>Check&nbsp;a&nbsp;proof<br>
 &nbsp;<br>
 This&nbsp;is&nbsp;a&nbsp;simple&nbsp;proof&nbsp;checker.&nbsp;&nbsp;It&nbsp;hasn't&nbsp;itself&nbsp;been&nbsp;proved,<br>
@@ -40,18 +40,6 @@ Command&nbsp;line&nbsp;options&nbsp;for&nbsp;debug:<br>
     
 <tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><dl>
-<dt><font face="helvetica, arial"><a href="exceptions.html#Exception">exceptions.Exception</a>
-</font></dt><dd>
-<dl>
-<dt><font face="helvetica, arial"><a href="check.html#InvalidProof">InvalidProof</a>
-</font></dt><dd>
-<dl>
-<dt><font face="helvetica, arial"><a href="check.html#LogicalFallacy">LogicalFallacy</a>
-</font></dt><dt><font face="helvetica, arial"><a href="check.html#PolicyViolation">PolicyViolation</a>
-</font></dt></dl>
-</dd>
-</dl>
-</dd>
 <dt><font face="helvetica, arial"><a href="__builtin__.html#object">__builtin__.object</a>
 </font></dt><dd>
 <dl>
@@ -67,6 +55,18 @@ Command&nbsp;line&nbsp;options&nbsp;for&nbsp;debug:<br>
 <dt><font face="helvetica, arial"><a href="check.html#AllPremises">AllPremises</a>
 </font></dt><dt><font face="helvetica, arial"><a href="check.html#Assumption">Assumption</a>
 </font></dt><dt><font face="helvetica, arial"><a href="check.html#ParsingOK">ParsingOK</a>
+</font></dt></dl>
+</dd>
+</dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="exceptions.html#Exception">exceptions.Exception</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="check.html#InvalidProof">InvalidProof</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="check.html#LogicalFallacy">LogicalFallacy</a>
+</font></dt><dt><font face="helvetica, arial"><a href="check.html#PolicyViolation">PolicyViolation</a>
 </font></dt></dl>
 </dd>
 </dl>
@@ -142,10 +142,12 @@ Data and other attributes inherited from <a href="check.html#Policy">Policy</a>:
 Methods defined here:<br>
 <dl><dt><a name="Checker-__init__"><strong>__init__</strong></a>(self, proof)</dt><dd><tt>proof&nbsp;&nbsp;&nbsp;is&nbsp;the&nbsp;formula&nbsp;which&nbsp;contains&nbsp;the&nbsp;proof</tt></dd></dl>
 
-<dl><dt><a name="Checker-checkParsing"><strong>checkParsing</strong></a>(self, r, f, policy)</dt></dl>
+<dl><dt><a name="Checker-checkParsing"><strong>checkParsing</strong></a>(self, r, f, policy, level)</dt></dl>
 
 <dl><dt><a name="Checker-conjecture"><strong>conjecture</strong></a>(self)</dt><dd><tt>return&nbsp;the&nbsp;formula&nbsp;that&nbsp;is&nbsp;claimed&nbsp;to&nbsp;be&nbsp;proved&nbsp;and<br>
 the&nbsp;main&nbsp;justification&nbsp;step.</tt></dd></dl>
+
+<dl><dt><a name="Checker-report"><strong>report</strong></a>(self, out, f<font color="#909090">=None</font>, step<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="Checker-result"><strong>result</strong></a>(self, r, policy, level<font color="#909090">=0</font>)</dt><dd><tt>Get&nbsp;the&nbsp;result&nbsp;of&nbsp;a&nbsp;proof&nbsp;step.<br>
 &nbsp;<br>
@@ -314,6 +316,14 @@ Methods inherited from <a href="exceptions.html#Exception">exceptions.Exception<
 @@hmm...&nbsp;integrate&nbsp;with&nbsp;<a href="#Policy">Policy</a>&nbsp;more?<br>
 &nbsp;<br>
 &gt;&gt;&gt;&nbsp;soc&nbsp;=&nbsp;Namespace("<a href="http://example/socrates">http://example/socrates</a>#")<br>
+&gt;&gt;&gt;&nbsp;pf&nbsp;=&nbsp;_s2f(_TestBuiltinStep&nbsp;%&nbsp;'"a"&nbsp;list:in&nbsp;("b"&nbsp;"a"&nbsp;"c")',<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"<a href="http://example/socrates">http://example/socrates</a>")<br>
+&gt;&gt;&gt;&nbsp;f&nbsp;=&nbsp;<a href="#-checkBuiltin">checkBuiltin</a>(soc.step1,<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pf.the(subj=soc.step1,&nbsp;pred=reason.gives),<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#Checker">Checker</a>(pf),&nbsp;<a href="#AllPremises">AllPremises</a>())<br>
+&gt;&gt;&gt;&nbsp;len(f)<br>
+1<br>
+&nbsp;<br>
 &gt;&gt;&gt;&nbsp;pf&nbsp;=&nbsp;_s2f(_TestBuiltinStep&nbsp;%&nbsp;'"abc"&nbsp;str:startsWith&nbsp;"a"',<br>
 ...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"<a href="http://example/socrates">http://example/socrates</a>")<br>
 &gt;&gt;&gt;&nbsp;f&nbsp;=&nbsp;<a href="#-checkBuiltin">checkBuiltin</a>(soc.step1,<br>
@@ -368,11 +378,11 @@ unification.</tt></dd></dl>
 <td width="100%"><strong>OBJ</strong> = 3<br>
 <strong>PRED</strong> = 1<br>
 <strong>SUBJ</strong> = 2<br>
-<strong>__version__</strong> = 'Id: check.py,v 1.54 2006/08/02 16:59:14 syosi Exp '<br>
+<strong>__version__</strong> = 'Id: check.py,v 1.59 2007/06/26 02:36:15 syosi Exp '<br>
 <strong>chatty</strong> = 0<br>
 <strong>debugLevelForInference</strong> = 0<br>
 <strong>debugLevelForParsing</strong> = 0<br>
-<strong>knownReasons</strong> = Set([Conjunction, Extraction, Parsing, CommandLine, Premise, Conclusion, Inference, Fact])<br>
+<strong>knownReasons</strong> = set([Premise, Parsing, Inference, Conjunction, Fact, Extraction, ...])<br>
 <strong>log</strong> = &lt;swap.myStore.Namespace object&gt;<br>
 <strong>nameBlankNodes</strong> = 0<br>
 <strong>proofSteps</strong> = 0<br>
