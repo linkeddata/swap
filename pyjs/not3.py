@@ -239,31 +239,31 @@ class SinkParser:
 
     def directive(self, str, i):
         j = self.skipSpace(str, i)
-        if j<0: return j # eof
-        res = []
-        
-        j = self.tok('bind', str, i)        # implied "#". Obsolete.
-        if j>0: raiseFudge( BadSyntax(self._thisDoc, self.lines, str, i,
-                                "keyword bind is obsolete: use @prefix"))
+	if j<0: return j # eof
+	res = []
+	
+	j = self.tok('bind', str, i)        # implied "#". Obsolete.
+	if j>0: raiseFudge( BadSyntax(self._thisDoc, self.lines, str, i,
+				"keyword bind is obsolete: use @prefix"))
 
-        j = self.tok('keywords', str, i)
-        if j>0:
-            i = self.commaSeparatedList(str, j, res, self.bareWord)
-            if i < 0:
-                raiseFudge( BadSyntax(self._thisDoc, self.lines, str, i,
-                    "'@keywords' needs comma separated list of words"))
-            self.setKeywords(res[:])
-            if diag.chatty_flag > 80: progress("Keywords ", self.keywords)
-            return i
+	j = self.tok('keywords', str, i)
+	if j>0:
+	    i = self.commaSeparatedList(str, j, res, false)
+	    if i < 0:
+		raiseFudge( BadSyntax(self._thisDoc, self.lines, str, i,
+		    "'@keywords' needs comma separated list of words"))
+	    self.setKeywords(res[:])
+	    if diag.chatty_flag > 80: progress("Keywords ", self.keywords)
+	    return i
 
 
-        j = self.tok('forAll', str, i)
-        if j > 0:
-            i = self.commaSeparatedList(str, j, res, self.uri_ref2)
-            if i <0: raiseFudge( BadSyntax(self._thisDoc, self.lines, str, i,
-                        "Bad variable list after @forAll"))
-            for x in res:
-                #self._context.declareUniversal(x)
+	j = self.tok('forAll', str, i)
+	if j > 0:
+	    i = self.commaSeparatedList(str, j, res, true)
+	    if i <0: raiseFudge( BadSyntax(self._thisDoc, self.lines, str, i,
+			"Bad variable list after @forAll"))
+	    for x in res:
+		#self._context.declareUniversal(x)
                 if x not in self._variables or x in self._parentVariables:
                     self._variables[x] =  self._context.newUniversal(x)
             return i
@@ -277,16 +277,25 @@ class SinkParser:
                 self._context.declareExistential(x)
             return i
 
-        j=self.tok('prefix', str, i)   # no implied "#"
-        if j<0: return -1
-        
-        t = []
-        i = self.qname(str, j, t)
-        if i<0: raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, j,
-                            "expected qname after @prefix")
-        j = self.uri_ref2(str, i, t)
-        if j<0: raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
-                            "expected <uriref> after @prefix _qname_")
+	j = self.tok('forSome', str, i)
+	if j > 0:
+	    i = self. commaSeparatedList(str, j, res, true)
+	    if i <0: raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
+		    "Bad variable list after @forSome")
+	    for x in res:
+		self._context.declareExistential(x)
+	    return i
+
+	j=self.tok('prefix', str, i)   # no implied "#"
+	if j<0: return -1
+	
+	t = []
+	i = self.qname(str, j, t)
+	if i<0: raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, j,
+			    "expected qname after @prefix")
+	j = self.uri_ref2(str, i, t)
+	if j<0: raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
+			    "expected <uriref> after @prefix _qname_")
 
 #       if isinstance(t[1], types.TupleType):
 #           ns = t[1][1] # old system for --pipe
@@ -688,32 +697,41 @@ class SinkParser:
                 return i
             i = i+1 # skip semicolon and continue
 
-    def commaSeparatedList(self, str, j, res, what):
-        """return value: -1 bad syntax; >1 new position in str
-        res has things found appended
-        """
-        i = self.skipSpace(str, j)
-        if i<0:
-            raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
-                                    "EOF found expecting comma sep list")
-            return i
-        if str[i] == ".": return j  # empty list is OK
-        i = what(str, i, res)
-        if i<0: return -1
-        
-        while 1:
-            j = self.skipSpace(str, i)
-            if j<0: return j # eof
-            ch = str[j:j+1]  
-            if ch != ",":
-                if ch != ".":
-                    return -1
-                return j    # Found  but not swallowed "."
-            i = what(str, j+1, res)
-            if i<0:
-                raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
-                                                "bad list content")
-                return i
+    def commaSeparatedList(self, str, j, res, ofUris):
+	"""return value: -1 bad syntax; >1 new position in str
+	res has things found appended
+	
+	Used to use a final value of the function to be called, e.g. this.bareWord
+	but passing the function didn't work fo js converion pyjs
+	"""
+	i = self.skipSpace(str, j)
+	if i<0:
+	    raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
+				    "EOF found expecting comma sep list")
+	    return i
+	if str[i] == ".": return j  # empty list is OK
+	if ofUris:
+	    i = this.uri_ref2(str, i, res)
+	else:
+	    i = self.bareWord(str, i, res)
+	if i<0: return -1
+	
+	while 1:
+	    j = self.skipSpace(str, i)
+	    if j<0: return j # eof
+	    ch = str[j:j+1]  
+	    if ch != ",":
+		if ch != ".":
+		    return -1
+		return j    # Found  but not swallowed "."
+	    if ofUris:
+		i = this.uri_ref2(str, j+1, res)
+	    else:
+		i = self.bareWord(str, j+1, res)
+	    if i<0:
+		raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
+						"bad list content")
+		return i
 
     def objectList(self, str, i, res):
         i = self.object(str, i, res)
@@ -827,21 +845,21 @@ class SinkParser:
         while 1:
             eol.lastIndex = 0
             m = eol.execFudge(str.slice(i))
-            if (m == None): break
-            self.lines = self.lines + 1
-            i += eol.lastIndex   # Point to first character unmatched
-            self.previousLine = self.startOfLine
-            self.startOfLine = i
-            log.debug('line '+self.lines+ ' ' +
-                str.slice(self.previousLine, self.startOfLine))  # pyjs
-        ws.lastIndex = 0
-        m = ws.execFudge(str.slice(i))
-        if m != None and m[0] != "":
-            i += ws.lastIndex
-        if i ==len(str): return -1
-#       m = eof.execFudge(str.slice(i))
-#       if m != None: return -1
-        return i
+	    if (m == None): break
+	    self.lines = self.lines + 1
+	    i += eol.lastIndex   # Point to first character unmatched
+	    self.previousLine = self.startOfLine
+	    self.startOfLine = i
+	    tabulator.log.debug('N3 line '+self.lines+ ' ' +
+		str.slice(self.previousLine, self.startOfLine))  # pyjs
+	ws.lastIndex = 0
+	m = ws.execFudge(str.slice(i))
+	if m != None and m[0] != "":
+	    i += ws.lastIndex
+	if i ==len(str): return -1
+#	m = eof.execFudge(str.slice(i))
+#	if m != None: return -1
+	return i
 
     def variable(self, str, i, res):
         """     ?abc -> variable(:abc)
@@ -871,12 +889,14 @@ class SinkParser:
         return i
 
     def bareWord(self, str, i, res):
-        """     abc -> :abc
-        """
-        j = self.skipSpace(str, i)
-        if j<0: return -1
-
-        if str[j] in "0123456789-" or str[j] in _notNameChars: return -1
+	"""	abc -> :abc
+  	"""
+	j = self.skipSpace(str, i)
+	if j<0: return -1
+	
+	ch = str[j]  #pyjs
+	if ch in "0123456789-": return -1   # pyjs
+	if ch in _notNameChars: return -1
         i = j
         while i <len(str) and str[i] not in _notNameChars:
             i = i+1
@@ -952,37 +972,39 @@ class SinkParser:
                 return -1
 
     def nodeOrLiteral(self, str, i, res):
-        j = self.node(str, i, res)
-        if j>= 0:
-            return j
-        else:
-            j = self.skipSpace(str, i)
-            if j<0: return -1
-            else: i=j
+	j = self.node(str, i, res)
+	if j>= 0:
+	    return j
+	else:
+	    j = self.skipSpace(str, i)
+	    if j<0: return -1
+	    else: i=j
 
-            ch = str[i]
-            if ch in "-+0987654321":
-                number_syntax.lastIndex = i
-                m = number_syntax.match(str)
-                if m == None:
-                    raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
-                                "Bad number syntax")
-                j = number_syntax.lastIndex
-                if m.group('exponent') != None: # includes decimal exponent
-                    res.append(float(str[i:j]))
-#                   res.append(self._store.newLiteral(str[i:j],
-#                       self._store.newSymbol(FLOAT_DATATYPE)))
+	    ch = str[i]
+	    if ch in "-+0987654321":
+		number_syntax.lastIndex = i
+		m = number_syntax.match(str)
+		if m == None:
+		    raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
+				"Bad number syntax")
+		j = number_syntax.lastIndex
+		if m.group('exponent') != None: # includes decimal exponent
+#@@ pyjs	    res.append(float(str[i:j]))  # pyjs 'float' reseves word in js
+		    res.append(str[i:j]-0)  # See "JS the definitive Guide" p164
+#		    res.append(self._store.newLiteral(str[i:j],
+#			self._store.newSymbol(FLOAT_DATATYPE)))
                 elif m.group('decimal') != None:
                     res.append(Decimal(str[i:j]))
-                else:
-                    res.append(long(str[i:j]))
-#                   res.append(self._store.newLiteral(str[i:j],
-#                       self._store.newSymbol(INTEGER_DATATYPE)))
-                return j
+		else:
+# @@ pyjs	    res.append(long(str[i:j]))    # long is reserved word in js
+		    res.append(str[i:j]-0)
+#		    res.append(self._store.newLiteral(str[i:j],
+#			self._store.newSymbol(INTEGER_DATATYPE)))
+		return j
 
-            if str[i]=='"':
-                if str[i:i+3] == '"""': delim = '"""'
-                else: delim = '"'
+	    if str[i]=='"':
+		if str[i:i+3] == '"""': delim = '"""'
+		else: delim = '"'
                 i = i + len(delim)
 
                 dt = None
