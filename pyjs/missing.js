@@ -54,6 +54,8 @@ uripath_join = function(base, given) {
 }
 
 var diag_tracking = 0;
+var diag_chatty_flag = 0;
+diag_progress = function(str) { tabulator.log.debug(str); }
 
 // why_BecauseOfData = function(doc, reason) { return doc };
 

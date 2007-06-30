@@ -195,7 +195,7 @@ Check for keyword.  Space must have been stripped on entry and
     }
     }
     var k =  ( i + pyjslib_len(tok) ) ;
-    if ((pyjslib_slice(str, i, k) == tok) && (_notQNameChars.indexOf(str[k] >= 0))) {
+    if ((pyjslib_slice(str, i, k) == tok) && (_notQNameChars.indexOf(str[k]) >= 0)) {
     return k;
     }
     else {
@@ -214,7 +214,7 @@ __SinkParser.prototype.directive = function(str, i) {
     }
     var j = this.tok("keywords", str, i);
     if ((j > 0)) {
-    var i = this.commaSeparatedList(str, j, res, this.bareWord);
+    var i = this.commaSeparatedList(str, j, res, false);
     if ((i < 0)) {
     raiseFudge(BadSyntax(this._thisDoc, this.lines, str, i, "'@keywords' needs comma separated list of words"));
     }
@@ -226,7 +226,7 @@ __SinkParser.prototype.directive = function(str, i) {
     }
     var j = this.tok("forAll", str, i);
     if ((j > 0)) {
-    var i = this.commaSeparatedList(str, j, res, this.uri_ref2);
+    var i = this.commaSeparatedList(str, j, res, true);
     if ((i < 0)) {
     raiseFudge(BadSyntax(this._thisDoc, this.lines, str, i, "Bad variable list after @forAll"));
     }
@@ -252,7 +252,7 @@ __SinkParser.prototype.directive = function(str, i) {
     }
     var j = this.tok("forSome", str, i);
     if ((j > 0)) {
-    var i = this.commaSeparatedList(str, j, res, this.uri_ref2);
+    var i = this.commaSeparatedList(str, j, res, true);
     if ((i < 0)) {
     throw BadSyntax(this._thisDoc, this.lines, str, i, "Bad variable list after @forSome");
     }
@@ -473,7 +473,7 @@ Remember or generate a term for one of these _: anonymous nodes*/
     if (term) {
     return term;
     }
-    var term = this._store.newBlankNode(this._context, this._reason2);
+    var term = this._store.bnode(this._context, this._reason2);
     this._anonymousNodes[ln] = ( term);
     return term;
 };
@@ -747,10 +747,13 @@ Parse property list
     var i =  ( i + 1 ) ;
     }
 };
-__SinkParser.prototype.commaSeparatedList = function(str, j, res, what) {
+__SinkParser.prototype.commaSeparatedList = function(str, j, res, ofUris) {
 /*
 return value: -1 bad syntax; >1 new position in str
 	res has things found appended
+	
+	Used to use a final value of the function to be called, e.g. this.bareWord
+	but passing the function didn't work fo js converion pyjs
 	*/
 
     var i = this.skipSpace(str, j);
@@ -761,7 +764,12 @@ return value: -1 bad syntax; >1 new position in str
     if ((str[i] == ".")) {
     return j;
     }
-    var i = what(str, i, res);
+    if (ofUris) {
+    var i = this.uri_ref2(str, i, res);
+    }
+    else {
+    var i = this.bareWord(str, i, res);
+    }
     if ((i < 0)) {
     return -1;
     }
@@ -777,7 +785,12 @@ return value: -1 bad syntax; >1 new position in str
     }
     return j;
     }
-    var i = what(str,  ( j + 1 ) , res);
+    if (ofUris) {
+    var i = this.uri_ref2(str,  ( j + 1 ) , res);
+    }
+    else {
+    var i = this.bareWord(str,  ( j + 1 ) , res);
+    }
     if ((i < 0)) {
     throw BadSyntax(this._thisDoc, this.lines, str, i, "bad list content");
     return i;
@@ -906,7 +919,7 @@ Generate uri from n3 representation.
     if ((j < 0)) {
     return -1;
     }
-    if ((this.keywords.indexOf(v[0] >= 0))) {
+    if ((this.keywords.indexOf(v[0]) >= 0)) {
     throw BadSyntax(this._thisDoc, this.lines, str, i, "Keyword \"%s\" not allowed here." % v[0]);
     }
     res.push(this._store.sym( ( this._bindings[""] + v[0] ) ));
@@ -931,7 +944,7 @@ Skip white space, newlines and comments.
     i += eol.lastIndex;
     this.previousLine = this.startOfLine;
     this.startOfLine = i;
-    log.debug( (  (  ( "line " + this.lines )  + " " )  + str.slice(this.previousLine, this.startOfLine) ) );
+    tabulator.log.debug( (  (  ( "N3 line " + this.lines )  + " " )  + str.slice(this.previousLine, this.startOfLine) ) );
     }
     ws.lastIndex = 0;
     var m = ws.exec(str.slice(i));
@@ -957,11 +970,11 @@ __SinkParser.prototype.variable = function(str, i, res) {
     }
     var j =  ( j + 1 ) ;
     var i = j;
-    if (("0123456789-".indexOf(str[j] >= 0))) {
+    if (("0123456789-".indexOf(str[j]) >= 0)) {
     throw BadSyntax(this._thisDoc, this.lines, str, j, "Varible name can't start with '%s'" % str[j]);
     return -1;
     }
-    while ((i < pyjslib_len(str)) && !(_notNameChars.indexOf(str[i] >= 0))) {
+    while ((i < pyjslib_len(str)) && !(_notNameChars.indexOf(str[i]) >= 0)) {
     var i =  ( i + 1 ) ;
     }
     if ((this._parentContext == null)) {
@@ -983,11 +996,15 @@ __SinkParser.prototype.bareWord = function(str, i, res) {
     if ((j < 0)) {
     return -1;
     }
-    if (("0123456789-".indexOf(str[j] >= 0)) || (_notNameChars.indexOf(str[j] >= 0))) {
+    var ch = str[j];
+    if (("0123456789-".indexOf(ch) >= 0)) {
+    return -1;
+    }
+    if ((_notNameChars.indexOf(ch) >= 0)) {
     return -1;
     }
     var i = j;
-    while ((i < pyjslib_len(str)) && !(_notNameChars.indexOf(str[i] >= 0))) {
+    while ((i < pyjslib_len(str)) && !(_notNameChars.indexOf(str[i]) >= 0)) {
     var i =  ( i + 1 ) ;
     }
     res.push(pyjslib_slice(str, j, i));
@@ -1106,13 +1123,13 @@ __SinkParser.prototype.nodeOrLiteral = function(str, i, res) {
     }
     var j = number_syntax.lastIndex;
     if ((m.group("exponent") != null)) {
-    res.push(float(pyjslib_slice(str, i, j)));
+    res.push( ( pyjslib_slice(str, i, j) - 0 ) );
     }
     else if ((m.group("decimal") != null)) {
     res.push(local_decimal_Decimal(pyjslib_slice(str, i, j)));
     }
     else {
-    res.push(long(pyjslib_slice(str, i, j)));
+    res.push( ( pyjslib_slice(str, i, j) - 0 ) );
     }
     return j;
     }
