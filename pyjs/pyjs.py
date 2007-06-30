@@ -548,7 +548,7 @@ class Translator:
                     assign_name = "temp_" + child_name
 
                 assign_tuple += """
-                var %(child_name)s %(op)s %(assign_name)s.__getitem__(%(i)i);
+                var %(child_name)s %(op)s %(assign_name)s[%(i)i];   # timbl
                 """ % locals()
                 i += 1
         else:
@@ -636,7 +636,7 @@ class Translator:
     def _subscript(self, node, current_klass):
         if node.flags == "OP_APPLY":
             if len(node.subs) == 1:
-                return self.expr(node.expr, current_klass) + ".__getitem__(" + self.expr(node.subs[0], current_klass) + ")"
+                return self.expr(node.expr, current_klass) + "[" + self.expr(node.subs[0], current_klass) + "]" # timbl
             else:
                 raise TranslationError("must have one sub (in _subscript)", node)
         else:
