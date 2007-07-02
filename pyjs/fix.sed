@@ -14,3 +14,5 @@ s/\.newLiteral(/.literal(/g
 s/\.newBlankNode(/.bnode(/g
 s/\.append(/\.push(/g
 s/\([\.a-zA-Z0-9_-]*\)\.__iter__()/new pyjslib_Iterator(\1)/g
+s/__str__/toString/g
+s/newList/list/g

@@ -542,7 +542,7 @@ class SinkParser:
             if ch2 == '$':
                 i += 1
                 j = i + 1
-                List = []
+                mylist = []
                 first_run = True
                 while 1:
                     i = self.skipSpace(str, j)
@@ -564,8 +564,8 @@ class SinkParser:
                     j = self.item(str,i, item) #@@@@@ should be path, was object
                     if j<0: raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
                                             "expected item in set or '$}'")
-                    List.append(self._store.intern(item[0]))
-                res.append(self._store.newSet(List, self._context))
+                    mylist.append(item[0])
+                res.append(self._store.newSet(mylist, self._context))
                 return j
             else:
                 j=i+1
@@ -611,7 +611,7 @@ class SinkParser:
                 i += 1
             j=i+1
 
-            List = []
+            mylist = []
             while 1:
                 i = self.skipSpace(str, j)
                 if i<0: raiseFudge2 = BadSyntax(self._thisDoc, self.lines,
@@ -624,8 +624,8 @@ class SinkParser:
                 j = self.item(str,i, item) #@@@@@ should be path, was object
                 if j<0: raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
                                         "expected item in list or ')'")
-                List.append(self._store.intern(item[0]))
-            res.append(thing_type(List, self._context))
+                mylist.append(item[0])
+            res.append(thing_type(mylist, self._context))
             return j
 
         j = self.tok('this', str, i)   # This context
@@ -1165,7 +1165,7 @@ class SinkParser:
 #  [  is  operator:plus  of (  \1  \2 ) ]
 
 
-class BadSyntax(SyntaxError):
+class OLD_BadSyntax():   # was subclass ofSyntaxError @@ pyjs
     def __init__(self, uri, lines, str, i, why):
 #       self._str = str.encode('utf-8') # Better go back to strings for errors
 #       self._str = decodeURIComponent( escape( str ) ) 
@@ -1186,10 +1186,14 @@ class BadSyntax(SyntaxError):
         else: pre=""
         if len(str)-i > 60: post="..."
         else: post=""
-
         return 'Line %i of <%s>: Bad syntax (%s) at ^ in:\n"%s%s^%s%s"' \
                % (self.lines +1, self._uri, self._why, pre,
                                     str[st:i], str[i:i+60], post)
+
+def BadSyhtax(self, uri, lines, str, i, why):
+        return 'Line %i of <%s>: Bad syntax: %s\nat: "%s"' \
+               % (lines +1, uri, why, str(i, i+30))
+
 
 
 

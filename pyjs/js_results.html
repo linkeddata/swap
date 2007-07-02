@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+ <head profile="http://www.w3.org/2000/08/w3c-synd/#"><meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <style type="text/css" xml:space="preserve">
+td.pass {background-color : green; }
+td.partial {background-color : teal; }
+td.failure {background-color: red; }
+td.pretty {width : 10em; }
+td.pad_me {width : 4em; }
+h1 {background-color: red; }
+div.diff { width: 80%; 
+	border : 1px solid black; }
+pre {	border : 1px solid black; 
+	width: 60%; 
+	background-color: grey; }
+  </style>
+  <title>N3 test result report:
+2007-07-02T12:07:44Z
+  </title>
+ </head>
+ <body>
+  <h1>
+Notation3 Parser Test Results
+  </h1>
+  <table border="1">
+   <caption>Color Key:</caption>
+   <tbody>
+     <tr>
+       <td class="pass pad_me"></td>
+       <td>Parser parses the file, and generates the expected output. Or, on a negative test, fails to parse the file</td>
+     </tr>
+     <tr>
+       <td class="partial pad_me"></td>
+       <td>Parser parses the file</td>
+     </tr>
+     <tr>
+       <td class="failure pad_me"></td>
+       <td>Parser throws an exception on the file. Or, on a negative test, fails to throw an exception</td>
+     </tr>
+   </tbody>
+  </table
+
+  <table border="1">
+   <thead>
+    <tr>
+     <td>
+Test file
+     </td>
+     <td>
+Description
+     </td>
+     <td>
+Class
+     </td>
+<td class="pretty">CLASSPATH="/devel/rhino/rhino1_6R5/js.jar" java org.mozilla.javascript.tools.shell.Main ../pyjs/testn3.js %s</td>
+    <tr>
+   </thead>
+   <tbody>
+<tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/neg-formula-predicate.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/neg-formula-predicate.n3</a></td><td>A predicate cannot be a formula, I hope</td><td>Negative</td><td class="pass">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/neg-keywords3.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/neg-keywords3.n3</a></td><td>@keywords is not a valid predicate</td><td>Negative</td><td class="pass">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/neg-literal-predicate.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/neg-literal-predicate.n3</a></td><td>A predicate cannot be a literal, I hope</td><td>Negative</td><td class="failure">&nbsp;</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/neg-single-quote.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/neg-single-quote.n3</a></td><td>single quoted strings are illegal</td><td>Negative</td><td class="pass">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/neg-thisadoc.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/neg-thisadoc.n3</a></td><td>The `this' keyword is no longer legal </td><td>Negative</td><td class="pass">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/tests-work.txt
+">
+file:///devel/WWW/2000/10/swap/test/tests-work.txt</a></td><td>something that isn't n3</td><td>Negative</td><td class="pass">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/zero-objects.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/zero-objects.n3</a></td><td>A statement that says nothing at all</td><td>Negative</td><td class="pass">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/anon-prop.n3
+">
+file:///devel/WWW/2000/10/swap/test/anon-prop.n3</a></td><td>Parse and regen anonymous property</td><td>Positive</td><td class="partial"><a href="#a8369fa533c67311c9de3a52bf8995f0a">diff</a></td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/contexts.n3
+">
+file:///devel/WWW/2000/10/swap/test/contexts.n3</a></td><td>Parse and generate simple contexts</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/djb1a.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/djb1a.n3</a></td><td>djb noticed a:b was parsed as rdf:type token</td><td>Positive</td><td class="pass">&nbsp;</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/dot-dash.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/dot-dash.n3</a></td><td>combinations of - and _ in identifiers</td><td>Positive</td><td class="pass">&nbsp;</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/equals1.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/equals1.n3</a></td><td>The = keyword</td><td>Positive</td><td class="partial">&nbsp;</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/equals2.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/equals2.n3</a></td><td>The = keyword</td><td>Positive</td><td class="partial">&nbsp;</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/i18n/hiragana.n3
+">
+file:///devel/WWW/2000/10/swap/test/i18n/hiragana.n3</a></td><td>N3 string, qname and IRI with utf-8 non-ascii characters</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/keywords1.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/keywords1.n3</a></td><td>@keywords in n3</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/keywords2.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/keywords2.n3</a></td><td>using no keywords in n3</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/lists.n3
+">
+file:///devel/WWW/2000/10/swap/test/lists.n3</a></td><td>parsing and generation of N3 list syntax</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/lstring.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/lstring.n3</a></td><td>N3 string nested triple quoting</td><td>Positive</td><td class="partial"><a href="#a9607f8807bb32ea93c940f0afaea4947">diff</a></td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/n3parser.tests
+">
+file:///devel/WWW/2000/10/swap/test/n3parser.tests</a></td><td>we might as well be nice and self-referential</td><td>Positive</td><td class="partial"><a href="#a8d4f6d8758f3c288b7247733bae3fc2e">diff</a></td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/no-last-nl.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/no-last-nl.n3</a></td><td>An N3 file with no final newline character</td><td>Positive</td><td class="partial"><a href="#af7ac4bec6ca0633f2c11c391516b736c">diff</a></td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/numbers.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/numbers.n3</a></td><td>Number syntax</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/path1.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/path1.n3</a></td><td>Path syntax, simple</td><td>Positive</td><td class="partial"><a href="#ad14817bfdff3c7fd077fbb52300555bf">diff</a></td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/path2.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/path2.n3</a></td><td>Path syntax, more</td><td>Positive</td><td class="partial"><a href="#acab56c7ead6759b21970ba9e1904de59">diff</a></td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/qvars1.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/qvars1.n3</a></td><td>Quick variable syntax, simple</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/qvars2.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/qvars2.n3</a></td><td>Quick variable syntax, more</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/strquot.n3
+">
+file:///devel/WWW/2000/10/swap/test/strquot.n3</a></td><td>N3 string quoting with escaping</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/this-quantifiers.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/this-quantifiers.n3</a></td><td>Can still read the old 'this log:forSome' syntax</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/this-rules.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/this-rules.n3</a></td><td>Can still read the old 'this log:forAll' syntax</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/too-nested.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/too-nested.n3</a></td><td>Are we exceeding a maximum recursion limit or two?</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/trailing-semicolon.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/trailing-semicolon.n3</a></td><td>Propertylists can end in trailing semicolon.</td><td>Positive</td><td class="partial"><a href="#a2a3f7ddf1cfaad874cf8c6a8caeac588">diff</a></td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/zero-predicates.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/zero-predicates.n3</a></td><td>A statement that says nothing at all</td><td>Positive</td><td class="failure">&nbsp</td></tr>
+   </tbody>
+  </table>
+<div class="diff" id="a2a3f7ddf1cfaad874cf8c6a8caeac588"> diff from file:///devel/WWW/2000/10/swap/pyjs/,temp/n3parser.tests_n3_10018e4225a3ebcc3073a7f3d9d907b0b7896.out to file:///devel/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10018.nt <pre>- &lt;file:///devel/WWW/2000/10/swap/test/syntax/trailing-semicolon.n3#b&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/trailing-semicolon.n3#c&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/trailing-semicolon.n3#d&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/syntax/trailing-semicolon.n3#e&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/trailing-semicolon.n3#f&gt; __:c0.
+- __:c0 &lt;file:///devel/WWW/2000/10/swap/test/syntax/trailing-semicolon.n3#g&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/trailing-semicolon.n3#h&gt;.
+- __:c0 &lt;file:///devel/WWW/2000/10/swap/test/syntax/trailing-semicolon.n3#i&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/trailing-semicolon.n3#j&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/syntax/trailing-semicolon.n3#b&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/trailing-semicolon.n3#c&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/trailing-semicolon.n3#d&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/syntax/trailing-semicolon.n3#e&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/trailing-semicolon.n3#f&gt; __:c0.
++ __:c0 &lt;http://www.w3.org/2000/10/swap/test/syntax/trailing-semicolon.n3#g&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/trailing-semicolon.n3#h&gt;.
++ __:c0 &lt;http://www.w3.org/2000/10/swap/test/syntax/trailing-semicolon.n3#i&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/trailing-semicolon.n3#j&gt;.
+</pre></div><div class="diff" id="a4df3ea5ae35e056c398f3063e67e191a"> diff from file:///devel/WWW/2000/10/swap/pyjs/,temp/n3parser.tests_n3_10005e4225a3ebcc3073a7f3d9d907b0b7896.out to file:///devel/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10005.nt <pre></pre></div><div class="diff" id="a552c8dfb413e38540330c11de5cec2cc"> diff from file:///devel/WWW/2000/10/swap/pyjs/,temp/n3parser.tests_n3_10002e4225a3ebcc3073a7f3d9d907b0b7896.out to file:///devel/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10002.nt <pre></pre></div><div class="diff" id="a8369fa533c67311c9de3a52bf8995f0a"> diff from file:///devel/WWW/2000/10/swap/pyjs/,temp/n3parser.tests_n3_10008e4225a3ebcc3073a7f3d9d907b0b7896.out to file:///devel/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10008.nt <pre>- &lt;file:///devel/WWW/2000/10/swap/test/anon-prop.n3#anySubj&gt; __:c0 &lt;file:///devel/WWW/2000/10/swap/test/anon-prop.n3#anyObj&gt;.
+- __:c0 &lt;file:///devel/WWW/2000/10/swap/test/anon-prop.n3#propProp&gt; &quot;red&quot;.
++ &lt;http://www.w3.org/2000/10/swap/test/anon-prop.n3#anySubj&gt; __:c0 &lt;http://www.w3.org/2000/10/swap/test/anon-prop.n3#anyObj&gt;.
++ __:c0 &lt;http://www.w3.org/2000/10/swap/test/anon-prop.n3#propProp&gt; &quot;red&quot;.
+</pre></div><div class="diff" id="a8d4f6d8758f3c288b7247733bae3fc2e"> diff from file:///devel/WWW/2000/10/swap/pyjs/,temp/n3parser.tests_n3_10006e4225a3ebcc3073a7f3d9d907b0b7896.out to file:///devel/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10006.nt <pre>- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10001&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10001&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;An N3 file with no final newline character&quot;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10001&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/no-last-nl.n3&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10001&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10001.nt&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10002&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10002&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;combinations of - and _ in identifiers&quot;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10002&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/dot-dash.n3&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10002&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10002.nt&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10003&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10003&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;@keywords in n3&quot;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10003&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/keywords1.n3&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10003&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10003.nt&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10004&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10004&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;using no keywords in n3&quot;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10004&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/keywords2.n3&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10004&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10004.nt&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10005&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10005&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;djb noticed a:b was parsed as rdf:type token&quot;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10005&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/djb1a.n3&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10005&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10005.nt&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10006&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10006&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;we might as well be nice and self-referential&quot;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10006&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10006&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10006.nt&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10007&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10007&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;Parse and generate simple contexts&quot;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10007&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/contexts.n3&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10007&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10007.nt&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10008&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10008&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;Parse and regen anonymous property&quot;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10008&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/anon-prop.n3&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10008&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10008.nt&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10009&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10009&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;N3 string quoting with escaping&quot;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10009&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/strquot.n3&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10009&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10009.nt&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10010&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10010&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;N3 string, qname and IRI with utf-8 non-ascii characters&quot;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10010&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/i18n/hiragana.n3&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10011&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10011&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;Path syntax, simple&quot;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10011&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/path1.n3&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10011&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10011.nt&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10012&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10012&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;Path syntax, more&quot;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10012&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/path2.n3&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10012&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10012.nt&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10013&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10013&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;Number syntax&quot;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10013&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/numbers.n3&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10013&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10013.nt&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10014&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10014&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;Quick variable syntax, simple&quot;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10014&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/qvars1.n3&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10014&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10014.nt&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10015&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10015&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;Quick variable syntax, more&quot;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10015&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/qvars2.n3&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10015&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10015.nt&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10016&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10016&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;N3 string nested triple quoting&quot;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10016&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/lstring.n3&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10016&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10016.nt&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10017&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10017&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;parsing and generation of N3 list syntax&quot;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10017&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/lists.n3&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10017&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10017.nt&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10018&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10018&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;Propertylists can end in trailing semicolon.&quot;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10018&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/trailing-semicolon.n3&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10018&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10018.nt&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10019&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10019&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;Can still read the old 'this log:forSome' syntax&quot;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10019&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/this-quantifiers.n3&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10019&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10019.nt&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10020&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10020&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;Can still read the old 'this log:forAll' syntax&quot;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10020&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/this-rules.n3&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10020&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10020.nt&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10021&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10021&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;Are we exceeding a maximum recursion limit or two?&quot;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10021&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/too-nested.n3&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10025&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10025&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;The = keyword&quot;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10025&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/equals1.n3&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10026&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10026&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;The = keyword&quot;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10026&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/equals2.n3&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10027&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10027&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;A statement that says nothing at all&quot;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_10027&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/zero-predicates.n3&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_20000&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#NegativeParserTest&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_20000&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;something that isn't n3&quot;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_20000&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/tests-work.txt&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_20001&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#NegativeParserTest&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_20001&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;@keywords is not a valid predicate&quot;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_20001&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/neg-keywords3.n3&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_20002&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#NegativeParserTest&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_20002&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;single quoted strings are illegal&quot;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_20002&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/neg-single-quote.n3&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_20003&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#NegativeParserTest&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_20003&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;The `this' keyword is no longer legal &quot;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_20003&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/neg-thisadoc.n3&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_20004&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#NegativeParserTest&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_20004&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;A predicate cannot be a literal, I hope&quot;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_20004&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/neg-literal-predicate.n3&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_20005&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#NegativeParserTest&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_20005&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;A predicate cannot be a formula, I hope&quot;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_20005&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/neg-formula-predicate.n3&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_20028&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#NegativeParserTest&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_20028&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;A statement that says nothing at all&quot;.
+- &lt;file:///devel/WWW/2000/10/swap/test/n3parser.tests#n3_20028&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/zero-objects.n3&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10001&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10001&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;An N3 file with no final newline character&quot;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10001&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/no-last-nl.n3&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10001&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/n3/n3parser.tests_n3_10001.nt&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10002&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10002&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;combinations of - and _ in identifiers&quot;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10002&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/dot-dash.n3&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10002&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/n3/n3parser.tests_n3_10002.nt&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10003&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10003&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;@keywords in n3&quot;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10003&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/keywords1.n3&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10003&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/n3/n3parser.tests_n3_10003.nt&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10004&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10004&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;using no keywords in n3&quot;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10004&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/keywords2.n3&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10004&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/n3/n3parser.tests_n3_10004.nt&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10005&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10005&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;djb noticed a:b was parsed as rdf:type token&quot;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10005&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/djb1a.n3&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10005&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/n3/n3parser.tests_n3_10005.nt&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10006&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10006&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;we might as well be nice and self-referential&quot;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10006&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10006&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/n3/n3parser.tests_n3_10006.nt&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10007&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10007&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;Parse and generate simple contexts&quot;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10007&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/contexts.n3&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10007&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/n3/n3parser.tests_n3_10007.nt&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10008&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10008&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;Parse and regen anonymous property&quot;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10008&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/anon-prop.n3&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10008&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/n3/n3parser.tests_n3_10008.nt&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10009&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10009&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;N3 string quoting with escaping&quot;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10009&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/strquot.n3&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10009&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/n3/n3parser.tests_n3_10009.nt&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10010&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10010&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;N3 string, qname and IRI with utf-8 non-ascii characters&quot;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10010&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/i18n/hiragana.n3&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10011&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10011&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;Path syntax, simple&quot;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10011&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/path1.n3&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10011&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/n3/n3parser.tests_n3_10011.nt&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10012&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10012&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;Path syntax, more&quot;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10012&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/path2.n3&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10012&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/n3/n3parser.tests_n3_10012.nt&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10013&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10013&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;Number syntax&quot;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10013&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/numbers.n3&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10013&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/n3/n3parser.tests_n3_10013.nt&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10014&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10014&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;Quick variable syntax, simple&quot;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10014&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/qvars1.n3&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10014&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/n3/n3parser.tests_n3_10014.nt&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10015&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10015&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;Quick variable syntax, more&quot;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10015&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/qvars2.n3&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10015&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/n3/n3parser.tests_n3_10015.nt&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10016&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10016&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;N3 string nested triple quoting&quot;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10016&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/lstring.n3&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10016&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/n3/n3parser.tests_n3_10016.nt&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10017&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10017&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;parsing and generation of N3 list syntax&quot;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10017&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/lists.n3&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10017&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/n3/n3parser.tests_n3_10017.nt&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10018&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10018&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;Propertylists can end in trailing semicolon.&quot;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10018&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/trailing-semicolon.n3&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10018&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/n3/n3parser.tests_n3_10018.nt&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10019&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10019&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;Can still read the old 'this log:forSome' syntax&quot;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10019&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/this-quantifiers.n3&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10019&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/n3/n3parser.tests_n3_10019.nt&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10020&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10020&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;Can still read the old 'this log:forAll' syntax&quot;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10020&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/this-rules.n3&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10020&gt; &lt;http://www.w3.org/2004/11/n3test#outputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/n3/n3parser.tests_n3_10020.nt&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10021&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10021&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;Are we exceeding a maximum recursion limit or two?&quot;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10021&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/too-nested.n3&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10025&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10025&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;The = keyword&quot;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10025&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/equals1.n3&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10026&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10026&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;The = keyword&quot;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10026&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/equals2.n3&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10027&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10027&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;A statement that says nothing at all&quot;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_10027&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/zero-predicates.n3&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20000&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#NegativeParserTest&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20000&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;something that isn't n3&quot;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20000&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/tests-work.txt&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20001&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#NegativeParserTest&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20001&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;@keywords is not a valid predicate&quot;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20001&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/neg-keywords3.n3&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20002&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#NegativeParserTest&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20002&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;single quoted strings are illegal&quot;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20002&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/neg-single-quote.n3&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20003&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#NegativeParserTest&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20003&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;The `this' keyword is no longer legal &quot;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20003&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/neg-thisadoc.n3&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20004&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#NegativeParserTest&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20004&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;A predicate cannot be a literal, I hope&quot;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20004&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/neg-literal-predicate.n3&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20005&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#NegativeParserTest&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20005&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;A predicate cannot be a formula, I hope&quot;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20005&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/neg-formula-predicate.n3&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20028&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#NegativeParserTest&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20028&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;A statement that says nothing at all&quot;.
++ &lt;http://www.w3.org/2000/10/swap/test/n3parser.tests#n3_20028&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/zero-objects.n3&gt;.
+</pre></div><div class="diff" id="a9607f8807bb32ea93c940f0afaea4947"> diff from file:///devel/WWW/2000/10/swap/pyjs/,temp/n3parser.tests_n3_10016e4225a3ebcc3073a7f3d9d907b0b7896.out to file:///devel/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10016.nt <pre>Syntax error: &quot;     @prefix : &lt;http://www.w3.org/2000/10/swap/test/crypto/acc.n3#&gt; .
+
+</pre></div><div class="diff" id="acab56c7ead6759b21970ba9e1904de59"> diff from file:///devel/WWW/2000/10/swap/pyjs/,temp/n3parser.tests_n3_10012e4225a3ebcc3073a7f3d9d907b0b7896.out to file:///devel/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10012.nt <pre>- &lt;file:///devel/WWW/2000/10/swap/test/syntax/a&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/b&gt; __:c10.
+- &lt;file:///devel/WWW/2000/10/swap/test/syntax/e&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/f&gt; __:c1.
+- &lt;file:///devel/WWW/2000/10/swap/test/syntax/foo.n3#admires&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/foo.n3#converse&gt; __:c8.
+- &lt;file:///devel/WWW/2000/10/swap/test/syntax/foo.n3#albert&gt; &lt;http://www.daml.example.org/2001/03/fam#mother&gt; __:c7.
+- &lt;file:///devel/WWW/2000/10/swap/test/syntax/foo.n3#albert&gt; __:c8 &lt;file:///devel/WWW/2000/10/swap/test/syntax/foo.n3#grumpy&gt;.
+- &lt;file:///devel/WWW/2000/10/swap/test/syntax/foo.n3#mentor&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/foo.n3#inverse&gt; __:c9.
+- &lt;file:///devel/WWW/2000/10/swap/test/syntax/foo.n3#x&gt; &lt;http://www.w3.org/2000/01/rdf-schema#label&gt; __:c3.
+- &lt;file:///devel/WWW/2000/10/swap/test/syntax/foo.n3#x&gt; &lt;http://www.w3.org/2000/01/rdf-schema#label&gt; __:c4.
+- __:c0 &lt;file:///devel/WWW/2000/10/swap/test/syntax/d&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/c&gt;.
+- __:c1 &lt;file:///devel/WWW/2000/10/swap/test/syntax/g&gt; __:c11.
+- __:c2 &lt;file:///devel/WWW/2000/10/swap/test/syntax/path2.n3#relatedTo&gt; __:c12.
+- __:c3 &lt;http://www.daml.example.org/2000/10/lang#eng&gt; &quot;Help!&quot;.
+- __:c4 &lt;http://www.daml.example.org/2000/10/lang#fr&gt; &quot;foo&quot;.
+- __:c5 &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/foo.n3#THREE&gt;.
+- __:c6 &lt;http://www.w3.org/2000/10/swap/math#sum&gt; __:c5.
+- __:c7 __:c9 &lt;file:///devel/WWW/2000/10/swap/test/syntax/foo.n3#auntieAnne&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/syntax/a&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/b&gt; __:c13.
++ &lt;http://www.w3.org/2000/10/swap/test/syntax/e&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/f&gt; __:c9.
++ &lt;http://www.w3.org/2000/10/swap/test/syntax/foo.n3#admires&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/foo.n3#converse&gt; __:c11.
++ &lt;http://www.w3.org/2000/10/swap/test/syntax/foo.n3#albert&gt; &lt;http://www.daml.example.org/2001/03/fam#mother&gt; __:c10.
++ &lt;http://www.w3.org/2000/10/swap/test/syntax/foo.n3#albert&gt; __:c11 &lt;http://www.w3.org/2000/10/swap/test/syntax/foo.n3#grumpy&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/syntax/foo.n3#mentor&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/foo.n3#inverse&gt; __:c12.
++ &lt;http://www.w3.org/2000/10/swap/test/syntax/foo.n3#x&gt; &lt;http://www.w3.org/2000/01/rdf-schema#label&gt; __:c0.
++ &lt;http://www.w3.org/2000/10/swap/test/syntax/foo.n3#x&gt; &lt;http://www.w3.org/2000/01/rdf-schema#label&gt; __:c1.
++ __:c0 &lt;http://www.daml.example.org/2000/10/lang#eng&gt; &quot;Help!&quot;.
++ __:c1 &lt;http://www.daml.example.org/2000/10/lang#fr&gt; &quot;foo&quot;.
++ __:c10 __:c12 &lt;http://www.w3.org/2000/10/swap/test/syntax/foo.n3#auntieAnne&gt;.
++ __:c2 &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#first&gt; &quot;1&quot;.
++ __:c2 &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#rest&gt; __:c3.
++ __:c2 &lt;http://www.w3.org/2000/10/swap/math#sum&gt; __:c7.
++ __:c3 &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#first&gt; &quot;2&quot;.
++ __:c3 &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#rest&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#nil&gt;.
++ __:c4 &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#first&gt; __:c8.
++ __:c4 &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#rest&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#nil&gt;.
++ __:c5 &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#first&gt; __:c14.
++ __:c5 &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#rest&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#nil&gt;.
++ __:c6 &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#first&gt; __:c13.
++ __:c6 &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#rest&gt; __:c4.
++ __:c6 &lt;http://www.w3.org/2000/10/swap/test/syntax/path2.n3#relatedTo&gt; __:c5.
++ __:c7 &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/foo.n3#THREE&gt;.
++ __:c8 &lt;http://www.w3.org/2000/10/swap/test/syntax/d&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/c&gt;.
++ __:c9 &lt;http://www.w3.org/2000/10/swap/test/syntax/g&gt; __:c14.
+</pre></div><div class="diff" id="ad14817bfdff3c7fd077fbb52300555bf"> diff from file:///devel/WWW/2000/10/swap/pyjs/,temp/n3parser.tests_n3_10011e4225a3ebcc3073a7f3d9d907b0b7896.out to file:///devel/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10011.nt <pre>- &lt;file:///devel/WWW/2000/10/swap/test/syntax/foo.n3#albert&gt; &lt;http://www.daml.example.org/2001/03/fam#mother&gt; __:c1.
+- __:c0 &lt;http://www.daml.example.org/2001/03/fam#father&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/foo.n3#albert&gt;.
+- __:c0 &lt;http://www.daml.example.org/2001/03/fam#sister&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/foo.n3#nieceBertha&gt;.
+- __:c1 &lt;http://www.daml.example.org/2001/03/fam#sister&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/foo.n3#auntieAnne&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/syntax/foo.n3#albert&gt; &lt;http://www.daml.example.org/2001/03/fam#mother&gt; __:c1.
++ __:c0 &lt;http://www.daml.example.org/2001/03/fam#father&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/foo.n3#albert&gt;.
++ __:c0 &lt;http://www.daml.example.org/2001/03/fam#sister&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/foo.n3#nieceBertha&gt;.
++ __:c1 &lt;http://www.daml.example.org/2001/03/fam#sister&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/foo.n3#auntieAnne&gt;.
+</pre></div><div class="diff" id="af7ac4bec6ca0633f2c11c391516b736c"> diff from file:///devel/WWW/2000/10/swap/pyjs/,temp/n3parser.tests_n3_10001e4225a3ebcc3073a7f3d9d907b0b7896.out to file:///devel/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10001.nt <pre>- &lt;file:///devel/WWW/2000/10/swap/test/syntax/a&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/b&gt; &lt;file:///devel/WWW/2000/10/swap/test/syntax/c&gt;.
++ &lt;http://www.w3.org/2000/10/swap/test/syntax/a&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/b&gt; &lt;http://www.w3.org/2000/10/swap/test/syntax/c&gt;.
+</pre></div>
+ </body>
+</html>

@@ -1,11 +1,22 @@
 
 W=../../../..
+T=../test/n3
+
+#  ../jena/n3_jena.tests
+TESTS := ../test/n3parser.tests
+
 S=$W/2000/10/swap
-C=python $S/cwm.py
+C=$S/cwm.py
 J='CLASSPATH="/devel/rhino/rhino1_6R5/js.jar" java org.mozilla.javascript.tools.shell.Main'
 
 n3parser.js : missing.js not3.js
 	cat  missing.js not3.js > n3parser.js
+
+js_results.html : js_results.n30 $T/makeReport.n3
+	$C $^ --crypto --think --purge --strings > js_results.html
+
+js_results.n30 : n3parser.js
+	$T/tester.py -c js_cmd -o js_results.n3 $(TESTS)
 
 ,publish : /devel/dig/2005/ajar/ajaw/js/rdf/n3parser.js
 	touch ,publish

@@ -510,9 +510,11 @@ class Translator:
         rhs = self.expr(rhs_node, current_klass)
 
         if op == "in":
-            return rhs + ".__contains__(" + lhs + ")"
+#            return rhs + ".__contains__(" + lhs + ")"
+            return '(' + rhs + ".indexOf(" + lhs + ") >= 0)" # work for strings only?
         elif op == "not in":
-            return "!" + rhs + ".__contains__(" + lhs + ")"
+#            return "!" + rhs + ".__contains__(" + lhs + ")"
+            return '(' + rhs + ".indexOf(" + lhs + ") < 0)" # work for strings only?
 
         return "(" + lhs + " " + op + " " + rhs + ")"
 
