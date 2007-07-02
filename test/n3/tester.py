@@ -50,7 +50,7 @@ testTypes = {n3test.PositiveParserTest : 'Positive',
              n3test.NegativeParserTest : 'Negative',
              n3test.UndecidedParserTest : 'Undecided' }
 
-def testParser(command, kb, output):
+def testParser(command, kb, output, errorFile):
     """The main parser tester
 
 
@@ -81,8 +81,10 @@ def testParser(command, kb, output):
         output.add(inputDocument, n3test.expected, type)
         output.add(inputDocument, n3test.description, description)
         #result = 1
-        result = system((command + ' > %s 2>/dev/null') % (inputDocument.uriref(), tempFile.uriref()[5:]) )
-        print (command + ' > %s 2>/dev/null') % (inputDocument.uriref(), tempFile.uriref()[5:])
+        thisCommand = ((command + ' > %s 2>>%s') % \
+                    (inputDocument.uriref(), tempFile.uriref()[5:], errorFile))
+        result = system(thisCommand)
+        print thisCommand
         if result != 0:
             output.add(commandNode, n3test.failsParsing, inputDocument)
             parseResult = output.newBlankNode()
@@ -98,7 +100,7 @@ def testParser(command, kb, output):
             else:
                 a = output.newBlankNode()
                 child_stdin, child_stdout = popen4("%s %s -f %s -d %s" % \
-                              ('python', '../../cant.py', tempFile.uriref(), outputDocument.uriref()))
+                              ('python', '$SWAP/cant.py', tempFile.uriref(), outputDocument.uriref()))
                 output.add(a, rdf.type, n3test.Diff)
                 output.add(a, n3test.diffString, "".join([escapize(ii) for ii in child_stdout.read()]))
                 output.add(parseResult, a, outputDocument)
@@ -108,12 +110,13 @@ def main():
 
     """ ### """
     try:
-        opts, testFiles = getopt.getopt(sys.argv[1:], "hc:o:",
-	    ["help", "command=", "output="])
+        opts, testFiles = getopt.getopt(sys.argv[1:], "hc:o:e:",
+	    ["help", "command=", "output=", "error="])
     except getopt.GetoptError:
         # print help information and exit:
         usage()
         sys.exit(2)
+    errorFile = "/dev/null"
     for o, a in opts:
         if o in ("-h", "--help"):
             usage()
@@ -122,6 +125,8 @@ def main():
             commandFile = a
         if o in ("-o", "--output"):
             outputFile = a
+        if o in ("-o", "--output"):
+            errorFile = a
     commands = [w[:-1] for w in file(commandFile, 'r')]
 
     assert system("mkdir -p ,temp") == 0
@@ -131,7 +136,7 @@ def main():
     z = 0
     for command in commands:
         output = formula()
-        testParser(command, kb, output)
+        testParser(command, kb, output, errorFile)
 
         output.close()
         output.store.dumpNested(output, ToN3(file(outputFile+`z`, 'w').write))
