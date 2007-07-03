@@ -3,7 +3,7 @@ W=../../../..
 T=../test/n3
 
 #  ../jena/n3_jena.tests
-TESTS := ../test/n3parser.tests
+TESTS := ../test/n3parser.tests http://www.dajobe.org/2004/01/turtle/tests/manifest.ttl http://www.dajobe.org/2004/01/turtle/tests/manifest-bad.ttl
 
 S=$W/2000/10/swap
 C=$S/cwm.py
