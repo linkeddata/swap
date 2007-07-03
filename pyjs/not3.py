@@ -982,22 +982,28 @@ class SinkParser:
 
 	    ch = str[i]
 	    if ch in "-+0987654321":
-		number_syntax.lastIndex = i
-		m = number_syntax.match(str)
+		number_syntax.lastIndex = 0
+		m = number_syntax.execFudge(str.slice(i))
 		if m == None:
 		    raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
 				"Bad number syntax")
-		j = number_syntax.lastIndex
-		if m.group('exponent') != None: # includes decimal exponent
-#@@ pyjs	    res.append(float(str[i:j]))  # pyjs 'float' reseves word in js
-		    res.append(str[i:j]-0)  # See "JS the definitive Guide" p164
-#		    res.append(self._store.newLiteral(str[i:j],
+		j = i + number_syntax.lastIndex
+                if '.' in str[i:j]:
+                    res.append(parseFloat(str[i:j]))
+                else:
+                    res.append(parseInt(str[i:j]))
+
+#                
+#		if m.group('exponent') != None: # includes decimal exponent
+##@@ pyjs	    res.append(float(str[i:j]))  # pyjs 'float' reseves word in js
+#		    res.append(str[i:j]-0)  # See "JS the definitive Guide" p164
+##		    res.append(self._store.newLiteral(str[i:j],
 #			self._store.newSymbol(FLOAT_DATATYPE)))
-                elif m.group('decimal') != None:
-                    res.append(Decimal(str[i:j]))
-		else:
+#                elif m.group('decimal') != None:
+#                    res.append(Decimal(str[i:j]))
+#		else:
 # @@ pyjs	    res.append(long(str[i:j]))    # long is reserved word in js
-		    res.append(str[i:j]-0)
+#		    res.append(str[i:j]-0)
 #		    res.append(self._store.newLiteral(str[i:j],
 #			self._store.newSymbol(INTEGER_DATATYPE)))
 		return j
@@ -1013,11 +1019,12 @@ class SinkParser:
                 s = pairFudge[1]
                 lang = None
                 if str[j:j+1] == "@":  # Language?
-                    m = langcode.match(str, j+1)
+                    langcode.lastIndex = 0;
+                    m = langcode.execFudge(str.slice(j+1))
                     if m == None:
                         raiseFudge2 = BadSyntax(self._thisDoc, startline, str, i,
                         "Bad language code syntax on string literal, after @")
-                    i = m.end()
+                    i = langcode.lastIndex + j + 1;
                     lang = str[j+1:i]
                     j = i
                 if str[j:j+2] == "^^":
@@ -1190,9 +1197,9 @@ class OLD_BadSyntax():   # was subclass ofSyntaxError @@ pyjs
                % (self.lines +1, self._uri, self._why, pre,
                                     str[st:i], str[i:i+60], post)
 
-def BadSyhtax(self, uri, lines, str, i, why):
+def BadSyntax(self, uri, lines, str, i, why):
         return 'Line %i of <%s>: Bad syntax: %s\nat: "%s"' \
-               % (lines +1, uri, why, str(i, i+30))
+               % (lines +1, uri, why, str[i:i+30])
 
 
 

@@ -16,3 +16,9 @@ s/\.append(/\.push(/g
 s/\([\.a-zA-Z0-9_-]*\)\.__iter__()/new pyjslib_Iterator(\1)/g
 s/__str__/toString/g
 s/newList/list/g
+s/newFormula/formula/g
+s/\.copy()/.slice()/g
+s/\.lower()/.toLowerCase()/g
+s/unichr(/String.fromCharCode(/g
+# Weird None all by itself is an artefact of the pyjs
+s/^None//g

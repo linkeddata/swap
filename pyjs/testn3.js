@@ -24,21 +24,26 @@ kb = new RDFIndexedFormula();
 
 
 testn3 = function(uri) {
-    print('# Parsing '+uri)
-    localURI = uri;
+    var msg = ""
+//    msg += '# Parsing '+uri + '\n'
+    var localURI = uri;
     if (uri.slice(0,5) == 'http:') {
         localURI ='http://localhost/' + uri.slice(7)
     }
-    buf = readUrl(localURI);   // @@ offline
-    print('# '+ buf.length+' bytes');
+    var buf = readUrl(localURI);   // @@ offline
+//    msg += ('# '+ buf.length+' bytes' + '\n');
     var p = SinkParser(kb, kb, uri, uri, null, null, "", null)
     try {
 	p.loadBuf(buf)
 
     } catch(e) {
-	var msg = ("Error trying to parse " + uri
-	    + ' as Notation3:\n' + e)
-	print(msg)
+	msg += ("Error trying to parse " + uri
+	    + ' as Notation3:\n\t' + e )
+//        msg += '\n\tline '+e.lineNumber ;
+        for (i in e) { msg+= '\n\t\t'+i +': '+ e[i]+'; '}
+        java.lang.System.err.println(msg)
+        
+//	print(msg)
         java.lang.System.exit(1)  // Error
     }
   

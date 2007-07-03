@@ -113,10 +113,10 @@ function __SinkParser(store, openFormula, thisDoc, baseURI, genPrefix, metaURI, 
     }
     if ((openFormula == null)) {
     if (this._thisDoc) {
-    this._formula = store.newFormula( ( thisDoc + "#_formula" ) );
+    this._formula = store.formula( ( thisDoc + "#_formula" ) );
     }
     else {
-    this._formula = store.newFormula();
+    this._formula = store.formula();
     }
     }
     else {
@@ -526,7 +526,7 @@ Parse the <node> production.
     var i =  ( j + 1 ) ;
     var objs = new pyjslib_List([]);
     var j = this.objectList(str, i, objs);
-None
+
     if ((j >= 0)) {
     var subj = objs[0];
     if ((pyjslib_len(objs) > 1)) {
@@ -621,11 +621,11 @@ None
     var grandParentVariables = this._parentVariables;
     this._parentVariables = this._variables;
     this._anonymousNodes = new pyjslib_Dict([]);
-    this._variables = this._variables.copy();
+    this._variables = this._variables.slice();
     var reason2 = this._reason2;
     this._reason2 = becauseSubexpression;
     if ((subj == null)) {
-    var subj = this._store.newFormula();
+    var subj = this._store.formula();
     }
     this._context = subj;
     while (1) {
@@ -1140,20 +1140,17 @@ __SinkParser.prototype.nodeOrLiteral = function(str, i, res) {
     }
     var ch = str[i];
     if (("-+0987654321".indexOf(ch) >= 0)) {
-    number_syntax.lastIndex = i;
-    var m = number_syntax.match(str);
+    number_syntax.lastIndex = 0;
+    var m = number_syntax.exec(str.slice(i));
     if ((m == null)) {
     throw BadSyntax(this._thisDoc, this.lines, str, i, "Bad number syntax");
     }
-    var j = number_syntax.lastIndex;
-    if ((m.group("exponent") != null)) {
-    res.push( ( pyjslib_slice(str, i, j) - 0 ) );
-    }
-    else if ((m.group("decimal") != null)) {
-    res.push(local_decimal_Decimal(pyjslib_slice(str, i, j)));
+    var j =  ( i + number_syntax.lastIndex ) ;
+    if ((pyjslib_slice(str, i, j).indexOf(".") >= 0)) {
+    res.push(parseFloat(pyjslib_slice(str, i, j)));
     }
     else {
-    res.push( ( pyjslib_slice(str, i, j) - 0 ) );
+    res.push(parseInt(pyjslib_slice(str, i, j)));
     }
     return j;
     }
@@ -1171,11 +1168,14 @@ __SinkParser.prototype.nodeOrLiteral = function(str, i, res) {
     var s = pairFudge[1];
     var lang = null;
     if ((pyjslib_slice(str, j,  ( j + 1 ) ) == "@")) {
-    var m = langcode.match(str,  ( j + 1 ) );
+    langcode.lastIndex = 0;
+
+    var m = langcode.exec(str.slice( ( j + 1 ) ));
     if ((m == null)) {
     throw BadSyntax(this._thisDoc, startline, str, i, "Bad language code syntax on string literal, after @");
     }
-    var i = m.end();
+    var i =  (  ( langcode.lastIndex + j )  + 1 ) ;
+
     var lang = pyjslib_slice(str,  ( j + 1 ) , i);
     var j = i;
     }
@@ -1274,7 +1274,7 @@ __SinkParser.prototype.uEscape = function(str, i, startline) {
     var value = 0;
     while ((count < 4)) {
     var chFudge = pyjslib_slice(str, j,  ( j + 1 ) );
-    var ch = chFudge.lower();
+    var ch = chFudge.toLowerCase();
     var j =  ( j + 1 ) ;
     if ((ch == "")) {
     throw BadSyntax(this._thisDoc, startline, str, i, "unterminated string literal(3)");
@@ -1286,7 +1286,7 @@ __SinkParser.prototype.uEscape = function(str, i, startline) {
     var value =  (  ( value * 16 )  + k ) ;
     var count =  ( count + 1 ) ;
     }
-    var uch = unichr(value);
+    var uch = String.fromCharCode(value);
     return new pyjslib_Tuple([j, uch]);
 };
 __SinkParser.prototype.UEscape = function(str, i, startline) {
@@ -1296,7 +1296,7 @@ __SinkParser.prototype.UEscape = function(str, i, startline) {
     var value = "\\U";
     while ((count < 8)) {
     var chFudge = pyjslib_slice(str, j,  ( j + 1 ) );
-    var ch = chFudge.lower();
+    var ch = chFudge.toLowerCase();
     var j =  ( j + 1 ) ;
     if ((ch == "")) {
     throw BadSyntax(this._thisDoc, startline, str, i, "unterminated string literal(3)");
@@ -1340,8 +1340,8 @@ __OLD_BadSyntax.prototype.toString = function() {
     }
     return "Line %i of <%s>: Bad syntax (%s) at ^ in:\n\"%s%s^%s%s\"" % new pyjslib_Tuple([ ( this.lines + 1 ) , this._uri, this._why, pre, pyjslib_slice(str, st, i), pyjslib_slice(str, i,  ( i + 60 ) ), post]);
 };
-function BadSyhtax(self, uri, lines, str, i, why) {
-    return "Line %i of <%s>: Bad syntax: %s\nat: \"%s\"" % new pyjslib_Tuple([ ( lines + 1 ) , uri, why, pyjslib_str(i,  ( i + 30 ) )]);
+function BadSyntax(self, uri, lines, str, i, why) {
+    return "Line %i of <%s>: Bad syntax: %s\nat: \"%s\"" % new pyjslib_Tuple([ ( lines + 1 ) , uri, why, pyjslib_slice(str, i,  ( i + 30 ) )]);
 }
 
 

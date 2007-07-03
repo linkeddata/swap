@@ -3,7 +3,7 @@
 
 var RDFSink_forSomeSym = "http://www.w3.org/2000/10/swap/log#forSome";
 var RDFSink_forAllSym = "http://www.w3.org/2000/10/swap/log#forAll";
-
+var Logic_NS = "http://www.w3.org/2000/10/swap/log#";
 
 //  pyjs seems to reference runtime library which I didn't find
 
@@ -53,6 +53,7 @@ uripath_join = function(base, given) {
     return Util.uri.join(given, base)  // sad but true
 }
 
+var becauseSubexpression = null; // No reason needed
 var diag_tracking = 0;
 var diag_chatty_flag = 0;
 diag_progress = function(str) { tabulator.log.debug(str); }
