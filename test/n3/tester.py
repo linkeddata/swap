@@ -111,7 +111,7 @@ def gatherDAWGStyleTests(kb):
             outputDocument = kb.any(subj=test, pred=mf.result)
             yield name, type, description, inputDocument, outputDocument
 
-def testParser(command, kb, output):
+def testParser(command, kb, output, errorFile):
     """The main parser tester
 
 
@@ -121,7 +121,6 @@ def testParser(command, kb, output):
     output.add(commandNode, rdf.type, n3test.N3Parser)
     output.add(commandNode, n3test.command, command)
 
-    errorFile = ',temp/__error.txt'
     
     for test in serial(gatherDAWGStyleTests(kb), gatherCwmStyleTests(kb)):
         name, type, description, inputDocument, outputDocument = test
@@ -173,7 +172,7 @@ def main():
         # print help information and exit:
         usage()
         sys.exit(2)
-    errorFile = "/dev/null"
+    errorFile = ',temp/__error.txt'   # was "/dev/null"
     for o, a in opts:
         if o in ("-h", "--help"):
             usage()
@@ -193,7 +192,7 @@ def main():
     z = 0
     for command in commands:
         output = formula()
-        testParser(command, kb, output)
+        testParser(command, kb, output, errorFile)
 
         output.close()
         output.store.dumpNested(output, ToN3(file(outputFile+`z`, 'w').write))
