@@ -65,6 +65,7 @@ testTypes = {n3test.PositiveParserTest : 'Positive',
              n3test.NegativeParserTest : 'Negative',
              n3test.UndecidedParserTest : 'Undecided' }
 
+
 def serial(*iters):
     for i in iters:
         for thing in i:
@@ -108,7 +109,7 @@ def gatherDAWGStyleTests(kb):
             outputDocument = kb.any(subj=test, pred=mf.result)
             yield name, type, description, inputDocument, outputDocument
 
-def testParser(command, kb, output, errorFile):
+def testParser(command, kb, output):
     """The main parser tester
 
 
@@ -118,7 +119,7 @@ def testParser(command, kb, output, errorFile):
     output.add(commandNode, rdf.type, n3test.N3Parser)
     output.add(commandNode, n3test.command, command)
 
-    
+    errorFile = ',temp/__error.txt'
     
     for test in serial(gatherDAWGStyleTests(kb), gatherCwmStyleTests(kb)):
         name, type, description, inputDocument, outputDocument = test
@@ -130,15 +131,20 @@ def testParser(command, kb, output, errorFile):
         output.add(inputDocument, n3test.expected, type)
         output.add(inputDocument, n3test.description, description)
         #result = 1
-        thisCommand = ((command + ' > %s 2>>%s') % \
-                    (inputDocument.uriref(), tempFile.uriref()[7:], errorFile))
+
+        thisCommand = ((command + ' > %s 2>%s') % \
+            (inputDocument.uriref(), tempFile.uriref()[5:], errorFile))
+
         result = system(thisCommand)
         print thisCommand
-        if result != 0:
+        if result != 0: # Error case:
             output.add(commandNode, n3test.failsParsing, inputDocument)
             parseResult = output.newBlankNode()
             output.add(inputDocument, commandNode, parseResult)
             output.add(parseResult, n3test.isFile, rdf.nil)
+            ef = open(errorFile, "r")
+            output.add(parseResult, n3test.errorMessage, ef.read())
+            ef.close()
         else:
             output.add(commandNode, n3test.parses, inputDocument)
             parseResult = output.newBlankNode()
@@ -185,7 +191,7 @@ def main():
     z = 0
     for command in commands:
         output = formula()
-        testParser(command, kb, output, errorFile)
+        testParser(command, kb, output)
 
         output.close()
         output.store.dumpNested(output, ToN3(file(outputFile+`z`, 'w').write))
