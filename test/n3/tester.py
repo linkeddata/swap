@@ -6,13 +6,15 @@ run all of the n3 tests given on all parsers given
 """
 from os import system, popen3, popen4
 from subprocess import Popen, PIPE, STDOUT, CalledProcessError  #Use this instead?
-import os
+import os, os.path
 import sys
 import urllib
+import time
 
 swap = os.environ.get("SWAP", None)
 if swap is None:
     realcwd = os.getcwd()
+    os.chdir(os.path.split(__file__)[0] or '.')
     os.chdir('..')
     os.chdir('..')
     swap = os.getcwd()
