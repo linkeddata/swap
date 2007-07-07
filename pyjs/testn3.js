@@ -27,12 +27,15 @@ testn3 = function(uri) {
     var msg = ""
 //    msg += '# Parsing '+uri + '\n'
     var localURI = uri;
-    if (uri.slice(0,5) == 'http:') {
+    if (uri.slice(0,18) == 'http://www.w3.org/') {
         localURI ='http://localhost/' + uri.slice(7)
     }
     var buf = readUrl(localURI);   // @@ offline
 //    msg += ('# '+ buf.length+' bytes' + '\n');
     var p = SinkParser(kb, kb, uri, uri, null, null, "", null)
+
+    p.loadBuf(buf)
+/*
     try {
 	p.loadBuf(buf)
 
@@ -40,17 +43,18 @@ testn3 = function(uri) {
 	msg += ("Error trying to parse " + uri
 	    + ' as Notation3:\n\t' + e )
 //        msg += '\n\tline '+e.lineNumber ;
-        for (i in e) { msg+= '\n\t\t'+i +': '+ e[i]+'; '}
+        if (typeof e != 'string')
+           for (i in e) { msg+= '\n\t\t'+i +': '+ e[i]+'; '}
         java.lang.System.err.println(msg)
         
 //	print(msg)
         java.lang.System.exit(1)  // Error
     }
-  
+*/  
     
-        str = ''+kb
+    str = ''+kb
     str = str.slice(1,-1)  // remove {}
-    print ('#Result:\n' + str)
+    print (str)
     java.lang.System.exit(0)
     
 }

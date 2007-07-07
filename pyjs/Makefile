@@ -1,16 +1,26 @@
-
+#  Make tests of the pyjs translated n3parser,js
+#
+# This is or was http://www.w3.org/2000/10/swap/test/pyjs/Makefile
+#
 W=../../../..
 T=../test/n3
 
+# We have a more limited version without the latrge tests whcih are slow
+# With no base URI, cannot handle relative URI in @prefixmanifest.ttl 
+
+# The bad turtle tests are often good N3 tets, which we pass.
+# http://www.dajobe.org/2004/01/turtle/tests/manifest-bad.ttl
+
+
 #  ../jena/n3_jena.tests
-TESTS := ../test/n3parser.tests http://www.dajobe.org/2004/01/turtle/tests/manifest.ttl http://www.dajobe.org/2004/01/turtle/tests/manifest-bad.ttl
+TESTS := http://www.w3.org/2000/10/swap/test/n3/n3-rdf.tests  http://www.w3.org/2000/10/swap/test/n3/turtle-manifest.n3
 
 S=$W/2000/10/swap
 C=$S/cwm.py
 J='CLASSPATH="/devel/rhino/rhino1_6R5/js.jar" java org.mozilla.javascript.tools.shell.Main'
 
-n3parser.js : missing.js not3.js
-	cat  missing.js not3.js > n3parser.js
+n3parser.js : utf8.js missing.js not3.js
+	cat  utf8.js missing.js not3.js > n3parser.js
 
 js_results.html : js_results.n30 $T/makeReport.n3
 	$C $^ --crypto --think --purge --strings > js_results.html
@@ -27,7 +37,10 @@ js_results.n30 : n3parser.js
 not3.js : not3a.js fix.sed
 	sed < not3a.js -f fix.sed  > not3.js
 
-not3a.js : pyjs.py not3.py
-	python pyjs.py not3.py > not3a.js
+not3a.js : pyjs.py not3p.py
+	python pyjs.py not3p.py > not3a.js
+
+not3p.py : not3.py pre.sed
+	sed < not3.py -f pre.sed  > not3p.py
 
 

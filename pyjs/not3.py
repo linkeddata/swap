@@ -48,8 +48,6 @@ import diag
 
 from why import BecauseOfData, becauseSubexpression
 
-N3_forSome_URI = RDFSink.forSomeSym
-N3_forAll_URI = RDFSink.forAllSym
 
 # Magic resources we know about
 
@@ -99,6 +97,7 @@ langcode = re.compile(r'^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)?')
 
 
 
+
 class SinkParser:
     def __init__(self, store, openFormula=None, thisDoc="", baseURI=None,
                  genPrefix = "", metaURI=None, flags="",
@@ -109,7 +108,7 @@ class SinkParser:
         self._bindings = {}
         self._flags = flags
         if thisDoc != "":
-            assertFudge( ':' in thisDoc, "Document URI not absolute: <%s>" % thisDoc)
+            assertFudge( ':' in thisDoc, "Document URI not absolute: " + thisDoc)
             self._bindings[""] = thisDoc + "#"  # default
 
         self._store = store
@@ -162,8 +161,8 @@ class SinkParser:
         
     def here(self, i):
 
-        return "%s_L%iC%i" % (self._genPrefix , self.lines,
-                                            i - self.startOfLine + 1) 
+        return self._genPrefix + '_L' + self.lines +'C' +(
+                                            i - self.startOfLine + 1) # "%s_L%iC%i"
         
     def formula(self):
         return self._formula
@@ -186,9 +185,7 @@ class SinkParser:
         remainder after any statements have been parsed.
         So if there is more data to feed to the
         parser, it should be straightforward to recover."""
-        # str = octets.decode('utf-8')
-        # str = decodeURIComponent( escape(octets))
-        str = octets # @@@@@@@ DECODE
+        str = octets.decode('utf-8')
         i = 0
         while i >= 0:
             j = self.skipSpace(str, i)
@@ -196,7 +193,7 @@ class SinkParser:
 
             i = self.directiveOrStatement(str,j)
             if i<0:
-                raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, j,
+                raise BadSyntax(self._thisDoc, self.lines, str, j,
                                     "expected directive or statement")
 
     def directiveOrStatement(self, str,h):
@@ -243,15 +240,15 @@ class SinkParser:
 	res = []
 	
 	j = self.tok('bind', str, i)        # implied "#". Obsolete.
-	if j>0: raiseFudge( BadSyntax(self._thisDoc, self.lines, str, i,
-				"keyword bind is obsolete: use @prefix"))
+	if j>0: raise BadSyntax(self._thisDoc, self.lines, str, i,
+				"keyword bind is obsolete: use @prefix")
 
 	j = self.tok('keywords', str, i)
 	if j>0:
 	    i = self.commaSeparatedList(str, j, res, false)
 	    if i < 0:
-		raiseFudge( BadSyntax(self._thisDoc, self.lines, str, i,
-		    "'@keywords' needs comma separated list of words"))
+		raise  BadSyntax(self._thisDoc, self.lines, str, i,
+		    "'@keywords' needs comma separated list of words")
 	    self.setKeywords(res[:])
 	    if diag.chatty_flag > 80: progress("Keywords ", self.keywords)
 	    return i
@@ -260,8 +257,8 @@ class SinkParser:
 	j = self.tok('forAll', str, i)
 	if j > 0:
 	    i = self.commaSeparatedList(str, j, res, true)
-	    if i <0: raiseFudge( BadSyntax(self._thisDoc, self.lines, str, i,
-			"Bad variable list after @forAll"))
+	    if i <0: raise BadSyntax(self._thisDoc, self.lines, str, i,
+			"Bad variable list after @forAll")
 	    for x in res:
 		#self._context.declareUniversal(x)
                 if x not in self._variables or x in self._parentVariables:
@@ -271,45 +268,50 @@ class SinkParser:
         j = self.tok('forSome', str, i)
         if j > 0:
             i = self. commaSeparatedList(str, j, res, self.uri_ref2)
-            if i <0: raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
+            if i <0: raise BadSyntax(self._thisDoc, self.lines, str, i,
                     "Bad variable list after @forSome")
             for x in res:
                 self._context.declareExistential(x)
             return i
 
-	j = self.tok('forSome', str, i)
-	if j > 0:
-	    i = self. commaSeparatedList(str, j, res, true)
-	    if i <0: raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
-		    "Bad variable list after @forSome")
-	    for x in res:
-		self._context.declareExistential(x)
-	    return i
-
 	j=self.tok('prefix', str, i)   # no implied "#"
-	if j<0: return -1
-	
-	t = []
-	i = self.qname(str, j, t)
-	if i<0: raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, j,
-			    "expected qname after @prefix")
-	j = self.uri_ref2(str, i, t)
-	if j<0: raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
-			    "expected <uriref> after @prefix _qname_")
+	if j >= 0:
+            t = []
+            i = self.qname(str, j, t)
+            if i<0: raise BadSyntax(self._thisDoc, self.lines, str, j,
+                                "expected qname after @prefix")
+            j = self.uri_ref2(str, i, t)
+            if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i,
+                                "expected <uriref> after @prefix _qname_")
+            ns = t[1].uri # pyjs was uriref()
+            if self._baseURI:
+                ns = join(self._baseURI, ns)
+            else:
+                assertFudge( ":" in ns, "With no base URI, cannot handle relative URI for NS")
+            assertFudge( ':' in ns) # must be absolute
+            self._bindings[t[0][0]] = ns
+            self.bind(t[0][0], hexify(ns))
+            return j
 
-#       if isinstance(t[1], types.TupleType):
-#           ns = t[1][1] # old system for --pipe
-#        else:     #pjys no isinstance and this is obsolete anyway
-        ns = t[1].uri # pyjs was uriref()
+	j=self.tok('base', str, i)      # Added 2007/7/7
+	if j >= 0:
+            t = []
+            i = self.uri_ref2(str, j, t)
+            if i<0: raise BadSyntax(self._thisDoc, self.lines, str, j,
+                                "expected <uri> after @base ")
+            ns = t[0].uri # pyjs was uriref()
 
-        if self._baseURI:
-            ns = join(self._baseURI, ns)
-        else:
-            assertFudge( ":" in ns, "With no base URI, cannot handle relative URI")
-        assertFudge( ':' in ns) # must be absolute
-        self._bindings[t[0][0]] = ns
-        self.bind(t[0][0], hexify(ns))
-        return j
+            if self._baseURI:
+                ns = join(self._baseURI, ns)
+            else:
+                raise BadSyntax(self._thisDoc, self.lines, str, j,
+                    "With no previous base URI, cannot use relative URI in @base  <"+ns+">")
+            assertFudge( ':' in ns) # must be absolute
+            self._baseURI = ns
+            return i
+
+        return -1  # Not a directive, could be something else.
+
 
     def bind(self, qn, uri):
 #       assertFudge( isinstance(uri,     # pyjs
@@ -356,7 +358,7 @@ class SinkParser:
 
         j = self.property_list(str, i, r[0])
 
-        if j<0: raiseFudge2 = BadSyntax(self._thisDoc, self.lines,
+        if j<0: raise BadSyntax(self._thisDoc, self.lines,
                                     str, i, "expected propertylist")
         return j
 
@@ -381,7 +383,7 @@ class SinkParser:
         j = self.tok('has', str, i)
         if j>=0:
             i = self.prop(str, j, r)
-            if i < 0: raiseFudge2 = BadSyntax(self._thisDoc, self.lines,
+            if i < 0: raise BadSyntax(self._thisDoc, self.lines,
                                 str, j, "expected property after 'has'")
             res.append(('->', r[0]))
             return i
@@ -389,16 +391,16 @@ class SinkParser:
         j = self.tok('is', str, i)
         if j>=0:
             i = self.prop(str, j, r)
-            if i < 0: raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, j,
+            if i < 0: raise BadSyntax(self._thisDoc, self.lines, str, j,
                                 "expected <property> after 'is'")
             j = self.skipSpace(str, i)
             if j<0:
-                raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
+                raise BadSyntax(self._thisDoc, self.lines, str, i,
                             "End of file found, expected property after 'is'")
                 return j # eof
             i=j
             j = self.tok('of', str, i)
-            if j<0: raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
+            if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i,
                                 "expected 'of' after 'is' <prop>")
             res.append(('<-', r[0]))
             return j
@@ -431,7 +433,7 @@ class SinkParser:
             return j
 
         if str[i:i+2] == ">-" or str[i:i+2] == "<-":
-            raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, j,
+            raise BadSyntax(self._thisDoc, self.lines, str, j,
                                         ">- ... -> syntax is obsolete.")
 
         return -1
@@ -466,7 +468,7 @@ class SinkParser:
             subj = res.pop()
             obj = self.blankNode(self.here(j))
             j = self.node(str, j+1, res)
-            if j<0: raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, j,
+            if j<0: raise BadSyntax(self._thisDoc, self.lines, str, j,
                             "EOF found in middle of path syntax")
             pred = res.pop()
             if ch == "^": # Reverse traverse
@@ -499,7 +501,7 @@ class SinkParser:
         if ch == "[":
             bnodeID = self.here(i)
             j=self.skipSpace(str,i+1)
-            if j<0: raiseFudge2 = BadSyntax(self._thisDoc,
+            if j<0: raise BadSyntax(self._thisDoc,
                                     self.lines, str, i, "EOF after '['")
             if str[j:j+1] == "=":     # Hack for "is"  binding name to anon node
                 i = j+1
@@ -513,26 +515,26 @@ class SinkParser:
                                                 self._store.newSymbol(DAML_sameAs_URI),
                                                 subj, obj))
                     j = self.skipSpace(str, j)
-                    if j<0: raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
+                    if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i,
                         "EOF when objectList expected after [ = ")
                     if str[j:j+1] == ";":
                         j=j+1
                 else:
-                    raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
+                    raise BadSyntax(self._thisDoc, self.lines, str, i,
                                         "objectList expected after [= ")
 
             if subj is None:
                 subj=self.blankNode(bnodeID)
 
             i = self.property_list(str, j, subj)
-            if i<0: raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, j,
+            if i<0: raise BadSyntax(self._thisDoc, self.lines, str, j,
                                 "property_list expected")
 
             j = self.skipSpace(str, i)
-            if j<0: raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
+            if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i,
                 "EOF when ']' expected after [ <propertyList>")
             if str[j:j+1] != "]":
-                raiseFudge2 = BadSyntax(self._thisDoc,
+                raise BadSyntax(self._thisDoc,
                                     self.lines, str, j, "']' expected")
             res.append(subj)
             return j+1
@@ -546,7 +548,7 @@ class SinkParser:
                 first_run = True
                 while 1:
                     i = self.skipSpace(str, j)
-                    if i<0: raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
+                    if i<0: raise BadSyntax(self._thisDoc, self.lines, str, i,
                                                     "needed '$}', found end.")                    
                     if str[i:i+2] == '$}':
                         j = i+2
@@ -556,13 +558,13 @@ class SinkParser:
                         if str[i:i+1] == ',':
                             i+=1
                         else:
-                            raiseFudge2 = BadSyntax(self._thisDoc, self.lines,
+                            raise BadSyntax(self._thisDoc, self.lines,
                                                 str, i, "expected: ','")
                     else: first_run = False
                     
                     item = []
                     j = self.item(str,i, item) #@@@@@ should be path, was object
-                    if j<0: raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
+                    if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i,
                                             "expected item in set or '$}'")
                     mylist.append(item[0])
                 res.append(self._store.newSet(mylist, self._context))
@@ -583,7 +585,7 @@ class SinkParser:
                 
                 while 1:
                     i = self.skipSpace(str, j)
-                    if i<0: raiseFudge2 = BadSyntax(self._thisDoc, self.lines,
+                    if i<0: raise BadSyntax(self._thisDoc, self.lines,
                                     str, i, "needed '}', found end.")
                     
                     if str[i:i+1] == "}":
@@ -591,7 +593,7 @@ class SinkParser:
                         break
                     
                     j = self.directiveOrStatement(str,i)
-                    if j<0: raiseFudge2 = BadSyntax(self._thisDoc, self.lines,
+                    if j<0: raise BadSyntax(self._thisDoc, self.lines,
                                     str, i, "expected statement or '}'")
 
                 self._anonymousNodes = parentAnonymousNodes
@@ -614,7 +616,7 @@ class SinkParser:
             mylist = []
             while 1:
                 i = self.skipSpace(str, j)
-                if i<0: raiseFudge2 = BadSyntax(self._thisDoc, self.lines,
+                if i<0: raise BadSyntax(self._thisDoc, self.lines,
                                     str, i, "needed ')', found end.")                    
                 if str[i:i+1] == ')':
                     j = i+1
@@ -622,7 +624,7 @@ class SinkParser:
 
                 item = []
                 j = self.item(str,i, item) #@@@@@ should be path, was object
-                if j<0: raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
+                if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i,
                                         "expected item in list or ')'")
                 mylist.append(item[0])
             res.append(thing_type(mylist, self._context))
@@ -630,6 +632,8 @@ class SinkParser:
 
         j = self.tok('this', str, i)   # This context
         if j>=0:
+            raise BadSyntax(self._thisDoc, self.lines, str, i,
+                "Keyword 'this' was ancient N3. Now use @forSome and @forAll keywords.")
             res.append(self._context)
             return j
 
@@ -657,7 +661,7 @@ class SinkParser:
         while 1:
             j = self.skipSpace(str, i)
             if j<0:
-                raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
+                raise BadSyntax(self._thisDoc, self.lines, str, i,
                             "EOF found when expected verb in property list")
                 return j #eof
 
@@ -665,7 +669,7 @@ class SinkParser:
                 i = j + 2
                 res = []
                 j = self.node(str, i, res, subj)
-                if j<0: raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
+                if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i,
                                         "bad {} or () or [] node after :- ")
                 i=j
                 continue
@@ -677,7 +681,7 @@ class SinkParser:
 
             objs = []
             i = self.objectList(str, j, objs)
-            if i<0: raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, j,
+            if i<0: raise BadSyntax(self._thisDoc, self.lines, str, j,
                                                         "objectList expected")
             for obj in objs:
                 pairFudge = v[0]
@@ -690,7 +694,7 @@ class SinkParser:
 
             j = self.skipSpace(str, i)
             if j<0:
-                raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, j,
+                raise BadSyntax(self._thisDoc, self.lines, str, j,
                                                 "EOF found in list of objects")
                 return j #eof
             if str[i:i+1] != ";":
@@ -706,7 +710,7 @@ class SinkParser:
 	"""
 	i = self.skipSpace(str, j)
 	if i<0:
-	    raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
+	    raise BadSyntax(self._thisDoc, self.lines, str, i,
 				    "EOF found expecting comma sep list")
 	    return i
 	if str[i] == ".": return j  # empty list is OK
@@ -729,7 +733,7 @@ class SinkParser:
 	    else:
 		i = self.bareWord(str, j+1, res)
 	    if i<0:
-		raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
+		raise BadSyntax(self._thisDoc, self.lines, str, i,
 						"bad list content")
 		return i
 
@@ -739,7 +743,7 @@ class SinkParser:
         while 1:
             j = self.skipSpace(str, i)
             if j<0:
-                raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, j,
+                raise BadSyntax(self._thisDoc, self.lines, str, j,
                                     "EOF found after object")
                 return j #eof
             if str[j:j+1] != ",":
@@ -756,7 +760,7 @@ class SinkParser:
                 return j     # don't skip it
             if str[j:j+1] == "]":
                 return j
-            raiseFudge2 = BadSyntax(self._thisDoc, self.lines,
+            raise BadSyntax(self._thisDoc, self.lines,
                     str, j, "expected '.' or '}' or ']' at end of statement")
             return i
 
@@ -783,8 +787,8 @@ class SinkParser:
                     if pfx == "_":  # Magic prefix 2001/05/30, can be overridden
                         res.append(self.anonymousNode(ln))
                         return j
-                    raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
-                                "Prefix %s not bound" % (pfx))
+                    raise BadSyntax(self._thisDoc, self.lines, str, i,
+                                'Prefix '+pfx+' not bound.')
             symb = self._store.newSymbol(ns + ln)
             if symb in self._variables:
                 res.append(self._variables[symb])
@@ -824,7 +828,7 @@ class SinkParser:
                         res.append(symb)
                     return i+1
                 i = i + 1
-            raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, j,
+            raise BadSyntax(self._thisDoc, self.lines, str, j,
                             "unterminated URI reference")
 
         elif self.keywordsSet:
@@ -832,8 +836,8 @@ class SinkParser:
             j = self.bareWord(str,i,v)
             if j<0: return -1      #Forget varibles as a class, only in context.
             if v[0] in self.keywords:
-                raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
-                    'Keyword "%s" not allowed here.' % v[0])
+                raise BadSyntax(self._thisDoc, self.lines, str, i,
+                    'Keyword "'+v[0]+'" not allowed here.')
             res.append(self._store.newSymbol(self._bindings[""]+v[0]))
             return j
         else:
@@ -872,20 +876,23 @@ class SinkParser:
         j=j+1
         i = j
         if str[j] in "0123456789-":
-            raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, j,
-                            "Varible name can't start with '%s'" % str[j])
+            raise BadSyntax(self._thisDoc, self.lines, str, j,
+                            "Varible name can't start with '"+str[j]+"s'")
             return -1
         while i <len(str) and str[i] not in _notNameChars:
             i = i+1
         if self._parentContext == None:
-            raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, j,
-                "Can't use ?xxx syntax for variable in outermost level: %s"
-                % str[j-1:i])
-        varURI = self._store.newSymbol(self._baseURI + "#" +str[j:i])
-        if varURI not in self._parentVariables:
-            self._parentVariables[varURI] = self._parentContext.newUniversal(varURI
-                            , self._reason2) 
-        res.append(self._parentVariables[varURI])
+            raise BadSyntax(self._thisDoc, self.lines, str, j,
+                "Can't use ?xxx syntax for variable in outermost level: "
+                + str[j-1:i])
+        
+        res.append(self._store.variable(str[j:i]))  # @@ pyjs
+
+#        varURI = self._store.newSymbol(self._baseURI + "#" +str[j:i])
+#        if varURI not in self._parentVariables:
+#            self._parentVariables[varURI] = self._parentContext.newUniversal(varURI
+#                            , self._reason2) 
+#        res.append(self._parentVariables[varURI])
         return i
 
     def bareWord(self, str, i, res):
@@ -985,13 +992,19 @@ class SinkParser:
 		number_syntax.lastIndex = 0
 		m = number_syntax.execFudge(str.slice(i))
 		if m == None:
-		    raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
+		    raise BadSyntax(self._thisDoc, self.lines, str, i,
 				"Bad number syntax")
 		j = i + number_syntax.lastIndex
-                if '.' in str[i:j]:
-                    res.append(parseFloat(str[i:j]))
+                val = str[i:j]
+                if 'e' in val:  # canonicalization is useful
+                    res.append(self._store.literal(parseFloat(val),
+                        undefined, kb.sym(FLOAT_DATATYPE)))
+                elif '.' in str[i:j]:
+                    res.append(self._store.literal(parseFloat(val),
+                        undefined, kb.sym(DECIMAL_DATATYPE)))
                 else:
-                    res.append(parseInt(str[i:j]))
+                    res.append(self._store.literal(parseInt(val),
+                        undefined, kb.sym(INTEGER_DATATYPE)))
 
 #                
 #		if m.group('exponent') != None: # includes decimal exponent
@@ -1022,7 +1035,7 @@ class SinkParser:
                     langcode.lastIndex = 0;
                     m = langcode.execFudge(str.slice(j+1))
                     if m == None:
-                        raiseFudge2 = BadSyntax(self._thisDoc, startline, str, i,
+                        raise BadSyntax(self._thisDoc, startline, str, i,
                         "Bad language code syntax on string literal, after @")
                     i = langcode.lastIndex + j + 1;
                     lang = str[j+1:i]
@@ -1059,9 +1072,8 @@ class SinkParser:
             m = interesting.execFudge(str.slice(j))  # was str[j:].
             # Note for pos param to work, MUST be compiled  ... re bug?
             if not m:
-                raiseFudge2 = BadSyntax(self._thisDoc, startline, str, j,
-                        "Closing quote missing in string at ^ in %s^%s" %(
-                    str[j-20:j], str[j:j+20])) # we at least have to find a quote
+                raise BadSyntax(self._thisDoc, startline, str, j,
+                        "Closing quote missing in string at ^ in "+str[j-20:j]+"^"+str[j:j+20]) # we at least have to find a quote
             i = j + interesting.lastIndex - 1 # The start of this match  [sic - why?]
             
 #           try:
@@ -1071,7 +1083,7 @@ class SinkParser:
 #               for c in str[j:i]:
 #                   err = err + (" %02x" % ord(c))
 #               streason = sys.exc_info()[1].__str__()
-#               raiseFudge2 = BadSyntax(self._thisDoc, startline, str, j,
+#               raise BadSyntax(self._thisDoc, startline, str, j,
 #               "Unicode error appending characters %s to string, because\n\t%s"
 #                               % (err, streason))
                 
@@ -1086,7 +1098,7 @@ class SinkParser:
                 continue
             elif ch == "\n":
                 if delim == '"':
-                    raiseFudge2 = BadSyntax(self._thisDoc, startline, str, i,
+                    raise BadSyntax(self._thisDoc, startline, str, i,
                                     "newline found in string literal")
                 self.lines = self.lines + 1
                 ustr = ustr + ch
@@ -1098,7 +1110,7 @@ class SinkParser:
                 j = i + 1
                 ch = str[j:j+1]  # Will be empty if string ends
                 if not ch:
-                    raiseFudge2 = BadSyntax(self._thisDoc, startline, str, i,
+                    raise BadSyntax(self._thisDoc, startline, str, i,
                                     "unterminated string literal (2)")
                 k = string.find('abfrtvn\\"', ch)
                 if k >= 0:
@@ -1116,10 +1128,10 @@ class SinkParser:
                     ch = pairFudge[1]
                     ustr = ustr + ch
                 else:
-                    raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
+                    raise BadSyntax(self._thisDoc, self.lines, str, i,
                                     "bad escape")
 
-        raiseFudge2 = BadSyntax(self._thisDoc, self.lines, str, i,
+        raise BadSyntax(self._thisDoc, self.lines, str, i,
                         "unterminated string literal")
 
 
@@ -1133,11 +1145,11 @@ class SinkParser:
                 # sbp http://ilrt.org/discovery/chatlogs/rdfig/2002-07-05
             j = j + 1
             if ch == "":
-                raiseFudge2 = BadSyntax(self._thisDoc, startline, str, i,
+                raise BadSyntax(self._thisDoc, startline, str, i,
                                 "unterminated string literal(3)")
             k = string.find("0123456789abcdef", ch)
             if k < 0:
-                raiseFudge2 = BadSyntax(self._thisDoc, startline, str, i,
+                raise BadSyntax(self._thisDoc, startline, str, i,
                                 "bad string literal hex escape")
             value = value * 16 + k
             count = count + 1
@@ -1145,7 +1157,6 @@ class SinkParser:
         return j, uch
 
     def UEscape(self, str, i, startline):
-        stringType = type('')
         j = i
         count = 0
         value = '\\U'
@@ -1155,16 +1166,17 @@ class SinkParser:
             # sbp http://ilrt.org/discovery/chatlogs/rdfig/2002-07-05
             j = j + 1
             if ch == "":
-                raiseFudge2 = BadSyntax(self._thisDoc, startline, str, i,
+                raise BadSyntax(self._thisDoc, startline, str, i,
                                 "unterminated string literal(3)")
             k = string.find("0123456789abcdef", ch)
             if k < 0:
-                raiseFudge2 = BadSyntax(self._thisDoc, startline, str, i,
+                raise BadSyntax(self._thisDoc, startline, str, i,
                                 "bad string literal hex escape")
             value = value + ch
             count = count + 1
             
-        uch = stringType(value).decode('unicode-escape')
+        # uch = value.decode('unicode-escape')   # @@ pyjs
+        uch = stringFromCharCode(('0x'+value[2:10])-0)
         return j, uch
 
 
@@ -1174,9 +1186,7 @@ class SinkParser:
 
 class OLD_BadSyntax():   # was subclass ofSyntaxError @@ pyjs
     def __init__(self, uri, lines, str, i, why):
-#       self._str = str.encode('utf-8') # Better go back to strings for errors
-#       self._str = decodeURIComponent( escape( str ) ) 
-# decodeURIComponent( escape( s ) )   doesn't work if not a URI
+        self._str = str.encode('utf-8') # Better go back to strings for errors
         self._str = str # @@ pyjs
         self._i = i
         self._why = why
@@ -1197,9 +1207,8 @@ class OLD_BadSyntax():   # was subclass ofSyntaxError @@ pyjs
                % (self.lines +1, self._uri, self._why, pre,
                                     str[st:i], str[i:i+60], post)
 
-def BadSyntax(self, uri, lines, str, i, why):
-        return 'Line %i of <%s>: Bad syntax: %s\nat: "%s"' \
-               % (lines +1, uri, why, str[i:i+30])
+def BadSyntax(uri, lines, str, i, why):
+        return 'Line '+(lines +1)+' of <'+uri+'>: Bad syntax: '+why+'\nat: "'+str[i:i+30]+'"'
 
 
 
