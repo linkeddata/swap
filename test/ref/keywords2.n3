@@ -1,6 +1,6 @@
      @prefix : <foo.n3#> .
     
-         @forAll :x,
+     @forAll :x,
                 :y,
                 :z.
          @forSome :a,
@@ -8,10 +8,4 @@
                 :c .
     
     :b     :a :c .
-    {
-        :x     :mother :y .
-        :y     :sister :z .
-        
-        }     <http://www.w3.org/2000/10/swap/log#implies> {:x     :aunt :z .
-        } .
     
