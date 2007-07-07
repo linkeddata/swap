@@ -95,16 +95,6 @@
 	n3test:outputDocument <n3/n3parser.tests_n3_10018.nt> ;
     n3test:inputDocument  <syntax/trailing-semicolon.n3> .
 
-:n3_10019 a n3test:PositiveParserTest;
-    n3test:description    "Can still read the old 'this log:forSome' syntax";
-	n3test:outputDocument <n3/n3parser.tests_n3_10019.nt> ;
-    n3test:inputDocument  <syntax/this-quantifiers.n3> .
-
-:n3_10020 a n3test:PositiveParserTest;
-    n3test:description    "Can still read the old 'this log:forAll' syntax";
-	n3test:outputDocument <n3/n3parser.tests_n3_10020.nt> ;
-    n3test:inputDocument  <syntax/this-rules.n3> .
-
 :n3_10021 a n3test:PositiveParserTest;
 	n3test:description "Are we exceeding a maximum recursion limit or two?";
 	n3test:inputDocument <syntax/too-nested.n3> .
@@ -156,3 +146,15 @@
 :n3_20005 a n3test:NegativeParserTest;
     n3test:description    "A predicate cannot be a formula, I hope";
     n3test:inputDocument  <syntax/neg-formula-predicate.n3> .
+
+:n3_10019 a n3test:NegativeParserTest;
+    n3test:description    "Can still read the old 'this log:forSome' syntax?";
+	n3test:outputDocument <n3/n3parser.tests_n3_10019.nt> ;
+    n3test:inputDocument  <syntax/this-quantifiers.n3> .
+
+:n3_10020 a n3test:NegativeParserTest;
+    n3test:description    "Can still read the old 'this log:forAll' syntax";
+	n3test:outputDocument <n3/n3parser.tests_n3_10020.nt> ;
+    n3test:inputDocument  <syntax/this-rules.n3> .
+
+
