@@ -1,6 +1,9 @@
 
+# http://www.dajobe.org/2004/01/turtle/tests/manifest.ttl  incldues long ones
+# turtle-manifest.n3 doesn't
+
 CWM = ../../cwm.py
-TESTS := http://www.w3.org/2000/10/swap/test/n3parser.tests ../jena/n3_jena.tests http://www.dajobe.org/2004/01/turtle/tests/manifest.ttl http://www.dajobe.org/2004/01/turtle/tests/manifest-bad.ttl
+TESTS := http://www.w3.org/2000/10/swap/test/n3parser.tests ../jena/n3_jena.tests  turtle-manifest.n3 http://www.dajobe.org/2004/01/turtle/tests/manifest-bad.ttl
 
 test_results.html : test_results.n3* makeReport.n3
 	$(CWM) $^ makeReport.n3 --crypto --think --purge --strings > test_results.html

@@ -20,17 +20,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
  <head profile="http://www.w3.org/2000/08/w3c-synd/#"><meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <style type="text/css" xml:space="preserve">
-td.pass {background-color : green; }
-td.partial {background-color : teal; }
-td.failure {background-color: red; }
+td.pass {background-color : #cfc; }
+td.partial {background-color : #ffc; }
+td.failure {background-color: #fdd; }
 td.pretty {width : 10em; }
 td.pad_me {width : 4em; }
-h1 {background-color: red; }
+h1 {background-color: white; }
 div.diff { width: 80%; 
 	border : 1px solid black; }
 pre {	border : 1px solid black; 
 	width: 60%; 
-	background-color: grey; }
+	background-color: #ddd; }
   </style>
   <title>N3 test result report:
 """ .
