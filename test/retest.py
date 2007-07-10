@@ -287,9 +287,9 @@ def main():
             if cat is triage.ReificationTest:
                 if verbose: print "\tNot supported (reification): "+ inputDocument[-40:]
                 good = 0
-            if cat is triage.ParseTypeLiteralTest:
-                if verbose: print "\tNot supported (Parse type literal): "+ inputDocument[-40:]
-                good = 0
+##            if cat is triage.ParseTypeLiteralTest:
+##                if verbose: print "\tNot supported (Parse type literal): "+ inputDocument[-40:]
+##                good = 0
         if good:
             RDFTestData.append((t.uriref(), case, description,  inputDocument, outputDocument))
 
@@ -314,6 +314,9 @@ def main():
         for cat in categories:
             if cat is triage.knownError:
                 if verbose: print "\tknown failure: "+ inputDocument[-40:]
+                good = 0
+            if cat is triage.ReificationTest:
+                if verbose: print "\tNot supported (reification): "+ inputDocument[-40:]
                 good = 0
         if good:
             RDFNegativeTestData.append((t.uriref(), case, description,  inputDocument))

@@ -22,5 +22,7 @@
 				}.
 
 
+{} => {<http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-id/Manifest.rdf#error007> a :ReificationTest, :BoringTest } . 
+
 #ends
 
