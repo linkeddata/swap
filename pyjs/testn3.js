@@ -16,6 +16,7 @@ load("/devel/dig/2005/ajar/ajaw/js/rdf/identity.js");
 load("/devel/dig/2005/ajar/ajaw/js/rdf/remote.js");
 load("/devel/dig/2005/ajar/ajaw/js/rdf/rdfparser.js");
 load("n3parser.js");  // @@ Note local copy
+load("/devel/dig/2005/ajar/ajaw/js/rdf/serialize.js");
 load("/devel/dig/2005/ajar/ajaw/js/rdf/query.js");
 load("/devel/dig/2005/ajar/ajaw/js/rdf/sources.js");
 load("/devel/dig/2005/ajar/ajaw/js/rdf/sparql.js");
@@ -34,8 +35,9 @@ testn3 = function(uri) {
 //    msg += ('# '+ buf.length+' bytes' + '\n');
     var p = SinkParser(kb, kb, uri, uri, null, null, "", null)
 
-    p.loadBuf(buf)
-/*
+//    p.loadBuf(buf)
+    
+
     try {
 	p.loadBuf(buf)
 
@@ -50,9 +52,16 @@ testn3 = function(uri) {
 //	print(msg)
         java.lang.System.exit(1)  // Error
     }
-*/  
+  
+//    print('kb='+kb);
+    sz = Serializer();
+//    for (var prefix in kb.namespaces) {
+//        sz.setPrefixForURI(prefix, kb.namespaces[prefix]);
+//        print(prefix +'->'+kb.namespaces[prefix]);
+//    }
+    str = sz.toN3(kb.statements, kb.namespaces);
     
-    str = ''+kb
+//    str = ''+kb
     str = str.slice(1,-1)  // remove {}
     print (str)
     java.lang.System.exit(0)

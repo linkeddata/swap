@@ -289,7 +289,7 @@ class SinkParser:
             else:
                 assertFudge( ":" in ns, "With no base URI, cannot handle relative URI for NS")
             assertFudge( ':' in ns) # must be absolute
-            self._bindings[t[0][0]] = ns
+            self._bindings[t[0][0]] = ns;
             self.bind(t[0][0], hexify(ns))
             return j
 
@@ -316,12 +316,12 @@ class SinkParser:
     def bind(self, qn, uri):
 #       assertFudge( isinstance(uri,     # pyjs
 #                   types.StringType), "Any unicode must be %x-encoded already")
-        return  # pyjs  store does not support bind() or setDefaultNamespace
         
         if qn == "":
-            self._store.setDefaultNamespace(uri)
+#            self._store.setDefaultNamespace(uri)
+            pass # pyjs
         else:
-            self._store.bind(qn, uri)
+            self._store.setPrefixForURI(qn, uri)
 
     def setKeywords(self, k):
         "Takes a list of strings"
@@ -1223,26 +1223,6 @@ def stripCR(str):
 def dummyWrite(x):
     pass
     
-    
-    
-def hexify(ustr):
-    """Use URL encoding to return an ASCII string
-    corresponding to the given UTF8 string
-
-    >>> hexify("http://example/a b")
-    'http://example/a%20b'
-    
-    """   #"
-#    progress("String is "+`ustr`)
-#    s1=ustr.encode('utf-8')
-    str  = ""
-    for ch in ustr:  # .encode('utf-8'):
-        if ord(ch) > 126 or ord(ch) < 33 :
-            ch = "%%%02X" % ord(ch)
-        else:
-            ch = "%c" % ord(ch)
-        str = str + ch
-    return str
     
     
 

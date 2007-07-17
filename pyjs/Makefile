@@ -5,6 +5,8 @@
 W=../../../..
 T=../test/n3
 
+D=http://www.w3.org/2001/sw/DataAccess/df1/tests
+
 # We have a more limited version without the latrge tests whcih are slow
 # With no base URI, cannot handle relative URI in @prefixmanifest.ttl 
 

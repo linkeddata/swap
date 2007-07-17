@@ -57,31 +57,13 @@ stringFromCharCode = function(uesc) {
 }
 
 
-// http://developer.mozilla.org/en/docs/Reading_textual_data
-// First, get and initialize the converter
-if (typeof Components != 'undefined') { // Only in Mozillaland
-    var UTF8_converter = Components.classes["@mozilla.org/intl/scriptableunicodeconverter"]
-                              .createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
-    UTF8_converter.charset = /* The character encoding you want, using UTF-8 here */ "UTF-8";
-
-    String.prototype.encode = function(encoding) {
-        if (encoding != 'utf-8') throw "UTF8_converter: can only do utf-8"
-        return UTF8_converter.ConvertFromUnicode(this);
-    }
-    String.prototype.decode = function(encoding) {
-        if (encoding != 'utf-8') throw "UTF8_converter: can only do utf-8"
-        return UTF8_converter.ConvertToUnicode(this);
-    }
-    // var text = converter.ConvertToUnicode(chunk);
-} else {
-    String.prototype.encode = function(encoding) {
-        if (encoding != 'utf-8') throw "UTF8_converter: can only do utf-8"
-        return Utf8.encode(this);
-    }
-    String.prototype.decode = function(encoding) {
-        if (encoding != 'utf-8') throw "UTF8_converter: can only do utf-8"
-        return Utf8.decode(this);
-    }
+String.prototype.encode = function(encoding) {
+    if (encoding != 'utf-8') throw "UTF8_converter: can only do utf-8"
+    return Utf8.encode(this);
+}
+String.prototype.decode = function(encoding) {
+    if (encoding != 'utf-8') throw "UTF8_converter: can only do utf-8"
+    return Utf8.decode(this);
 }
 
 
