@@ -215,8 +215,7 @@ For future reference, use newUniversal
         if v not in self._universalVariables:
             self._universalVariables.add(v)
             if self.occurringIn(Set([self.newSymbol(v.uriref())])):
-                raise ValueError("Are you trying to confuse me with %s?" % v)
-        
+                raise ValueError("Internal error: declareUniversal: %s?" % v)
     def declareExistential(self, v):
         if verbosity() > 90: progress("Declare existential:", v)
         if v not in self._existentialVariables:  # Takes time
@@ -458,7 +457,7 @@ For future reference, use newUniversal
         if self._renameVarsMaps:
             if self in self._renameVarsMaps[-1]:
                 return self._renameVarsMaps[-1][self]
-        #progress('Running renameVars of self=%s' % self.debugString())
+        # progress('Running renameVars of self=%s' % self.debugString())
         m2 = {}
         for triple in self:
             for node in triple.spo():
