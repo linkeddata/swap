@@ -896,7 +896,7 @@ class Query(Formula):
         else:
             reason = None
 
-        es, exout = (extraBNodes), Set() #self.workingContext.existentials() | 
+        es, exout = (self.workingContext.existentials() | extraBNodes), Set() #self.workingContext.existentials() | 
         for var, (val, source) in bindings.items():
             if isinstance(val, Exception):
                 if "q" in self.mode: # How nice are we?
@@ -907,7 +907,7 @@ class Query(Formula):
                 if diag.chatty_flag > 25: progress(
                 "Match found to that which is only an existential: %s -> %s" %
                                                     (var, val))
-                if val not in self.workingContext.existentials():
+                if val not in self.targetContext.existentials():
                     if self.conclusion.occurringIn([var]):
                         self.targetContext.declareExistential(val)
 

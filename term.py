@@ -1319,15 +1319,20 @@ def occurs_check(self, other, env2):
 #               L I T E R A L S
 
 def toBool(val, dt=None):
-    if dt == 'boolean':
-        if val == 'false' or val == 'False' or val == '0':
-            return False
-        if val == 'true' or val == 'True' or val == '1':
-            return True
-        raise ValueError('"%s" is not a valid boolean' % val)
-    if dt in typeMap:
-        return bool(typeMap[dt](val))
-    return bool(val)
+    if dt is None:
+        return bool(val)
+    xsd = dt.store.integer.resource
+    if dt.resource is xsd:
+        dt = dt.fragid
+        if dt == 'boolean':
+            if val == 'false' or val == 'False' or val == '0':
+                return False
+            if val == 'true' or val == 'True' or val == '1':
+                return True
+            raise ValueError('"%s" is not a valid boolean' % val)
+        if dt in typeMap:
+            return bool(typeMap[dt](val))
+    raise TypeError("%s type cannot be converted to boolean" % val)
 
 typeMap = { "decimal": Decimal,
                 "integer": long,
