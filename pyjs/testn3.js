@@ -28,15 +28,9 @@ testn3 = function(uri) {
     var msg = ""
 //    msg += '# Parsing '+uri + '\n'
     var localURI = uri;
-<<<<<<< testn3.js
-//    if (uri.slice(0,5) == 'http:') {
-//        localURI ='http://localhost/' + uri.slice(7)
-//    }
-=======
     if (uri.slice(0,18) == 'http://www.w3.org/') {
         localURI ='http://localhost/' + uri.slice(7)
     }
->>>>>>> 1.5
     var buf = readUrl(localURI);   // @@ offline
 //    msg += ('# '+ buf.length+' bytes' + '\n');
     var p = SinkParser(kb, kb, uri, uri, null, null, "", null)
