@@ -220,8 +220,8 @@ For future reference, use newUniversal
         if verbosity() > 90: progress("Declare existential:", v)
         if v not in self._existentialVariables:  # Takes time
             self._existentialVariables.add(v)
-            if self.occurringIn(Set([v])) and not v.generated():
-                raise ValueError("Are you trying to confuse me?")
+##            if self.occurringIn(Set([v])) and not v.generated():
+##                raise ValueError("Are you trying to confuse me, declaring %s as an existential?" % v)
 #       else:
 #           raise RuntimeError("Redeclared %s in %s -- trying to erase that" %(v, self)) 
         
@@ -387,6 +387,8 @@ For future reference, use newUniversal
             if isTopLevel(self) and isinstance(subj, Formula) and not subj.reallyCanonical:
                 subj = subj.reopen()
                 subj = subj.canonicalize(cannon=True)
+            if isinstance(subj, Formula):
+                subj = subj.canonical
             if subj is not s[SUBJ]:
                 bindings2[s[SUBJ]] = subj
             pred=s[PRED].substitution(
@@ -400,14 +402,22 @@ For future reference, use newUniversal
             if isTopLevel(self) and isinstance(obj, Formula) and not obj.reallyCanonical:
                 obj = obj.reopen()
                 obj = obj.canonicalize(cannon=True)
+            if isinstance(obj, Formula):
+                obj = obj.canonical
             if obj is not s[OBJ]:
                 ### Question to self: What is this doing?
                 bindings2[s[OBJ]] = obj
-                
-            total += self.add(subj=subj,
-                              pred=pred,
-                              obj=obj,
-                              why=why)
+
+            try:
+                total += self.add(subj=subj,
+                                  pred=pred,
+                                  obj=obj,
+                                  why=why)
+            except AssertionError:
+                print 'subj=%s' % subj.debugString()
+                print 'oldSubj=%s' % (s[SUBJ].debugString(),)
+                print 'subj.canonical=%s' % subj.canonical.debugString()
+                raise
         return bindings3, total
 
     def subSet(self, statements, why=None):

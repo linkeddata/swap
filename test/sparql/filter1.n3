@@ -9,7 +9,7 @@
 {?X a sparql:Result;
     sparql:bNode [] } .
 
-{} => {[ a sparql:resultBNode ] } .
+{?X a sparql:Result } => {[ a sparql:resultBNode ] } .
 
 {?a ?b ?c ;
     log:rawType [ log:notEqualTo log:Formula ] } => {?a ?b ?c} .

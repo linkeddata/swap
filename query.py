@@ -729,12 +729,18 @@ class Queue([].__class__):
         self.remove(item)
         return item
 
+    def __repr__(self):
+        return 'Queue(%s, bNodes=%s)' % (list.__repr__(self), self.bNodes)
+
 #Queue = [].__class__
 
 class Chain_Step(object):
-    def __init__(self, queue, env, parent=None, evidence=[]):
+    def __init__(self, vars, existentials, queue, env, parent=None, evidence=[]):
+        self.vars = vars
+        self.existentials = existentials
         self.lines = queue
         self.env = env
+        assert parent is None
         self.parent = parent
         self.evidence = evidence
 
@@ -742,7 +748,7 @@ class Chain_Step(object):
         return self.lines.popBest()
 
     def copy(self):
-        retVal = self.__class__(self.lines, self.env, self.parent, self.evidence)
+        retVal = self.__class__(self.vars, self.existentials, self.lines, self.env, self.parent, self.evidence)
         return retVal
 
     def done(self):
@@ -852,7 +858,7 @@ class Query(Formula):
                     if diag.chatty_flag>29: progress("Redirecting binding %r to %r" % (value, x))
                     bindings[var] = x
 
-    def conclude(self, bindings, evidence = [], extraBNodes = Set()):
+    def conclude(self, bindings, evidence = [], extraBNodes = Set(), allBindings=None):
         """When a match found in a query, add conclusions to target formula.
 
         Returns the number of statements added."""
@@ -880,19 +886,21 @@ class Query(Formula):
                         progress( "No duplication check")
         
         if diag.tracking:
+            if allBindings is None:
+                allBindings = bindings
             for loc in xrange(len(evidence)):
                 r = evidence[loc]
                 
                 if isinstance(r, BecauseSupportsWill):                    
-                    evidence[loc] = BecauseSupports(*([smarterSubstitution(k, bindings,
+                    evidence[loc] = BecauseSupports(*([smarterSubstitution(k, allBindings,
                         r.args[1], why=Because("I support it: "), exception=[r.args[2]]) for k in r.args] +
                         [[k for k in evidence if isinstance(k, (StoredStatement, Reason))]]))
                 if isinstance(r, BecauseBuiltInWill):
-                    evidence[loc] = BecauseBuiltIn(*[smarterSubstitution(k, bindings,
-                        r.args[0], why=Because("I include it: " + k.debugString() + `bindings`)) for k in r.args[1:]])
-            reason = BecauseOfRule(self.rule, bindings=bindings, knownExistentials = extraBNodes,
+                    evidence[loc] = BecauseBuiltIn(*[smarterSubstitution(k, allBindings,
+                        r.args[0], why=Because("I include it: " + k.debugString() + `allBindings`)) for k in r.args[1:]])
+            reason = BecauseOfRule(self.rule, bindings=allBindings, knownExistentials = extraBNodes,
                             evidence=evidence, kb=self.workingContext)
-#           progress("We have a reason for %s of %s with bindings %s" % (self.rule, reason, bindings))
+#           progress("We have a reason for %s of %s with bindings %s" % (self.rule, reason, alBindings))
         else:
             reason = None
 
@@ -960,11 +968,11 @@ class Query(Formula):
 
 ##################################################################################
 
-    def matchFormula(query, queue, _, __, env=Env()):
+    def matchFormula(query, queue, variables, existentials, env=Env()):
         from terminalController import TerminalController
         t = TerminalController()
         total = 0
-        stack = [Chain_Step(queue, env)]
+        stack = [Chain_Step(variables, existentials, queue, env)]
         while stack:
             if diag.chatty_flag > 150:
                 progress(t.BLUE, stack, t.NORMAL)
@@ -973,6 +981,8 @@ class Query(Formula):
                 queue = workingStep.lines
                 evidence = workingStep.evidence
                 bindings = workingStep.env
+                variables = workingStep.vars
+                existentials = workingStep.existentials
                 
                 item = workingStep.popBest()
 
@@ -980,7 +990,7 @@ class Query(Formula):
                 state = item.state
                 if state == S_DONE:  # After bindNew, could be undoable.
                     nbs = []
-                if state == S_LIGHT_UNS_READY:          # Search then 
+                elif state == S_LIGHT_UNS_READY:          # Search then 
                     nbs = item.tryBuiltin(queue, bindings, evidence=evidence)
                     item.state = S_LIGHT_EARLY   # Unsearched, try builtin @@@@@@@@@ <== need new state here
                 elif state == S_LIGHT_GO:
@@ -988,11 +998,15 @@ class Query(Formula):
                     item.state = S_DONE   # Searched.
                 elif (state == S_LIGHT_EARLY or state == S_NOT_LIGHT or
                                         state == S_NEED_DEEP): #  Not searched yet
-                    nbs = item.tryDeepSearch(queue)
+                    nbs = item.tryDeepSearch(queue, bindings)
                 elif state == S_HEAVY_READY:  # not light, may be heavy; or heavy ready to run
                     if pred is query.store.includes: # and not diag.tracking:  # don't optimize when tracking?
+                        variables = variables.copy()
+                        existentials = existentials.copy()
                         nbs = item.doIncludes(queue, existentials, variables, bindings)
                     elif pred is query.store.supports:
+                        variables = variables.copy()
+                        existentials = existentials.copy()
                         nbs = item.doSupports(queue, existentials, variables, bindings)
                     else:
                         item.state = S_HEAVY_WAIT  # Assume can't resolve
@@ -1039,23 +1053,29 @@ class Query(Formula):
                     if isinstance(reason, StoredStatement):
                         if True or reason[CONTEXT] is not query.workingContext:
                             for m in nb.values():
+                                if isinstance(m, tuple):
+                                    m = m[0]
                                 if m in reason[CONTEXT].existentials():
                                     q2.bNodes.add(m)
                                     if diag.chatty_flag > 80:
                                         ### These get picked up from log:includes
                                         ### {[:b :c]} log:includes {?X :b :c} ...
                                         progress('Adding bNode %s, now %s' % (m, q2.bNodes))
-                    for i in queue:
-                        newItem = i.clone()
-                        q2.append(newItem)  #@@@@@@@@@@  If exactly 1 binding, loop (tail recurse)
+                    new_thing = False
                     try:
                         new_env = bindings.flatten(nb)
                     except ValueError:
                         pass
                     else:
+                        new_thing = True
+                    for i in queue:
+                        newItem = i.clone()
+                        newItem.bindNew(new_env) ## Is this right? I was hoping to avoid this
+                        q2.append(newItem)  #@@@@@@@@@@  If exactly 1 binding, loop (tail recurse)
+                    if new_thing:
                         if diag.chatty_flag > 70:
                             progress(t.RED, bindings, nb, new_env, t.NORMAL)
-                        new_step = Chain_Step(q2, new_env, workingStep.parent, workingStep.evidence + [reason])
+                        new_step = Chain_Step(variables, existentials, q2, new_env, workingStep.parent, workingStep.evidence + [reason])
                         stack_extent.append(new_step)
 
                 if item.state != S_DONE:
@@ -1070,14 +1090,14 @@ class Query(Formula):
                 if workingStep.parent is not None:
                     raise RuntimeError("We are not chaining yet.\n How did I get here?")
                 else:
-                    total = query.conclude(workingStep.env,
-                                           evidence=workingStep.evidence, extraBNodes = queue.bNodes) + total  # No terms left .. success!
+                    total = query.conclude(workingStep.env.filter(workingStep.vars), allBindings=workingStep.env
+                                          , evidence=workingStep.evidence, extraBNodes = workingStep.lines.bNodes) + total  # No terms left .. success!
                     #raise RuntimeError("I need to conclude here, workingStep=%s" % workingStep)
                     pass
         return total
 
 
-    def matchFormula(query,
+    def matchFormula2(query,
                queue,               # Set of items we are trying to match CORRUPTED
                variables,           # List of variables to match and return CORRUPTED
                existentials,        # List of variables to match to anything
@@ -1189,7 +1209,7 @@ class Query(Formula):
                 item.state = S_DONE   # Searched.
             elif (state == S_LIGHT_EARLY or state == S_NOT_LIGHT or
                                     state == S_NEED_DEEP): #  Not searched yet
-                nbs = item.tryDeepSearch(queue)
+                nbs = item.tryDeepSearch(queue, Env())
             elif state == S_HEAVY_READY:  # not light, may be heavy; or heavy ready to run
                 if pred is query.store.includes: # and not diag.tracking:  # don't optimize when tracking?
                     nbs = item.doIncludes(queue, existentials, variables, bindings)
@@ -1286,7 +1306,7 @@ class Query(Formula):
                 raise
             if len(queue.statements) != len(query.workingContext):
                 return total
-        newTotal = query.conclude(bindings,  evidence=evidence, extraBNodes = queue.bNodes) + total  # No terms left .. success!
+        newTotal = query.conclude(bindings,  evidence=evidence, extraBNodes = queue.bNodes, allBindings=bindings) + total  # No terms left .. success!
         if total:
             progress('newTotal=%s, total=%s' % (newTotal, total))
             raise RuntimeError('How did I get here?')
@@ -1685,8 +1705,10 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                                          diag.tracking and BecauseBuiltIn(con, subj, pred, x)
                                          ) for x in result]
                             else:
-                                return [(Env({obj: (result, None)}),
-                                         diag.tracking and BecauseBuiltIn(con, subj, pred, result))]
+                                return [(nb1, diag.tracking and BecauseBuiltIn(con, subj, pred, result))
+                                        for nb1, env3 in obj.unify(result, Env(), Env(), self.neededToRun[OBJ])]
+##                                return [(Env({obj: (result, None)}),
+##                                         diag.tracking and BecauseBuiltIn(con, subj, pred, result))]
                         else:
                             return []
             else:
@@ -1719,10 +1741,12 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                                          BecauseBuiltIn(con, x, pred, obj)) \
                                         for x in result]
                             else:
-                                return [(Env({subj: (result,None)}),
-                                         diag.tracking and \
-                                         BecauseBuiltIn(con, result, pred, obj)
-                                         )]
+                                return [(nb1, diag.tracking and BecauseBuiltIn(con, subj, pred, result))
+                                        for nb1, env3 in subj.unify(result, Env(), Env(), self.neededToRun[SUBJ])]
+##                                return [(Env({subj: (result,None)}),
+##                                         diag.tracking and \
+##                                         BecauseBuiltIn(con, result, pred, obj)
+##                                         )]
                         else:
                             return []
                 else:
@@ -1740,7 +1764,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
         except (IOError, SyntaxError):
             raise BuiltInFailed(sys.exc_info(), self, pred ),None
         
-    def tryDeepSearch(self, queue):
+    def tryDeepSearch(self, queue, oldBindings=Env()):
         """Search the store, unifying nested compound structures
         
         Returns lists of list of bindings, attempting if necessary to unify
@@ -1766,7 +1790,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
             for s in self.myIndex :  # for everything matching what we know,
                 if self.query.justReturn and s in queue.statements:
                     continue
-                env_queue = [(Env(), Env())]
+                env_queue = [(oldBindings, Env())]
                 ### Why not just unify here?
                 if diag.chatty_flag > 106: progress("...checking %r" % s)
                 for p in PRED, SUBJ, OBJ:

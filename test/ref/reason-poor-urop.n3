@@ -9,7 +9,7 @@
                 :S,
                 :S2 .
     
-    owl:sameAs     :p owl:SymmetricProperty .
+    owl:sameAs     a owl:SymmetricProperty .
     {
          @forSome :_g_L14C13,
                     :_g_L16C12 .
@@ -20,7 +20,7 @@
             } .
         <http://example.com/swap/test/reason/timbl.n3>     log:semantics :_g_L14C13 .
         
-        }     log:implies {:S     :p :O .
+        }     log:implies {:S     :P :O .
         } .
     
 

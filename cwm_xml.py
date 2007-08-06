@@ -10,11 +10,18 @@ from sax2rdf import XMLtoDOM # for fn:doc
 
 #from Ft.Xml.XPath import Evaluate as evalXPath
 # http://packages.debian.org/unstable/python/python-xml
-try:
-    from xml.xpath import Evaluate as evalXPath 
-except ImportError:
-    progress("Try getting python-xml from http://downloads.sourceforge.net/pyxml/PyXML-0.8.4.tar.gz")
-    evalXPath = progress
+##
+## The following code allows for the lazy importing of the
+## evalXPath function. It is a hack
+def evalXPath(*args, **keywords):
+    try:
+        from xml.xpath import Evaluate as localEvalXPath 
+    except ImportError:
+        progress("Try getting python-xml from http://downloads.sourceforge.net/pyxml/PyXML-0.8.4.tar.gz")
+        localEvalXPath = progress
+    globals()['evalXPath'] = localEvalXPath
+    return localEvalXPath(*args, **keywords)
+
 
 XMLBI_NS_URI = "http://www.w3.org/2007/ont/xml#"
 

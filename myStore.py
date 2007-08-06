@@ -23,7 +23,10 @@ History:
     Spilt off from  thing.py 2003-08-19
 
 $Log$
-Revision 1.13  2007-06-26 02:36:15  syosi
+Revision 1.14  2007-08-06 16:13:56  syosi
+A month of changes
+
+Revision 1.13  2007/06/26 02:36:15  syosi
 fix tabs
 
 Revision 1.12  2005/10/24 16:58:38  timbl
@@ -207,6 +210,7 @@ class Namespace(object):
         """For getting a symbol for an expression, rather than a constant.
         For, and from, pim/toIcal.py"""
         return  _checkStore(self.store).symbol(self._name + lname)
+    __getitem__ = sym
 
 
 

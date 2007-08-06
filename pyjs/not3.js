@@ -1,6 +1,10 @@
 /*
 
+<<<<<<< not3.js
 $Id$
+=======
+$Id$
+>>>>>>> 1.11
 
 HAND EDITED FOR CONVERSION TO JAVASCRIPT
 

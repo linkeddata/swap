@@ -142,8 +142,9 @@ you can hash it (if you want to)
     def flatten(self, other):
         """Pull all of the bindings of other into a copy of self
         """
-        from backward import progress
-        progress(lambda : 'Env.flatten(%s,%s)' % (self, other))
+#        from backward import progress
+        if diag.chatty_flag > 85:
+            progress(lambda : 'Env.flatten(%s,%s)' % (self, other))
         retVal = dict(other)
         for key, (val, source) in self.items():
             if key in other:
@@ -155,7 +156,14 @@ you can hash it (if you want to)
                 retVal[key] = (val, source)
         retVal = self.__class__(retVal)
         retVal.id = self.id
-        progress(lambda : '... returns %s' % retVal)
+        if diag.chatty_flag > 85:
+            progress(lambda : '... returns %s' % retVal)
+        return retVal
+
+    def filter(self, varSet):
+        retVal = [(a,b) for (a,b) in self.items() if a in varSet]
+        retVal = self.__class__(retVal)
+        retVal.id = self.id
         return retVal
 
     def substitution(self, node, *otherEnvs):
@@ -1111,6 +1119,8 @@ def matchSet(pattern, kb, vars=Set([]),  bindings={}):
                 res.append((nb3, None))
     return res  # Failed to match the one we picked
 
+
+#### Everything that follows are the new unification routines
 class ListView(object):
     def __init__(self, list, start=0):
         self.list = list
@@ -1264,9 +1274,10 @@ def unify(self, other, bindings=Env(), otherBindings=Env(),
     elif type(self) is type([]):
         for x in unifySequence(self, other, env1, env2, vars, existentials, n1Source=n1Source, n2Source=n2Source):
             yield x
-    elif self.unifySecondary.im_func is other.unifySecondary.im_func:  # A reasonable definition of same type
-        for x in self.unifySecondary(other, env1, env2, vars, universals, existentials, n1Source=n1Source, n2Source=n2Source):
-            yield x
+    elif hasattr(self, 'unifySecondary') and hasattr(other, 'unifySecondary'):
+        if self.unifySecondary.im_func is other.unifySecondary.im_func:  # A reasonable definition of same type
+            for x in self.unifySecondary(other, env1, env2, vars, universals, existentials, n1Source=n1Source, n2Source=n2Source):
+                yield x
 
 def unifySequence(self, other, bindings=Env(), otherBindings=Env(),
           vars=Set([]), universals=Set([]), existentials=Set([]), 

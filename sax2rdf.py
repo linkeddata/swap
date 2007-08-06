@@ -123,6 +123,7 @@ List_NS = RDF_NS_URI     # Changed 200308
 XML_NS_URI = "http://www.w3.org/XML/1998/namespace"
 
 from diag import verbosity, progress, tracking
+from set_importer import Set
 
 
 _nextId = 0        # For generation of arbitrary names for anonymous nodes
@@ -188,6 +189,7 @@ class RDFHandler(xml.sax.ContentHandler):
         self._nodeIDs = {}
         self._items = [] # for <rdf:li> containers
         self._litDepth = 0
+        self._usedIDs = Set()
         
         version = "$Id$"
 #        self.sink.makeComment("RDF parsed by "+version[1:-1])
@@ -252,6 +254,9 @@ class RDFHandler(xml.sax.ContentHandler):
                 if ln == "ID":
                     if not isXML.isName(value):
                         raise  BadSyntax(sys.exc_info(), 'An ID must be a Name %s' % value)
+                    if (self._base, value) in self._usedIDs:
+                        raise BadSyntax(sys.exc_info(), "Two elements cannot have the same ID, %s" % value)
+                    self._usedIDs.add((self._base, value))
                     if self._subject:
                         print "# oops - subject already", self._subject
                         raise BadSyntax(sys.exc_info(), ">1 subject")
@@ -283,6 +288,8 @@ class RDFHandler(xml.sax.ContentHandler):
                     pass  #later
                 elif ln == "datatype":
                     pass  #later
+                elif uri in propertyAttributeExceptions:
+                    raise BadSyntax(sys.exc_info(), "%s is not a valid attribute named here" % uri)
                 else:
                     if not ns:
                         if "L" not in self.flags:  # assume local?
@@ -423,8 +430,11 @@ class RDFHandler(xml.sax.ContentHandler):
         self._base = uripath.join(self._base, attrs.get((XML_NS_URI, "base"), self._base))
         x = self._base.find("#")
         if x >= 0: self._base = self._base[:x] # See rdf-tests/rdfcore/xmlbase/test013.rdf
-        
-        tagURI = uripath.join(self._base, tagURI)  # If relative, make absolute. Not needed for standard.
+
+        try:
+            tagURI = uripath.join(self._base, tagURI)  # If relative, make absolute. Not needed for standard.
+        except ValueError:
+            pass
                                              # Needed for portable RDF generated with --rdf=z 
         
         self._language = attrs.get((XML_NS_URI, "lang"), None)
@@ -924,6 +934,7 @@ class XMLDOMParser(RDFXMLParser):
         self._state = STATE_LITERAL
         self._litDepth = 0
         self.LiteralNS = [{}]
+        self._prefixMap = [{}]
         self.testdata = ''
 #       self._datatype = self.sink.newSymbol("http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral")
         self.domDocument = self.domImplementation.createDocument(

@@ -24,11 +24,30 @@ if swap is None:
 # From PYTHONPATH equivalent to http://www.w3.org/2000/10
 
 from swap import llyn
-from swap.myStore import load, loadMany, Namespace, formula
+from swap.myStore import load, loadMany, Namespace, formula, _checkStore as checkStore
 from swap.uripath import refTo, base, join
 from swap import diag
 from swap.diag import progress
 from swap.notation3 import ToN3
+from swap.sparql.sparqlClient import parseSparqlResults
+
+def sparqlResults2Turtle(resultURI):
+    result = resultURI
+#    result = urllib.urlopen(resultURI).read()
+    mappings = parseSparqlResults(checkStore(), result)
+    f = formula()
+    bindingSet = f.newBlankNode()
+    f.add(bindingSet, rdf.type, rs.ResultSet)
+    for binding in mappings:
+        m = f.newBlankNode()
+        f.add(bindingSet, rs.solution, m)
+        for var, val in binding.items():
+            f.add(bindingSet, rs.resultVariable, f.newLiteral(var))
+            binding = f.newBlankNode()
+            f.add(m, rs.binding, binding)
+            f.add(binding, rs.value, val)
+            f.add(binding, rs.variable, f.newLiteral(var))
+    return f.n3String(flags="ubpartanev")
 
 
 rdf = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
@@ -42,6 +61,7 @@ triage = Namespace("http://www.w3.org/2000/10/swap/test/triage#")
 mf = Namespace("http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#")
 qt = Namespace("http://www.w3.org/2001/sw/DataAccess/tests/test-query#")
 earl = Namespace("http://www.w3.org/ns/earl#")
+rs = Namespace("http://www.w3.org/2001/sw/DataAccess/tests/result-set#")
 
 import getopt
 import sys
@@ -111,22 +131,33 @@ def testCwmSparql(kb, output, errorFile):
     commandNode = output.newBlankNode()
     thisProgram = output.newSymbol('http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py')
     cwmURI = output.newSymbol('http://www.w3.org/2000/10/swap/doc/cwm#')
-
+    testCount = 0
     
     for test in gatherDAWGStyleTests(kb):
+        testCount += 1
+##        if testCount < 250:
+##            continue
         testURI, name, type, description, queryDocument, inputDocument, outputDocument = test
-        print('%s\t%s\t%s\t%s\t%s' % (testURI, name, description, queryDocument.uriref(), type))
+        print('%s %s\t%s\t%s\t%s\t%s' % (testCount, testURI, name, description, queryDocument.uriref(), type))
         case = (name + temp_adder + ".out").replace(' ',
                 '_').replace('\n',
                 '_').replace('\t',
                 '_').replace('|',
                 '_').replace('\\',
                 '_').replace('/',
+                '_').replace('&',
                 '_') # Make up temp filename
         tempFile = output.newSymbol(join(base(), ',temp/' + case))
 
 
         if type == 'Query':
+            if inputDocument is None:
+                inputDocument = lambda : 'empty.n3'
+                inputDocument.uriref = inputDocument
+            try:
+                inputDocument.uriref()
+            except:
+                raise ValueError(inputDocument)
             thisCommand = ('python ../../cwm.py %s --sparql=%s --filter=%s --filter=%s --ntriples > %s' %
                               (inputDocument.uriref(), queryDocument.uriref(),
                                'filter1.n3', 'filter2.n3',
@@ -137,14 +168,20 @@ def testCwmSparql(kb, output, errorFile):
                 result = earl.fail
             else:
                 if outputDocument.uriref()[-3:] == 'srx': # sparql results format. how do we deal with that?
-                    result = earl['noClue']
+                    resultString = sparqlResults2Turtle(outputDocument.uriref())
+                    outputDocument = output.newSymbol(tempFile.uriref() + '2')
+                    tempFile2 = outputDocument.uriref()[5:]
+                    temp2 = file(tempFile2, 'w')
+                    try:
+                        temp2.write(resultString)
+                    finally:
+                        temp2.close()
+                result = system('python ../../cwm.py %s --ntriples | python ../../cant.py -d %s' %
+                           (outputDocument.uriref(), tempFile.uriref()))
+                if result == 0:
+                    result = earl['pass']
                 else:
-                    result = system('python ../../cwm.py %s --ntriples | python ../../cant.py -d %s' %
-                               (outputDocument.uriref(), tempFile.uriref()))
-                    if result == 0:
-                        result = earl['pass']
-                    else:
-                        result = earl['fail']
+                    result = earl['fail']
         else:
             thisCommand = ('python ../../cwm.py --language=sparql %s > /dev/null 2> /dev/null' %
                               (queryDocument.uriref(), ))

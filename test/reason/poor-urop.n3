@@ -16,5 +16,5 @@ forAll S2, P2, O2 .
    log:supports {S P O} .
   <danc.n3>!log:semantics
    log:supports {S P O} .
-} => {S p O} .
+} => {S P O} .
 

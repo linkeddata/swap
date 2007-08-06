@@ -66,7 +66,7 @@ Notation3 Parser Test Results
        <td>Parser throws an exception on the file. Or, on a negative test, fails to throw an exception</td>
      </tr>
    </tbody>
-  </table
+  </table>
 """ .
 
 #
@@ -101,7 +101,7 @@ Class
 #
 "E" log:outputString
 """
-    <tr>
+    </tr>
    </thead>
    <tbody>
 """ .
@@ -260,7 +260,7 @@ Class
 	n3test:failsParsing ?file .
 	?file n3test:expected "Undecided" .
 	("GUndecided" ?file ?y) string:concatenation ?x .
-	("""<td class="failure">&nbsp</td>""") string:concatenation ?z . } log:implies
+	("""<td class="failure">&nbsp;</td>""") string:concatenation ?z . } log:implies
 {?x log:outputString ?z } .
 
 {?parser a n3test:N3Parser; 
@@ -268,7 +268,7 @@ Class
 	n3test:failsParsing ?file .
 	?file n3test:expected "Positive" .
 	("GPositive" ?file ?y) string:concatenation ?x .
-	("""<td class="failure">&nbsp</td>""") string:concatenation ?z . } log:implies
+	("""<td class="failure">&nbsp;</td>""") string:concatenation ?z . } log:implies
 {?x log:outputString ?z } .
 
 {?parser a n3test:N3Parser; 
@@ -276,7 +276,7 @@ Class
 	n3test:failsParsing ?file .
 	?file n3test:expected "Negative" .
 	("GNegative" ?file ?y) string:concatenation ?x .
-	("""<td class="pass">&nbsp</td>""") string:concatenation ?z . } log:implies
+	("""<td class="pass">&nbsp;</td>""") string:concatenation ?z . } log:implies
 {?x log:outputString ?z } .
 
 

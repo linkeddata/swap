@@ -66,7 +66,9 @@ def urlopenForRDF(addr, referer=None):
     """
     return webget(addr,
                   types=['text/rdf+n3',
-                         'application/rdf+xml'],
+                         'application/rdf+xml'
+       #                  ,'application/x-turtle'    # Why not ask for turtle?
+                         ], 
                   referer = referer)
 
 

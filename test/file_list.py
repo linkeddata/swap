@@ -26,7 +26,9 @@ chdir(qqq)
 from swap import diag
 from swap import uripath
 
-
+### I used to have a main() function
+### But that made the stack one longer
+### Which changed the progress() output
 
 if __name__ == '__main__':
     diag.print_all_file_names = 1

@@ -274,6 +274,9 @@ z  - Allow relative URIs for namespaces
             self._formula = context   # Asssume first statement is in outermost context @@
         predn = self.referenceTo( pred[1])
         subjn = self.referenceTo( subj[1])
+        
+        if pred == (SYMBOL, RDF_NS_URI+'Description'):
+            raise ValueError('rdf:Description is not a valid predicate')
 
         if self._subj != subj:
             if self._subj:

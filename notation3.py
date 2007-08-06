@@ -1000,7 +1000,13 @@ class SinkParser:
                     j = self.uri_ref2(str, j+2, res2) # Read datatype URI
                     dt = res2[0]
                     if dt.uriref() == "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral":
-                        dom = XMLtoDOM(s)
+                        try:
+                            dom = XMLtoDOM('<rdf:envelope xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns">'
+                                           + s
+                                           + '</rdf:envelope>').firstChild
+                        except:
+                            print 's="%s"' % s
+                            raise
                         res.append(self._store.newXMLLiteral(dom))
                         return j
                 res.append(self._store.newLiteral(s, dt, lang))

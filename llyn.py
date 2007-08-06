@@ -177,6 +177,18 @@ def memoize(f):
     return k
 
 
+####
+###  BCHAIN @@@ Is this the right way to do it?
+####
+BACKWARD_CHAINING = False
+class VARHASH(object):
+    def __repr__(self): return 'VAR'
+    def __str__(self): return 'VAR'
+VARHASH = VARHASH()
+####
+###  /BCHAIN
+####
+
 ###################################### Forumula
 #
 class IndexedFormula(Formula):

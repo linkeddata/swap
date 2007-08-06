@@ -98,6 +98,12 @@
     test:description   "Proof with basic modus ponens";
     test:arguments     """reason/socrates.n3 --think --base=foo --why | python ../check.py""".
 
+:t07zcheck a test:CwmTest;
+        test:workingDirectory <../>;
+        test:referenceOutput <../ref/reason-single-gen.n3>;
+        test:description "make sure a proof does not split anonymous nodes unnecessarily";
+        test:arguments """reason/single_gen.n3 --think --base=foo --why | python ../check.py""" .
+
 
 :t08proof
 # a test:CwmTest;

@@ -81,7 +81,7 @@ def SparqlQuery(query, items, serviceURI):
     return nbs   # No bindings for testing
 
 
-# ends
+
 
 from xml.sax import make_parser
 from xml.sax.saxutils import handler, quoteattr, escape
@@ -133,6 +133,7 @@ class SparqlResultsHandler(handler.ContentHandler):
 #        raise NotImplementedError
 
     def startElementNS(self, name, qname, attrs):
+        self.text = u''
         (ns, lname) = name
         if ns != RESULTS_NS:
             self.onError('The tag %s does not belong anywhere!' % (ns + lname))
@@ -141,6 +142,7 @@ class SparqlResultsHandler(handler.ContentHandler):
         except KeyError:
             self.onError("The tag %s does not belong here\nI'm in state %s" % (ns + lname, self.state))
         processor(self, attrs)
+        self.text = ''
 
     def endElementNS(self, name, qname):
         (ns, lname) = name
@@ -214,7 +216,7 @@ class SparqlResultsHandler(handler.ContentHandler):
         self.val = self.store.newSymbol(self.text)
     def endBnode(self):
         self.state = 'endBinding'
-        self.val = self.store.newSymbol(self.text)
+        self.val = makeExistential()
     
     tagEndHandlers = \
                         {'sparql': lambda x: None,

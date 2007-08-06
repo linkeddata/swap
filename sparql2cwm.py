@@ -1460,7 +1460,7 @@ class FromSparql(productionHandler):
         if funcName == 'IT_isURI':
             return (typedThing('isURI', 'boolean'), p[3])
         if funcName == 'IT_STR':
-            return (typedThing('string', 'literal', ['literal', 'symbol']), p[3])
+            return (typedThing('String', 'literal', ['literal', 'symbol']), p[3])
         if funcName == 'IT_LANG':
             return (typedThing('lang', 'literal', ['literal']), p[3])
         if funcName == 'IT_DATATYPE':
