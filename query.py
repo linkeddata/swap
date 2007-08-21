@@ -347,6 +347,8 @@ class InferenceTask:
         if not query_root:
             # This is wrong
             query_root = ruleFormula.any(pred=store.type, obj=sparql['SelectQuery'])
+        if not query_root:
+            query_root = ruleFormula.any(pred=store.type, obj=sparql['AskQuery'])
         # query_root is a very boring bNode
         if query_root:
             #construct query
@@ -1889,6 +1891,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
             for p in PRED, SUBJ, OBJ :
                 x = self.quad[p]
                 if hasFormula(x): # expr  @@ Set  @@@@@@@@@@ Check and CompundTerm>???
+#                    ur = x.freeVariables()
                     ur = x.occurringIn(self.neededToRun[p])
                     self.neededToRun[p] = ur
                     hasUnboundCoumpundTerm = 1     # Can't search directly
