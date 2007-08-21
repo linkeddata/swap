@@ -1323,6 +1323,7 @@ def unifySet(self, other, bindings=Env(), otherBindings=Env(),
             yield (env1, env2)
 
 def occurs_check(self, other, env2):
+    return not other.occurringIn(set([self]))
     return True ### @@@ Need real check
 
 ##########################################################################

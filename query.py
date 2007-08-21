@@ -1099,7 +1099,7 @@ class Query(Formula):
         return total
 
 
-    def matchFormula2(query,
+    def matchFormula(query,
                queue,               # Set of items we are trying to match CORRUPTED
                variables,           # List of variables to match and return CORRUPTED
                existentials,        # List of variables to match to anything
