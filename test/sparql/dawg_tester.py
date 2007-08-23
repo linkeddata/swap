@@ -38,16 +38,20 @@ def sparqlResults2Turtle(resultURI):
     f = formula()
     bindingSet = f.newBlankNode()
     f.add(bindingSet, rdf.type, rs.ResultSet)
-    for binding in mappings:
-        m = f.newBlankNode()
-        f.add(bindingSet, rs.solution, m)
-        for var, val in binding.items():
-            f.add(bindingSet, rs.resultVariable, f.newLiteral(var))
-            binding = f.newBlankNode()
-            f.add(m, rs.binding, binding)
-            f.add(binding, rs.value, val)
-            f.add(binding, rs.variable, f.newLiteral(var))
-    return f.n3String(flags="ubpartanev")
+    if isinstance(mappings, bool):
+        f.add(bindingSet, rs.boolean, f.store.intern(mappings))
+    else:
+        for binding in mappings:
+            m = f.newBlankNode()
+            f.add(bindingSet, rs.solution, m)
+            for var, val in binding.items():
+                f.add(bindingSet, rs.resultVariable, f.newLiteral(var))
+                binding = f.newBlankNode()
+                f.add(m, rs.binding, binding)
+                f.add(binding, rs.value, val)
+                f.add(binding, rs.variable, f.newLiteral(var))
+    retVal = f.ntString()
+    return retVal
 
 
 rdf = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
@@ -132,10 +136,11 @@ def testCwmSparql(kb, output, errorFile):
     thisProgram = output.newSymbol('http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py')
     cwmURI = output.newSymbol('http://www.w3.org/2000/10/swap/doc/cwm#')
     testCount = 0
+
     
     for test in gatherDAWGStyleTests(kb):
         testCount += 1
-##        if testCount < 250:
+##        if testCount < 317:
 ##            continue
         testURI, name, type, description, queryDocument, inputDocument, outputDocument = test
         print('%s %s\t%s\t%s\t%s\t%s' % (testCount, testURI, name, description, queryDocument.uriref(), type))
@@ -146,7 +151,9 @@ def testCwmSparql(kb, output, errorFile):
                 '_').replace('\\',
                 '_').replace('/',
                 '_').replace('&',
-                '_') # Make up temp filename
+                '_').replace("'",
+                '_').replace('"',
+                '_')  # Make up temp filename
         tempFile = output.newSymbol(join(base(), ',temp/' + case))
 
 
@@ -158,9 +165,8 @@ def testCwmSparql(kb, output, errorFile):
                 inputDocument.uriref()
             except:
                 raise ValueError(inputDocument)
-            thisCommand = ('python ../../cwm.py %s --sparql=%s --filter=%s --filter=%s --ntriples > %s' %
+            thisCommand = ('python ../../cwm.py %s --sparql=%s --sparqlResults  > %s' %
                               (inputDocument.uriref(), queryDocument.uriref(),
-                               'filter1.n3', 'filter2.n3',
                                 tempFile.uriref()[5:]))
             print thisCommand
             result = system(thisCommand)
@@ -176,6 +182,31 @@ def testCwmSparql(kb, output, errorFile):
                         temp2.write(resultString)
                     finally:
                         temp2.close()
+
+                temp = file(tempFile.uriref()[5:], 'r')
+                try:
+                    tempString = temp.read()
+                finally:
+                    temp.close()
+                if 'sparql xmlns="http://www.w3.org/2005/sparql-results#"' in tempString:
+                    resultString = sparqlResults2Turtle(tempFile.uriref())
+                    tempFile = output.newSymbol(tempFile.uriref() + '3')
+                    tempFile2 = tempFile.uriref()[5:]
+                    temp2 = file(tempFile2, 'w')
+                    try:
+                        temp2.write(resultString)
+                    finally:
+                        temp2.close()
+                else:
+                    resultString = output.store.load(tempFile.uriref(), contentType="application/rdf+xml").ntString()
+                    tempFile = output.newSymbol(tempFile.uriref() + '3')
+                    tempFile2 = tempFile.uriref()[5:]
+                    temp2 = file(tempFile2, 'w')
+                    try:
+                        temp2.write(resultString)
+                    finally:
+                        temp2.close()
+                    
                 result = system('python ../../cwm.py %s --ntriples | python ../../cant.py -d %s' %
                            (outputDocument.uriref(), tempFile.uriref()))
                 if result == 0:

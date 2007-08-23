@@ -6,7 +6,7 @@ $Id$
 
 """
 
-from term import LightBuiltIn, Function, ReverseFunction, MultipleFunction,\
+from swap.term import LightBuiltIn, Function, ReverseFunction, MultipleFunction,\
     MultipleReverseFunction, typeMap, LabelledNode, \
     CompoundTerm, N3Set, List, EmptyList, NonEmptyList, \
     Symbol, Fragment, Literal, Term, AnonymousNode, HeavyBuiltIn, toBool
@@ -221,13 +221,18 @@ def sparql_output(query, F):
         xwr.endElement()
         xwr.startElement(RESULTS_NS+'results', [], prefixTracker.prefixes)
         resultFormulae = [aa for aa in F.each(pred=store.type, obj=ns['Result'])]
-        resultFormulae.sort(Term.compareAnyTerm)
+        try:
+            resultFormulae.sort(Term.compareAnyTerm)
+        except:
+            print [type(x) for x in resultFormulae]
+            print Term
+            raise
         for resultFormula in resultFormulae:
             xwr.startElement(RESULTS_NS+'result', [], prefixTracker.prefixes)
             for var in vars:
-                xwr.startElement(RESULTS_NS+'binding', [(RESULTS_NS+' name', str(var))],  prefixTracker.prefixes)
                 binding = resultFormula.the(pred=ns['bound'], obj=var)
                 if binding:
+                    xwr.startElement(RESULTS_NS+'binding', [(RESULTS_NS+' name', str(var))],  prefixTracker.prefixes)
                     if isinstance(binding, LabelledNode):
                         xwr.startElement(RESULTS_NS+'uri', [],  prefixTracker.prefixes)
                         xwr.data(binding.uriref())
@@ -245,9 +250,9 @@ def sparql_output(query, F):
                         xwr.startElement(RESULTS_NS+'literal', props,  prefixTracker.prefixes)
                         xwr.data(unicode(binding))
                         xwr.endElement()
+                    xwr.endElement()
                 else:
-                    xwr.emptyElement(RESULTS_NS+'unbound', [], prefixTracker.prefixes)
-                xwr.endElement()
+                    pass
 
             xwr.endElement()
         xwr.endElement()

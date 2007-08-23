@@ -182,6 +182,9 @@ class SparqlResultsHandler(handler.ContentHandler):
         if self.dt is not None:
             self.dt = self.store.newSymbol(self.dt)
         self.lang = attrs.get(('http://www.w3.org/XML/1998/namespace', 'lang'), None)
+
+    def boolean(self, attrs):
+        self.state = 'boolean'
     
     
 
@@ -190,6 +193,7 @@ class SparqlResultsHandler(handler.ContentHandler):
                       ('sparql', 'head'): sparqlHead,
                       ('head', 'variable'): variable,
                       ('afterHead', 'results'): results,
+                      ('afterHead', 'boolean'): boolean,
                       ('results', 'result'): result,
                       ('result', 'binding'): binding,
                       ('binding', 'uri'): uri,
@@ -217,6 +221,8 @@ class SparqlResultsHandler(handler.ContentHandler):
     def endBnode(self):
         self.state = 'endBinding'
         self.val = makeExistential()
+    def endBoolean(self):
+        self.results = (self.text == 'true')
     
     tagEndHandlers = \
                         {'sparql': lambda x: None,
@@ -227,7 +233,8 @@ class SparqlResultsHandler(handler.ContentHandler):
                          'binding': endBinding,
                          'literal': endLiteral,
                          'uri': endUri,
-                         'bnode': endBnode}
+                         'bnode': endBnode,
+                         'boolean': endBoolean}
 
 from notation3 import stringToN3, backslashUify, N3_nil
 from pretty import auPair

@@ -188,28 +188,28 @@
             } .
         } .
     {
-        <#_g0>     :ancestor <#_g1> .
-        <#_g1>     :ancestor <#_g2> .
+        <#_g0>     rdfs:subClassOf <#_g1> .
+        <#_g1>     rdfs:subClassOf <#_g2> .
         
-        }     log:implies {<#_g0>     :ancestor <#_g2> .
+        }     log:implies {<#_g0>     rdfs:subClassOf <#_g2> .
         } .
     {
-        <#_g3>     :descendant <#_g4> .
-        <#_g4>     :descendant <#_g5> .
+        <#_g3>     rdfs:subPropertyOf <#_g4> .
+        <#_g4>     rdfs:subPropertyOf <#_g5> .
         
-        }     log:implies {<#_g3>     :descendant <#_g5> .
+        }     log:implies {<#_g3>     rdfs:subPropertyOf <#_g5> .
         } .
     {
-        <#_g6>     rdfs:subPropertyOf <#_g7> .
-        <#_g7>     rdfs:subPropertyOf <#_g8> .
+        <#_g6>     :descendant <#_g7> .
+        <#_g7>     :descendant <#_g8> .
         
-        }     log:implies {<#_g6>     rdfs:subPropertyOf <#_g8> .
+        }     log:implies {<#_g6>     :descendant <#_g8> .
         } .
     {
-        <#_g9>     rdfs:subClassOf <#_g10> .
-        <#_g10>     rdfs:subClassOf <#_g11> .
+        <#_g9>     :ancestor <#_g10> .
+        <#_g10>     :ancestor <#_g11> .
         
-        }     log:implies {<#_g9>     rdfs:subClassOf <#_g11> .
+        }     log:implies {<#_g9>     :ancestor <#_g11> .
         } .
     {
         v:c1     rdfs:subClassOf v:c2 .

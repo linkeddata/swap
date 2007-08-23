@@ -664,6 +664,15 @@ For future reference, use newUniversal
         self.store.dumpNested(self, _outSink)
         return buffer.getvalue().decode('utf_8')
 
+    def ntString(self, base=None, flags="bravestpun"):
+        "Dump the formula to an absolute string in N3"
+        buffer=StringIO.StringIO()
+        _outSink = notation3.ToN3(buffer.write,
+                                      quiet=1, base=base, flags=flags)
+        self.store.dumpBySubject(self, _outSink)
+        return buffer.getvalue().decode('utf_8')
+
+
     def rdfString(self, base=None, flags=""):
         "Dump the formula to an absolute string in RDF/XML"
         buffer=StringIO.StringIO()

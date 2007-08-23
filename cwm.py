@@ -696,7 +696,7 @@ rdf/xml files. Note that this requires rdflib.
                 if not sparql_query_formula:
                     raise ValueError('No query')
                 else:
-                    sys.stdout.write(outputString(sparql_query_formula, workingContext).encode('utf_8'))
+                    sys.stdout.write(outputString(sparql_query_formula, workingContext)[0].encode('utf_8'))
                     option_outputStyle = "-no"
                     
                 
