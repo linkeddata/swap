@@ -221,6 +221,10 @@ def testCwmSparql(kb, output, errorFile):
                (result != 0 and type == 'Negative'):
                 result = earl['pass']
             else:
+                system('echo %s >> %s' % (thisCommand, errorFile))
+                thisCommand = ('python ../../cwm.py --language=sparql %s > /dev/null 2>> %s' %
+                              (queryDocument.uriref(), errorFile))
+                system(thisCommand)
                 result = earl['fail']
                 
         caseURI = output.newBlankNode()
@@ -232,6 +236,9 @@ def testCwmSparql(kb, output, errorFile):
         output.add(caseURI, earl.result, resultURI)
         output.add(resultURI, rdf.type, earl.TestResult)
         output.add(resultURI, earl.outcome, result)
+        if outputDocument:
+            output.add(resultURI, mf.result, outputDocument)
+            output.add(resultURI, mf.got, tempFile)
         print '\t\t\tresult\t', result
 
 

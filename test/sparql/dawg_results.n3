@@ -1,26 +1,27 @@
 
 #  Notation3 generation by
-#       notation3.py,v 1.196 2007/08/06 16:13:56 syosi Exp
+#       notation3.py,v 1.195 2007/06/26 02:36:15 syosi Exp
 
      @prefix : <http://www.w3.org/ns/earl#> .
     @prefix cwm: <http://www.w3.org/2000/10/swap/doc/cwm#> .
-    @prefix m: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/regex/manifest#> .
-    @prefix ma: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/syntax-sparql4/manifest#> .
+    @prefix m: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/syntax-sparql2/manifest#> .
+    @prefix ma: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/regex/manifest#> .
     @prefix man: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/open-world/manifest#> .
-    @prefix man10: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/construct/manifest#> .
-    @prefix man11: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/boolean-effective-value/manifest#> .
-    @prefix man12: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/syntax-sparql1/manifest#> .
-    @prefix man13: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/sort/manifest#> .
-    @prefix man2: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/optional/manifest#> .
-    @prefix man3: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/expr-builtin/manifest#> .
-    @prefix man4: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/distinct/manifest#> .
-    @prefix man5: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/algebra/manifest#> .
-    @prefix man6: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/graph/manifest#> .
-    @prefix man7: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/triple-match/manifest#> .
-    @prefix man8: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/type-promotion/manifest#> .
-    @prefix man9: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/syntax-sparql2/manifest#> .
-    @prefix mani: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/optional-filter/manifest#> .
-    @prefix manif: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/syntax-sparql3/manifest#> .
+    @prefix man10: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/graph/manifest#> .
+    @prefix man11: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/optional-filter/manifest#> .
+    @prefix man12: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/optional/manifest#> .
+    @prefix man13: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/boolean-effective-value/manifest#> .
+    @prefix man2: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/syntax-sparql3/manifest#> .
+    @prefix man3: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/triple-match/manifest#> .
+    @prefix man4: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/type-promotion/manifest#> .
+    @prefix man5: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/sort/manifest#> .
+    @prefix man6: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/syntax-sparql1/manifest#> .
+    @prefix man7: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/syntax-sparql4/manifest#> .
+    @prefix man8: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/expr-builtin/manifest#> .
+    @prefix man9: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/distinct/manifest#> .
+    @prefix mani: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/construct/manifest#> .
+    @prefix manif: <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/algebra/manifest#> .
+    @prefix mf: <http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#> .
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -28,7 +29,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-basic-01 ].
+             :test man6:syntax-basic-01 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -36,7 +37,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-basic-02 ].
+             :test man6:syntax-basic-02 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -44,7 +45,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-basic-03 ].
+             :test man6:syntax-basic-03 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -52,7 +53,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-basic-04 ].
+             :test man6:syntax-basic-04 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -60,7 +61,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-basic-05 ].
+             :test man6:syntax-basic-05 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -68,7 +69,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-basic-06 ].
+             :test man6:syntax-basic-06 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -76,7 +77,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-qname-01 ].
+             :test man6:syntax-qname-01 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -84,7 +85,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-qname-02 ].
+             :test man6:syntax-qname-02 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -92,7 +93,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-qname-03 ].
+             :test man6:syntax-qname-03 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -100,7 +101,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-qname-04 ].
+             :test man6:syntax-qname-04 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -108,7 +109,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-qname-05 ].
+             :test man6:syntax-qname-05 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -116,7 +117,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-qname-06 ].
+             :test man6:syntax-qname-06 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -124,7 +125,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-qname-07 ].
+             :test man6:syntax-qname-07 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -132,7 +133,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-qname-08 ].
+             :test man6:syntax-qname-08 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -140,7 +141,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-lit-01 ].
+             :test man6:syntax-lit-01 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -148,7 +149,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-lit-02 ].
+             :test man6:syntax-lit-02 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -156,7 +157,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-lit-03 ].
+             :test man6:syntax-lit-03 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -164,7 +165,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-lit-04 ].
+             :test man6:syntax-lit-04 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -172,7 +173,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-lit-05 ].
+             :test man6:syntax-lit-05 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -180,7 +181,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-lit-06 ].
+             :test man6:syntax-lit-06 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -188,7 +189,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-lit-07 ].
+             :test man6:syntax-lit-07 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -196,7 +197,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-lit-08 ].
+             :test man6:syntax-lit-08 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -204,7 +205,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-lit-09 ].
+             :test man6:syntax-lit-09 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -212,7 +213,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-lit-10 ].
+             :test man6:syntax-lit-10 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -220,7 +221,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-lit-11 ].
+             :test man6:syntax-lit-11 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -228,7 +229,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-lit-12 ].
+             :test man6:syntax-lit-12 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -236,7 +237,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-lit-13 ].
+             :test man6:syntax-lit-13 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -244,7 +245,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-lit-14 ].
+             :test man6:syntax-lit-14 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -252,7 +253,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-lit-15 ].
+             :test man6:syntax-lit-15 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -260,7 +261,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-lit-16 ].
+             :test man6:syntax-lit-16 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -268,7 +269,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-lit-17 ].
+             :test man6:syntax-lit-17 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -276,7 +277,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-lit-18 ].
+             :test man6:syntax-lit-18 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -284,7 +285,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-lit-19 ].
+             :test man6:syntax-lit-19 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -292,7 +293,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-lit-20 ].
+             :test man6:syntax-lit-20 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -300,7 +301,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-struct-01 ].
+             :test man6:syntax-struct-01 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -308,7 +309,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-struct-02 ].
+             :test man6:syntax-struct-02 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -316,7 +317,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-struct-03 ].
+             :test man6:syntax-struct-03 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -324,7 +325,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-struct-05 ].
+             :test man6:syntax-struct-05 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -332,7 +333,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-struct-06 ].
+             :test man6:syntax-struct-06 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -340,7 +341,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-struct-07 ].
+             :test man6:syntax-struct-07 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -348,7 +349,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-struct-08 ].
+             :test man6:syntax-struct-08 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -356,7 +357,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-struct-09 ].
+             :test man6:syntax-struct-09 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -364,7 +365,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-struct-10 ].
+             :test man6:syntax-struct-10 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -372,7 +373,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-struct-11 ].
+             :test man6:syntax-struct-11 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -380,7 +381,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-struct-12 ].
+             :test man6:syntax-struct-12 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -388,7 +389,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-struct-13 ].
+             :test man6:syntax-struct-13 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -396,7 +397,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-struct-14 ].
+             :test man6:syntax-struct-14 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -404,7 +405,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-lists-01 ].
+             :test man6:syntax-lists-01 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -412,7 +413,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-lists-02 ].
+             :test man6:syntax-lists-02 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -420,7 +421,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-lists-03 ].
+             :test man6:syntax-lists-03 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -428,7 +429,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-lists-04 ].
+             :test man6:syntax-lists-04 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -436,7 +437,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-lists-05 ].
+             :test man6:syntax-lists-05 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -444,7 +445,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-bnodes-01 ].
+             :test man6:syntax-bnodes-01 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -452,7 +453,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-bnodes-02 ].
+             :test man6:syntax-bnodes-02 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -460,7 +461,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-bnodes-03 ].
+             :test man6:syntax-bnodes-03 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -468,7 +469,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-bnodes-04 ].
+             :test man6:syntax-bnodes-04 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -476,7 +477,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-bnodes-05 ].
+             :test man6:syntax-bnodes-05 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -484,7 +485,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-forms-01 ].
+             :test man6:syntax-forms-01 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -492,7 +493,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-forms-02 ].
+             :test man6:syntax-forms-02 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -500,7 +501,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-union-01 ].
+             :test man6:syntax-union-01 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -508,7 +509,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-union-02 ].
+             :test man6:syntax-union-02 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -516,7 +517,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-expr-01 ].
+             :test man6:syntax-expr-01 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -524,7 +525,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-expr-02 ].
+             :test man6:syntax-expr-02 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -532,7 +533,7 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test man12:syntax-expr-03 ].
+             :test man6:syntax-expr-03 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -540,15 +541,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man12:syntax-expr-04 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :fail ];
-             :subject cwm:;
-             :test man12:syntax-expr-05 ].
+             :test man6:syntax-expr-04 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -556,7 +549,7 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test man12:syntax-order-01 ].
+             :test man6:syntax-expr-05 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -564,7 +557,7 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test man12:syntax-order-02 ].
+             :test man6:syntax-order-01 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -572,7 +565,7 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test man12:syntax-order-03 ].
+             :test man6:syntax-order-02 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -580,7 +573,7 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test man12:syntax-order-04 ].
+             :test man6:syntax-order-03 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -588,7 +581,7 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test man12:syntax-order-05 ].
+             :test man6:syntax-order-04 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -596,7 +589,7 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test man12:syntax-order-06 ].
+             :test man6:syntax-order-05 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -604,7 +597,7 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test man12:syntax-order-07 ].
+             :test man6:syntax-order-06 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -612,7 +605,7 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test man12:syntax-limit-offset-01 ].
+             :test man6:syntax-order-07 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -620,7 +613,7 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test man12:syntax-limit-offset-02 ].
+             :test man6:syntax-limit-offset-01 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -628,7 +621,7 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test man12:syntax-limit-offset-03 ].
+             :test man6:syntax-limit-offset-02 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -636,63 +629,7 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test man12:syntax-limit-offset-04 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man12:syntax-pat-01 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man12:syntax-pat-02 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man12:syntax-pat-03 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man12:syntax-pat-04 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-general-01 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-general-02 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-general-03 ].
+             :test man6:syntax-limit-offset-03 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -700,7 +637,63 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test man9:syntax-general-04 ].
+             :test man6:syntax-limit-offset-04 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man6:syntax-pat-01 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man6:syntax-pat-02 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man6:syntax-pat-03 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man6:syntax-pat-04 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-general-01 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-general-02 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-general-03 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -708,15 +701,7 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test man9:syntax-general-05 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-general-06 ].
+             :test m:syntax-general-04 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -724,7 +709,15 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test man9:syntax-general-07 ].
+             :test m:syntax-general-05 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-general-06 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -732,15 +725,7 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test man9:syntax-general-08 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-general-09 ].
+             :test m:syntax-general-07 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -748,7 +733,15 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test man9:syntax-general-10 ].
+             :test m:syntax-general-08 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-general-09 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -756,119 +749,7 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test man9:syntax-general-11 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-general-12 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-general-13 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-general-14 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-keywords-01 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-keywords-02 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-keywords-03 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-lists-01 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-lists-02 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-lists-03 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-lists-04 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-lists-05 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-bnode-01 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-bnode-02 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-bnode-03 ].
+             :test m:syntax-general-10 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -876,7 +757,119 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test man9:syntax-function-01 ].
+             :test m:syntax-general-11 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-general-12 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-general-13 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-general-14 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-keywords-01 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-keywords-02 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-keywords-03 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-lists-01 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-lists-02 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-lists-03 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-lists-04 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-lists-05 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-bnode-01 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-bnode-02 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-bnode-03 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -884,7 +877,7 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test man9:syntax-function-02 ].
+             :test m:syntax-function-01 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -892,7 +885,7 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test man9:syntax-function-03 ].
+             :test m:syntax-function-02 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -900,71 +893,7 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test man9:syntax-function-04 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-form-select-01 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-form-select-02 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-form-ask-02 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-form-construct01 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-form-construct02 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-form-construct03 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-form-construct04 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-form-construct06 ].
+             :test m:syntax-function-03 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -972,7 +901,71 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test man9:syntax-form-describe01 ].
+             :test m:syntax-function-04 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-form-select-01 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-form-select-02 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-form-ask-02 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-form-construct01 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-form-construct02 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-form-construct03 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-form-construct04 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-form-construct06 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -980,103 +973,7 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test man9:syntax-form-describe02 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-dataset-01 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-dataset-02 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-dataset-03 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-dataset-04 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-graph-01 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-graph-02 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-graph-03 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-graph-04 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-graph-05 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-esc-01 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-esc-02 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test man9:syntax-esc-03 ].
+             :test m:syntax-form-describe01 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -1084,7 +981,103 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test man9:syntax-esc-04 ].
+             :test m:syntax-form-describe02 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-dataset-01 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-dataset-02 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-dataset-03 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-dataset-04 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-graph-01 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-graph-02 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-graph-03 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-graph-04 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-graph-05 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-esc-01 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-esc-02 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test m:syntax-esc-03 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -1092,279 +1085,7 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test man9:syntax-esc-05 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-01 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-02 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-03 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-04 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-05 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-06 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-07 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-08 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-bad-01 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-bad-02 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-bad-03 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-bad-04 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-bad-05 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-bad-06 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-bad-07 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-bad-08 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-bad-09 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-bad-10 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-bad-11 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-bad-12 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-bad-13 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-bad-14 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-bad-15 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-bad-16 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-bad-17 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-bad-18 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-bad-19 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-bad-20 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-bad-21 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-bad-22 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-bad-23 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-bad-24 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-bad-25 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-bad-26 ].
+             :test m:syntax-esc-04 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -1372,7 +1093,279 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test manif:syn-bad-27 ].
+             :test m:syntax-esc-05 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-01 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-02 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-03 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-04 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-05 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-06 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-07 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-08 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-bad-01 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-bad-02 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-bad-03 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-bad-04 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-bad-05 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-bad-06 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-bad-07 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-bad-08 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-bad-09 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-bad-10 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-bad-11 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-bad-12 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-bad-13 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-bad-14 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-bad-15 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-bad-16 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-bad-17 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-bad-18 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-bad-19 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-bad-20 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-bad-21 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-bad-22 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-bad-23 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-bad-24 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-bad-25 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:syn-bad-26 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -1380,103 +1373,7 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test manif:syn-bad-28 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-bad-29 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-bad-30 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:syn-bad-31 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:bnode-dot ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:bnodes-missing-pvalues-01 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:bnodes-missing-pvalues-02 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:empty-optional-01 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:empty-optional-02 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:filter-missing-parens ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:lone-list ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:lone-node ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :pass ];
-             :subject cwm:;
-             :test manif:blabel-cross-filter ].
+             :test man2:syn-bad-27 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -1484,7 +1381,7 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test manif:blabel-cross-graph-bad ].
+             :test man2:syn-bad-28 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -1492,7 +1389,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test manif:blabel-cross-optional-bad ].
+             :test man2:syn-bad-29 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -1500,7 +1397,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test manif:blabel-cross-union-bad ].
+             :test man2:syn-bad-30 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -1508,7 +1405,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test ma:syn-09 ].
+             :test man2:syn-bad-31 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -1516,7 +1413,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test ma:syn-10 ].
+             :test man2:bnode-dot ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -1524,55 +1421,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test ma:syn-11 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :fail ];
-             :subject cwm:;
-             :test ma:syn-bad-34 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :fail ];
-             :subject cwm:;
-             :test ma:syn-bad-35 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :fail ];
-             :subject cwm:;
-             :test ma:syn-bad-36 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :fail ];
-             :subject cwm:;
-             :test ma:syn-bad-37 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :fail ];
-             :subject cwm:;
-             :test ma:syn-bad-38 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :fail ];
-             :subject cwm:;
-             :test ma:syn-bad-OPT-breaks-BGP ].
+             :test man2:bnodes-missing-pvalues-01 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -1580,31 +1429,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test ma:syn-bad-UNION-breaks-BGP ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :fail ];
-             :subject cwm:;
-             :test ma:syn-bad-GRAPH-breaks-BGP ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :fail ];
-             :subject cwm:;
-             :test ma:syn-leading-digits-in-prefixed-names ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :fail ];
-             :subject cwm:;
-             :test man5:nested-opt-1 ].
+             :test man2:bnodes-missing-pvalues-02 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -1612,7 +1437,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man5:nested-opt-2 ].
+             :test man2:empty-optional-01 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -1620,7 +1445,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man5:opt-filter-1 ].
+             :test man2:empty-optional-02 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -1628,7 +1453,31 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man5:opt-filter-2 ].
+             :test man2:filter-missing-parens ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:lone-list ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:lone-node ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man2:blabel-cross-filter ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -1636,7 +1485,7 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test man5:opt-filter-3 ].
+             :test man2:blabel-cross-graph-bad ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -1644,7 +1493,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man5:filter-place-1 ].
+             :test man2:blabel-cross-optional-bad ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -1652,7 +1501,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man5:filter-place-2 ].
+             :test man2:blabel-cross-union-bad ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -1660,7 +1509,7 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man5:filter-place-3 ].
+             :test man7:syn-09 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -1668,7 +1517,15 @@
                  a :TestResult;
                  :outcome :pass ];
              :subject cwm:;
-             :test man5:filter-nested-1 ].
+             :test man7:syn-10 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man7:syn-11 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -1676,7 +1533,7 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test man5:filter-nested-2 ].
+             :test man7:syn-bad-34 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -1684,7 +1541,7 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test man5:filter-scope-1 ].
+             :test man7:syn-bad-35 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
@@ -1692,12 +1549,202 @@
                  a :TestResult;
                  :outcome :fail ];
              :subject cwm:;
-             :test man5:join-scope-1 ].
+             :test man7:syn-bad-36 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test man7:syn-bad-37 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test man7:syn-bad-38 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test man7:syn-bad-OPT-breaks-BGP ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man7:syn-bad-UNION-breaks-BGP ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test man7:syn-bad-GRAPH-breaks-BGP ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test man7:syn-leading-digits-in-prefixed-names ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Nested_Optionals_-_1_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Nested_Optionals_-_1_dawg_test.out2>;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test manif:nested-opt-1 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Nested_Optionals_-_2_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Nested_Optionals_-_2_dawg_test.out2>;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test manif:nested-opt-2 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Optional-filter_-_1_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Optional-filter_-_1_dawg_test.out2>;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test manif:opt-filter-1 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Optional-filter_-_2_filters_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Optional-filter_-_2_filters_dawg_test.out2>;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test manif:opt-filter-2 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Optional-filter_-_scope_of_variable_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Optional-filter_-_scope_of_variable_dawg_test.out2>;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test manif:opt-filter-3 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Filter-placement_-_1_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Filter-placement_-_1_dawg_test.out2>;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test manif:filter-place-1 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Filter-placement_-_2_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Filter-placement_-_2_dawg_test.out2>;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test manif:filter-place-2 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Filter-placement_-_3_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Filter-placement_-_3_dawg_test.out2>;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test manif:filter-place-3 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Filter-nested_-_1_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Filter-nested_-_1_dawg_test.out2>;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test manif:filter-nested-1 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Filter-nested_-_2_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Filter-nested_-_2_dawg_test.out2>;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test manif:filter-nested-2 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Filter-scope_-_1_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Filter-scope_-_1_dawg_test.out2>;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test manif:filter-scope-1 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Join_scope_-_1_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Join_scope_-_1_dawg_test.out2>;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test manif:join-scope-1 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Join_operator_with_OPTs,_BGPs,_and_UNIONs_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Join_operator_with_OPTs,_BGPs,_and_UNIONs_dawg_test.out2>;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test manif:join-combo-1 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Join_operator_with_Graph_and_Union_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Join_operator_with_Graph_and_Union_dawg_test.out2>;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test manif:join-combo-2 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/dawg-bnode-coreference_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/bnode-coreference/result.ttl>;
                  :outcome :fail ];
              :subject cwm:;
              :test <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/bnode-coreference/manifest#dawg-bnode-coref-001> ].
@@ -1706,54 +1753,78 @@
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Test_literal__true__dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/boolean-effective-value/result-boolean-literal.ttl>;
                  :outcome :pass ];
              :subject cwm:;
-             :test man11:dawg-bev-1 ].
+             :test man13:dawg-boolean-literal ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Test__boolean_effective_value__-_true_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/boolean-effective-value/result-bev-1.ttl>;
                  :outcome :pass ];
              :subject cwm:;
-             :test man11:dawg-bev-2 ].
+             :test man13:dawg-bev-1 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Test__boolean_effective_value__-_false_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/boolean-effective-value/result-bev-2.ttl>;
                  :outcome :pass ];
              :subject cwm:;
-             :test man11:dawg-bev-3 ].
+             :test man13:dawg-bev-2 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Test__boolean_effective_value__-____dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/boolean-effective-value/result-bev-3.ttl>;
                  :outcome :pass ];
              :subject cwm:;
-             :test man11:dawg-bev-4 ].
+             :test man13:dawg-bev-3 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Test__boolean_effective_value__-____dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/boolean-effective-value/result-bev-4.ttl>;
                  :outcome :pass ];
              :subject cwm:;
-             :test man11:dawg-bev-5 ].
+             :test man13:dawg-bev-4 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Test__boolean_effective_value__-_optional_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/boolean-effective-value/result-bev-5.ttl>;
                  :outcome :pass ];
              :subject cwm:;
-             :test man11:dawg-bev-6 ].
+             :test man13:dawg-bev-5 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Test__boolean_effective_value__-_unknown_types_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/boolean-effective-value/result-bev-6.ttl>;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man13:dawg-bev-6 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/dawg-bound-query-001_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/bound/bound1-result.ttl>;
                  :outcome :pass ];
              :subject cwm:;
              :test <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/bound/manifest#dawg-bound-query-001> ].
@@ -1762,367 +1833,489 @@
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/dawg-construct-identity_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/construct/result-ident.ttl>;
                  :outcome :pass ];
              :subject cwm:;
-             :test man10:construct-1 ].
+             :test mani:construct-1 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/dawg-construct-subgraph_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/construct/result-subgraph.ttl>;
                  :outcome :pass ];
              :subject cwm:;
-             :test man10:construct-2 ].
+             :test mani:construct-2 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/dawg-construct-reification-1_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/construct/result-reif.ttl>;
                  :outcome :pass ];
              :subject cwm:;
-             :test man10:construct-3 ].
+             :test mani:construct-3 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/dawg-construct-reification-2_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/construct/result-reif.ttl>;
                  :outcome :pass ];
              :subject cwm:;
-             :test man10:construct-4 ].
+             :test mani:construct-4 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/dawg-construct-optional_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/construct/result-construct-optional.ttl>;
                  :outcome :pass ];
              :subject cwm:;
-             :test man10:construct-5 ].
+             :test mani:construct-5 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Numbers:_No_distinct_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Numbers:_No_distinct_dawg_test.out2>;
                  :outcome :fail ];
              :subject cwm:;
-             :test man4:no-distinct-1 ].
+             :test man9:no-distinct-1 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Numbers:_Distinct_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Numbers:_Distinct_dawg_test.out2>;
                  :outcome :fail ];
              :subject cwm:;
-             :test man4:distinct-1 ].
+             :test man9:distinct-1 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Strings:_No_distinct_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Strings:_No_distinct_dawg_test.out2>;
                  :outcome :fail ];
              :subject cwm:;
-             :test man4:no-distinct-2 ].
+             :test man9:no-distinct-2 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Strings:_Distinct_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Strings:_Distinct_dawg_test.out2>;
                  :outcome :pass ];
              :subject cwm:;
-             :test man4:distinct-2 ].
+             :test man9:distinct-2 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Nodes:_No_distinct_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Nodes:_No_distinct_dawg_test.out2>;
                  :outcome :fail ];
              :subject cwm:;
-             :test man4:no-distinct-3 ].
+             :test man9:no-distinct-3 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Nodes:_Distinct_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Nodes:_Distinct_dawg_test.out2>;
                  :outcome :fail ];
              :subject cwm:;
-             :test man4:distinct-3 ].
+             :test man9:distinct-3 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Opt:_No_distinct_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Opt:_No_distinct_dawg_test.out2>;
                  :outcome :fail ];
              :subject cwm:;
-             :test man4:no-distinct-4 ].
+             :test man9:no-distinct-4 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
-                 :outcome :fail ];
-             :subject cwm:;
-             :test man4:distinct-4 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :fail ];
-             :subject cwm:;
-             :test man4:no-distinct-9 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :fail ];
-             :subject cwm:;
-             :test man4:distinct-9 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Opt:_Distinct_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Opt:_Distinct_dawg_test.out2>;
                  :outcome :pass ];
              :subject cwm:;
-             :test man4:distinct-star-1 ].
+             :test man9:distinct-4 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/All:_No_distinct_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/All:_No_distinct_dawg_test.out2>;
                  :outcome :fail ];
              :subject cwm:;
-             :test man3:dawg-str-1 ].
+             :test man9:no-distinct-9 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/All:_Distinct_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/All:_Distinct_dawg_test.out2>;
                  :outcome :fail ];
              :subject cwm:;
-             :test man3:dawg-str-2 ].
+             :test man9:distinct-9 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
-                 :outcome :fail ];
-             :subject cwm:;
-             :test man3:dawg-str-3 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :fail ];
-             :subject cwm:;
-             :test man3:dawg-str-4 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :fail ];
-             :subject cwm:;
-             :test man3:dawg-isBlank-1 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :fail ];
-             :subject cwm:;
-             :test man3:dawg-datatype-1 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :fail ];
-             :subject cwm:;
-             :test man3:dawg-datatype-2 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :fail ];
-             :subject cwm:;
-             :test man3:dawg-datatype-3 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/SELECT_DISTINCT_*_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/SELECT_DISTINCT_*_dawg_test.out2>;
                  :outcome :pass ];
              :subject cwm:;
-             :test man3:dawg-lang-1 ].
+             :test man9:distinct-star-1 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/str-1_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/expr-builtin/result-str-1.ttl>;
                  :outcome :fail ];
              :subject cwm:;
-             :test man3:dawg-lang-2 ].
+             :test man8:dawg-str-1 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/str-2_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/expr-builtin/result-str-2.ttl>;
                  :outcome :fail ];
              :subject cwm:;
-             :test man3:dawg-lang-3 ].
+             :test man8:dawg-str-2 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/str-3_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/expr-builtin/result-str-3.ttl>;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test man8:dawg-str-3 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/str-4_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/expr-builtin/result-str-4.ttl>;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test man8:dawg-str-4 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/isBlank-1_dawg_test.out>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/expr-builtin/result-blank-1.ttl>;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test man8:dawg-isBlank-1 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/isLiteral_dawg_test.out>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/expr-builtin/result-isliteral-1.ttl>;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test man8:dawg-isLiteral-1 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/datatype-1_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/expr-builtin/result-datatype-1.ttl>;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test man8:dawg-datatype-1 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/datatype-2_:_Literals_with_a_datatype_dawg_test.out>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/expr-builtin/result-datatype-2.srx>;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test man8:dawg-datatype-2 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/datatype-3_:_Literals_with_a_datatype_of_xsd:string_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/datatype-3_:_Literals_with_a_datatype_of_xsd:string_dawg_test.out2>;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test man8:dawg-datatype-3 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/lang-1_:_Literals_with_a_lang_tag_of_some_kind_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/lang-1_:_Literals_with_a_lang_tag_of_some_kind_dawg_test.out2>;
                  :outcome :pass ];
              :subject cwm:;
-             :test man3:dawg-isURI-1 ].
+             :test man8:dawg-lang-1 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
-                 :outcome :fail ];
-             :subject cwm:;
-             :test man3:dawg-langMatches-1 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :fail ];
-             :subject cwm:;
-             :test man3:dawg-langMatches-2 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :fail ];
-             :subject cwm:;
-             :test man3:dawg-langMatches-3 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :fail ];
-             :subject cwm:;
-             :test man3:dawg-langMatches-4 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :fail ];
-             :subject cwm:;
-             :test man3:lang-case-insensitive-eq ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :fail ];
-             :subject cwm:;
-             :test man3:lang-case-insensitive-ne ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/lang-2_:_Literals_with_a_lang_tag_of____dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/lang-2_:_Literals_with_a_lang_tag_of____dawg_test.out2>;
                  :outcome :pass ];
              :subject cwm:;
-             :test man6:dawg-graph-01 ].
+             :test man8:dawg-lang-2 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/lang-3_:_Graph_matching_with_lang_tag_being_a_different_case_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/lang-3_:_Graph_matching_with_lang_tag_being_a_different_case_dawg_test.out2>;
                  :outcome :fail ];
              :subject cwm:;
-             :test man6:dawg-graph-02 ].
+             :test man8:dawg-lang-3 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
-                 :outcome :fail ];
-             :subject cwm:;
-             :test man6:dawg-graph-03 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
-                 :outcome :fail ];
-             :subject cwm:;
-             :test man6:dawg-graph-04 ].
-    
-      [      a :Assertion;
-             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
-             :result  [
-                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/isURI-1_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/expr-builtin/result-uri-1.ttl>;
                  :outcome :pass ];
              :subject cwm:;
-             :test man6:dawg-graph-05 ].
+             :test man8:dawg-isURI-1 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/isIRI-1_dawg_test.out>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/expr-builtin/result-iri-1.ttl>;
                  :outcome :fail ];
              :subject cwm:;
-             :test man6:dawg-graph-06 ].
+             :test man8:dawg-isIRI-1 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/LangMatches-1_dawg_test.out>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/expr-builtin/result-langMatches-1.ttl>;
                  :outcome :fail ];
              :subject cwm:;
-             :test man6:dawg-graph-07 ].
+             :test man8:dawg-langMatches-1 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/LangMatches-2_dawg_test.out>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/expr-builtin/result-langMatches-2.ttl>;
                  :outcome :fail ];
              :subject cwm:;
-             :test man6:dawg-graph-08 ].
+             :test man8:dawg-langMatches-2 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/LangMatches-3_dawg_test.out>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/expr-builtin/result-langMatches-3.ttl>;
                  :outcome :fail ];
              :subject cwm:;
-             :test man6:dawg-graph-09 ].
+             :test man8:dawg-langMatches-3 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/LangMatches-4_dawg_test.out>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/expr-builtin/result-langMatches-4.ttl>;
                  :outcome :fail ];
              :subject cwm:;
-             :test man6:dawg-graph-10 ].
+             :test man8:dawg-langMatches-4 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/LangMatches-basic_dawg_test.out>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/expr-builtin/result-langMatches-de.ttl>;
                  :outcome :fail ];
              :subject cwm:;
-             :test man6:dawg-graph-11 ].
+             :test man8:dawg-langMatches-basic ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/lang-case-insensitive-eq_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/lang-case-insensitive-eq_dawg_test.out2>;
                  :outcome :fail ];
+             :subject cwm:;
+             :test man8:lang-case-insensitive-eq ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/lang-case-insensitive-ne_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/lang-case-insensitive-ne_dawg_test.out2>;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man8:lang-case-insensitive-ne ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/graph-01_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/graph/graph-01.ttl>;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man10:dawg-graph-01 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/graph-02_dawg_test.out>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/graph/graph-02.ttl>;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test man10:dawg-graph-02 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/graph-03_dawg_test.out>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/graph/graph-03.ttl>;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test man10:dawg-graph-03 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/graph-04_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/graph/graph-04.ttl>;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test man10:dawg-graph-04 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/graph-05_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/graph/graph-05.ttl>;
+                 :outcome :pass ];
+             :subject cwm:;
+             :test man10:dawg-graph-05 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/graph-06_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/graph/graph-06.ttl>;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test man10:dawg-graph-06 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/graph-07_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/graph/graph-07.ttl>;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test man10:dawg-graph-07 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/graph-08_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/graph/graph-08.ttl>;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test man10:dawg-graph-08 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/graph-09_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/graph/graph-09.ttl>;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test man10:dawg-graph-09 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/graph-10_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/graph/graph-10.ttl>;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test man10:dawg-graph-10 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/graph-11_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/graph/graph-11.ttl>;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test man10:dawg-graph-11 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/open-eq-01_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/open-eq-01_dawg_test.out2>;
+                 :outcome :pass ];
              :subject cwm:;
              :test man:open-eq-01 ].
     
@@ -2130,6 +2323,8 @@
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/open-eq-02_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/open-eq-02_dawg_test.out2>;
                  :outcome :pass ];
              :subject cwm:;
              :test man:open-eq-02 ].
@@ -2138,6 +2333,8 @@
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/open-eq-03_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/open-eq-03_dawg_test.out2>;
                  :outcome :fail ];
              :subject cwm:;
              :test man:open-eq-03 ].
@@ -2146,6 +2343,8 @@
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/open-eq-04_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/open-eq-04_dawg_test.out2>;
                  :outcome :pass ];
              :subject cwm:;
              :test man:open-eq-04 ].
@@ -2154,6 +2353,8 @@
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/open-eq-05_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/open-eq-05_dawg_test.out2>;
                  :outcome :pass ];
              :subject cwm:;
              :test man:open-eq-05 ].
@@ -2162,6 +2363,8 @@
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/open-eq-06_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/open-eq-06_dawg_test.out2>;
                  :outcome :fail ];
              :subject cwm:;
              :test man:open-eq-06 ].
@@ -2170,6 +2373,8 @@
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/open-eq-07_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/open-eq-07_dawg_test.out2>;
                  :outcome :fail ];
              :subject cwm:;
              :test man:open-eq-07 ].
@@ -2178,6 +2383,8 @@
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/open-eq-08_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/open-eq-08_dawg_test.out2>;
                  :outcome :fail ];
              :subject cwm:;
              :test man:open-eq-08 ].
@@ -2186,7 +2393,9 @@
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
-                 :outcome :fail ];
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/open-eq-09_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/open-eq-09_dawg_test.out2>;
+                 :outcome :pass ];
              :subject cwm:;
              :test man:open-eq-09 ].
     
@@ -2194,6 +2403,8 @@
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/open-eq-10_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/open-eq-10_dawg_test.out2>;
                  :outcome :fail ];
              :subject cwm:;
              :test man:open-eq-10 ].
@@ -2202,6 +2413,8 @@
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/open-eq-11_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/open-eq-11_dawg_test.out2>;
                  :outcome :fail ];
              :subject cwm:;
              :test man:open-eq-11 ].
@@ -2210,6 +2423,8 @@
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/open-eq-12_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/open-eq-12_dawg_test.out2>;
                  :outcome :fail ];
              :subject cwm:;
              :test man:open-eq-12 ].
@@ -2218,6 +2433,8 @@
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/date-1_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/date-1_dawg_test.out2>;
                  :outcome :fail ];
              :subject cwm:;
              :test man:date-1 ].
@@ -2226,6 +2443,8 @@
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/date-2_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/date-2_dawg_test.out2>;
                  :outcome :fail ];
              :subject cwm:;
              :test man:date-2 ].
@@ -2234,6 +2453,8 @@
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/date-3_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/date-3_dawg_test.out2>;
                  :outcome :fail ];
              :subject cwm:;
              :test man:date-3 ].
@@ -2242,6 +2463,8 @@
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/date-4_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/date-4_dawg_test.out2>;
                  :outcome :pass ];
              :subject cwm:;
              :test man:date-4 ].
@@ -2250,6 +2473,8 @@
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/open-cmp-01_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/open-cmp-01_dawg_test.out2>;
                  :outcome :fail ];
              :subject cwm:;
              :test man:open-cmp-01 ].
@@ -2258,6 +2483,8 @@
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/open-cmp-02_dawg_test.out3>;
+                 mf:result <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/open-cmp-02_dawg_test.out2>;
                  :outcome :fail ];
              :subject cwm:;
              :test man:open-cmp-02 ].
@@ -2266,432 +2493,610 @@
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/OPTIONAL-FILTER_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/optional-filter/expr-1-result.ttl>;
                  :outcome :pass ];
              :subject cwm:;
-             :test mani:dawg-optional-filter-001 ].
+             :test man11:dawg-optional-filter-001 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/OPTIONAL_-_Outer_FILTER_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/optional-filter/expr-2-result.ttl>;
                  :outcome :pass ];
              :subject cwm:;
-             :test mani:dawg-optional-filter-002 ].
+             :test man11:dawg-optional-filter-002 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/OPTIONAL_-_Outer_FILTER_with_BOUND_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/optional-filter/expr-3-result.ttl>;
                  :outcome :pass ];
              :subject cwm:;
-             :test mani:dawg-optional-filter-003 ].
+             :test man11:dawg-optional-filter-003 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/One_optional_clause_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/optional/result-opt-1.ttl>;
                  :outcome :pass ];
              :subject cwm:;
-             :test man2:dawg-optional-001 ].
+             :test man12:dawg-optional-001 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Two_optional_clauses_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/optional/result-opt-2.ttl>;
                  :outcome :pass ];
              :subject cwm:;
-             :test man2:dawg-optional-002 ].
+             :test man12:dawg-optional-002 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Union_is_not_optional_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/optional/result-opt-3.ttl>;
                  :outcome :pass ];
              :subject cwm:;
-             :test man2:dawg-union-001 ].
+             :test man12:dawg-union-001 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Complex_optional_semantics:_1_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/optional/result-opt-complex-1.ttl>;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test man12:dawg-optional-complex-1 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Complex_optional_semantics:_2_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/optional/result-opt-complex-2.ttl>;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test man12:dawg-optional-complex-2 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Complex_optional_semantics:_3_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/optional/result-opt-complex-3.ttl>;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test man12:dawg-optional-complex-3 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Complex_optional_semantics:_4_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/optional/result-opt-complex-4.ttl>;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test man12:dawg-optional-complex-4 ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/regex-query-001_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/regex/regex-result-001.ttl>;
                  :outcome :pass ];
              :subject cwm:;
-             :test m:dawg-regex-001 ].
+             :test ma:dawg-regex-001 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/regex-query-002_dawg_test.out>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/regex/regex-result-002.ttl>;
                  :outcome :fail ];
              :subject cwm:;
-             :test m:dawg-regex-002 ].
+             :test ma:dawg-regex-002 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/regex-query-003_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/regex/regex-result-003.ttl>;
                  :outcome :pass ];
              :subject cwm:;
-             :test m:dawg-regex-003 ].
+             :test ma:dawg-regex-003 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/regex-query-004_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/regex/regex-result-004.ttl>;
                  :outcome :fail ];
              :subject cwm:;
-             :test m:dawg-regex-004 ].
+             :test ma:dawg-regex-004 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/sort-1_dawg_test.out>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/sort/result-sort-1.rdf>;
                  :outcome :fail ];
              :subject cwm:;
-             :test man13:dawg-sort-1 ].
+             :test man5:dawg-sort-1 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/sort-2_dawg_test.out>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/sort/result-sort-2.rdf>;
                  :outcome :fail ];
              :subject cwm:;
-             :test man13:dawg-sort-2 ].
+             :test man5:dawg-sort-2 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/sort-3_dawg_test.out>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/sort/result-sort-3.rdf>;
                  :outcome :fail ];
              :subject cwm:;
-             :test man13:dawg-sort-3 ].
+             :test man5:dawg-sort-3 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/sort-4_dawg_test.out>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/sort/result-sort-4.rdf>;
                  :outcome :fail ];
              :subject cwm:;
-             :test man13:dawg-sort-4 ].
+             :test man5:dawg-sort-4 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/sort-5_dawg_test.out>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/sort/result-sort-5.rdf>;
                  :outcome :fail ];
              :subject cwm:;
-             :test man13:dawg-sort-5 ].
+             :test man5:dawg-sort-5 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/sort-6_dawg_test.out>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/sort/result-sort-6.rdf>;
                  :outcome :fail ];
              :subject cwm:;
-             :test man13:dawg-sort-6 ].
+             :test man5:dawg-sort-6 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/sort-7_dawg_test.out>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/sort/result-sort-7.rdf>;
                  :outcome :fail ];
              :subject cwm:;
-             :test man13:dawg-sort-7 ].
+             :test man5:dawg-sort-7 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/sort-8_dawg_test.out>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/sort/result-sort-8.rdf>;
                  :outcome :fail ];
              :subject cwm:;
-             :test man13:dawg-sort-8 ].
+             :test man5:dawg-sort-8 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/sort-9_dawg_test.out>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/sort/result-sort-9.rdf>;
                  :outcome :fail ];
              :subject cwm:;
-             :test man13:dawg-sort-9 ].
+             :test man5:dawg-sort-9 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/sort-10_dawg_test.out>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/sort/result-sort-10.rdf>;
                  :outcome :fail ];
              :subject cwm:;
-             :test man13:dawg-sort-10 ].
+             :test man5:dawg-sort-10 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Expression_sort_dawg_test.out>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/sort/result-sort-numbers.ttl>;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test man5:dawg-sort-numbers ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Builtin_sort_dawg_test.out>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/sort/result-sort-builtin.ttl>;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test man5:dawg-sort-builtin ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/Function_sort_dawg_test.out>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/sort/result-sort-function.ttl>;
+                 :outcome :fail ];
+             :subject cwm:;
+             :test man5:dawg-sort-function ].
+    
+      [      a :Assertion;
+             :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
+             :result  [
+                 a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/dawg-triple-pattern-001_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/triple-match/result-tp-01.ttl>;
                  :outcome :pass ];
              :subject cwm:;
-             :test man7:dawg-triple-pattern-001 ].
+             :test man3:dawg-triple-pattern-001 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/dawg-triple-pattern-002_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/triple-match/result-tp-02.ttl>;
                  :outcome :pass ];
              :subject cwm:;
-             :test man7:dawg-triple-pattern-002 ].
+             :test man3:dawg-triple-pattern-002 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/dawg-triple-pattern-003_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/triple-match/result-tp-03.ttl>;
                  :outcome :pass ];
              :subject cwm:;
-             :test man7:dawg-triple-pattern-003 ].
+             :test man3:dawg-triple-pattern-003 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/dawg-triple-pattern-004_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/triple-match/result-tp-04.ttl>;
                  :outcome :pass ];
              :subject cwm:;
-             :test man7:dawg-triple-pattern-004 ].
+             :test man3:dawg-triple-pattern-004 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
-                 :outcome :fail ];
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/tP-double-double_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/type-promotion/true.ttl>;
+                 :outcome :pass ];
              :subject cwm:;
-             :test man8:type-promotion-01 ].
+             :test man4:type-promotion-01 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
-                 :outcome :fail ];
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/tP-double-float_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/type-promotion/true.ttl>;
+                 :outcome :pass ];
              :subject cwm:;
-             :test man8:type-promotion-02 ].
+             :test man4:type-promotion-02 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
-                 :outcome :fail ];
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/tP-double-decimal_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/type-promotion/true.ttl>;
+                 :outcome :pass ];
              :subject cwm:;
-             :test man8:type-promotion-03 ].
+             :test man4:type-promotion-03 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/tP-float-float_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/type-promotion/true.ttl>;
                  :outcome :fail ];
              :subject cwm:;
-             :test man8:type-promotion-04 ].
+             :test man4:type-promotion-04 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/tP-float-decimal_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/type-promotion/true.ttl>;
                  :outcome :fail ];
              :subject cwm:;
-             :test man8:type-promotion-05 ].
+             :test man4:type-promotion-05 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
-                 :outcome :fail ];
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/tP-decimal-decimal_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/type-promotion/true.ttl>;
+                 :outcome :pass ];
              :subject cwm:;
-             :test man8:type-promotion-06 ].
+             :test man4:type-promotion-06 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
-                 :outcome :fail ];
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/tP-integer-short_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/type-promotion/true.ttl>;
+                 :outcome :pass ];
              :subject cwm:;
-             :test man8:type-promotion-07 ].
+             :test man4:type-promotion-07 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
-                 :outcome :fail ];
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/tP-nonPositiveInteger-short_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/type-promotion/true.ttl>;
+                 :outcome :pass ];
              :subject cwm:;
-             :test man8:type-promotion-08 ].
+             :test man4:type-promotion-08 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
-                 :outcome :fail ];
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/tP-negativeInteger-short_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/type-promotion/true.ttl>;
+                 :outcome :pass ];
              :subject cwm:;
-             :test man8:type-promotion-09 ].
+             :test man4:type-promotion-09 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
-                 :outcome :fail ];
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/tP-long-short_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/type-promotion/true.ttl>;
+                 :outcome :pass ];
              :subject cwm:;
-             :test man8:type-promotion-10 ].
+             :test man4:type-promotion-10 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
-                 :outcome :fail ];
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/tP-int-short_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/type-promotion/true.ttl>;
+                 :outcome :pass ];
              :subject cwm:;
-             :test man8:type-promotion-11 ].
+             :test man4:type-promotion-11 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
-                 :outcome :fail ];
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/tP-short-short_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/type-promotion/true.ttl>;
+                 :outcome :pass ];
              :subject cwm:;
-             :test man8:type-promotion-12 ].
+             :test man4:type-promotion-12 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
-                 :outcome :fail ];
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/tP-byte-short_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/type-promotion/true.ttl>;
+                 :outcome :pass ];
              :subject cwm:;
-             :test man8:type-promotion-13 ].
+             :test man4:type-promotion-13 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
-                 :outcome :fail ];
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/tP-nonNegativeInteger-short_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/type-promotion/true.ttl>;
+                 :outcome :pass ];
              :subject cwm:;
-             :test man8:type-promotion-14 ].
+             :test man4:type-promotion-14 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
-                 :outcome :fail ];
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/tP-unsignedLong-short_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/type-promotion/true.ttl>;
+                 :outcome :pass ];
              :subject cwm:;
-             :test man8:type-promotion-15 ].
+             :test man4:type-promotion-15 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
-                 :outcome :fail ];
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/tP-unsignedInt-short_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/type-promotion/true.ttl>;
+                 :outcome :pass ];
              :subject cwm:;
-             :test man8:type-promotion-16 ].
+             :test man4:type-promotion-16 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
-                 :outcome :fail ];
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/tP-unsignedShort-short_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/type-promotion/true.ttl>;
+                 :outcome :pass ];
              :subject cwm:;
-             :test man8:type-promotion-17 ].
+             :test man4:type-promotion-17 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
-                 :outcome :fail ];
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/tP-unsignedByte-short_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/type-promotion/true.ttl>;
+                 :outcome :pass ];
              :subject cwm:;
-             :test man8:type-promotion-18 ].
+             :test man4:type-promotion-18 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
-                 :outcome :fail ];
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/tP-positiveInteger-short_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/type-promotion/true.ttl>;
+                 :outcome :pass ];
              :subject cwm:;
-             :test man8:type-promotion-19 ].
+             :test man4:type-promotion-19 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
-                 :outcome :fail ];
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/tP-short-double_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/type-promotion/true.ttl>;
+                 :outcome :pass ];
              :subject cwm:;
-             :test man8:type-promotion-20 ].
+             :test man4:type-promotion-20 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/tP-short-float_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/type-promotion/true.ttl>;
                  :outcome :fail ];
              :subject cwm:;
-             :test man8:type-promotion-21 ].
+             :test man4:type-promotion-21 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
-                 :outcome :fail ];
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/tP-short-decimal_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/type-promotion/true.ttl>;
+                 :outcome :pass ];
              :subject cwm:;
-             :test man8:type-promotion-22 ].
+             :test man4:type-promotion-22 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
-                 :outcome :fail ];
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/tP-short-short-fail_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/type-promotion/false.ttl>;
+                 :outcome :pass ];
              :subject cwm:;
-             :test man8:type-promotion-23 ].
+             :test man4:type-promotion-23 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
-                 :outcome :fail ];
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/tP-byte-short-fail_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/type-promotion/false.ttl>;
+                 :outcome :pass ];
              :subject cwm:;
-             :test man8:type-promotion-24 ].
+             :test man4:type-promotion-24 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
-                 :outcome :fail ];
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/tP-short-long-fail_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/type-promotion/false.ttl>;
+                 :outcome :pass ];
              :subject cwm:;
-             :test man8:type-promotion-25 ].
+             :test man4:type-promotion-25 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
-                 :outcome :fail ];
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/tP-short-int-fail_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/type-promotion/false.ttl>;
+                 :outcome :pass ];
              :subject cwm:;
-             :test man8:type-promotion-26 ].
+             :test man4:type-promotion-26 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
-                 :outcome :fail ];
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/tP-short-byte-fail_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/type-promotion/false.ttl>;
+                 :outcome :pass ];
              :subject cwm:;
-             :test man8:type-promotion-27 ].
+             :test man4:type-promotion-27 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
-                 :outcome :fail ];
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/tP-double-float-fail_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/type-promotion/false.ttl>;
+                 :outcome :pass ];
              :subject cwm:;
-             :test man8:type-promotion-28 ].
+             :test man4:type-promotion-28 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
-                 :outcome :fail ];
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/tP-double-decimal-fail_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/type-promotion/false.ttl>;
+                 :outcome :pass ];
              :subject cwm:;
-             :test man8:type-promotion-29 ].
+             :test man4:type-promotion-29 ].
     
       [      a :Assertion;
              :assertedBy <http://www.w3.org/2000/10/swap/test/sparql/dawg_tester.py>;
              :result  [
                  a :TestResult;
-                 :outcome :fail ];
+                 mf:got <file:///home/syosi/cvs-trunk/WWW/2000/10/swap/test/sparql/,temp/tP-float-decimal-fail_dawg_test.out3>;
+                 mf:result <http://www.w3.org/2001/sw/DataAccess/tests/data-r2/type-promotion/false.ttl>;
+                 :outcome :pass ];
              :subject cwm:;
-             :test man8:type-promotion-30 ].
+             :test man4:type-promotion-30 ].
     
 #ENDS
