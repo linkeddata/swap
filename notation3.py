@@ -294,30 +294,46 @@ class SinkParser:
                 self._context.declareExistential(x)
             return i
 
+
         j=self.tok('prefix', str, i)   # no implied "#"
-        if j<0: return -1
-        
-        t = []
-        i = self.qname(str, j, t)
-        if i<0: raise BadSyntax(self._thisDoc, self.lines, str, j,
-                            "expected qname after @prefix")
-        j = self.uri_ref2(str, i, t)
-        if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i,
-                            "expected <uriref> after @prefix _qname_")
+        if j>=0:
+            t = []
+            i = self.qname(str, j, t)
+            if i<0: raise BadSyntax(self._thisDoc, self.lines, str, j,
+                                "expected qname after @prefix")
+            j = self.uri_ref2(str, i, t)
+            if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i,
+                                "expected <uriref> after @prefix _qname_")
+            ns = self.uriOf(t[1])
 
-        if isinstance(t[1], types.TupleType):
-            ns = t[1][1] # old system for --pipe
-        else:
-            ns = t[1].uriref()
+            if self._baseURI:
+                ns = join(self._baseURI, ns)
+            elif ":" not in ns:
+                 raise BadSyntax(self._thisDoc, self.lines, str, j,
+                    "With no base URI, cannot use relative URI in @prefix <"+ns+">")
+            assert ':' in ns # must be absolute
+            self._bindings[t[0][0]] = ns
+            self.bind(t[0][0], hexify(ns))
+            return j
 
-        if self._baseURI:
-            ns = join(self._baseURI, ns)
-        else:
-            assert ":" in ns, "With no base URI, cannot handle relative URI"
-        assert ':' in ns # must be absolute
-        self._bindings[t[0][0]] = ns
-        self.bind(t[0][0], hexify(ns))
-        return j
+        j=self.tok('base', str, i)      # Added 2007/7/7
+        if j >= 0:
+            t = []
+            i = self.uri_ref2(str, j, t)
+            if i<0: raise BadSyntax(self._thisDoc, self.lines, str, j,
+                                "expected <uri> after @base ")
+            ns = self.uriOf(t[0])
+
+            if self._baseURI:
+                ns = join(self._baseURI, ns)
+            else:
+                raise BadSyntax(self._thisDoc, self.lines, str, j,
+                    "With no previous base URI, cannot use relative URI in @base  <"+ns+">")
+            assert ':' in ns # must be absolute
+            self._baseURI = ns
+            return i
+
+        return -1  # Not a directive, could be something else.
 
     def bind(self, qn, uri):
         assert isinstance(uri,
@@ -630,6 +646,8 @@ class SinkParser:
 
         j = self.tok('this', str, i)   # This context
         if j>=0:
+            raise BadSyntax(self._thisDoc, self.lines, str, i,
+                "Keyword 'this' was ancient N3. Now use @forSome and @forAll keywords.")
             res.append(self._context)
             return j
 
@@ -772,7 +790,7 @@ class SinkParser:
                         res.append(self.anonymousNode(ln))
                         return j
                     raise BadSyntax(self._thisDoc, self.lines, str, i,
-                                "Prefix %s not bound" % (pfx))
+                                "Prefix \"%s:\" not bound" % (pfx))
             symb = self._store.newSymbol(ns + ln)
             if symb in self._variables:
                 res.append(self._variables[symb])
@@ -1005,14 +1023,19 @@ class SinkParser:
                                            + s
                                            + '</rdf:envelope>').firstChild
                         except:
-                            print 's="%s"' % s
-                            raise
+                            raise  ValueError('s="%s"' % s)
                         res.append(self._store.newXMLLiteral(dom))
                         return j
                 res.append(self._store.newLiteral(s, dt, lang))
                 return j
             else:
                 return -1
+    
+    def uriOf(self, sym):
+        if isinstance(sym, types.TupleType):
+            return sym[1] # old system for --pipe
+        return sym.uriref() # cwm api
+
 
     def strconst(self, str, i, delim):
         """parse an N3 string constant delimited by delim.
@@ -1163,7 +1186,7 @@ class BadSyntax(SyntaxError):
         if len(str)-i > 60: post="..."
         else: post=""
 
-        return 'Line %i of <%s>: Bad syntax (%s) at ^ in:\n"%s%s^%s%s"' \
+        return 'at line %i of <%s>:\nBad syntax (%s) at ^ in:\n"%s%s^%s%s"' \
                % (self.lines +1, self._uri, self._why, pre,
                                     str[st:i], str[i:i+60], post)
 
@@ -1269,8 +1292,11 @@ B   Turn any blank node into a existentially qualified explicitly named node.
                     
     def writeEncoded(self, str):
         """Write a possibly unicode string out to the output"""
-        return self._writeRaw(str.encode('utf-8'))
-        
+        try:
+            return self._writeRaw(str.encode('utf-8'))
+        except UnicodeDecodeError:
+            return "<@UNICODE DECODE ERROR ENcoding utf-8>"
+            
     def setDefaultNamespace(self, uri):
         return self.bind("", uri)
     
@@ -1572,7 +1598,6 @@ B   Turn any blank node into a existentially qualified explicitly named node.
                     return toBool(s) and "true" or "false"
             if "n" not in self._flags:
                 dt_uri = dt
-#               dt_uri = dt.uriref()             
                 if (dt_uri == INTEGER_DATATYPE):
                     return str(long(s))
                 if (dt_uri == FLOAT_DATATYPE):
@@ -1615,9 +1640,9 @@ B   Turn any blank node into a existentially qualified explicitly named node.
             and "p" not in self._flags):   # Suppress use of prefixes?
             for ch in value[j+1:]:  #  Examples: "." ";"  we can't have in qname
                 if ch in _notNameChars:
-                    if verbosity() > 0:
-                        progress("Cannot have character %i in local name."
-                                    % ord(ch))
+                    if verbosity() > 20:
+                        progress("Cannot have character %i in local name for %s"
+                                    % (ord(ch), `value`))
                     break
             else:
                 namesp = value[:j+1]
@@ -1795,6 +1820,7 @@ class tmToN3(RDFSink.RDFSink):
         else: value = hexify(value)
 
         return "<" + value + ">"    # Everything else
+        
     def IsOf(self):
         self._write('is ')
         self._predIsOfs[-1] = FRESH
