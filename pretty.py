@@ -131,6 +131,8 @@ class Serializer:
 
         self.defaultNamespace = mp
 
+        # Make up prefixes for things which don't have them:
+        
         for r, count in counts.items():
             if count > 1 and r != mp:
                 if self.store.prefixes.get(r, None) is None:
@@ -179,25 +181,6 @@ class Serializer:
             except KeyError:
                 pass
         return
-
-
-    def _subFormulae(self, F, path = []):
-        """Returns a sequence of the all the formulae nested within this one.
-        
-        slow... only used in pretty print functions.
-        """
-
-        set = [F]
-        path2 = path + [ F ]     # Avoid loops
-        for s in F.statements:
-            for p in PRED, SUBJ, OBJ:
-                if isinstance(s[p], Formula):
-                    if s[p] not in path2:
-                        set2 = self._subFormulae(s[p], path2)
-                        for c in set2:
-                            if c not in set: set.append(c)
-        return set
-
 
     def dumpPrefixes(self):
         if self.defaultNamespace is not None:
