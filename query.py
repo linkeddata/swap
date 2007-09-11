@@ -924,7 +924,7 @@ class Query(Formula):
         # Variable renaming
 
         b2 = bindings.asDict()
-        b2[self.conclusion] = self.targetContext
+#        b2[self.conclusion] = self.targetContext  # What does this mean?
         ok = self.targetContext.universals() 
         # It is actually ok to share universal variables with other stuff
         poss = self.conclusion.universals().copy()
@@ -959,7 +959,7 @@ class Query(Formula):
         before = self.store.size
         _, delta = self.targetContext.loadFormulaWithSubstitution(
                     self.conclusion, b2, why=reason, cannon=True)
-        if diag.chatty_flag>29 and delta:
+        if diag.chatty_flag>-29 and delta:
             progress(" --- because of: %s => %s, with bindings %s" % (self.template.debugString(),
                                                                       self.conclusion.debugString(),
                                                                       b2))
@@ -971,13 +971,11 @@ class Query(Formula):
 ##################################################################################
 
     def matchFormula(query, queue, variables, existentials, env=Env()):
-        from terminalController import TerminalController
-        t = TerminalController()
         total = 0
         stack = [Chain_Step(variables, existentials, queue, env)]
         while stack:
             if diag.chatty_flag > 150:
-                progress(t.BLUE, stack, t.NORMAL)
+                progress(stack)
             workingStep = stack.pop()
             if not workingStep.done():
                 queue = workingStep.lines
@@ -1076,7 +1074,7 @@ class Query(Formula):
                         q2.append(newItem)  #@@@@@@@@@@  If exactly 1 binding, loop (tail recurse)
                     if new_thing:
                         if diag.chatty_flag > 70:
-                            progress(t.RED, bindings, nb, new_env, t.NORMAL)
+                            progress(bindings, nb, new_env)
                         new_step = Chain_Step(variables, existentials, q2, new_env, workingStep.parent, workingStep.evidence + [reason])
                         stack_extent.append(new_step)
 
