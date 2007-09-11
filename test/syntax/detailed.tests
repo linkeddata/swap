@@ -9,15 +9,20 @@
 @prefix test: <http://www.w3.org/2000/10/swap/test.n3#>.
 
 
-:syn001 a test:CwmTest;
-    test:referenceOutput <this-quantifiers-ref.n3>;
-    test:description   "Can still read the old 'this log:forSome' syntax";
-    test:arguments     "syntax/this-quantifiers.n3".
+#:syn001 a test:ObsoleteCwmTest;
+#    test:referenceOutput <this-quantifiers-ref.n3>;
+#    test:description   "Can still read the old 'this log:forSome' syntax. Removed 2007-07-07";
+#    test:arguments     "syntax/this-quantifiers.n3".
+#
+#:syn002 a test:ObsoleteCwmTest;
+#    test:referenceOutput <this-rules-ref.n3>;
+#    test:description   "Can still read the old 'this log:forAll' syntax. Removed 2007-07-07";
+#    test:arguments     "syntax/this-rules.n3".
 
-:syn002 a test:CwmTest;
-    test:referenceOutput <this-rules-ref.n3>;
-    test:description   "Can still read the old 'this log:forAll' syntax";
-    test:arguments     "syntax/this-rules.n3".
+:syn000 a test:CwmTest;       #  2007-09-11
+    test:referenceOutput <base-ref.n3>;
+    test:description   "The @base directive";
+    test:arguments     "syntax/base.n3".
 
 :syn005 a test:CwmTest;
     test:referenceOutput <this-quantifiers-ref2.n3>;
