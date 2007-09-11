@@ -1,0 +1,5 @@
+@base <http://example.com/ontolgies>.
+
+<a> :b <foo/bar#baz>.
+
+#ends
