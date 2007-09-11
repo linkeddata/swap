@@ -81,6 +81,7 @@ symbol bnf:mustBeOneSequence (
 	).
 
 declaration bnf:mustBeOneSequence(
+		( "@base" explicituri "." )
 		( "@prefix" qname explicituri "." )
 		( "@keywords" [ bnf:commaSeparatedPeriodTerminatedListOf barename ] )
 	).
