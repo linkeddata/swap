@@ -97,6 +97,7 @@ existential cfg:mustBeOneSequence(
 
 
 declaration cfg:mustBeOneSequence(
+		( "@base" explicituri  )
 		( "@prefix" prefix explicituri  )
 		( "@keywords" [ cfg:commaSeparatedListOf barename ] )
 	).
