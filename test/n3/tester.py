@@ -5,7 +5,7 @@ run all of the n3 tests given on all parsers given
 
 """
 from os import system, popen3, popen4
-from subprocess import Popen, PIPE, STDOUT, CalledProcessError  #Use this instead?
+##from subprocess import Popen, PIPE, STDOUT, CalledProcessError  #Use this instead?
 import os, os.path
 import sys
 import urllib
@@ -133,7 +133,7 @@ def testParser(command, kb, output, errorFile):
         output.add(inputDocument, n3test.description, description)
         #result = 1
 
-        thisCommand = ((command + ' > %s 2>%s') % \
+        thisCommand = ((command + ' > %s 2>>%s') % \
             (inputDocument.uriref(), tempFile.uriref()[5:], errorFile))
 
         result = system(thisCommand)

@@ -55,4 +55,9 @@
     test:description   "Test 22";
     test:arguments     "xml-syntax/xml-literal-mixed.rdf " .
 
+:xmllit010 a test:CwmTest;
+    test:referenceOutput <xml-literal-empty-xmlns.n3.ref>;
+    test:description   "An empty xmlns was killing it";
+    test:arguments     "--rdf xml-syntax/empty-xmlns.rdf --n3" .
+
 #ends

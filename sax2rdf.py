@@ -382,6 +382,7 @@ class RDFHandler(xml.sax.ContentHandler):
 
         #print "startPrefixMapping with prefix=", prefix, "uri=", `uri`
         prefix = prefix or ""
+        uri = uri or ""
         uri = self.uriref(uri)
 
         if self._nsmap:
