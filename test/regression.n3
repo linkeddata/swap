@@ -345,6 +345,11 @@
     test:description   "log:filter should do the same thing as --filter";
     test:arguments     """log-filter.n3 --think --data""".
 
+:t1029c a test:CwmTest, test:CwmProofTest;
+    test:referenceOutput <ref/filter-bnode.n3>;
+    test:description   "--filter should work with bnodes";
+    test:arguments     "query/filter-bnodes.n3 --filter=query/trivial-filter.n3" .
+
 :t1030 a test:CwmTest, test:CwmProofTest;
     test:referenceOutput <ref/underbarscope-out.n3>;
     test:description   "The scope of _:me should be the formula";

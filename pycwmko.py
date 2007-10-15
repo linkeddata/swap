@@ -121,7 +121,7 @@ class directPychinkoQuery(object):
             return '_:' + str(t)
             #raise RuntimeError            
         if t in F.universals():
-            return terms.Variable(t.fragid)
+            return terms.Variable(t)
         if K is not None and t in K.existentials():
 #            print "returning existential:", t
             return terms.Exivar(t)

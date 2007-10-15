@@ -912,14 +912,16 @@ class Query(Formula):
                 if "q" in self.mode: # How nice are we?
                     raise ValueError(val)
                 return 0
-            if val in es:   #  Take time for large number of bnodes?
-                exout.add(val)
+            intersection = val.occurringIn(es) #  Take time for large number of bnodes?
+            if intersection:   
+                exout.update(intersection)
                 if diag.chatty_flag > 25: progress(
                 "Match found to that which is only an existential: %s -> %s" %
                                                     (var, val))
-                if val not in self.targetContext.existentials():
-                    if self.conclusion.occurringIn([var]):
-                        self.targetContext.declareExistential(val)
+                for val2 in intersection:
+                    if val not in self.targetContext.existentials():
+                        if self.conclusion.occurringIn([var]):
+                            self.targetContext.declareExistential(val2)
 
         # Variable renaming
 
@@ -959,7 +961,7 @@ class Query(Formula):
         before = self.store.size
         _, delta = self.targetContext.loadFormulaWithSubstitution(
                     self.conclusion, b2, why=reason, cannon=True)
-        if diag.chatty_flag>-29 and delta:
+        if diag.chatty_flag>29 and delta:
             progress(" --- because of: %s => %s, with bindings %s" % (self.template.debugString(),
                                                                       self.conclusion.debugString(),
                                                                       b2))

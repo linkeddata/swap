@@ -34,6 +34,7 @@ import string
 import codecs # python 2-ism; for writing utf-8 in RDF/xml output
 import urllib
 import re
+from warnings import warn
 
 from sax2rdf import XMLtoDOM # Incestuous.. would be nice to separate N3 and XML
 
@@ -326,7 +327,7 @@ class SinkParser:
 
             if self._baseURI:
                 ns = join(self._baseURI, ns)
-            else:
+            elif ':' not in ns:
                 raise BadSyntax(self._thisDoc, self.lines, str, j,
                     "With no previous base URI, cannot use relative URI in @base  <"+ns+">")
             assert ':' in ns # must be absolute
@@ -646,8 +647,8 @@ class SinkParser:
 
         j = self.tok('this', str, i)   # This context
         if j>=0:
-            raise BadSyntax(self._thisDoc, self.lines, str, i,
-                "Keyword 'this' was ancient N3. Now use @forSome and @forAll keywords.")
+            warn(''.__class__(BadSyntax(self._thisDoc, self.lines, str, i,
+                "Keyword 'this' was ancient N3. Now use @forSome and @forAll keywords.")))
             res.append(self._context)
             return j
 

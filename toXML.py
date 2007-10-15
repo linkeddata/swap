@@ -240,7 +240,9 @@ z  - Allow relative URIs for namespaces
 
 
         if self.stack[-1]:
-            if pred == N3_first:
+            if pred == RDF_li:
+                pass
+            elif pred == N3_first:
                 pred = RDF_li
             elif pred == RDF_type and obj == N3_List:
                 return  # We knew
@@ -406,10 +408,12 @@ z  - Allow relative URIs for namespaces
     def startListObject(self,  tuple, isList =0):
         self._pred = RDF_li
         self.startWithParseType('Collection', tuple)
+        self.stack.append(1)
         return
 
 
     def endListObject(self, subject, verb):    # Remind me where we are
+        self.stack.pop()
         self._xwr.endElement()
         self._subj = subject       # @@@ This all needs to be thought about!
         return
