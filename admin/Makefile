@@ -3,6 +3,7 @@
 W=../../../..
 PYTHON=python
 SWAP=..
+SWAPP=../..
 PIM=$(SWAP)/pim
 CAL=$W/2002/12/cal
 
@@ -30,7 +31,7 @@ openBugs.html: ,bugsToDo.cal3 bugReport.n3
 	$(CWM) ,bugsToDo.cal3 bugReport.n3 --think --purge --strings > $@
 
 N3-Bugs.ics: ,bugsToDo.cal3 $(SWAP)/pim/toIcal.py
-	PYTHONPATH=$(SWAP):$(CAL) $(PYTHON) $(SWAP)/pim/toIcal.py ,bugsToDo.cal3 >$@
+	PYTHONPATH=$(SWAPP):$(CAL) $(PYTHON) $(SWAP)/pim/toIcal.py ,bugsToDo.cal3 >$@
 
 # Make update means fteches new info from outside this directory.
 
