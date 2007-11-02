@@ -57,6 +57,8 @@ def convert(path):
     inPerson = 0
     dataline = re.compile(r'([a-zA-Z0-9_]*): +(.*)')
     base64line = re.compile(r'([a-zA-Z0-9_]*):: +(.*)')
+    urline = re.compile(r'([a-zA-Z0-9_]*):< +(.*)')
+    commentLine = re.compile(r'^#.*')
 
     
     asFoaf = { "cn": "foaf:name" }
@@ -71,19 +73,21 @@ def convert(path):
                 break
             if eol+1 < len(buf) and buf[eol+1] == ' ':  # DOES LDIF fold lines??
                 l += buf[nextLine:eol]
-                nextLine = eol+2 # After the '\n '              
+                nextLine = eol+2 # After the '\n '                
                 continue
             l += buf[nextLine:eol]
             nextLine = eol+1
             break
         while l and l[-1:] in "\r\n": l = l[:-1]
         
+        if commentLine.match(l): continue
+
         m = blank.match(l)
         if m:
             print "    ]."
             inPerson = 0
             continue
-        
+        valtype = 'LITERAL'
         m = dataline.match(l)
         if m:
             field = m.group(1)
@@ -92,8 +96,13 @@ def convert(path):
             m = base64line.match(l)
             if m:
                 field = m.group(1)
-                value = m.group(2)
                 value = base64.decodestring(m.group(2))
+            else:
+                m = urlline.match(l)
+                if m:
+                    field = m.group(1)
+                    value = m.group(2)
+                    valtype = 'SYMBOL' 
         if m:
             if not inPerson:
                 print "    ["
