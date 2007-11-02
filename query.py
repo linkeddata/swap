@@ -1076,7 +1076,7 @@ class Query(Formula):
                         q2.append(newItem)  #@@@@@@@@@@  If exactly 1 binding, loop (tail recurse)
                     if new_thing:
                         if diag.chatty_flag > 70:
-                            progress(bindings, nb, new_env)
+                            progress("query.py bindings nb new_entry:", bindings, nb, new_env)
                         new_step = Chain_Step(variables, existentials, q2, new_env, workingStep.parent, workingStep.evidence + [reason])
                         stack_extent.append(new_step)
 
@@ -1247,7 +1247,7 @@ class Query(Formula):
                 
             if diag.chatty_flag > 90: progress("nbs=" + `nbs`)
             
-#<<<<<<< query.py  Removed as I added this and wasn't sure whether it works with justReturn change below -tbl
+#     query.py  Removed as I added this and wasn't sure whether it works with justReturn change below -tbl
 #           # Optimization when sucess but no bindings
 #           if (len(nbs) == 1 and nbs[0][0] == {} and nbs[0][1] is None and # if nbs == [({}, None)] and
 #                   state == S_DONE):
