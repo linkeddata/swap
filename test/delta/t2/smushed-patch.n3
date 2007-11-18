@@ -2,7 +2,7 @@
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
      @prefix del: <http://www.w3.org/2004/delta#> .
     
-    this     log:forAll <#_account>,
+    @forAll <#_account>,
                 <#_ac2>,
                 <#_who> .
     {

@@ -562,8 +562,8 @@ I should have.
 
 
     timeMatcher = re.compile(r'\t([0-9]+)m([0-9]+)\.([0-9]+)s')
-    from test.pystone import pystones
-    pyStoneTime = pystones()[1]
+##    from test.pystone import pystones
+##    pyStoneTime = pystones()[1]
     for u, theTime, description, env, arguments in perfData:
         tests = tests + 1
         if tests < start: continue

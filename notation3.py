@@ -1296,8 +1296,8 @@ B   Turn any blank node into a existentially qualified explicitly named node.
         try:
             return self._writeRaw(str.encode('utf-8'))
         except UnicodeDecodeError:
-            return "<@UNICODE DECODE ERROR ENcoding utf-8>"
-            
+            raise UnicodeDecodeError(str, str.__class__)
+
     def setDefaultNamespace(self, uri):
         return self.bind("", uri)
     
@@ -1313,9 +1313,9 @@ B   Turn any blank node into a existentially qualified explicitly named node.
         self._endStatement()
         self.prefixes[uri] = prefixString
         if 'r' in self._flags:
-            self._write("@prefix %s: <%s> ."%(prefixString, uri))
+            self._write(u"@prefix %s: <%s> ."%(prefixString, uri))
         else:
-            self._write("@prefix %s: <%s> ."%(prefixString, refTo(self.base, uri)))
+            self._write(u"@prefix %s: <%s> ."%(prefixString, refTo(self.base, uri)))
         self._newline()
 
     def setDefaultNamespace(self, uri):
@@ -1327,38 +1327,38 @@ B   Turn any blank node into a existentially qualified explicitly named node.
             x = refTo(self.base, uri)
         else:
             x = uri
-        self._write(" @prefix : <%s> ." % x )
+        self._write(u" @prefix : <%s> ." % x )
         self._newline()
        
 
     def startDoc(self):
  
         if not self._quiet:  # Suppress stuff which will confuse test diffs
-            self._write("\n#  Notation3 generation by\n")
-            idstr = "$Id$"
+            self._write(u"\n#  Notation3 generation by\n")
+            idstr = u"$Id$"
             # CVS CHANGES THE ABOVE LINE
-            self._write("#       " + idstr[5:-2] + "\n\n") 
+            self._write(u"#       " + idstr[5:-2] + u"\n\n") 
             # Strip "$" in case the N3 file is checked in to CVS
-            if self.base: self._write("#   Base was: " + self.base + "\n")
-        self._write("    " * self.indent)
+            if self.base: self._write(u"#   Base was: " + self.base + u"\n")
+        self._write(u"    " * self.indent)
         self._subj = None
 #        self._nextId = 0
 
     def endDoc(self, rootFormulaPair=None):
         self._endStatement()
-        self._write("\n")
+        self._write(u"\n")
         if self.stayOpen: return  #  fo concatenation
-        if not self._quiet: self._write("#ENDS\n")
+        if not self._quiet: self._write(u"#ENDS\n")
         return  # No formula returned - this is not a store
 
     def makeComment(self, str):
         for line in string.split(str, "\n"):
-            self._write("#" + line + "\n")  # Newline order??@@
-        self._write("    " * self.indent + "    ")
+            self._write(u"#" + line + "\n")  # Newline order??@@
+        self._write(u"    " * self.indent + "    ")
 
 
     def _newline(self, extra=0):
-        self._write("\n"+ "    " * (self.indent+extra))
+        self._write(u"\n"+ u"    " * (self.indent+extra))
 
     def makeStatement(self, triple, why=None, aIsPossible=1):
 #        triple = tuple([a.asPair() for a in triple2])
@@ -1399,14 +1399,14 @@ B   Turn any blank node into a existentially qualified explicitly named node.
         
     def startAnonymous(self,  triple):
         self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])
-        self._write(" [")
+        self._write(u" [")
         self.indent = self.indent + 1
         self._pred = None
         self._newline()
         self._subj = triple[OBJ]    # The object is now the current subject
 
     def endAnonymous(self, subject, verb):    # Remind me where we are
-        self._write(" ]")
+        self._write(u" ]")
         self.indent = self.indent - 1
         self._subj = subject
         self._pred = verb
@@ -1415,17 +1415,17 @@ B   Turn any blank node into a existentially qualified explicitly named node.
 
     def startAnonymousNode(self, subj):
         if self._subj:
-            self._write(" .")
+            self._write(u" .")
         self._newline()
         self.indent = self.indent + 1
-        self._write("  [ ")
+        self._write(u"  [ ")
         self._subj = subj    # The object is not the subject context
         self._pred = None
 
 
     def endAnonymousNode(self, subj=None):    # Remove default subject
-        self._write(" ]")
-        if not subj: self._write(".")
+        self._write(u" ]")
+        if not subj: self._write(u".")
         self.indent = self.indent - 1
         self._newline()
         self._subj = subj
@@ -1437,18 +1437,18 @@ B   Turn any blank node into a existentially qualified explicitly named node.
 
     def startListSubject(self, subj):
         if self._subj:
-            self._write(" .")
+            self._write(u" .")
         self._newline()
         self.indent = self.indent + 1
-        self._write("  ( ")
+        self._write(u"  ( ")
         self._needNL = 0
         self._subj = subj    # The object is not the subject context
         self._pred = N3_li  # expect these until list ends
 
 
     def endListSubject(self, subj=None):    # Remove default subject
-        self._write(" )")
-        if not subj: self._write(".")
+        self._write(u" )")
+        if not subj: self._write(u".")
         self.indent = self.indent - 1
         self._newline()
         self._subj = subj
@@ -1460,14 +1460,14 @@ B   Turn any blank node into a existentially qualified explicitly named node.
     def startListObject(self,  triple):
         self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])
         self._subj = triple[OBJ]
-        self._write(" (")
+        self._write(u" (")
         self._needNL = 1      # Choice here of compactness
         self.indent = self.indent + 1
         self._pred = N3_li  # expect these until list ends
         self._subj = triple[OBJ]    # The object is now the current subject
 
     def endListObject(self, subject, verb):    # Remind me where we are
-        self._write(" )")
+        self._write(u" )")
         self.indent = self.indent - 1
         self._subj = subject
         self._pred = verb
@@ -1480,7 +1480,7 @@ B   Turn any blank node into a existentially qualified explicitly named node.
         if self._subj != context:
             self._endStatement()
         self.indent = self.indent + 1
-        self._write("{")
+        self._write(u"{")
         self._newline()
         self._subj = None
         self._pred = None
@@ -1489,21 +1489,21 @@ B   Turn any blank node into a existentially qualified explicitly named node.
         self._endStatement()     # @@@@@@@@ remove in syntax change to implicit
         self._newline()
         self.indent = self.indent - 1
-        self._write("}")
+        self._write(u"}")
         self._subj = subj
         self._pred = None
      
     def startFormulaObject(self, triple):
         self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])
         self.indent = self.indent + 1
-        self._write("{")
+        self._write(u"{")
         self._subj = None
         self._pred = None
 
     def endFormulaObject(self, pred, subj):    # Remove context
         self._endStatement() # @@@@@@@@ remove in syntax change to implicit
         self.indent = self.indent - 1
-        self._write("}")
+        self._write(u"}")
 #        self._newline()
         self._subj = subj
         self._pred = pred
@@ -1538,32 +1538,32 @@ B   Turn any blank node into a existentially qualified explicitly named node.
                 if "v" not in self._flags and (
                      self._pred== (SYMBOL, N3_forAll_URI) or
                      self._pred == (SYMBOL, N3_forSome_URI)):
-                     self._write(".")
+                     self._write(u".")
                 else:
-                    self._write(";")
+                    self._write(u";")
                 self._newline(1)   # Indent predicate from subject
-            elif not varDecl: self._write("    ")
+            elif not varDecl: self._write(u"    ")
 
             if varDecl:
                     if pred == (SYMBOL, N3_forAll_URI):
-                        self._write( " @forAll ")
+                        self._write( u" @forAll ")
                     else:
-                        self._write( " @forSome ")
+                        self._write( u" @forSome ")
             elif pred == (SYMBOL, DAML_sameAs_URI) and "t" not in self._flags:
-                self._write(" = ")
+                self._write(u" = ")
             elif pred == (SYMBOL, RDF_type_URI)  and "t" not in self._flags:
-                self._write(" a ")
+                self._write(u" a ")
             else :
-                self._write( " %s " % self.representationOf(context, pred))
+                self._write( u" %s " % self.representationOf(context, pred))
                 
             self._pred = pred
         else:
-            self._write(",")
+            self._write(u",")
             self._newline(3)    # Same subject and pred => object list
 
     def _endStatement(self):
         if self._subj:
-            self._write(" .")
+            self._write(u" .")
             self._newline()
             self._subj = None
 
@@ -1576,9 +1576,9 @@ B   Turn any blank node into a existentially qualified explicitly named node.
 
         if "t" not in self._flags:
             if pair == context:
-                return "this"
+                return u"this"
             if pair == N3_nil and not self.noLists:
-                return"()"
+                return u"()"
 
         ty, value = pair
 
@@ -1587,41 +1587,41 @@ B   Turn any blank node into a existentially qualified explicitly named node.
             return stringToN3(value, singleLine=singleLine, flags = self._flags)
 
         if ty == XMLLITERAL:
-            st = ''.join([Canonicalize(x, None, unsuppressedPrefixes=['foo']) for x in value.childNodes])
+            st = u''.join([Canonicalize(x, None, unsuppressedPrefixes=['foo']) for x in value.childNodes])
             st = stringToN3(st, singleLine=singleLine, flags=self._flags)
-            return st + "^^" + self.representationOf(context, (SYMBOL,
-                    "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"))
+            return st + u"^^" + self.representationOf(context, (SYMBOL,
+                    u"http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"))
 
         if ty == LITERAL_DT:
             s, dt = value
             if "b" not in self._flags:
                 if (dt == BOOLEAN_DATATYPE):
-                    return toBool(s) and "true" or "false"
+                    return toBool(s) and u"true" or u"false"
             if "n" not in self._flags:
                 dt_uri = dt
                 if (dt_uri == INTEGER_DATATYPE):
-                    return str(long(s))
+                    return unicode(long(s))
                 if (dt_uri == FLOAT_DATATYPE):
-                    retVal =  str(float(s))    # numeric value python-normalized
+                    retVal =  unicode(float(s))    # numeric value python-normalized
                     if 'e' not in retVal:
                         retVal += 'e+00'
                     return retVal
                 if (dt_uri == DECIMAL_DATATYPE):
-                    retVal = str(Decimal(s))
+                    retVal = unicode(Decimal(s))
                     if '.' not in retVal:
                         retVal += '.0'
                     return retVal
             st = stringToN3(s, singleLine= singleLine, flags=self._flags)
-            return st + "^^" + self.representationOf(context, (SYMBOL, dt))
+            return st + u"^^" + self.representationOf(context, (SYMBOL, dt))
 
         if ty == LITERAL_LANG:
             s, lang = value
             return stringToN3(s, singleLine= singleLine,
-                                        flags=self._flags)+ "@" + lang
+                                        flags=self._flags)+ u"@" + lang
 
         aid = self._anodeId.get(pair[1], None)
         if aid != None:  # "a" flag only
-            return "_:" + aid    # Must start with alpha as per NTriples spec.
+            return u"_:" + aid    # Must start with alpha as per NTriples spec.
 
         if ((ty == ANONYMOUS)
             and not option_noregen and "i" not in self._flags ):
@@ -1650,20 +1650,20 @@ B   Turn any blank node into a existentially qualified explicitly named node.
                 if (self.defaultNamespace
                     and self.defaultNamespace == namesp
                     and "d" not in self._flags):
-                    return ":"+value[j+1:]
+                    return u":"+value[j+1:]
                 self.countNamespace(namesp)
                 prefix = self.prefixes.get(namesp, None) # @@ #CONVENTION
-                if prefix != None : return prefix + ":" + value[j+1:]
+                if prefix != None : return prefix + u":" + value[j+1:]
             
                 if value[:j] == self.base:   # If local to output stream,
-                    return "<#" + value[j+1:] + ">" # use local frag id
+                    return u"<#" + value[j+1:] + u">" # use local frag id
         
         if "r" not in self._flags and self.base != None:
             value = hexify(refTo(self.base, value))
         elif "u" in self._flags: value = backslashUify(value)
         else: value = hexify(value)
 
-        return "<" + value + ">"    # Everything else
+        return u"<" + value + u">"    # Everything else
 
 def nothing():
     pass
@@ -1924,16 +1924,16 @@ forbidden1 = re.compile(ur'[\\\"\a\b\f\r\v\u0080-\U0000ffff]')
 forbidden2 = re.compile(ur'[\\\"\a\b\f\r\v\t\n\u0080-\U0000ffff]')
 #"
 def stringToN3(str, singleLine=0, flags=""):
-    res = ''
+    res = u''
     if (len(str) > 20 and
-        str[-1] <> '"' and
+        str[-1] <> u'"' and
         not singleLine and
-        (string.find(str, "\n") >=0 
-         or string.find(str, '"') >=0)):
-        delim= '"""'
+        (string.find(str, u"\n") >=0 
+         or string.find(str, u'"') >=0)):
+        delim= u'"""'
         forbidden = forbidden1   # (allow tabs too now)
     else:
-        delim = '"'
+        delim = u'"'
         forbidden = forbidden2
         
     i = 0
@@ -1946,25 +1946,25 @@ def stringToN3(str, singleLine=0, flags=""):
         j = m.start()
         res = res + str[i:j]
         ch = m.group(0)
-        if ch == '"' and delim == '"""' and str[j:j+3] != '"""':  #"
+        if ch == u'"' and delim == u'"""' and str[j:j+3] != u'"""':  #"
             res = res + ch
         else:
-            k = string.find('\a\b\f\r\t\v\n\\"', ch)
-            if k >= 0: res = res + "\\" + 'abfrtvn\\"'[k]
+            k = string.find(u'\a\b\f\r\t\v\n\\"', ch)
+            if k >= 0: res = res + u"\\" + u'abfrtvn\\"'[k]
             else:
                 if 'e' in flags:
 #                res = res + ('\\u%04x' % ord(ch))
-                    res = res + ('\\u%04X' % ord(ch)) 
+                    res = res + (u'\\u%04X' % ord(ch)) 
                     # http://www.w3.org/TR/rdf-testcases/#ntriples
                 else:
                     res = res + ch
         i = j + 1
 
     # The following code fixes things for really high range Unicode
-    newstr = ""
+    newstr = u""
     for ch in res + str[i:]:
         if ord(ch)>65535:
-            newstr = newstr + ('\\U%08X' % ord(ch)) 
+            newstr = newstr + (u'\\U%08X' % ord(ch)) 
                 # http://www.w3.org/TR/rdf-testcases/#ntriples
         else:
             newstr = newstr + ch
@@ -1977,14 +1977,14 @@ def backslashUify(ustr):
         to the given unicode"""
 #    progress("String is "+`ustr`)
 #    s1=ustr.encode('utf-8')
-    str  = ""
+    str  = u""
     for ch in ustr:  # .encode('utf-8'):
         if ord(ch) > 65535:
-            ch = "\\U%08X" % ord(ch)       
+            ch = u"\\U%08X" % ord(ch)       
         elif ord(ch) > 126:
-            ch = "\\u%04X" % ord(ch)
+            ch = u"\\u%04X" % ord(ch)
         else:
-            ch = "%c" % ord(ch)
+            ch = u"%c" % ord(ch)
         str = str + ch
     return str
 

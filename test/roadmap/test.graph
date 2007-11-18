@@ -19,7 +19,7 @@
     <sw.n3>     doc:version "$Id$";
          gv:digraph swws:theGraph .
     
-    this     log:forAll swws:n1,
+    @forAll swws:n1,
                 swws:n2,
                 swws:p,
                 swws:type,

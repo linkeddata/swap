@@ -641,8 +641,8 @@ def n3Equivalent(g, f, env1, env2, vars=Set([]),
         pass
     else:
 
-        assert f.canonical is f
-        assert g.canonical is g
+        assert f.canonical is f, "%s, %s" % (f.debugString(), f.canonical.debugString())
+        assert g.canonical is g, "%s, %s" % (g.debugString(), g.canonical.debugString())
 
         m = diag.chatty_flag
         diag.chatty_flag = 0

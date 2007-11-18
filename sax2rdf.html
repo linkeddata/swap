@@ -8,7 +8,7 @@
 <td valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>sax2rdf</strong></big></big></font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/yosi/CVSROOT/WWW/2000/10/swap/sax2rdf.py">/Users/yosi/CVSROOT/WWW/2000/10/swap/sax2rdf.py</a></font></td></tr></table>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/syosi/cvs-trunk/WWW/2000/10/swap/sax2rdf.py">/home/syosi/cvs-trunk/WWW/2000/10/swap/sax2rdf.py</a></font></td></tr></table>
     <p><tt>&nbsp;&nbsp;A&nbsp;parser&nbsp;for&nbsp;RDF/XML&nbsp;built&nbsp;on&nbsp;the&nbsp;sax2&nbsp;interface;<br>
 &nbsp;&nbsp;derived&nbsp;from&nbsp;a&nbsp;parser&nbsp;for&nbsp;RDF/XML&nbsp;built&nbsp;on&nbsp;the&nbsp;xmllib&nbsp;XML&nbsp;parser.<br>
 &nbsp;<br>
@@ -57,7 +57,7 @@
 <a href="string.html">string</a><br>
 </td><td width="25%" valign=top><a href="sys.html">sys</a><br>
 <a href="uripath.html">uripath</a><br>
-</td><td width="25%" valign=top><a href="xml.html">xml</a><br>
+</td><td width="25%" valign=top><a href="_xmlplus.html">_xmlplus</a><br>
 </td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ee77aa">
@@ -193,7 +193,10 @@ SAX&nbsp;parsers&nbsp;may&nbsp;return&nbsp;all&nbsp;contiguous&nbsp;whitespace&n
 chunk,&nbsp;or&nbsp;they&nbsp;may&nbsp;split&nbsp;it&nbsp;into&nbsp;several&nbsp;chunks;&nbsp;however,&nbsp;all<br>
 of&nbsp;the&nbsp;characters&nbsp;in&nbsp;any&nbsp;single&nbsp;event&nbsp;must&nbsp;come&nbsp;from&nbsp;the&nbsp;same<br>
 external&nbsp;entity,&nbsp;so&nbsp;that&nbsp;the&nbsp;Locator&nbsp;provides&nbsp;useful<br>
-information.</tt></dd></dl>
+information.<br>
+&nbsp;<br>
+The&nbsp;application&nbsp;must&nbsp;not&nbsp;attempt&nbsp;to&nbsp;read&nbsp;from&nbsp;the&nbsp;array<br>
+outside&nbsp;of&nbsp;the&nbsp;specified&nbsp;range.</tt></dd></dl>
 
 <dl><dt><a name="RDFHandler-setDocumentLocator"><strong>setDocumentLocator</strong></a>(self, locator)</dt><dd><tt>Called&nbsp;by&nbsp;the&nbsp;parser&nbsp;to&nbsp;give&nbsp;the&nbsp;application&nbsp;a&nbsp;locator&nbsp;for<br>
 locating&nbsp;the&nbsp;origin&nbsp;of&nbsp;document&nbsp;events.<br>
@@ -325,7 +328,10 @@ SAX&nbsp;parsers&nbsp;may&nbsp;return&nbsp;all&nbsp;contiguous&nbsp;whitespace&n
 chunk,&nbsp;or&nbsp;they&nbsp;may&nbsp;split&nbsp;it&nbsp;into&nbsp;several&nbsp;chunks;&nbsp;however,&nbsp;all<br>
 of&nbsp;the&nbsp;characters&nbsp;in&nbsp;any&nbsp;single&nbsp;event&nbsp;must&nbsp;come&nbsp;from&nbsp;the&nbsp;same<br>
 external&nbsp;entity,&nbsp;so&nbsp;that&nbsp;the&nbsp;Locator&nbsp;provides&nbsp;useful<br>
-information.</tt></dd></dl>
+information.<br>
+&nbsp;<br>
+The&nbsp;application&nbsp;must&nbsp;not&nbsp;attempt&nbsp;to&nbsp;read&nbsp;from&nbsp;the&nbsp;array<br>
+outside&nbsp;of&nbsp;the&nbsp;specified&nbsp;range.</tt></dd></dl>
 
 <dl><dt><a name="RDFXMLParser-setDocumentLocator"><strong>setDocumentLocator</strong></a>(self, locator)</dt><dd><tt>Called&nbsp;by&nbsp;the&nbsp;parser&nbsp;to&nbsp;give&nbsp;the&nbsp;application&nbsp;a&nbsp;locator&nbsp;for<br>
 locating&nbsp;the&nbsp;origin&nbsp;of&nbsp;document&nbsp;events.<br>
@@ -460,7 +466,10 @@ SAX&nbsp;parsers&nbsp;may&nbsp;return&nbsp;all&nbsp;contiguous&nbsp;whitespace&n
 chunk,&nbsp;or&nbsp;they&nbsp;may&nbsp;split&nbsp;it&nbsp;into&nbsp;several&nbsp;chunks;&nbsp;however,&nbsp;all<br>
 of&nbsp;the&nbsp;characters&nbsp;in&nbsp;any&nbsp;single&nbsp;event&nbsp;must&nbsp;come&nbsp;from&nbsp;the&nbsp;same<br>
 external&nbsp;entity,&nbsp;so&nbsp;that&nbsp;the&nbsp;Locator&nbsp;provides&nbsp;useful<br>
-information.</tt></dd></dl>
+information.<br>
+&nbsp;<br>
+The&nbsp;application&nbsp;must&nbsp;not&nbsp;attempt&nbsp;to&nbsp;read&nbsp;from&nbsp;the&nbsp;array<br>
+outside&nbsp;of&nbsp;the&nbsp;specified&nbsp;range.</tt></dd></dl>
 
 <dl><dt><a name="XMLDOMParser-setDocumentLocator"><strong>setDocumentLocator</strong></a>(self, locator)</dt><dd><tt>Called&nbsp;by&nbsp;the&nbsp;parser&nbsp;to&nbsp;give&nbsp;the&nbsp;application&nbsp;a&nbsp;locator&nbsp;for<br>
 locating&nbsp;the&nbsp;origin&nbsp;of&nbsp;document&nbsp;events.<br>

@@ -131,6 +131,7 @@ def register(store):
     ns.internFrag("in", BI_in)
     ns.internFrag("member", BI_member)
     ns.internFrag("last", BI_last)
+    ns.internFrag("lastElement", BI_lastElem)
     ns.internFrag("append", BI_append)
     ns.internFrag("members", BI_members)
 ##    ns.internFrag("map", BI_map)

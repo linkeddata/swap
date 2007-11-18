@@ -199,6 +199,18 @@ class BI_query(LightBuiltIn, Function):
         if query.contains(obj=ns['SelectQuery']) or query.contains(obj=ns['AskQuery']):
             return self.store.newLiteral(sparql_output(query, F))
 
+def bnode_replace(self, string):
+    if string in self:
+        return self[string]
+    hash = string.find('#')
+    base = string[:hash]
+    self[string] = base + '#_bnode_' + str(self['counter'])
+    self['counter'] += 1
+    return self[string]
+
+bnode_replace = bnode_replace.__get__({'counter':0})
+
+
 def sparql_output(query, F):
     store = F.store
     RESULTS_NS = 'http://www.w3.org/2005/sparql-results#'
@@ -239,7 +251,7 @@ def sparql_output(query, F):
                         xwr.endElement()
                     elif isinstance(binding, (AnonymousNode, List)):
                         xwr.startElement(RESULTS_NS+'bnode', [],  prefixTracker.prefixes)
-                        xwr.data(binding.uriref())
+                        xwr.data(bnode_replace(binding.uriref()))
                         xwr.endElement()
                     elif isinstance(binding, Literal):
                         props = []
