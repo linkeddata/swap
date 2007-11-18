@@ -802,6 +802,8 @@ class StoredStatement:
         """Just compare SUBJ, Pred and OBJ, others the same
         Avoid loops by spotting reference to containing formula"""
         if self is other: return 0
+        if not isinstance(other, StoredStatement):
+            return cmp(self.__class__, other.__class__)
         sc = self.quad[CONTEXT]
         oc = other.quad[CONTEXT]
         for p in [SUBJ, PRED, OBJ]: # Note NOT internal order
