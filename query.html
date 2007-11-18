@@ -43,8 +43,6 @@
 </font></dt><dt><font face="helvetica, arial"><a href="query.html#BecauseSupportsWill">BecauseSupportsWill</a>
 </font></dt><dt><font face="helvetica, arial"><a href="query.html#BetterNone">BetterNone</a>
 </font></dt><dt><font face="helvetica, arial"><a href="query.html#Chain_Step">Chain_Step</a>
-</font></dt><dt><font face="helvetica, arial"><a href="query.html#Event">Event</a>
-</font></dt><dt><font face="helvetica, arial"><a href="query.html#Scheduler">Scheduler</a>
 </font></dt></dl>
 </dd>
 <dt><font face="helvetica, arial"><a href="exceptions.html#Exception">exceptions.Exception</a>
@@ -194,24 +192,6 @@ Data and other attributes defined here:<br>
 <dl><dt><a name="CyclicSetOfRules-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
 
 <dl><dt><a name="CyclicSetOfRules-run"><strong>run</strong></a>(self)</dt><dd><tt>Run&nbsp;a&nbsp;cyclic&nbsp;subset&nbsp;of&nbsp;the&nbsp;rules</tt></dd></dl>
-
-</td></tr></table> <p>
-<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
-<tr bgcolor="#ffc8d8">
-<td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#000000" face="helvetica, arial"><a name="Event">class <strong>Event</strong></a>(<a href="__builtin__.html#object">__builtin__.object</a>)</font></td></tr>
-    
-<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%">Methods defined here:<br>
-<dl><dt><a name="Event-__init__"><strong>__init__</strong></a>(self, parent, thunk)</dt></dl>
-
-<dl><dt><a name="Event-run"><strong>run</strong></a>(self)</dt></dl>
-
-<hr>
-Data and other attributes defined here:<br>
-<dl><dt><strong>__dict__</strong> = &lt;dictproxy object&gt;<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dl>
-
-<dl><dt><strong>__weakref__</strong> = &lt;attribute '__weakref__' of 'Event' objects&gt;<dd><tt><a href="__builtin__.html#list">list</a>&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;(if&nbsp;defined)</tt></dl>
 
 </td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -776,30 +756,6 @@ even&nbsp;without&nbsp;a&nbsp;repeat.</tt></dd></dl>
 
 <dl><dt><a name="Rule-traceForward"><strong>traceForward</strong></a>(self, r1)</dt></dl>
 
-</td></tr></table> <p>
-<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
-<tr bgcolor="#ffc8d8">
-<td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#000000" face="helvetica, arial"><a name="Scheduler">class <strong>Scheduler</strong></a>(<a href="__builtin__.html#object">__builtin__.object</a>)</font></td></tr>
-    
-<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%">Methods defined here:<br>
-<dl><dt><a name="Scheduler-__init__"><strong>__init__</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="Scheduler-__len__"><strong>__len__</strong></a>(self)</dt><dd><tt>We&nbsp;just&nbsp;want&nbsp;to&nbsp;know&nbsp;if&nbsp;we&nbsp;are&nbsp;empty</tt></dd></dl>
-
-<dl><dt><a name="Scheduler-add"><strong>add</strong></a>(self, thunk)</dt></dl>
-
-<dl><dt><a name="Scheduler-next"><strong>next</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="Scheduler-run"><strong>run</strong></a>(self)</dt></dl>
-
-<hr>
-Data and other attributes defined here:<br>
-<dl><dt><strong>__dict__</strong> = &lt;dictproxy object&gt;<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dl>
-
-<dl><dt><strong>__weakref__</strong> = &lt;attribute '__weakref__' of 'Scheduler' objects&gt;<dd><tt><a href="__builtin__.html#list">list</a>&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;(if&nbsp;defined)</tt></dl>
-
 </td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#eeaa77">
@@ -828,8 +784,6 @@ Then,&nbsp;any&nbsp;node&nbsp;in&nbsp;the&nbsp;pool&nbsp;can&nbsp;be&nbsp;done&n
  <dl><dt><a name="-quadToString"><strong>quadToString</strong></a>(q, neededToRun<font color="#909090">=[[], [], [], []]</font>, pattern<font color="#909090">=[1, 1, 1, 1]</font>)</dt></dl>
  <dl><dt><a name="-queueToString"><strong>queueToString</strong></a>(queue)</dt><dd><tt>#&nbsp;&nbsp;&nbsp;DIAGNOSTIC&nbsp;STRING&nbsp;OUTPUT</tt></dd></dl>
  <dl><dt><a name="-returnWrapper"><strong>returnWrapper</strong></a>(f)</dt></dl>
- <dl><dt><a name="-scheduleAddRule"><strong>scheduleAddRule</strong></a>(formula, subj, implies, obj)</dt></dl>
- <dl><dt><a name="-scheduleFireRuleWithTriple"><strong>scheduleFireRuleWithTriple</strong></a>(rule, triple)</dt></dl>
  <dl><dt><a name="-seqToString"><strong>seqToString</strong></a>(set)</dt></dl>
  <dl><dt><a name="-setToString"><strong>setToString</strong></a>(set)</dt></dl>
  <dl><dt><a name="-smarterSubstitution"><strong>smarterSubstitution</strong></a>(f, bindings, source, why<font color="#909090">=None</font>, exception<font color="#909090">=[]</font>)</dt></dl>
@@ -884,7 +838,6 @@ store.&nbsp;The&nbsp;store&nbsp;is&nbsp;used&nbsp;for&nbsp;read&nbsp;(normally&n
 <strong>forAllSym</strong> = 'http://www.w3.org/2000/10/swap/log#forAll'<br>
 <strong>forSomeSym</strong> = 'http://www.w3.org/2000/10/swap/log#forSome'<br>
 <strong>nextRule</strong> = 0<br>
-<strong>scheduler</strong> = &lt;query.Scheduler object&gt;<br>
 <strong>stateName</strong> = {10: 'Remote', 20: 'HvWait', 30: 'LtWait', 40: 'HvGo', 45: 'Deep', 50: 'LtEarly', 60: 'NotLt', 65: 'LtGo', 70: 'LtUsGo', 80: 'DONE', ...}<br>
 <strong>tracking</strong> = 0</td></tr></table>
 </body></html>
