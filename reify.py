@@ -214,7 +214,7 @@ def flatten(formula):
                 continue
             break
         else:
-            print a
+            pass
     returnFormula = formula.newFormula()
     for a in still_needed_existentials.keys():
         returnFormula.declareExistential(a)
