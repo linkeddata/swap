@@ -162,7 +162,7 @@
     test:workingDirectory  <../>;
     test:referenceOutput <../ref/double-proof.n3>;
     test:description   "Are we splitting bNodes in proofs with no good reason?";
-    test:arguments     """--n3=eiouB reason/double.n3 --think --base=foo --why""".
+    test:arguments     """--ntriples reason/double.n3 --think --base=foo --why --flatten | ../cant.py""".
 
 
 :t90check a test:CwmTest;

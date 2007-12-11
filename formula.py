@@ -85,6 +85,7 @@ class Formula(AnonymousNode, CompoundTerm):
         self._universalVariables = Set()
         self.stayOpen = 0   # If set, works as a knowledegbase, never canonicalized.
         self._redirections = {}  # Used for equalities
+
         
     def __repr__(self):
         if self.statements == []:
@@ -726,9 +727,9 @@ For future reference, use newUniversal
         """Yes, any identifier you see for this is arbitrary."""
         return 1
 
-    def asPair(self):
-        """Return an old representation. Obsolete"""
-        return (FORMULA, self.uriref())
+#    def asPair(self):
+#        """Return an old representation. Obsolete"""
+#        return (FORMULA, self.uriref())
 
     def subjects(self, pred=None, obj=None):
         """Obsolete - use each(pred=..., obj=...)"""

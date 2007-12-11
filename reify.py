@@ -18,6 +18,7 @@ from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4, RDF_type_URI
 import uripath
 import diag
 from mixin import Mixin
+from set_importer import Set
 
 reifyNS = 'http://www.w3.org/2004/06/rei#'
 REIFY_NS = reifyNS
@@ -137,7 +138,7 @@ class rFormula(Mixin, Formula):
             F = sink.newBlankNode()
             bnodeMap[self] = F
         rei = sink.newSymbol(reifyNS[:-1])
-        myMap = {}
+        myMap = bnodeMap
         ooo = sink.newSymbol(owlOneOf)
         es = list(self.existentials())
         es.sort(Term.compareAnyTerm)
@@ -148,7 +149,7 @@ class rFormula(Mixin, Formula):
             if diag.chatty_flag > 54:
                 progress("vars=", vars)
                 progress("vars=", [v.uriref() for v in vars])
-            list = sink.store.nil.newList([sink.newLiteral(x.uriref()) for x in vars])
+            list = sink.store.nil.newList([x.reification(sink, myMap, why) for x in vars]) # sink.newLiteral(x.uriref())
             klass = sink.newBlankNode()
             sink.add(klass, ooo, list)
             sink.add(F, vocab, klass, why) 
@@ -181,6 +182,7 @@ def flatten(formula):
     This will minimally change a formula to make it valid RDF
     flattening a flattened formula should thus be the unity
     """
+    why = None
     store = formula.store
     valid_triples = formula.statements[:]
     for triple in valid_triples:
@@ -191,47 +193,51 @@ def flatten(formula):
                 pass
     
     invalid_triples = []
-    for a in formula.universals():
+    new_invalid_triples  = []
+    shared_vars = Set()
+    for triple in valid_triples:
+        if triple.occurringIn(formula.universals()):
+                new_invalid_triples.append(triple)
+                shared_vars.update(triple.occurringIn(formula.existentials()))
+    for triple in new_invalid_triples:
+        try:
+            valid_triples.remove(triple)
+        except ValueError:
+            pass
+    while new_invalid_triples:
+        invalid_triples.extend(new_invalid_triples)
         new_invalid_triples = []
         for triple in valid_triples:
-            for part in SUBJ, PRED, OBJ:
-                if triple[part].doesNodeAppear(a):
-                    new_invalid_triples.append(triple)
+            if triple.occurringIn(shared_vars):
+                new_invalid_triples.append(triple)
+                shared_vars.update(triple.occurringIn(formula.existentials()))
         for triple in new_invalid_triples:
             try:
                 valid_triples.remove(triple)
             except ValueError:
-                pass
-        invalid_triples.extend(new_invalid_triples)
-    still_needed_existentials = {}
-    for a in formula.existentials():
-        for triple in valid_triples:
-            for part in SUBJ, PRED, OBJ:
-                if triple[part].doesNodeAppear(a):
-                    still_needed_existentials[a] = 1
-                    break
-            else:
-                continue
-            break
-        else:
-            pass
+                pass        
+    still_needed_existentials = reduce(Set.union,
+                                       [x.occurringIn(formula.existentials()) for x in valid_triples],
+                                       Set())
     returnFormula = formula.newFormula()
-    for a in still_needed_existentials.keys():
-        returnFormula.declareExistential(a)
+    tempBindings = {}
+    bNodeBindings = {}
+    for a in still_needed_existentials:
+        bNodeBindings = returnFormula.newBlankNode(a)
     tempformula = formula.newFormula()
     for var in formula.universals():
-        tempformula.declareUniversal(var)
+        tempBindings[var] = tempformula.newUniversal(var)
     for var in formula.existentials():
-        tempformula.declareExistential(var)
+        termBindings[var] = tempformula.newBlankNode(var)
     for triple in invalid_triples:
-        tempformula.add(triple[SUBJ],
-                        triple[PRED],
-                        triple[OBJ])
+        tempformula.add(triple[SUBJ].substitution(tempBindings, why=why),
+                        triple[PRED].substitution(tempBindings, why=why),
+                        triple[OBJ].substitution(tempBindings, why=why))
     #now for the stuff that isn't reified
     for triple in valid_triples:
-        returnFormula.add(triple[SUBJ].flatten(returnFormula),
-                        triple[PRED].flatten(returnFormula),
-                        triple[OBJ].flatten(returnFormula))
+        returnFormula.add(triple[SUBJ].substitution(bNodeBindings, why=why).flatten(returnFormula),
+                        triple[PRED].substitution(bNodeBindings, why=why).flatten(returnFormula),
+                        triple[OBJ].substitution(bNodeBindings, why=why).flatten(returnFormula))
     if tempformula.statements != []:
         x = tempformula.reification(returnFormula)
         returnFormula.add(x, store.type, store.Truth)

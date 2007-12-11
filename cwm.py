@@ -572,6 +572,9 @@ rdf/xml files. Note that this requires rdflib.
                 workingContext.stayOpen = False
                 workingContext = workingContext.close()
                 workingContext = explainFormula(workingContext, option_why)
+                # Can't prove proofs
+                diag.tracking=0
+                diag.setTracking(0)
 
             elif arg == "-dump":
                 

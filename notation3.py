@@ -1529,7 +1529,7 @@ B   Turn any blank node into a existentially qualified explicitly named node.
                 if (pred != (SYMBOL, N3_forAll_URI) and
                     pred != (SYMBOL, N3_forSome_URI)):
                     raise ValueError(
-                     "On N3 output, 'this' used with bad predicate: %s" % pred)
+                     "On N3 output, 'this' used with bad predicate: %s" % (pred, ))
             self._subj = subj
             self._pred = None
 
