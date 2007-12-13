@@ -119,6 +119,7 @@ steps, in order left to right:
 --revision    print CVS revision numbers of major modules
 --chatty=50   Verbose debugging output of questionable use, range 0-99
 --sparqlServer instead of outputting, start a SPARQL server on port 8000 of the store
+--sparqlResults        After sparql query, print in sparqlResults format instead of rdf
 
 finally:
 
