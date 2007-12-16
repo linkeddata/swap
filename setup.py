@@ -33,7 +33,7 @@ print "swap dir: "+swap_dir
 # Install SWAP
 from distutils.core import setup
 #from swap import __version__
-__version__='1.2.0a2'
+__version__='1.2.0'
 setup(
     name = 'cwm',
     version = __version__,
