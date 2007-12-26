@@ -19,7 +19,7 @@ import diag
 from diag import chatty_flag, tracking, progress
 from term import BuiltIn, LightBuiltIn, RDFBuiltIn, ArgumentNotLiteral, \
     HeavyBuiltIn, Function, ReverseFunction, MultipleFunction, \
-    MultipleReverseFunction, UnknownType, Env, \
+    MultipleReverseFunction, UnknownType, Env, unify, \
     Literal, Symbol, Fragment, FragmentNil,  Term, \
     CompoundTerm, List, EmptyList, NonEmptyList, ErrorFlag
 from formula import StoredStatement, Formula
@@ -32,6 +32,7 @@ BuiltinFeedError = (ArgumentNotLiteral, UnknownType)
 
 import types
 import sys
+import weakref
 # from sets import Set  # only in python 2.3 and following
                         # set_importer does a cleaner job
 
@@ -104,7 +105,7 @@ def applyQueries(
     """Once, nothing recusive, for a N3QL query"""
     t = InferenceTask(workingContext, ruleFormula, targetContext)
     t.gatherQueries(t.ruleFormula)
-    result = t.runSmart()
+    result = t.run()
     del(t)
     return result
 
@@ -116,7 +117,7 @@ def applySparqlQueries(
     """Once, nothing recusive, for a N3QL query"""
     t = InferenceTask(workingContext, ruleFormula, targetContext, mode="q")
     t.gatherSparqlQueries(t.ruleFormula)
-    result = t.runSmart()
+    result = t.run()
     del(t)
     return result
 
@@ -143,174 +144,80 @@ class InferenceTask:
         else: self.ruleFormula = ruleFormula
         self.ruleFor = {}
         self.hasMetaRule = 0
+        self.scheduler = Scheduler()
 
         self.workingContext, self.targetContext, self.mode, self.repeat = \
             workingContext, targetContext, mode, repeat
         self.store = self.workingContext.store
 
-    def runSmart(self):
-        """Run the rules by mapping rule interactions first"""
-        rules= self.ruleFor.values()
-        if self.targetContext is self.workingContext: #otherwise, there cannot be loops
-            for r1 in rules:
-                vars1 = r1.templateExistentials | r1.variablesUsed
-                for r2 in rules:
-                    vars2 = r2.templateExistentials | r2.variablesUsed
-                    for s1 in r1.conclusion.statements:
-                        s2 = None
-                        p = None        
-                        for s2 in r2.template.statements:
-                            for p in PRED, SUBJ, OBJ:
-                                if ((s1[p] not in vars1
-                                        and not isinstance(s1[p], CompoundTerm))
-                                    and (s2[p] not in vars2
-                                        and not isinstance(s2[p], CompoundTerm))
-                                    and (s1[p] is not s2[p])):
-                                        break
-                            else:
-                                r1.affects[r2] = 1 # save transfer binding here?
-                                if diag.chatty_flag > 20: progress(
-                                    "%s can affect %s because %s can trigger %s" %
-                                                (`r1`, `r2`, `s1`, `s2`))
-                                break # can affect
+    def scheduleAttachRule(task, statement, formula, variables):
+        formula = statement.context()
+        subj, pred, obj = statement.spo()
+        variables = variables | formula.universals()
+        def addRule():
+            if not formula.contains(subj=subj, pred=formula.store.implies, obj=obj):
+                return 0  # The triple is no longer there
+            return Rule(task, subj, obj, statement, variables).once()
+        task.schedule(addRule)
 
-                        else:  # that statement couldn't but
-                            if diag.chatty_flag > 96:
-                                progress("...couldn't beccause of ",s1,s2,p)
-                            continue # try next one
-                        break # can
+    def scheduleAttachQuery(task, subj, obj, statement, variables):
+        formula = statement.context()
+        variables = variables | formula.universals()
+        def addRule():
+            if not formula.contains(subj=statement.subject(), pred=statement.predicate(), obj=statement.object()):
+                return 0  # The triple is no longer there
+            r = Rule(task, subj, obj, statement, variables).once()
+            if (diag.chatty_flag >30):
+                progress( "Found rule %r for statement %s " % (r, statement))
+            return r
+        task.schedule(addRule)
 
-        # Calculate transitive closure of "affects"
-        for r1 in rules:
-            r1.traceForward(r1)  # could lazy eval
 
-        for r1 in rules:
-            r1.indirectlyAffects.sort()
-            r1.indirectlyAffectedBy.sort()
-            
-        # Print the affects matrix
-        if diag.chatty_flag > 30:
-            str = "%4s:" % "Aff"
-            for r2 in rules:
-                str+= "%4s" % `r2`
-            progress(str)
-            for r1 in rules:
-                str= "%4s:" % `r1`
-                for r2 in rules:
-                    if r2.affects.get(r1, 0): str+= "%4s" % "X"
-                    elif r1 in r2.indirectlyAffects: str +="%4s" % "-"
-                    else: str+= "%4s" % " "
-                progress(str)
-            
-        # Find cyclic subsystems
-        # These are connected sets within which you can get from any node back to itself
-        pool = rules[:]
-        pool.sort()  # Sorted list, can use merge, intersection, etc
-        cyclics = []
-        while pool:
-            r1 = pool[0]
-            if r1 not in r1.indirectlyAffects:
-                cyclic = [ r1 ]
-                pool.remove(r1)
-            else:
-                if diag.chatty_flag > 90:
-                    progress("%s indirectly affects %s and is affected by %s" %
-                        (r1, r1.indirectlyAffects, r1.indirectlyAffectedBy))
-                cyclic = intersection(r1.indirectlyAffects, r1.indirectlyAffectedBy)
-                pool = minus(pool, cyclic)
-            cyclics.append(CyclicSetOfRules(cyclic))
-            if diag.chatty_flag > 90:
-                progress("New cyclic: %s" % cyclics[-1])
-            
-
-        # Because the cyclic subsystems contain any loops, we know
-        # there are no cycles between them. Therefore, there is a partial
-        # ordering.  If we order them in that way, then we can resolve each
-        # one just once without violating
-
-        pool = cyclics[:]
-        seq = []
-        while pool:
-            cy = pool[0] #  pick random one
-            seq = partialOrdered(cy, pool) + seq
-
-        if diag.chatty_flag > 10:
-            progress("In order:" + `seq`)
-
-        # TEMPORARY: test that
-        n = len(seq)
-        for i in range(n):
-            for j in range(i-1):
-                if compareCyclics(seq[i], seq[j]) < 0:
-                    raise RuntimeError("Should not be:  %s < %s" %(seq[i], seq[j]))
-
-        # Run the rules
-        total = 0
-        for cy in seq:
-            total += cy.run()
-        if diag.chatty_flag > 9:
-            progress("Grand total %i facts found" % total)
-        return total
+    def schedule(self, thunk):
+        if self.scheduler is not None:
+            self.scheduler.add(thunk)
 
 
     def run(self):
         """Perform task.
         Return number of  new facts"""
-        self.gatherRules(self.ruleFormula)
-        if self.hasMetaRule or not self.repeat:
-            return self.runLaborious()
-        return self.runSmart()
+        return self.runBrilliant()
 
-    def runLaborious(self):
+    def runBrilliant(self):
         """Perform task.
         Return number of  new facts.
-        Start again if new rule mayhave been generated."""
-        grandtotal = 0
-        iterations = 0
-        self.ruleFor = {}
-        needToCheckForRules = 1
-        while 1:
-            if needToCheckForRules:
-                self.gatherRules(self.ruleFormula)
-                needToCheckForRules = 0
-            _total = 0
-            iterations = iterations + 1
-            for rule in self.ruleFor.values():
-                found = rule.once()
-                if (diag.chatty_flag >50):
-                    progress( "Laborious: Found %i new stmts on for rule %s" %
-                                                            (found, rule))
-                _total = _total+found
-                if found and (rule.meta or self.targetContext._closureMode):
-                    needToCheckForRules = 1
-            if diag.chatty_flag > 5: progress(
-                "Total of %i new statements on iteration %i." %
-                    (_total, iterations))
-            if _total == 0: break
-            grandtotal= grandtotal + _total
-            if not self.repeat: break
-        if diag.chatty_flag > 5: progress(
-                "Grand total of %i new statements in %i iterations." %
-                    (grandtotal, iterations))
-        return grandtotal
+        Start again if new rule mayhave been generated.
+        This should be much faster than even runSmart,
+        despite being much simpler"""
+        if self.repeat and self.targetContext is self.workingContext:
+            # We can loop
+            canLoop = True
+        else:
+            canLoop = False
 
+        universals = Set() # self.universals???
+        
+        if "q" not in self.mode:
+            self.gatherRules(self.ruleFormula)
+
+
+        scheduler = self.scheduler
+        if not canLoop:
+            self.scheduler = None
+
+        total = scheduler.run(int.__add__)
+
+        self.scheduler = scheduler
+
+        return total
+        
 
     def gatherRules(self, ruleFormula):
         universals = Set() # @@ self.universals??
-        for s in ruleFormula.statementsMatching(pred=self.store.implies):
-            r = self.ruleFor.get(s, None)
-            if r != None: continue
-            con, pred, subj, obj  = s.quad
-            if (isinstance(subj, Formula)
-                and isinstance(obj, Formula)):
-                v2 = universals | ruleFormula.universals() # Note new variables can be generated
-                r = Rule(self, antecedent=subj, consequent=obj, statement=s,  variables=v2)
-                self.ruleFor[s] = r
-                if r.meta: self.hasMetaRule = 1
-                if (diag.chatty_flag >30):
-                    progress( "Found rule %r for statement %s " % (r, s))
+        v2 = universals
+        RuleInstaller(self, ruleFormula, v2).think()
 
-        for F in ruleFormula.each(pred=self.store.implies, obj=self.store.Truth): #@@ take out when --closure=T ??
+        for F in ruleFormula.each(pred=self.store.type, obj=self.store.Truth): #@@ take out when --closure=T ??
             self.gatherRules(F)  #See test/rules13.n3, test/schema-rules.n3 etc
 
     def gatherQueries(self, ruleFormula):
@@ -328,12 +235,7 @@ class InferenceTask:
             if (isinstance(selectClause, Formula)
                 and isinstance(whereClause, Formula)):
                 v2 = universals | ruleFormula.universals() # Note new variables can be generated
-                r = Rule(self, antecedent=whereClause, consequent=selectClause,
-                                statement=s,  variables=v2)
-                self.ruleFor[s] = r
-                if r.meta: self.hasMetaRule = 1
-                if (diag.chatty_flag >30):
-                    progress( "Found rule %r for statement %s " % (r, s))
+                self.scheduleAttachQuery(whereClause, selectClause, s, v2)
 
     def gatherSparqlQueries(self, ruleFormula):
         "Find the rules in SPARQL"
@@ -359,79 +261,75 @@ class InferenceTask:
                 assert implies_clause is not None, ("where=%s, f=%s" % (where_clause.debugString(), ruleFormula.debugString()))
                 #implies_clause is the head of the rule
                 v2 = ruleFormula.universals().copy()
-                r = Rule(self, antecedent=where_clause, consequent=implies_clause,
-                         statement=where_triple, variables=v2)
-                self.ruleFor[where_triple] = r
-                if r.meta: self.hasMetaRule = 1
-                if (diag.chatty_flag >30):
-                    progress( "Found rule %r for statement %s " % (r, where_triple))
+                self.scheduleAttachQuery(where_clause, implies_clause, where_triple, v2)
 
 
-def partialOrdered(cy1, pool):
-    """Return sequence conforming to the partially order in a set of cyclic subsystems
-    
-    Basially, we find the dependencies of a node and remove them from the pool.
-    Then, any node in the pool can be done earlier, because has no depndency from those done.
-    """
-    seq = []
-    for r1 in cy1:   # @@ did just chose first rule cy[0], but didn't get all
-        for r2 in  r1.affects:
-            if r2 not in cy1:  # An external dependency
-                cy2 = r2.cycle
-                if cy2 in pool:
-                    seq = partialOrdered(cy2, pool) + seq
-    pool.remove(cy1)
-    if diag.chatty_flag > 90: progress("partial topo: %s" % `[cy1] + seq`)
-    return [cy1] + seq
-
-class CyclicSetOfRules:
-    """A set of rules which are connected
-    """
-    def __init__(self, rules):
-        self.rules = rules
-        for r1 in rules:
-            r1.cycle = self
-
-    def __getitem__(self, i):
-        return self.rules[i]
-
-    def __repr__(self):
-        return `self.rules`
-
-    def run(self):
-        "Run a cyclic subset of the rules"
-        if diag.chatty_flag > 20:
-            progress()
-            progress("Running cyclic system %s" % (self))
-        if len(self.rules) == 1:
-            rule = self.rules[0]
-            if not rule.affects.get(rule, 0):
-#               rule.already = None # Suppress recording of previous answers
-                # - no, needed to remove dup bnodes as in test/includes/quant-implies.n3 --think
-                # When Rule.once is smarter about not iterating over things not mentioned elsewhere,
-                # can remove this.
-                return rule.once()
-                
-        agenda = self.rules[:]
-        total = 0
-        for r1 in self.rules:
-            af = r1.affects.keys()
-            af.sort()
-            r1.affectsInCyclic = intersection(self.rules, af)
-        while agenda:
-            rule = agenda[0]
-            agenda = agenda[1:]
-            found = rule.once()
-            if diag.chatty_flag > 20: progress("Rule %s gave %i. Affects:%s." %(
-                        rule, found, rule.affectsInCyclic))
-            if found:
-                total = total + found
-                for r2 in rule.affectsInCyclic:
-                    if r2 not in agenda:
-                        if diag.chatty_flag > 30: progress("...rescheduling", r2)
-                        agenda.append(r2)
-        if diag.chatty_flag > 20: progress("Cyclic subsystem exhausted")
-        return total
+#### TOPO
+#def partialOrdered(cy1, pool):
+#    """Return sequence conforming to the partially order in a set of cyclic subsystems
+#    
+#    Basially, we find the dependencies of a node and remove them from the pool.
+#    Then, any node in the pool can be done earlier, because has no depndency from those done.
+#    """
+#    seq = []
+#    for r1 in cy1:   # @@ did just chose first rule cy[0], but didn't get all
+#        for r2 in  r1.affects:
+#            if r2 not in cy1:  # An external dependency
+#                cy2 = r2.cycle
+#                if cy2 in pool:
+#                    seq = partialOrdered(cy2, pool) + seq
+#    pool.remove(cy1)
+#    if diag.chatty_flag > 90: progress("partial topo: %s" % `[cy1] + seq`)
+#    return [cy1] + seq
+#
+#class CyclicSetOfRules:
+#    """A set of rules which are connected
+#    """
+#    def __init__(self, rules):
+#        self.rules = rules
+#        for r1 in rules:
+#            r1.cycle = self
+#
+#    def __getitem__(self, i):
+#        return self.rules[i]
+#
+#    def __repr__(self):
+#        return `self.rules`
+#
+#    def run(self):
+#        "Run a cyclic subset of the rules"
+#        if diag.chatty_flag > 20:
+#            progress()
+#            progress("Running cyclic system %s" % (self))
+#        if len(self.rules) == 1:
+#            rule = self.rules[0]
+#            if not rule.affects.get(rule, 0):
+##               rule.already = None # Suppress recording of previous answers
+#                # - no, needed to remove dup bnodes as in test/includes/quant-implies.n3 --think
+#                # When Rule.once is smarter about not iterating over things not mentioned elsewhere,
+#                # can remove this.
+#                return rule.once()
+#                
+#        agenda = self.rules[:]
+#        total = 0
+#        for r1 in self.rules:
+#            af = r1.affects.keys()
+#            af.sort()
+#            r1.affectsInCyclic = intersection(self.rules, af)
+#        while agenda:
+#            rule = agenda[0]
+#            agenda = agenda[1:]
+#            found = rule.once()
+#            if diag.chatty_flag > 20: progress("Rule %s gave %i. Affects:%s." %(
+#                        rule, found, rule.affectsInCyclic))
+#            if found:
+#                total = total + found
+#                for r2 in rule.affectsInCyclic:
+#                    if r2 not in agenda:
+#                        if diag.chatty_flag > 30: progress("...rescheduling", r2)
+#                        agenda.append(r2)
+#        if diag.chatty_flag > 20: progress("Cyclic subsystem exhausted")
+#        return total
         
 
 def buildPattern(workingContext, template):
@@ -522,6 +420,25 @@ class Rule:
         for x in variablesMentioned:
             if x not in self.variablesUsed:
                 self.templateExistentials.add(x)
+
+        allVariablesMentioned = self.templateExistentials | self.variablesUsed
+        self.patternsToUnmatched = {}
+        for p in self.unmatched:
+            def replaceWithNil(x):
+                if isinstance(x, Formula) or \
+                   (isinstance(x, List) and hasFormula(x)) or \
+                   x.occurringIn(allVariablesMentioned):
+                    return None
+                return x
+            patternTuple = tuple(replaceWithNil(x) for x in (p[1],
+                                                             p[2],
+                                                             p[3]))
+##            print 'patternTuple is %s, p is %s, vars=%s' % (patternTuple, p[1:], variables)
+            primaryAlpha = p[0].statementsMatching(*patternTuple)
+            primaryAlpha.addConsumer(self)
+            self.patternsToUnmatched.setdefault(primaryAlpha.identity, []).append(p)
+
+        
         if diag.chatty_flag >20:
             progress("New Rule %s ============ looking for:" % `self` )
             for s in self.template.statements: progress("    ", `s`)
@@ -559,6 +476,49 @@ class Rule:
         if diag.chatty_flag > 20:
             progress("Rule try generated %i new statements" % total)
         return total
+
+    def scheduleAddTriple(rule, key, triple):
+        def fireRuleWithTriple():
+            if not triple.context().contains(subj=triple.subject(), pred=triple.predicate(), obj=triple.object()):
+                return 0  # The triple is no longer there
+            return rule.addTriple(key, triple)
+        rule.task.schedule(fireRuleWithTriple)
+
+
+    def addTriple(self, key, triple):
+        """One triple was added to the store. Run the rule on it
+        """
+        possiblesInUnmatched = self.patternsToUnmatched[key]
+        total = 0
+        for pattern in possiblesInUnmatched:
+            for env1, env2 in unify(pattern[1:], triple.quad[1:], vars=self.variablesUsed | self.templateExistentials):
+                if diag.chatty_flag >20:
+                    progress("Trying rule %s on pattern %s, triple %s, env=%s===================" %
+                             (self, pattern, triple.quad, env1) )
+                    progress( setToString(self.unmatched))
+                task = self.task
+                query = Query(self.store,
+                                unmatched = [x for x in self.unmatched if x is not pattern],
+                                template = self.template,
+                                variables = self.variablesUsed.copy(),
+                                existentials = self.templateExistentials.copy(),
+                                workingContext = task.workingContext,
+                                conclusion = self.conclusion,
+                                targetContext = task.targetContext,
+                                already = self.already,
+                              ###
+                                rule = self.statement,
+                              ###
+                                interpretBuiltins = 1,    # (...)
+                                meta = task.workingContext,
+                                mode = task.mode)
+                Formula.resetRenames()
+                subtotal = query.resolve((env1, [triple]))
+                total += subtotal
+                Formula.resetRenames(False)
+                if diag.chatty_flag > 20:
+                    progress("Rule try generated %i new statements" % subtotal)
+        return total                
     
     def __repr__(self):
         if self in self.affects: return "R"+`self.number`+ "*"
@@ -835,9 +795,13 @@ class Query(Formula):
             return
         return
         
-    def resolve(self):
+    def resolve(self, alreadyBound=None):
         if hasattr(self, "noWay"): return 0
-        k = self.matchFormula(self.statements, self.variables, self._existentialVariables)
+        if alreadyBound is not None:
+            env, evidence = alreadyBound
+            k = self.matchFormula(self.statements, self.variables, self._existentialVariables, env, evidence=evidence)
+        else:
+            k = self.matchFormula(self.statements, self.variables, self._existentialVariables)
         if self.justReturn:
             return self.bindingList
         return k
@@ -972,9 +936,12 @@ class Query(Formula):
 
 ##################################################################################
 
-    def matchFormula(query, queue, variables, existentials, env=Env()):
+    def matchFormula(query, queue, variables, existentials, env=Env(), evidence=[]):
         total = 0
-        stack = [Chain_Step(variables, existentials, queue, env)]
+        if env:
+            for i in queue:
+                i.bindNew(env)
+        stack = [Chain_Step(variables, existentials, queue, env, evidence=evidence)]
         while stack:
             if diag.chatty_flag > 150:
                 progress(stack)
@@ -1957,18 +1924,79 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
         return s
 
 
+#### The new scheduler to run rules
+
+class Event(object):
+    def __init__(self, parent, thunk):
+        self.thunk = thunk
+        if parent is not None:
+            parent.child = self
+        self.child = None
+
+    def run(self):
+        return thunk()
+
+class Scheduler(object):
+    def __init__(self):
+        self.current = None
+        self.last = None
+        
+    def add(self, thunk):
+        self.last = Event(self.last, thunk)
+        if self.current is None:
+            self.current = self.last
+
+    def __len__(self):
+        """We just want to know if we are empty"""
+        if self.current is None:
+            return 0
+        return 1
+
+    def next(self):
+        retVal = self.current
+        self.current = self.current.child
+        return retVal.thunk()
+
+    def run(self, func=None):
+        retVal = None
+        while self:
+            if func is None or retVal is None:
+                retVal = self.next()
+            else:
+                retVal = func(retVal, self.next())
+        return retVal
+
+# This should probably be properties and methods of IndexedFormula
+class RuleInstaller(object):
+    def __init__(self, task, ruleSource, variables):
+        self.task = task
+        self.ruleSource = ruleSource
+        self.variables = variables
+
+    def think(self):
+        rules = self.ruleSource.statementsMatching(pred=self.ruleSource.store.implies)
+        rules.addConsumer(self)
+        for rule in rules:
+            self.task.scheduleAttachRule(rule, self.ruleSource, self.variables)
+
+    def scheduleAddTriple(self, ruleList, rule):
+        self.task.scheduleAttachRule(rule, self.ruleSource, self.variables)
+
+        
+
+#### TOPO
 ##############
 # Compare two cyclic subsystem sto see which should be done first
-
-def compareCyclics(self,other):
-    """Note the set indirectly affected is the same for any
-    member of a cyclic subsystem"""
-    if other[0] in self[0].indirectlyAffects:
-        return -1  # Do me earlier
-    if other[0] in self[0].indirectlyAffectedBy:
-        return 1
-    return 0
-        
+#
+#def compareCyclics(self,other):
+#    """Note the set indirectly affected is the same for any
+#    member of a cyclic subsystem"""
+#    if other[0] in self[0].indirectlyAffects:
+#        return -1  # Do me earlier
+#    if other[0] in self[0].indirectlyAffectedBy:
+#
+#    return 0
+#        
 
 
 #############  Substitution functions    

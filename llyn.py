@@ -189,6 +189,22 @@ VARHASH = VARHASH()
 ###  /BCHAIN
 ####
 
+class IndexNode(list):
+    def __init__(self, *args, **keywords):
+        list.__init__(self, *args, **keywords)
+        self.consumers = Set()
+        self.identity = object()
+
+    def append(self, o):
+        list.append(self, o)
+        for consumer in self.consumers:
+#            print '%s is telling the rule %s to run %s' % (self, consumer, o)
+            consumer.scheduleAddTriple(self.identity, o)
+
+    def addConsumer(self, c):
+#        print '%s is adding consumer %s' % (self, c)
+        self.consumers.add(c)
+
 
 ###################################### Forumula
 #
@@ -207,6 +223,7 @@ class IndexedFormula(Formula):
     """
     def __init__(self, store, uri=None):
         Formula.__init__(self, store, uri)
+        self.statements = IndexNode()
 #       self._redirections = {}
         self.descendents = None   # Placeholder for list of closure under subcontext
 #       self.collector = None # Object collecting evidence, if any 
@@ -229,7 +246,7 @@ class IndexedFormula(Formula):
             
         If none, returns []
         """
-        return self._index.get((pred, subj, obj), [])
+        return self._index.setdefault((pred, subj, obj), IndexNode())
 
     def contains(self, pred=None, subj=None, obj=None):
         """Return boolean true iff formula contains statement(s) matching the parts given
@@ -311,7 +328,7 @@ class IndexedFormula(Formula):
         If it is 0 there is no solution to the query, we know now.
         
         In this implementation, we use the length of the sequence to be searched."""
-        res = self._index.get((pred, subj, obj), [])
+        res = self._index.setdefault((pred, subj, obj), IndexNode())
 #        progress("searchable  %s, %s" %(self.statements, (pred, subj, obj))
         return len(res), res
 
@@ -456,34 +473,27 @@ class IndexedFormula(Formula):
 
         self.statements.append(s)
        
-        list = self._index.get((None, None, obj), None)
-        if list is None: self._index[(None, None, obj)]=[s]
-        else: list.append(s)
+        alphaMem = self._index.setdefault((None, None, obj), IndexNode())
+        alphaMem.append(s)
 
-        list = self._index.get((None, subj, None), None)
-        if list is None: self._index[(None, subj, None)]=[s]
-        else: list.append(s)
+        alphaMem = self._index.setdefault((None, subj, None), IndexNode())
+        alphaMem.append(s)
 
-        list = self._index.get((None, subj, obj), None)
-        if list is None: self._index[(None, subj, obj)]=[s]
-        else: list.append(s)
+        alphaMem = self._index.setdefault((None, subj, obj), IndexNode())
+        alphaMem.append(s)
 
-        list = self._index.get((pred, None, None), None)
-        if list is None: self._index[(pred, None, None)]=[s]
-        else: list.append(s)
+        alphaMem = self._index.setdefault((pred, None, None), IndexNode())
+        alphaMem.append(s)
 
         rein = self.newSymbol('http://dig.csail.mit.edu/2005/09/rein/network#requester')
-        list = self._index.get((pred, None, obj), None)
-        if list is None: self._index[(pred, None, obj)]=[s]
-        else: list.append(s)
+        alphaMem = self._index.setdefault((pred, None, obj), IndexNode())
+        alphaMem.append(s)
 
-        list = self._index.get((pred, subj, None), None)
-        if list is None: self._index[(pred, subj, None)]=[s]
-        else: list.append(s)
+        alphaMem = self._index.setdefault((pred, subj, None), IndexNode())
+        alphaMem.append(s)
 
-        list = self._index.get((pred, subj, obj), None)
-        if list is None: self._index[(pred, subj, obj)]=[s]
-        else: list.append(s)
+        alphaMem = self._index.setdefault((pred, subj, obj), IndexNode())
+        alphaMem.append(s)
 
         if self._closureMode != "":
             self.checkClosure(subj, pred, obj)

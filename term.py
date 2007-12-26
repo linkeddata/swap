@@ -508,6 +508,10 @@ class Fragment(LabelledNode):
 
                 
 nextId = 0
+def updateEpoch():
+    global nextId
+    nextId = (((nextId // 10000) + 1) * 10000)
+
 class AnonymousNode(Node):
     """Has no real URI except when needed for output.
     Goal is to eliminate use of ths URI in the code.
@@ -1033,57 +1037,7 @@ def unifySet(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
     return res
 
 
-def betterUnifySet(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
-    """We need to be smarter about this
 
-    there are the following catagories :
-        atoms
-        variable atoms
-        lists of only lists and atoms (recursive)
-        lists of only lists and atoms (recursive), some of which may be variables
-        lists containing sets
-        sets
-
-    in about that order of difficulty. Can we use this?
-    strategy: Usually, we will only have a set of triples (of ... )
-        remove all ground ones. Match those directly off the bat (note: a ground set is NOT good enough!)
-            This is looking complex
-        look at all simple ones, generating binding possibilities
-        then deal with sets
-    """
-    def all_list(l, vars):
-        m = True
-        n = True
-        for k in l:
-            if isinstance(k, list_type):
-                m_, n_ = all_list(k, vars)
-                m = m and m_
-                n = n and n_
-            if isinstance(k, set_type):
-                return False, False
-            if k in vars:
-                n = False
-        return m, n
-    atoms = Set()
-    trivials = Set()
-    someSubstitutionNeeded = Set()
-    hard = Set()
-    for s in self:
-        if isinstance(s, atom):
-            atoms.add(s)
-        elif isinstance(s, list_type):
-            lists, grounded = all_list(s, vars)
-            if lists and grounded:
-                trivials.add(s)
-            elif lists:
-                someSubstitutionNeeded.add(s)
-            else:
-                hard.add(s)
-        else:
-            hard.add(s)
-    #@@@todo atoms
-    ##
-    ## Now lists
     
 def matchSet(pattern, kb, vars=Set([]),  bindings={}):
     """Utility routine to match 2 python sets of things.
@@ -1134,20 +1088,6 @@ class ListView(object):
     def __len__(self):
         return len(self.list) - self.start
             
-def unify(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
-    """Unify something whatever it is
-    See Term.unify
-    """
-    if diag.chatty_flag > 100: progress("Unifying %s with %s" %(self, other))
-    if isinstance(self, (Set, ImmutableSet)):
-        return unifySet(self, other, vars, existentials, bindings)
-    if type(self) is type([]):
-        return unifySequence(self, other, vars, existentials, bindings)
-    k = self.unify(other, vars, existentials, bindings)
-    if k == 0:
-        raise RuntimeError(other, other.__class__)
-    return k
-
 def pickEnv(choice, *envs):
     for env in envs:
         if choice is env.id:
