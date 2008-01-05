@@ -116,7 +116,7 @@ doc:persistencePolicy
 
 ########## Properties of the ConactLocation
 
-:address a rdf:Property, owl:FunctionalProperty, owl:InnverseFunctionalProperty;
+:address a rdf:Property, owl:FunctionalProperty, owl:InverseFunctionalProperty;
     rdfs:domain :ContactLocation; rdfs:range :Address;
     rdfs:label "address"@en .
 

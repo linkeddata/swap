@@ -37,7 +37,7 @@ include $(UMLP)/XSLTPROC.mak
 .n3.rdf:
 	$(PYTHON) $(CWM) $< --rdf >$@
 
-all: travelFig.rdf ical
+all: travelFig.rdf ical contact.rdf
 
 travelFig.rdf: travelFig.xml
 

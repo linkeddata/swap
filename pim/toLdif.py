@@ -91,7 +91,6 @@ def wr(buf):
 
 def backslashEncode(val):
     text = val.encode('ascii') # Just check
-    # @@TODO: wrap at 75 cols
     for c in ('\\'):  # cal: ('\\', ';', ',')
         text = text.replace(c, "\\"+c)
     text = text.replace('\n', "\\n")

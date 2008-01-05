@@ -101,7 +101,7 @@
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#address">
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InnverseFunctionalProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
         <domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#ContactLocation"/>
         <label xml:lang="en">address</label>
         <range rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Address"/>

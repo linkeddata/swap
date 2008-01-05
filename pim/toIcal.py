@@ -73,6 +73,7 @@ class CalWr:
         """
 
         for cal in sts.each(pred = RDF.type, obj = ICAL.Vcalendar):
+	    progress('Calendar:')
             self.doComponent(sts, cal, "VCALENDAR", iCalendarDefs)
 
 
@@ -378,7 +379,7 @@ def tzid(tzi):
 
 
 import sys, os
-import uripath
+from swap import uripath
 
 def usage():
     print __doc__
@@ -427,7 +428,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.39  2007-02-20 14:49:24  timbl
+# Revision 2.40  2008-01-05 21:42:37  timbl
+# qif directory was blocking qif ontology on website
+#
+# Revision 2.39  2007/02/20 14:49:24  timbl
 # from swap.* import
 #
 # Revision 2.38  2006/10/09 13:32:20  connolly
