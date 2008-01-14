@@ -30,6 +30,8 @@
 { ?seq a Sequence } => { ?seq a SequenceTail }.
 { ?seq a SequenceTail; rdf:rest ?s2 } => { ?s2 a SequenceTail }.
 
+################
+
 # Literal are referenced but no labels for LHS  @@ escaped
 
 { ?seq a SequenceTail; rdf:first ?x.
@@ -76,11 +78,12 @@ bnf:eof  reference "EOF".
 ("\t\t|\t" ?seqlab "\n" ) string:concatenation ?para
 } => {(?lab 5) log:outputString ?para}.
 
+##########################  Regular expressions
 
 { 	[] a Production;
 	   bnf:label ?lab;
 	   bnf:matches ?regexp.
-	( "\t'" ?regexp "'\n") string:concatenation ?regpara.
+	( "\t" ?regexp "\n") string:concatenation ?regpara.
 }=>{
 	(?lab 6) log:outputString ?regpara.
 	

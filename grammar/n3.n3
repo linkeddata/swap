@@ -300,10 +300,16 @@ string		cfg:matches		"(\"\"\"[^\"\\\\]*(?:(?:\\\\.|\"(?!\"\"))[^\"\\\\]*)*\"\"\"
 	( ?y "_s" ) string:concatenation ?str } => { ?x cfg:label ?str }.
 
 { ?x cfg:commaSeparatedPeriodTerminatedListOf [ cfg:label ?y].
+	( ?y "_csptl" ) string:concatenation ?str } => { ?x cfg:label ?str }.
+
+{ ?x cfg:commaSeparatedListOf [ cfg:label ?y].
 	( ?y "_csl" ) string:concatenation ?str } => { ?x cfg:label ?str }.
 
 { ?x cfg:CSLTail [ cfg:label ?y].
-	( ?y "_necsl" ) string:concatenation ?str } => { ?x cfg:label ?str }.
+	( ?y "_csptl_tail" ) string:concatenation ?str } => { ?x cfg:label ?str }.
+
+{ ?x cfg:CSLTail2 [ cfg:label ?y].
+	( ?y "_csl_tail" ) string:concatenation ?str } => { ?x cfg:label ?str }.
 
 
 #ends
