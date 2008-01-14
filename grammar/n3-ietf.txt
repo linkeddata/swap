@@ -1,0 +1,65 @@
+barename ::=	'[A-Z_a-zÀ-ÖØ-öø-˿Ͱ-ͽͿ-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿][\-0-9A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿-⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿]*'
+boolean ::=		|	 "@false" 
+		|	 "@true" 
+decimal ::=	'[-+]?[0-9]+(\.[0-9]+)?'
+declaration ::=		|	 "@base"  explicituri
+		|	 "@prefix"  prefix explicituri
+document ::=		|	statements_optional EOF
+double ::=	'[-+]?[0-9]+(\.[0-9]+)?([eE][-+]?[0-9]+)'
+dtlang ::=		|	 "@"  langcode
+		|	 "^^"  symbol
+		|	void
+existential ::=explicituri ::=	'<[^>]*>'
+expression ::=		|	pathitem pathtail
+formulacontent ::=		|	statementlist
+integer ::=	'[-+]?[0-9]+'
+langcode ::=	'[a-z]+(-[a-z0-9]+)*'
+literal ::=		|	string dtlang
+numericliteral ::=		|	decimal
+		|	double
+		|	integer
+object ::=		|	expression
+objecttail ::=		|	 ","  object objecttail
+		|	void
+pathitem ::=		|	 "("  pathlist  ")" 
+		|	 "["  propertylist  "]" 
+		|	 "{"  formulacontent  "}" 
+		|	boolean
+		|	literal
+		|	numericliteral
+		|	quickvariable
+		|	symbol
+pathlist ::=		|	expression pathlist
+		|	void
+pathtail ::=		|	 "!"  expression
+		|	 "^"  expression
+		|	void
+prefix ::=	'([A-Z_a-zÀ-ÖØ-öø-˿Ͱ-ͽͿ-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿][\-0-9A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿-⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿]*)?:'
+propertylist ::=		|	verb object objecttail propertylisttail
+		|	void
+propertylisttail ::=		|	 ";"  propertylist
+		|	void
+qname ::=	'(([A-Z_a-zÀ-ÖØ-öø-˿Ͱ-ͽͿ-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿][\-0-9A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿-⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿]*)?:)?[A-Z_a-zÀ-ÖØ-öø-˿Ͱ-ͽͿ-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿][\-0-9A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿-⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿]*'
+quickvariable ::=	'\?[A-Z_a-zÀ-ÖØ-öø-˿Ͱ-ͽͿ-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿][\-0-9A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿-⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿]*'
+simpleStatement ::=		|	subject propertylist
+statement ::=		|	declaration
+		|	existential
+		|	simpleStatement
+		|	universal
+statementlist ::=		|	statement statementtail
+		|	void
+statements_optional ::=		|	statement  "."  statements_optional
+		|	void
+statementtail ::=		|	 "."  statementlist
+		|	void
+string ::=	'("""[^"\\]*(?:(?:\\.|"(?!""))[^"\\]*)*""")|("[^"\\]*(?:\\.[^"\\]*)*")'
+subject ::=		|	expression
+symbol ::=		|	explicituri
+		|	qname
+universal ::=verb ::=		|	 "<=" 
+		|	 "=" 
+		|	 "=>" 
+		|	 "@a" 
+		|	 "@has"  expression
+		|	 "@is"  expression  "@of" 
+		|	expression
