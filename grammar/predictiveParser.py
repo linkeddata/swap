@@ -57,7 +57,17 @@ from codecs import utf_8_encode
 BNF = Namespace("http://www.w3.org/2000/10/swap/grammar/bnf#")
 RDF = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
 REGEX = Namespace("http://www.w3.org/2000/10/swap/grammar/regex#")
-    
+
+#  There is a problem that 16-bit-character builds of python can't deal with
+#  our regexps
+
+wide_build = (len(u"\U00012345") == 1)
+def smartCompile(pattern, flags=0):
+    if not wide_build:
+        pattern = pattern.replace(u"\U00010000-\U000effff", u"\ud800-\udb7f\udc00-\udfff")
+    return re.compile(pattern, flags)
+
+
 
 branchTable = {}
 tokenRegexps = {}
@@ -117,7 +127,7 @@ def yaccProduction(yacc, lhs,  tokenRegexps):
     rhs = g.the(pred=BNF.matches, subj=lhs)
     if rhs != None:
         if chatty_flag: progress( "\nToken %s matches regexp %s" %(lhs, rhs))
-#       tokenRegexps[lhs] = re.compile(rhs.value())
+#       tokenRegexps[lhs] = smartCompile(rhs.value())
         return
     rhs = g.the(pred=BNF.mustBeOneSequence, subj=lhs)
     if rhs == None:
@@ -166,7 +176,7 @@ def doProduction(lhs):
     if rhs != None:
         if chatty_flag: progress( "\nToken %s matches regexp %s" %(lhs, rhs))
         try:
-            tokenRegexps[lhs] = re.compile(rhs.value(), re.U)
+            tokenRegexps[lhs] = smartCompile(rhs.value(), re.U)
         except:
             print rhs.value().encode('utf-8')
             raise
@@ -179,7 +189,7 @@ def doProduction(lhs):
         import regex
         rhs = regex.makeRegex(g, lhs)
         try:
-            tokenRegexps[lhs] = re.compile(rhs, re.U)
+            tokenRegexps[lhs] = smartCompile(rhs, re.U)
         except:
             print rhs
             raise
@@ -237,7 +247,7 @@ def doProduction(lhs):
 
 ######################### Parser based on the RDF Context-free grammar
 
-whiteSpace = re.compile(ur'[ \t]*((#[^\n]*)?\r?\n)?')
+whiteSpace = smartCompile(ur'[ \t]*((#[^\n]*)?\r?\n)?')
 singleCharacterSelectors = u"\t\r\n !\"#$%&'()*.,+/;<=>?[\\]^`{|}~"
 notQNameChars = singleCharacterSelectors + "@"  # Assume anything else valid qname :-/
 notNameChars = notQNameChars + ":"  # Assume anything else valid name :-/
