@@ -3,7 +3,7 @@
 SWAP=..
 P=python
 C=$(SWAP)/cwm.py
-CG=PYTHONPATH=$(SWAP) python predictiveParser.py
+CG=PYTHONPATH=$(SWAP)/.. python predictiveParser.py
 
 
 .SUFFIXES: .rdf .n3
@@ -18,7 +18,7 @@ all : n3-checked.txt n3-report.html n3.rdf \
 #  N3 Full:
 
 .n3.rdf:
-	python $(SWAP)/cwm.py --n3 $< --rdf  > $@
+	python $(SWAP)/cwm.py --n3 $< --data --quiet --rdf  > $@
 
 n3-yacc.c : n3-selectors.n3-yacc.y
 	yacc -o $@ n3-selectors.n3-yacc.y
@@ -42,8 +42,11 @@ n3-report.big:  n3.n3 bnf2html.n3
 n3-report.html : n3-report.big
 	time $P $C  n3-report.big --strings > $@
 
+n3-ietf.txt : n3.n3 bnf2ietf.n3
+	time $P $C n3.n3 bnf2ietf.n3 --chatty=21 --think --data --strings > $@
+
 n3.rdf : n3.n3 
-	$C --n3 n3.n3  --rdf > $@
+	$C --n3 n3.n3  --data --quiet --rdf > $@
 
 # N3-RDF
 
