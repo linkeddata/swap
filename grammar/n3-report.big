@@ -1,10 +1,3 @@
-#Processed by Id: cwm.py,v 1.183 2006/01/13 14:48:54 syosi Exp 
-        #    using base file:/devel/WWW/2000/10/swap/grammar/
-        
-#  Notation3 generation by
-#       notation3.py,v 1.187 2006/01/13 14:48:54 syosi Exp
-
-#   Base was: file:/devel/WWW/2000/10/swap/grammar/
      @prefix : <http://www.w3.org/2000/10/swap/grammar/n3#> .
     @prefix cfg: <http://www.w3.org/2000/10/swap/grammar/bnf#> .
     @prefix h: <http://www.w3.org/2000/10/swap/grammar/bnf2html#> .
@@ -39,6 +32,8 @@
     "@"     h:reference """<b><code>"@"</code></b>""" .
     
     "@a"     h:reference """<b><code>"@a"</code></b>""" .
+    
+    "@base"     h:reference """<b><code>"@base"</code></b>""" .
     
     "@false"     h:reference """<b><code>"@false"</code></b>""" .
     
@@ -89,7 +84,7 @@
          h:seqlabel """<b><code>")"</code></b>""" .
       ( ","
         :barename
-        <#_g5> )
+        <#_g3> )
          a h:Sequence,
                 h:SequenceTail .
       ( ","
@@ -100,12 +95,12 @@
          h:seqlabel """<b><code>","</code></b> <a href='#object'>object</a> <a href='#objecttail'>objecttail</a>""" .
       ( ","
         :symbol
-        <#_g3> )
+        <#_g4> )
          a h:Sequence,
                 h:SequenceTail .
       ( ","
         :symbol
-        <#_g4> )
+        <#_g5> )
          a h:Sequence,
                 h:SequenceTail .
       ( "."
@@ -158,6 +153,11 @@
          a h:Sequence,
                 h:SequenceTail;
          h:seqlabel """<b><code>"@a"</code></b>""" .
+      ( "@base"
+        :explicituri )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel """<b><code>"@base"</code></b> <a href='#explicituri'>explicituri</a>""" .
       ( "@false" )
          a h:Sequence,
                 h:SequenceTail;
@@ -258,7 +258,9 @@
 """ .
       ( "declaration"
         5 )
-         log:outputString """		<p><b><code>"@prefix"</code></b> <a href='#prefix'>prefix</a> <a href='#explicituri'>explicituri</a></p>
+         log:outputString """		<p><b><code>"@base"</code></b> <a href='#explicituri'>explicituri</a></p>
+""",
+                """		<p><b><code>"@prefix"</code></b> <a href='#prefix'>prefix</a> <a href='#explicituri'>explicituri</a></p>
 """ .
       ( "declaration"
         9 )
@@ -672,7 +674,7 @@
          a h:SequenceTail;
          h:seqlabel "<em>EOF</em>" .
       ( :barename
-        <#_g5> )
+        <#_g3> )
          a h:Sequence,
                 h:SequenceTail .
       ( :boolean )
@@ -828,11 +830,11 @@
                 h:SequenceTail;
          h:seqlabel "<a href='#subject'>subject</a> <a href='#propertylist'>propertylist</a>" .
       ( :symbol
-        <#_g3> )
+        <#_g4> )
          a h:Sequence,
                 h:SequenceTail .
       ( :symbol
-        <#_g4> )
+        <#_g5> )
          a h:Sequence,
                 h:SequenceTail .
       ( :symbol )
@@ -869,6 +871,8 @@
     cfg:eof     h:reference "<em>EOF</em>" .
     
     :barename     a h:Production;
+         cfg:canStartWith "_",
+                "a";
          cfg:label "barename";
          cfg:matches "[A-Z_a-zÀ-ÖØ-öø-˿Ͱ-ͽͿ-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿][\\-0-9A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿-⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿]*";
          h:reference "<a href='#barename'>barename</a>" .
@@ -905,6 +909,9 @@
     
     :declaration     a h:Production;
          cfg:canBeSequence  (
+        "@base"
+        :explicituri ),
+                 (
         "@keywords"
         <#_g2> ),
                  (
@@ -914,6 +921,9 @@
          cfg:label "declaration";
          cfg:mustBeOneSequence  (
          (
+            "@base"
+            :explicituri )
+         (
             "@prefix"
             :prefix
             :explicituri )
@@ -921,6 +931,17 @@
             "@keywords"
             <#_g2> ) );
          h:optionTail (),
+                 (
+         (
+            "@base"
+            :explicituri )
+         (
+            "@prefix"
+            :prefix
+            :explicituri )
+         (
+            "@keywords"
+            <#_g2> ) ),
                  (
          (
             "@keywords"
@@ -1762,23 +1783,23 @@
          cfg:canBeSequence (),
                  (
         :symbol
-        <#_g3> );
+        <#_g5> );
          cfg:commaSeparatedListOf :symbol;
          cfg:mustBeOneSequence  (
         ()
          (
             :symbol
-            <#_g3> ) );
+            <#_g5> ) );
          h:optionTail (),
                  (
         ()
          (
             :symbol
-            <#_g3> ) ),
+            <#_g5> ) ),
                  (
          (
             :symbol
-            <#_g3> ) ) .
+            <#_g5> ) ) .
     
     <#_g1>     a h:Production;
          cfg:canBeSequence (),
@@ -1806,48 +1827,48 @@
          cfg:canBeSequence (),
                  (
         :barename
-        <#_g5> );
+        <#_g3> );
          cfg:commaSeparatedListOf :barename;
          cfg:mustBeOneSequence  (
         ()
          (
             :barename
-            <#_g5> ) );
+            <#_g3> ) );
          h:optionTail (),
                  (
         ()
          (
             :barename
-            <#_g5> ) ),
+            <#_g3> ) ),
                  (
          (
             :barename
-            <#_g5> ) ) .
+            <#_g3> ) ) .
     
     <#_g3>     a h:Production;
-         cfg:CSLTail2 :symbol;
+         cfg:CSLTail2 :barename;
          cfg:canBeSequence (),
                  (
         ","
-        :symbol
+        :barename
         <#_g3> );
          cfg:mustBeOneSequence  (
         ()
          (
             ","
-            :symbol
+            :barename
             <#_g3> ) );
          h:optionTail (),
                  (
         ()
          (
             ","
-            :symbol
+            :barename
             <#_g3> ) ),
                  (
          (
             ","
-            :symbol
+            :barename
             <#_g3> ) ) .
     
     <#_g4>     a h:Production;
@@ -1877,29 +1898,28 @@
             <#_g4> ) ) .
     
     <#_g5>     a h:Production;
-         cfg:CSLTail2 :barename;
+         cfg:CSLTail2 :symbol;
          cfg:canBeSequence (),
                  (
         ","
-        :barename
+        :symbol
         <#_g5> );
          cfg:mustBeOneSequence  (
         ()
          (
             ","
-            :barename
+            :symbol
             <#_g5> ) );
          h:optionTail (),
                  (
         ()
          (
             ","
-            :barename
+            :symbol
             <#_g5> ) ),
                  (
          (
             ","
-            :barename
+            :symbol
             <#_g5> ) ) .
     
-#ENDS
