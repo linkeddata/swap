@@ -25,25 +25,25 @@ n3-yacc.c : n3-selectors.n3-yacc.y
 
 n3-selectors.n3-yacc.y : n3-selectors.n3
 
-n3-checked.txt: n3-selectors.n3
+n3-checked.txt: n3-selectors.n3 n3.n3
 	$(CG) --grammar=n3-selectors.n3 \
 		--as=http://www.w3.org/2000/10/swap/grammar/n3#document \
 		--parse=n3.n3 && touch $@
 
-n3-selectors.n3 : n3.n3 bnf-rules.n3
-	time $P $C n3.n3 bnf-rules.n3 --think --purge --data --quiet > $@
+n3-selectors.n3 : n3.n3 cfg2bnf.n3 bnf-rules.n3
+	time $P $C n3.n3 cfg2bnf.n3 bnf-rules.n3 --think --purge --data --quiet > $@
 
 n3-i18n-selectors.n3 : n3-re.n3 bnf-rules.n3
 	time $P $C n3-re.n3 bnf-rules.n3 --think --purge --data --quiet > $@
 
-n3-report.big:  n3.n3 bnf2html.n3
-	time $P $C n3.n3 bnf2html.n3 --chatty=21 --think --data --quiet > $@
+n3-report.big:  n3.n3 bnf2html.n3 cfg2bnf.n3
+	time $P $C n3.n3 cfg2bnf.n3 bnf2html.n3 --chatty=21 --think --data --quiet > $@
 
 n3-report.html : n3-report.big
 	time $P $C  n3-report.big --strings > $@
 
-n3-ietf.txt : n3-kludge.n3 bnf2ietf.n3
-	time $P $C ,n3-kludge.n3 bnf2ietf.n3 --chatty=21 --think --strings > $@
+n3-ietf.txt : ,n3-kludge.n3  cfg2bnf.n3 bnf2ietf.n3
+	time $P $C ,n3-kludge.n3  cfg2bnf.n3 bnf2ietf.n3 --chatty=21 --think --strings > $@
 
 ,n3-kludge.n3: n3.n3
 	sed -e 's/\\[uU]/#x/g' < n3.n3 > ,n3-kludge.n3

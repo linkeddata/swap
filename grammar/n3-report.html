@@ -13,6 +13,14 @@
   <dt><a name='barename'>barename</a></dt><dd>
 	<p><em>[A-Z_a-zÀ-ÖØ-öø-˿Ͱ-ͽͿ-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿][\-0-9A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿-⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿]*</em></p>
 	</dd>
+  <dt><a name='barename_csl'>barename_csl</a></dt><dd>
+		<p><a href='#barename'>barename</a> <a href='#barename_csl_tail'>barename_csl_tail</a></p>
+		<p><em>void</em></p>
+	</dd>
+  <dt><a name='barename_csl_tail'>barename_csl_tail</a></dt><dd>
+		<p><b><code>","</code></b> <a href='#barename'>barename</a> <a href='#barename_csl_tail'>barename_csl_tail</a></p>
+		<p><em>void</em></p>
+	</dd>
   <dt><a name='boolean'>boolean</a></dt><dd>
 		<p><b><code>"@false"</code></b></p>
 		<p><b><code>"@true"</code></b></p>
@@ -22,6 +30,7 @@
 	</dd>
   <dt><a name='declaration'>declaration</a></dt><dd>
 		<p><b><code>"@base"</code></b> <a href='#explicituri'>explicituri</a></p>
+		<p><b><code>"@keywords"</code></b> <a href='#barename_csl'>barename_csl</a></p>
 		<p><b><code>"@prefix"</code></b> <a href='#prefix'>prefix</a> <a href='#explicituri'>explicituri</a></p>
 	</dd>
   <dt><a name='document'>document</a></dt><dd>
@@ -36,6 +45,7 @@
 		<p><em>void</em></p>
 	</dd>
   <dt><a name='existential'>existential</a></dt><dd>
+		<p><b><code>"@forSome"</code></b> <a href='#symbol_csl'>symbol_csl</a></p>
 	</dd>
   <dt><a name='explicituri'>explicituri</a></dt><dd>
 	<p><em><[^>]*></em></p>
@@ -134,7 +144,16 @@
 		<p><a href='#explicituri'>explicituri</a></p>
 		<p><a href='#qname'>qname</a></p>
 	</dd>
+  <dt><a name='symbol_csl'>symbol_csl</a></dt><dd>
+		<p><a href='#symbol'>symbol</a> <a href='#symbol_csl_tail'>symbol_csl_tail</a></p>
+		<p><em>void</em></p>
+	</dd>
+  <dt><a name='symbol_csl_tail'>symbol_csl_tail</a></dt><dd>
+		<p><b><code>","</code></b> <a href='#symbol'>symbol</a> <a href='#symbol_csl_tail'>symbol_csl_tail</a></p>
+		<p><em>void</em></p>
+	</dd>
   <dt><a name='universal'>universal</a></dt><dd>
+		<p><b><code>"@forAll"</code></b> <a href='#symbol_csl'>symbol_csl</a></p>
 	</dd>
   <dt><a name='verb'>verb</a></dt><dd>
 		<p><a href='#expression'>expression</a></p>

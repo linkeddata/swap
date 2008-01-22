@@ -30,10 +30,9 @@
 #  (possible ending characters of one and beginning characters overlap)
 #
 
-<> cfg:syntaxFor [ cfg:internetMediaType 
-		<http://www.w3.org/2003/mediatypes#application/n3>].
+#<> cfg:syntaxFor [ cfg:internetMediaType 
+#		<http://www.w3.org/2003/mediatypes/text/n3>].
 
-# <> rdfsem:semanticsFor ""   .....
 
 # __________________________________________________________________
 #
@@ -107,7 +106,7 @@ simpleStatement cfg:mustBeOneSequence(( subject propertylist )).
 
 propertylist cfg:mustBeOneSequence (
 		( )
-		( verb  object objecttail propertylisttail )
+		( predicate  object objecttail propertylisttail )
 	).
 
 propertylisttail cfg:mustBeOneSequence (
@@ -122,7 +121,7 @@ objecttail cfg:mustBeOneSequence (
 	).
 
 
-verb cfg:mustBeOneSequence (
+predicate cfg:mustBeOneSequence (
 		( expression )
 		( "@has" expression )
 		( "@is" expression "@of" )
@@ -175,9 +174,13 @@ symbol cfg:mustBeOneSequence (
 
 numericliteral cfg:mustBeOneSequence (
           ( integer )
+          ( rational )
           ( double )
           ( decimal )
 ) .
+
+rational cfg:mustBeOneSequence (( integer "/" unsignedint)).
+
 
 literal cfg:mustBeOneSequence(( string dtlang)).
 
@@ -194,6 +197,8 @@ dtlang cfg:mustBeOneSequence(  ()  ("@" langcode)  ("^^" symbol)).
 # 
 integer 	cfg:matches	"""[-+]?[0-9]+""";
 		cfg:canStartWith 	"0", "-", "+".
+unsignedint 	cfg:matches	"""[0-9]+""";
+		cfg:canStartWith 	"0".
 double	cfg:matches	"""[-+]?[0-9]+(\\.[0-9]+)?([eE][-+]?[0-9]+)""";
 		cfg:canStartWith 	"0", "-", "+".
 decimal	cfg:matches	"""[-+]?[0-9]+(\\.[0-9]+)?""";
@@ -244,72 +249,13 @@ langcode	cfg:matches  	"[a-z]+(-[a-z0-9]+)*"; # http://www.w3.org/TR/rdf-testcas
 # 	>>> print notation3.stringToN3(tokenize.Double)
 # 	"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\""
 # After that we have to prefix with one or three opening \"  which
-# the python regexp doesn't have them.
+# the python regexp doesn't have.
 #
 # string3		cfg:matches		"\"\"\"[^\"\\\\]*(?:(?:\\\\.|\"(?!\"\"))[^\"\\\\]*)*\"\"\"".
 # string1		cfg:matches		"\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"".
 
 string		cfg:matches		"(\"\"\"[^\"\\\\]*(?:(?:\\\\.|\"(?!\"\"))[^\"\\\\]*)*\"\"\")|(\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\")";
 		cfg:canStartWith 	"\"".
-
-#____________________________________________________
-
-#  Axioms reducing the shortcut CFG terms to cfg:musBeOneSequence.
-
-{ ?x cfg:zeroOrMore ?y } => {?x cfg:mustBeOneSequence ( () (?y ?x) ) }.
-
-
-{ ?x cfg:commaSeparatedPeriodTerminatedListOf ?y } =>
-{
-	?x cfg:mustBeOneSequence (
-		( "." )
-		( ?y [cfg:CSLTail ?y]  )
-	)
-}.
-
-{ ?x cfg:CSLTail ?y } =>
-{
-	?x cfg:mustBeOneSequence (
-		( "." )
-		( "," ?y ?x )
-	)
-}.
-
-# Without the period
-
-{ ?x cfg:commaSeparatedListOf ?y } =>
-{
-	?x cfg:mustBeOneSequence (
-		(  )
-		( ?y [cfg:CSLTail2 ?y]  )
-	)
-}.
-
-{ ?x cfg:CSLTail2 ?y } =>
-{
-	?x cfg:mustBeOneSequence (
-		( )
-		( "," ?y ?x )
-	)
-}.
-
-
-#  labelling of things which do not have explicit URIs:
-
-{ ?x cfg:zeroOrMore [ cfg:label ?y].
-	( ?y "_s" ) string:concatenation ?str } => { ?x cfg:label ?str }.
-
-{ ?x cfg:commaSeparatedPeriodTerminatedListOf [ cfg:label ?y].
-	( ?y "_csptl" ) string:concatenation ?str } => { ?x cfg:label ?str }.
-
-{ ?x cfg:commaSeparatedListOf [ cfg:label ?y].
-	( ?y "_csl" ) string:concatenation ?str } => { ?x cfg:label ?str }.
-
-{ ?x cfg:CSLTail [ cfg:label ?y].
-	( ?y "_csptl_tail" ) string:concatenation ?str } => { ?x cfg:label ?str }.
-
-{ ?x cfg:CSLTail2 [ cfg:label ?y].
-	( ?y "_csl_tail" ) string:concatenation ?str } => { ?x cfg:label ?str }.
 
 
 #ends

@@ -1,15 +1,21 @@
 barename ::=	[A-Z_a-z#x00c0-#x00d6#x00d8-#x00f6#x00f8-#x02ff#x0370-#x037d#x037f-#x1fff#x200c-#x200d#x2070-#x218f#x2c00-#x2fef#x3001-#xd7ff#xf900-#xfdcf#xfdf0-#xfffd#x00010000-#x000effff][\-0-9A-Z_a-z#x00b7#x00c0-#x00d6#x00d8-#x00f6#x00f8-#x037d#x037f-#x1fff#x200c-#x200d#x203f-#x2040#x2070-#x218f#x2c00-#x2fef#x3001-#xd7ff#xf900-#xfdcf#xfdf0-#xfffd#x00010000-#x000effff]*
+barename_csl ::=		|	barename barename_csl_tail
+		|	void
+barename_csl_tail ::=		|	 ","  barename barename_csl_tail
+		|	void
 boolean ::=		|	 "@false" 
 		|	 "@true" 
 decimal ::=	[-+]?[0-9]+(\.[0-9]+)?
 declaration ::=		|	 "@base"  explicituri
+		|	 "@keywords"  barename_csl
 		|	 "@prefix"  prefix explicituri
 document ::=		|	statements_optional EOF
 double ::=	[-+]?[0-9]+(\.[0-9]+)?([eE][-+]?[0-9]+)
 dtlang ::=		|	 "@"  langcode
 		|	 "^^"  symbol
 		|	void
-existential ::=explicituri ::=	<[^>]*>
+existential ::=		|	 "@forSome"  symbol_csl
+explicituri ::=	<[^>]*>
 expression ::=		|	pathitem pathtail
 formulacontent ::=		|	statementlist
 integer ::=	[-+]?[0-9]+
@@ -56,7 +62,12 @@ string ::=	("""[^"\\]*(?:(?:\\.|"(?!""))[^"\\]*)*""")|("[^"\\]*(?:\\.[^"\\]*)*")
 subject ::=		|	expression
 symbol ::=		|	explicituri
 		|	qname
-universal ::=verb ::=		|	 "<=" 
+symbol_csl ::=		|	symbol symbol_csl_tail
+		|	void
+symbol_csl_tail ::=		|	 ","  symbol symbol_csl_tail
+		|	void
+universal ::=		|	 "@forAll"  symbol_csl
+verb ::=		|	 "<=" 
 		|	 "=" 
 		|	 "=>" 
 		|	 "@a" 

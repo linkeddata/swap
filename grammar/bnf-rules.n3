@@ -14,24 +14,19 @@
 @prefix string: <http://www.w3.org/2000/10/swap/string#>.
 @keywords a, is, of.
 
+
+<> rdfs:comment
+
+"""This set of rules process a BNF graph in its basic
+cfg:mustBeOneOf BNF form and create the branching tables to drive a 
+predictive parser.
+
+See also cfg2bnf.n3 which expands the shothand ontology into the basic
+BNF terms.
+""".
+
 #_____________________________________
 
-# Shorthand expansion into BNF
-
-#{ ?x bnf:zeroOrMore ?y } => {
-#    ?x bnf:mustBeOneSequence (
-##		( )
-#		( ?y ?x )
-#	) 
-#}.
-#
-#{ ?x bnf:mustBe ?y } => {?x bnf:mustBeOneSequence ((?y))}.
-#
-# Axioms relating the definite (open world) form to the indefinte (closed world) 
-#(better words?) form:
-#
-#{ ?x bnf:mustBe ?y } => { ?x bnf:mustBeOneSequence (( ?y )) }.
-#
 
 # Enumerate options:
 
