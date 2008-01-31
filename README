@@ -13,7 +13,7 @@ To find out more about Cwm, visit
 == Getting Started ==
 
 Unpack this tarball in a useful place. cd to that directory and type:
-  cd test; make
+  cd test; make post-install
 at the command line. It should spend a while testing to make sure
 the program is working.
 
