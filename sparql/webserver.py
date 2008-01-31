@@ -54,6 +54,7 @@ class SPARQL_request_handler(BaseHTTPServer.BaseHTTPRequestHandler):
     query_file = '/'
     default = default_string % query_file
     def do_GET(self):
+        print dict(self.headers)
         try:
             file, query = self.path.split('?', 1)
         except ValueError:
