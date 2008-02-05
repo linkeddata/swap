@@ -118,7 +118,7 @@ setup_tarball: $(SOURCES) $(HTMLS) $(TESTS) $(GRAMMAR) $(TARBALL_STUFF) tested f
 	cd ,cwm-$(VERSION)-test/cwm-$(VERSION)/test && mkdir ,test
 	cd ,cwm-$(VERSION)-test/cwm-$(VERSION)/test && $(MAKE) post-install
 	$(PYTHON) -c 'print "".join([a for a in file(".htaccess")][:-1])[:-1]' > ,htaccess
-	echo 'RewriteRule ^cwm.tar.gz$ ' $(TARNAME).tar.gz '[L]' >> ,htaccess
+	echo 'RewriteRule ^cwm.tar.gz$ ' $(TARNAME).tar.gz '[L,R]' >> ,htaccess
 #  Comment out below line if you do NOT want the cwm.tar.gz to be the release you are building
 	mv ,htaccess .htaccess
 	-cvs add $(TARNAME).tar.gz	
