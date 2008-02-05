@@ -15,7 +15,7 @@
 :t3 a test:CwmTest ;
     test:referenceOutput <t3/output.n3> ;
     test:description     "exit status test" ;
-    test:arguments       "delta/t3/test.n3 --think --with `../delta.py -f delta/t3/from.n3 -t delta/t3/to-same.n3 &> /dev/null; echo $?` `../delta.py -f delta/t3/from.n3 -t delta/t3/to-diff.n3 &> /dev/null; echo $?`" .
+    test:arguments       "delta/t3/test.n3 --think --with `../delta.py -f delta/t3/from.n3 -t delta/t3/to-same.n3 > /dev/null; echo $?` `../delta.py -f delta/t3/from.n3 -t delta/t3/to-diff.n3 > /dev/null; echo $?`" .
     
 :t4 a test:CwmTest ;
     test:referenceOutput <t4/output.n3> ;

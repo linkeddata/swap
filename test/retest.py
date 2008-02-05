@@ -86,11 +86,14 @@ def execute(cmd1, noStdErr=False):
     global verbose, no_action
     if verbose: print "    "+cmd1
     if no_action: return
-    if noStdErr:
-        stderr = file('/dev/null', 'w')
-    else:
-        stderr = None
-    result = call(cmd1, shell=True, stderr=stderr)
+    stderr = None
+    try:
+        if noStdErr:
+            stderr = file('/dev/null', 'w')
+        result = call(cmd1, shell=True, stderr=stderr)
+    finally:
+        if stderr:
+            stderr.close()
     if result != 0:
         raise RuntimeError("Error %i executing %s" %(result, cmd1))
 

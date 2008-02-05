@@ -208,7 +208,7 @@ class Formula(AnonymousNode, CompoundTerm):
 
     
     def declareUniversal(self, v, key=None):
-        if key is not AnonymousUniversal:
+        if False and key is not AnonymousUniversal:
             raise RuntimeError("""We have now disallowed the calling of declareUniversal.
 For future reference, use newUniversal
 """)
