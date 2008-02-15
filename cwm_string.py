@@ -17,7 +17,7 @@ from diag import verbosity, progress
 import urllib # for hasContent
 import md5, binascii  # for building md5 URIs
 
-from term import LightBuiltIn, ReverseFunction, Function
+from term import LightBuiltIn, ReverseFunction, Function, UnknownType
 from local_decimal import Decimal
 
 LITERAL_URI_prefix = "data:text/rdf+n3;"
@@ -122,6 +122,26 @@ class BI_concatenation(LightBuiltIn, Function):
 #               return None # Can't
             str = str + x 
         return str
+
+    def evalObj45(self,  subj, queue, bindings, proof, query):
+#        raise RuntimeError('I got here!')
+        subj_py = list(subj)
+        if verbosity() > 80: progress("Concatenation input:"+`subj_py`)
+        retVal = []
+        for x in subj_py:
+            try:
+                val = x.value()
+                if not isString(val):
+                    if type(val) == type(long()) or isinstance(val, Decimal):
+                        val = make_string(val)
+                    else:
+                        val = `val`
+                    if verbosity() > 34: progress("Warning: Coercing to string for concat:"+`val`)
+                retVal.append(val)
+            except UnknownType:
+                progress("Warning: Coercing to string for concat:"+`x`)
+                retVal.append(x.string)
+        return subj.store.newLiteral(''.join(retVal))
 
 class BI_scrape(LightBuiltIn, Function):
     """a built-in for scraping using regexps.
