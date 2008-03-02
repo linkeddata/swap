@@ -1,0 +1,19 @@
+#  n3
+#
+#  Tax Categories
+#
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix string: <http://www.w3.org/2000/10/swap/string#>.
+@prefix math: <http://www.w3.org/2000/10/swap/math#>.
+@prefix q:  <http://www.w3.org/2000/10/swap/pim/qif#>.
+#
+
+
+@prefix tax:  <http://www.w3.org/2000/10/swap/pim/tax.n3#>.
+
+
+tax:Null s:label "Tax-irrelevant".
+
+#ends
