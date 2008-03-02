@@ -20,11 +20,6 @@
                 :Vtodo;
          ss:label "type" .
     
-    log:forSome     a rdf:Property;
-         ss:label "forSome";
-         ss:rangeIntersects :Vevent,
-                :Vtimezone,
-                :Vtodo .
     
     :Vcalendar     a s:Class;
          ss:intersectsDomainOf rdf:type,

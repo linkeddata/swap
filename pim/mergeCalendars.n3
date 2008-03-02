@@ -6,7 +6,7 @@
 
 @prefix : <#>.
 
-this log:forAll :S, :P, :O.
+@forAll :S, :P, :O.
 
 { ?E a cal:Vevent;
      s:seeAlso ?DOC.
@@ -23,6 +23,9 @@ this log:forAll :S, :P, :O.
 
 
 # $Log$
-# Revision 1.1  2004-02-22 21:28:34  connolly
+# Revision 1.2  2008-03-02 23:03:36  timbl
+# get rid of old this log:forAll syntax
+#
+# Revision 1.1  2004/02/22 21:28:34  connolly
 # works in one case
 #

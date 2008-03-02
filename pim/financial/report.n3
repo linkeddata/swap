@@ -15,7 +15,7 @@
 @prefix : <#>.
 @prefix foo: <#>.
 
-this log:forAll :d, :p, :s, :t, :x, :y, :z.
+@forAll :d, :p, :s, :t, :x, :y, :z.
 
 
 "00" log:outputString

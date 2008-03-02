@@ -19,7 +19,7 @@
 
 @prefix : <?#>.
 
-this log:forAll :where, :cityN, :stN, :i, :pg, :txt.
+@forAll :where, :cityN, :stN, :i, :pg, :txt.
 
 
 { :where p:cityName :cityN;
@@ -60,7 +60,8 @@ this log:forAll :where, :cityN, :stN, :i, :pg, :txt.
   log:implies {
     :where map:x :long; map:y :lat; :_latMag :latMag; :_latX :latX.
   }.
-this log:forAll :lat, :latMag, :latX, :long, :longMag, :longX.
+
+@forAll :lat, :latMag, :latX, :long, :longMag, :longX.
 
 
 # test data...

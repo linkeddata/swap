@@ -18,7 +18,7 @@
 @prefix : <#>.
 @prefix foo: <#>.
 
-this log:forAll :a, :c, :d, :k, :l, :m, :n, :p, :s, :t, :x, :y, :z.
+@forAll :a, :c, :d, :k, :l, :m, :n, :p, :s, :t, :x, :y, :z.
 
 
 # {?x log:uri "1"!os:argv!os:baseAbsolute} => {?x a :target}.

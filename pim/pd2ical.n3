@@ -15,8 +15,8 @@
 @prefix : <pd2ical#>.
 @prefix p2i: <pd2ical#>.
 
-this log:forAll v:e, v:i, v:date, v:desc.
-this log:forSome v:cal.
+@forAll v:e, v:i, v:date, v:desc.
+@forSome v:cal.
 
 v:cal a ical:VCALENDAR.
 

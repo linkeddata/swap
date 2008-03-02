@@ -168,7 +168,7 @@
    ofx:TRNAMT   :x ].
    :i crypto:sha ?id.
    :r log:uri [is os:baseAbsolute of
-	[is string:concatenation of ( "fit.n3#" ?id  )]].
+	[is string:concatenation of ( "year.rdf#" ?id  )]].
 #   ofx:TRNTYPE  :t 
 } log:implies {
 :r  qu:toAccount :y ;

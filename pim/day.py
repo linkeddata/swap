@@ -69,14 +69,18 @@ class Map:
         
         self.midla = (minla + maxla)/2.0
         self.midlo = (minlo + maxlo)/2.0
+        self.total_m = 0 # Meters
+        self.last = None   # (lon, lat)
         
         r_earth = 6400000.0 # (say) meters
         pi = 3.14159265358979323846 # (say)
         degree = pi/180
         
-        m_per_degree = r_earth * pi /180
-        subtended_y = (maxla - minla) * m_per_degree
-        subtended_x = (maxlo - minlo) * m_per_degree * cos(self.midla*degree)
+        self.x_m_per_degree = r_earth * pi /180
+        self.y_m_per_degree = self.x_m_per_degree * cos(self.midla*degree)
+        progress('Metres per degree: (%f,%f)' % (self.x_m_per_degree, self.y_m_per_degree))
+        subtended_y = (maxla - minla) * self.x_m_per_degree
+        subtended_x = (maxlo - minlo) * self.y_m_per_degree
     
         progress("Area subtended  %f (E-W)  %f (N-S) meters" %(subtended_x, subtended_y))
         
@@ -142,17 +146,27 @@ class Map:
             
     def startPath(self, lon, lat):
         x, y = self.deg_to_px(lon, lat)
+        self.last = (lon, lat)
         self.wr("  <path   style='fill:none; stroke:red' d='M %i %i " % (x,y))
 
     def straightPath(self, lon, lat):
         x, y = self.deg_to_px(lon, lat)
         self.wr("L %i %i " % (x,y))
+        lastlon, lastlat = self.last
+        dx = (lon-lastlon) * self.x_m_per_degree
+        dy = (lat-lastlat) * self.y_m_per_degree
+        ds = sqrt(dx*dx + dy*dy)
+        progress('Path length/m '+`ds`)
+        self.total_m += ds
+        self.last = (lon, lat)
 
     def skipPath(self, lon, lat):
         x, y = self.deg_to_px(lon, lat)
         self.wr("M %i %i " % (x,y))
+        self.last = (lon, lat)
 
     def endPath(self):
+        progress('Track length so far:/m: %i' % (self.total_m))
         self.wr("'/>\n\n")
 
     def photo(self, uri, lon, lat):

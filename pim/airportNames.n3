@@ -34,7 +34,7 @@ a:PHX k:nameString "PHOENIX".
 @prefix :  <?var#>.
 @prefix v: <?var#>.
 
-this log:forAll :P, :Q, :X, :Y.
+@forAll :P, :Q, :X, :Y.
 
 #special case of UnambiguousProperty and =, perhaps
 k:nameString :determines k:fromLocation, k:toLocation.

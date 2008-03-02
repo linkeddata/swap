@@ -64,7 +64,7 @@ q:UnclassifiedOutgoing a :toBeDisplayed;  s:label "Unclassified Outgoings".
 	q:date :d;
 	log:uri ?URI;
 	q:toAccount [s:label :a].
-    :p string:notMatches "^C[hH][Ee][Cc][Kk]".  # Check lines should have other
+#    :p string:notMatches "^C[hH][Ee][Cc][Kk]".  # Check lines should have other -- eh?
     :y a :toBeDisplayed; s:label :l.
     ( :l :d ) string:concatenation :k.
     (  "<tr class='"  :a

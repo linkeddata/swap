@@ -20,7 +20,7 @@
 
 #:window :start "20021214". #@@ enhance ical2rdf.pl to put hyphens in dates
 
-this log:forAll :CAL, :EV, :ID, :RULE, :SUMMARY, :FREQ,
+@forAll :CAL, :EV, :ID, :RULE, :SUMMARY, :FREQ,
 	:START, :STARTDATETIME, :STARTTZ, :STARTDATE, :KEY, :WHEN, :VAL.
 
 

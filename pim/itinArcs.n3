@@ -16,7 +16,7 @@ dc:relation <airportLookup.n3>.
 
 @prefix : <itinArcs#>.
 
-this log:forAll :LAT1, :LON1, :LAT2, :LON2, :NUM, :YMD,
+@forAll :LAT1, :LON1, :LAT2, :LON2, :NUM, :YMD,
   :K, :TXT, :IT, :P, :Q, :X, :Y.
 
 

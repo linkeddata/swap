@@ -107,9 +107,11 @@ def doCommand(serialDevice=None, outputURI=None, doTracks=1, doWaypoints=1, verb
                 f.add(point, WGS.lat, obj=intern(degrees(p.slat)))
                 f.add(point, WGS.long, obj=intern(degrees(p.slon)))
 #               if verbose: progress("    time=", p.time)
+#                progress('p.time='+`p.time`) # @@
                 if p.time == 0 or p.time == 0xffffffffL:
                     if verbose: progress("time=%8x, ignoring" % p.time)
-                f.add(point, WGS.time, obj=intern(isodate.fullString(TimeEpoch+p.time)))
+                else:
+                    f.add(point, WGS.time, obj=intern(isodate.fullString(TimeEpoch+p.time)))
 
    phys.f.close()  # Should really be done by the del() below, but isn't
    del(phys) # close serial link (?)

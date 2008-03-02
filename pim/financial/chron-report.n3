@@ -17,7 +17,7 @@
 @prefix : <#>.
 @prefix foo: <#>.
 
-this log:forAll :a, :c, :d, :k, :l, :m, :n, :p, :s, :t, :x, :y, :z.
+@forAll :a, :c, :d, :k, :l, :m, :n, :p, :s, :t, :x, :y, :z.
 
 # Select subclasses of TaxCategories.
 #  Must be at least one entry, and must have a label

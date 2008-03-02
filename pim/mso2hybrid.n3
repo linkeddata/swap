@@ -18,7 +18,7 @@
 @prefix : <#>.
 
 
-this log:forAll :d, :e, :e2, :i, :p, :s, :s2, :tz, :tz2, :tzo, :x, :y, :z.
+@forAll :d, :e, :e2, :i, :p, :s, :s2, :tz, :tz2, :tzo, :x, :y, :z.
 
 #  Microsoft Outlook uses these strange strings
 

@@ -14,7 +14,7 @@
 
 @prefix : <http://www.w3.org/2000/10/swap/pim/airportLookup#>.
 
-this log:forAll :LAT1, :LON1, :LAT2, :LON2, :NUM, :YMD,
+@forAll :LAT1, :LON1, :LAT2, :LON2, :NUM, :YMD,
   :K, :TXT, :IT, :P, :Q, :X, :Y.
 
 
@@ -58,7 +58,7 @@ this log:forAll :LAT1, :LON1, :LAT2, :LON2, :NUM, :YMD,
 }.
 
 
-this log:forAll :P, :Q, :X, :Y.
+@forAll :P, :Q, :X, :Y.
 
 # same IATA code -> same fromLocation, toLocation
 #special case of UnambiguousProperty and =, perhaps

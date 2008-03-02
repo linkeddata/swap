@@ -21,11 +21,11 @@
 @prefix : <foo#>.
 @prefix foo: <foo#>.
 
-this log:forAll :A, :E, :F, :G, :S, :X, :Y, :Z.
+@forAll :A, :E, :F, :G, :S, :X, :Y, :Z.
 
 {
     {
-	this log:forAll :a, :d, :e, :f,  :n, :m, :p, :s, :t, :x, :y, :z,
+	@forAll :a, :d, :e, :f,  :n, :m, :p, :s, :t, :x, :y, :z,
 			:ez, :sz, :ex, :ey, :sx, :sy.
 
 	"1" a :Possible.
