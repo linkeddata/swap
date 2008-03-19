@@ -39,12 +39,18 @@ and a signature, then the object is either "1" if the signature
 validates or "0" if it does not.</td></tr>
 </table><h2> list</h2>
 <p class='ns'>@prefix list: &lt;http://www.w3.org/2000/10/swap/list#&gt;.</p>
-<table>  <tr><td class='ln'>in</td><td class='comment'>
+<table>  <tr><td class='ln'>append</td><td class='comment'>
+Iff the subject is a list of lists and the concatenation of all those lists 
+is the object, then this is true.
+eg  ( (1 2) (3 4) ) list:append (1 2 3 4).
+The object can be calculated as a function of the subject.
+</td></tr>
+  <tr><td class='ln'>in</td><td class='comment'>
 Iff the object is a list and the subject is in that list, then this is true.
 </td></tr>
   <tr><td class='ln'>last</td><td class='comment'>
-Iff the subject is a list and the object is the last thing that list, then this is true.
-The last element can be calculated as a function of the list.
+Iff the suject is a list and the obbject is the last thing that list, then this is true.
+The object can be calculated as a function of the list.
 </td></tr>
 </table><h2> log</h2>
 <p class='ns'>@prefix log: &lt;http://www.w3.org/2000/10/swap/log#&gt;.</p>

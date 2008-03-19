@@ -40,13 +40,14 @@ steps, in order left to right:
 --unflatten   Undo the effects of --flatten
 --think=foo   as -apply=foo but continue until no more rule matches (or forever!)
 --purge       Remove from store any triple involving anything in class log:Chaff
---data	      Remove all except plain RDF triples (formulae, forAll, etc)
+--data              Remove all except plain RDF triples (formulae, forAll, etc)
 --strings     Dump :s to stdout ordered by :k whereever { :k log:outputString :s }
 --crypto      Enable processing of crypto builtin functions. Requires python crypto.
 --help        print this message
 --revision    print CVS revision numbers of major modules
 --chatty=50   Verbose debugging output of questionable use, range 0-99
 --sparqlServer instead of outputting, start a SPARQL server on port 8000 of the store
+--sparqlResults        After sparql query, print in sparqlResults format instead of rdf
 
 finally:
 
@@ -125,8 +126,9 @@ z  - Allow relative URIs for namespaces
         S  - Strict spec. Unknown parse type treated as Literal instead of error.
         T  - take foreign XML as transparent and parse any RDF in it
              (default it is to ignore unless rdf:RDF at top level)
-	L  - If non-rdf attributes have no namespace prefix, assume in local &lt;#> namespace
-	D  - Assume default namespace decalred as local document is assume xmlns=""
+        L  - If non-rdf attributes have no namespace prefix, assume in local &lt;#> namespace
+        D  - Assume default namespace decalred as local document is assume xmlns=""
+        R  -  Do not require an outer &lt;rdf:RDF>, treating the file as RDF content (opposite of T)
 
     Note: The parser (sax2rdf) does not support reification, bagIds, or parseType=Literal.
           It does support the rest of RDF inc. datatypes, xml:lang, and nodeIds.
