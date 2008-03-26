@@ -49,7 +49,7 @@ monthName= ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct"
 
 rdf_type = RDF.type
 
-
+ 
 def compareByTime(a, b):
     if a[0] < b[0]: return -1
     if a[0] > b[0]: return +1
@@ -72,9 +72,17 @@ class Map:
         self.total_m = 0 # Meters
         self.last = None   # (lon, lat)
         
-        r_earth = 6400000.0 # (say) meters
         pi = 3.14159265358979323846 # (say)
         degree = pi/180
+        # r_earth = 6400000.0 # (say) meters
+        phi = self.midla * degree
+        
+        # See http://en.wikipedia.org/wiki/Earth_radius
+        a = 6.378137e6 # m
+        b = 6.3567523e6 #m
+        r_earth = sqrt(  ((a*a*cos(phi))**2 + ((a*a*sin(phi)))**2)/
+                        ((a*cos(phi))**2 + ((a*sin(phi)))**2))
+        print "Local radius of earth = ", r_earth
         
         self.x_m_per_degree = r_earth * pi /180
         self.y_m_per_degree = self.x_m_per_degree * cos(self.midla*degree)
