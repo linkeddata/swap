@@ -11,7 +11,7 @@
 
 @prefix : <#>.
 
-this log:forAll :X, :Y, :Z, :P.
+@forAll :X, :Y, :Z, :P.
 
 { :P a ont:UnambiguousProperty.
   :X :P :Y.

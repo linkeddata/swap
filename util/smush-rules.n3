@@ -17,7 +17,7 @@
 
 # These should be derivable from the axiomatic semantics for DAML+OIL
 
-this log:forAll :x, :y, :z, :p, :q.
+@forAll :x, :y, :z, :p, :q.
 
 {  	?p a owl:FunctionalProperty. 
    	?x ?p ?y.

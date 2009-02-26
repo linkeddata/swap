@@ -105,7 +105,7 @@ _:y dt:date "2001-70-01"; ex:winningTeam ex:tigers.
 
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 
-this log:forAll :P, :L, :DT.
+@forAll :P, :L, :DT.
 
 { [] :P :L.
   :P :rangeSyntax :DT.
@@ -140,7 +140,7 @@ dt:integer :baseType dt:decimal.
 dt:boolean :lexicalSpace [ dt:pattern "(true)|(false)|0|1" ].
 dt:decimal :lexicalSpace [ dt:pattern "([+-])?\\d+(\\.\\d*)?" ].
 
-this log:forAll :V, :L, :DT, :PAT, :PATTEST.
+@forAll :V, :L, :DT, :PAT, :PATTEST.
 { [] :DT :L.
   :DT :lexicalSpace [ dt:pattern :PAT ].
 
@@ -185,7 +185,7 @@ ex:fred ex:age "ten", "10years", "10", "10.", "10.0", "10.0 years", "y10".
     Each value in the value space of a datatype is denoted by one
     or more literals in its lexical space.""".
 
-this log:forAll :V.
+@forAll :V.
 
 { :V a [ is :valueSpace of :DT ] } log:implies
   { :V :DT [ a [ is :lexicalSpace of :DT ] ] }.
@@ -201,7 +201,7 @@ this log:forAll :V.
 ####
 # diversion... specification of :Set
 
-this log:forAll :A, :B.
+@forAll :A, :B.
 
 # equality of sets is defined extensionally...
 { :A a :Set. :B a :Set. } log:implies {
@@ -216,13 +216,13 @@ this log:forAll :A, :B.
 ###
 # a bit of RDFS...
 
-this log:forAll :S, :C.
+@forAll :S, :C.
 
 { :S a [ s:subClassOf :C ] } log:implies { :S a :C }.
 
 ####
 # a bit of DAML+OIL...
-this log:forAll :S, :T, :P, :O.
+@forAll :S, :T, :P, :O.
 
 { :S :P :O.
   :T :P :O.

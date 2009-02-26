@@ -16,7 +16,7 @@
 # Output should not incldue any error messages.
 #
 
-this log:forAll :d, :o, :p, :r, :s, :S, :s1, :x, :y, :F, :G, :H.
+@forAll :d, :o, :p, :r, :s, :S, :s1, :x, :y, :F, :G, :H.
 
 #  Some internal terms we will be using in this document:
 

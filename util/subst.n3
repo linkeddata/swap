@@ -7,7 +7,7 @@
 
 @prefix : <#>.
 
-this log:forAll :X, :Y, :Z, :P, :Q.
+@forAll :X, :Y, :Z, :P, :Q.
 
 { :X :P :Y. :X = :Z.
   :P log:notEqualTo log:forAll, log:forSome    #HIDELINE

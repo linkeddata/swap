@@ -4,7 +4,10 @@
   dc:description "$Id$",
 """
 $Log$
-Revision 1.7  2005-04-04 21:10:32  connolly
+Revision 1.8  2009-02-26 17:08:01  timbl
+fix old this syntax
+
+Revision 1.7  2005/04/04 21:10:32  connolly
 updated to icaltzd
 
 Revision 1.6  2004/03/10 22:06:12  timbl
@@ -83,7 +86,7 @@ hmm... remote query...
      ]
  }.
 
-this log:forAll :MSG, :SUBJ, :DATE.
+@forAll :MSG, :SUBJ, :DATE.
 
 @prefix req: <http://www.w3.org/2000/10/swap/util/reqThreads#>.
 

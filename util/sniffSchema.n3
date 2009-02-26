@@ -15,7 +15,7 @@ dc:relation <sniffSchema.rdf>, <sniffSchema.n3>.
 @prefix   : <http://www.w3.org/2000/10/swap/util/sniffSchema#>.
 @prefix ss: <http://www.w3.org/2000/10/swap/util/sniffSchema#>.
 
-this log:forAll :P, :C, :X, :T.
+@forAll :P, :C, :X, :T.
 
 # declare the properties I'm using...
 # thanks to the DAML validator for keeping me honest.

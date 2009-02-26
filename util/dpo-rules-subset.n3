@@ -18,7 +18,7 @@
 @prefix v: <validate.n3#> .	# Hint for others use
 
 
-this log:forAll <#p>, <#p1>, <#p2>,	# Properties
+@forAll <#p>, <#p1>, <#p2>,	# Properties
 	 <#c>, <#c1>, <#c2>.   # Classes
 
 <> doc:version "$Id$".
@@ -94,7 +94,7 @@ rdfs:subClassOf 		a daml:TransitiveProperty .
 
 # The first NOT we come across is disjointWith:
 
-this log:forAll <#x>, <#y>, <#z> .
+@forAll <#x>, <#y>, <#z> .
 { 	<#x> a <#y> .
 	<#x> a <#z> .
 	<#y> daml:disjointFrom <#z> } log:implies { <#x> v:ERROR  "Member of disjoint classes" } .
