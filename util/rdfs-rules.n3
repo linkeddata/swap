@@ -55,8 +55,8 @@ rdfs:subClassOf rdfs:range rdfs:Class.
 @prefix rr: <rdfs-rules#>. # hint
 
 @prefix log:  <http://www.w3.org/2000/10/swap/log#> .
-this log:forAll :xxx, :yyy, :zzz, :aaa, :uuu.
-this log:forAll :bbb, :ccc. #@@not delcared in prose.
+@forAll :xxx, :yyy, :zzz, :aaa, :uuu.
+@forAll :bbb, :ccc. #@@not delcared in prose.
 
 #rdf1
 
@@ -106,7 +106,10 @@ this log:forAll :bbb, :ccc. #@@not delcared in prose.
 
 <> dc:description """
 $Log$
-Revision 1.5  2002-07-18 05:09:33  connolly
+Revision 1.6  2009-02-26 17:01:42  timbl
+fix old this syntax
+
+Revision 1.5  2002/07/18 05:09:33  connolly
 published RDF version of sniffSchema, with properties declared
 
 Revision 1.4  2002/04/11 19:43:27  connolly

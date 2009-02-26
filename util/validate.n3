@@ -19,7 +19,7 @@
 #    (look for "ERROR" in caps)
 #
 
-this log:forAll :c, :d, :o, :p, :r, :s, :S, :s1, :x, :y, :F, :G, :H.
+@forAll :c, :d, :o, :p, :r, :s, :S, :s1, :x, :y, :F, :G, :H.
 
 #  Some internal terms we will be using in this document:
 #  These are declared here because older versions of the validator
