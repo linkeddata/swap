@@ -411,7 +411,7 @@ def doCommand(year, inputURI="/dev/stdin"):
         
 #  Chart of income stacked up against expenses
         print "<p><a href='chart.svg'><p>Chart of day-day income vs expense</p><img src='chart.svg'></a></p>"
-        print "<p><a href='chart.svg'><p>Chart of all income vs expense</p><img src='all.svg'></a></p>"
+        print "<p><a href='all.svg'><p>Chart of all income vs expense</p><img src='all.svg'></a></p>"
 
         writeChart(filename = "chart.svg",
             categories=quCategories + [ qu.UnclassifiedIncome, qu.UnclassifiedOutgoing],
