@@ -12,12 +12,15 @@ s?</OFX>?]. # OFX?
 s?^<\([A-Z][A-Z0-9]*\)>$?   ofx:\1[?
 #
 # End tag:
-s?</\([A-Z0-9]*\)>?    ];   # \1?
+s?^</\([A-Z0-9]*\)>?    ];   # \1?
 #
 # Special case remove .
 s?<INTU.BID>\(..*\)?    ofx:INTU_BID "\1"?
 #
-# Start with data is assumeD implcit end tag
+# Start with data and explicit end tag
+s?<\([A-Z][A-Z0-9]*\)>\(.[^<]*\)</\([A-Z][A-Z0-9]*\)>?        ofx:\1 "\2";?
+#
+# Start with data is assumed implcit end tag
 s?<\([A-Z][A-Z0-9]*\)>\(..*\)?        ofx:\1 "\2";?
 #
 # Start tag without data is assumed to be closed later
