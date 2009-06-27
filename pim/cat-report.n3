@@ -34,25 +34,26 @@ q:UnclassifiedOutgoing a :toBeDisplayed;  s:label "Unclassified Outgoings".
 "00" log:outputString
 """<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <title>Spending & Income by category - personal financial report</title>
+  <title>Spending and Income by category - personal financial report</title>
   <link type="text/css" rel="stylesheet" href="report.css" />
 </head>
 
 <body>
-<h1>Spending & Income by category</h1>
+<h1>Spending and Income by category</h1>
 """.
 
 
 {   :y a :toBeDisplayed; s:label :l.
     (:y!log:uri ".*#(.*)") string:scrape :a. 
-    ( :l "0000") string:concatenation :k.
+    ( :l " 0000") string:concatenation :k.
     ( "<h2><a name='" :a "'>  " :l """</a></h2><table>
  <tbody>
   <tr><th>Date</th>
    <th>Details ("payee")</th>
-   <th>Amount</th></tr>""" ) string:concatenation :s
+   <th>Amount</th></tr>""" ) string:concatenation :s .
+   ( :l " 0000" ) string:concatenation :k.
     } log:implies {
-    :l log:outputString :s
+    :k log:outputString :s
 }.
 
 # Each line:
@@ -64,9 +65,10 @@ q:UnclassifiedOutgoing a :toBeDisplayed;  s:label "Unclassified Outgoings".
 	q:date :d;
 	log:uri ?URI;
 	q:toAccount [s:label :a].
-#    :p string:notMatches "^C[hH][Ee][Cc][Kk]".  # Check lines should have other -- eh?
+        # Check lines have to payees, a raw one (suppressed here) and one from checks-by-hand.*
+    :p string:notMatches "^C[hH][Ee][Cc][Kk]".  # Check lines should have other -- eh?
     :y a :toBeDisplayed; s:label :l.
-    ( :l :d ) string:concatenation :k.
+    ( :l " " :d ) string:concatenation :k.
     (  "<tr class='"  :a
 	 "'><td class='date'><a href='" ?URI "'>" (:d "^([^T]*)")!string:scrape
 #       "</a></td><td class='cat'>" :l
@@ -81,7 +83,7 @@ q:UnclassifiedOutgoing a :toBeDisplayed;  s:label "Unclassified Outgoings".
 
 {  
     :y a :toBeDisplayed; s:label :l; q:total :x.
-    ( :l "9000" ) string:concatenation :k.
+    ( :l " 9000" ) string:concatenation :k.
     (  "<tr><td class='date'>"
 #       "</td><td class='cat'>" :l
        "</td><td class='payee'>" "Total"
@@ -95,7 +97,7 @@ q:UnclassifiedOutgoing a :toBeDisplayed;  s:label "Unclassified Outgoings".
 # end section:
 
 {   :y a :toBeDisplayed; s:label :l.
-    ( :l "9999") string:concatenation :k.
+    ( :l " 9999") string:concatenation :k.
 } log:implies {
     :l log:outputString "</table>\n"
 }.
