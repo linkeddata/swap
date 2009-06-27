@@ -2,6 +2,9 @@
 #
 #  Categorized stuff by date
 #
+# Call eg:
+#     cwm .... --with 2002
+#
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
@@ -53,7 +56,7 @@ q:UnclassifiedOutgoing a :toBeDisplayed; s:label "Unclassified Outgoings".
 "12" :monthName "December".
 
 {  :m :monthName :n.
-    ( "2002-" :m "-00" ) string:concatenation :k.
+    ( 1!os:argv "-" :m "-00" ) string:concatenation :k.
     ( "<h2><a name='m" :m "'>  " :n """</a></h2>
 <table>
   <tbody>
@@ -70,7 +73,7 @@ q:UnclassifiedOutgoing a :toBeDisplayed; s:label "Unclassified Outgoings".
     [] a :y; q:payee :p; q:amount :x; q:date :d; q:toAccount [s:label :a].
     :p log:notEqualTo "Check".
     :p log:notEqualTo "Check - Ecp".
-    :d string:startsWith "2002".
+    :d string:startsWith 1!os:argv.
     :y a :toBeDisplayed; s:label :l.
     ( :d :a ) string:concatenation :k.
     (  "<tr class='"  :a "'><td class='date'>" (:d "^([^T]*)")!string:scrape
@@ -87,7 +90,7 @@ acc:Default s:label "DEFAULT".
 # end section:
 
 {  :m :monthName :n.
-    ( "2002-" :m  "ZZZZZ" ) string:concatenation :k.
+    ( 1!os:argv "-" :m  "ZZZZZ" ) string:concatenation :k.
 } log:implies {
     :k log:outputString "</tbody></table>\n"
 }.
