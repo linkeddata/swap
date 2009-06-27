@@ -40,7 +40,7 @@
 
 ########## Rule for getting credit card account:
 #
-# Bug: does not pick up any name for the account.
+# Bug: does not pick up any bank name for the account.
 # I guess this is to do with the way credit cards work: they are not really
 # connected to  a bank as they can be transferred from bank to bank.
 # could use last 4 digits of card number
@@ -65,7 +65,7 @@
        ofx:CCSTMTTRNRS  [
            ofx:CCSTMTRS  [
                ofx:CCACCTFROM  [
-                   ofx:ACCTID :a;
+                   ofx:ACCTID :a;   # This is the credit card number
 #                   ofx:ACCTTYPE :l;
 #                   ofx:BANKID :b
 	       ];
@@ -76,6 +76,7 @@
 # between different statements:
 
     (:a ".*(....)") string:scrape ?a4. # Last 4 digits only
+    ?lab is string:concatenation of ( "CCARD_" ?a4 ).
     :z 	log:uri [is os:baseAbsolute of
 		    [is string:concatenation of ( "acc#CCARD_" ?a4 )]].
 	
@@ -84,10 +85,10 @@
 	:payeeField ofx:NAME;   # New version
 	:sourceDocument :s.
 	
-   :z   ofx:ACCTID :a4;
+   :z   ofx:ACCTID ?a4;
 	 # Extending their ontology by inventing an account type for consistency
 	 # :-/
-        ofx:ACCTTYPE "CREDITCARD";  s:label "CREDITCARD";
+        ofx:ACCTTYPE ?lab;  s:label ?lab; # was "CREDITCARD"
 #        ofx:BANKID :b.
 }.
 
@@ -110,6 +111,8 @@
 # Construct a unique identifier for account which will match
 # between different statements:
 
+    (:a ".*(....)") string:scrape ?a4. # Last 4 digits only
+    ?lab is string:concatenation of ( :l ?a4 ).
     :z 	log:uri [is os:baseAbsolute of
 		    [is string:concatenation of ( "acc#" :b "_" :a )]].
 	
@@ -118,7 +121,7 @@
 	:payeeField ofx:NAME;   # New version
 	:sourceDocument :s.
    :z   ofx:ACCTID :a;
-        ofx:ACCTTYPE :l;  s:label :l;
+        ofx:ACCTTYPE :l;  s:label ?lab;
         ofx:BANKID :b.
 }.
 
@@ -139,6 +142,8 @@
 # Construct a unique identifier for account which will match
 # between different statements:
 
+    (:a ".*(....)") string:scrape ?a4. # Last 4 digits only
+
     :z 	log:uri [is os:baseAbsolute of
 		    [is string:concatenation of ( "acc#" :b "_" :a )]].
 	
@@ -157,7 +162,7 @@
 
 # Convert statements to basic financial ontology
 #
-# We use NAME as that is what there is, whil before
+# We use NAME as that is what there is, while before
 # we used MEMO which was in practice a longer version of NAME.
 
 {  [:listForAccount :y; :payeeField ?p; :sourceDocument :s] ofx:STMTTRN
@@ -187,7 +192,7 @@
    ofx:CHECKNUM   :x ].
    :i crypto:sha ?id.
    :r log:uri [is os:baseAbsolute of
-	[is string:concatenation of ( "fit.n3#" ?id  )]].
+	[is string:concatenation of ( "year.rdf#" ?id  )]].
 #   ofx:TRNTYPE  :t 
 } log:implies {
 :r  qu:number :x .
