@@ -12,7 +12,7 @@ s?</OFX>?]. # OFX?
 s?^<\([A-Z][A-Z0-9]*\)>$?   ofx:\1[?
 #
 # End tag:
-s?^</\([A-Z0-9]*\)>?    ];   # \1?
+s?^[ \t]*</\([A-Z0-9]*\)>?    ];   # \1?
 #
 # Special case remove .
 s?<INTU.BID>\(..*\)?    ofx:INTU_BID "\1"?
