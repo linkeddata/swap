@@ -26,6 +26,7 @@
 @prefix math: <http://www.w3.org/2000/10/swap/math#>.
 @prefix os: <http://www.w3.org/2000/10/swap/os#>.
 @prefix qu:  <http://www.w3.org/2000/10/swap/pim/qif#>.
+@prefix cur:	<http://www.w3.org/2007/ont/currency#>.
 
 # QFX (OFX) format:
 @prefix ofx: <http://www.w3.org/2000/10/swap/pim/ofx#> .
@@ -34,7 +35,7 @@
 
 @prefix : <var#>.
 
-@forAll :a, :b, :d, :i, :l, :m, :n, :p, :r, :s, :t, :x, :y, :z.
+@forAll :a, :b, :d, :i, :l, :m, :n, :p, :r, :s, :t, :x.
 
 
 
@@ -64,6 +65,7 @@
    ofx:CREDITCARDMSGSRSV1[
        ofx:CCSTMTTRNRS  [
            ofx:CCSTMTRS  [
+               ofx:CURDEF ?currency;
                ofx:CCACCTFROM  [
                    ofx:ACCTID :a;   # This is the credit card number
 #                   ofx:ACCTTYPE :l;
@@ -77,15 +79,16 @@
 
     (:a ".*(....)") string:scrape ?a4. # Last 4 digits only
     ?lab is string:concatenation of ( "CCARD_" ?a4 ).
-    :z 	log:uri [is os:baseAbsolute of
+    ?account 	log:uri [is os:baseAbsolute of
 		    [is string:concatenation of ( "acc#CCARD_" ?a4 )]].
 	
 } log:implies {
-   :x	:listForAccount :z;
+   :x	:listForAccount ?account;
 	:payeeField ofx:NAME;   # New version
 	:sourceDocument :s.
 	
-   :z   ofx:ACCTID ?a4;
+   ?account   ofx:ACCTID ?a4;
+        :currencyCode ?currency;
 	 # Extending their ontology by inventing an account type for consistency
 	 # :-/
         ofx:ACCTTYPE ?lab;  s:label ?lab; # was "CREDITCARD"
@@ -101,6 +104,7 @@
    ofx:BANKMSGSRSV1[
        ofx:STMTTRNRS  [
            ofx:STMTRS  [
+               ofx:CURDEF ?currency;
                ofx:BANKACCTFROM  [
                    ofx:ACCTID :a;
                    ofx:ACCTTYPE :l;
@@ -109,18 +113,19 @@
                         ]]]].
 
 # Construct a unique identifier for account which will match
-# between different statements:
+# between different statements: 
 
     (:a ".*(....)") string:scrape ?a4. # Last 4 digits only
     ?lab is string:concatenation of ( :l ?a4 ).
-    :z 	log:uri [is os:baseAbsolute of
+    ?account 	log:uri [is os:baseAbsolute of
 		    [is string:concatenation of ( "acc#" :b "_" :a )]].
 	
 } log:implies {
-   :x	:listForAccount :z;
+   :x	:listForAccount ?account;
 	:payeeField ofx:NAME;   # New version
 	:sourceDocument :s.
-   :z   ofx:ACCTID :a;
+   ?account   ofx:ACCTID :a;
+        :currencyCode ?currency;
         ofx:ACCTTYPE :l;  s:label ?lab;
         ofx:BANKID :b.
 }.
@@ -144,15 +149,15 @@
 
     (:a ".*(....)") string:scrape ?a4. # Last 4 digits only
 
-    :z 	log:uri [is os:baseAbsolute of
+    ?account 	log:uri [is os:baseAbsolute of
 		    [is string:concatenation of ( "acc#" :b "_" :a )]].
 	
 } log:implies {
-   :x	:listForAccount :z;
+   :x	:listForAccount ?account;
 	:payeeField ofx:MEMO;  # Old version
 	:sourceDocument :s.
 	
-   :z   ofx:ACCTID :a;
+   ?account   ofx:ACCTID :a;
         ofx:ACCTTYPE :l;  s:label :l;
         ofx:BANKID :b.
 }.
@@ -165,7 +170,7 @@
 # We use NAME as that is what there is, while before
 # we used MEMO which was in practice a longer version of NAME.
 
-{  [:listForAccount :y; :payeeField ?p; :sourceDocument :s] ofx:STMTTRN
+{  [:listForAccount ?account; :payeeField ?p; :sourceDocument :s] ofx:STMTTRN
   [
    ofx:DTPOSTED :d;
    ofx:FITID    :i;
@@ -176,7 +181,7 @@
 	[is string:concatenation of ( "year.rdf#" ?id  )]].
 #   ofx:TRNTYPE  :t 
 } log:implies {
-:r  qu:toAccount :y ;
+:r  qu:toAccount ?account ;
    qu:date :d;
    qu:payee :m;  	# Quicken seems to mix it like this
    qu:accordingTo :s;	# useful to track the source
@@ -187,7 +192,7 @@
 ###############
 
 # For those with check numbers, get the check number:
-{  [:listForAccount :y] ofx:STMTTRN [
+{  [:listForAccount ?account] ofx:STMTTRN [
    ofx:FITID    :i;
    ofx:CHECKNUM   :x ].
    :i crypto:sha ?id.
@@ -197,6 +202,25 @@
 } log:implies {
 :r  qu:number :x .
 }.
+
+#################
+# Where we know currency, calculate normalized value
+#
+#
+# Note the different properties for the currency code of a transaction
+# and the currency code of an abstract currency.
+#
+{
+#?trans!qu:toAccount!:currencyCode^cur:code  cur:in_USD ?rate.
+ ?trans qu:toAccount ?account.
+ ?account :currencyCode ?code .
+ ?cur cur:code ?code;  cur:in_USD ?rate.
+    ?trans qu:amount ?string.
+   (?rate ?string) math:product ?y.
+ } => {
+    ?trans qu:in_USD ?y; qu:currency ?cur.
+ }.
+
 
    
 
