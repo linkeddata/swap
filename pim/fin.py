@@ -3,6 +3,11 @@
     
 usage, eg:
     fin -y 2003
+        Results for the year 2003-01 through 2003-12
+    fin -y 2003-07
+        Results for the year 2003-07 through 2004-06
+        
+    -t foo.n3   --totals=foo.n3  Please output totals in this file     
     
     The year must be given explicitly.
     Transactions outside that year will be ignored.
@@ -75,7 +80,7 @@ def tableRow(label, anchor, totals, value):
         str = str + "<td class='amt'>%6.2f</td>" % value[month]
     if anchor:
         return "<tr><td><a href='%s'>%s</a></td><td class='total'>%7.2f</td>%s</tr>" %(
-                "year-cat.html#" + anchor, label, totals, str)
+                "year-cat.html#" + anchor, label, totals, str)  # @@ add year in filename
     return "<tr><td>%s</td><td class='total'>%7.2f</td>%s</tr>" %(label, totals, str)
 
 def internalCheck():
@@ -86,19 +91,19 @@ def internalCheck():
     while len(transactions) > 0:
         x = transactions.pop()
         date = str(kb.the(subj=x, pred=qu.date))
-        if len(kb.each(subj=x, pred=qu.amount)) != 1:
+        if len(kb.each(subj=x, pred=qu.in_USD)) != 1:
             progress("Ignoring !=1 amount transaction %s" % x)
             continue
-        amount = float(str(kb.the(subj=x, pred=qu.amount)))
+        amount = float(str(kb.the(subj=x, pred=qu.in_USD)))
         for y in transactions:
             datey = str(kb.the(subj=y, pred=qu.date))
             if date[0:10] == datey[0:10]:  # precision one day
-                if len(kb.each(subj=y, pred=qu.amount)) != 1:
+                if len(kb.each(subj=y, pred=qu.in_USD)) != 1:
                     progress("Error: Ignoring: >1 amount for transaction %s" % y)
                     transactions.remove(y)
                     continue
                 if abs(amount +
-                        float(str(kb.the(subj=y, pred=qu.amount)))) < 0.001:
+                        float(str(kb.the(subj=y, pred=qu.in_USD)))) < 0.001:
                     transactions.remove(y)
                     break
         else:
@@ -107,9 +112,9 @@ def internalCheck():
     unbalanced = []
     while len(transactions) > 0:
         x = transactions.pop()
-        amount = float(str(kb.the(subj=x, pred=qu.amount)))
+        amount = float(str(kb.the(subj=x, pred=qu.in_USD)))
         for y in transactions:
-            if abs(amount + float(str(kb.the(subj=y, pred=qu.amount)))) < 0.001 : # Floating point ~=
+            if abs(amount + float(str(kb.the(subj=y, pred=qu.in_USD)))) < 0.001 : # Floating point ~=
                 transactions.remove(y)
                 break
         else:
@@ -119,7 +124,7 @@ def internalCheck():
     print "<h2>Unbalanced internal transactions</h2>"
     print "<table>"
     for da, x in unbalanced:
-        amount = float(str(kb.the(subj=x, pred=qu.amount)))
+        amount = float(str(kb.the(subj=x, pred=qu.in_USD)))
         payee = kb.any(subj=x, pred=qu.payee)
         toAccount = kb.the(subj=x, pred=qu.toAccount)
         print "<tr class='%s'><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>" %(
@@ -249,7 +254,7 @@ def writeChart(filename, categories, totals, income, outgoings, shortTerm=0):
     return
 
 
-def doCommand(year, inputURI="/dev/stdin"):
+def doCommand(yearInQuestion, inputURIs=["/dev/stdin"],totalsFilename=None):
         """Fin - financial summary
         
  <command> <options> <inputURIs>
@@ -274,7 +279,10 @@ def doCommand(year, inputURI="/dev/stdin"):
 # Load the data:
 
 #       print "Data from", inputURI
-        kb=load(inputURI)
+        kb=load(inputURIs[0])
+        for inputURI in inputURIs[1:]:
+            progress("Data also from " + inputURI)
+            kb.store.load(uri=inputURI, openFormula=kb)
         
 #       print "Size of kb: ", len(kb)
         
@@ -283,6 +291,7 @@ def doCommand(year, inputURI="/dev/stdin"):
 #       print "Size of meta", len(meta)
         
         qu_date = qu.date
+        qu_in_USD = qu.in_USD
         qu_amount = qu.amount
         qu_payee = qu.payee
         qu_Classified = qu.Classified
@@ -316,16 +325,26 @@ def doCommand(year, inputURI="/dev/stdin"):
 #               raise ValueError("No date for transaction %s" % s)
                 progress("No date for transaction %s -- ignoring\n" % s)
                 continue
-            year = int(date[0:4])
+            m = int(date[0:4]) * 12 + int(date[5:7])
+            monthInQuestion = int(yearInQuestion[0:4]) * 12 + int(yearInQuestion[5:7])
+            month = m - monthInQuestion
+            if month < 0 or  month > 11: continue
+
 #           print year, yearInQuestion, `s`
-            if  int(year) != int(yearInQuestion): continue
-            month = int(date[5:7]) -1
-            if month not in range(12): raise ValueError("Month %i"% month)
+#            if  int(year) != int(yearInQuestion): continue
+#            month = int(date[5:7]) -1
+#            if month not in range(12): raise ValueError("Month %i"% month)
             
             payees = kb.each(subj=s, pred=qu_payee)
             if str(payees[0]) == "Check" and len(payees) >1: payee = payees[1]
             else: payee = payees[0]
-            amounts = kb.each(subj=s, pred=qu_amount)
+            amounts = kb.each(subj=s, pred=qu_in_USD)
+            if len(amounts) == 0:
+                amounts = kb.each(subj=s, pred=qu_amount)
+                if len(amounts) == 0:
+                    progress("@@@ Error: No amount for "+`s`)
+                else:
+                    progress("Warning: No USD amount for "+`s`+", assuming USD")
             if len(amounts) >1:
                 if (cat_ns.Internal not in cats or
                     len(amounts) != 2 ):
@@ -340,7 +359,13 @@ def doCommand(year, inputURI="/dev/stdin"):
                             % (amounts,s))
                 continue
 
-            amount = float(kb.the(subj=s, pred=qu_amount).__str__())
+            if len(amounts) != 1:
+                progress("@@@ Error: No amount for "+`s`);
+                progress("... where s.uri is "+s.uriref())
+                ss = kb.statementsMatching(subj=s)
+                progress(`ss`+'; KB='+`kb.n3String()`)
+                continue
+            amount = float(amounts[0].__str__())
 #           print "%s  %40s  %10s month %i" %(date, payee, `amount`, month)
 
             monthTotals[month] = monthTotals[month] + amount
@@ -384,9 +409,13 @@ def doCommand(year, inputURI="/dev/stdin"):
 #   TABLE OF CATEGORY BY MONTH
 
                 
-        print "<h2>%s Personal categories and month</h2><table class='wide'><tr><th></th><th>Year</th>" % yearInQuestion
+        print "<h2>%s Personal categories and month</h2><table class='wide'><tr><th></th><th>Year </th>" % yearInQuestion
         for month in range(12):
-            print "<th><a href='year-chron.html#m%s'>%s</a></th>" %(("0"+`month+1`)[-2:], monthName[month]),
+            m = month + int(yearInQuestion[5:7]) - 1
+            if m > 11: m -= 12  # Modulo in python?
+            
+            
+            print "<th><a href='year-chron.html#m%s'>%s</a></th>" %(("0"+`m+1`)[-2:], monthName[m]),
         print "</tr>"
         for cat in quCategories + [ qu.UnclassifiedIncome, qu.UnclassifiedOutgoing]:
             label = meta.the(subj=cat, pred=rdfs.label)
@@ -429,9 +458,10 @@ def doCommand(year, inputURI="/dev/stdin"):
             ko.add(subj=c, pred=qu.total, obj=("%7.2f" % totals.get(c,0)))
         ko.close()
         
-        fo = open("totals.n3", "w")
-        fo.write(ko.n3String())
-        fo.close
+        if (totalsFilename):
+            fo = open(totalsFilename, "w")
+            fo.write(ko.n3String())
+            fo.close
         
         internalCheck()
 
@@ -480,6 +510,7 @@ def doCommand(year, inputURI="/dev/stdin"):
 if __name__ == '__main__':
     import getopt
     testFiles = []
+    totalsFilename = None
     start = 1
     normal = 0
     chatty = 0
@@ -488,23 +519,27 @@ if __name__ == '__main__':
     global yearInQuestion
     verbose = 0
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hvy:i:",
-            ["help",  "verbose", "year=", "input="])
+        opts, args = getopt.getopt(sys.argv[1:], "hvy:i:t:",
+            ["help",  "verbose", "year=", "input=", "totals="])
     except getopt.GetoptError:
         # print help information and exit:
         print __doc__
         sys.exit(2)
     output = None
+    inputURIs = []
     for o, a in opts:
         if o in ("-h", "--help"):
             usage()
             sys.exit()
         if o in ("-v", "--verbose"):
             verbose = 1
+        if o in ("-t", "--totals"):
+            totalsFilename = a
         if o in ("-y", "--year"):
             yearInQuestion = a
+            if len(yearInQuestion) < 7: yearInQuestion += "-01"
         if o in ("-i", "--input"):
-            inputURI = a
+            inputURIs.append(a)
 
-    doCommand(year=yearInQuestion, inputURI=inputURI)
+    doCommand(yearInQuestion=yearInQuestion, inputURIs=inputURIs, totalsFilename=totalsFilename)
 
