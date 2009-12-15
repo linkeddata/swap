@@ -135,6 +135,7 @@ def _giveTerm(x, ko):
     from formula import Formula
     if isinstance(x, Formula):
         b = ko.newBlankNode(why=dontAsk)
+        x = x.close() # per timbl Tue, 15 Dec 2009 08:53:04 -0500
         ko.add(subj=x, pred=ko.store.sameAs, obj=b,
                         why=dontAsk)
         return b
