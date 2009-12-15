@@ -335,14 +335,17 @@ class Checker(FormulaCache):
 
             self._maxn += 1
             num = self._maxn
-            out.write("%d: %s\n [by parsing <%s>]\n\n" %
+            out.write("   * - %d\n"
+                      "     - %s\n"
+                      "     - parsing <%s>\n"
+                      "     - \n" % 
                       (num, body, res))
         elif t is reason.Inference:
             evidence = proof.the(subj=step, pred=reason.evidence)
-            ej = []
+            ej = ()
             for e in evidence:
                 n = self.report(out, None, e)
-                ej.append(n)
+                ej = ej + (n,)
             rule = proof.the(subj=step, pred=reason.rule)
             rn = self.report(out, None, rule)
 
@@ -373,44 +376,59 @@ class Checker(FormulaCache):
 
             self._maxn += 1
             num = self._maxn
-            out.write("%d: %s\n [by rule from step %s applied to steps %s\n  with bindings %s]\n\n" %
+            out.write("   * - %d\n"
+                      "     - %s\n"
+                      "     - rule from step %s applied to steps %s\n"
+                      "     - %s\n" %
                       (num, body, rn, ej, bindings))
         
         elif t is reason.Conjunction:
             components = proof.each(subj=step, pred=reason.component)
             num = 1
-            js = []
+            js = ()
             for e in components:
                 n = self.report(out, None, e)
-                js.append(n)
+                js = js + (n,)
 
             self._maxn += 1
             num = self._maxn
-            out.write("%d: %s\n [by conjoining steps %s]\n\n" %
+            out.write("   * - %d\n"
+                      "     - %s\n"
+                      "     - conjoining steps %s\n"
+                      "     - \n" %
                       (num, body, js))
         
         elif t is reason.Fact:
             pred, subj, obj = atomicFormulaTerms(f)
             self._maxn += 1
             num = self._maxn
-            out.write("%d: %s\n [by built-in Axiom %s]\n\n" %
+            out.write("   * - %d\n"
+                      "     - %s\n"
+                      "     - built-in Axiom %s\n"
+                      "     - \n" %
                       (num, body, pred))
         elif t is reason.Conclusion:
             self._maxn += 1
             num = self._maxn
-            out.write("%d: %s\n [by conditional proof on @@]\n\n" %
+            out.write("   * - %d\n"
+                      "     - %s\n"
+                      "     - **conditional proof on @@\n"
+                      "     - \n" %
                       (num, body))
         elif t is reason.Extraction:
             r2 = proof.the(step, reason.because)
             n = self.report(out, None, r2)
             self._maxn += 1
             num = self._maxn
-            out.write("%d: %s\n [by erasure from step %s]\n\n" %
+            out.write("   * - %d\n"
+                      "     - %s\n"
+                      "     - erasure from step %s\n"
+                      "     - \n" %
                       (num, body, n))
         elif t is reason.Premise:
             self._maxn += 1
             num = self._maxn
-            out.write("@@num/name: %s [Premise]\n\n" %
+            out.write("@@num/name: %s [Premise]\n" %
                       body)
         else:
             raise RuntimeError, t
@@ -845,7 +863,9 @@ def main(argv):
     try:
         c = Checker(proof)
         if report:
+            sys.stdout.write(PfReportHeader)
             c.report(sys.stdout)
+            sys.stdout.write("\n\nConclusion::\n")
 
         proved = c.result(c.conjecture()[1], policy=policy)
 
@@ -857,6 +877,17 @@ def main(argv):
         progress("Proof invalid:", e)
         sys.exit(-1)
 
+
+PfReportHeader = """
+.. list-table:: Proof
+   :widths: 2 70 20 20
+   :header-rows: 1
+
+   * - Step
+     - Formula
+     - Justification
+     - Bindings
+"""
 
 ################################
 # test harness and diagnostics
