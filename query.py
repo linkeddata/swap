@@ -1710,7 +1710,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                                          BecauseBuiltIn(con, x, pred, obj)) \
                                         for x in result]
                             else:
-                                return [(nb1, diag.tracking and BecauseBuiltIn(con, subj, pred, result))
+                                return [(nb1, diag.tracking and BecauseBuiltIn(con, result, pred, obj))
                                         for nb1, env3 in subj.unify(result, Env(), Env(), self.neededToRun[SUBJ])]
 ##                                return [(Env({subj: (result,None)}),
 ##                                         diag.tracking and \
