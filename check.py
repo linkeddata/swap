@@ -737,7 +737,7 @@ def checkBuiltin(r, f, checker, policy, level=0):
                          "predicate: %s "
                          "subject: %s "
                          "object: %s "
-                         "result: %s" % (s, pred, o, r), level)
+                         "result: %s" % (pred, s, o, r), level)
 
 
 def atomicFormulaTerms(f):
