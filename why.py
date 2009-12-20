@@ -27,7 +27,6 @@ from set_importer import Set, sorted
 
 import urllib # for hasContent
 import uripath # DanC's tested and correct one
-import md5, binascii  # for building md5 URIs
 
 from uripath import refTo
 from myStore  import Namespace
