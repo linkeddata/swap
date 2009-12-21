@@ -30,7 +30,7 @@ from set_importer import Set, ImmutableSet
 
 
 import uripath # DanC's tested and correct one
-import md5, binascii  # for building md5 URIs
+import hashlib, binascii  # for building md5 URIs
 
 from uripath import refTo
 from RDFSink import runNamespace
@@ -1396,7 +1396,7 @@ class Literal(Term):
         Hmm... encoding... assuming utf8? @@test this.
         Hmm... for a class of literals including this one,
         strictly speaking."""
-        x=md5.new()
+        x=hashlib.md5()
         x.update(self.string)
         d=x.digest()
         b16=binascii.hexlify(d)
@@ -1592,7 +1592,7 @@ class BuiltIn(Fragment):
     
     A binary operator can calculate truth value given 2 arguments"""
     def __new__(cls, *args, **keywords):
-        self = Fragment.__new__(cls, *args, **keywords)
+        self = Fragment.__new__(cls)
         BuiltIn.all.append(self)         # to prevent the forgetting of builtins
         return self
     all = []

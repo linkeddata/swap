@@ -15,7 +15,6 @@ import re
 from diag import verbosity, progress
 
 import urllib # for hasContent
-import md5, binascii  # for building md5 URIs
 
 from term import LightBuiltIn, ReverseFunction, Function, UnknownType
 from local_decimal import Decimal

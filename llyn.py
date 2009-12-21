@@ -57,7 +57,6 @@ from warnings import warn
 
 
 import urllib # for log:content
-import md5, binascii  # for building md5 URIs
 
 import uripath
 from uripath import canonical
@@ -1521,13 +1520,11 @@ class RDFStore(RDFSink) :
         cwm_set.register(self)
         cwm_sparql.register(self)
         cwm_xml.register(self)
-        import cwm_crypto  # Cryptography
         if crypto:
+            import cwm_crypto  # Cryptography
             if cwm_crypto.USE_PKC == 0:
                 raise RuntimeError("Try installing pycrypto, and make sure it is in you PYTHONPATH")
-        else:
-            cwm_crypto.USE_PKC = 0       
-        cwm_crypto.register(self)  # would like to anyway to catch bug if used but not available
+            cwm_crypto.register(self)  # would like to anyway to catch bug if used but not available
 
     def newLiteral(self, str, dt=None, lang=None):
         "Interned version: generate new literal object as stored in this store"
