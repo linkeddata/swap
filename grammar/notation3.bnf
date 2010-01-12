@@ -86,6 +86,8 @@
 
 [30] qname  ::= prefix? localname
 [31] localname ::= (NameStartChar3|"_") NameChar3*
+
+/* @@bug! doesn't allow : as a prefix, a in @prefix : <foo#> */
 [32] prefix  ::= (("_" NameChar3+) | (NameStartChar3 NameChar3*))? ":"
 
 /* @@ no \u stuff, for now */
