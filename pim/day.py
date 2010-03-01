@@ -4,7 +4,7 @@
 options:
 
 --help      -h
---gpsData   -g   file   Input file directory with gpsData.n3
+--gpsData   -g   dir   Input file directory containing gpsData.n3 and Photometa.n3
 --verbose   -v
 
 is or was http://www.w3.org/2000/10/swap/pim/day.py
@@ -55,6 +55,15 @@ def compareByTime(a, b):
     if a[0] > b[0]: return +1
     return 0
 
+def saveAs(uri, filename):
+    gifStream = urlopen(uri)
+    gifData = gifStream.read()
+    gifStream.close
+    progress("curl \"%s\" > %s" % (uri, filename))
+    saveStream = open(filename, "w")
+    saveStream.write(gifData)
+    saveStream.close()
+
 ################################ Map class
 
 class Map:
@@ -70,7 +79,7 @@ class Map:
         self.midla = (minla + maxla)/2.0
         self.midlo = (minlo + maxlo)/2.0
         self.total_m = 0 # Meters
-        self.last = None   # (lon, lat)
+        self.last = None   # (lon, lat, date)
         
         pi = 3.14159265358979323846 # (say)
         degree = pi/180
@@ -84,53 +93,81 @@ class Map:
                         ((a*cos(phi))**2 + ((a*sin(phi)))**2))
         print "Local radius of earth = ", r_earth
         
-        self.x_m_per_degree = r_earth * pi /180
-        self.y_m_per_degree = self.x_m_per_degree * cos(self.midla*degree)
+        self.y_m_per_degree = r_earth * pi /180
+        self.x_m_per_degree = self.y_m_per_degree * cos(self.midla*degree)
         progress('Metres per degree: (%f,%f)' % (self.x_m_per_degree, self.y_m_per_degree))
-        subtended_y = (maxla - minla) * self.x_m_per_degree
-        subtended_x = (maxlo - minlo) * self.y_m_per_degree
+        # OpsenStreetMap Map
+        
+        hila = maxla + (maxla - minla) * 0.1  # Make  margins an extra 10% all round
+        hilo = maxlo + (maxlo - minlo) * 0.1
+        lola = minla - (maxla - minla) * 0.1
+        lolo = minlo - (maxlo - minlo) * 0.1
+
+        subtended_x = (hilo - lolo) * self.x_m_per_degree
+        subtended_y = (hila - lola) * self.y_m_per_degree
     
         progress("Area subtended  %f (E-W)  %f (N-S) meters" %(subtended_x, subtended_y))
-        
-        page_x = 800.0  # pixels
-        page_y = 600.0
-        max_x_scale = page_x / subtended_x
-        max_y_scale = page_y / subtended_y
-        self.pixels_per_m = min(max_x_scale, max_y_scale)    * 0.9  # make margins
+
+        osmScale = 10000  # say
+        self.pixels_per_m = 122.94/25.4 * 1000 / osmScale  # pixels per metre on the ground - dpi was 120 now 123
+
+        # Like http://tile.openstreetmap.org/cgi-bin/export?bbox=-71.2118,42.42694,-71.19273,42.44086&scale=25000&format=svg
+        OSM_URI = ("http://tile.openstreetmap.org/cgi-bin/export?bbox=%f,%f,%f,%f&scale=%i&format=svg" % (lolo, lola, hilo, hila, osmScale))
+        progress("FYI OSM map at: ", OSM_URI)
+        try:
+            pass
+            #saveAs(OSM_URI, "background-map.svg")
+            osmStream = urlopen(OSM_URI)
+            osmData = osmStream.read()  # Beware of server overloaded errors
+            osmStream.close
+
+        except IOError:
+            progress("Unable to get OSM map")
+
+        i = osmData.rfind('</svg>')
+        if i <0:
+            progress("Invalid SVG file from OSM")
+            return
+        self.wr(osmData[:i])  # Everything except for the last </svg>
+
+
+#        page_x = 800.0  # pixels
+#        page_y = 600.0
+#        max_x_scale = page_x / subtended_x
+#        max_y_scale = page_y / subtended_y
+#        self.pixels_per_m = min(max_x_scale, max_y_scale)    * 0.9  # make margins
+
         self.pixels_per_deg_lat = self.pixels_per_m * r_earth * pi /180
         self.pixels_per_deg_lon = self.pixels_per_deg_lat * cos(self.midla*degree)
         
-        self.page_x = int(subtended_x * self.pixels_per_m/0.9)
-        self.page_y = int(subtended_y * self.pixels_per_m/0.9)
+        self.page_x = int(subtended_x * self.pixels_per_m)
+        self.page_y = int(subtended_y * self.pixels_per_m)
 
-        map_wid = subtended_x /0.9
-        map_ht  = subtended_y /0.9
+       # TIGER map
 
-        tigerURI = ("http://tiger.census.gov/cgi-bin/mapper/map.gif?"
-                +"&lat=%f&lon=%f&ht=%f&wid=%f&"
-                +"&on=CITIES&on=majroads&on=miscell&on=places&on=railroad&on=shorelin&on=streets"
-                +"&on=interstate&on=statehwy&on=states&on=ushwy&on=water"
-                +"&tlevel=-&tvar=-&tmeth=i&mlat=&mlon=&msym=bigdot&mlabel=&murl=&conf=mapnew.con"
-                +"&iht=%i&iwd=%i")  % (self.midla, self.midlo, map_ht, map_wid, self.page_y, self.page_x)
+        if 0:
 
-        progress("Getting Tiger map ", tigerURI)
-        try:
-            gifStream = urlopen(tigerURI)
-            gifData = gifStream.read()
-            gifStream.close
-            progress("Saving tiger map")
-            saveStream = open("tiger.gif", "w")
-            saveStream.write(gifData)
-            saveStream.close()
-        except IOError:
-            progress("Offline? No tigermap.")
-            
+            map_wid = subtended_x /0.9
+            map_ht  = subtended_y /0.9
+            tigerURI = ("http://tiger.census.gov/cgi-bin/mapper/map.gif?"
+                    +"&lat=%f&lon=%f&ht=%f&wid=%f&"
+                    +"&on=CITIES&on=majroads&on=miscell&on=places&on=railroad&on=shorelin&on=streets"
+                    +"&on=interstate&on=statehwy&on=states&on=ushwy&on=water"
+                    +"&tlevel=-&tvar=-&tmeth=i&mlat=&mlon=&msym=bigdot&mlabel=&murl=&conf=mapnew.con"
+                    +"&iht=%i&iwd=%i")  % (self.midla, self.midlo, map_ht, map_wid, self.page_y, self.page_x)
+
+            progress("Getting tiger map ", tigerURI)
+            try:
+                saveAs(tigerURI, "tiger.gif")
+            except IOError:
+                progress("Offline? No tigermap.")
+                
 #       tigerURI = ("http://tiger.census.gov/cgi-bin/mapper/map.gif?&lat=%f&lon=%f&ht=%f"
 #           +"&wid=%f&&on=majroads&on=miscell&tlevel=-&tvar=-&tmeth=i&mlat=&mlon=&msym=bigdot&mlabel=&murl="
 #           +"&conf=mapnew.con&iht=%i&iwd=%i" ) % (self.midla, self.midlo,  maxla-minla, maxlo-minlo, self.page_y, self.page_x)
 
 
-        self.wr("""<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+        if 0: self.wr("""<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.0//EN'
  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
 <!-- Generated by @@@ -->
@@ -140,10 +177,13 @@ class Map:
     xmlns='http://www.w3.org/2000/svg'
     xmlns:xlink='http://www.w3.org/1999/xlink'>
  <g>
- <rect x='0' y='0' width='%ipx' height='%ipx' style='fill:#ddffbb'/>
- <image width="100%%" height="100%%"  xlink:href="tiger.gif"/>
- """  %   (self.page_x,self.page_y, self.page_x,self.page_y))  #"
+ """  %   (self.page_x,self.page_y))  #"
  
+        progress('Map page size (%i,%i)'% (self.page_x,self.page_y))
+
+# <rect x='0' y='0' width='%ipx' height='%ipx' style='fill:#ddffbb'/>
+# <image width="100%%" height="100%%"  xlink:href="background-map.svg"/>
+
 
     def deg_to_px(self, lon, lat):
         "Note the lon, lat order on input like x,y"
@@ -152,29 +192,41 @@ class Map:
         return (int((lon - self.midlo) * self.pixels_per_deg_lon + self.page_x/2),
             int(self.page_y/2 - (lat - self.midla) * self.pixels_per_deg_lat))
             
-    def startPath(self, lon, lat):
+    def startPath(self, lon, lat, date):
         x, y = self.deg_to_px(lon, lat)
-        self.last = (lon, lat)
+        self.last = (lon, lat, date)
+        self.walking = 0.0
         self.wr("  <path   style='fill:none; stroke:red' d='M %i %i " % (x,y))
 
-    def straightPath(self, lon, lat):
+    def straightPath(self, lon, lat, date):
         x, y = self.deg_to_px(lon, lat)
         self.wr("L %i %i " % (x,y))
-        lastlon, lastlat = self.last
+        lastlon, lastlat, lastdate = self.last
         dx = (lon-lastlon) * self.x_m_per_degree
         dy = (lat-lastlat) * self.y_m_per_degree
         ds = sqrt(dx*dx + dy*dy)
-        progress('Path length/m '+`ds`)
-        self.total_m += ds
-        self.last = (lon, lat)
 
-    def skipPath(self, lon, lat):
+        t1 = isodate.parse(lastdate)
+        t2 = isodate.parse(date)
+        dt = t2-t1
+        if dt > 0:
+            speed = ds/dt  # m/s
+        else:
+            speed = 0.0  # well, infinity
+        # progress('Path length: %sm, speed: %f m/s ' %(`ds`, speed))
+        if speed > 0.5 and speed < 2.0:
+            self.walking += dt
+        self.total_m += ds
+        self.last = (lon, lat, date)
+
+    def skipPath(self, lon, lat, date):
         x, y = self.deg_to_px(lon, lat)
         self.wr("M %i %i " % (x,y))
-        self.last = (lon, lat)
+        self.last = (lon, lat, date)
 
     def endPath(self):
         progress('Track length so far:/m: %i' % (self.total_m))
+        progress('Time spent walking/m: %i' % (self.walking/60))
         self.wr("'/>\n\n")
 
     def photo(self, uri, lon, lat):
@@ -194,7 +246,7 @@ class Map:
                     </a>""" %(rel, x-7, y-4, x, y))
         
     def close(self):
-        self.wr("</g></svg>\n")
+        self.wr("</svg>\n")
         
 
 
@@ -327,14 +379,14 @@ if __name__ == '__main__':
 
     pathpoint = None
     for i in range(n):
-        dt, ty, da = events[i]
+        date, ty, da = events[i]
         if ty == "T": # Trackpoint
             (la, lo) = float(da[0]), float(da[1])
             if pathpoint == None:
-                map.startPath(lo, la)
+                map.startPath(lo, la, date)
                 pathpoint = 1
             else:
-                map.straightPath(lo, la)
+                map.straightPath(lo, la, date)
         elif ty == "P":
             pass
     map.endPath()
