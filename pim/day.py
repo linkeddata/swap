@@ -69,8 +69,21 @@ def saveAs(uri, filename):
 class Map:
     def __init__(self, minla, maxla, minlo, maxlo, svgStream=None):
     
+        def getSize(s, atr):
+            i = s.find(atr+'="') + len(atr) + 2
+            val = ""
+            while s[i] in '0123456789':
+                val += s[i]
+                i = i+1
+            x = int(val)
+            progress("Found attribute %s=%i" %(atr,x))
+            return x
+    
         progress("Lat between %f and %f, Long %f and %f" % (minla, maxla, minlo, maxlo))
     
+        pageLong_m = 10.5 * 25.4 / 1000   # Say for 8.5 x 11" US Paper YMMV
+        pageShort_m = 8.0 * 25.4 / 1000     #This is printable
+
         if svgStream==None: self.wr = sys.stdout.write
         else: self.wr = svgStream.write
         
@@ -105,11 +118,39 @@ class Map:
 
         subtended_x = (hilo - lolo) * self.x_m_per_degree
         subtended_y = (hila - lola) * self.y_m_per_degree
-    
+        
+
         progress("Area subtended  %f (E-W)  %f (N-S) meters" %(subtended_x, subtended_y))
 
-        osmScale = 10000  # say
-        self.pixels_per_m = 122.94/25.4 * 1000 / osmScale  # pixels per metre on the ground - dpi was 120 now 123
+        vertical = subtended_y > subtended_x
+        if vertical:
+            if subtended_y / pageLong_m >  subtended_x/pageShort_m:  # constrained by height
+                osmScale = subtended_y / pageLong_m
+                hilo = self.midlo + 0.5 * (pageShort_m * osmScale/self.x_m_per_degree)
+                lolo = self.midlo - 0.5 * (pageShort_m * osmScale/self.x_m_per_degree)
+            else: # constrained by width
+                osmScale = subtended_x/pageShort_m
+                hila = self.midla + 0.5 * (pageLong_m * osmScale/self.y_m_per_degree)
+                lola = self.midla - 0.5 * (pageLong_m * osmScale/self.y_m_per_degree)
+            
+        else:
+            if subtended_x / pageLong_m >  subtended_y/pageShort_m:  # constrained by long width
+                osmScale = subtended_x / pageLong_m
+                hila = self.midla + 0.5 * (pageShort_m * osmScale/self.y_m_per_degree)
+                lola = self.midla - 0.5 * (pageShort_m * osmScale/self.y_m_per_degree)
+            else: # constrained by short height
+                osmScale = subtended_y/pageShort_m
+                hilo = self.midlo + 0.5 * (pageLong_m * osmScale/self.x_m_per_degree)
+                lolo = self.midlo - 0.5 * (pageLong_m * osmScale/self.x_m_per_degree)
+
+        progress("Area subtended  %f (E-W)  %f (N-S) meters" %(subtended_x, subtended_y))
+
+        # osmScale = 10000  # say
+        #self.pixels_per_m = 122.94/25.4 * 1000 / osmScale  # pixels per metre on the ground - dpi was 120 now 123
+        #self.pixels_per_m = 85 /25.4 * 1000 / osmScale #  Calculating this doesn't sem to work -- lets look at the actual map
+        #self.page_x = (hilo-lolo) * self.x_m_per_degree * self.pixels_per_m
+        #self.page_y = (hila-lola) * self.y_m_per_degree * self.pixels_per_m
+        
 
         # Like http://tile.openstreetmap.org/cgi-bin/export?bbox=-71.2118,42.42694,-71.19273,42.44086&scale=25000&format=svg
         OSM_URI = ("http://tile.openstreetmap.org/cgi-bin/export?bbox=%f,%f,%f,%f&scale=%i&format=svg" % (lolo, lola, hilo, hila, osmScale))
@@ -130,6 +171,20 @@ class Map:
             return
         self.wr(osmData[:i])  # Everything except for the last </svg>
 
+        # Set up parametrs for point mapping:
+        self.page_x = getSize(osmData, 'width')
+        self.page_y = getSize(osmData, 'height')
+        self.lolo = lolo
+        self.lola = lola
+        self.hilo = hilo
+        self.hila = hila
+        self.pixels_per_deg_lat = self.page_y / (hila-lola)
+        self.pixels_per_deg_lon = self.page_x / (hilo-lolo)
+#        self.pixels_per_deg_lat = self.pixels_per_m * r_earth * pi /180
+#        self.pixels_per_deg_lon = self.pixels_per_deg_lat * cos(self.midla*degree)
+        
+        
+        
 
 #        page_x = 800.0  # pixels
 #        page_y = 600.0
@@ -137,11 +192,8 @@ class Map:
 #        max_y_scale = page_y / subtended_y
 #        self.pixels_per_m = min(max_x_scale, max_y_scale)    * 0.9  # make margins
 
-        self.pixels_per_deg_lat = self.pixels_per_m * r_earth * pi /180
-        self.pixels_per_deg_lon = self.pixels_per_deg_lat * cos(self.midla*degree)
-        
-        self.page_x = int(subtended_x * self.pixels_per_m)
-        self.page_y = int(subtended_y * self.pixels_per_m)
+        #self.page_x = int(subtended_x * self.pixels_per_m)
+        #self.page_y = int(subtended_y * self.pixels_per_m)
 
        # TIGER map
 
@@ -179,7 +231,7 @@ class Map:
  <g>
  """  %   (self.page_x,self.page_y))  #"
  
-        progress('Map page size (%i,%i)'% (self.page_x,self.page_y))
+        progress('Map page size (%f,%f)'% (self.page_x,self.page_y))
 
 # <rect x='0' y='0' width='%ipx' height='%ipx' style='fill:#ddffbb'/>
 # <image width="100%%" height="100%%"  xlink:href="background-map.svg"/>
@@ -189,18 +241,18 @@ class Map:
         "Note the lon, lat order on input like x,y"
 #       progress("lon %f from center %f is offset %f, ie %f meters" % (
 #               lon, self.midlo, lon - self.midlo, ((lon - self.midlo) * self.pixels_per_deg_lon)))
-        return (int((lon - self.midlo) * self.pixels_per_deg_lon + self.page_x/2),
-            int(self.page_y/2 - (lat - self.midla) * self.pixels_per_deg_lat))
+        return   ((lon - self.lolo) * self.pixels_per_deg_lon,
+                  (self.hila - lat) * self.pixels_per_deg_lat)
             
     def startPath(self, lon, lat, date):
         x, y = self.deg_to_px(lon, lat)
         self.last = (lon, lat, date)
         self.walking = 0.0
-        self.wr("  <path   style='fill:none; stroke:red' d='M %i %i " % (x,y))
+        self.wr("  <path   style='fill:none; stroke:red' d='M %f %f " % (x,y))
 
     def straightPath(self, lon, lat, date):
         x, y = self.deg_to_px(lon, lat)
-        self.wr("L %i %i " % (x,y))
+        self.wr("L %f %f " % (x,y))
         lastlon, lastlat, lastdate = self.last
         dx = (lon-lastlon) * self.x_m_per_degree
         dy = (lat-lastlat) * self.y_m_per_degree
@@ -221,12 +273,12 @@ class Map:
 
     def skipPath(self, lon, lat, date):
         x, y = self.deg_to_px(lon, lat)
-        self.wr("M %i %i " % (x,y))
+        self.wr("M %f %f " % (x,y))
         self.last = (lon, lat, date)
 
     def endPath(self):
-        progress('Track length so far:/m: %i' % (self.total_m))
-        progress('Time spent walking/m: %i' % (self.walking/60))
+        progress('Track length so far:/m: %f' % (self.total_m))
+        progress('Time spent walking/min: %f' % (self.walking/60.0))
         self.wr("'/>\n\n")
 
     def photo(self, uri, lon, lat):
@@ -321,7 +373,7 @@ if __name__ == '__main__':
 
     if verbose: progress( "First event:" , `events[0]`, "Last event:" , `events[n-1]`)
 
-    minla, maxla = 90.0, 0.0
+    minla, maxla = 90.0, -90.0
     minlo, maxlo = 400.0, -400.0
     conclusions = formula()
     for i in range(n):
