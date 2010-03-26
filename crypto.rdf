@@ -1,10 +1,7 @@
 
-<!-- Processed by Id: cwm.py,v 1.177 2005/08/28 22:53:56 syosi Exp -->
-<!--     using base file:/home/syosi/CVS-local/WWW/2000/10/swap/crypto.n3-->
 
 
 <rdf:RDF xmlns="http://www.w3.org/2000/01/rdf-schema#"
-    xmlns:dpo="http://www.daml.org/2001/03/daml+oil#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:s="http://www.w3.org/2000/01/rdf-schema#">
 
@@ -42,13 +39,13 @@ document. Currently (2001/9) only SHA is given that property.
 The object can hold a public and optionally a private key.</comment>
     </Class>
 
-    <dpo:UniqueProperty rdf:about="http://www.w3.org/2000/10/swap/crypto#md5">
-        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/crypto#md5">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
         <comment>The object is a MD5 hash of the subject.</comment>
         <domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
         <label>MD5 hash</label>
         <range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
-    </dpo:UniqueProperty>
+    </rdf:Property>
 
     <Property rdf:about="http://www.w3.org/2000/10/swap/crypto#publicKey">
         <comment>The object is a public key object that doesn't
@@ -58,14 +55,14 @@ The object can hold a public and optionally a private key.</comment>
         <range rdf:resource="http://www.w3.org/2000/10/swap/crypto#PublicKeyObject"/>
     </Property>
 
-    <dpo:UnambiguousProperty rdf:about="http://www.w3.org/2000/10/swap/crypto#sha">
-        <rdf:type rdf:resource="http://www.daml.org/2001/03/daml+oil#UniqueProperty"/>
-        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/crypto#sha">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
         <comment>The object is a SHA-1 hash of the subject.</comment>
         <domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
         <label>SHA hash</label>
         <range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
-    </dpo:UnambiguousProperty>
+    </rdf:Property>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/crypto#sign">
         <comment>The subject should be a list of two things, a hash

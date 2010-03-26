@@ -1,34 +1,54 @@
 #  Schema for string built-in functions in cwm. 
 
-#@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
 @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
-#@prefix daml:  <http://www.daml.org/2001/03/daml-ont#> .
-@prefix dpo:  <http://www.daml.org/2001/03/daml+oil#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+
+# @prefix daml:  <http://www.daml.org/2001/03/daml-ont#> .
+# @prefix dpo:  <http://www.daml.org/2001/03/daml+oil#> .
+
 @prefix log:  <http://www.w3.org/2000/10/swap/log#> .
 
+@prefix :  <http://www.w3.org/2000/10/swap/string#> .
 @prefix string:  <http://www.w3.org/2000/10/swap/string#> .
 
+<>  s:comment "String Processing Ontology";
+    s:comment """This is an ontology for computable string functions.
+It is implemented, for example, in CWM and Euler.""".
+
 string:String a s:Class;
-    dpo:sameClassAs s:Literal.   # I suppose - modulo typing
+    s:label "string".
+#    owl:sameClassAs s:Literal.   # I suppose - modulo typing
 
 # Concat is backwards!
-string:concat a dpo:UnambiguousProperty;   # obj = list of string to string
+string:concat a owl:InverseFunctionalProperty;   # obj = list of string to string
     s:definedBy <http://www.w3.org/2000/10/swap/string>;  
     s:label  "is concatenation of";
     s:comment "(obsolete - (was backwards!) - use: string:concatenation)";
     s:domain string:String;
-    s:range  dpo:List;
-    dpo:inverse string:concatenation.  # Use that instead for new designs
+    s:range  rdf:List;
+    owl:inverse string:concatenation.  # Use that instead for new designs
 
-string:concatenation a dpo:UniqueProperty;
+string:concatenation a owl:FunctionalProperty;
     s:definedBy <http://www.w3.org/2000/10/swap/string>;  
     s:label "is the concatenation of the strings in";
     s:comment  """The subject is a list of strings. The object is calculated as
 		a concatenation of those strings.""";
-    s:domain dpo:List;
+    s:domain rdf:List;
     s:range  string:String.
 
-string:greaterThan a dpo:Property;
+string:format a owl:FunctionalProperty;
+    s:definedBy <http://www.w3.org/2000/10/swap/string>;  
+    s:label "is the string formatted function of";
+    s:comment  """The subject is a list, whose first member is a format string,
+        and whose remaining members are arguments to the format string.
+        The formating string is in the style of python's % operator,
+        very similar to C's sprintf().
+        The object is calculated from the subject.""";
+    s:domain rdf:List;
+    s:range  string:String.
+
+string:greaterThan a rdf:Property;
     s:definedBy <http://www.w3.org/2000/10/swap/string>;  
     s:label  "is greater than";
     s:comment  """True iff the string is greater than the object
@@ -37,7 +57,7 @@ string:greaterThan a dpo:Property;
     s:range  string:String.
 
 
-string:notGreaterThan a dpo:Property;
+string:notGreaterThan a rdf:Property;
     s:definedBy <http://www.w3.org/2000/10/swap/string>;  
     s:label  "is not greater than";
     s:comment  """True iff the string is NOT greater than the object
@@ -46,7 +66,7 @@ string:notGreaterThan a dpo:Property;
     s:range  string:String.
 
 
-string:lessThan a dpo:Property;
+string:lessThan a rdf:Property;
     s:definedBy <http://www.w3.org/2000/10/swap/string>;  
     s:label  "is less than";
     s:comment  """True iff the string is less than the object
@@ -55,7 +75,7 @@ string:lessThan a dpo:Property;
     s:range  string:String.
 
 
-string:notLessThan a dpo:Property;
+string:notLessThan a rdf:Property;
     s:definedBy <http://www.w3.org/2000/10/swap/string>;  
     s:label  "is not less than";
     s:comment  """True iff the string is NOT less than the object
@@ -63,28 +83,28 @@ string:notLessThan a dpo:Property;
     s:domain string:String;
     s:range  string:String.
 
-string:startsWith a dpo:Property;
+string:startsWith a rdf:Property;
     s:definedBy <http://www.w3.org/2000/10/swap/string>;  
     s:label  "starts with";
     s:comment  """True iff the subject string starts with the object string.""";
     s:domain string:String;
     s:range  string:String.
 
-string:endsWith a dpo:Property;
+string:endsWith a rdf:Property;
     s:definedBy <http://www.w3.org/2000/10/swap/string>;  
     s:label  "ends with";
     s:comment  """True iff the subject string ends with the object string.""";
     s:domain string:String;
     s:range  string:String.
 
-string:contains a dpo:Property;
+string:contains a rdf:Property;
     s:definedBy <http://www.w3.org/2000/10/swap/string>;  
     s:label  "contains";
     s:comment  """True iff the subject string contains the object string.""";
     s:domain string:String;
     s:range  string:String.
 
-string:containsIgnoringCase a dpo:Property;
+string:containsIgnoringCase a rdf:Property;
     s:definedBy <http://www.w3.org/2000/10/swap/string>;  
     s:label  "contains";
     s:comment  """True iff the subject string contains the object string,
@@ -93,7 +113,7 @@ lower case characters.""";
     s:domain string:String;
     s:range  string:String.
 
-string:equalIgnoringCase a dpo:Property;
+string:equalIgnoringCase a rdf:Property;
     s:definedBy <http://www.w3.org/2000/10/swap/string>;  
     s:label  "contains";
     s:comment  """True iff the subject string is the same as object string
@@ -101,7 +121,7 @@ ignoring differences between upper and lower case.""";
     s:domain string:String;
     s:range  string:String.
 
-string:notEqualIgnoringCase a dpo:Property;
+string:notEqualIgnoringCase a rdf:Property;
     s:definedBy <http://www.w3.org/2000/10/swap/string>;  
     s:label  "contains";
     s:comment  """True iff the subject string is the NOT same as object string
@@ -109,7 +129,7 @@ ignoring differences between upper and lower case.""";
     s:domain string:String;
     s:range  string:String.
 
-string:scrape a dpo:Property;
+string:scrape a rdf:Property;
     s:definedBy <http://www.w3.org/2000/10/swap/string>;  
     s:label  "contains";
     s:comment  """The subject is a list of two strings. The second string is
@@ -119,7 +139,7 @@ the regular expression, then the object is calculated as being the
 part of the first string which matches the group.""";
     s:range  string:String.
 
-string:matches a dpo:Property;
+string:matches a rdf:Property;
     s:definedBy <http://www.w3.org/2000/10/swap/string>;  
     s:label  "contains";
     s:comment  """The subject is a string;
@@ -129,7 +149,7 @@ It is true iff the string matches the regexp.""";
     s:range  string:String.
 
 
-string:notMatches a dpo:Property;
+string:notMatches a rdf:Property;
     s:definedBy <http://www.w3.org/2000/10/swap/string>;  
     s:label  "contains";
     s:comment  """The subject string;

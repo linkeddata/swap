@@ -1,152 +1,169 @@
-<!-- Processed by Id: cwm.py,v 1.124 2003/02/14 00:55:50 sandro Exp -->
-<!--     using base file:/home/sandro/WWW/2000/10/swap/string.n3-->
+
+<!-- Processed by Id: cwm.py,v 1.197 2007/12/13 15:38:39 syosi Exp -->
+<!--     using base file:///devel/WWW/2000/10/swap/string.n3-->
 
 
-<rdf:RDF xmlns="http://www.w3.org/2000/10/swap/string#"
-    xmlns:dpo="http://www.daml.org/2001/03/daml+oil#"
-    xmlns:log="http://www.w3.org/2000/10/swap/log#"
+<rdf:RDF xmlns="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    xmlns:s="http://www.w3.org/2000/01/rdf-schema#"
-    xmlns:string="http://www.w3.org/2000/10/swap/string#">
+    xmlns:s="http://www.w3.org/2000/01/rdf-schema#">
 
-    <s:Class rdf:about="http://www.w3.org/2000/10/swap/string#String">
-        <dpo:sameClassAs rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </s:Class>
+    <rdf:Description rdf:about="">
+        <comment>String Processing Ontology</comment>
+        <comment>This is an ontology for computable string functions.
+It is implemented, for example, in CWM and Euler.</comment>
+    </rdf:Description>
 
-    <dpo:UnambiguousProperty rdf:about="http://www.w3.org/2000/10/swap/string#concat">
-        <dpo:inverse rdf:resource="http://www.w3.org/2000/10/swap/string#concatenation"/>
-        <s:comment>(obsolete - (was backwards!) - use: string:concatenation)</s:comment>
-        <s:definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
-        <s:domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
-        <s:label>is concatenation of</s:label>
-        <s:range rdf:resource="http://www.daml.org/2001/03/daml+oil#List"/>
-    </dpo:UnambiguousProperty>
+    <Class rdf:about="http://www.w3.org/2000/10/swap/string#String">
+        <label>string</label>
+    </Class>
 
-    <dpo:UniqueProperty rdf:about="http://www.w3.org/2000/10/swap/string#concatenation">
-        <s:comment>The subject is a list of strings. The object is calculated as
-		a concatenation of those strings.</s:comment>
-        <s:definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
-        <s:domain rdf:resource="http://www.daml.org/2001/03/daml+oil#List"/>
-        <s:label>is the concatenation of the strings in</s:label>
-        <s:range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
-    </dpo:UniqueProperty>
+    <owl:InverseFunctionalProperty rdf:about="http://www.w3.org/2000/10/swap/string#concat">
+        <comment>(obsolete - (was backwards!) - use: string:concatenation)</comment>
+        <definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+        <label>is concatenation of</label>
+        <range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
+        <owl:inverse rdf:resource="http://www.w3.org/2000/10/swap/string#concatenation"/>
+    </owl:InverseFunctionalProperty>
 
-    <dpo:Property rdf:about="http://www.w3.org/2000/10/swap/string#contains">
-        <s:comment>True iff the subject string contains the object string.</s:comment>
-        <s:definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
-        <s:domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
-        <s:label>contains</s:label>
-        <s:range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
-    </dpo:Property>
+    <owl:FunctionalProperty rdf:about="http://www.w3.org/2000/10/swap/string#concatenation">
+        <comment>The subject is a list of strings. The object is calculated as
+		a concatenation of those strings.</comment>
+        <definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
+        <domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
+        <label>is the concatenation of the strings in</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+    </owl:FunctionalProperty>
 
-    <dpo:Property rdf:about="http://www.w3.org/2000/10/swap/string#containsIgnoringCase">
-        <s:comment>True iff the subject string contains the object string,
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/string#contains">
+        <comment>True iff the subject string contains the object string.</comment>
+        <definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+        <label>contains</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/string#containsIgnoringCase">
+        <comment>True iff the subject string contains the object string,
 with the comparison done ignoring the difference between upper case and
-lower case characters.</s:comment>
-        <s:definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
-        <s:domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
-        <s:label>contains</s:label>
-        <s:range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
-    </dpo:Property>
+lower case characters.</comment>
+        <definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+        <label>contains</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+    </rdf:Property>
 
-    <dpo:Property rdf:about="http://www.w3.org/2000/10/swap/string#endsWith">
-        <s:comment>True iff the subject string ends with the object string.</s:comment>
-        <s:definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
-        <s:domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
-        <s:label>ends with</s:label>
-        <s:range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
-    </dpo:Property>
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/string#endsWith">
+        <comment>True iff the subject string ends with the object string.</comment>
+        <definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+        <label>ends with</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+    </rdf:Property>
 
-    <dpo:Property rdf:about="http://www.w3.org/2000/10/swap/string#equalIgnoringCase">
-        <s:comment>True iff the subject string is the same as object string
-ignoring differences between upper and lower case.</s:comment>
-        <s:definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
-        <s:domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
-        <s:label>contains</s:label>
-        <s:range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
-    </dpo:Property>
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/string#equalIgnoringCase">
+        <comment>True iff the subject string is the same as object string
+ignoring differences between upper and lower case.</comment>
+        <definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+        <label>contains</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+    </rdf:Property>
 
-    <dpo:Property rdf:about="http://www.w3.org/2000/10/swap/string#greaterThan">
-        <s:comment>True iff the string is greater than the object
-	when ordered according to Unicode(tm) code order.</s:comment>
-        <s:definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
-        <s:domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
-        <s:label>is greater than</s:label>
-        <s:range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
-    </dpo:Property>
+    <owl:FunctionalProperty rdf:about="http://www.w3.org/2000/10/swap/string#format">
+        <comment>The subject is a list, whose first member is a format string,
+        and whose remaining members are arguments to the format string.
+        The formating string is in the style of python's % operator,
+        very similar to C's sprintf().
+        The object is calculated from the subject.</comment>
+        <definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
+        <domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
+        <label>is the string formatted function of</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+    </owl:FunctionalProperty>
 
-    <dpo:Property rdf:about="http://www.w3.org/2000/10/swap/string#lessThan">
-        <s:comment>True iff the string is less than the object
-	when ordered according to Unicode(tm) code order.</s:comment>
-        <s:definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
-        <s:domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
-        <s:label>is less than</s:label>
-        <s:range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
-    </dpo:Property>
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/string#greaterThan">
+        <comment>True iff the string is greater than the object
+	when ordered according to Unicode(tm) code order.</comment>
+        <definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+        <label>is greater than</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+    </rdf:Property>
 
-    <dpo:Property rdf:about="http://www.w3.org/2000/10/swap/string#matches">
-        <s:comment>The subject is a string;
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/string#lessThan">
+        <comment>True iff the string is less than the object
+	when ordered according to Unicode(tm) code order.</comment>
+        <definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+        <label>is less than</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/string#matches">
+        <comment>The subject is a string;
 the object is is a regular expression in the perl, python style.
-It is true iff the string matches the regexp.</s:comment>
-        <s:definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
-        <s:domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
-        <s:label>contains</s:label>
-        <s:range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
-    </dpo:Property>
+It is true iff the string matches the regexp.</comment>
+        <definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+        <label>contains</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+    </rdf:Property>
 
-    <dpo:Property rdf:about="http://www.w3.org/2000/10/swap/string#notEqualIgnoringCase">
-        <s:comment>True iff the subject string is the NOT same as object string
-ignoring differences between upper and lower case.</s:comment>
-        <s:definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
-        <s:domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
-        <s:label>contains</s:label>
-        <s:range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
-    </dpo:Property>
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/string#notEqualIgnoringCase">
+        <comment>True iff the subject string is the NOT same as object string
+ignoring differences between upper and lower case.</comment>
+        <definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+        <label>contains</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+    </rdf:Property>
 
-    <dpo:Property rdf:about="http://www.w3.org/2000/10/swap/string#notGreaterThan">
-        <s:comment>True iff the string is NOT greater than the object
-	when ordered according to Unicode(tm) code order.</s:comment>
-        <s:definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
-        <s:domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
-        <s:label>is not greater than</s:label>
-        <s:range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
-    </dpo:Property>
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/string#notGreaterThan">
+        <comment>True iff the string is NOT greater than the object
+	when ordered according to Unicode(tm) code order.</comment>
+        <definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+        <label>is not greater than</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+    </rdf:Property>
 
-    <dpo:Property rdf:about="http://www.w3.org/2000/10/swap/string#notLessThan">
-        <s:comment>True iff the string is NOT less than the object
-	when ordered according to Unicode(tm) code order.</s:comment>
-        <s:definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
-        <s:domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
-        <s:label>is not less than</s:label>
-        <s:range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
-    </dpo:Property>
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/string#notLessThan">
+        <comment>True iff the string is NOT less than the object
+	when ordered according to Unicode(tm) code order.</comment>
+        <definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+        <label>is not less than</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+    </rdf:Property>
 
-    <dpo:Property rdf:about="http://www.w3.org/2000/10/swap/string#notMatches">
-        <s:comment>The subject string;
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/string#notMatches">
+        <comment>The subject string;
 the object is is a regular expression in the perl, python style.
-It is true iff the string does NOT match the regexp.</s:comment>
-        <s:definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
-        <s:domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
-        <s:label>contains</s:label>
-        <s:range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
-    </dpo:Property>
+It is true iff the string does NOT match the regexp.</comment>
+        <definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+        <label>contains</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+    </rdf:Property>
 
-    <dpo:Property rdf:about="http://www.w3.org/2000/10/swap/string#scrape">
-        <s:comment>The subject is a list of two strings. The second string is
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/string#scrape">
+        <comment>The subject is a list of two strings. The second string is
 a regular expression in the perl, python style.
 It must contain one group (a part in parentheses).  If the first string in the list matches
 the regular expression, then the object is calculated as being the
-part of the first string which matches the group.</s:comment>
-        <s:definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
-        <s:label>contains</s:label>
-        <s:range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
-    </dpo:Property>
+part of the first string which matches the group.</comment>
+        <definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
+        <label>contains</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+    </rdf:Property>
 
-    <dpo:Property rdf:about="http://www.w3.org/2000/10/swap/string#startsWith">
-        <s:comment>True iff the subject string starts with the object string.</s:comment>
-        <s:definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
-        <s:domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
-        <s:label>starts with</s:label>
-        <s:range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
-    </dpo:Property>
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/string#startsWith">
+        <comment>True iff the subject string starts with the object string.</comment>
+        <definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+        <label>starts with</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+    </rdf:Property>
 </rdf:RDF>
