@@ -1,9 +1,8 @@
 
-<!-- Processed by Id: cwm.py,v 1.190 2006/08/09 23:20:42 syosi Exp -->
-<!--     using base file:///devel/WWW/2000/10/swap/log.n3-->
 
 
 <rdf:RDF xmlns="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
 
@@ -120,7 +119,7 @@ in question.
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/log#equalTo">
         <comment>True if the subject and object are the same RDF node (symbol or literal).
-Do not confuse with daml:EquivalentTo.
+Do not confuse with owl:sameAs.
 A cwm built-in logical operator, RDF graph level.
 </comment>
     </rdf:Property>
@@ -170,9 +169,9 @@ You can use this to peer inside nested formulae.)</comment>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/log#notEqualTo">
         <comment>Equality in this sense is actually the same URI.
-Do not confuse with daml:EquivalentTo.
 A cwm built-in logical operator.
 </comment>
+        <owl:inverse rdf:resource="http://www.w3.org/2000/10/swap/log#equalTo"/>
     </rdf:Property>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/log#notIncludes">

@@ -1,6 +1,4 @@
 
-<!-- Processed by Id: cwm.py,v 1.145 2004/01/29 23:22:22 timbl Exp -->
-<!--     using base file:/devel/WWW/2000/10/swap/math.n3-->
 
 
 <rdf:RDF xmlns="http://www.w3.org/2000/01/rdf-schema#"
@@ -18,7 +16,7 @@
         <comment>The class of things that are DAML lists were all of the 
       members are math:Value items.</comment>
         <label>List</label>
-        <subClassOf rdf:resource="http://www.daml.org/2001/03/daml+oil#List"/>
+        <subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#LIst"/>
     </Class>
 
     <Class rdf:about="http://www.w3.org/2000/10/swap/math#LogicalOperator">

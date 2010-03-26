@@ -8,6 +8,7 @@
 # 
 # $Id$
 
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#>.
@@ -25,20 +26,19 @@ of any other identifiers used in the document.
 ################################################## Syntactic level
 #
 #  It isn't clear to me that these should be described as Properties
-#  and Classes.  They operate at a level of symbol identity, not daml:Equivalence.
+#  and Classes.  They operate at a level of symbol identity, not identity of the things referred to.
 #
 
 log:equalTo a rdf:Property;
     rdfs:comment
 """True if the subject and object are the same RDF node (symbol or literal).
-Do not confuse with daml:EquivalentTo.
+Do not confuse with owl:sameAs.
 A cwm built-in logical operator, RDF graph level.
 """.
 
-log:notEqualTo a rdf:Property;
+log:notEqualTo a rdf:Property; owl:inverse log:equalTo;
     rdfs:comment
 """Equality in this sense is actually the same URI.
-Do not confuse with daml:EquivalentTo.
 A cwm built-in logical operator.
 """.
 
