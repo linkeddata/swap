@@ -16,14 +16,14 @@ Cwm a doap:Project;
     doap:shortdesc "An general Semantic Web data procesing tool";
     doap:homepage <http://www.w3.org/2000/10/swap/doc/cwm>;
     doap:description """Cwm (pronounced coom) is a general-purpose data processor for the
-     semantic web, somewhat like sed, awk, etc. for text files or XSLT for XML.
-      It is a forward chaining reasoner which can be used for querying, checking,
-       transforming and filtering information. Its core language is RDF, extended
-        to include rules, and it uses RDF/XML or RDF/N3 (see Notation3 Primer)
-	 serializations as required.
+    semantic web, somewhat like sed, awk, etc. for text files or XSLT for XML.
+    It is a forward chaining reasoner which can be used for querying, checking,
+    transforming and filtering information. Its core language is RDF, extended
+    to include rules, and it uses RDF/XML or RDF/N3 (see Notation3 Primer)
+    serializations as required.
 
-Cwm is written in python; it is part of SWAP, 
-a Semantic Web Application Platform. It is open source under the W3C software license.""";
+    Cwm is written in python; it is part of SWAP, the Semantic Web Application Platform.
+    It is open source under the W3C software license.""";
 
     cc:license
         <http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231>;
