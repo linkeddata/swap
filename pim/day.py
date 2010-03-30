@@ -164,11 +164,12 @@ class Map:
 
         except IOError:
             progress("Unable to get OSM map")
+            sys.exit(4)  # @@ should extract the error code from somwhere
 
         i = osmData.rfind('</svg>')
         if i <0:
-            progress("Invalid SVG file from OSM")
-            return
+            progress("Invalid SVG file from OSM:\n" + osmData[:1000])
+            sys.exit(5)
         self.wr(osmData[:i])  # Everything except for the last </svg>
 
         # Set up parametrs for point mapping:

@@ -169,6 +169,10 @@
 #
 # We use NAME as that is what there is, while before
 # we used MEMO which was in practice a longer version of NAME.
+#
+# We used to put URIs of transactions in aocmmon space by year but then we got clashes between two 
+# CC statments for dfferent accounts as their FIT was just (date, serialthatday).
+#
 
 {  [:listForAccount ?account; :payeeField ?p; :sourceDocument :s] ofx:STMTTRN
   [
@@ -177,8 +181,10 @@
    ?p           :m;
    ofx:TRNAMT   :x ].
    :i crypto:sha ?id.
+   :s log:uri ?filename.
+#   (?filename "([A-Za-z0-9-_]*)") string:scrape ?base.
    :r log:uri [is os:baseAbsolute of
-	[is string:concatenation of ( "year.rdf#" ?id  )]].
+	[is string:concatenation of ( ?filename "#" ?id  )]].
 #   ofx:TRNTYPE  :t 
 } log:implies {
 :r  qu:toAccount ?account ;
@@ -192,12 +198,14 @@
 ###############
 
 # For those with check numbers, get the check number:
-{  [:listForAccount ?account] ofx:STMTTRN [
+{  [:listForAccount ?account; :sourceDocument :s] ofx:STMTTRN [
    ofx:FITID    :i;
    ofx:CHECKNUM   :x ].
    :i crypto:sha ?id.
+   :s log:uri ?filename.
+#   (?filename "([A-Za-z0-9-_]*)") string:scrape ?base.
    :r log:uri [is os:baseAbsolute of
-	[is string:concatenation of ( "year.rdf#" ?id  )]].
+	[is string:concatenation of ( ?filename "#" ?id  )]].
 #   ofx:TRNTYPE  :t 
 } log:implies {
 :r  qu:number :x .
@@ -218,7 +226,9 @@
     ?trans qu:amount ?string.
    (?rate ?string) math:product ?y.
  } => {
-    ?trans qu:in_USD ?y; qu:currency ?cur.
+    ?trans qu:in_USD ?y;
+    # qu:rate ?rate;
+     qu:currency ?cur.
  }.
 
 

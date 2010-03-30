@@ -29,8 +29,10 @@ s?<\([A-Z][A-Z0-9]*\)>$?        ofx:\1 [?
 # Strip trailing spaces at ends of values:
 s? *";?";?
 #
-# Convert datetime format to W3C standard
+# Convert datetime format to W3C standard (date times)
 /ofx:DT/s?"\([0-9][0-9][0-9][0-9]\)\([0-9][0-9]\)\([0-9][0-9]\)\([0-9][0-9]\)\([0-9][0-9]\)\([0-9][0-9]\)"?"\1-\2-\3T\4:\5:\6"?
+# Convert datetime format to W3C standard (date only)
+/ofx:DT/s?"\([0-9][0-9][0-9][0-9]\)\([0-9][0-9]\)\([0-9][0-9]\)"?"\1-\2-\3"?
 # Convert datetime format to W3C standard with timezone
 /ofx:DT/s?"\([0-9][0-9][0-9][0-9]\)\([0-9][0-9]\)\([0-9][0-9]\)\([0-9][0-9]\)\([0-9][0-9]\)\([0-9][0-9]\)\[\([-+]\)\([0-9]\):[A-Z]*\]"?"\1-\2-\3T\4:\5:\6\70\800"?
 s/&amp;/\&/g

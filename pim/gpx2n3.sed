@@ -4,9 +4,9 @@
 \
 <#ThisRecord> a gps:Record.\
 
-s/<trkpt lat="\([0-9\.]*\)" lon="\([0-9\.]*\)">/gps:trackpoint [wgs84:lat \1e+00; wgs84:long \2e+00;/
+s/<trkpt lat="\([0-9\.-]*\)" lon="\([0-9\.-]*\)">/gps:trackpoint [wgs84:lat \1e+00; wgs84:long \2e+00;/
 s?</trkpt>?];?
-s?<ele>\([0-9\.]*\)</ele>?   wgs84:altitude \1e0;?
+s?<ele>\([0-9\.-]*\)</ele>?   wgs84:altitude \1e0;?
 s?<time>\([_A-Z:0-9\.-]*\)</time>?   wgs84:time "\1";?
 /<speed>.*<.speed>/d
 /<course>.*<.course>/d

@@ -61,20 +61,42 @@ q:UnclassifiedOutgoing a :toBeDisplayed;  s:label "Unclassified Outgoings".
 {  
     [] a :y;
 	q:payee :p;
-	q:amount :x;
+	# q:amount :x;
+        q:in_USD ?dollars; 
 	q:date :d;
 	log:uri ?URI;
 	q:toAccount [s:label :a].
+     
+     ("%6.2f" ?dollars) string:format :x.
+     
         # Check lines have to payees, a raw one (suppressed here) and one from checks-by-hand.*
     :p string:notMatches "^C[hH][Ee][Cc][Kk]".  # Check lines should have other -- eh?
     :y a :toBeDisplayed; s:label :l.
-    ( :l " " :d ) string:concatenation :k.
+    ( :l " " :d ?URI "0") string:concatenation :k.
     (  "<tr class='"  :a
 	 "'><td class='date'><a href='" ?URI "'>" (:d "^([^T]*)")!string:scrape
 #       "</a></td><td class='cat'>" :l
        "</td><td class='payee'>" :p
 #       "</td><td class='to'>" :a
        "</td><td class='amount'>" :x "</td></tr>\n") string:concatenation :s
+} log:implies {
+   :k log:outputString :s
+}.
+
+#### Comment underneath
+{  
+    [] a :y;
+        s:comment :p;
+	q:date :d;
+	log:uri ?URI;
+	q:toAccount [s:label :a].
+     
+    :y a :toBeDisplayed; s:label :l.
+    ( :l " " :d ?URI "1") string:concatenation :k.
+    (  "<tr class='"  :a
+	 "'><td class='date'>"
+       "</td><td class='comment'>" :p
+       "</td><td class='amount'></td></tr>\n") string:concatenation :s
 } log:implies {
    :k log:outputString :s
 }.

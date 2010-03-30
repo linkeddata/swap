@@ -58,7 +58,8 @@ from fromIcal import iCalendarDefs # http://www.w3.org/2002/12/cal/
 CRLF = chr(13) + chr(10)
 
 RDF = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
-ICAL = Namespace('http://www.w3.org/2002/12/cal/icaltzd#')
+# ICAL = Namespace('http://www.w3.org/2002/12/cal/icaltzd#')
+ICAL = Namespace('http://www.w3.org/2002/12/cal/ical#')
 XMLSchema = Namespace('http://www.w3.org/2001/XMLSchema#')
 
 
@@ -428,7 +429,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.40  2008-01-05 21:42:37  timbl
+# Revision 2.41  2010-03-30 20:29:21  timbl
+# Catchup after messing with maps and taxes
+#
+# Revision 2.40  2008/01/05 21:42:37  timbl
 # qif directory was blocking qif ontology on website
 #
 # Revision 2.39  2007/02/20 14:49:24  timbl
