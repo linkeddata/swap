@@ -73,7 +73,7 @@ is calculated by subtracting the second number of the pair from the first.
     <math:StrictProperty rdf:about="http://www.w3.org/2000/10/swap/math#equalTo">
         <comment>True iff the subject is a string representation of a number which  is EQUAL TO a number of which the object is a string representation.</comment>
         <domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
-        <label>equalTo</label>
+        <label>equal to</label>
         <range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
     </math:StrictProperty>
 
@@ -88,7 +88,7 @@ is calculated by raising the first number of the power of the second.
     <math:StrictProperty rdf:about="http://www.w3.org/2000/10/swap/math#greaterThan">
         <comment>True iff the subject is a string representation of a number which  is greater than the number of which the object is a string representation.</comment>
         <domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
-        <label>greaterThan</label>
+        <label>greater than</label>
         <range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
     </math:StrictProperty>
 
@@ -103,7 +103,7 @@ is calculated by dividing the first number of the pair by the second, ignoring r
     <math:StrictProperty rdf:about="http://www.w3.org/2000/10/swap/math#lessThan">
         <comment>True iff the subject is a string representation of a number which  is LESS than a number of which the object is a string representation.</comment>
         <domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
-        <label>lessThan</label>
+        <label>less than</label>
         <range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
     </math:StrictProperty>
 
@@ -125,23 +125,22 @@ the object is calculated as the number of members.</comment>
     <math:StrictProperty rdf:about="http://www.w3.org/2000/10/swap/math#notEqualTo">
         <comment>True iff the subject is a string representation of a number which  is NOT EQUAL to a number of which the object is a string representation.</comment>
         <domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
-        <label>notEqualTo</label>
+        <label>not equal to</label>
         <range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
     </math:StrictProperty>
 
     <math:StrictProperty rdf:about="http://www.w3.org/2000/10/swap/math#notGreaterThan">
         <comment>True iff the subject is a string representation of a number which is NOT greater than the number of which the object is a string representation.</comment>
         <domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
-        <label>notGreaterThan</label>
+        <label>not greater than</label>
         <range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
     </math:StrictProperty>
 
-    <math:StrictProperty rdf:about="http://www.w3.org/2000/10/swap/math#notlessThan">
+    <math:StrictProperty rdf:about="http://www.w3.org/2000/10/swap/math#notLessThan">
         <comment>True iff the subject is a string representation of a number which  is NOT LESS than a number of which the object is a string representation.</comment>
         <domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
-        <label>notlessThan</label>
+        <label>not less than</label>
         <range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
-        <subPropertyOf rdf:resource="http://www.w3.org/2000/10/swap/string#notlessThan"/>
     </math:StrictProperty>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#product">

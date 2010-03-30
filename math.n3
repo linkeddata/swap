@@ -86,23 +86,19 @@ the object is calculated as the number of members.""" .
 # Logical operators:
 
 math:greaterThan a math:StrictProperty; rdfs:label "greaterThan"; 
-#   rdfs:subPropertyOf string:greaterThan;     No, basically no relation - tbl
    rdfs:comment """True iff the subject is a string representation of a number which  is greater than the number of which the object is a string representation.""";
    rdfs:domain math:Value; rdfs:range math:Value .
 
 math:notGreaterThan a math:StrictProperty;
     rdfs:label "notGreaterThan"; 
-#   rdfs:subPropertyOf string:notGreaterThan;  No, basically no relation -tbl
     rdfs:comment """True iff the subject is a string representation of a number which is NOT greater than the number of which the object is a string representation.""";
     rdfs:domain math:Value; rdfs:range math:Value .
 
 math:lessThan a math:StrictProperty; rdfs:label "lessThan"; 
-#   rdfs:subPropertyOf string:lessThan;   No, basically no relation
    rdfs:comment """True iff the subject is a string representation of a number which  is LESS than a number of which the object is a string representation.""";
    rdfs:domain math:Value; rdfs:range math:Value .
 
-math:notlessThan a math:StrictProperty; rdfs:label "notlessThan"; 
-   rdfs:subPropertyOf string:notlessThan; 
+math:notLessThan a math:StrictProperty; rdfs:label "notlessThan"; 
    rdfs:comment """True iff the subject is a string representation of a number which  is NOT LESS than a number of which the object is a string representation.""";
    rdfs:domain math:Value; rdfs:range math:Value .
 

@@ -86,32 +86,28 @@ the object is calculated as the number of members.""" .
 
 # Logical operators:
 
-math:greaterThan a math:StrictProperty; s:label "greaterThan"; 
-#   s:subPropertyOf string:greaterThan;     No, basically no relation - tbl
+math:greaterThan a math:StrictProperty; s:label "greater than"; 
    s:comment """True iff the subject is a string representation of a number which  is greater than the number of which the object is a string representation.""";
    s:domain math:Value; s:range math:Value .
 
 math:notGreaterThan a math:StrictProperty;
-    s:label "notGreaterThan"; 
-#   s:subPropertyOf string:notGreaterThan;  No, basically no relation -tbl
+    s:label "not greater than"; 
     s:comment """True iff the subject is a string representation of a number which is NOT greater than the number of which the object is a string representation.""";
     s:domain math:Value; s:range math:Value .
 
-math:lessThan a math:StrictProperty; s:label "lessThan"; 
-#   s:subPropertyOf string:lessThan;   No, basically no relation
+math:lessThan a math:StrictProperty; s:label "less than"; 
    s:comment """True iff the subject is a string representation of a number which  is LESS than a number of which the object is a string representation.""";
    s:domain math:Value; s:range math:Value .
 
-math:notlessThan a math:StrictProperty; s:label "notlessThan"; 
-   s:subPropertyOf string:notlessThan; 
+math:notLessThan a math:StrictProperty; s:label "not less than"; 
    s:comment """True iff the subject is a string representation of a number which  is NOT LESS than a number of which the object is a string representation.""";
    s:domain math:Value; s:range math:Value .
 
-math:equalTo a math:StrictProperty; s:label "equalTo"; 
+math:equalTo a math:StrictProperty; s:label "equal to"; 
    s:comment """True iff the subject is a string representation of a number which  is EQUAL TO a number of which the object is a string representation.""";
    s:domain math:Value; s:range math:Value .
 
-math:notEqualTo a math:StrictProperty; s:label "notEqualTo"; 
+math:notEqualTo a math:StrictProperty; s:label "not equal to"; 
    s:comment """True iff the subject is a string representation of a number which  is NOT EQUAL to a number of which the object is a string representation.""";
    s:domain math:Value; s:range math:Value .
 

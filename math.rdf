@@ -150,12 +150,11 @@ the object is calculated as the number of members.</comment>
         <range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
     </math:StrictProperty>
 
-    <math:StrictProperty rdf:about="http://www.w3.org/2000/10/swap/math#notlessThan">
+    <math:StrictProperty rdf:about="http://www.w3.org/2000/10/swap/math#notLessThan">
         <comment>True iff the subject is a string representation of a number which  is NOT LESS than a number of which the object is a string representation.</comment>
         <domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
         <label>notlessThan</label>
         <range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
-        <subPropertyOf rdf:resource="http://www.w3.org/2000/10/swap/string#notlessThan"/>
     </math:StrictProperty>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#product">
