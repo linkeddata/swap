@@ -1,2 +1,36 @@
 # Test ontology
 #
+
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+
+@prefix dc:	<http://purl.org/dc/elements/1.1/>.
+@prefix doc:	<http://www.w3.org/2000/10/swap/pim/doc#> .
+@prefix :	<http://www.w3.org/2006/gen/ont#> .
+
+@keywords a, is, of.
+
+<>  doc:version "$Id$";
+
+<> s:comment """This is an ontology for data converted from the Online Financial Exchange XML
+format for downlodable bank statements, etc. 
+""".
+
+NAME a rdf:Property; s:label "name"; is s:subPropertyOf s:label.
+# This can be used as a label for a transaction (but is not ideal as one).
+
+
+BANKTRANLIST a rdf:Property; s:label "transaction list".
+
+STMTTRN a rdf:Property; s:label "transaction".
+
+#  Properties of transactions:
+
+FITID a rdf:Property; s:label "ID".
+DTSTART a rdf:Property; s:label "from".
+DTEND a rdf:Property; s:label "until".
+TRNAMT a rdf:Property; s:label "amount".
+TYPE a rdf:Property; s:label "type".
+DTPOSTED a rdf:Property; s:label "posted".
+
