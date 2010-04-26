@@ -88,7 +88,7 @@
 	:sourceDocument :s.
 	
    ?account   ofx:ACCTID ?a4;
-        :currencyCode ?currency;
+        qu:currencyCode ?currency;
 	 # Extending their ontology by inventing an account type for consistency
 	 # :-/
         ofx:ACCTTYPE ?lab;  s:label ?lab; # was "CREDITCARD"
@@ -125,7 +125,7 @@
 	:payeeField ofx:NAME;   # New version
 	:sourceDocument :s.
    ?account   ofx:ACCTID :a;
-        :currencyCode ?currency;
+        qu:currencyCode ?currency;
         ofx:ACCTTYPE :l;  s:label ?lab;
         ofx:BANKID :b.
 }.
@@ -221,13 +221,15 @@
 {
 #?trans!qu:toAccount!:currencyCode^cur:code  cur:in_USD ?rate.
  ?trans qu:toAccount ?account.
- ?account :currencyCode ?code .
+ ?account qu:currencyCode ?code .
  ?cur cur:code ?code;  cur:in_USD ?rate.
     ?trans qu:amount ?string.
    (?rate ?string) math:product ?y.
+   ("(Original currency " ?code " " ?string ")") string:concatenation ?note.
  } => {
     ?trans qu:in_USD ?y;
     # qu:rate ?rate;
+    s:comment ?note;
      qu:currency ?cur.
  }.
 
