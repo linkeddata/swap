@@ -21,6 +21,8 @@ dc:description """
 @prefix owl: <http://www.w3.org/2002/07/owl#>.
 @prefix link: <http://www.w3.org/2006/link#>.
 @prefix doc:  <http://www.w3.org/2000/10/swap/pim/doc#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+
 @keywords is, of, a.
 
 <> doc:persistencePolicy [ a :_SubjectToChange;
@@ -94,6 +96,17 @@ doc:persistencePolicy
 	is rdfs:domain of :phone, :fax.
 
 
+:assistant a rdf:Property;
+    rdfs:label "assistant";
+    rdfs:comment """A person (or other agent) who is an assistant to the subject.""";
+    rdfs:domain foaf:Agent;
+    rdfs:ramge foaf:Agent.
+    
+:participant a rdf:Property;
+    rdfs:label "participant";
+    rdfs:comment """A person (or other agent) who  particpates in an event, meeting, etc.""";
+    rdfs:ramge foaf:Agent.
+    
 :office a rdf:Property;
     rdfs:label "work";  # Would have been better :work
     rdfs:domain :Person; rdfs:range :ContactLocation.
