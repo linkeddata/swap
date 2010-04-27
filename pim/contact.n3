@@ -107,6 +107,11 @@ doc:persistencePolicy
     rdfs:comment """A person (or other agent) who  particpates in an event, meeting, etc.""";
     rdfs:ramge foaf:Agent.
     
+    
+:preferredURI a rdf:Property;
+    rdfs:label "preferred";
+    rdfs:comment """A string which is the URI a person, organization, etc, prefers that people use for them.""".
+
 :office a rdf:Property;
     rdfs:label "work";  # Would have been better :work
     rdfs:domain :Person; rdfs:range :ContactLocation.

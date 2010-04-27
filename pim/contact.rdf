@@ -295,6 +295,11 @@
         <domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Address"/>
     </rdf:Description>
 
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#preferredURI">
+        <comment>A string which is the URI a person, organization, etc, prefers that people use for them.</comment>
+        <label>preferred</label>
+    </rdf:Property>
+
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#publicHomePage">
         <subPropertyOf rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#homePage"/>
     </rdf:Description>
