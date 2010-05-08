@@ -13,11 +13,12 @@
 
 <>  doc:version "$Id$";
 
-<> s:comment """This is an ontology for data converted from the Online Financial Exchange XML
+    s:comment """This is an ontology for data converted from the Online Financial Exchange XML
 format for downlodable bank statements, etc. 
 """.
 
-NAME a rdf:Property; s:label "name"; is s:subPropertyOf s:label.
+NAME a rdf:Property; s:label "name"; s:subPropertyOf s:label.
+
 # This can be used as a label for a transaction (but is not ideal as one).
 
 
