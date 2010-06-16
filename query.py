@@ -1977,7 +1977,8 @@ class RuleInstaller(object):
         rules = self.ruleSource.statementsMatching(pred=self.ruleSource.store.implies)
         rules.addConsumer(self)
         for rule in rules:
-            self.task.scheduleAttachRule(rule, self.ruleSource, self.variables)
+            if hasattr(rule.subject(), 'contains') and hasattr(rule.object(), 'contains'):
+                self.task.scheduleAttachRule(rule, self.ruleSource, self.variables)
 
     def scheduleAddTriple(self, ruleList, rule):
         self.task.scheduleAttachRule(rule, self.ruleSource, self.variables)
