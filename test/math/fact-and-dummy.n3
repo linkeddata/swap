@@ -1,0 +1,6 @@
+@prefix math: <http://www.w3.org/2000/10/swap/math#>.
+
+(1 2) math:sum 5.
+
+{ (1 []) math:sum ?x} =>  { ?x a :ThreeOrFive }.
+

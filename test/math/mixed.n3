@@ -1,0 +1,10 @@
+@prefix : <#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+
+# Mixed decimal and string
+{ ( 1.6 "3" ) math:product  ?y } => { ?y a "should be 4.8" }.
+{ ( "   -522.52" 1 ) math:product  ?y } => { ?y a "should be -522.52" }.
+
+
