@@ -1,5 +1,5 @@
 
-<!-- Processed by Id: cwm.py,v 1.190 2006/08/09 23:20:42 syosi Exp -->
+<!-- Processed by Id: cwm.py,v 1.197 2007/12/13 15:38:39 syosi Exp -->
 <!--     using base file:///devel/WWW/2000/10/swap/pim/qif.n3-->
 
 
@@ -11,7 +11,7 @@
     <r:Description r:about="">
         <comment>An ontology for data exported, for example, by Quicken,
 	as an interchange format. Also a generally useful ontology for
-	bank tranactions.  See also the OFX ontology</comment>
+	bank tranactions.  See also the OFX ontology.</comment>
         <seeAlso r:resource="qif2n3.py"/>
         <seeAlso r:resource="http://dev.w3.org/cvsweb/2000/quacken/"/>
         <seeAlso r:resource="http://dev.w3.org/cvsweb/~checkout~/2000/quacken/vocab.n3?rev=1.1"/>
@@ -30,8 +30,18 @@
         <label>category</label>
     </Class>
 
+    <Class r:about="http://www.w3.org/2000/10/swap/pim/qif#Classified">
+        <label>classified</label>
+        <subClassOf r:resource="http://www.w3.org/2000/10/swap/pim/qif#Transaction"/>
+    </Class>
+
     <Class r:about="http://www.w3.org/2000/10/swap/pim/qif#Transaction">
         <label>transaction</label>
+    </Class>
+
+    <Class r:about="http://www.w3.org/2000/10/swap/pim/qif#Unclassified">
+        <label>unclassified</label>
+        <subClassOf r:resource="http://www.w3.org/2000/10/swap/pim/qif#Transaction"/>
     </Class>
 
     <r:Property r:about="http://www.w3.org/2000/10/swap/pim/qif#accordingTo">

@@ -4,9 +4,9 @@
 @prefix r:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
 
+@prefix :  <http://www.w3.org/2000/10/swap/pim/qif#> .
 @prefix q: <http://www.w3.org/2000/10/swap/pim/qif#> .
 @prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#> .
-@prefix :  <http://www.w3.org/2000/10/swap/pim/qif#> .
 
 <> doc:version "$Id$";
   s:seeAlso <qif2n3.py>, <http://dev.w3.org/cvsweb/2000/quacken/>,
@@ -14,10 +14,12 @@
         <http://www.intuit.com/support/quicken/2002/win/1177.html>;
 	s:comment """An ontology for data exported, for example, by Quicken,
 	as an interchange format. Also a generally useful ontology for
-	bank tranactions.  See also the OFX ontology""".
+	bank tranactions.  See also the OFX ontology.""".
 
 
 q:Transaction a s:Class; s:label "transaction".
+q:Classified a s:Class; s:label "classified"; s:subClassOf q:Transaction.
+q:Unclassified a s:Class; s:label "unclassified"; s:subClassOf q:Transaction.
 
 q:Account a s:Class; s:label "account".
 
