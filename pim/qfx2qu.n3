@@ -219,18 +219,26 @@
 # and the currency code of an abstract currency.
 #
 {
-#?trans!qu:toAccount!:currencyCode^cur:code  cur:in_USD ?rate.
- ?trans qu:toAccount ?account.
- ?account qu:currencyCode ?code .
- ?cur cur:code ?code;  cur:in_USD ?rate.
+    ?trans qu:toAccount ?account.
+    ?account qu:currencyCode ?code .
+    ?cur cur:code ?code;  cur:in_USD ?rate.
     ?trans qu:amount ?string.
-   (?rate ?string) math:product ?y.
-   ("(Original currency " ?code " " ?string ")") string:concatenation ?note.
+    (?rate ?string) math:product ?y.
  } => {
     ?trans qu:in_USD ?y;
-    # qu:rate ?rate;
-    s:comment ?note;
-     qu:currency ?cur.
+        qu:currency ?cur.
+ }.
+
+
+{
+    ?trans qu:toAccount ?account.
+    ?account qu:currencyCode ?code .
+    ?cur cur:code ?code.
+    ?code string:notEqualIgnoringCase "USD".
+    ?trans qu:amount ?string.
+    ("(Original currency " ?code " " ?string ")") string:concatenation ?note.
+ } => {
+    ?trans s:comment ?note.
  }.
 
 

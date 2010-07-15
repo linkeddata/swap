@@ -35,3 +35,8 @@ TRNAMT a rdf:Property; s:label "amount".
 TYPE a rdf:Property; s:label "type".
 DTPOSTED a rdf:Property; s:label "posted".
 
+# Of accounts:
+
+ACCTID a  a rdf:Property; s:label "account number".
+ACCTID a  a rdf:Property; s:label "account type".
+BANKID a  a rdf:Property; s:label "bank number".

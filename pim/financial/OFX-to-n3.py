@@ -1,11 +1,13 @@
 #!/usr/bin/python
 """OFX-to-n3.py -- interpret OFX format as RDF
 
+This is or was http://www.w3.org/2000/10/swap/pim/financial/OFX-to-n3.py
+
 Converts OFX format (as in downloaded back statements etc
 USAGE:
-  python ofx.py --n3 < foo.ofx > foo.rdf
-  python ofx.py --n3 foo.ofx > foo.rdf
-  python ofx.py --rename stmt*.ofx
+  python OFX-to-n3.py --n3 < foo.ofx > foo.rdf
+  python OFX-to-n3.py --n3 foo.ofx > foo.rdf
+  python OFX-to-n3.py --rename stmt*.ofx
   
   The conversion is only syntactic.  The OFX modelling is
   pretty weel thought out, so taking it as defining an effecive
@@ -116,6 +118,13 @@ dt4 = [re.compile('([0-9][0-9][0-9][0-9])([0-9][0-9])([0-9][0-9])([0-9][0-9])([0
 # Most complex first
 dtcases = [dt4, dt3, dt2, dt1]
 
+def sanitize(tag):
+    str = ""
+    for ch in tag:
+        if ch in ".-": str+= "_"
+        else: str += ch
+    return str
+
 def contentLines(doc, argv, fn=None):
     "Process the content as a single buffer"
 
@@ -169,7 +178,8 @@ def contentLines(doc, argv, fn=None):
 	i = line.find(">")
 	if i < 0: raise SyntaxError("No > on line %i: %s" %(
 				ln, line))
-	tag = line[1:i]
+	tag = sanitize(line[1:i])
+
 	if line[1] == "/": # End tag
 	    tag = tag[1:]
 	    tag2 = stack.pop()
@@ -181,6 +191,9 @@ def contentLines(doc, argv, fn=None):
 	    if n3: print "%s ofx:%s [" %("  "*len(stack), tag)
 	    stack.append(tag)
 	else:  #  Data tag
+            e = line.find('</')
+            if e > 0:
+                line = line[:e]  # If so strip off
             value = line[i+1:]
             if tag[:2] == "DT": # Datetimes
                 for re_fmt in dtcases:
@@ -193,14 +206,17 @@ def contentLines(doc, argv, fn=None):
 				ln, line))
                 
 	    if n3: print  "%s ofx:%s \"%s\";" % ("  "*len(stack), tag, value)
-            if tag in [ "ACCTID", "DTEND"]:
+            if tag in [ "ACCTID", "DTEND", "ACCTTYPE"]:
                 filenamebits[tag] = value
                 
     if stack: raise SyntaxError("Unclosed tags: %s" % stack)
     if n3: print "."
 
     if makeName:
-        name = filenamebits["DTEND"][:10]+"ac"+filenamebits["ACCTID"][-4:]+".ofx"
+         # Not always present but on old BBoA a/c needed top differentiate between
+         # checking and savings accounts of SAME ACCOUNT NUMBER!
+        at = filenamebits.get("ACCTTYPE", 'ac').lower() 
+        name = filenamebits["DTEND"][:10]+"-" + at + "-" + filenamebits["ACCTID"][-4:]+".ofx"
         if name == fn:
             print "Name is already as suggested. Not renamed: %s"%fn
         else:
@@ -223,7 +239,9 @@ def _test():
 
 if __name__ == '__main__':
     import sys
-    if sys.argv[1:2] == ['--test']:
+    if "--help" in sys.argv[1:] or "-help" in sys.argv[1:]:
+        print __doc__
+    elif sys.argv[1:2] == ['--test']:
         del sys.argv[1]
         _test()
     else:
