@@ -299,7 +299,7 @@ def doCommand(yearInQuestion, inputURIs=["/dev/stdin"],totalsFilename=None):
         taxCategories = meta.each(pred=rdf_type, obj=tax.Category)
         if verbose:
             print "Tax categories", taxCategories
-        specialCategories = taxCategories + [qu.Classified, qu_Unclassified]
+        specialCategories = taxCategories + [qu.Classified, qu.Unclassified, qu.Transaction]
 
 ####### Analyse the data:
         monthTotals = [0] * 12 
@@ -385,7 +385,13 @@ def doCommand(yearInQuestion, inputURIs=["/dev/stdin"],totalsFilename=None):
                 byMonth[c][month] = byMonth[c][month] + amount
                 if c not in specialCategories:
                     normalCats.append(c)
-            if len(normalCats) != 1:
+            bottomCats = normalCats[:] # Copy
+            for b in normalCats:
+                sups = kb.each(subj=b, pred=rdfs.subClassOf)
+                for sup in sups:
+                    if sup in bottomCats:
+                        bottomCats.remove(sup)
+            if len(bottomCats) != 1:
                 progress("Error: %s Transaction with %s for %10s in >1 category: %s!!"
                             %(date, payee, amount, normalCats))
     
@@ -462,6 +468,7 @@ def doCommand(yearInQuestion, inputURIs=["/dev/stdin"],totalsFilename=None):
             fo = open(totalsFilename, "w")
             fo.write(ko.n3String())
             fo.close
+
         
         internalCheck()
 
