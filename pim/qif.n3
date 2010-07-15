@@ -20,6 +20,8 @@
 q:Transaction a s:Class; s:label "transaction".
 q:Classified a s:Class; s:label "classified"; s:subClassOf q:Transaction.
 q:Unclassified a s:Class; s:label "unclassified"; s:subClassOf q:Transaction.
+q:UnclassifiedIncome a s:Class; s:label "unclassified income"; s:subClassOf q:Unclassified.
+q:UnclassifiedOutgoing a s:Class; s:label "unclassified outgoing"; s:subClassOf q:Unclassified.
 
 q:Account a s:Class; s:label "account".
 

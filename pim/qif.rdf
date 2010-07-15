@@ -44,6 +44,16 @@
         <subClassOf r:resource="http://www.w3.org/2000/10/swap/pim/qif#Transaction"/>
     </Class>
 
+    <Class r:about="http://www.w3.org/2000/10/swap/pim/qif#UnclassifiedIncome">
+        <label>unclassified income</label>
+        <subClassOf r:resource="http://www.w3.org/2000/10/swap/pim/qif#Unclassified"/>
+    </Class>
+
+    <Class r:about="http://www.w3.org/2000/10/swap/pim/qif#UnclassifiedOutgoing">
+        <label>unclassified outgoing</label>
+        <subClassOf r:resource="http://www.w3.org/2000/10/swap/pim/qif#Unclassified"/>
+    </Class>
+
     <r:Property r:about="http://www.w3.org/2000/10/swap/pim/qif#accordingTo">
         <comment>The document which is the source of data for this transaction.</comment>
         <domain r:resource="http://www.w3.org/2000/10/swap/pim/qif#Transaction"/>
