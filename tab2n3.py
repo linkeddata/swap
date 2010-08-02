@@ -1,10 +1,14 @@
 #! /usr/bin/python
 """  Convert tab-separated text to n3 notation
-#  This has been hacked to work with the "Tab separated (Windows)" outputt from
-# MS Outlook export of contaxt files.
-#
+  This has been hacked in 2000 to work with the "Tab separated (Windows)" output from
+ MS Outlook export of contaxt files.
+ Runtime options:
+
     -comma    Use comma as delimited instead of tab
+    -id       Generate URIs for the things described by each row
+    -type     Declare each thing as of a type <#Item>.
     -schema   Generate a little RDF schema
+    -help     display this message and exit.
 """
 import sys
 import string
@@ -62,7 +66,15 @@ def readTabs(delim):
      
 import sys
 
+# Column headings can have newlines embedded
+def sanitize(s):
+    return s.replace('\n', ' ')
+            
 def convert():
+    if "-help" in sys.argv[1:]:
+        print __doc__
+        return
+        
     if "-comma" in sys.argv[1:]:
         delim = ','
     else:
@@ -89,7 +101,7 @@ def convert():
         print "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> ."
         for i in range(0,len(headings)):
             print "  :%s  a rdfs:Property; rdfs:label \"%s\"." % \
-                    ( headings[i], labels[i]  )
+                    ( headings[i], sanitize(labels[i])  )
         print
  
     while 1:
@@ -102,21 +114,32 @@ def convert():
             print "#  %i headings but %i values" % (len(headings), len(values))
 
 
-        print "["
+        if "-id" in sys.argv[1:]:
+            print "<#n%i>" % records 
+        else:
+            print "[]"
+
+        if "-type" in sys.argv[1:]:
+            print " a <#Item>;"
         i=0
         while i < len(values):
             v = values[i]
+            # semicolon except last time because turtle spec'd diff from N3 :-(
+            if i == len(values)-1 : sep = "."
+            else: sep = ";"
             while v[:1] == ' ': v = v[1:]   # Strip spaces
             while v[-1:] == ' ': v = v[:-1]
             
             if (len(v) and v!="0/0/00"
                 and v!="\n")  :  # Kludge to remove void Exchange dates & notes
+                if i < len(headings) : pred = headings[i]
+                else: pred = 'column%i' % (i)
                 if string.find(v, "\n") >= 0:
-                    print '    :%s """%s""";' % (headings[i], v) # Not n3 spec (yet?)
+                    print '    :%s """%s"""&s' % (pred, v, sep)
                 else:
-                    print '    :%s "%s";' % (headings[i], v)
+                    print '    :%s "%s"%s' % (pred, v, sep)
             i = i+1
-        print " ] .\n"
+        #print ".\n"
 
     print "# Total number of records:", records
 
