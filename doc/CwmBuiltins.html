@@ -116,7 +116,7 @@ in question.
      literal. For example, { ("2005-03-30T11:00:00" :tz) log:dtlit ?X } => { ?X a :Answer } .
     will produce "2005-03-30T11:00:00"^^:tz a :Answer .</td></tr>
   <tr><td class='ln'>equalTo</td><td class='comment'>True if the subject and object are the same RDF node (symbol or literal).
-Do not confuse with daml:EquivalentTo.
+Do not confuse with owl:sameAs.
 A cwm built-in logical operator, RDF graph level.
 </td></tr>
   <tr><td class='ln'>implies</td><td class='comment'>Logical implication. 
@@ -147,7 +147,6 @@ formulae, lists and sets.
 You can use this to peer inside nested formulae.)</td></tr>
   <tr><td class='ln'>n3String</td><td class='comment'>The subject formula, expressed as N3, gives this string.</td></tr>
   <tr><td class='ln'>notEqualTo</td><td class='comment'>Equality in this sense is actually the same URI.
-Do not confuse with daml:EquivalentTo.
 A cwm built-in logical operator.
 </td></tr>
   <tr><td class='ln'>notIncludes</td><td class='comment'>The object formula is NOT a subset of subject.
@@ -315,6 +314,11 @@ lower case characters.</td></tr>
   <tr><td class='ln'>endsWith</td><td class='comment'>True iff the subject string ends with the object string.</td></tr>
   <tr><td class='ln'>equalIgnoringCase</td><td class='comment'>True iff the subject string is the same as object string
 ignoring differences between upper and lower case.</td></tr>
+  <tr><td class='ln'>format</td><td class='comment'>The subject is a list, whose first member is a format string,
+        and whose remaining members are arguments to the format string.
+        The formating string is in the style of python's % operator,
+        very similar to C's sprintf().
+        The object is calculated from the subject.</td></tr>
   <tr><td class='ln'>greaterThan</td><td class='comment'>True iff the string is greater than the object
 	when ordered according to Unicode(tm) code order.</td></tr>
   <tr><td class='ln'>lessThan</td><td class='comment'>True iff the string is less than the object
