@@ -8,6 +8,7 @@
     -id       Generate URIs for the things described by each row
     -type     Declare each thing as of a type <#Item>.
     -schema   Generate a little RDF schema
+    -nostrip  Do not strip empty cells
     -help     display this message and exit.
 """
 import sys
@@ -106,40 +107,33 @@ def convert():
  
     while 1:
         values = readTabs(delim)
-#       print "Values: ", values
         if values == []: break
         if len(values) < 2: continue;
         records = records + 1
         if len(values) != len(headings):
-            print "#  %i headings but %i values" % (len(headings), len(values))
-
-
-        if "-id" in sys.argv[1:]:
-            print "<#n%i>" % records 
-        else:
-            print "[]"
-
+            print "#  Warning: %i headings but %i values" % (len(headings), len(values))
+        open = 0  # false
+        str = ""
         if "-type" in sys.argv[1:]:
-            print " a <#Item>;"
-        i=0
-        while i < len(values):
-            v = values[i]
-            # semicolon except last time because turtle spec'd diff from N3 :-(
-            if i == len(values)-1 : sep = "."
-            else: sep = ";"
-            while v[:1] == ' ': v = v[1:]   # Strip spaces
-            while v[-1:] == ' ': v = v[:-1]
-            
-            if (len(v) and v!="0/0/00"
-                and v!="\n")  :  # Kludge to remove void Exchange dates & notes
+            str += " a <#Item>;"
+            open = 1
+        for i in range(len(values)):
+            v = values[i].strip()
+            open = 0
+            if ((len(v) and v!="0/0/00"
+                and v!="\n") or  ("-nostrip" in sys.argv[1:]))  :  # Kludge to remove void Exchange dates & notes
+                if open:  str+= "; "
                 if i < len(headings) : pred = headings[i]
                 else: pred = 'column%i' % (i)
                 if string.find(v, "\n") >= 0:
-                    print '    :%s """%s"""&s' % (pred, v, sep)
+                    str += '\n    :%s """%s"""' % (pred, v)
                 else:
-                    print '    :%s "%s"%s' % (pred, v, sep)
-            i = i+1
-        #print ".\n"
+                    str += '\n    :%s "%s"' % (pred, v)
+                open = 1
+        if open: str += "."
+        if str != "":
+            if "-id" in sys.argv[1:]: print "<#n%i>" % records + str
+            else: print "[]" + str
 
     print "# Total number of records:", records
 
