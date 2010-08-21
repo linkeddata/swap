@@ -112,14 +112,13 @@ def convert():
         records = records + 1
         if len(values) != len(headings):
             print "#  Warning: %i headings but %i values" % (len(headings), len(values))
-        open = 0  # false
+        open = False  # Open means the predicate object syntax needs to be closed
         str = ""
         if "-type" in sys.argv[1:]:
-            str += " a <#Item>;"
-            open = 1
+            str += " a <#Item> "
+            open = True
         for i in range(len(values)):
             v = values[i].strip()
-            open = 0
             if ((len(v) and v!="0/0/00"
                 and v!="\n") or  ("-nostrip" in sys.argv[1:]))  :  # Kludge to remove void Exchange dates & notes
                 if open:  str+= "; "
@@ -129,8 +128,9 @@ def convert():
                     str += '\n    :%s """%s"""' % (pred, v)
                 else:
                     str += '\n    :%s "%s"' % (pred, v)
-                open = 1
+                open = True
         if open: str += "."
+        open = False
         if str != "":
             if "-id" in sys.argv[1:]: print "<#n%i>" % records + str
             else: print "[]" + str
