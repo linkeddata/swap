@@ -5,7 +5,8 @@
  Runtime options:
 
     -comma    Use comma as delimited instead of tab
-    -id       Generate URIs for the things described by each row
+    -id       Generate sequential URIs for the items described by each row
+    -idfield  Use column 'id' to form the URI for each item
     -type     Declare each thing as of a type <#Item>.
     -schema   Generate a little RDF schema
     -nostrip  Do not strip empty cells
@@ -99,9 +100,10 @@ def convert():
     if "-schema" in sys.argv[1:]:
         print "# Schema"
         # print "@prefix : <> ."
-        print "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> ."
+        print "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>."
+        print "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>."
         for i in range(0,len(headings)):
-            print "  :%s  a rdfs:Property; rdfs:label \"%s\"." % \
+            print "  :%s  a rdf:Property; rdfs:label \"%s\"." % \
                     ( headings[i], sanitize(labels[i])  )
         print
  
@@ -114,6 +116,7 @@ def convert():
             print "#  Warning: %i headings but %i values" % (len(headings), len(values))
         open = False  # Open means the predicate object syntax needs to be closed
         str = ""
+        this_id = None
         if "-type" in sys.argv[1:]:
             str += " a <#Item> "
             open = True
@@ -121,18 +124,22 @@ def convert():
             v = values[i].strip()
             if ((len(v) and v!="0/0/00"
                 and v!="\n") or  ("-nostrip" in sys.argv[1:]))  :  # Kludge to remove void Exchange dates & notes
-                if open:  str+= "; "
                 if i < len(headings) : pred = headings[i]
                 else: pred = 'column%i' % (i)
-                if string.find(v, "\n") >= 0:
-                    str += '\n    :%s """%s"""' % (pred, v)
+                if ('-idfield' in sys.argv[1:]) and headings[i] == 'id':
+                    this_id = v
                 else:
-                    str += '\n    :%s "%s"' % (pred, v)
-                open = True
+                    if open:  str+= "; "
+                    if string.find(v, "\n") >= 0:
+                        str += '\n    :%s """%s"""' % (pred, v)
+                    else:
+                        str += '\n    :%s "%s"' % (pred, v)
+                    open = True
         if open: str += "."
         open = False
         if str != "":
             if "-id" in sys.argv[1:]: print "<#n%i>" % records + str
+            elif  "-idfield" in sys.argv[1:]: print "<#n%s>" % this_id + str
             else: print "[]" + str
 
     print "# Total number of records:", records
