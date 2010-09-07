@@ -11,6 +11,10 @@
     -schema   Generate a little RDF schema
     -nostrip  Do not strip empty cells
     -help     display this message and exit.
+    
+This is or was http://www.w3.org/2000/10/swap/tab2n3.py
+It is open source under the W3C software license.
+http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231
 """
 import sys
 import string
