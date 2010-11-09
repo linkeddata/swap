@@ -6,13 +6,17 @@ The continuing story of cryptographic builtins.
 
 cf. http://www.w3.org/2000/10/swap/cwm.py
 & http://www.amk.ca/python/writing/pycrypt/node16.html
+
+2010-11-01 TimBL Updated to use hashlib and added more SHA variants.
 """
 
 __author__ = 'Sean B. Palmer'
 __cvsid__ = '$Id$'
 __version__ = '$Revision$'
 
-import md5, sha, binascii, quopri, base64
+# 2010: DeprecationWarning: the sha module is deprecated; use the hashlib module instead
+import hashlib # http://pydoc.org/2.5.1/hashlib.html
+# import, binascii, quopri, base64
 from term import Function, ReverseFunction, LightBuiltIn
 
 USE_PKC = 1
@@ -23,7 +27,8 @@ if USE_PKC:
         import Crypto.PublicKey.RSA as RSA
     except ImportError:
         USE_PKC = 0
-#        'we failed')
+#        'we failed'  -- Fail silently now unless --crypto asked for
+# Note that Public Key stuff is not available but hashes still work.
 
 # Some stuff that we need to know about
 
@@ -93,7 +98,7 @@ def decToBin(i): # int to string
 #
 # C R Y P T O G R A H P I C   B U I L T - I N s
 #
-# At the moment, we only have built-ins that can gague the hash values of 
+# At the moment, we only have built-ins that can gauge the hash values of 
 # strings. It may be cool to have built ins that can give the hash value 
 # of the content of a work, too, although you can do that with log:content.
 #
@@ -103,13 +108,28 @@ def decToBin(i): # int to string
 
 class BI_md5(LightBuiltIn, Function):
     def evaluateObject(self, subj_py): 
-        m = md5.new(subj_py).digest() 
+        return hashlib.md5(subj_py).hexdigest(); 
         return  binascii.hexlify(m)
 
 class BI_sha(LightBuiltIn, Function):
     def evaluateObject(self, subj_py): 
-        m = sha.new(subj_py).digest() 
-        return binascii.hexlify(m)
+        return hashlib.sha1(subj_py).hexdigest(); 
+
+class BI_sha224(LightBuiltIn, Function):
+    def evaluateObject(self, subj_py): 
+        return hashlib.sha224(subj_py).hexdigest(); 
+
+class BI_sha256(LightBuiltIn, Function):
+    def evaluateObject(self, subj_py): 
+        return hashlib.sha256(subj_py).hexdigest(); 
+
+class BI_sha384(LightBuiltIn, Function):
+    def evaluateObject(self, subj_py): 
+        return hashlib.sha384(subj_py).hexdigest(); 
+
+class BI_sha512(LightBuiltIn, Function):
+    def evaluateObject(self, subj_py): 
+        return hashlib.sha512(subj_py).hexdigest(); 
 
 # Create a new RSA key
 
@@ -175,6 +195,10 @@ def register(store):
    str = store.symbol(CRYPTO_NS_URI[:-1])
    str.internFrag('md5', BI_md5)
    str.internFrag('sha', BI_sha)
+   str.internFrag('sha224', BI_sha224)
+   str.internFrag('sha256', BI_sha256)
+   str.internFrag('sha384', BI_sha384)
+   str.internFrag('sha512', BI_sha512)
    if USE_PKC: 
       str.internFrag('keyLength', BI_keyLength)
       str.internFrag('sign', BI_sign)
