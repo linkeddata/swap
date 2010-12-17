@@ -1,6 +1,4 @@
 
-<!-- Processed by Id: cwm.py,v 1.197 2007/12/13 15:38:39 syosi Exp -->
-<!--     using base file:///devel/WWW/2000/10/swap/string.n3-->
 
 
 <rdf:RDF xmlns="http://www.w3.org/2000/01/rdf-schema#"
@@ -148,6 +146,18 @@ It is true iff the string does NOT match the regexp.</comment>
         <range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
     </rdf:Property>
 
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/string#replace">
+        <comment>A built-in for replacing characters or sub.
+    takes a list of 3 strings; the first is the
+    input data, the second the old and the third the new string.
+    The object is calculated as the rplaced string.
+    For example, ("fofof bar", "of", "baz") string:replace "fbazbaz bar"
+    </comment>
+        <definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
+        <label>replace</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+    </rdf:Property>
+
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/string#scrape">
         <comment>The subject is a list of two strings. The second string is
 a regular expression in the perl, python style.
@@ -155,7 +165,7 @@ It must contain one group (a part in parentheses).  If the first string in the l
 the regular expression, then the object is calculated as being the
 part of the first string which matches the group.</comment>
         <definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
-        <label>contains</label>
+        <label>scrape</label>
         <range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
     </rdf:Property>
 

@@ -19,7 +19,7 @@ import urllib # for hasContent
 from term import LightBuiltIn, ReverseFunction, Function, UnknownType
 from local_decimal import Decimal
 
-LITERAL_URI_prefix = "data:text/rdf+n3;"
+LITERAL_URI_prefix = "data:text/n3;"
 
 
 STRING_NS_URI = "http://www.w3.org/2000/10/swap/string#"
@@ -153,8 +153,6 @@ class BI_scrape(LightBuiltIn, Function):
     """
     
     def evaluateObject(self, subj_py):
-#        raise Error
-        store = self.store
         if verbosity() > 80: progress("scrape input:"+`subj_py`)
 
         str, pat = subj_py
@@ -165,6 +163,18 @@ class BI_scrape(LightBuiltIn, Function):
             if verbosity() > 80: progress("scrape matched:"+m.group(1))
             return m.group(1)
         if verbosity() > 80: progress("scrape didn't match")
+
+class BI_replace(LightBuiltIn, Function):
+    """A built-in for replacing characters or sub.
+    takes a list of 3 strings; the first is the
+    input data, the second the old and the third the new string.
+    The object is calculated as the rplaced string.
+    For example, ("fofof bar", "of", "baz") string:replace "fbazbaz bar".
+    """
+    
+    def evaluateObject(self, subj_py):
+        str, old, new = subj_py
+        return str.replace(old, new)
 
 class BI_search(LightBuiltIn, Function):
     """a more powerful built-in for scraping using regexps.
@@ -340,6 +350,7 @@ def register(store):
     str.internFrag("concat", BI_concat)
     str.internFrag("concatenation", BI_concatenation)
     str.internFrag("scrape", BI_scrape)
+    str.internFrag("replace", BI_replace)
     str.internFrag("search", BI_search)
     str.internFrag("split", BI_split)
     str.internFrag("stringToList", BI_stringToList)

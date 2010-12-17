@@ -131,12 +131,23 @@ ignoring differences between upper and lower case.""";
 
 string:scrape a rdf:Property;
     s:definedBy <http://www.w3.org/2000/10/swap/string>;  
-    s:label  "contains";
+    s:label  "scrape";
     s:comment  """The subject is a list of two strings. The second string is
 a regular expression in the perl, python style.
 It must contain one group (a part in parentheses).  If the first string in the list matches
 the regular expression, then the object is calculated as being the
 part of the first string which matches the group.""";
+    s:range  string:String.
+
+string:replace a rdf:Property;
+    s:definedBy <http://www.w3.org/2000/10/swap/string>;  
+    s:label  "replace";
+    s:comment  """A built-in for replacing characters or sub.
+    takes a list of 3 strings; the first is the
+    input data, the second the old and the third the new string.
+    The object is calculated as the rplaced string.
+    For example, ("fofof bar", "of", "baz") string:replace "fbazbaz bar"
+    """;
     s:range  string:String.
 
 string:matches a rdf:Property;
