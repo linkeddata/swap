@@ -302,15 +302,20 @@
         <subPropertyOf rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#homePage"/>
     </rdf:Description>
 
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#region">
+        <comment>The sub-national unit such as state (us),
+province (ca), county (uk), département (fr), and so on</comment>
+        <label>region</label>
+    </rdf:Property>
+
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#sortName">
         <comment>re-arranged for lexicographic ordering; ala Doe, John</comment>
         <label>sort name</label>
     </rdf:Property>
 
-    <Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#stateOrProvince">
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#stateOrProvince">
         <domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Address"/>
-        <label>region</label>
-    </Property>
+    </rdf:Description>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#street">
         <domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Address"/>

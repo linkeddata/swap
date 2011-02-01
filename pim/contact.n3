@@ -142,8 +142,10 @@ doc:persistencePolicy
     is rdfs:domain of :street, :street2, :street3,
 		:city, :stateOrProvince, :postalCode, :country .
 
-stateOrProvince a rdfs:Property;
-    rdfs:label "region".
+region a rdf:Property;
+    rdfs:label "region";
+    rdfs:comment """The sub-national unit such as state (us),
+province (ca), county (uk), département (fr), and so on""".
     
 :zip rdfs:subPropertyOf :postalCode.
 
