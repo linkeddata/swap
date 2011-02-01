@@ -51,10 +51,13 @@ def convertDate(qdate):
 
     QIF is like   "7/ 9/98"  "9/ 7/99"  or   "10/10/99"  or "10/10'01" for y2k
          or, it seems (citibankdownload 20002) like "01/22/2002"
+         or, (Paypal 2011) like "3/2/2011".
     ISO is like   YYYY-MM-DD  I think @@check
     """
     if qdate[1] == "/":
         qdate = "0" + qdate   # Extend month to 2 digits
+    if qdate[4] == "/":
+        qdate = qdate[:3]+"0" + qdate[3:]   # Extend month to 2 digits
     for i in range(len(qdate)):
         if qdate[i] == " ":
             qdate = qdate[:i] + "0" + qdate[i+1:]
@@ -65,17 +68,22 @@ def convertDate(qdate):
     return C + qdate[6:8] + "-" + qdate[0:2] + "-" + qdate[3:5]
     
 def extract(path):
-    global nochange
     global verbose
+    global defaultAccount
     defaultUsed = 0
     crs = 0
     total = 0
+    nextId = 1
     ignorables = [ "Clear:AutoSwitch", "Option:AutoSwitch" ]   # Without leading "!"
     
     # The properties for any non-investment account:
     nonInvestmentProperties = { "C": None, "D": "date", "E": "splitMemo", "L": "category", "P": "payee",
                    "M": "memo", "N": "number", "S": "splitCategory", "T": "amount",
                                 "U": None, "$": "splitAmount"}
+                                
+    payPalCashProperties = { "D": "date", "P": "payee", "T": "amount", 
+                        "M": "memo","C": None,
+                          "L": None, "S": None, "$":None}  # Split stuff
 
     # For each type of account, a conversion from QIF poerty letter to rdf property name:
     properties = {
@@ -91,6 +99,7 @@ def extract(path):
                     "N": "number", "T": "amount", "U": "amount2", "$": "splitAmount" },
          "Oth_A": nonInvestmentProperties,
          "Oth_L": nonInvestmentProperties,
+         "Cash" : payPalCashProperties,
          }
     
     print "# n3  Personal and confidential. Not for distrbution."
@@ -157,15 +166,16 @@ def extract(path):
                 inRecord = 1
             else:
                 print "#@@@@@@ Unknown ", line
-        elif attr == "^":
+        elif attr == "^":   # The end of the record
             if split:
                 print "]",
                 split = 0
-            if (what == "Bank" or what == "CCard"):
+            print "qu:accordingTo <>;",
+            if (what == "Bank" or what == "CCard" or what == "Cash"):
                 if toAccount!= None: #@@ mising from citibank download
                     print "qu:toAccount ",toAccount,
                 else:
-                    print "qu:toAccount acc:Default",
+                    print "qu:toAccount acc:%s" % defaultAccount,
                     defaultUsed = 1
             print "."
             inSentence = 0
@@ -185,7 +195,9 @@ def extract(path):
                     toAccount = string.lower(qname)
                 continue
             if not inSentence:
-                print "[]",  # Start the sentence unnamed about thing
+                print "<#id%i>" % nextId,
+                nextId += 1
+                # print "[]",  # Start the sentence unnamed about thing
                 inSentence = 1
             val = ""
             for c in value:
@@ -193,7 +205,7 @@ def extract(path):
                 else: val = val + c
             if property != None:
                 if not inRecord:
-                    print ",\n    [",
+                    print ",\n    [",  qq
                     inRecord = 1
                 if split and property=="splitCategory":  # @ special!  Starts new part of split
                     print "],\n            [",
@@ -226,30 +238,24 @@ def extract(path):
 
 def do(path):
     if verbose: sys.stderr.write("Doing " + path + "\n")
-#    if os.path.isdir(path):
-#        if recursive:
-#            for name in os.listdir(path):
-#                do(path + "/" + name)
-#    else:
     if path[-4:] == ".QIF" or path[-4:] == ".qif":
         extract(path) 
         
 ######################################## Main program
 
 recursive = 0
-nochange = 1
 verbose = 0
 files = []
+defaultAccount = "Default";
 
 for arg in sys.argv[1:]:
     if arg[0:1] == "-":
-        if arg == "-r": recursive = 1    # Recursive
-        elif arg == "-f": nochange = 0   # Fix
-        elif arg == "-v": verbose = 1   # Tell me even about files which were ok
+#        if arg == "-r": recursive = 1    # Recursive
+        if arg == "-v": verbose = 1   # Tell me even about files which were ok
+        elif arg[:3] == "-a=": defaultAccount = arg[3:]
         else:
             print """Bad option argument.
-            -r  recursive
-            -f  fix files instead of just looking
+            -a=paypal  set the default account in case none in file
 
 """
             sys.exit(-1)

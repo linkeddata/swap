@@ -1,4 +1,4 @@
-#   Quciken(tm) Interchange Format RDF vocabulary
+#   Originally Quicken(tm) Interchange Format now generic RDF vocabulary
 #
 
 @prefix r:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -7,6 +7,7 @@
 @prefix :  <http://www.w3.org/2000/10/swap/pim/qif#> .
 @prefix q: <http://www.w3.org/2000/10/swap/pim/qif#> .
 @prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#> .
+@prefix trip: <http://www.w3.org/ns/pim/trip#>.
 
 <> doc:version "$Id$";
   s:seeAlso <qif2n3.py>, <http://dev.w3.org/cvsweb/2000/quacken/>,
@@ -42,5 +43,11 @@ q:toAccount a r:Property; s:label "account"; s:domain q:Transaction;
 q:accordingTo a r:Property; s:label "statement";
     s:domain q:Transaction; s:range doc:Work;
     s:comment "The document which is the source of data for this transaction.".
+
+
+#  No .. use http://www.w3.org/ns/pim/trip#trip
+#q:trip a r:Property; s:label "trip";
+#    s:comment "The trip associated with this transaction, etc. For expenses purposes, for example.";
+#    s:range trip:Trip.
 
 #ENDS

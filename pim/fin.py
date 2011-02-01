@@ -19,7 +19,7 @@ $Id$
 from swap import llyn, diag, notation3, RDFSink, uripath, myStore
 
 from swap.diag import verbosity, setVerbosity, progress
-from swap.uripath import join
+# from swap.uripath import join
 from swap.notation3 import RDF_NS_URI
 from swap.myStore import store, load, loadMany,  Namespace
 import swap.llyn
@@ -41,8 +41,8 @@ monthName= ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
 
 rdf_type = rdf.type
 cat = cat_ns
-meta = None   # Formula for metadata
-    
+kb = None;
+
 def sym(uri):
     return store.intern((0, uri))
 
@@ -75,12 +75,13 @@ def printCategories(cats, totals, count):
 
 
 def tableRow(label, anchor, totals, value):
+    global reportLink
     str = ""
     for month in range(12):
         str = str + "<td class='amt'>%6.2f</td>" % value[month]
     if anchor:
         return "<tr><td><a href='%s'>%s</a></td><td class='total'>%7.2f</td>%s</tr>" %(
-                "year-cat.html#" + anchor, label, totals, str)  # @@ add year in filename
+                reportLink + "#" + anchor, label, totals, str)  # @@ add year in filename
     return "<tr><td>%s</td><td class='total'>%7.2f</td>%s</tr>" %(label, totals, str)
 
 def internalCheck():
@@ -90,6 +91,9 @@ def internalCheck():
     unbalanced = []
     while len(transactions) > 0:
         x = transactions.pop()
+        month = monthNumber(x)
+        if month not in range(12) : continue
+
         date = str(kb.the(subj=x, pred=qu.date))
         if len(kb.each(subj=x, pred=qu.in_USD)) != 1:
             progress("Ignoring !=1 amount transaction %s" % x)
@@ -99,7 +103,7 @@ def internalCheck():
             datey = str(kb.the(subj=y, pred=qu.date))
             if date[0:10] == datey[0:10]:  # precision one day
                 if len(kb.each(subj=y, pred=qu.in_USD)) != 1:
-                    progress("Error: Ignoring: >1 amount for transaction %s" % y)
+                    progress("Error: Ignoring: >1 amount for Internal transaction %s" % y)
                     transactions.remove(y)
                     continue
                 if abs(amount +
@@ -139,7 +143,6 @@ def writeChart(filename, categories, totals, income, outgoings, shortTerm=0):
     
     Scaled chart
     """
-    global meta
     chart = open(filename, "w")
     chart.write("""<?xml version="1.0" encoding="iso-8859-1"?>
 <svg xmlns="http://www.w3.org/2000/svg"
@@ -151,16 +154,16 @@ def writeChart(filename, categories, totals, income, outgoings, shortTerm=0):
     for c in categories:
         if totals.get(c, 0) == 0: continue
         
-        label = meta.the(subj=c, pred=rdfs.label)
+        label = kb.the(subj=c, pred=rdfs.label)
         if label == None:
             label = `c`
             sys.stderr.write("Warning: No label for category"+`c` +"\n")
         else:
             label = str(label)
         
-        if shortTerm and meta.contains(subj=c, pred=rdf.type, obj=qu.LongTerm):
+        if shortTerm and kb.contains(subj=c, pred=rdf.type, obj=qu.LongTerm):
             continue  # ignore in budget diagram
-        volatility = meta.the(subj=c, pred=qu.volatility)
+        volatility = kb.the(subj=c, pred=qu.volatility)
         if volatility == None:
             volatility = 50
             sys.stderr.write("No volatility for "+ c.uriref() +"\n")
@@ -253,6 +256,26 @@ def writeChart(filename, categories, totals, income, outgoings, shortTerm=0):
     chart.close()
     return
 
+def allClasses(some):
+    cats = []
+    agenda = some[:]
+    while len(agenda) > 0:
+        c = agenda.pop()
+        if c not in cats: cats.append(c);
+        supers = kb.each(subj=c, pred=rdfs.subClassOf);
+        for sup in supers:
+            if sup not in agenda and sup not in cats: agenda.append(sup)
+    return cats
+
+def monthNumber(s):
+    global qu
+    date = kb.any(subj=s, pred=qu.date).__str__()
+    if date == "None":
+        progress("No date for transaction %s -- ignoring\n" % s)
+        return  -1
+    m = int(date[0:4]) * 12 + int(date[5:7])
+    monthInQuestion = int(yearInQuestion[0:4]) * 12 + int(yearInQuestion[5:7])
+    return m - monthInQuestion
 
 def doCommand(yearInQuestion, inputURIs=["/dev/stdin"],totalsFilename=None):
         """Fin - financial summary
@@ -278,27 +301,17 @@ def doCommand(yearInQuestion, inputURIs=["/dev/stdin"],totalsFilename=None):
 
 # Load the data:
 
-#       print "Data from", inputURI
-        kb=load(inputURIs[0])
-        for inputURI in inputURIs[1:]:
-            progress("Data also from " + inputURI)
-            kb.store.load(uri=inputURI, openFormula=kb)
-        
-#       print "Size of kb: ", len(kb)
-        
-        global meta
-        meta = loadMany(["categories.n3", "classify.n3"])  # Category names etc
-#       print "Size of meta", len(meta)
-        
+        kb = loadMany(inputURIs)
+                
         qu_date = qu.date
         qu_in_USD = qu.in_USD
         qu_amount = qu.amount
         qu_payee = qu.payee
         qu_Classified = qu.Classified
         qu_Unclassified = qu.Unclassified
-        taxCategories = meta.each(pred=rdf_type, obj=tax.Category)
+        taxCategories = kb.each(pred=rdf_type, obj=tax.Category)
         if verbose:
-            print "Tax categories", taxCategories
+            progress("Tax categories" + `taxCategories`)
         specialCategories = taxCategories + [qu.Classified, qu.Unclassified, qu.Transaction]
 
 ####### Analyse the data:
@@ -307,61 +320,56 @@ def doCommand(yearInQuestion, inputURIs=["/dev/stdin"],totalsFilename=None):
         income, outgoings = 0,0
         outgoingsByMonth = [0] * 12 
 
-        quCategories = meta.each(pred=rdf_type, obj=qu.Cat)
+        quCategories = kb.each(pred=rdf_type, obj=qu.Cat)
         
         totals = {}  # Total by all classes of transaction
         count = {}  # Number of transactions
         byMonth = {}
-        satis = tax.Category, qu.Cat  # Satisfactory classes
-        classified =  kb.each(pred=rdf_type, obj=qu_Classified)
-        unclassified = kb.each(pred=rdf_type, obj=qu_Unclassified)
-        for t in classified: assert t not in unclassified, "Can't be classified and unclassified!"+`t`
-        for s in classified + unclassified:
+
+        sts = kb.statementsMatching(pred=qu.amount)  # Ideally one per transaction
+        for st in sts:
+            s = st.subject()
+            uri = s.uriref()
+#        classified =  kb.each(pred=rdf_type, obj=qu_Classified)
+#        unclassified = kb.each(pred=rdf_type, obj=qu_Unclassified)
+#        for t in classified: assert t not in unclassified, "Can't be classified and unclassified!"+`t`
+#        for s in classified + unclassified:
 #           progress( "Transaction ", `s`)
             t_ok, c_ok = 0, 0
-            date = kb.any(subj=s, pred=qu_date).__str__()
-            cats = kb.each(subj=s, pred=rdf_type)
-            if date == "None":
-#               raise ValueError("No date for transaction %s" % s)
-                progress("No date for transaction %s -- ignoring\n" % s)
-                continue
-            m = int(date[0:4]) * 12 + int(date[5:7])
-            monthInQuestion = int(yearInQuestion[0:4]) * 12 + int(yearInQuestion[5:7])
-            month = m - monthInQuestion
-            if month < 0 or  month > 11: continue
-
-#           print year, yearInQuestion, `s`
-#            if  int(year) != int(yearInQuestion): continue
-#            month = int(date[5:7]) -1
-#            if month not in range(12): raise ValueError("Month %i"% month)
             
+            cats = allClasses(kb.each(subj=s, pred=rdf.type))
+            # progress( "Categories: "+`cats`)
+            
+            month = monthNumber(s)
+            if month not in range(12) : continue
+                        
             payees = kb.each(subj=s, pred=qu_payee)
             if str(payees[0]) == "Check" and len(payees) >1: payee = payees[1]
             else: payee = payees[0]
+            
             amounts = kb.each(subj=s, pred=qu_in_USD)
             if len(amounts) == 0:
                 amounts = kb.each(subj=s, pred=qu_amount)
                 if len(amounts) == 0:
-                    progress("@@@ Error: No amount for "+`s`)
+                    progress("@@@ Error: No amount for "+`uri`)
                 else:
-                    progress("Warning: No USD amount for "+`s`+", assuming USD")
+                    progress("Warning: No USD amount for "+`uri`+", assuming USD")
             if len(amounts) >1:
                 if (cat_ns.Internal not in cats or
                     len(amounts) != 2 ):
                 
                     progress(
             "Error: More than one amount %s for transaction %s -- ignoring!\n"
-                            % (amounts,s))
+                            % (`amounts`,uri))
                 else:
                     sum = float(amounts[0]) + float(amounts[1])
                     if sum != 0:
                         progress("2 amounts %s for internal transaction %s.\n"
-                            % (amounts,s))
+                            % (amounts,uri))
                 continue
 
             if len(amounts) != 1:
-                progress("@@@ Error: No amount for "+`s`);
-                progress("... where s.uri is "+s.uriref())
+                progress("@@@ Error: No amount for "+`uri`);
                 ss = kb.statementsMatching(subj=s)
                 progress(`ss`+'; KB='+`kb.n3String()`)
                 continue
@@ -392,8 +400,9 @@ def doCommand(yearInQuestion, inputURIs=["/dev/stdin"],totalsFilename=None):
                     if sup in bottomCats:
                         bottomCats.remove(sup)
             if len(bottomCats) != 1:
-                progress("Error: %s Transaction with %s for %10s in >1 category: %s!!"
-                            %(date, payee, amount, normalCats))
+                date = kb.any(subj=s, pred=qu.date).__str__()
+                progress("Warning: %s :\n\t %s Transaction with %s for %10s : no unique bottom category: %s, all cats: %s, raw cats:%s"
+                            %(uri, date, payee, amount, `bottomCats`, `cats`, `kb.each(subj=s, pred=rdf.type)`))
     
 
         print '<html xmlns="http://www.w3.org/1999/xhtml">'
@@ -424,7 +433,7 @@ def doCommand(yearInQuestion, inputURIs=["/dev/stdin"],totalsFilename=None):
             print "<th><a href='year-chron.html#m%s'>%s</a></th>" %(("0"+`m+1`)[-2:], monthName[m]),
         print "</tr>"
         for cat in quCategories + [ qu.UnclassifiedIncome, qu.UnclassifiedOutgoing]:
-            label = meta.the(subj=cat, pred=rdfs.label)
+            label = kb.the(subj=cat, pred=rdfs.label)
             if label == None:
                 label = `cat`
                 sys.stderr.write("@@ No label for "+`cat` +"\n")
@@ -513,7 +522,9 @@ def doCommand(yearInQuestion, inputURIs=["/dev/stdin"],totalsFilename=None):
     
         
 ############################################################ Main program
-    
+
+reportLink = "year-cat.html"
+
 if __name__ == '__main__':
     import getopt
     testFiles = []
@@ -526,8 +537,8 @@ if __name__ == '__main__':
     global yearInQuestion
     verbose = 0
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hvy:i:t:",
-            ["help",  "verbose", "year=", "input=", "totals="])
+        opts, args = getopt.getopt(sys.argv[1:], "hvy:i:t:r:",
+            ["help",  "verbose", "year=", "input=", "totals=", "report="])
     except getopt.GetoptError:
         # print help information and exit:
         print __doc__
@@ -547,6 +558,9 @@ if __name__ == '__main__':
             if len(yearInQuestion) < 7: yearInQuestion += "-01"
         if o in ("-i", "--input"):
             inputURIs.append(a)
+        if o in ("-r", "--report"):
+            reportLink = a
+            #progress("Report to link to: "+a)
 
     doCommand(yearInQuestion=yearInQuestion, inputURIs=inputURIs, totalsFilename=totalsFilename)
 
