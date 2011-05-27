@@ -1,7 +1,7 @@
 #! /usr/bin/python
 """  Convert tab-separated text to n3 notation
   This has been hacked in 2000 to work with the "Tab separated (Windows)" output from
- MS Outlook export of contaxt files.
+ MS Outlook export of contact files.
  Runtime options:
 
     -comma    Use comma as delimited instead of tab
