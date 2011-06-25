@@ -154,6 +154,9 @@ def contentLines(doc, argv, fn=None):
 	colon = line.find(":")
 	if colon < 0:
 	    if line == "": break #
+            if "<OFX>" in line:  # NatWest OFX error - missing gap line
+                ln = ln - 1  # Back up and do it again
+                break;
 	    raise SyntaxError("No colon in header line, line %i: %s" % (
 						ln, line))
 	hname, value = line[:colon], line[colon+1:]
