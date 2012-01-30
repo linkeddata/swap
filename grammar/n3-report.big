@@ -1,7 +1,7 @@
-     @prefix : <http://www.w3.org/2000/10/swap/grammar/bnf2html#> .
+     @prefix : <http://www.w3.org/2000/10/swap/grammar/n3#> .
     @prefix cfg: <http://www.w3.org/2000/10/swap/grammar/bnf#> .
+    @prefix h: <http://www.w3.org/2000/10/swap/grammar/bnf2html#> .
     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
-    @prefix n3: <http://www.w3.org/2000/10/swap/grammar/n3#> .
     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
     @prefix rul: <http://www.w3.org/2000/10/swap/grammar/bnf-rules#> .
     
@@ -12,110 +12,116 @@
                 <#_g4>,
                 <#_g5> .
     
-    "!"     :reference """<b><code>"!"</code></b>""" .
+    "!"     h:reference """<b><code>"!"</code></b>""" .
     
-    "("     :reference """<b><code>"("</code></b>""" .
+    "("     h:reference """<b><code>"("</code></b>""" .
     
-    ")"     :reference """<b><code>")"</code></b>""" .
+    ")"     h:reference """<b><code>")"</code></b>""" .
     
-    ","     :reference """<b><code>","</code></b>""" .
+    ","     h:reference """<b><code>","</code></b>""" .
     
-    "."     :reference """<b><code>"."</code></b>""" .
+    "."     h:reference """<b><code>"."</code></b>""" .
     
-    ";"     :reference """<b><code>";"</code></b>""" .
+    "/"     h:reference """<b><code>"/"</code></b>""" .
     
-    "<="     :reference """<b><code>"<="</code></b>""" .
+    ";"     h:reference """<b><code>";"</code></b>""" .
     
-    "="     :reference """<b><code>"="</code></b>""" .
+    "<="     h:reference """<b><code>"<="</code></b>""" .
     
-    "=>"     :reference """<b><code>"=>"</code></b>""" .
+    "="     h:reference """<b><code>"="</code></b>""" .
     
-    "@"     :reference """<b><code>"@"</code></b>""" .
+    "=>"     h:reference """<b><code>"=>"</code></b>""" .
     
-    "@a"     :reference """<b><code>"@a"</code></b>""" .
+    "@"     h:reference """<b><code>"@"</code></b>""" .
     
-    "@base"     :reference """<b><code>"@base"</code></b>""" .
+    "@a"     h:reference """<b><code>"@a"</code></b>""" .
     
-    "@false"     :reference """<b><code>"@false"</code></b>""" .
+    "@base"     h:reference """<b><code>"@base"</code></b>""" .
     
-    "@forAll"     :reference """<b><code>"@forAll"</code></b>""" .
+    "@false"     h:reference """<b><code>"@false"</code></b>""" .
     
-    "@forSome"     :reference """<b><code>"@forSome"</code></b>""" .
+    "@forAll"     h:reference """<b><code>"@forAll"</code></b>""" .
     
-    "@has"     :reference """<b><code>"@has"</code></b>""" .
+    "@forSome"     h:reference """<b><code>"@forSome"</code></b>""" .
     
-    "@is"     :reference """<b><code>"@is"</code></b>""" .
+    "@has"     h:reference """<b><code>"@has"</code></b>""" .
     
-    "@keywords"     :reference """<b><code>"@keywords"</code></b>""" .
+    "@is"     h:reference """<b><code>"@is"</code></b>""" .
     
-    "@of"     :reference """<b><code>"@of"</code></b>""" .
+    "@keywords"     h:reference """<b><code>"@keywords"</code></b>""" .
     
-    "@prefix"     :reference """<b><code>"@prefix"</code></b>""" .
+    "@of"     h:reference """<b><code>"@of"</code></b>""" .
     
-    "@true"     :reference """<b><code>"@true"</code></b>""" .
+    "@prefix"     h:reference """<b><code>"@prefix"</code></b>""" .
     
-    "["     :reference """<b><code>"["</code></b>""" .
+    "@true"     h:reference """<b><code>"@true"</code></b>""" .
     
-    "]"     :reference """<b><code>"]"</code></b>""" .
+    "["     h:reference """<b><code>"["</code></b>""" .
     
-    "^"     :reference """<b><code>"^"</code></b>""" .
+    "]"     h:reference """<b><code>"]"</code></b>""" .
     
-    "^^"     :reference """<b><code>"^^"</code></b>""" .
+    "^"     h:reference """<b><code>"^"</code></b>""" .
     
-    "{"     :reference """<b><code>"{"</code></b>""" .
+    "^^"     h:reference """<b><code>"^^"</code></b>""" .
     
-    "}"     :reference """<b><code>"}"</code></b>""" .
+    "{"     h:reference """<b><code>"{"</code></b>""" .
     
-    ()     a :Sequence,
-                :SequenceTail;
-         :seqlabel "<em>void</em>" .
+    "}"     h:reference """<b><code>"}"</code></b>""" .
+    
+    ()     a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel "<em>void</em>" .
       ( "!"
-        n3:expression )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel """<b><code>"!"</code></b> <a href='#expression'>expression</a>""" .
+        :expression )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel """<b><code>"!"</code></b> <a href='#expression'>expression</a>""" .
       ( "("
-        n3:pathlist
+        :pathlist
         ")" )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel """<b><code>"("</code></b> <a href='#pathlist'>pathlist</a> <b><code>")"</code></b>""" .
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel """<b><code>"("</code></b> <a href='#pathlist'>pathlist</a> <b><code>")"</code></b>""" .
       ( ")" )
-         a :SequenceTail;
-         :seqlabel """<b><code>")"</code></b>""" .
+         a h:SequenceTail;
+         h:seqlabel """<b><code>")"</code></b>""" .
       ( ","
-        n3:barename
+        :barename
         <#_g3> )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel """<b><code>","</code></b> <a href='#barename'>barename</a> <a href='#barename_csl_tail'>barename_csl_tail</a>""" .
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel """<b><code>","</code></b> <a href='#barename'>barename</a> <a href='#barename_csl_tail'>barename_csl_tail</a>""" .
       ( ","
-        n3:object
-        n3:objecttail )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel """<b><code>","</code></b> <a href='#object'>object</a> <a href='#objecttail'>objecttail</a>""" .
+        :object
+        :objecttail )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel """<b><code>","</code></b> <a href='#object'>object</a> <a href='#objecttail'>objecttail</a>""" .
       ( ","
-        n3:symbol
+        :symbol
         <#_g4> )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel """<b><code>","</code></b> <a href='#symbol'>symbol</a> <a href='#symbol_csl_tail'>symbol_csl_tail</a>""" .
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel """<b><code>","</code></b> <a href='#symbol'>symbol</a> <a href='#symbol_csl_tail'>symbol_csl_tail</a>""" .
       ( ","
-        n3:symbol
+        :symbol
         <#_g5> )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel """<b><code>","</code></b> <a href='#symbol'>symbol</a> <a href='#symbol_csl_tail'>symbol_csl_tail</a>""" .
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel """<b><code>","</code></b> <a href='#symbol'>symbol</a> <a href='#symbol_csl_tail'>symbol_csl_tail</a>""" .
       ( "."
-        n3:statementlist )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel """<b><code>"."</code></b> <a href='#statementlist'>statementlist</a>""" .
+        :statementlist )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel """<b><code>"."</code></b> <a href='#statementlist'>statementlist</a>""" .
       ( "."
-        n3:statements_optional )
-         a :SequenceTail;
-         :seqlabel """<b><code>"."</code></b> <a href='#statements_optional'>statements_optional</a>""" .
+        :statements_optional )
+         a h:SequenceTail;
+         h:seqlabel """<b><code>"."</code></b> <a href='#statements_optional'>statements_optional</a>""" .
+      ( "/"
+        :unsignedint )
+         a h:SequenceTail;
+         h:seqlabel """<b><code>"/"</code></b> <a href='#unsignedint'>unsignedint</a>""" .
       ( "0"
         0 )
          log:outputString """<html>
@@ -132,98 +138,98 @@
   <dl>
 """ .
       ( ";"
-        n3:propertylist )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel """<b><code>";"</code></b> <a href='#propertylist'>propertylist</a>""" .
+        :propertylist )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel """<b><code>";"</code></b> <a href='#propertylist'>propertylist</a>""" .
       ( "<=" )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel """<b><code>"<="</code></b>""" .
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel """<b><code>"<="</code></b>""" .
       ( "=" )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel """<b><code>"="</code></b>""" .
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel """<b><code>"="</code></b>""" .
       ( "=>" )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel """<b><code>"=>"</code></b>""" .
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel """<b><code>"=>"</code></b>""" .
       ( "@"
-        n3:langcode )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel """<b><code>"@"</code></b> <a href='#langcode'>langcode</a>""" .
+        :langcode )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel """<b><code>"@"</code></b> <a href='#langcode'>langcode</a>""" .
       ( "@a" )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel """<b><code>"@a"</code></b>""" .
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel """<b><code>"@a"</code></b>""" .
       ( "@base"
-        n3:explicituri )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel """<b><code>"@base"</code></b> <a href='#explicituri'>explicituri</a>""" .
+        :explicituri )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel """<b><code>"@base"</code></b> <a href='#explicituri'>explicituri</a>""" .
       ( "@false" )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel """<b><code>"@false"</code></b>""" .
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel """<b><code>"@false"</code></b>""" .
       ( "@forAll"
         <#_g0> )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel """<b><code>"@forAll"</code></b> <a href='#symbol_csl'>symbol_csl</a>""" .
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel """<b><code>"@forAll"</code></b> <a href='#symbol_csl'>symbol_csl</a>""" .
       ( "@forSome"
         <#_g1> )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel """<b><code>"@forSome"</code></b> <a href='#symbol_csl'>symbol_csl</a>""" .
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel """<b><code>"@forSome"</code></b> <a href='#symbol_csl'>symbol_csl</a>""" .
       ( "@has"
-        n3:expression )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel """<b><code>"@has"</code></b> <a href='#expression'>expression</a>""" .
+        :expression )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel """<b><code>"@has"</code></b> <a href='#expression'>expression</a>""" .
       ( "@is"
-        n3:expression
+        :expression
         "@of" )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel """<b><code>"@is"</code></b> <a href='#expression'>expression</a> <b><code>"@of"</code></b>""" .
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel """<b><code>"@is"</code></b> <a href='#expression'>expression</a> <b><code>"@of"</code></b>""" .
       ( "@keywords"
         <#_g2> )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel """<b><code>"@keywords"</code></b> <a href='#barename_csl'>barename_csl</a>""" .
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel """<b><code>"@keywords"</code></b> <a href='#barename_csl'>barename_csl</a>""" .
       ( "@of" )
-         a :SequenceTail;
-         :seqlabel """<b><code>"@of"</code></b>""" .
+         a h:SequenceTail;
+         h:seqlabel """<b><code>"@of"</code></b>""" .
       ( "@prefix"
-        n3:prefix
-        n3:explicituri )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel """<b><code>"@prefix"</code></b> <a href='#prefix'>prefix</a> <a href='#explicituri'>explicituri</a>""" .
+        :prefix
+        :explicituri )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel """<b><code>"@prefix"</code></b> <a href='#prefix'>prefix</a> <a href='#explicituri'>explicituri</a>""" .
       ( "@true" )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel """<b><code>"@true"</code></b>""" .
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel """<b><code>"@true"</code></b>""" .
       ( "["
-        n3:propertylist
+        :propertylist
         "]" )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel """<b><code>"["</code></b> <a href='#propertylist'>propertylist</a> <b><code>"]"</code></b>""" .
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel """<b><code>"["</code></b> <a href='#propertylist'>propertylist</a> <b><code>"]"</code></b>""" .
       ( "]" )
-         a :SequenceTail;
-         :seqlabel """<b><code>"]"</code></b>""" .
+         a h:SequenceTail;
+         h:seqlabel """<b><code>"]"</code></b>""" .
       ( "^"
-        n3:expression )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel """<b><code>"^"</code></b> <a href='#expression'>expression</a>""" .
+        :expression )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel """<b><code>"^"</code></b> <a href='#expression'>expression</a>""" .
       ( "^^"
-        n3:symbol )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel """<b><code>"^^"</code></b> <a href='#symbol'>symbol</a>""" .
+        :symbol )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel """<b><code>"^^"</code></b> <a href='#symbol'>symbol</a>""" .
       ( "barename"
         0 )
          log:outputString """  <dt><a name='barename'>barename</a></dt><dd>
@@ -280,7 +286,7 @@
 """ .
       ( "decimal"
         6 )
-         log:outputString """	<p><em>[-+]?[0-9]+(\\.[0-9]+)?</em></p>
+         log:outputString """	<p><em>[-+]?[0-9]+\\.[0-9]*</em></p>
 """ .
       ( "decimal"
         9 )
@@ -425,6 +431,8 @@
                 """		<p><a href='#double'>double</a></p>
 """,
                 """		<p><a href='#integer'>integer</a></p>
+""",
+                """		<p><a href='#rational'>rational</a></p>
 """ .
       ( "numericliteral"
         9 )
@@ -506,6 +514,29 @@
       ( "pathtail"
         9 )
          log:outputString "\t</dd>\n" .
+      ( "predicate"
+        0 )
+         log:outputString """  <dt><a name='predicate'>predicate</a></dt><dd>
+""" .
+      ( "predicate"
+        5 )
+         log:outputString """		<p><a href='#expression'>expression</a></p>
+""",
+                """		<p><b><code>"<="</code></b></p>
+""",
+                """		<p><b><code>"="</code></b></p>
+""",
+                """		<p><b><code>"=>"</code></b></p>
+""",
+                """		<p><b><code>"@a"</code></b></p>
+""",
+                """		<p><b><code>"@has"</code></b> <a href='#expression'>expression</a></p>
+""",
+                """		<p><b><code>"@is"</code></b> <a href='#expression'>expression</a> <b><code>"@of"</code></b></p>
+""" .
+      ( "predicate"
+        9 )
+         log:outputString "\t</dd>\n" .
       ( "prefix"
         0 )
          log:outputString """  <dt><a name='prefix'>prefix</a></dt><dd>
@@ -523,7 +554,7 @@
 """ .
       ( "propertylist"
         5 )
-         log:outputString """		<p><a href='#verb'>verb</a> <a href='#object'>object</a> <a href='#objecttail'>objecttail</a> <a href='#propertylisttail'>propertylisttail</a></p>
+         log:outputString """		<p><a href='#predicate'>predicate</a> <a href='#object'>object</a> <a href='#objecttail'>objecttail</a> <a href='#propertylisttail'>propertylisttail</a></p>
 """,
                 """		<p><em>void</em></p>
 """ .
@@ -563,6 +594,17 @@
          log:outputString """	<p><em>\\?[A-Z_a-zÀ-ÖØ-öø-˿Ͱ-ͽͿ-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿][\\-0-9A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿-⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿]*</em></p>
 """ .
       ( "quickvariable"
+        9 )
+         log:outputString "\t</dd>\n" .
+      ( "rational"
+        0 )
+         log:outputString """  <dt><a name='rational'>rational</a></dt><dd>
+""" .
+      ( "rational"
+        5 )
+         log:outputString """		<p><a href='#integer'>integer</a> <b><code>"/"</code></b> <a href='#unsignedint'>unsignedint</a></p>
+""" .
+      ( "rational"
         9 )
          log:outputString "\t</dd>\n" .
       ( "simpleStatement"
@@ -704,244 +746,245 @@
       ( "universal"
         9 )
          log:outputString "\t</dd>\n" .
-      ( "verb"
+      ( "unsignedint"
         0 )
-         log:outputString """  <dt><a name='verb'>verb</a></dt><dd>
+         log:outputString """  <dt><a name='unsignedint'>unsignedint</a></dt><dd>
 """ .
-      ( "verb"
-        5 )
-         log:outputString """		<p><a href='#expression'>expression</a></p>
-""",
-                """		<p><b><code>"<="</code></b></p>
-""",
-                """		<p><b><code>"="</code></b></p>
-""",
-                """		<p><b><code>"=>"</code></b></p>
-""",
-                """		<p><b><code>"@a"</code></b></p>
-""",
-                """		<p><b><code>"@has"</code></b> <a href='#expression'>expression</a></p>
-""",
-                """		<p><b><code>"@is"</code></b> <a href='#expression'>expression</a> <b><code>"@of"</code></b></p>
+      ( "unsignedint"
+        6 )
+         log:outputString """	<p><em>[0-9]+</em></p>
 """ .
-      ( "verb"
+      ( "unsignedint"
         9 )
          log:outputString "\t</dd>\n" .
       ( "{"
-        n3:formulacontent
+        :formulacontent
         "}" )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel """<b><code>"{"</code></b> <a href='#formulacontent'>formulacontent</a> <b><code>"}"</code></b>""" .
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel """<b><code>"{"</code></b> <a href='#formulacontent'>formulacontent</a> <b><code>"}"</code></b>""" .
       ( "}" )
-         a :SequenceTail;
-         :seqlabel """<b><code>"}"</code></b>""" .
+         a h:SequenceTail;
+         h:seqlabel """<b><code>"}"</code></b>""" .
       ( "~~"
         9 )
          log:outputString "\n</dl>\n</html>\n" .
       ( cfg:eof )
-         a :SequenceTail;
-         :seqlabel "<em>EOF</em>" .
-      ( n3:barename
+         a h:SequenceTail;
+         h:seqlabel "<em>EOF</em>" .
+      ( :barename
         <#_g3> )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel "<a href='#barename'>barename</a> <a href='#barename_csl_tail'>barename_csl_tail</a>" .
-      ( n3:boolean )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel "<a href='#boolean'>boolean</a>" .
-      ( n3:decimal )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel "<a href='#decimal'>decimal</a>" .
-      ( n3:declaration )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel "<a href='#declaration'>declaration</a>" .
-      ( n3:double )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel "<a href='#double'>double</a>" .
-      ( n3:dtlang )
-         a :SequenceTail;
-         :seqlabel "<a href='#dtlang'>dtlang</a>" .
-      ( n3:existential )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel "<a href='#existential'>existential</a>" .
-      ( n3:explicituri )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel "<a href='#explicituri'>explicituri</a>" .
-      ( n3:expression
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel "<a href='#barename'>barename</a> <a href='#barename_csl_tail'>barename_csl_tail</a>" .
+      ( :boolean )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel "<a href='#boolean'>boolean</a>" .
+      ( :decimal )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel "<a href='#decimal'>decimal</a>" .
+      ( :declaration )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel "<a href='#declaration'>declaration</a>" .
+      ( :double )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel "<a href='#double'>double</a>" .
+      ( :dtlang )
+         a h:SequenceTail;
+         h:seqlabel "<a href='#dtlang'>dtlang</a>" .
+      ( :existential )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel "<a href='#existential'>existential</a>" .
+      ( :explicituri )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel "<a href='#explicituri'>explicituri</a>" .
+      ( :expression
         "@of" )
-         a :SequenceTail;
-         :seqlabel """<a href='#expression'>expression</a> <b><code>"@of"</code></b>""" .
-      ( n3:expression
-        n3:pathlist )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel "<a href='#expression'>expression</a> <a href='#pathlist'>pathlist</a>" .
-      ( n3:expression )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel "<a href='#expression'>expression</a>" .
-      ( n3:formulacontent
+         a h:SequenceTail;
+         h:seqlabel """<a href='#expression'>expression</a> <b><code>"@of"</code></b>""" .
+      ( :expression
+        :pathlist )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel "<a href='#expression'>expression</a> <a href='#pathlist'>pathlist</a>" .
+      ( :expression )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel "<a href='#expression'>expression</a>" .
+      ( :formulacontent
         "}" )
-         a :SequenceTail;
-         :seqlabel """<a href='#formulacontent'>formulacontent</a> <b><code>"}"</code></b>""" .
-      ( n3:integer )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel "<a href='#integer'>integer</a>" .
-      ( n3:langcode )
-         a :SequenceTail;
-         :seqlabel "<a href='#langcode'>langcode</a>" .
-      ( n3:literal )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel "<a href='#literal'>literal</a>" .
-      ( n3:numericliteral )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel "<a href='#numericliteral'>numericliteral</a>" .
-      ( n3:object
-        n3:objecttail
-        n3:propertylisttail )
-         a :SequenceTail;
-         :seqlabel "<a href='#object'>object</a> <a href='#objecttail'>objecttail</a> <a href='#propertylisttail'>propertylisttail</a>" .
-      ( n3:object
-        n3:objecttail )
-         a :SequenceTail;
-         :seqlabel "<a href='#object'>object</a> <a href='#objecttail'>objecttail</a>" .
-      ( n3:objecttail
-        n3:propertylisttail )
-         a :SequenceTail;
-         :seqlabel "<a href='#objecttail'>objecttail</a> <a href='#propertylisttail'>propertylisttail</a>" .
-      ( n3:objecttail )
-         a :SequenceTail;
-         :seqlabel "<a href='#objecttail'>objecttail</a>" .
-      ( n3:pathitem
-        n3:pathtail )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel "<a href='#pathitem'>pathitem</a> <a href='#pathtail'>pathtail</a>" .
-      ( n3:pathlist
+         a h:SequenceTail;
+         h:seqlabel """<a href='#formulacontent'>formulacontent</a> <b><code>"}"</code></b>""" .
+      ( :integer
+        "/"
+        :unsignedint )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel """<a href='#integer'>integer</a> <b><code>"/"</code></b> <a href='#unsignedint'>unsignedint</a>""" .
+      ( :integer )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel "<a href='#integer'>integer</a>" .
+      ( :langcode )
+         a h:SequenceTail;
+         h:seqlabel "<a href='#langcode'>langcode</a>" .
+      ( :literal )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel "<a href='#literal'>literal</a>" .
+      ( :numericliteral )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel "<a href='#numericliteral'>numericliteral</a>" .
+      ( :object
+        :objecttail
+        :propertylisttail )
+         a h:SequenceTail;
+         h:seqlabel "<a href='#object'>object</a> <a href='#objecttail'>objecttail</a> <a href='#propertylisttail'>propertylisttail</a>" .
+      ( :object
+        :objecttail )
+         a h:SequenceTail;
+         h:seqlabel "<a href='#object'>object</a> <a href='#objecttail'>objecttail</a>" .
+      ( :objecttail
+        :propertylisttail )
+         a h:SequenceTail;
+         h:seqlabel "<a href='#objecttail'>objecttail</a> <a href='#propertylisttail'>propertylisttail</a>" .
+      ( :objecttail )
+         a h:SequenceTail;
+         h:seqlabel "<a href='#objecttail'>objecttail</a>" .
+      ( :pathitem
+        :pathtail )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel "<a href='#pathitem'>pathitem</a> <a href='#pathtail'>pathtail</a>" .
+      ( :pathlist
         ")" )
-         a :SequenceTail;
-         :seqlabel """<a href='#pathlist'>pathlist</a> <b><code>")"</code></b>""" .
-      ( n3:pathlist )
-         a :SequenceTail;
-         :seqlabel "<a href='#pathlist'>pathlist</a>" .
-      ( n3:pathtail )
-         a :SequenceTail;
-         :seqlabel "<a href='#pathtail'>pathtail</a>" .
-      ( n3:prefix
-        n3:explicituri )
-         a :SequenceTail;
-         :seqlabel "<a href='#prefix'>prefix</a> <a href='#explicituri'>explicituri</a>" .
-      ( n3:propertylist
+         a h:SequenceTail;
+         h:seqlabel """<a href='#pathlist'>pathlist</a> <b><code>")"</code></b>""" .
+      ( :pathlist )
+         a h:SequenceTail;
+         h:seqlabel "<a href='#pathlist'>pathlist</a>" .
+      ( :pathtail )
+         a h:SequenceTail;
+         h:seqlabel "<a href='#pathtail'>pathtail</a>" .
+      ( :predicate
+        :object
+        :objecttail
+        :propertylisttail )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel "<a href='#predicate'>predicate</a> <a href='#object'>object</a> <a href='#objecttail'>objecttail</a> <a href='#propertylisttail'>propertylisttail</a>" .
+      ( :prefix
+        :explicituri )
+         a h:SequenceTail;
+         h:seqlabel "<a href='#prefix'>prefix</a> <a href='#explicituri'>explicituri</a>" .
+      ( :propertylist
         "]" )
-         a :SequenceTail;
-         :seqlabel """<a href='#propertylist'>propertylist</a> <b><code>"]"</code></b>""" .
-      ( n3:propertylist )
-         a :SequenceTail;
-         :seqlabel "<a href='#propertylist'>propertylist</a>" .
-      ( n3:propertylisttail )
-         a :SequenceTail;
-         :seqlabel "<a href='#propertylisttail'>propertylisttail</a>" .
-      ( n3:qname )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel "<a href='#qname'>qname</a>" .
-      ( n3:quickvariable )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel "<a href='#quickvariable'>quickvariable</a>" .
-      ( n3:simpleStatement )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel "<a href='#simpleStatement'>simpleStatement</a>" .
-      ( n3:statement
+         a h:SequenceTail;
+         h:seqlabel """<a href='#propertylist'>propertylist</a> <b><code>"]"</code></b>""" .
+      ( :propertylist )
+         a h:SequenceTail;
+         h:seqlabel "<a href='#propertylist'>propertylist</a>" .
+      ( :propertylisttail )
+         a h:SequenceTail;
+         h:seqlabel "<a href='#propertylisttail'>propertylisttail</a>" .
+      ( :qname )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel "<a href='#qname'>qname</a>" .
+      ( :quickvariable )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel "<a href='#quickvariable'>quickvariable</a>" .
+      ( :rational )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel "<a href='#rational'>rational</a>" .
+      ( :simpleStatement )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel "<a href='#simpleStatement'>simpleStatement</a>" .
+      ( :statement
         "."
-        n3:statements_optional )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel """<a href='#statement'>statement</a> <b><code>"."</code></b> <a href='#statements_optional'>statements_optional</a>""" .
-      ( n3:statement
-        n3:statementtail )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel "<a href='#statement'>statement</a> <a href='#statementtail'>statementtail</a>" .
-      ( n3:statementlist )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel "<a href='#statementlist'>statementlist</a>" .
-      ( n3:statements_optional
+        :statements_optional )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel """<a href='#statement'>statement</a> <b><code>"."</code></b> <a href='#statements_optional'>statements_optional</a>""" .
+      ( :statement
+        :statementtail )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel "<a href='#statement'>statement</a> <a href='#statementtail'>statementtail</a>" .
+      ( :statementlist )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel "<a href='#statementlist'>statementlist</a>" .
+      ( :statements_optional
         cfg:eof )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel "<a href='#statements_optional'>statements_optional</a> <em>EOF</em>" .
-      ( n3:statements_optional )
-         a :SequenceTail;
-         :seqlabel "<a href='#statements_optional'>statements_optional</a>" .
-      ( n3:statementtail )
-         a :SequenceTail;
-         :seqlabel "<a href='#statementtail'>statementtail</a>" .
-      ( n3:string
-        n3:dtlang )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel "<a href='#string'>string</a> <a href='#dtlang'>dtlang</a>" .
-      ( n3:subject
-        n3:propertylist )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel "<a href='#subject'>subject</a> <a href='#propertylist'>propertylist</a>" .
-      ( n3:symbol
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel "<a href='#statements_optional'>statements_optional</a> <em>EOF</em>" .
+      ( :statements_optional )
+         a h:SequenceTail;
+         h:seqlabel "<a href='#statements_optional'>statements_optional</a>" .
+      ( :statementtail )
+         a h:SequenceTail;
+         h:seqlabel "<a href='#statementtail'>statementtail</a>" .
+      ( :string
+        :dtlang )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel "<a href='#string'>string</a> <a href='#dtlang'>dtlang</a>" .
+      ( :subject
+        :propertylist )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel "<a href='#subject'>subject</a> <a href='#propertylist'>propertylist</a>" .
+      ( :symbol
         <#_g4> )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel "<a href='#symbol'>symbol</a> <a href='#symbol_csl_tail'>symbol_csl_tail</a>" .
-      ( n3:symbol
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel "<a href='#symbol'>symbol</a> <a href='#symbol_csl_tail'>symbol_csl_tail</a>" .
+      ( :symbol
         <#_g5> )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel "<a href='#symbol'>symbol</a> <a href='#symbol_csl_tail'>symbol_csl_tail</a>" .
-      ( n3:symbol )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel "<a href='#symbol'>symbol</a>" .
-      ( n3:universal )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel "<a href='#universal'>universal</a>" .
-      ( n3:verb
-        n3:object
-        n3:objecttail
-        n3:propertylisttail )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel "<a href='#verb'>verb</a> <a href='#object'>object</a> <a href='#objecttail'>objecttail</a> <a href='#propertylisttail'>propertylisttail</a>" .
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel "<a href='#symbol'>symbol</a> <a href='#symbol_csl_tail'>symbol_csl_tail</a>" .
+      ( :symbol )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel "<a href='#symbol'>symbol</a>" .
+      ( :universal )
+         a h:Sequence,
+                h:SequenceTail;
+         h:seqlabel "<a href='#universal'>universal</a>" .
+      ( :unsignedint )
+         a h:SequenceTail;
+         h:seqlabel "<a href='#unsignedint'>unsignedint</a>" .
       ( <#_g0> )
-         a :SequenceTail;
-         :seqlabel "<a href='#symbol_csl'>symbol_csl</a>" .
+         a h:SequenceTail;
+         h:seqlabel "<a href='#symbol_csl'>symbol_csl</a>" .
       ( <#_g1> )
-         a :SequenceTail;
-         :seqlabel "<a href='#symbol_csl'>symbol_csl</a>" .
+         a h:SequenceTail;
+         h:seqlabel "<a href='#symbol_csl'>symbol_csl</a>" .
       ( <#_g2> )
-         a :SequenceTail;
-         :seqlabel "<a href='#barename_csl'>barename_csl</a>" .
+         a h:SequenceTail;
+         h:seqlabel "<a href='#barename_csl'>barename_csl</a>" .
       ( <#_g3> )
-         a :SequenceTail;
-         :seqlabel "<a href='#barename_csl_tail'>barename_csl_tail</a>" .
+         a h:SequenceTail;
+         h:seqlabel "<a href='#barename_csl_tail'>barename_csl_tail</a>" .
       ( <#_g4> )
-         a :SequenceTail;
-         :seqlabel "<a href='#symbol_csl_tail'>symbol_csl_tail</a>" .
+         a h:SequenceTail;
+         h:seqlabel "<a href='#symbol_csl_tail'>symbol_csl_tail</a>" .
       ( <#_g5> )
-         a :SequenceTail;
-         :seqlabel "<a href='#symbol_csl_tail'>symbol_csl_tail</a>" .
+         a h:SequenceTail;
+         h:seqlabel "<a href='#symbol_csl_tail'>symbol_csl_tail</a>" .
     
     <cfg2bnf.n3>     rdfs:comment """ 
 
@@ -953,16 +996,16 @@ generated.
 This file was split from n3.n3 on 2007-01-20.
 """ .
     
-    cfg:eof     :reference "<em>EOF</em>" .
+    cfg:eof     h:reference "<em>EOF</em>" .
     
-    n3:barename     a :Production;
+    :barename     a h:Production;
          cfg:canStartWith "_",
                 "a";
          cfg:label "barename";
          cfg:matches "[A-Z_a-zÀ-ÖØ-öø-˿Ͱ-ͽͿ-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿][\\-0-9A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿-⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿]*";
-         :reference "<a href='#barename'>barename</a>" .
+         h:reference "<a href='#barename'>barename</a>" .
     
-    n3:boolean     a :Production;
+    :boolean     a h:Production;
          cfg:canBeSequence  (
         "@false" ),
                  (
@@ -973,7 +1016,7 @@ This file was split from n3.n3 on 2007-01-20.
             "@true" )
          (
             "@false" ) );
-         :optionTail (),
+         h:optionTail (),
                  (
          (
             "@false" ) ),
@@ -982,48 +1025,48 @@ This file was split from n3.n3 on 2007-01-20.
             "@true" )
          (
             "@false" ) );
-         :reference "<a href='#boolean'>boolean</a>" .
+         h:reference "<a href='#boolean'>boolean</a>" .
     
-    n3:decimal     a :Production;
+    :decimal     a h:Production;
          cfg:canStartWith "+",
                 "-",
                 "0";
          cfg:label "decimal";
-         cfg:matches "[-+]?[0-9]+(\\.[0-9]+)?";
-         :reference "<a href='#decimal'>decimal</a>" .
+         cfg:matches "[-+]?[0-9]+\\.[0-9]*";
+         h:reference "<a href='#decimal'>decimal</a>" .
     
-    n3:declaration     a :Production;
+    :declaration     a h:Production;
          cfg:canBeSequence  (
         "@base"
-        n3:explicituri ),
+        :explicituri ),
                  (
         "@keywords"
         <#_g2> ),
                  (
         "@prefix"
-        n3:prefix
-        n3:explicituri );
+        :prefix
+        :explicituri );
          cfg:label "declaration";
          cfg:mustBeOneSequence  (
          (
             "@base"
-            n3:explicituri )
+            :explicituri )
          (
             "@prefix"
-            n3:prefix
-            n3:explicituri )
+            :prefix
+            :explicituri )
          (
             "@keywords"
             <#_g2> ) );
-         :optionTail (),
+         h:optionTail (),
                  (
          (
             "@base"
-            n3:explicituri )
+            :explicituri )
          (
             "@prefix"
-            n3:prefix
-            n3:explicituri )
+            :prefix
+            :explicituri )
          (
             "@keywords"
             <#_g2> ) ),
@@ -1034,78 +1077,78 @@ This file was split from n3.n3 on 2007-01-20.
                  (
          (
             "@prefix"
-            n3:prefix
-            n3:explicituri )
+            :prefix
+            :explicituri )
          (
             "@keywords"
             <#_g2> ) );
-         :reference "<a href='#declaration'>declaration</a>" .
+         h:reference "<a href='#declaration'>declaration</a>" .
     
-    n3:document     a rul:Used,
-                :Production;
+    :document     a rul:Used,
+                h:Production;
          cfg:canBeSequence  (
-        n3:statements_optional
+        :statements_optional
         cfg:eof );
          cfg:label "document";
          cfg:mustBeOneSequence  (
          (
-            n3:statements_optional
+            :statements_optional
             cfg:eof ) );
-         :optionTail (),
+         h:optionTail (),
                  (
          (
-            n3:statements_optional
+            :statements_optional
             cfg:eof ) );
-         :reference "<a href='#document'>document</a>" .
+         h:reference "<a href='#document'>document</a>" .
     
-    n3:double     a :Production;
+    :double     a h:Production;
          cfg:canStartWith "+",
                 "-",
                 "0";
          cfg:label "double";
          cfg:matches "[-+]?[0-9]+(\\.[0-9]+)?([eE][-+]?[0-9]+)";
-         :reference "<a href='#double'>double</a>" .
+         h:reference "<a href='#double'>double</a>" .
     
-    n3:dtlang     a :Production;
+    :dtlang     a h:Production;
          cfg:canBeSequence (),
                  (
         "@"
-        n3:langcode ),
+        :langcode ),
                  (
         "^^"
-        n3:symbol );
+        :symbol );
          cfg:label "dtlang";
          cfg:mustBeOneSequence  (
         ()
          (
             "@"
-            n3:langcode )
+            :langcode )
          (
             "^^"
-            n3:symbol ) );
-         :optionTail (),
+            :symbol ) );
+         h:optionTail (),
                  (
         ()
          (
             "@"
-            n3:langcode )
+            :langcode )
          (
             "^^"
-            n3:symbol ) ),
+            :symbol ) ),
                  (
          (
             "@"
-            n3:langcode )
+            :langcode )
          (
             "^^"
-            n3:symbol ) ),
+            :symbol ) ),
                  (
          (
             "^^"
-            n3:symbol ) );
-         :reference "<a href='#dtlang'>dtlang</a>" .
+            :symbol ) );
+         h:reference "<a href='#dtlang'>dtlang</a>" .
     
-    n3:existential     a :Production;
+    :existential     a h:Production;
          cfg:canBeSequence  (
         "@forSome"
         <#_g1> );
@@ -1114,646 +1157,391 @@ This file was split from n3.n3 on 2007-01-20.
          (
             "@forSome"
             <#_g1> ) );
-         :optionTail (),
+         h:optionTail (),
                  (
          (
             "@forSome"
             <#_g1> ) );
-         :reference "<a href='#existential'>existential</a>" .
+         h:reference "<a href='#existential'>existential</a>" .
     
-    n3:explicituri     a :Production;
+    :explicituri     a h:Production;
          cfg:canStartWith "<";
          cfg:label "explicituri";
          cfg:matches "<[^>]*>";
-         :reference "<a href='#explicituri'>explicituri</a>" .
+         h:reference "<a href='#explicituri'>explicituri</a>" .
     
-    n3:expression     a :Production;
+    :expression     a h:Production;
          cfg:canBeSequence  (
-        n3:pathitem
-        n3:pathtail );
+        :pathitem
+        :pathtail );
          cfg:label "expression";
          cfg:mustBeOneSequence  (
          (
-            n3:pathitem
-            n3:pathtail ) );
-         :optionTail (),
+            :pathitem
+            :pathtail ) );
+         h:optionTail (),
                  (
          (
-            n3:pathitem
-            n3:pathtail ) );
-         :reference "<a href='#expression'>expression</a>" .
+            :pathitem
+            :pathtail ) );
+         h:reference "<a href='#expression'>expression</a>" .
     
-    n3:formulacontent     a :Production;
+    :formulacontent     a h:Production;
          cfg:canBeSequence  (
-        n3:statementlist );
+        :statementlist );
          cfg:label "formulacontent";
          cfg:mustBeOneSequence  (
          (
-            n3:statementlist ) );
-         :optionTail (),
+            :statementlist ) );
+         h:optionTail (),
                  (
          (
-            n3:statementlist ) );
-         :reference "<a href='#formulacontent'>formulacontent</a>" .
+            :statementlist ) );
+         h:reference "<a href='#formulacontent'>formulacontent</a>" .
     
-    n3:integer     a :Production;
+    :integer     a h:Production;
          cfg:canStartWith "+",
                 "-",
                 "0";
          cfg:label "integer";
          cfg:matches "[-+]?[0-9]+";
-         :reference "<a href='#integer'>integer</a>" .
+         h:reference "<a href='#integer'>integer</a>" .
     
-    n3:langcode     a :Production;
+    :langcode     a h:Production;
          cfg:canStartWith "a";
          cfg:label "langcode";
          cfg:matches "[a-z]+(-[a-z0-9]+)*";
-         :reference "<a href='#langcode'>langcode</a>" .
+         h:reference "<a href='#langcode'>langcode</a>" .
     
-    n3:language     a cfg:Language;
-         cfg:document n3:document;
+    :language     a cfg:Language;
+         cfg:document :document;
          cfg:whiteSpace "@@@@@" .
     
-    n3:literal     a :Production;
+    :literal     a h:Production;
          cfg:canBeSequence  (
-        n3:string
-        n3:dtlang );
+        :string
+        :dtlang );
          cfg:label "literal";
          cfg:mustBeOneSequence  (
          (
-            n3:string
-            n3:dtlang ) );
-         :optionTail (),
+            :string
+            :dtlang ) );
+         h:optionTail (),
                  (
          (
-            n3:string
-            n3:dtlang ) );
-         :reference "<a href='#literal'>literal</a>" .
+            :string
+            :dtlang ) );
+         h:reference "<a href='#literal'>literal</a>" .
     
-    n3:numericliteral     a :Production;
+    :numericliteral     a h:Production;
          cfg:canBeSequence  (
-        n3:decimal ),
+        :decimal ),
                  (
-        n3:double ),
+        :double ),
                  (
-        n3:integer );
+        :integer ),
+                 (
+        :rational );
          cfg:label "numericliteral";
          cfg:mustBeOneSequence  (
          (
-            n3:integer )
+            :integer )
          (
-            n3:double )
+            :rational )
          (
-            n3:decimal ) );
-         :optionTail (),
+            :double )
+         (
+            :decimal ) );
+         h:optionTail (),
                  (
          (
-            n3:decimal ) ),
+            :decimal ) ),
                  (
          (
-            n3:double )
+            :double )
          (
-            n3:decimal ) ),
+            :decimal ) ),
                  (
          (
-            n3:integer )
+            :integer )
          (
-            n3:double )
+            :rational )
          (
-            n3:decimal ) );
-         :reference "<a href='#numericliteral'>numericliteral</a>" .
+            :double )
+         (
+            :decimal ) ),
+                 (
+         (
+            :rational )
+         (
+            :double )
+         (
+            :decimal ) );
+         h:reference "<a href='#numericliteral'>numericliteral</a>" .
     
-    n3:object     a :Production;
+    :object     a h:Production;
          cfg:canBeSequence  (
-        n3:expression );
+        :expression );
          cfg:label "object";
          cfg:mustBeOneSequence  (
          (
-            n3:expression ) );
-         :optionTail (),
+            :expression ) );
+         h:optionTail (),
                  (
          (
-            n3:expression ) );
-         :reference "<a href='#object'>object</a>" .
+            :expression ) );
+         h:reference "<a href='#object'>object</a>" .
     
-    n3:objecttail     a :Production;
+    :objecttail     a h:Production;
          cfg:canBeSequence (),
                  (
         ","
-        n3:object
-        n3:objecttail );
+        :object
+        :objecttail );
          cfg:label "objecttail";
          cfg:mustBeOneSequence  (
         ()
          (
             ","
-            n3:object
-            n3:objecttail ) );
-         :optionTail (),
+            :object
+            :objecttail ) );
+         h:optionTail (),
                  (
         ()
          (
             ","
-            n3:object
-            n3:objecttail ) ),
+            :object
+            :objecttail ) ),
                  (
          (
             ","
-            n3:object
-            n3:objecttail ) );
-         :reference "<a href='#objecttail'>objecttail</a>" .
+            :object
+            :objecttail ) );
+         h:reference "<a href='#objecttail'>objecttail</a>" .
     
-    n3:pathitem     a :Production;
+    :pathitem     a h:Production;
          cfg:canBeSequence  (
         "("
-        n3:pathlist
+        :pathlist
         ")" ),
                  (
         "["
-        n3:propertylist
+        :propertylist
         "]" ),
                  (
         "{"
-        n3:formulacontent
+        :formulacontent
         "}" ),
                  (
-        n3:boolean ),
+        :boolean ),
                  (
-        n3:literal ),
+        :literal ),
                  (
-        n3:numericliteral ),
+        :numericliteral ),
                  (
-        n3:quickvariable ),
+        :quickvariable ),
                  (
-        n3:symbol );
+        :symbol );
          cfg:label "pathitem";
          cfg:mustBeOneSequence  (
          (
-            n3:symbol )
+            :symbol )
          (
             "{"
-            n3:formulacontent
+            :formulacontent
             "}" )
          (
-            n3:quickvariable )
+            :quickvariable )
          (
-            n3:numericliteral )
+            :numericliteral )
          (
-            n3:literal )
+            :literal )
          (
             "["
-            n3:propertylist
+            :propertylist
             "]" )
          (
             "("
-            n3:pathlist
+            :pathlist
             ")" )
          (
-            n3:boolean ) );
-         :optionTail (),
+            :boolean ) );
+         h:optionTail (),
                  (
          (
             "("
-            n3:pathlist
+            :pathlist
             ")" )
          (
-            n3:boolean ) ),
+            :boolean ) ),
                  (
          (
             "["
-            n3:propertylist
+            :propertylist
             "]" )
          (
             "("
-            n3:pathlist
+            :pathlist
             ")" )
          (
-            n3:boolean ) ),
+            :boolean ) ),
                  (
          (
             "{"
-            n3:formulacontent
+            :formulacontent
             "}" )
          (
-            n3:quickvariable )
+            :quickvariable )
          (
-            n3:numericliteral )
+            :numericliteral )
          (
-            n3:literal )
+            :literal )
          (
             "["
-            n3:propertylist
+            :propertylist
             "]" )
          (
             "("
-            n3:pathlist
+            :pathlist
             ")" )
          (
-            n3:boolean ) ),
+            :boolean ) ),
                  (
          (
-            n3:boolean ) ),
+            :boolean ) ),
                  (
          (
-            n3:literal )
+            :literal )
          (
             "["
-            n3:propertylist
+            :propertylist
             "]" )
          (
             "("
-            n3:pathlist
+            :pathlist
             ")" )
          (
-            n3:boolean ) ),
+            :boolean ) ),
                  (
          (
-            n3:numericliteral )
+            :numericliteral )
          (
-            n3:literal )
+            :literal )
          (
             "["
-            n3:propertylist
+            :propertylist
             "]" )
          (
             "("
-            n3:pathlist
+            :pathlist
             ")" )
          (
-            n3:boolean ) ),
+            :boolean ) ),
                  (
          (
-            n3:quickvariable )
+            :quickvariable )
          (
-            n3:numericliteral )
+            :numericliteral )
          (
-            n3:literal )
+            :literal )
          (
             "["
-            n3:propertylist
+            :propertylist
             "]" )
          (
             "("
-            n3:pathlist
+            :pathlist
             ")" )
          (
-            n3:boolean ) ),
+            :boolean ) ),
                  (
          (
-            n3:symbol )
+            :symbol )
          (
             "{"
-            n3:formulacontent
+            :formulacontent
             "}" )
          (
-            n3:quickvariable )
+            :quickvariable )
          (
-            n3:numericliteral )
+            :numericliteral )
          (
-            n3:literal )
+            :literal )
          (
             "["
-            n3:propertylist
+            :propertylist
             "]" )
          (
             "("
-            n3:pathlist
+            :pathlist
             ")" )
          (
-            n3:boolean ) );
-         :reference "<a href='#pathitem'>pathitem</a>" .
+            :boolean ) );
+         h:reference "<a href='#pathitem'>pathitem</a>" .
     
-    n3:pathlist     a :Production;
+    :pathlist     a h:Production;
          cfg:canBeSequence (),
                  (
-        n3:expression
-        n3:pathlist );
+        :expression
+        :pathlist );
          cfg:label "pathlist";
          cfg:mustBeOneSequence  (
         ()
          (
-            n3:expression
-            n3:pathlist ) );
-         :optionTail (),
+            :expression
+            :pathlist ) );
+         h:optionTail (),
                  (
         ()
          (
-            n3:expression
-            n3:pathlist ) ),
+            :expression
+            :pathlist ) ),
                  (
          (
-            n3:expression
-            n3:pathlist ) );
-         :reference "<a href='#pathlist'>pathlist</a>" .
+            :expression
+            :pathlist ) );
+         h:reference "<a href='#pathlist'>pathlist</a>" .
     
-    n3:pathtail     a :Production;
+    :pathtail     a h:Production;
          cfg:canBeSequence (),
                  (
         "!"
-        n3:expression ),
+        :expression ),
                  (
         "^"
-        n3:expression );
+        :expression );
          cfg:label "pathtail";
          cfg:mustBeOneSequence  (
         ()
          (
             "!"
-            n3:expression )
+            :expression )
          (
             "^"
-            n3:expression ) );
-         :optionTail (),
+            :expression ) );
+         h:optionTail (),
                  (
         ()
          (
             "!"
-            n3:expression )
+            :expression )
          (
             "^"
-            n3:expression ) ),
+            :expression ) ),
                  (
          (
             "!"
-            n3:expression )
+            :expression )
          (
             "^"
-            n3:expression ) ),
+            :expression ) ),
                  (
          (
             "^"
-            n3:expression ) );
-         :reference "<a href='#pathtail'>pathtail</a>" .
+            :expression ) );
+         h:reference "<a href='#pathtail'>pathtail</a>" .
     
-    n3:prefix     a :Production;
-         cfg:canStartWith ":",
-                "_",
-                "a";
-         cfg:label "prefix";
-         cfg:matches "([A-Z_a-zÀ-ÖØ-öø-˿Ͱ-ͽͿ-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿][\\-0-9A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿-⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿]*)?:";
-         :reference "<a href='#prefix'>prefix</a>" .
-    
-    n3:propertylist     a :Production;
-         cfg:canBeSequence (),
-                 (
-        n3:verb
-        n3:object
-        n3:objecttail
-        n3:propertylisttail );
-         cfg:label "propertylist";
-         cfg:mustBeOneSequence  (
-        ()
-         (
-            n3:verb
-            n3:object
-            n3:objecttail
-            n3:propertylisttail ) );
-         :optionTail (),
-                 (
-        ()
-         (
-            n3:verb
-            n3:object
-            n3:objecttail
-            n3:propertylisttail ) ),
-                 (
-         (
-            n3:verb
-            n3:object
-            n3:objecttail
-            n3:propertylisttail ) );
-         :reference "<a href='#propertylist'>propertylist</a>" .
-    
-    n3:propertylisttail     a :Production;
-         cfg:canBeSequence (),
-                 (
-        ";"
-        n3:propertylist );
-         cfg:label "propertylisttail";
-         cfg:mustBeOneSequence  (
-        ()
-         (
-            ";"
-            n3:propertylist ) );
-         :optionTail (),
-                 (
-        ()
-         (
-            ";"
-            n3:propertylist ) ),
-                 (
-         (
-            ";"
-            n3:propertylist ) );
-         :reference "<a href='#propertylisttail'>propertylisttail</a>" .
-    
-    n3:qname     a :Production;
-         cfg:canStartWith ":",
-                "_",
-                "a";
-         cfg:label "qname";
-         cfg:matches "(([A-Z_a-zÀ-ÖØ-öø-˿Ͱ-ͽͿ-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿][\\-0-9A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿-⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿]*)?:)?[A-Z_a-zÀ-ÖØ-öø-˿Ͱ-ͽͿ-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿][\\-0-9A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿-⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿]*";
-         :reference "<a href='#qname'>qname</a>" .
-    
-    n3:quickvariable     a :Production;
-         cfg:canStartWith "?";
-         cfg:label "quickvariable";
-         cfg:matches "\\?[A-Z_a-zÀ-ÖØ-öø-˿Ͱ-ͽͿ-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿][\\-0-9A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿-⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿]*";
-         :reference "<a href='#quickvariable'>quickvariable</a>" .
-    
-    n3:simpleStatement     a :Production;
-         cfg:canBeSequence  (
-        n3:subject
-        n3:propertylist );
-         cfg:label "simpleStatement";
-         cfg:mustBeOneSequence  (
-         (
-            n3:subject
-            n3:propertylist ) );
-         :optionTail (),
-                 (
-         (
-            n3:subject
-            n3:propertylist ) );
-         :reference "<a href='#simpleStatement'>simpleStatement</a>" .
-    
-    n3:statement     a :Production;
-         cfg:canBeSequence  (
-        n3:declaration ),
-                 (
-        n3:existential ),
-                 (
-        n3:simpleStatement ),
-                 (
-        n3:universal );
-         cfg:label "statement";
-         cfg:mustBeOneSequence  (
-         (
-            n3:declaration )
-         (
-            n3:universal )
-         (
-            n3:existential )
-         (
-            n3:simpleStatement ) );
-         :optionTail (),
-                 (
-         (
-            n3:declaration )
-         (
-            n3:universal )
-         (
-            n3:existential )
-         (
-            n3:simpleStatement ) ),
-                 (
-         (
-            n3:existential )
-         (
-            n3:simpleStatement ) ),
-                 (
-         (
-            n3:simpleStatement ) ),
-                 (
-         (
-            n3:universal )
-         (
-            n3:existential )
-         (
-            n3:simpleStatement ) );
-         :reference "<a href='#statement'>statement</a>" .
-    
-    n3:statementlist     a :Production;
-         cfg:canBeSequence (),
-                 (
-        n3:statement
-        n3:statementtail );
-         cfg:label "statementlist";
-         cfg:mustBeOneSequence  (
-        ()
-         (
-            n3:statement
-            n3:statementtail ) );
-         :optionTail (),
-                 (
-        ()
-         (
-            n3:statement
-            n3:statementtail ) ),
-                 (
-         (
-            n3:statement
-            n3:statementtail ) );
-         :reference "<a href='#statementlist'>statementlist</a>" .
-    
-    n3:statements_optional     a :Production;
-         cfg:canBeSequence (),
-                 (
-        n3:statement
-        "."
-        n3:statements_optional );
-         cfg:label "statements_optional";
-         cfg:mustBeOneSequence  (
-        ()
-         (
-            n3:statement
-            "."
-            n3:statements_optional ) );
-         :optionTail (),
-                 (
-        ()
-         (
-            n3:statement
-            "."
-            n3:statements_optional ) ),
-                 (
-         (
-            n3:statement
-            "."
-            n3:statements_optional ) );
-         :reference "<a href='#statements_optional'>statements_optional</a>" .
-    
-    n3:statementtail     a :Production;
-         cfg:canBeSequence (),
-                 (
-        "."
-        n3:statementlist );
-         cfg:label "statementtail";
-         cfg:mustBeOneSequence  (
-        ()
-         (
-            "."
-            n3:statementlist ) );
-         :optionTail (),
-                 (
-        ()
-         (
-            "."
-            n3:statementlist ) ),
-                 (
-         (
-            "."
-            n3:statementlist ) );
-         :reference "<a href='#statementtail'>statementtail</a>" .
-    
-    n3:string     a :Production;
-         cfg:canStartWith "\"";
-         cfg:label "string";
-         cfg:matches """(\"""[^"\\\\]*(?:(?:\\\\.|"(?!""))[^"\\\\]*)*\""")|("[^"\\\\]*(?:\\\\.[^"\\\\]*)*")""";
-         :reference "<a href='#string'>string</a>" .
-    
-    n3:subject     a :Production;
-         cfg:canBeSequence  (
-        n3:expression );
-         cfg:label "subject";
-         cfg:mustBeOneSequence  (
-         (
-            n3:expression ) );
-         :optionTail (),
-                 (
-         (
-            n3:expression ) );
-         :reference "<a href='#subject'>subject</a>" .
-    
-    n3:symbol     a :Production;
-         cfg:canBeSequence  (
-        n3:explicituri ),
-                 (
-        n3:qname );
-         cfg:label "symbol";
-         cfg:mustBeOneSequence  (
-         (
-            n3:explicituri )
-         (
-            n3:qname ) );
-         :optionTail (),
-                 (
-         (
-            n3:explicituri )
-         (
-            n3:qname ) ),
-                 (
-         (
-            n3:qname ) );
-         :reference "<a href='#symbol'>symbol</a>" .
-    
-    n3:universal     a :Production;
-         cfg:canBeSequence  (
-        "@forAll"
-        <#_g0> );
-         cfg:label "universal";
-         cfg:mustBeOneSequence  (
-         (
-            "@forAll"
-            <#_g0> ) );
-         :optionTail (),
-                 (
-         (
-            "@forAll"
-            <#_g0> ) );
-         :reference "<a href='#universal'>universal</a>" .
-    
-    n3:verb     a :Production;
+    :predicate     a h:Production;
          cfg:canBeSequence  (
         "<=" ),
                  (
@@ -1764,23 +1552,23 @@ This file was split from n3.n3 on 2007-01-20.
         "@a" ),
                  (
         "@has"
-        n3:expression ),
+        :expression ),
                  (
         "@is"
-        n3:expression
+        :expression
         "@of" ),
                  (
-        n3:expression );
-         cfg:label "verb";
+        :expression );
+         cfg:label "predicate";
          cfg:mustBeOneSequence  (
          (
-            n3:expression )
+            :expression )
          (
             "@has"
-            n3:expression )
+            :expression )
          (
             "@is"
-            n3:expression
+            :expression
             "@of" )
          (
             "@a" )
@@ -1790,7 +1578,7 @@ This file was split from n3.n3 on 2007-01-20.
             "=>" )
          (
             "<=" ) );
-         :optionTail (),
+         h:optionTail (),
                  (
          (
             "<=" ) ),
@@ -1818,10 +1606,10 @@ This file was split from n3.n3 on 2007-01-20.
                  (
          (
             "@has"
-            n3:expression )
+            :expression )
          (
             "@is"
-            n3:expression
+            :expression
             "@of" )
          (
             "@a" )
@@ -1834,7 +1622,7 @@ This file was split from n3.n3 on 2007-01-20.
                  (
          (
             "@is"
-            n3:expression
+            :expression
             "@of" )
          (
             "@a" )
@@ -1846,13 +1634,13 @@ This file was split from n3.n3 on 2007-01-20.
             "<=" ) ),
                  (
          (
-            n3:expression )
+            :expression )
          (
             "@has"
-            n3:expression )
+            :expression )
          (
             "@is"
-            n3:expression
+            :expression
             "@of" )
          (
             "@a" )
@@ -1862,161 +1650,454 @@ This file was split from n3.n3 on 2007-01-20.
             "=>" )
          (
             "<=" ) );
-         :reference "<a href='#verb'>verb</a>" .
+         h:reference "<a href='#predicate'>predicate</a>" .
     
-    <#_g0>     a :Production;
+    :prefix     a h:Production;
+         cfg:canStartWith ":",
+                "_",
+                "a";
+         cfg:label "prefix";
+         cfg:matches "([A-Z_a-zÀ-ÖØ-öø-˿Ͱ-ͽͿ-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿][\\-0-9A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿-⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿]*)?:";
+         h:reference "<a href='#prefix'>prefix</a>" .
+    
+    :propertylist     a h:Production;
          cfg:canBeSequence (),
                  (
-        n3:symbol
+        :predicate
+        :object
+        :objecttail
+        :propertylisttail );
+         cfg:label "propertylist";
+         cfg:mustBeOneSequence  (
+        ()
+         (
+            :predicate
+            :object
+            :objecttail
+            :propertylisttail ) );
+         h:optionTail (),
+                 (
+        ()
+         (
+            :predicate
+            :object
+            :objecttail
+            :propertylisttail ) ),
+                 (
+         (
+            :predicate
+            :object
+            :objecttail
+            :propertylisttail ) );
+         h:reference "<a href='#propertylist'>propertylist</a>" .
+    
+    :propertylisttail     a h:Production;
+         cfg:canBeSequence (),
+                 (
+        ";"
+        :propertylist );
+         cfg:label "propertylisttail";
+         cfg:mustBeOneSequence  (
+        ()
+         (
+            ";"
+            :propertylist ) );
+         h:optionTail (),
+                 (
+        ()
+         (
+            ";"
+            :propertylist ) ),
+                 (
+         (
+            ";"
+            :propertylist ) );
+         h:reference "<a href='#propertylisttail'>propertylisttail</a>" .
+    
+    :qname     a h:Production;
+         cfg:canStartWith ":",
+                "_",
+                "a";
+         cfg:label "qname";
+         cfg:matches "(([A-Z_a-zÀ-ÖØ-öø-˿Ͱ-ͽͿ-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿][\\-0-9A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿-⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿]*)?:)?[A-Z_a-zÀ-ÖØ-öø-˿Ͱ-ͽͿ-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿][\\-0-9A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿-⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿]*";
+         h:reference "<a href='#qname'>qname</a>" .
+    
+    :quickvariable     a h:Production;
+         cfg:canStartWith "?";
+         cfg:label "quickvariable";
+         cfg:matches "\\?[A-Z_a-zÀ-ÖØ-öø-˿Ͱ-ͽͿ-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿][\\-0-9A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿-⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿]*";
+         h:reference "<a href='#quickvariable'>quickvariable</a>" .
+    
+    :rational     a h:Production;
+         cfg:canBeSequence  (
+        :integer
+        "/"
+        :unsignedint );
+         cfg:label "rational";
+         cfg:mustBeOneSequence  (
+         (
+            :integer
+            "/"
+            :unsignedint ) );
+         h:optionTail (),
+                 (
+         (
+            :integer
+            "/"
+            :unsignedint ) );
+         h:reference "<a href='#rational'>rational</a>" .
+    
+    :simpleStatement     a h:Production;
+         cfg:canBeSequence  (
+        :subject
+        :propertylist );
+         cfg:label "simpleStatement";
+         cfg:mustBeOneSequence  (
+         (
+            :subject
+            :propertylist ) );
+         h:optionTail (),
+                 (
+         (
+            :subject
+            :propertylist ) );
+         h:reference "<a href='#simpleStatement'>simpleStatement</a>" .
+    
+    :statement     a h:Production;
+         cfg:canBeSequence  (
+        :declaration ),
+                 (
+        :existential ),
+                 (
+        :simpleStatement ),
+                 (
+        :universal );
+         cfg:label "statement";
+         cfg:mustBeOneSequence  (
+         (
+            :declaration )
+         (
+            :universal )
+         (
+            :existential )
+         (
+            :simpleStatement ) );
+         h:optionTail (),
+                 (
+         (
+            :declaration )
+         (
+            :universal )
+         (
+            :existential )
+         (
+            :simpleStatement ) ),
+                 (
+         (
+            :existential )
+         (
+            :simpleStatement ) ),
+                 (
+         (
+            :simpleStatement ) ),
+                 (
+         (
+            :universal )
+         (
+            :existential )
+         (
+            :simpleStatement ) );
+         h:reference "<a href='#statement'>statement</a>" .
+    
+    :statementlist     a h:Production;
+         cfg:canBeSequence (),
+                 (
+        :statement
+        :statementtail );
+         cfg:label "statementlist";
+         cfg:mustBeOneSequence  (
+        ()
+         (
+            :statement
+            :statementtail ) );
+         h:optionTail (),
+                 (
+        ()
+         (
+            :statement
+            :statementtail ) ),
+                 (
+         (
+            :statement
+            :statementtail ) );
+         h:reference "<a href='#statementlist'>statementlist</a>" .
+    
+    :statements_optional     a h:Production;
+         cfg:canBeSequence (),
+                 (
+        :statement
+        "."
+        :statements_optional );
+         cfg:label "statements_optional";
+         cfg:mustBeOneSequence  (
+        ()
+         (
+            :statement
+            "."
+            :statements_optional ) );
+         h:optionTail (),
+                 (
+        ()
+         (
+            :statement
+            "."
+            :statements_optional ) ),
+                 (
+         (
+            :statement
+            "."
+            :statements_optional ) );
+         h:reference "<a href='#statements_optional'>statements_optional</a>" .
+    
+    :statementtail     a h:Production;
+         cfg:canBeSequence (),
+                 (
+        "."
+        :statementlist );
+         cfg:label "statementtail";
+         cfg:mustBeOneSequence  (
+        ()
+         (
+            "."
+            :statementlist ) );
+         h:optionTail (),
+                 (
+        ()
+         (
+            "."
+            :statementlist ) ),
+                 (
+         (
+            "."
+            :statementlist ) );
+         h:reference "<a href='#statementtail'>statementtail</a>" .
+    
+    :string     a h:Production;
+         cfg:canStartWith "\"";
+         cfg:label "string";
+         cfg:matches """(\"""[^"\\\\]*(?:(?:\\\\.|"(?!""))[^"\\\\]*)*\""")|("[^"\\\\]*(?:\\\\.[^"\\\\]*)*")""";
+         h:reference "<a href='#string'>string</a>" .
+    
+    :subject     a h:Production;
+         cfg:canBeSequence  (
+        :expression );
+         cfg:label "subject";
+         cfg:mustBeOneSequence  (
+         (
+            :expression ) );
+         h:optionTail (),
+                 (
+         (
+            :expression ) );
+         h:reference "<a href='#subject'>subject</a>" .
+    
+    :symbol     a h:Production;
+         cfg:canBeSequence  (
+        :explicituri ),
+                 (
+        :qname );
+         cfg:label "symbol";
+         cfg:mustBeOneSequence  (
+         (
+            :explicituri )
+         (
+            :qname ) );
+         h:optionTail (),
+                 (
+         (
+            :explicituri )
+         (
+            :qname ) ),
+                 (
+         (
+            :qname ) );
+         h:reference "<a href='#symbol'>symbol</a>" .
+    
+    :universal     a h:Production;
+         cfg:canBeSequence  (
+        "@forAll"
+        <#_g0> );
+         cfg:label "universal";
+         cfg:mustBeOneSequence  (
+         (
+            "@forAll"
+            <#_g0> ) );
+         h:optionTail (),
+                 (
+         (
+            "@forAll"
+            <#_g0> ) );
+         h:reference "<a href='#universal'>universal</a>" .
+    
+    :unsignedint     a h:Production;
+         cfg:canStartWith "0";
+         cfg:label "unsignedint";
+         cfg:matches "[0-9]+";
+         h:reference "<a href='#unsignedint'>unsignedint</a>" .
+    
+    <#_g0>     a h:Production;
+         cfg:canBeSequence (),
+                 (
+        :symbol
         <#_g5> );
-         cfg:commaSeparatedListOf n3:symbol;
+         cfg:commaSeparatedListOf :symbol;
          cfg:label "symbol_csl";
          cfg:mustBeOneSequence  (
         ()
          (
-            n3:symbol
+            :symbol
             <#_g5> ) );
-         :optionTail (),
+         h:optionTail (),
                  (
         ()
          (
-            n3:symbol
+            :symbol
             <#_g5> ) ),
                  (
          (
-            n3:symbol
+            :symbol
             <#_g5> ) );
-         :reference "<a href='#symbol_csl'>symbol_csl</a>" .
+         h:reference "<a href='#symbol_csl'>symbol_csl</a>" .
     
-    <#_g1>     a :Production;
+    <#_g1>     a h:Production;
          cfg:canBeSequence (),
                  (
-        n3:symbol
+        :symbol
         <#_g4> );
-         cfg:commaSeparatedListOf n3:symbol;
+         cfg:commaSeparatedListOf :symbol;
          cfg:label "symbol_csl";
          cfg:mustBeOneSequence  (
         ()
          (
-            n3:symbol
+            :symbol
             <#_g4> ) );
-         :optionTail (),
+         h:optionTail (),
                  (
         ()
          (
-            n3:symbol
+            :symbol
             <#_g4> ) ),
                  (
          (
-            n3:symbol
+            :symbol
             <#_g4> ) );
-         :reference "<a href='#symbol_csl'>symbol_csl</a>" .
+         h:reference "<a href='#symbol_csl'>symbol_csl</a>" .
     
-    <#_g2>     a :Production;
+    <#_g2>     a h:Production;
          cfg:canBeSequence (),
                  (
-        n3:barename
+        :barename
         <#_g3> );
-         cfg:commaSeparatedListOf n3:barename;
+         cfg:commaSeparatedListOf :barename;
          cfg:label "barename_csl";
          cfg:mustBeOneSequence  (
         ()
          (
-            n3:barename
+            :barename
             <#_g3> ) );
-         :optionTail (),
+         h:optionTail (),
                  (
         ()
          (
-            n3:barename
+            :barename
             <#_g3> ) ),
                  (
          (
-            n3:barename
+            :barename
             <#_g3> ) );
-         :reference "<a href='#barename_csl'>barename_csl</a>" .
+         h:reference "<a href='#barename_csl'>barename_csl</a>" .
     
-    <#_g3>     a :Production;
-         cfg:CSLTail2 n3:barename;
+    <#_g3>     a h:Production;
+         cfg:CSLTail2 :barename;
          cfg:canBeSequence (),
                  (
         ","
-        n3:barename
+        :barename
         <#_g3> );
          cfg:label "barename_csl_tail";
          cfg:mustBeOneSequence  (
         ()
          (
             ","
-            n3:barename
+            :barename
             <#_g3> ) );
-         :optionTail (),
+         h:optionTail (),
                  (
         ()
          (
             ","
-            n3:barename
+            :barename
             <#_g3> ) ),
                  (
          (
             ","
-            n3:barename
+            :barename
             <#_g3> ) );
-         :reference "<a href='#barename_csl_tail'>barename_csl_tail</a>" .
+         h:reference "<a href='#barename_csl_tail'>barename_csl_tail</a>" .
     
-    <#_g4>     a :Production;
-         cfg:CSLTail2 n3:symbol;
+    <#_g4>     a h:Production;
+         cfg:CSLTail2 :symbol;
          cfg:canBeSequence (),
                  (
         ","
-        n3:symbol
+        :symbol
         <#_g4> );
          cfg:label "symbol_csl_tail";
          cfg:mustBeOneSequence  (
         ()
          (
             ","
-            n3:symbol
+            :symbol
             <#_g4> ) );
-         :optionTail (),
+         h:optionTail (),
                  (
         ()
          (
             ","
-            n3:symbol
+            :symbol
             <#_g4> ) ),
                  (
          (
             ","
-            n3:symbol
+            :symbol
             <#_g4> ) );
-         :reference "<a href='#symbol_csl_tail'>symbol_csl_tail</a>" .
+         h:reference "<a href='#symbol_csl_tail'>symbol_csl_tail</a>" .
     
-    <#_g5>     a :Production;
-         cfg:CSLTail2 n3:symbol;
+    <#_g5>     a h:Production;
+         cfg:CSLTail2 :symbol;
          cfg:canBeSequence (),
                  (
         ","
-        n3:symbol
+        :symbol
         <#_g5> );
          cfg:label "symbol_csl_tail";
          cfg:mustBeOneSequence  (
         ()
          (
             ","
-            n3:symbol
+            :symbol
             <#_g5> ) );
-         :optionTail (),
+         h:optionTail (),
                  (
         ()
          (
             ","
-            n3:symbol
+            :symbol
             <#_g5> ) ),
                  (
          (
             ","
-            n3:symbol
+            :symbol
             <#_g5> ) );
-         :reference "<a href='#symbol_csl_tail'>symbol_csl_tail</a>" .
+         h:reference "<a href='#symbol_csl_tail'>symbol_csl_tail</a>" .
     

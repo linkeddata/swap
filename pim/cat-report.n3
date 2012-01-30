@@ -40,7 +40,7 @@ q:UnclassifiedOutgoing a :toBeDisplayed;  s:label "Unclassified Outgoings".
   <style type="text/css" media="all">
 """.
 
-{ <file:///Users/timbl/Documents/2010/Financial/Data/report.css> log:content ?stylesheet } => { "01" log:outputString  ?stylesheet }.
+{ <file:///Users/timbl/Documents/2011/Financial/Data/report.css> log:content ?stylesheet } => { "01" log:outputString  ?stylesheet }.
 
 "02" log:outputString
 """
@@ -79,7 +79,7 @@ q:UnclassifiedOutgoing a :toBeDisplayed;  s:label "Unclassified Outgoings".
      ("%6.2f" ?dollars) string:format :x.
      
         # Check lines have to payees, a raw one (suppressed here) and one from checks-by-hand.*
-    :p string:notMatches "^C[hH][Ee][Cc][Kk]".  # Check lines should have other -- eh?
+#    :p string:notMatches "^C[hH][Ee][Cc][Kk]".  # Check lines should have other -- eh?
     :y a :toBeDisplayed; s:label :l.
     ( :l " " :d ?URI "0") string:concatenation :k.
     (  "<tr class='"  :a

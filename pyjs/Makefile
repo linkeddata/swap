@@ -36,13 +36,18 @@ js_results.n30 : n3parser.js
 /devel/dig/2005/ajar/ajaw/js/rdf/n3parser.js : n3parser.js
 	cp n3parser.js /devel/dig/2005/ajar/ajaw/js/rdf/n3parser.js
 
-not3.js : not3a.js fix.sed
-	sed < not3a.js -f fix.sed  > not3.js
+not3p.py : not3.py pre.sed
+	sed < not3.py -f pre.sed  > not3p.py
 
 not3a.js : pyjs.py not3p.py
 	python pyjs.py not3p.py > not3a.js
 
-not3p.py : not3.py pre.sed
-	sed < not3.py -f pre.sed  > not3p.py
+not3i.js : not3a.js fix.sed
+	sed < not3a.js -f fix.sed   > not3i.js
+
+not3.js : not3i.js  $S/util/jsindent.py
+	python $S/util/jsindent.py not3i.js > not3.js
+
+
 
 

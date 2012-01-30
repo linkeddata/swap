@@ -1,5 +1,6 @@
      @prefix : <http://www.w3.org/2000/10/swap/grammar/bnf#> .
     @prefix n3: <http://www.w3.org/2000/10/swap/grammar/n3#> .
+    @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
     @prefix rul: <http://www.w3.org/2000/10/swap/grammar/bnf-rules#> .
     
      @forSome <#_g0>,
@@ -39,6 +40,8 @@
                 n3:statementlist,
                 n3:statements_optional;
          :canStartWith "." .
+    
+    "/"     :canPrecede n3:unsignedint .
     
     ";"     :canPrecede ".",
                 "]",
@@ -164,8 +167,23 @@
                 n3:propertylisttail,
                 n3:statementtail .
     
-    <n3.n3>     :syntaxFor  [
-             :internetMediaType <http://www.w3.org/2003/mediatypes#application/n3> ] .
+    <bnf-rules.n3>     rdfs:comment """This set of rules process a BNF graph in its basic
+cfg:mustBeOneOf BNF form and create the branching tables to drive a 
+predictive parser.
+
+See also cfg2bnf.n3 which expands the shothand ontology into the basic
+BNF terms.
+""" .
+    
+    <cfg2bnf.n3>     rdfs:comment """ 
+
+These are rules to take the shortcut ontology such as cfg:zeroOrOneOf 
+and expland them into the base cfg:mustBeOneSequence.
+It also generates human-readable labels for things which have been
+generated.
+
+This file was split from n3.n3 on 2007-01-20.
+""" .
     
     :eof     :canStartWith "@EOFDUMMY" .
     
@@ -228,7 +246,7 @@
          :canStartWith "+",
                 "-",
                 "0";
-         :matches "[-+]?[0-9]+(\\.[0-9]+)?" .
+         :matches "[-+]?[0-9]+\\.[0-9]*" .
     
     n3:declaration     :TEST "@base",
                 "@keywords",
@@ -568,6 +586,7 @@
     
     n3:integer     :canPrecede ")",
                 ".",
+                "/",
                 "@of",
                 "]",
                 "}",
@@ -631,7 +650,8 @@
     
     n3:numericliteral     :TEST n3:decimal,
                 n3:double,
-                n3:integer;
+                n3:integer,
+                n3:rational;
          :branch  [
              :branchTail  (
             n3:integer );
@@ -640,6 +660,14 @@
                     "0";
              :sequence  (
             n3:integer ) ],
+                 [
+             :branchTail  (
+            n3:rational );
+             :condition "+",
+                    "-",
+                    "0";
+             :sequence  (
+            n3:rational ) ],
                  [
              :branchTail  (
             n3:double );
@@ -674,6 +702,8 @@
          :mustBeOneSequence  (
          (
             n3:integer )
+         (
+            n3:rational )
          (
             n3:double )
          (
@@ -1001,13 +1031,127 @@
             "^"
             n3:expression ) ) .
     
+    n3:predicate     :TEST "<=",
+                "=",
+                "=>",
+                "@a",
+                "@has",
+                "@is",
+                n3:expression;
+         :branch  [
+             :branchTail  (
+            n3:expression );
+             :condition "\"",
+                    "(",
+                    "+",
+                    "-",
+                    "0",
+                    ":",
+                    "<",
+                    "?",
+                    "@false",
+                    "@true",
+                    "[",
+                    "_",
+                    "a",
+                    "{";
+             :sequence  (
+            n3:expression ) ],
+                 [
+             :branchTail  (
+            "@has"
+            n3:expression );
+             :condition "@has";
+             :sequence  (
+            "@has"
+            n3:expression ) ],
+                 [
+             :branchTail  (
+            "@is"
+            n3:expression
+            "@of" );
+             :condition "@is";
+             :sequence  (
+            "@is"
+            n3:expression
+            "@of" ) ],
+                 [
+             :branchTail  (
+            "@a" );
+             :condition "@a";
+             :sequence  (
+            "@a" ) ],
+                 [
+             :branchTail  (
+            "=" );
+             :condition "=";
+             :sequence  (
+            "=" ) ],
+                 [
+             :branchTail  (
+            "=>" );
+             :condition "=>";
+             :sequence  (
+            "=>" ) ],
+                 [
+             :branchTail  (
+            "<=" );
+             :condition "<=";
+             :sequence  (
+            "<=" ) ];
+         :canPrecede n3:object;
+         :canStartWith "\"",
+                "(",
+                "+",
+                "-",
+                "0",
+                ":",
+                "<",
+                "<=",
+                "=",
+                "=>",
+                "?",
+                "@a",
+                "@false",
+                "@has",
+                "@is",
+                "@true",
+                "[",
+                "_",
+                "a",
+                "{";
+         :canStartWithLiteral "<=",
+                "=",
+                "=>",
+                "@a",
+                "@has",
+                "@is";
+         :mustBeOneSequence  (
+         (
+            n3:expression )
+         (
+            "@has"
+            n3:expression )
+         (
+            "@is"
+            n3:expression
+            "@of" )
+         (
+            "@a" )
+         (
+            "=" )
+         (
+            "=>" )
+         (
+            "<=" ) ) .
+    
     n3:prefix     :canPrecede n3:explicituri;
          :canStartWith ":",
                 "_",
                 "a";
          :matches "([A-Z_a-zÀ-ÖØ-öø-˿Ͱ-ͽͿ-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿][\\-0-9A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿-⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿]*)?:" .
     
-    n3:propertylist     :TEST n3:verb;
+    n3:propertylist     :TEST n3:predicate;
          :branch  [
              :branchTail ();
              :condition ".",
@@ -1016,7 +1160,7 @@
              :sequence () ],
                  [
              :branchTail  (
-            n3:verb
+            n3:predicate
             n3:object
             n3:objecttail
             n3:propertylisttail );
@@ -1041,7 +1185,7 @@
                     "a",
                     "{";
              :sequence  (
-            n3:verb
+            n3:predicate
             n3:object
             n3:objecttail
             n3:propertylisttail ) ];
@@ -1072,7 +1216,7 @@
          :mustBeOneSequence  (
         ()
          (
-            n3:verb
+            n3:predicate
             n3:object
             n3:objecttail
             n3:propertylisttail ) ) .
@@ -1137,6 +1281,40 @@
                 n3:statementtail;
          :canStartWith "?";
          :matches "\\?[A-Z_a-zÀ-ÖØ-öø-˿Ͱ-ͽͿ-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿][\\-0-9A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿-⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿]*" .
+    
+    n3:rational     :TEST n3:integer;
+         :branch  [
+             :branchTail  (
+            n3:integer
+            "/"
+            n3:unsignedint );
+             :condition "+",
+                    "-",
+                    "0";
+             :sequence  (
+            n3:integer
+            "/"
+            n3:unsignedint ) ];
+         :canPrecede ")",
+                ".",
+                "@of",
+                "]",
+                "}",
+                n3:object,
+                n3:objecttail,
+                n3:pathlist,
+                n3:pathtail,
+                n3:propertylist,
+                n3:propertylisttail,
+                n3:statementtail;
+         :canStartWith "+",
+                "-",
+                "0";
+         :mustBeOneSequence  (
+         (
+            n3:integer
+            "/"
+            n3:unsignedint ) ) .
     
     n3:simpleStatement     :TEST n3:subject;
          :branch  [
@@ -1514,119 +1692,20 @@
             "@forAll"
             <#_g0> ) ) .
     
-    n3:verb     :TEST "<=",
-                "=",
-                "=>",
-                "@a",
-                "@has",
-                "@is",
-                n3:expression;
-         :branch  [
-             :branchTail  (
-            n3:expression );
-             :condition "\"",
-                    "(",
-                    "+",
-                    "-",
-                    "0",
-                    ":",
-                    "<",
-                    "?",
-                    "@false",
-                    "@true",
-                    "[",
-                    "_",
-                    "a",
-                    "{";
-             :sequence  (
-            n3:expression ) ],
-                 [
-             :branchTail  (
-            "@has"
-            n3:expression );
-             :condition "@has";
-             :sequence  (
-            "@has"
-            n3:expression ) ],
-                 [
-             :branchTail  (
-            "@is"
-            n3:expression
-            "@of" );
-             :condition "@is";
-             :sequence  (
-            "@is"
-            n3:expression
-            "@of" ) ],
-                 [
-             :branchTail  (
-            "@a" );
-             :condition "@a";
-             :sequence  (
-            "@a" ) ],
-                 [
-             :branchTail  (
-            "=" );
-             :condition "=";
-             :sequence  (
-            "=" ) ],
-                 [
-             :branchTail  (
-            "=>" );
-             :condition "=>";
-             :sequence  (
-            "=>" ) ],
-                 [
-             :branchTail  (
-            "<=" );
-             :condition "<=";
-             :sequence  (
-            "<=" ) ];
-         :canPrecede n3:object;
-         :canStartWith "\"",
-                "(",
-                "+",
-                "-",
-                "0",
-                ":",
-                "<",
-                "<=",
-                "=",
-                "=>",
-                "?",
-                "@a",
-                "@false",
-                "@has",
-                "@is",
-                "@true",
-                "[",
-                "_",
-                "a",
-                "{";
-         :canStartWithLiteral "<=",
-                "=",
-                "=>",
-                "@a",
-                "@has",
-                "@is";
-         :mustBeOneSequence  (
-         (
-            n3:expression )
-         (
-            "@has"
-            n3:expression )
-         (
-            "@is"
-            n3:expression
-            "@of" )
-         (
-            "@a" )
-         (
-            "=" )
-         (
-            "=>" )
-         (
-            "<=" ) ) .
+    n3:unsignedint     :canPrecede ")",
+                ".",
+                "@of",
+                "]",
+                "}",
+                n3:object,
+                n3:objecttail,
+                n3:pathlist,
+                n3:pathtail,
+                n3:propertylist,
+                n3:propertylisttail,
+                n3:statementtail;
+         :canStartWith "0";
+         :matches "[0-9]+" .
     
     <#_g0>     :TEST n3:symbol;
          :branch  [

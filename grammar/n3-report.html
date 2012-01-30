@@ -26,7 +26,7 @@
 		<p><b><code>"@true"</code></b></p>
 	</dd>
   <dt><a name='decimal'>decimal</a></dt><dd>
-	<p><em>[-+]?[0-9]+(\.[0-9]+)?</em></p>
+	<p><em>[-+]?[0-9]+\.[0-9]*</em></p>
 	</dd>
   <dt><a name='declaration'>declaration</a></dt><dd>
 		<p><b><code>"@base"</code></b> <a href='#explicituri'>explicituri</a></p>
@@ -69,6 +69,7 @@
 		<p><a href='#decimal'>decimal</a></p>
 		<p><a href='#double'>double</a></p>
 		<p><a href='#integer'>integer</a></p>
+		<p><a href='#rational'>rational</a></p>
 	</dd>
   <dt><a name='object'>object</a></dt><dd>
 		<p><a href='#expression'>expression</a></p>
@@ -96,11 +97,20 @@
 		<p><b><code>"^"</code></b> <a href='#expression'>expression</a></p>
 		<p><em>void</em></p>
 	</dd>
+  <dt><a name='predicate'>predicate</a></dt><dd>
+		<p><a href='#expression'>expression</a></p>
+		<p><b><code>"<="</code></b></p>
+		<p><b><code>"="</code></b></p>
+		<p><b><code>"=>"</code></b></p>
+		<p><b><code>"@a"</code></b></p>
+		<p><b><code>"@has"</code></b> <a href='#expression'>expression</a></p>
+		<p><b><code>"@is"</code></b> <a href='#expression'>expression</a> <b><code>"@of"</code></b></p>
+	</dd>
   <dt><a name='prefix'>prefix</a></dt><dd>
 	<p><em>([A-Z_a-zÀ-ÖØ-öø-˿Ͱ-ͽͿ-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿][\-0-9A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿-⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿]*)?:</em></p>
 	</dd>
   <dt><a name='propertylist'>propertylist</a></dt><dd>
-		<p><a href='#verb'>verb</a> <a href='#object'>object</a> <a href='#objecttail'>objecttail</a> <a href='#propertylisttail'>propertylisttail</a></p>
+		<p><a href='#predicate'>predicate</a> <a href='#object'>object</a> <a href='#objecttail'>objecttail</a> <a href='#propertylisttail'>propertylisttail</a></p>
 		<p><em>void</em></p>
 	</dd>
   <dt><a name='propertylisttail'>propertylisttail</a></dt><dd>
@@ -112,6 +122,9 @@
 	</dd>
   <dt><a name='quickvariable'>quickvariable</a></dt><dd>
 	<p><em>\?[A-Z_a-zÀ-ÖØ-öø-˿Ͱ-ͽͿ-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿][\-0-9A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌-‍‿-⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿]*</em></p>
+	</dd>
+  <dt><a name='rational'>rational</a></dt><dd>
+		<p><a href='#integer'>integer</a> <b><code>"/"</code></b> <a href='#unsignedint'>unsignedint</a></p>
 	</dd>
   <dt><a name='simpleStatement'>simpleStatement</a></dt><dd>
 		<p><a href='#subject'>subject</a> <a href='#propertylist'>propertylist</a></p>
@@ -155,14 +168,8 @@
   <dt><a name='universal'>universal</a></dt><dd>
 		<p><b><code>"@forAll"</code></b> <a href='#symbol_csl'>symbol_csl</a></p>
 	</dd>
-  <dt><a name='verb'>verb</a></dt><dd>
-		<p><a href='#expression'>expression</a></p>
-		<p><b><code>"<="</code></b></p>
-		<p><b><code>"="</code></b></p>
-		<p><b><code>"=>"</code></b></p>
-		<p><b><code>"@a"</code></b></p>
-		<p><b><code>"@has"</code></b> <a href='#expression'>expression</a></p>
-		<p><b><code>"@is"</code></b> <a href='#expression'>expression</a> <b><code>"@of"</code></b></p>
+  <dt><a name='unsignedint'>unsignedint</a></dt><dd>
+	<p><em>[0-9]+</em></p>
 	</dd>
 
 </dl>

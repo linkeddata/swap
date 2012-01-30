@@ -10,7 +10,7 @@
     {
         :x     a :Mother .
         
-        }     <http://www.w3.org/2000/10/swap/log#implies> {:x     :says {:You     :listenTo :x .
+        }     => {:x     :says {:You     :listenTo :x .
             } .
         } .
     

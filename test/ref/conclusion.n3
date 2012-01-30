@@ -151,76 +151,76 @@
         {
             v:p     a dpo:TransitiveProperty .
             
-            }     log:implies { @forAll v:xx,
+            }     => { @forAll v:xx,
                         v:yx,
                         v:zx .
             {
                 v:xx     v:p v:yx .
                 v:yx     v:p v:zx .
                 
-                }     log:implies {v:xx     v:p v:zx .
+                }     => {v:xx     v:p v:zx .
                 } .
             } .
         {
             con:_g0     s:subClassOf con:_g1 .
             con:_g1     s:subClassOf con:_g2 .
             
-            }     log:implies {con:_g0     s:subClassOf con:_g2 .
+            }     => {con:_g0     s:subClassOf con:_g2 .
             } .
         {
             con:_g3     s:subPropertyOf con:_g4 .
             con:_g4     s:subPropertyOf con:_g5 .
             
-            }     log:implies {con:_g3     s:subPropertyOf con:_g5 .
+            }     => {con:_g3     s:subPropertyOf con:_g5 .
             } .
         {
             con:_g6     :descendant con:_g7 .
             con:_g7     :descendant con:_g8 .
             
-            }     log:implies {con:_g6     :descendant con:_g8 .
+            }     => {con:_g6     :descendant con:_g8 .
             } .
         {
             con:_g9     :ancestor con:_g10 .
             con:_g10     :ancestor con:_g11 .
             
-            }     log:implies {con:_g9     :ancestor con:_g11 .
+            }     => {con:_g9     :ancestor con:_g11 .
             } .
         {
             v:c1     s:subClassOf v:c2 .
             v:x     a v:c1 .
             
-            }     log:implies {v:x     a v:c2 .
+            }     => {v:x     a v:c2 .
             } .
         {
             v:p     s:domain v:c .
             v:x     v:p v:y .
             
-            }     log:implies {v:x     a v:c .
+            }     => {v:x     a v:c .
             } .
         {
             v:p     s:range v:c .
             v:x     v:p v:y .
             
-            }     log:implies {v:y     a v:c .
+            }     => {v:y     a v:c .
             } .
         {
             v:p1     s:range v:c .
             v:p2     s:subPropertyOf v:p1 .
             
-            }     log:implies {v:p2     s:range v:c .
+            }     => {v:p2     s:range v:c .
             } .
         {
             v:p1     = v:p2 .
             v:x     v:p1 v:y .
             
-            }     log:implies {v:x     v:p2 v:y .
+            }     => {v:x     v:p2 v:y .
             } .
         {
             v:x     a v:y,
                         v:z .
             v:y     dpo:disjointFrom v:z .
             
-            }     log:implies {v:x     a v:schemaInconsistency .
+            }     => {v:x     a v:schemaInconsistency .
             } .
         } .
     {
@@ -236,6 +236,6 @@
         <../invalid-ex.n3>     log:semantics con:_g14 .
         <../schema-rules.n3>     log:semantics con:_g15 .
         
-        }     log:implies {foo:result     foo:is foo:G .
+        }     => {foo:result     foo:is foo:G .
         } .
     

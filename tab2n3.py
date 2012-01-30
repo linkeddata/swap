@@ -18,6 +18,7 @@ http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231
 """
 import sys
 import string
+from sys import argv
 
 inFp = sys.stdin
 
@@ -77,6 +78,11 @@ def sanitize(s):
     return s.replace('\n', ' ')
             
 def convert():
+    
+    namespace = None;
+    for i in range(len(argv)-2):
+        if argv[i+1] == '-namespace': namespace = argv[i+2]
+            
     if "-help" in sys.argv[1:]:
         print __doc__
         return
@@ -106,6 +112,7 @@ def convert():
         # print "@prefix : <> ."
         print "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>."
         print "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>."
+        if namespace: print "@prefix : <%s>." % namespace
         for i in range(0,len(headings)):
             print "  :%s  a rdf:Property; rdfs:label \"%s\"." % \
                     ( headings[i], sanitize(labels[i])  )

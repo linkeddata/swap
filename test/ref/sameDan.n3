@@ -42,50 +42,50 @@ the same thing.""";
     {
         :p     a ont:UnambiguousProperty .
         
-        }     log:implies {{
+        }     => {{
             :x     :p :z .
             :y     :p :z .
             
-            }     log:implies {:x     = :y .
+            }     => {:x     = :y .
             } .
         } .
     {
         :p     a ont:UniqueProperty .
         
-        }     log:implies {{
+        }     => {{
             :x     :p :y,
                         :z .
             
-            }     log:implies {:y     = :z .
+            }     => {:y     = :z .
             } .
         } .
     {
         :x     = :y .
         
-        }     log:implies {:y     = :x .
+        }     => {:y     = :x .
         } .
     {
         :x     = :z .
         
-        }     log:implies {:x     = :z .
+        }     => {:x     = :z .
         } .
     {
         sam:x     sam:birthPlace sam:KC;
              sam:hairColor sam:red .
         
-        }     log:implies {sam:test1     a sam:Success .
+        }     => {sam:test1     a sam:Success .
         } .
     {
         :x     contact:homePageAddress :z .
         :y     contact:homePageAddress :z .
         
-        }     log:implies {:x     = :y .
+        }     => {:x     = :y .
         } .
     {
         :x     contact:mailbox :z .
         :y     contact:mailbox :z .
         
-        }     log:implies {:x     = :y .
+        }     => {:x     = :y .
         } .
     {
         :p     log:notEqualTo log:forAll,
@@ -93,7 +93,7 @@ the same thing.""";
              = :q .
         :x     :p :y .
         
-        }     log:implies {:x     :q :y .
+        }     => {:x     :q :y .
         } .
     {
         :p     log:notEqualTo log:forAll,
@@ -101,7 +101,7 @@ the same thing.""";
         :x     = :z;
              :p :y .
         
-        }     log:implies {:z     :p :y .
+        }     => {:z     :p :y .
         } .
     {
         :p     log:notEqualTo log:forAll,
@@ -109,6 +109,6 @@ the same thing.""";
         :x     :p :y .
         :y     = :z .
         
-        }     log:implies {:x     :p :z .
+        }     => {:x     :p :z .
         } .
     

@@ -10,6 +10,8 @@ from sax2rdf import XMLtoDOM # for fn:doc
 
 #from Ft.Xml.XPath import Evaluate as evalXPath
 # http://packages.debian.org/unstable/python/python-xml
+# see also for a review:
+# http://www.oreillynet.com/onlamp/blog/2005/01/code_respecting_xpath_xml_pyth.html
 ##
 ## The following code allows for the lazy importing of the
 ## evalXPath function. It is a hack

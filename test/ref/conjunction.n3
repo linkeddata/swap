@@ -1,7 +1,7 @@
      @prefix : <foo.n3#> .
-     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    @prefix log: <http://www.w3.org/2000/10/swap/log#> .
     
-    @forAll :F,
+     @forAll :F,
                 :G,
                 :d,
                 :x,
@@ -14,7 +14,7 @@
                 } )
              log:conjunction :F .
         
-        }     log:implies {:F     a :result .
+        }     => {:F     a :result .
         } .
     {
         :sky     :color :blue,

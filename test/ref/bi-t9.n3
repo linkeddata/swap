@@ -1,8 +1,7 @@
      @prefix : <#> .
-     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
-     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    @prefix string: <http://www.w3.org/2000/10/swap/string#> .
     
-    @forAll :d,
+     @forAll :d,
                 :e .
     
     :e1     a :Sep2001Event;
@@ -12,13 +11,13 @@
     {
         :e1     a :Sep2001Event .
         
-        }     log:implies {:t1     a :Success .
+        }     => {:t1     a :Success .
         } .
     {
         :d     string:lessThan "2001-10";
              string:notLessThan "2001-09" .
         :e     :date :d .
         
-        }     log:implies {:e     a :Sep2001Event .
+        }     => {:e     a :Sep2001Event .
         } .
     

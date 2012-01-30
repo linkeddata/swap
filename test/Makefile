@@ -1,6 +1,6 @@
 #    Makefile
 #
-P=python2.4
+P=python
 W=../../../..
 C=../cwm.py
 RC=../../rdf-tests/rdfcore

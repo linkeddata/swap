@@ -6,6 +6,7 @@ usage, eg:
         Results for the year 2003-01 through 2003-12
     fin -y 2003-07
         Results for the year 2003-07 through 2004-06
+    fin --start 2010-01 --end 2010-06
         
     -t foo.n3   --totals=foo.n3  Please output totals in this file     
     
@@ -25,6 +26,8 @@ from swap.myStore import store, load, loadMany,  Namespace
 import swap.llyn
 
 #import uripath
+
+global yearInQuestion, startDate, endDate
 
 import string
 import sys
@@ -74,10 +77,10 @@ def printCategories(cats, totals, count):
 
 
 
-def tableRow(label, anchor, totals, value):
+def tableRow(label, anchor, totals, value, nm):
     global reportLink
     str = ""
-    for month in range(12):
+    for month in range(nm):
         str = str + "<td class='amt'>%6.2f</td>" % value[month]
     if anchor:
         return "<tr><td><a href='%s'>%s</a></td><td class='total'>%7.2f</td>%s</tr>" %(
@@ -193,8 +196,8 @@ def writeChart(filename, categories, totals, income, outgoings, shortTerm=0):
 
 
     chart.write("""    <text  y="%ipx" x="5px" width="60px"
-        height="20px">%s</text>
-""" %(20, yearInQuestion))
+        height="20px">%s up to but excluding %s</text>
+""" %(20, startDate, endDate))
 
     
     y = 0
@@ -256,6 +259,10 @@ def writeChart(filename, categories, totals, income, outgoings, shortTerm=0):
     chart.close()
     return
 
+def isBottomClass(c):
+    subs = kb.each(pred=rdfs.subClassOf, obj=c);
+    return len(subs) == 0
+
 def allClasses(some):
     cats = []
     agenda = some[:]
@@ -267,17 +274,22 @@ def allClasses(some):
             if sup not in agenda and sup not in cats: agenda.append(sup)
     return cats
 
+def monthOfDate(date):
+    return int(date[0:4]) * 12 + int(date[5:7])
+
 def monthNumber(s):
     global qu
     date = kb.any(subj=s, pred=qu.date).__str__()
     if date == "None":
-        progress("No date for transaction %s -- ignoring\n" % s)
+        progress("@@@ No date for transaction %s -- ignoring!" % s.uriref())
         return  -1
-    m = int(date[0:4]) * 12 + int(date[5:7])
-    monthInQuestion = int(yearInQuestion[0:4]) * 12 + int(yearInQuestion[5:7])
-    return m - monthInQuestion
+    m = monthOfDate(date)
+    startMonth = monthOfDate(startDate)
+    endMonth = monthOfDate(endDate)
+    if m >= endMonth: return -1
+    return m - startMonth
 
-def doCommand(yearInQuestion, inputURIs=["/dev/stdin"],totalsFilename=None):
+def doCommand(startDate, endDate, inputURIs=["/dev/stdin"],totalsFilename=None):
         """Fin - financial summary
         
  <command> <options> <inputURIs>
@@ -290,7 +302,7 @@ def doCommand(yearInQuestion, inputURIs=["/dev/stdin"],totalsFilename=None):
         import time
         import sys
         global sax2rdf
-        global kb
+        global kb, tax
         
         # The base URI for this process - the Web equiv of cwd
         _baseURI = uripath.base()
@@ -315,12 +327,16 @@ def doCommand(yearInQuestion, inputURIs=["/dev/stdin"],totalsFilename=None):
         specialCategories = taxCategories + [qu.Classified, qu.Unclassified, qu.Transaction]
 
 ####### Analyse the data:
-        monthTotals = [0] * 12 
-        incomeByMonth = [0] * 12 
+        numberOfMonths = monthOfDate(endDate) - monthOfDate(startDate)
+        monthTotals = [0] * numberOfMonths
+        incomeByMonth = [0] * numberOfMonths
         income, outgoings = 0,0
-        outgoingsByMonth = [0] * 12 
+        outgoingsByMonth = [0] * numberOfMonths
 
         quCategories = kb.each(pred=rdf_type, obj=qu.Cat)
+        bottomCategories = [];
+        for c in quCategories:
+            if isBottomClass(c): bottomCategories.append(c);
         
         totals = {}  # Total by all classes of transaction
         count = {}  # Number of transactions
@@ -336,12 +352,11 @@ def doCommand(yearInQuestion, inputURIs=["/dev/stdin"],totalsFilename=None):
 #        for s in classified + unclassified:
 #           progress( "Transaction ", `s`)
             t_ok, c_ok = 0, 0
-            
             cats = allClasses(kb.each(subj=s, pred=rdf.type))
             # progress( "Categories: "+`cats`)
             
             month = monthNumber(s)
-            if month not in range(12) : continue
+            if month not in range(numberOfMonths) : continue
                         
             payees = kb.each(subj=s, pred=qu_payee)
             if str(payees[0]) == "Check" and len(payees) >1: payee = payees[1]
@@ -385,10 +400,10 @@ def doCommand(yearInQuestion, inputURIs=["/dev/stdin"],totalsFilename=None):
                     outgoingsByMonth[month] = outgoingsByMonth[month] + amount
                     outgoings = outgoings + amount
 
-            normalCats = []
+            normalCats = []  # For this item
             for c in cats:
                 totals[c] = totals.get(c, 0) + amount
-                byMonth[c] = byMonth.get(c, [0] * 12)
+                byMonth[c] = byMonth.get(c, [0] * numberOfMonths)
                 count[c] = count.get(c, 0) + 1
                 byMonth[c][month] = byMonth[c][month] + amount
                 if c not in specialCategories:
@@ -424,10 +439,11 @@ def doCommand(yearInQuestion, inputURIs=["/dev/stdin"],totalsFilename=None):
 #   TABLE OF CATEGORY BY MONTH
 
                 
-        print "<h2>%s Personal categories and month</h2><table class='wide'><tr><th></th><th>Year </th>" % yearInQuestion
-        for month in range(12):
-            m = month + int(yearInQuestion[5:7]) - 1
-            if m > 11: m -= 12  # Modulo in python?
+        print "<h2>Personal categories and months %s - %s</h2><table class='wide'><tr><th></th><th>Year </th>" % (
+                        startDate, endDate)
+        for month in range(numberOfMonths):
+            m = month + int(startDate[5:7]) - 1
+            while m > 11: m -= 12  # Modulo in python?
             
             
             print "<th><a href='year-chron.html#m%s'>%s</a></th>" %(("0"+`m+1`)[-2:], monthName[m]),
@@ -441,14 +457,14 @@ def doCommand(yearInQuestion, inputURIs=["/dev/stdin"],totalsFilename=None):
                 label = str(label)
             anchor = cat.fragid
             try:
-                print tableRow(anchor, anchor, totals[cat], byMonth.get(cat, [0] * 12))
+                print tableRow(anchor, anchor, totals[cat], byMonth.get(cat, [0] * numberOfMonths), numberOfMonths)
             except KeyError:
                 continue
 
         print "<tr><td colspan='14'></td></tr>"
-        print tableRow("Income", None,  income, incomeByMonth)
-        print tableRow("Outgoings", None, outgoings, outgoingsByMonth)
-        print tableRow("Balance", None, income + outgoings, monthTotals)
+        print tableRow("Income", None,  income, incomeByMonth, numberOfMonths)
+        print tableRow("Outgoings", None, outgoings, outgoingsByMonth, numberOfMonths)
+        print tableRow("Balance", None, income + outgoings, monthTotals, numberOfMonths)
 
         print "</table>"
 
@@ -458,11 +474,11 @@ def doCommand(yearInQuestion, inputURIs=["/dev/stdin"],totalsFilename=None):
         print "<p><a href='all.svg'><p>Chart of all income vs expense</p><img src='all.svg'></a></p>"
 
         writeChart(filename = "chart.svg",
-            categories=quCategories + [ qu.UnclassifiedIncome, qu.UnclassifiedOutgoing],
+            categories = bottomCategories + [ qu.UnclassifiedIncome, qu.UnclassifiedOutgoing],
             totals = totals, income=income, outgoings=outgoings, shortTerm = 1)
     
         writeChart(filename = "all.svg",
-            categories=quCategories + [ qu.UnclassifiedIncome, qu.UnclassifiedOutgoing],
+            categories = bottomCategories + [ qu.UnclassifiedIncome, qu.UnclassifiedOutgoing],
             totals = totals, income=income, outgoings=outgoings, shortTerm = 0)
     
 
@@ -524,8 +540,15 @@ def doCommand(yearInQuestion, inputURIs=["/dev/stdin"],totalsFilename=None):
 ############################################################ Main program
 
 reportLink = "year-cat.html"
+global yearInQuestion, startDate, endDate
+
+startDate = None
+endDate = None
+yearInQuestion = None
 
 if __name__ == '__main__':
+    global verbose
+    #global yearInQuestion, startDate, endDate
     import getopt
     testFiles = []
     totalsFilename = None
@@ -533,12 +556,10 @@ if __name__ == '__main__':
     normal = 0
     chatty = 0
     proofs = 0
-    global verbose
-    global yearInQuestion
     verbose = 0
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hvy:i:t:r:",
-            ["help",  "verbose", "year=", "input=", "totals=", "report="])
+        opts, args = getopt.getopt(sys.argv[1:], "hvy:i:s:e:t:r:",
+            ["help",  "verbose", "year=", "input=", "start=", "end=", "totals=", "report="])
     except getopt.GetoptError:
         # print help information and exit:
         print __doc__
@@ -553,6 +574,10 @@ if __name__ == '__main__':
             verbose = 1
         if o in ("-t", "--totals"):
             totalsFilename = a
+        if o in ("-s", "--start"):
+            startDate = a
+        if o in ("-e", "--end"):
+            endDate = a
         if o in ("-y", "--year"):
             yearInQuestion = a
             if len(yearInQuestion) < 7: yearInQuestion += "-01"
@@ -562,5 +587,8 @@ if __name__ == '__main__':
             reportLink = a
             #progress("Report to link to: "+a)
 
-    doCommand(yearInQuestion=yearInQuestion, inputURIs=inputURIs, totalsFilename=totalsFilename)
+    if yearInQuestion is not None :
+        startDate = yearInQuestion + "-01"
+        endDate = "%4i" % (int(yearInQuestion[0:4]) + 1) + yearInQuestion[4:7] + "-01" # Date NOT done
+    doCommand(startDate=startDate, endDate=endDate, inputURIs=inputURIs, totalsFilename=totalsFilename)
 

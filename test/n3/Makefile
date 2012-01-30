@@ -1,13 +1,18 @@
 
 # http://www.dajobe.org/2004/01/turtle/tests/manifest.ttl  incldues long ones
+# Note http://www.w3.org/2001/sw/DataAccess/df1/tests is the same stuff,
+# in cvs-accessible space.
 # turtle-manifest.n3 doesn't
 
 CWM = ../../cwm.py
-<<<<<<< Makefile
-TESTS := http://www.w3.org/2000/10/swap/test/n3parser.tests http://www.dajobe.org/2004/01/turtle/tests/manifest.ttl http://www.dajobe.org/2004/01/turtle/tests/manifest-bad.ttl
-=======
-TESTS := http://www.w3.org/2000/10/swap/test/n3parser.tests ../jena/n3_jena.tests  turtle-manifest.n3 http://www.dajobe.org/2004/01/turtle/tests/manifest-bad.ttl
->>>>>>> 1.10
+D=http://www.w3.org/2001/sw/DataAccess/df1/tests
+
+
+TESTS := http://www.w3.org/2000/10/swap/test/n3parser.tests ../jena/n3_jena.tests  turtle-manifest.n3 $D/manifest-bad.ttl
+
+#TESTS := http://www.w3.org/2000/10/swap/test/n3parser.tests http://www.dajobe.org/2004/01/turtle/tests/manifest.ttl http://www.dajobe.org/#2004/01/turtle/tests/manifest-bad.ttl
+#=======
+#TESTS := http://www.w3.org/2000/10/swap/test/n3parser.tests ../jena/n3_jena.tests  turtle-manifest.n3 http://www.dajobe.org/2004/01/turtle/#tests/manifest-bad.ttl
 
 test_results.html : test_results.n3* makeReport.n3
 	$(CWM) $^ makeReport.n3 --crypto --think --purge --strings > test_results.html

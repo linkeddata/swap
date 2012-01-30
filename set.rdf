@@ -1,0 +1,51 @@
+
+
+
+<rdf:RDF xmlns="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/set#difference">
+        <comment>The subject is a list of sets,
+    and the objet is the difference of the sets in the object</comment>
+        <label>difference</label>
+        <range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/set#in">
+        <comment>This set contains that as a member.
+    Cwm will bind the subject to each of the members of the object.</comment>
+        <label>in</label>
+        <range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/set#intersection">
+        <comment>The subject is a list of sets,
+    and the objet is the intersection of the sets in the object</comment>
+        <label>intersection</label>
+        <range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/set#member">
+        <comment>This is a member of that set.
+    Cwm will bind the object to each of the members of the suject.</comment>
+        <domain rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+        <label>member</label>
+        <owl:inverseOf rdf:resource="http://www.w3.org/2000/10/swap/set#in"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/set#symmetricDifference">
+        <comment>The subject is a list of sets,
+    and the objet is the symmetricDifference of the sets in the object</comment>
+        <label>symmetric difference</label>
+        <range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/set#union">
+        <comment>The subject is a list [sic] of sets,
+    and the objet is the union of the sets in the object</comment>
+        <label>union</label>
+        <range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    </rdf:Property>
+</rdf:RDF>

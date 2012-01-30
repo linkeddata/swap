@@ -729,7 +729,7 @@ class Serializer:
             if collectionSyntaxOK:
                 sink.startListObject(auxPairs(triple))
                 for ele in obj:
-                    self.dumpStatement(sink, (context, self.store.li, obj, ele),
+                    self.dumpStatement(sink, (context, self.store.li, obj, ele), #  @@@ THIS IS WRONG IN XML !!!
                         sorting)
                 sink.endListObject(auPair(sub), auPair(pre))
             else:

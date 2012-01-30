@@ -1335,7 +1335,7 @@ typeMap = { "decimal": Decimal,
 class Literal(Term):
     """ A Literal is a representation of an RDF literal
 
-    really, data:text/rdf+n3;%22hello%22 == "hello" but who
+    really, data:text/n3;%22hello%22 == "hello" but who
     wants to store it that way?  Maybe we do... at least in theory and maybe
     practice but, for now, we keep them in separate subclases of Term.
     An RDF literal has a value - by default a string, and a datattype, and a
@@ -1445,7 +1445,7 @@ from xmlC14n import Canonicalize # http://dev.w3.org/cvsweb/2001/xmlsec-python/c
 class XMLLiteral(Literal):
     """ A Literal is a representation of an RDF literal
 
-    really, data:text/rdf+n3;%22hello%22 == "hello" but who
+    really, data:text/n3;%22hello%22 == "hello" but who
     wants to store it that way?  Maybe we do... at least in theory and maybe
     practice but, for now, we keep them in separate subclases of Term.
     An RDF literal has a value - by default a string, and a datattype, and a

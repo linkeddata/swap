@@ -144,7 +144,7 @@ def testParser(command, kb, output, errorFile):
             output.add(inputDocument, commandNode, parseResult)
             output.add(parseResult, n3test.isFile, rdf.nil)
             ef = open(errorFile, "r")
-            output.add(parseResult, n3test.errorMessage, ef.read())
+            output.add(parseResult, n3test.errorMessage, ef.read().decode('utf-8'))
             ef.close()
         else:
             output.add(commandNode, n3test.parses, inputDocument)
@@ -158,7 +158,11 @@ def testParser(command, kb, output, errorFile):
                 child_stdin, child_stdout = popen4("%s %s -f %s -d %s" % \
                               ('python', '$SWAP/cant.py', tempFile.uriref(), outputDocument.uriref()))
                 output.add(a, rdf.type, n3test.Diff)
-                output.add(a, n3test.diffString, "".join([escapize(ii) for ii in child_stdout.read()]))
+                try:
+                    ds = "".join([escapize(ii) for ii in child_stdout.read().decode('utf-8')])
+                except UnicodeDecodeError:
+                    ds = "unicode decode error in diff"
+                output.add(a, n3test.diffString, ds)
                 output.add(parseResult, a, outputDocument)
 def main():
     """The main function

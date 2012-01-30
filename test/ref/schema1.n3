@@ -177,75 +177,75 @@
     {
         v:p     a daml:TransitiveProperty .
         
-        }     log:implies { @forAll v:xx,
+        }     => { @forAll v:xx,
                     v:yx,
                     v:zx .
         {
             v:xx     v:p v:yx .
             v:yx     v:p v:zx .
             
-            }     log:implies {v:xx     v:p v:zx .
+            }     => {v:xx     v:p v:zx .
             } .
         } .
     {
         <#_g0>     rdfs:subClassOf <#_g1> .
         <#_g1>     rdfs:subClassOf <#_g2> .
         
-        }     log:implies {<#_g0>     rdfs:subClassOf <#_g2> .
+        }     => {<#_g0>     rdfs:subClassOf <#_g2> .
         } .
     {
         <#_g3>     rdfs:subPropertyOf <#_g4> .
         <#_g4>     rdfs:subPropertyOf <#_g5> .
         
-        }     log:implies {<#_g3>     rdfs:subPropertyOf <#_g5> .
+        }     => {<#_g3>     rdfs:subPropertyOf <#_g5> .
         } .
     {
         <#_g6>     :descendant <#_g7> .
         <#_g7>     :descendant <#_g8> .
         
-        }     log:implies {<#_g6>     :descendant <#_g8> .
+        }     => {<#_g6>     :descendant <#_g8> .
         } .
     {
         <#_g9>     :ancestor <#_g10> .
         <#_g10>     :ancestor <#_g11> .
         
-        }     log:implies {<#_g9>     :ancestor <#_g11> .
+        }     => {<#_g9>     :ancestor <#_g11> .
         } .
     {
         v:c1     rdfs:subClassOf v:c2 .
         v:x     a v:c1 .
         
-        }     log:implies {v:x     a v:c2 .
+        }     => {v:x     a v:c2 .
         } .
     {
         v:p     rdfs:domain v:c .
         v:x     v:p v:y .
         
-        }     log:implies {v:x     a v:c .
+        }     => {v:x     a v:c .
         } .
     {
         v:p     rdfs:range v:c .
         v:x     v:p v:y .
         
-        }     log:implies {v:y     a v:c .
+        }     => {v:y     a v:c .
         } .
     {
         v:p1     rdfs:range v:c .
         v:p2     rdfs:subPropertyOf v:p1 .
         
-        }     log:implies {v:p2     rdfs:range v:c .
+        }     => {v:p2     rdfs:range v:c .
         } .
     {
         v:p1     = v:p2 .
         v:x     v:p1 v:y .
         
-        }     log:implies {v:x     v:p2 v:y .
+        }     => {v:x     v:p2 v:y .
         } .
     {
         v:x     a v:y,
                     v:z .
         v:y     daml:disjointFrom v:z .
         
-        }     log:implies {v:x     a v:schemaInconsistency .
+        }     => {v:x     a v:schemaInconsistency .
         } .
     

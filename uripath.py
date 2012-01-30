@@ -301,6 +301,9 @@ def canonical(str_in):
     >>> canonical('%2F')
     '%2F'
 
+    >>> canonical('aaa%bbb')
+    'aaa%2Fbbb'
+
     """
     if type(str_in) == type(u''):
         s8 = str_in.encode('utf-8')
@@ -313,7 +316,12 @@ def canonical(str_in):
         if (n > 126) or (n < 33) :   # %-encode controls, SP, DEL, and utf-8
             s += "%%%02X" % ord(ch)
         elif ch == '%' and i+2 < len(s8):
-            ch2 = s8[i+1:i+3].decode('hex')
+            try:
+                ch2 = s8[i+1:i+3].decode('hex')
+            except TypeError: # If not hex, then  # @@ WARNING?
+                i = i+1
+                s += "%25"
+                continue
             if ch2 in URI_unreserved: s += ch2
             else: s += "%%%02X" % ord(ch2)
             i = i+3
@@ -459,7 +467,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.21  2007-06-26 02:36:16  syosi
+# Revision 1.22  2012-01-30 09:30:21  timbl
+# NOT PASSED TESTS but some work in that direction, for example now => is used on output changes test results
+#
+# Revision 1.21  2007/06/26 02:36:16  syosi
 # fix tabs
 #
 # Revision 1.20  2007/01/25 20:26:50  timbl

@@ -1,5 +1,5 @@
      @prefix : <#> .
-     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    @prefix log: <http://www.w3.org/2000/10/swap/log#> .
     
      @forAll :x .
     {
@@ -8,6 +8,6 @@
             
             }     log:n3String :x .
         
-        }     log:implies {:x     a :interesting .
+        }     => {:x     a :interesting .
         } .
     

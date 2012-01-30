@@ -59,11 +59,17 @@ testn3 = function(uri) {
 //        sz.setPrefixForURI(prefix, kb.namespaces[prefix]);
 //        print(prefix +'->'+kb.namespaces[prefix]);
 //    }
-    str = sz.toN3(kb.statements, kb.namespaces);
+
+    sz.suggestNamespaces(kb.namespaces);
+    print('test: sz.prefixes[http://www.w3.org/2000/10/swap/pim/contact#]='+sz.prefixes['http://www.w3.org/2000/10/swap/pim/contact#']);
+    sz.setBase(uri);
+    var sts = kb.statementsMatching(undefined, undefined, undefined, kb.sym(uri));
+//    str = sz.statementsToXML(kb.statements);
+    str = sz.statementsToXML(sts);
     
 //    str = ''+kb
-    str = str.slice(1,-1)  // remove {}
-    print (str)
+//    str = str.slice(1,-1)  // remove {}
+    print (str)  // .encode('utf-8')
     java.lang.System.exit(0)
     
 }

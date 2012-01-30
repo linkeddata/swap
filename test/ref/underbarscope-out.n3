@@ -1,5 +1,5 @@
      @prefix : <#> .
-     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    @prefix log: <http://www.w3.org/2000/10/swap/log#> .
     
      @forSome :x .
     
@@ -11,6 +11,6 @@
         
           [      log:equalTo :x ].
         
-        }     log:implies {<>     a :Success .
+        }     => {<>     a :Success .
         } .
     

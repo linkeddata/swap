@@ -30,7 +30,7 @@ TARBALL_STUFF = README LICENSE LICENSE.rdf LICENSE.n3
 	$(PYTHON) $(YAPPS) $< $@
 
 .n3.rdf:
-	$(PYTHON) cwm.py $<  --rdf > $@
+	$(PYTHON) cwm.py $<  --rdf --quiet > $@
 
 .py.html:
 	pydoc -w `echo $< | sed -e 's/\.py//'`
@@ -151,7 +151,7 @@ SemEnglish.html: SemEnglish.g gram2html.py
 	$(PYTHON) gram2html.py SemEnglish.g "SemEnglish Grammar (from Seth)" >$@
 
 log.rdf: log.n3
-	$(PYTHON) cwm.py log.n3 --rdf > log.rdf
+	$(PYTHON) cwm.py log.n3 --rdf --quiet > log.rdf
 
 sparqlCwm.rdf: sparqlCwm.n3
 	$(PYTHON) cwm.py sparqlCwm.n3 --rdf > sparqlCwm.rdf

@@ -24,6 +24,7 @@ literal ::=		|	string dtlang
 numericliteral ::=		|	decimal
 		|	double
 		|	integer
+		|	rational
 object ::=		|	expression
 objecttail ::=		|	 ","  object objecttail
 		|	void
@@ -40,13 +41,21 @@ pathlist ::=		|	expression pathlist
 pathtail ::=		|	 "!"  expression
 		|	 "^"  expression
 		|	void
+predicate ::=		|	 "<=" 
+		|	 "=" 
+		|	 "=>" 
+		|	 "@a" 
+		|	 "@has"  expression
+		|	 "@is"  expression  "@of" 
+		|	expression
 prefix ::=	([A-Z_a-z#x00c0-#x00d6#x00d8-#x00f6#x00f8-#x02ff#x0370-#x037d#x037f-#x1fff#x200c-#x200d#x2070-#x218f#x2c00-#x2fef#x3001-#xd7ff#xf900-#xfdcf#xfdf0-#xfffd#x00010000-#x000effff][\-0-9A-Z_a-z#x00b7#x00c0-#x00d6#x00d8-#x00f6#x00f8-#x037d#x037f-#x1fff#x200c-#x200d#x203f-#x2040#x2070-#x218f#x2c00-#x2fef#x3001-#xd7ff#xf900-#xfdcf#xfdf0-#xfffd#x00010000-#x000effff]*)?:
-propertylist ::=		|	verb object objecttail propertylisttail
+propertylist ::=		|	predicate object objecttail propertylisttail
 		|	void
 propertylisttail ::=		|	 ";"  propertylist
 		|	void
 qname ::=	(([A-Z_a-z#x00c0-#x00d6#x00d8-#x00f6#x00f8-#x02ff#x0370-#x037d#x037f-#x1fff#x200c-#x200d#x2070-#x218f#x2c00-#x2fef#x3001-#xd7ff#xf900-#xfdcf#xfdf0-#xfffd#x00010000-#x000effff][\-0-9A-Z_a-z#x00b7#x00c0-#x00d6#x00d8-#x00f6#x00f8-#x037d#x037f-#x1fff#x200c-#x200d#x203f-#x2040#x2070-#x218f#x2c00-#x2fef#x3001-#xd7ff#xf900-#xfdcf#xfdf0-#xfffd#x00010000-#x000effff]*)?:)?[A-Z_a-z#x00c0-#x00d6#x00d8-#x00f6#x00f8-#x02ff#x0370-#x037d#x037f-#x1fff#x200c-#x200d#x2070-#x218f#x2c00-#x2fef#x3001-#xd7ff#xf900-#xfdcf#xfdf0-#xfffd#x00010000-#x000effff][\-0-9A-Z_a-z#x00b7#x00c0-#x00d6#x00d8-#x00f6#x00f8-#x037d#x037f-#x1fff#x200c-#x200d#x203f-#x2040#x2070-#x218f#x2c00-#x2fef#x3001-#xd7ff#xf900-#xfdcf#xfdf0-#xfffd#x00010000-#x000effff]*
 quickvariable ::=	\?[A-Z_a-z#x00c0-#x00d6#x00d8-#x00f6#x00f8-#x02ff#x0370-#x037d#x037f-#x1fff#x200c-#x200d#x2070-#x218f#x2c00-#x2fef#x3001-#xd7ff#xf900-#xfdcf#xfdf0-#xfffd#x00010000-#x000effff][\-0-9A-Z_a-z#x00b7#x00c0-#x00d6#x00d8-#x00f6#x00f8-#x037d#x037f-#x1fff#x200c-#x200d#x203f-#x2040#x2070-#x218f#x2c00-#x2fef#x3001-#xd7ff#xf900-#xfdcf#xfdf0-#xfffd#x00010000-#x000effff]*
+rational ::=		|	integer  "/"  unsignedint
 simpleStatement ::=		|	subject propertylist
 statement ::=		|	declaration
 		|	existential
@@ -67,10 +76,4 @@ symbol_csl ::=		|	symbol symbol_csl_tail
 symbol_csl_tail ::=		|	 ","  symbol symbol_csl_tail
 		|	void
 universal ::=		|	 "@forAll"  symbol_csl
-verb ::=		|	 "<=" 
-		|	 "=" 
-		|	 "=>" 
-		|	 "@a" 
-		|	 "@has"  expression
-		|	 "@is"  expression  "@of" 
-		|	expression
+unsignedint ::=	[0-9]+

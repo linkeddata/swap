@@ -1,15 +1,15 @@
-#Processed by Id: cwm.py,v 1.165 2004/11/19 01:58:39 syosi Exp 
-        #    using base file:/devel/WWW/2000/10/swap/grammar/
+#Processed by Id: cwm.py,v 1.197 2007/12/13 15:38:39 syosi Exp 
+        #    using base file:///devel/WWW/2000/10/swap/grammar/
         
 #  Notation3 generation by
-#       notation3.py,v 1.166 2004/10/28 17:41:59 timbl Exp
+#       notation3.py,v 1.200 2007/12/11 21:18:08 syosi Exp
 
-#   Base was: file:/devel/WWW/2000/10/swap/grammar/
+#   Base was: file:///devel/WWW/2000/10/swap/grammar/
      @prefix : <http://www.w3.org/2000/10/swap/grammar/bnf2html#> .
-     @prefix bnf: <http://www.w3.org/2000/10/swap/grammar/bnf#> .
-     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
-     @prefix n3r: <http://www.w3.org/2000/10/swap/grammar/n3-rules#> .
-     @prefix rul: <http://www.w3.org/2000/10/swap/grammar/bnf-rules#> .
+    @prefix bnf: <http://www.w3.org/2000/10/swap/grammar/bnf#> .
+    @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    @prefix n3r: <http://www.w3.org/2000/10/swap/grammar/n3-rules#> .
+    @prefix rul: <http://www.w3.org/2000/10/swap/grammar/bnf-rules#> .
     
      @forSome <#_g0>,
                 <#_g1>,
@@ -40,6 +40,8 @@
     
     "@a"     :reference """<b><code>"@a"</code></b>""" .
     
+    "@base"     :reference """<b><code>"@base"</code></b>""" .
+    
     "@forAll"     :reference """<b><code>"@forAll"</code></b>""" .
     
     "@forSome"     :reference """<b><code>"@forSome"</code></b>""" .
@@ -69,59 +71,59 @@
     ()     a :Sequence,
                 :SequenceTail;
          :seqlabel "<em>void</em>" .
-      ( "!" 
-        n3r:path  )
+      ( "!"
+        n3r:path )
          a :Sequence,
                 :SequenceTail;
          :seqlabel """<b><code>"!"</code></b> <a href='#path'>path</a>""" .
-      ( "(" 
-        n3r:itemlist 
-        ")"  )
+      ( "("
+        n3r:itemlist
+        ")" )
          a :Sequence,
                 :SequenceTail;
          :seqlabel """<b><code>"("</code></b> <a href='#itemlist'>itemlist</a> <b><code>")"</code></b>""" .
-      ( ")"  )
+      ( ")" )
          a :SequenceTail;
          :seqlabel """<b><code>")"</code></b>""" .
-      ( "," 
-        n3r:barename 
-        <#_g7>  )
+      ( ","
+        n3r:barename
+        <#_g7> )
          a :Sequence,
                 :SequenceTail;
          :seqlabel """<b><code>","</code></b> <a href='#barename'>barename</a> <a href='#barename_csl'>barename_csl</a>""" .
-      ( "," 
-        n3r:object 
-        n3r:objecttail  )
+      ( ","
+        n3r:object
+        n3r:objecttail )
          a :Sequence,
                 :SequenceTail;
          :seqlabel """<b><code>","</code></b> <a href='#object'>object</a> <a href='#objecttail'>objecttail</a>""" .
-      ( "," 
-        n3r:symbol 
-        <#_g5>  )
+      ( ","
+        n3r:symbol
+        <#_g5> )
          a :Sequence,
                 :SequenceTail;
          :seqlabel """<b><code>","</code></b> <a href='#symbol'>symbol</a> <a href='#symbol_csl'>symbol_csl</a>""" .
-      ( "," 
-        n3r:symbol 
-        <#_g6>  )
+      ( ","
+        n3r:symbol
+        <#_g6> )
          a :Sequence,
                 :SequenceTail;
          :seqlabel """<b><code>","</code></b> <a href='#symbol'>symbol</a> <a href='#symbol_csl'>symbol_csl</a>""" .
-      ( "." 
-        n3r:statementlist  )
+      ( "."
+        n3r:statementlist )
          a :Sequence,
                 :SequenceTail;
          :seqlabel """<b><code>"."</code></b> <a href='#statementlist'>statementlist</a>""" .
-      ( "." 
-        n3r:statements_optional  )
+      ( "."
+        n3r:statements_optional )
          a :SequenceTail;
          :seqlabel """<b><code>"."</code></b> <a href='#statements_optional'>statements_optional</a>""" .
-      ( "."  )
+      ( "." )
          a :Sequence,
                 :SequenceTail;
          :seqlabel """<b><code>"."</code></b>""" .
-      ( "0" 
-        0  )
+      ( "0"
+        0 )
          log:outputString """<html>
 <head>
    <title>BNF</title>
@@ -135,275 +137,283 @@
   </p>
   <dl>
 """ .
-      ( ";" 
-        n3r:propertylist  )
+      ( ";"
+        n3r:propertylist )
          a :Sequence,
                 :SequenceTail;
          :seqlabel """<b><code>";"</code></b> <a href='#propertylist'>propertylist</a>""" .
-      ( "="  )
+      ( "=" )
          a :Sequence,
                 :SequenceTail;
          :seqlabel """<b><code>"="</code></b>""" .
-      ( "=>" 
-        "{" 
-        n3r:formula_safe 
-        "}"  )
+      ( "=>"
+        "{"
+        n3r:formula_safe
+        "}" )
          a :SequenceTail .
-      ( "=>" 
-        "{" 
-        n3r:formulacontent 
-        "}"  )
+      ( "=>"
+        "{"
+        n3r:formulacontent
+        "}" )
          a :SequenceTail;
          :seqlabel """<b><code>"=>"</code></b> <b><code>"{"</code></b> <a href='#formulacontent'>formulacontent</a> <b><code>"}"</code></b>""" .
-      ( "@" 
-        n3r:langcode  )
+      ( "@"
+        n3r:langcode )
          a :Sequence,
                 :SequenceTail;
          :seqlabel """<b><code>"@"</code></b> <a href='#langcode'>langcode</a>""" .
-      ( "@a"  )
+      ( "@a" )
          a :Sequence,
                 :SequenceTail;
          :seqlabel """<b><code>"@a"</code></b>""" .
-      ( "@forAll" 
-        <#_g5>  )
+      ( "@base"
+        n3r:explicituri
+        "." )
+         a :Sequence,
+                :SequenceTail;
+         :seqlabel """<b><code>"@base"</code></b> <a href='#explicituri'>explicituri</a> <b><code>"."</code></b>""" .
+      ( "@forAll"
+        <#_g5> )
          a :Sequence,
                 :SequenceTail;
          :seqlabel """<b><code>"@forAll"</code></b> <a href='#symbol_csl'>symbol_csl</a>""" .
-      ( "@forSome" 
-        <#_g6>  )
+      ( "@forSome"
+        <#_g6> )
          a :Sequence,
                 :SequenceTail;
          :seqlabel """<b><code>"@forSome"</code></b> <a href='#symbol_csl'>symbol_csl</a>""" .
-      ( "@has" 
-        n3r:prop  )
+      ( "@has"
+        n3r:prop )
          a :Sequence,
                 :SequenceTail;
          :seqlabel """<b><code>"@has"</code></b> <a href='#prop'>prop</a>""" .
-      ( "@is" 
-        n3r:prop 
-        "@of"  )
+      ( "@is"
+        n3r:prop
+        "@of" )
          a :Sequence,
                 :SequenceTail;
          :seqlabel """<b><code>"@is"</code></b> <a href='#prop'>prop</a> <b><code>"@of"</code></b>""" .
-      ( "@keywords" 
-        <#_g7>  )
+      ( "@keywords"
+        <#_g7> )
          a :Sequence,
                 :SequenceTail;
          :seqlabel """<b><code>"@keywords"</code></b> <a href='#barename_csl'>barename_csl</a>""" .
-      ( "@of"  )
+      ( "@of" )
          a :SequenceTail;
          :seqlabel """<b><code>"@of"</code></b>""" .
-      ( "@prefix" 
-        n3r:qname 
-        n3r:explicituri 
-        "."  )
+      ( "@prefix"
+        n3r:qname
+        n3r:explicituri
+        "." )
          a :Sequence,
                 :SequenceTail;
          :seqlabel """<b><code>"@prefix"</code></b> <a href='#qname'>qname</a> <a href='#explicituri'>explicituri</a> <b><code>"."</code></b>""" .
-      ( "[" 
-        n3r:propertylist 
-        "]"  )
+      ( "["
+        n3r:propertylist
+        "]" )
          a :Sequence,
                 :SequenceTail;
          :seqlabel """<b><code>"["</code></b> <a href='#propertylist'>propertylist</a> <b><code>"]"</code></b>""" .
-      ( "]"  )
+      ( "]" )
          a :SequenceTail;
          :seqlabel """<b><code>"]"</code></b>""" .
-      ( "^" 
-        n3r:path  )
+      ( "^"
+        n3r:path )
          a :Sequence,
                 :SequenceTail;
          :seqlabel """<b><code>"^"</code></b> <a href='#path'>path</a>""" .
-      ( "^^" 
-        n3r:symbol  )
+      ( "^^"
+        n3r:symbol )
          a :Sequence,
                 :SequenceTail;
          :seqlabel """<b><code>"^^"</code></b> <a href='#symbol'>symbol</a>""" .
-      ( "alphanumeric" 
-        0  )
+      ( "alphanumeric"
+        0 )
          log:outputString """  <dt><a name='alphanumeric'>alphanumeric</a></dt><dd>
 """ .
-      ( "alphanumeric" 
-        6  )
+      ( "alphanumeric"
+        6 )
          log:outputString """	<p><em>[a-zA-Z][a-zA-Z0-9_]*</em></p>
 """ .
-      ( "alphanumeric" 
-        9  )
+      ( "alphanumeric"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "barename" 
-        0  )
+      ( "barename"
+        0 )
          log:outputString """  <dt><a name='barename'>barename</a></dt><dd>
 """ .
-      ( "barename" 
-        6  )
+      ( "barename"
+        6 )
          log:outputString """	<p><em>[a-zA-Z_][a-zA-Z0-9_]*</em></p>
 """ .
-      ( "barename" 
-        9  )
+      ( "barename"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "barename_csl" 
-        0  )
+      ( "barename_csl"
+        0 )
          log:outputString """  <dt><a name='barename_csl'>barename_csl</a></dt><dd>
 """ .
-      ( "barename_csl" 
-        5  )
+      ( "barename_csl"
+        5 )
          log:outputString """		<p><b><code>","</code></b> <a href='#barename'>barename</a> <a href='#barename_csl'>barename_csl</a></p>
 """,
                 """		<p><b><code>"."</code></b></p>
 """ .
-      ( "barename_csl" 
-        9  )
+      ( "barename_csl"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "declaration" 
-        0  )
+      ( "declaration"
+        0 )
          log:outputString """  <dt><a name='declaration'>declaration</a></dt><dd>
 """ .
-      ( "declaration" 
-        5  )
-         log:outputString """		<p><b><code>"@keywords"</code></b> <a href='#barename_csl'>barename_csl</a></p>
+      ( "declaration"
+        5 )
+         log:outputString """		<p><b><code>"@base"</code></b> <a href='#explicituri'>explicituri</a> <b><code>"."</code></b></p>
+""",
+                """		<p><b><code>"@keywords"</code></b> <a href='#barename_csl'>barename_csl</a></p>
 """,
                 """		<p><b><code>"@prefix"</code></b> <a href='#qname'>qname</a> <a href='#explicituri'>explicituri</a> <b><code>"."</code></b></p>
 """ .
-      ( "declaration" 
-        9  )
+      ( "declaration"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "declaration_s" 
-        0  )
+      ( "declaration_s"
+        0 )
          log:outputString """  <dt><a name='declaration_s'>declaration_s</a></dt><dd>
 """ .
-      ( "declaration_s" 
-        5  )
+      ( "declaration_s"
+        5 )
          log:outputString """		<p><a href='#declaration'>declaration</a> <a href='#declaration_s'>declaration_s</a></p>
 """,
                 """		<p><em>void</em></p>
 """ .
-      ( "declaration_s" 
-        9  )
+      ( "declaration_s"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "dtlang" 
-        0  )
+      ( "dtlang"
+        0 )
          log:outputString """  <dt><a name='dtlang'>dtlang</a></dt><dd>
 """ .
-      ( "dtlang" 
-        5  )
+      ( "dtlang"
+        5 )
          log:outputString """		<p><b><code>"@"</code></b> <a href='#langcode'>langcode</a></p>
 """,
                 """		<p><b><code>"^^"</code></b> <a href='#symbol'>symbol</a></p>
 """,
                 """		<p><em>void</em></p>
 """ .
-      ( "dtlang" 
-        9  )
+      ( "dtlang"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "existential" 
-        0  )
+      ( "existential"
+        0 )
          log:outputString """  <dt><a name='existential'>existential</a></dt><dd>
 """ .
-      ( "existential" 
-        5  )
+      ( "existential"
+        5 )
          log:outputString """		<p><b><code>"@forSome"</code></b> <a href='#symbol_csl'>symbol_csl</a></p>
 """ .
-      ( "existential" 
-        9  )
+      ( "existential"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "existential_s" 
-        0  )
+      ( "existential_s"
+        0 )
          log:outputString """  <dt><a name='existential_s'>existential_s</a></dt><dd>
 """ .
-      ( "existential_s" 
-        5  )
+      ( "existential_s"
+        5 )
          log:outputString """		<p><a href='#existential'>existential</a> <a href='#existential_s'>existential_s</a></p>
 """,
                 """		<p><em>void</em></p>
 """ .
-      ( "existential_s" 
-        9  )
+      ( "existential_s"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "explicituri" 
-        0  )
+      ( "explicituri"
+        0 )
          log:outputString """  <dt><a name='explicituri'>explicituri</a></dt><dd>
 """ .
-      ( "explicituri" 
-        6  )
+      ( "explicituri"
+        6 )
          log:outputString """	<p><em><[^>].*></em></p>
 """ .
-      ( "explicituri" 
-        9  )
+      ( "explicituri"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "formulacontent" 
-        0  )
+      ( "formulacontent"
+        0 )
          log:outputString """  <dt><a name='formulacontent'>formulacontent</a></dt><dd>
 """ .
-      ( "formulacontent" 
-        5  )
+      ( "formulacontent"
+        5 )
          log:outputString """		<p><a href='#declaration_s'>declaration_s</a> <a href='#existential_s'>existential_s</a> <a href='#statementlist'>statementlist</a></p>
 """ .
-      ( "formulacontent" 
-        9  )
+      ( "formulacontent"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "item" 
-        0  )
+      ( "item"
+        0 )
          log:outputString """  <dt><a name='item'>item</a></dt><dd>
 """ .
-      ( "item" 
-        5  )
+      ( "item"
+        5 )
          log:outputString """		<p><a href='#path'>path</a></p>
 """ .
-      ( "item" 
-        9  )
+      ( "item"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "itemlist" 
-        0  )
+      ( "itemlist"
+        0 )
          log:outputString """  <dt><a name='itemlist'>itemlist</a></dt><dd>
 """ .
-      ( "itemlist" 
-        5  )
+      ( "itemlist"
+        5 )
          log:outputString """		<p><a href='#item'>item</a> <a href='#itemlist'>itemlist</a></p>
 """,
                 """		<p><em>void</em></p>
 """ .
-      ( "itemlist" 
-        9  )
+      ( "itemlist"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "langcode" 
-        0  )
+      ( "langcode"
+        0 )
          log:outputString """  <dt><a name='langcode'>langcode</a></dt><dd>
 """ .
-      ( "langcode" 
-        6  )
+      ( "langcode"
+        6 )
          log:outputString """	<p><em>[a-zA-Z0-9]+(-[a-zA-Z0-9]+)?</em></p>
 """ .
-      ( "langcode" 
-        9  )
+      ( "langcode"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "literal" 
-        0  )
+      ( "literal"
+        0 )
          log:outputString """  <dt><a name='literal'>literal</a></dt><dd>
 """ .
-      ( "literal" 
-        5  )
+      ( "literal"
+        5 )
          log:outputString """		<p><a href='#string'>string</a> <a href='#dtlang'>dtlang</a></p>
 """ .
-      ( "literal" 
-        9  )
+      ( "literal"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "n3document" 
-        0  )
+      ( "n3document"
+        0 )
          log:outputString """  <dt><a name='n3document'>n3document</a></dt><dd>
 """ .
-      ( "n3document" 
-        5  )
+      ( "n3document"
+        5 )
          log:outputString """		<p><a href='#declaration_s'>declaration_s</a> <a href='#universal_s'>universal_s</a> <a href='#existential_s'>existential_s</a> <a href='#statements_optional'>statements_optional</a> <em>EOF</em></p>
 """ .
-      ( "n3document" 
-        9  )
+      ( "n3document"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "node" 
-        0  )
+      ( "node"
+        0 )
          log:outputString """  <dt><a name='node'>node</a></dt><dd>
 """ .
-      ( "node" 
-        5  )
+      ( "node"
+        5 )
          log:outputString """		<p><a href='#literal'>literal</a></p>
 """,
                 """		<p><a href='#numericliteral'>numericliteral</a></p>
@@ -416,15 +426,15 @@
 """,
                 """		<p><b><code>"["</code></b> <a href='#propertylist'>propertylist</a> <b><code>"]"</code></b></p>
 """ .
-      ( "node" 
-        9  )
+      ( "node"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "node_safe" 
-        0  )
+      ( "node_safe"
+        0 )
          log:outputString """  <dt><a name='node_safe'>node_safe</a></dt><dd>
 """ .
-      ( "node_safe" 
-        5  )
+      ( "node_safe"
+        5 )
          log:outputString """		<p><a href='#literal'>literal</a></p>
 """,
                 """		<p><a href='#numericliteral'>numericliteral</a></p>
@@ -433,288 +443,288 @@
 """,
                 """		<p><a href='#variable'>variable</a></p>
 """ .
-      ( "node_safe" 
-        9  )
+      ( "node_safe"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "numericliteral" 
-        0  )
+      ( "numericliteral"
+        0 )
          log:outputString """  <dt><a name='numericliteral'>numericliteral</a></dt><dd>
 """ .
-      ( "numericliteral" 
-        6  )
+      ( "numericliteral"
+        6 )
          log:outputString """	<p><em>[-+]?[0-9]+(\\.[0-9]+)?(e[-+]?[0-9]+)?</em></p>
 """ .
-      ( "numericliteral" 
-        9  )
+      ( "numericliteral"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "object" 
-        0  )
+      ( "object"
+        0 )
          log:outputString """  <dt><a name='object'>object</a></dt><dd>
 """ .
-      ( "object" 
-        5  )
+      ( "object"
+        5 )
          log:outputString """		<p><a href='#item'>item</a></p>
 """ .
-      ( "object" 
-        9  )
+      ( "object"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "objecttail" 
-        0  )
+      ( "objecttail"
+        0 )
          log:outputString """  <dt><a name='objecttail'>objecttail</a></dt><dd>
 """ .
-      ( "objecttail" 
-        5  )
+      ( "objecttail"
+        5 )
          log:outputString """		<p><b><code>","</code></b> <a href='#object'>object</a> <a href='#objecttail'>objecttail</a></p>
 """,
                 """		<p><em>void</em></p>
 """ .
-      ( "objecttail" 
-        9  )
+      ( "objecttail"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "path" 
-        0  )
+      ( "path"
+        0 )
          log:outputString """  <dt><a name='path'>path</a></dt><dd>
 """ .
-      ( "path" 
-        5  )
+      ( "path"
+        5 )
          log:outputString """		<p><a href='#node'>node</a> <a href='#pathtail'>pathtail</a></p>
 """ .
-      ( "path" 
-        9  )
+      ( "path"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "pathtail" 
-        0  )
+      ( "pathtail"
+        0 )
          log:outputString """  <dt><a name='pathtail'>pathtail</a></dt><dd>
 """ .
-      ( "pathtail" 
-        5  )
+      ( "pathtail"
+        5 )
          log:outputString """		<p><b><code>"!"</code></b> <a href='#path'>path</a></p>
 """,
                 """		<p><b><code>"^"</code></b> <a href='#path'>path</a></p>
 """,
                 """		<p><em>void</em></p>
 """ .
-      ( "pathtail" 
-        9  )
+      ( "pathtail"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "prop" 
-        0  )
+      ( "prop"
+        0 )
          log:outputString """  <dt><a name='prop'>prop</a></dt><dd>
 """ .
-      ( "prop" 
-        5  )
+      ( "prop"
+        5 )
          log:outputString """		<p><a href='#node'>node</a></p>
 """ .
-      ( "prop" 
-        9  )
+      ( "prop"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "propertylist" 
-        0  )
+      ( "propertylist"
+        0 )
          log:outputString """  <dt><a name='propertylist'>propertylist</a></dt><dd>
 """ .
-      ( "propertylist" 
-        5  )
+      ( "propertylist"
+        5 )
          log:outputString """		<p><a href='#verb'>verb</a> <a href='#object'>object</a> <a href='#objecttail'>objecttail</a> <a href='#propertylisttail'>propertylisttail</a></p>
 """,
                 """		<p><em>void</em></p>
 """ .
-      ( "propertylist" 
-        9  )
+      ( "propertylist"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "propertylisttail" 
-        0  )
+      ( "propertylisttail"
+        0 )
          log:outputString """  <dt><a name='propertylisttail'>propertylisttail</a></dt><dd>
 """ .
-      ( "propertylisttail" 
-        5  )
+      ( "propertylisttail"
+        5 )
          log:outputString """		<p><b><code>";"</code></b> <a href='#propertylist'>propertylist</a></p>
 """,
                 """		<p><em>void</em></p>
 """ .
-      ( "propertylisttail" 
-        9  )
+      ( "propertylisttail"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "qname" 
-        0  )
+      ( "qname"
+        0 )
          log:outputString """  <dt><a name='qname'>qname</a></dt><dd>
 """ .
-      ( "qname" 
-        6  )
+      ( "qname"
+        6 )
          log:outputString """	<p><em>(([a-zA-Z_][a-zA-Z0-9_]*)?:)?([a-zA-Z_][a-zA-Z0-9_]*)?</em></p>
 """ .
-      ( "qname" 
-        9  )
+      ( "qname"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "rule" 
-        0  )
+      ( "rule"
+        0 )
          log:outputString """  <dt><a name='rule'>rule</a></dt><dd>
 """ .
-      ( "rule" 
-        5  )
+      ( "rule"
+        5 )
          log:outputString """		<p><b><code>"{"</code></b> <a href='#formulacontent'>formulacontent</a> <b><code>"}"</code></b> <b><code>"=>"</code></b> <b><code>"{"</code></b> <a href='#formulacontent'>formulacontent</a> <b><code>"}"</code></b></p>
 """ .
-      ( "rule" 
-        9  )
+      ( "rule"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "rule_safe" 
-        0  )
+      ( "rule_safe"
+        0 )
          log:outputString """  <dt><a name='rule_safe'>rule_safe</a></dt><dd>
 """ .
-      ( "rule_safe" 
-        9  )
+      ( "rule_safe"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "statement" 
-        0  )
+      ( "statement"
+        0 )
          log:outputString """  <dt><a name='statement'>statement</a></dt><dd>
 """ .
-      ( "statement" 
-        5  )
+      ( "statement"
+        5 )
          log:outputString """		<p><a href='#subject'>subject</a> <a href='#propertylist'>propertylist</a></p>
 """ .
-      ( "statement" 
-        9  )
+      ( "statement"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "statement_or_rule" 
-        0  )
+      ( "statement_or_rule"
+        0 )
          log:outputString """  <dt><a name='statement_or_rule'>statement_or_rule</a></dt><dd>
 """ .
-      ( "statement_or_rule" 
-        5  )
+      ( "statement_or_rule"
+        5 )
          log:outputString """		<p><a href='#rule'>rule</a></p>
 """,
                 """		<p><a href='#statement'>statement</a></p>
 """ .
-      ( "statement_or_rule" 
-        9  )
+      ( "statement_or_rule"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "statementlist" 
-        0  )
+      ( "statementlist"
+        0 )
          log:outputString """  <dt><a name='statementlist'>statementlist</a></dt><dd>
 """ .
-      ( "statementlist" 
-        5  )
+      ( "statementlist"
+        5 )
          log:outputString """		<p><a href='#statement'>statement</a> <a href='#statementtail'>statementtail</a></p>
 """,
                 """		<p><em>void</em></p>
 """ .
-      ( "statementlist" 
-        9  )
+      ( "statementlist"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "statements_optional" 
-        0  )
+      ( "statements_optional"
+        0 )
          log:outputString """  <dt><a name='statements_optional'>statements_optional</a></dt><dd>
 """ .
-      ( "statements_optional" 
-        5  )
+      ( "statements_optional"
+        5 )
          log:outputString """		<p><a href='#statement_or_rule'>statement_or_rule</a> <b><code>"."</code></b> <a href='#statements_optional'>statements_optional</a></p>
 """,
                 """		<p><em>void</em></p>
 """ .
-      ( "statements_optional" 
-        9  )
+      ( "statements_optional"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "statementtail" 
-        0  )
+      ( "statementtail"
+        0 )
          log:outputString """  <dt><a name='statementtail'>statementtail</a></dt><dd>
 """ .
-      ( "statementtail" 
-        5  )
+      ( "statementtail"
+        5 )
          log:outputString """		<p><b><code>"."</code></b> <a href='#statementlist'>statementlist</a></p>
 """,
                 """		<p><em>void</em></p>
 """ .
-      ( "statementtail" 
-        9  )
+      ( "statementtail"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "string" 
-        0  )
+      ( "string"
+        0 )
          log:outputString """  <dt><a name='string'>string</a></dt><dd>
 """ .
-      ( "string" 
-        6  )
+      ( "string"
+        6 )
          log:outputString """	<p><em>(\"""[^"\\\\]*(?:(?:\\\\.|"(?!""))[^"\\\\]*)*\""")|("[^"\\\\]*(?:\\\\.[^"\\\\]*)*")</em></p>
 """ .
-      ( "string" 
-        9  )
+      ( "string"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "subject" 
-        0  )
+      ( "subject"
+        0 )
          log:outputString """  <dt><a name='subject'>subject</a></dt><dd>
 """ .
-      ( "subject" 
-        5  )
+      ( "subject"
+        5 )
          log:outputString """		<p><a href='#item'>item</a></p>
 """ .
-      ( "subject" 
-        9  )
+      ( "subject"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "symbol" 
-        0  )
+      ( "symbol"
+        0 )
          log:outputString """  <dt><a name='symbol'>symbol</a></dt><dd>
 """ .
-      ( "symbol" 
-        5  )
+      ( "symbol"
+        5 )
          log:outputString """		<p><a href='#explicituri'>explicituri</a></p>
 """,
                 """		<p><a href='#qname'>qname</a></p>
 """ .
-      ( "symbol" 
-        9  )
+      ( "symbol"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "symbol_csl" 
-        0  )
+      ( "symbol_csl"
+        0 )
          log:outputString """  <dt><a name='symbol_csl'>symbol_csl</a></dt><dd>
 """ .
-      ( "symbol_csl" 
-        5  )
+      ( "symbol_csl"
+        5 )
          log:outputString """		<p><b><code>","</code></b> <a href='#symbol'>symbol</a> <a href='#symbol_csl'>symbol_csl</a></p>
 """,
                 """		<p><b><code>"."</code></b></p>
 """ .
-      ( "symbol_csl" 
-        9  )
+      ( "symbol_csl"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "universal" 
-        0  )
+      ( "universal"
+        0 )
          log:outputString """  <dt><a name='universal'>universal</a></dt><dd>
 """ .
-      ( "universal" 
-        5  )
+      ( "universal"
+        5 )
          log:outputString """		<p><b><code>"@forAll"</code></b> <a href='#symbol_csl'>symbol_csl</a></p>
 """ .
-      ( "universal" 
-        9  )
+      ( "universal"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "universal_s" 
-        0  )
+      ( "universal_s"
+        0 )
          log:outputString """  <dt><a name='universal_s'>universal_s</a></dt><dd>
 """ .
-      ( "universal_s" 
-        5  )
+      ( "universal_s"
+        5 )
          log:outputString """		<p><a href='#universal'>universal</a> <a href='#universal_s'>universal_s</a></p>
 """,
                 """		<p><em>void</em></p>
 """ .
-      ( "universal_s" 
-        9  )
+      ( "universal_s"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "variable" 
-        0  )
+      ( "variable"
+        0 )
          log:outputString """  <dt><a name='variable'>variable</a></dt><dd>
 """ .
-      ( "variable" 
-        6  )
+      ( "variable"
+        6 )
          log:outputString """	<p><em>\\?[a-zA-Z_][a-zA-Z0-9_]*</em></p>
 """ .
-      ( "variable" 
-        9  )
+      ( "variable"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "verb" 
-        0  )
+      ( "verb"
+        0 )
          log:outputString """  <dt><a name='verb'>verb</a></dt><dd>
 """ .
-      ( "verb" 
-        5  )
+      ( "verb"
+        5 )
          log:outputString """		<p><a href='#prop'>prop</a></p>
 """,
                 """		<p><b><code>"="</code></b></p>
@@ -725,323 +735,323 @@
 """,
                 """		<p><b><code>"@is"</code></b> <a href='#prop'>prop</a> <b><code>"@of"</code></b></p>
 """ .
-      ( "verb" 
-        9  )
+      ( "verb"
+        9 )
          log:outputString "\t</dd>\n" .
-      ( "{" 
-        n3r:formula_safe 
-        "}"  )
+      ( "{"
+        n3r:formula_safe
+        "}" )
          a :SequenceTail .
-      ( "{" 
-        n3r:formulacontent 
-        "}" 
-        "=>" 
-        "{" 
-        n3r:formula_safe 
-        "}"  )
+      ( "{"
+        n3r:formulacontent
+        "}"
+        "=>"
+        "{"
+        n3r:formula_safe
+        "}" )
          a :Sequence,
                 :SequenceTail .
-      ( "{" 
-        n3r:formulacontent 
-        "}" 
-        "=>" 
-        "{" 
-        n3r:formulacontent 
-        "}"  )
+      ( "{"
+        n3r:formulacontent
+        "}"
+        "=>"
+        "{"
+        n3r:formulacontent
+        "}" )
          a :Sequence,
                 :SequenceTail;
          :seqlabel """<b><code>"{"</code></b> <a href='#formulacontent'>formulacontent</a> <b><code>"}"</code></b> <b><code>"=>"</code></b> <b><code>"{"</code></b> <a href='#formulacontent'>formulacontent</a> <b><code>"}"</code></b>""" .
-      ( "{" 
-        n3r:formulacontent 
-        "}"  )
+      ( "{"
+        n3r:formulacontent
+        "}" )
          a :SequenceTail;
          :seqlabel """<b><code>"{"</code></b> <a href='#formulacontent'>formulacontent</a> <b><code>"}"</code></b>""" .
-      ( "}" 
-        "=>" 
-        "{" 
-        n3r:formula_safe 
-        "}"  )
+      ( "}"
+        "=>"
+        "{"
+        n3r:formula_safe
+        "}" )
          a :SequenceTail .
-      ( "}" 
-        "=>" 
-        "{" 
-        n3r:formulacontent 
-        "}"  )
+      ( "}"
+        "=>"
+        "{"
+        n3r:formulacontent
+        "}" )
          a :SequenceTail;
          :seqlabel """<b><code>"}"</code></b> <b><code>"=>"</code></b> <b><code>"{"</code></b> <a href='#formulacontent'>formulacontent</a> <b><code>"}"</code></b>""" .
-      ( "}"  )
+      ( "}" )
          a :SequenceTail;
          :seqlabel """<b><code>"}"</code></b>""" .
-      ( "~~" 
-        9  )
+      ( "~~"
+        9 )
          log:outputString "\n</dl>\n</html>\n" .
-      ( bnf:eof  )
+      ( bnf:eof )
          a :SequenceTail;
          :seqlabel "<em>EOF</em>" .
-      ( n3r:barename 
-        <#_g7>  )
+      ( n3r:barename
+        <#_g7> )
          a :SequenceTail;
          :seqlabel "<a href='#barename'>barename</a> <a href='#barename_csl'>barename_csl</a>" .
-      ( n3r:declaration 
-        <#_g0>  )
+      ( n3r:declaration
+        <#_g0> )
          a :Sequence,
                 :SequenceTail;
          :seqlabel "<a href='#declaration'>declaration</a> <a href='#declaration_s'>declaration_s</a>" .
-      ( n3r:declaration 
-        <#_g3>  )
+      ( n3r:declaration
+        <#_g3> )
          a :Sequence,
                 :SequenceTail;
          :seqlabel "<a href='#declaration'>declaration</a> <a href='#declaration_s'>declaration_s</a>" .
-      ( n3r:dtlang  )
+      ( n3r:dtlang )
          a :SequenceTail;
          :seqlabel "<a href='#dtlang'>dtlang</a>" .
-      ( n3r:existential 
-        <#_g2>  )
+      ( n3r:existential
+        <#_g2> )
          a :Sequence,
                 :SequenceTail;
          :seqlabel "<a href='#existential'>existential</a> <a href='#existential_s'>existential_s</a>" .
-      ( n3r:existential 
-        <#_g4>  )
+      ( n3r:existential
+        <#_g4> )
          a :Sequence,
                 :SequenceTail;
          :seqlabel "<a href='#existential'>existential</a> <a href='#existential_s'>existential_s</a>" .
-      ( n3r:explicituri 
-        "."  )
+      ( n3r:explicituri
+        "." )
          a :SequenceTail;
          :seqlabel """<a href='#explicituri'>explicituri</a> <b><code>"."</code></b>""" .
-      ( n3r:explicituri  )
+      ( n3r:explicituri )
          a :Sequence,
                 :SequenceTail;
          :seqlabel "<a href='#explicituri'>explicituri</a>" .
-      ( n3r:formula_safe 
-        "}"  )
+      ( n3r:formula_safe
+        "}" )
          a :SequenceTail .
-      ( n3r:formulacontent 
-        "}" 
-        "=>" 
-        "{" 
-        n3r:formula_safe 
-        "}"  )
+      ( n3r:formulacontent
+        "}"
+        "=>"
+        "{"
+        n3r:formula_safe
+        "}" )
          a :SequenceTail .
-      ( n3r:formulacontent 
-        "}" 
-        "=>" 
-        "{" 
-        n3r:formulacontent 
-        "}"  )
+      ( n3r:formulacontent
+        "}"
+        "=>"
+        "{"
+        n3r:formulacontent
+        "}" )
          a :SequenceTail;
          :seqlabel """<a href='#formulacontent'>formulacontent</a> <b><code>"}"</code></b> <b><code>"=>"</code></b> <b><code>"{"</code></b> <a href='#formulacontent'>formulacontent</a> <b><code>"}"</code></b>""" .
-      ( n3r:formulacontent 
-        "}"  )
+      ( n3r:formulacontent
+        "}" )
          a :SequenceTail;
          :seqlabel """<a href='#formulacontent'>formulacontent</a> <b><code>"}"</code></b>""" .
-      ( n3r:item 
-        n3r:itemlist  )
+      ( n3r:item
+        n3r:itemlist )
          a :Sequence,
                 :SequenceTail;
          :seqlabel "<a href='#item'>item</a> <a href='#itemlist'>itemlist</a>" .
-      ( n3r:item  )
+      ( n3r:item )
          a :Sequence,
                 :SequenceTail;
          :seqlabel "<a href='#item'>item</a>" .
-      ( n3r:itemlist 
-        ")"  )
+      ( n3r:itemlist
+        ")" )
          a :SequenceTail;
          :seqlabel """<a href='#itemlist'>itemlist</a> <b><code>")"</code></b>""" .
-      ( n3r:itemlist  )
+      ( n3r:itemlist )
          a :SequenceTail;
          :seqlabel "<a href='#itemlist'>itemlist</a>" .
-      ( n3r:langcode  )
+      ( n3r:langcode )
          a :SequenceTail;
          :seqlabel "<a href='#langcode'>langcode</a>" .
-      ( n3r:literal  )
+      ( n3r:literal )
          a :Sequence,
                 :SequenceTail;
          :seqlabel "<a href='#literal'>literal</a>" .
-      ( n3r:node 
-        n3r:pathtail  )
+      ( n3r:node
+        n3r:pathtail )
          a :Sequence,
                 :SequenceTail;
          :seqlabel "<a href='#node'>node</a> <a href='#pathtail'>pathtail</a>" .
-      ( n3r:node  )
+      ( n3r:node )
          a :Sequence,
                 :SequenceTail;
          :seqlabel "<a href='#node'>node</a>" .
-      ( n3r:numericliteral  )
+      ( n3r:numericliteral )
          a :Sequence,
                 :SequenceTail;
          :seqlabel "<a href='#numericliteral'>numericliteral</a>" .
-      ( n3r:object 
-        n3r:objecttail 
-        n3r:propertylisttail  )
+      ( n3r:object
+        n3r:objecttail
+        n3r:propertylisttail )
          a :SequenceTail;
          :seqlabel "<a href='#object'>object</a> <a href='#objecttail'>objecttail</a> <a href='#propertylisttail'>propertylisttail</a>" .
-      ( n3r:object 
-        n3r:objecttail  )
+      ( n3r:object
+        n3r:objecttail )
          a :SequenceTail;
          :seqlabel "<a href='#object'>object</a> <a href='#objecttail'>objecttail</a>" .
-      ( n3r:objecttail 
-        n3r:propertylisttail  )
+      ( n3r:objecttail
+        n3r:propertylisttail )
          a :SequenceTail;
          :seqlabel "<a href='#objecttail'>objecttail</a> <a href='#propertylisttail'>propertylisttail</a>" .
-      ( n3r:objecttail  )
+      ( n3r:objecttail )
          a :SequenceTail;
          :seqlabel "<a href='#objecttail'>objecttail</a>" .
-      ( n3r:path  )
+      ( n3r:path )
          a :Sequence,
                 :SequenceTail;
          :seqlabel "<a href='#path'>path</a>" .
-      ( n3r:pathtail  )
+      ( n3r:pathtail )
          a :SequenceTail;
          :seqlabel "<a href='#pathtail'>pathtail</a>" .
-      ( n3r:prop 
-        "@of"  )
+      ( n3r:prop
+        "@of" )
          a :SequenceTail;
          :seqlabel """<a href='#prop'>prop</a> <b><code>"@of"</code></b>""" .
-      ( n3r:prop  )
+      ( n3r:prop )
          a :Sequence,
                 :SequenceTail;
          :seqlabel "<a href='#prop'>prop</a>" .
-      ( n3r:propertylist 
-        "]"  )
+      ( n3r:propertylist
+        "]" )
          a :SequenceTail;
          :seqlabel """<a href='#propertylist'>propertylist</a> <b><code>"]"</code></b>""" .
-      ( n3r:propertylist  )
+      ( n3r:propertylist )
          a :SequenceTail;
          :seqlabel "<a href='#propertylist'>propertylist</a>" .
-      ( n3r:propertylisttail  )
+      ( n3r:propertylisttail )
          a :SequenceTail;
          :seqlabel "<a href='#propertylisttail'>propertylisttail</a>" .
-      ( n3r:qname 
-        n3r:explicituri 
-        "."  )
+      ( n3r:qname
+        n3r:explicituri
+        "." )
          a :SequenceTail;
          :seqlabel """<a href='#qname'>qname</a> <a href='#explicituri'>explicituri</a> <b><code>"."</code></b>""" .
-      ( n3r:qname  )
+      ( n3r:qname )
          a :Sequence,
                 :SequenceTail;
          :seqlabel "<a href='#qname'>qname</a>" .
-      ( n3r:rule  )
+      ( n3r:rule )
          a :Sequence,
                 :SequenceTail;
          :seqlabel "<a href='#rule'>rule</a>" .
-      ( n3r:statement 
-        n3r:statementtail  )
+      ( n3r:statement
+        n3r:statementtail )
          a :Sequence,
                 :SequenceTail;
          :seqlabel "<a href='#statement'>statement</a> <a href='#statementtail'>statementtail</a>" .
-      ( n3r:statement  )
+      ( n3r:statement )
          a :Sequence,
                 :SequenceTail;
          :seqlabel "<a href='#statement'>statement</a>" .
-      ( n3r:statement_or_rule 
-        "." 
-        n3r:statements_optional  )
+      ( n3r:statement_or_rule
+        "."
+        n3r:statements_optional )
          a :Sequence,
                 :SequenceTail;
          :seqlabel """<a href='#statement_or_rule'>statement_or_rule</a> <b><code>"."</code></b> <a href='#statements_optional'>statements_optional</a>""" .
-      ( n3r:statementlist  )
+      ( n3r:statementlist )
          a :SequenceTail;
          :seqlabel "<a href='#statementlist'>statementlist</a>" .
-      ( n3r:statements_optional 
-        bnf:eof  )
+      ( n3r:statements_optional
+        bnf:eof )
          a :SequenceTail;
          :seqlabel "<a href='#statements_optional'>statements_optional</a> <em>EOF</em>" .
-      ( n3r:statements_optional  )
+      ( n3r:statements_optional )
          a :SequenceTail;
          :seqlabel "<a href='#statements_optional'>statements_optional</a>" .
-      ( n3r:statementtail  )
+      ( n3r:statementtail )
          a :SequenceTail;
          :seqlabel "<a href='#statementtail'>statementtail</a>" .
-      ( n3r:string 
-        n3r:dtlang  )
+      ( n3r:string
+        n3r:dtlang )
          a :Sequence,
                 :SequenceTail;
          :seqlabel "<a href='#string'>string</a> <a href='#dtlang'>dtlang</a>" .
-      ( n3r:subject 
-        n3r:propertylist  )
+      ( n3r:subject
+        n3r:propertylist )
          a :Sequence,
                 :SequenceTail;
          :seqlabel "<a href='#subject'>subject</a> <a href='#propertylist'>propertylist</a>" .
-      ( n3r:symbol 
-        <#_g5>  )
+      ( n3r:symbol
+        <#_g5> )
          a :SequenceTail;
          :seqlabel "<a href='#symbol'>symbol</a> <a href='#symbol_csl'>symbol_csl</a>" .
-      ( n3r:symbol 
-        <#_g6>  )
+      ( n3r:symbol
+        <#_g6> )
          a :SequenceTail;
          :seqlabel "<a href='#symbol'>symbol</a> <a href='#symbol_csl'>symbol_csl</a>" .
-      ( n3r:symbol  )
+      ( n3r:symbol )
          a :Sequence,
                 :SequenceTail;
          :seqlabel "<a href='#symbol'>symbol</a>" .
-      ( n3r:universal 
-        <#_g1>  )
+      ( n3r:universal
+        <#_g1> )
          a :Sequence,
                 :SequenceTail;
          :seqlabel "<a href='#universal'>universal</a> <a href='#universal_s'>universal_s</a>" .
-      ( n3r:variable  )
+      ( n3r:variable )
          a :Sequence,
                 :SequenceTail;
          :seqlabel "<a href='#variable'>variable</a>" .
-      ( n3r:verb 
-        n3r:object 
-        n3r:objecttail 
-        n3r:propertylisttail  )
+      ( n3r:verb
+        n3r:object
+        n3r:objecttail
+        n3r:propertylisttail )
          a :Sequence,
                 :SequenceTail;
          :seqlabel "<a href='#verb'>verb</a> <a href='#object'>object</a> <a href='#objecttail'>objecttail</a> <a href='#propertylisttail'>propertylisttail</a>" .
-      ( <#_g0> 
-        <#_g1> 
-        <#_g2> 
-        n3r:statements_optional 
-        bnf:eof  )
+      ( <#_g0>
+        <#_g1>
+        <#_g2>
+        n3r:statements_optional
+        bnf:eof )
          a :Sequence,
                 :SequenceTail;
          :seqlabel "<a href='#declaration_s'>declaration_s</a> <a href='#universal_s'>universal_s</a> <a href='#existential_s'>existential_s</a> <a href='#statements_optional'>statements_optional</a> <em>EOF</em>" .
-      ( <#_g0>  )
+      ( <#_g0> )
          a :SequenceTail;
          :seqlabel "<a href='#declaration_s'>declaration_s</a>" .
-      ( <#_g1> 
-        <#_g2> 
-        n3r:statements_optional 
-        bnf:eof  )
+      ( <#_g1>
+        <#_g2>
+        n3r:statements_optional
+        bnf:eof )
          a :SequenceTail;
          :seqlabel "<a href='#universal_s'>universal_s</a> <a href='#existential_s'>existential_s</a> <a href='#statements_optional'>statements_optional</a> <em>EOF</em>" .
-      ( <#_g1>  )
+      ( <#_g1> )
          a :SequenceTail;
          :seqlabel "<a href='#universal_s'>universal_s</a>" .
-      ( <#_g2> 
-        n3r:statements_optional 
-        bnf:eof  )
+      ( <#_g2>
+        n3r:statements_optional
+        bnf:eof )
          a :SequenceTail;
          :seqlabel "<a href='#existential_s'>existential_s</a> <a href='#statements_optional'>statements_optional</a> <em>EOF</em>" .
-      ( <#_g2>  )
+      ( <#_g2> )
          a :SequenceTail;
          :seqlabel "<a href='#existential_s'>existential_s</a>" .
-      ( <#_g3> 
-        <#_g4> 
-        n3r:statementlist  )
+      ( <#_g3>
+        <#_g4>
+        n3r:statementlist )
          a :Sequence,
                 :SequenceTail;
          :seqlabel "<a href='#declaration_s'>declaration_s</a> <a href='#existential_s'>existential_s</a> <a href='#statementlist'>statementlist</a>" .
-      ( <#_g3>  )
+      ( <#_g3> )
          a :SequenceTail;
          :seqlabel "<a href='#declaration_s'>declaration_s</a>" .
-      ( <#_g4> 
-        n3r:statementlist  )
+      ( <#_g4>
+        n3r:statementlist )
          a :SequenceTail;
          :seqlabel "<a href='#existential_s'>existential_s</a> <a href='#statementlist'>statementlist</a>" .
-      ( <#_g4>  )
+      ( <#_g4> )
          a :SequenceTail;
          :seqlabel "<a href='#existential_s'>existential_s</a>" .
-      ( <#_g5>  )
+      ( <#_g5> )
          a :SequenceTail;
          :seqlabel "<a href='#symbol_csl'>symbol_csl</a>" .
-      ( <#_g6>  )
+      ( <#_g6> )
          a :SequenceTail;
          :seqlabel "<a href='#symbol_csl'>symbol_csl</a>" .
-      ( <#_g7>  )
+      ( <#_g7> )
          a :SequenceTail;
          :seqlabel "<a href='#barename_csl'>barename_csl</a>" .
     
@@ -1065,76 +1075,97 @@
     
     n3r:declaration     a :Production;
          bnf:canBeSequence  (
-        "@keywords" 
-        <#_g7>  ),
+        "@base"
+        n3r:explicituri
+        "." ),
                  (
-        "@prefix" 
-        n3r:qname 
-        n3r:explicituri 
-        "."  );
+        "@keywords"
+        <#_g7> ),
+                 (
+        "@prefix"
+        n3r:qname
+        n3r:explicituri
+        "." );
          bnf:label "declaration";
          bnf:mustBeOneSequence  (
          (
-            "@prefix" 
-            n3r:qname 
-            n3r:explicituri 
-            "."  )
+            "@base"
+            n3r:explicituri
+            "." )
          (
-            "@keywords" 
-            <#_g7>  ) );
+            "@prefix"
+            n3r:qname
+            n3r:explicituri
+            "." )
+         (
+            "@keywords"
+            <#_g7> ) );
          :optionTail (),
                  (
          (
-            "@keywords" 
-            <#_g7>  ) ),
+            "@base"
+            n3r:explicituri
+            "." )
+         (
+            "@prefix"
+            n3r:qname
+            n3r:explicituri
+            "." )
+         (
+            "@keywords"
+            <#_g7> ) ),
                  (
          (
-            "@prefix" 
-            n3r:qname 
-            n3r:explicituri 
-            "."  )
+            "@keywords"
+            <#_g7> ) ),
+                 (
          (
-            "@keywords" 
-            <#_g7>  ) );
+            "@prefix"
+            n3r:qname
+            n3r:explicituri
+            "." )
+         (
+            "@keywords"
+            <#_g7> ) );
          :reference "<a href='#declaration'>declaration</a>" .
     
     n3r:dtlang     a :Production;
          bnf:canBeSequence (),
                  (
-        "@" 
-        n3r:langcode  ),
+        "@"
+        n3r:langcode ),
                  (
-        "^^" 
-        n3r:symbol  );
+        "^^"
+        n3r:symbol );
          bnf:label "dtlang";
          bnf:mustBeOneSequence  (
-        () 
+        ()
          (
-            "@" 
-            n3r:langcode  )
+            "@"
+            n3r:langcode )
          (
-            "^^" 
-            n3r:symbol  ) );
+            "^^"
+            n3r:symbol ) );
          :optionTail (),
                  (
-        () 
+        ()
          (
-            "@" 
-            n3r:langcode  )
+            "@"
+            n3r:langcode )
          (
-            "^^" 
-            n3r:symbol  ) ),
+            "^^"
+            n3r:symbol ) ),
                  (
          (
-            "@" 
-            n3r:langcode  )
+            "@"
+            n3r:langcode )
          (
-            "^^" 
-            n3r:symbol  ) ),
+            "^^"
+            n3r:symbol ) ),
                  (
          (
-            "^^" 
-            n3r:symbol  ) );
+            "^^"
+            n3r:symbol ) );
          :reference "<a href='#dtlang'>dtlang</a>" .
     
     n3r:e     a :Sequence,
@@ -1142,18 +1173,18 @@
     
     n3r:existential     a :Production;
          bnf:canBeSequence  (
-        "@forSome" 
-        <#_g6>  );
+        "@forSome"
+        <#_g6> );
          bnf:label "existential";
          bnf:mustBeOneSequence  (
          (
-            "@forSome" 
-            <#_g6>  ) );
+            "@forSome"
+            <#_g6> ) );
          :optionTail (),
                  (
          (
-            "@forSome" 
-            <#_g6>  ) );
+            "@forSome"
+            <#_g6> ) );
          :reference "<a href='#existential'>existential</a>" .
     
     n3r:explicituri     a :Production;
@@ -1164,57 +1195,57 @@
     
     n3r:formulacontent     a :Production;
          bnf:canBeSequence  (
-        <#_g3> 
-        <#_g4> 
-        n3r:statementlist  );
+        <#_g3>
+        <#_g4>
+        n3r:statementlist );
          bnf:label "formulacontent";
          bnf:mustBeOneSequence  (
          (
-            <#_g3> 
-            <#_g4> 
-            n3r:statementlist  ) );
+            <#_g3>
+            <#_g4>
+            n3r:statementlist ) );
          :optionTail (),
                  (
          (
-            <#_g3> 
-            <#_g4> 
-            n3r:statementlist  ) );
+            <#_g3>
+            <#_g4>
+            n3r:statementlist ) );
          :reference "<a href='#formulacontent'>formulacontent</a>" .
     
     n3r:item     a :Production;
          bnf:canBeSequence  (
-        n3r:path  );
+        n3r:path );
          bnf:label "item";
          bnf:mustBeOneSequence  (
          (
-            n3r:path  ) );
+            n3r:path ) );
          :optionTail (),
                  (
          (
-            n3r:path  ) );
+            n3r:path ) );
          :reference "<a href='#item'>item</a>" .
     
     n3r:itemlist     a :Production;
          bnf:canBeSequence (),
                  (
-        n3r:item 
-        n3r:itemlist  );
+        n3r:item
+        n3r:itemlist );
          bnf:label "itemlist";
          bnf:mustBeOneSequence  (
-        () 
+        ()
          (
-            n3r:item 
-            n3r:itemlist  ) );
+            n3r:item
+            n3r:itemlist ) );
          :optionTail (),
                  (
-        () 
+        ()
          (
-            n3r:item 
-            n3r:itemlist  ) ),
+            n3r:item
+            n3r:itemlist ) ),
                  (
          (
-            n3r:item 
-            n3r:itemlist  ) );
+            n3r:item
+            n3r:itemlist ) );
          :reference "<a href='#itemlist'>itemlist</a>" .
     
     n3r:langcode     a :Production;
@@ -1225,198 +1256,198 @@
     
     n3r:literal     a :Production;
          bnf:canBeSequence  (
-        n3r:string 
-        n3r:dtlang  );
+        n3r:string
+        n3r:dtlang );
          bnf:label "literal";
          bnf:mustBeOneSequence  (
          (
-            n3r:string 
-            n3r:dtlang  ) );
+            n3r:string
+            n3r:dtlang ) );
          :optionTail (),
                  (
          (
-            n3r:string 
-            n3r:dtlang  ) );
+            n3r:string
+            n3r:dtlang ) );
          :reference "<a href='#literal'>literal</a>" .
     
     n3r:n3document     a rul:Used,
                 :Production;
          bnf:canBeSequence  (
-        <#_g0> 
-        <#_g1> 
-        <#_g2> 
-        n3r:statements_optional 
-        bnf:eof  );
+        <#_g0>
+        <#_g1>
+        <#_g2>
+        n3r:statements_optional
+        bnf:eof );
          bnf:label "n3document";
          bnf:mustBeOneSequence  (
          (
-            <#_g0> 
-            <#_g1> 
-            <#_g2> 
-            n3r:statements_optional 
-            bnf:eof  ) );
+            <#_g0>
+            <#_g1>
+            <#_g2>
+            n3r:statements_optional
+            bnf:eof ) );
          :optionTail (),
                  (
          (
-            <#_g0> 
-            <#_g1> 
-            <#_g2> 
-            n3r:statements_optional 
-            bnf:eof  ) );
+            <#_g0>
+            <#_g1>
+            <#_g2>
+            n3r:statements_optional
+            bnf:eof ) );
          :reference "<a href='#n3document'>n3document</a>" .
     
     n3r:node     a :Production;
          bnf:canBeSequence  (
-        "(" 
-        n3r:itemlist 
-        ")"  ),
+        "("
+        n3r:itemlist
+        ")" ),
                  (
-        "[" 
-        n3r:propertylist 
-        "]"  ),
+        "["
+        n3r:propertylist
+        "]" ),
                  (
-        n3r:literal  ),
+        n3r:literal ),
                  (
-        n3r:numericliteral  ),
+        n3r:numericliteral ),
                  (
-        n3r:symbol  ),
+        n3r:symbol ),
                  (
-        n3r:variable  );
+        n3r:variable );
          bnf:label "node";
          bnf:mustBeOneSequence  (
          (
-            n3r:symbol  )
+            n3r:symbol )
          (
-            n3r:variable  )
+            n3r:variable )
          (
-            n3r:numericliteral  )
+            n3r:numericliteral )
          (
-            n3r:literal  )
+            n3r:literal )
          (
-            "[" 
-            n3r:propertylist 
-            "]"  )
+            "["
+            n3r:propertylist
+            "]" )
          (
-            "(" 
-            n3r:itemlist 
-            ")"  ) );
+            "("
+            n3r:itemlist
+            ")" ) );
          :optionTail (),
                  (
          (
-            "(" 
-            n3r:itemlist 
-            ")"  ) ),
+            "("
+            n3r:itemlist
+            ")" ) ),
                  (
          (
-            "[" 
-            n3r:propertylist 
-            "]"  )
+            "["
+            n3r:propertylist
+            "]" )
          (
-            "(" 
-            n3r:itemlist 
-            ")"  ) ),
+            "("
+            n3r:itemlist
+            ")" ) ),
                  (
          (
-            n3r:literal  )
+            n3r:literal )
          (
-            "[" 
-            n3r:propertylist 
-            "]"  )
+            "["
+            n3r:propertylist
+            "]" )
          (
-            "(" 
-            n3r:itemlist 
-            ")"  ) ),
+            "("
+            n3r:itemlist
+            ")" ) ),
                  (
          (
-            n3r:numericliteral  )
+            n3r:numericliteral )
          (
-            n3r:literal  )
+            n3r:literal )
          (
-            "[" 
-            n3r:propertylist 
-            "]"  )
+            "["
+            n3r:propertylist
+            "]" )
          (
-            "(" 
-            n3r:itemlist 
-            ")"  ) ),
+            "("
+            n3r:itemlist
+            ")" ) ),
                  (
          (
-            n3r:symbol  )
+            n3r:symbol )
          (
-            n3r:variable  )
+            n3r:variable )
          (
-            n3r:numericliteral  )
+            n3r:numericliteral )
          (
-            n3r:literal  )
+            n3r:literal )
          (
-            "[" 
-            n3r:propertylist 
-            "]"  )
+            "["
+            n3r:propertylist
+            "]" )
          (
-            "(" 
-            n3r:itemlist 
-            ")"  ) ),
+            "("
+            n3r:itemlist
+            ")" ) ),
                  (
          (
-            n3r:variable  )
+            n3r:variable )
          (
-            n3r:numericliteral  )
+            n3r:numericliteral )
          (
-            n3r:literal  )
+            n3r:literal )
          (
-            "[" 
-            n3r:propertylist 
-            "]"  )
+            "["
+            n3r:propertylist
+            "]" )
          (
-            "(" 
-            n3r:itemlist 
-            ")"  ) );
+            "("
+            n3r:itemlist
+            ")" ) );
          :reference "<a href='#node'>node</a>" .
     
     n3r:node_safe     a :Production;
          bnf:canBeSequence  (
-        n3r:literal  ),
+        n3r:literal ),
                  (
-        n3r:numericliteral  ),
+        n3r:numericliteral ),
                  (
-        n3r:symbol  ),
+        n3r:symbol ),
                  (
-        n3r:variable  );
+        n3r:variable );
          bnf:label "node_safe";
          bnf:mustBeOneSequence  (
          (
-            n3r:symbol  )
+            n3r:symbol )
          (
-            n3r:variable  )
+            n3r:variable )
          (
-            n3r:numericliteral  )
+            n3r:numericliteral )
          (
-            n3r:literal  ) );
+            n3r:literal ) );
          :optionTail (),
                  (
          (
-            n3r:literal  ) ),
+            n3r:literal ) ),
                  (
          (
-            n3r:numericliteral  )
+            n3r:numericliteral )
          (
-            n3r:literal  ) ),
+            n3r:literal ) ),
                  (
          (
-            n3r:symbol  )
+            n3r:symbol )
          (
-            n3r:variable  )
+            n3r:variable )
          (
-            n3r:numericliteral  )
+            n3r:numericliteral )
          (
-            n3r:literal  ) ),
+            n3r:literal ) ),
                  (
          (
-            n3r:variable  )
+            n3r:variable )
          (
-            n3r:numericliteral  )
+            n3r:numericliteral )
          (
-            n3r:literal  ) );
+            n3r:literal ) );
          :reference "<a href='#node_safe'>node_safe</a>" .
     
     n3r:numericliteral     a :Production;
@@ -1429,164 +1460,164 @@
     
     n3r:object     a :Production;
          bnf:canBeSequence  (
-        n3r:item  );
+        n3r:item );
          bnf:label "object";
          bnf:mustBeOneSequence  (
          (
-            n3r:item  ) );
+            n3r:item ) );
          :optionTail (),
                  (
          (
-            n3r:item  ) );
+            n3r:item ) );
          :reference "<a href='#object'>object</a>" .
     
     n3r:objecttail     a :Production;
          bnf:canBeSequence (),
                  (
-        "," 
-        n3r:object 
-        n3r:objecttail  );
+        ","
+        n3r:object
+        n3r:objecttail );
          bnf:label "objecttail";
          bnf:mustBeOneSequence  (
-        () 
+        ()
          (
-            "," 
-            n3r:object 
-            n3r:objecttail  ) );
+            ","
+            n3r:object
+            n3r:objecttail ) );
          :optionTail (),
                  (
-        () 
+        ()
          (
-            "," 
-            n3r:object 
-            n3r:objecttail  ) ),
+            ","
+            n3r:object
+            n3r:objecttail ) ),
                  (
          (
-            "," 
-            n3r:object 
-            n3r:objecttail  ) );
+            ","
+            n3r:object
+            n3r:objecttail ) );
          :reference "<a href='#objecttail'>objecttail</a>" .
     
     n3r:path     a :Production;
          bnf:canBeSequence  (
-        n3r:node 
-        n3r:pathtail  );
+        n3r:node
+        n3r:pathtail );
          bnf:label "path";
          bnf:mustBeOneSequence  (
          (
-            n3r:node 
-            n3r:pathtail  ) );
+            n3r:node
+            n3r:pathtail ) );
          :optionTail (),
                  (
          (
-            n3r:node 
-            n3r:pathtail  ) );
+            n3r:node
+            n3r:pathtail ) );
          :reference "<a href='#path'>path</a>" .
     
     n3r:pathtail     a :Production;
          bnf:canBeSequence (),
                  (
-        "!" 
-        n3r:path  ),
+        "!"
+        n3r:path ),
                  (
-        "^" 
-        n3r:path  );
+        "^"
+        n3r:path );
          bnf:label "pathtail";
          bnf:mustBeOneSequence  (
-        () 
+        ()
          (
-            "!" 
-            n3r:path  )
+            "!"
+            n3r:path )
          (
-            "^" 
-            n3r:path  ) );
+            "^"
+            n3r:path ) );
          :optionTail (),
                  (
-        () 
+        ()
          (
-            "!" 
-            n3r:path  )
+            "!"
+            n3r:path )
          (
-            "^" 
-            n3r:path  ) ),
+            "^"
+            n3r:path ) ),
                  (
          (
-            "!" 
-            n3r:path  )
+            "!"
+            n3r:path )
          (
-            "^" 
-            n3r:path  ) ),
+            "^"
+            n3r:path ) ),
                  (
          (
-            "^" 
-            n3r:path  ) );
+            "^"
+            n3r:path ) );
          :reference "<a href='#pathtail'>pathtail</a>" .
     
     n3r:prop     a :Production;
          bnf:canBeSequence  (
-        n3r:node  );
+        n3r:node );
          bnf:label "prop";
          bnf:mustBeOneSequence  (
          (
-            n3r:node  ) );
+            n3r:node ) );
          :optionTail (),
                  (
          (
-            n3r:node  ) );
+            n3r:node ) );
          :reference "<a href='#prop'>prop</a>" .
     
     n3r:propertylist     a :Production;
          bnf:canBeSequence (),
                  (
-        n3r:verb 
-        n3r:object 
-        n3r:objecttail 
-        n3r:propertylisttail  );
+        n3r:verb
+        n3r:object
+        n3r:objecttail
+        n3r:propertylisttail );
          bnf:label "propertylist";
          bnf:mustBeOneSequence  (
-        () 
+        ()
          (
-            n3r:verb 
-            n3r:object 
-            n3r:objecttail 
-            n3r:propertylisttail  ) );
+            n3r:verb
+            n3r:object
+            n3r:objecttail
+            n3r:propertylisttail ) );
          :optionTail (),
                  (
-        () 
+        ()
          (
-            n3r:verb 
-            n3r:object 
-            n3r:objecttail 
-            n3r:propertylisttail  ) ),
+            n3r:verb
+            n3r:object
+            n3r:objecttail
+            n3r:propertylisttail ) ),
                  (
          (
-            n3r:verb 
-            n3r:object 
-            n3r:objecttail 
-            n3r:propertylisttail  ) );
+            n3r:verb
+            n3r:object
+            n3r:objecttail
+            n3r:propertylisttail ) );
          :reference "<a href='#propertylist'>propertylist</a>" .
     
     n3r:propertylisttail     a :Production;
          bnf:canBeSequence (),
                  (
-        ";" 
-        n3r:propertylist  );
+        ";"
+        n3r:propertylist );
          bnf:label "propertylisttail";
          bnf:mustBeOneSequence  (
-        () 
+        ()
          (
-            ";" 
-            n3r:propertylist  ) );
+            ";"
+            n3r:propertylist ) );
          :optionTail (),
                  (
-        () 
+        ()
          (
-            ";" 
-            n3r:propertylist  ) ),
+            ";"
+            n3r:propertylist ) ),
                  (
          (
-            ";" 
-            n3r:propertylist  ) );
+            ";"
+            n3r:propertylist ) );
          :reference "<a href='#propertylisttail'>propertylisttail</a>" .
     
     n3r:qname     a :Production;
@@ -1598,181 +1629,181 @@
     
     n3r:rule     a :Production;
          bnf:canBeSequence  (
-        "{" 
-        n3r:formulacontent 
-        "}" 
-        "=>" 
-        "{" 
-        n3r:formulacontent 
-        "}"  );
+        "{"
+        n3r:formulacontent
+        "}"
+        "=>"
+        "{"
+        n3r:formulacontent
+        "}" );
          bnf:label "rule";
          bnf:mustBeOneSequence  (
          (
-            "{" 
-            n3r:formulacontent 
-            "}" 
-            "=>" 
-            "{" 
-            n3r:formulacontent 
-            "}"  ) );
+            "{"
+            n3r:formulacontent
+            "}"
+            "=>"
+            "{"
+            n3r:formulacontent
+            "}" ) );
          :optionTail (),
                  (
          (
-            "{" 
-            n3r:formulacontent 
-            "}" 
-            "=>" 
-            "{" 
-            n3r:formulacontent 
-            "}"  ) );
+            "{"
+            n3r:formulacontent
+            "}"
+            "=>"
+            "{"
+            n3r:formulacontent
+            "}" ) );
          :reference "<a href='#rule'>rule</a>" .
     
     n3r:rule_safe     a :Production;
          bnf:canBeSequence  (
-        "{" 
-        n3r:formulacontent 
-        "}" 
-        "=>" 
-        "{" 
-        n3r:formula_safe 
-        "}"  );
+        "{"
+        n3r:formulacontent
+        "}"
+        "=>"
+        "{"
+        n3r:formula_safe
+        "}" );
          bnf:label "rule_safe";
          bnf:mustBeOneSequence  (
          (
-            "{" 
-            n3r:formulacontent 
-            "}" 
-            "=>" 
-            "{" 
-            n3r:formula_safe 
-            "}"  ) );
+            "{"
+            n3r:formulacontent
+            "}"
+            "=>"
+            "{"
+            n3r:formula_safe
+            "}" ) );
          :optionTail (),
                  (
          (
-            "{" 
-            n3r:formulacontent 
-            "}" 
-            "=>" 
-            "{" 
-            n3r:formula_safe 
-            "}"  ) );
+            "{"
+            n3r:formulacontent
+            "}"
+            "=>"
+            "{"
+            n3r:formula_safe
+            "}" ) );
          :reference "<a href='#rule_safe'>rule_safe</a>" .
     
     n3r:statement     a :Production;
          bnf:canBeSequence  (
-        n3r:subject 
-        n3r:propertylist  );
+        n3r:subject
+        n3r:propertylist );
          bnf:label "statement";
          bnf:mustBeOneSequence  (
          (
-            n3r:subject 
-            n3r:propertylist  ) );
+            n3r:subject
+            n3r:propertylist ) );
          :optionTail (),
                  (
          (
-            n3r:subject 
-            n3r:propertylist  ) );
+            n3r:subject
+            n3r:propertylist ) );
          :reference "<a href='#statement'>statement</a>" .
     
     n3r:statement_or_rule     a :Production;
          bnf:canBeSequence  (
-        n3r:rule  ),
+        n3r:rule ),
                  (
-        n3r:statement  );
+        n3r:statement );
          bnf:label "statement_or_rule";
          bnf:mustBeOneSequence  (
          (
-            n3r:statement  )
+            n3r:statement )
          (
-            n3r:rule  ) );
+            n3r:rule ) );
          :optionTail (),
                  (
          (
-            n3r:rule  ) ),
+            n3r:rule ) ),
                  (
          (
-            n3r:statement  )
+            n3r:statement )
          (
-            n3r:rule  ) );
+            n3r:rule ) );
          :reference "<a href='#statement_or_rule'>statement_or_rule</a>" .
     
     n3r:statementlist     a :Production;
          bnf:canBeSequence (),
                  (
-        n3r:statement 
-        n3r:statementtail  );
+        n3r:statement
+        n3r:statementtail );
          bnf:label "statementlist";
          bnf:mustBeOneSequence  (
-        () 
+        ()
          (
-            n3r:statement 
-            n3r:statementtail  ) );
+            n3r:statement
+            n3r:statementtail ) );
          :optionTail (),
                  (
-        () 
+        ()
          (
-            n3r:statement 
-            n3r:statementtail  ) ),
+            n3r:statement
+            n3r:statementtail ) ),
                  (
          (
-            n3r:statement 
-            n3r:statementtail  ) );
+            n3r:statement
+            n3r:statementtail ) );
          :reference "<a href='#statementlist'>statementlist</a>" .
     
     n3r:statements_optional     a :Production;
          bnf:canBeSequence (),
                  (
-        n3r:statement_or_rule 
-        "." 
-        n3r:statements_optional  ),
+        n3r:statement_or_rule
+        "."
+        n3r:statements_optional ),
                 n3r:e;
          bnf:label "statements_optional";
          bnf:mustBeOneSequence  (
-        () 
+        ()
          (
-            n3r:statement_or_rule 
-            "." 
-            n3r:statements_optional  )
-        n3r:e  );
+            n3r:statement_or_rule
+            "."
+            n3r:statements_optional )
+        n3r:e );
          :optionTail (),
                  (
-        () 
+        ()
          (
-            n3r:statement_or_rule 
-            "." 
-            n3r:statements_optional  )
-        n3r:e  ),
+            n3r:statement_or_rule
+            "."
+            n3r:statements_optional )
+        n3r:e ),
                  (
          (
-            n3r:statement_or_rule 
-            "." 
-            n3r:statements_optional  )
-        n3r:e  ),
+            n3r:statement_or_rule
+            "."
+            n3r:statements_optional )
+        n3r:e ),
                  (
-        n3r:e  );
+        n3r:e );
          :reference "<a href='#statements_optional'>statements_optional</a>" .
     
     n3r:statementtail     a :Production;
          bnf:canBeSequence (),
                  (
-        "." 
-        n3r:statementlist  );
+        "."
+        n3r:statementlist );
          bnf:label "statementtail";
          bnf:mustBeOneSequence  (
-        () 
+        ()
          (
-            "." 
-            n3r:statementlist  ) );
+            "."
+            n3r:statementlist ) );
          :optionTail (),
                  (
-        () 
+        ()
          (
-            "." 
-            n3r:statementlist  ) ),
+            "."
+            n3r:statementlist ) ),
                  (
          (
-            "." 
-            n3r:statementlist  ) );
+            "."
+            n3r:statementlist ) );
          :reference "<a href='#statementtail'>statementtail</a>" .
     
     n3r:string     a :Production;
@@ -1783,53 +1814,53 @@
     
     n3r:subject     a :Production;
          bnf:canBeSequence  (
-        n3r:item  );
+        n3r:item );
          bnf:label "subject";
          bnf:mustBeOneSequence  (
          (
-            n3r:item  ) );
+            n3r:item ) );
          :optionTail (),
                  (
          (
-            n3r:item  ) );
+            n3r:item ) );
          :reference "<a href='#subject'>subject</a>" .
     
     n3r:symbol     a :Production;
          bnf:canBeSequence  (
-        n3r:explicituri  ),
+        n3r:explicituri ),
                  (
-        n3r:qname  );
+        n3r:qname );
          bnf:label "symbol";
          bnf:mustBeOneSequence  (
          (
-            n3r:explicituri  )
+            n3r:explicituri )
          (
-            n3r:qname  ) );
+            n3r:qname ) );
          :optionTail (),
                  (
          (
-            n3r:explicituri  )
+            n3r:explicituri )
          (
-            n3r:qname  ) ),
+            n3r:qname ) ),
                  (
          (
-            n3r:qname  ) );
+            n3r:qname ) );
          :reference "<a href='#symbol'>symbol</a>" .
     
     n3r:universal     a :Production;
          bnf:canBeSequence  (
-        "@forAll" 
-        <#_g5>  );
+        "@forAll"
+        <#_g5> );
          bnf:label "universal";
          bnf:mustBeOneSequence  (
          (
-            "@forAll" 
-            <#_g5>  ) );
+            "@forAll"
+            <#_g5> ) );
          :optionTail (),
                  (
          (
-            "@forAll" 
-            <#_g5>  ) );
+            "@forAll"
+            <#_g5> ) );
          :reference "<a href='#universal'>universal</a>" .
     
     n3r:variable     a :Production;
@@ -1840,290 +1871,290 @@
     
     n3r:verb     a :Production;
          bnf:canBeSequence  (
-        "="  ),
+        "=" ),
                  (
-        "@a"  ),
+        "@a" ),
                  (
-        "@has" 
-        n3r:prop  ),
+        "@has"
+        n3r:prop ),
                  (
-        "@is" 
-        n3r:prop 
-        "@of"  ),
+        "@is"
+        n3r:prop
+        "@of" ),
                  (
-        n3r:prop  );
+        n3r:prop );
          bnf:label "verb";
          bnf:mustBeOneSequence  (
          (
-            n3r:prop  )
+            n3r:prop )
          (
-            "@has" 
-            n3r:prop  )
+            "@has"
+            n3r:prop )
          (
-            "@is" 
-            n3r:prop 
-            "@of"  )
+            "@is"
+            n3r:prop
+            "@of" )
          (
-            "@a"  )
+            "@a" )
          (
-            "="  ) );
+            "=" ) );
          :optionTail (),
                  (
          (
-            "="  ) ),
+            "=" ) ),
                  (
          (
-            "@a"  )
+            "@a" )
          (
-            "="  ) ),
+            "=" ) ),
                  (
          (
-            "@has" 
-            n3r:prop  )
+            "@has"
+            n3r:prop )
          (
-            "@is" 
-            n3r:prop 
-            "@of"  )
+            "@is"
+            n3r:prop
+            "@of" )
          (
-            "@a"  )
+            "@a" )
          (
-            "="  ) ),
+            "=" ) ),
                  (
          (
-            "@is" 
-            n3r:prop 
-            "@of"  )
+            "@is"
+            n3r:prop
+            "@of" )
          (
-            "@a"  )
+            "@a" )
          (
-            "="  ) ),
+            "=" ) ),
                  (
          (
-            n3r:prop  )
+            n3r:prop )
          (
-            "@has" 
-            n3r:prop  )
+            "@has"
+            n3r:prop )
          (
-            "@is" 
-            n3r:prop 
-            "@of"  )
+            "@is"
+            n3r:prop
+            "@of" )
          (
-            "@a"  )
+            "@a" )
          (
-            "="  ) );
+            "=" ) );
          :reference "<a href='#verb'>verb</a>" .
     
     <#_g0>     a :Production;
          bnf:canBeSequence (),
                  (
-        n3r:declaration 
-        <#_g0>  );
+        n3r:declaration
+        <#_g0> );
          bnf:label "declaration_s";
          bnf:mustBeOneSequence  (
-        () 
+        ()
          (
-            n3r:declaration 
-            <#_g0>  ) );
+            n3r:declaration
+            <#_g0> ) );
          bnf:zeroOrMore n3r:declaration;
          :optionTail (),
                  (
-        () 
+        ()
          (
-            n3r:declaration 
-            <#_g0>  ) ),
+            n3r:declaration
+            <#_g0> ) ),
                  (
          (
-            n3r:declaration 
-            <#_g0>  ) );
+            n3r:declaration
+            <#_g0> ) );
          :reference "<a href='#declaration_s'>declaration_s</a>" .
     
     <#_g1>     a :Production;
          bnf:canBeSequence (),
                  (
-        n3r:universal 
-        <#_g1>  );
+        n3r:universal
+        <#_g1> );
          bnf:label "universal_s";
          bnf:mustBeOneSequence  (
-        () 
+        ()
          (
-            n3r:universal 
-            <#_g1>  ) );
+            n3r:universal
+            <#_g1> ) );
          bnf:zeroOrMore n3r:universal;
          :optionTail (),
                  (
-        () 
+        ()
          (
-            n3r:universal 
-            <#_g1>  ) ),
+            n3r:universal
+            <#_g1> ) ),
                  (
          (
-            n3r:universal 
-            <#_g1>  ) );
+            n3r:universal
+            <#_g1> ) );
          :reference "<a href='#universal_s'>universal_s</a>" .
     
     <#_g2>     a :Production;
          bnf:canBeSequence (),
                  (
-        n3r:existential 
-        <#_g2>  );
+        n3r:existential
+        <#_g2> );
          bnf:label "existential_s";
          bnf:mustBeOneSequence  (
-        () 
+        ()
          (
-            n3r:existential 
-            <#_g2>  ) );
+            n3r:existential
+            <#_g2> ) );
          bnf:zeroOrMore n3r:existential;
          :optionTail (),
                  (
-        () 
+        ()
          (
-            n3r:existential 
-            <#_g2>  ) ),
+            n3r:existential
+            <#_g2> ) ),
                  (
          (
-            n3r:existential 
-            <#_g2>  ) );
+            n3r:existential
+            <#_g2> ) );
          :reference "<a href='#existential_s'>existential_s</a>" .
     
     <#_g3>     a :Production;
          bnf:canBeSequence (),
                  (
-        n3r:declaration 
-        <#_g3>  );
+        n3r:declaration
+        <#_g3> );
          bnf:label "declaration_s";
          bnf:mustBeOneSequence  (
-        () 
+        ()
          (
-            n3r:declaration 
-            <#_g3>  ) );
+            n3r:declaration
+            <#_g3> ) );
          bnf:zeroOrMore n3r:declaration;
          :optionTail (),
                  (
-        () 
+        ()
          (
-            n3r:declaration 
-            <#_g3>  ) ),
+            n3r:declaration
+            <#_g3> ) ),
                  (
          (
-            n3r:declaration 
-            <#_g3>  ) );
+            n3r:declaration
+            <#_g3> ) );
          :reference "<a href='#declaration_s'>declaration_s</a>" .
     
     <#_g4>     a :Production;
          bnf:canBeSequence (),
                  (
-        n3r:existential 
-        <#_g4>  );
+        n3r:existential
+        <#_g4> );
          bnf:label "existential_s";
          bnf:mustBeOneSequence  (
-        () 
+        ()
          (
-            n3r:existential 
-            <#_g4>  ) );
+            n3r:existential
+            <#_g4> ) );
          bnf:zeroOrMore n3r:existential;
          :optionTail (),
                  (
-        () 
+        ()
          (
-            n3r:existential 
-            <#_g4>  ) ),
+            n3r:existential
+            <#_g4> ) ),
                  (
          (
-            n3r:existential 
-            <#_g4>  ) );
+            n3r:existential
+            <#_g4> ) );
          :reference "<a href='#existential_s'>existential_s</a>" .
     
     <#_g5>     a :Production;
          bnf:canBeSequence  (
-        "," 
-        n3r:symbol 
-        <#_g5>  ),
+        ","
+        n3r:symbol
+        <#_g5> ),
                  (
-        "."  );
+        "." );
          bnf:commaSeparatedPeriodTerminatedListOf n3r:symbol;
          bnf:label "symbol_csl";
          bnf:mustBeOneSequence  (
          (
-            "."  )
+            "." )
          (
-            "," 
-            n3r:symbol 
-            <#_g5>  ) );
+            ","
+            n3r:symbol
+            <#_g5> ) );
          :optionTail (),
                  (
          (
-            "," 
-            n3r:symbol 
-            <#_g5>  ) ),
+            ","
+            n3r:symbol
+            <#_g5> ) ),
                  (
          (
-            "."  )
+            "." )
          (
-            "," 
-            n3r:symbol 
-            <#_g5>  ) );
+            ","
+            n3r:symbol
+            <#_g5> ) );
          :reference "<a href='#symbol_csl'>symbol_csl</a>" .
     
     <#_g6>     a :Production;
          bnf:canBeSequence  (
-        "," 
-        n3r:symbol 
-        <#_g6>  ),
+        ","
+        n3r:symbol
+        <#_g6> ),
                  (
-        "."  );
+        "." );
          bnf:commaSeparatedPeriodTerminatedListOf n3r:symbol;
          bnf:label "symbol_csl";
          bnf:mustBeOneSequence  (
          (
-            "."  )
+            "." )
          (
-            "," 
-            n3r:symbol 
-            <#_g6>  ) );
+            ","
+            n3r:symbol
+            <#_g6> ) );
          :optionTail (),
                  (
          (
-            "," 
-            n3r:symbol 
-            <#_g6>  ) ),
+            ","
+            n3r:symbol
+            <#_g6> ) ),
                  (
          (
-            "."  )
+            "." )
          (
-            "," 
-            n3r:symbol 
-            <#_g6>  ) );
+            ","
+            n3r:symbol
+            <#_g6> ) );
          :reference "<a href='#symbol_csl'>symbol_csl</a>" .
     
     <#_g7>     a :Production;
          bnf:canBeSequence  (
-        "," 
-        n3r:barename 
-        <#_g7>  ),
+        ","
+        n3r:barename
+        <#_g7> ),
                  (
-        "."  );
+        "." );
          bnf:commaSeparatedPeriodTerminatedListOf n3r:barename;
          bnf:label "barename_csl";
          bnf:mustBeOneSequence  (
          (
-            "."  )
+            "." )
          (
-            "," 
-            n3r:barename 
-            <#_g7>  ) );
+            ","
+            n3r:barename
+            <#_g7> ) );
          :optionTail (),
                  (
          (
-            "," 
-            n3r:barename 
-            <#_g7>  ) ),
+            ","
+            n3r:barename
+            <#_g7> ) ),
                  (
          (
-            "."  )
+            "." )
          (
-            "," 
-            n3r:barename 
-            <#_g7>  ) );
+            ","
+            n3r:barename
+            <#_g7> ) );
          :reference "<a href='#barename_csl'>barename_csl</a>" .
     
 #ENDS

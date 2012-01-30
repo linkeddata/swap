@@ -1238,15 +1238,16 @@ class ToN3(RDFSink.RDFSink):
         
 a   Anonymous nodes should be output using the _: convention (p flag or not).
 d   Don't use default namespace (empty prefix)
+c   Comments added at top about version and base URI used.
 e   escape literals --- use \u notation
+g   Suppress => shothand for log:implies
 i   Use identifiers from store - don't regen on output
 l   List syntax suppression. Don't use (..)
 n   No numeric syntax - use strings typed with ^^ syntax
 p   Prefix suppression - don't use them, always URIs in <> instead of qnames.
-q   Quiet - don't output comments about version and base URI used.
 r   Relative URI suppression. Always use absolute URIs.
 s   Subject must be explicit for every statement. Don't use ";" shorthand.
-t   "this" and "()" special syntax should be suppresed.
+t   "=" and "()" special syntax should be suppresed.
 u   Use \u for unicode escaping in URIs instead of utf-8 %XX
 v   Use  "this log:forAll" for @forAll, and "this log:forAll" for "@forSome".
 /   If namespace has no # in it, assume it ends at the last slash if outputting.
@@ -1284,7 +1285,7 @@ B   Turn any blank node into a existentially qualified explicitly named node.
         RDFSink.RDFSink.__init__(self, gp)
         self._write = self.writeEncoded
         self._writeRaw = write
-        self._quiet = quiet or "q" in flags
+        self._quiet = quiet or "c" not in flags
         self._flags = flags
         self._subj = None
         self.prefixes = {}      # Look up prefix conventions
@@ -1565,6 +1566,8 @@ B   Turn any blank node into a existentially qualified explicitly named node.
                         self._write( u" @forSome ")
             elif pred == (SYMBOL, DAML_sameAs_URI) and "t" not in self._flags:
                 self._write(u" = ")
+            elif pred == (SYMBOL, LOG_implies_URI) and "g" not in self._flags:
+                self._write(u" => ")
             elif pred == (SYMBOL, RDF_type_URI)  and "t" not in self._flags:
                 self._write(u" a ")
             else :
@@ -1648,7 +1651,7 @@ B   Turn any blank node into a existentially qualified explicitly named node.
 
 
         j = string.rfind(value, "#")
-        if j<0 and "/" in self._flags:
+        if j<0:    #   and "/" in self._flags:   Always allow 2010-10-24 TimBL
             j=string.rfind(value, "/")   # Allow "/" namespaces as a second best
         
         if (j>=0
@@ -1704,7 +1707,7 @@ class tmToN3(RDFSink.RDFSink):
         RDFSink.RDFSink.__init__(self, gp)
         self._write = self.writeEncoded
         self._writeRaw = write
-        self._quiet = quiet or "q" in flags
+        self._quiet = quiet or "c" in flags
         self._flags = flags
         self._subj = None
         self.prefixes = {}      # Look up prefix conventions
@@ -1805,7 +1808,7 @@ class tmToN3(RDFSink.RDFSink):
     
     def symbolString(self, value):
         j = string.rfind(value, "#")
-        if j<0 and "/" in self._flags:
+        if j<0: #and "/" in self._flags:
             j=string.rfind(value, "/")   # Allow "/" namespaces as a second best
         
         if (j>=0

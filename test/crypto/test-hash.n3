@@ -1,3 +1,7 @@
+#
+#    cwm test-hash.n3 --think
+#     Compare restult with hash-out.n3
+#
 @prefix : <#> .
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
@@ -13,7 +17,8 @@
 { :x a :GetHashFile . :x log:content [ crypto:md5 :y; crypto:sha :z ] } 
    log:implies { :x :md5 :y; :sha :z } .
 
-<test.txt> a :GetHashFile .
+#<test.txt> a :GetHashFile .
+<hash-data.txt> a :GetHashFile .
 
 # <http://www.w3.org/> a :GetHashFile .
 

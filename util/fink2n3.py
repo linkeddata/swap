@@ -1,5 +1,6 @@
 #!/usr/bin/python
-#
+#       Convert Fink (Debian Packaging system) data to RDF
+# 
 # See http://fink.sourceforge.net/doc/packaging/reference.php
 #   and http://fink.sourceforge.net/doc/packaging/format.php#format
 # See http://www.w3.org/DesignIssues/Notation3.html
@@ -292,7 +293,7 @@ for arg in sys.argv[1:]:
         elif arg == "-?" or arg == "-h" or arg == "--help":
             print """Convert Fink .info format  to n3 format.
 
-Syntax:    make2n3  [-r] <file>
+Syntax:    python fink2n3.py  [-r] <file>
 
     where <file> can be omitted and if so defaults to /sw/fink/dists .
     This program was http://www.w3.org/2000/10/swap/util/fink2p3.py

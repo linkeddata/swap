@@ -100,8 +100,7 @@ class BI_member(LightBuiltIn, MultipleFunction):
 
 class BI_append(LightBuiltIn, Function):
     """Takes a list of lists, and appends them together.
-
-
+    
     """
     def evalObj(self, subj, queue, bindings, proof, query):
         if not isinstance(subj, NonEmptyList): return None

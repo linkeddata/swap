@@ -48,6 +48,7 @@ from set_importer import Set, ImmutableSet
 
 import types
 import string
+import xml.dom.minidom
 
 import re
 import StringIO
@@ -1520,11 +1521,10 @@ class RDFStore(RDFSink) :
         cwm_set.register(self)
         cwm_sparql.register(self)
         cwm_xml.register(self)
-        if crypto:
-            import cwm_crypto  # Cryptography
-            if cwm_crypto.USE_PKC == 0:
-                raise RuntimeError("Try installing pycrypto, and make sure it is in you PYTHONPATH")
-            cwm_crypto.register(self)  # would like to anyway to catch bug if used but not available
+        import cwm_crypto  # Cryptography -- register this for the hash functions even if no pub key
+        if crypto and cwm_crypto.USE_PKC == 0:
+            raise RuntimeError("Public Key Crypto unavailable. Try installing pycrypto, and make sure it is in you PYTHONPATH")
+        cwm_crypto.register(self)  # would like to anyway to catch bug if used but not available
 
     def newLiteral(self, str, dt=None, lang=None):
         "Interned version: generate new literal object as stored in this store"
@@ -1594,11 +1594,10 @@ class RDFStore(RDFSink) :
         And a proliferation of APIs confuses.
         """
         baseURI = uripath.base()
-        givenOpenFormula = openFormula
-        if openFormula is None:
-            openFormula = store.newFormula()
+        G = openFormula
+        if G is None: G = store.newFormula()
         if topLevel:
-            newTopLevelFormula(openFormula)
+            newTopLevelFormula(G)
         if uri != None and openFormula==None and remember:
             addr = uripath.join(baseURI, uri) # Make abs from relative
             source = store.newSymbol(addr)
@@ -1606,12 +1605,13 @@ class RDFStore(RDFSink) :
             if F != None:
                 if diag.chatty_flag > 40: progress("Using cached semantics for",addr)
                 return F 
-            F = webAccess.load(store, uri, openFormula, asIfFrom, contentType, flags, referer, why)  
-            store._experience.add(
-                    store.intern((SYMBOL, addr)), store.semantics, F,
-                    why=BecauseOfExperience("load document"))
+            F = webAccess.load(store, uri, G, asIfFrom, contentType, flags, referer, why)  
+            if diag.chatty_flag > 40: progress("Recording cached semantics for",addr)
+            F = F.close()
+            store._experience.add(source, store.semantics, F, why=BecauseOfExperience("load document"))
             return F
             
+        if diag.chatty_flag > 40: progress("NOT caching semantics for",uri, "remember=%s, openFormula=%s" % (`remember`,`openFormula`))
         return webAccess.load(store, uri, openFormula, asIfFrom, contentType, flags, \
                               referer=referer, why=why)  
 

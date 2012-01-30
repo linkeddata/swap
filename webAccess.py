@@ -65,7 +65,7 @@ def urlopenForRDF(addr, referer=None):
     """Access the web, with a preference for RDF
     """
     return webget(addr,
-                  types=['text/rdf+n3',
+                  types=['text/n3',
                          'application/rdf+xml'
        #                  ,'application/x-turtle'    # Why not ask for turtle?
                          ], 
@@ -150,7 +150,7 @@ def load(store, uri=None, openFormula=None, asIfFrom=None, contentType=None,
                      and not (receivedContentType.find('n3')>=0)  ):
                 guess = "application/rdf+xml"
             elif receivedContentType.find('n3') >= 0:
-                guess = "text/rdf+n3"
+                guess = "text/n3"
         if guess== None and contentType:
             if diag.chatty_flag > 9:
                 progress("Given Content-type: " + `contentType` + " for "+addr)
@@ -158,7 +158,7 @@ def load(store, uri=None, openFormula=None, asIfFrom=None, contentType=None,
                     contentType.find('rdf') >= 0  and not (contentType.find('n3') >= 0 )):
                 guess = "application/rdf+xml"
             elif contentType.find('n3') >= 0:
-                guess = "text/rdf+n3"
+                guess = "text/n3"
             elif contentType.find('sparql') >= 0 or contentType.find('rq'):
                             guess = "x-application/sparql"
         buffer = netStream.read()
@@ -166,13 +166,13 @@ def load(store, uri=None, openFormula=None, asIfFrom=None, contentType=None,
 
             # can't be XML if it starts with these...
             if buffer[0:1] == "#" or buffer[0:7] == "@prefix":
-                guess = 'text/rdf+n3'
+                guess = 'text/n3'
             elif buffer[0:6] == 'PREFIX' or buffer[0:4] == 'BASE':
                 guess = "x-application/sparql"
             elif buffer.find('xmlns="') >=0 or buffer.find('xmlns:') >=0: #"
                 guess = 'application/rdf+xml'
             else:
-                guess = 'text/rdf+n3'
+                guess = 'text/n3'
             if diag.chatty_flag > 9: progress("Guessed ContentType:" + guess)
     except (IOError, OSError):  
         raise DocumentAccessError(addr, sys.exc_info() )
@@ -210,7 +210,7 @@ def load(store, uri=None, openFormula=None, asIfFrom=None, contentType=None,
         p.feed(buffer)
         F = p.close()
     else:
-        assert guess == 'text/rdf+n3'
+        assert guess == 'text/n3'
         if diag.chatty_flag > 49: progress("Parsing as N3")
         if os.environ.get("CWM_N3_PARSER", 0) == 'n3p':
             import n3p_tm
@@ -267,7 +267,7 @@ def loadMany(store, uris, openFormula=None):
 #  File "/sw/lib/python2.4/urllib.py", line 559, in open_data
 #    f.fileno = None     # needed for addinfourl
 #AttributeError: 'cStringIO.StringI' object has no attribute 'fileno'
-# $ cwm 'data:text/rdf+n3;charset=utf-8;base64,QHByZWZpeCBsb2c6IDxodHRwOi8vd3d3LnczLm9yZy8yMDAwLzEwL3N3YXAvbG9nIz4gLgp7fSA9PiB7OmEgOmIgOmN9IC4g'
+# $ cwm 'data:text/n3;charset=utf-8;base64,QHByZWZpeCBsb2c6IDxodHRwOi8vd3d3LnczLm9yZy8yMDAwLzEwL3N3YXAvbG9nIz4gLgp7fSA9PiB7OmEgOmIgOmN9IC4g'
 
 # Found the bug in python bug traker.
 # http://sourceforge.net/tracker/index.php?func=detail&aid=1365984&group_id=5470&atid=105470
