@@ -1,0 +1,23 @@
+#  Terms use in converting a (e.g BankOfAmerica online martgage statment
+# To rdf which alas was not available in OFX.
+# the property names were hand made
+
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix : <http://www.w3.org/2001/swap/pim/mort>.
+
+
+  :date  a rdf:Property; rdfs:label "date".
+  :description  a rdf:Property; rdfs:label "description".
+  :payment  a rdf:Property; rdfs:label "payment".
+  :insurace  a rdf:Property; rdfs:label "insurace".
+  :principal  a rdf:Property; rdfs:label "principal".
+  :balance  a rdf:Property; rdfs:label "balance".
+  :interest  a rdf:Property; rdfs:label "interest".
+  :buydown  a rdf:Property; rdfs:label "buydown".
+  :escrow  a rdf:Property; rdfs:label "escrow".
+  :escrowBalance  a rdf:Property; rdfs:label "Escrow Balance".
+  :lateCharge  a rdf:Property; rdfs:label "Late Charge".
+  :lateChargeBalance  a rdf:Property; rdfs:label "Late Charge Balance".
+  :partial  a rdf:Property; rdfs:label "partial".
+  :partialBalance  a rdf:Property; rdfs:label "Partial Balance".
