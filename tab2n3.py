@@ -4,13 +4,14 @@
  MS Outlook export of contact files.
  Runtime options:
 
-    -comma    Use comma as delimited instead of tab
-    -id       Generate sequential URIs for the items described by each row
-    -idfield  Use column 'id' to form the URI for each item
-    -type     Declare each thing as of a type <#Item>.
-    -schema   Generate a little RDF schema
-    -nostrip  Do not strip empty cells
-    -help     display this message and exit.
+    -comma          Use comma as delimited instead of tab
+    -id             Generate sequential URIs for the items described by each row
+    -idfield        Use column 'id' to form the URI for each item
+    -type           Declare each thing as of a type <#Item>.
+    -namespace xxx  Properties are in namespace <xxx#> note added hash
+    -schema         Generate a little RDF schema
+    -nostrip        Do not strip empty cells
+    -help           Display this message and exit.
     
 This is or was http://www.w3.org/2000/10/swap/tab2n3.py
 It is open source under the W3C software license.
@@ -77,11 +78,20 @@ import sys
 def sanitize(s):
     return s.replace('\n', ' ')
             
+def sanitizeID(s):
+    res = ""
+    for ch in s:
+        if ch in string.ascii_letters or ch in string.digits:
+            res += ch
+        else:
+            res += '_'
+    return res
+            
 def convert():
     
     namespace = None;
     for i in range(len(argv)-2):
-        if argv[i+1] == '-namespace': namespace = argv[i+2]
+        if argv[i+1] == '-namespace': namespace = argv[i+2] + '#'
             
     if "-help" in sys.argv[1:]:
         print __doc__
@@ -107,12 +117,12 @@ def convert():
                 headings[i] = headings[i][:j] + "_" + headings[i] [j+1:]
         headings[i] = headings[i][:1].lower() + headings[i][1:] # Predicates initial lower case 
                 
+    if namespace: print "@prefix : <%s>." % namespace
     if "-schema" in sys.argv[1:]:
         print "# Schema"
         # print "@prefix : <> ."
         print "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>."
         print "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>."
-        if namespace: print "@prefix : <%s>." % namespace
         for i in range(0,len(headings)):
             print "  :%s  a rdf:Property; rdfs:label \"%s\"." % \
                     ( headings[i], sanitize(labels[i])  )
@@ -138,7 +148,7 @@ def convert():
                 if i < len(headings) : pred = headings[i]
                 else: pred = 'column%i' % (i)
                 if ('-idfield' in sys.argv[1:]) and headings[i] == 'id':
-                    this_id = v
+                    this_id = sanitizeID(v)
                 else:
                     if open:  str+= "; "
                     if string.find(v, "\n") >= 0:
