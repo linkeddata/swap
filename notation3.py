@@ -633,6 +633,9 @@ class SinkParser:
                 i = self.skipSpace(str, j)
                 if i<0: raise BadSyntax(self._thisDoc, self.lines,
                                     str, i, "needed ')', found end.")                    
+                if str[i:i+2] == '$)':
+                    j = i+2
+                    break
                 if str[i:i+1] == ')':
                     j = i+1
                     break
