@@ -8,6 +8,7 @@
 @prefix q: <http://www.w3.org/2000/10/swap/pim/qif#> .
 @prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#> .
 @prefix trip: <http://www.w3.org/ns/pim/trip#>.
+@prefix gen:	<http://www.w3.org/2006/gen/ont#> .
 
 <> doc:version "$Id$";
   s:seeAlso <qif2n3.py>, <http://dev.w3.org/cvsweb/2000/quacken/>,
@@ -44,6 +45,13 @@ q:accordingTo a r:Property; s:label "statement";
     s:domain q:Transaction; s:range doc:Work;
     s:comment "The document which is the source of data for this transaction.".
 
+q:SupportingDocument a s:Class;
+    s:label "supporting document";
+    s:subClassOf gen:InformationResource .
+
+q:Receipt  a s:Class;
+    s:label "receipt";
+    s:subClassOf q:SupportingDocument .    
 
 #  No .. use http://www.w3.org/ns/pim/trip#trip
 #q:trip a r:Property; s:label "trip";

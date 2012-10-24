@@ -1,5 +1,5 @@
 
-<!-- Processed by Id: cwm.py,v 1.197 2007/12/13 15:38:39 syosi Exp -->
+<!-- Processed by Id: cwm.py,v 1.198 2012/01/30 09:30:20 timbl Exp -->
 <!--     using base file:///devel/WWW/2000/10/swap/pim/qif.n3-->
 
 
@@ -33,6 +33,16 @@
     <Class r:about="http://www.w3.org/2000/10/swap/pim/qif#Classified">
         <label>classified</label>
         <subClassOf r:resource="http://www.w3.org/2000/10/swap/pim/qif#Transaction"/>
+    </Class>
+
+    <Class r:about="http://www.w3.org/2000/10/swap/pim/qif#Receipt">
+        <label>receipt</label>
+        <subClassOf r:resource="http://www.w3.org/2000/10/swap/pim/qif#SupportingDocument"/>
+    </Class>
+
+    <Class r:about="http://www.w3.org/2000/10/swap/pim/qif#SupportingDocument">
+        <label>supporting document</label>
+        <subClassOf r:resource="http://www.w3.org/2006/gen/ont#InformationResource"/>
     </Class>
 
     <Class r:about="http://www.w3.org/2000/10/swap/pim/qif#Transaction">
