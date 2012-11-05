@@ -335,6 +335,12 @@ ignoring differences between upper and lower case.</td></tr>
   <tr><td class='ln'>notMatches</td><td class='comment'>The subject string;
 the object is is a regular expression in the perl, python style.
 It is true iff the string does NOT match the regexp.</td></tr>
+  <tr><td class='ln'>replace</td><td class='comment'>A built-in for replacing characters or sub.
+    takes a list of 3 strings; the first is the
+    input data, the second the old and the third the new string.
+    The object is calculated as the rplaced string.
+    For example, ("fofof bar", "of", "baz") string:replace "fbazbaz bar"
+    </td></tr>
   <tr><td class='ln'>scrape</td><td class='comment'>The subject is a list of two strings. The second string is
 a regular expression in the perl, python style.
 It must contain one group (a part in parentheses).  If the first string in the list matches
