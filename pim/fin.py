@@ -51,8 +51,6 @@ rdf_type = rdf.type
 # cat = cat_ns
 kb = None;
 
-def sym(uri):
-    return store.intern((0, uri))
 
 def printTransactionDetails(t):
     for st in kb.statementsMatching(subj=t):
@@ -318,7 +316,7 @@ def baseRel(uri):
     return uripath.refTo(uripath.base(), uri)
     
 def doCommand(startDate, endDate, inputURIs=["/dev/stdin"],totalsFilename=None):
-        """Fin - financial summary
+    """Fin - financial summary
         
  <command> <options> <inputURIs>
  Totals transactions by classes to which they are known to belong 
@@ -326,292 +324,294 @@ def doCommand(startDate, endDate, inputURIs=["/dev/stdin"],totalsFilename=None):
  
 """
         
-        #import urllib
-        import time
-        import sys
-        global sax2rdf
-        global kb, tax
-        
-        def noteError(e):
-            if not errors.get(s, None): errors[s] = [];
-            errors[s].append(e)
-        
-        # The base URI for this process - the Web equiv of cwd
-        _baseURI = uripath.base()
-        
-        _outURI = _baseURI
-        option_baseURI = _baseURI   # To start with - then tracks running base
+    #import urllib
+    #import time
+    import sys
+    # global sax2rdf
+    global kb, tax
+    
+    def noteError(e):
+        if not errors.get(s, None): errors[s] = [];
+        errors[s].append(e)
+    
+    # The base URI for this process - the Web equiv of cwd
+    _baseURI = uripath.base()
+    
+    _outURI = _baseURI
+    option_baseURI = _baseURI   # To start with - then tracks running base
 
 
 # Load the data:
 
-        kb = loadMany(inputURIs)
-                
-        qu_date = qu.date
-        qu_in_USD = qu.in_USD
-        qu_amount = qu.amount
-        qu_payee = qu.payee
-        qu_Classified = qu.Classified
-        qu_Unclassified = qu.Unclassified
-        taxCategories = kb.each(pred=rdf_type, obj=tax.Category)
-        if verbose:
-            progress("Tax categories" + `taxCategories`)
-        specialCategories = taxCategories + [qu.Classified, qu.Unclassified, qu.Transaction]
+    kb = loadMany(inputURIs)
+            
+    qu_date = qu.date
+    qu_in_USD = qu.in_USD
+    qu_amount = qu.amount
+    qu_payee = qu.payee
+    qu_Classified = qu.Classified
+    qu_Unclassified = qu.Unclassified
+    taxCategories = kb.each(pred=rdf_type, obj=tax.Category)
+    if verbose:
+        progress("Tax categories" + `taxCategories`)
+    specialCategories = taxCategories + [qu.Classified, qu.Unclassified, qu.Transaction]
 
 ####### Analyse the data:
-        numberOfMonths = monthOfDate(endDate) - monthOfDate(startDate)
-        monthTotals = [0] * numberOfMonths
-        incomeByMonth = [0] * numberOfMonths
-        income, outgoings = 0,0
-        outgoingsByMonth = [0] * numberOfMonths
+    numberOfMonths = monthOfDate(endDate) - monthOfDate(startDate)
+    monthTotals = [0] * numberOfMonths
+    incomeByMonth = [0] * numberOfMonths
+    income, outgoings = 0,0
+    outgoingsByMonth = [0] * numberOfMonths
 
-        quCategories = kb.each(pred=rdf_type, obj=qu.Cat)
-        bottomCategories = [];
-        for c in quCategories:
-            if isBottomClass(c): bottomCategories.append(c);
-        
-        totals = {}  # Total by all classes of transaction
-        count = {}  # Number of transactions
-        byMonth = {}
+    quCategories = kb.each(pred=rdf_type, obj=qu.Cat)
+    bottomCategories = [];
+    for c in quCategories:
+        if isBottomClass(c): bottomCategories.append(c);
+    
+    totals = {}  # Total by all classes of transaction
+    count = {}  # Number of transactions
+    byMonth = {}
 
-        sts = kb.statementsMatching(pred=qu.amount)  # Ideally one per transaction
-        errors = {}
-        for st in sts:
-            s = st.subject()
-            uri = s.uriref()
+    sts = kb.statementsMatching(pred=qu.amount)  # Ideally one per transaction
+    errors = {}
+    for st in sts:
+        s = st.subject()
+        uri = s.uriref()
 #        classified =  kb.each(pred=rdf_type, obj=qu_Classified)
 #        unclassified = kb.each(pred=rdf_type, obj=qu_Unclassified)
 #        for t in classified: assert t not in unclassified, "Can't be classified and unclassified!"+`t`
 #        for s in classified + unclassified:
 #           progress( "Transaction ", `s`)
-            t_ok, c_ok = 0, 0
-            cats = allClasses(kb.each(subj=s, pred=rdf.type))
-            # progress( "Categories: "+`cats`)
-            
-            month = monthNumber(s)
-            if month not in range(numberOfMonths) : continue
-                        
-            payees = kb.each(subj=s, pred=qu_payee)
-            if str(payees[0]) == "Check" and len(payees) >1: payee = payees[1]
-            else: payee = payees[0]
-            
-            amounts = kb.each(subj=s, pred=qu_in_USD)
+        t_ok, c_ok = 0, 0
+        cats = allClasses(kb.each(subj=s, pred=rdf.type))
+        # progress( "Categories: "+`cats`)
+        
+        month = monthNumber(s)
+        if month not in range(numberOfMonths) : continue
+                    
+        payees = kb.each(subj=s, pred=qu_payee)
+        if str(payees[0]) == "Check" and len(payees) >1: payee = payees[1]
+        else: payee = payees[0]
+        
+        amounts = kb.each(subj=s, pred=qu_in_USD)
+        if len(amounts) == 0:
+            amounts = kb.each(subj=s, pred=qu_amount)
             if len(amounts) == 0:
-                amounts = kb.each(subj=s, pred=qu_amount)
-                if len(amounts) == 0:
-                    progress("@@@ Error: No amount for "+`uri`)
-                else:
-                    progress("Warning: No USD amount for "+`uri`+", assuming USD")
-            if len(amounts) >1:
-                if (cat_ns.Internal not in cats or
-                    len(amounts) != 2 ):
-                
-                    progress(
-            "Error: More than one amount %s for transaction %s -- ignoring!\n"
-                            % (`amounts`,uri))
-                else:
-                    sum = float(amounts[0]) + float(amounts[1])
-                    if sum != 0:
-                        progress("2 amounts %s for internal transaction %s.\n"
-                            % (amounts,uri))
-                continue
+                progress("@@@ Error: No amount for "+`uri`)
+            else:
+                progress("Warning: No USD amount for "+`uri`+", assuming USD")
+        if len(amounts) >1:
+            if (cat_ns.Internal not in cats or
+                len(amounts) != 2 ):
+            
+                progress(
+        "Error: More than one amount %s for transaction %s -- ignoring!\n"
+                        % (`amounts`,uri))
+            else:
+                sum = float(amounts[0]) + float(amounts[1])
+                if sum != 0:
+                    progress("2 amounts %s for internal transaction %s.\n"
+                        % (amounts,uri))
+            continue
 
-            if len(amounts) != 1:
-                progress("@@@ Error: No amount for "+`uri`);
-                ss = kb.statementsMatching(subj=s)
-                progress(`ss`+'; KB='+`kb.n3String()`)
-                continue
-            amount = float(amounts[0].__str__())
+        if len(amounts) != 1:
+            progress("@@@ Error: No amount for "+`uri`);
+            ss = kb.statementsMatching(subj=s)
+            progress(`ss`+'; KB='+`kb.n3String()`)
+            continue
+        amount = float(amounts[0].__str__())
 #           print "%s  %40s  %10s month %i" %(date, payee, `amount`, month)
 
-            monthTotals[month] = monthTotals[month] + amount
-            if cat_ns.Internal not in cats:
-                if amount > 0:
-                    incomeByMonth[month] = incomeByMonth[month] + amount
-                    income = income + amount
-                else:
-                    outgoingsByMonth[month] = outgoingsByMonth[month] + amount
-                    outgoings = outgoings + amount
+        monthTotals[month] = monthTotals[month] + amount
+        if cat_ns.Internal not in cats:
+            if amount > 0:
+                incomeByMonth[month] = incomeByMonth[month] + amount
+                income = income + amount
+            else:
+                outgoingsByMonth[month] = outgoingsByMonth[month] + amount
+                outgoings = outgoings + amount
 
-            normalCats = []  # For this item
-            for c in cats:
-                totals[c] = totals.get(c, 0) + amount
-                byMonth[c] = byMonth.get(c, [0] * numberOfMonths)
-                count[c] = count.get(c, 0) + 1
-                byMonth[c][month] = byMonth[c][month] + amount
-                if c not in specialCategories:
-                    normalCats.append(c)
-            bottomCats = normalCats[:] # Copy
-            for b in normalCats:
-                sups = kb.each(subj=b, pred=rdfs.subClassOf)
-                for sup in sups:
-                    if sup in bottomCats:
-                        bottomCats.remove(sup)
-            if len(bottomCats) == 0:
-               noteError("No ategoriy: %s"  # all cats: %s, raw cats:%s"
-                            %(`bottomCats`))  #  ,`cats`, `kb.each(subj=s, pred=rdf.type)`)
-            elif bottomCats[0] not in bottomCategories:
-               pass # noteError("Be more specifc: %s"  %(`bottomCats[0]`)) # Won't get shown e.g. in year-cat.html
-            if len(bottomCats) > 1:
-               noteError("Inconsistent categories: %s"  # all cats: %s, raw cats:%s"
-                            %(`bottomCats`))  #  ,`cats`, `kb.each(subj=s, pred=rdf.type)`)
+        normalCats = []  # For this item
+        for c in cats:
+            totals[c] = totals.get(c, 0) + amount
+            byMonth[c] = byMonth.get(c, [0] * numberOfMonths)
+            count[c] = count.get(c, 0) + 1
+            byMonth[c][month] = byMonth[c][month] + amount
+            if c not in specialCategories:
+                normalCats.append(c)
+        bottomCats = normalCats[:] # Copy
+        for b in normalCats:
+            sups = kb.each(subj=b, pred=rdfs.subClassOf)
+            for sup in sups:
+                if sup in bottomCats:
+                    bottomCats.remove(sup)
+        if len(bottomCats) == 0:
+           noteError("No ategoriy: %s"  # all cats: %s, raw cats:%s"
+                        %(`bottomCats`))  #  ,`cats`, `kb.each(subj=s, pred=rdf.type)`)
+        elif bottomCats[0] not in bottomCategories:
+           pass # noteError("Be more specifc: %s"  %(`bottomCats[0]`)) # Won't get shown e.g. in year-cat.html
+        if len(bottomCats) > 1:
+           noteError("Inconsistent categories: %s"  # all cats: %s, raw cats:%s"
+                        %(`bottomCats`))  #  ,`cats`, `kb.each(subj=s, pred=rdf.type)`)
+
     
-        
-        print '<html xmlns="http://www.w3.org/1999/xhtml">'
-        print """<head>
-            <title>Annual Summary by month</title>
-            <link rel="Stylesheet" href="report.css">
-        </head>
-        <body>
-        """
+    print '<html xmlns="http://www.w3.org/1999/xhtml">'
+    print """<head>
+        <meta charset='UTF-8'>
+        <title>Annual Summary by month</title>
+        <link rel="Stylesheet" href="report.css">
+    </head>
+    <body>
+    """
 #           <img src="sand-dollar.gif" alt="dollar" align="right"/>
-        
+    
 
 
-        version = "$Id$"
+    version = "$Id$"
 #       if not option_quiet:
 #       _outSink.makeComment("<address>Processed by " + version[1:-1]+"</address>") # Strip $ to disarm
 
 
 #  SUMMARY  TABLE OF CATEGORY BY MONTH
 
-        print "<h2>Personal categories and months %s - %s</h2>" % (startDate, endDate)
-        print "<table class='wide' style='border-collapse:collapse; border: 0.01em solid #aaa; text-align: right' ><col style='text-align: left'>"
-        
-        print "<tr><th></th><th>Total </th>" 
-        for month in range(numberOfMonths):
-            m = month + int(startDate[5:7]) - 1
-            while m > 11: m -= 12  # Modulo in python?
-            
-            
-            print "<th><a href='year-chron.html#m%s'>%s</a></th>" %(("0"+`m+1`)[-2:], monthName[m]),
-        print "</tr>"
+    print "<h2>Personal categories and months %s - %s</h2>" % (startDate, endDate)
+    print "<table class='wide' style='border-collapse:collapse; border: 0.01em solid #aaa; text-align: right' ><col style='text-align: left'>"
+    
+    print "<tr><th></th><th>Total </th>" 
+    for month in range(numberOfMonths):
+        m = month + int(startDate[5:7]) - 1
+        while m > 11: m -= 12  # Modulo in python?
         
         
-        def listFor(c, depth=0):   # Any, because there could be 2 copies of same list :-(
-            subs = kb.any(subj = c, pred = owl.disjointUnionOf);
-            res = [ (c, depth) ];
-            if subs == None:
-                subs = kb.each(pred = rdfs.subClassOf, obj = c);
-                if len(subs) > 0:
-                    sys.stderr.write( "Warning: for %s: no disjointUnionOf but subclasses %s\n" %(`c`, `subs`))
-                for sub in subs: res += listFor(sub, depth+1)
-            else:
-                for sub in subs: res += listFor(sub, depth+1)
-            return res
-            
-        printOrder = listFor(qu.Transaction);
+        print "<th><a href='year-chron.html#m%s'>%s</a></th>" %(("0"+`m+1`)[-2:], monthName[m]),
+    print "</tr>"
+    
+    
+    def listFor(c, depth=0):   # Any, because there could be 2 copies of same list :-(
+        subs = kb.any(subj = c, pred = owl.disjointUnionOf);
+        res = [ (c, depth) ];
+        if subs == None:
+            subs = kb.each(pred = rdfs.subClassOf, obj = c);
+            if len(subs) > 0:
+                sys.stderr.write( "Warning: for %s: no disjointUnionOf but subclasses %s\n" %(`c`, `subs`))
+            for sub in subs: res += listFor(sub, depth+1)
+        else:
+            for sub in subs: res += listFor(sub, depth+1)
+        return res
         
-        for cat, depth in printOrder:
-            label = kb.the(subj=cat, pred=rdfs.label)
-            if label == None:
-                label = `cat`
-                sys.stderr.write("@@ No label for "+`cat` +"\n")
-            else:
-                label = str(label)
-            anchor = cat.fragid
-            if totals.get(cat, None) != None:
-                print monthGridRow(anchor, anchor, totals[cat], byMonth.get(cat, [0] * numberOfMonths),
-                    numberOfMonths, indent = depth)
+    printOrder = listFor(qu.Transaction);
+    
+    for cat, depth in printOrder:
+        label = kb.the(subj=cat, pred=rdfs.label)
+        if label == None:
+            label = `cat`
+            sys.stderr.write("@@ No label for "+`cat` +"\n")
+        else:
+            label = str(label)
+        anchor = cat.fragid
+        if totals.get(cat, None) != None:
+            print monthGridRow(anchor, anchor, totals[cat], byMonth.get(cat, [0] * numberOfMonths),
+                numberOfMonths, indent = depth)
 
-        print "<tr><td colspan='14'> ___  </td></tr>"
-        print monthGridRow("Income", None,  income, incomeByMonth, numberOfMonths)
-        print monthGridRow("Outgoings", None, outgoings, outgoingsByMonth, numberOfMonths)
-        print monthGridRow("Balance", None, income + outgoings, monthTotals, numberOfMonths)
+    print "<tr><td colspan='14'> ___  </td></tr>"
+    print monthGridRow("Income", None,  income, incomeByMonth, numberOfMonths)
+    print monthGridRow("Outgoings", None, outgoings, outgoingsByMonth, numberOfMonths)
+    print monthGridRow("Balance", None, income + outgoings, monthTotals, numberOfMonths)
 
-        print "</table>"
+    print "</table>"
 
-        
+    
 #  Chart of income stacked up against expenses
-        print "<p><a href='chart.svg'><p>Chart of day-day income vs expense</p><img src='chart.svg'></a></p>"
-        print "<p><a href='all.svg'><p>Chart of all income vs expense</p><img src='all.svg'></a></p>"
+    print "<p><a href='chart.svg'><p>Chart of day-day income vs expense</p><img src='chart.svg'></a></p>"
+    print "<p><a href='all.svg'><p>Chart of all income vs expense</p><img src='all.svg'></a></p>"
 
-        writeChart(filename = "chart.svg",
-            categories = bottomCategories + [ qu.UnclassifiedIncome, qu.UnclassifiedOutgoing],
-            totals = totals, income=income, outgoings=outgoings, shortTerm = 1)
+    writeChart(filename = "chart.svg",
+        categories = bottomCategories + [ qu.UnclassifiedIncome, qu.UnclassifiedOutgoing],
+        totals = totals, income=income, outgoings=outgoings, shortTerm = 1)
+
+    writeChart(filename = "all.svg",
+        categories = bottomCategories + [ qu.UnclassifiedIncome, qu.UnclassifiedOutgoing],
+        totals = totals, income=income, outgoings=outgoings, shortTerm = 0)
+
+
+    # Output totals
     
-        writeChart(filename = "all.svg",
-            categories = bottomCategories + [ qu.UnclassifiedIncome, qu.UnclassifiedOutgoing],
-            totals = totals, income=income, outgoings=outgoings, shortTerm = 0)
+    ko = kb.newFormula()    
+    for c in quCategories + [ qu.UnclassifiedIncome, qu.UnclassifiedOutgoing]:
+        ko.add(subj=c, pred=qu.total, obj=("%7.2f" % totals.get(c,0)))
+    ko.add(subj=qu.Transaction, pred=qu.total, obj=("%7.2f" % (income + outgoings)))
+    ko.close()
     
-
-        # Output totals
-        
-        ko = kb.newFormula()    
-        for c in quCategories + [ qu.UnclassifiedIncome, qu.UnclassifiedOutgoing]:
-            ko.add(subj=c, pred=qu.total, obj=("%7.2f" % totals.get(c,0)))
-        ko.close()
-        
-        if (totalsFilename):
-            fo = open(totalsFilename, "w")
-            fo.write(ko.n3String())
-            fo.close
+    if (totalsFilename):
+        fo = open(totalsFilename, "w")
+        fo.write(ko.n3String())
+        fo.close
 
 
-        #  Generate a list of errors found
-        errstr = ""
-        for x, list in errors.items():
-            errstr += transactionRow(x)
-            for e in list: errstr += "<tr><td colspan='4'>"+`e`+"</td></tr>\n"  #  @@@ encode error string
-        if errstr:
-            print "<h2>Inconsistencies</h2><table>\n" + errstr + "</table>\n"
-        
-        # List Unclassified Income and Spending
-        
-        def transactionList(cat):
-            ts = kb.each(pred = rdf.type, obj = cat)
-            if len(ts) == 0: return ""
-            label = kb.any(cat, rdfs.label)
-            st = '<h2>'+label.value()+'</h2>\n<table>\n'
-            return st + transactionTable(ts)
-        
-        for cat in [ qu.UnclassifiedIncome, qu.UnclassifiedOutgoing]:
-            print transactionList(cat)
-
-        print reimbursablesCheck();
-        
-        internalCheck()
-
-        
-        print "<h2>Tax Categories</h2>"
-        taxCategories = kb.each(pred=rdf_type, obj=tax.Category)
-        printCategoryTotalsOnly(taxCategories + [ qu.Unclassified], totals, count)
+    #  Generate a list of errors found
+    errstr = ""
+    for x, list in errors.items():
+        errstr += transactionRow(x)
+        for e in list: errstr += "<tr><td colspan='4'>"+`e`+"</td></tr>\n"  #  @@@ encode error string
+    if errstr:
+        print "<h2>Inconsistencies</h2><table>\n" + errstr + "</table>\n"
     
-        print "<h2>Tax stuff</h2>"
-        print "<table>"
-        print "<tr><th>-<th>Form line</th><th>amount</th></tr>"
-        print "</table>"
-            
-        # print "<h2>Personal Category total</h2>"
-        # printCategoryTotalsOnly(quCategories + [ qu.Unclassified], totals, count)
+    # List Unclassified Income and Spending
+    
+    def transactionList(cat):
+        ts = kb.each(pred = rdf.type, obj = cat)
+        if len(ts) == 0: return ""
+        label = kb.any(cat, rdfs.label)
+        st = '<h2>'+label.value()+'</h2>\n<table>\n'
+        return st + transactionTable(ts)
+    
+    for cat in [ qu.UnclassifiedIncome, qu.UnclassifiedOutgoing]:
+        print transactionList(cat)
 
-        print
-
-        print "Note totals for tax and personal breakdowns must match."
-        dates = kb.statementsMatching(pred=qu.date)
-        print "There should be a total of %i transactions in each." % len(dates)
-
-        
-
-        if 0:
-            print "<pre>(consistency check)"
-            problems = 0
-            for s in dates:
-                tra = s.subject()
-                types = kb.each(subj=tra, pred=rdf_type)
-                for typ in types:
-                    if typ is qu.Unclassified or typ is qu.Classified:
-                        break # ok
-                else:
-                    print "@@@@ problem transcation with no classified or unclassified, with types", types
-                    printTransactionDetails(tra)
-                    problems = problems + 1
-            print problems, "problems.</pre>"
-        
-        print "</body></html>"
+    print reimbursablesCheck();
+    
+    internalCheck()
 
     
+    print "<h2>Tax Categories</h2>"
+    taxCategories = kb.each(pred=rdf_type, obj=tax.Category)
+    printCategoryTotalsOnly(taxCategories + [ qu.Unclassified], totals, count)
+
+    print "<h2>Tax stuff</h2>"
+    print "<table>"
+    print "<tr><th>-<th>Form line</th><th>amount</th></tr>"
+    print "</table>"
         
+    # print "<h2>Personal Category total</h2>"
+    # printCategoryTotalsOnly(quCategories + [ qu.Unclassified], totals, count)
+
+    print
+
+    print "Note totals for tax and personal breakdowns must match."
+    dates = kb.statementsMatching(pred=qu.date)
+    print "There should be a total of %i transactions in each." % len(dates)
+
+    
+
+    if 0:
+        print "<pre>(consistency check)"
+        problems = 0
+        for s in dates:
+            tra = s.subject()
+            types = kb.each(subj=tra, pred=rdf_type)
+            for typ in types:
+                if typ is qu.Unclassified or typ is qu.Classified:
+                    break # ok
+            else:
+                print "@@@@ problem transcation with no classified or unclassified, with types", types
+                printTransactionDetails(tra)
+                problems = problems + 1
+        print problems, "problems.</pre>"
+    
+    print "</body></html>"
+
+
+    
 ############################################################ Main program
 
 reportLink = "year-cat.html"

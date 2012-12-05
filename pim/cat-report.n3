@@ -10,7 +10,7 @@
 @prefix q:  <http://www.w3.org/2000/10/swap/pim/qif#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/> .
 @prefix trip: <http://www.w3.org/ns/pim/trip#>.
-
+@prefix flow: <http://www.w3.org/2005/01/wf/flow#>.
 
 @prefix os: <http://www.w3.org/2000/10/swap/os#>.
 @prefix tax:  <http://www.w3.org/2000/10/swap/pim/tax.n3#>.
@@ -36,6 +36,7 @@ q:UnclassifiedOutgoing a :toBeDisplayed;  s:label "Unclassified Outgoings".
 """<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <title>Spending and Income by category - personal financial report</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <!-- <link type="text/css" rel="stylesheet" href="report.css" /> -->
   <style type="text/css" media="all">
 """.
@@ -51,11 +52,16 @@ q:UnclassifiedOutgoing a :toBeDisplayed;  s:label "Unclassified Outgoings".
 <h1>Spending and Income by category</h1>
 """.
 
+#  Heading of section
+
+#  Did have: (:y!log:uri "(/Financial/.*)")!string:scrape
 
 {   :y a :toBeDisplayed; s:label :l.
-    (:y!log:uri ".*#(.*)") string:scrape :a. 
+    :y log:uri ?uri.
+    (?uri ".*#(.*)") string:scrape :a. 
+     (?uri "/Documents/(.*)") string:scrape ?tail .
     ( :l " 0000") string:concatenation :k.
-    ( "<h2><a name='" :a "' href='" :y!log:uri "'>  " :l """</a></h2><table>
+    ( "<h2><a name='" :a "' href='../../" ?tail "'>  " :l """</a></h2><table>
  <tbody>
   <tr><th>Date</th>
    <th>Details ("payee")</th>
@@ -78,8 +84,6 @@ q:UnclassifiedOutgoing a :toBeDisplayed;  s:label "Unclassified Outgoings".
      
      ("%6.2f" ?dollars) string:format :x.
      
-        # Check lines have to payees, a raw one (suppressed here) and one from checks-by-hand.*
-#    :p string:notMatches "^C[hH][Ee][Cc][Kk]".  # Check lines should have other -- eh?
     :y a :toBeDisplayed; s:label :l.
     ( :l " " :d ?URI "0") string:concatenation :k.
     (  "<tr class='"  :a
@@ -119,10 +123,34 @@ q:UnclassifiedOutgoing a :toBeDisplayed;  s:label "Unclassified Outgoings".
 	q:toAccount [s:label :a].
      
     :y a :toBeDisplayed; s:label :l.
+     (?tripURI "/Documents/(.*)")  string:scrape ?tail .
+
     ( :l " " :d ?URI "2") string:concatenation :k.
     (  "<tr class='"  :a
 	 "'><td class='date'>"
-       "</td><td class='comment'> Trip: <a href='" ?tripURI "'>" :p
+       "</td><td class='comment'> Trip: <a href='../../../" ?tail "'>" :p
+       "</a></td><td class='amount'></td></tr>\n") string:concatenation :s
+} log:implies {
+   :k log:outputString :s
+}.
+
+#### Attachment underneath
+{  
+    [] a :y;
+	q:date :d;
+	log:uri ?URI;
+        
+        flow:attachment [
+     #   dc:title :p; 
+        log:uri ?fileURI];
+
+	q:toAccount [s:label :a].
+     (?fileURI "/Documents/(.*)") string:scrape ?tail .  # Only works on local files
+    :y a :toBeDisplayed; s:label :l.
+    ( :l " " :d ?URI "3") string:concatenation :k.
+    (  "<tr class='"  "attachment"
+	 "'><td class='date'>"
+       "</td><td class='attach'> See: <a href='../../../" ?tail "'>" ?tail
        "</a></td><td class='amount'></td></tr>\n") string:concatenation :s
 } log:implies {
    :k log:outputString :s

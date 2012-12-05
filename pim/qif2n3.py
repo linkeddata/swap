@@ -112,9 +112,9 @@ def extract(path):
     @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
     @prefix log: <http://www.w3.org/2000/10/swap/log#>.
     @prefix qu:  <http://www.w3.org/2000/10/swap/pim/qif#>.
-    @prefix acc: <accounts.n3#>.
-    @prefix cat: <categories.n3#>.
-    @prefix cla: <classes.n3#>.
+#    @prefix acc: <../../../Financial/Data/accounts.n3#>.
+#    @prefix cat: <categories.n3#>.
+#    @prefix cla: <classes.n3#>.
     """
 
     input = open(path, "r")
@@ -175,7 +175,7 @@ def extract(path):
                 if toAccount!= None: #@@ mising from citibank download
                     print "qu:toAccount ",toAccount,
                 else:
-                    print "qu:toAccount acc:%s" % defaultAccount,
+                    print "qu:toAccount %s;" % defaultAccount,
                     defaultUsed = 1
             print "."
             inSentence = 0
@@ -230,7 +230,8 @@ def extract(path):
                 print 'qu:%s "%s";'%(property, val),
     if inSentence: print ".",
 #    if inAccount: print "]\n."
-    if defaultUsed: print """    acc:Default s:label "DEFAULT". """
+    if defaultUsed and defaultAccount == "<accouts.n3#Default>":
+        print """    acc:Default s:label "DEFAULT". """
     print "\n\n#ends\n"
             
     input.close()
@@ -246,13 +247,14 @@ def do(path):
 recursive = 0
 verbose = 0
 files = []
-defaultAccount = "Default";
+defaultAccount = "<accouts.n3#Default>";
 
 for arg in sys.argv[1:]:
     if arg[0:1] == "-":
 #        if arg == "-r": recursive = 1    # Recursive
         if arg == "-v": verbose = 1   # Tell me even about files which were ok
-        elif arg[:3] == "-a=": defaultAccount = arg[3:]
+        elif arg[:3] == "-A=": defaultAccount = "<%s>" % arg[3:]
+        elif arg[:3] == "-a=": defaultAccount = "<accounts.n3#%s>" % arg[3:]
         else:
             print """Bad option argument.
             -a=paypal  set the default account in case none in file

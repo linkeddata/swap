@@ -4,20 +4,89 @@
 
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
-@prefix : <http://www.w3.org/2001/swap/pim/mort>.
+@prefix : <http://www.w3.org/2001/swap/pim/mortgage#>.
+
+ # old:
+ # :date  a rdf:Property; rdfs:label "date".
+ # :description  a rdf:Property; rdfs:label "description".
+ # :payment  a rdf:Property; rdfs:label "payment".
+ # :insurace  a rdf:Property; rdfs:label "insurace".
+ # :principal  a rdf:Property; rdfs:label "principal".
+ # :balance  a rdf:Property; rdfs:label "balance".
+ # :interest  a rdf:Property; rdfs:label "interest".
+ # :buydown  a rdf:Property; rdfs:label "buydown".
+ # :escrow  a rdf:Property; rdfs:label "escrow".
+ # :escrowBalance  a rdf:Property; rdfs:label "Escrow Balance".
+ # :lateCharge  a rdf:Property; rdfs:label "Late Charge".
+ # :lateChargeBalance  a rdf:Property; rdfs:label "Late Charge Balance".
+ # :partial  a rdf:Property; rdfs:label "partial".
+ # :partialBalance  a rdf:Property; rdfs:label "Partial Balance".
 
 
-  :date  a rdf:Property; rdfs:label "date".
-  :description  a rdf:Property; rdfs:label "description".
-  :payment  a rdf:Property; rdfs:label "payment".
-  :insurace  a rdf:Property; rdfs:label "insurace".
-  :principal  a rdf:Property; rdfs:label "principal".
-  :balance  a rdf:Property; rdfs:label "balance".
-  :interest  a rdf:Property; rdfs:label "interest".
-  :buydown  a rdf:Property; rdfs:label "buydown".
-  :escrow  a rdf:Property; rdfs:label "escrow".
-  :escrowBalance  a rdf:Property; rdfs:label "Escrow Balance".
-  :lateCharge  a rdf:Property; rdfs:label "Late Charge".
-  :lateChargeBalance  a rdf:Property; rdfs:label "Late Charge Balance".
-  :partial  a rdf:Property; rdfs:label "partial".
-  :partialBalance  a rdf:Property; rdfs:label "Partial Balance".
+  :date  a rdf:Property; rdfs:label "Date".
+  
+  :description  a rdf:Property; rdfs:label "Description".
+  
+  :payment_Amt  a rdf:Property; rdfs:label "Payment Amt".
+  
+  :opt_Prod_Amt  a rdf:Property; rdfs:label "Opt. Prod. Amt."
+; rdfs:comment """Payment AmountPayment amount is the dollar amount due
+for the current month, which includes principal, interest and
+escrow, if those items apply. This does not include any past due
+amounts or fees.Optional Product(s)If you have elected for an optional product (such as life
+insurance, disability, home warranty, etc.) in which we are
+collecting a monthly premium, that dollar amount will be entered
+here."""
+.
+  :principal  a rdf:Property; rdfs:label "Principal/"
+.
+  :principalBalance  a rdf:Property; rdfs:label "PrincipalBalance"
+; rdfs:comment """PrincipalPrincipal is the portion of your monthly
+payment deducted from your current loan balance.Principal BalancePrincipal balance is the portion of the remaining dollar amount
+owed from the original/initial amount borrowed, not including
+interest or fees due that is commonly referred to as the face value
+of the note or mortgage."""
+.
+  :interest  a rdf:Property; rdfs:label "Interest/"
+.
+  :interestBuydown  a rdf:Property; rdfs:label "InterestBuydown"
+; rdfs:comment """InterestInterest is the portion of your monthly
+payment that is attributable to the application of the applicable
+interest rate to your principal balance.Buy DownA mortgage loan with a below-market interest rate for a specific
+period of time. The reduced interest rate results in a lower
+monthly payment for the time period specified. A buydown is made by
+a lender as the result of money received from a builder, seller,
+homebuyer, or others."""
+.
+  :escrow  a rdf:Property; rdfs:label "Escrow"
+.
+  :escrowBalance  a rdf:Property; rdfs:label "EscrowBalance"
+; rdfs:comment """EscrowEscrow is the portion of your monthly
+payment that is held within your escrow account to pay your
+property tax, hazard insurance, and/or mortgage insurance
+(PMI/MIP), if applicable.Escrow BalanceThe escrow balance is the dollar amount currently in your escrow
+account. Note: The escrow account is used to make your property
+tax, hazard insurance, and/or mortgage insurance payment
+(MIP/PMI),if applicable."""
+.
+  :late_Charge  a rdf:Property; rdfs:label "Late Charge".
+  
+  :late_ChargeBalance  a rdf:Property; rdfs:label "Late ChargeBalance"
+; rdfs:comment """Late ChargeThe late charge is the amount assessed
+when your monthly payment is not paid by the agreed upon monthly
+date. There is often a grace period that extends a number of days
+from the date the payment is due, unless otherwise stated in your
+loan document.Late Charge BalanceThe late charge balance is the penalty amount due and payable to
+the lender for payment(s) received after the allotted grace
+period."""
+.
+  :partial  a rdf:Property; rdfs:label "Partial"
+.
+  :partialBalance  a rdf:Property; rdfs:label "PartialBalance"
+; rdfs:comment """PartialPartial payment is the dollar amount set
+aside within the partial balance until the full amount is received
+to make the principal and interest payment expected for the current
+month.Partial BalancePartial balance is any amount (usually under the contractual
+payment amount) paid and held in an unapplied/suspense funds
+account."""
+.

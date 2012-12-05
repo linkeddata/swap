@@ -71,15 +71,16 @@ q:UnclassifiedOutgoing a :toBeDisplayed; s:label "Unclassified Outgoings".
 
 {  
     [] a :y; q:payee :p; q:amount :x; q:date :d; q:toAccount [s:label :a].
-    :p log:notEqualTo "Check".
-    :p log:notEqualTo "Check - Ecp".
-    :d string:startsWith 1!os:argv.
-    :y a :toBeDisplayed; s:label :l.
+#    :p log:notEqualTo "Check".
+#    :p log:notEqualTo "Check - Ecp".
+#    :d string:startsWith 1!os:argv.
+#    :y a :toBeDisplayed.
+#    :y s:label :l.
     ( :d :a ) string:concatenation :k.
     (  "<tr class='"  :a "'><td class='date'>" (:d "^([^T]*)")!string:scrape
        "</td><td class='payee'>" :p
-       "</td><td class='cat'>" :l
-       "</td><td class='to'>" :a
+#       "</td><td class='cat'>" :l
+#       "</td><td class='to'>" :a
        "</td><td class='amount'>" :x "</td></tr>\n") string:concatenation :s
 } log:implies {
    :k log:outputString :s

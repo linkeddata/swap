@@ -13,12 +13,13 @@ s?<time>\([_A-Z:0-9\.-]*\)</time>?   wgs84:time "\1"; #?
 s?<trkseg>??
 s?</trkseg>??
 s?<trk>? gps:track [ #?
-s?</trk>?]. #?
+s?</trk>?]; #?
 #/<gpx/,/</-1d
-s?</gpx>??
+s?</gpx>?. #?
 /<wpt/,/<\/wpt/d
 /<?xml/d
 # Remove any remaining XML lines:
 #/<[A-Za-z]*>.*<\/[A-Za-z]*>/d
 /#$/!d
 s/#$//
+
