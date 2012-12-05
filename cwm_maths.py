@@ -138,11 +138,11 @@ class BI_remainderOf(LightBuiltIn, ReverseFunction):
 
 class BI_negation(LightBuiltIn, Function, ReverseFunction):
 
-    def evalaluateObject(self, subject):
+    def evaluateObject(self, subject):
             t = -Decimal(subject)
             if t is not None: return tidy(t)
 
-    def evalaluateSubject(self, object):
+    def evaluateSubject(self, object):
             t = -Decimal(object)
             if t is not None: return tidy(t)
 
