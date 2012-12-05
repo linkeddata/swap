@@ -10,6 +10,7 @@
     -comma          Use comma as delimited instead of tab
     -xhtml          Read XHTML and look for a table, instead of CSV or TSV
     -id             Generate sequential URIs for the items described by each row
+    -startId        With -id, start ids at this number (default 0) eg -startId 1
     -idfield        Use column 'id' to form the URI for each item
     -type           Declare each thing as of a type <#Item>.
     -namespace xxx  Properties are in namespace <xxx#> note added hash
@@ -45,6 +46,7 @@ class DataTable(list):
         self.col = -1
         self.row = -1
         self.numberOfColumns = 0;
+        self.idOffset = 0;
         self.headings, self.tips = [], []
         self.cellType = ''
         self.kludge = 0; # Kludge: we are following a <br>
@@ -289,7 +291,7 @@ class DataTable(list):
             if str != "":
                 thisId = '[]';
                 if "-id" in argv[1:]:
-                    thisId =  "<#n%i>" % rowNumber
+                    thisId =  "<#n%i>" % (rowNumber + self.idOffset)
                 elif  "-idfield" in argv[1:]:
                     thidId = "<#n%s>" % this_id;
                     
@@ -312,6 +314,7 @@ class DataTable(list):
         namespace = None;
         for i in range(len(argv)-2):
             if argv[i+1] == '-namespace': namespace = argv[i+2] + '#'
+            if argv[i+1] == '-startId': self.idOffset = int(argv[i+2])
                 
         if "-help" in argv[1:]:
             info( __doc__);
