@@ -51,8 +51,28 @@ q:SupportingDocument a s:Class;
 
 q:Receipt  a s:Class;
     s:label "receipt";
-    s:subClassOf q:SupportingDocument .    
+    s:subClassOf q:SupportingDocument .   
+    
+# Split transactions
+#
+q:splitPart a r:Property;
+    s:label "part";
+    s:domain  q:Transaction, q:SplitTransaction; s:range  q:Transaction;
+    s:comment """A transaction representing a part of this transaction.
+    The sum of the amounts of the parts must equal the amount of this transaction.""".
 
+q:splitReverse a r:Property;
+    s:label "part";
+    s:domain  q:Transaction, q:SplitTransaction; s:range  q:Transaction;
+    s:comment """A reverse transaction, putting this transaction back in the Split account, for redistribution as parts.
+    The amount of the reverse transaction must be the negation of this transaction.""".
+
+q:SplitTransaction a s:Class;
+    s:label "split transaction";
+    s:subClassOf q:Transaction;
+    s:comment "A transaction which has to be split into parts for classification.".
+    
+    
 #  No .. use http://www.w3.org/ns/pim/trip#trip
 #q:trip a r:Property; s:label "trip";
 #    s:comment "The trip associated with this transaction, etc. For expenses purposes, for example.";

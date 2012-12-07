@@ -40,6 +40,12 @@
         <subClassOf r:resource="http://www.w3.org/2000/10/swap/pim/qif#SupportingDocument"/>
     </Class>
 
+    <Class r:about="http://www.w3.org/2000/10/swap/pim/qif#SplitTransaction">
+        <comment>A transaction which has to be split into parts for classification.</comment>
+        <label>split transaction</label>
+        <subClassOf r:resource="http://www.w3.org/2000/10/swap/pim/qif#Transaction"/>
+    </Class>
+
     <Class r:about="http://www.w3.org/2000/10/swap/pim/qif#SupportingDocument">
         <label>supporting document</label>
         <subClassOf r:resource="http://www.w3.org/2006/gen/ont#InformationResource"/>
@@ -90,6 +96,24 @@
         <domain r:resource="http://www.w3.org/2000/10/swap/pim/qif#Transaction"/>
         <label>payee</label>
         <subPropertyOf r:resource="http://www.w3.org/2000/01/rdf-schema#label"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/qif#splitPart">
+        <comment>A transaction representing a part of this transaction.
+    The sum of the amounts of the parts must equal the amount of this transaction.</comment>
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/qif#SplitTransaction"/>
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/qif#Transaction"/>
+        <label>part</label>
+        <range r:resource="http://www.w3.org/2000/10/swap/pim/qif#Transaction"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/qif#splitReverse">
+        <comment>A reverse transaction, putting this transaction back in the Split account, for redistribution as parts.
+    The amount of the reverse transaction must be the negation of this transaction.</comment>
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/qif#SplitTransaction"/>
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/qif#Transaction"/>
+        <label>part</label>
+        <range r:resource="http://www.w3.org/2000/10/swap/pim/qif#Transaction"/>
     </r:Property>
 
     <r:Property r:about="http://www.w3.org/2000/10/swap/pim/qif#toAccount">
