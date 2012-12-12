@@ -56,19 +56,26 @@ q:UnclassifiedOutgoing a :toBeDisplayed;  s:label "Unclassified Outgoings".
 
 #  Did have: (:y!log:uri "(/Financial/.*)")!string:scrape
 
-{   :y a :toBeDisplayed; s:label :l.
-    :y log:uri ?uri.
-    (?uri ".*#(.*)") string:scrape :a. 
-     (?uri "/Documents/(.*)") string:scrape ?tail .
-    ( :l " 0000") string:concatenation :k.
-    ( "<h2><a name='" :a "' href='../../" ?tail "'>  " :l """</a></h2><table>
+{
+#   [] a ?y.
+
+    ?y a :toBeDisplayed; s:label ?l.
+    
+    ?y log:uri ?uri.
+        (?uri ".*#(.*)") string:scrape ?a. 
+       (?uri "/Documents/(.*)") string:scrape ?tail .
+     ?uri os:baseRelative ?rel.
+    
+    ( "<h2><a name='" ?a "' href='"  ?rel  "'>  " ?l """</a></h2><table>
  <tbody>
   <tr><th>Date</th>
    <th>Details ("payee")</th>
-   <th>Amount</th></tr>""" ) string:concatenation :s .
-   ( :l " 0000" ) string:concatenation :k.
-    } log:implies {
-    :k log:outputString :s
+   <th>Amount</th></tr>""" ) string:concatenation ?s .
+   
+   ( ?l " 00000000" ) string:concatenation ?k.
+   
+} => {
+    ?k log:outputString ?s.
 }.
 
 # Each line:
@@ -85,7 +92,8 @@ q:UnclassifiedOutgoing a :toBeDisplayed;  s:label "Unclassified Outgoings".
      ("%6.2f" ?dollars) string:format :x.
      
     :y a :toBeDisplayed; s:label :l.
-    ( :l " " :d ?URI "0") string:concatenation :k.
+    
+    ( :l " 11111111 " :d ?URI "0") string:concatenation :k.
     (  "<tr class='"  :a
 	 "'><td class='date'><a href='"  (?URI "/Data/(.*)")!string:scrape "'>" (:d "^([^T]*)")!string:scrape
 #       "</a></td><td class='cat'>" :l
