@@ -124,6 +124,9 @@ def sanitize(tag):
         if ch in ".-": str+= "_"
         else: str += ch
     return str
+    
+def de_escapeXML(st0):
+    return st0.replace('&amp;','&').replace('&lt;', '<').replace('&gt;', '>');
 
 def contentLines(doc, argv, fn=None):
     "Process the content as a single buffer"
@@ -197,7 +200,7 @@ def contentLines(doc, argv, fn=None):
             e = line.find('</')
             if e > 0:
                 line = line[:e]  # If so strip off
-            value = line[i+1:]
+            value = de_escapeXML(line[i+1:]);
             if tag[:2] == "DT": # Datetimes
                 for re_fmt in dtcases:
                     m = re_fmt[0].search(value)
@@ -209,8 +212,8 @@ def contentLines(doc, argv, fn=None):
 				ln, line))
                 
 	    if n3: print  "%s ofx:%s \"%s\";" % ("  "*len(stack), tag, value)
-            if tag in [ "ACCTID", "DTEND", "ACCTTYPE"]:
-                filenamebits[tag] = value
+            if tag in [ "ACCTID", "DTSTART", "DTEND", "ACCTTYPE"]:
+                filenamebits[tag] = value;
                 
     if stack: raise SyntaxError("Unclosed tags: %s" % stack)
     if n3: print "."
@@ -219,12 +222,12 @@ def contentLines(doc, argv, fn=None):
          # Not always present but on old BBoA a/c needed top differentiate between
          # checking and savings accounts of SAME ACCOUNT NUMBER!
         at = filenamebits.get("ACCTTYPE", 'ac').lower() 
-        name = filenamebits["DTEND"][:10]+"-" + at + "-" + filenamebits["ACCTID"][-4:]+".ofx"
+        name = filenamebits["DTSTART"][:10]+"-on-" + at + "-" + filenamebits["ACCTID"][-4:]+".ofx"
         if name == fn:
             print "Name is already as suggested. Not renamed: %s"%fn
         else:
             print "mv %s %s" % (fn, name)
-            os.rename(fn, name)
+            if "--no" not in sys.argv[1:]: os.rename(fn, name)
     
 
 def _test():

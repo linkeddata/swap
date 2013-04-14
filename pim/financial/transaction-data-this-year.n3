@@ -1,0 +1,20 @@
+# Filter for transaction and account data only
+# Transactions those things which have amounts.
+#
+#  cwm     -- with 2009
+
+@prefix os:  <http://www.w3.org/2000/10/swap/os#> .
+@prefix str:  <http://www.w3.org/2000/10/swap/string#> .
+
+@prefix : <http://www.w3.org/2000/10/swap/pim/qif#> .
+@prefix ofx: <http://www.w3.org/2000/10/swap/pim/ofx#> .
+
+
+{ ?x :amount []; ?p ?z. 
+    ?x!:date str:startsWith 1!os:argv } => { ?x ?p ?z }.
+
+{ ?x ofx:ACCTID []; ?p ?z } => { ?x ?p ?z }.
+
+
+#ends
+ 
