@@ -9,8 +9,11 @@
 @prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#> .
 @prefix trip: <http://www.w3.org/ns/pim/trip#>.
 @prefix gen:	<http://www.w3.org/2006/gen/ont#> .
+@prefix ui: <http://www.w3.org/ns/ui#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
 
 <> doc:version "$Id$";
+  dc:title "An ontology for personal finances";
   s:seeAlso <qif2n3.py>, <http://dev.w3.org/cvsweb/2000/quacken/>,
 	<http://dev.w3.org/cvsweb/~checkout~/2000/quacken/vocab.n3?rev=1.1>,
         <http://www.intuit.com/support/quicken/2002/win/1177.html>;
@@ -19,7 +22,8 @@
 	bank tranactions.  See also the OFX ontology.""".
 
 
-q:Transaction a s:Class; s:label "transaction".
+q:Transaction a s:Class; s:label "transaction"; ui:sortBy q:date.
+
 q:Classified a s:Class; s:label "classified"; s:subClassOf q:Transaction.
 q:Unclassified a s:Class; s:label "unclassified"; s:subClassOf q:Transaction.
 q:UnclassifiedIncome a s:Class; s:label "unclassified income"; s:subClassOf q:Unclassified.
@@ -72,7 +76,22 @@ q:SplitTransaction a s:Class;
     s:subClassOf q:Transaction;
     s:comment "A transaction which has to be split into parts for classification.".
     
-    
+####### For for the essential metadata about a supporting document
+#
+#
+q:DocumentMetadataForm a ui:Form;
+    dc:title "Basic document metadata";
+    is ui:creationForm of q:SupportingDocument;
+    a ui:Group; ui:part
+        [ ui:sequence 1; a ui:Heading;  ui:contents "Edit Metadata"@en], 
+        [ ui:sequence 2; a ui:SingleLineTextField; ui:property dc:title; ui:size 80 ],
+        [ ui:sequence 3; a ui:Comment;  ui:contents
+        """The date is the date of the document, for example for an invoice or email,
+        or if none available a date of e.g. a described transaction, event etc."""@en; ui:style "background-color: #ffe;"],
+        [ ui:sequence 4; a ui:DateField; ui:property dc:date ],
+        [ ui:sequence 4; a ui:MultiLineTextField; ui:property s:comment ].
+
+
 #  No .. use http://www.w3.org/ns/pim/trip#trip
 #q:trip a r:Property; s:label "trip";
 #    s:comment "The trip associated with this transaction, etc. For expenses purposes, for example.";

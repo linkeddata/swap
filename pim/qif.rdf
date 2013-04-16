@@ -4,11 +4,14 @@
 
 
 <r:RDF xmlns="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:doc="http://www.w3.org/2000/10/swap/pim/doc#"
     xmlns:r="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    xmlns:s="http://www.w3.org/2000/01/rdf-schema#">
+    xmlns:s="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:ui="http://www.w3.org/ns/ui#">
 
     <r:Description r:about="">
+        <dc:title>An ontology for personal finances</dc:title>
         <comment>An ontology for data exported, for example, by Quicken,
 	as an interchange format. Also a generally useful ontology for
 	bank tranactions.  See also the OFX ontology.</comment>
@@ -35,6 +38,39 @@
         <subClassOf r:resource="http://www.w3.org/2000/10/swap/pim/qif#Transaction"/>
     </Class>
 
+    <ui:Form r:about="http://www.w3.org/2000/10/swap/pim/qif#DocumentMetadataForm">
+        <r:type r:resource="http://www.w3.org/ns/ui#Group"/>
+        <dc:title>Basic document metadata</dc:title>
+        <ui:part r:parseType="Resource">
+            <r:type r:resource="http://www.w3.org/ns/ui#Heading"/>
+            <ui:contents xml:lang="en">Edit Metadata</ui:contents>
+            <ui:sequence r:datatype="http://www.w3.org/2001/XMLSchema#integer">1</ui:sequence>
+        </ui:part>
+        <ui:part r:parseType="Resource">
+            <r:type r:resource="http://www.w3.org/ns/ui#SingleLineTextField"/>
+            <ui:property r:resource="http://purl.org/dc/elements/1.1/title"/>
+            <ui:sequence r:datatype="http://www.w3.org/2001/XMLSchema#integer">2</ui:sequence>
+            <ui:size r:datatype="http://www.w3.org/2001/XMLSchema#integer">80</ui:size>
+        </ui:part>
+        <ui:part r:parseType="Resource">
+            <r:type r:resource="http://www.w3.org/ns/ui#Comment"/>
+            <ui:contents xml:lang="en">The date is the date of the document, for example for an invoice or email,
+        or if none available a date of e.g. a described transaction, event etc.</ui:contents>
+            <ui:sequence r:datatype="http://www.w3.org/2001/XMLSchema#integer">3</ui:sequence>
+            <ui:style>background-color: #ffe;</ui:style>
+        </ui:part>
+        <ui:part r:parseType="Resource">
+            <r:type r:resource="http://www.w3.org/ns/ui#DateField"/>
+            <ui:property r:resource="http://purl.org/dc/elements/1.1/date"/>
+            <ui:sequence r:datatype="http://www.w3.org/2001/XMLSchema#integer">4</ui:sequence>
+        </ui:part>
+        <ui:part r:parseType="Resource">
+            <r:type r:resource="http://www.w3.org/ns/ui#MultiLineTextField"/>
+            <ui:property r:resource="http://www.w3.org/2000/01/rdf-schema#comment"/>
+            <ui:sequence r:datatype="http://www.w3.org/2001/XMLSchema#integer">4</ui:sequence>
+        </ui:part>
+    </ui:Form>
+
     <Class r:about="http://www.w3.org/2000/10/swap/pim/qif#Receipt">
         <label>receipt</label>
         <subClassOf r:resource="http://www.w3.org/2000/10/swap/pim/qif#SupportingDocument"/>
@@ -49,10 +85,12 @@
     <Class r:about="http://www.w3.org/2000/10/swap/pim/qif#SupportingDocument">
         <label>supporting document</label>
         <subClassOf r:resource="http://www.w3.org/2006/gen/ont#InformationResource"/>
+        <ui:creationForm r:resource="http://www.w3.org/2000/10/swap/pim/qif#DocumentMetadataForm"/>
     </Class>
 
     <Class r:about="http://www.w3.org/2000/10/swap/pim/qif#Transaction">
         <label>transaction</label>
+        <ui:sortBy r:resource="http://www.w3.org/2000/10/swap/pim/qif#date"/>
     </Class>
 
     <Class r:about="http://www.w3.org/2000/10/swap/pim/qif#Unclassified">
