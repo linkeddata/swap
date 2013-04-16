@@ -1,0 +1,39 @@
+#  n3
+#
+#  Find unclassified transactions in the file whose name is argv(1)
+# Classify them as a filter -- just generated the unclassified statemnts only
+#
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix string: <http://www.w3.org/2000/10/swap/string#>.
+@prefix math: <http://www.w3.org/2000/10/swap/math#>.
+@prefix q:  <http://www.w3.org/2000/10/swap/pim/qif#>.
+
+@prefix os: <http://www.w3.org/2000/10/swap/os#>.
+@prefix tax:  <http://www.w3.org/2000/10/swap/pim/tax.n3#>.    #@@
+
+#
+@prefix : <foo#>.
+@prefix foo: <foo#>.
+
+@forAll :a, :d, :p, :t, :x, :y, :z.
+
+
+{   [is log:semantics of [ log:uri [is os:baseAbsolute of [is os:argv of "1" ]]]]
+        log:includes { :t q:payee :p; q:amount :x };      # was:  q:date :d; q:toAccount :a;
+        log:notIncludes { :t a []}.  # tax:Classified  q:Classified 
+    :x math:lessThan 0.
+} log:implies {
+    :t a q:Unclassified, q:UnclassifiedOutgoing.
+}.
+
+{   [is log:semantics of [ log:uri [is os:baseAbsolute of [is os:argv of "1" ]]]]
+        log:includes { :t q:payee :p ; q:amount :x};   # was: ; q:date :d; q:toAccount :a
+        log:notIncludes { :t a []}.  # tax:Classified  q:Classified 
+    :x math:notLessThan 0.
+} log:implies {
+    :t a q:Unclassified, q:UnclassifiedIncome.
+}.
+
+
+#ends

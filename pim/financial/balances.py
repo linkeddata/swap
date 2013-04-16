@@ -22,12 +22,13 @@ options:
     -v  --verbose           Output more about what you are doing
     -h  --help              Print this message
     
-    
+    Bug: Does not convert curency yet
     
     The date range must be given explicitly, there is no default.
     Transactions outside that year will be ignored.
 
 $Id$
+2013-04-15 Fix bug: first value ignored first transaction.
 """
 from swap import llyn, diag, notation3, RDFSink, uripath, myStore
 
@@ -61,7 +62,7 @@ kb = None;
 
 
 def figureBalances(startDate, endDate, inputURIs=["/dev/stdin"]):
-    
+    global verbose
     
     # The base URI for this process - the Web equiv of cwd
     _baseURI = uripath.base()
@@ -117,12 +118,13 @@ def figureBalances(startDate, endDate, inputURIs=["/dev/stdin"]):
         for d, a in transactionsThisStatement:
             # assert dat >= d, "Ooops '%s' < '%s'  %d, %d in %s" % (dat, d, len(dat), len(d), acid)
             # print "\t\t%10s  %10s\t%s\t%10.2f\t%10.2f" % (d, dat, acid, a, bal)
-            first[acid] = [d, bal];
             balances.append((d, dat, acid, bal));
             bal = bal - a
+            first[acid] = [d, bal];
             dat = d
             
     balances.sort();
+    if verbose: info("First: " + `first`)
     return first, balances
 
 def trackTotalBalance(first, balances):
@@ -349,36 +351,56 @@ def balancesReport(dates, first, balances):
     res = "";
     series = []; # Let's have an ordered list for once
     for ac in first:
-        if ac == 'sum': series.insert(0, ac)  # sum is special, colour 0, black.
+        if ac == 'sum': pass # series.insert(0, ac)  # sum is special, colour 0, black.
         else: series.append(ac);
         d, lastTime[ac]  = first[ac];
 
     res += 'date'
     for a in series:
         res += ','+ a
-    res += '\n'
+    res += ',total\n'
+
+    opening = {}
 
     def line(d):
         r = d
         tot = 0
+        opening[d] = {};
         for a in series:
             r +=  (',%10.2f' % lastTime[a]);
+            opening[d][a] = lastTime[a];
             if a != 'sum': tot += lastTime[a]
         if lastTime['sum'] != tot:
-            print "Error: sum %10.2f but total here %10.2f" % ( lastTime['sum'], tot);
-        return r + '\n';
+            print "Warning at %s: sum %10.2f but total here %10.2f" % (d,lastTime['sum'], tot);
+        return r +   (',%10.2f' % tot) + '\n';
 
     for s, e, ac, bal in balances:
-        lastTime[ac] = bal
         if s >= dates[dp]:
             res += line(dates[dp]);
             dp += 1;
             
+        lastTime[ac] = bal
+        delta = 0.0
         if dp >= len(dates):
-            return res;
+            break;
 
-    #print "Didn't find all dates.", dp 
-    res += line(dates[dp]);    
+    if dp < len(dates) - 1:
+        info( "Error: Didn't find all dates." +  `dates[dp]`); 
+        res += line(dates[dp]);    
+    
+    if dp == len(dates) - 1:
+        info( "Ok: Didn't find all dates." +  `dates[dp]`); 
+        res += line(dates[dp]);    
+    
+    dn = len(dates) -1;
+    res += 'delta     '
+    for a in series:
+        diff = opening[dates[dn]][a] - opening[dates[0]][a];
+        delta += diff
+        res +=  (',%10.2f' % diff);
+    res += (',%10.2f\n' % delta)
+    
+    
     return res
     
 
@@ -449,6 +471,7 @@ if __name__ == '__main__':
             endDate=endDate, inputURIs=inputURIs)
     firstSum, totalBalances = trackTotalBalance(first, balances)
     balances = balances + totalBalances
+    balances.sort();
     first.update(firstSum)
     
     if svgFileName :

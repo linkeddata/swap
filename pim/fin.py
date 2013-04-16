@@ -446,10 +446,10 @@ def doCommand(startDate, endDate, inputURIs=["/dev/stdin"],totalsFilename=None):
                 if sup in bottomCats:
                     bottomCats.remove(sup)
         if len(bottomCats) == 0:
-           noteError("No ategoriy: %s"  # all cats: %s, raw cats:%s"
-                        %(`bottomCats`))  #  ,`cats`, `kb.each(subj=s, pred=rdf.type)`)
+           noteError("No categoriy: %s  for <%s>"  # all cats: %s, raw cats:%s"
+                        %(`bottomCats`, `s`))  #  ,`cats`, `kb.each(subj=s, pred=rdf.type)`)
         elif bottomCats[0] not in bottomCategories:
-           pass # noteError("Be more specifc: %s"  %(`bottomCats[0]`)) # Won't get shown e.g. in year-cat.html
+           noteError("Be more specifc: %s for <%s>"  %(`bottomCats[0]`, `s`)) # Won't get shown e.g. in year-cat.html
         if len(bottomCats) > 1:
            noteError("Inconsistent categories: %s"  # all cats: %s, raw cats:%s"
                         %(`bottomCats`))  #  ,`cats`, `kb.each(subj=s, pred=rdf.type)`)

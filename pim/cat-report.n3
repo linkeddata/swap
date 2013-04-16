@@ -63,7 +63,7 @@ q:UnclassifiedOutgoing a :toBeDisplayed;  s:label "Unclassified Outgoings".
     
     ?y log:uri ?uri.
         (?uri ".*#(.*)") string:scrape ?a. 
-       (?uri "/Documents/(.*)") string:scrape ?tail .
+##       (?uri "/Documents/(.*)") string:scrape ?tail .
      ?uri os:baseRelative ?rel.
     
     ( "<h2><a name='" ?a "' href='"  ?rel  "'>  " ?l """</a></h2><table>
@@ -72,7 +72,7 @@ q:UnclassifiedOutgoing a :toBeDisplayed;  s:label "Unclassified Outgoings".
    <th>Details ("payee")</th>
    <th>Amount</th></tr>""" ) string:concatenation ?s .
    
-   ( ?l " 00000000" ) string:concatenation ?k.
+   ( ?l " 00000000 " ) string:concatenation ?k.
    
 } => {
     ?k log:outputString ?s.
@@ -113,7 +113,7 @@ q:UnclassifiedOutgoing a :toBeDisplayed;  s:label "Unclassified Outgoings".
 	q:toAccount [s:label :a].
      
     :y a :toBeDisplayed; s:label :l.
-    ( :l " " :d ?URI "1") string:concatenation :k.
+    ( :l " 11111111 " :d ?URI "1") string:concatenation :k.
     (  "<tr class='"  :a
 	 "'><td class='date'>"
        "</td><td class='comment'>" :p
@@ -133,7 +133,7 @@ q:UnclassifiedOutgoing a :toBeDisplayed;  s:label "Unclassified Outgoings".
     :y a :toBeDisplayed; s:label :l.
      (?tripURI "/Documents/(.*)")  string:scrape ?tail .
 
-    ( :l " " :d ?URI "2") string:concatenation :k.
+    ( :l " 11111111 " :d ?URI "2") string:concatenation :k.
     (  "<tr class='"  :a
 	 "'><td class='date'>"
        "</td><td class='comment'> Trip: <a href='../../../" ?tail "'>" :p
@@ -155,7 +155,7 @@ q:UnclassifiedOutgoing a :toBeDisplayed;  s:label "Unclassified Outgoings".
 	q:toAccount [s:label :a].
      (?fileURI "/Documents/(.*)") string:scrape ?tail .  # Only works on local files
     :y a :toBeDisplayed; s:label :l.
-    ( :l " " :d ?URI "3") string:concatenation :k.
+    ( :l " 11111111 " :d ?URI "3") string:concatenation :k.
     (  "<tr class='"  "attachment"
 	 "'><td class='date'>"
        "</td><td class='attach'> See: <a href='../../../" ?tail "'>" ?tail
@@ -168,7 +168,7 @@ q:UnclassifiedOutgoing a :toBeDisplayed;  s:label "Unclassified Outgoings".
 
 {  
     :y a :toBeDisplayed; s:label :l; q:total :x.
-    ( :l " 9000" ) string:concatenation :k.
+    ( :l " 90000000 " ) string:concatenation :k.
     (  "<tr><td class='date'>"
 #       "</td><td class='cat'>" :l
        "</td><td class='payee'>" "Total"
@@ -182,7 +182,7 @@ q:UnclassifiedOutgoing a :toBeDisplayed;  s:label "Unclassified Outgoings".
 # end section:
 
 {   :y a :toBeDisplayed; s:label :l.
-    ( :l " 9999") string:concatenation :k.
+    ( :l " 99999999 ") string:concatenation :k.
 } log:implies {
     :l log:outputString "</table>\n"
 }.
