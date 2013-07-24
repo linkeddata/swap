@@ -27,6 +27,7 @@ TODO:
     e.g., 2001 != 2001-01-01T00:00:00Z.
     
     2002-06-22 added bad string to error message -- timbl@w3.org
+    2013-07024 made the colon in the timezone offset optional as it is omitted in real data
 """
 
 import sys, time, re, operator
@@ -62,7 +63,7 @@ date_parser = re.compile(r"""^
                     (?:
                         (?P<tz_sign>[+-])
                         (?P<tz_hour>\d{1,2})
-                        :
+                        :?
                         (?P<tz_min>\d{2,2})
                     )
                 )
