@@ -230,16 +230,19 @@
  }.
 
 
-{
-    ?trans qu:toAccount ?account.
-    ?account qu:currencyCode ?code .
-    ?cur cur:code ?code.
-    ?code string:notEqualIgnoringCase "USD".
-    ?trans qu:amount ?string.
-    ("(Original currency " ?code " " ?string ")") string:concatenation ?note.
- } => {
-    ?trans s:comment ?note.
- }.
+############  It is a pain to have an uneditable rdfs:comment in the statement file.
+## suppress this.
+#
+#{
+#    ?trans qu:toAccount ?account.
+#    ?account qu:currencyCode ?code .
+#    ?cur cur:code ?code.
+#    ?code string:notEqualIgnoringCase "USD".
+#    ?trans qu:amount ?string.
+#    ("(Original currency " ?code " " ?string ")") string:concatenation ?note.
+# } => {
+#    ?trans s:comment ?note.
+# }.
 
 
    

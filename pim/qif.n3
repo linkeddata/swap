@@ -89,12 +89,8 @@ q:DocumentMetadataForm a ui:Form;
         """The date is the date of the document, for example for an invoice or email,
         or if none available a date of e.g. a described transaction, event etc."""@en; ui:style "background-color: #ffe;"],
         [ ui:sequence 4; a ui:DateField; ui:property dc:date ],
-        [ ui:sequence 4; a ui:MultiLineTextField; ui:property s:comment ].
+        [ ui:sequence 5; a ui:MultiLineTextField; ui:property s:comment ].
 
 
-#  No .. use http://www.w3.org/ns/pim/trip#trip
-#q:trip a r:Property; s:label "trip";
-#    s:comment "The trip associated with this transaction, etc. For expenses purposes, for example.";
-#    s:range trip:Trip.
 
 #ENDS

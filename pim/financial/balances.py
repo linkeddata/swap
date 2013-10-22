@@ -50,6 +50,7 @@ OFX = Namespace('http://www.w3.org/2000/10/swap/pim/ofx#');
 qu = Namespace("http://www.w3.org/2000/10/swap/pim/qif#")
 rdf = Namespace(RDF_NS_URI)
 rdfs = Namespace("http://www.w3.org/2000/01/rdf-schema#")
+cur = Namespace("http://www.w3.org/2007/ont/currency#")
 # cat = Namespace("categories.n3#")
 
 info = lambda s: sys.stderr.write(s+'\n');
@@ -103,14 +104,19 @@ def figureBalances(startDate, endDate, inputURIs=["/dev/stdin"]):
         # info("Bank statment %s  to  %s for %s" % (s, e, acid)); # @@
         
         ledgerBalance = kb.the(stmtrs, OFX.LEDGERBAL);
+        curdef = kb.the(stmtrs, OFX.CURDEF).value();
+        currency = cur.sym(curdef);
+        conversionRate = 1
+        if (curdef != "USD"):
+            conversionRate = kb.the(currency, cur.in_USD).value();
         balanceDate = str(kb.the(ledgerBalance, OFX.DTASOF))[:10];
-        balance = float(str(kb.the(ledgerBalance, OFX.BALAMT)));
+        balance = float(str(kb.the(ledgerBalance, OFX.BALAMT))) * conversionRate;
         
         transactionsThisStatement = [];
         for tran in kb.each(t, OFX.STMTTRN):
             transactionsThisStatement.append((
                 str(kb.the(tran, OFX.DTPOSTED))[:10], 
-                float(str(str(kb.the(tran, OFX.TRNAMT))))));
+                conversionRate * float(str(str(kb.the(tran, OFX.TRNAMT))))));
         transactionsThisStatement.sort();
         transactionsThisStatement.reverse();
         
