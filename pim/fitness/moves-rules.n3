@@ -1,0 +1,116 @@
+#  N3
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix ui: <http://www.w3.org/ns/ui#>.
+@prefix dc:	<http://purl.org/dc/elements/1.1/>.
+@prefix doc:	<http://www.w3.org/2000/10/swap/pim/doc#> .
+
+# Domain ontologies:
+
+@prefix : <http://www.w3.org/ns/pim/moves#> .
+@prefix moves: <http://www.w3.org/ns/pim/moves#> .
+@prefix fit:	<http://www.w3.org/ns/pim/fit#> .
+@prefix wgs84: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix ical:    <http://www.w3.org/2002/12/cal/ical#>.
+
+# CWM builtin functions
+
+@prefix list:	<http://www.w3.org/2000/10/swap/list#> .
+@prefix log:	<http://www.w3.org/2000/10/swap/log#> .
+@prefix string:	<http://www.w3.org/2000/10/swap/string#> .
+@prefix math:	<http://www.w3.org/2000/10/swap/math#> .
+
+
+<> dc:title                 "Moves ontology conversion rules";
+    s:comment
+
+        """Rules for converting personal activity as exported from moves
+    into a more standard form.""".
+
+
+# { ?doc :value ( ?v ) } => { ?v a fit:Timeline }.
+
+:lon :preferred wgs84:long.
+:lat :preferred wgs84:lat.
+
+:date :preferredDatePredicate dc:date .
+
+:time :preferredTimePredicate wgs84:time.
+:startTime :preferredTimePredicate ical:dtstart.
+:endTime :preferredTimePredicate ical:dtend.
+
+:distance :preferred fit:distance.
+:duration :preferred fit:duration.
+:calories :preferred fit:calories.
+
+# Remove unnecessary ordered list structrure
+
+{ ?x :activities ?list. ?y list:in ?list. } => { ?x fit:activity ?y .  ?list a log:Chaff.} .  
+
+#  Remove a list structure which is in fact usefully ordered but can be sorted by time anyway.
+## { ?t :trackPoints ?list. ?y list:in ?list. } => { ?x gpx:trkpt ?y.  ?list a log:Chaff }.
+
+
+# Convert activity type strings to classes
+
+:activity a log:Chaff.
+
+# See https://groups.google.com/forum/#!msg/moves-api/t3wHbGsFiaQ/PqLGTKqjCt4J
+
+{ ?x :activity "wlk" } => { ?x a fit:Walking }.
+{ ?x :activity "run" } => { ?x a fit:Running }.
+{ ?x :activity "trp" } => { ?x a fit:Transport }.
+{ ?x :activity "cyc" } => { ?x a fit:Cycling }.
+{ ?x :activity "non" } => { ?x a fit:Activity }.  # @@@ don't know what the type of activity is
+
+{ ?x ?p ?t.
+    ?p :preferredTimePredicate ?q.
+    #  ?p list:in ( :time :startTime :endTime ).
+    #  ?t log:rawType log:Literal.
+    ?t string:matches "[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]T[0-9][0-9][0-9][0-9][0-9][0-9]Z".
+    (?t "^(....)") string:scrape ?year. 
+    (?t "^....(..)") string:scrape ?month. 
+    (?t "^......(..)") string:scrape ?day.
+    (?t "^.........(..)") string:scrape ?h.
+    (?t "^...........(..)") string:scrape ?m.
+    (?t "^.............(..)") string:scrape ?s.
+    ( ?year "-" ?month "-" ?day "T" ?h ":" ?m ":" ?s "Z") string:concatenation ?datetime.  
+    (?datetime  xsd:dateTime) log:dtlit ?value. 
+} => { ?x ?q ?value.  ?p a log:Chaff }.
+
+{ ?x ?p ?t.
+    ?p :preferredDatePredicate ?q.
+    ?t string:matches "[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]".
+    (?t "^(....)") string:scrape ?year. 
+    (?t "^....(..)") string:scrape ?month. 
+    (?t "^......(..)") string:scrape ?day.
+    ( ?year "-" ?month "-" ?day ) string:concatenation ?date.  
+    (?date  xsd:date) log:dtlit ?value. 
+} => { ?x ?q ?value.  ?p a log:Chaff }.
+
+{ ?x ?p ?y.   ?p :preferred ?q } => { ?x ?q ?y.  ?p a log:Chaff. }.
+
+
+####################
+
+
+# Further infernce
+
+{ ?x fit:distance ?s ; fit:duration  ?t.
+  ( ?s ?t) math:quotient ?v.
+  (?v 3.6) math:product ?k.
+}  =>  { ?x fit:meanSpeed_kmph ?k  }.
+
+{ ?x fit:calories ?y.  (?y 4.18) math:product ?v }  => { ?x fit:energyBurn_kJ ?v }.
+
+#  Only approximate.
+
+{ ?x a fit:Transport; fit:meanSpeed_kmph [ math:greaterThan 160.0 ] } => {?x a fit:Flying }.
+# Driving speeds could aslo be train, etc
+# { ?x a fit:Transport; fit:meanSpeed_kmph [ math:greaterThan 30; math:lessThan 160 ] } => {?x a fit:Driving }.
+ 
+
+
+
+
