@@ -10,6 +10,7 @@
     -comma          Use comma as delimited instead of tab
     -xhtml          Read XHTML and look for a table, instead of CSV or TSV
     -id             Generate sequential URIs for the items described by each row
+    -reverse        Generate the URIs in reverse order (e.g for reve chron order) 
     -startId        With -id, start ids at this number (default 0) eg -startId 1
     -idfield        Use column 'id' to form the URI for each item
     -type           Declare each thing as of a type <#Item>.
@@ -163,7 +164,7 @@ class DataTable(list):
         return res
         
 
-    def readTabs(self,delim, inFP):
+    def readTabs(self,delim, inFp):
         result = []
 
         l = inFp.readline()
@@ -217,10 +218,13 @@ class DataTable(list):
 
         while len(self.headings) <2: # Hack for fidelity files which have pre-heading items
             self.headings = self.readTabs(delim, inFP)
+            for jj in range(len(self.headings)):
+                self.headings[jj] = self.headings[jj].strip()
+            while self.headings[-1:] == [""]: self.headings = self.headings[:-1]; # Strip trailing comma on heading line (paypal)
             info( "# headings found: %i  %s" % (len(self.headings), self.headings))
 
         while 1:
-            values = readTabs(delim, inFP)
+            values = self.readTabs(delim, inFP)
             if values == []: break
             if len(values) < 2: continue;
             if len(values) != len(self.headings):
@@ -252,7 +256,7 @@ class DataTable(list):
             for i in range(0,len(self.headings)):
                 self.outln( "  :%s  a rdf:Property; rdfs:label \"%s\"" % \
                         ( self.headings[i], self.sanitize(labels[i])  ))
-                if self.tips[i]: self.outln( '; rdfs:comment """'+self.tips[i]+'"""')
+                if i < len(self.tips) and self.tips[i]: self.outln( '; rdfs:comment """'+self.tips[i]+'"""')
                 self.outln( ".");
             self.outln('');
      
@@ -328,7 +332,7 @@ class DataTable(list):
         if "-xhtml" in argv[1:]:
             self.parseXHTML(inFP);
         else:
-            self.parseCSV(inFP, delim);
+            self.readCSV(inFP, delim);
         self.generateTurtle(argv, namespace);
         return
     
