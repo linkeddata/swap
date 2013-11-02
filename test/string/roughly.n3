@@ -38,5 +38,30 @@
 	narrowEST
 	OF PLACES""" string:containsRoughly "wide and the" } log:implies { :test8 a :success }.
 
+
+
+
+{ "A green party" string:notContainsRoughly "green     Party" } log:implies { :test1n a :FAILURE }.
+
+{ "all good people to come to" string:notContainsRoughly "gooood" } log:implies { :test2n a :success }.
+
+{ "jkl" string:notContainsRoughly "jkl" } log:implies { :test3n a :FAILURE }.
+
+{ "foo" string:notContainsRoughly "foo bar" } log:implies { :test4n a :success }.
+
+{ "asd" string:notContainsRoughly "asdfjhkjhasd" } log:implies { :test5n a :success }.
+
+{ "" string:notContainsRoughly "" } log:implies { :test6n a :FAILURE }.
+
+{ "supercalifragilisticexpialidocious" string:notContainsRoughly "" } log:implies { :test7n a :FAILURE }.
+{ """THE
+	WIDE     
+	AND
+	THE
+	narrowEST
+	OF PLACES""" string:notContainsRoughly "wide and the" } log:implies { :test8n a :FAILURE }.
+
+
+
 #ends
 
