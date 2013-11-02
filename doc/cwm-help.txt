@@ -93,15 +93,16 @@ Flags for N3 output are as follows:-
         
 a   Anonymous nodes should be output using the _: convention (p flag or not).
 d   Don't use default namespace (empty prefix)
+c   Comments added at top about version and base URI used.
 e   escape literals --- use \u notation
+g   Suppress => shothand for log:implies
 i   Use identifiers from store - don't regen on output
 l   List syntax suppression. Don't use (..)
 n   No numeric syntax - use strings typed with ^^ syntax
 p   Prefix suppression - don't use them, always URIs in &lt;> instead of qnames.
-q   Quiet - don't output comments about version and base URI used.
 r   Relative URI suppression. Always use absolute URIs.
 s   Subject must be explicit for every statement. Don't use ";" shorthand.
-t   "this" and "()" special syntax should be suppresed.
+t   "=" and "()" special syntax should be suppresed.
 u   Use \u for unicode escaping in URIs instead of utf-8 %XX
 v   Use  "this log:forAll" for @forAll, and "this log:forAll" for "@forSome".
 /   If namespace has no # in it, assume it ends at the last slash if outputting.
