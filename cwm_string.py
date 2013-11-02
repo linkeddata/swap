@@ -72,6 +72,10 @@ class BI_ContainsRoughly(LightBuiltIn):
     def eval(self,  subj, obj, queue, bindings, proof, query):
         return normalizeWhitespace(subj.string.lower()).find(normalizeWhitespace(obj.string.lower())) >= 0
 
+class BI_DoesNotContainRoughly(LightBuiltIn):
+    def eval(self,  subj, obj, queue, bindings, proof, query):
+        return normalizeWhitespace(subj.string.lower()).find(normalizeWhitespace(obj.string.lower())) >= 0
+
 class BI_DoesNotContain(LightBuiltIn): # Converse of the above
     def eval(self,  subj, obj, queue, bindings, proof, query):
         return subj.string.find(obj.string) < 0
@@ -360,6 +364,7 @@ def register(store):
     str.internFrag("contains", BI_Contains)
     str.internFrag("containsIgnoringCase", BI_ContainsIgnoringCase)
     str.internFrag("containsRoughly", BI_ContainsRoughly)
+    str.internFrag("notContainsRoughly", BI_DoesNotContainRoughly)
     str.internFrag("doesNotContain", BI_DoesNotContain)
     str.internFrag("equalIgnoringCase", BI_equalIgnoringCase)
     str.internFrag("notEqualIgnoringCase", BI_notEqualIgnoringCase)
