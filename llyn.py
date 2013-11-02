@@ -763,9 +763,10 @@ class IndexedFormula(Formula):
         
         Check whether this new list (given as bnode) causes other things to become lists.
         Set up redirection so the list is used from now on instead of the bnode.        
-        Internal function.
+        Internal function. This is the de-reification of lists from (first, rest) form.
 
-        This function is extraordinarily slow, .08 seconds per call on reify/reify3.n3"""
+        This function is extraordinarily slow, .08 seconds per call on reify/reify3.n3.
+        It can hit the python recursion limit with a long list!"""
         if diag.chatty_flag > 80: progress("New list was %s, now %s = %s"%(`bnode`, `list`, `list.value()`))
         if isinstance(bnode, List): return  ##@@@@@ why is this necessary? weid.
         newBindings[bnode] = list
