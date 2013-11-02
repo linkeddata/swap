@@ -74,7 +74,7 @@ class BI_ContainsRoughly(LightBuiltIn):
 
 class BI_DoesNotContainRoughly(LightBuiltIn):
     def eval(self,  subj, obj, queue, bindings, proof, query):
-        return normalizeWhitespace(subj.string.lower()).find(normalizeWhitespace(obj.string.lower())) >= 0
+        return normalizeWhitespace(subj.string.lower()).find(normalizeWhitespace(obj.string.lower())) < 0
 
 class BI_DoesNotContain(LightBuiltIn): # Converse of the above
     def eval(self,  subj, obj, queue, bindings, proof, query):
