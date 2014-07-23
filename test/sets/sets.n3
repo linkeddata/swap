@@ -26,7 +26,7 @@
 
 # N3 only:
 
-{$ 1 $} <#linksEqualSets> {$ 1 $} .
+{$ 1 2 $} <#linksEqualSets> {$ 2 1 $} .
 
 
 

@@ -280,6 +280,28 @@
       ( "boolean"
         9 )
          log:outputString "\t</dd>\n" .
+      ( "date"
+        0 )
+         log:outputString """  <dt><a name='date'>date</a></dt><dd>
+""" .
+      ( "date"
+        6 )
+         log:outputString """	<p><em>[0-9][0-9]-[0-9][0-9]-[0-9][0-9]Z?</em></p>
+""" .
+      ( "date"
+        9 )
+         log:outputString "\t</dd>\n" .
+      ( "dateTime"
+        0 )
+         log:outputString """  <dt><a name='dateTime'>dateTime</a></dt><dd>
+""" .
+      ( "dateTime"
+        6 )
+         log:outputString """	<p><em>[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9](T[0-9][0-9]:[0-9][0-9](:[0-9][0-9](\\.[0-9]*)?)?)?Z?</em></p>
+""" .
+      ( "dateTime"
+        9 )
+         log:outputString "\t</dd>\n" .
       ( "decimal"
         0 )
          log:outputString """  <dt><a name='decimal'>decimal</a></dt><dd>
@@ -1026,6 +1048,18 @@ This file was split from n3.n3 on 2007-01-20.
          (
             "@false" ) );
          h:reference "<a href='#boolean'>boolean</a>" .
+    
+    :date     a h:Production;
+         cfg:canStartWith "0";
+         cfg:label "date";
+         cfg:matches "[0-9][0-9]-[0-9][0-9]-[0-9][0-9]Z?";
+         h:reference "<a href='#date'>date</a>" .
+    
+    :dateTime     a h:Production;
+         cfg:canStartWith "0";
+         cfg:label "dateTime";
+         cfg:matches "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9](T[0-9][0-9]:[0-9][0-9](:[0-9][0-9](\\.[0-9]*)?)?)?Z?";
+         h:reference "<a href='#dateTime'>dateTime</a>" .
     
     :decimal     a h:Production;
          cfg:canStartWith "+",

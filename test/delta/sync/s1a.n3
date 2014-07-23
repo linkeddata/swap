@@ -1,0 +1,31 @@
+    
+    <http://www.w3.org/uid/009608A4-6FFB-11D9-B3B2-000A9580D8C0>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/12/cal/ical#Vevent> .
+    
+    <http://www.w3.org/uid/009608A4-6FFB-11D9-B3B2-000A9580D8C0>     <http://www.w3.org/2002/12/cal/ical#dtend> _:L12C18 .
+    
+    <http://www.w3.org/uid/009608A4-6FFB-11D9-B3B2-000A9580D8C0>     <http://www.w3.org/2002/12/cal/ical#dtstart> _:L14C20 .
+    
+    <http://www.w3.org/uid/009608A4-6FFB-11D9-B3B2-000A9580D8C0>     <http://www.w3.org/2002/12/cal/ical#summary> "Meet everyone in the group" .
+    
+    <http://www.w3.org/uid/009608A4-6FFB-11D9-B3B2-000A9580D8C0>     <http://www.w3.org/2002/12/cal/ical#uid> "009608A4-6FFB-11D9-B3B2-000A9580D8C0" .
+    
+    _:L12C18     <http://www.w3.org/2002/12/cal/tzd/America/New_York#tz> "2005-01-23T17:00:00" .
+    
+    _:L14C20     <http://www.w3.org/2002/12/cal/tzd/America/New_York#tz> "2005-01-23T16:00:00" .
+    
+    _:L18C7     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/12/cal/ical#Vcalendar> .
+    
+    _:L18C7     <http://www.w3.org/2002/12/cal/ical#calscale> "GREGORIAN" .
+    
+    _:L18C7     <http://www.w3.org/2002/12/cal/ical#component> <http://www.w3.org/uid/009608A4-6FFB-11D9-B3B2-000A9580D8C0> .
+    
+    _:L18C7     <http://www.w3.org/2002/12/cal/ical#prodid> "-//Apple Computer, Inc//iCal 1.5//EN" .
+    
+    _:L18C7     <http://www.w3.org/2002/12/cal/ical#version> "2.0" .
+    
+    _:L18C7     <http://www.w3.org/2002/12/cal/prod/Apple_Comp_273def595c8b3485#calname> "test" .
+    
+    _:L18C7     <http://www.w3.org/2002/12/cal/prod/Apple_Comp_273def595c8b3485#relcalid> "D762F657-6FFA-11D9-B3B2-000A9580D8C0" .
+    
+    _:L18C7     <http://www.w3.org/2002/12/cal/prod/Apple_Comp_273def595c8b3485#timezone> "US/Eastern" .
+    

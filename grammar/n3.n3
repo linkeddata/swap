@@ -155,7 +155,7 @@ pathitem cfg:mustBeOneSequence (
 		( "[" propertylist "]"  )
 		(  "("  pathlist ")"  )
                 ( boolean )
-#		( "@this" )	  #  Deprocated.  Was allowed for this log:forAll x
+#		( "@this" )	  #  Deprecated.  Was allowed for this log:forAll x
 ).
 
 
@@ -203,6 +203,12 @@ double	cfg:matches	"""[-+]?[0-9]+(\\.[0-9]+)?([eE][-+]?[0-9]+)""";
 		cfg:canStartWith 	"0", "-", "+".
 decimal	cfg:matches	"""[-+]?[0-9]+\\.[0-9]*""";
 		cfg:canStartWith 	"0", "-", "+".
+date	cfg:matches	"""[0-9][0-9]-[0-9][0-9]-[0-9][0-9]Z?""";
+		cfg:canStartWith 	"0".
+
+dateTime	cfg:matches	"""[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9](T[0-9][0-9]:[0-9][0-9](:[0-9][0-9](\\.[0-9]*)?)?)?Z?""";
+		cfg:canStartWith 	"0".
+
 
 #numericliteral	cfg:matches	"""[-+]?[0-9]+(\\.[0-9]+)?(e[-+]?[0-9]+)?""";
 #		cfg:canStartWith 	"0", "-", "+".
