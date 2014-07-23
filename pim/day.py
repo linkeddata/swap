@@ -151,9 +151,12 @@ class Map:
         #self.page_x = (hilo-lolo) * self.x_m_per_degree * self.pixels_per_m
         #self.page_y = (hila-lola) * self.y_m_per_degree * self.pixels_per_m
         
-
+        layers = 'C'; # Cyclemap
+        
         # Like http://tile.openstreetmap.org/cgi-bin/export?bbox=-71.2118,42.42694,-71.19273,42.44086&scale=25000&format=svg
-        OSM_URI = ("http://tile.openstreetmap.org/cgi-bin/export?bbox=%f,%f,%f,%f&scale=%i&format=svg" % (lolo, lola, hilo, hila, osmScale))
+#        OSM_URI = ("http://tile.openstreetmap.org/cgi-bin/export?bbox=%f,%f,%f,%f&scale=%i&format=svg" % (lolo, lola, hilo, hila, osmScale))
+#        OSM_URI = ("http://render.openstreetmap.org/cgi-bin/export?bbox=%f,%f,%f,%f&scale=%i&format=svg" % (lolo, lola, hilo, hila, osmScale))
+        OSM_URI = ("http://render.openstreetmap.org/cgi-bin/export?bbox=%f,%f,%f,%f&scale=%i&format=svg&layers=%s" % (lolo, lola, hilo, hila, osmScale, layers))
         progress("FYI OSM map at: ", OSM_URI)
         try:
             pass
