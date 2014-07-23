@@ -1,0 +1,58 @@
+<html>
+<body>
+<h1>Methods of applying diffs</h1>
+<p>
+</p>
+<h2>deltas as a news stream</h2>
+<ol>
+<li>Make a robust delta/sigma algorithm and try applying patches to incomplete datasets.
+</li>
+<li>When a patch fails, ignore it</li>
+<li>Compare the resulting dataset with the original, checking the original includes the genearted, </li>
+<li>and checking some subjective notion of usefulness of the generated subset.</li>
+</ol>
+<ol>
+<li>Make a non-robust delta/sigma algorithm</li>
+<li>Send out changes timestamped</li>
+<li>When theyt arrive out of sync, rewind and replay</li>
+<li>When the reply patch fails, ask for help, or inform one of the agents that a specific operation failed.</li>
+</ol>
+<h2>Deltas in concurrent development - using delta locally with CVS</h2>
+<ol>
+<li>Use a robust delta/sigma algorithm.</li>
+<li>Operate CVS by keeping a commonly agreed versioin, geneating diffs by each party. </li>
+<li> Apply smallest diff to the other dataset to generate a new common one.</li>
+<li>Check in the common one, and load it into the local application.</li>
+</ol>
+<h2>Deltas in concurrent development - async notification style</h2>
+<ol>
+<li>Use a robust delta/sigma algorithm </li>
+<li>Keeping the latest version of each party for a certian timeout t, larger than twice the diamter time of the net. Keep all patches applied to that version or any version indirectly derived from it.</li>
+<li>When a change is made, generate a delta and email/new it to everyone, with the version if of the version it was made of, and the version id generated of the new result version.</li>
+<li>When someone else's delta arrives, apply it if you can to the version it was generated from. This might involve waiting for other patches if that version is not abailable yet.</li>
+<li> Re-generate all patches in order, making a tree. </li>
+<li>
+Where a tree forks because two patches are based on the same version,
+try to merge them by applying one patch to the result of the other.</li>
+<li> If that fails, then the later patch is deemed invalid, and all any versions derived from it are usuable and are discarded. The patches are kept, though, as they may be re-usable, as a later arriving earlier sent patch may in fact fix the problem (Unlikely and ignorable?. (then inform the sender of the patch that it fails.? No. They will find out.) </li>
+<li> Apply smallest diff to the other dataset to generate a new common one.</li>
+<li>Check in the common one, and load it into the local application.</li>
+</ol>
+
+<h2>On async message receipt</h2>
+<ol>
+<li>Parse incoming message from RFC822 format into RDF form.
+</li>
+<li>Parse body of the message according to conent type, encoding, etc.
+</li>
+<li>From the content (subject?) get the URI of the file whcih is being patched
+</li>
+<li>From a local rule generate from that the directory where the local copy is stored
+</li>
+<li>Load the version history from local subdirectory like /.p2vs/status.n3
+</li>
+<li>
+</li>
+</ol>
+</body>
+</html>

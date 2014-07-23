@@ -1,0 +1,2146 @@
+# Differences by Id: diff.py,v 1.12 2004/10/28 17:41:59 timbl Exp 
+     @prefix : <#> .
+     @prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#> .
+     @prefix delta: <http://www.w3.org/2004/delta#> .
+     @prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#> .
+     @prefix mat: <http://www.w3.org/2002/05/matrix/vocab#> .
+     @prefix org: <http://www.w3.org/2001/04/roadmap/org#> .
+     @prefix rec: <http://www.w3.org/2001/02pd/rec54#> .
+    
+     @forAll :_g0,
+                :_g1,
+                :_g2,
+                :_g3,
+                :_g4,
+                :_g5,
+                :_g6,
+                :_g7,
+                :_g8,
+                :_g9,
+                :_g10,
+                :_g11,
+                :_g12,
+                :_g13,
+                :_g14,
+                :_g15,
+                :_g16,
+                :_g17,
+                :_g18,
+                :_g19,
+                :_g20,
+                :_g21,
+                :_g22,
+                :_g23,
+                :_g24,
+                :_g25,
+                :_g26,
+                :_g27,
+                :_g28,
+                :_g29,
+                :_g30,
+                :_g31,
+                :_g32,
+                :_g33,
+                :_g34,
+                :_g35,
+                :_g36,
+                :_g37,
+                :_g38,
+                :_g39,
+                :_g40,
+                :_g41,
+                :_g42,
+                :_g43,
+                :_g44,
+                :_g45,
+                :_g46,
+                :_g47,
+                :_g48,
+                :_g49,
+                :_g50,
+                :_g51,
+                :_g52,
+                :_g53,
+                :_g54,
+                :_g55,
+                :_g56,
+                :_g57,
+                :_g58,
+                :_g59,
+                :_g60,
+                :_g61,
+                :_g62,
+                :_g63,
+                :_g64,
+                :_g65,
+                :_g66,
+                :_g67,
+                :_g68,
+                :_g69,
+                :_g70,
+                :_g71,
+                :_g72,
+                :_g73,
+                :_g74,
+                :_g75,
+                :_g76,
+                :_g77,
+                :_g78,
+                :_g79,
+                :_g80,
+                :_g81,
+                :_g82,
+                :_g83,
+                :_g84,
+                :_g85,
+                :_g86,
+                :_g87,
+                :_g88,
+                :_g89,
+                :_g90,
+                :_g91,
+                :_g92,
+                :_g93,
+                :_g94,
+                :_g95,
+                :_g96,
+                :_g97,
+                :_g98,
+                :_g99,
+                :_g100,
+                :_g101,
+                :_g102,
+                :_g103,
+                :_g104,
+                :_g105,
+                :_g106,
+                :_g107,
+                :_g108,
+                :_g109,
+                :_g110,
+                :_g111,
+                :_g112,
+                :_g113,
+                :_g114,
+                :_g115,
+                :_g116,
+                :_g117,
+                :_g118,
+                :_g119,
+                :_g120,
+                :_g121,
+                :_g122,
+                :_g123,
+                :_g124,
+                :_g125,
+                :_g126,
+                :_g127,
+                :_g128,
+                :_g129,
+                :_g130,
+                :_g131,
+                :_g132,
+                :_g133,
+                :_g134,
+                :_g135,
+                :_g136,
+                :_g137,
+                :_g138,
+                :_g139,
+                :_g140,
+                :_g141,
+                :_g142,
+                :_g143,
+                :_g144,
+                :_g145,
+                :_g146,
+                :_g147,
+                :_g148,
+                :_g149,
+                :_g150,
+                :_g151,
+                :_g152,
+                :_g153,
+                :_g154,
+                :_g155,
+                :_g156,
+                :_g157,
+                :_g158,
+                :_g159,
+                :_g160,
+                :_g161,
+                :_g162,
+                :_g163,
+                :_g164,
+                :_g165,
+                :_g166,
+                :_g167,
+                :_g168,
+                :_g169,
+                :_g170,
+                :_g171,
+                :_g172,
+                :_g173,
+                :_g174,
+                :_g175,
+                :_g176,
+                :_g177,
+                :_g178,
+                :_g179,
+                :_g180,
+                :_g181,
+                :_g182,
+                :_g183,
+                :_g184,
+                :_g185,
+                :_g186,
+                :_g187,
+                :_g188,
+                :_g189,
+                :_g190,
+                :_g191,
+                :_g192,
+                :_g193,
+                :_g194,
+                :_g195,
+                :_g196,
+                :_g197,
+                :_g198,
+                :_g199,
+                :_g200,
+                :_g201,
+                :_g202,
+                :_g203,
+                :_g204,
+                :_g205,
+                :_g206,
+                :_g207,
+                :_g208,
+                :_g209,
+                :_g210,
+                :_g211,
+                :_g212,
+                :_g213,
+                :_g214,
+                :_g215,
+                :_g216,
+                :_g217,
+                :_g218,
+                :_g219,
+                :_g220,
+                :_g221,
+                :_g222,
+                :_g223,
+                :_g224,
+                :_g225,
+                :_g226,
+                :_g227,
+                :_g228,
+                :_g229,
+                :_g230,
+                :_g231,
+                :_g232,
+                :_g233,
+                :_g234,
+                :_g235,
+                :_g236,
+                :_g237 .
+    {
+        
+        }     delta:deletion {<http://www.w3.org/TR/2002/WD-soap12-af-20020924>     a rec:LastCall,
+                    rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2002-09-24";
+             <http://purl.org/dc/elements/1.1/title> "SOAP 1.2 Attachment Feature";
+             doc:obsoletes <http://www.w3.org/TR/2002/WD-soap12-af-20020814>;
+             doc:versionOf <http://www.w3.org/TR/soap12-af>;
+             rec:cites <http://www.w3.org/2002/ws/Activity>;
+             rec:lastCallFeedBackDue "2002-10-15" .
+        <http://www.w3.org/TR/2003/CR-qaframe-spec-20031110/>     a rec:CR;
+             <http://purl.org/dc/elements/1.1/date> "2003-11-10";
+             <http://purl.org/dc/elements/1.1/title> "QA Framework: Specification Guidelines";
+             doc:obsoletes <http://www.w3.org/TR/2003/WD-qaframe-spec-20030912/>;
+             doc:versionOf <http://www.w3.org/TR/qaframe-spec/>;
+             rec:cites <http://www.w3.org/QA/Activity>;
+             rec:implementationFeedbackDue "2004-05-10" .
+        <http://www.w3.org/TR/2003/CR-speech-synthesis-20031218/>     a rec:CR;
+             <http://purl.org/dc/elements/1.1/date> "2003-12-18";
+             <http://purl.org/dc/elements/1.1/title> "Speech Synthesis Markup Language Version 1.0";
+             doc:obsoletes <http://www.w3.org/TR/2002/WD-speech-synthesis-20021202/>;
+             doc:versionOf <http://www.w3.org/TR/speech-synthesis>;
+             rec:cites <http://www.w3.org/Voice/Activity>;
+             rec:implementationFeedbackDue "2004-02-18" .
+        <http://www.w3.org/TR/2003/WD-WCAG20-HTML-TECHS-20031209/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2003-12-09";
+             <http://purl.org/dc/elements/1.1/title> "HTML Techniques for WCAG 2.0";
+             doc:versionOf <http://www.w3.org/TR/WCAG20-HTML-TECHS/>;
+             rec:cites <http://www.w3.org/WAI/Technical/Activity> .
+        <http://www.w3.org/TR/2003/WD-css3-speech-20030514>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2003-05-14";
+             <http://purl.org/dc/elements/1.1/title> "CSS3 Speech Module";
+             doc:versionOf <http://www.w3.org/TR/css3-speech>;
+             rec:cites <http://www.w3.org/Style/Activity> .
+        <http://www.w3.org/TR/2003/WD-emma-20031218/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2003-12-18";
+             <http://purl.org/dc/elements/1.1/title> "EMMA: Extensible MultiModal Annotation markup language";
+             doc:obsoletes <http://www.w3.org/TR/2003/WD-emma-20030811/>;
+             doc:versionOf <http://www.w3.org/TR/emma/>;
+             rec:cites <http://www.w3.org/2002/mmi/Activity> .
+        <http://www.w3.org/TR/2003/WD-soap12-os-ucr-20031112/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2003-11-12";
+             <http://purl.org/dc/elements/1.1/title> "SOAP Optimized Serialization Use Cases and Requirements";
+             doc:versionOf <http://www.w3.org/TR/soap12-os-ucr/>;
+             rec:cites <http://www.w3.org/2002/ws/Activity> .
+        <http://www.w3.org/TR/2003/WD-webarch-20031209/>     a rec:LastCall,
+                    rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2003-12-09";
+             <http://purl.org/dc/elements/1.1/title> "Architecture of the World Wide Web, First Edition";
+             doc:obsoletes <http://www.w3.org/TR/2003/WD-webarch-20031001/>;
+             doc:versionOf <http://www.w3.org/TR/webarch/>;
+             rec:lastCallFeedBackDue "2004-03-05" .
+        <http://www.w3.org/TR/2003/WD-wsdl12-bindings-20030611>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2003-06-11";
+             <http://purl.org/dc/elements/1.1/title> "Web Services Description Language (WSDL) Version 1.2 Part 3: Bindings";
+             doc:obsoletes <http://www.w3.org/TR/2003/WD-wsdl12-bindings-20030124>;
+             doc:versionOf <http://www.w3.org/TR/wsdl12-bindings>;
+             rec:cites <http://www.w3.org/2002/ws/Activity> .
+        <http://www.w3.org/TR/2003/WD-xhtml2-20030506>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2003-05-06";
+             <http://purl.org/dc/elements/1.1/title> "XHTML 2.0";
+             doc:obsoletes <http://www.w3.org/TR/2003/WD-xhtml2-20030131>;
+             doc:versionOf <http://www.w3.org/TR/xhtml2>;
+             rec:cites <http://www.w3.org/MarkUp/Activity> .
+        <http://www.w3.org/TR/2003/WD-xmlquery-full-text-use-cases-20030214/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2003-02-14";
+             <http://purl.org/dc/elements/1.1/title> "XQuery and XPath Full-Text Use Cases ";
+             doc:versionOf <http://www.w3.org/TR/xmlquery-full-text-use-cases>;
+             rec:cites <http://www.w3.org/XML/Activity> .
+        <http://www.w3.org/TR/2003/WD-xpath-datamodel-20031112/>     a rec:LastCall,
+                    rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2003-11-12";
+             <http://purl.org/dc/elements/1.1/title> "XQuery 1.0 and XPath 2.0 Data Model";
+             doc:obsoletes <http://www.w3.org/TR/2003/WD-xpath-datamodel-20030502/>;
+             doc:versionOf <http://www.w3.org/TR/xpath-datamodel/>;
+             rec:cites <http://www.w3.org/XML/Activity>;
+             rec:lastCallFeedBackDue "2004-02-15" .
+        <http://www.w3.org/TR/2003/WD-xpath-functions-20031112/>     a rec:LastCall,
+                    rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2003-11-12";
+             <http://purl.org/dc/elements/1.1/title> "XQuery 1.0 and XPath 2.0 Functions and Operators";
+             doc:obsoletes <http://www.w3.org/TR/2003/WD-xpath-functions-20030502/>;
+             doc:versionOf <http://www.w3.org/TR/xpath-functions/>;
+             rec:cites <http://www.w3.org/XML/Activity>;
+             rec:lastCallFeedBackDue "2004-02-15" .
+        <http://www.w3.org/TR/2003/WD-xpath20-20031112>     a rec:LastCall,
+                    rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2003-11-12";
+             <http://purl.org/dc/elements/1.1/title> "XML Path Language (XPath) 2.0";
+             doc:obsoletes <http://www.w3.org/TR/2003/WD-xpath20-20030822>;
+             doc:versionOf <http://www.w3.org/TR/xpath20>;
+             rec:cites <http://www.w3.org/XML/Activity>;
+             rec:lastCallFeedBackDue "2004-02-15" .
+        <http://www.w3.org/TR/2003/WD-xquery-20031112/>     a rec:LastCall,
+                    rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2003-11-12";
+             <http://purl.org/dc/elements/1.1/title> "XQuery 1.0: An XML Query Language";
+             doc:obsoletes <http://www.w3.org/TR/2003/WD-xquery-20030822/>;
+             doc:versionOf <http://www.w3.org/TR/xquery>;
+             rec:cites <http://www.w3.org/XML/Activity>;
+             rec:lastCallFeedBackDue "2004-02-15" .
+        <http://www.w3.org/TR/2003/WD-xslt-xquery-serialization-20031112/>     a rec:LastCall,
+                    rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2003-11-12";
+             <http://purl.org/dc/elements/1.1/title> "XSLT 2.0 and XQuery 1.0 Serialization";
+             doc:obsoletes <http://www.w3.org/TR/2003/WD-xslt-xquery-serialization-20030502/>;
+             doc:versionOf <http://www.w3.org/TR/xslt-xquery-serialization/>;
+             rec:cites <http://www.w3.org/XML/Activity>;
+             rec:lastCallFeedBackDue "2004-02-15" .
+        <http://www.w3.org/TR/2004/CR-xinclude-20040413>     a rec:CR;
+             <http://purl.org/dc/elements/1.1/date> "2004-04-13";
+             <http://purl.org/dc/elements/1.1/title> "XML Inclusions (XInclude) Version 1.0";
+             doc:obsoletes <http://www.w3.org/TR/2003/WD-xinclude-20031110>;
+             doc:versionOf <http://www.w3.org/TR/xinclude/>;
+             rec:cites <http://www.w3.org/XML/Activity>;
+             rec:implementationFeedbackDue "2004-05-28" .
+        <http://www.w3.org/TR/2004/NOTE-xforms-11-req-20040126/>     a rec:NOTE;
+             <http://purl.org/dc/elements/1.1/date> "2004-01-26";
+             <http://purl.org/dc/elements/1.1/title> "XForms 1.1 Requirements";
+             doc:versionOf <http://www.w3.org/TR/xforms-11-req/>;
+             rec:cites <http://www.w3.org/2002/Forms/Activity> .
+        <http://www.w3.org/TR/2004/WD-InkML-20040223>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-02-23";
+             <http://purl.org/dc/elements/1.1/title> "Ink Markup Language";
+             doc:obsoletes <http://www.w3.org/TR/2003/WD-InkML-20030806>;
+             doc:versionOf <http://www.w3.org/TR/InkML>;
+             rec:cites <http://www.w3.org/2002/mmi/Activity> .
+        <http://www.w3.org/TR/2004/WD-P3P11-20040427>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-04-27";
+             <http://purl.org/dc/elements/1.1/title> "The Platform for Privacy Preferences 1.1 (P3P1.1) Specification";
+             doc:obsoletes <http://www.w3.org/TR/2004/WD-P3P11-20040210/>;
+             doc:versionOf <http://www.w3.org/TR/P3P11/>;
+             rec:cites <http://www.w3.org/Privacy/Activity> .
+        <http://www.w3.org/TR/2004/WD-SVGMobile12-20040325/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-03-25";
+             <http://purl.org/dc/elements/1.1/title> "Mobile SVG Profiles: SVG Tiny and SVG Basic, Version 1.2";
+             doc:obsoletes <http://www.w3.org/TR/2003/WD-SVGMobile12-20031209/>;
+             doc:versionOf <http://www.w3.org/TR/SVGMobile12/>;
+             rec:cites <http://www.w3.org/Graphics/Activity> .
+        <http://www.w3.org/TR/2004/WD-WCAG20-20040311/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-03-11";
+             <http://purl.org/dc/elements/1.1/title> "Web Content Accessibility Guidelines 2.0";
+             doc:obsoletes <http://www.w3.org/TR/2003/WD-WCAG20-20030624/>;
+             doc:versionOf <http://www.w3.org/TR/WCAG20/>;
+             rec:cites <http://www.w3.org/WAI/Technical/Activity> .
+        <http://www.w3.org/TR/2004/WD-qa-handbook-20040510/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-05-10";
+             <http://purl.org/dc/elements/1.1/title> "The QA Handbook";
+             doc:obsoletes <http://www.w3.org/TR/2003/CR-qaframe-ops-20030922/>,
+                    <http://www.w3.org/TR/2003/NOTE-qaframe-intro-20030912/>;
+             doc:versionOf <http://www.w3.org/TR/qa-handbook/>;
+             rec:cites <http://www.w3.org/QA/Activity> .
+        <http://www.w3.org/TR/2004/WD-qaframe-test-20040225/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-02-25";
+             <http://purl.org/dc/elements/1.1/title> "QA Framework: Test Guidelines";
+             doc:obsoletes <http://www.w3.org/TR/2003/WD-qaframe-test-20030516/>;
+             doc:versionOf <http://www.w3.org/TR/qaframe-test/>;
+             rec:cites <http://www.w3.org/QA/Activity> .
+        <http://www.w3.org/TR/2004/WD-soap12-mtom-20040209/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-02-09";
+             <http://purl.org/dc/elements/1.1/title> "SOAP Message Transmission Optimization Mechanism";
+             doc:obsoletes <http://www.w3.org/TR/2003/WD-soap12-mtom-20030721>;
+             doc:versionOf <http://www.w3.org/TR/soap12-mtom>;
+             rec:cites <http://www.w3.org/2002/ws/Activity> .
+        <http://www.w3.org/TR/2004/WD-soap12-rep-20040428/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-04-28";
+             <http://purl.org/dc/elements/1.1/title> "SOAP Resource Representation Header";
+             doc:versionOf <http://www.w3.org/TR/soap12-rep/>;
+             rec:cites <http://www.w3.org/2002/ws/Activity> .
+        <http://www.w3.org/TR/2004/WD-voicexml21-20040323/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-03-23";
+             <http://purl.org/dc/elements/1.1/title> "Voice Extensible Markup Language (VoiceXML) 2.1";
+             doc:versionOf <http://www.w3.org/TR/voicexml21/>;
+             rec:cites <http://www.w3.org/Voice/Activity> .
+        <http://www.w3.org/TR/2004/WD-ws-i18n-scenarios-20040512/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-05-12";
+             <http://purl.org/dc/elements/1.1/title> "Web Services Internationalization Usage Scenarios";
+             doc:obsoletes <http://www.w3.org/TR/2003/WD-ws-i18n-scenarios-20030516/>;
+             doc:versionOf <http://www.w3.org/TR/ws-i18n-scenarios/>;
+             rec:cites <http://www.w3.org/International/Activity> .
+        <http://www.w3.org/TR/2004/WD-wsdl20-20040326>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-03-26";
+             <http://purl.org/dc/elements/1.1/title> "Web Services Description Language (WSDL) Version 2.0 Part 1: Core Language";
+             doc:obsoletes <http://www.w3.org/TR/2003/WD-wsdl20-20031110>;
+             doc:versionOf <http://www.w3.org/TR/wsdl20>;
+             rec:cites <http://www.w3.org/2002/ws/Activity> .
+        <http://www.w3.org/TR/2004/WD-wsdl20-patterns-20040326>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-03-26";
+             <http://purl.org/dc/elements/1.1/title> "Web Services Description Language (WSDL) Version 2.0 Part 2: Message Exchange Patterns";
+             doc:obsoletes <http://www.w3.org/TR/2003/WD-wsdl20-patterns-20031110>;
+             doc:versionOf <http://www.w3.org/TR/wsdl20-patterns>;
+             rec:cites <http://www.w3.org/2002/ws/Activity> .
+        <http://www.w3.org/TR/2004/WD-xmlschema-ref-20040309/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-03-09";
+             <http://purl.org/dc/elements/1.1/title> "XML Schema: Component Designators";
+             doc:obsoletes <http://www.w3.org/TR/2003/WD-xmlschema-ref-20030109/>;
+             doc:versionOf <http://www.w3.org/TR/xmlschema-ref/>;
+             rec:cites <http://www.w3.org/XML/Activity> .
+        <http://www.w3.org/TR/2004/WD-xop10-20040209/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-02-09";
+             <http://purl.org/dc/elements/1.1/title> "XML-binary Optimized Packaging";
+             doc:versionOf <http://www.w3.org/TR/xop10/>;
+             rec:cites <http://www.w3.org/2002/ws/Activity> .
+        <http://www.w3.org/TR/wsdl20-patterns>     rec:formerShortname "wsdl12-patterns";
+             rec:sameWorkAs <http://www.w3.org/TR/wsdl12-patterns> .
+        };
+         delta:insertion { @forSome :_g238,
+                    :_g239,
+                    :_g240,
+                    :_g241,
+                    :_g242,
+                    :_g243 .
+        <http://www.w3.org/TR/2001/WD-xmlschema-formal-20010925/>     rec:patentRules <http://www.w3.org/Consortium/Patent-Policy-20040205/> .
+        <http://www.w3.org/TR/2003/WD-xqueryx-20031219>     rec:patentRules <http://www.w3.org/Consortium/Patent-Policy-20040205/> .
+        <http://www.w3.org/TR/2003/WD-xsl11-20031217/>     rec:patentRules <http://www.w3.org/Consortium/Patent-Policy-20040205/> .
+        <http://www.w3.org/TR/2003/WD-xslt20-20031112/>     rec:patentRules <http://www.w3.org/Consortium/Patent-Policy-20040205/> .
+        <http://www.w3.org/TR/2004/CR-soap12-mtom-20040826/>     a rec:CR;
+             <http://purl.org/dc/elements/1.1/date> "2004-08-26";
+             <http://purl.org/dc/elements/1.1/title> "SOAP Message Transmission Optimization Mechanism";
+             doc:obsoletes <http://www.w3.org/TR/2004/WD-soap12-mtom-20040608/>;
+             doc:versionOf <http://www.w3.org/TR/soap12-mtom>;
+             rec:cites <http://www.w3.org/2002/ws/Activity>;
+             rec:implementationFeedbackDue "2004-09-15" .
+        <http://www.w3.org/TR/2004/CR-soap12-rep-20040826/>     a rec:CR;
+             <http://purl.org/dc/elements/1.1/date> "2004-08-26";
+             <http://purl.org/dc/elements/1.1/title> "Resource Representation SOAP Header Block";
+             doc:obsoletes <http://www.w3.org/TR/2004/WD-soap12-rep-20040608/>;
+             doc:versionOf <http://www.w3.org/TR/soap12-rep/>;
+             rec:cites <http://www.w3.org/2002/ws/Activity>;
+             rec:implementationFeedbackDue "2004-09-15" .
+        <http://www.w3.org/TR/2004/CR-xop10-20040826/>     a rec:CR;
+             <http://purl.org/dc/elements/1.1/date> "2004-08-26";
+             <http://purl.org/dc/elements/1.1/title> "XML-binary Optimized Packaging";
+             doc:obsoletes <http://www.w3.org/TR/2004/WD-xop10-20040608/>;
+             doc:versionOf <http://www.w3.org/TR/xop10/>;
+             rec:cites <http://www.w3.org/2002/ws/Activity>;
+             rec:implementationFeedbackDue "2004-09-15" .
+        <http://www.w3.org/TR/2004/NOTE-soap12-af-20040608/>     a rec:NOTE;
+             <http://purl.org/dc/elements/1.1/date> "2004-06-08";
+             <http://purl.org/dc/elements/1.1/title> "SOAP 1.2 Attachment Feature";
+             doc:obsoletes <http://www.w3.org/TR/2002/WD-soap12-af-20020924>;
+             doc:versionOf <http://www.w3.org/TR/soap12-af>;
+             rec:cites <http://www.w3.org/2002/ws/Activity> .
+        <http://www.w3.org/TR/2004/NOTE-ws-i18n-scenarios-20040730/>     a rec:NOTE;
+             <http://purl.org/dc/elements/1.1/date> "2004-07-30";
+             <http://purl.org/dc/elements/1.1/title> "Web Services Internationalization Usage Scenarios";
+             doc:obsoletes <http://www.w3.org/TR/2004/WD-ws-i18n-scenarios-20040512/>;
+             doc:versionOf <http://www.w3.org/TR/ws-i18n-scenarios/>;
+             rec:cites <http://www.w3.org/International/Activity> .
+        <http://www.w3.org/TR/2004/NOTE-xforms-11-req-20040831/>     a rec:NOTE;
+             <http://purl.org/dc/elements/1.1/date> "2004-08-31";
+             <http://purl.org/dc/elements/1.1/title> "XForms 1.1 Requirements";
+             doc:obsoletes <http://www.w3.org/TR/2004/NOTE-xforms-11-req-20040611/>;
+             doc:versionOf <http://www.w3.org/TR/xforms-11-req/>;
+             rec:cites <http://www.w3.org/2002/Forms/Activity> .
+        <http://www.w3.org/TR/2004/NOTE-xopinc-FAQ-20040608/>     a rec:NOTE;
+             <http://purl.org/dc/elements/1.1/date> "2004-06-08";
+             <http://purl.org/dc/elements/1.1/title> "XOP Inclusion Mechanism - Frequently Asked Questions";
+             doc:versionOf <http://www.w3.org/TR/xopinc-FAQ/>;
+             rec:cites <http://www.w3.org/2002/ws/Activity>;
+             rec:editor  [
+                 contact:fullName "Michael Mahan" ] .
+        <http://www.w3.org/TR/2004/PR-xinclude-20040930/>     a rec:PR;
+             <http://purl.org/dc/elements/1.1/date> "2004-09-30";
+             <http://purl.org/dc/elements/1.1/title> "XML Inclusions (XInclude) Version 1.0";
+             doc:obsoletes <http://www.w3.org/TR/2004/CR-xinclude-20040413>;
+             doc:versionOf <http://www.w3.org/TR/xinclude/>;
+             rec:cites <http://www.w3.org/XML/Activity>;
+             rec:prReviewsDue "2004-10-29" .
+        <http://www.w3.org/TR/2004/REC-speech-synthesis-20040907/>     a rec:REC;
+             <http://purl.org/dc/elements/1.1/date> "2004-09-07";
+             <http://purl.org/dc/elements/1.1/title> "Speech Synthesis Markup Language (SSML) Version 1.0";
+             doc:obsoletes <http://www.w3.org/TR/2004/PR-speech-synthesis-20040715/>;
+             doc:versionOf <http://www.w3.org/TR/speech-synthesis>;
+             rec:cites <http://www.w3.org/Voice/Activity>;
+             mat:hasErrata <http://www.w3.org/2004/09/ssml-errata.html>;
+             mat:hasTranslations <http://www.w3.org/2003/03/Translations/byTechnology?technology=ssml> .
+        <http://www.w3.org/TR/2004/WD-InkML-20040928>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-09-28";
+             <http://purl.org/dc/elements/1.1/title> "Ink Markup Language";
+             doc:obsoletes <http://www.w3.org/TR/2004/WD-InkML-20040223>;
+             doc:versionOf <http://www.w3.org/TR/InkML>;
+             rec:cites <http://www.w3.org/2002/mmi/Activity>;
+             rec:editor  [
+                 contact:fullName "Jose-Antonio Magaña" ] .
+        <http://www.w3.org/TR/2004/WD-P3P11-20040720/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-07-20";
+             <http://purl.org/dc/elements/1.1/title> "The Platform for Privacy Preferences 1.1 (P3P1.1) Specification";
+             doc:obsoletes <http://www.w3.org/TR/2004/WD-P3P11-20040427>;
+             doc:versionOf <http://www.w3.org/TR/P3P11/>;
+             rec:cites <http://www.w3.org/Privacy/Activity> .
+        <http://www.w3.org/TR/2004/WD-SVGMobile12-20040813/>     a rec:LastCall,
+                    rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-08-13";
+             <http://purl.org/dc/elements/1.1/title> "Mobile SVG Profile: SVG Tiny, Version 1.2";
+             doc:obsoletes <http://www.w3.org/TR/2004/WD-SVGMobile12-20040806/>;
+             doc:versionOf <http://www.w3.org/TR/SVGMobile12/>;
+             rec:cites <http://www.w3.org/Graphics/Activity>;
+             rec:editor  [
+                 contact:fullName "Vincent Hardy" ];
+             rec:lastCallFeedBackDue "2004-09-17" .
+        <http://www.w3.org/TR/2004/WD-WCAG20-20040730/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-07-30";
+             <http://purl.org/dc/elements/1.1/title> "Web Content Accessibility Guidelines 2.0";
+             doc:obsoletes <http://www.w3.org/TR/2004/WD-WCAG20-20040311/>;
+             doc:versionOf <http://www.w3.org/TR/WCAG20/>;
+             rec:cites <http://www.w3.org/WAI/Technical/Activity> .
+        <http://www.w3.org/TR/2004/WD-WCAG20-CSS-TECHS-20040730/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-07-30";
+             <http://purl.org/dc/elements/1.1/title> "CSS Techniques for WCAG 2.0";
+             doc:versionOf <http://www.w3.org/TR/WCAG20-CSS-TECHS/>;
+             rec:cites <http://www.w3.org/WAI/Technical/Activity> .
+        <http://www.w3.org/TR/2004/WD-WCAG20-GATEWAY-20040730/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-07-30";
+             <http://purl.org/dc/elements/1.1/title> "Gateway to Techniques for WCAG 2.0";
+             doc:versionOf <http://www.w3.org/TR/WCAG20-GATEWAY/>;
+             rec:cites <http://www.w3.org/WAI/Technical/Activity>;
+             rec:editor  [
+                 contact:fullName "John Slatin" ],
+                     [
+                 contact:fullName "Tom Croucher" ] .
+        <http://www.w3.org/TR/2004/WD-WCAG20-HTML-TECHS-20040730/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-07-30";
+             <http://purl.org/dc/elements/1.1/title> "HTML Techniques for WCAG 2.0";
+             doc:obsoletes <http://www.w3.org/TR/2003/WD-WCAG20-HTML-TECHS-20031209/>;
+             doc:versionOf <http://www.w3.org/TR/WCAG20-HTML-TECHS/>;
+             rec:cites <http://www.w3.org/WAI/Technical/Activity> .
+        <http://www.w3.org/TR/2004/WD-cselection-20040611/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-06-11";
+             <http://purl.org/dc/elements/1.1/title> "Content Selection for Device Independence (DISelect) 1.0";
+             doc:versionOf <http://www.w3.org/TR/cselection/>;
+             rec:cites <http://www.w3.org/2001/di/Activity> .
+        <http://www.w3.org/TR/2004/WD-css3-speech-20040727>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-07-27";
+             <http://purl.org/dc/elements/1.1/title> "CSS3 Speech Module";
+             doc:obsoletes <http://www.w3.org/TR/2003/WD-css3-speech-20030514>;
+             doc:versionOf <http://www.w3.org/TR/css3-speech>;
+             rec:cites <http://www.w3.org/Style/Activity> .
+        <http://www.w3.org/TR/2004/WD-emma-20040901/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-09-01";
+             <http://purl.org/dc/elements/1.1/title> "EMMA: Extensible MultiModal Annotation markup language";
+             doc:obsoletes <http://www.w3.org/TR/2003/WD-emma-20031218/>;
+             doc:versionOf <http://www.w3.org/TR/emma/>;
+             rec:cites <http://www.w3.org/2002/mmi/Activity>;
+             rec:editor  [
+                 contact:fullName "Michael Johnston" ] .
+        <http://www.w3.org/TR/2004/WD-qa-handbook-20040830/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-08-30";
+             <http://purl.org/dc/elements/1.1/title> "The QA Handbook";
+             doc:obsoletes <http://www.w3.org/TR/2004/WD-qa-handbook-20040510/>;
+             doc:versionOf <http://www.w3.org/TR/qa-handbook/>;
+             rec:cites <http://www.w3.org/QA/Activity> .
+        <http://www.w3.org/TR/2004/WD-qaframe-spec-20040830/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-08-30";
+             <http://purl.org/dc/elements/1.1/title> "QA Framework: Specification Guidelines";
+             doc:obsoletes <http://www.w3.org/TR/2004/WD-qaframe-spec-20040602/>;
+             doc:versionOf <http://www.w3.org/TR/qaframe-spec/>;
+             rec:cites <http://www.w3.org/QA/Activity>;
+             rec:editor  [
+                 contact:fullName "Karl Dubost" ];
+             rec:patentRules <http://www.w3.org/Consortium/Patent-Policy-20040205/> .
+        <http://www.w3.org/TR/2004/WD-qaframe-test-20040820/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-08-20";
+             <http://purl.org/dc/elements/1.1/title> "QA Framework: Test Guidelines";
+             doc:obsoletes <http://www.w3.org/TR/2004/WD-qaframe-test-20040225/>;
+             doc:versionOf <http://www.w3.org/TR/qaframe-test/>;
+             rec:cites <http://www.w3.org/QA/Activity>;
+             rec:patentRules <http://www.w3.org/Consortium/Patent-Policy-20040205/> .
+        <http://www.w3.org/TR/2004/WD-rdf-dawg-uc-20041012/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-10-12";
+             <http://purl.org/dc/elements/1.1/title> "RDF Data Access Use Cases and Requirements";
+             doc:obsoletes <http://www.w3.org/TR/2004/WD-rdf-dawg-uc-20040802/>;
+             doc:versionOf <http://www.w3.org/TR/rdf-dawg-uc/>;
+             rec:editor  [
+                 contact:fullName "Kendall Grant Clark" ];
+             rec:patentRules <http://www.w3.org/Consortium/Patent-Policy-20040205/>;
+             org:deliveredBy :_g238 .
+        <http://www.w3.org/TR/2004/WD-rdf-sparql-query-20041012/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-10-12";
+             <http://purl.org/dc/elements/1.1/title> "SPARQL Query Language for RDF";
+             doc:versionOf <http://www.w3.org/TR/rdf-sparql-query/>;
+             rec:editor  [
+                 contact:fullName "Andy Seaborne" ];
+             rec:patentRules <http://www.w3.org/Consortium/Patent-Policy-20040205/>;
+             org:deliveredBy :_g238 .
+        <http://www.w3.org/TR/2004/WD-sXBL-20040901>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-09-01";
+             <http://purl.org/dc/elements/1.1/title> "SVG's XML Binding Language (sXBL)";
+             doc:versionOf <http://www.w3.org/TR/sXBL>;
+             rec:cites <http://www.w3.org/Graphics/Activity>,
+                    <http://www.w3.org/Style/Activity>;
+             rec:editor  [
+                 contact:fullName "David Hyatt" ] .
+        <http://www.w3.org/TR/2004/WD-soap12-os-ucr-20040608/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-06-08";
+             <http://purl.org/dc/elements/1.1/title> "SOAP Optimized Serialization Use Cases and Requirements";
+             doc:obsoletes <http://www.w3.org/TR/2003/WD-soap12-os-ucr-20031112/>;
+             doc:versionOf <http://www.w3.org/TR/soap12-os-ucr/>;
+             rec:cites <http://www.w3.org/2002/ws/Activity> .
+        <http://www.w3.org/TR/2004/WD-spec-variability-20040830/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-08-30";
+             <http://purl.org/dc/elements/1.1/title> "Variability in Specifications";
+             doc:obsoletes <http://www.w3.org/TR/2003/CR-qaframe-spec-20031110/concepts>;
+             doc:versionOf <http://www.w3.org/TR/spec-variability/>;
+             rec:cites <http://www.w3.org/QA/Activity> .
+        <http://www.w3.org/TR/2004/WD-swbp-classes-as-values-20040721/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-07-21";
+             <http://purl.org/dc/elements/1.1/title> "Representing Classes As Property Values on the Semantic Web";
+             doc:versionOf <http://www.w3.org/TR/swbp-classes-as-values>;
+             rec:editor :_g239;
+             org:deliveredBy :_g240 .
+        <http://www.w3.org/TR/2004/WD-swbp-n-aryRelations-20040721/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-07-21";
+             <http://purl.org/dc/elements/1.1/title> "Defining N-ary Relations on the Semantic Web: Use With Individuals";
+             doc:versionOf <http://www.w3.org/TR/swbp-n-aryRelations>;
+             rec:editor :_g239,
+                    :_g241;
+             org:deliveredBy :_g240 .
+        <http://www.w3.org/TR/2004/WD-swbp-specified-values-20040803/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-08-03";
+             <http://purl.org/dc/elements/1.1/title> "Representing Specified Values in OWL: \"value partitions\" and \"value sets\"";
+             doc:versionOf <http://www.w3.org/TR/swbp-specified-values>;
+             rec:editor :_g241;
+             org:deliveredBy :_g240 .
+        <http://www.w3.org/TR/2004/WD-sysenv-20040728/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-07-28";
+             <http://purl.org/dc/elements/1.1/title> "System and Environment Framework";
+             doc:versionOf <http://www.w3.org/TR/sysenv/>;
+             rec:cites <http://www.w3.org/2002/mmi/Activity>;
+             rec:editor  [
+                 contact:fullName "Rafah A. Hosn" ],
+                     [
+                 contact:fullName "Keith Waters" ] .
+        <http://www.w3.org/TR/2004/WD-voicexml21-20040728/>     a rec:LastCall,
+                    rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-07-28";
+             <http://purl.org/dc/elements/1.1/title> "Voice Extensible Markup Language (VoiceXML) 2.1";
+             doc:obsoletes <http://www.w3.org/TR/2004/WD-voicexml21-20040323/>;
+             doc:versionOf <http://www.w3.org/TR/voicexml21/>;
+             rec:cites <http://www.w3.org/Voice/Activity>;
+             rec:lastCallFeedBackDue "2004-09-01" .
+        <http://www.w3.org/TR/2004/WD-webarch-20040816/>     a rec:LastCall,
+                    rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-08-16";
+             <http://purl.org/dc/elements/1.1/title> "Architecture of the World Wide Web, First Edition";
+             doc:obsoletes <http://www.w3.org/TR/2004/WD-webarch-20040705/>;
+             doc:versionOf <http://www.w3.org/TR/webarch/>;
+             rec:lastCallFeedBackDue "2004-09-17" .
+        <http://www.w3.org/TR/2004/WD-wsdl20-20040803>     a rec:LastCall,
+                    rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-08-03";
+             <http://purl.org/dc/elements/1.1/title> "Web Services Description Language (WSDL) Version 2.0 Part 1: Core Language";
+             doc:obsoletes <http://www.w3.org/TR/2004/WD-wsdl20-20040326>;
+             doc:versionOf <http://www.w3.org/TR/wsdl20>;
+             rec:cites <http://www.w3.org/2002/ws/Activity>;
+             rec:lastCallFeedBackDue "2004-10-04" .
+        <http://www.w3.org/TR/2004/WD-wsdl20-bindings-20040803>     a rec:LastCall,
+                    rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-08-03";
+             <http://purl.org/dc/elements/1.1/title> "Web Services Description Language (WSDL) Version 2.0 Part 3: Bindings";
+             doc:obsoletes <http://www.w3.org/TR/2003/WD-wsdl12-bindings-20030611>;
+             doc:versionOf <http://www.w3.org/TR/wsdl20-bindings>;
+             rec:cites <http://www.w3.org/2002/ws/Activity>;
+             rec:lastCallFeedBackDue "2004-10-04" .
+        <http://www.w3.org/TR/2004/WD-wsdl20-extensions-20040803>     a rec:LastCall,
+                    rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-08-03";
+             <http://purl.org/dc/elements/1.1/title> "Web Services Description Language (WSDL) Version 2.0 Part 2: Predefined Extensions";
+             doc:obsoletes <http://www.w3.org/TR/2004/WD-wsdl20-patterns-20040326>;
+             doc:versionOf <http://www.w3.org/TR/wsdl20-extensions>;
+             rec:cites <http://www.w3.org/2002/ws/Activity>;
+             rec:lastCallFeedBackDue "2004-10-04" .
+        <http://www.w3.org/TR/2004/WD-xbc-properties-20041005/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-10-05";
+             <http://purl.org/dc/elements/1.1/title> "XML Binary Characterization Properties";
+             doc:versionOf <http://www.w3.org/TR/xbc-properties>;
+             rec:editor :_g242,
+                    :_g243 .
+        <http://www.w3.org/TR/2004/WD-xbc-use-cases-20040728/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-07-28";
+             <http://purl.org/dc/elements/1.1/title> "XML Binary Characterization Use Cases";
+             doc:versionOf <http://www.w3.org/TR/xbc-use-cases>;
+             rec:editor :_g242,
+                    :_g243;
+             org:deliveredBy  [
+                 contact:homePage <http://www.w3.org/XML/Binary/> ] .
+        <http://www.w3.org/TR/2004/WD-xhtml2-20040722>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-07-22";
+             <http://purl.org/dc/elements/1.1/title> "XHTML 2.0";
+             doc:obsoletes <http://www.w3.org/TR/2003/WD-xhtml2-20030506>;
+             doc:versionOf <http://www.w3.org/TR/xhtml2>;
+             rec:cites <http://www.w3.org/MarkUp/Activity> .
+        <http://www.w3.org/TR/2004/WD-xml-id-20040407>     rec:patentRules <http://www.w3.org/Consortium/Patent-Policy-20040205/> .
+        <http://www.w3.org/TR/2004/WD-xml-media-types-20040608>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-06-08";
+             <http://purl.org/dc/elements/1.1/title> "Assigning Media Types to Binary Data in XML";
+             doc:versionOf <http://www.w3.org/TR/xml-media-types>;
+             rec:cites <http://www.w3.org/2002/ws/Activity>;
+             rec:editor  [
+                 contact:fullName "Ümit Yalçınalp" ] .
+        <http://www.w3.org/TR/2004/WD-xmlquery-full-text-use-cases-20040709/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-07-09";
+             <http://purl.org/dc/elements/1.1/title> "XQuery 1.0 and XPath 2.0 Full-Text Use Cases";
+             doc:obsoletes <http://www.w3.org/TR/2003/WD-xmlquery-full-text-use-cases-20030214/>;
+             doc:versionOf <http://www.w3.org/TR/xmlquery-full-text-use-cases>;
+             rec:cites <http://www.w3.org/XML/Activity> .
+        <http://www.w3.org/TR/2004/WD-xmlschema-ref-20040716/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-07-16";
+             <http://purl.org/dc/elements/1.1/title> "XML Schema: Component Designators";
+             doc:obsoletes <http://www.w3.org/TR/2004/WD-xmlschema-ref-20040309/>;
+             doc:versionOf <http://www.w3.org/TR/xmlschema-ref/>;
+             rec:cites <http://www.w3.org/XML/Activity>;
+             rec:patentRules <http://www.w3.org/Consortium/Patent-Policy-20040205/> .
+        <http://www.w3.org/TR/2004/WD-xmlschema11-1-20040716/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-07-16";
+             <http://purl.org/dc/elements/1.1/title> "XML Schema 1.1 Part 1: Structures";
+             doc:versionOf <http://www.w3.org/TR/xmlschema11-1/>;
+             rec:cites <http://www.w3.org/XML/Activity>;
+             rec:patentRules <http://www.w3.org/Consortium/Patent-Policy-20040205/> .
+        <http://www.w3.org/TR/2004/WD-xmlschema11-2-20040716/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-07-16";
+             <http://purl.org/dc/elements/1.1/title> "XML Schema 1.1 Part 2: Datatypes";
+             doc:versionOf <http://www.w3.org/TR/xmlschema11-2/>;
+             rec:cites <http://www.w3.org/XML/Activity>;
+             rec:editor  [
+                 contact:fullName "David Peterson" ];
+             rec:patentRules <http://www.w3.org/Consortium/Patent-Policy-20040205/> .
+        <http://www.w3.org/TR/2004/WD-xpath-datamodel-20040723/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-07-23";
+             <http://purl.org/dc/elements/1.1/title> "XQuery 1.0 and XPath 2.0 Data Model";
+             doc:obsoletes <http://www.w3.org/TR/2003/WD-xpath-datamodel-20031112/>;
+             doc:versionOf <http://www.w3.org/TR/xpath-datamodel/>;
+             rec:cites <http://www.w3.org/XML/Activity>;
+             rec:patentRules <http://www.w3.org/Consortium/Patent-Policy-20040205/> .
+        <http://www.w3.org/TR/2004/WD-xpath-functions-20040723/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-07-23";
+             <http://purl.org/dc/elements/1.1/title> "XQuery 1.0 and XPath 2.0 Functions and Operators";
+             doc:obsoletes <http://www.w3.org/TR/2003/WD-xpath-functions-20031112/>;
+             doc:versionOf <http://www.w3.org/TR/xpath-functions/>;
+             rec:cites <http://www.w3.org/XML/Activity>;
+             rec:patentRules <http://www.w3.org/Consortium/Patent-Policy-20040205/> .
+        <http://www.w3.org/TR/2004/WD-xpath20-20040723>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-07-23";
+             <http://purl.org/dc/elements/1.1/title> "XML Path Language (XPath) 2.0";
+             doc:obsoletes <http://www.w3.org/TR/2003/WD-xpath20-20031112>;
+             doc:versionOf <http://www.w3.org/TR/xpath20>;
+             rec:cites <http://www.w3.org/XML/Activity>;
+             rec:patentRules <http://www.w3.org/Consortium/Patent-Policy-20040205/> .
+        <http://www.w3.org/TR/2004/WD-xquery-20040723/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-07-23";
+             <http://purl.org/dc/elements/1.1/title> "XQuery 1.0: An XML Query Language";
+             doc:obsoletes <http://www.w3.org/TR/2003/WD-xquery-20031112/>;
+             doc:versionOf <http://www.w3.org/TR/xquery>;
+             rec:cites <http://www.w3.org/XML/Activity>;
+             rec:patentRules <http://www.w3.org/Consortium/Patent-Policy-20040205/> .
+        <http://www.w3.org/TR/2004/WD-xquery-full-text-20040709/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-07-09";
+             <http://purl.org/dc/elements/1.1/title> "XQuery 1.0 and XPath 2.0 Full-Text";
+             doc:versionOf <http://www.w3.org/TR/xquery-full-text/>;
+             rec:cites <http://www.w3.org/XML/Activity>;
+             rec:editor  [
+                 contact:fullName "Jochen Doerre" ],
+                     [
+                 contact:fullName "Darin McBeath" ],
+                     [
+                 contact:fullName "Jayavel Shanmugasundaram" ],
+                     [
+                 contact:fullName "Chavdar Botev" ];
+             rec:patentRules <http://www.w3.org/Consortium/Patent-Policy-20040205/> .
+        <http://www.w3.org/TR/2004/WD-xquery-semantics-20040220/>     rec:patentRules <http://www.w3.org/Consortium/Patent-Policy-20040205/> .
+        <http://www.w3.org/TR/2004/WD-xslt-xquery-serialization-20040723/>     a rec:WD;
+             <http://purl.org/dc/elements/1.1/date> "2004-07-23";
+             <http://purl.org/dc/elements/1.1/title> "XSLT 2.0 and XQuery 1.0 Serialization";
+             doc:obsoletes <http://www.w3.org/TR/2003/WD-xslt-xquery-serialization-20031112/>;
+             doc:versionOf <http://www.w3.org/TR/xslt-xquery-serialization/>;
+             rec:cites <http://www.w3.org/XML/Activity>;
+             rec:patentRules <http://www.w3.org/Consortium/Patent-Policy-20040205/> .
+        <http://www.w3.org/TR/wsdl20-bindings>     rec:formerShortname "wsdl12-bindings";
+             rec:sameWorkAs <http://www.w3.org/TR/wsdl12-bindings> .
+        <http://www.w3.org/TR/wsdl20-extensions>     rec:formerShortname "wsdl20-patterns";
+             rec:sameWorkAs <http://www.w3.org/TR/wsdl20-patterns> .
+        :_g238     contact:homePage <http://www.w3.org/2001/sw/DataAccess/> .
+        :_g239     contact:fullName "Natasha Noy" .
+        :_g240     contact:homePage <http://www.w3.org/2001/sw/BestPractices/> .
+        :_g241     contact:fullName "Alan Rector" .
+        :_g242     contact:fullName "Santiago Pericas-Geertsen" .
+        :_g243     contact:fullName "Mike Cokus" .
+        } .
+    {
+        :_g0     contact:fullName "Henrik Frystyk Nielsen" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2002/WD-soap12-af-20020924>     rec:editor :_g0 .
+        } .
+    {
+        :_g1     contact:homePage <http://www.w3.org/Style/Group/> .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-css3-speech-20030514>     org:deliveredBy :_g1 .
+        } .
+    {
+        :_g2     contact:homePage <http://www.w3.org/XML/Group/Core> .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/CR-xinclude-20040413>     org:deliveredBy :_g2 .
+        } .
+    {
+        :_g3     contact:fullName "David Raggett" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-css3-speech-20030514>     rec:editor :_g3 .
+        <http://www.w3.org/TR/2003/WD-emma-20031218/>     rec:editor :_g3 .
+        } .
+    {
+        :_g4     contact:fullName "Ian Jacobs" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-webarch-20031209/>     rec:editor :_g4 .
+        } .
+    {
+        :_g5     contact:fullName "Jonathan Robie" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-xpath20-20031112>     rec:editor :_g5 .
+        <http://www.w3.org/TR/2003/WD-xquery-20031112/>     rec:editor :_g5 .
+        } .
+    {
+        :_g6     contact:homePage <http://www.w3.org/MarkUp/Group/> .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-xhtml2-20030506>     org:deliveredBy :_g6 .
+        } .
+    {
+        :_g7     contact:homePage <http://www.w3.org/Graphics/SVG/Group/> .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-SVGMobile12-20040325/>     org:deliveredBy :_g7 .
+        } .
+    {
+        :_g8     contact:fullName "Norman Walsh" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-xpath-datamodel-20031112/>     rec:editor :_g8 .
+        <http://www.w3.org/TR/2003/WD-xpath-functions-20031112/>     rec:editor :_g8 .
+        <http://www.w3.org/TR/2003/WD-xslt-xquery-serialization-20031112/>     rec:editor :_g8 .
+        } .
+    {
+        :_g9     contact:homePage <http://www.w3.org/Style/XSL/Group/> .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-xpath-datamodel-20031112/>     org:deliveredBy :_g9 .
+        <http://www.w3.org/TR/2003/WD-xpath-functions-20031112/>     org:deliveredBy :_g9 .
+        <http://www.w3.org/TR/2003/WD-xpath20-20031112>     org:deliveredBy :_g9 .
+        <http://www.w3.org/TR/2003/WD-xquery-20031112/>     org:deliveredBy :_g9 .
+        <http://www.w3.org/TR/2003/WD-xslt-xquery-serialization-20031112/>     org:deliveredBy :_g9 .
+        } .
+    {
+        :_g10     contact:fullName "Martin J. Dürst" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-ws-i18n-scenarios-20040512/>     rec:editor :_g10 .
+        } .
+    {
+        :_g11     contact:homePage <http://www.w3.org/International/Group/> .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-ws-i18n-scenarios-20040512/>     org:deliveredBy :_g11 .
+        } .
+    {
+        :_g12     contact:fullName "Masayasu Ishikawa" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-xhtml2-20030506>     rec:editor :_g12 .
+        } .
+    {
+        :_g13     contact:fullName "Ashok Malhotra" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-xpath-datamodel-20031112/>     rec:editor :_g13 .
+        <http://www.w3.org/TR/2003/WD-xpath-functions-20031112/>     rec:editor :_g13 .
+        } .
+    {
+        :_g14     contact:fullName "Gregg Vanderheiden" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-WCAG20-20040311/>     rec:editor :_g14 .
+        } .
+    {
+        :_g15     contact:fullName "Wendy Chisholm" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-WCAG20-HTML-TECHS-20031209/>     rec:editor :_g15 .
+        <http://www.w3.org/TR/2004/WD-WCAG20-20040311/>     rec:editor :_g15 .
+        } .
+    {
+        :_g16     contact:homePage <http://www.w3.org/WAI/GL/> .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-WCAG20-HTML-TECHS-20031209/>     org:deliveredBy :_g16 .
+        <http://www.w3.org/TR/2004/WD-WCAG20-20040311/>     org:deliveredBy :_g16 .
+        } .
+    {
+        :_g17     contact:fullName "Daniel Glazman" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-css3-speech-20030514>     rec:editor :_g17 .
+        } .
+    {
+        :_g18     contact:homePage <http://www.w3.org/Voice/Group/> .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/CR-speech-synthesis-20031218/>     org:deliveredBy :_g18 .
+        <http://www.w3.org/TR/2004/WD-voicexml21-20040323/>     org:deliveredBy :_g18 .
+        } .
+    {
+        :_g19     contact:fullName "Scott McGlashan" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-voicexml21-20040323/>     rec:editor :_g19 .
+        } .
+    {
+        :_g20     contact:fullName "Andrew Hunt" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/CR-speech-synthesis-20031218/>     rec:editor :_g20 .
+        } .
+    {
+        :_g21     contact:fullName "Steven Pemberton" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-xhtml2-20030506>     rec:editor :_g21 .
+        } .
+    {
+        :_g22     contact:fullName "Deborah A. Dahl" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-emma-20031218/>     rec:editor :_g22 .
+        } .
+    {
+        :_g23     contact:fullName "Daniel C. Burnett" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/CR-speech-synthesis-20031218/>     rec:editor :_g23 .
+        <http://www.w3.org/TR/2004/WD-voicexml21-20040323/>     rec:editor :_g23 .
+        } .
+    {
+        :_g24     contact:fullName "Shane McCarron" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-xhtml2-20030506>     rec:editor :_g24 .
+        } .
+    {
+        :_g25     contact:fullName "Lofton Henderson" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/CR-qaframe-spec-20031110/>     rec:editor :_g25 .
+        <http://www.w3.org/TR/2004/WD-qa-handbook-20040510/>     rec:editor :_g25 .
+        } .
+    {
+        :_g26     contact:fullName "Tex Texin" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-ws-i18n-scenarios-20040512/>     rec:editor :_g26 .
+        } .
+    {
+        :_g27     contact:fullName "Sebastian Schnitzenbaumer" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/NOTE-xforms-11-req-20040126/>     rec:editor :_g27 .
+        } .
+    {
+        :_g28     contact:fullName "David Orchard" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/CR-xinclude-20040413>     rec:editor :_g28 .
+        } .
+    {
+        :_g29     contact:fullName "John Boyer" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/NOTE-xforms-11-req-20040126/>     rec:editor :_g29 .
+        } .
+    {
+        :_g30     contact:fullName "Jonathan Marsh" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-xpath-datamodel-20031112/>     rec:editor :_g30 .
+        <http://www.w3.org/TR/2004/CR-xinclude-20040413>     rec:editor :_g30 .
+        } .
+    {
+        :_g31     contact:homePage <http://www.w3.org/XML/Group/Schemas> .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-xmlschema-ref-20040309/>     org:deliveredBy :_g31 .
+        } .
+    {
+        :_g32     contact:fullName "Noah Mendelsohn" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-soap12-mtom-20040209/>     rec:editor :_g32 .
+        <http://www.w3.org/TR/2004/WD-xop10-20040209/>     rec:editor :_g32 .
+        } .
+    {
+        :_g33     contact:fullName "Tony Graham" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-soap12-os-ucr-20031112/>     rec:editor :_g33 .
+        } .
+    {
+        :_g34     contact:fullName "Anders Berglund" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-xpath20-20031112>     rec:editor :_g34 .
+        } .
+    {
+        :_g35     contact:fullName "Tolga Capin" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-SVGMobile12-20040325/>     rec:editor :_g35 .
+        } .
+    {
+        :_g36     contact:fullName "Brad Porter" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-voicexml21-20040323/>     rec:editor :_g36 .
+        } .
+    {
+        :_g37     contact:homePage <http://www.w3.org/MarkUp/Forms/Group/> .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/NOTE-xforms-11-req-20040126/>     org:deliveredBy :_g37 .
+        } .
+    {
+        :_g38     contact:fullName "Emily Candell" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-voicexml21-20040323/>     rec:editor :_g38 .
+        } .
+    {
+        :_g39     contact:homePage <http://www.w3.org/2002/mmi/Group/> .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-emma-20031218/>     org:deliveredBy :_g39 .
+        <http://www.w3.org/TR/2004/WD-InkML-20040223>     org:deliveredBy :_g39 .
+        } .
+    {
+        :_g40     contact:fullName "Rigo Wenning" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-P3P11-20040427>     rec:editor :_g40 .
+        } .
+    {
+        :_g41     contact:fullName "Lynne Rosenthal" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/CR-qaframe-spec-20031110/>     rec:editor :_g41 .
+        } .
+    {
+        :_g42     contact:fullName "Dimitris Dimitriadis" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-qaframe-test-20040225/>     rec:editor :_g42 .
+        } .
+    {
+        :_g43     contact:homePage <http://www.w3.org/QA/WG/> .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/CR-qaframe-spec-20031110/>     org:deliveredBy :_g43 .
+        <http://www.w3.org/TR/2004/WD-qa-handbook-20040510/>     org:deliveredBy :_g43 .
+        <http://www.w3.org/TR/2004/WD-qaframe-test-20040225/>     org:deliveredBy :_g43 .
+        } .
+    {
+        :_g44     contact:homePage <http://www.w3.org/2000/xp/Group/> .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2002/WD-soap12-af-20020924>     org:deliveredBy :_g44 .
+        <http://www.w3.org/TR/2003/WD-soap12-os-ucr-20031112/>     org:deliveredBy :_g44 .
+        <http://www.w3.org/TR/2004/WD-soap12-mtom-20040209/>     org:deliveredBy :_g44 .
+        <http://www.w3.org/TR/2004/WD-soap12-rep-20040428/>     org:deliveredBy :_g44 .
+        <http://www.w3.org/TR/2004/WD-xop10-20040209/>     org:deliveredBy :_g44 .
+        } .
+    {
+        :_g45     contact:fullName "Hervé Ruellan" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2002/WD-soap12-af-20020924>     rec:editor :_g45 .
+        <http://www.w3.org/TR/2004/WD-soap12-mtom-20040209/>     rec:editor :_g45 .
+        <http://www.w3.org/TR/2004/WD-xop10-20040209/>     rec:editor :_g45 .
+        } .
+    {
+        :_g46     contact:homePage <http://www.w3.org/2002/ws/desc/> .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-wsdl12-bindings-20030611>     org:deliveredBy :_g46 .
+        <http://www.w3.org/TR/2004/WD-wsdl20-20040326>     org:deliveredBy :_g46 .
+        <http://www.w3.org/TR/2004/WD-wsdl20-patterns-20040326>     org:deliveredBy :_g46 .
+        } .
+    {
+        :_g47     contact:fullName "Dominique Hazaël-Massieux" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/CR-qaframe-spec-20031110/>     rec:editor :_g47 .
+        } .
+    {
+        :_g48     contact:fullName "Mark R. Walker" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/CR-speech-synthesis-20031218/>     rec:editor :_g48 .
+        } .
+    {
+        :_g49     contact:fullName "Yi-Min Chee" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-InkML-20040223>     rec:editor :_g49 .
+        } .
+    {
+        :_g50     contact:fullName "Max Froumentin" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-InkML-20040223>     rec:editor :_g50 .
+        } .
+    {
+        :_g51     contact:fullName "Martin Gudgin" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-soap12-rep-20040428/>     rec:editor :_g51 .
+        <http://www.w3.org/TR/2004/WD-wsdl20-20040326>     rec:editor :_g51 .
+        <http://www.w3.org/TR/2004/WD-wsdl20-patterns-20040326>     rec:editor :_g51 .
+        } .
+    {
+        :_g52     contact:fullName "Jean-Jacques Moreau" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-wsdl12-bindings-20030611>     rec:editor :_g52 .
+        <http://www.w3.org/TR/2004/WD-wsdl20-20040326>     rec:editor :_g52 .
+        } .
+    {
+        :_g53     contact:fullName "Mark Nottingham" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-soap12-mtom-20040209/>     rec:editor :_g53 .
+        <http://www.w3.org/TR/2004/WD-xop10-20040209/>     rec:editor :_g53 .
+        } .
+    {
+        :_g54     contact:fullName "Anish Karmarkar" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-soap12-os-ucr-20031112/>     rec:editor :_g54 .
+        <http://www.w3.org/TR/2004/WD-soap12-rep-20040428/>     rec:editor :_g54 .
+        } .
+    {
+        :_g55     contact:fullName "Mark Jones" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-soap12-os-ucr-20031112/>     rec:editor :_g55 .
+        } .
+    {
+        :_g56     contact:fullName "Roland Merrick" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/NOTE-xforms-11-req-20040126/>     rec:editor :_g56 .
+        } .
+    {
+        :_g57     contact:fullName "Michael Cooper" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-WCAG20-HTML-TECHS-20031209/>     rec:editor :_g57 .
+        } .
+    {
+        :_g58     contact:fullName "Wu Chou" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-emma-20031218/>     rec:editor :_g58 .
+        } .
+    {
+        :_g59     contact:fullName "Roberto Pieraccini" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-emma-20031218/>     rec:editor :_g59 .
+        } .
+    {
+        :_g60     contact:homePage <http://www.w3.org/2001/tag/> .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-webarch-20031209/>     org:deliveredBy :_g60 .
+        } .
+    {
+        :_g61     contact:fullName "Addison Phillips" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-ws-i18n-scenarios-20040512/>     rec:editor :_g61 .
+        } .
+    {
+        :_g62     contact:fullName "Jeffrey Schlimmer" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-wsdl12-bindings-20030611>     rec:editor :_g62 .
+        <http://www.w3.org/TR/2004/WD-wsdl20-20040326>     rec:editor :_g62 .
+        <http://www.w3.org/TR/2004/WD-wsdl20-patterns-20040326>     rec:editor :_g62 .
+        } .
+    {
+        :_g63     contact:fullName "Jonny Axelsson" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-xhtml2-20030506>     rec:editor :_g63 .
+        } .
+    {
+        :_g64     contact:fullName "Beth Epperson" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-xhtml2-20030506>     rec:editor :_g64 .
+        } .
+    {
+        :_g65     contact:fullName "Ann Navarro" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-xhtml2-20030506>     rec:editor :_g65 .
+        } .
+    {
+        :_g66     contact:fullName "Pat Case" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-xmlquery-full-text-use-cases-20030214/>     rec:editor :_g66 .
+        } .
+    {
+        :_g67     contact:fullName "Sihem Amer-Yahia" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-xmlquery-full-text-use-cases-20030214/>     rec:editor :_g67 .
+        } .
+    {
+        :_g68     contact:homePage <http://www.w3.org/XML/Group/Query> .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-xmlquery-full-text-use-cases-20030214/>     org:deliveredBy :_g68 .
+        <http://www.w3.org/TR/2003/WD-xpath-datamodel-20031112/>     org:deliveredBy :_g68 .
+        <http://www.w3.org/TR/2003/WD-xpath-functions-20031112/>     org:deliveredBy :_g68 .
+        <http://www.w3.org/TR/2003/WD-xpath20-20031112>     org:deliveredBy :_g68 .
+        <http://www.w3.org/TR/2003/WD-xquery-20031112/>     org:deliveredBy :_g68 .
+        <http://www.w3.org/TR/2003/WD-xslt-xquery-serialization-20031112/>     org:deliveredBy :_g68 .
+        } .
+    {
+        :_g69     contact:fullName "Mary Fernández" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-xpath-datamodel-20031112/>     rec:editor :_g69 .
+        } .
+    {
+        :_g70     contact:fullName "Marton Nagy" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-xpath-datamodel-20031112/>     rec:editor :_g70 .
+        } .
+    {
+        :_g71     contact:fullName "Jim Melton" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-xpath-functions-20031112/>     rec:editor :_g71 .
+        } .
+    {
+        :_g72     contact:fullName "Mary F. Fernández" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-xpath20-20031112>     rec:editor :_g72 .
+        <http://www.w3.org/TR/2003/WD-xquery-20031112/>     rec:editor :_g72 .
+        } .
+    {
+        :_g73     contact:fullName "Michael Kay" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-xpath20-20031112>     rec:editor :_g73 .
+        <http://www.w3.org/TR/2003/WD-xslt-xquery-serialization-20031112/>     rec:editor :_g73 .
+        } .
+    {
+        :_g74     contact:fullName "Jérôme Siméon" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-xpath20-20031112>     rec:editor :_g74 .
+        <http://www.w3.org/TR/2003/WD-xquery-20031112/>     rec:editor :_g74 .
+        } .
+    {
+        :_g75     contact:fullName "Scott Boag" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-xpath20-20031112>     rec:editor :_g75 .
+        <http://www.w3.org/TR/2003/WD-xquery-20031112/>     rec:editor :_g75 .
+        } .
+    {
+        :_g76     contact:fullName "Don Chamberlin" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-xpath20-20031112>     rec:editor :_g76 .
+        <http://www.w3.org/TR/2003/WD-xquery-20031112/>     rec:editor :_g76 .
+        } .
+    {
+        :_g77     contact:fullName "Daniela Florescu" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-xquery-20031112/>     rec:editor :_g77 .
+        } .
+    {
+        :_g78     contact:fullName "Henry Zongaro" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2003/WD-xslt-xquery-serialization-20031112/>     rec:editor :_g78 .
+        } .
+    {
+        :_g79     contact:fullName "Jim Ferrans" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-voicexml21-20040323/>     rec:editor :_g79 .
+        } .
+    {
+        :_g80     contact:fullName "Ken Rehor" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-voicexml21-20040323/>     rec:editor :_g80 .
+        } .
+    {
+        :_g81     contact:fullName "Gregory Russell" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-InkML-20040223>     rec:editor :_g81 .
+        } .
+    {
+        :_g82     contact:fullName "Larry Yaeger" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-InkML-20040223>     rec:editor :_g82 .
+        } .
+    {
+        :_g83     contact:fullName "Katrin Franke" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-InkML-20040223>     rec:editor :_g83 .
+        } .
+    {
+        :_g84     contact:fullName "Christopher Tremblay" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-InkML-20040223>     rec:editor :_g84 .
+        } .
+    {
+        :_g85     contact:fullName "Giovanni Seni" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-InkML-20040223>     rec:editor :_g85 .
+        } .
+    {
+        :_g86     contact:fullName "Sriganesh Madhvanath" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-InkML-20040223>     rec:editor :_g86 .
+        } .
+    {
+        :_g87     contact:fullName "Ola Andersson" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-SVGMobile12-20040325/>     rec:editor :_g87 .
+        } .
+    {
+        :_g88     contact:fullName "Ben Caldwell" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-WCAG20-20040311/>     rec:editor :_g88 .
+        } .
+    {
+        :_g89     contact:fullName "Jason White" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-WCAG20-20040311/>     rec:editor :_g89 .
+        } .
+    {
+        :_g90     contact:fullName "Patrick Curran" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-qaframe-test-20040225/>     rec:editor :_g90 .
+        } .
+    {
+        :_g91     contact:fullName "Yves Lafon" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-soap12-rep-20040428/>     rec:editor :_g91 .
+        } .
+    {
+        :_g92     contact:fullName "David Burke" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-voicexml21-20040323/>     rec:editor :_g92 .
+        } .
+    {
+        :_g93     contact:fullName "Jeff Kusnitz" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-voicexml21-20040323/>     rec:editor :_g93 .
+        } .
+    {
+        :_g94     contact:fullName "Hakan Kilic" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-voicexml21-20040323/>     rec:editor :_g94 .
+        } .
+    {
+        :_g95     contact:fullName "Matt Oshry" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-voicexml21-20040323/>     rec:editor :_g95 .
+        } .
+    {
+        :_g96     contact:fullName "Paolo Baggia" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-voicexml21-20040323/>     rec:editor :_g96 .
+        } .
+    {
+        :_g97     contact:fullName "Michael Migdol" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-voicexml21-20040323/>     rec:editor :_g97 .
+        :_g97     contact:fullName "Michael Migdol" .
+        } .
+    {
+        :_g98     contact:fullName "Laura Ricotti" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-voicexml21-20040323/>     rec:editor :_g98 .
+        :_g98     contact:fullName "Laura Ricotti" .
+        } .
+    {
+        :_g99     contact:fullName "Rob Marchand" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-voicexml21-20040323/>     rec:editor :_g99 .
+        } .
+    {
+        :_g100     contact:fullName "Jeff Haynie" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-voicexml21-20040323/>     rec:editor :_g100 .
+        } .
+    {
+        :_g101     contact:fullName "Michael Bodell" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-voicexml21-20040323/>     rec:editor :_g101 .
+        } .
+    {
+        :_g102     contact:fullName "Takao Suzuki" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-ws-i18n-scenarios-20040512/>     rec:editor :_g102 .
+        } .
+    {
+        :_g103     contact:fullName "Andrea Vine" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-ws-i18n-scenarios-20040512/>     rec:editor :_g103 .
+        } .
+    {
+        :_g104     contact:fullName "Mary Trumble" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-ws-i18n-scenarios-20040512/>     rec:editor :_g104 .
+        } .
+    {
+        :_g105     contact:fullName "Kentaroh Noji" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-ws-i18n-scenarios-20040512/>     rec:editor :_g105 .
+        } .
+    {
+        :_g106     contact:fullName "Debasish Banerjee" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-ws-i18n-scenarios-20040512/>     rec:editor :_g106 .
+        } .
+    {
+        :_g107     contact:fullName "Mike McKenna" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-ws-i18n-scenarios-20040512/>     rec:editor :_g107 .
+        } .
+    {
+        :_g108     contact:fullName "Roberto Chinnici" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-wsdl20-20040326>     rec:editor :_g108 .
+        } .
+    {
+        :_g109     contact:fullName "Sanjiva Weerawarana" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-wsdl20-20040326>     rec:editor :_g109 .
+        } .
+    {
+        :_g110     contact:fullName "Amy Lewis" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-wsdl20-patterns-20040326>     rec:editor :_g110 .
+        } .
+    {
+        :_g111     contact:fullName "Asir S. Vedamuthu" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-xmlschema-ref-20040309/>     rec:editor :_g111 .
+        } .
+    {
+        :_g112     contact:fullName "Mary Holstege" .
+        
+        }     delta:deletion {<http://www.w3.org/TR/2004/WD-xmlschema-ref-20040309/>     rec:editor :_g112 .
+        } .
+    {
+        :_g113     contact:fullName "Henrik Frystyk Nielsen" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/NOTE-soap12-af-20040608/>     rec:editor :_g113 .
+        } .
+    {
+        :_g114     contact:homePage <http://www.w3.org/Style/Group/> .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-css3-speech-20040727>     org:deliveredBy :_g114 .
+        <http://www.w3.org/TR/2004/WD-sXBL-20040901>     org:deliveredBy :_g114 .
+        } .
+    {
+        :_g115     contact:homePage <http://www.w3.org/XML/Group/Core> .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/PR-xinclude-20040930/>     org:deliveredBy :_g115 .
+        } .
+    {
+        :_g116     contact:homePage <http://www.w3.org/P3P/Group/Specification/> .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-P3P11-20040720/>     org:deliveredBy :_g116 .
+        } .
+    {
+        :_g117     contact:fullName "David Raggett" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-css3-speech-20040727>     rec:editor :_g117 .
+        <http://www.w3.org/TR/2004/WD-emma-20040901/>     rec:editor :_g117 .
+        <http://www.w3.org/TR/2004/WD-sysenv-20040728/>     rec:editor :_g117 .
+        } .
+    {
+        :_g118     contact:fullName "Ian Jacobs" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-webarch-20040816/>     rec:editor :_g118 .
+        } .
+    {
+        :_g119     contact:fullName "Jonathan Robie" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xpath20-20040723>     rec:editor :_g119 .
+        <http://www.w3.org/TR/2004/WD-xquery-20040723/>     rec:editor :_g119 .
+        } .
+    {
+        :_g120     contact:homePage <http://www.w3.org/MarkUp/Group/> .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xhtml2-20040722>     org:deliveredBy :_g120 .
+        } .
+    {
+        :_g121     contact:fullName "Jon Ferraiolo" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-sXBL-20040901>     rec:editor :_g121 .
+        } .
+    {
+        :_g122     contact:homePage <http://www.w3.org/Graphics/SVG/Group/> .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-SVGMobile12-20040813/>     org:deliveredBy :_g122 .
+        <http://www.w3.org/TR/2004/WD-sXBL-20040901>     org:deliveredBy :_g122 .
+        } .
+    {
+        :_g123     contact:fullName "Norman Walsh" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-webarch-20040816/>     rec:editor :_g123 .
+        <http://www.w3.org/TR/2004/WD-xpath-datamodel-20040723/>     rec:editor :_g123 .
+        <http://www.w3.org/TR/2004/WD-xpath-functions-20040723/>     rec:editor :_g123 .
+        <http://www.w3.org/TR/2004/WD-xslt-xquery-serialization-20040723/>     rec:editor :_g123 .
+        } .
+    {
+        :_g124     contact:homePage <http://www.w3.org/Style/XSL/Group/> .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xmlquery-full-text-use-cases-20040709/>     org:deliveredBy :_g124 .
+        <http://www.w3.org/TR/2004/WD-xpath-datamodel-20040723/>     org:deliveredBy :_g124 .
+        <http://www.w3.org/TR/2004/WD-xpath-functions-20040723/>     org:deliveredBy :_g124 .
+        <http://www.w3.org/TR/2004/WD-xpath20-20040723>     org:deliveredBy :_g124 .
+        <http://www.w3.org/TR/2004/WD-xquery-20040723/>     org:deliveredBy :_g124 .
+        <http://www.w3.org/TR/2004/WD-xquery-full-text-20040709/>     org:deliveredBy :_g124 .
+        <http://www.w3.org/TR/2004/WD-xslt-xquery-serialization-20040723/>     org:deliveredBy :_g124 .
+        } .
+    {
+        :_g125     contact:fullName "Martin J. Dürst" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/NOTE-ws-i18n-scenarios-20040730/>     rec:editor :_g125 .
+        } .
+    {
+        :_g126     contact:homePage <http://www.w3.org/International/Group/> .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/NOTE-ws-i18n-scenarios-20040730/>     org:deliveredBy :_g126 .
+        } .
+    {
+        :_g127     contact:fullName "Masayasu Ishikawa" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xhtml2-20040722>     rec:editor :_g127 .
+        } .
+    {
+        :_g128     contact:fullName "Henry S. Thompson" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xmlschema11-1-20040716/>     rec:editor :_g128 .
+        } .
+    {
+        :_g129     contact:fullName "Murray Maloney" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xmlschema11-1-20040716/>     rec:editor :_g129 .
+        } .
+    {
+        :_g130     contact:fullName "Ashok Malhotra" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xmlschema11-2-20040716/>     rec:editor :_g130 .
+        <http://www.w3.org/TR/2004/WD-xpath-datamodel-20040723/>     rec:editor :_g130 .
+        <http://www.w3.org/TR/2004/WD-xpath-functions-20040723/>     rec:editor :_g130 .
+        } .
+    {
+        :_g131     contact:fullName "Gregg Vanderheiden" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-WCAG20-20040730/>     rec:editor :_g131 .
+        } .
+    {
+        :_g132     contact:fullName "Wendy Chisholm" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-WCAG20-20040730/>     rec:editor :_g132 .
+        <http://www.w3.org/TR/2004/WD-WCAG20-CSS-TECHS-20040730/>     rec:editor :_g132 .
+        <http://www.w3.org/TR/2004/WD-WCAG20-HTML-TECHS-20040730/>     rec:editor :_g132 .
+        } .
+    {
+        :_g133     contact:homePage <http://www.w3.org/WAI/GL/> .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-WCAG20-20040730/>     org:deliveredBy :_g133 .
+        <http://www.w3.org/TR/2004/WD-WCAG20-CSS-TECHS-20040730/>     org:deliveredBy :_g133 .
+        <http://www.w3.org/TR/2004/WD-WCAG20-GATEWAY-20040730/>     org:deliveredBy :_g133 .
+        <http://www.w3.org/TR/2004/WD-WCAG20-HTML-TECHS-20040730/>     org:deliveredBy :_g133 .
+        } .
+    {
+        :_g134     contact:fullName "Daniel Glazman" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-css3-speech-20040727>     rec:editor :_g134 .
+        } .
+    {
+        :_g135     contact:homePage <http://www.w3.org/Voice/Group/> .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/REC-speech-synthesis-20040907/>     org:deliveredBy :_g135 .
+        <http://www.w3.org/TR/2004/WD-voicexml21-20040728/>     org:deliveredBy :_g135 .
+        } .
+    {
+        :_g136     contact:fullName "Scott McGlashan" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-voicexml21-20040728/>     rec:editor :_g136 .
+        } .
+    {
+        :_g137     contact:fullName "Andrew Hunt" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/REC-speech-synthesis-20040907/>     rec:editor :_g137 .
+        } .
+    {
+        :_g138     contact:fullName "Steven Pemberton" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xhtml2-20040722>     rec:editor :_g138 .
+        } .
+    {
+        :_g139     contact:fullName "Philippe Le Hégaret" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-wsdl20-bindings-20040803>     rec:editor :_g139 .
+        } .
+    {
+        :_g140     contact:fullName "Deborah A. Dahl" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-emma-20040901/>     rec:editor :_g140 .
+        } .
+    {
+        :_g141     contact:fullName "Daniel C. Burnett" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/REC-speech-synthesis-20040907/>     rec:editor :_g141 .
+        <http://www.w3.org/TR/2004/WD-voicexml21-20040728/>     rec:editor :_g141 .
+        } .
+    {
+        :_g142     contact:fullName "Shane McCarron" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xhtml2-20040722>     rec:editor :_g142 .
+        } .
+    {
+        :_g143     contact:fullName "Ian Hickson" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-sXBL-20040901>     rec:editor :_g143 .
+        } .
+    {
+        :_g144     contact:fullName "Lofton Henderson" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-qa-handbook-20040830/>     rec:editor :_g144 .
+        <http://www.w3.org/TR/2004/WD-qaframe-spec-20040830/>     rec:editor :_g144 .
+        } .
+    {
+        :_g145     contact:fullName "Tex Texin" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/NOTE-ws-i18n-scenarios-20040730/>     rec:editor :_g145 .
+        } .
+    {
+        :_g146     contact:fullName "David Orchard" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/PR-xinclude-20040930/>     rec:editor :_g146 .
+        <http://www.w3.org/TR/2004/WD-wsdl20-bindings-20040803>     rec:editor :_g146 .
+        } .
+    {
+        :_g147     contact:fullName "John Boyer" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/NOTE-xforms-11-req-20040831/>     rec:editor :_g147 .
+        } .
+    {
+        :_g148     contact:fullName "Jonathan Marsh" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/PR-xinclude-20040930/>     rec:editor :_g148 .
+        <http://www.w3.org/TR/2004/WD-xpath-datamodel-20040723/>     rec:editor :_g148 .
+        } .
+    {
+        :_g149     contact:homePage <http://www.w3.org/XML/Group/Schemas> .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xmlschema-ref-20040716/>     org:deliveredBy :_g149 .
+        <http://www.w3.org/TR/2004/WD-xmlschema11-1-20040716/>     org:deliveredBy :_g149 .
+        <http://www.w3.org/TR/2004/WD-xmlschema11-2-20040716/>     org:deliveredBy :_g149 .
+        } .
+    {
+        :_g150     contact:fullName "David Beech" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xmlschema11-1-20040716/>     rec:editor :_g150 .
+        } .
+    {
+        :_g151     contact:fullName "Noah Mendelsohn" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/CR-soap12-mtom-20040826/>     rec:editor :_g151 .
+        <http://www.w3.org/TR/2004/CR-xop10-20040826/>     rec:editor :_g151 .
+        <http://www.w3.org/TR/2004/WD-xmlschema11-1-20040716/>     rec:editor :_g151 .
+        } .
+    {
+        :_g152     contact:fullName "Paul V. Biron" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xmlschema11-2-20040716/>     rec:editor :_g152 .
+        } .
+    {
+        :_g153     contact:fullName "Tony Graham" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-soap12-os-ucr-20040608/>     rec:editor :_g153 .
+        } .
+    {
+        :_g154     contact:fullName "Anders Berglund" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xpath20-20040723>     rec:editor :_g154 .
+        } .
+    {
+        :_g155     contact:fullName "Tolga Capin" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-SVGMobile12-20040813/>     rec:editor :_g155 .
+        } .
+    {
+        :_g156     contact:fullName "Brad Porter" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-voicexml21-20040728/>     rec:editor :_g156 .
+        } .
+    {
+        :_g157     contact:homePage <http://www.w3.org/MarkUp/Forms/Group/> .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/NOTE-xforms-11-req-20040831/>     org:deliveredBy :_g157 .
+        } .
+    {
+        :_g158     contact:fullName "Emily Candell" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-voicexml21-20040728/>     rec:editor :_g158 .
+        } .
+    {
+        :_g159     contact:homePage <http://www.w3.org/2002/mmi/Group/> .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-InkML-20040928>     org:deliveredBy :_g159 .
+        <http://www.w3.org/TR/2004/WD-emma-20040901/>     org:deliveredBy :_g159 .
+        <http://www.w3.org/TR/2004/WD-sysenv-20040728/>     org:deliveredBy :_g159 .
+        } .
+    {
+        :_g160     contact:fullName "Rigo Wenning" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-P3P11-20040720/>     rec:editor :_g160 .
+        } .
+    {
+        :_g161     contact:fullName "Dimitris Dimitriadis" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-qaframe-test-20040820/>     rec:editor :_g161 .
+        } .
+    {
+        :_g162     contact:fullName "Lynne Rosenthal" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-qaframe-spec-20040830/>     rec:editor :_g162 .
+        <http://www.w3.org/TR/2004/WD-spec-variability-20040830/>     rec:editor :_g162 .
+        } .
+    {
+        :_g163     contact:homePage <http://www.w3.org/QA/WG/> .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-qa-handbook-20040830/>     org:deliveredBy :_g163 .
+        <http://www.w3.org/TR/2004/WD-qaframe-spec-20040830/>     org:deliveredBy :_g163 .
+        <http://www.w3.org/TR/2004/WD-qaframe-test-20040820/>     org:deliveredBy :_g163 .
+        <http://www.w3.org/TR/2004/WD-spec-variability-20040830/>     org:deliveredBy :_g163 .
+        } .
+    {
+        :_g164     contact:homePage <http://www.w3.org/2000/xp/Group/> .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/CR-soap12-mtom-20040826/>     org:deliveredBy :_g164 .
+        <http://www.w3.org/TR/2004/CR-soap12-rep-20040826/>     org:deliveredBy :_g164 .
+        <http://www.w3.org/TR/2004/CR-xop10-20040826/>     org:deliveredBy :_g164 .
+        <http://www.w3.org/TR/2004/NOTE-soap12-af-20040608/>     org:deliveredBy :_g164 .
+        <http://www.w3.org/TR/2004/NOTE-xopinc-FAQ-20040608/>     org:deliveredBy :_g164 .
+        <http://www.w3.org/TR/2004/WD-soap12-os-ucr-20040608/>     org:deliveredBy :_g164 .
+        <http://www.w3.org/TR/2004/WD-xml-media-types-20040608>     org:deliveredBy :_g164 .
+        } .
+    {
+        :_g165     contact:homePage <http://www.w3.org/2001/di/Group/> .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-cselection-20040611/>     org:deliveredBy :_g165 .
+        } .
+    {
+        :_g166     contact:homePage <http://www.w3.org/2002/ws/desc/> .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-wsdl20-20040803>     org:deliveredBy :_g166 .
+        <http://www.w3.org/TR/2004/WD-wsdl20-bindings-20040803>     org:deliveredBy :_g166 .
+        <http://www.w3.org/TR/2004/WD-wsdl20-extensions-20040803>     org:deliveredBy :_g166 .
+        <http://www.w3.org/TR/2004/WD-xml-media-types-20040608>     org:deliveredBy :_g166 .
+        } .
+    {
+        :_g167     contact:fullName "Rhys Lewis" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-cselection-20040611/>     rec:editor :_g167 .
+        } .
+    {
+        :_g168     contact:fullName "Yi-Min Chee" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-InkML-20040928>     rec:editor :_g168 .
+        } .
+    {
+        :_g169     contact:fullName "Max Froumentin" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-InkML-20040928>     rec:editor :_g169 .
+        } .
+    {
+        :_g170     contact:fullName "Martin Gudgin" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/CR-soap12-mtom-20040826/>     rec:editor :_g170 .
+        <http://www.w3.org/TR/2004/CR-soap12-rep-20040826/>     rec:editor :_g170 .
+        <http://www.w3.org/TR/2004/CR-xop10-20040826/>     rec:editor :_g170 .
+        <http://www.w3.org/TR/2004/WD-wsdl20-20040803>     rec:editor :_g170 .
+        <http://www.w3.org/TR/2004/WD-wsdl20-extensions-20040803>     rec:editor :_g170 .
+        } .
+    {
+        :_g171     contact:fullName "Jean-Jacques Moreau" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-wsdl20-20040803>     rec:editor :_g171 .
+        <http://www.w3.org/TR/2004/WD-wsdl20-bindings-20040803>     rec:editor :_g171 .
+        } .
+    {
+        :_g172     contact:fullName "Mark Nottingham" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/CR-soap12-mtom-20040826/>     rec:editor :_g172 .
+        <http://www.w3.org/TR/2004/CR-xop10-20040826/>     rec:editor :_g172 .
+        } .
+    {
+        :_g173     contact:fullName "Anish Karmarkar" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/CR-soap12-rep-20040826/>     rec:editor :_g173 .
+        <http://www.w3.org/TR/2004/WD-soap12-os-ucr-20040608/>     rec:editor :_g173 .
+        <http://www.w3.org/TR/2004/WD-xml-media-types-20040608>     rec:editor :_g173 .
+        } .
+    {
+        :_g174     contact:fullName "Mark Jones" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-soap12-os-ucr-20040608/>     rec:editor :_g174 .
+        } .
+    {
+        :_g175     contact:fullName "Hugo Haas" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-wsdl20-bindings-20040803>     rec:editor :_g175 .
+        } .
+    {
+        :_g176     contact:fullName "Roland Merrick" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/NOTE-xforms-11-req-20040831/>     rec:editor :_g176 .
+        <http://www.w3.org/TR/2004/WD-cselection-20040611/>     rec:editor :_g176 .
+        } .
+    {
+        :_g177     contact:fullName "Michael Cooper" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-WCAG20-HTML-TECHS-20040730/>     rec:editor :_g177 .
+        } .
+    {
+        :_g178     contact:fullName "Addison Phillips" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/NOTE-ws-i18n-scenarios-20040730/>     rec:editor :_g178 .
+        } .
+    {
+        :_g179     contact:fullName "Mary Fernández" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xpath-datamodel-20040723/>     rec:editor :_g179 .
+        } .
+    {
+        :_g180     contact:homePage <http://www.w3.org/XML/Group/Query> .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xmlquery-full-text-use-cases-20040709/>     org:deliveredBy :_g180 .
+        <http://www.w3.org/TR/2004/WD-xpath-datamodel-20040723/>     org:deliveredBy :_g180 .
+        <http://www.w3.org/TR/2004/WD-xpath-functions-20040723/>     org:deliveredBy :_g180 .
+        <http://www.w3.org/TR/2004/WD-xpath20-20040723>     org:deliveredBy :_g180 .
+        <http://www.w3.org/TR/2004/WD-xquery-20040723/>     org:deliveredBy :_g180 .
+        <http://www.w3.org/TR/2004/WD-xquery-full-text-20040709/>     org:deliveredBy :_g180 .
+        <http://www.w3.org/TR/2004/WD-xslt-xquery-serialization-20040723/>     org:deliveredBy :_g180 .
+        } .
+    {
+        :_g181     contact:fullName "Michael Rys" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xquery-full-text-20040709/>     rec:editor :_g181 .
+        } .
+    {
+        :_g182     contact:fullName "Stephen Buxton" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xquery-full-text-20040709/>     rec:editor :_g182 .
+        } .
+    {
+        :_g183     contact:fullName "Don Chamberlin" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xpath20-20040723>     rec:editor :_g183 .
+        <http://www.w3.org/TR/2004/WD-xquery-20040723/>     rec:editor :_g183 .
+        } .
+    {
+        :_g184     contact:fullName "Daniela Florescu" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xquery-20040723/>     rec:editor :_g184 .
+        } .
+    {
+        :_g185     contact:fullName "Jim Melton" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xpath-functions-20040723/>     rec:editor :_g185 .
+        } .
+    {
+        :_g186     contact:fullName "Michael Kay" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xpath20-20040723>     rec:editor :_g186 .
+        <http://www.w3.org/TR/2004/WD-xslt-xquery-serialization-20040723/>     rec:editor :_g186 .
+        } .
+    {
+        :_g187     contact:fullName "Hervé Ruellan" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/CR-soap12-mtom-20040826/>     rec:editor :_g187 .
+        <http://www.w3.org/TR/2004/CR-xop10-20040826/>     rec:editor :_g187 .
+        <http://www.w3.org/TR/2004/NOTE-soap12-af-20040608/>     rec:editor :_g187 .
+        } .
+    {
+        :_g188     contact:fullName "Yves Lafon" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/CR-soap12-rep-20040826/>     rec:editor :_g188 .
+        } .
+    {
+        :_g189     contact:fullName "Dominique Hazaël-Massieux" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-qaframe-spec-20040830/>     rec:editor :_g189 .
+        <http://www.w3.org/TR/2004/WD-spec-variability-20040830/>     rec:editor :_g189 .
+        } .
+    {
+        :_g190     contact:fullName "Mary Trumble" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/NOTE-ws-i18n-scenarios-20040730/>     rec:editor :_g190 .
+        } .
+    {
+        :_g191     contact:fullName "Debasish Banerjee" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/NOTE-ws-i18n-scenarios-20040730/>     rec:editor :_g191 .
+        } .
+    {
+        :_g192     contact:fullName "Kentaroh Noji" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/NOTE-ws-i18n-scenarios-20040730/>     rec:editor :_g192 .
+        } .
+    {
+        :_g193     contact:fullName "Andrea Vine" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/NOTE-ws-i18n-scenarios-20040730/>     rec:editor :_g193 .
+        } .
+    {
+        :_g194     contact:fullName "Mike McKenna" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/NOTE-ws-i18n-scenarios-20040730/>     rec:editor :_g194 .
+        } .
+    {
+        :_g195     contact:fullName "Takao Suzuki" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/NOTE-ws-i18n-scenarios-20040730/>     rec:editor :_g195 .
+        } .
+    {
+        :_g196     contact:fullName "Mark R. Walker" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/REC-speech-synthesis-20040907/>     rec:editor :_g196 .
+        } .
+    {
+        :_g197     contact:fullName "Ken Rehor" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-voicexml21-20040728/>     rec:editor :_g197 .
+        } .
+    {
+        :_g198     contact:fullName "Jim Ferrans" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-voicexml21-20040728/>     rec:editor :_g198 .
+        } .
+    {
+        :_g199     contact:fullName "Giovanni Seni" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-InkML-20040928>     rec:editor :_g199 .
+        } .
+    {
+        :_g200     contact:fullName "Christopher Tremblay" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-InkML-20040928>     rec:editor :_g200 .
+        } .
+    {
+        :_g201     contact:fullName "Larry Yaeger" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-InkML-20040928>     rec:editor :_g201 .
+        } .
+    {
+        :_g202     contact:fullName "Katrin Franke" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-InkML-20040928>     rec:editor :_g202 .
+        } .
+    {
+        :_g203     contact:fullName "Gregory Russell" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-InkML-20040928>     rec:editor :_g203 .
+        } .
+    {
+        :_g204     contact:fullName "Sriganesh Madhvanath" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-InkML-20040928>     rec:editor :_g204 .
+        } .
+    {
+        :_g205     contact:fullName "Ola Andersson" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-SVGMobile12-20040813/>     rec:editor :_g205 .
+        } .
+    {
+        :_g206     contact:fullName "Jason White" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-WCAG20-20040730/>     rec:editor :_g206 .
+        } .
+    {
+        :_g207     contact:fullName "Ben Caldwell" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-WCAG20-20040730/>     rec:editor :_g207 .
+        } .
+    {
+        :_g208     contact:fullName "RJ Auburn" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-voicexml21-20040728/>     rec:editor :_g208 .
+        } .
+    {
+        :_g209     contact:fullName "Wu Chou" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-emma-20040901/>     rec:editor :_g209 .
+        } .
+    {
+        :_g210     contact:fullName "Roberto Pieraccini" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-emma-20040901/>     rec:editor :_g210 .
+        } .
+    {
+        :_g211     contact:fullName "Patrick Curran" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-qaframe-test-20040820/>     rec:editor :_g211 .
+        } .
+    {
+        :_g212     contact:fullName "Eric Prud'hommeaux" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-rdf-sparql-query-20041012/>     rec:editor :_g212 .
+        } .
+    {
+        :_g213     contact:fullName "Jeff Haynie" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-voicexml21-20040728/>     rec:editor :_g213 .
+        } .
+    {
+        :_g214     contact:fullName "Paolo Baggia" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-voicexml21-20040728/>     rec:editor :_g214 .
+        } .
+    {
+        :_g215     contact:fullName "Michael Bodell" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-voicexml21-20040728/>     rec:editor :_g215 .
+        } .
+    {
+        :_g216     contact:fullName "David Burke" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-voicexml21-20040728/>     rec:editor :_g216 .
+        } .
+    {
+        :_g217     contact:fullName "Jeff Kusnitz" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-voicexml21-20040728/>     rec:editor :_g217 .
+        } .
+    {
+        :_g218     contact:fullName "Hakan Kilic" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-voicexml21-20040728/>     rec:editor :_g218 .
+        } .
+    {
+        :_g219     contact:fullName "Rob Marchand" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-voicexml21-20040728/>     rec:editor :_g219 .
+        } .
+    {
+        :_g220     contact:fullName "Matt Oshry" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-voicexml21-20040728/>     rec:editor :_g220 .
+        } .
+    {
+        :_g221     contact:homePage <http://www.w3.org/2001/tag/> .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-webarch-20040816/>     org:deliveredBy :_g221 .
+        } .
+    {
+        :_g222     contact:fullName "Jeffrey Schlimmer" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-wsdl20-20040803>     rec:editor :_g222 .
+        <http://www.w3.org/TR/2004/WD-wsdl20-bindings-20040803>     rec:editor :_g222 .
+        <http://www.w3.org/TR/2004/WD-wsdl20-extensions-20040803>     rec:editor :_g222 .
+        } .
+    {
+        :_g223     contact:fullName "Roberto Chinnici" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-wsdl20-20040803>     rec:editor :_g223 .
+        } .
+    {
+        :_g224     contact:fullName "Sanjiva Weerawarana" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-wsdl20-20040803>     rec:editor :_g224 .
+        <http://www.w3.org/TR/2004/WD-wsdl20-bindings-20040803>     rec:editor :_g224 .
+        } .
+    {
+        :_g225     contact:fullName "Amy Lewis" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-wsdl20-extensions-20040803>     rec:editor :_g225 .
+        } .
+    {
+        :_g226     contact:fullName "Beth Epperson" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xhtml2-20040722>     rec:editor :_g226 .
+        } .
+    {
+        :_g227     contact:fullName "Ann Navarro" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xhtml2-20040722>     rec:editor :_g227 .
+        } .
+    {
+        :_g228     contact:fullName "Jonny Axelsson" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xhtml2-20040722>     rec:editor :_g228 .
+        } .
+    {
+        :_g229     contact:fullName "Pat Case" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xmlquery-full-text-use-cases-20040709/>     rec:editor :_g229 .
+        <http://www.w3.org/TR/2004/WD-xquery-full-text-20040709/>     rec:editor :_g229 .
+        } .
+    {
+        :_g230     contact:fullName "Sihem Amer-Yahia" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xmlquery-full-text-use-cases-20040709/>     rec:editor :_g230 .
+        <http://www.w3.org/TR/2004/WD-xquery-full-text-20040709/>     rec:editor :_g230 .
+        } .
+    {
+        :_g231     contact:fullName "Asir S. Vedamuthu" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xmlschema-ref-20040716/>     rec:editor :_g231 .
+        } .
+    {
+        :_g232     contact:fullName "Mary Holstege" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xmlschema-ref-20040716/>     rec:editor :_g232 .
+        } .
+    {
+        :_g233     contact:fullName "Marton Nagy" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xpath-datamodel-20040723/>     rec:editor :_g233 .
+        } .
+    {
+        :_g234     contact:fullName "Mary F. Fernández" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xpath20-20040723>     rec:editor :_g234 .
+        <http://www.w3.org/TR/2004/WD-xquery-20040723/>     rec:editor :_g234 .
+        } .
+    {
+        :_g235     contact:fullName "Jérôme Siméon" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xpath20-20040723>     rec:editor :_g235 .
+        <http://www.w3.org/TR/2004/WD-xquery-20040723/>     rec:editor :_g235 .
+        } .
+    {
+        :_g236     contact:fullName "Scott Boag" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xpath20-20040723>     rec:editor :_g236 .
+        <http://www.w3.org/TR/2004/WD-xquery-20040723/>     rec:editor :_g236 .
+        } .
+    {
+        :_g237     contact:fullName "Henry Zongaro" .
+        
+        }     delta:insertion {<http://www.w3.org/TR/2004/WD-xslt-xquery-serialization-20040723/>     rec:editor :_g237 .
+        } .
+    
+
