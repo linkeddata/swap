@@ -3,6 +3,7 @@
 *.pyc
 diffs
 temp
+dist
 xdiffs
 parser.out
 *_tab.py
