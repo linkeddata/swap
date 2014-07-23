@@ -25,6 +25,8 @@ and N3 generation, replaced stream model with use
 of common store/formula API.  Yosi Scharf developped
 the module, including tests and test harness.
 
+2013-11-07 Added naked dateZ and datetimeZ literal parsing
+
 """
 
 
@@ -75,6 +77,8 @@ INTEGER_DATATYPE = "http://www.w3.org/2001/XMLSchema#integer"
 FLOAT_DATATYPE = "http://www.w3.org/2001/XMLSchema#double"
 DECIMAL_DATATYPE = "http://www.w3.org/2001/XMLSchema#decimal"
 BOOLEAN_DATATYPE = "http://www.w3.org/2001/XMLSchema#boolean"
+DATE_DATATYPE = "http://www.w3.org/2001/XMLSchema#date"
+DATETIME_DATATYPE = "http://www.w3.org/2001/XMLSchema#dateTime"
 
 option_noregen = 0   # If set, do not regenerate genids on output
 
@@ -97,7 +101,8 @@ eof = re.compile(r'[ \t]*(#[^\n]*)?$')          # end  of file, poss. w/comment
 ws = re.compile(r'[ \t]*')                      # Whitespace not including NL
 signed_integer = re.compile(r'[-+]?[0-9]+')     # integer
 number_syntax = re.compile(r'(?P<integer>[-+]?[0-9]+)(?P<decimal>\.[0-9]+)?(?P<exponent>e[-+]?[0-9]+)?')
-digitstring = re.compile(r'[0-9]+')             # Unsigned integer      
+datetime_syntax = re.compile(r'[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9](T[0-9][0-9]:[0-9][0-9](:[0-9][0-9](\.[0-9]*)?)?)?Z?');
+digitstring = re.compile(r'[0-9]+')             # Unsigned integer
 interesting = re.compile(r'[\\\r\n\"]')
 langcode = re.compile(r'[a-zA-Z0-9]+(-[a-zA-Z0-9]+)?')
 #"
@@ -213,7 +218,7 @@ class SinkParser:
 
             i = self.directiveOrStatement(str,j)
             if i<0:
-                print "# next char: ", `str[j]` 
+                # print "# next char: ", `str[j]`
                 raise BadSyntax(self._thisDoc, self.lines, str, j,
                                     "expected directive or statement")
 
@@ -984,22 +989,36 @@ class SinkParser:
 
             ch = str[i]
             if ch in "-+0987654321":
-                m = number_syntax.match(str, i)
-                if m == None:
-                    raise BadSyntax(self._thisDoc, self.lines, str, i,
-                                "Bad number syntax")
-                j = m.end()
-                if m.group('exponent') != None: # includes decimal exponent
-                    res.append(float(str[i:j]))
-#                   res.append(self._store.newLiteral(str[i:j],
-#                       self._store.newSymbol(FLOAT_DATATYPE)))
-                elif m.group('decimal') != None:
-                    res.append(Decimal(str[i:j]))
-                else:
-                    res.append(long(str[i:j]))
-#                   res.append(self._store.newLiteral(str[i:j],
-#                       self._store.newSymbol(INTEGER_DATATYPE)))
-                return j
+		m = datetime_syntax.match(str, i);
+		if m != None:
+		    j = m.end();
+		    # print "date time "+str[i:j]
+		    if 'T' in str[i:j]:
+			res.append(self._store.newLiteral(str[i:j],
+			   self._store.newSymbol(DATETIME_DATATYPE)))
+			return j
+		    else:
+			res.append(self._store.newLiteral(str[i:j],
+			   self._store.newSymbol(DATE_DATATYPE)))
+			return j
+
+		m = number_syntax.match(str, i)
+		if m != None:
+		    j = m.end()
+		    if m.group('exponent') != None: # includes decimal exponent
+			res.append(float(str[i:j]))
+    #                   res.append(self._store.newLiteral(str[i:j],
+    #                       self._store.newSymbol(FLOAT_DATATYPE)))
+		    elif m.group('decimal') != None:
+			res.append(Decimal(str[i:j]))
+		    else:
+			res.append(long(str[i:j]))
+    #                   res.append(self._store.newLiteral(str[i:j],
+    #                       self._store.newSymbol(INTEGER_DATATYPE)))
+		    return j
+		raise BadSyntax(self._thisDoc, self.lines, str, i,
+			    "Bad number or datetime syntax")
+
 
             if str[i]=='"':
                 if str[i:i+3] == '"""': delim = '"""'
