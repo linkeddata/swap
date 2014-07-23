@@ -175,6 +175,14 @@ class BI_parseToSeconds(LightBuiltIn, Function):
         except:
             return None
 
+class BI_parse(LightBuiltIn, Function):
+    def evaluateObject(self,   subj_py):
+        if verbosity() > 80: progress("strTime:parse input:"+`subj_py`)
+        str, format = subj_py
+        try:
+            return  isodate.fullString(int(calendar.timegm(time.strptime(str, format))));
+        except:
+            return None
 
 
 
@@ -195,7 +203,7 @@ def register(store):
     str.internFrag("gmTime", BI_gmTime)
     str.internFrag("localTime", BI_localTime)
     str.internFrag("format", BI_format)
-#    str.internFrag("parse", BI_parse)
+    str.internFrag("parse", BI_parse)
     str.internFrag("formatSeconds", BI_formatSeconds)  # Deprocate?
     str.internFrag("parseToSeconds", BI_parseToSeconds)  # Deprocate?
 
