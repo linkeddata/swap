@@ -9,6 +9,8 @@
 
     -comma          Use comma as delimited instead of tab
     -xhtml          Read XHTML and look for a table, instead of CSV or TSV
+    -sheet          Read the XML sheet file from an unzipped Excel .xlsx file
+    -stringTableFileName foo  gives the string table XML file for excel
     -id             Generate sequential URIs for the items described by each row
     -reverse        Generate the URIs in reverse order (e.g for reve chron order) 
     -startId        With -id, start ids at this number (default 0) eg -startId 1
@@ -51,20 +53,63 @@ class DataTable(list):
         self.headings, self.tips = [], []
         self.cellType = ''
         self.kludge = 0; # Kludge: we are following a <br>
+        
+        self.htmlTags = {
+            'table':    ['table'], 
+            'row':      ['tr'],
+            'cell':     [ 'td', 'th' ] 
+        }
+        self.sheetTags = {
+            'table':    ['sheetdata'], 
+            'row':      ['row'],
+            'cell':     [ 'c', ] 
+        }
  
-#  XHTML
+#  Unzipped Excel spreadsheet
+          
+    def parseSheet(self, infile, stringTableFile):
+        self.parseSharedStringTable(stringTableFile);
+        tree = etree.parse(infile);
+        root = tree.getroot();
+        self.doElement(root, self.sheetTags, None)
+        self.cleanup()
+        
+        print self.diagnosticString()
+        print 'self:', self
+        return;
+
+    def parseSharedStringTable(self, infile):
+        tree = etree.parse(infile);
+        self.shortStrings = []
+        root = tree.getroot();
+        tag = root.tag.split('}')[1];
+        assert tag == 'sst'
+        count = 0
+        for si in root:
+            assert si.tag.split('}')[1] == 'si'
+            t = si[0]
+            assert t.tag.split('}')[1] == 't'
+            if t.text: 
+                self.shortStrings.append(t.text)
+                print "Short string %i:" % count, t.text 
+            else:
+                self.shortStrings.append('')
+            count += 1
+
+#  XHTML (or spreadsheet XML)
           
     def parseXHTML(self, infile):
-        tree = etree.parse(sys.stdin);
+        tree = etree.parse(infile);
         root = tree.getroot();
-        self.doElement(root)
+        self.doElement(root, self.htmlTags, None);
         self.cleanup()
         return;
    
     def pokeString(self, s, hide):
+        print "Pokestring at %i,%i " % (self.row, self.col), s
         if self.row >= -1 and self.col >= 0:
             s = s.strip()
-            if self.cellType == 'td':
+            if self.row > 0:
                 self[self.row][self.col] += s;
             else:   # tr th p span   or    tr th span 
                 if not hide:
@@ -75,12 +120,12 @@ class DataTable(list):
                 else:
                     self.tips[self.col] += s;
 
-    def doElement(self, e, level=0, hide = 0):
+    def doElement(self, e, tags, parent, level=0, hide = 0):
         
         def newColumn():
             self.col += 1
             if self.col >= self.numberOfColumns: self.numberOfColumns = self.col + 1
-            if self.cellType == 'td':
+            if self.row >= 0:
                 self[self.row].append('');
             else:
                 self.headings.append('');
@@ -88,31 +133,45 @@ class DataTable(list):
             return
 
         tag = e.tag.split('}')[1];
-        if tag == 'table':
+        if tag in tags['table']:
             self.row = -2;
-        elif tag == 'tr':
+        elif tag in tags['row']:
             self.row += 1;
             self.append([]);
             self.col = -1;
             
-        elif tag == 'td' or tag == 'th': #   or (tag =='br' and col >= 0):
+        elif tag in tags['cell']: #   or (tag =='br' and col >= 0):
 
             self.cellType = tag
             newColumn()
+            print "         column ", self.col
             
         elif tag == 'br':
             self.kludge = 1  #  A break moves temporarily to the next stacked column
 
+        elif tag == 'v':  # A reference in excel to the string table.
+            if parent.attrib.get('t','') == 's':
+                self.pokeString(self.shortStrings[int(e.text)], hide);
+                # print " tttt ", self.shortStrings[int(e.text)], 'at', self.row, self.col
+            elif parent.attrib.get('s', ''):
+                self.pokeString('date '+e.text, hide);
+                # print " ssss ", 'date '+e.text, 'at', self.row, self.col
+            else:
+                print parent.tag, parent.attrib,  e.tag, e.attrib, e.text
+                assert False
+ 
         #   Now poke any text content into the array:
         
-        if (e.text) : self.pokeString(e.text, hide);        
+        if tag != 'v' and (e.text) : self.pokeString(e.text, hide);        
 
         # Child elements
 
         for x in e:
-            self.doElement(x, level+1, hide or e.attrib.get('class',"") == 'hide')
+            self.doElement(x, tags, e, level+1, hide or e.attrib.get('class',"") == 'hide')
 
-        if (e.tail) : self.pokeString(e.tail, hide);        
+        if (e.tail) :
+            print "Tail ", e.tail
+            self.pokeString(e.tail, hide);        
 
         #  End tag actions:
 
@@ -220,6 +279,8 @@ class DataTable(list):
             self.headings = self.readTabs(delim, inFP)
             for jj in range(len(self.headings)):
                 self.headings[jj] = self.headings[jj].strip()
+                if len(self.headings[jj]) == 0:
+                    self.headings[jj] = unichr(65+jj) #  Default to "A",  "B", etc
             while self.headings[-1:] == [""]: self.headings = self.headings[:-1]; # Strip trailing comma on heading line (paypal)
             info( "# headings found: %i  %s" % (len(self.headings), self.headings))
 
@@ -319,6 +380,8 @@ class DataTable(list):
         for i in range(len(argv)-2):
             if argv[i+1] == '-namespace': namespace = argv[i+2] + '#'
             if argv[i+1] == '-startId': self.idOffset = int(argv[i+2])
+            if argv[i+1] == '-sheet': self.sheetRootFileName = argv[i+2]
+            
                 
         if "-help" in argv[1:]:
             info( __doc__);
@@ -329,7 +392,11 @@ class DataTable(list):
         else:
             delim = '\t'
             
-        if "-xhtml" in argv[1:]:
+        if "-sheet" in argv[1:]:
+            sheetFile = open(self.sheetRootFileName + '/worksheets/sheet1.xml');
+            sstFile = open(self.sheetRootFileName + '/sharedStrings.xml');
+            self.parseSheet(sheetFile, sstFile);
+        elif "-xhtml" in argv[1:]:
             self.parseXHTML(inFP);
         else:
             self.readCSV(inFP, delim);
