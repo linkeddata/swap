@@ -155,6 +155,7 @@ Rules which use this function will of course NOT be repeatable.
     rdfs:range time:format;
     rdfs:isDefinedBy <>.
 
+
 time:localTime a rdf:Property,
 	ont:UniqueProperty;
     rdfs:label "local time";
@@ -172,7 +173,22 @@ Rules which use this function will of course NOT be repeatable.
     rdfs:range time:format;
     rdfs:isDefinedBy <>.
 
+time:parse a rdf:Property;
+    rdfs:label "parsed as time";
+    rdfs:comment """The subject is a list of a input string and a format string.
+    The object is calculated as the result of parsing the first string using the 
+    format in the secons string.  The format of the format string is the same as
+    for python's and C's  strptime() function.  The object is in W3C standard datetime format.
+    """ 
 
+time:parseToSeconds a rdf:Property;
+    rdfs:label "parsed as time to seconds";
+    rdfs:comment """The subject is a list of a input string and a format string.
+    The object is calculated as the result of parsing the first string using the 
+    format in the secons string.  The format of the format string is the same as
+    for python's and C's  strptime() function.  The object is a number of seconds since we count time from.
+    (See also inSeconds).
+    """ 
 
 #@@@ To be aded  localtime, gmtime, ... format, parse...
     #@@ add pointers to examples in test/time  etc
