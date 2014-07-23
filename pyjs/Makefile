@@ -48,6 +48,9 @@ not3i.js : not3a.js fix.sed
 not3.js : not3i.js  $S/util/jsindent.py
 	python $S/util/jsindent.py not3i.js > not3.js
 
+clean :
+	rm not3.js not3i.js not3a.js not3p.py js_results.n30 
+
 
 
 

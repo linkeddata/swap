@@ -1,0 +1,76 @@
+<html><head><script>
+
+window["provider$user.agent"] = function() {
+  var ua = navigator.userAgent.toLowerCase();
+  if (ua.indexOf('opera') != -1) {
+    return 'opera';
+  }
+   else if (ua.indexOf('safari') != -1) {
+    return 'safari';
+  }
+   else if (ua.indexOf('msie 6.0') != -1) {
+    return 'ie6';
+  }
+   else if (ua.indexOf('mozilla') != -1) {
+    var geckoIdx = ua.indexOf('gecko/');
+    if (geckoIdx == -1) 
+      return 'oldmoz';
+    var spaceIdx = ua.indexOf(' ', geckoIdx);
+    if (spaceIdx == -1) 
+      spaceIdx = ua.length;
+    var version = parseInt(ua.substring(geckoIdx + 6, spaceIdx));
+    if (version < 20051107) 
+      return 'oldmoz';
+    return 'moz';
+  }
+  return 'unknown';
+}
+;
+
+window["prop$user.agent"] = function() {
+  var v = window["provider$user.agent"]();
+  switch (v) {
+    case "ie6":
+    case "moz":
+    case "oldmoz":
+    case "opera":
+    case "safari":
+      return v;
+    default:
+      parent.__pygwt_onBadProperty("%(app_name)s", "user.agent", ['"ie6"', '"moz"', '"oldmoz"', '"opera"', '"safari"'], v);
+      throw null;
+  }
+};
+
+function O(a,v) {
+  var answer = O.answers;
+  var i = -1;
+  var n = a.length - 1;
+  while (++i < n) {
+    if (!(a[i] in answer)) {
+      answer[a[i]] = [];
+    }
+    answer = answer[a[i]];
+  }
+  answer[a[n]] = v;
+}
+O.answers = [];
+
+function selectScript() {
+  try {
+    var F;
+    var I = ["true", (F=window["prop$user.agent"],F())];
+
+    O(["true","safari"],"%(safari_js)s");
+    O(["true","ie6"],"%(ie6_js)s");
+    O(["true","oldmoz"],"%(oldmoz_js)s");
+    O(["true","moz"],"%(moz_js)s");
+    O(["true","opera"],"%(opera_js)s");
+
+    var strongName = O.answers[I[0]][I[1]];
+    location.replace(strongName + '.cache.html');
+  } catch (e) {
+    // intentionally silent on property failure
+  }
+}
+</script></head><body onload='if (parent && parent.__pygwt_webModeFrameOnLoad) selectScript()'><font face='arial' size='-1'>This script is part of module</font> <code>%(app_name)s</code></body></html>
