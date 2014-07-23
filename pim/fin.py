@@ -113,15 +113,11 @@ def transactionRow(x):
     if not accLabel: accLabel = `toAccount`[-4:]
     return " <tr class='%s'><td class='date'>%s</td><td><a href='%s'>%s</a></td><td style='width:7em;'>%s</td><td class='amount'>%7.2f</td></tr>\n" % (accLabel, date, baseRel(x.uriref()), payee, accLabel, amount)
     
+    
 def reimbursablesCheck():
     global kb
     global cat
-    st = ""
-    transactions = kb.each(pred=rdf.type, obj=cat_ns.Reimbursables)
-    
-    st = "<h2>Reimbusables with no trip</h2>\n"
-    
-#    st += "<table>\n";
+    transactions = kb.each(pred=rdf.type, obj=cat_ns.Reimbursables)    
     needed = [];
     while len(transactions) > 0:
         x = transactions.pop()
@@ -129,8 +125,9 @@ def reimbursablesCheck():
         if month < 0 : continue
         if kb.any(subj = x, pred = trip.trip): continue
         needed.append(x);
-#       st += transactionRow(x)
-    return st + transactionTable(needed);
+    if needed:
+        return "<h2>Reimbusables with no trip</h2>\n" + transactionTable(needed)
+    return "" ;
         
 def internalCheck():
     global kb
@@ -162,9 +159,9 @@ def internalCheck():
                     break
         else:
             unbalanced.append(x)
-
-    print "<h2>Unbalanced internal transactions</h2>"
-    print transactionTable(unbalanced);
+    if unbalanced:
+        print "<h2>Unbalanced internal transactions</h2>"
+        print transactionTable(unbalanced);
     return
 
 
@@ -343,7 +340,7 @@ def doCommand(startDate, endDate, inputURIs=["/dev/stdin"],totalsFilename=None):
     
     _outURI = _baseURI
     option_baseURI = _baseURI   # To start with - then tracks running base
-
+    fatalErrors = 0;
 
 # Load the data:
 
@@ -394,32 +391,44 @@ def doCommand(startDate, endDate, inputURIs=["/dev/stdin"],totalsFilename=None):
         if month not in range(numberOfMonths) : continue
                     
         payees = kb.each(subj=s, pred=qu_payee)
-        if str(payees[0]) == "Check" and len(payees) >1: payee = payees[1]
-        else: payee = payees[0]
+	if not payees:
+	    progress("@@@ Error: No payee for "+`uri`)
+	    payee = "@@@@@@ Unknown";
+            fatalErrors += 1;
+	
+        elif len(payees) >1 and str(payees[0]) == "Check":
+	    payee = payees[1]
+        else:
+	    payee = payees[0]
         
         amounts = kb.each(subj=s, pred=qu_in_USD)
         if len(amounts) == 0:
             amounts = kb.each(subj=s, pred=qu_amount)
             if len(amounts) == 0:
-                progress("@@@ Error: No amount for "+`uri`)
+                progress("@@@ Error: No USD amount for "+`uri`)
+                fatalErrors += 1;
+
             else:
                 progress("Warning: No USD amount for "+`uri`+", assuming USD")
         if len(amounts) >1:
             if (cat_ns.Internal not in cats or
                 len(amounts) != 2 ):
-            
+                fatalErrors += 1;
+
                 progress(
-        "Error: More than one amount %s for transaction %s -- ignoring!\n"
+        "Error: More than one USD amount %s for transaction %s -- ignoring!\n"
                         % (`amounts`,uri))
             else:
                 sum = float(amounts[0]) + float(amounts[1])
                 if sum != 0:
-                    progress("2 amounts %s for internal transaction %s.\n"
-                        % (amounts,uri))
+                    fatalErrors += 1;
+                    progress("Sum %f not zero for USD amounts %s for internal transaction %s.\n"
+                        % (sum, amounts, uri))
             continue
 
         if len(amounts) != 1:
             progress("@@@ Error: No amount for "+`uri`);
+            fatalErrors += 1;
             ss = kb.statementsMatching(subj=s)
             progress(`ss`+'; KB='+`kb.n3String()`)
             continue
@@ -451,7 +460,7 @@ def doCommand(startDate, endDate, inputURIs=["/dev/stdin"],totalsFilename=None):
                     bottomCats.remove(sup)
         if len(bottomCats) == 0:
            noteError("No categoriy: %s  for <%s>"  # all cats: %s, raw cats:%s"
-                        %(`bottomCats`, `s`))  #  ,`cats`, `kb.each(subj=s, pred=rdf.type)`)
+                        %(`cats`, `s`))  #  ,`cats`, `kb.each(subj=s, pred=rdf.type)`)
         elif bottomCats[0] not in bottomCategories and (bottomCats[0] not in [ qu.UnclassifiedIncome, qu.UnclassifiedOutgoing]):
            noteError("Be more specifc: %s for <%s>"  %(`bottomCats[0]`, `s`)) # Won't get shown e.g. in year-cat.html
         if len(bottomCats) > 1:
@@ -460,13 +469,21 @@ def doCommand(startDate, endDate, inputURIs=["/dev/stdin"],totalsFilename=None):
 
     
     print '<html xmlns="http://www.w3.org/1999/xhtml">'
+
+    if '--summary' in sys.argv:
+        title = "Monthly summary"
+    elif '--issues' in sys.argv:
+        title = "Issues"
+    else:
+        title = "Report"
+
     print """<head>
         <meta charset='UTF-8'>
-        <title>Annual Summary by month</title>
+        <title>%s</title>
         <link rel="Stylesheet" href="report.css">
     </head>
     <body>
-    """
+    """ % (title)
 #           <img src="sand-dollar.gif" alt="dollar" align="right"/>
     
 
@@ -615,6 +632,7 @@ def doCommand(startDate, endDate, inputURIs=["/dev/stdin"],totalsFilename=None):
         print problems, "problems.</pre>"
     
     print "</body></html>"
+    return fatalErrors
 
 
     
@@ -674,5 +692,6 @@ if __name__ == '__main__':
     if yearInQuestion is not None :
         startDate = yearInQuestion + "-01"
         endDate = "%4i" % (int(yearInQuestion[0:4]) + 1) + yearInQuestion[4:7] + "-01" # Date NOT done
-    doCommand(startDate=startDate, endDate=endDate, inputURIs=inputURIs, totalsFilename=totalsFilename)
+    if doCommand(startDate=startDate, endDate=endDate, inputURIs=inputURIs, totalsFilename=totalsFilename) > 0:
+        sys.exit(1) #  Error
 

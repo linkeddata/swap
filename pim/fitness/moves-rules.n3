@@ -58,11 +58,26 @@
 
 # See https://groups.google.com/forum/#!msg/moves-api/t3wHbGsFiaQ/PqLGTKqjCt4J
 
+# OLDER VOCAB  
+
 { ?x :activity "wlk" } => { ?x a fit:Walking }.
 { ?x :activity "run" } => { ?x a fit:Running }.
 { ?x :activity "trp" } => { ?x a fit:Transport }.
 { ?x :activity "cyc" } => { ?x a fit:Cycling }.
 { ?x :activity "non" } => { ?x a fit:Activity }.  # @@@ don't know what the type of activity is
+
+# NEWER 2014
+
+{ ?x :activity "walking" } => { ?x a fit:Walking }.
+{ ?x :activity "running" } => { ?x a fit:Running }.
+{ ?x :activity "transport" } => { ?x a fit:Transport }.
+{ ?x :activity "cycling" } => { ?x a fit:Cycling }.
+{ ?x :activity "swimming" } => { ?x a fit:Swimming }.
+{ ?x :activity "cross_country_skiing" } => { ?x a fit:CrossCountrySkiing }.
+{ ?x :activity "downhill_skiing" } => { ?x a fit:DownhillSkiing }.
+{ ?x :activity "airplane" } => { ?x a fit:Flight }.
+{ ?x :activity "train" } => { ?x a fit:TrainRide }.
+
 
 { ?x ?p ?t.
     ?p :preferredTimePredicate ?q.
@@ -106,7 +121,7 @@
 
 #  Only approximate.
 
-{ ?x a fit:Transport; fit:meanSpeed_kmph [ math:greaterThan 160.0 ] } => {?x a fit:Flying }.
+{ ?x a fit:Transport; fit:meanSpeed_kmph [ math:greaterThan 160.0 ] } => {?x a fit:Flight }.
 # Driving speeds could aslo be train, etc
 # { ?x a fit:Transport; fit:meanSpeed_kmph [ math:greaterThan 30; math:lessThan 160 ] } => {?x a fit:Driving }.
  

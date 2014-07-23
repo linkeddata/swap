@@ -58,6 +58,7 @@ info = lambda s: sys.stderr.write(s+'\n');
 monthName= ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
                             "Aug", "Sep", "Oct", "Nov", "Dec"]
 
+currencySource = uripath.join(uripath.base(), "currencies.n3");
 
 kb = None;
 
@@ -74,7 +75,9 @@ def figureBalances(startDate, endDate, inputURIs=["/dev/stdin"]):
 
 # Load the data:
 
-    kb = loadMany(inputURIs)
+    kb = loadMany(inputURIs);
+    
+    rates = loadMany(["currencies.n3"]);
 
     sts = kb.statementsMatching(pred = OFX.BANKTRANLIST);
     #if verbose:
@@ -92,6 +95,7 @@ def figureBalances(startDate, endDate, inputURIs=["/dev/stdin"]):
     # lists.reverse();
     balances = [];
     first = {};
+    g = {};
 
     for s, e, t, stmtrs in lists:
     
@@ -108,7 +112,7 @@ def figureBalances(startDate, endDate, inputURIs=["/dev/stdin"]):
         currency = cur.sym(curdef);
         conversionRate = 1
         if (curdef != "USD"):
-            conversionRate = kb.the(currency, cur.in_USD).value();
+            conversionRate = rates.the(currency, cur.in_USD).value();  # , None, kb.store.symbol(currencySource)).value();
         balanceDate = str(kb.the(ledgerBalance, OFX.DTASOF))[:10];
         balance = float(str(kb.the(ledgerBalance, OFX.BALAMT))) * conversionRate;
         
@@ -355,6 +359,8 @@ def balancesReport(dates, first, balances):
     dp = 0;
     lastTime = {};
     res = "";
+    ttl = "@prefix : <http://www.w3.org/2000/10/swap/pim/qif#>.\n\n";
+    i = 0;
     series = []; # Let's have an ordered list for once
     for ac in first:
         if ac == 'sum': pass # series.insert(0, ac)  # sum is special, colour 0, black.
@@ -362,27 +368,37 @@ def balancesReport(dates, first, balances):
         d, lastTime[ac]  = first[ac];
 
     res += 'date'
-    for a in series:
-        res += ','+ a
     res += ',total\n'
+
+    for i in range(len(series)):
+	a = series[i];
+        res += ','+ a
+	ttl += '<#b%i> :acct4 "%s".\n' % (i, a)
+    ttl += '<#b%i> :acct4 "%s".\n' % (len(series), 'total');
 
     opening = {}
 
     def line(d):
-        r = d
+        r = d;
+	t = "";
         tot = 0
+	global ttl;
         opening[d] = {};
-        for a in series:
+        for i in range(len(series)):
+	    a = series[i];
+	    t += '<#b%i> :balance [ :asof "%s"; :amount %10.2f ].\n'% (i, d, lastTime[a]);
             r +=  (',%10.2f' % lastTime[a]);
             opening[d][a] = lastTime[a];
             if a != 'sum': tot += lastTime[a]
         if lastTime['sum'] != tot:
             print "Warning at %s: sum %10.2f but total here %10.2f" % (d,lastTime['sum'], tot);
-        return r +   (',%10.2f' % tot) + '\n';
+        r = r +   (',%10.2f' % tot) + '\n';
+	t = t + '<#b%i> :balance [ :asof "%s"; :amount %10.2f ] .\n' %(len(series), d, tot);
+	return t
 
     for s, e, ac, bal in balances:
         if s >= dates[dp]:
-            res += line(dates[dp]);
+            ttl += line(dates[dp]);
             dp += 1;
             
         lastTime[ac] = bal
@@ -407,7 +423,7 @@ def balancesReport(dates, first, balances):
     res += (',%10.2f\n' % delta)
     
     
-    return res
+    return ttl # res
     
 
     

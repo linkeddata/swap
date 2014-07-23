@@ -24,11 +24,11 @@
 # Select subclasses of TaxCategories.
 #  Must be at least one entry, and must have a label
 
-{ [] a :c. :c a q:Cat; s:label [] } log:implies { :c a :toBeDisplayed }.
+{ [] a :c. :c a q:Cat; s:label [] } log:implies { :c a q:toBeDisplayed }.
  
-#q:Unclassified a :toBeDisplayed; s:label "Unclassified transactions".
-q:UnclassifiedIncome a :toBeDisplayed; s:label "Unclassified Income".
-q:UnclassifiedOutgoing a :toBeDisplayed;  s:label "Unclassified Outgoings".
+#q:Unclassified a q:toBeDisplayed; s:label "Unclassified transactions".
+q:UnclassifiedIncome a q:toBeDisplayed; s:label "Unclassified Income".
+q:UnclassifiedOutgoing a q:toBeDisplayed;  s:label "Unclassified Outgoings".
 
 ####################################################################
 
@@ -59,7 +59,7 @@ q:UnclassifiedOutgoing a :toBeDisplayed;  s:label "Unclassified Outgoings".
 {
 #   [] a ?y.
 
-    ?y a :toBeDisplayed; s:label ?l.
+    ?y a q:toBeDisplayed; s:label ?l.
     
     ?y log:uri ?uri.
         (?uri ".*#(.*)") string:scrape ?a. 
@@ -91,11 +91,11 @@ q:UnclassifiedOutgoing a :toBeDisplayed;  s:label "Unclassified Outgoings".
      
      ("%6.2f" ?dollars) string:format :x.
      
-    :y a :toBeDisplayed; s:label :l.
+    :y a q:toBeDisplayed; s:label :l.
     
     ( :l " 11111111 " :d ?URI "0") string:concatenation :k.
     (  "<tr class='"  :a
-	 "'><td class='date'><a href='"  (?URI "/Data/(.*)")!string:scrape "'>" (:d "^([^T]*)")!string:scrape
+	 "'><td class='date'><a href='../"  (?URI "/Financial/(.*)")!string:scrape "'>" (:d "^([^T]*)")!string:scrape
 #       "</a></td><td class='cat'>" :l
        "</td><td class='payee'>" :p
 #       "</td><td class='to'>" :a
@@ -112,7 +112,7 @@ q:UnclassifiedOutgoing a :toBeDisplayed;  s:label "Unclassified Outgoings".
 	log:uri ?URI;
 	q:toAccount [s:label :a].
      
-    :y a :toBeDisplayed; s:label :l.
+    :y a q:toBeDisplayed; s:label :l.
     ( :l " 11111111 " :d ?URI "1") string:concatenation :k.
     (  "<tr class='"  :a
 	 "'><td class='date'>"
@@ -130,7 +130,7 @@ q:UnclassifiedOutgoing a :toBeDisplayed;  s:label "Unclassified Outgoings".
 	log:uri ?URI;
 	q:toAccount [s:label :a].
      
-    :y a :toBeDisplayed; s:label :l.
+    :y a q:toBeDisplayed; s:label :l.
      (?tripURI "/Documents/(.*)")  string:scrape ?tail .
 
     ( :l " 11111111 " :d ?URI "2") string:concatenation :k.
@@ -154,7 +154,7 @@ q:UnclassifiedOutgoing a :toBeDisplayed;  s:label "Unclassified Outgoings".
 
 	q:toAccount [s:label :a].
      (?fileURI "/Documents/(.*)") string:scrape ?tail .  # Only works on local files
-    :y a :toBeDisplayed; s:label :l.
+    :y a q:toBeDisplayed; s:label :l.
     ( :l " 11111111 " :d ?URI "3") string:concatenation :k.
     (  "<tr class='"  "attachment"
 	 "'><td class='date'>"
@@ -167,7 +167,7 @@ q:UnclassifiedOutgoing a :toBeDisplayed;  s:label "Unclassified Outgoings".
 # Total if available
 
 {  
-    :y a :toBeDisplayed; s:label :l; q:total :x.
+    :y a q:toBeDisplayed; s:label :l; q:total :x.
     ( :l " 90000000 " ) string:concatenation :k.
     (  "<tr><td class='date'>"
 #       "</td><td class='cat'>" :l
@@ -181,7 +181,7 @@ q:UnclassifiedOutgoing a :toBeDisplayed;  s:label "Unclassified Outgoings".
 
 # end section:
 
-{   :y a :toBeDisplayed; s:label :l.
+{   :y a q:toBeDisplayed; s:label :l.
     ( :l " 99999999 ") string:concatenation :k.
 } log:implies {
     :l log:outputString "</table>\n"

@@ -53,6 +53,12 @@ class Turtleizer():
             self.writeln(indent + ']');
         elif type(x) == type(u''):
             self.writeln('"""' + x.replace('"', '\\"') + '"""')
+        elif x == None:
+            self.writeln(indent + `()`);
+        elif `x` == 'True':
+            self.writeln(indent + 'true');  #  Python to n3
+        elif `x` == 'False':
+            self.writeln(indent + 'false');
         else:
             self.writeln(indent + `x`);
 
