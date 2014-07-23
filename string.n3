@@ -123,11 +123,31 @@ ignoring differences between upper and lower case.""";
 
 string:notEqualIgnoringCase a rdf:Property;
     s:definedBy <http://www.w3.org/2000/10/swap/string>;  
-    s:label  "contains";
+    s:label  "not equal to (ignoring case)";
     s:comment  """True iff the subject string is the NOT same as object string
 ignoring differences between upper and lower case.""";
     s:domain string:String;
     s:range  string:String.
+
+string:containsRoughly a rdf:Property;
+    s:definedBy <http://www.w3.org/2000/10/swap/string>;  
+    s:label  "contains roughly";
+    s:comment  """True iff the subject string contains the object string,
+with the comparison done ignoring the difference between upper case and
+lower case characters and normalizing whitespace.""";
+    s:domain string:String;
+    s:range  string:String.
+
+string:notContainsRoughly a rdf:Property;
+    s:definedBy <http://www.w3.org/2000/10/swap/string>;  
+    s:label  "does not contain roughly";
+    s:comment  """True iff the subject string contains the object string,
+with the comparison done ignoring the difference between upper case and
+lower case characters and normalizing whitespace.""";
+    s:domain string:String;
+    s:range  string:String.
+
+
 
 string:scrape a rdf:Property;
     s:definedBy <http://www.w3.org/2000/10/swap/string>;  
