@@ -1,0 +1,84 @@
+#Processed by Id: cwm.py,v 1.181 2005/11/04 14:19:22 timbl Exp 
+        #    using base foo:
+        
+#  Notation3 generation by
+#       notation3.py,v 1.185 2005/11/02 00:06:26 timbl Exp
+
+#   Base was: foo:
+     @prefix : <http://dig.csail.mit.edu/2005/09/rein/engine#> .
+    @prefix http: <http://dig.csail.mit.edu/2005/09/rein/examples/http-access#> .
+    @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    @prefix n3: <http://www.w3.org/2004/06/rei#> .
+    @prefix paw: <file:/devel/WWW/2000/10/swap/test/reason/paw-proof.n3#> .
+    @prefix pfc: <file:/devel/WWW/2000/10/swap/test/reason/pfcheck1.n3#> .
+    @prefix pr: <http://www.w3.org/2000/10/swap/reason#> .
+    @prefix session: <http://redfoot.net/2005/session#> .
+    
+     @forSome <#_g0> .
+      [      a pr:Conjunction,
+                    pr:Proof;
+             pr:component <#_g0>,
+                     [
+                 a pr:Inference;
+                 pr:binding  [
+                     pr:boundTo { @forSome paw:_g4 .
+                    paw:_g4     session:id :test;
+                         session:secret "judy-passwd" .
+                      [      a :Request;
+                             :access http:can-get;
+                             :requester paw:_g4;
+                             :resource <http://demo.policyawareweb.org/images/award.jpg> ].
+                    };
+                     pr:variable  [
+                         n3:uri "file:/devel/WWW/2000/10/swap/test/reason/pfcheck1.n3#X" ] ];
+                 pr:evidence  (
+                 [
+                         a pr:Extraction;
+                         pr:because <#_g0>;
+                         pr:gives {{
+                             @forSome paw:_g4 .
+                            paw:_g4     session:id :test;
+                                 session:secret "judy-passwd" .
+                              [      a :Request;
+                                     :access http:can-get;
+                                     :requester paw:_g4;
+                                     :resource <http://demo.policyawareweb.org/images/award.jpg> ].
+                            
+                            }     a :RequestFormula .
+                        } ] );
+                 pr:rule  [
+                     a pr:Extraction;
+                     pr:because <#_g0>;
+                     pr:gives { @forAll pfc:X .
+                    {
+                        pfc:X     a :RequestFormula .
+                        
+                        }     log:implies {:test     a :Pass .
+                        } .
+                    } ] ];
+             pr:gives { @forAll pfc:X .
+            :test     a :Pass .
+            {
+                pfc:X     a :RequestFormula .
+                
+                }     log:implies {:test     a :Pass .
+                } .
+            {
+                 @forSome paw:_g4 .
+                paw:_g4     session:id :test;
+                     session:secret "judy-passwd" .
+                  [      a :Request;
+                         :access http:can-get;
+                         :requester paw:_g4;
+                         :resource <http://demo.policyawareweb.org/images/award.jpg> ].
+                
+                }     a :RequestFormula .
+            } ].
+    
+    <#_g0>     a pr:Parsing;
+         pr:because  [
+             a pr:CommandLine;
+             pr:args "['/devel/WWW/2000/10/swap/cwm.py', 'pfcheck1.n3', '--think', '--why', '--base=foo:']" ];
+         pr:source <file:/devel/WWW/2000/10/swap/test/reason/pfcheck1.n3> .
+    
+#ENDS

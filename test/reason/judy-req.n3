@@ -1,0 +1,17 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rein: <http://dig.csail.mit.edu/2005/09/rein/network#> .
+@prefix session: <http://redfoot.net/2005/session#> .
+@prefix http: <http://dig.csail.mit.edu/2005/09/rein/examples/http-access#> .
+@prefix : <judy-req#> . 
+
+
+:req a rein:Request;
+  rein:requester [ session:secret "judy-passwd" ];
+  rein:access http:can-get;
+  rein:resource <http://demo.policyawareweb.org/images/group.jpg>;
+  rdfs:comment "Judy makes a request for http://demo.policyawareweb.org/images/group.jpg which was taken during AnnualMeeting which Judy attended. This is a valid request.".
+
+# from the 401 challenge
+<http://demo.policyawareweb.org/images/group.jpg> rein:policy <http://dig.csail.mit.edu/2005/09/rein/examples/troop42-policy.n3>.
+
+#ends

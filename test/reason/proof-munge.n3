@@ -1,0 +1,12 @@
+# Munge the proof so that it is easier to read
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix pr: <http://www.w3.org/2000/10/swap/reason#> .
+
+{ ?x pr:gives ?f } => { ?f pr:derivation2 ?x }.
+{ ?x pr:boundTo ?f } => { ?f pr:binding2 ?x }.
+
+pr:gives a log:Chaff.
+pr:boundTo a log:Chaff.
+
+#ends

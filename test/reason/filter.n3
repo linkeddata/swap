@@ -1,0 +1,35 @@
+# USAGE : cwm --crypto --rdf|--n3  <request> --n3 engine.n3 --think --filter="filter.n3" --rdf
+# USAGE : cwm --crypto --rdf http://dig.csail.mit.edu/2005/09/rein/examples/judy-req.rdf --n3 http://dig.csail.mit.edu/2005/09/rein/engine.n3 --think --filter="http://dig.csail.mit.edu/2005/09/rein/filter.n3" --rdf
+
+ 
+@keywords is, of, a.
+
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix rein: <http://dig.csail.mit.edu/2005/09/rein/network#> .
+@prefix session: <http://redfoot.net/2005/session#>.
+@prefix : <http://dig.csail.mit.edu/2005/09/rein/engine#>.
+
+@forAll REQ, WHO, RESOURCE, ACCESS, G.
+
+# if ( requester access resource) is true in G, request is valid
+{  REQ a rein:Request.
+   REQ rein:requester WHO.
+   REQ rein:resource RESOURCE.
+   REQ rein:access ACCESS.
+   G :has :ans.
+   G log:includes { REQ rein:requester [ ACCESS RESOURCE ] }.
+} => { REQ rein:ans rein:Valid. REQ rein:requester [ ACCESS RESOURCE ]. }.
+
+# if ( requester access resource) is not true in G, request is invalid
+{  REQ a rein:Request.
+   REQ rein:requester WHO.
+   REQ rein:resource RESOURCE.
+   REQ rein:access ACCESS.
+   G :has :ans.
+   G log:notIncludes { REQ rein:requester [ ACCESS RESOURCE ] }.
+} => { REQ rein:ans rein:Invalid. }.
+
+#ends
