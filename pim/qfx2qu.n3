@@ -120,7 +120,7 @@
     ?account 	log:uri [is os:baseAbsolute of
 		    [is string:concatenation of ( "acc#" :b "_" :a )]].
 	
-} log:implies {
+} => {
    :x	qu:listForAccount ?account;
 	qu:payeeField ofx:NAME;   # New version
 	qu:sourceDocument :s.
@@ -174,12 +174,13 @@
 # CC statments for dfferent accounts as their FIT was just (date, serialthatday).
 #
 
-{  [qu:listForAccount ?account; qu:payeeField ?p; qu:sourceDocument :s] ofx:STMTTRN
-  [
+{  [qu:listForAccount ?account; qu:payeeField ?p; qu:sourceDocument :s] ofx:STMTTRN ?original.
+  ?original
    ofx:DTPOSTED :d;
    ofx:FITID    :i;
    ?p           :m;
-   ofx:TRNAMT   :x ].
+   ofx:TRNAMT   :x .
+   
    :i crypto:sha ?id.
    :s log:uri ?filename.
 #   (?filename "([A-Za-z0-9-_]*)") string:scrape ?base.
@@ -191,6 +192,7 @@
    qu:date :d;
    qu:payee :m;  	# Quicken seems to mix it like this
    qu:accordingTo :s;	# useful to track the source
+   qu:ofxTransaction ?original;
    qu:amount :x .
 }.
 
