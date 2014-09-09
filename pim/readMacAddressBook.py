@@ -1,5 +1,5 @@
 #!/usr/bin/python2.7
-# MIT License.  (c)timbl
+# MIT License.  (c)timbl, Richard Newman
 #
 # This is or was http://www.w3.org/2000/10/swap/pim/readMacAddressBook.py
 # See also http://www.w3.org/2000/10/swap/pim/vcard2n3.py
@@ -363,26 +363,11 @@ Arguments:
         -m   --me               Dump just my own bsuiness card 
 	-a, --all		Use all people in the address book
         -g,  --groups           Dump the groups
-	-d x, --distribute=x	Use x as the prefix for a file tree to be writter.
+	-d x, --distribute=x	Use x as the prefix for a file tree to be writtn.
 
-You must include a namespace, which is the base URI for the resources 
-in the file (typically the URL at which the FOAF file will be found)."""
+If you distribute the data, many files wil be made in a tree, linking to each other
+Files (though not directories) will be created where necessary."""
 
-def getCommentFields(c):
-	"""Extracts additional information stored in the textual comment fields.
-Rather than doing complex parsing, just embed turtule in the entry:
-	{
-		<whatever RDF you want, e.g. 
-		<foaf:workplaceHomepage rdf:resource="..." />
-	}
-Voila!"""
-
-	# Cut out the comment between RDF: and END.
-	startIndex = c.find("{")
-	if startIndex != -1:
-            return c[(startIndex+1):(c.rfind("}"))]
-	
-	return ''
 
 def main(argv):
     """The main function for the application."""
