@@ -223,7 +223,7 @@ class DataTable(list):
         return res
         
 
-    def readTabs(self,delim, inFp):
+    def readTabs(self, delim, inFp):
         result = []
 
         l = inFp.readline()
@@ -232,7 +232,9 @@ class DataTable(list):
             l=l[:-1]  # Strip CR and/or LF
 
         while 1: # Next field
-            if l == "": return result  
+            if l == "":
+                result.append('') # Final empty field
+                return result  
 
             if l[0] == '"':  # Is this a quoted string?
                 l = l[1:]  # Chop leading quote
@@ -283,14 +285,15 @@ class DataTable(list):
                     self.headings[jj] = unichr(65+jj) #  Default to "A",  "B", etc
             while self.headings[-1:] == [""]: self.headings = self.headings[:-1]; # Strip trailing comma on heading line (paypal)
             info( "# headings found: %i  %s" % (len(self.headings), self.headings))
-
+        lineNo = 2
         while 1:
             values = self.readTabs(delim, inFP)
             if values == []: break
             if len(values) < 2: continue;
             if len(values) != len(self.headings):
-                info( "#  Warning: %i headings but %i values" % (len(self.headings), len(values)))
+                info( "#  %i: Warning: %i headings but %i values" % (lineNo, len(self.headings), len(values)))
             self.append(values);
+            lineNo = lineNo + 1;
         return
         
     def generateTurtle(self, argv, namespace):
