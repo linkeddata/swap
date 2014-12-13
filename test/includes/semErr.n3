@@ -1,0 +1,3 @@
+@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
+
+{ <file:/dev/null> log:semanticsOrError ?X } log:implies { <#test> a <#Pass> }.

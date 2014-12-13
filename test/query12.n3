@@ -1,0 +1,38 @@
+#    Test filter in N3
+#
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix mech: <s1.n3#> .
+@prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
+@prefix : <#> .
+
+# DanC challenge
+
+@forAll <#p> .
+
+{  <#p> a daml:TransitiveProperty . } log:means
+
+{ { <#x> <#p> <#y> .
+  <#y> <#p> <#z> .
+  <#p> a daml:TransitiveProperty . } log:forall <#x> , <#y> , <#z> } .
+
+
+
+
+# Intoduce a symmetric implication for convienience
+# Could be just labelled as self[-inverse i suppose.
+
+{ <#x> log:means <#y> }  log:implies {	<#x> log:implies <#y> .
+							<#y> log:implies <#x> . } . 
+
+# and in fact,
+
+{ <#x> log:means <#y> }  log:means {	<#x> log:implies <#y> .
+							<#y> log:implies <#x> . } . 
+
+
+
+<#ancestor>  a daml:TransitiveProperty .
+<#granpa> <#ancestor> <#pa> .
+<#pa> <#ancestor> <#bill> .
+
+

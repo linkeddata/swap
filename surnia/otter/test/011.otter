@@ -1,0 +1,35 @@
+%
+%   Does it work even with reaching a nil or anything...?!
+%
+
+set(auto).
+include('otter/owlAx-card4.otter').
+clear(sigint_interact).
+      make_evaluable(_+_, $SUM(_,_)).
+      make_evaluable(_-_, $DIFF(_,_)).
+      make_evaluable(_<=_, $LE(_,_)).
+      make_evaluable(_>_, $GT(_,_)).
+
+formula_list(usable).
+
+item(a, s).
+item(b, s).
+item(c, s).
+item(d, s).
+
+-(a=b).
+-(a=c).
+-(b=c).
+
+% card(s)=base.
+%card(s)=succ(base).
+% card(s)=succ(succ(base)).
+  
+% succ(succ(p)) = succ(succ(succ(p))) .
+
+all X (
+  item(X, ss) ->
+  (X=e1)
+).
+
+-(card(ss) = succ(base)).

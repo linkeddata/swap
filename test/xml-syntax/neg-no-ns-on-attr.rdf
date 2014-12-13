@@ -1,0 +1,713 @@
+<?xml version="1.0"?>
+<RDF:RDF xmlns:NS3="http://home.netscape.com/WEB-rdf#"
+         xmlns:NC="http://home.netscape.com/NC-rdf#"
+         xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <RDF:Description about="chrome://communicator/content/wallet/WalletViewer.xul">
+    <NC:persist resource="chrome://communicator/content/wallet/WalletViewer.xul#walletViewer"/>
+  </RDF:Description>
+  <RDF:Description about="chrome://messenger/content/addressbook/addressbook.xul#GeneratedName"
+                   ordinal="1" />
+  <RDF:Description about="NC:BookmarksRoot#$32026f43"
+                   NC:open="true" />
+  <RDF:Description about="chrome://editor/content/EditorPublishProgress.xul">
+    <NC:persist resource="chrome://editor/content/EditorPublishProgress.xul#KeepOpen"/>
+    <NC:persist resource="chrome://editor/content/EditorPublishProgress.xul#location"/>
+  </RDF:Description>
+  <RDF:Description about="chrome://messenger/content/messageWindow.xul">
+    <NC:persist resource="chrome://messenger/content/messageWindow.xul#messengerWindow"/>
+    <NC:persist resource="chrome://messenger/content/messageWindow.xul#msgHeaderView"/>
+  </RDF:Description>
+  <RDF:Description about="chrome://messenger/content/addressbook/addressbook.xul#HomePhone"
+                   ordinal="11"
+                   hidden="true" />
+  <RDF:Description about="chrome://communicator/content/history/history.xul#Date"
+                   ordinal="5" />
+  <RDF:Description about="chrome://navigator/content/viewSource.xul">
+    <NC:persist resource="chrome://navigator/content/viewSource.xul#main-window"/>
+  </RDF:Description>
+  <RDF:Description about="chrome://messenger/content/addressbook/addressbook.xul#JobTitle"
+                   ordinal="21"
+                   hidden="true" />
+  <RDF:Description about="chrome://editor/content/EditorPublishProgress.xul#location"
+                   offsetX="316"
+                   offsetY="-50" />
+  <RDF:Description about="chrome://messenger/content/addressbook/addressbook.xul#sidebar-panels-splitter-box"
+                   collapsed="true" />
+  <RDF:Description about="chrome://communicator/content/history/history.xul#VisitCount"
+                   ordinal="13" />
+  <RDF:Description about="chrome://messenger/content/AccountWizard.xul">
+    <NC:persist resource="chrome://messenger/content/AccountWizard.xul#AccountWizard"/>
+  </RDF:Description>
+  <RDF:Description about="chrome://communicator/content/bookmarks/bookmarks.xul#ShortcutURL"
+                   ordinal="5"
+                   hidden="true" />
+  <RDF:Description about="chrome://communicator/content/history/history.xul#Name"
+                   ordinal="1" />
+  <RDF:Description about="chrome://messenger/content/mail3PaneWindowVertLayout.xul#OrderReceivedColumn"
+                   hidden="true" />
+  <RDF:Description about="chrome://messenger/content/SearchDialog.xul">
+    <NC:persist resource="chrome://messenger/content/SearchDialog.xul#threadCol"/>
+    <NC:persist resource="chrome://messenger/content/SearchDialog.xul#subjectCol"/>
+    <NC:persist resource="chrome://messenger/content/SearchDialog.xul#senderOrRecipientCol"/>
+    <NC:persist resource="chrome://messenger/content/SearchDialog.xul#unreadButtonColHeader"/>
+    <NC:persist resource="chrome://messenger/content/SearchDialog.xul#dateCol"/>
+    <NC:persist resource="chrome://messenger/content/SearchDialog.xul#statusCol"/>
+    <NC:persist resource="chrome://messenger/content/SearchDialog.xul#sizeCol"/>
+    <NC:persist resource="chrome://messenger/content/SearchDialog.xul#flaggedCol"/>
+    <NC:persist resource="chrome://messenger/content/SearchDialog.xul#labelCol"/>
+    <NC:persist resource="chrome://messenger/content/SearchDialog.xul#priorityCol"/>
+    <NC:persist resource="chrome://messenger/content/SearchDialog.xul#unreadCol"/>
+    <NC:persist resource="chrome://messenger/content/SearchDialog.xul#totalCol"/>
+  </RDF:Description>
+  <RDF:Description about="chrome://editor/content/editor.xul#sidebar-panels-splitter-box"
+                   collapsed="true" />
+  <RDF:Description about="chrome://messenger/content/addressbook/addressbook.xul#CellularNumber"
+                   ordinal="17"
+                   hidden="true" />
+  <RDF:Description about="chrome://communicator/content/bookmarks/bookmarks.xul#bookmarks-view"
+                   colinfo=" col:Name?width=&amp;hidden=&amp;ordinal=1 col:URL?width=&amp;hidden=&amp;ordinal=3 col:ShortcutURL?width=&amp;hidden=true&amp;ordinal=5 col:Description?width=&amp;hidden=true&amp;ordinal=7 col:AddDate?width=&amp;hidden=true&amp;ordinal=9 col:LastModDate?width=&amp;hidden=true&amp;ordinal=11 col:LastVisitDate?width=&amp;hidden=true&amp;ordinal=13" />
+  <RDF:Description about="chrome://messenger/content/messenger.xul#messengerWindow"
+                   sizemode="normal"
+                   screenX="123"
+                   screenY="0"
+                   width="959"
+                   height="725" />
+  <RDF:Description about="chrome://navigator/content/navigator.xul#sidebar-panels-splitter-box"
+                   collapsed="true"
+                   height="" />
+  <RDF:Description about="find:datasource=history&amp;match=AgeInDays&amp;method=is&amp;text=0&amp;datasource=history&amp;match=Hostname&amp;method=is&amp;text=www.google.com"
+                   NC:open="true" />
+  <RDF:Description about="chrome://editor/content/editor.xul#sidebar-title-box"
+                   hidden="true" />
+  <RDF:Description about="chrome://communicator/content/bookmarks/bm-panel.xul#Name"
+                   ordinal="1" />
+  <RDF:Description about="chrome://messenger/content/messenger.xul#threadTree"
+                   height="276" />
+  <RDF:Description about="chrome://editor/content/EdListProps.xul#location"
+                   offsetX="203"
+                   offsetY="0" />
+  <RDF:Description about="chrome://messenger/content/addressbook/addressbook.xul#PagerNumber"
+                   ordinal="15"
+                   hidden="true" />
+  <RDF:Description about="chrome://navigator/content/navigator.xul#component-bar"
+                   hidden="false" />
+  <RDF:Description about="chrome://communicator/content/bookmarks/bm-panel.xul#bookmarks-view"
+                   colinfo=" col:Name?width=&amp;hidden=&amp;ordinal=1 col:URL?width=&amp;hidden=true&amp;ordinal=3 col:ShortcutURL?width=&amp;hidden=true&amp;ordinal=5 col:Description?width=&amp;hidden=true&amp;ordinal=7 col:AddDate?width=&amp;hidden=true&amp;ordinal=9 col:LastModDate?width=&amp;hidden=true&amp;ordinal=11 col:LastVisitDate?width=&amp;hidden=true&amp;ordinal=13" />
+  <RDF:Description about="chrome://messenger/content/SearchDialog.xul#unreadButtonColHeader"
+                   hidden="true"
+                   ordinal="9" />
+  <RDF:Description about="chrome://messenger/content/AccountWizard.xul#AccountWizard"
+                   width="500"
+                   height="380" />
+  <RDF:Description about="chrome://messenger/content/messenger.xul#subjectCol"
+                   ordinal="5"
+                   width="269" />
+  <RDF:Description about="chrome://communicator/content/bookmarks/bm-panel.xul">
+    <NC:persist resource="chrome://communicator/content/bookmarks/bm-panel.xul#Name"/>
+    <NC:persist resource="chrome://communicator/content/bookmarks/bm-panel.xul#bookmarks-view"/>
+  </RDF:Description>
+  <RDF:Description about="chrome://navigator/content/navigator.xul#print-button"
+                   hidden="true" />
+  <RDF:Description about="chrome://communicator/content/history/history.xul#history-window"
+                   width="500"
+                   height="400"
+                   sizemode="normal"
+                   screenX="141"
+                   screenY="11" />
+  <RDF:Description about="chrome://navigator/content/navigator.xul#nav-bar"
+                   hidden="false"
+                   moz-collapsed="false" />
+  <RDF:Description about="chrome://communicator/content/bookmarks/addBookmark.xul#Name"
+                   sortDirection="ascending" />
+  <RDF:Description about="chrome://communicator/content/downloadmanager/downloadmanager.xul#downloadManager"
+                   width="600"
+                   height="400"
+                   screenX="10"
+                   screenY="10" />
+  <RDF:Description about="chrome://messenger/content/messenger.xul#locationCol"
+                   width="0" />
+  <RDF:Description about="chrome://editor/content/EdLinkProps.xul#location"
+                   offsetX="135"
+                   offsetY="0" />
+  <RDF:Description about="chrome://messenger/content/messenger.xul#totalCol"
+                   hidden="true"
+                   ordinal="25"
+                   width="0" />
+  <RDF:Description about="chrome://editor/content/editor.xul#editorWindow"
+                   sizemode="normal"
+                   width="611"
+                   height="737"
+                   screenX="411"
+                   screenY="30" />
+  <RDF:Description about="chrome://communicator/content/directory/directory.xul#ContentLengthColumn"
+                   ordinal="3" />
+  <RDF:Description about="chrome://communicator/content/bookmarks/bookmarks.xul#viewCommandToolbar"
+                   checked="false" />
+  <RDF:Description about="chrome://communicator/content/bookmarks/addBookmark.xul#newBookmarkDialog"
+                   screenX="24"
+                   screenY="24"
+                   width="422"
+                   height="407" />
+  <RDF:Description about="chrome://messenger/content/messenger.xul#folderTotalCol"
+                   hidden="true" />
+  <RDF:Description about="chrome://messenger/content/messenger.xul#unreadCol"
+                   hidden="true"
+                   ordinal="23"
+                   width="0" />
+  <RDF:Description about="chrome://navigator/content/navigator.xul#PersonalToolbar"
+                   hidden="true" />
+  <RDF:Description about="chrome://messenger/content/messenger.xul#sidebar-panels-splitter"
+                   state="collapsed" />
+  <RDF:Description about="chrome://editor/content/EdListProps.xul">
+    <NC:persist resource="chrome://editor/content/EdListProps.xul#location"/>
+  </RDF:Description>
+  <RDF:Description about="chrome://messenger/content/addressbook/addressbook.xul#Company"
+                   ordinal="7" />
+  <RDF:Description about="chrome://navigator/content/navigator.xul#cmd_viewpersonaltoolbar"
+                   checked="false" />
+  <RDF:Description about="chrome://communicator/content/bookmarks/addBookmark.xul">
+    <NC:persist resource="chrome://communicator/content/bookmarks/addBookmark.xul#newBookmarkDialog"/>
+    <NC:persist resource="chrome://communicator/content/bookmarks/addBookmark.xul#Name"/>
+  </RDF:Description>
+  <RDF:Description about="chrome://navigator/content/pageInfo.xul">
+    <NC:persist resource="chrome://navigator/content/pageInfo.xul#main-window"/>
+  </RDF:Description>
+  <RDF:Description about="chrome://messenger/content/messenger.xul#sidebar-panels-splitter-box"
+                   height="288"
+                   hidden="true" />
+  <RDF:Description about="chrome://messenger/content/messengercompose/messengercompose.xul">
+    <NC:persist resource="chrome://messenger/content/messengercompose/messengercompose.xul#msgcomposeWindow"/>
+  </RDF:Description>
+  <RDF:Description about="chrome://help/content/help.xul?chrome%3A%2F%2Fhelp%2Flocale%2Fmozillahelp.rdf%3F">
+    <NC:persist resource="chrome://help/content/help.xul?chrome%3A%2F%2Fhelp%2Flocale%2Fmozillahelp.rdf%3F#help"/>
+  </RDF:Description>
+  <RDF:Description about="NC:BookmarksRoot#$ad814583"
+                   NC:open="true" />
+  <RDF:Description about="chrome://messenger/content/mail3PaneWindowVertLayout.xul#statusCol"
+                   hidden="true" />
+  <RDF:Description about="chrome://communicator/content/bookmarks/bookmarks.xul">
+    <NC:persist resource="chrome://communicator/content/bookmarks/bookmarks.xul#Name"/>
+    <NC:persist resource="chrome://communicator/content/bookmarks/bookmarks.xul#URL"/>
+    <NC:persist resource="chrome://communicator/content/bookmarks/bookmarks.xul#ShortcutURL"/>
+    <NC:persist resource="chrome://communicator/content/bookmarks/bookmarks.xul#Description"/>
+    <NC:persist resource="chrome://communicator/content/bookmarks/bookmarks.xul#AddDate"/>
+    <NC:persist resource="chrome://communicator/content/bookmarks/bookmarks.xul#LastModDate"/>
+    <NC:persist resource="chrome://communicator/content/bookmarks/bookmarks.xul#LastVisitDate"/>
+    <NC:persist resource="chrome://communicator/content/bookmarks/bookmarks.xul#bookmark-window"/>
+    <NC:persist resource="chrome://communicator/content/bookmarks/bookmarks.xul#bookmarks-view"/>
+    <NC:persist resource="chrome://communicator/content/bookmarks/bookmarks.xul#viewCommandToolbar"/>
+  </RDF:Description>
+  <RDF:Description about="chrome://messenger/content/messenger.xul">
+    <NC:persist resource="chrome://messenger/content/messenger.xul#statusCol"/>
+    <NC:persist resource="chrome://messenger/content/messenger.xul#sizeCol"/>
+    <NC:persist resource="chrome://messenger/content/messenger.xul#unreadCol"/>
+    <NC:persist resource="chrome://messenger/content/messenger.xul#totalCol"/>
+    <NC:persist resource="chrome://messenger/content/messenger.xul#OrderReceivedColumn"/>
+    <NC:persist resource="chrome://messenger/content/messenger.xul#flaggedCol"/>
+    <NC:persist resource="chrome://messenger/content/messenger.xul#messengerWindow"/>
+    <NC:persist resource="chrome://messenger/content/messenger.xul#sidebar-panels"/>
+    <NC:persist resource="chrome://messenger/content/messenger.xul#sidebar-panels-splitter-box"/>
+    <NC:persist resource="chrome://messenger/content/messenger.xul#threadOutliner"/>
+    <NC:persist resource="chrome://messenger/content/messenger.xul#threadCol"/>
+    <NC:persist resource="chrome://messenger/content/messenger.xul#subjectCol"/>
+    <NC:persist resource="chrome://messenger/content/messenger.xul#senderOrRecipientCol"/>
+    <NC:persist resource="chrome://messenger/content/messenger.xul#unreadButtonColHeader"/>
+    <NC:persist resource="chrome://messenger/content/messenger.xul#dateCol"/>
+    <NC:persist resource="chrome://messenger/content/messenger.xul#labelCol"/>
+    <NC:persist resource="chrome://messenger/content/messenger.xul#priorityCol"/>
+    <NC:persist resource="chrome://messenger/content/messenger.xul#folderUnreadCol"/>
+    <NC:persist resource="chrome://messenger/content/messenger.xul#folderTotalCol"/>
+    <NC:persist resource="chrome://messenger/content/messenger.xul#searchBox"/>
+    <NC:persist resource="chrome://messenger/content/messenger.xul#threadpane-splitter"/>
+    <NC:persist resource="chrome://messenger/content/messenger.xul#threadTree"/>
+    <NC:persist resource="chrome://messenger/content/messenger.xul#messagepanebox"/>
+    <NC:persist resource="chrome://messenger/content/messenger.xul#sidebar-panels-splitter"/>
+    <NC:persist resource="chrome://messenger/content/messenger.xul#folderTree"/>
+    <NC:persist resource="chrome://messenger/content/messenger.xul#sidebar-splitter"/>
+    <NC:persist resource="chrome://messenger/content/messenger.xul#sidebar-box"/>
+    <NC:persist resource="chrome://messenger/content/messenger.xul#locationCol"/>
+  </RDF:Description>
+  <RDF:Description about="chrome://messenger/content/SearchDialog.xul#totalCol"
+                   hidden="true"
+                   ordinal="25" />
+  <RDF:Seq about="nc:urlbar-history">
+    <RDF:li>http://www.w3.org/2002/08dc-ymx/itinView.png</RDF:li>
+    <RDF:li>http://www.w3.org/2002/08dc-ymx/Makefile</RDF:li>
+    <RDF:li>http://www.w3.org/2002/09/aa/</RDF:li>
+    <RDF:li>http://www.abuse.net/</RDF:li>
+    <RDF:li>http://www.w3.org/2001/04/roadmap/about.svg</RDF:li>
+    <RDF:li>http://www.w3.org/2002/08/survey</RDF:li>
+    <RDF:li>http://www.w3.org/2000/07/04-ccpp</RDF:li>
+    <RDF:li>http://www.w3.org/2002/09/04-jumpstart.html</RDF:li>
+    <RDF:li>http://www.w3.org/QA/TheMatrix.xml</RDF:li>
+    <RDF:li>http://www.w3.org/QA/TheMatrix.html</RDF:li>
+    <RDF:li>http://www.w3.org/Amaya/Plan/Wishes.html</RDF:li>
+    <RDF:li>http://www.w3.org/Amaya/Plan</RDF:li>
+    <RDF:li>http://www.w3.org/Amaya</RDF:li>
+    <RDF:li>http://www.w3.org/TR</RDF:li>
+    <RDF:li>http://www.garmin.com</RDF:li>
+    <RDF:li>http://www.nationalgeographic.com/topo</RDF:li>
+    <RDF:li>http://www.w3.org/Team/2002/08/ercim-w3c_faq</RDF:li>
+    <RDF:li>http://lists.w3.org/Archives/Team/w3t-mit/2002Sep/0011.html</RDF:li>
+    <RDF:li>http://www.trip.com</RDF:li>
+    <RDF:li>http://www.britishairways.com</RDF:li>
+    <RDF:li>http://192.168.1.1/</RDF:li>
+    <RDF:li>http://192.168.0.1/</RDF:li>
+    <RDF:li>http://samba.org/samba/</RDF:li>
+    <RDF:li>http://www.movies.com</RDF:li>
+    <RDF:li>http://www.w3.org/2000/10/swap/infoset/*,access*</RDF:li>
+    <RDF:li>http://www.w3.org/2000/01/sw/swadDev.n3</RDF:li>
+    <RDF:li>http://www.w3.org/DesignIssues/LinkMyths</RDF:li>
+    <RDF:li>http://www.w3.org/</RDF:li>
+    <RDF:li>http://www.Mozilla.org/</RDF:li>
+    <RDF:li>http://www.online.t-mobile.com/</RDF:li>
+    <RDF:li>http://www.w3.org/2000/10/rdf-tests/rdfcore/testSchema</RDF:li>
+    <RDF:li>http://www.openprojects.net</RDF:li>
+    <RDF:li>http://www.macfound.org</RDF:li>
+    <RDF:li>http://www.cvshome.org/docs/manual/cvs_17.html#SEC155</RDF:li>
+    <RDF:li>http://ilrt.org/discovery/chatlogs/rdfig/2002-08-06.html</RDF:li>
+    <RDF:li>http://ilrt.org/discovery/chatlogs/rdfig/2002-07-06.html</RDF:li>
+    <RDF:li>http://www.w3.org/2002/08/06-issuesRDF/example.n3</RDF:li>
+    <RDF:li>http://www.w3.org/2002/08/06-issuesRDF/example.rdf</RDF:li>
+    <RDF:li>http://www.eikon.com/</RDF:li>
+    <RDF:li>http://eikon.com/</RDF:li>
+    <RDF:li>http://18.29.0.184</RDF:li>
+    <RDF:li>http://tbl-pserve.w3.org/</RDF:li>
+    <RDF:li>http://tbl-pserve@w3.org</RDF:li>
+    <RDF:li>http://www.w3.org/1999/10/nsuri</RDF:li>
+    <RDF:li>http://www.w3.org/2000/10/swap/Primer</RDF:li>
+    <RDF:li>http://www.w3.org/History.html</RDF:li>
+    <RDF:li>http://198.65.138.161/military/agency/usaf/</RDF:li>
+    <RDF:li>http://198.65.138.161/military/agency/usaf/380aeg.htm</RDF:li>
+    <RDF:li>http://ilrt.org/discovery/chatlogs/rdfig/2002-07-29.html</RDF:li>
+    <RDF:li>http://ilrt.org/discovery/chatlogs/rdfig/2002-07-28.html</RDF:li>
+    <RDF:li>http://www.w3.org/DesignIssues/HTTP-URI.html</RDF:li>
+    <RDF:li>http://www.w3.org/DesignIssues/</RDF:li>
+    <RDF:li>http://www.w3.org/2000/10/rdf-tests/rdfcore/testSchema/NegativeParserTest</RDF:li>
+    <RDF:li>http://www.w3.org/2002/05/positive-triples/test/forall-x-abx.rdf</RDF:li>
+    <RDF:li>http://www.w3.org/DesignIssues/Logic</RDF:li>
+    <RDF:li>http://www.w3.org/member/mail</RDF:li>
+    <RDF:li>http://www.w3.org/2000/10/swap/pim/*,access*</RDF:li>
+    <RDF:li>http://www.w3.org/2000/10/swap/pim/conf2cal.n3</RDF:li>
+    <RDF:li>http://www.purl.org/</RDF:li>
+    <RDF:li>http://www.w3.org/2002/07/xmlp/all.htm</RDF:li>
+    <RDF:li>http://www.w3.org/2000/10/swap/pim/mso.n3,access</RDF:li>
+    <RDF:li>http://www.w3.org//2001/palmagent/vcal2xml.pl</RDF:li>
+    <RDF:li>http://www.w3.org/2000/10/rdf-tests/</RDF:li>
+    <RDF:li>http://www.daml.org/2000/10/daml-ont</RDF:li>
+    <RDF:li>http://www.daml.org/2000/10/daml-ont.rdf</RDF:li>
+    <RDF:li>http://www.hp.com/</RDF:li>
+    <RDF:li>http://wwwhp.com/</RDF:li>
+    <RDF:li>http://support.ximian.com/cgi-bin/ximian.cfg/php/enduser/std_adp.php?p_faqid=119</RDF:li>
+    <RDF:li>http://support.ximian.com/cgi-bin/ximian.cfg/php/enduser/std_adp.php?p_sid=FpBD2hkg&amp;p_lva=&amp;p_faqid=119&amp;p_created=1007627536</RDF:li>
+    <RDF:li>http://ximian.com</RDF:li>
+    <RDF:li>http://fink.sourceforge.net/</RDF:li>
+    <RDF:li>http://dev.w3.org/cvsweb/~checkout~/2001/palmagent/vcal2xml.pl?rev=1.4&amp;content-type=text/plain&amp;sortby=file</RDF:li>
+    <RDF:li>http://infomesh.net/2001/05/notation3/</RDF:li>
+    <RDF:li>http://www.oasis-open.org/cover/xmlAndSemantics.html</RDF:li>
+    <RDF:li>http://www.w3.org/2002/05/aa.txt,access</RDF:li>
+    <RDF:li>http://infomesh.net/2002/eep3/20020703/rdfn3.g.txt</RDF:li>
+    <RDF:li>http://infomesh.net/2002/eep3/20020703/rdfn3,g.txt</RDF:li>
+    <RDF:li>http://www.w3.org/2002/07/02-swad-irc,access</RDF:li>
+    <RDF:li>http://www.w3.org/2000/10/swap/pim/track.n3</RDF:li>
+    <RDF:li>http://www.w3.org/2000/10/swap/pim/track</RDF:li>
+    <RDF:li>http://www.w3.org/Signature</RDF:li>
+    <RDF:li>http://opengis.org/</RDF:li>
+    <RDF:li>http://ip.opengis.org/</RDF:li>
+    <RDF:li>http://ip.opengis.org/ows/index.html</RDF:li>
+    <RDF:li>http://www.google.com/</RDF:li>
+    <RDF:li>http://www.w3.org/Consortium/Legal/</RDF:li>
+    <RDF:li>http://www.w3.org/2000/10/swap/LICENSE.rdf</RDF:li>
+    <RDF:li>http://www.w3.org/2000/10/swap/LICENSE.*,access*</RDF:li>
+    <RDF:li>http://www.w3.org/2000/10/swap/pim/doc.n3</RDF:li>
+    <RDF:li>http://www.w3.org/2000/10/pim/doc.n3</RDF:li>
+    <RDF:li>http://www.w3.org/2000/10/pim/doc</RDF:li>
+    <RDF:li>http://www.w3.org/2000/01/pim/doc</RDF:li>
+    <RDF:li>http://www.w3.org/2000/10/swap/time.rdf,access</RDF:li>
+    <RDF:li>http://www.w3.org/2000/10/swap/*,access*</RDF:li>
+    <RDF:li>http://www.w3.org/2000/10/swap/time.n3,access</RDF:li>
+    <RDF:li>http://www.w3.org/2000/10/swap/time.n3</RDF:li>
+    <RDF:li>http://www.softwarestudio.org/Olson_20011030_5</RDF:li>
+    <RDF:li>http://www.softwarestudio.org/Olson_20011030_5/America/New_York</RDF:li>
+    <RDF:li>http://www.softwarestudio.org</RDF:li>
+    <RDF:li>http://www.mnot.net/python</RDF:li>
+  </RDF:Seq>
+  <RDF:Description about="chrome://messenger/content/messengercompose/messengercompose.xul#msgcomposeWindow"
+                   sizemode="normal"
+                   width="764"
+                   height="558"
+                   screenX="256"
+                   screenY="105" />
+  <RDF:Description about="chrome://messenger/content/AccountManager.xul#account-manager"
+                   width="620"
+                   height="470"
+                   screenX="58"
+                   screenY="0" />
+  <RDF:Description about="chrome://communicator/content/history/history.xul#FirstVisitDate"
+                   ordinal="7" />
+  <RDF:Description about="chrome://messenger/content/mail3PaneWindowVertLayout.xul#sidebar-panels"
+                   hidden="true" />
+  <RDF:Description about="chrome://messenger/content/mail3PaneWindowVertLayout.xul">
+    <NC:persist resource="chrome://messenger/content/mail3PaneWindowVertLayout.xul#sidebar-panels-splitter-box"/>
+    <NC:persist resource="chrome://messenger/content/mail3PaneWindowVertLayout.xul#sidebar-panels"/>
+    <NC:persist resource="chrome://messenger/content/mail3PaneWindowVertLayout.xul#threadOutliner"/>
+    <NC:persist resource="chrome://messenger/content/mail3PaneWindowVertLayout.xul#statusCol"/>
+    <NC:persist resource="chrome://messenger/content/mail3PaneWindowVertLayout.xul#sizeCol"/>
+    <NC:persist resource="chrome://messenger/content/mail3PaneWindowVertLayout.xul#unreadCol"/>
+    <NC:persist resource="chrome://messenger/content/mail3PaneWindowVertLayout.xul#totalCol"/>
+    <NC:persist resource="chrome://messenger/content/mail3PaneWindowVertLayout.xul#OrderReceivedColumn"/>
+    <NC:persist resource="chrome://messenger/content/mail3PaneWindowVertLayout.xul#flaggedCol"/>
+  </RDF:Description>
+  <RDF:Description about="chrome://chatzilla/content/chatzilla.xul#status-bar"
+                   collapsed="true" />
+  <RDF:Description about="engine://Macintosh%20HD%3AApplications%3AOriginal%20packaging%3AMozilla%3AMozilla.app%3AContents%3AMacOS%3ASearch%20Plugins%3Agoogle.src"
+                   NS3:LastPingModDate="Tue, 11 Jun 2002 22:15:16 GMT"
+                   NS3:LastPingContentLen="706"
+                   NS3:LastPingDate="1032318185" />
+  <RDF:Description about="chrome://global/content/finddialog.xul#findDialog"
+                   screenY="150"
+                   screenX="652" />
+  <RDF:Description about="chrome://messenger/content/SearchDialog.xul#senderOrRecipientCol"
+                   ordinal="7" />
+  <RDF:Description about="chrome://communicator/content/bookmarks/bookmarks.xul#LastVisitDate"
+                   ordinal="13"
+                   hidden="true" />
+  <RDF:Description about="chrome://editor/content/EditorPublish.xul#location"
+                   offsetX="129"
+                   offsetY="0" />
+  <RDF:Description about="chrome://editor/content/editor.xul#EditToolbar"
+                   moz-collapsed="true" />
+  <RDF:Description about="chrome://communicator/content/bookmarks/bookmarks.xul#AddDate"
+                   ordinal="9"
+                   hidden="true" />
+  <RDF:Description about="chrome://navigator/content/navigator.xul#sidebar-title-box"
+                   hidden="true" />
+  <RDF:Description about="chrome://communicator/content/history/history.xul">
+    <NC:persist resource="chrome://communicator/content/history/history.xul#Name"/>
+    <NC:persist resource="chrome://communicator/content/history/history.xul#URL"/>
+    <NC:persist resource="chrome://communicator/content/history/history.xul#Date"/>
+    <NC:persist resource="chrome://communicator/content/history/history.xul#FirstVisitDate"/>
+    <NC:persist resource="chrome://communicator/content/history/history.xul#Hostname"/>
+    <NC:persist resource="chrome://communicator/content/history/history.xul#Referrer"/>
+    <NC:persist resource="chrome://communicator/content/history/history.xul#VisitCount"/>
+    <NC:persist resource="chrome://communicator/content/history/history.xul#history-window"/>
+  </RDF:Description>
+  <RDF:Description about="imap://timbl@localhost/Consulting"
+                   NC:open="true" />
+  <RDF:Description about="chrome://messenger/content/mail3PaneWindowVertLayout.xul#totalCol"
+                   hidden="true" />
+  <RDF:Description about="chrome://messenger/content/SearchDialog.xul#flaggedCol"
+                   hidden="true"
+                   ordinal="17" />
+  <RDF:Description about="chrome://navigator/content/navigator.xul#sidebar-box"
+                   collapsed="true" />
+  <RDF:Description about="chrome://communicator/content/downloadmanager/downloadmanager.xul">
+    <NC:persist resource="chrome://communicator/content/downloadmanager/downloadmanager.xul#downloadManager"/>
+  </RDF:Description>
+  <RDF:Description about="chrome://messenger/content/SearchDialog.xul#labelCol"
+                   ordinal="19" />
+  <RDF:Description about="chrome://communicator/content/bookmarks/bookmarks.xul#bookmark-window"
+                   sizemode="normal"
+                   width="655"
+                   height="599"
+                   screenX="407"
+                   screenY="106" />
+  <RDF:Description about="chrome://messenger/content/messageWindow.xul#messengerWindow"
+                   sizemode="normal"
+                   width="528"
+                   height="681"
+                   screenX="184"
+                   screenY="42" />
+  <RDF:Description about="chrome://messenger/content/SearchDialog.xul#statusCol"
+                   hidden="true"
+                   ordinal="13" />
+  <RDF:Description about="chrome://messenger/content/messenger.xul#unreadButtonColHeader"
+                   ordinal="9" />
+  <RDF:Description about="chrome://editor/content/editor.xul#sidebar-splitter"
+                   hidden="true" />
+  <RDF:Description about="chrome://navigator/content/navigator.xul#sidebar-splitter"
+                   hidden="true" />
+  <RDF:Description about="chrome://messenger/content/addressbook/addressbook.xul#addressbookWindow"
+                   width="750"
+                   height="450"
+                   sizemode="normal" />
+  <RDF:Description about="chrome://messenger/content/messenger.xul#sidebar-panels"
+                   last-selected-panel="urn:sidebar:panel:bookmarks"
+                   hidden="true" />
+  <RDF:Description about="chrome://messenger/content/messenger.xul#flaggedCol"
+                   ordinal="17"
+                   hidden="false" />
+  <RDF:Description about="chrome://pippki/content/device_manager.xul">
+    <NC:persist resource="chrome://pippki/content/device_manager.xul#devicemanager"/>
+  </RDF:Description>
+  <RDF:Description about="chrome://communicator/content/pref/pref.xul">
+    <NC:persist resource="chrome://communicator/content/pref/pref.xul#prefDialog"/>
+  </RDF:Description>
+  <RDF:Description about="chrome://messenger/content/mail3PaneWindowVertLayout.xul#threadOutliner"
+                   height="94" />
+  <RDF:Description about="chrome://communicator/content/history/history.xul#URL"
+                   ordinal="3" />
+  <RDF:Description about="chrome://navigator/content/navigator.xul#search-button"
+                   hidden="true" />
+  <RDF:Description about="chrome://messenger/content/AccountManager.xul">
+    <NC:persist resource="chrome://messenger/content/AccountManager.xul#account-manager"/>
+  </RDF:Description>
+  <RDF:Description about="chrome://editor/content/editor.xul#FormatToolbar"
+                   moz-collapsed="false" />
+  <RDF:Description about="chrome://messenger/content/addressbook/addressbook.xul#sidebar-title-box"
+                   hidden="true" />
+  <RDF:Description about="chrome://navigator/content/pageInfo.xul#main-window"
+                   width="425"
+                   height="450"
+                   sizemode="normal"
+                   screenX="680"
+                   screenY="180" />
+  <RDF:Description about="chrome://editor/content/editor.xul">
+    <NC:persist resource="chrome://editor/content/editor.xul#editorWindow"/>
+    <NC:persist resource="chrome://editor/content/editor.xul#FormatToolbar"/>
+    <NC:persist resource="chrome://editor/content/editor.xul#EditToolbar"/>
+    <NC:persist resource="chrome://editor/content/editor.xul#sidebar-box"/>
+    <NC:persist resource="chrome://editor/content/editor.xul#sidebar-splitter"/>
+    <NC:persist resource="chrome://editor/content/editor.xul#sidebar-title-box"/>
+    <NC:persist resource="chrome://editor/content/editor.xul#sidebar-panels-splitter-box"/>
+  </RDF:Description>
+  <RDF:Description about="chrome://chatzilla/content/chatzilla.xul#user-list-box"
+                   width="150"
+                   collapsed="false" />
+  <RDF:Description about="imap://timbl@localhost/Director"
+                   NC:open="true" />
+  <RDF:Description about="chrome://messenger/content/addressbook/addressbook.xul#SecondEmail"
+                   ordinal="19"
+                   hidden="true" />
+  <RDF:Description about="chrome://messenger/content/mail3PaneWindowVertLayout.xul#sizeCol"
+                   hidden="true" />
+  <RDF:Description about="chrome://global/content/finddialog.xul">
+    <NC:persist resource="chrome://global/content/finddialog.xul#findDialog"/>
+  </RDF:Description>
+  <RDF:Description about="chrome://editor/content/EdLinkProps.xul">
+    <NC:persist resource="chrome://editor/content/EdLinkProps.xul#location"/>
+  </RDF:Description>
+  <RDF:Description about="chrome://editor/content/editor.xul#sidebar-box"
+                   hidden="false"
+                   collapsed="true" />
+  <RDF:Description about="chrome://messenger/content/SearchDialog.xul#sizeCol"
+                   hidden="true"
+                   ordinal="15" />
+  <RDF:Description about="chrome://communicator/content/directory/directory.xul">
+    <NC:persist resource="chrome://communicator/content/directory/directory.xul#FilenameColumn"/>
+    <NC:persist resource="chrome://communicator/content/directory/directory.xul#ContentLengthColumn"/>
+    <NC:persist resource="chrome://communicator/content/directory/directory.xul#LastModColumn"/>
+  </RDF:Description>
+  <RDF:Description about="NC:BookmarksRoot#$43478c44"
+                   NC:open="true" />
+  <RDF:Description about="chrome://messenger/content/mail3PaneWindowVertLayout.xul#unreadCol"
+                   hidden="true" />
+  <RDF:Description about="chrome://navigator/content/navigator.xul#main-window"
+                   sizemode="normal"
+                   width="681"
+                   height="672"
+                   screenX="395"
+                   screenY="22" />
+  <RDF:Description about="chrome://messenger/content/addressbook/addressbook.xul#abResultsOutliner"
+                   height="94" />
+  <RDF:Description about="chrome://messenger/content/messenger.xul#threadCol"
+                   ordinal="1" />
+  <RDF:Description about="find:datasource=history&amp;match=AgeInDays&amp;method=is&amp;text=0&amp;groupby=Hostname"
+                   NC:open="true" />
+  <RDF:Description about="chrome://messenger/content/messenger.xul#senderOrRecipientCol"
+                   ordinal="7"
+                   width="171" />
+  <RDF:Description about="chrome://communicator/content/openLocation.xul#openLocation"
+                   screenY="0"
+                   screenX="186" />
+  <RDF:Description about="chrome://communicator/content/directory/directory.xul#LastModColumn"
+                   ordinal="5" />
+  <RDF:Description about="chrome://chatzilla/content/chatzilla.xul#header-bar-tbar"
+                   moz-collapsed="true" />
+  <RDF:Description about="chrome://editor/content/EdColorPicker.xul#location"
+                   offsetY="0"
+                   offsetX="186" />
+  <RDF:Description about="chrome://communicator/content/bookmarks/bookmarks.xul#Description"
+                   ordinal="7"
+                   hidden="true" />
+  <RDF:Description about="chrome://navigator/content/navigator.xul#sidebar-panels"
+                   last-selected-panel="urn:sidebar:panel:search" />
+  <RDF:Description about="chrome://navigator/content/navigator.xul#bookmarks-button"
+                   hidden="true" />
+  <RDF:Description about="chrome://messenger/content/SearchDialog.xul#subjectCol"
+                   ordinal="5" />
+  <RDF:Description about="chrome://messenger/content/SearchDialog.xul#priorityCol"
+                   ordinal="21" />
+  <RDF:Description about="chrome://communicator/content/wallet/WalletViewer.xul#walletViewer"
+                   width="720"
+                   height="470"
+                   screenX="24"
+                   screenY="24" />
+  <RDF:Description about="chrome://messenger/content/messenger.xul#dateCol"
+                   ordinal="11"
+                   width="95" />
+  <RDF:Description about="chrome://help/content/help.xul?chrome%3A%2F%2Fhelp%2Flocale%2Fmozillahelp.rdf%3F#help"
+                   screenX="508"
+                   screenY="48"
+                   width="640"
+                   height="650" />
+  <RDF:Description about="chrome://messenger/content/addressbook/addressbook.xul#NickName"
+                   ordinal="9"
+                   hidden="true" />
+  <RDF:Description about="chrome://navigator/content/viewSource.xul#main-window"
+                   sizemode="normal"
+                   width="876"
+                   height="686"
+                   screenX="159"
+                   screenY="33" />
+  <RDF:Description about="chrome://editor/content/EdColorPicker.xul">
+    <NC:persist resource="chrome://editor/content/EdColorPicker.xul#location"/>
+  </RDF:Description>
+  <RDF:Description about="chrome://communicator/content/history/history.xul#Referrer"
+                   ordinal="11" />
+  <RDF:Description about="chrome://navigator/content/navigator.xul">
+    <NC:persist resource="chrome://navigator/content/navigator.xul#sidebar-panels"/>
+    <NC:persist resource="chrome://navigator/content/navigator.xul#main-window"/>
+    <NC:persist resource="chrome://navigator/content/navigator.xul#sidebar-box"/>
+    <NC:persist resource="chrome://navigator/content/navigator.xul#sidebar-splitter"/>
+    <NC:persist resource="chrome://navigator/content/navigator.xul#sidebar-title-box"/>
+    <NC:persist resource="chrome://navigator/content/navigator.xul#sidebar-panels-splitter-box"/>
+    <NC:persist resource="chrome://navigator/content/navigator.xul#nav-bar"/>
+    <NC:persist resource="chrome://navigator/content/navigator.xul#cmd_viewnavbar"/>
+    <NC:persist resource="chrome://navigator/content/navigator.xul#PersonalToolbar"/>
+    <NC:persist resource="chrome://navigator/content/navigator.xul#cmd_viewpersonaltoolbar"/>
+    <NC:persist resource="chrome://navigator/content/navigator.xul#bookmarks-button"/>
+    <NC:persist resource="chrome://navigator/content/navigator.xul#search-button"/>
+    <NC:persist resource="chrome://navigator/content/navigator.xul#print-button"/>
+    <NC:persist resource="chrome://navigator/content/navigator.xul#component-bar"/>
+    <NC:persist resource="chrome://navigator/content/navigator.xul#cmd_viewcomponentbar"/>
+  </RDF:Description>
+  <RDF:Description about="chrome://communicator/content/history/history.xul#Hostname"
+                   ordinal="9" />
+  <RDF:Description about="chrome://pippki/content/device_manager.xul#devicemanager"
+                   width="540"
+                   height="360" />
+  <RDF:Description about="chrome://messenger/content/addressbook/addressbook.xul">
+    <NC:persist resource="chrome://messenger/content/addressbook/addressbook.xul#abResultsOutliner"/>
+    <NC:persist resource="chrome://messenger/content/addressbook/addressbook.xul#sidebar-panels-splitter-box"/>
+    <NC:persist resource="chrome://messenger/content/addressbook/addressbook.xul#sidebar-title-box"/>
+    <NC:persist resource="chrome://messenger/content/addressbook/addressbook.xul#GeneratedName"/>
+    <NC:persist resource="chrome://messenger/content/addressbook/addressbook.xul#PrimaryEmail"/>
+    <NC:persist resource="chrome://messenger/content/addressbook/addressbook.xul#WorkPhone"/>
+    <NC:persist resource="chrome://messenger/content/addressbook/addressbook.xul#Company"/>
+    <NC:persist resource="chrome://messenger/content/addressbook/addressbook.xul#NickName"/>
+    <NC:persist resource="chrome://messenger/content/addressbook/addressbook.xul#HomePhone"/>
+    <NC:persist resource="chrome://messenger/content/addressbook/addressbook.xul#FaxNumber"/>
+    <NC:persist resource="chrome://messenger/content/addressbook/addressbook.xul#PagerNumber"/>
+    <NC:persist resource="chrome://messenger/content/addressbook/addressbook.xul#CellularNumber"/>
+    <NC:persist resource="chrome://messenger/content/addressbook/addressbook.xul#SecondEmail"/>
+    <NC:persist resource="chrome://messenger/content/addressbook/addressbook.xul#JobTitle"/>
+    <NC:persist resource="chrome://messenger/content/addressbook/addressbook.xul#Department"/>
+    <NC:persist resource="chrome://messenger/content/addressbook/addressbook.xul#addressbookWindow"/>
+  </RDF:Description>
+  <RDF:Description about="find:datasource=history&amp;match=AgeInDays&amp;method=is&amp;text=2&amp;groupby=Hostname"
+                   NC:open="true" />
+  <RDF:Description about="chrome://messenger/content/messenger.xul#labelCol"
+                   hidden="true"
+                   ordinal="19"
+                   width="0" />
+  <RDF:Description about="engine://Macintosh%20HD%3AApplications%3AMozilla.app%3AContents%3AMacOS%3ASearch%20Plugins%3Agoogle.src"
+                   NS3:LastPingModDate="Tue, 11 Jun 2002 22:15:16 GMT"
+                   NS3:LastPingContentLen="343"
+                   NS3:LastPingDate="1031672414" />
+  <RDF:Description about="chrome://communicator/content/bookmarks/bookmarks.xul#LastModDate"
+                   ordinal="11"
+                   hidden="true" />
+  <RDF:Description about="chrome://chatzilla/content/chatzilla.xul">
+    <NC:persist resource="chrome://chatzilla/content/chatzilla.xul#chatzilla-window"/>
+    <NC:persist resource="chrome://chatzilla/content/chatzilla.xul#user-list-box"/>
+    <NC:persist resource="chrome://chatzilla/content/chatzilla.xul#main-splitter"/>
+    <NC:persist resource="chrome://chatzilla/content/chatzilla.xul#header-bar-tbar"/>
+    <NC:persist resource="chrome://chatzilla/content/chatzilla.xul#status-bar"/>
+    <NC:persist resource="chrome://chatzilla/content/chatzilla.xul#header-bar-tbox"/>
+    <NC:persist resource="chrome://chatzilla/content/chatzilla.xul#view-tabs"/>
+  </RDF:Description>
+  <RDF:Description about="chrome://chatzilla/content/chatzilla.xul#main-splitter"
+                   collapsed="false" />
+  <RDF:Description about="chrome://communicator/content/pref/pref.xul#prefDialog"
+                   screenX="149"
+                   screenY="165" />
+  <RDF:Description about="chrome://messenger/content/messenger.xul#priorityCol"
+                   ordinal="21"
+                   width="78" />
+  <RDF:Description about="chrome://messenger/content/addressbook/addressbook.xul#FaxNumber"
+                   ordinal="13"
+                   hidden="true" />
+  <RDF:Description about="chrome://messenger/content/mail3PaneWindowVertLayout.xul#sidebar-panels-splitter-box"
+                   hidden="true" />
+  <RDF:Description about="chrome://navigator/content/navigator.xul#cmd_viewnavbar"
+                   checked="true" />
+  <RDF:Description about="chrome://chatzilla/content/chatzilla.xul#view-tabs"
+                   collapsed="false" />
+  <RDF:Description about="chrome://communicator/content/bookmarks/bookmarks.xul#URL"
+                   ordinal="3" />
+  <RDF:Description about="chrome://messenger/content/messenger.xul#folderTree"
+                   height="650" />
+  <RDF:Description about="chrome://messenger/content/messenger.xul#statusCol"
+                   hidden="true"
+                   ordinal="13"
+                   width="0" />
+  <RDF:Description about="chrome://communicator/content/openLocation.xul">
+    <NC:persist resource="chrome://communicator/content/openLocation.xul#openLocation"/>
+  </RDF:Description>
+  <RDF:Description about="chrome://messenger/content/messenger.xul#OrderReceivedColumn"
+                   hidden="true" />
+  <RDF:Description about="chrome://messenger/content/messenger.xul#threadOutliner"
+                   height="94" />
+  <RDF:Description about="chrome://messenger/content/mail3PaneWindowVertLayout.xul#flaggedCol"
+                   hidden="true" />
+  <RDF:Description about="chrome://messenger/content/SearchDialog.xul#dateCol"
+                   ordinal="11" />
+  <RDF:Description about="chrome://messenger/content/SearchDialog.xul#unreadCol"
+                   hidden="true"
+                   ordinal="23" />
+  <RDF:Description about="chrome://communicator/content/bookmarks/bookmarks.xul#Name"
+                   ordinal="1" />
+  <RDF:Description about="chrome://messenger/content/messenger.xul#folderUnreadCol"
+                   hidden="true" />
+  <RDF:Description about="chrome://messenger/content/messageWindow.xul#msgHeaderView"
+                   state="true" />
+  <RDF:Description about="chrome://chatzilla/content/chatzilla.xul#header-bar-tbox"
+                   collapsed="true" />
+  <RDF:Description about="chrome://communicator/content/directory/directory.xul#FilenameColumn"
+                   ordinal="1" />
+  <RDF:Description about="chrome://messenger/content/messenger.xul#sidebar-box"
+                   width="249" />
+  <RDF:Description about="chrome://editor/content/EditorPublish.xul">
+    <NC:persist resource="chrome://editor/content/EditorPublish.xul#location"/>
+  </RDF:Description>
+  <RDF:Description about="chrome://messenger/content/addressbook/addressbook.xul#Department"
+                   ordinal="23"
+                   hidden="true" />
+  <RDF:Description about="NC:BookmarksRoot#$ccb00c3"
+                   NC:open="true" />
+  <RDF:Description about="chrome://chatzilla/content/chatzilla.xul#chatzilla-window"
+                   width="792"
+                   height="435"
+                   screenX="270"
+                   screenY="151" />
+  <RDF:Description about="chrome://messenger/content/SearchDialog.xul#threadCol"
+                   ordinal="1"
+                   hidden="true" />
+  <RDF:Description about="chrome://messenger/content/addressbook/addressbook.xul#PrimaryEmail"
+                   ordinal="3" />
+  <RDF:Description about="chrome://messenger/content/messenger.xul#messagepanebox"
+                   height="353" />
+  <RDF:Description about="NC:BookmarksRoot#$43478c45"
+                   NC:open="true" />
+  <RDF:Description about="chrome://messenger/content/messenger.xul#sizeCol"
+                   hidden="true"
+                   ordinal="15"
+                   width="0" />
+  <RDF:Description about="find:datasource=history&amp;match=AgeInDays&amp;method=is&amp;text=1&amp;groupby=Hostname"
+                   NC:open="true" />
+  <RDF:Description about="chrome://messenger/content/addressbook/addressbook.xul#WorkPhone"
+                   ordinal="5" />
+  <RDF:Description about="chrome://navigator/content/navigator.xul#cmd_viewcomponentbar"
+                   checked="true" />
+</RDF:RDF>

@@ -1,0 +1,134 @@
+/* The N3 Full Grammar */
+/* in XML formal grammar notation */
+/* which see  http://www.w3.org/TR/2004/REC-xml11-20040204/#sec-notation */
+/* and see http://en.wikipedia.org/wiki/Extended_Backus-Naur_form */
+
+/* $Id$ */
+/* transcribe from n3.n3 revision 1.28 date: 2006/02/15 15:49:00 */
+
+[1] document ::= (statement ".")*
+
+/* Formula does NOT need period on last statement */
+
+[2] formulacontent ::= (statement ("." statement)*)?
+
+[3] statement  ::= declaration
+	       | universal
+	       | existential
+	       | simpleStatement
+
+[4] universal ::= "@forAll" varlist
+
+[5] existential ::= "@forSome" varlist
+
+[6] varlist ::= (symbol ("," symbol)*)?
+
+[7] declaration ::= "@prefix" prefix uriref
+    		|   "@keywords" (barename ("," barename)*)?
+
+[8] barename ::= qname
+/* barename constraint: no colon */
+
+[9] simpleStatement ::= term propertylist
+
+[10] propertylist ::= (property (";" property)*)?
+[11] property ::= (verb | inverb) term ("," term)*
+
+[12] verb ::= "@has"? term
+		| "@a"
+		| "="
+		| "=>"
+		| "<=" 
+
+[12a] inverb ::= "@is" term "@of"
+
+[13] term ::= pathitem pathtail
+
+[14] pathtail ::=
+     	      | "!" term
+	      | "^" term
+
+[15] pathitem ::= symbol
+		| evar
+		| uvar
+		| numeral
+		| literal
+		| "{" formulacontent "}"
+		| "[" propertylist "]"
+		|  "("  term* ")"
+                | boolean
+/*		| "@this"  #  Deprecated.  Was allowed for this log:forAll x */
+
+[16] literal ::= (STRING_LITERAL2 | STRING_LITERAL_LONG2)
+            ("^^" symbol)
+	    | langstring
+
+[17] boolean ::= "@true" | "@false"
+
+[18] symbol ::= uriref
+	    | qname
+
+[19] numeral ::= integer
+          | double
+          | decimal
+
+/***********/
+
+@terminals
+
+[26] integer ::= [+-]? [0-9]+
+[27] double	::= [+-]? [0-9]+ ("." [0-9]+)? ( [eE] [+-]? [0-9]+)
+/* in SPARQL, decimals can have exponents too. Java too, I think. */
+[28] decimal	::= [+-]? [0-9]+ ("." [0-9]+)
+
+/* borrowed from SPARQL spec, which excludes newlines and other nastiness */
+[29] uriref ::=	'<' ([^<>'{}|^`]-[#x01-#x20])* '>'
+
+[30] qname  ::= prefix? localname
+[31] localname ::= (NameStartChar3|"_") NameChar3*
+
+/* @@bug! doesn't allow : as a prefix, a in @prefix : <foo#> */
+[32] prefix  ::= (("_" NameChar3+) | (NameStartChar3 NameChar3*))? ":"
+
+/* @@ no \u stuff, for now */
+[33] NameStartChar3	   ::=   	[A-Z] | [a-z]
+
+/* @@ no \u stuff */
+[34]   	NameChar3	   ::=   	NameStartChar3 | "-" | "_"
+	| [0-9]
+
+/* [4]   	NameStartChar	from xml11, less ":", "_" */
+[33x] NameStartChar3x	   ::=   	[A-Z] | [a-z] | [#xC0-#xD6]
+      | [#xD8-#xF6] | [#xF8-#x2FF] | [#x370-#x37D] | [#x37F-#x1FFF]
+      | [#x200C-#x200D] | [#x2070-#x218F] | [#x2C00-#x2FEF]
+      | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD]
+      | [#x10000-#xEFFFF]
+
+/* [4a]   	NameChar from xml11 less ":" and ".", plus "_" */
+[34x]   	NameChar3x	   ::=   	NameStartChar3 | "-" | "_"
+	| [0-9] | #xB7 | [#x0300-#x036F] | [#x203F-#x2040]
+
+
+[35] uvar ::= "?" localname
+[36] evar ::= "_:" localname
+
+[37] langstring ::= (STRING_LITERAL2 | STRING_LITERAL_LONG2)
+	    	"@" [a-z]+ ("-" [a-z0-9]+)*
+
+/* http://www.w3.org/TR/rdf-testcases/#language */
+
+
+/* borrow from SPARQL... and double some \\ for yacker (or not?) */
+
+[38] STRING_LITERAL2 ::= '"' ( [^#x22#x5C#x0A#x0D] | ECHAR | UCHAR)* '"'
+
+[39] STRING_LITERAL_LONG2 ::= '"""' ( ( '"' | '""' )?
+                                      ( [^#x22#x5C] | ECHAR | UCHAR ) )* '"""'
+
+[40] ECHAR ::= #x5C [tbnrf#x5C#x22']
+
+/* UCHAR from Andy's turtle.html */
+[41]   UCHAR                   ::=   '\' ( 'u' HEX HEX HEX HEX | 'U' HEX
+                                      HEX HEX HEX HEX HEX HEX HEX )
+[42]   HEX                     ::=   [0-9] | [A-F] | [a-f]
+

@@ -1,0 +1,153 @@
+#Processed by Id: cwm.py,v 1.190 2006/08/09 23:20:42 syosi Exp 
+        #    using base file:///home/connolly/w3ccvs/WWW/2000/10/swap/.run-1167793172.967557p6477
+        
+#  Notation3 generation by
+#       notation3.py,v 1.191 2006/08/01 01:14:04 syosi Exp
+
+#   Base was: file:///home/connolly/w3ccvs/WWW/2000/10/swap/.run-1167793172.967557p6477
+     @prefix : <http://www.w3.org/2000/10/swap/reason#> .
+    @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    @prefix n3: <http://www.w3.org/2004/06/rei#> .
+    @prefix run: <#> .
+    @prefix wit: <test/reason/witch#> .
+    @prefix witch: <test/reason/witch.n3#> .
+    
+     @forSome run:_g0,
+                run:_g1 .
+      [      a :Inference,
+                    :Proof;
+             :evidence  (
+             [
+                     a :Extraction;
+                     :because  [
+                         a :Inference;
+                         :binding  [
+                             :boundTo  [
+                                 n3:uri "file:///home/connolly/w3ccvs/WWW/2000/10/swap/test/reason/witch#GIRL" ];
+                             :variable  [
+                                 n3:nodeId "file:///home/connolly/w3ccvs/WWW/2000/10/swap/test/reason/witch.n3#x" ] ];
+                         :evidence  (
+                         [
+                                 a :Extraction;
+                                 :because run:_g1;
+                                 :gives {wit:GIRL     a wit:WOMAN .
+                                } ]
+                         [
+                                 a :Extraction;
+                                 :because  [
+                                     a :Inference;
+                                     :binding  [
+                                         :boundTo  [
+                                             n3:uri "file:///home/connolly/w3ccvs/WWW/2000/10/swap/test/reason/witch#GIRL" ];
+                                         :variable  [
+                                             n3:nodeId "file:///home/connolly/w3ccvs/WWW/2000/10/swap/test/reason/witch.n3#x" ] ];
+                                     :evidence  (
+                                     [
+                                             a :Extraction;
+                                             :because  [
+                                                 a :Inference;
+                                                 :binding  [
+                                                     :boundTo  [
+                                                         n3:uri "file:///home/connolly/w3ccvs/WWW/2000/10/swap/test/reason/witch#GIRL" ];
+                                                     :variable  [
+                                                         n3:nodeId "file:///home/connolly/w3ccvs/WWW/2000/10/swap/test/reason/witch.n3#x" ] ];
+                                                 :evidence  (
+                                                 [
+                                                         a :Extraction;
+                                                         :because  [
+                                                             a :Inference;
+                                                             :binding  [
+                                                                 :boundTo  [
+                                                                     n3:uri "file:///home/connolly/w3ccvs/WWW/2000/10/swap/test/reason/witch#DUCK" ];
+                                                                 :variable  [
+                                                                     n3:nodeId "file:///home/connolly/w3ccvs/WWW/2000/10/swap/test/reason/witch.n3#x" ] ],
+                                                                     [
+                                                                 :boundTo  [
+                                                                     n3:uri "file:///home/connolly/w3ccvs/WWW/2000/10/swap/test/reason/witch#GIRL" ];
+                                                                 :variable  [
+                                                                     n3:nodeId "file:///home/connolly/w3ccvs/WWW/2000/10/swap/test/reason/witch.n3#y" ] ];
+                                                             :evidence  (
+                                                             [
+                                                                     a :Extraction;
+                                                                     :because run:_g1;
+                                                                     :gives {wit:DUCK     wit:SAMEWEIGHT wit:GIRL .
+                                                                    } ]
+                                                             [
+                                                                     a :Extraction;
+                                                                     :because run:_g1;
+                                                                     :gives {wit:DUCK     a wit:FLOATS .
+                                                                    } ] );
+                                                             :rule  [
+                                                                 a :Extraction;
+                                                                 :because run:_g1;
+                                                                 :gives { @forAll witch:x,
+                                                                            witch:y .
+                                                                {
+                                                                    witch:x     a wit:FLOATS;
+                                                                         wit:SAMEWEIGHT witch:y .
+                                                                    
+                                                                    }     log:implies {witch:y     a wit:FLOATS .
+                                                                    } .
+                                                                } ] ];
+                                                         :gives {wit:GIRL     a wit:FLOATS .
+                                                        } ] );
+                                                 :rule  [
+                                                     a :Extraction;
+                                                     :because run:_g1;
+                                                     :gives { @forAll witch:x .
+                                                    {
+                                                        witch:x     a wit:FLOATS .
+                                                        
+                                                        }     log:implies {witch:x     a wit:ISMADEOFWOOD .
+                                                        } .
+                                                    } ] ];
+                                             :gives {wit:GIRL     a wit:ISMADEOFWOOD .
+                                            } ] );
+                                     :rule  [
+                                         a :Extraction;
+                                         :because run:_g1;
+                                         :gives { @forAll witch:x .
+                                        {
+                                            witch:x     a wit:ISMADEOFWOOD .
+                                            
+                                            }     log:implies {witch:x     a wit:BURNS .
+                                            } .
+                                        } ] ];
+                                 :gives {wit:GIRL     a wit:BURNS .
+                                } ] );
+                         :rule  [
+                             a :Extraction;
+                             :because run:_g1;
+                             :gives { @forAll witch:x .
+                            {
+                                witch:x     a wit:BURNS,
+                                            wit:WOMAN .
+                                
+                                }     log:implies {witch:x     a wit:WITCH .
+                                } .
+                            } ] ];
+                     :gives {wit:GIRL     a wit:WITCH .
+                    } ] );
+             :gives {wit:GIRL     a wit:WITCH .
+            };
+             :rule  [
+                 a :Extraction;
+                 :because  [
+                     a :Parsing;
+                     :because run:_g0;
+                     :source <test/reason/witch-goal.n3> ];
+                 :gives {{
+                    wit:GIRL     a wit:WITCH .
+                    
+                    }     log:implies {wit:GIRL     a wit:WITCH .
+                    } .
+                } ] ].
+    
+    run:_g0     a :CommandLine;
+         :args "['cwm.py', 'test/reason/witch.n3', '--think', '--filter=test/reason/witch-goal.n3', '--why']" .
+    
+    run:_g1     a :Parsing;
+         :because run:_g0;
+         :source <test/reason/witch.n3> .
+    
+#ENDS

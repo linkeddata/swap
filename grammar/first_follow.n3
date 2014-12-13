@@ -1,0 +1,85 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/>.  # @@ no #
+
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<> dc:title "first and follow rules for LL(1) grammars";
+dc:description "$Id$";
+dc:source [
+ = <http://en.wikipedia.org/wiki/LL_parser#Constructing_an_LL.281.29_parsing_table>;
+ dc:title "Constructing an LL(1) parsing table";
+ dc:description "The same material is covered in page 44-48 of Aho, Sethi, Ullman";
+ dc:relation <http://en.wikipedia.org/wiki/Compilers:_Principles%2C_Techniques%2C_and_Tools>;
+].
+
+@prefix g: <http://www.w3.org/2000/10/swap/grammar/ebnf#>.
+
+@prefix list: <http://www.w3.org/2000/10/swap/list#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+@prefix : <http://www.w3.org/2000/10/swap/grammar/ebnf#>.
+@prefix ll1: <http://www.w3.org/2000/10/swap/grammar/ebnf#>.
+#@@ need to update ebnf schema with first, follow, eps, eof
+
+@keywords is, of, a.
+
+######## first
+# from wikipedia:
+
+# Fi(a w' ) = { a } for every terminal a
+{ ?A g:seq [ rdf:first ?T ].
+  ?A g:nonTerminal [ g:terminal ?T].
+} => { ?A first ?T }.
+
+{ ?A g:alt [ list:member ?T ].
+  ?A g:nonTerminal [ g:terminal ?T].
+} => { ?A first ?T }.
+
+# Fi(A w' ) = Fi(A) for every nonterminal A with ε not in Fi(A)
+{ ?AW g:seq [ rdf:first ?A ].
+  ?A first ?T
+} => { ?AW first ?T }.
+
+# Fi(A w' ) = Fi(A) \ { ε } ∪ Fi(w' ) for every nonterminal A with ε in Fi(A)
+{ ?AW seq [ rdf:first ?A; rdf:rest ?W ].
+  ?A first eps.
+  ?W first ?T
+} => { ?AW first ?T }.
+
+# Fi(ε) = { ε }
+{ ?E g:seq () } => { ?E first eps }.
+
+# and one more rule since wikipedia doesn't use exactly the same structure:
+{ ?A g:alt [ list:member [ first ?T ] ].
+} => { ?A first ?T }.
+
+
+######## follow
+
+{ [] g:start ?A } => { ?A follow g:eof }.
+
+#if there is a rule of the form Aj → wAiw' , then
+#
+#    * if the terminal a is in Fi(w' ), then add a to Fo(Ai)
+{ ?AW g:seq [ rdf:first ?A; rdf:rest ?W ].
+  [ g:seq ?W ] first ?T.
+  ?A g:nonTerminal [ g:terminal ?T].
+} => { ?A follow ?T }.
+
+#    * if ε is in Fi(w' ), then add Fo(Aj) to Fo(Ai)
+
+{ ?A g:seq [ rdf:rest ( ?B ) ].
+  ?A follow ?T }
+=> { ?B follow ?T }.
+{ ?A g:seq [ rdf:rest [ rdf:first ?B; rdf:rest ?W ] ].
+  [ :seq ?W ] first eps.
+  ?A follow ?T. }
+=> { ?B follow ?T }.
+
+#anything that follows this follows its members.
+{ ?A follow ?T; g:alt [ list:member ?B ] } => { ?B follow ?T }.
+
+
+############
+# Comprehension rule:
+# all shorter sequences exist.
+{ ?X g:seq [ rdf:rest ?R] } => { [] g:seq ?R }.

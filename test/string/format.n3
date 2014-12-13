@@ -1,0 +1,32 @@
+
+@prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#>.
+@prefix rcs: <http://www.w3.org/2001/03swell/rcs#>.
+@prefix doc:  <http://www.w3.org/2000/10/swap/pim/doc#> .
+
+
+<>   rcs:id "$Id$";
+
+  doc:creator [ 
+	contact:fullName "Tim berners-Lee";
+	contact:homePage <http://www.w3.org/People/Berners-Lee/>;
+	contact:mailbox <mailto:timbl@w3.org>
+	].
+
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix string: <http://www.w3.org/2000/10/swap/string#>.
+
+
+
+{ ( "foo%sbaz" "-bar-" ) string:format ?s } => { :test1 result ?s }.
+
+{ ( "foo%sbaz%sfee%sfum" "-bar-" "-fee-" "fee" ) string:format ?s } => { :test2 result ?s }.
+
+{ ( "%4d" 123 ) string:format ?s } => { :test3 result ?s }.
+
+# { (  ) string:format ?s } => { :test result ?s }.
+
+
+
+#ends
+

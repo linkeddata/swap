@@ -1,0 +1,10 @@
+@prefix rein: <http://yosi.us/rein#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+
+:UberPrint a :Printer .
+:Shashi a :GradStudent .
+
+{?x a :GradStudent. ?y a :Printer} => {?x rein:permitted ?y}.
+
+{?x a :GradStudent} => {?x rein:prohibited
+:UberPrint}.

@@ -1,0 +1,27 @@
+# Filter for transaction and account data only - only qu: ontology
+# Transactions those things which have amounts.
+#
+#  cwm     -- with 2009
+
+@prefix os:  <http://www.w3.org/2000/10/swap/os#> .
+@prefix str:  <http://www.w3.org/2000/10/swap/string#> .
+
+@prefix : <http://www.w3.org/2000/10/swap/pim/qif#> .
+@prefix ofx: <http://www.w3.org/2000/10/swap/pim/ofx#> .
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+
+{ ?x :amount []; ?p ?z. 
+
+    ?p!log:uri  str:startsWith "http://www.w3.org/2000/10/swap/pim/qif#";
+                str:notEqualIgnoringCase "http://www.w3.org/2000/10/swap/pim/qif#trip".
+
+    ?x!:date str:startsWith 1!os:argv } => { ?x ?p ?z }.
+
+{ ?x ofx:ACCTID []; ?p ?z } => { ?x ?p ?z }.
+
+# was: str:notEqualIgnoringCase "http://www.w3.org/1999/02/22-rdf-syntax-ns#type".
+
+#ends
+ 

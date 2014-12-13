@@ -1,0 +1,95 @@
+#  Find all conferences
+#    and make calendar events for them
+
+# Vocabs for talking about calendar stuff:
+
+# @prefix ms: <http://www.w3.org/2000/10/swap/pim/mso.n3#> .
+@prefix util: <http://www.w3.org/2000/10/swap/util.n3#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix os: <http://www.w3.org/2000/10/swap/os#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix times: <http://www.w3.org/2000/10/swap/times#> .
+@prefix maths: <http://www.w3.org/2000/10/swap/maths#> .
+
+# was: @prefix cal: <http://www.w3.org/2000/10/swap/pim/ical#>.
+@prefix cal: <http://www.w3.org/2002/12/cal/ical#>.
+
+# Vocabs from teleconferce.n3:
+#
+@prefix conf: <http://www.w3.org/2002/06/conf#> .
+@prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+
+@prefix : <#>.
+
+
+@forAll :a,:b,:c,:d,:e,:f,:g,:h,:i,:j,:k,:l,:m,
+		:n,:o,:p,:q,:r,:s,:t,:u,:v,:w,:x,:y,:z.
+
+
+# Translate conference times. 
+#  Conference times are in Z zone - this can just be put into the 
+# 	dtstart, thank goodness!
+
+#{   :x conf:start :s; conf:duration :d.
+#    :e times:inSeconds [is maths:sum of
+#        ([is times:inSeconds of :s] [is maths:product of (:d "60")])].
+#} log:implies {
+#    :x  cal:DTSTART [rdf:value :s];
+#  	cal:DTEND   [rdf:value :e].
+#}.
+
+
+#         conf:bridge <http://www.w3.org/2002/06/bridge#Zakim>;
+#         conf:contact :c_53;
+#         conf:subEventOf :s_30 .
+
+
+{   :c   a conf:ScheduledConference;
+         conf:id :i; #   eg "1134";
+         conf:duration :d;  #    eg "180";
+         conf:name :n;  # eg "Team_W3M()8:00AM";
+         conf:ports :p;  # eg "15";
+         conf:start :s. # eg "2002-07-10T12:00Z"
+
+    :e times:inSeconds [is maths:sum of
+        ([is times:inSeconds of :s] [is maths:product of (:d "60")])].
+
+    (:i "@telconf.w3.org") string:concatenation :u.
+
+#    :n string:startsWith [ conf:attendee_user [ is os:environ of "USER"]].
+
+
+} log:implies {
+ 
+   :theCalendar
+	a cal:Vcalendar;
+	cal:component [
+	  a cal:Vevent;
+	  cal:summary :n;
+	  cal:dtstart [
+		cal:dateTime :s;
+#		cal:tzid "/softwarestudio.org/Olson_20011030_5/America/New_York"
+	 ];
+	  cal:dtend   [
+		cal:dateTime :e;
+#		cal:tzid "/softwarestudio.org/Olson_20011030_5/America/New_York"
+	];
+	  cal:uid  :u
+    ]
+}.
+
+
+{} => {
+
+  <http://www.w3.org/2002/12/cal/tzd/America/New_York#tz>
+	a cal:Vtimezone;
+	cal:tzid "/softwarestudio.org/Olson_20011030_5/America/New_York".
+
+}.
+
+
+#ends
+

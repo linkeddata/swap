@@ -1,0 +1,8 @@
+pyjamas
+
+pyjamas is an attempt to port the Google Web Toolkit to Python and thus enable
+the development of AJAX applications in Python.
+
+For more information, see:
+
+    http://pyjamas.pyworks.org/

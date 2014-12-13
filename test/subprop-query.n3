@@ -1,0 +1,5 @@
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix : <subprop#>.
+@prefix v: <subprop?>.
+
+{ v:x :spouse v:y } log:forSome v:x, v:y.

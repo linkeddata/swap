@@ -1,0 +1,11 @@
+     @prefix : <#> .
+    
+     @forAll :s .
+    
+    :Steve     :talksTo :Joe .
+    {
+        :s     :talksTo :s .
+        
+        }     => {:s     :admits "I talk to myself" .
+        } .
+    

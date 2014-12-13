@@ -1,0 +1,1605 @@
+#Processed by Id: cwm.py,v 1.154 2004/06/24 03:17:11 timbl Exp 
+        #    using base file:/devel/WWW/2000/10/swap/grammar/
+        
+#  Notation3 generation by
+#       notation3.py,v 1.155 2004/06/25 01:26:59 timbl Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/grammar/
+     @prefix : <http://www.w3.org/2000/10/swap/grammar/bnf#> .
+     @prefix n: <http://www.w3.org/2000/10/swap/grammar/n3ql#> .
+     @prefix rul: <http://www.w3.org/2000/10/swap/grammar/bnf-rules#> .
+    
+         @forSome <#_g0>,
+                <#_g1>,
+                <#_g2>,
+                <#_g3>,
+                <#_g4>,
+                <#_g5>,
+                <#_g6> .
+    
+    "!"     :canPrecede n:path;
+         :canStartWith "!" .
+    
+    "("     :canPrecede ")",
+                n:itemlist;
+         :canStartWith "(" .
+    
+    ")"     :canPrecede ")",
+                ".",
+                "@of",
+                "]",
+                "}",
+                n:itemlist,
+                n:object,
+                n:objecttail,
+                n:pathtail,
+                n:propertylist,
+                n:propertylisttail,
+                n:statementtail .
+    
+    ","     :canPrecede n:barename,
+                n:object,
+                n:symbol;
+         :canStartWith "," .
+    
+    "."     :canPrecede "}",
+                :eof,
+                n:statementlist,
+                n:statements_optional,
+                <#_g0>,
+                <#_g1>,
+                <#_g2>,
+                <#_g3>;
+         :canStartWith "." .
+    
+    ";"     :canPrecede n:verb;
+         :canStartWith ";" .
+    
+    "="     :canPrecede n:object;
+         :canStartWith "=" .
+    
+    "=>"     :canPrecede "{" .
+    
+    "@"     :canPrecede n:langcode;
+         :canStartWith "@" .
+    
+    "@a"     :canPrecede n:object;
+         :canStartWith "@a" .
+    
+    "@forAll"     :canPrecede <#_g4>;
+         :canStartWith "@forAll" .
+    
+    "@forSome"     :canPrecede <#_g5>;
+         :canStartWith "@forSome" .
+    
+    "@has"     :canPrecede n:prop;
+         :canStartWith "@has" .
+    
+    "@is"     :canPrecede n:prop;
+         :canStartWith "@is" .
+    
+    "@keywords"     :canPrecede <#_g6>;
+         :canStartWith "@keywords" .
+    
+    "@of"     :canPrecede n:object .
+    
+    "@prefix"     :canPrecede n:qname;
+         :canStartWith "@prefix" .
+    
+    "["     :canPrecede ".",
+                "]",
+                "}",
+                n:propertylist,
+                n:statementtail;
+         :canStartWith "[" .
+    
+    "]"     :canPrecede ")",
+                ".",
+                "@of",
+                "]",
+                "}",
+                n:itemlist,
+                n:object,
+                n:objecttail,
+                n:pathtail,
+                n:propertylist,
+                n:propertylisttail,
+                n:statementtail .
+    
+    "^"     :canPrecede n:path;
+         :canStartWith "^" .
+    
+    "^^"     :canPrecede n:symbol;
+         :canStartWith "^^" .
+    
+    "{"     :canPrecede n:formula_safe,
+                n:formulacontent;
+         :canStartWith "{" .
+    
+    "}"     :canPrecede ".",
+                "=>" .
+    
+    ()     a rul:Used .
+      ( "!" 
+        n:path  )
+         a rul:Used .
+      ( "(" 
+        n:itemlist 
+        ")"  )
+         a rul:Used .
+      ( "," 
+        n:barename 
+        <#_g6>  )
+         a rul:Used .
+      ( "," 
+        n:object 
+        n:objecttail  )
+         a rul:Used .
+      ( "," 
+        n:symbol 
+        <#_g4>  )
+         a rul:Used .
+      ( "," 
+        n:symbol 
+        <#_g5>  )
+         a rul:Used .
+      ( "." 
+        n:statementlist  )
+         a rul:Used .
+      ( "."  )
+         a rul:Used .
+      ( ";" 
+        n:verb 
+        n:object 
+        n:objecttail 
+        n:propertylisttail  )
+         a rul:Used .
+      ( "="  )
+         a rul:Used .
+      ( "@" 
+        n:langcode  )
+         a rul:Used .
+      ( "@a"  )
+         a rul:Used .
+      ( "@forAll" 
+        <#_g4>  )
+         a rul:Used .
+      ( "@forSome" 
+        <#_g5>  )
+         a rul:Used .
+      ( "@has" 
+        n:prop  )
+         a rul:Used .
+      ( "@is" 
+        n:prop 
+        "@of"  )
+         a rul:Used .
+      ( "@keywords" 
+        <#_g6>  )
+         a rul:Used .
+      ( "@prefix" 
+        n:qname 
+        n:explicituri 
+        "."  )
+         a rul:Used .
+      ( "[" 
+        n:propertylist 
+        "]"  )
+         a rul:Used .
+      ( "^" 
+        n:path  )
+         a rul:Used .
+      ( "^^" 
+        n:symbol  )
+         a rul:Used .
+      ( "{" 
+        n:formulacontent 
+        "}" 
+        "=>" 
+        "{" 
+        n:formula_safe 
+        "}"  )
+         a rul:Used .
+      ( "{" 
+        n:formulacontent 
+        "}" 
+        "=>" 
+        "{" 
+        n:formulacontent 
+        "}"  )
+         a rul:Used .
+      ( n:declaration 
+        <#_g0>  )
+         a rul:Used .
+      ( n:declaration 
+        <#_g2>  )
+         a rul:Used .
+      ( n:existential 
+        <#_g1>  )
+         a rul:Used .
+      ( n:existential 
+        <#_g3>  )
+         a rul:Used .
+      ( n:explicituri  )
+         a rul:Used .
+      ( n:item 
+        n:itemlist  )
+         a rul:Used .
+      ( n:item  )
+         a rul:Used .
+      ( n:literal  )
+         a rul:Used .
+      ( n:node 
+        n:pathtail  )
+         a rul:Used .
+      ( n:node  )
+         a rul:Used .
+      ( n:numericliteral  )
+         a rul:Used .
+      ( n:path  )
+         a rul:Used .
+      ( n:prop  )
+         a rul:Used .
+      ( n:qname  )
+         a rul:Used .
+      ( n:rule  )
+         a rul:Used .
+      ( n:statement 
+        n:statementtail  )
+         a rul:Used .
+      ( n:statement  )
+         a rul:Used .
+      ( n:statement_or_rule 
+        "." 
+        n:statements_optional  )
+         a rul:Used .
+      ( n:string 
+        n:dtlang  )
+         a rul:Used .
+      ( n:subject 
+        n:propertylist  )
+         a rul:Used .
+      ( n:symbol  )
+         a rul:Used .
+      ( n:variable  )
+         a rul:Used .
+      ( n:verb 
+        n:object 
+        n:objecttail 
+        n:propertylisttail  )
+         a rul:Used .
+      ( <#_g0> 
+        <#_g1> 
+        n:statements_optional 
+        :eof  )
+         a rul:Used .
+      ( <#_g2> 
+        <#_g3> 
+        n:statementlist  )
+         a rul:Used .
+    
+    :eof     :canStartWith "@EOFDUMMY" .
+    
+    n:alphanumeric     :canStartWith "a";
+         :matches "[a-zA-Z][a-zA-Z0-9_]*" .
+    
+    n:barename     :canPrecede <#_g6>;
+         :canStartWith "_",
+                "a";
+         :matches "[a-zA-Z_][a-zA-Z0-9_]*" .
+    
+    n:declaration     :TEST "@keywords",
+                "@prefix";
+         :branch  [
+             :condition "@prefix";
+             :sequence  (
+            "@prefix" 
+            n:qname 
+            n:explicituri 
+            "."  ) ],
+                 [
+             :condition "@keywords";
+             :sequence  (
+            "@keywords" 
+            <#_g6>  ) ];
+         :canPrecede "}",
+                :eof,
+                n:statementlist,
+                n:statements_optional,
+                <#_g0>,
+                <#_g1>,
+                <#_g2>,
+                <#_g3>;
+         :canStartWith "@keywords",
+                "@prefix";
+         :canStartWithLiteral "@keywords",
+                "@prefix";
+         :mustBeOneSequence  (
+         (
+            "@prefix" 
+            n:qname 
+            n:explicituri 
+            "."  )
+         (
+            "@keywords" 
+            <#_g6>  ) ) .
+    
+    n:document     a rul:Used;
+         :TEST <#_g0>;
+         :branch  [
+             :condition "@keywords",
+                    "@prefix";
+             :sequence  (
+            <#_g0> 
+            <#_g1> 
+            n:statements_optional 
+            :eof  ) ];
+         :canStartWith "@keywords",
+                "@prefix";
+         :mustBeOneSequence  (
+         (
+            <#_g0> 
+            <#_g1> 
+            n:statements_optional 
+            :eof  ) ) .
+    
+    n:dtlang     :TEST "@",
+                "^^";
+         :branch  [
+             :condition "!",
+                    "\"",
+                    "(",
+                    ")",
+                    "+",
+                    ",",
+                    "-",
+                    ".",
+                    "0",
+                    ";",
+                    "<",
+                    "=",
+                    "?",
+                    "@a",
+                    "@has",
+                    "@is",
+                    "@of",
+                    "[",
+                    "]",
+                    "^",
+                    "_",
+                    "a",
+                    "}";
+             :sequence () ],
+                 [
+             :condition "@";
+             :sequence  (
+            "@" 
+            n:langcode  ) ],
+                 [
+             :condition "^^";
+             :sequence  (
+            "^^" 
+            n:symbol  ) ];
+         :canPrecede ")",
+                ".",
+                "@of",
+                "]",
+                "}",
+                n:itemlist,
+                n:object,
+                n:objecttail,
+                n:pathtail,
+                n:propertylist,
+                n:propertylisttail,
+                n:statementtail;
+         :canStartWith "@",
+                "^^";
+         :canStartWithLiteral "@",
+                "^^";
+         :mustBeOneSequence  (
+        () 
+         (
+            "@" 
+            n:langcode  )
+         (
+            "^^" 
+            n:symbol  ) ) .
+    
+    n:existential     :TEST "@forSome";
+         :branch  [
+             :condition "@forSome";
+             :sequence  (
+            "@forSome" 
+            <#_g5>  ) ];
+         :canPrecede "}",
+                :eof,
+                n:statementlist,
+                n:statements_optional,
+                <#_g1>,
+                <#_g3>;
+         :canStartWith "@forSome";
+         :canStartWithLiteral "@forSome";
+         :mustBeOneSequence  (
+         (
+            "@forSome" 
+            <#_g5>  ) ) .
+    
+    n:explicituri     :canPrecede ")",
+                ".",
+                "@of",
+                "]",
+                "}",
+                n:itemlist,
+                n:object,
+                n:objecttail,
+                n:pathtail,
+                n:propertylist,
+                n:propertylisttail,
+                n:statementtail,
+                <#_g4>,
+                <#_g5>;
+         :canStartWith "<";
+         :matches "<[^>].*>" .
+    
+    n:formula_safe     :canPrecede "}" .
+    
+    n:formulacontent     :TEST <#_g2>;
+         :branch  [
+             :condition "@keywords",
+                    "@prefix";
+             :sequence  (
+            <#_g2> 
+            <#_g3> 
+            n:statementlist  ) ];
+         :canPrecede "}";
+         :canStartWith "@keywords",
+                "@prefix";
+         :mustBeOneSequence  (
+         (
+            <#_g2> 
+            <#_g3> 
+            n:statementlist  ) ) .
+    
+    n:item     :TEST n:path;
+         :branch  [
+             :condition "\"",
+                    "(",
+                    "+",
+                    "-",
+                    "0",
+                    "<",
+                    "?",
+                    "[",
+                    "_",
+                    "a";
+             :sequence  (
+            n:path  ) ];
+         :canPrecede ")",
+                ".",
+                "]",
+                "}",
+                n:itemlist,
+                n:objecttail,
+                n:propertylist,
+                n:propertylisttail,
+                n:statementtail;
+         :canStartWith "\"",
+                "(",
+                "+",
+                "-",
+                "0",
+                "<",
+                "?",
+                "[",
+                "_",
+                "a";
+         :mustBeOneSequence  (
+         (
+            n:path  ) ) .
+    
+    n:itemlist     :TEST n:item;
+         :branch  [
+             :condition ")";
+             :sequence () ],
+                 [
+             :condition "\"",
+                    "(",
+                    "+",
+                    "-",
+                    "0",
+                    "<",
+                    "?",
+                    "[",
+                    "_",
+                    "a";
+             :sequence  (
+            n:item 
+            n:itemlist  ) ];
+         :canPrecede ")";
+         :canStartWith "\"",
+                "(",
+                "+",
+                "-",
+                "0",
+                "<",
+                "?",
+                "[",
+                "_",
+                "a";
+         :mustBeOneSequence  (
+        () 
+         (
+            n:item 
+            n:itemlist  ) ) .
+    
+    n:langcode     :canPrecede ")",
+                ".",
+                "@of",
+                "]",
+                "}",
+                n:itemlist,
+                n:object,
+                n:objecttail,
+                n:pathtail,
+                n:propertylist,
+                n:propertylisttail,
+                n:statementtail;
+         :canStartWith "a";
+         :matches "[a-zA-Z0-9]+(-[a-zA-Z0-9]+)?" .
+    
+    n:literal     :TEST n:string;
+         :branch  [
+             :condition "\"";
+             :sequence  (
+            n:string 
+            n:dtlang  ) ];
+         :canPrecede ")",
+                ".",
+                "@of",
+                "]",
+                "}",
+                n:itemlist,
+                n:object,
+                n:objecttail,
+                n:pathtail,
+                n:propertylist,
+                n:propertylisttail,
+                n:statementtail;
+         :canStartWith "\"";
+         :mustBeOneSequence  (
+         (
+            n:string 
+            n:dtlang  ) ) .
+    
+    n:node     :TEST "(",
+                "[",
+                n:literal,
+                n:numericliteral,
+                n:symbol,
+                n:variable;
+         :branch  [
+             :condition "<",
+                    "_",
+                    "a";
+             :sequence  (
+            n:symbol  ) ],
+                 [
+             :condition "?";
+             :sequence  (
+            n:variable  ) ],
+                 [
+             :condition "+",
+                    "-",
+                    "0";
+             :sequence  (
+            n:numericliteral  ) ],
+                 [
+             :condition "\"";
+             :sequence  (
+            n:literal  ) ],
+                 [
+             :condition "[";
+             :sequence  (
+            "[" 
+            n:propertylist 
+            "]"  ) ],
+                 [
+             :condition "(";
+             :sequence  (
+            "(" 
+            n:itemlist 
+            ")"  ) ];
+         :canPrecede ")",
+                ".",
+                "@of",
+                "]",
+                "}",
+                n:itemlist,
+                n:object,
+                n:objecttail,
+                n:pathtail,
+                n:propertylist,
+                n:propertylisttail,
+                n:statementtail;
+         :canStartWith "\"",
+                "(",
+                "+",
+                "-",
+                "0",
+                "<",
+                "?",
+                "[",
+                "_",
+                "a";
+         :canStartWithLiteral "(",
+                "[";
+         :mustBeOneSequence  (
+         (
+            n:symbol  )
+         (
+            n:variable  )
+         (
+            n:numericliteral  )
+         (
+            n:literal  )
+         (
+            "[" 
+            n:propertylist 
+            "]"  )
+         (
+            "(" 
+            n:itemlist 
+            ")"  ) ) .
+    
+    n:node_safe     :TEST n:literal,
+                n:numericliteral,
+                n:symbol,
+                n:variable;
+         :branch  [
+             :condition "<",
+                    "_",
+                    "a";
+             :sequence  (
+            n:symbol  ) ],
+                 [
+             :condition "?";
+             :sequence  (
+            n:variable  ) ],
+                 [
+             :condition "+",
+                    "-",
+                    "0";
+             :sequence  (
+            n:numericliteral  ) ],
+                 [
+             :condition "\"";
+             :sequence  (
+            n:literal  ) ];
+         :canStartWith "\"",
+                "+",
+                "-",
+                "0",
+                "<",
+                "?",
+                "_",
+                "a";
+         :mustBeOneSequence  (
+         (
+            n:symbol  )
+         (
+            n:variable  )
+         (
+            n:numericliteral  )
+         (
+            n:literal  ) ) .
+    
+    n:numericliteral     :canPrecede ")",
+                ".",
+                "@of",
+                "]",
+                "}",
+                n:itemlist,
+                n:object,
+                n:objecttail,
+                n:pathtail,
+                n:propertylist,
+                n:propertylisttail,
+                n:statementtail;
+         :canStartWith "+",
+                "-",
+                "0";
+         :matches "[-+]?[0-9]+(\\.[0-9]+)?(e[-+]?[0-9]+)?" .
+    
+    n:object     :TEST n:item;
+         :branch  [
+             :condition "\"",
+                    "(",
+                    "+",
+                    "-",
+                    "0",
+                    "<",
+                    "?",
+                    "[",
+                    "_",
+                    "a";
+             :sequence  (
+            n:item  ) ];
+         :canPrecede ".",
+                "]",
+                "}",
+                n:objecttail,
+                n:propertylisttail,
+                n:statementtail;
+         :canStartWith "\"",
+                "(",
+                "+",
+                "-",
+                "0",
+                "<",
+                "?",
+                "[",
+                "_",
+                "a";
+         :mustBeOneSequence  (
+         (
+            n:item  ) ) .
+    
+    n:objecttail     :TEST ",";
+         :branch  [
+             :condition ".",
+                    ";",
+                    "]",
+                    "}";
+             :sequence () ],
+                 [
+             :condition ",";
+             :sequence  (
+            "," 
+            n:object 
+            n:objecttail  ) ];
+         :canPrecede ".",
+                "]",
+                "}",
+                n:propertylisttail,
+                n:statementtail;
+         :canStartWith ",";
+         :canStartWithLiteral ",";
+         :mustBeOneSequence  (
+        () 
+         (
+            "," 
+            n:object 
+            n:objecttail  ) ) .
+    
+    n:path     :TEST n:node;
+         :branch  [
+             :condition "\"",
+                    "(",
+                    "+",
+                    "-",
+                    "0",
+                    "<",
+                    "?",
+                    "[",
+                    "_",
+                    "a";
+             :sequence  (
+            n:node 
+            n:pathtail  ) ];
+         :canPrecede ")",
+                ".",
+                "]",
+                "}",
+                n:itemlist,
+                n:objecttail,
+                n:propertylist,
+                n:propertylisttail,
+                n:statementtail;
+         :canStartWith "\"",
+                "(",
+                "+",
+                "-",
+                "0",
+                "<",
+                "?",
+                "[",
+                "_",
+                "a";
+         :mustBeOneSequence  (
+         (
+            n:node 
+            n:pathtail  ) ) .
+    
+    n:pathtail     :TEST "!",
+                "^";
+         :branch  [
+             :condition "\"",
+                    "(",
+                    ")",
+                    "+",
+                    ",",
+                    "-",
+                    ".",
+                    "0",
+                    ";",
+                    "<",
+                    "=",
+                    "?",
+                    "@a",
+                    "@has",
+                    "@is",
+                    "[",
+                    "]",
+                    "_",
+                    "a",
+                    "}";
+             :sequence () ],
+                 [
+             :condition "!";
+             :sequence  (
+            "!" 
+            n:path  ) ],
+                 [
+             :condition "^";
+             :sequence  (
+            "^" 
+            n:path  ) ];
+         :canPrecede ")",
+                ".",
+                "]",
+                "}",
+                n:itemlist,
+                n:objecttail,
+                n:propertylist,
+                n:propertylisttail,
+                n:statementtail;
+         :canStartWith "!",
+                "^";
+         :canStartWithLiteral "!",
+                "^";
+         :mustBeOneSequence  (
+        () 
+         (
+            "!" 
+            n:path  )
+         (
+            "^" 
+            n:path  ) ) .
+    
+    n:prop     :TEST n:node;
+         :branch  [
+             :condition "\"",
+                    "(",
+                    "+",
+                    "-",
+                    "0",
+                    "<",
+                    "?",
+                    "[",
+                    "_",
+                    "a";
+             :sequence  (
+            n:node  ) ];
+         :canPrecede "@of",
+                n:object;
+         :canStartWith "\"",
+                "(",
+                "+",
+                "-",
+                "0",
+                "<",
+                "?",
+                "[",
+                "_",
+                "a";
+         :mustBeOneSequence  (
+         (
+            n:node  ) ) .
+    
+    n:propertylist     :TEST n:verb;
+         :branch  [
+             :condition ".",
+                    "]",
+                    "}";
+             :sequence () ],
+                 [
+             :condition "\"",
+                    "(",
+                    "+",
+                    "-",
+                    "0",
+                    "<",
+                    "=",
+                    "?",
+                    "@a",
+                    "@has",
+                    "@is",
+                    "[",
+                    "_",
+                    "a";
+             :sequence  (
+            n:verb 
+            n:object 
+            n:objecttail 
+            n:propertylisttail  ) ];
+         :canPrecede ".",
+                "]",
+                "}",
+                n:statementtail;
+         :canStartWith "\"",
+                "(",
+                "+",
+                "-",
+                "0",
+                "<",
+                "=",
+                "?",
+                "@a",
+                "@has",
+                "@is",
+                "[",
+                "_",
+                "a";
+         :mustBeOneSequence  (
+        () 
+         (
+            n:verb 
+            n:object 
+            n:objecttail 
+            n:propertylisttail  ) ) .
+    
+    n:propertylisttail     :TEST ";";
+         :branch  [
+             :condition ".",
+                    "]",
+                    "}";
+             :sequence () ],
+                 [
+             :condition ";";
+             :sequence  (
+            ";" 
+            n:verb 
+            n:object 
+            n:objecttail 
+            n:propertylisttail  ) ];
+         :canPrecede ".",
+                "]",
+                "}",
+                n:statementtail;
+         :canStartWith ";";
+         :canStartWithLiteral ";";
+         :mustBeOneSequence  (
+        () 
+         (
+            ";" 
+            n:verb 
+            n:object 
+            n:objecttail 
+            n:propertylisttail  ) ) .
+    
+    n:qname     :canPrecede ")",
+                ".",
+                "@of",
+                "]",
+                "}",
+                n:explicituri,
+                n:itemlist,
+                n:object,
+                n:objecttail,
+                n:pathtail,
+                n:propertylist,
+                n:propertylisttail,
+                n:statementtail,
+                <#_g4>,
+                <#_g5>;
+         :canStartWith "_",
+                "a";
+         :matches "(([a-zA-Z_][a-zA-Z0-9_]*)?:)?([a-zA-Z_][a-zA-Z0-9_]*)?" .
+    
+    n:rule     :TEST "{";
+         :branch  [
+             :condition "{";
+             :sequence  (
+            "{" 
+            n:formulacontent 
+            "}" 
+            "=>" 
+            "{" 
+            n:formulacontent 
+            "}"  ) ];
+         :canPrecede ".";
+         :canStartWith "{";
+         :canStartWithLiteral "{";
+         :mustBeOneSequence  (
+         (
+            "{" 
+            n:formulacontent 
+            "}" 
+            "=>" 
+            "{" 
+            n:formulacontent 
+            "}"  ) ) .
+    
+    n:rule_safe     :TEST "{";
+         :branch  [
+             :condition "{";
+             :sequence  (
+            "{" 
+            n:formulacontent 
+            "}" 
+            "=>" 
+            "{" 
+            n:formula_safe 
+            "}"  ) ];
+         :canStartWith "{";
+         :canStartWithLiteral "{";
+         :mustBeOneSequence  (
+         (
+            "{" 
+            n:formulacontent 
+            "}" 
+            "=>" 
+            "{" 
+            n:formula_safe 
+            "}"  ) ) .
+    
+    n:statement     :TEST n:subject;
+         :branch  [
+             :condition "\"",
+                    "(",
+                    "+",
+                    "-",
+                    "0",
+                    "<",
+                    "?",
+                    "[",
+                    "_",
+                    "a";
+             :sequence  (
+            n:subject 
+            n:propertylist  ) ];
+         :canPrecede ".",
+                "}",
+                n:statementtail;
+         :canStartWith "\"",
+                "(",
+                "+",
+                "-",
+                "0",
+                "<",
+                "?",
+                "[",
+                "_",
+                "a";
+         :mustBeOneSequence  (
+         (
+            n:subject 
+            n:propertylist  ) ) .
+    
+    n:statement_or_rule     :TEST n:rule,
+                n:statement;
+         :branch  [
+             :condition "\"",
+                    "(",
+                    "+",
+                    "-",
+                    "0",
+                    "<",
+                    "?",
+                    "[",
+                    "_",
+                    "a";
+             :sequence  (
+            n:statement  ) ],
+                 [
+             :condition "{";
+             :sequence  (
+            n:rule  ) ];
+         :canPrecede ".";
+         :canStartWith "\"",
+                "(",
+                "+",
+                "-",
+                "0",
+                "<",
+                "?",
+                "[",
+                "_",
+                "a",
+                "{";
+         :mustBeOneSequence  (
+         (
+            n:statement  )
+         (
+            n:rule  ) ) .
+    
+    n:statementlist     :TEST n:statement;
+         :branch  [
+             :condition "}";
+             :sequence () ],
+                 [
+             :condition "\"",
+                    "(",
+                    "+",
+                    "-",
+                    "0",
+                    "<",
+                    "?",
+                    "[",
+                    "_",
+                    "a";
+             :sequence  (
+            n:statement 
+            n:statementtail  ) ];
+         :canPrecede "}";
+         :canStartWith "\"",
+                "(",
+                "+",
+                "-",
+                "0",
+                "<",
+                "?",
+                "[",
+                "_",
+                "a";
+         :mustBeOneSequence  (
+        () 
+         (
+            n:statement 
+            n:statementtail  ) ) .
+    
+    n:statements_optional     :TEST n:statement_or_rule;
+         :branch  [
+             :condition "@EOFDUMMY";
+             :sequence () ],
+                 [
+             :condition "\"",
+                    "(",
+                    "+",
+                    "-",
+                    "0",
+                    "<",
+                    "?",
+                    "[",
+                    "_",
+                    "a",
+                    "{";
+             :sequence  (
+            n:statement_or_rule 
+            "." 
+            n:statements_optional  ) ];
+         :canPrecede :eof;
+         :canStartWith "\"",
+                "(",
+                "+",
+                "-",
+                "0",
+                "<",
+                "?",
+                "[",
+                "_",
+                "a",
+                "{";
+         :mustBeOneSequence  (
+        () 
+         (
+            n:statement_or_rule 
+            "." 
+            n:statements_optional  ) ) .
+    
+    n:statementtail     :TEST ".";
+         :branch  [
+             :condition "}";
+             :sequence () ],
+                 [
+             :condition ".";
+             :sequence  (
+            "." 
+            n:statementlist  ) ];
+         :canPrecede "}";
+         :canStartWith ".";
+         :canStartWithLiteral ".";
+         :mustBeOneSequence  (
+        () 
+         (
+            "." 
+            n:statementlist  ) ) .
+    
+    n:string     :canPrecede ")",
+                ".",
+                "@of",
+                "]",
+                "}",
+                n:dtlang,
+                n:itemlist,
+                n:object,
+                n:objecttail,
+                n:pathtail,
+                n:propertylist,
+                n:propertylisttail,
+                n:statementtail;
+         :canStartWith "\"";
+         :matches "(\"([^\"]|(\\\\\"))*\")" .
+    
+    n:subject     :TEST n:item;
+         :branch  [
+             :condition "\"",
+                    "(",
+                    "+",
+                    "-",
+                    "0",
+                    "<",
+                    "?",
+                    "[",
+                    "_",
+                    "a";
+             :sequence  (
+            n:item  ) ];
+         :canPrecede ".",
+                "]",
+                "}",
+                n:propertylist,
+                n:statementtail;
+         :canStartWith "\"",
+                "(",
+                "+",
+                "-",
+                "0",
+                "<",
+                "?",
+                "[",
+                "_",
+                "a";
+         :mustBeOneSequence  (
+         (
+            n:item  ) ) .
+    
+    n:symbol     :TEST n:explicituri,
+                n:qname;
+         :branch  [
+             :condition "<";
+             :sequence  (
+            n:explicituri  ) ],
+                 [
+             :condition "_",
+                    "a";
+             :sequence  (
+            n:qname  ) ];
+         :canPrecede ")",
+                ".",
+                "@of",
+                "]",
+                "}",
+                n:itemlist,
+                n:object,
+                n:objecttail,
+                n:pathtail,
+                n:propertylist,
+                n:propertylisttail,
+                n:statementtail,
+                <#_g4>,
+                <#_g5>;
+         :canStartWith "<",
+                "_",
+                "a";
+         :mustBeOneSequence  (
+         (
+            n:explicituri  )
+         (
+            n:qname  ) ) .
+    
+    n:universal     :TEST "@forAll";
+         :branch  [
+             :condition "@forAll";
+             :sequence  (
+            "@forAll" 
+            <#_g4>  ) ];
+         :canStartWith "@forAll";
+         :canStartWithLiteral "@forAll";
+         :mustBeOneSequence  (
+         (
+            "@forAll" 
+            <#_g4>  ) ) .
+    
+    n:variable     :canPrecede ")",
+                ".",
+                "@of",
+                "]",
+                "}",
+                n:itemlist,
+                n:object,
+                n:objecttail,
+                n:pathtail,
+                n:propertylist,
+                n:propertylisttail,
+                n:statementtail;
+         :canStartWith "?";
+         :matches "\\?[a-zA-Z_][a-zA-Z0-9_]*" .
+    
+    n:verb     :TEST "=",
+                "@a",
+                "@has",
+                "@is",
+                n:prop;
+         :branch  [
+             :condition "\"",
+                    "(",
+                    "+",
+                    "-",
+                    "0",
+                    "<",
+                    "?",
+                    "[",
+                    "_",
+                    "a";
+             :sequence  (
+            n:prop  ) ],
+                 [
+             :condition "@has";
+             :sequence  (
+            "@has" 
+            n:prop  ) ],
+                 [
+             :condition "@is";
+             :sequence  (
+            "@is" 
+            n:prop 
+            "@of"  ) ],
+                 [
+             :condition "@a";
+             :sequence  (
+            "@a"  ) ],
+                 [
+             :condition "=";
+             :sequence  (
+            "="  ) ];
+         :canPrecede n:object;
+         :canStartWith "\"",
+                "(",
+                "+",
+                "-",
+                "0",
+                "<",
+                "=",
+                "?",
+                "@a",
+                "@has",
+                "@is",
+                "[",
+                "_",
+                "a";
+         :canStartWithLiteral "=",
+                "@a",
+                "@has",
+                "@is";
+         :mustBeOneSequence  (
+         (
+            n:prop  )
+         (
+            "@has" 
+            n:prop  )
+         (
+            "@is" 
+            n:prop 
+            "@of"  )
+         (
+            "@a"  )
+         (
+            "="  ) ) .
+    
+    <#_g0>     :TEST n:declaration;
+         :branch  [
+             :condition "\"",
+                    "(",
+                    "+",
+                    "-",
+                    "0",
+                    "<",
+                    "?",
+                    "@EOFDUMMY",
+                    "@forSome",
+                    "[",
+                    "_",
+                    "a",
+                    "{";
+             :sequence () ],
+                 [
+             :condition "@keywords",
+                    "@prefix";
+             :sequence  (
+            n:declaration 
+            <#_g0>  ) ];
+         :canPrecede :eof,
+                n:statements_optional,
+                <#_g1>;
+         :canStartWith "@keywords",
+                "@prefix";
+         :mustBeOneSequence  (
+        () 
+         (
+            n:declaration 
+            <#_g0>  ) );
+         :zeroOrMore n:declaration .
+    
+    <#_g1>     :TEST n:existential;
+         :branch  [
+             :condition "\"",
+                    "(",
+                    "+",
+                    "-",
+                    "0",
+                    "<",
+                    "?",
+                    "@EOFDUMMY",
+                    "[",
+                    "_",
+                    "a",
+                    "{";
+             :sequence () ],
+                 [
+             :condition "@forSome";
+             :sequence  (
+            n:existential 
+            <#_g1>  ) ];
+         :canPrecede :eof,
+                n:statements_optional;
+         :canStartWith "@forSome";
+         :mustBeOneSequence  (
+        () 
+         (
+            n:existential 
+            <#_g1>  ) );
+         :zeroOrMore n:existential .
+    
+    <#_g2>     :TEST n:declaration;
+         :branch  [
+             :condition "\"",
+                    "(",
+                    "+",
+                    "-",
+                    "0",
+                    "<",
+                    "?",
+                    "@forSome",
+                    "[",
+                    "_",
+                    "a",
+                    "}";
+             :sequence () ],
+                 [
+             :condition "@keywords",
+                    "@prefix";
+             :sequence  (
+            n:declaration 
+            <#_g2>  ) ];
+         :canPrecede "}",
+                n:statementlist,
+                <#_g3>;
+         :canStartWith "@keywords",
+                "@prefix";
+         :mustBeOneSequence  (
+        () 
+         (
+            n:declaration 
+            <#_g2>  ) );
+         :zeroOrMore n:declaration .
+    
+    <#_g3>     :TEST n:existential;
+         :branch  [
+             :condition "\"",
+                    "(",
+                    "+",
+                    "-",
+                    "0",
+                    "<",
+                    "?",
+                    "[",
+                    "_",
+                    "a",
+                    "}";
+             :sequence () ],
+                 [
+             :condition "@forSome";
+             :sequence  (
+            n:existential 
+            <#_g3>  ) ];
+         :canPrecede "}",
+                n:statementlist;
+         :canStartWith "@forSome";
+         :mustBeOneSequence  (
+        () 
+         (
+            n:existential 
+            <#_g3>  ) );
+         :zeroOrMore n:existential .
+    
+    <#_g4>     :TEST ",",
+                ".";
+         :branch  [
+             :condition ".";
+             :sequence  (
+            "."  ) ],
+                 [
+             :condition ",";
+             :sequence  (
+            "," 
+            n:symbol 
+            <#_g4>  ) ];
+         :canStartWith ",",
+                ".";
+         :canStartWithLiteral ",",
+                ".";
+         :commaSeparatedPeriodTerminatedListOf n:symbol;
+         :mustBeOneSequence  (
+         (
+            "."  )
+         (
+            "," 
+            n:symbol 
+            <#_g4>  ) ) .
+    
+    <#_g5>     :TEST ",",
+                ".";
+         :branch  [
+             :condition ".";
+             :sequence  (
+            "."  ) ],
+                 [
+             :condition ",";
+             :sequence  (
+            "," 
+            n:symbol 
+            <#_g5>  ) ];
+         :canPrecede "}",
+                :eof,
+                n:statementlist,
+                n:statements_optional,
+                <#_g1>,
+                <#_g3>;
+         :canStartWith ",",
+                ".";
+         :canStartWithLiteral ",",
+                ".";
+         :commaSeparatedPeriodTerminatedListOf n:symbol;
+         :mustBeOneSequence  (
+         (
+            "."  )
+         (
+            "," 
+            n:symbol 
+            <#_g5>  ) ) .
+    
+    <#_g6>     :TEST ",",
+                ".";
+         :branch  [
+             :condition ".";
+             :sequence  (
+            "."  ) ],
+                 [
+             :condition ",";
+             :sequence  (
+            "," 
+            n:barename 
+            <#_g6>  ) ];
+         :canPrecede "}",
+                :eof,
+                n:statementlist,
+                n:statements_optional,
+                <#_g0>,
+                <#_g1>,
+                <#_g2>,
+                <#_g3>;
+         :canStartWith ",",
+                ".";
+         :canStartWithLiteral ",",
+                ".";
+         :commaSeparatedPeriodTerminatedListOf n:barename;
+         :mustBeOneSequence  (
+         (
+            "."  )
+         (
+            "," 
+            n:barename 
+            <#_g6>  ) ) .
+    
+#ENDS

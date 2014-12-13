@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<r:RDF xmlns:r="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:s="http://www.w3.org/2000/01/rdf-schema#" xmlns:dia="http://www.lysator.liu.se/~alla/dia/" xmlns:owl="http://www.w3.org/2002/07/owl@@#">
+  <s:Class r:ID="O0">
+    <s:label>Flight</s:label>
+  </s:Class>
+  <s:Class r:ID="O1">
+    <s:label>Economy</s:label>
+  </s:Class>
+  <r:Description r:about="#O1">
+    <s:subClassOf r:resource="#O0"/>
+  </r:Description>
+  <s:Class r:ID="O3">
+    <s:label>Translocation</s:label>
+  </s:Class>
+  <r:Description r:about="#O0">
+    <s:subClassOf r:resource="#O3"/>
+  </r:Description>
+  <s:Class r:ID="O5">
+    <s:label>PartiallyTangible</s:label>
+  </s:Class>
+  <r:Property r:ID="O6">
+    <s:label>fromLocation</s:label>
+    <s:domain r:resource="#O3"/>
+    <s:range r:resource="#O5"/>
+  </r:Property>
+  <s:Class r:ID="O7">
+    <s:label>Date</s:label>
+  </s:Class>
+  <r:Property r:ID="O8">
+    <s:label>startingDate</s:label>
+    <s:domain r:resource="#O11"/>
+    <s:range r:resource="#O7"/>
+  </r:Property>
+  <r:Property r:ID="O9">
+    <s:label>endingDate</s:label>
+    <s:domain r:resource="#O11"/>
+    <s:range r:resource="#O7"/>
+  </r:Property>
+  <r:Property r:ID="O10">
+    <s:label>toLocation</s:label>
+    <s:domain r:resource="#O3"/>
+    <s:range r:resource="#O5"/>
+  </r:Property>
+  <s:Class r:ID="O11">
+    <s:label>TemporalThing</s:label>
+  </s:Class>
+  <r:Description r:about="#O3">
+    <s:subClassOf r:resource="#O11"/>
+  </r:Description>
+  <r:Property r:ID="O13">
+    <s:label>arrivalTime</s:label>
+    <s:domain r:resource="#O0"/>
+    <s:range r:resource="#O14"/>
+  </r:Property>
+  <s:Class r:ID="O14">
+    <s:label>TimeString</s:label>
+  </s:Class>
+  <s:Class r:ID="O15">
+    <s:label>AirlineCompany</s:label>
+  </s:Class>
+  <r:Property r:ID="O16">
+    <s:label>carrier</s:label>
+    <s:domain r:resource="#O0"/>
+    <s:range r:resource="#O15"/>
+  </r:Property>
+  <r:Property r:ID="O17">
+    <s:label>departureTime</s:label>
+    <s:domain r:resource="#O0"/>
+    <s:range r:resource="#O14"/>
+  </r:Property>
+  <s:Class r:ID="O18">
+    <s:label>Literal</s:label>
+  </s:Class>
+  <r:Description r:about="#O14">
+    <s:subClassOf r:resource="#O18"/>
+  </r:Description>
+  <r:Property r:ID="O20">
+    <s:label>nameOfAgent</s:label>
+    <s:domain r:resource="#O21"/>
+    <s:range r:resource="#O18"/>
+  </r:Property>
+  <s:Class r:ID="O21">
+    <s:label>Agent</s:label>
+  </s:Class>
+  <r:Description r:about="#O15">
+    <s:subClassOf r:resource="#O21"/>
+  </r:Description>
+  <s:Class r:ID="O23">
+    <s:label>Airport-Physical</s:label>
+  </s:Class>
+  <r:Description r:about="#O23">
+    <s:subClassOf r:resource="#O5"/>
+  </r:Description>
+  <s:Class r:ID="O25">
+    <s:label>Event</s:label>
+  </s:Class>
+  <r:Property r:ID="O26">
+    <s:label>subEvents</s:label>
+    <s:domain r:resource="#O25"/>
+    <s:range r:resource="#O25"/>
+  </r:Property>
+  <r:Description r:about="#O3">
+    <s:subClassOf r:resource="#O25"/>
+  </r:Description>
+  <r:Property r:ID="O28">
+    <s:label>dt:date</s:label>
+    <s:domain r:resource="#O7"/>
+    <s:range r:resource="#O18"/>
+  </r:Property>
+  <r:Description r:about="#O7">
+    <owl:hasAtLeastOne r:resource="#O28"/>
+  </r:Description>
+  <r:Property r:ID="O29">
+    <s:label>flightNumber</s:label>
+    <s:domain r:resource="#O0"/>
+    <s:range r:resource="#O18"/>
+  </r:Property>
+</r:RDF>

@@ -1,0 +1,24 @@
+{
+   @forSome paw:_g4 .
+  paw:_g4     session:id rein:test;
+       session:secret "judy-passwd" .
+    [      a rein:Request;
+	   rein:access http:can-get;
+	   rein:requester paw:_g4;
+	   rein:resource <http://demo.policyawareweb.org/images/award.jpg> ].
+  
+  }     a rein:RequestFormula .
+
+@forSome REQ.
+{
+  {
+       @forSome paw:_g4 .
+      paw:_g4     session:id rein:test;
+	   session:secret "judy-passwd" .
+	[      a rein:Request;
+	       rein:access http:can-get;
+	       rein:requester paw:_g4;
+	       rein:resource REQ ].
+      
+      }     a rein:RequestFormula .
+}

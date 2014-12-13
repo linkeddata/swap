@@ -1,0 +1,117 @@
+    
+    _:L3C7     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#Vcalendar> .
+    
+    _:L3C7     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#component> _:L4C26 .
+    
+    _:L3C7     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#component> _:g10 .
+    
+    _:L3C7     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#method> "REQUEST" .
+    
+    _:L3C7     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#prodid> "-//Apple Computer, Inc//iCal 1.0//EN" .
+    
+    _:L3C7     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#publishedAs> <http://example.com/tetst/calendar.ics> .
+    
+    _:L4C26     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#Vevent> .
+    
+    _:L4C26     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#attendee> _:L6C29 .
+    
+    _:L4C26     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#attendee> _:g32 .
+    
+    _:L4C26     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#component> _:L9C30 .
+    
+    _:L4C26     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#dtstamp> _:L16C28 .
+    
+    _:L4C26     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#dtstart> _:L18C28 .
+    
+    _:L4C26     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#duration> _:L21C29 .
+    
+    _:L4C26     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#organizer> _:L23C30 .
+    
+    _:L4C26     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#sequence> "2" .
+    
+    _:L4C26     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#summary> "IRC Meet" .
+    
+    _:L4C26     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#uid> "EB825E41-23CE-11D7-B93D-003065B0C95E" .
+    
+    _:L6C29     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#calAddress> <mailto:libby.miller@bristol.ac.uk> .
+    
+    _:L6C29     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#cn> "Libby Miller" .
+    
+    _:L9C30     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#Valarm> .
+    
+    _:L9C30     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#action> "AUDIO" .
+    
+    _:L9C30     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#alarmid> "EB825E41-23CE-11D7-B93D-003foobar" .
+    
+    _:L9C30     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#attach> <file:/devel/WWW/2000/10/swap/test/delta/ical/Pong> .
+    
+    _:L9C30     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#trigger> _:L14C32 .
+    
+    _:L14C32     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#duration> "-PT15M" .
+    
+    _:L16C28     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#dateTime> "2003-01-09T12:39:09Z" .
+    
+    _:L18C28     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#dateTime> "2003-01-15T18:00:00" .
+    
+    _:L18C28     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#timezone> _:g10 .
+    
+    _:g10     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#Vtimezone> .
+    
+    _:g10     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#daylight> _:L35C21 .
+    
+    _:g10     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#standard> _:L46C21 .
+    
+    _:g10     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#tzid> "/softwarestudio.org/Olson_20011030_5/Europe/London" .
+    
+    _:g10     <http://www.w3.org/2002/12/cal/prod/Apple_Comp_628d9d8459c556fa#location> "Europe/London" .
+    
+    _:L21C29     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#duration> "PT1H" .
+    
+    _:L23C30     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#calAddress> <mailto:pldms@mac.com> .
+    
+    _:L23C30     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#cn> "Damian Steer" .
+    
+    _:L35C21     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#dtstart> _:L36C24 .
+    
+    _:L35C21     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#rrule> _:L38C22 .
+    
+    _:L35C21     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#tzname> "BST" .
+    
+    _:L35C21     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#tzoffsetfrom> "+0000" .
+    
+    _:L35C21     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#tzoffsetto> "+0100" .
+    
+    _:L36C24     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#dateTime> "1970-03-29T01:00:00" .
+    
+    _:L38C22     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#byday> "-1SU" .
+    
+    _:L38C22     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#bymonth> "3" .
+    
+    _:L38C22     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#freq> "YEARLY" .
+    
+    _:L38C22     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#interval> "1" .
+    
+    _:L46C21     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#dtstart> _:L47C24 .
+    
+    _:L46C21     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#rrule> _:L49C22 .
+    
+    _:L46C21     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#tzname> "GMT" .
+    
+    _:L46C21     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#tzoffsetfrom> "+0100" .
+    
+    _:L46C21     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#tzoffsetto> "+0000" .
+    
+    _:L47C24     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#dateTime> "1970-10-25T02:00:00" .
+    
+    _:L49C22     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#byday> "-1SU" .
+    
+    _:L49C22     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#bymonth> "10" .
+    
+    _:L49C22     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#freq> "YEARLY" .
+    
+    _:L49C22     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#interval> "1" .
+    
+    _:g32     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#calAddress> <mailto:timbl@w3.org> .
+    
+    _:g32     <file:/devel/WWW/2000/10/swap/test/delta/ical/ical-ifp.n3#cn> "Tim Berners-Lee" .
+    

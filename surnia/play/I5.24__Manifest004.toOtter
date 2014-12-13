@@ -1,0 +1,58 @@
+set(auto).
+clear(sigint_interact).
+%include('otter/owlAx.otter').
+formula_list(usable).
+rdf(owl_Thing, rdf_type, owl_Class).
+rdf(s, rdf_type, owl_Restriction).
+rdf(ns15_prop, rdf_type, owl_ObjectProperty).
+rdf(s, owl_onProperty, ns15_prop).
+rdf(ns15_A, rdf_type, owl_Class).
+rdf(s, owl_allValuesFrom, ns15_A).
+rdf(owl_Thing, rdfs_subClassOf, s).
+
+ -((rdf(ns15_prop, rdf_type, owl_ObjectProperty) & rdf(ns15_A, rdf_type, owl_Class)) & rdf(ns15_prop, rdfs_range, ns15_A)).
+
+%(all X (rdf(X, rdf_type, owl_Thing))).
+
+% % try this kind of thing....?
+%all RESTRICTION PROPERTY BASECLASS (
+%   ( rdf(RESTRICTION, owl_onProperty, PROPERTY) &
+%     rdf(RESTRICTION, owl_allValuesFrom, BASECLASS) )
+%   -> 
+%   restAVF(CLASS, PROPERTY, BASECLASS)
+%).
+%% infer the class part...
+
+
+
+all RESTRICTION PROPERTY BASECLASS INST VALUE Q (
+   ( rdf(RESTRICTION, rdf_type, owl_Restriction) &
+     rdf(RESTRICTION, owl_onProperty, PROPERTY) &
+     rdf(RESTRICTION, owl_allValuesFrom, BASECLASS) &
+     rdf(INST, rdf_type, Q) &
+     rdf(Q, rdfs_subClassOf, RESTRICTION))
+   ->
+   ( rdf(INST, PROPERTY, VALUE)
+     <->
+     rdf(VALUE, rdf_type, BASECLASS)  )
+).
+
+
+all C1 C2 (
+   rdf(C1, rdfs_subClassOf, C2)
+   <->     % <- needed for equivalentClass/Manifest002
+   (all INST (
+     rdf(INST, rdf_type, C1) -> rdf(INST, rdf_type, C2) 
+   ))
+).
+
+all PRED CLASS (
+   rdf(PRED, rdfs_range, CLASS) 
+   <->      % maybe needed for FunctionalProperty004
+   (all SUBJ OBJ (
+     rdf(SUBJ, PRED, OBJ) -> rdf(OBJ, rdf_type, CLASS)
+   ))
+).
+
+
+end_of_list.

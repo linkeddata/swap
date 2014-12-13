@@ -1,0 +1,20 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+
+@prefix : <#>.
+@prefix qu: <#>.
+
+# Although this works, proof of this can't be checked:
+# {{ []  a :foo } log:includes { [] a :foo }} => { :test1 a :SUCCESS }.
+
+# because....the following sort of thiung doesn't work:
+
+{  {{[] a :foo}=> {:a :b :c}} log:includes  {{[] a :foo}=> {:a :b :c}} }
+=> {:test2 a :SUCCESS}.
+
+
+# because log:includes doesn't unify down many levels, we rely on
+# statement cannonicalization which is not extended to arbitrary
+# identifiers of bnodes. (graph isomorphism problem). On the someday pile.
+#
+# tbl 2002/12/30
+#ends

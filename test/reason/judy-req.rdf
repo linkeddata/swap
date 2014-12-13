@@ -1,0 +1,24 @@
+
+<!-- Processed by Id: cwm.py,v 1.176 2005/08/10 17:03:22 syosi Exp -->
+<!--     using base file:/Users/lkagal1/Research/rein/2005/09/rein/examples/judy-req.n3-->
+
+
+<rdf:RDF xmlns="http://dig.csail.mit.edu/2005/09/rein/network#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:rein="http://dig.csail.mit.edu/2005/09/rein/network#"
+    xmlns:session="http://redfoot.net/2005/session#">
+
+    <Request rdf:about="judy-req#req">
+        <access rdf:resource="http://dig.csail.mit.edu/2005/09/rein/examples/http-access#can-get"/>
+        <requester rdf:parseType="Resource">
+            <session:secret>judy-passwd</session:secret>
+        </requester>
+        <resource rdf:resource="http://demo.policyawareweb.org/images/group.jpg"/>
+        <rdfs:comment>Judy makes a request for http://demo.policyawareweb.org/images/group.jpg which was taken during AnnualMeeting which Judy attended. This is a valid request.</rdfs:comment>
+    </Request>
+
+    <rdf:Description rdf:about="http://demo.policyawareweb.org/images/group.jpg">
+        <policy rdf:resource="http://dig.csail.mit.edu/2005/09/rein/examples/troop42-policy.n3"/>
+    </rdf:Description>
+</rdf:RDF>

@@ -1,0 +1,84 @@
+#  n3
+#
+#  EXPERIMENTAL ONLY - NO GUARANTEE OR LIABILITY OF ANY SORT!!!
+#
+# N3 rules for 1040 and is schedules A and B
+#
+# Roughly transcribed from f1040.pdf alas not available in RDF.
+# Amounts are in US dollars.
+#
+# I guess the way to use this is to figure out which are non-calculated
+# fields for which one has no data, and assume they are zero.
+# The worst bit of tax data entry if the long list of questions to which the
+# answer i sno butr the question is very complicated.
+# It is easier to just decide, for every category of transaction in one's life,
+# where it figures in the tac form (if at all) and when all are accounted for, answer
+# "no" to the rest.
+#
+# @@ rules from W4
+#
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix string: <http://www.w3.org/2000/10/swap/string#>.
+@prefix math: <http://www.w3.org/2000/10/swap/math#>.
+
+
+@prefix form: <http://www.w3.org/2000/10/swap/pim/form#>.
+@prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#>.
+
+@prefix tf:   <http://www.w3.org/2000/10/swap/pim/f2002-1040#>.
+@prefix sa:   <http://www.w3.org/2000/10/swap/pim/f2002-1040-sa#>.
+@prefix sb:   <http://www.w3.org/2000/10/swap/pim/f2002-1040-sb#>.
+@prefix sc:   <http://www.w3.org/2000/10/swap/pim/f2002-1040-sc#>.
+@prefix sd:   <http://www.w3.org/2000/10/swap/pim/f2002-1040-sd#>.
+@prefix se:   <http://www.w3.org/2000/10/swap/pim/f2002-1040-se#>.
+
+@prefix : <#>.
+
+
+
+
+############################################################################
+
+# test data
+
+<imaginary.rdf> a form:Filing; form:form form:f2002-1040;
+	form:filer [ contact:firstName "Joe";
+		contact:lastname "Doe";
+		form:ssn "12-345-6789";
+		a form:selfDependent;
+		contact:partner :jane;
+		contact:occupationName "Form tester";
+		form:dependent :jane;
+		form:claimingSelf "1";
+		form:claimingSpouse "1";
+		form:numberOfDependentKids "2";
+		a tf:MarriedFilingJointly].
+:jane
+	contact:firstName "Jane";
+	contact:lastname "Doe";
+	form:ssn "12-345-6790".
+
+<imaginary.rdf>
+	tf:line7 "35000.00";
+	tf:line8a "0";
+	tf:line8b "0";
+	tf:line9 "0";
+	tf:line10 "0";
+	tf:line11 "0";
+	tf:line12 "0";
+	tf:line13 "0";
+	tf:line14 "0";
+	tf:line15a "0";	tf:line15b "0";
+	tf:line16a "0"; tf:line16b "0";
+	tf:line17 "0";
+	tf:line18 "0";
+	tf:line19 "0";
+	tf:line20 "0";
+	tf:line21 "0";   # 22 is calculated
+
+	tf:line23 "0";
+	tf:line24 "0".
+
+#ends

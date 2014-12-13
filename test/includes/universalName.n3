@@ -1,0 +1,24 @@
+# Test the builtins for getting at the variable lists
+#
+
+@prefix ex: <http://example.com/foo#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+
+{
+	@forAll :x, :y, :z. 
+	@forSome :u.
+        { :x  ex:foo :y } => { :x ex:bar [] }.
+        ex:Joe ex:married :u.
+#        ex:Joe ex:mother []; ex:father [].     Functionality not defined.
+ } a :TestFormula.
+
+
+{ } a :TestFormula.
+
+
+
+{ [a :TestFormula] log:universalVariableName ?STR }
+=> { ?STR a :UniversalVariableResut }.
+
+{ [a :TestFormula] log:existentialVariableName ?STR }
+=> { ?STR a :ExistentialVariableResut }.

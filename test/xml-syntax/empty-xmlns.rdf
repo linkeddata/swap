@@ -1,0 +1,6 @@
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns="http://example.org/#">
+<rdf:Description rdf:about="http://example.org/#p">
+ <q rdf:parseType="Literal"><p xmlns="">...</p></q>
+</rdf:Description>
+</rdf:RDF>

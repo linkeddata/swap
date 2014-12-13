@@ -1,0 +1,85 @@
+#Processed by Id: cwm.py,v 1.98 2002/07/24 02:31:38 timbl Exp 
+        #    using base file:/Users/timbl/Documents/2002/06/outlook/
+        
+#  Notation3 generation by
+#       notation3.py,v 1.111 2002/07/24 02:31:40 timbl Exp
+
+#   Base was: file:/Users/timbl/Documents/2002/06/outlook/
+     @prefix : <http://www.w3.org/2000/10/swap/pim/mso.n3#> .
+     @prefix dc: <http://purl.org/dc/elements/1.1/> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix r: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+     @prefix ss: <http://www.w3.org/2000/10/swap/util/sniffSchema#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+     @prefix util: <http://www.w3.org/2000/10/swap/util.n3#> .
+    
+   
+    
+    :AllDayEvent     a r:Property;
+         ss:label "AllDayEvent";
+         ss:rangeIntersects s:Literal .
+    
+    :BusyStatus     a r:Property;
+         ss:label "BusyStatus";
+         ss:rangeIntersects s:Literal .
+    
+    :CreationTime     a r:Property;
+         ss:label "CreationTime";
+         ss:rangeIntersects s:Literal .
+    
+    :Duration     a r:Property;
+         ss:label "Duration";
+         ss:rangeIntersects s:Literal .
+    
+    :End     a r:Property;
+         ss:label "End";
+         ss:rangeIntersects s:Literal .
+    
+    :IsRecurring     a r:Property;
+         ss:label "IsRecurring";
+         ss:rangeIntersects s:Literal .
+    
+    :LastModificationTime     a r:Property;
+         ss:label "LastModificationTime";
+         ss:rangeIntersects s:Literal .
+    
+    :MeetingStatus     a r:Property;
+         ss:label "MeetingStatus";
+         ss:rangeIntersects s:Literal .
+    
+    :Organizer     a r:Property;
+         ss:label "Organizer";
+         ss:rangeIntersects s:Literal .
+    
+    :RecurrenceState     a r:Property;
+         ss:label "RecurrenceState";
+         ss:rangeIntersects s:Literal .
+    
+    :ReminderMinutesBeforeStart     a r:Property;
+         ss:label "ReminderMinutesBeforeStart";
+         ss:rangeIntersects s:Literal .
+    
+    :ReminderPlaySound     a r:Property;
+         ss:label "ReminderPlaySound";
+         ss:rangeIntersects s:Literal .
+    
+    :ReminderSet     a r:Property;
+         ss:label "ReminderSet";
+         ss:rangeIntersects s:Literal .
+    
+    :ResponseRequested     a r:Property;
+         ss:label "ResponseRequested";
+         ss:rangeIntersects s:Literal .
+    
+    :ResponseStatus     a r:Property;
+         ss:label "ResponseStatus";
+         ss:rangeIntersects s:Literal .
+    
+    :Subject     a r:Property;
+         ss:label "Subject";
+         ss:rangeIntersects s:Literal .
+    
+    
+#ENDS

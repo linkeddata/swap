@@ -1,0 +1,35 @@
+<html>
+<head>
+<script>
+var $wnd = parent;
+var $doc = $wnd.document;
+var $moduleName = "%(app_name)s";
+</script>
+</head>
+<body onload="if (parent && parent.__pygwt_webModeFrameOnLoad) parent.__pygwt_webModeFrameOnLoad(window, '%(app_name)s');">
+<font face='arial' size='-1'>This script is part of module</font> <code>%(app_name)s</code>
+<script><!--
+
+%(app_libs)s
+%(app_code)s
+
+function run() {
+    app = new %(app_name)s();
+    app.onModuleLoad();
+}
+
+function pygwtOnLoad(onLoadError, name) {
+    if (onLoadError)
+        try {
+            run();
+        } catch (exception) {
+            onLoadError(name);
+        }
+    else {
+            run();
+    }
+}
+
+--></script>
+</body>
+</html>

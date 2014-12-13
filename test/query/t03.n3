@@ -1,0 +1,25 @@
+# see <http://rdfstore.sourceforge.net/2002/06/24/rdf-query/query-use-cases.html>.
+# Use case data retreival
+
+#
+#  cwm t03.n3 --think
+#
+@prefix this: <#>.
+@prefix con: <http://www.w3.org/2000/10/swap/pim/contact#>.
+@prefix vcard: <http://www.w3.org/2001/vcard-rdf/3.0#>.
+@prefix : <http://www.w3.org/2001/vcard-rdf/3.0#>.
+
+# @@ Test case is not schema-valid - see vcard schema.
+
+{[] :Family "Smith"; :Given ?g } => { ?g a this:SmithFamilyMember }.
+
+# test data:
+
+[] :Given "Andrew"; 	:Family "Other".
+[] :Given "Jane"; 	:Family "Doe".
+[] :Given "Jane"; 	:Family "Smith".
+[] :Given "John"; 	:Family "Smith".
+[] :Given "Marmaduke"; 	:Family "Smith".
+[] :Given "Smith"; 	:Family "Robinson".
+
+#ends

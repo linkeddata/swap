@@ -1,0 +1,51 @@
+     @prefix : <http://www.w3.org/2000/10/swap/reason#> .
+    
+    this     <http://www.w3.org/2000/10/swap/log#forSome> <#_g0> .
+      [      a :Conjunction,
+                    :Proof;
+             :component  [
+                 a :Extraction;
+                 :because  [
+                     a :Inference;
+                     :evidence  [
+                         a :Extraction;
+                         :because <#_g0>;
+                         :gives {<reason/t3.n3#a>     <reason/t3.n3#b> <reason/t3.n3#c> .
+                        } ];
+                     :rule  [
+                         a :Extraction;
+                         :because <#_g0>;
+                         :gives {{
+                            <reason/t3.n3#a>     <reason/t3.n3#b> <reason/t3.n3#c> .
+                            
+                            }     <http://www.w3.org/2000/10/swap/log#implies> {<reason/t3.n3#a2>     <reason/t3.n3#b2> <reason/t3.n3#c2> .
+                            } .
+                        } ] ];
+                 :gives {<reason/t3.n3#a2>     <reason/t3.n3#b2> <reason/t3.n3#c2> .
+                } ],
+                     [
+                 a :Extraction;
+                 :because <#_g0>;
+                 :gives {<reason/t3.n3#a>     <reason/t3.n3#b> <reason/t3.n3#c> .
+                } ],
+                     [
+                 a :Extraction;
+                 :because <#_g0>;
+                 :gives {{
+                    <reason/t3.n3#a>     <reason/t3.n3#b> <reason/t3.n3#c> .
+                    
+                    }     <http://www.w3.org/2000/10/swap/log#implies> {<reason/t3.n3#a2>     <reason/t3.n3#b2> <reason/t3.n3#c2> .
+                    } .
+                } ];
+             :gives {<reason/t3.n3#a>     <reason/t3.n3#b> <reason/t3.n3#c> .
+            <reason/t3.n3#a2>     <reason/t3.n3#b2> <reason/t3.n3#c2> .
+            {
+                <reason/t3.n3#a>     <reason/t3.n3#b> <reason/t3.n3#c> .
+                
+                }     <http://www.w3.org/2000/10/swap/log#implies> {<reason/t3.n3#a2>     <reason/t3.n3#b2> <reason/t3.n3#c2> .
+                } .
+            } ].
+    
+    <#_g0>     a :Parsing;
+         :source <reason/t3.n3> .
+    

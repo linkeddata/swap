@@ -1,0 +1,10 @@
+@prefix  con: <http://example.com/contact#>.
+
+:joe  con:firstName "Joe";
+      con:age 33;
+      con:parent  :sarah, :tom;
+      con:address [
+            con:street "19 Accacia Ave";
+            con:city   "Happytown USA"];
+      con:children  (:alan   :bert).
+

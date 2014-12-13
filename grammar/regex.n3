@@ -1,0 +1,68 @@
+@keywords a, of, is .
+
+@prefix   : <http://www.w3.org/2000/10/swap/grammar/regex#> .
+@prefix re: <http://www.w3.org/2000/10/swap/grammar/regex#> .
+
+## standard namespaces
+@prefix  rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix  rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix  xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix  owl:     <http://www.w3.org/2002/07/owl#> .
+
+
+:Regex a owl:Class .
+
+re:alt rdfs:domain re:Regex.
+re:seq rdfs:domain re:Regex.
+re:matches rdfs:domain re:Regex.
+re:diff rdfs:domain re:Regex.
+re:opt rdfs:domain re:Regex.
+re:rep rdfs:domain re:Regex.
+re:star rdfs:domain re:Regex.
+
+# stuff DanC has yet to integrate with Yosi's stuff
+:MatchCounter a owl:Class;
+    rdfs:subClassOf :Modifier .
+
+:GreedyMatchCounter a owl:Class;
+    rdfs:subClassOf :MatchCounter .
+
+:NonGreedyMatchCounter a owl:Class;
+    rdfs:subClassOf :MatchCounter .
+
+:minMatches a owl:FunctionalProperty;
+    rdfs:domain :MatchCounter;
+    rdfs:range xsd:nonNegativeInteger .
+
+:maxMatches a owl:FunctionalProperty;
+    rdfs:domain :MatchCounter;
+    rdfs:range xsd:nonNegativeInteger .
+
+:preciseMatches a owl:FunctionalProperty;
+    rdfs:subPropertyOf :maxMatches, :minMatches .
+
+:complement rdfs:subPropertyOf :rdef;
+    rdfs:domain :CharClass;
+    rdfs:range  :CharClass .
+
+:lookAhead rdfs:subPropertyOf :rdef;
+    rdfs:domain :Regex;
+    rdfs:range  :Regex .
+
+:negativeLookAhead rdfs:subPropertyOf :rdef;
+    rdfs:domain :Regex;
+    rdfs:range  :Regex .
+
+:lookBehind rdfs:subPropertyOf :rdef;
+    rdfs:domain :Regex;
+    rdfs:range  :Regex .
+
+:negativeLookBehind rdfs:subPropertyOf :rdef;
+    rdfs:domain :Regex;
+    rdfs:range  :Regex .
+
+    :matches     a owl:InverseFunctionalProperty;
+         rdfs:label "matches";
+         rdfs:range rdfs:Literal;
+         rdfs:comment """ [ :matches "x|y"] is the language of strings that matches the regex "x|y". """ .
+    

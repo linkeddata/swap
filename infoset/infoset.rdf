@@ -1,0 +1,405 @@
+
+<!-- Processed by Id: cwm.py,v 1.44 2001/05/19 03:39:00 timbl Exp -->
+<!--     using base file:/cygdrive/c/devel/WWW/2000/10/swap/infoset/-->
+
+
+<rdf:RDF xmlns:dot="http://www.w3.org/2001/02pd/gv#"
+    xmlns:doc="http://www.w3.org/2000/10/swap/pim/doc.n3#"
+    xmlns:v="http://www.w3.org/2001/04/roadmap/var#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns="http://www.w3.org/2001/04/infoset#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:log="http://www.w3.org/2000/10/swap/log#">
+
+    <dot:EdgeProperty rdf:about="http://www.w3.org/2000/01/rdf-schema#subPropertyOf">
+        <dot:color>khaki2</dot:color>
+    </dot:EdgeProperty>
+
+    <dot:EdgeProperty rdf:about="http://www.w3.org/2000/01/rdf-schema#subClassOf">
+        <dot:color>skyblue2</dot:color>
+    </dot:EdgeProperty>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/01/rdf-schema#Literal">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#Literal"/>
+    </rdf:Description>
+
+    <dot:EdgeProperty rdf:about="http://www.w3.org/2000/01/rdf-schema#range">
+        <dot:color>green1</dot:color>
+        <dot:style>bold</dot:style>
+    </dot:EdgeProperty>
+
+    <dot:EdgeProperty rdf:about="http://www.w3.org/2000/01/rdf-schema#domain">
+        <dot:color>red</dot:color>
+        <dot:style>bold</dot:style>
+    </dot:EdgeProperty>
+
+    <rdf:Description rdf:about="#_formula">
+        <log:forSome rdf:resource="style.n3#_g0"/>
+        <log:forSome rdf:resource="style.n3#_g1"/>
+        <log:forSome rdf:resource="style.n3#_g2"/>
+        <log:forSome rdf:resource="style.n3#_g3"/>
+        <log:forSome rdf:resource="style.n3#_g4"/>
+        <log:forSome rdf:resource="style.n3#_g5"/>
+        <log:forSome rdf:resource="style.n3#_g6"/>
+        <log:forSome rdf:resource="style.n3#_g7"/>
+        <log:forSome rdf:resource="style.n3#_g8"/>
+        <log:forSome rdf:resource="style.n3#_g9"/>
+        <log:forSome rdf:resource="style.n3#_g10"/>
+        <log:forSome rdf:resource="style.n3#_g11"/>
+        <log:forSome rdf:resource="style.n3#_g12"/>
+        <log:forSome rdf:resource="style.n3#_g13"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/roadmap/var#theGraph">
+        <dot:label>XML Infoset $Date$</dot:label>
+        <dot:rankdir>LR</dot:rankdir>
+    </rdf:Description>
+
+    <rdfs:Property rdf:about="http://www.w3.org/2001/04/infoset#children">
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#InfoItemSeq"/>
+    </rdfs:Property>
+
+    <rdfs:Property rdf:about="http://www.w3.org/2001/04/infoset#notations">
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Document"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#NotationSet"/>
+    </rdfs:Property>
+
+    <rdfs:Property rdf:about="http://www.w3.org/2001/04/infoset#attributes">
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Element"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#AttributeSet"/>
+    </rdfs:Property>
+
+    <rdfs:Property rdf:about="http://www.w3.org/2001/04/infoset#notationName">
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#UnparsedEntity"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#Literal"/>
+    </rdfs:Property>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2001/04/infoset#InfoItemSeq">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#References"/>
+    </rdfs:Class>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2001/04/infoset#References">
+    </rdfs:Class>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2001/04/infoset#Boolean">
+    </rdfs:Class>
+
+    <rdfs:Property rdf:about="http://www.w3.org/2001/04/infoset#prefix">
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#Literal"/>
+    </rdfs:Property>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2001/04/infoset#InfoItemSet">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag"/>
+    </rdfs:Class>
+
+    <rdfs:Property rdf:about="http://www.w3.org/2001/04/infoset#publicIdentifier">
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#Literal"/>
+    </rdfs:Property>
+
+    <AttributeType rdf:about="http://www.w3.org/2001/04/infoset#AttributeType_ENUMERATION">
+    </AttributeType>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2001/04/infoset#NotationSet">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#InfoItemSet"/>
+    </rdfs:Class>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2001/04/infoset#UnparsedEntity">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+    </rdfs:Class>
+
+    <rdfs:Property rdf:about="http://www.w3.org/2001/04/infoset#baseURI">
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#Literal"/>
+    </rdfs:Property>
+
+    <rdfs:Property rdf:about="http://www.w3.org/2001/04/infoset#standalone">
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Document"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#Standalone"/>
+    </rdfs:Property>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2001/04/infoset#ProcessingInstruction">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+    </rdfs:Class>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2001/04/infoset#Attribute">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+    </rdfs:Class>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2001/04/infoset#UnparsedEntitySet">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#InfoItemSet"/>
+    </rdfs:Class>
+
+    <rdfs:Property rdf:about="http://www.w3.org/2001/04/infoset#systemIdentifier">
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#Literal"/>
+    </rdfs:Property>
+
+    <AttributeType rdf:about="http://www.w3.org/2001/04/infoset#AttributeType_CDATA">
+    </AttributeType>
+
+    <AttributeType rdf:about="http://www.w3.org/2001/04/infoset#AttributeType_IDREFS">
+    </AttributeType>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2001/04/infoset#InfoItem">
+    </rdfs:Class>
+
+    <rdfs:Property rdf:about="http://www.w3.org/2001/04/infoset#normalizedValue">
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Attribute"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdfs:Property>
+
+    <rdfs:Property rdf:about="http://www.w3.org/2001/04/infoset#namespaceAttributes">
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Element"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#AttributeSet"/>
+    </rdfs:Property>
+
+    <AttributeType rdf:about="http://www.w3.org/2001/04/infoset#AttributeType_NMTOKENS">
+    </AttributeType>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2001/04/infoset#Namespace">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+    </rdfs:Class>
+
+    <rdfs:Property rdf:about="http://www.w3.org/2001/04/infoset#allDeclarationsProcessed">
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Document"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#Boolean"/>
+    </rdfs:Property>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2001/04/infoset#Element">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+    </rdfs:Class>
+
+    <Boolean rdf:about="http://www.w3.org/2001/04/infoset#Boolean_false">
+    </Boolean>
+
+    <AttributeType rdf:about="http://www.w3.org/2001/04/infoset#AttributeType_ENTITIES">
+    </AttributeType>
+
+    <Boolean rdf:about="http://www.w3.org/2001/04/infoset#Boolean_true">
+    </Boolean>
+
+    <rdfs:Property rdf:about="http://www.w3.org/2001/04/infoset#notation">
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#UnparsedEntity"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#Notation"/>
+    </rdfs:Property>
+
+    <rdfs:Property rdf:about="http://www.w3.org/2001/04/infoset#target">
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#ProcessingInstruction"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdfs:Property>
+
+    <rdfs:Property rdf:about="http://www.w3.org/2001/04/infoset#elementContentWhitespace">
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Character"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#Boolean"/>
+    </rdfs:Property>
+
+    <Standalone rdf:about="http://www.w3.org/2001/04/infoset#Standalone_yes">
+    </Standalone>
+
+    <rdfs:Property rdf:about="http://www.w3.org/2001/04/infoset#name">
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdfs:Property>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2001/04/infoset#Integer">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdfs:Class>
+
+    <rdfs:Property rdf:about="http://www.w3.org/2001/04/infoset#documentElement">
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Document"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#Element"/>
+    </rdfs:Property>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2001/04/infoset#AttributeType">
+    </rdfs:Class>
+
+    <rdfs:Property rdf:about="http://www.w3.org/2001/04/infoset#characterEncodingScheme">
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Document"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdfs:Property>
+
+    <rdfs:Property rdf:about="http://www.w3.org/2001/04/infoset#version">
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Document"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#Literal"/>
+    </rdfs:Property>
+
+    <rdfs:Property rdf:about="http://www.w3.org/2001/04/infoset#content">
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdfs:Property>
+
+    <AttributeType rdf:about="http://www.w3.org/2001/04/infoset#AttributeType_NOTATION">
+    </AttributeType>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2001/04/infoset#NoValue">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#AttributeType"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#Literal"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#Boolean"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#Standalone"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#Notation"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#References"/>
+    </rdfs:Class>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2001/04/infoset#NamespaceSet">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#InfoItemSet"/>
+    </rdfs:Class>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2001/04/infoset#AttributeSet">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#InfoItemSet"/>
+    </rdfs:Class>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2001/04/infoset#Notation">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+    </rdfs:Class>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2001/04/infoset#Comment">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+    </rdfs:Class>
+
+    <Standalone rdf:about="http://www.w3.org/2001/04/infoset#Standalone_no">
+    </Standalone>
+
+    <rdfs:Property rdf:about="http://www.w3.org/2001/04/infoset#ownerElement">
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Attribute"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#Element"/>
+    </rdfs:Property>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2001/04/infoset#UnexpandedEntityReference">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+    </rdfs:Class>
+
+    <Unknown rdf:about="http://www.w3.org/2001/04/infoset#Unknown_unknown">
+    </Unknown>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2001/04/infoset#Document">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+    </rdfs:Class>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2001/04/infoset#DocumentTypeDeclaration">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+    </rdfs:Class>
+
+    <rdfs:Property rdf:about="http://www.w3.org/2001/04/infoset#inScopeNamespaces">
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Element"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#NamespaceSet"/>
+    </rdfs:Property>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2001/04/infoset#Standalone">
+    </rdfs:Class>
+
+    <rdfs:Property rdf:about="http://www.w3.org/2001/04/infoset#specified">
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Attribute"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#Boolean"/>
+    </rdfs:Property>
+
+    <rdfs:Property rdf:about="http://www.w3.org/2001/04/infoset#attributeType">
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Attribute"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#AttributeType"/>
+    </rdfs:Property>
+
+    <rdfs:Property rdf:about="http://www.w3.org/2001/04/infoset#references">
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Attribute"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#References"/>
+    </rdfs:Property>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2001/04/infoset#Literal">
+    </rdfs:Class>
+
+    <rdfs:Property rdf:about="http://www.w3.org/2001/04/infoset#declarationBaseURI">
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#Literal"/>
+    </rdfs:Property>
+
+    <AttributeType rdf:about="http://www.w3.org/2001/04/infoset#AttributeType_ID">
+    </AttributeType>
+
+    <AttributeType rdf:about="http://www.w3.org/2001/04/infoset#AttributeType_IDREF">
+    </AttributeType>
+
+    <AttributeType rdf:about="http://www.w3.org/2001/04/infoset#AttributeType_NMTOKEN">
+    </AttributeType>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2001/04/infoset#Character">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+    </rdfs:Class>
+
+    <rdfs:Property rdf:about="http://www.w3.org/2001/04/infoset#localName">
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdfs:Property>
+
+    <AttributeType rdf:about="http://www.w3.org/2001/04/infoset#AttributeType_ENTITY">
+    </AttributeType>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2001/04/infoset#Unknown">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#AttributeType"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#Literal"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#Boolean"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#Notation"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#References"/>
+    </rdfs:Class>
+
+    <rdfs:Property rdf:about="http://www.w3.org/2001/04/infoset#characterCode">
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Character"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#Integer"/>
+    </rdfs:Property>
+
+    <rdfs:Property rdf:about="http://www.w3.org/2001/04/infoset#parent">
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+    </rdfs:Property>
+
+    <rdfs:Property rdf:about="http://www.w3.org/2001/04/infoset#unparsedEntities">
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Document"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#UnparsedEntitySet"/>
+    </rdfs:Property>
+
+    <Unknown rdf:about="http://www.w3.org/2001/04/infoset#NoValue_noValue">
+    </Unknown>
+
+    <rdfs:Property rdf:about="http://www.w3.org/2001/04/infoset#namespaceName">
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#Literal"/>
+    </rdfs:Property>
+
+    <rdf:Description rdf:about="style.n3">
+        <log:forAll rdf:resource="http://www.w3.org/2001/04/roadmap/var#n1"/>
+        <log:forAll rdf:resource="http://www.w3.org/2001/04/roadmap/var#n2"/>
+        <log:forAll rdf:resource="http://www.w3.org/2001/04/roadmap/var#p"/>
+        <log:forAll rdf:resource="http://www.w3.org/2001/04/roadmap/var#s"/>
+        <doc:cvsversion>$Id$</doc:cvsversion>
+        <dot:digraph rdf:resource="http://www.w3.org/2001/04/roadmap/var#theGraph"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="style.n3#_g0">
+        <log:implies rdf:resource="style.n3#_g1"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="style.n3#_g6">
+        <log:implies rdf:resource="style.n3#_g7"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="style.n3#_g4">
+        <log:implies rdf:resource="style.n3#_g5"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="style.n3#_g8">
+        <log:implies rdf:resource="style.n3#_g9"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="style.n3#_g12">
+        <log:implies rdf:resource="style.n3#_g13"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="style.n3#_g10">
+        <log:implies rdf:resource="style.n3#_g11"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="style.n3#_g2">
+        <log:implies rdf:resource="style.n3#_g3"/>
+    </rdf:Description>
+</rdf:RDF>

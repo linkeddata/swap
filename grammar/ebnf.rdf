@@ -1,0 +1,67 @@
+
+<!-- Processed by Id: cwm.py,v 1.190 2006/08/09 23:20:42 syosi Exp -->
+<!--     using base file:///home/connolly/w3ccvs/WWW/2000/10/swap/grammar/ebnf.n3-->
+
+
+<rdf:RDF xmlns="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:ebnf="http://www.w3.org/2000/10/swap/grammar/ebnf#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+
+    <rdf:Description rdf:about="">
+        <seeAlso rdf:resource="ebnf2bnf"/>
+        <seeAlso rdf:resource="ebnf2bnf.n3"/>
+        <seeAlso rdf:resource="ebnf2turtle.py"/>
+        <seeAlso rdf:resource="http://c2.com/cgi/wiki?TheDragonBook"/>
+        <seeAlso rdf:resource="http://en.wikipedia.org/wiki/Compilers:_Principles,_Techniques,_and_Tools"/>
+        <seeAlso rdf:resource="http://en.wikipedia.org/wiki/Extended_Backus-Naur_form"/>
+    </rdf:Description>
+
+    <owl:InverseFunctionalProperty rdf:about="http://www.w3.org/2000/10/swap/grammar/ebnf#alt">
+        <comment>read {X :alt (Y Z)]} as: an X is either a Y or a Z.</comment>
+        <label>alt</label>
+    </owl:InverseFunctionalProperty>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/ebnf#empty">
+        <comment>the empty sequence</comment>
+        <label>empty</label>
+        <ebnf:seq rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/ebnf#eof">
+        <label>EOF</label>
+    </rdf:Description>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/grammar/ebnf#nonTerminal">
+        <comment>relates grammatical symbol to a language</comment>
+        <label>non terminal</label>
+    </rdf:Property>
+
+    <owl:InverseFunctionalProperty rdf:about="http://www.w3.org/2000/10/swap/grammar/ebnf#opt">
+        <comment>[ :opt X] is an optional X,
+ i.e. zero or one X's.
+short for [ :alt ([ :seq ()] X)]</comment>
+        <label>opt</label>
+    </owl:InverseFunctionalProperty>
+
+    <owl:InverseFunctionalProperty rdf:about="http://www.w3.org/2000/10/swap/grammar/ebnf#plus">
+        <comment>[ :plus X] is one or more Xs.</comment>
+        <label>plus</label>
+    </owl:InverseFunctionalProperty>
+
+    <owl:InverseFunctionalProperty rdf:about="http://www.w3.org/2000/10/swap/grammar/ebnf#seq">
+        <comment>read {X :seq (Y Z)]} as: an X is a Y followed by a Z.</comment>
+        <label>seq</label>
+    </owl:InverseFunctionalProperty>
+
+    <owl:InverseFunctionalProperty rdf:about="http://www.w3.org/2000/10/swap/grammar/ebnf#star">
+        <comment>[ :star X] is zero or more Xs.</comment>
+        <label>star</label>
+    </owl:InverseFunctionalProperty>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/grammar/ebnf#terminal">
+        <comment>relates a language to one of its lexical tokens; i.e. a symbol in a lower-level language</comment>
+        <label>terminal</label>
+    </rdf:Property>
+</rdf:RDF>

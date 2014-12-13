@@ -1,0 +1,67 @@
+     @prefix : <reason/t4.n3#> .
+    @prefix foo: <#> .
+    @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    @prefix n3: <http://www.w3.org/2004/06/rei#> .
+    @prefix pr: <http://www.w3.org/2000/10/swap/reason#> .
+    
+     @forSome foo:_g0 .
+      [      a pr:Conjunction,
+                    pr:Proof;
+             pr:component  [
+                 a pr:Extraction;
+                 pr:because foo:_g0;
+                 pr:gives {:a     :b :c .
+                } ],
+                     [
+                 a pr:Extraction;
+                 pr:because foo:_g0;
+                 pr:gives { @forAll :x .
+                {
+                    :a     :b :x .
+                    
+                    }     log:implies {:x     :d :e .
+                    } .
+                } ],
+                     [
+                 a pr:Extraction;
+                 pr:because  [
+                     a pr:Inference;
+                     pr:binding  [
+                         pr:boundTo  [
+                             n3:uri "http://example.com/swap/test/reason/t4.n3#c" ];
+                         pr:variable  [
+                             n3:uri "http://example.com/swap/test/reason/t4.n3#x" ] ];
+                     pr:evidence  (
+                     [
+                             a pr:Extraction;
+                             pr:because foo:_g0;
+                             pr:gives {:a     :b :c .
+                            } ] );
+                     pr:rule  [
+                         a pr:Extraction;
+                         pr:because foo:_g0;
+                         pr:gives { @forAll :x .
+                        {
+                            :a     :b :x .
+                            
+                            }     log:implies {:x     :d :e .
+                            } .
+                        } ] ];
+                 pr:gives {:c     :d :e .
+                } ];
+             pr:gives { @forAll :x .
+            :a     :b :c .
+            :c     :d :e .
+            {
+                :a     :b :x .
+                
+                }     log:implies {:x     :d :e .
+                } .
+            } ].
+    
+    foo:_g0     a pr:Parsing;
+         pr:because  [
+             a pr:CommandLine;
+             pr:args "['../cwm.py', '--quiet', 'reason/t4.n3', '--think', '--base=foo', '--why']" ];
+         pr:source <reason/t4.n3> .
+    

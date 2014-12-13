@@ -1,0 +1,28 @@
+#  For expanding ABNF shorthand into plain old BNF
+#
+
+@prefix cfg: <http://www.w3.org/2000/10/swap/grammar/bnf#>.
+@prefix string: <http://www.w3.org/2000/10/swap/string#>.
+
+
+#  Axioms reducing the shortcut CFG terms to cfg:musBeOneSequence.
+
+{ ?x cfg:zeroOrMore ?y } => {?x cfg:mustBeOneSequence ( () (?y ?x) ) }.
+{ ?x cfg:oneOrMore ?y } => {?x cfg:mustBeOneSequence ( (?y [cfg:zeroOrMore ?y]) ) }.
+{ ?x cfg:zeroOrOne ?y } => {?x cfg:mustBeOneSequence ( () (?y) ) }.
+
+#  labelling of things which do not have explicit URIs:
+
+{ ?x cfg:zeroOrMore [ cfg:label ?y].
+	( ?y "_star" ) string:concatenation ?str } => { ?x cfg:label ?str }.
+
+{ ?x cfg:oneOrMore [ cfg:label ?y].
+	( ?y "_plus" ) string:concatenation ?str } => { ?x cfg:label ?str }.
+
+{ ?x cfg:zeroOrOne [ cfg:label ?y].
+	( ?y "_opt" ) string:concatenation ?str } => { ?x cfg:label ?str }.
+
+
+
+
+#ends

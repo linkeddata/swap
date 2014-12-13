@@ -1,0 +1,16 @@
+#testing nested lists for pycwmko converter
+#run this example (assuming you have pychinko on your PYTHONPATH) with --pythink option
+
+
+        @prefix : <http://cwmTest/>.
+
+        @prefix log: <http://www.w3.org/2000/10/swap/log#>.
+	  @prefix math: <http://www.w3.org/2000/10/swap/math#> .
+	  @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+
+	<http://cwmTest/john> <http://cwmTest/hasValue> ((1 2) 3 4).
+
+
+         {?z :hasValue ?x. ?x rdf:first ?y. ?y math:sum ?e} 
+         log:implies 
+          {<http://test> :has ?e}.

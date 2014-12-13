@@ -1,0 +1,16 @@
+
+        @prefix : <http://cwmTest/>.
+
+        @prefix log: <http://www.w3.org/2000/10/swap/log#>.
+	  @prefix math: <http://www.w3.org/2000/10/swap/math#> .
+	  @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+
+
+         { ?x :hasValue ?valX. ?y :hasValue ?valY.
+  		(?valX ?valY) math:sum ?z.
+	  ("http://"  ?x " + " ?y " = " ?z ) string:concatenation ?s.
+	} => { ?x a ?s }.
+
+
+:t1 :hasValue 3. 
+:t2 :hasValue 4.

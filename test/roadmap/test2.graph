@@ -1,0 +1,561 @@
+#Processed by Id: cwm.py,v 1.82 2001/11/15 22:11:23 timbl Exp 
+        #    using base file:/cygdrive/c/devel/WWW/2001/04/roadmap/sw.rdf
+        
+#  Notation3 generation by
+#       notation3.py,v 1.98 2001/11/15 22:11:24 timbl Exp
+
+#   Base was: file:/cygdrive/c/devel/WWW/2001/04/roadmap/sw.rdf
+     @prefix : <http://www.w3.org/2001/04/roadmap/w3c#> .
+     @prefix doc: <http://www.w3.org/2000/10/swap/pim/doc.n3#> .
+     @prefix dot: <http://www.w3.org/2001/02pd/gv#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix rm: <http://www.w3.org/2001/04/roadmap/vocab#> .
+     @prefix swws: <http://www.w3.org/2001/04/roadmap/swws#> .
+     @prefix u: <http://www.w3.org/2000/01/rdf-schema#> .
+     @prefix v: <http://www.w3.org/2001/04/roadmap/var#> .
+    
+      [      log:implies  [
+             ] ].
+    
+      [      log:implies  [
+             ] ].
+    
+      [      log:implies  [
+             ] ].
+    
+      [      log:implies  [
+             ] ].
+    
+      [      log:implies  [
+             ] ].
+    
+      [      log:implies  [
+             ] ].
+    
+      [      log:implies  [
+             ] ].
+    
+      [      log:implies  [
+             ] ].
+    
+    <style.n3>     doc:cvsversion "$Id$" .
+      [      log:implies  [
+             ] ].
+    
+      [      log:implies  [
+             ] ].
+    
+    <sw.n3>     doc:version "$Id$";
+         dot:digraph swws:theGraph .
+    
+    this     log:forAll swws:n1,
+                swws:n2,
+                swws:p,
+                swws:type,
+                v:n1,
+                v:n2,
+                v:p,
+                v:s .
+    
+    <w3c.n3>     doc:version "$Id$" .
+    
+    swws:k_current     a rm:current;
+         dot:color "gold1";
+         dot:label "current";
+         dot:style "filled" .
+    
+    swws:k_dep     a rm:current;
+         dot:color "gold1";
+         dot:label "X depends on this";
+         dot:style "filled" .
+    
+    swws:k_external     a rm:external;
+         dot:color "grey5";
+         dot:label "external";
+         dot:shape "plaintext" .
+    
+    swws:k_goal     a rm:goal;
+         dot:color "blue";
+         dot:label "Goal";
+         dot:shape "doublecircle" .
+    
+    swws:k_inf     a rm:current;
+         dot:color "gold1";
+         dot:label "X influenced by this";
+         dot:style "filled" .
+    
+    swws:k_planned     a rm:planned;
+         dot:color "lightskyblue1";
+         dot:label "planned";
+         dot:style "filled" .
+    
+    swws:k_program     a rm:current,
+                rm:program;
+         dot:color "gold1";
+         dot:label "LEAD\\nsoftware";
+         dot:shape "box";
+         dot:style "filled" .
+    
+    swws:k_proto     a rm:current,
+                rm:program;
+         dot:color "gold1";
+         dot:label "this prototypes X";
+         dot:shape "box";
+         dot:style "filled";
+         rm:prototypes swws:k_something .
+    
+    swws:k_prototyped     a rm:prototyped;
+         dot:color "lawngreen";
+         dot:label "prototyped";
+         dot:style "filled" .
+    
+    swws:k_something     a rm:current;
+         dot:color "gold1";
+         dot:label "the\\nspec X";
+         dot:style "filled";
+         rm:influencedBy swws:k_inf;
+         rm:needs swws:k_dep .
+    
+#    swws:key     dot:hasNode swws:k_current,
+#                swws:k_dep,
+#                swws:k_external,
+#                swws:k_goal,
+#                swws:k_inf,
+#                swws:k_planned,
+#                swws:k_program,
+#                swws:k_proto,
+#                swws:k_prototyped,
+#                swws:k_something;
+#         dot:label "Key: arrows mean HOW?, reverse of arrow WHY? " .
+    
+    swws:theGraph     dot:hasNode swws:k_dep,
+                swws:k_inf,
+              swws:k_something,
+                :agents,
+#               :annotea,
+#                :attachments,
+#                :busmodel,
+#                :xmlquery,
+                 :xpointer;
+         dot:label "W3C Semantic Web Planned Components $Date$";
+         dot:subgraph swws:key;
+         swws:likes rm:current,
+                rm:external,
+                rm:goal,
+                rm:planned,
+                rm:prototyped,
+                rm:subgoal .
+    
+#    rm:influencedBy     a dot:EdgeProperty;
+#         dot:color "red";
+#         dot:style "bold" .
+    
+    rm:needs     a dot:EdgeProperty;
+         dot:color "black" .
+    
+    rm:prototypes     dot:color "green1";
+         dot:style "bold" .
+    
+    rm:protypes     a dot:EdgeProperty .
+    
+    :agents     a rm:goal;
+         dot:color "blue";
+         dot:label "Agents";
+         dot:shape "doublecircle";
+         rm:needs :logic,
+                :rdfquery,
+                :rules,
+                :trust .
+    
+    :annotea     a rm:current,
+                rm:program;
+         dot:color "gold1";
+         dot:label "Annotea";
+         dot:shape "box";
+         dot:style "filled";
+         rm:prototypes :rdfquery,
+                :xlink,
+                :xpointer .
+    
+    :attachments     a rm:planned;
+         dot:color "lightskyblue1";
+         dot:label "Binary\\nattachments";
+         dot:style "filled" .
+    
+    :busapp     a rm:goal;
+         dot:color "blue";
+         dot:label "Inter-\\nBusiness";
+         dot:shape "doublecircle";
+         rm:needs :busmodel,
+                :directory,
+                :flow,
+                :xmlp2 .
+    
+    :busmodel     a rm:external;
+         dot:color "grey5";
+         dot:label "Model actual\\nbusiness processes";
+         dot:shape "plaintext";
+         rm:influencedBy :ebXML,
+                :uddi .
+    
+    :cannon     a rm:current;
+         dot:color "gold1";
+         dot:label "XML Cannonicalization";
+         dot:style "filled" .
+    
+    :ccpp     a rm:current;
+         dot:color "gold1";
+         dot:label "CC/PP";
+         dot:style "filled" .
+    
+    :creative     a rm:goal;
+         dot:color "blue";
+         dot:label "Creative\\nSpace";
+         dot:shape "doublecircle";
+         rm:needs :annotea,
+                :jigsaw .
+    
+    :di     a rm:current;
+         dot:color "gold1";
+         dot:label "Device\\nIndependence";
+         dot:style "filled";
+         rm:needs :ccpp,
+                :sep .
+    
+    :directory     a rm:planned;
+         dot:color "lightskyblue1";
+         dot:label "service\\ndirectory\\nservice";
+         dot:style "filled";
+         rm:needs :rdfquery,
+                :wsdv .
+    
+    :dns     a rm:external;
+         dot:color "grey5";
+         dot:label "DNS";
+         dot:shape "plaintext";
+         rm:needs :ip .
+    
+    :docs     a rm:goal;
+         dot:color "blue";
+         dot:label "document\\nprocessing";
+         dot:shape "doublecircle";
+         rm:needs :xml2 .
+    
+    :dpo     a rm:external;
+         dot:color "grey5";
+         dot:label "DAML+OIL";
+         dot:shape "plaintext" .
+    
+    :ebXML     a rm:external;
+         dot:color "grey5";
+         dot:label "ebXML";
+         dot:shape "plaintext" .
+    
+    :encryption     a rm:current;
+         dot:color "gold1";
+         dot:label "XML\\nEncryption";
+         dot:style "filled" .
+    
+    :flow     a rm:planned;
+         dot:color "lightskyblue1";
+         dot:label "Flow\\n(paper trail)";
+         dot:style "filled";
+         rm:influencedBy :picalc .
+    
+    :fo     a rm:current;
+         dot:color "gold1";
+         dot:label "Formatting\\nobjects";
+         dot:style "filled" .
+    
+    :fullpotential     a rm:goal;
+         dot:color "blue";
+         dot:label "Full\\nPotential\\nOf The\\nWeb";
+         dot:shape "doublecircle";
+         rm:needs :agents,
+                :busapp,
+                :creative,
+                :docs,
+                :intapp,
+                :social,
+                :ui,
+                :uni .
+    
+    :i18n     a rm:current;
+         dot:color "gold1";
+         dot:label "I18n";
+         dot:style "filled";
+         rm:needs :i18n_many .
+    
+    :i18n_many     a rm:external;
+         dot:color "grey5";
+         dot:label "many...";
+         dot:shape "plaintext" .
+    
+    :intapp     a rm:goal;
+         dot:color "blue";
+         dot:label "Intranet\\napp2app";
+         dot:shape "doublecircle";
+         rm:needs :attachments,
+                :busmodel,
+                :flow,
+                :xmlp .
+    
+    :ip     a rm:external;
+         dot:color "grey5";
+         dot:label "IP";
+         dot:shape "plaintext" .
+    
+    :ipr     a rm:planned;
+         dot:color "lightskyblue1";
+         dot:label "Digital rights\\nmanagement";
+         dot:style "filled" .
+    
+    :jigsaw     a rm:current,
+                rm:program;
+         dot:color "gold1";
+         dot:label "Jigsaw";
+         dot:shape "box";
+         dot:style "filled";
+         rm:prototypes :webdav,
+                :xmlp .
+    
+    :logic     a rm:planned;
+         dot:color "lightskyblue1";
+         dot:label "Logic";
+         dot:style "filled";
+         rm:needs :rules .
+    
+    :mime     a rm:external;
+         dot:color "grey5";
+         dot:label "MIME";
+         dot:shape "plaintext" .
+    
+    :multim     a rm:planned;
+         dot:color "lightskyblue1";
+         dot:label "Multimodal";
+         dot:style "filled" .
+    
+    :ontology     a rm:current;
+         dot:color "gold1";
+         dot:label "Web\\nClassification";
+         dot:style "filled";
+         rm:influencedBy :dpo .
+    
+    :picalc     a rm:external;
+         dot:color "grey5";
+         dot:label "e.g. Pi\\ncalculus?";
+         dot:shape "plaintext" .
+    
+    :privacy     a rm:planned;
+         dot:color "lightskyblue1";
+         dot:label "services\\nprivacy";
+         dot:style "filled" .
+    
+    :proof     a rm:planned;
+         dot:color "lightskyblue1";
+         dot:label "Proof";
+         dot:style "filled";
+         rm:needs :logic .
+    
+    :qos     a rm:planned;
+         dot:color "lightskyblue1";
+         dot:label "QoS";
+         dot:style "filled" .
+    
+    :rdfquery     a rm:prototyped;
+         dot:color "lawngreen";
+         dot:label "Query\\nService";
+         dot:style "filled";
+         rm:needs :rules,
+                :xmlp2 .
+    
+    :reliable     a rm:planned;
+         dot:color "lightskyblue1";
+         dot:label "Reliable\\nmessaging";
+         dot:style "filled";
+         rm:needs :flow .
+    
+    :routing     a rm:planned;
+         dot:color "lightskyblue1";
+         dot:label "Routing";
+         dot:style "filled" .
+    
+    :rules     a rm:prototyped;
+         dot:color "lawngreen";
+         dot:label "Rule/Query\\nlanguage";
+         dot:style "filled";
+         rm:influencedBy :xmlquery;
+         rm:needs :ontology .
+    
+    :screen     a rm:planned;
+         dot:color "lightskyblue1";
+         dot:label "2D\\nintegration";
+         dot:style "filled" .
+    
+    :security     a rm:subgoal;
+         dot:color "blue";
+         dot:label "Security";
+         rm:needs :encryption .
+    
+    :sep     a rm:subgoal;
+         dot:color "blue";
+         dot:label "Separate Form\\n and Content";
+         rm:needs :ccpp,
+                :fo .
+    
+    :smtp     a rm:external;
+         dot:color "grey5";
+         dot:label "SMTP";
+         dot:shape "plaintext";
+         rm:needs :dns,
+                :mime,
+                :tcp .
+    
+    :soap     a rm:external;
+         dot:color "grey5";
+         dot:label "SOAP";
+         dot:shape "plaintext" .
+    
+    :social     a rm:goal;
+         dot:color "blue";
+         dot:label "Socially\\nappropriate";
+         dot:shape "doublecircle";
+         rm:needs :ipr,
+                :security .
+    
+    :tcp     a rm:external;
+         dot:color "grey5";
+         dot:label "TCP";
+         dot:shape "plaintext";
+         rm:needs :ip .
+    
+    :trust     a rm:subgoal;
+         dot:color "blue";
+         dot:label "Trust";
+         rm:needs :proof,
+                :rules,
+                :security .
+    
+    :uddi     a rm:external;
+         dot:color "grey5";
+         dot:label "UDDI";
+         dot:shape "plaintext" .
+    
+    :ui     a rm:goal;
+         dot:color "blue";
+         dot:label "Cool\\nU.I.";
+         dot:shape "doublecircle";
+         rm:needs :multim,
+                :voice,
+                :xforms .
+    
+    :uni     a rm:goal;
+         dot:color "blue";
+         dot:label "Universality\\nand Accessibility";
+         dot:shape "doublecircle";
+         rm:needs :di,
+                :i18n,
+                :sep,
+                :wai .
+    
+    :unicode     a rm:external;
+         dot:color "grey5";
+         dot:label "Unicode";
+         dot:shape "plaintext" .
+    
+    :voice     a rm:current;
+         dot:color "gold1";
+         dot:label "Voice";
+         dot:style "filled" .
+    
+    :wai     a rm:current;
+         dot:color "gold1";
+         dot:label "WAI";
+         dot:style "filled";
+         rm:needs :wai_many .
+    
+    :wai_many     a rm:external;
+         dot:color "grey5";
+         dot:label "many...";
+         dot:shape "plaintext" .
+    
+    :webdav     a rm:external;
+         dot:color "grey5";
+         dot:label "WebDAV";
+         dot:shape "plaintext" .
+    
+    :ws     a rm:goal;
+         dot:color "blue";
+         dot:label "Semantic Web";
+         dot:shape "doublecircle";
+         rm:needs :agents .
+    
+    :wsdl     a rm:external;
+         dot:color "grey5";
+         dot:label "WSDL";
+         dot:shape "plaintext" .
+    
+    :wsdv     a rm:planned;
+         dot:color "lightskyblue1";
+         dot:label "Service Desc. Vocab.";
+         dot:style "filled";
+         rm:influencedBy :wsdl;
+         rm:needs :flow .
+    
+    :xforms     a rm:current;
+         dot:color "gold1";
+         dot:label "XForms";
+         dot:style "filled";
+         rm:needs :screen .
+    
+    :xlink     a rm:current;
+         dot:color "gold1";
+         dot:label "xlink";
+         dot:style "filled";
+         rm:needs :xmlarch,
+                :xpointer .
+    
+    :xml2     a rm:subgoal;
+         dot:color "blue";
+         dot:label "xml\\nEnhanced";
+         rm:needs :xlink,
+                :xmlquery,
+                :xpointer .
+    
+    :xmlarch     a rm:planned;
+         dot:color "lightskyblue1";
+         dot:label "processing\\nmodel";
+         dot:style "filled" .
+    
+    :xmlp2     a rm:subgoal;
+         dot:color "blue";
+         dot:label "XML Prococol\\nEnhanced";
+         rm:needs :attachments,
+                :privacy,
+                :qos,
+                :reliable,
+                :routing,
+                :security,
+                :xmlp .
+    
+    :xmlp     a rm:current;
+         dot:color "gold1";
+         dot:label "XML\\nProtocol";
+         dot:style "filled";
+         rm:influencedBy :soap;
+         rm:needs :smtp .
+    
+    :xmlquery     a rm:current;
+         dot:color "gold1";
+         dot:label "xml Query";
+         dot:style "filled";
+         rm:needs :xmlarch .
+    
+    :xpointer     a rm:current;
+         dot:color "gold1";
+         dot:label "xpointer";
+         dot:style "filled";
+         rm:needs :xmlarch .
+    
+#ENDS

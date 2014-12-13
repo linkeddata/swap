@@ -1,0 +1,25 @@
+
+THIS (http://www.w3.org/2000/10/swap/pim/jhead) is NOT
+the home of this code.  It is part of the CVS tree of the
+swap tree as a pragmatic measure as a JPEG>N3 conversion tool,
+but anyone working with sources or looking for the 
+latest version of this software should go to the source,
+Matthias Wandel.
+
+I found the originals at his web site
+http://www.sentex.net/~mwandel/jhead/
+
+He did the work of untangling the EXIF tags within 
+JPEG JFIF files.
+
+he says, """I got my information on the Exif format from:
+http://www.ba.wakwak.com/~tsuruzoh/Computer/Digicams/exif-e.html
+
+The official specs have since appeared on the web at:
+http://www.pima.net/standards/it10/PIMA15740/exif.htm
+
+"""
+for the record.
+
+timbl
+2003/1

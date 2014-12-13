@@ -1,0 +1,16 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix : <#> .
+
+# This gives the correct conclusions
+#{ ( { :sky :color :blue }  { :grass :color :green } ) log:conjunction ?F }
+#  =>  { :rest :is ?F } .
+
+
+#but this does not
+:g = { :sky :color :blue } .
+:h = { :grass :color :green } .
+
+
+{ ( :g :h ) log:conjunction ?F } => { :rest :is ?F } .
+

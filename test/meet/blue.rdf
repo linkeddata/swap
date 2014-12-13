@@ -1,0 +1,20 @@
+
+<!-- Processed by Id: cwm.py,v 1.27 2001/02/05 19:58:24 timbl Exp -->
+<!--     using base file:/devel/WWW/2000/10/swap/test/meet/blue.n3-->
+
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:m="http://www.example.org/meeting_organization#"
+    xmlns="http://www.example.org/people#"
+    xmlns:p="http://www.example.org/personal_details#">
+
+    <rdf:Description about="http://meetings.example.com/cal#m1">
+        <m:homePage resource="http://meetings.example.com/m1/hp"/>
+    </rdf:Description>
+
+    <rdf:Description about="http://www.example.org/people#fred">
+        <m:attending resource="http://meetings.example.com/cal#m1"/>
+        <p:GivenName>Fred</p:GivenName>
+        <p:hasEmail resource="mailto:fred@example.com"/>
+    </rdf:Description>
+</rdf:RDF>

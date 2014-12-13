@@ -1,0 +1,45 @@
+
+
+
+<rdf:RDF xmlns="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/list#append">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <comment>
+Iff the subject is a list of lists and the concatenation of all those lists 
+is the object, then this is true.
+eg  ( (1 2) (3 4) ) list:append (1 2 3 4).
+The object can be calculated as a function of the subject.
+</comment>
+        <isDefinedBy rdf:resource=""/>
+        <label>concatenation</label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/list#in">
+        <comment>
+Iff the object is a list and the subject is in that list, then this is true.
+</comment>
+        <isDefinedBy rdf:resource=""/>
+        <label>in</label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/list#last">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <comment>
+Iff the suject is a list and the obbject is the last thing that list, then this is true.
+The object can be calculated as a function of the list.
+</comment>
+        <isDefinedBy rdf:resource=""/>
+        <label>in</label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/list#member">
+        <comment>
+Iff the subject is a list and the obbject is in that list, then this is true.
+</comment>
+        <isDefinedBy rdf:resource=""/>
+        <label>member</label>
+    </rdf:Property>
+</rdf:RDF>

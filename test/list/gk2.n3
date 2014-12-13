@@ -1,0 +1,157 @@
+
+# $Id$
+#
+# Experiments with Cwm rules.
+#
+# After my first attempt at home network configuration with RDF [1], I thought
+# some more about Cwm rules for manipulating access permissions.  To get
+# some purchase on the problem, I start by tackling some very much simpler
+# rules based on the following properties:
+#
+#   ?A rule:append ( ?L ?T1 )
+# is true when ?A is the same as the result of appending ?T1 to the list ?L.
+#
+#   ?A rule:reverse ?B
+# is true when ?A is the same as the list obtained by reversing the members 
+# of list ?B
+#
+# These goals are stated in structural terms, but I they can be motivated by
+# semantic conditions about an ascending or descending list of numbers.
+#
+# Results:
+#
+# Not quite what I expected.  Using the Cwm --think option, the recursive 
+# definition for rule:append gets applied just once.  Interestingly, though,
+# if I apply Cwm to its own output, specifying the --think option again,
+# I get an error:
+#
+#  File "F:\W3C\swap1111\llyn.py", line 482, in the
+#    assert len(hits) == 1, "There should only be one match for %s %s %s." %(subj , pred, obj)
+#  AssertionError: There should only be one match for _g1 first None.
+#
+#
+# [1] http://www.ninebynine.org/SWAD-E/Intro.html#HomeNetAccessDemo
+#
+#--------+---------+---------+---------+---------+---------+---------+---------+
+#
+# Copyright (c) 2002, G. KLYNE
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+#--------+---------+---------+---------+---------+---------+---------+---------+
+# $Source$
+# $Author$
+# $Date$
+# $Id$
+#--------+---------+---------+---------+---------+---------+---------+---------+
+#        1         2         3         4         5         6         7         8
+
+@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix log:      <http://www.w3.org/2000/10/swap/log#> .
+@prefix string:   <http://www.w3.org/2000/10/swap/string#> .
+@prefix daml:     <http://www.daml.org/2001/03/daml+oil#> .
+@prefix foaf:     <http://xmlns.com/foaf/0.1/> .
+@prefix rule:     <http://id.ninebynine.org/wip/2002/rule/> .
+@prefix :         <#> .
+
+#
+# rule:append
+# -----------
+#
+#   ?A rule:append ( ?L ?T1 )
+#
+# is true when ?A is the same as the result of appending ?T1 to the list ?L.
+#
+#   ?A rule:append ( [ ?H :: ?T ]  ?T1 )
+# =>
+#   ?A daml:first ?H ;
+#      daml:rest  [ rule:append ( ?T ?T1 ) ] .
+#
+#   ?A rule:append ( daml:nil ?T1 )
+# =>
+#   ?A daml:first ?T1 ;
+#      daml:rest  daml:nil .
+#
+
+{ 
+  ?A rule:append ( [ daml:first ?H ; daml:rest ?T ] ?Y ) .
+} =>  { 
+  ?A daml:first ?H ;
+     daml:rest  [ rule:append ( ?T ?Y ) ] .
+} .
+
+# The following rule, when enabled, causes a different error:
+#
+#  File "F:\W3C\swap1111\llyn.py", line 2402, in query2
+#    existentials.remove(pair[0]) # Can't match anything anymore, need exact match
+#  ValueError: list.remove(x): x not in list
+#
+
+{ 
+  ?A rule:append ( () ?Z ) .
+} => { 
+  ?A daml:first ?Z ;
+     daml:rest  () .
+}.
+
+# Test cases
+
+ :A1 rule:append ( ( "L11" "L12" "L13" ) "L14" ) .
+
+#:A2 rule:append (  :A1 "L2" ) .
+
+#:A3 rule:append (  :A1 "L3" ) .
+
+#
+# I note that the notation
+#   [ ?H :: ?T ]
+# as a shorthand for:
+#   [ daml:first ?H ; daml:rest ?T ]
+# or
+#   [ rdf:first ?H ; rdf:rest ?T ]
+# might be convenient.
+#
+
+
+#
+# End of network user details
+#
+#--------+---------+---------+---------+---------+---------+---------+---------+
+# $Log$
+# Revision 1.1  2003-01-16 05:06:45  timbl
+# mm
+#
+# Revision 1.4  2002/12/19 17:45:08  graham
+# Reduce to single test case
+#
+# Revision 1.3  2002/12/19 17:27:28  graham
+# Tried adding append to nil (termination) rule
+#
+# Revision 1.2  2002/12/19 16:42:17  graham
+# Append rule not working as expected
+#
+# Revision 1.1  2002/12/19 16:28:25  graham
+# Add PlayRules files to CVS
+#

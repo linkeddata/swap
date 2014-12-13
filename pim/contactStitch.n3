@@ -1,0 +1,322 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+
+
+<> dc:title	"Mappings between contact information vocabularies";
+
+
+dc:description """
+ Contact, FOAF, vCard and LDIF vocabularies all cover contact information 
+ for people.  Here we express some mappings.
+ .
+""",
+"$Id$".
+
+
+
+
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix o2:  <http://www.w3.org/2007/ont/o2#>.   # Just for 'chain' missing from owl
+
+@prefix wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix v: <http://www.w3.org/2006/vcard/ns#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix con: <http://www.w3.org/2000/10/swap/pim/contact#> .
+@prefix ldif: <http://www.w3.org/2007/ont/ldif#>.
+@prefix link: <http://www.w3.org/2006/link#>.
+@prefix doc:  <http://www.w3.org/2000/10/swap/pim/doc#> .
+
+    v:bday     owl:equivalentProperty con:birthday.  # yes
+
+    v:fax     rdfs:subPropertyOf foaf:mbox;
+         owl:equivalentProperty con:fax .
+    
+    v:homeTel     rdfs:subPropertyOf con:phone,
+                foaf:phone .
+    
+    v:key     owl:equivalentProperty <http://xmlns.com/wot/0.1/pubkeyAddress> .  # Address or value? @@HH
+    
+    v:latitude     owl:equivalentProperty wgs:lat .
+    
+    v:logo     owl:equivalentProperty foaf:logo .
+    
+    v:longitude     owl:equivalentProperty wgs:long .
+    
+    v:mobileEmail     rdfs:subPropertyOf con:emailAddress,  # @@HH No, con:mailbox
+                foaf:mbox .   
+    
+    v:photo     rdfs:subPropertyOf foaf:img .
+    
+    v:tel     owl:equivalentProperty con:phone,
+                foaf:phone .
+    
+#    v:unlabelledTel     rdfs:subPropertyOf vca:phone,   # @@@ ????  vca:?
+#                con:phone .
+    
+    v:url     owl:equivalentProperty con:homepage,
+                foaf:homePage .
+    
+    v:workEmail     rdfs:subPropertyOf con:emailAddress,
+                foaf:mbox .
+    
+    v:workTel     rdfs:subClassOf foaf:phone;
+         rdfs:subPropertyOf con:phone .
+ 
+
+########################
+
+
+
+# The N3 file takes the from of a line from an example data file in comments,
+# followed by the crosss-definition with the contact vocabulary    
+    
+ 
+ #  Going through LDIF:
+
+        # ldif:dn "cn=Zackery Zephyr,mail=zac@example.com"; 
+#	ldif:dn = v:n.  # Not used explicitly in contact
+#  No - have to generate with rule I think    -- or just with python format conv
+	
+        # a ldif:Person; 
+	ldif:Person = con:Person.
+	
+#        a ldif:OrganizationalPerson; 
+#        a ldif:InetOrgPerson; 
+#        a ldif:MozillaAbPersonAlpha; 
+
+
+#  NAMES
+
+
+#        foaf:name "Zackery Zephyr"; 
+
+    ldif:cn = foaf:name, v:fn, con:knownAs.  # An actual usable name string
+
+#    v:fn     owl:equivalentProperty foaf:fullName.
+    
+
+#        ldif:givenName "Zackery"; 
+
+     v:given-name owl:equivalentProperty
+	con:givenName,
+#       foaf:givenname ,
+	ldif:givenName .  # USe FOAF? Not yet set
+    
+    v:family-name     owl:equivalentProperty #  con:lastName, @@HH No - order is cultural
+                foaf:family_name,
+		con:familyName,
+		ldif:sn.
+#                foaf:surname.
+					    
+    
+
+    v:honorific-prefix    owl:equivalentProperty con:personalTitle,
+                foaf:title .
+    
+       v:honorific-suffix     owl:equivalentProperty con:personalSuffix .  # This
+    
+
+
+#        ldif:sn "Zephyr"; 
+
+
+#    v:n     owl:equivalentProperty foaf:name .   # @@HH No, -- N is structured thing, name  is a srtring.
+    
+    v:nickname   #     rdfs:subPropertyOf con:knownAs;   @@HH No, knownAs means common name. 
+         owl:equivalentProperty foaf:nick, ldif:mozillaNickname.
+    
+
+########### Email, accounts etc
+
+
+
+
+
+	ldif:email = foaf:mailbox.  # @@@ Assumption ofIFP
+
+#	ldif:email @@
+#        ldif:mozillaSecondEmail "zackery@example.org "; 
+
+
+    v:email     owl:equivalentProperty   # @@HH Assume these all use <mailto:x> and not "x"? 
+		ldif:mail.		# @HH not IFP
+
+    foaf:mbox owl:equivalentProperty con:mailbox. # InverseFunctionalProperty
+		
+    v:work-email rdfs:subPropertyOf v:email.
+    
+    v:home-email rdfs:subPropertyOf v:email.
+    
+    v:unlabelledEmail     rdfs:subPropertyOf con:emailAddress,  # = ?  Do you mean' can't have a label' or 'no label known'?
+                foaf:mbox .
+    
+
+
+
+
+
+#        ldif:nsAIMid "zaco"; 
+
+	 v:x-aim = ldif:nsAIMid.
+
+#        ldif:mozillaUseHtmlMail "false";    @@ No analog
+
+#        ldif:telephoneNumber "+1 202 250 2525";     @@@@ reformat as URI
+
+
+#  Fixed ldif vocab and conversion to use tel: and mailto:
+ 
+	ldif:telephoneNumber = v:work-tel;
+	    o2:chain (con:work con:phone).
+	
+#        ldif:homePhone <tel:+1-202-250-2526>; 
+
+	ldif:homePhone o2:chain(con:home con:phone). 
+	ldif:homePhone = v:home-tel.
+
+# The following are all assumed "work" by Mozilla
+	
+#	ldif:telephoneNumber    formatted as URI
+	ldif:telephoneNumber o2:chain (con:work con:phone).
+
+
+#        ldif:fax "+1 202 250 2527";      @@ work-tel <...> a vc:Fax
+	ldif:fax rdfs:range con:Fax; rdfs:subpropertyOf con:phone.
+	
+#        ldif:pager "+1 202 555 2525"; 
+	ldif:page rdfs:range con:Pager; rdfs:subpropertyOf con:phone.
+
+#        ldif:mobile "+1 202 555 2526"; 
+	ldif:mobile rdfs:range con:MobilePhone; rdfs:subpropertyOf con:phone.
+
+
+######### Addresses
+
+
+
+# Classes    
+
+    v:Address     = con:Address .  # yes
+    
+#    v:Location     = con:Location .  # @@HH Don't think so. con:Location is contact point, home or work or mobile. @@TBL should rename
+    
+    
+#   v:adr     rdfs:subPropertyOf con:address .  # No. Diff domain. (person, contact point)
+    
+
+
+    v:street-address	owl:equivalentProperty con:street.
+
+    v:extended-address	owl:equivalentProperty con:street2. 
+
+#   v:post-office-box   rdfs:subPropertyOf con:_addressProperty . # @@ no equiv
+    
+    v:locality		owl:equivalentProperty con:city.
+    
+    v:region		owl:equivalentProperty con:stateOrProvince.  
+    
+    v:postal-code	owl:equivalentProperty con:postalCode.
+    
+    v:country-name	owl:equivalentProperty con:country. 
+    
+
+    v:unlabelledAdr     rdfs:subPropertyOf con:address .   # = ? @@HH Do you mean' can't have a label' or 'no label known'?
+    
+    
+    
+#### Home-specific
+
+    v:home-adr o2:chain(con:home con:address).
+
+    v:homeAdr     rdfs:subPropertyOf con:address .
+    
+    
+
+#        ldif:homeStreet "1 Zephyr Drive"; 
+	ldif:homeStreet o2:chain (v:home-adr con:street).
+	
+#        ldif:mozillaHomeStreet2 "Apt 26"; 
+	ldif:mozillaHomeStreet2 o2:chain (v:home-adr con:street2).
+	
+#        ldif:mozillaHomeLocalityName "Zoaloc"; 
+	ldif:mozillaHomeLocalityName o2:chain (v:home-adr con:city).
+	
+#        ldif:mozillaHomeState "MA"; 
+	ldif:mozillaHomeState o2:chain (v:home-adr con:stateOrProvince).
+
+#        ldif:mozillaHomePostalCode "02999"; 
+    
+    ldif:mozillaHomePostalCode o2:chain (v:home-adr con:postalCode).
+
+#        ldif:mozillaHomeCountryName "USA"; 
+    ldif:mozillaHomeCountryName o2:chain (v:home-adr con:country).
+
+
+
+#### Work-specific
+
+    v:workAdr     rdfs:subPropertyOf con:address .
+    
+    v:work-adr o2:chain(con:work con:address).
+
+#        ldif:street "1 Enterprise Way"; 
+    ldif:street o2:chain (v:work-adr con:street).
+    
+#        ldif:mozillaWorkStreet2 "Suite 260"; 
+    ldif:mozillaWorkStreet2 o2:chain (v:work-adr con:street2).
+
+#        ldif:l "Zoaloc Heights"; 
+    ldif: o2:chain (v:work-adr con:city).
+
+#        ldif:st "MA"; 
+    ldif:st o2:chain (v:work-adr con:stateOrProvince).
+
+#        ldif:postalCode "02998"; 
+
+    ldif:postalCode o2:chain (v:work-adr con:postalCode).
+
+#        ldif:c "USA"; 
+    ldif:c o2:chain (v:work-adr con:country).
+
+########  Title and Organization
+
+#        ldif:title "Chief Test dataset"; 
+
+    v:title     owl:equivalentProperty ldif:title,
+		con:title.
+
+#   NOT foaf:title or con:personalTitle which are Mr. etc
+    
+
+#        ldif:department "Testing"; 
+
+	 ldif:department = con:departmentName.  #  A string, property of person
+
+    v:org     owl:equivalentProperty foaf:organization, con:organization .
+    
+    
+    
+    v:organization-name     rdfs:subPropertyOf foaf:name .
+    
+
+	 
+#        ldif:company "Zacme Widgets"; 
+    ldif:company o2:chain (con:organization foaf:name).
+
+#        ldif:mozillaWorkUrl "http://example.com/test/zac";
+    ldif:mozillaWorkUrl o2:chain(con:work foaf:homePage).
+ 
+#        ldif:mozillaHomeUrl "http://zac.example.net/zac"; 
+
+
+
+#        ldif:mozillaCustom1 "custom1 value"; 
+#        ldif:mozillaCustom2 "custom2 value"; 
+#        ldif:mozillaCustom3 "custom3 value"; 
+#        ldif:mozillaCustom4 "custom4 value"; 
+
+
+#        ldif:description "This is an imaginary person "
+    ldif:description = con:description, v:note.
+    

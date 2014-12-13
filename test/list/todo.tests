@@ -1,0 +1,26 @@
+# List of regression tests
+#
+# - was in bash script retest.sh
+#
+@prefix : <#>.
+@prefix x: <#>.
+@prefix test: <http://www.w3.org/2000/10/swap/test.n3#>.
+@prefix dc:  <http://purl.org/dc/elements/1.1/>. # yuk - under protest - no hash
+
+
+
+
+
+:t1032 a test:CwmTest;
+    test:shortFileName "li-gk3.n3";
+    test:description   "Iterative ops on lists";
+    test:arguments     """list/gk3.n3 -think""".
+
+
+:t2050 a  test:CwmTest;
+    test:shortFileName "list-first.n3";
+    test:description   "List rdf:first and rdf:rest as built-in functions";
+    test:arguments     """list/first.n3 --think --data""".
+
+
+#ends

@@ -1,0 +1,10 @@
+.*
+,*
+*.pyc
+diffs
+temp
+xdiffs
+lx_language_lbase_tab.py
+parser.out
+.arch-ids
+

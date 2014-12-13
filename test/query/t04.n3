@@ -1,0 +1,30 @@
+# see <http://rdfstore.sourceforge.net/2002/06/24/rdf-query/query-use-cases.html>.
+# Use case data retreival
+
+#
+#  cwm t04.n3 --think
+#
+# @@ would be nice to have this just use --mode=rsme --think
+# to pick up hte schema data automatically
+#
+@prefix con: <http://www.w3.org/2000/10/swap/pim/contact#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> . 
+@prefix data: <#>.
+@prefix : <#>.
+
+{data:x ?p ?v. ?p rdfs:range ?c} => {[] :prop ?p; :range ?c; :val ?v }.
+
+# test data:
+
+data:x  con:office [
+		con:address [ con:street "Lombard Street" ]];
+	  con:home [
+		con:address [ con:street "Islington Gardens"]].
+
+# test metadata:  (a subset of the schema)
+
+con:office rdfs:range con:Location.
+con:home rdfs:range con:Location.
+con:address rdfs:range con:Address.
+
+#ends

@@ -1,0 +1,1423 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<!DOCTYPE uridef[
+  <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY daml "http://www.daml.org/2001/03/daml+oil">
+  <!ENTITY profile "http://www.daml.org/services/daml-s/2001/10/Profile.daml">
+  <!ENTITY cia "http://ontolingua.stanford.edu/doc/chimaera/ontologies/world-fact-book.daml">
+  <!ENTITY DEFAULT "http://www.daml.ri.cmu.edu/ont/Country.daml">
+  <!ENTITY THIS "http://www.daml.ri.cmu.edu/ont/Country.daml">
+]>
+ 
+<!--
+This document uses entity types as a shorthand for URIs.
+Download the source for a version with unexpanded entities.
+  -->
+ 
+<rdf:RDF
+  xmlns:rdf=    "&rdf;#"
+  xmlns:rdfs=   "&rdfs;#"
+  xmlns:daml=   "&daml;#"
+  xmlns:cia=    "&cia;#"
+  xmlns=        "&DEFAULT;#">
+ 
+  <daml:Ontology about="">
+    <daml:versionInfo>
+      $Id$
+    </daml:versionInfo>
+    <rdfs:comment>
+      Country Ontology.  Use as a top level ontology for describing countries.
+      Some entries below include references to the CI world fact book.
+      Note that this is not necessarily a complete or accurate ontology; to
+      mke corrections, contact terryp@cs.cmu.edu
+
+    </rdfs:comment>
+    <daml:imports rdf:resource="&rdf;" />
+    <daml:imports rdf:resource="&rdfs;" />
+    <daml:imports rdf:resource="&daml;" />
+  </daml:Ontology>
+ 
+  <rdfs:Class rdf:ID="Country">
+    <rdfs:label>Country</rdfs:label>
+    <rdfs:subClassOf rdf:resource="&profile;#Location" />
+    <!--  was... <rdfs:subClassOf rdf:resource="&daml;#Thing" /> -->
+    <!-- Does the following sameClassAs statement cause problems? -->
+    <daml:sameClassAs rdf:resource="&cia;#GEOREFF" />
+    <rdfs:comment> 
+      High level country concept.
+    </rdfs:comment> 
+  </rdfs:Class>
+ 
+  <rdf:Property rdf:ID="name">
+    <rdfs:domain rdf:resource="#Country" />
+    <rdfs:range rdf:resource="&rdfs;#Literal"/>
+  </rdf:Property> 
+
+  <rdf:Property rdf:ID="cia">
+    <rdfs:domain rdf:resource="#Country" />
+    <rdfs:range rdf:resource="&cia;#GEOREF"/>
+  </rdf:Property> 
+
+  <!-- Instantiate some entries -->
+
+  <Country rdf:ID="AFGHANISTAN">
+    <name>Afghanistan</name>
+    <cia rdf:resource="&cia;#AFGHANISTAN"/>
+  </Country>
+  
+  <Country rdf:ID="ALBANIA">
+    <name>Albania</name>
+    <cia rdf:resource="&cia;#ALBANIA"/>
+  </Country>
+  
+  <Country rdf:ID="ALGERIA">
+    <name>Algeria</name>
+    <cia rdf:resource="&cia;#ALGERIA"/>
+  </Country>
+  
+  <Country rdf:ID="AMERICAN-SAMOA">
+    <name>American Samoa</name>
+    <cia rdf:resource="&cia;#AMERICAN-SAMOA"/>
+  </Country>
+  
+  <Country rdf:ID="ANDORRA">
+    <name>Andorra</name>
+    <cia rdf:resource="&cia;#ANDORRA"/>
+  </Country>
+  
+  <Country rdf:ID="ANGOLA">
+    <name>Angola</name>
+    <cia rdf:resource="&cia;#ANGOLA"/>
+  </Country>
+  
+  <Country rdf:ID="ANGUILLA">
+    <name>Anguilla</name>
+    <cia rdf:resource="&cia;#ANGUILLA"/>
+  </Country>
+  
+  <Country rdf:ID="ANTARCTICA">
+    <name>Antarctica</name>
+    <cia rdf:resource="&cia;#ANTARCTICA"/>
+  </Country>
+  
+  <Country rdf:ID="ANTIGUA-AND-BARBUDA">
+    <name>Antigua and Barbuda</name>
+    <cia rdf:resource="&cia;#ANTIGUA-AND-BARBUDA"/>
+  </Country>
+  
+  <Country rdf:ID="ARCTIC-OCEAN">
+    <name>Arctic Ocean</name>
+    <cia rdf:resource="&cia;#ARCTIC-OCEAN"/>
+  </Country>
+  
+  <Country rdf:ID="ARGENTINA">
+    <name>Argentina</name>
+    <cia rdf:resource="&cia;#ARGENTINA"/>
+  </Country>
+  
+  <Country rdf:ID="ARMENIA">
+    <name>Armenia</name>
+    <cia rdf:resource="&cia;#ARMENIA"/>
+  </Country>
+  
+  <Country rdf:ID="ARUBA">
+    <name>Aruba</name>
+    <cia rdf:resource="&cia;#ARUBA"/>
+  </Country>
+  
+  <Country rdf:ID="ASHMORE-AND-CARTIER-ISLANDS">
+    <name>Ashmore and Cartier Islands</name>
+    <cia rdf:resource="&cia;#ASHMORE-AND-CARTIER-ISLANDS"/>
+  </Country>
+  
+  <Country rdf:ID="ATLANTIC-OCEAN">
+    <name>Atlantic Ocean</name>
+    <cia rdf:resource="&cia;#ATLANTIC-OCEAN"/>
+  </Country>
+  
+  <Country rdf:ID="AUSTRALIA">
+    <name>Australia</name>
+    <cia rdf:resource="&cia;#AUSTRALIA"/>
+  </Country>
+  
+  <Country rdf:ID="AUSTRIA">
+    <name>Austria</name>
+    <cia rdf:resource="&cia;#AUSTRIA"/>
+  </Country>
+  
+  <Country rdf:ID="AZERBAIJAN">
+    <name>Azerbaijan</name>
+    <cia rdf:resource="&cia;#AZERBAIJAN"/>
+  </Country>
+  
+  <Country rdf:ID="THE-BAHAMAS">
+    <name>Bahamas, The</name>
+    <cia rdf:resource="&cia;#THE-BAHAMAS"/>
+  </Country>
+  
+  <Country rdf:ID="BAHRAIN">
+    <name>Bahrain</name>
+    <cia rdf:resource="&cia;#BAHRAIN"/>
+  </Country>
+  
+  <Country rdf:ID="BAKER-ISLAND">
+    <name>Baker Island</name>
+    <cia rdf:resource="&cia;#BAKER-ISLAND"/>
+  </Country>
+  
+  <Country rdf:ID="BANGLADESH">
+    <name>Bangladesh</name>
+    <cia rdf:resource="&cia;#BANGLADESH"/>
+  </Country>
+  
+  <Country rdf:ID="BARBADOS">
+    <name>Barbados</name>
+    <cia rdf:resource="&cia;#BARBADOS"/>
+  </Country>
+  
+  <Country rdf:ID="BASSAS-DA-INDIA">
+    <name>Bassas da India</name>
+    <cia rdf:resource="&cia;#BASSAS-DA-INDIA"/>
+  </Country>
+  
+  <Country rdf:ID="BELARUS">
+    <name>Belarus</name>
+    <cia rdf:resource="&cia;#BELARUS"/>
+  </Country>
+  
+  <Country rdf:ID="BELGIUM">
+    <name>Belgium</name>
+    <cia rdf:resource="&cia;#BELGIUM"/>
+  </Country>
+  
+  <Country rdf:ID="BELIZE">
+    <name>Belize</name>
+    <cia rdf:resource="&cia;#BELIZE"/>
+  </Country>
+  
+  <Country rdf:ID="BENIN">
+    <name>Benin</name>
+    <cia rdf:resource="&cia;#BENIN"/>
+  </Country>
+  
+  <Country rdf:ID="BERMUDA">
+    <name>Bermuda</name>
+    <cia rdf:resource="&cia;#BERMUDA"/>
+  </Country>
+  
+  <Country rdf:ID="BHUTAN">
+    <name>Bhutan</name>
+    <cia rdf:resource="&cia;#BHUTAN"/>
+  </Country>
+  
+  <Country rdf:ID="BOLIVIA">
+    <name>Bolivia</name>
+    <cia rdf:resource="&cia;#BOLIVIA"/>
+  </Country>
+  
+  <Country rdf:ID="BOSNIA-AND-HERZEGOVINA">
+    <name>Bosnia and Herzegovina</name>
+    <cia rdf:resource="&cia;#BOSNIA-AND-HERZEGOVINA"/>
+  </Country>
+  
+  <Country rdf:ID="BOTSWANA">
+    <name>Botswana</name>
+    <cia rdf:resource="&cia;#BOTSWANA"/>
+  </Country>
+  
+  <Country rdf:ID="BOUVET-ISLAND">
+    <name>Bouvet Island</name>
+    <cia rdf:resource="&cia;#BOUVET-ISLAND"/>
+  </Country>
+  
+  <Country rdf:ID="BRAZIL">
+    <name>Brazil</name>
+    <cia rdf:resource="&cia;#BRAZIL"/>
+  </Country>
+  
+  <Country rdf:ID="BRITISH-INDIAN-OCEAN-TERRITORY">
+    <name>British Indian Ocean Territory</name>
+    <cia rdf:resource="&cia;#BRITISH-INDIAN-OCEAN-TERRITORY"/>
+  </Country>
+  
+  <Country rdf:ID="BRITISH-VIRGIN-ISLANDS">
+    <name>British Virgin Islands</name>
+    <cia rdf:resource="&cia;#BRITISH-VIRGIN-ISLANDS"/>
+  </Country>
+  
+  <Country rdf:ID="BRUNEI">
+    <name>Brunei</name>
+    <cia rdf:resource="&cia;#BRUNEI"/>
+  </Country>
+  
+  <Country rdf:ID="BULGARIA">
+    <name>Bulgaria</name>
+    <cia rdf:resource="&cia;#BULGARIA"/>
+  </Country>
+  
+  <Country rdf:ID="BURKINA-FASO">
+    <name>Burkina Faso</name>
+    <cia rdf:resource="&cia;#BURKINA-FASO"/>
+  </Country>
+  
+  <Country rdf:ID="BURMA">
+    <name>Burma</name>
+    <cia rdf:resource="&cia;#BURMA"/>
+  </Country>
+  
+  <Country rdf:ID="BURUNDI">
+    <name>Burundi</name>
+    <cia rdf:resource="&cia;#BURUNDI"/>
+  </Country>
+  
+  <Country rdf:ID="CAMBODIA">
+    <name>Cambodia</name>
+    <cia rdf:resource="&cia;#CAMBODIA"/>
+  </Country>
+  
+  <Country rdf:ID="CAMEROON">
+    <name>Cameroon</name>
+    <cia rdf:resource="&cia;#CAMEROON"/>
+  </Country>
+  
+  <Country rdf:ID="CANADA">
+    <name>Canada</name>
+    <cia rdf:resource="&cia;#CANADA"/>
+  </Country>
+  
+  <Country rdf:ID="CAPE-VERDE">
+    <name>Cape Verde</name>
+    <cia rdf:resource="&cia;#CAPE-VERDE"/>
+  </Country>
+  
+  <Country rdf:ID="CAYMAN-ISLANDS">
+    <name>Cayman Islands</name>
+    <cia rdf:resource="&cia;#CAYMAN-ISLANDS"/>
+  </Country>
+  
+  <Country rdf:ID="CENTRAL-AFRICAN-REPUBLIC">
+    <name>Central African Republic</name>
+    <cia rdf:resource="&cia;#CENTRAL-AFRICAN-REPUBLIC"/>
+  </Country>
+  
+  <Country rdf:ID="CHAD">
+    <name>Chad</name>
+    <cia rdf:resource="&cia;#CHAD"/>
+  </Country>
+  
+  <Country rdf:ID="CHILE">
+    <name>Chile</name>
+    <cia rdf:resource="&cia;#CHILE"/>
+  </Country>
+  
+  <Country rdf:ID="CHINA">
+    <name>China</name>
+    <cia rdf:resource="&cia;#CHINA"/>
+  </Country>
+  
+  <Country rdf:ID="CHRISTMAS-ISLAND">
+    <name>Christmas Island</name>
+    <cia rdf:resource="&cia;#CHRISTMAS-ISLAND"/>
+  </Country>
+  
+  <Country rdf:ID="CLIPPERTON-ISLAND">
+    <name>Clipperton Island</name>
+    <cia rdf:resource="&cia;#CLIPPERTON-ISLAND"/>
+  </Country>
+  
+  <Country rdf:ID="COCOS-ISLANDS">
+    <name>Cocos (Keeling) Islands</name>
+    <cia rdf:resource="&cia;#COCOS-KEELING-ISLANDS"/>
+  </Country>
+  
+  <Country rdf:ID="KEELING-ISLANDS">
+    <name>Cocos (Keeling) Islands</name>
+    <daml:sameClassAs rdf:resource="#COCOS-ISLANDS" />
+  </Country>
+  
+  <Country rdf:ID="COLOMBIA">
+    <name>Colombia</name>
+    <cia rdf:resource="&cia;#COLOMBIA"/>
+  </Country>
+  
+  <Country rdf:ID="COMOROS">
+    <name>Comoros</name>
+    <cia rdf:resource="&cia;#COMOROS"/>
+  </Country>
+  
+  <Country rdf:ID="DEMOCRATIC-REPUBLIC-OF-THE-CONGO">
+    <name>Congo, Democratic Republic of the</name>
+    <cia rdf:resource="&cia;#DEMOCRATIC-REPUBLIC-OF-THE-CONGO"/>
+  </Country>
+  
+  <Country rdf:ID="REPUBLIC-OF-THE-CONGO">
+    <name>Congo, Republic of the</name>
+    <cia rdf:resource="&cia;#REPUBLIC-OF-THE-CONGO"/>
+  </Country>
+  
+  <Country rdf:ID="COOK-ISLANDS">
+    <name>Cook Islands</name>
+    <cia rdf:resource="&cia;#COOK-ISLANDS"/>
+  </Country>
+  
+  <Country rdf:ID="CORAL-SEA-ISLANDS">
+    <name>Coral Sea Islands</name>
+    <cia rdf:resource="&cia;#CORAL-SEA-ISLANDS"/>
+  </Country>
+  
+  <Country rdf:ID="COSTA-RICA">
+    <name>Costa Rica</name>
+    <cia rdf:resource="&cia;#COSTA-RICA"/>
+  </Country>
+  
+  <Country rdf:ID="COTE-D-IVOIRE">
+    <name>Cote d'Ivoire</name>
+    <cia rdf:resource="&cia;#COTE-D'IVOIRE"/>
+  </Country>
+  
+  <Country rdf:ID="CROATIA">
+    <name>Croatia</name>
+    <cia rdf:resource="&cia;#CROATIA"/>
+  </Country>
+  
+  <Country rdf:ID="CUBA">
+    <name>Cuba</name>
+    <cia rdf:resource="&cia;#CUBA"/>
+  </Country>
+  
+  <Country rdf:ID="CYPRUS">
+    <name>Cyprus</name>
+    <cia rdf:resource="&cia;#CYPRUS"/>
+  </Country>
+  
+  <Country rdf:ID="CZECH-REPUBLIC">
+    <name>Czech Republic</name>
+    <cia rdf:resource="&cia;#CZECH-REPUBLIC"/>
+  </Country>
+  
+  <Country rdf:ID="DENMARK">
+    <name>Denmark</name>
+    <cia rdf:resource="&cia;#DENMARK"/>
+  </Country>
+  
+  <Country rdf:ID="DJIBOUTI">
+    <name>Djibouti</name>
+    <cia rdf:resource="&cia;#DJIBOUTI"/>
+  </Country>
+  
+  <Country rdf:ID="DOMINICA">
+    <name>Dominica</name>
+    <cia rdf:resource="&cia;#DOMINICA"/>
+  </Country>
+  
+  <Country rdf:ID="DOMINICAN-REPUBLIC">
+    <name>Dominican Republic</name>
+    <cia rdf:resource="&cia;#DOMINICAN-REPUBLIC"/>
+  </Country>
+  
+  <Country rdf:ID="EAST-TIMOR">
+    <name>East-Timor</name>
+  </Country>
+  
+  <Country rdf:ID="ECUADOR">
+    <name>Ecuador</name>
+    <cia rdf:resource="&cia;#ECUADOR"/>
+  </Country>
+  
+  <Country rdf:ID="EGYPT">
+    <name>Egypt</name>
+    <cia rdf:resource="&cia;#EGYPT"/>
+  </Country>
+  
+  <Country rdf:ID="EL-SALVADOR">
+    <name>El Salvador</name>
+    <cia rdf:resource="&cia;#EL-SALVADOR"/>
+  </Country>
+  
+  <Country rdf:ID="EQUATORIAL-GUINEA">
+    <name>Equatorial Guinea</name>
+    <cia rdf:resource="&cia;#EQUATORIAL-GUINEA"/>
+  </Country>
+  
+  <Country rdf:ID="ERITREA">
+    <name>Eritrea</name>
+    <cia rdf:resource="&cia;#ERITREA"/>
+  </Country>
+  
+  <Country rdf:ID="ESTONIA">
+    <name>Estonia</name>
+    <cia rdf:resource="&cia;#ESTONIA"/>
+  </Country>
+  
+  <Country rdf:ID="ETHIOPIA">
+    <name>Ethiopia</name>
+    <cia rdf:resource="&cia;#ETHIOPIA"/>
+  </Country>
+  
+  <Country rdf:ID="EUROPA-ISLAND">
+    <name>Europa Island</name>
+    <cia rdf:resource="&cia;#EUROPA-ISLAND"/>
+  </Country>
+  
+  <Country rdf:ID="FALKLAND-ISLANDS">
+    <name>Falkland Islands (Islas Malvinas)</name>
+    <cia rdf:resource="&cia;#FALKLAND-ISLANDS-(ISLAS-MALVINAS)"/>
+  </Country>
+  
+  <Country rdf:ID="ISLAS-MALVINAS">
+    <name>Islas Malvinas</name>
+    <daml:sameClassAs rdf:resource="#FALKLAND-ISLANDS" />
+  </Country>
+  
+  <Country rdf:ID="FAROE-ISLANDS">
+    <name>Faroe Islands</name>
+    <cia rdf:resource="&cia;#FAROE-ISLANDS"/>
+  </Country>
+  
+  <Country rdf:ID="FIJI">
+    <name>Fiji</name>
+    <cia rdf:resource="&cia;#FIJI"/>
+  </Country>
+  
+  <Country rdf:ID="FINLAND">
+    <name>Finland</name>
+    <cia rdf:resource="&cia;#FINLAND"/>
+  </Country>
+  
+  <Country rdf:ID="FRANCE">
+    <name>France</name>
+    <cia rdf:resource="&cia;#FRANCE"/>
+  </Country>
+  
+  <Country rdf:ID="FRENCH-GUIANA">
+    <name>French Guiana</name>
+    <cia rdf:resource="&cia;#FRENCH-GUIANA"/>
+  </Country>
+  
+  <Country rdf:ID="FRENCH-POLYNESIA">
+    <name>French Polynesia</name>
+    <cia rdf:resource="&cia;#FRENCH-POLYNESIA"/>
+  </Country>
+  
+  <Country rdf:ID="FRENCH-SOUTHERN-AND-ANTARCTIC-LANDS">
+    <name>French Southern and Antarctic Lands</name>
+    <cia rdf:resource="&cia;#FRENCH-SOUTHERN-AND-ANTARCTIC-LANDS"/>
+  </Country>
+  
+  <Country rdf:ID="GABON">
+    <name>Gabon</name>
+    <cia rdf:resource="&cia;#GABON"/>
+  </Country>
+  
+  <Country rdf:ID="THE-GAMBIA">
+    <name>Gambia, The</name>
+    <cia rdf:resource="&cia;#THE-GAMBIA"/>
+  </Country>
+  
+  <Country rdf:ID="GAZA-STRIP">
+    <name>Gaza Strip</name>
+    <cia rdf:resource="&cia;#GAZA-STRIP"/>
+  </Country>
+  
+  <Country rdf:ID="GEORGIA">
+    <name>Georgia</name>
+    <cia rdf:resource="&cia;#GEORGIA"/>
+  </Country>
+  
+  <Country rdf:ID="GERMANY">
+    <name>Germany</name>
+    <cia rdf:resource="&cia;#GERMANY"/>
+  </Country>
+  
+  <Country rdf:ID="GHANA">
+    <name>Ghana</name>
+    <cia rdf:resource="&cia;#GHANA"/>
+  </Country>
+  
+  <Country rdf:ID="GIBRALTAR">
+    <name>Gibraltar</name>
+    <cia rdf:resource="&cia;#GIBRALTAR"/>
+  </Country>
+  
+  <Country rdf:ID="GLORIOSO-ISLANDS">
+    <name>Glorioso Islands</name>
+    <cia rdf:resource="&cia;#GLORIOSO-ISLANDS"/>
+  </Country>
+  
+  <Country rdf:ID="GREECE">
+    <name>Greece</name>
+    <cia rdf:resource="&cia;#GREECE"/>
+  </Country>
+  
+  <Country rdf:ID="GREENLAND">
+    <name>Greenland</name>
+    <cia rdf:resource="&cia;#GREENLAND"/>
+  </Country>
+  
+  <Country rdf:ID="GRENADA">
+    <name>Grenada</name>
+    <cia rdf:resource="&cia;#GRENADA"/>
+  </Country>
+  
+  <Country rdf:ID="GUADELOUPE">
+    <name>Guadeloupe</name>
+    <cia rdf:resource="&cia;#GUADELOUPE"/>
+  </Country>
+  
+  <Country rdf:ID="GUAM">
+    <name>Guam</name>
+    <cia rdf:resource="&cia;#GUAM"/>
+  </Country>
+  
+  <Country rdf:ID="GUATEMALA">
+    <name>Guatemala</name>
+    <cia rdf:resource="&cia;#GUATEMALA"/>
+  </Country>
+  
+  <Country rdf:ID="GUERNSEY">
+    <name>Guernsey</name>
+    <cia rdf:resource="&cia;#GUERNSEY"/>
+  </Country>
+  
+  <Country rdf:ID="GUINEA">
+    <name>Guinea</name>
+    <cia rdf:resource="&cia;#GUINEA"/>
+  </Country>
+  
+  <Country rdf:ID="GUINEA-BISSAU">
+    <name>Guinea-Bissau</name>
+    <cia rdf:resource="&cia;#GUINEA-BISSAU"/>
+  </Country>
+  
+  <Country rdf:ID="GUYANA">
+    <name>Guyana</name>
+    <cia rdf:resource="&cia;#GUYANA"/>
+  </Country>
+  
+  <Country rdf:ID="HAITI">
+    <name>Haiti</name>
+    <cia rdf:resource="&cia;#HAITI"/>
+  </Country>
+  
+  <Country rdf:ID="HEARD-ISLAND-AND-MCDONALD-ISLANDS">
+    <name>Heard Island and McDonald Islands</name>
+    <cia rdf:resource="&cia;#HEARD-ISLAND-AND-MCDONALD-ISLANDS"/>
+  </Country>
+  
+  <Country rdf:ID="VATICAN-CITY">
+    <name>Holy See (Vatican City)</name>
+    <cia rdf:resource="&cia;#HOLY-SEE-(VATICAN-CITY)"/>
+  </Country>
+
+  <Country rdf:ID="HOLY-SEE">
+    <name>Holy See (Vatican City)</name>
+    <daml:sameClassAs rdf:resource="#VATICAN-CITY" />
+  </Country>
+  
+  <Country rdf:ID="HONDURAS">
+    <name>Honduras</name>
+    <cia rdf:resource="&cia;#HONDURAS"/>
+  </Country>
+  
+  <Country rdf:ID="HONG-KONG">
+    <name>Hong Kong</name>
+    <cia rdf:resource="&cia;#HONG-KONG"/>
+  </Country>
+  
+  <Country rdf:ID="HOWLAND-ISLAND">
+    <name>Howland Island</name>
+    <cia rdf:resource="&cia;#HOWLAND-ISLAND"/>
+  </Country>
+  
+  <Country rdf:ID="HUNGARY">
+    <name>Hungary</name>
+    <cia rdf:resource="&cia;#HUNGARY"/>
+  </Country>
+  
+  <Country rdf:ID="ICELAND">
+    <name>Iceland</name>
+    <cia rdf:resource="&cia;#ICELAND"/>
+  </Country>
+  
+  <Country rdf:ID="INDIA">
+    <name>India</name>
+    <cia rdf:resource="&cia;#INDIA"/>
+  </Country>
+  
+  <Country rdf:ID="INDIAN-OCEAN">
+    <name>Indian Ocean</name>
+    <cia rdf:resource="&cia;#INDIAN-OCEAN"/>
+  </Country>
+  
+  <Country rdf:ID="INDONESIA">
+    <name>Indonesia</name>
+    <cia rdf:resource="&cia;#INDONESIA"/>
+  </Country>
+  
+  <Country rdf:ID="IRAN">
+    <name>Iran</name>
+    <cia rdf:resource="&cia;#IRAN"/>
+  </Country>
+  
+  <Country rdf:ID="IRAQ">
+    <name>Iraq</name>
+    <cia rdf:resource="&cia;#IRAQ"/>
+  </Country>
+  
+  <Country rdf:ID="IRELAND">
+    <name>Ireland</name>
+    <cia rdf:resource="&cia;#IRELAND"/>
+  </Country>
+  
+  <Country rdf:ID="ISRAEL">
+    <name>Israel</name>
+    <cia rdf:resource="&cia;#ISRAEL"/>
+  </Country>
+  
+  <Country rdf:ID="ITALY">
+    <name>Italy</name>
+    <cia rdf:resource="&cia;#ITALY"/>
+  </Country>
+  
+  <Country rdf:ID="JAMAICA">
+    <name>Jamaica</name>
+    <cia rdf:resource="&cia;#JAMAICA"/>
+  </Country>
+  
+  <Country rdf:ID="JAN-MAYEN">
+    <name>Jan Mayen</name>
+    <cia rdf:resource="&cia;#JAN-MAYEN"/>
+  </Country>
+  
+  <Country rdf:ID="JAPAN">
+    <name>Japan</name>
+    <cia rdf:resource="&cia;#JAPAN"/>
+  </Country>
+  
+  <Country rdf:ID="JARVIS-ISLAND">
+    <name>Jarvis Island</name>
+    <cia rdf:resource="&cia;#JARVIS-ISLAND"/>
+  </Country>
+  
+  <Country rdf:ID="JERSEY">
+    <name>Jersey</name>
+    <cia rdf:resource="&cia;#JERSEY"/>
+  </Country>
+  
+  <Country rdf:ID="JOHNSTON-ATOLL">
+    <name>Johnston Atoll</name>
+    <cia rdf:resource="&cia;#JOHNSTON-ATOLL"/>
+  </Country>
+  
+  <Country rdf:ID="JORDAN">
+    <name>Jordan</name>
+    <cia rdf:resource="&cia;#JORDAN"/>
+  </Country>
+  
+  <Country rdf:ID="JUAN-DE-NOVA-ISLAND">
+    <name>Juan de Nova Island</name>
+    <cia rdf:resource="&cia;#JUAN-DE-NOVA-ISLAND"/>
+  </Country>
+  
+  <Country rdf:ID="KAZAKHSTAN">
+    <name>Kazakhstan</name>
+    <cia rdf:resource="&cia;#KAZAKHSTAN"/>
+  </Country>
+  
+  <Country rdf:ID="KENYA">
+    <name>Kenya</name>
+    <cia rdf:resource="&cia;#KENYA"/>
+  </Country>
+  
+  <Country rdf:ID="KINGMAN-REEF">
+    <name>Kingman Reef</name>
+    <cia rdf:resource="&cia;#KINGMAN-REEF"/>
+  </Country>
+  
+  <Country rdf:ID="KIRIBATI">
+    <name>Kiribati</name>
+    <cia rdf:resource="&cia;#KIRIBATI"/>
+  </Country>
+  
+  <Country rdf:ID="NORTH-KOREA">
+    <name>Korea, North</name>
+    <cia rdf:resource="&cia;#NORTH-KOREA"/>
+  </Country>
+  
+  <Country rdf:ID="SOUTH-KOREA">
+    <name>Korea, South</name>
+    <cia rdf:resource="&cia;#SOUTH-KOREA"/>
+  </Country>
+  
+  <Country rdf:ID="KUWAIT">
+    <name>Kuwait</name>
+    <cia rdf:resource="&cia;#KUWAIT"/>
+  </Country>
+  
+  <Country rdf:ID="KYRGYZSTAN">
+    <name>Kyrgyzstan</name>
+    <cia rdf:resource="&cia;#KYRGYZSTAN"/>
+  </Country>
+  
+  <Country rdf:ID="LAOS">
+    <name>Laos</name>
+    <cia rdf:resource="&cia;#LAOS"/>
+  </Country>
+  
+  <Country rdf:ID="LATVIA">
+    <name>Latvia</name>
+    <cia rdf:resource="&cia;#LATVIA"/>
+  </Country>
+  
+  <Country rdf:ID="LEBANON">
+    <name>Lebanon</name>
+    <cia rdf:resource="&cia;#LEBANON"/>
+  </Country>
+  
+  <Country rdf:ID="LESOTHO">
+    <name>Lesotho</name>
+    <cia rdf:resource="&cia;#LESOTHO"/>
+  </Country>
+  
+  <Country rdf:ID="LIBERIA">
+    <name>Liberia</name>
+    <cia rdf:resource="&cia;#LIBERIA"/>
+  </Country>
+  
+  <Country rdf:ID="LIBYA">
+    <name>Libya</name>
+    <cia rdf:resource="&cia;#LIBYA"/>
+  </Country>
+  
+  <Country rdf:ID="LIECHTENSTEIN">
+    <name>Liechtenstein</name>
+    <cia rdf:resource="&cia;#LIECHTENSTEIN"/>
+  </Country>
+  
+  <Country rdf:ID="LITHUANIA">
+    <name>Lithuania</name>
+    <cia rdf:resource="&cia;#LITHUANIA"/>
+  </Country>
+  
+  <Country rdf:ID="LUXEMBOURG">
+    <name>Luxembourg</name>
+    <cia rdf:resource="&cia;#LUXEMBOURG"/>
+  </Country>
+  
+  <Country rdf:ID="MACAU">
+    <name>Macau</name>
+    <cia rdf:resource="&cia;#MACAU"/>
+  </Country>
+  
+  <Country rdf:ID="THE-FORMER-YUGOSLAV-REPUBLIC-OF-MACEDONIA">
+    <name>Macedonia, The Former Yugoslav Republic of</name>
+    <cia rdf:resource="&cia;#THE-FORMER-YUGOSLAV-REPUBLIC-OF-MACEDONIA"/>
+  </Country>
+  
+  <Country rdf:ID="MADAGASCAR">
+    <name>Madagascar</name>
+    <cia rdf:resource="&cia;#MADAGASCAR"/>
+  </Country>
+  
+  <Country rdf:ID="MALAWI">
+    <name>Malawi</name>
+    <cia rdf:resource="&cia;#MALAWI"/>
+  </Country>
+  
+  <Country rdf:ID="MALAYSIA">
+    <name>Malaysia</name>
+    <cia rdf:resource="&cia;#MALAYSIA"/>
+  </Country>
+  
+  <Country rdf:ID="MALDIVES">
+    <name>Maldives</name>
+    <cia rdf:resource="&cia;#MALDIVES"/>
+  </Country>
+  
+  <Country rdf:ID="MALI">
+    <name>Mali</name>
+    <cia rdf:resource="&cia;#MALI"/>
+  </Country>
+  
+  <Country rdf:ID="MALTA">
+    <name>Malta</name>
+    <cia rdf:resource="&cia;#MALTA"/>
+  </Country>
+  
+  <Country rdf:ID="ISLE-OF-MAN">
+    <name>Man, Isle of</name>
+    <cia rdf:resource="&cia;#ISLE-OF-MAN"/>
+  </Country>
+  
+  <Country rdf:ID="MARSHALL-ISLANDS">
+    <name>Marshall Islands</name>
+    <cia rdf:resource="&cia;#MARSHALL-ISLANDS"/>
+  </Country>
+  
+  <Country rdf:ID="MARTINIQUE">
+    <name>Martinique</name>
+    <cia rdf:resource="&cia;#MARTINIQUE"/>
+  </Country>
+  
+  <Country rdf:ID="MAURITANIA">
+    <name>Mauritania</name>
+    <cia rdf:resource="&cia;#MAURITANIA"/>
+  </Country>
+  
+  <Country rdf:ID="MAURITIUS">
+    <name>Mauritius</name>
+    <cia rdf:resource="&cia;#MAURITIUS"/>
+  </Country>
+  
+  <Country rdf:ID="MAYOTTE">
+    <name>Mayotte</name>
+    <cia rdf:resource="&cia;#MAYOTTE"/>
+  </Country>
+  
+  <Country rdf:ID="MEXICO">
+    <name>Mexico</name>
+    <cia rdf:resource="&cia;#MEXICO"/>
+  </Country>
+  
+  <Country rdf:ID="FEDERATED-STATES-OF-MICRONESIA">
+    <name>Micronesia, Federated States of</name>
+    <cia rdf:resource="&cia;#FEDERATED-STATES-OF-MICRONESIA"/>
+  </Country>
+  
+  <Country rdf:ID="MIDWAY-ISLANDS">
+    <name>Midway Islands</name>
+    <cia rdf:resource="&cia;#MIDWAY-ISLANDS"/>
+  </Country>
+  
+  <Country rdf:ID="MOLDOVA">
+    <name>Moldova</name>
+    <cia rdf:resource="&cia;#MOLDOVA"/>
+  </Country>
+  
+  <Country rdf:ID="MONACO">
+    <name>Monaco</name>
+    <cia rdf:resource="&cia;#MONACO"/>
+  </Country>
+  
+  <Country rdf:ID="MONGOLIA">
+    <name>Mongolia</name>
+    <cia rdf:resource="&cia;#MONGOLIA"/>
+  </Country>
+  
+  <Country rdf:ID="MONTSERRAT">
+    <name>Montserrat</name>
+    <cia rdf:resource="&cia;#MONTSERRAT"/>
+  </Country>
+  
+  <Country rdf:ID="MOROCCO">
+    <name>Morocco</name>
+    <cia rdf:resource="&cia;#MOROCCO"/>
+  </Country>
+  
+  <Country rdf:ID="MOZAMBIQUE">
+    <name>Mozambique</name>
+    <cia rdf:resource="&cia;#MOZAMBIQUE"/>
+  </Country>
+  
+  <Country rdf:ID="NAMIBIA">
+    <name>Namibia</name>
+    <cia rdf:resource="&cia;#NAMIBIA"/>
+  </Country>
+  
+  <Country rdf:ID="NAURU">
+    <name>Nauru</name>
+    <cia rdf:resource="&cia;#NAURU"/>
+  </Country>
+  
+  <Country rdf:ID="NAVASSA-ISLAND">
+    <name>Navassa Island</name>
+    <cia rdf:resource="&cia;#NAVASSA-ISLAND"/>
+  </Country>
+  
+  <Country rdf:ID="NEPAL">
+    <name>Nepal</name>
+    <cia rdf:resource="&cia;#NEPAL"/>
+  </Country>
+  
+  <Country rdf:ID="NETHERLANDS">
+    <name>Netherlands</name>
+    <cia rdf:resource="&cia;#NETHERLANDS"/>
+  </Country>
+  
+  <Country rdf:ID="NETHERLANDS-ANTILLES">
+    <name>Netherlands Antilles</name>
+    <cia rdf:resource="&cia;#NETHERLANDS-ANTILLES"/>
+  </Country>
+  
+  <Country rdf:ID="NEW-CALEDONIA">
+    <name>New Caledonia</name>
+    <cia rdf:resource="&cia;#NEW-CALEDONIA"/>
+  </Country>
+  
+  <Country rdf:ID="NEW-ZEALAND">
+    <name>New Zealand</name>
+    <cia rdf:resource="&cia;#NEW-ZEALAND"/>
+  </Country>
+  
+  <Country rdf:ID="NICARAGUA">
+    <name>Nicaragua</name>
+    <cia rdf:resource="&cia;#NICARAGUA"/>
+  </Country>
+  
+  <Country rdf:ID="NIGER">
+    <name>Niger</name>
+    <cia rdf:resource="&cia;#NIGER"/>
+  </Country>
+  
+  <Country rdf:ID="NIGERIA">
+    <name>Nigeria</name>
+    <cia rdf:resource="&cia;#NIGERIA"/>
+  </Country>
+  
+  <Country rdf:ID="NIUE">
+    <name>Niue</name>
+    <cia rdf:resource="&cia;#NIUE"/>
+  </Country>
+  
+  <Country rdf:ID="NORFOLK-ISLAND">
+    <name>Norfolk Island</name>
+    <cia rdf:resource="&cia;#NORFOLK-ISLAND"/>
+  </Country>
+  
+  <Country rdf:ID="NORTHERN-MARIANA-ISLANDS">
+    <name>Northern Mariana Islands</name>
+    <cia rdf:resource="&cia;#NORTHERN-MARIANA-ISLANDS"/>
+  </Country>
+  
+  <Country rdf:ID="NORWAY">
+    <name>Norway</name>
+    <cia rdf:resource="&cia;#NORWAY"/>
+  </Country>
+  
+  <Country rdf:ID="OMAN">
+    <name>Oman</name>
+    <cia rdf:resource="&cia;#OMAN"/>
+  </Country>
+  
+  <Country rdf:ID="PACIFIC-OCEAN">
+    <name>Pacific Ocean</name>
+    <cia rdf:resource="&cia;#PACIFIC-OCEAN"/>
+  </Country>
+  
+  <Country rdf:ID="PAKISTAN">
+    <name>Pakistan</name>
+    <cia rdf:resource="&cia;#PAKISTAN"/>
+  </Country>
+
+  <Country rdf:ID="PALESTINE">
+    <name>Palestine</name>
+    <cia rdf:resource="&cia;#WEST-BANK"/>
+    <cia rdf:resource="&cia;#GAZA-STRIP"/>
+  </Country>
+  
+  <Country rdf:ID="PALAU">
+    <name>Palau</name>
+    <cia rdf:resource="&cia;#PALAU"/>
+  </Country>
+  
+  <Country rdf:ID="PALMYRA-ATOLL">
+    <name>Palmyra Atoll</name>
+    <cia rdf:resource="&cia;#PALMYRA-ATOLL"/>
+  </Country>
+  
+  <Country rdf:ID="PANAMA">
+    <name>Panama</name>
+    <cia rdf:resource="&cia;#PANAMA"/>
+  </Country>
+  
+  <Country rdf:ID="PAPUA-NEW-GUINEA">
+    <name>Papua New Guinea</name>
+    <cia rdf:resource="&cia;#PAPUA-NEW-GUINEA"/>
+  </Country>
+  
+  <Country rdf:ID="PARACEL-ISLANDS">
+    <name>Paracel Islands</name>
+    <cia rdf:resource="&cia;#PARACEL-ISLANDS"/>
+  </Country>
+  
+  <Country rdf:ID="PARAGUAY">
+    <name>Paraguay</name>
+    <cia rdf:resource="&cia;#PARAGUAY"/>
+  </Country>
+  
+  <Country rdf:ID="PERU">
+    <name>Peru</name>
+    <cia rdf:resource="&cia;#PERU"/>
+  </Country>
+  
+  <Country rdf:ID="PHILIPPINES">
+    <name>Philippines</name>
+    <cia rdf:resource="&cia;#PHILIPPINES"/>
+  </Country>
+  
+  <Country rdf:ID="PITCAIRN-ISLANDS">
+    <name>Pitcairn Islands</name>
+    <cia rdf:resource="&cia;#PITCAIRN-ISLANDS"/>
+  </Country>
+  
+  <Country rdf:ID="POLAND">
+    <name>Poland</name>
+    <cia rdf:resource="&cia;#POLAND"/>
+  </Country>
+  
+  <Country rdf:ID="PORTUGAL">
+    <name>Portugal</name>
+    <cia rdf:resource="&cia;#PORTUGAL"/>
+  </Country>
+  
+  <Country rdf:ID="PUERTO-RICO">
+    <name>Puerto Rico</name>
+    <cia rdf:resource="&cia;#PUERTO-RICO"/>
+  </Country>
+  
+  <Country rdf:ID="QATAR">
+    <name>Qatar</name>
+    <cia rdf:resource="&cia;#QATAR"/>
+  </Country>
+  
+  <Country rdf:ID="REUNION">
+    <name>Reunion</name>
+    <cia rdf:resource="&cia;#REUNION"/>
+  </Country>
+  
+  <Country rdf:ID="ROMANIA">
+    <name>Romania</name>
+    <cia rdf:resource="&cia;#ROMANIA"/>
+  </Country>
+  
+  <Country rdf:ID="RUSSIA">
+    <name>Russia</name>
+    <cia rdf:resource="&cia;#RUSSIA"/>
+  </Country>
+  
+  <Country rdf:ID="RWANDA">
+    <name>Rwanda</name>
+    <cia rdf:resource="&cia;#RWANDA"/>
+  </Country>
+  
+  <Country rdf:ID="SAINT-HELENA">
+    <name>Saint Helena</name>
+    <cia rdf:resource="&cia;#SAINT-HELENA"/>
+  </Country>
+  
+  <Country rdf:ID="SAINT-KITTS-AND-NEVIS">
+    <name>Saint Kitts and Nevis</name>
+    <cia rdf:resource="&cia;#SAINT-KITTS-AND-NEVIS"/>
+  </Country>
+  
+  <Country rdf:ID="SAINT-LUCIA">
+    <name>Saint Lucia</name>
+    <cia rdf:resource="&cia;#SAINT-LUCIA"/>
+  </Country>
+  
+  <Country rdf:ID="SAINT-PIERRE-AND-MIQUELON">
+    <name>Saint Pierre and Miquelon</name>
+    <cia rdf:resource="&cia;#SAINT-PIERRE-AND-MIQUELON"/>
+  </Country>
+  
+  <Country rdf:ID="SAINT-VINCENT-AND-THE-GRENADINES">
+    <name>Saint Vincent and the Grenadines</name>
+    <cia rdf:resource="&cia;#SAINT-VINCENT-AND-THE-GRENADINES"/>
+  </Country>
+  
+  <Country rdf:ID="SAMOA">
+    <name>Samoa</name>
+    <cia rdf:resource="&cia;#SAMOA"/>
+  </Country>
+  
+  <Country rdf:ID="SAN-MARINO">
+    <name>San Marino</name>
+    <cia rdf:resource="&cia;#SAN-MARINO"/>
+  </Country>
+  
+  <Country rdf:ID="SAO-TOME-AND-PRINCIPE">
+    <name>Sao Tome and Principe</name>
+    <cia rdf:resource="&cia;#SAO-TOME-AND-PRINCIPE"/>
+  </Country>
+  
+  <Country rdf:ID="SAUDI-ARABIA">
+    <name>Saudi Arabia</name>
+    <cia rdf:resource="&cia;#SAUDI-ARABIA"/>
+  </Country>
+  
+  <Country rdf:ID="SENEGAL">
+    <name>Senegal</name>
+    <cia rdf:resource="&cia;#SENEGAL"/>
+  </Country>
+  
+  <Country rdf:ID="SERBIA-AND-MONTENEGRO">
+    <name>Serbia and Montenegro</name>
+    <cia rdf:resource="&cia;#SERBIA-AND-MONTENEGRO"/>
+  </Country>
+  
+  <Country rdf:ID="SEYCHELLES">
+    <name>Seychelles</name>
+    <cia rdf:resource="&cia;#SEYCHELLES"/>
+  </Country>
+  
+  <Country rdf:ID="SIERRA-LEONE">
+    <name>Sierra Leone</name>
+    <cia rdf:resource="&cia;#SIERRA-LEONE"/>
+  </Country>
+  
+  <Country rdf:ID="SINGAPORE">
+    <name>Singapore</name>
+    <cia rdf:resource="&cia;#SINGAPORE"/>
+  </Country>
+  
+  <Country rdf:ID="SLOVAKIA">
+    <name>Slovakia</name>
+    <cia rdf:resource="&cia;#SLOVAKIA"/>
+  </Country>
+  
+  <Country rdf:ID="SLOVENIA">
+    <name>Slovenia</name>
+    <cia rdf:resource="&cia;#SLOVENIA"/>
+  </Country>
+  
+  <Country rdf:ID="SOLOMON-ISLANDS">
+    <name>Solomon Islands</name>
+    <cia rdf:resource="&cia;#SOLOMON-ISLANDS"/>
+  </Country>
+  
+  <Country rdf:ID="SOMALIA">
+    <name>Somalia</name>
+    <cia rdf:resource="&cia;#SOMALIA"/>
+  </Country>
+  
+  <Country rdf:ID="SOUTH-AFRICA">
+    <name>South Africa</name>
+    <cia rdf:resource="&cia;#SOUTH-AFRICA"/>
+  </Country>
+  
+  <Country rdf:ID="SOUTH-GEORGIA-AND-THE-SOUTH-SANDWICH-ISLANDS">
+    <name>South Georgia and the South Sandwich Islands</name>
+    <cia rdf:resource="&cia;#SOUTH-GEORGIA-AND-THE-SOUTH-SANDWICH-ISLANDS"/>
+  </Country>
+  
+  <Country rdf:ID="SOUTHERN-OCEAN">
+    <name>Southern Ocean</name>
+    <cia rdf:resource="&cia;#SOUTHERN-OCEAN"/>
+  </Country>
+  
+  <Country rdf:ID="SPAIN">
+    <name>Spain</name>
+    <cia rdf:resource="&cia;#SPAIN"/>
+  </Country>
+  
+  <Country rdf:ID="SPRATLY-ISLANDS">
+    <name>Spratly Islands</name>
+    <cia rdf:resource="&cia;#SPRATLY-ISLANDS"/>
+  </Country>
+  
+  <Country rdf:ID="SRI-LANKA">
+    <name>Sri Lanka</name>
+    <cia rdf:resource="&cia;#SRI-LANKA"/>
+  </Country>
+  
+  <Country rdf:ID="SUDAN">
+    <name>Sudan</name>
+    <cia rdf:resource="&cia;#SUDAN"/>
+  </Country>
+  
+  <Country rdf:ID="SURINAME">
+    <name>Suriname</name>
+    <cia rdf:resource="&cia;#SURINAME"/>
+  </Country>
+  
+  <Country rdf:ID="SVALBARD">
+    <name>Svalbard</name>
+    <cia rdf:resource="&cia;#SVALBARD"/>
+  </Country>
+  
+  <Country rdf:ID="SWAZILAND">
+    <name>Swaziland</name>
+    <cia rdf:resource="&cia;#SWAZILAND"/>
+  </Country>
+  
+  <Country rdf:ID="SWEDEN">
+    <name>Sweden</name>
+    <cia rdf:resource="&cia;#SWEDEN"/>
+  </Country>
+  
+  <Country rdf:ID="SWITZERLAND">
+    <name>Switzerland</name>
+    <cia rdf:resource="&cia;#SWITZERLAND"/>
+  </Country>
+  
+  <Country rdf:ID="SYRIA">
+    <name>Syria</name>
+    <cia rdf:resource="&cia;#SYRIA"/>
+  </Country>
+  
+  <Country rdf:ID="TAJIKISTAN-">
+    <name>Tajikistan </name>
+    <cia rdf:resource="&cia;#TAJIKISTAN-"/>
+  </Country>
+  
+  <Country rdf:ID="TANZANIA-">
+    <name>Tanzania </name>
+    <cia rdf:resource="&cia;#TANZANIA-"/>
+  </Country>
+  
+  <Country rdf:ID="THAILAND-">
+    <name>Thailand </name>
+    <cia rdf:resource="&cia;#THAILAND-"/>
+  </Country>
+  
+  <Country rdf:ID="TOGO-">
+    <name>Togo </name>
+    <cia rdf:resource="&cia;#TOGO-"/>
+  </Country>
+  
+  <Country rdf:ID="TOKELAU-">
+    <name>Tokelau </name>
+    <cia rdf:resource="&cia;#TOKELAU-"/>
+  </Country>
+  
+  <Country rdf:ID="TONGA-">
+    <name>Tonga </name>
+    <cia rdf:resource="&cia;#TONGA-"/>
+  </Country>
+  
+  <Country rdf:ID="TRINIDAD-AND-TOBAGO-">
+    <name>Trinidad and Tobago </name>
+    <cia rdf:resource="&cia;#TRINIDAD-AND-TOBAGO-"/>
+  </Country>
+  
+  <Country rdf:ID="TROMELIN-ISLAND-">
+    <name>Tromelin Island </name>
+    <cia rdf:resource="&cia;#TROMELIN-ISLAND-"/>
+  </Country>
+  
+  <Country rdf:ID="TUNISIA-">
+    <name>Tunisia </name>
+    <cia rdf:resource="&cia;#TUNISIA-"/>
+  </Country>
+  
+  <Country rdf:ID="TURKEY-">
+    <name>Turkey </name>
+    <cia rdf:resource="&cia;#TURKEY-"/>
+  </Country>
+  
+  <Country rdf:ID="TURKMENISTAN-">
+    <name>Turkmenistan </name>
+    <cia rdf:resource="&cia;#TURKMENISTAN-"/>
+  </Country>
+  
+  <Country rdf:ID="TURKS-AND-CAICOS-ISLANDS-">
+    <name>Turks and Caicos Islands </name>
+    <cia rdf:resource="&cia;#TURKS-AND-CAICOS-ISLANDS-"/>
+  </Country>
+  
+  <Country rdf:ID="TUVALU-">
+    <name>Tuvalu </name>
+    <cia rdf:resource="&cia;#TUVALU-"/>
+  </Country>
+  
+  <Country rdf:ID="UGANDA">
+    <name>Uganda</name>
+    <cia rdf:resource="&cia;#UGANDA"/>
+  </Country>
+  
+  <Country rdf:ID="UKRAINE">
+    <name>Ukraine</name>
+    <cia rdf:resource="&cia;#UKRAINE"/>
+  </Country>
+  
+  <Country rdf:ID="UNITED-ARAB-EMIRATES">
+    <name>United Arab Emirates</name>
+    <cia rdf:resource="&cia;#UNITED-ARAB-EMIRATES"/>
+  </Country>
+  
+  <Country rdf:ID="UNITED-KINGDOM">
+    <name>United Kingdom</name>
+    <cia rdf:resource="&cia;#UNITED-KINGDOM"/>
+  </Country>
+  
+  <Country rdf:ID="UNITED-STATES">
+    <name>United States</name>
+    <cia rdf:resource="&cia;#UNITED-STATES"/>
+  </Country>
+  
+  <Country rdf:ID="URUGUAY">
+    <name>Uruguay</name>
+    <cia rdf:resource="&cia;#URUGUAY"/>
+  </Country>
+  
+  <Country rdf:ID="UZBEKISTAN">
+    <name>Uzbekistan</name>
+    <cia rdf:resource="&cia;#UZBEKISTAN"/>
+  </Country>
+  
+  <Country rdf:ID="VANUATU">
+    <name>Vanuatu</name>
+    <cia rdf:resource="&cia;#VANUATU"/>
+  </Country>
+  
+  <Country rdf:ID="VENEZUELA">
+    <name>Venezuela</name>
+    <cia rdf:resource="&cia;#VENEZUELA"/>
+  </Country>
+  
+  <Country rdf:ID="VIETNAM">
+    <name>Vietnam</name>
+    <cia rdf:resource="&cia;#VIETNAM"/>
+  </Country>
+  
+  <Country rdf:ID="VIRGIN-ISLANDS">
+    <name>Virgin Islands</name>
+    <cia rdf:resource="&cia;#VIRGIN-ISLANDS"/>
+  </Country>
+  
+  <Country rdf:ID="WAKE-ISLAND">
+    <name>Wake Island</name>
+    <cia rdf:resource="&cia;#WAKE-ISLAND"/>
+  </Country>
+  
+  <Country rdf:ID="WALLIS-AND-FUTUNA">
+    <name>Wallis and Futuna</name>
+    <cia rdf:resource="&cia;#WALLIS-AND-FUTUNA"/>
+  </Country>
+  
+  <Country rdf:ID="WEST-BANK">
+    <name>West Bank</name>
+    <cia rdf:resource="&cia;#WEST-BANK"/>
+  </Country>
+  
+  <Country rdf:ID="WESTERN-SAHARA">
+    <name>Western Sahara</name>
+    <cia rdf:resource="&cia;#WESTERN-SAHARA"/>
+  </Country>
+  
+  <Country rdf:ID="WORLD">
+    <name>World</name>
+    <cia rdf:resource="&cia;#WORLD"/>
+  </Country>
+  
+  <Country rdf:ID="YEMEN">
+    <name>Yemen</name>
+    <cia rdf:resource="&cia;#YEMEN"/>
+  </Country>
+  
+  <Country rdf:ID="ZAMBIA">
+    <name>Zambia</name>
+    <cia rdf:resource="&cia;#ZAMBIA"/>
+  </Country>
+  
+  <Country rdf:ID="ZIMBABWE">
+    <name>Zimbabwe</name>
+    <cia rdf:resource="&cia;#ZIMBABWE"/>
+  </Country>
+  
+  <Country rdf:ID="TAIWAN">
+    <name>Taiwan</name>
+    <cia rdf:resource="&cia;#TAIWAN"/>
+  </Country>
+  
+</rdf:RDF>

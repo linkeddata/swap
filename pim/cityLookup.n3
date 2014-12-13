@@ -1,0 +1,223 @@
+# notes as this was developed...
+# http://ilrt.org/discovery/chatlogs/rdfig/2003-03-10#T22-49-48
+#
+# $Id$
+# see log at end
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix str: <http://www.w3.org/2000/10/swap/string#>.
+@prefix con: <http://www.w3.org/2000/10/swap/pim/contact#>.
+
+@prefix k: <http://opencyc.sourceforge.net/daml/cyc.daml#>.
+
+@prefix map: <http://www.w3.org/2000/10/swap/pim/earthMap#>.
+@prefix usps: <http://www.w3.org/2000/10/swap/pim/usps#> .
+
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix cal: <http://www.w3.org/2002/12/cal/icaltzd#>.
+
+@prefix apt: <http://www.daml.org/2001/10/html/airport-ont#>.
+
+@prefix      : <http://www.w3.org/2000/10/swap/pim/cityLookup#>.
+@prefix cityl: <http://www.w3.org/2000/10/swap/pim/cityLookup#>.
+
+
+# http://www.wunderground.com/cgi-bin/findweather/getForecast?query=66210
+{
+  ?PLACE usps:zipCode ?ZIP
+} => { ?PLACE :formVal ?ZIP }.
+
+# http://www.wunderground.com/cgi-bin/findweather/getForecast?query=Budapest%2C+Hungary
+
+{
+  ?PLACE con:phone [ log:uri ?TXT ].
+  (?TXT "\\+1-(\\d\\d\\d)-\\d\\d\\d-\\d\\d\\d\\d") str:scrape ?ACODE.
+  (?TXT "\\+1-\\d\\d\\d-(\\d\\d\\d)-\\d\\d\\d\\d") str:scrape ?EXCH.
+  ?PG log:uri [ is str:concatenation of (
+    "http://www.primeris.com/fonefind/findome.php?npa=" ?ACODE
+    "&nxx=" ?EXCH )].
+}
+ =>
+{ ?PLACE :phonePage ?PG }.
+
+{
+  ?PLACE :phonePage [ log:content ?TXT ].
+  (?TXT "<TR><TD>\\d+<TD>\\d+<TD>([A-Za-z\\. ]+)<TD>")
+	 str:scrape ?CITYNAME.
+  (?TXT "<TR><TD>\\d+<TD>\\d+<TD>[A-Za-z\\. ]+<TD><A HREF='images/npamap/(\\w\\w).gif'>[^<]+</A>")
+	 str:scrape ?STATECODEL.
+
+  ?STATE usps:stateAbbr [ str:equalIgnoringCase ?STATECODEL ].
+} =>
+{
+  ?PLACE k:inRegion [
+    map:cityName ?CITYNAME;
+    k:inRegion ?STATE
+  ].
+}.
+
+
+
+# states I visited on one of my trips...
+# hmm... surely this table is published by the post office...
+k:Kansas               usps:stateAbbr "KS".
+k:Missouri             usps:stateAbbr "MO".
+k:Illinois-State       usps:stateAbbr "IL".
+k:Indiana-State        usps:stateAbbr "IN".
+k:Ohio-State           usps:stateAbbr "OH".
+k:Pennsylvania-State   usps:stateAbbr "PA".
+k:New_York-State       usps:stateAbbr "NY".
+k:New_Hampshire-State  usps:stateAbbr "NH".
+k:Vermont-State        usps:stateAbbr "VT".
+k:Massachusetts-State  usps:stateAbbr "MA".
+
+
+{
+ ?CITY k:inRegion ?AREA.
+
+ ?N is str:concatenation of (
+  [ is map:cityName of ?CITY ]
+  "%2C"
+  [ is map:countryName of ?AREA ]
+ ).
+}
+  log:implies { ?CITY :formVal ?N }.
+
+# What we really want is a built-in for
+# uri-escaping. This KLUDGE works just
+# for the U.K.
+{
+ ?CITY k:inRegion [ map:countryName "United Kingdom"].
+
+ ?N is str:concatenation of (
+  [ is map:cityName of ?CITY ]
+  "%2CUnited+Kingdom"
+ ).
+}
+  log:implies { ?CITY :formVal ?N }.
+
+
+{
+ ?CITY k:inRegion ?AREA.
+
+ ?N is str:concatenation of (
+  [ is map:cityName of ?CITY ]
+  "%2C"
+  [ is usps:stateAbbr of ?AREA ]
+ ).
+}
+  log:implies { ?CITY :formVal ?N }.
+
+{
+ ?WHERE apt:iataCode ?CODE.
+}
+  log:implies { ?WHERE :formVal ?CODE }.
+
+# ORD finds Ord, Nebraska as well as the airport
+{ ?WHERE :formVal "ORD" } => { ?WHERE :formVal "Chicago" }.
+# patch for HEL airport
+{ ?WHERE :formVal "HEL" } => { ?WHERE :formVal "Helsinki" }.
+# patch for MAN airport
+{ ?WHERE :formVal "MAN" } => { ?WHERE :formVal "Manchester,United+Kingdom" }.
+
+#http://www.vicinity.com/myblast/map.mb?CMD=LFILL&&CT=47.43000031:19.18000031:90000&
+
+{
+ ?PG log:uri [ is str:concatenation of (
+  "http://www.wunderground.com/cgi-bin/findweather/getForecast?query="
+  [ is :formVal of ?CITY ] ) ].
+
+
+ ?PG log:content ?TXT.
+ (?TXT "CMD=LFILL&&CT=([^:]+):") str:scrape ?LAT.
+ (?TXT "CMD=LFILL&&CT=[^:]+:([^:]+):") str:scrape ?LON.
+} => { ?CITY :weatherPage ?PG; geo:lat ?LAT; geo:long ?LON }.
+
+
+# http://mappoint.msn.com/map.aspx?L=USA&C=40.75013351,-73.99700928&A=70
+{
+ ?PG log:uri [ is str:concatenation of (
+  "http://www.wunderground.com/cgi-bin/findweather/getForecast?query="
+  [ is :formVal of ?CITY ] ) ].
+
+
+ ?PG log:content ?TXT.
+ (?TXT "L=USA&C=([^,]+),") str:scrape ?LAT.
+ (?TXT "L=USA&C=[^,]+,([^&]+)&") str:scrape ?LON.
+} => { ?CITY :weatherPage ?PG; geo:lat ?LAT; geo:long ?LON }.
+
+#<font size="-1">Local Time: <b> 3:29 PM EST on February 22, 2004</b> [America/New_York] </font>
+# oops... changed...
+# http://www.wunderground.com/picktimezone.asp?tz=Europe/Brussels
+{
+ ?PG log:uri [ is str:concatenation of (
+  "http://www.wunderground.com/cgi-bin/findweather/getForecast?query="
+  [ is :formVal of ?CITY ] ) ].
+
+
+ ?PG log:content ?TXT.
+ (?TXT "/picktimezone.asp\\?tz=([A-Za-z_/]+)") str:scrape ?TZN.
+ ?TZ log:uri [
+   is str:concatenation of
+   ("http://www.w3.org/2002/12/cal/tzd/" ?TZN "#tz")
+  ].
+
+} => {
+ ?TZ a cal:Vtimezone, k:SpatialThing.
+ ?CITY :weatherPage ?PG; k:inRegion ?TZ.
+ }.
+
+
+# test case
+
+#[ map:cityName "Budapest";
+#  k:inRegion [ map:countryName "Hungary" ] ].
+
+# $Log$
+# Revision 1.14  2005-09-15 02:03:39  connolly
+# patch for MAN airport
+#
+# Revision 1.13  2005/04/22 15:52:21  connolly
+# icaltzd namespace update
+#
+# Revision 1.12  2004/12/23 15:58:28  connolly
+# patch for HEL/Helsinki
+#
+# Revision 1.11  2004/12/23 15:42:05  connolly
+# eliminated :lower hack to avoid literal subjects
+#
+# Revision 1.10  2004/11/13 20:01:59  connolly
+# special case for ORD/Chicago
+#
+# Revision 1.9  2004/07/09 03:55:43  connolly
+# deal with lowercase state codes in phone lookup
+#
+# Revision 1.8  2004/07/04 19:07:04  connolly
+# in order to map phone numbers to timezones,
+# map phone numbers to cities via primeris.com.
+# Hmm... is the mapping from states to area codes 1-1?
+#  no... arizona, for one. sigh.
+#
+# Revision 1.7  2004/05/03 14:30:54  connolly
+# scrape new page layout
+#
+# Revision 1.6  2004/04/14 16:01:06  connolly
+# kludge for United Kingdom
+#
+# Revision 1.5  2004/02/22 20:50:06  connolly
+#  - scrape US-specific lat/lon pattern
+#  - scrape time zone names as well as lat/lon
+#  - look up airport codes as well as city names
+#
+# Revision 1.4  2003/07/07 16:10:16  connolly
+# documented nearestAirport property; cleaned up parse errors in contact.n3; used doc:persistencePolicy in contact; fixed typo in doc
+#
+# Revision 1.3  2003/04/14 21:19:34  connolly
+# 4Apr refactor
+#
+# Revision 1.2  2003/03/10 23:57:42  connolly
+# u.s. city support
+#
+# Revision 1.1  2003/03/10 22:51:38  connolly
+# got one case to work
+#

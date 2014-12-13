@@ -1,0 +1,13 @@
+<rdf:RDF 
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/" >
+
+<rdf:Description rdf:about="#obj1">
+  <dc:creator>Ralph</dc:creator>
+</rdf:Description>
+
+<rdf:Description rdf:about="#obj2">
+  <dc:creator>Also Ralph</dc:creator>
+</rdf:Description>
+
+</rdf:RDF>

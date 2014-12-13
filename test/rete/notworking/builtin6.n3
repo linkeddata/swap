@@ -1,0 +1,14 @@
+        @prefix : <http://cwmTest/>.
+
+        @prefix log: <http://www.w3.org/2000/10/swap/log#>.
+	  @prefix math: <http://www.w3.org/2000/10/swap/math#> .
+
+{ ?a :hasValue ?x. ?b :hasValue ?y.  ?b :hasValue ?z. 
+
+  (?x  [ is math:sum of (?y ?z)  ]) math:sum ?x } => {?d :worksWith ?y}.
+
+:a1 :hasValue 2.
+
+:a2 :hasValue 0.
+:a2 :hasValue 0.
+

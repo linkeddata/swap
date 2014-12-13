@@ -1,0 +1,20 @@
+<rdf:RDF
+    xmlns:iw="http://inferenceweb.stanford.edu/2004/03/iw.owl#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#">
+  <owl:Class rdf:about="http://inferenceweb.stanford.edu/2004/03/iw.owl#Team"/>
+  <owl:Class rdf:about="http://inferenceweb.stanford.edu/2004/03/iw.owl#InferenceEngine"/>
+  <rdf:Property rdf:about="http://inferenceweb.stanford.edu/2004/03/iw.owl#URL"/>
+  <rdf:Property rdf:about="http://inferenceweb.stanford.edu/2004/03/iw.owl#name"/>
+  <rdf:Property rdf:about="http://inferenceweb.stanford.edu/2004/03/iw.owl#firstSubmissionDate"/>
+  <rdf:Property rdf:about="http://inferenceweb.stanford.edu/2004/03/iw.owl#lastSubmissionDate"/>
+  <rdf:Property rdf:about="http://inferenceweb.stanford.edu/2004/03/iw.owl#submitter"/>
+  <iw:InferenceEngine rdf:about="http://inferenceweb.stanford.edu/registry/IE/CWM.owl#CWM"
+     iw:firstSubmissionDate="20031118235917"
+     iw:lastSubmissionDate="20040317175550">
+    <iw:name>CWM - W3C Semantic Web Closed World Machine</iw:name>
+    <iw:URL>http://www.w3.org/2000/10/swap/doc/cwm.html</iw:URL>
+    <iw:submitter rdf:resource="http://inferenceweb.stanford.edu/registry/TM/IW-TEAM.owl#IW-TEAM"
+       rdf:type="http://inferenceweb.stanford.edu/2004/03/iw.owl#Team"/>
+  </iw:InferenceEngine>
+</rdf:RDF>

@@ -1,0 +1,12 @@
+<Doc xmlns="http://example.com/htont/">
+   <author>
+      <name>Sandro Hawke</name>
+      <email>sandro@w3.org</email>
+   </author>
+   <heading>This is a sample document!</heading>
+
+<Para>I would like <Link><target>http://foo.bar</target>you</Link>
+to read this <Emph>wonderful</Emph>
+document</Para>
+
+</Doc>

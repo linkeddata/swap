@@ -1,0 +1,544 @@
+% $Id$
+
+% check for internal consistency with something like
+%   mace -P -N 10 -k 768000 < otter/owlAx.otter
+% but it's gotten too big.  :-(
+
+include('otter/owlAx-unionOf.otter').
+include('otter/owlAx-oneOf.otter').
+include('otter/owlAx-equivProp.otter').
+include('otter/owlAx-card.otter').
+include('otter/owlAx-cardeq.otter').
+
+formula_list(usable).
+
+%   Note on "BIDIR"   These are all "->" which logically
+%   could/should be "<->", although the reverse arrows
+%   seems generally unneeded.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+%   rdf_nil
+%
+
+-(exists c (rdf(rdf_nil, rdf_rest, c))).
+-(exists c (rdf(rdf_nil, rdf_first, c))).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   owl_Nothing
+%
+
+% (all X (-rdf(X, rdf_type, owl_Nothing))).
+
+-(exists c (rdf(c, rdf_type, owl_Nothing))).
+rdf(owl_Nothing, rdf_type, owl_Class).
+
+% if something else is like this, it's equiv owl_Nothing?
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   owl_Thing, rdf_Resource
+%
+
+(all X (rdf(X, rdf_type, owl_Thing))).
+(all X (rdf(X, rdf_type, rdf_Resource))).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   owl_intersectionOf
+%
+
+all INST CLASS LIST (
+   rdf(CLASS, owl_intersectionOf, LIST)
+   ->
+   ( rdf(INST, rdf_type, CLASS) 
+     <->
+     instanceOfAll(INST, LIST)
+   )
+).
+
+all INST LIST HEAD TAIL (
+   ( rdf(LIST, rdf_first, HEAD) &
+     rdf(LIST, rdf_rest, TAIL) )
+   ->
+   ( instanceOfAll(INST, LIST)		
+     <->
+     ( rdf(INST, rdf_type, HEAD) &
+       instanceOfAll(INST, TAIL) )
+   )
+).
+
+all INST (instanceOfAll(INST, rdf_nil)).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   owl_equivalentClass
+%
+
+all C1 C2 (
+   rdf(C1, owl_equivalentClass, C2)
+   <->     % <- needed for http://www.w3.org/2002/03owlt/I4.6/conclusions003
+   (all INST (
+     rdf(INST, rdf_type, C1) <-> rdf(INST, rdf_type, C2) 
+   ))
+).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   rdfs_subClassOf
+%
+
+all C1 C2 (
+   rdf(C1, rdfs_subClassOf, C2)
+   <->     % <- needed for equivalentClass/Manifest002
+   (all INST (
+     rdf(INST, rdf_type, C1) -> rdf(INST, rdf_type, C2) 
+   ))
+).
+
+% lemma for equivalentClass/Manifest002
+all a b (
+  rdf(a, owl_equivalentClass, b) 
+  ->
+  rdf(a, rdfs_subClassOf, b)
+).
+
+% lemma for equivalentClass/Manifest003
+all a b (
+  ( rdf(a, rdfs_subClassOf, b) &
+    rdf(b, rdfs_subClassOf, a) )
+  ->
+  rdf(a, owl_equivalentClass, b) 
+).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   owl_complementOf
+%
+
+all C1 C2 (
+   rdf(C1, owl_complementOf, C2)
+   <->     % <- needed for complementOf/Manifest001
+         % very odd bit: having this be "<->" speeds up
+         % FunctionalProperty/Manifest004 by 50-100 times
+	 % even though the proof found is the same and
+	 % does not involved owl_complementOf!
+   (all INST (
+     rdf(INST, rdf_type, C1) <-> -rdf(INST, rdf_type, C2) 
+   ))
+).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   owl_disjointWith
+%
+
+all C1 C2 (
+   rdf(C1, owl_disjointWith, C2)
+   ->     % BIDIR 
+   (all INST (
+     - (rdf(INST, rdf_type, C1) & rdf(INST, rdf_type, C2))
+   ))
+).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   rdfs_subClassOf
+%
+
+all INST C1 C2 (
+   rdf(C1, rdfs_subClassOf, C2)
+   ->    %%  This is the RDF Core definition; does OWL require
+         %%  <-> ???   
+   ( rdf(INST, rdf_type, C1) 
+     -> 
+     rdf(INST, rdf_type, C2) 
+   )
+).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   allValuesFrom
+%
+%   The owl:allValuesFrom restriction requires that for every instance
+%   of the class that has instances of the specified property, the
+%   values of the property are all instances of the specified
+%   restriction class.      -- OWL Guide
+%
+
+all RESTRICTION PROPERTY BASECLASS INST VALUE (
+   ( rdf(RESTRICTION, rdf_type, owl_Restriction) &
+     rdf(RESTRICTION, owl_onProperty, PROPERTY) &
+     rdf(RESTRICTION, owl_allValuesFrom, BASECLASS) &
+     rdf(INST, rdf_type, RESTRICTION) )
+   ->
+   ( rdf(INST, PROPERTY, VALUE)
+     <->
+     rdf(VALUE, rdf_type, BASECLASS)  )
+).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   someValuesFrom
+%
+%   allValuesFrom
+%      For all wines, if they have makers, all the makers are wineries.
+%   someValuesFrom 
+%      For all wines, they have at least one maker that is a winery.
+%              -- OWL Guide
+%
+%   
+
+all RESTRICTION PROPERTY BASECLASS INST (
+   ( rdf(RESTRICTION, rdf_type, owl_Restriction) &
+     rdf(RESTRICTION, owl_onProperty, PROPERTY) &
+     rdf(RESTRICTION, owl_someValuesFrom, BASECLASS) &
+     rdf(INST, rdf_type, RESTRICTION) )
+   -> 
+%   conceptually we want:
+%  (exists VALUE (
+%    rdf(INST, PROPERTY, VALUE)
+%    rdf(VALUE, rdf_type, BASECLASS)
+%  ))
+%   but we'll manually Skolemize with fewer dependencies:
+%
+   ( rdf(INST, PROPERTY, valueSkFunc(INST, RESTRICTION)) &
+     rdf(valueSkFunc(INST, RESTRICTION), rdf_type, BASECLASS) )
+).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   owl_hasValue
+%
+
+all RESTRICTION PROPERTY VALUE INST (
+   ( rdf(RESTRICTION, rdf_type, owl_Restriction) &
+     rdf(RESTRICTION, owl_onProperty, PROPERTY) &
+     rdf(RESTRICTION, owl_hasValue, VALUE) &
+     rdf(INST, rdf_type, RESTRICTION) )
+   ->
+   rdf(INST, PROPERTY, VALUE)
+).
+   
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   owl_FunctionalProperty
+%
+
+all PROPERTY (
+   rdf(PROPERTY, rdf_type, owl_FunctionalProperty)
+   <->     %   <-needed for FunctionalProperty/*004 !
+   ( all INST VAL1 VAL2 (
+     ( rdf(INST, PROPERTY, VAL1) &
+       rdf(INST, PROPERTY, VAL2) )
+     ->
+     rdf(VAL1, owl_sameAs, VAL2)
+   ))
+).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   owl_InverseFunctionalProperty
+%
+
+all PROPERTY (
+   rdf(PROPERTY, rdf_type, owl_InverseFunctionalProperty)
+   <->
+   ( all INST1 INST2 VAL (
+     ( rdf(INST1, PROPERTY, VAL) &
+       rdf(INST2, PROPERTY, VAL) )
+      ->
+       rdf(INST1, owl_sameAs, INST2)
+   ))
+).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   owl_sameAs
+%
+
+% identity
+all X (
+   rdf(X, owl_sameAs, X)
+).
+
+% symmetry
+all X Y (
+   rdf(X, owl_sameAs, Y) -> rdf(Y, owl_sameAs, X)
+).
+
+% transitivity
+all X Y Z (
+   (rdf(X, owl_sameAs, Y) & rdf(Y, owl_sameAs, Z))
+   -> 
+   rdf(X, owl_sameAs, Z)
+).
+
+% substitutivity
+all THING1 THING2 (
+   rdf(THING1, owl_sameAs, THING2) 
+   ->     % BIDIR   
+   (all X Y (
+      ( rdf(X, Y, THING1) <-> rdf(X, Y, THING2) ) &
+      ( rdf(X, THING1, Y) <-> rdf(X, THING2, Y) ) &
+      ( rdf(THING1, X, Y) <-> rdf(THING2, X, Y) ) 
+   ))
+).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   owl_differentFrom
+%
+
+all X Y (
+   rdf(X, owl_differentFrom, Y) -> rdf(Y, owl_differentFrom, X)
+).
+
+all X Y (
+   rdf(X, owl_differentFrom, Y) <-> -rdf(X, owl_sameAs, Y)
+).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   rdfs_range
+%
+
+all PRED CLASS (
+   rdf(PRED, rdfs_range, CLASS) 
+   <->      % maybe needed for FunctionalProperty004
+   (all SUBJ OBJ (
+     rdf(SUBJ, PRED, OBJ) -> rdf(OBJ, rdf_type, CLASS)
+   ))
+).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   rdfs_domain
+%
+
+all PRED CLASS (
+   rdf(PRED, rdfs_domain, CLASS) 
+   <->      % maybe needed for FunctionalProperty004
+   (all SUBJ OBJ (
+     rdf(SUBJ, PRED, OBJ) -> rdf(SUBJ, rdf_type, CLASS)
+   ))
+).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   owl_InverseOf
+%
+
+all PRED1 PRED2 (
+   rdf(PRED1, owl_inverseOf, PRED2)
+   ->     % BIDIR
+   (all SUBJ OBJ (
+      ( rdf(SUBJ, PRED1, OBJ) <-> rdf(OBJ, PRED2, SUBJ) )
+   ))
+).
+
+% should be a theorem....
+% rdf(owl_inverseOf, rdf_type, owl_SymmetricProperty).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%   owl_SymmetricProperty
+
+(all P (
+   rdf(P, rdf_type, owl_SymmetricProperty)
+   ->     % BIDIR
+   (all X Y (
+      rdf(X, P, Y) <-> rdf(Y, P, X)
+   ))
+)).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   owl_TransitiveProperty
+%
+
+(all P (
+   rdf(P, rdf_type, owl_TransitiveProperty)
+   ->    % BIDIR
+   (all X Y Z (
+      ( rdf(X, P, Y) & rdf(Y, P, Z) )
+      <->
+      rdf(X, P, Z)
+   ))
+)).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%    owl_AllDifferent
+%
+
+
+all A (
+   rdf(A, rdf_type, owl_AllDifferent)
+   <->
+   (exists L (
+     rdf(A, owl_distinctMembers, L)
+   ))
+).
+
+all A L (
+   rdf(A, owl_distinctMembers, L)
+   ->   % BIDIR
+   allDifferent(L)
+).
+
+allDifferent(rdf_nil).
+
+all LIST HEAD TAIL (
+   (allDifferent(LIST) &
+    rdf(LIST, rdf_first, HEAD) &
+    rdf(LIST, rdf_rest, TAIL))
+   ->
+   differentFromAll(HEAD, TAIL)
+).
+
+all SUBJECT (
+  differentFromAll(SUBJECT, rdf_nil)
+).
+
+all SUBJECT LIST HEAD TAIL (
+   (differentFromAll(SUBJECT, LIST) &
+    rdf(LIST, rdf_first, HEAD) &
+    rdf(LIST, rdf_rest, TAIL))
+   ->
+   ( rdf(SUBJECT, owl_differentFrom, HEAD) &
+     differentFromAll(SUBJECT, TAIL) )
+).
+
+all X Y (
+   rdf(X, owl_differentFrom, Y)
+   ->
+   rdf(Y, owl_differentFrom, X)
+).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   Special Axiom on Inverse Cardinality
+%
+%   (I'd think this would be a theorem, but it doesn't seem to be,
+%   even with all the arrows bidirectional...)
+%
+
+all P1 P2 (
+   ( rdf(P1, owl_inverseOf, P2) &
+     rdf(P1, rdf_type, owl_FunctionalProperty) )
+   ->
+   rdf(P2, rdf_type, owl_InverseFunctionalProperty)
+).
+
+all P1 P2 (
+   ( rdf(P1, owl_inverseOf, P2) &
+     rdf(P1, rdf_type, owl_InverseFunctionalProperty) )
+   ->
+   rdf(P2, rdf_type, owl_FunctionalProperty)
+).
+    
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   Some theorems for unionOf/002
+
+
+% theorem: union of 1
+(all INST CLASS LIST FIRST (
+  ( rdf(INST, rdf_type, CLASS) &
+    rdf(CLASS, owl_unionOf, LIST) &
+    rdf(LIST, rdf_first, FIRST) &
+    rdf(LIST, rdf_rest, rdf_nil) )
+  -> 
+  rdf(INST, rdf_type, FIRST)
+)).
+
+% theorem: union of 2
+(all INST CLASS LIST L2 FIRST SECOND (
+  ( rdf(INST, rdf_type, CLASS) &
+    rdf(CLASS, owl_unionOf, LIST) &
+    rdf(LIST, rdf_first, FIRST) &
+    rdf(LIST, rdf_rest, L2) &
+    rdf(L2, rdf_first, SECOND) &
+    rdf(L2, rdf_rest, rdf_nil) )
+  -> 
+  ( rdf(INST, rdf_type, FIRST) | rdf(INST, rdf_type, SECOND) )
+)).
+
+
+% $Log$
+% Revision 1.17  2003-11-07 06:52:00  sandro
+% up to about 70% on RDF Core tests; may have broken OWL stuff
+%
+% Revision 1.16  2003/08/08 20:59:32  sandro
+% 76% !
+%
+% Revision 1.15  2003/08/01 16:27:35  sandro
+% modified to run in swap/surnia instead of swap
+%
+% Revision 1.14  2003/08/01 04:24:32  sandro
+% intermediate; about to play with paramodulation
+%
+% Revision 1.13  2003/07/31 04:35:07  sandro
+% Added a way for certain tests to use subset of the full set of
+% axioms; I'm starting to hit a wall where adding the details needed
+% to pass one test makes the others become too slow.   Sometimes we
+% can subset the axioms to make a test pass quickly, but that wont
+% work for sufficiently complex expressions, will it?   Still, maybe
+% we can partition same/different from union/intersection from property
+% logic, ...
+%
+% Revision 1.12  2003/07/30 20:19:19  sandro
+% fixed unionOf, and gave it theorem to get test to run < 10 minutes
+%
+% Revision 1.11  2003/07/30 18:51:00  sandro
+% fixed intersectionOf, removed some leftover comments
+%
+% Revision 1.10  2003/07/30 06:46:58  sandro
+% supporting several more tests, and coincidentally improving
+% performance dramatically in our bad cases.
+% Added some lemmas for subClass
+% Added differentFrom
+%
+% Revision 1.9  2003/07/30 05:53:34  sandro
+% added rdf_domain, bidir on InvFuncProp, passing InfFuncProp004
+%
+% Revision 1.8  2003/07/30 05:30:07  sandro
+% changed directionality of inList recursion
+% made sameAs transitive and symmetric
+% -> now passes functionalProperty/Manifest004 (runtime 72 seconds!)
+%
+% Revision 1.7  2003/07/30 03:25:18  sandro
+% added owl_Thing and a BIDIR to pass 5.24/...004
+%
+% Revision 1.6  2003/07/30 03:08:01  sandro
+% third try for allDifferent; passes test finally
+%
+% Revision 1.5  2003/07/30 03:05:40  sandro
+% switched to using equals for allDifferent
+%
+% Revision 1.4  2003/07/30 02:43:26  sandro
+% added first draft of allDifferent
+%
+% Revision 1.3  2003/07/30 02:26:40  sandro
+% added Id and Log cvs keywords
+%
+

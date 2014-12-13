@@ -1,0 +1,7 @@
+     @prefix : <http://dig.csail.mit.edu/2005/09/rein/network#> .
+    
+    <mid:1025@example.org>     a :Request;
+         :ans :Valid;
+         :resource <http://demo.policyawareweb.org/images/alice-award.jpg> .
+    
+

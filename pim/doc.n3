@@ -1,0 +1,156 @@
+#   Documentation control vocabulary
+#
+# All those things which we need to express all the time
+#
+#
+#  Reminder: People are people, not names
+#  Documents are documents, not titles.
+#
+# See also: 
+#  Set of requirements http://lists.w3.org/Archives/Public/uri/2000Sep/0020.html
+# - This contains that (eg image) as part of the document, not as reference.  See LinkLaw.hrml
+#
+#  Other related schemata:
+# http://www.daml.org/2000/04/maillog2rdf/email#     ( .rdf and .html)
+
+@prefix r:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+
+@prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#> .
+@prefix :    <http://www.w3.org/2000/10/swap/pim/contact#> .
+
+<>  doc:version "$Id$";
+    doc:creator <http://www.w3.org/People/Berners-Lee/card#i>;
+    doc:ipr <../LICENSE.n3>.
+
+
+doc:Work a s:Class;
+    s:label 	"work";
+    s:comment   "An abstract information thing of value, typically intellectual property".
+
+doc:version a r:Property;
+    s:label 	"version";
+    s:comment   "This version of this document (eg number, date, etc). A string".
+    
+doc:creator a r:Property;
+    s:comment "The person (not string) who created this.";
+    s:label	"creator";
+    s:domain    doc:Work;
+    s:range	    :SocialEntity .
+
+doc:derivedFrom a r:Property;
+    s:label	"derived from";
+    s:comment   "A work wholey or partly used in the creation of this one.";
+    s:domain    doc:Work;
+    s:range     doc:Work .
+
+doc:derivativeWork a r:Property;
+    s:label	"derivative work";
+    s:comment   "A work wholey or partly used in the creation of this one.";
+    s:domain    doc:Work;
+    s:range     doc:Work;
+    owl:inverseOf doc:derivedFrom.
+
+doc:ipr a r:Property;
+    s:label	"rights";
+    s:comment   "Terms and intellectual property rights licensing conditions.";
+    s:domain    doc:Work;
+    s:range     doc:Work .
+
+doc:subLicense a r:Property, owl:TransitiveProperty;
+    s:label	"sub-license";
+    s:comment 
+"""For any license, a sublicense is a licensing offering a subset of the rights. 
+If A doc:sublicense B then anything under license A can be released under
+licence B.""";
+    s:domain    doc:Work;
+    s:range     doc:Work .
+
+doc:OpenSourceLicense s:subClassOf doc:Work;
+    s:label	"Opem Source licence";
+    s:comment   """Class of licenses which can be called Open Soutrce
+                according to opensource.org""".
+
+doc:persistencePolicy a r:Property;
+    s:label	"persistence policy";
+    s:comment   """Publishers policy regarding the peristence of the mapping
+                between URI and its meaning and/or representation in bits.""";
+    s:domain    doc:Work;
+    s:range     doc:Work .
+
+# Version management stuff
+#
+# With these you can build a CVS tree:
+
+doc:version a r:Property;
+    s:label	"version";
+    s:comment   """This generic work has a specific version in the
+	follwing specific document""";
+    s:domain    doc:Work;
+    s:range     doc:Work .
+    
+doc:versionOf a r:Property;
+    s:comment   """This work is a a specific version of the follwing generic document.
+		OBSOLETE - use its inverse, version.""";
+    s:domain    doc:Work;
+    s:range     doc:Work;
+    owl:inverseOf doc:version. # This will get "version" label used for backward links
+    
+doc:obsoletes a r:Property;
+    s:label	"obsoletes";
+    s:comment   """This work is more upto date than that and makes it obsolete.""";
+    s:domain    doc:Work;
+    s:range     doc:Work .
+
+doc:dependsOn a r:Property;
+    s:label	"depends on";
+    s:comment   """The meaning or value of this work depends on that of that work.""";
+    s:domain    doc:Work;
+    s:range     doc:Work .
+
+doc:adminPage a r:Property;
+    s:label	"administrative page";
+    s:comment   """A web page allowing a human user to administer this work,
+            for example changing access control, version control information etc.""";
+    s:domain    doc:Work.
+
+# Access control
+#
+# Eg [ :mailbox <mailto:timbl@w3.org> ] doc:mayWrite <> .
+#
+doc:mayRead a r:Property;
+    s:label	"may read";
+    s:comment   "This may access that for read -- compare 'r' unix";
+    s:domain    :SocialEntity;
+    s:range     doc:Work .
+
+doc:mayWrite a r:Property;
+    s:label	"may write";
+    s:comment   "This may access that to modify it -- compare 'w' unix";
+    s:domain    :SocialEntity;
+    s:range     doc:Work .
+
+doc:mayControl a r:Property;
+    s:label	"may control";
+    s:comment   "This may change that access control for that";
+    s:domain    :SocialEntity;
+    s:range     doc:Work .
+
+
+# Machine-readable semantics
+#
+#   Eg  <contact>  doc:rules <contact-rules>.
+#
+
+doc:rules a r:Property;
+    s:label	"rules";
+    s:comment """
+	The subject is a namespace document; the object is a document
+	containing rules. The rules are valid information about the terms
+	defined in the namespace document.
+	""";
+    s:range :Work;
+    s:domain :Work.
+
+#ENDS

@@ -1,0 +1,10 @@
+@prefix : <fam.n3#>.
+@keywords is, of, a.
+
+{ ?x ancestor ?y. ?y ancestor ?z } => { ?x ancestor ?z }.
+
+:John :ancestor :Jim. 
+:Jim  :ancestor :Michael.
+
+#ends
+ 

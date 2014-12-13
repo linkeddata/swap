@@ -1,0 +1,440 @@
+
+<!-- Processed by Id: cwm.py,v 1.190 2006/08/09 23:20:42 syosi Exp -->
+<!--     using base file:///devel/WWW/2000/10/swap/pim/contactStitch.n3-->
+
+
+<rdf:RDF xmlns="http://www.w3.org/2002/07/owl#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:o2="http://www.w3.org/2007/ont/o2#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+
+    <rdf:Description rdf:about="">
+        <dc:description>
+ Contact, FOAF, vCard and LDIF vocabularies all cover contact information 
+ for people.  Here we express some mappings.
+ .
+</dc:description>
+        <dc:description>$Id$</dc:description>
+        <dc:title>Mappings between contact information vocabularies</dc:title>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.Address">
+        <sameAs>http://www.w3.org/2000/10/swap/pim/contact#Address</sameAs>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.bday">
+        <equivalentProperty>http://www.w3.org/2000/10/swap/pim/contact#birthday</equivalentProperty>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.country-name">
+        <equivalentProperty>http://www.w3.org/2000/10/swap/pim/contact#country</equivalentProperty>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.email">
+        <equivalentProperty>http://www.w3.org/2000/10/swap/pim/contact#emailAddress</equivalentProperty>
+        <equivalentProperty rdf:resource="http://xmlns.com/foaf/0.1/mbox"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.extended-address">
+        <rdfs:subPropertyOf>http://www.w3.org/2000/10/swap/pim/contact#_addressProperty</rdfs:subPropertyOf>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.family-name">
+        <equivalentProperty>http://xmlns.com/foaf/0.1/family_name</equivalentProperty>
+        <equivalentProperty rdf:resource="http://xmlns.com/foaf/0.1/surname"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.fax">
+        <rdfs:subPropertyOf>http://xmlns.com/foaf/0.1/mbox</rdfs:subPropertyOf>
+        <equivalentProperty rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#fax"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.fn">
+        <equivalentProperty>http://xmlns.com/foaf/0.1/fullName</equivalentProperty>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.given-name">
+        <equivalentProperty>http://www.w3.org/2000/10/swap/pim/contact#firstName</equivalentProperty>
+        <equivalentProperty rdf:resource="http://xmlns.com/foaf/0.1/givenname"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.homeAdr">
+        <rdfs:subPropertyOf>http://www.w3.org/2000/10/swap/pim/contact#address</rdfs:subPropertyOf>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.homeTel">
+        <rdfs:subPropertyOf>http://www.w3.org/2000/10/swap/pim/contact#phone</rdfs:subPropertyOf>
+        <rdfs:subPropertyOf rdf:resource="http://xmlns.com/foaf/0.1/phone"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.honorific-prefix">
+        <sameAs>http://www.w3.org/2000/10/swap/pim/contact#personalTitle</sameAs>
+        <sameAs rdf:resource="http://xmlns.com/foaf/0.1/title"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.honorific-suffix">
+        <rdfs:samePropertyAs>http://www.w3.org/2000/10/swap/pim/contact#personalSuffix</rdfs:samePropertyAs>
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#personalSuffix"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.key">
+        <equivalentProperty>http://xmlns.com/wot/0.1/pubkeyAddress</equivalentProperty>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.latitude">
+        <equivalentProperty>http://www.w3.org/2003/01/geo/wgs84_pos#lat</equivalentProperty>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.locality">
+        <equivalentProperty>http://www.w3.org/2000/10/swap/pim/contact#city</equivalentProperty>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.logo">
+        <equivalentProperty>http://xmlns.com/foaf/0.1/logo</equivalentProperty>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.longitude">
+        <equivalentProperty>http://www.w3.org/2003/01/geo/wgs84_pos#long</equivalentProperty>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.mobileEmail">
+        <rdfs:subPropertyOf>http://www.w3.org/2000/10/swap/pim/contact#emailAddress</rdfs:subPropertyOf>
+        <rdfs:subPropertyOf rdf:resource="http://xmlns.com/foaf/0.1/mbox"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.n">
+        <equivalentProperty>http://xmlns.com/foaf/0.1/name</equivalentProperty>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.nickname">
+        <rdfs:subPropertyOf>http://www.w3.org/2000/10/swap/pim/contact#knownAs</rdfs:subPropertyOf>
+        <equivalentProperty rdf:resource="http://xmlns.com/foaf/0.1/nick"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.org">
+        <equivalentProperty>http://xmlns.com/foaf/0.1/Organization</equivalentProperty>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.organization-name">
+        <rdfs:subPropertyOf>http://xmlns.com/foaf/0.1/name</rdfs:subPropertyOf>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.photo">
+        <rdfs:subPropertyOf>http://xmlns.com/foaf/0.1/img</rdfs:subPropertyOf>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.post-office-box">
+        <rdfs:subPropertyOf>http://www.w3.org/2000/10/swap/pim/contact#_addressProperty</rdfs:subPropertyOf>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.region">
+        <rdfs:subPropertyOf>http://www.w3.org/2000/10/swap/pim/contact#_addressProperty</rdfs:subPropertyOf>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.street-address">
+        <rdfs:subPropertyOf>http://www.w3.org/2000/10/swap/pim/contact#street</rdfs:subPropertyOf>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.tel">
+        <equivalentProperty>http://www.w3.org/2000/10/swap/pim/contact#phone</equivalentProperty>
+        <equivalentProperty rdf:resource="http://xmlns.com/foaf/0.1/phone"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.title">
+        <equivalentProperty>http://www.w3.org/2000/10/swap/pim/contact#personalTitle</equivalentProperty>
+        <equivalentProperty rdf:resource="http://xmlns.com/foaf/0.1/title"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.unlabelledAdr">
+        <rdfs:subPropertyOf>http://www.w3.org/2000/10/swap/pim/contact#address</rdfs:subPropertyOf>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.unlabelledEmail">
+        <rdfs:subPropertyOf>http://www.w3.org/2000/10/swap/pim/contact#emailAddress</rdfs:subPropertyOf>
+        <rdfs:subPropertyOf rdf:resource="http://xmlns.com/foaf/0.1/mbox"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.url">
+        <equivalentProperty>http://www.w3.org/2000/10/swap/pim/contact#homepage</equivalentProperty>
+        <equivalentProperty rdf:resource="http://xmlns.com/foaf/0.1/homePage"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.workAdr">
+        <rdfs:subPropertyOf>http://www.w3.org/2000/10/swap/pim/contact#address</rdfs:subPropertyOf>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.workEmail">
+        <rdfs:subPropertyOf>http://www.w3.org/2000/10/swap/pim/contact#emailAddress</rdfs:subPropertyOf>
+        <rdfs:subPropertyOf rdf:resource="http://xmlns.com/foaf/0.1/mbox"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#v.workTel">
+        <rdfs:subClassOf>http://xmlns.com/foaf/0.1/phone</rdfs:subClassOf>
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#phone"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2006/vcard/ns#x-aim">
+        <sameAs>http://www.w3.org/2007/ont/ldif#nsAIMid</sameAs>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2007/ont/ldif#">
+        <o2:Chain rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#work"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#address"/>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#city"/>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </rdf:rest>
+        </o2:Chain>
+        <o2:Chain rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#work"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#address"/>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#stateorProvince"/>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </rdf:rest>
+        </o2:Chain>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2007/ont/ldif#Person">
+        <sameAs>http://www.w3.org/2000/10/swap/pim/contact#Person</sameAs>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2007/ont/ldif#c">
+        <o2:Chain rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#work"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#address"/>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#country"/>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </rdf:rest>
+        </o2:Chain>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2007/ont/ldif#cn">
+        <sameAs>http://xmlns.com/foaf/0.1/name</sameAs>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2007/ont/ldif#company">
+        <o2:chain rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#organization"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://xmlns.com/foaf/0.1/name"/>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </o2:chain>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2007/ont/ldif#department">
+        <sameAs>http://www.w3.org/2000/10/swap/pim/contact#departmentName</sameAs>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2007/ont/ldif#description">
+        <sameAs>http://www.w3.org/2000/10/swap/pim/contact#description</sameAs>
+        <sameAs rdf:resource="http://www.w3.org/2006/vcard/ns#note"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2007/ont/ldif#dn">
+        <sameAs>http://www.w3.org/2006/vcard/ns#n</sameAs>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2007/ont/ldif#fax">
+        <rdfs:range>http://www.w3.org/2000/10/swap/pim/contact#Fax</rdfs:range>
+        <rdfs:subpropertyOf rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#phone"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2007/ont/ldif#givenName">
+        <o2:chain rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/2006/vcard/ns#n"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2006/vcard/ns#given"/>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </o2:chain>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2007/ont/ldif#homePhone">
+        <sameAs>http://www.w3.org/2006/vcard/ns#home-tel</sameAs>
+        <o2:chain rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#home"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#phone"/>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </o2:chain>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2007/ont/ldif#homeStreet">
+        <o2:chain rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#home"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#address"/>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#street"/>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </rdf:rest>
+        </o2:chain>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2007/ont/ldif#mobile">
+        <rdfs:range>http://www.w3.org/2000/10/swap/pim/contact#MobilePhone</rdfs:range>
+        <rdfs:subpropertyOf rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#phone"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2007/ont/ldif#mozillaHomeCountryName">
+        <o2:Chain rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#home"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#address"/>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#country"/>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </rdf:rest>
+        </o2:Chain>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2007/ont/ldif#mozillaHomeLocalityName">
+        <o2:chain rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#home"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#address"/>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#city"/>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </rdf:rest>
+        </o2:chain>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2007/ont/ldif#mozillaHomePostalCode">
+        <o2:Chain rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#home"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#address"/>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#postalCode"/>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </rdf:rest>
+        </o2:Chain>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2007/ont/ldif#mozillaHomeState">
+        <o2:chain rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#home"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#address"/>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#stateOrProvince"/>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </rdf:rest>
+        </o2:chain>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2007/ont/ldif#mozillaHomeStreet2">
+        <o2:chain rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#home"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#address"/>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#street2"/>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </rdf:rest>
+        </o2:chain>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2007/ont/ldif#mozillaNickname">
+        <sameAs>http://xmlns.com/foaf/0.1/nick</sameAs>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2007/ont/ldif#mozillaWorkStreet2">
+        <o2:Chain rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#work"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#address"/>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#street2"/>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </rdf:rest>
+        </o2:Chain>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2007/ont/ldif#mozillaWorkUrl">
+        <o2:chain rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#work"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://xmlns.com/foaf/0.1/homePage"/>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </o2:chain>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2007/ont/ldif#page">
+        <rdfs:range>http://www.w3.org/2000/10/swap/pim/contact#Pager</rdfs:range>
+        <rdfs:subpropertyOf rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#phone"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2007/ont/ldif#postalCode">
+        <o2:Chain rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#work"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#address"/>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#postalCode"/>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </rdf:rest>
+        </o2:Chain>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2007/ont/ldif#sn">
+        <o2:chain rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/2006/vcard/ns#n"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2006/vcard/ns#family"/>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </o2:chain>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2007/ont/ldif#street">
+        <o2:Chain rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#work"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#address"/>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#street"/>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </rdf:rest>
+        </o2:Chain>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2007/ont/ldif#telephoneNumber">
+        <sameAs>http://www.w3.org/2006/vcard/ns#work-tel</sameAs>
+        <o2:chain rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#work"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#phone"/>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </o2:chain>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2007/ont/ldif#title">
+        <sameAs>http://www.w3.org/2000/10/swap/pim/contact#title</sameAs>
+    </rdf:Description>
+</rdf:RDF>

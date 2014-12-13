@@ -1,0 +1,339 @@
+#Processed by Id: cwm.py,v 1.134 2003/07/30 19:36:21 timbl Exp 
+        #    using base file:/devel/WWW/2000/10/swap/test/math/math-test.n3
+        
+#  Notation3 generation by
+#       notation3.py,v 1.140 2003/07/29 02:55:36 timbl Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/test/math/math-test.n3
+     @prefix : <#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix math: <http://www.w3.org/2000/10/swap/math#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    @forAll :s,
+                :x,
+                :y,
+                :z .
+    
+    "0"     a :testValue;
+         :worksWith 0,
+                1729 .
+    
+    "1"     :valuOf " () math:product ?x  --- should be 1" .
+    
+    "1.0e7"     a :testValue .
+    
+    "1729"     a :testValue;
+         :worksWith 0,
+                1729 .
+    
+    "3.1415926"     a :testValue .
+    
+    "30"     :valueOf "5 * 3 * 2" .
+    
+    1.0e7     a :testValue .
+    
+    3.1415926     a :testValue .
+    
+    3.5     :valueOf "7 / 2" .
+    
+    9.5     :valueOf "(7 / 2) + ((7 % 2)^10000000) + 5 [should be 9.5]" .
+    
+    -3     :valueOf "3 negated" .
+    
+    0     a :testValue;
+         :valuOf " () math:sum ?x  --- should be 0";
+         :worksWith 0,
+                1729 .
+    
+    1     :valueOf "7 % 2" .
+    
+    1024     :valueOf "2^10" .
+    
+    108     :valueOf "3 + 5 + 100" .
+    
+    1729     a :testValue;
+         :worksWith 0,
+                1729 .
+    
+    3     :valueOf "sum(3) = 3",
+                "what -3's the - of" .
+    
+    5     :valueOf "8 - 3" .
+    
+    8     :valueOf "3 + (8 - 3)",
+                "3 + 5",
+                "3 + 5 = 8" .
+      ( "1729" 
+        "3.1415926"  )
+         :SumDifferenceFAILS 3.1415925999999672 .
+      ( 1729 
+        "3.1415926"  )
+         :SumDifferenceFAILS 3.1415925999999672 .
+      ( "1.0e7" 
+        "3.1415926"  )
+         :SumDifferenceFAILS 3.1415925994515419 .
+      ( 1.0e7 
+        "3.1415926"  )
+         :SumDifferenceFAILS 3.1415925994515419 .
+      ( "1729" 
+        3.1415926  )
+         :SumDifferenceFAILS 3.1415925999999672 .
+      ( 1729 
+        3.1415926  )
+         :SumDifferenceFAILS 3.1415925999999672 .
+      ( "1.0e7" 
+        3.1415926  )
+         :SumDifferenceFAILS 3.1415925994515419 .
+      ( 1.0e7 
+        3.1415926  )
+         :SumDifferenceFAILS 3.1415925994515419 .
+    
+    :test10     a :success .
+    {
+        "-3"     math:negation :x .
+        
+        }     log:implies {:x     :valueOf "what -3's the - of" .
+        } .
+    {
+        "008"     math:greaterThan "70" .
+        
+        }     log:implies {:test10     a :FAILURE .
+        } .
+    {
+        "70"     math:greaterThan "008" .
+        
+        }     log:implies {:test10     a :success .
+        } .
+    {
+        -3     math:negation :x .
+        
+        }     log:implies {:x     :valueOf "what -3's the - of" .
+        } .
+    {
+        :x     math:negation "3" .
+        
+        }     log:implies {:x     :valueOf "3 negated" .
+        } .
+    {
+        :x     math:negation 3 .
+        
+        }     log:implies {:x     :valueOf "3 negated" .
+        } .
+    {
+        ()     math:product :x .
+        
+        }     log:implies {:x     :valuOf " () math:product ?x  --- should be 1" .
+        } .
+    {
+        ()     math:sum :x .
+        
+        }     log:implies {:x     :valuOf " () math:sum ?x  --- should be 0" .
+        } .
+    {
+        
+          ( 3  )
+             math:sum :x .
+        
+        }     log:implies {:x     :valueOf "sum(3) = 3" .
+        } .
+    {
+        
+          ( "8"  )
+             math:difference :x .
+        
+        }     log:implies {:x     :valueOf "8 - (error?)" .
+        } .
+    {
+        
+          ( "3" 
+            "5"  )
+             math:sum :x .
+        
+        }     log:implies {:x     :valueOf "3 + 5" .
+        } .
+    {
+        
+          ( "7" 
+            "2"  )
+             math:quotient :x .
+        
+        }     log:implies {:x     :valueOf "7 / 2" .
+        } .
+    {
+        
+          ( "7" 
+            "2"  )
+             math:remainder :x .
+        
+        }     log:implies {:x     :valueOf "7 % 2" .
+        } .
+    {
+        
+          ( "2" 
+            "10"  )
+             math:exponentiation :x .
+        
+        }     log:implies {:x     :valueOf "2^10" .
+        } .
+    {
+        
+          ( 3 
+            5  )
+             math:sum :x .
+        
+        }     log:implies {:x     :valueOf "3 + 5 = 8" .
+        } .
+    {
+        
+          ( 8 
+            3  )
+             math:difference :x .
+        
+        }     log:implies {:x     :valueOf "8 - 3" .
+        } .
+    {
+        
+          ( "8" 
+            "3"  )
+             math:difference :x .
+        
+        }     log:implies {:x     :valueOf "8 - 3" .
+        } .
+    {
+        
+          ( 7 
+            2  )
+             math:quotient :x .
+        
+        }     log:implies {:x     :valueOf "7 / 2" .
+        } .
+    {
+        
+          ( 7 
+            2  )
+             math:remainder :x .
+        
+        }     log:implies {:x     :valueOf "7 % 2" .
+        } .
+    {
+        
+          ( 2 
+            10  )
+             math:exponentiation :x .
+        
+        }     log:implies {:x     :valueOf "2^10" .
+        } .
+    {
+        
+          ( "5" 
+            "3" 
+            "2"  )
+             math:product :x .
+        
+        }     log:implies {:x     :valueOf "5 * 3 * 2" .
+        } .
+    {
+        
+          ( 3 
+            5 
+            100  )
+             math:sum :x .
+        
+        }     log:implies {:x     :valueOf "3 + 5 + 100" .
+        } .
+    {
+        
+          ( 5 
+            3 
+            2  )
+             math:product :x .
+        
+        }     log:implies {:x     :valueOf "5 * 3 * 2" .
+        } .
+    {
+        @forSome :_g0 .
+          ( 3 
+            :_g0  )
+             math:sum :x .
+          ( 8 
+            3  )
+             math:difference :_g0 .
+        
+        }     log:implies {:x     :valueOf "3 + (8 - 3)" .
+        } .
+    {
+        @forSome :_g1 .
+          ( :x 
+            :_g1  )
+             math:sum :y .
+          ( :y 
+            :x  )
+             math:difference :_g1 .
+        :x     a :testValue .
+        :y     a :testValue .
+        
+        }     log:implies {:x     :worksWith :y .
+        } .
+    {
+        @forSome :_g2 .
+          ( :x 
+            :_g2  )
+             math:sum :z .
+          ( :y 
+            :x  )
+             math:difference :_g2 .
+        :x     a :testValue .
+        :y     a :testValue .
+        :z     math:notEqualTo :y .
+        
+        }     log:implies {
+          ( :x 
+            :y  )
+             :SumDifferenceFAILS :z .
+        } .
+    {
+        
+          ( :x 
+            :y  )
+             math:sum :z .
+          ( :x 
+            " + " 
+            :y 
+            " = " 
+            :z  )
+             string:concatenation :s .
+        :x     a :testValue .
+        :y     a :testValue .
+        
+        }     log:implies {:s     a :RESULT .
+        } .
+    {
+        @forSome :_g3,
+                    :_g4,
+                    :_g5,
+                    :_g6 .
+          ( "7" 
+            "2"  )
+             math:quotient :_g4 .
+          ( :_g4 
+            :_g6 
+            :_g3  )
+             math:sum :x .
+          ( "7" 
+            "2"  )
+             math:remainder :_g5 .
+          ( :_g5 
+            "10000000"  )
+             math:exponentiation :_g6 .
+          ( "a" 
+            "b" 
+            "c" 
+            "d" 
+            "e"  )
+             math:memberCount :_g3 .
+        
+        }     log:implies {:x     :valueOf "(7 / 2) + ((7 % 2)^10000000) + 5 [should be 9.5]" .
+        } .
+    
+#ENDS

@@ -1,0 +1,78 @@
+#  Style sheet in for Roadmap charts
+#
+#   W3C Source code licence
+#  $Id $
+
+@prefix doc: <http://www.w3.org/2000/10/swap/pim/doc.n3#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dot: <http://www.w3.org/2001/02pd/gv#>.
+
+# NOTE rdf2dot.xsl needs namespace URIs absolutized @@
+
+@prefix : <?#>.  # Just for variales in fact
+@prefix v: <?#>.  # Just for variales in fact
+
+this log:forAll :n1, :n2, :p, :s, :TXT.
+
+<> doc:cvsversion "$Id$".
+
+
+{ :n1 a s:Class} log:implies { :n1 dot:color "skyblue1"; dot:style "filled" }.
+{ :n1 a s:Class; s:label :s } log:implies { :n1 dot:label :s }.
+
+{ :p s:label :TXT;
+     s:domain :n1;
+     s:range :n2.
+  :n1 s:label [].
+  :n2 s:label [] }
+  log:implies { :n1 [ a dot:EdgeProperty; dot:label :TXT ] :n2 }.
+
+
+#{ :n1 a rdf:Property} log:implies { :n1 dot:color "khaki2"; dot:shape "box"; dot:style "filled"}.
+
+# the rdfs namespace is not hte one for Property. Confuses people.
+#@@{ :n1 a s:Property}     log:implies { :n1 dot:color "khaki1"; dot:shape "box"; dot:style "filled"}.
+
+s:subClassOf a dot:EdgeProperty; dot:color "skyblue2".
+
+s:subPropertyOf a dot:EdgeProperty; dot:color "khaki2".
+
+# tempting to reverse the arrows on domain.
+#s:domain a dot:EdgeProperty;  	dot:color "red"; dot:style "bold".
+#s:range a dot:EdgeProperty; 	  dot:color "green1"; dot:style "bold".
+
+##########
+<> dot:digraph :theGraph.
+
+:theGraph dot:label "XML Infoset $Date$";
+	         dot:rankdir "LR".
+
+this log:forAll :n1, :n2, :p, :s.
+
+#:theGraph dot:hasNode is:InfoItem.    # arbitrary seed to trace out from
+
+#@@include all classes (with labels) in the graph...
+{ :s a s:Class; s:label [] } log:implies { :theGraph dot:hasNode :s }.
+
+{ :theGraph dot:hasNode :n1.    # Seed it from any subclass relationship
+  :n1 s:subClass :n2.
+}
+   log:implies { :theGraph dot:hasNode :n1, :n2. }.
+
+
+{ :theGraph dot:hasNode :n1.
+  :n1 :p :n2.
+  :p a dot:EdgeProperty.
+ }
+   log:implies { :theGraph dot:hasNode :n2. }.
+
+{ :theGraph dot:hasNode :n2.
+  :n1 :p :n2.
+  :p a dot:EdgeProperty.
+ }
+   log:implies { :theGraph dot:hasNode :n1. }.
+
+
+# ends

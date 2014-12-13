@@ -1,0 +1,25 @@
+     @prefix : <http://www.example.com/schema#> .
+     @prefix ccpp: <http://www.w3.org/2002/05/20-ccpp#> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+    
+    :MyProfile     ccpp:component :TerminalBrowser,
+                :TerminalHardware,
+                :TerminalSoftware .
+    
+    :TerminalBrowser     a :BrowserUA;
+         :htmlVersionsSupported  [
+             a rdf:Bag;
+             rdf:_1 "3.0";
+             rdf:_2 "4.0" ];
+         :name "Mozilla";
+         :vendor "Symbian";
+         :version "5.0" .
+    
+    :TerminalHardware     a :HardwarePlatform;
+         :display "320x200" .
+    
+    :TerminalSoftware     a :SoftwarePlatform;
+         :name "EPOC";
+         :vendor "Symbian";
+         :version "2.0" .
+    

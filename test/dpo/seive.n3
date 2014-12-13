@@ -1,0 +1,15 @@
+#  Sieve out axioms in N3
+# @@ doesn't get the whole axiom, just a list
+
+#   Base was: file:/devel/WWW/2000/10/swap/test/dpo/axioms0.n3
+     @prefix v: <vars#> .
+     @prefix ko: <kif-ops#> .
+     @prefix a: <axioms.n3#> .
+     @prefix : <http://www.daml.org/2001/03/daml+oil#> .
+     @conv:   <convert.n3#> .
+
+<> log:forAll :ax, :n3.
+
+{	:ax a ko:Axiom; = [ conv:inN3 :n3 ] } implies { :ax :translatesTo :n3 } .
+
+#ends    

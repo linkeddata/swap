@@ -1,0 +1,21 @@
+#Processed by Id: cwm.py,v 1.46 2001/05/21 14:35:47 connolly Exp 
+        #    using base http://www.agfa.com/w3c/n3/ziv-query.n3
+        
+#  Notation3 generation by
+#       notation3.py,v 1.77 2001/05/21 02:37:13 timbl Exp
+
+#   Base was: http://www.agfa.com/w3c/n3/ziv-query.n3
+     @prefix : <http://www.w3.org/2000/10/swap/log#> .
+    { }
+        
+#          [      <ziv.n3#cinema> "Globus";
+#                 <ziv.n3#city> <ziv.n3#c>;
+#                 <ziv.n3#film> <ziv.n3#f>;
+#                 <ziv.n3#maand> "May"
+#									 ].
+        
+             :p :q.
+#														 <ziv.n3#c>,
+#                <ziv.n3#f> .
+    
+#ENDS

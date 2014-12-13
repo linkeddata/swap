@@ -1,0 +1,167 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+
+<> dc:title "An RDF/DAML+OIL Schema/Ontology for XML content";
+ dc:source <infoset-daml.n3>;
+ .
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dpo:  <http://www.daml.org/2001/03/daml+oil#> .
+@prefix dl: <http://www.w3.org/2001/03swell/lists#>.
+@prefix sws: <http://www.w3.org/2001/03swell/finiteSet#>.
+@prefix : <http://www.w3.org/2001/05id/infoset#> . #@@ move this there.
+
+
+@prefix xc: <xmlContent#>.
+@prefix iu: <infosetUtil#>.
+@prefix dl: <http://www.w3.org/2001/03swell/lists#>.
+
+:InformationItem rdfs:label "Information Item".
+:itemName rdfs:label "item name";
+  rdfs:subPropertyOf rdfs:label;
+  rdfs:domain
+    [ dpo:onProperty rdfs:subClassOf;
+      dpo:hasValue :InformationItem ].
+
+:Property rdfs:label "property";
+  rdfs:subClassOf dpo:UniqueProperty;
+  rdfs:comment "all infoset properties are unique/many-to-one/functional".
+:propertyName rdfs:label "property name";
+  rdfs:subPropertyOf rdfs:label;
+  rdfs:comment "section 2. Information Items.";
+  rdfs:comment "@@isDefinedBy?";
+  rdfs:domain :Property.
+
+
+:children :propertyName "children";
+  a dpo:UniqueProperty.
+
+:Element :itemName "Element";
+
+  # combine namespaceName and localName into one?
+  # @@cf TAG issue @@
+
+  rdfs:subClassOf [
+    dpo:onProperty :namespaceName;
+    dpo:toClass :NamespaceName;
+  ];
+
+  rdfs:subClassOf [
+    dpo:onProperty :localName;
+    dpo:toClass iu:NCName;
+  ];
+    
+  rdfs:subClassOf [
+    dpo:onProperty :children;
+    dpo:toClass xc:Content;
+  ];
+
+  rdfs:subClassOf [
+    dpo:onProperty :attributes;
+    dpo:toClass [ sws:setOf :Attribute ];
+  ];
+
+  rdfs:subClassOf [ # drop this?
+    dpo:onProperty :inScopeNamespaces;
+    dpo:toClass [ sws:setOf :Namespace ];
+  ];
+
+  # NOTE: base URI is extrinsic.
+  # i.e. a piece of XML content is paired with
+  # a base URI for various operations.
+
+  .
+
+:namespaceName :propertyName "namespace name".
+:NamespaceName rdfs:label "Namespace Name";
+  dpo:disjointUnionOf (
+    iu:NoValue #@@REVIEW: hmm... the "" URIreference
+    iu:AbsoluteURIref
+  ).
+
+:localName :propertyName "local name".
+
+:prefix :propertyName "prefix".
+
+xc:Content rdfs:label "Content";
+  dl:listOf xc:Item.
+
+xc:Item rdfs:label "Item";
+    dpo:disjointUnionOf (
+      :Element
+      :ProcessingInstruction
+      # unexpanded entity reference is not part of the actual model.
+      :Character
+      :Comment
+      ) .
+
+:attributes :propertyName "attributes".
+:namespaceAttributes :propertyName "namespace attributes".
+
+:inScopeNamespaces :propertyName "in-scope namespaces";
+  rdfs:comment """@@not captured:
+"This set always
+             contains an item with the prefix xml which is implicitly bound to the namespace
+             name http://www.w3.org/XML/1998/namespace."
+""".
+
+:Attribute :itemName "Attribute";
+  rdfs:subClassOf [
+    dpo:onProperty :namespaceName;
+    dpo:toClass :NamespaceName;
+  ];
+
+  rdfs:subClassOf [
+    dpo:onProperty :localName;
+    dpo:toClass iu:NCName;
+  ];
+    
+  rdfs:subClassOf [
+    dpo:onProperty :normalizedValue;
+    dpo:toClass iu:String;
+  ];
+
+  rdfs:comment "dropped specified, attribute type: DTD-dependent";
+
+  rdfs:comment "dropped ownerElement, ala parent";
+  .
+
+:normalizedValue :propertyName "normalized value".
+
+:ProcessingInstruction :itemName "Processing Instruction";
+  rdfs:subClassOf [
+    dpo:onProperty :target;
+    dpo:toClass iu:Name;
+  ];
+
+  rdfs:subClassOf [
+    dpo:onProperty :content;
+    dpo:toClass iu:String;
+  ];
+  .
+
+:target :propertyName "target".
+:content :propertyName "content".
+
+:Namespace :itemName "Namespace";
+  rdfs:comment "@@more...".
+
+:Character :itemName "Character";
+  rdfs:comment "@@more...".
+
+
+:Comment :itemName "Comment";
+  rdfs:comment "@@more...".
+
+
+### supplemental rules
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+
+# REVIEW: this is left implicit in the infoset spec.
+{ :d a :Document;
+     :children [ dl:member :e ].
+  :e a :Element
+} log:means { :d :documentElement :e. }.
+
+{ :s :parent :o } log:means { :o :children [ dl:member :s ] }.
+

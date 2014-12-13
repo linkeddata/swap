@@ -1,0 +1,165 @@
+
+
+
+<html xmlns="">
+
+    <head>
+        <title>SemEnglish Grammar (from Seth)</title>
+    </head>
+
+    <body>
+        <h1>SemEnglish Grammar (from Seth)</h1>
+        <address>source: <a href="SemEnglish.g">SemEnglish.g</a>
+        </address>
+        <dl>
+            <dt>
+                <a name="document"
+                    id="document">document</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <a href="#Statement">Statement</a>
+                <sub></sub> * <tt>END</tt> </dd>
+            <dt>
+                <a name="Statement"
+                    id="Statement">Statement</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <a href="#Subject">Subject</a>
+                <sub></sub> <a href="#Predicate">Predicate</a>
+                <sub></sub> <a href="#AddPredicate">AddPredicate</a>
+                <sub></sub> * [ <tt>"\\."</tt>  ] </dd>
+            <dt>
+                <a name="Subject"
+                    id="Subject">Subject</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <a href="#CompoundWords">CompoundWords</a>
+                <sub></sub> <br class=""/> | <tt>Word</tt> <br class=""/> | <tt>Number</tt> <br class=""/> | <a href="#AnnNode">AnnNode</a>
+                <sub></sub> </dd>
+            <dt>
+                <a name="CompoundWords"
+                    id="CompoundWords">CompoundWords</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>"\\("</tt> <tt>Word</tt> + <tt>"\\)"</tt> </dd>
+            <dt>
+                <a name="AnnNode"
+                    id="AnnNode">AnnNode</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>"\\["</tt> <a href="#Predicate">Predicate</a>
+                <sub></sub> <tt>"\\]"</tt> </dd>
+            <dt>
+                <a name="Predicate"
+                    id="Predicate">Predicate</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <a href="#Verb">Verb</a>
+                <sub></sub> <a href="#Object">Object</a>
+                <sub></sub> <a href="#AddObject">AddObject</a>
+                <sub></sub> * </dd>
+            <dt>
+                <a name="AddPredicate"
+                    id="AddPredicate">AddPredicate</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>";"</tt> <a href="#Predicate">Predicate</a>
+                <sub></sub> </dd>
+            <dt>
+                <a name="Verb"
+                    id="Verb">Verb</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <a href="#CompoundWords">CompoundWords</a>
+                <sub></sub> <br class=""/> | <tt>Word</tt> </dd>
+            <dt>
+                <a name="Object"
+                    id="Object">Object</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <a href="#CompoundWords">CompoundWords</a>
+                <sub></sub> <br class=""/> | <a href="#ExpObject">ExpObject</a>
+                <sub></sub> <br class=""/> | <a href="#Expression">Expression</a>
+                <sub></sub> </dd>
+            <dt>
+                <a name="AddObject"
+                    id="AddObject">AddObject</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>","</tt> <a href="#Object">Object</a>
+                <sub></sub> </dd>
+            <dt>
+                <a name="ExpObject"
+                    id="ExpObject">ExpObject</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>Word</tt> <br class=""/> | <tt>Number</tt> <br class=""/> | <a href="#AnnNode">AnnNode</a>
+                <sub></sub> <br class=""/> | <a href="#ReifiedStatement">ReifiedStatement</a>
+                <sub></sub> <br class=""/> | <a href="#Context">Context</a>
+                <sub></sub> <br class=""/> | <a href="#Literal">Literal</a>
+                <sub></sub> </dd>
+            <dt>
+                <a name="ReifiedStatement"
+                    id="ReifiedStatement">ReifiedStatement</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>THAT</tt> <tt>"\\("</tt> <a href="#Subject">Subject</a>
+                <sub></sub> <a href="#Verb">Verb</a>
+                <sub></sub> <a href="#Object">Object</a>
+                <sub></sub> <tt>"\\)"</tt> </dd>
+            <dt>
+                <a name="Context"
+                    id="Context">Context</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>"{"</tt> <a href="#Statement">Statement</a>
+                <sub></sub> * <tt>"}"</tt> </dd>
+            <dt>
+                <a name="Literal"
+                    id="Literal">Literal</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>Dquote</tt> <br class=""/> | <tt>Squote</tt> </dd>
+            <dt>
+                <a name="Expression"
+                    id="Expression">Expression</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>"exp"</tt> <a href="#Nexpression">Nexpression</a>
+                <sub></sub> </dd>
+            <dt>
+                <a name="Nexpression"
+                    id="Nexpression">Nexpression</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>"\\("</tt> <a href="#Verb">Verb</a>
+                <sub></sub> <a href="#ExpObject_">ExpObject_</a>
+                <sub></sub> + <tt>"\\)"</tt> </dd>
+            <dt>
+                <a name="ExpObject_"
+                    id="ExpObject_">ExpObject_</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <a href="#ExpObject">ExpObject</a>
+                <sub></sub> <br class=""/> | <a href="#Nexpression">Nexpression</a>
+                <sub></sub> </dd>
+        </dl>
+    </body>
+</html>

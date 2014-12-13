@@ -1,0 +1,31 @@
+#Processed by Id: cwm.py,v 1.176 2005/08/10 17:03:22 syosi Exp 
+        #    using base file:/devel/WWW/2000/10/swap/test/reason/foo
+        
+#  Notation3 generation by
+#       notation3.py,v 1.182 2005/08/15 16:28:43 syosi Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/test/reason/foo
+     @prefix : <http://www.w3.org/2000/10/swap/reason#> .
+     @prefix foo: <#> .
+    
+     @forSome foo:_g0 .
+      [      a :Conjunction,
+                    :Proof;
+             :component  [
+                 a :Extraction;
+                 :because foo:_g0;
+                 :gives {<a>     <b> <c> .
+                } ],
+                     [
+                 a :Extraction;
+                 :because foo:_g0;
+                 :gives {<a2>     <b2> <c2> .
+                } ];
+             :gives {<a>     <b> <c> .
+            <a2>     <b2> <c2> .
+            } ].
+    
+    foo:_g0     a :Parsing;
+         :source <t2.n3> .
+    
+#ENDS

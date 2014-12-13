@@ -1,0 +1,304 @@
+@prefix cfg: <http://www.w3.org/2000/10/swap/grammar/bnf#>.
+@keywords a, is, of.
+## This is a BNF grammar in a yacc-ish syntax. It's used for constructing the
+## grammar section of the SPARQL specification.
+## 
+## $    Id   cfg:mustBeOneSequence((  grammar.yy,v 1.5 2004/11/28 08:28:39 eric Exp $
+## 
+##     INSTRUCTIONS   cfg:mustBeOneSequence(( 
+## Mark [cfg:mustBeOneSequence (( \C-SPACE ))] after this header.
+## Then go to the bottom and ESC )( ../../../../2004/05/06-Algae/prod2Table sparql
+## and past the results between the MARKER comments
+## 
+## %TOKENS
+SELECT       cfg:mustBeOneSequence((       "select"
+         )).
+DISTINCT       cfg:mustBeOneSequence((     "distinct"
+         )).
+LIMIT       cfg:mustBeOneSequence((        "limit"
+         )).
+DESCRIBE       cfg:mustBeOneSequence((     "describe"
+         )).
+CONSTRUCT       cfg:mustBeOneSequence((    "construct"
+         )).
+ASK       cfg:mustBeOneSequence((          "ask"
+         )).
+UNSAID       cfg:mustBeOneSequence((       "unsaid"
+         )).
+SOURCE       cfg:mustBeOneSequence((       "source"
+         )).
+FROM       cfg:mustBeOneSequence((         "from"
+         )).
+WHERE       cfg:mustBeOneSequence((        "where"
+         )).
+AND       cfg:mustBeOneSequence((          "and"
+         )).
+OR       cfg:mustBeOneSequence((           "or"
+         )).
+UNION       cfg:mustBeOneSequence((        "union"
+         )).
+PREFIX       cfg:mustBeOneSequence((       "prefix"
+         )).
+OPTIONAL       cfg:mustBeOneSequence((     "optional"
+         )).
+FOR       cfg:mustBeOneSequence((          "for"
+         )).
+STR_EQ       cfg:mustBeOneSequence((  "eq"
+         )).
+STR_NE       cfg:mustBeOneSequence((  "ne"
+         )).
+
+LPAREN       cfg:mustBeOneSequence((     "("
+         )).
+RPAREN       cfg:mustBeOneSequence((     ")"
+         )).
+
+LBRACE       cfg:mustBeOneSequence((     "{"
+         )).
+RBRACE       cfg:mustBeOneSequence((     "}"
+         )).
+LBRACKET       cfg:mustBeOneSequence((   "["
+         )).
+RBRACKET       cfg:mustBeOneSequence((   "]"
+         )).
+SEMICOLON       cfg:mustBeOneSequence((  ";"
+         )).
+COMMA       cfg:mustBeOneSequence((      ","
+         )).
+DOT       cfg:mustBeOneSequence((        "."
+         )).
+
+ASSIGN       cfg:mustBeOneSequence((  "="
+         )).
+GT       cfg:mustBeOneSequence((  "&gt;"
+         )).
+LT       cfg:mustBeOneSequence((  "&lt;"
+         )).
+BANG       cfg:mustBeOneSequence((  "!"
+         )).
+TILDE       cfg:mustBeOneSequence((  "~"
+         )).
+HOOK       cfg:mustBeOneSequence((  "^cfg:zeroOrOne"
+         )).
+COLON       cfg:mustBeOneSequence((  ":"
+         )).
+EQ       cfg:mustBeOneSequence((  "=="
+         )).
+NEQ       cfg:mustBeOneSequence((  "!="
+         )).
+LE       cfg:mustBeOneSequence((  "&lt;="
+         )).
+GE       cfg:mustBeOneSequence((  "&gt;="
+         )).
+SC_OR       cfg:mustBeOneSequence((  ")(|"
+         )).
+SC_AND       cfg:mustBeOneSequence((  "&amp;&amp;"
+         )).
+INCR       cfg:mustBeOneSequence((  "^cfg:oneOrMore^cfg:oneOrMore"
+         )).
+DECR       cfg:mustBeOneSequence((  "--"
+         )).
+PLUS       cfg:mustBeOneSequence((  "^cfg:oneOrMore"
+         )).
+MINUS       cfg:mustBeOneSequence((  "-"
+         )).
+STAR       cfg:mustBeOneSequence((  "^cfg:zeroOrMore"
+         )).
+SLASH       cfg:mustBeOneSequence((  "/"
+         )).
+AMP       cfg:mustBeOneSequence((  "&amp;"
+         )).
+REM       cfg:mustBeOneSequence((  "%"
+         )).
+LSHIFT       cfg:mustBeOneSequence((  "&lt;&lt;"
+         )).
+RSIGNEDSHIFT       cfg:mustBeOneSequence((  "&gt;&gt;"
+         )).
+RUNSIGNEDSHIFT       cfg:mustBeOneSequence((  "&gt;&gt;&gt;"
+         )).
+STR_MATCH       cfg:mustBeOneSequence((  "=~"
+         )).
+STR_NMATCH       cfg:mustBeOneSequence((  "!~"
+         )).
+DATATYPE       cfg:mustBeOneSequence((  "^^"
+         )).
+AT       cfg:mustBeOneSequence((  "@"
+         )).
+
+
+    Query   cfg:mustBeOneSequence(( 	PrefixDecl^cfg:zeroOrMore ReportFormat PrefixDecl^cfg:zeroOrMore FromClause^cfg:zeroOrOne WhereClause^cfg:zeroOrOne
+         )).
+    ReportFormat   cfg:mustBeOneSequence(( 	SELECT DISTINCT^cfg:zeroOrOne VAR [cfg:mustBeOneSequence ((  CommaOpt VAR  ))]^cfg:zeroOrMore
+	 )( SELECT DISTINCT^cfg:zeroOrOne STAR
+	 )( CONSTRUCT ConstructPattern
+	 )( CONSTRUCT STAR
+	 )( DESCRIBE VarOrURI [cfg:mustBeOneSequence ((  CommaOpt VarOrURI  ))]^cfg:zeroOrMore
+	 )( DESCRIBE STAR
+	 )( ASK
+         )).
+    FromClause   cfg:mustBeOneSequence(( 	FROM FromSelector [cfg:mustBeOneSequence ((  CommaOpt FromSelector  ))]^cfg:zeroOrMore
+         )).
+    FromSelector   cfg:mustBeOneSequence(( 	URI
+         )).
+    WhereClause   cfg:mustBeOneSequence(( 	WHERE GraphPattern
+         )).
+    SourceGraphPattern   cfg:mustBeOneSequence(( 	SOURCE STAR PatternElement
+	 )( SOURCE VarOrURI PatternElement
+         )).
+    OptionalGraphPattern   cfg:mustBeOneSequence(( 	OPTIONAL PatternElement
+	 )( LBRACKET GraphPattern RBRACKET
+         )).
+    GraphPattern   cfg:mustBeOneSequence(( 	GraphAndPattern [cfg:mustBeOneSequence (( UNION GraphAndPattern ))]^cfg:zeroOrMore
+         )).
+    GraphAndPattern   cfg:mustBeOneSequence(( 	PatternElement^cfg:oneOrMore
+         )).
+    PatternElement   cfg:mustBeOneSequence(( 	TriplePattern
+	 )( GroupGraphPattern
+	 )( SourceGraphPattern
+	 )( OptionalGraphPattern
+	 )( AND^cfg:zeroOrOne Expression
+         )).
+    GroupGraphPattern   cfg:mustBeOneSequence(( 	LBRACE GraphPattern RBRACE
+         )).
+    TriplePattern   cfg:mustBeOneSequence(( 	LPAREN VarOrURI CommaOpt VarOrURI CommaOpt VarOrLiteral RPAREN
+         )).
+    ConstructPattern   cfg:mustBeOneSequence(( 	ConstructElement^cfg:oneOrMore
+         )).
+    ConstructElement   cfg:mustBeOneSequence(( 	TriplePattern
+			)( LBRACE ConstructPattern RBRACE
+         )).
+    VarOrURI   cfg:mustBeOneSequence(( 	VAR
+	 )( URI
+         )).
+    VarOrLiteral   cfg:mustBeOneSequence(( 	VAR
+	 )( Literal
+         )).
+    PrefixDecl   cfg:mustBeOneSequence(( 	PREFIX NCNAME COLON QuotedURI
+	 )( PREFIX COLON QuotedURI
+         )).
+    Expression   cfg:mustBeOneSequence(( 	ConditionalOrExpression
+         )).
+    ConditionalOrExpression   cfg:mustBeOneSequence(( 	ConditionalAndExpression [cfg:mustBeOneSequence ((  SC_OR ConditionalAndExpression  ))]^cfg:zeroOrMore
+         )).
+    ConditionalAndExpression   cfg:mustBeOneSequence(( 	ValueLogical [cfg:mustBeOneSequence ((  SC_AND ValueLogical  ))]^cfg:zeroOrMore
+         )).
+    ValueLogical   cfg:mustBeOneSequence(( 	StringEqualityExpression
+         )).
+    StringEqualityExpression   cfg:mustBeOneSequence(( 	EqualityExpression StringComparitor^cfg:zeroOrMore
+         )).
+    StringComparitor   cfg:mustBeOneSequence(( 	STR_EQ EqualityExpression
+	 )( STR_NE EqualityExpression
+	 )( STR_MATCH PATTERN_LITERAL
+	 )( STR_NMATCH PATTERN_LITERAL
+         )).
+    EqualityExpression   cfg:mustBeOneSequence(( 	RelationalExpression RelationalComparitor^cfg:zeroOrOne
+         )).
+    RelationalComparitor   cfg:mustBeOneSequence(( 	EQ RelationalExpression
+	 )( NEQ RelationalExpression
+         )).
+    RelationalExpression   cfg:mustBeOneSequence(( 	AdditiveExpression NumericComparitor^cfg:zeroOrOne
+         )).
+    NumericComparitor   cfg:mustBeOneSequence(( 	LT AdditiveExpression
+	 )( GT AdditiveExpression
+	 )( LE AdditiveExpression
+	 )( GE AdditiveExpression
+         )).
+    AdditiveExpression   cfg:mustBeOneSequence(( 	MultiplicativeExpression AdditiveOperation^cfg:zeroOrMore
+         )).
+    AdditiveOperation   cfg:mustBeOneSequence(( 	PLUS MultiplicativeExpression
+	 )( MINUS MultiplicativeExpression
+         )).
+    MultiplicativeExpression   cfg:mustBeOneSequence(( 	UnaryExpression MultiplicativeOperation^cfg:zeroOrMore
+         )).
+    MultiplicativeOperation   cfg:mustBeOneSequence(( 	STAR UnaryExpression
+	 )( SLASH UnaryExpression
+	 )( REM UnaryExpression
+         )).
+    UnaryExpression   cfg:mustBeOneSequence(( 	UnaryExpressionNotPlusMinus
+         )).
+    UnaryExpressionNotPlusMinus   cfg:mustBeOneSequence(( 	[cfg:mustBeOneSequence ((  TILDE )( BANG  ))] UnaryExpression
+ 	 )(  PrimaryExpression
+         )).
+    PrimaryExpression   cfg:mustBeOneSequence(( 	VAR
+	 )( Literal
+	 )( FunctionCall
+	 )( LPAREN Expression RPAREN
+         )).
+    FunctionCall   cfg:mustBeOneSequence(( 	AMP QNAME LPAREN ArgList^cfg:zeroOrOne RPAREN
+         )).
+    ArgList   cfg:mustBeOneSequence(( 	VarOrLiteral [cfg:mustBeOneSequence ((  COMMA VarOrLiteral  ))]^cfg:zeroOrMore
+         )).
+    Literal   cfg:mustBeOneSequence(( 	URI
+ 	)(  NumericLiteral
+ 	)(  TextLiteral
+         )).
+    NumericLiteral   cfg:mustBeOneSequence(( 	INTEGER_LITERAL
+ 	)(  FLOATING_POINT_LITERAL
+         )).
+    TextLiteral   cfg:mustBeOneSequence(( 	String LANG^cfg:zeroOrOne [cfg:mustBeOneSequence ((  DATATYPE URI  ))]^cfg:zeroOrOne
+         )).
+    String   cfg:mustBeOneSequence(( 		STRING_LITERAL1
+	 )( STRING_LITERAL2
+         )).
+    URI   cfg:mustBeOneSequence(( 		QuotedURI
+ 	 )(  QName
+         )).
+    QName   cfg:mustBeOneSequence(( 		QNAME
+         )).
+    QuotedURI   cfg:mustBeOneSequence(( 	URI
+         )).
+    CommaOpt   cfg:mustBeOneSequence(( 	COMMA^cfg:zeroOrOne
+         )).
+
+## 
+## URI       cfg:mustBeOneSequence(( 		"<" NCCHAR1 [cfg:mustBeOneSequence (( ~[">"," "] ))]^cfg:zeroOrMore ">"
+## ;
+## QNAME       cfg:mustBeOneSequence(( 	[cfg:mustBeOneSequence (( NCNAME ))]^cfg:zeroOrOne ":" NCNAME
+## ;
+## VAR       cfg:mustBeOneSequence(( 		"^cfg:zeroOrOne" NCNAME
+## ;
+## LANG       cfg:mustBeOneSequence(( 		AT A2ZA2Z [cfg:mustBeOneSequence (( "-" A2ZA2Z ))]^cfg:zeroOrOne
+## ;
+## A2Z       cfg:mustBeOneSequence(( 		["a"-"z","A"-"Z"]>
+## ;
+## 
+## INTEGER_LITERAL       cfg:mustBeOneSequence(( 	[cfg:mustBeOneSequence (( ["^cfg:oneOrMore","-"] ))]^cfg:zeroOrOne DECIMAL_LITERAL [cfg:mustBeOneSequence (( ["l","L"] ))]^cfg:zeroOrOne
+##                       )( HEX_LITERAL [cfg:mustBeOneSequence (( ["l","L"] ))]^cfg:zeroOrOne
+## ;
+## DECIMAL_LITERAL       cfg:mustBeOneSequence(( 	DIGITS
+## ;
+## HEX_LITERAL       cfg:mustBeOneSequence(( 		"0" ["x","X"] [cfg:mustBeOneSequence (( ["0"-"9","a"-"f","A"-"F"] ))]^cfg:oneOrMore
+## ;
+## 
+## FLOATING_POINT_LITERAL       cfg:mustBeOneSequence(( 	[cfg:mustBeOneSequence (( ["^cfg:oneOrMore","-"] ))]^cfg:zeroOrOne [cfg:mustBeOneSequence (( ["0"-"9"] ))]^cfg:oneOrMore "." [cfg:mustBeOneSequence (( ["0"-"9"] ))]^cfg:zeroOrMore [cfg:mustBeOneSequence (( EXPONENT ))]^cfg:zeroOrOne
+##       )( "." [cfg:mustBeOneSequence (( ["0"-"9"] ))]^cfg:oneOrMore [cfg:mustBeOneSequence (( EXPONENT ))]^cfg:zeroOrOne
+##       )( [cfg:mustBeOneSequence (( ["0"-"9"] ))]^cfg:oneOrMore EXPONENT
+## ;
+## EXPONENT       cfg:mustBeOneSequence(( 		["e","E"] [cfg:mustBeOneSequence (( ["^cfg:oneOrMore","-"] ))]^cfg:zeroOrOne [cfg:mustBeOneSequence (( ["0"-"9"] ))]^cfg:oneOrMore
+## ;
+## # Single quoted string
+## STRING_LITERAL1       cfg:mustBeOneSequence(( 	"'" [cfg:mustBeOneSequence ((  (~["'","\\","\n","\r"] ))] )( [cfg:mustBeOneSequence (( "\\" ~["\n","\r"] ))] )^cfg:zeroOrMore "'"
+## ;
+## # Double quoted string
+## STRING_LITERAL2       cfg:mustBeOneSequence(( 	"\"" [cfg:mustBeOneSequence ((  (~["\"","\\","\n","\r"] ))] )( [cfg:mustBeOneSequence (( "\\"  ~["\n","\r"] ))] )^cfg:zeroOrMore "\""
+## ;
+## DIGITS       cfg:mustBeOneSequence(( 		[cfg:mustBeOneSequence (( ["0"-"9"] ))]
+## ;
+## 
+## PATTERN_LITERAL       cfg:mustBeOneSequence(( 	[m]/pattern/[i][m][s][x]
+## ;
+## 
+## NCCHAR1       cfg:mustBeOneSequence(( 		["A"-"Z"] 
+## 	)( "_" | ["a"-"z"] 
+## 	)( ["\u00C0"-"\u02FF"]  
+## 	)( ["\u0370"-"\u037D"] 
+## 	)( ["\u037F"-"\u1FFF"] 
+## 	)( ["\u200C"-"\u200D"] 
+## 	)( ["\u2070"-"\u218F"] 
+## 	)( ["\u2C00"-"\u2FEF"] 
+## 	)( ["\u3001"-"\uD7FF"] 
+## 	)( ["\uF900"-"\uFFFF"] 
+## ;
+## NCNAME       cfg:mustBeOneSequence(( 		NCCHAR1 [cfg:mustBeOneSequence (( NCCHAR1 )( "." | "-" | ["0"-"9"] | "\u00B7"  ))]^cfg:zeroOrMore
+## ;
+## 

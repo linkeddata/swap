@@ -1,0 +1,13 @@
+Package: swap-cwm
+Binary: swap-cwm
+Version: 0.9-1
+Maintainer: Dan Brickley <danbri@w3.org>
+Build-Depends: debhelper
+Architecture: all
+Standards-Version: 0.9
+Format: 1.0
+Directory: ./
+Files:
+ dc39bd5806f6b885845f3b1386b191a2 239 swap-cwm_0.9-1.dsc
+ 4eb819c74943df7160fd0a378d09335b 348741 swap-cwm_0.9-1.tar.gz
+

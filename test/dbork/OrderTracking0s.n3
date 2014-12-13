@@ -1,0 +1,51 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+
+#@prefix db: 		<http://localhost/SqlDB#>.
+# Tables:
+#@prefix Customers: 	<mysql://rdftest@swada.w3.org/OrderTracking/Customers#>.
+#@prefix Products: 	<mysql://rdftest@swada.w3.org/OrderTracking/Products#>.
+
+@prefix Customers: 	<Customers#>.
+@prefix Products: 	<Products#>.
+
+@prefix : <#>.
+
+@forAll :customer, :family, :given .
+
+#<mysql://rdftest@swada.w3.org/OrderTracking/> is log:definitiveService of
+#	Customers:familyName, Customers:givenName, Products:name.
+
+{
+ 	:customer Customers:familyName :family .
+ 	:customer Customers:givenName :given .
+} log:implies {
+	:given :RESULT :family .
+}.
+
+
+# Find all products with a name:
+#
+#@forAll :product, :name .
+#
+#<mysql://root@localhost/OrderTracking> is log:definitiveService of
+#	Products:name.
+#{
+# :product Products:name :name .
+#} log:implies {
+#
+# :product :PRODUCT_NAME :name .
+#
+#}.
+
+# SQL queries (so nicely formatted):
+# SELECT Customers_0.id AS customer_id,
+#          Customers_0.givenName AS given_givenName,
+#          Customers_0.familyName AS family_familyName
+# FROM Customers AS Customers_0
+
+# and
+
+# SELECT Products_0.id AS products_id,
+#          Products_0.name AS name_name
+# FROM Products AS Products_0
+

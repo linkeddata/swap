@@ -1,0 +1,8 @@
+     @prefix : <http://example.org/stuff/1.0/> .
+    @prefix dc: <http://purl.org/dc/elements/1.1/> .
+    
+    <http://www.w3.org/TR/rdf-syntax-grammar>     :editor  [
+             :fullName "Dave Beckett";
+             :homePage <http://purl.org/net/dajobe/> ];
+         dc:title "RDF/XML Syntax Specification (Revised)" .
+    

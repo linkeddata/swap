@@ -1,0 +1,26 @@
+#  Notation3 generation by
+#       notation3.py,v 1.187 2006/01/13 14:48:54 syosi Exp
+
+#   Base was: file:/Documents and Settings/kolovski/My Documents/mindswap/Policy Aware Web/www/2000/10/sameVarRules1.n3
+     @prefix : <#> .
+    @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    @prefix math: <http://www.w3.org/2000/10/swap/math#> .
+    
+     @forAll :x,
+                :y,
+                :z .
+    
+    <http://cwmTest/test>     <http://cwmTest/has> "10";
+         <http://cwmTest/hasValue> 2 .
+    {
+        
+          ( 5
+            :y
+            3 )
+             math:sum :z .
+        :x     <http://cwmTest/hasValue> :y .
+        
+        }     log:implies {:x     <http://cwmTest/has> :z .
+        } .
+    
+#ENDS

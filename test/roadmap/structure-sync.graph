@@ -1,0 +1,3588 @@
+#Processed by Id: cwm.py,v 1.81 2001/11/01 14:44:49 timbl Exp 
+        #    using base file:/cygdrive/c/devel/WWW/2001/04/roadmap/
+        
+#  Notation3 generation by
+#       notation3.py,v 1.97 2001/11/01 14:44:49 timbl Exp
+
+#   Base was: file:/cygdrive/c/devel/WWW/2001/04/roadmap/
+     @prefix : <../../../2000/04/mem-news/groups.rdf#> .
+     @prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#> .
+     @prefix dc: <http://purl.org/dc/elements/1.1/> .
+     @prefix doc: <http://www.w3.org/2000/10/swap/pim/doc.n3#> .
+     @prefix dot: <http://www.w3.org/2001/02pd/gv#> .
+     @prefix h: <http://www.w3.org/1999/xhtml> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix mso: <../../../../../../../home/connolly/w3ccvs/WWW/2000/10/swap/pim/MSOutlookContacts.n3#> .
+     @prefix msog1: <../../../2000/10/swap/pim/MSOutlookContacts.n3#> .
+     @prefix ont: <http://www.daml.org/2001/03/daml+oil#> .
+     @prefix ontg1: <http://www.daml.org/2000/12/daml+oil#> .
+     @prefix ontg1g1: <http://www.daml.org/2001/03/daml-ont#> .
+     @prefix org: <http://www.w3.org/2001/04/roadmap/org#> .
+     @prefix rcs: <http://www.w3.org/2001/03swell/rcs#> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix rm: <http://www.w3.org/2001/04/roadmap/vocab#> .
+     @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+     @prefix st: <structure.n3#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+     @prefix v: <http://www.w3.org/2001/04/roadmap/var#> .
+     @prefix w: <http://www.w3.org/2001/04/roadmap/w3c#> .
+    
+    <../../../2000/04/mem-news/groups-redundant.rdf>     <http://purl.org/dc/elements/1.1/source> <http://www.w3.org/Member/Mail/Overview.html> .
+    
+    :_g0     a org:Domain;
+         dot:color "khaki2";
+         dot:label "Architecture Domain";
+         dot:shape "box";
+         dot:style "filled";
+         org:includes :_g13,
+                :_g18,
+                :_g2,
+                :_g8;
+         org:lead :_g1;
+         org:name "Architecture Domain";
+         org:partOf st:w3c .
+    
+    :_g100     a contact:Person,
+                org:Individual;
+         = :_g100;
+         contact:fullName "Philipp Hoschka";
+         contact:mailbox <mailto:hoschka@w3.org>;
+         contact:sortName "Hoschka";
+         dot:label "Philipp Hoschka";
+         dot:shape "plaintext" .
+    
+    :_g101     a org:Activity;
+         = :_g101;
+         contact:homePage <http://www.w3.org/Voice/#intro>;
+         contact:homePageAddress "http://www.w3.org/Voice/#intro";
+         dot:URL "http://www.w3.org/Voice/#intro";
+         dot:color "khaki3";
+         dot:label "Voice Browser";
+         dot:shape "box";
+         dot:style "filled";
+         org:includes :_g103;
+         org:lead :_g102;
+         org:name "Voice Browser";
+         org:partOf :_g85 .
+    
+    :_g102     a contact:Person,
+                org:Individual;
+         = :_g102;
+         contact:fullName "Dave Raggett";
+         contact:homePage <http://www.w3.org/People/Raggett/>;
+         contact:homePageAddress "http://www.w3.org/People/Raggett/";
+         contact:sortName "Raggett";
+         dot:URL "http://www.w3.org/People/Raggett/";
+         dot:label "Dave Raggett";
+         dot:shape "plaintext" .
+    
+    :_g103     a org:WorkingGroup;
+         = :_g103;
+         contact:homePage <http://www.w3.org/Voice/Group/>;
+         contact:homePageAddress "http://www.w3.org/Voice/Group/";
+         contact:mailbox <mailto:w3c-voice-wg@w3.org>;
+         dot:URL "http://www.w3.org/Voice/Group/";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "Voice Browser Working Group";
+         dot:shape "box";
+         dot:style "filled";
+         org:chair :_g104;
+         org:deliverable w:voice;
+         org:name "Voice Browser Working Group";
+         org:partOf :_g101;
+         org:teamContact :_g102 .
+    
+    :_g104     a contact:Person,
+                org:Individual;
+         = :_g104;
+         contact:fullName "Jim Larson";
+         contact:mailbox <mailto:jim.a.larson@intel.com>;
+         contact:sortName "Larson";
+         dot:label "Jim Larson";
+         dot:shape "plaintext" .
+    
+    :_g106     a org:Activity;
+         = :_g106;
+         contact:homePage <http://www.w3.org/AudioVideo/Activity>;
+         contact:homePageAddress "http://www.w3.org/AudioVideo/Activity";
+         dot:URL "http://www.w3.org/AudioVideo/Activity";
+         dot:color "khaki3";
+         dot:label "Synchronized Multimedia";
+         dot:shape "box";
+         dot:style "filled";
+         org:includes :_g108;
+         org:lead :_g107;
+         org:name "Synchronized Multimedia";
+         org:partOf :_g85 .
+    
+    :_g107     a contact:Person,
+                org:Individual;
+         = :_g107;
+         contact:fullName "Thierry Michel";
+         contact:mailbox <mailto:tmichel@w3.org>;
+         contact:sortName "Michel";
+         dot:label "Thierry Michel";
+         dot:shape "plaintext" .
+    
+    :_g108     a org:WorkingGroup;
+         = :_g108;
+         contact:homePage <http://www.w3.org/AudioVideo/Group/>;
+         contact:homePageAddress "http://www.w3.org/AudioVideo/Group/";
+         contact:mailbox <mailto:symm@w3.org>;
+         dot:URL "http://www.w3.org/AudioVideo/Group/";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "SYMM Working Group";
+         dot:shape "box";
+         dot:style "filled";
+         org:chair :_g109;
+         org:deliverable w:smil;
+         org:name "SYMM Working Group";
+         org:partOf :_g106;
+         org:teamContact :_g107 .
+    
+    :_g109     a contact:Person,
+                org:Individual;
+         = :_g109;
+         contact:fullName "Aaron M. Cohen";
+         contact:mailbox <mailto:aaron.m.cohen@intel.com>;
+         contact:sortName "Cohen";
+         dot:label "Aaron M. Cohen";
+         dot:shape "plaintext" .
+    
+    :_g10     a org:InterestGroup;
+         = :_g10;
+         contact:homePage <http://www.w3.org/2000/10/URI/>;
+         contact:homePageAddress "http://www.w3.org/2000/10/URI/";
+         contact:mailbox <mailto:w3c-uri-ig@w3.org>;
+         dot:URL "http://www.w3.org/2000/10/URI/";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "URI Planning Interest Group";
+         dot:shape "elipse";
+         dot:style "filled";
+         org:chair :_g11,
+                :_g12;
+         org:name "URI Planning Interest Group";
+         org:partOf :_g8 .
+    
+    :_g111     a org:Domain;
+         dot:color "khaki2";
+         dot:label "Technology and Society Domain";
+         dot:shape "box";
+         dot:style "filled";
+         org:includes :_g113,
+                :_g117,
+                :_g132,
+                :_g135,
+                :_g150;
+         org:lead :_g112;
+         org:name "Technology and Society Domain";
+         org:partOf st:w3c .
+    
+    :_g112     a contact:Person,
+                org:Individual;
+         = :_g112;
+         contact:fullName "Daniel Weitzner";
+         contact:mailbox <mailto:djweitzner@w3.org>;
+         contact:sortName "Weitzner";
+         dot:label "Daniel Weitzner";
+         dot:shape "plaintext" .
+    
+    :_g113     a org:Activity;
+         = :_g113;
+         contact:homePage <http://www.w3.org/Encryption/2001/Activity>;
+         contact:homePageAddress "http://www.w3.org/Encryption/2001/Activity";
+         dot:URL "http://www.w3.org/Encryption/2001/Activity";
+         dot:color "khaki3";
+         dot:label "XML Encryption Activity";
+         dot:shape "box";
+         dot:style "filled";
+         org:includes :_g115;
+         org:lead :_g114;
+         org:name "XML Encryption Activity";
+         org:partOf :_g111 .
+    
+    :_g114     a contact:Person,
+                org:Individual;
+         = :_g114;
+         contact:fullName "Joseph Reagle";
+         contact:mailbox <mailto:reagle@w3.org>;
+         contact:sortName "Reagle";
+         dot:label "Joseph Reagle";
+         dot:shape "plaintext" .
+    
+    :_g115     a org:WorkingGroup;
+         = :_g115;
+         contact:homePage <http://www.w3.org/Encryption/2001/>;
+         contact:homePageAddress "http://www.w3.org/Encryption/2001/";
+         contact:mailbox <mailto:xml-encryption@w3.org>;
+         dot:URL "http://www.w3.org/Encryption/2001/";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "XML Encryption WG";
+         dot:shape "box";
+         dot:style "filled";
+         org:chair :_g114;
+         org:name "XML Encryption WG";
+         org:partOf :_g113 .
+    
+    :_g117     a org:Activity;
+         = :_g117;
+         contact:homePage <http://www.w3.org/2001/sw/Activity>;
+         contact:homePageAddress "http://www.w3.org/2001/sw/Activity";
+         dot:URL "http://www.w3.org/2001/sw/Activity";
+         dot:color "khaki3";
+         dot:label "Semantic Web";
+         dot:shape "box";
+         dot:style "filled";
+         org:includes :_g119,
+                :_g121,
+                :_g125,
+                :_g128,
+                :_g130;
+         org:lead :_g118;
+         org:name "Semantic Web";
+         org:partOf :_g111 .
+    
+    :_g118     a contact:Person,
+                org:Individual;
+         = :_g118;
+         contact:fullName "Eric Miller";
+         contact:mailbox <mailto:em@w3.org>;
+         contact:sortName "Miller";
+         dot:label "Eric Miller";
+         dot:shape "plaintext" .
+    
+    :_g119     a org:CoordinationGroup;
+         = :_g119;
+         contact:homePage <http://www.w3.org/2001/sw/CG/>;
+         contact:homePageAddress "http://www.w3.org/2001/sw/CG/";
+         contact:mailbox <mailto:w3c-semweb-cg@w3.org>;
+         dot:URL "http://www.w3.org/2001/sw/CG/";
+         dot:label "Semantic Web Coordination Group";
+         org:chair :_g118;
+         org:name "Semantic Web Coordination Group";
+         org:partOf :_g117 .
+    
+    :_g11     a contact:Person,
+                org:Individual;
+         = :_g11;
+         contact:fullName "Norm Walsh";
+         contact:mailbox <mailto:Norman.Walsh@East.Sun.COM>;
+         contact:sortName "Walsh";
+         dot:label "Norm Walsh";
+         dot:shape "plaintext" .
+    
+    :_g121     a org:WorkingGroup;
+         = :_g121;
+         contact:homePage <http://www.w3.org/2001/sw/RDFCore/>;
+         contact:homePageAddress "http://www.w3.org/2001/sw/RDFCore/";
+         contact:mailbox <mailto:w3c-rdfcore-wg@w3.org>;
+         dot:URL "http://www.w3.org/2001/sw/RDFCore/";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "RDF Core Working Group";
+         dot:shape "box";
+         dot:style "filled";
+         org:chair :_g122,
+                :_g123;
+         org:name "RDF Core Working Group";
+         org:partOf :_g117;
+         org:teamContact :_g118 .
+    
+    :_g122     a contact:Person,
+                org:Individual;
+         = :_g122;
+         contact:fullName "Dan Brickley";
+         contact:mailbox <mailto:danbri@w3.org>;
+         contact:sortName "Brickley";
+         dot:label "Dan Brickley";
+         dot:shape "plaintext" .
+    
+    :_g123     a contact:Person,
+                org:Individual;
+         = :_g123;
+         contact:fullName "Brian McBride";
+         contact:mailbox <mailto:brian_mcbride@hp.com>;
+         contact:sortName "McBride";
+         dot:label "Brian McBride";
+         dot:shape "plaintext" .
+    
+    :_g125     a org:WorkingGroup;
+         = :_g125;
+         contact:homePage <http://www.w3.org/2001/sw/WebOnt/>;
+         contact:homePageAddress "http://www.w3.org/2001/sw/WebOnt/";
+         contact:mailbox <mailto:www-webont-wg@w3.org>;
+         dot:URL "http://www.w3.org/2001/sw/WebOnt/";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "Web Ontology Working Group";
+         dot:shape "box";
+         dot:style "filled";
+         org:chair :_g126;
+         org:name "Web Ontology Working Group";
+         org:partOf :_g117;
+         org:teamContact :_g12 .
+    
+    :_g126     a contact:Person,
+                org:Individual;
+         = :_g126;
+         contact:fullName "Jim Hendler";
+         contact:mailbox <mailto:hendler@cs.umd.edu>;
+         contact:sortName "Hendler";
+         dot:label "Jim Hendler";
+         dot:shape "plaintext" .
+    
+    :_g128     a org:InterestGroup;
+         = :_g128;
+         contact:homePage <http://www.w3.org/RDF/Interest/>;
+         contact:homePageAddress "http://www.w3.org/RDF/Interest/";
+         contact:mailbox <mailto:www-rdf-interest@w3.org>;
+         dot:URL "http://www.w3.org/RDF/Interest/";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "RDF Interest Group";
+         dot:shape "elipse";
+         dot:style "filled";
+         org:chair :_g122;
+         org:name "RDF Interest Group";
+         org:partOf :_g117 .
+    
+    :_g12     a contact:Person,
+                org:Individual;
+         = :_g12;
+         contact:fullName "Dan Connolly";
+         contact:homePage <http://www.w3.org/People/Connolly/>;
+         contact:homePageAddress "http://www.w3.org/People/Connolly/";
+         contact:mailbox <mailto:connolly@w3.org>;
+         contact:sortName "Connolly";
+         dot:URL "http://www.w3.org/People/Connolly/";
+         dot:label "Dan Connolly";
+         dot:shape "plaintext" .
+    
+    :_g130     a org:InterestGroup;
+         = :_g130;
+         contact:homePage <http://www.w3.org/PICS/IG/>;
+         contact:homePageAddress "http://www.w3.org/PICS/IG/";
+         contact:mailbox <mailto:pics-interest@w3.org>;
+         dot:URL "http://www.w3.org/PICS/IG/";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "PICS Interest Group";
+         dot:shape "elipse";
+         dot:style "filled";
+         org:chair :_g131;
+         org:name "PICS Interest Group";
+         org:partOf :_g117 .
+    
+    :_g131     a contact:Person,
+                org:Individual;
+         = :_g131;
+         contact:fullName "Ralph Swick";
+         contact:mailbox <mailto:swick@w3.org>;
+         contact:sortName "Swick";
+         dot:label "Ralph Swick";
+         dot:shape "plaintext" .
+    
+    :_g132     a org:Activity;
+         dot:color "khaki3";
+         dot:shape "box";
+         dot:style "filled";
+         org:includes :_g133;
+         org:partOf :_g111 .
+    
+    :_g133     a org:WorkingGroup;
+         = :_g133;
+         contact:homePage <http://www.w3.org/Consortium/Patent/Group/>;
+         contact:homePageAddress "http://www.w3.org/Consortium/Patent/Group/";
+         contact:mailbox <mailto:w3c-patent-wg@w3.org>;
+         dot:URL "http://www.w3.org/Consortium/Patent/Group/";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "Patent Policy Working Group";
+         dot:shape "box";
+         dot:style "filled";
+         org:chair :_g112;
+         org:name "Patent Policy Working Group";
+         org:partOf :_g132 .
+    
+    :_g135     a org:Activity;
+         = :_g135;
+         contact:homePage <http://www.w3.org/Privacy/Activity>;
+         contact:homePageAddress "http://www.w3.org/Privacy/Activity";
+         dot:URL "http://www.w3.org/Privacy/Activity";
+         dot:color "khaki3";
+         dot:label "Privacy (P3P)";
+         dot:shape "box";
+         dot:style "filled";
+         org:includes :_g137,
+                :_g139,
+                :_g141,
+                :_g144,
+                :_g147;
+         org:lead :_g136;
+         org:name "Privacy (P3P)";
+         org:partOf :_g111 .
+    
+    :_g136     a contact:Person,
+                org:Individual;
+         = :_g136;
+         contact:fullName "Rigo Wenning";
+         contact:mailbox <mailto:rigo@w3.org>;
+         contact:sortName "Wenning";
+         dot:label "Rigo Wenning";
+         dot:shape "plaintext" .
+    
+    :_g137     a org:InterestGroup;
+         = :_g137;
+         contact:homePage <http://lists.w3.org/Archives/Member/w3c-p3p-ig/>;
+         contact:homePageAddress "http://lists.w3.org/Archives/Member/w3c-p3p-ig/";
+         contact:mailbox <mailto:w3c-p3p-ig@w3.org>;
+         dot:URL "http://lists.w3.org/Archives/Member/w3c-p3p-ig/";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "P3P Interest Group";
+         dot:shape "elipse";
+         dot:style "filled";
+         org:chair :_g136;
+         org:name "P3P Interest Group";
+         org:partOf :_g135 .
+    
+    :_g139     a org:CoordinationGroup;
+         = :_g139;
+         contact:homePage <http://www.w3.org/P3P/Group/Coordination/>;
+         contact:homePageAddress "http://www.w3.org/P3P/Group/Coordination/";
+         contact:mailbox <mailto:w3c-p3p-coordination@w3.org>;
+         dot:URL "http://www.w3.org/P3P/Group/Coordination/";
+         dot:label "P3P Coordination Group";
+         org:chair :_g112;
+         org:name "P3P Coordination Group";
+         org:partOf :_g135 .
+    
+    :_g13     a org:Activity;
+         = :_g13;
+         contact:homePage <http://www.w3.org/2000/xp/>;
+         contact:homePageAddress "http://www.w3.org/2000/xp/";
+         dot:URL "http://www.w3.org/2000/xp/";
+         dot:color "khaki3";
+         dot:label "XML Protocol";
+         dot:shape "box";
+         dot:style "filled";
+         org:includes :_g15;
+         org:lead :_g14;
+         org:name "XML Protocol";
+         org:partOf :_g0 .
+    
+    :_g141     a org:WorkingGroup;
+         = :_g141;
+         contact:homePage <http://www.w3.org/P3P/Group/POWG/>;
+         contact:homePageAddress "http://www.w3.org/P3P/Group/POWG/";
+         contact:mailbox <mailto:w3c-p3p-powg@w3.org>;
+         dot:URL "http://www.w3.org/P3P/Group/POWG/";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "P3P Policy and Outreach";
+         dot:shape "box";
+         dot:style "filled";
+         org:chair :_g142;
+         org:name "P3P Policy and Outreach";
+         org:partOf :_g135;
+         org:teamContact :_g136 .
+    
+    :_g142     a contact:Person,
+                org:Individual;
+         = :_g142;
+         contact:fullName "Ari Schwartz";
+         contact:mailbox <mailto:ari@cdt.org>;
+         contact:sortName "Schwartz";
+         dot:label "Ari Schwartz";
+         dot:shape "plaintext" .
+    
+    :_g144     a org:WorkingGroup;
+         = :_g144;
+         contact:homePage <http://www.w3.org/P3P/Group/Specification/>;
+         contact:homePageAddress "http://www.w3.org/P3P/Group/Specification/";
+         contact:mailbox <mailto:w3c-p3p-specification@w3.org>;
+         dot:URL "http://www.w3.org/P3P/Group/Specification/";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "P3P Specification";
+         dot:shape "box";
+         dot:style "filled";
+         org:chair :_g145;
+         org:deliverable w:p3p;
+         org:name "P3P Specification";
+         org:partOf :_g135;
+         org:teamContact :_g136 .
+    
+    :_g145     a contact:Person,
+                org:Individual;
+         = :_g145;
+         contact:fullName "Lorrie Faith Cranor";
+         contact:mailbox <mailto:lorrie@research.att.com>;
+         contact:sortName "Cranor";
+         dot:label "Lorrie Faith Cranor";
+         dot:shape "plaintext" .
+    
+    :_g147     a org:WorkingGroup;
+         = :_g147;
+         contact:homePage <http://www.w3.org/P3P/Group/Preferences/>;
+         contact:homePageAddress "http://www.w3.org/P3P/Group/Preferences/";
+         contact:mailbox <mailto:w3c-p3p-preferences@w3.org>;
+         dot:URL "http://www.w3.org/P3P/Group/Preferences/";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "P3P Preferences (APPEL)";
+         dot:shape "box";
+         dot:style "filled";
+         org:chair :_g148;
+         org:name "P3P Preferences (APPEL)";
+         org:partOf :_g135;
+         org:teamContact :_g136 .
+    
+    :_g148     a contact:Person,
+                org:Individual;
+         = :_g148;
+         contact:fullName "Marc Langheinrich";
+         contact:mailbox <mailto:langhein@inf.ethz.ch>;
+         contact:sortName "Langheinrich";
+         dot:label "Marc Langheinrich";
+         dot:shape "plaintext" .
+    
+    :_g14     a contact:Person,
+                org:Individual;
+         = :_g14;
+         contact:fullName "Yves Lafon";
+         contact:homePage <http://www.w3.org/People/Lafon/>;
+         contact:homePageAddress "http://www.w3.org/People/Lafon/";
+         contact:sortName "Lafon";
+         dot:URL "http://www.w3.org/People/Lafon/";
+         dot:label "Yves Lafon";
+         dot:shape "plaintext" .
+    
+    :_g150     a org:Activity;
+         = :_g150;
+         contact:homePage <http://www.w3.org/Signature/Activity>;
+         contact:homePageAddress "http://www.w3.org/Signature/Activity";
+         dot:URL "http://www.w3.org/Signature/Activity";
+         dot:color "khaki3";
+         dot:label "XML Digital Signatures Activity";
+         dot:shape "box";
+         dot:style "filled";
+         org:includes :_g152,
+                :_g155;
+         org:lead :_g114;
+         org:name "XML Digital Signatures Activity";
+         org:partOf :_g111 .
+    
+    :_g152     a org:WorkingGroup;
+         = :_g152;
+         contact:homePage <http://www.w3.org/Signature/>;
+         contact:homePageAddress "http://www.w3.org/Signature/";
+         contact:mailbox <mailto:w3c-ietf-xmldsig@w3.org>;
+         dot:URL "http://www.w3.org/Signature/";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "XML-Signature WG";
+         dot:shape "box";
+         dot:style "filled";
+         org:chair :_g114,
+                :_g154;
+         org:deliverable w:cannon,
+                w:sig;
+         org:name "XML-Signature WG";
+         org:partOf :_g150 .
+    
+    :_g154     a contact:Person,
+                org:Individual;
+         = :_g154;
+         contact:fullName "Donald Eastlake";
+         contact:mailbox <mailto:Donald.Eastlake@motorola.com>;
+         contact:sortName "Eastlake";
+         dot:label "Donald Eastlake";
+         dot:shape "plaintext" .
+    
+    :_g155     a org:InterestGroup;
+         = :_g155;
+         contact:homePage <http://www.w3.org/DSig/Group/>;
+         contact:homePageAddress "http://www.w3.org/DSig/Group/";
+         contact:mailbox <mailto:w3c-dsig@w3.org>;
+         dot:URL "http://www.w3.org/DSig/Group/";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "DSig Project Interest Group";
+         dot:shape "elipse";
+         dot:style "filled";
+         org:chair :_g114;
+         org:name "DSig Project Interest Group";
+         org:partOf :_g150 .
+    
+    :_g157     a org:Domain;
+         dot:color "khaki2";
+         dot:label "Web Accessibility Initiative";
+         dot:shape "box";
+         dot:style "filled";
+         org:includes :_g159,
+                :_g167;
+         org:lead :_g158;
+         org:name "Web Accessibility Initiative";
+         org:partOf st:w3c .
+    
+    :_g158     a contact:Person,
+                org:Individual;
+         = :_g158;
+         contact:fullName "Judy Brewer";
+         contact:mailbox <mailto:jbrewer@w3.org>;
+         contact:sortName "Brewer";
+         dot:label "Judy Brewer";
+         dot:shape "plaintext" .
+    
+    :_g159     a org:Activity;
+         = :_g159;
+         contact:homePage <http://www.w3.org/WAI/IPO/Activity>;
+         contact:homePageAddress "http://www.w3.org/WAI/IPO/Activity";
+         dot:URL "http://www.w3.org/WAI/IPO/Activity";
+         dot:color "khaki3";
+         dot:label "WAI International Program Office";
+         dot:shape "box";
+         dot:style "filled";
+         org:includes :_g161,
+                :_g163,
+                :_g165;
+         org:lead :_g158;
+         org:name "WAI International Program Office";
+         org:partOf :_g157 .
+    
+    :_g15     a org:WorkingGroup;
+         = :_g15;
+         contact:homePage <http://www.w3.org/2000/xp/Group>;
+         contact:homePageAddress "http://www.w3.org/2000/xp/Group";
+         contact:mailbox <mailto:xml-dist-app@w3.org>;
+         dot:URL "http://www.w3.org/2000/xp/Group";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "XML Protocol WG";
+         dot:shape "box";
+         dot:style "filled";
+         org:chair :_g16;
+         org:name "XML Protocol WG";
+         org:partOf :_g13;
+         org:teamContact :_g14 .
+    
+    :_g161     a org:WorkingGroup;
+         = :_g161;
+         contact:homePage <http://www.w3.org/WAI/EO>;
+         contact:homePageAddress "http://www.w3.org/WAI/EO";
+         contact:mailbox <mailto:w3c-wai-eo@w3.org>;
+         dot:URL "http://www.w3.org/WAI/EO";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "Education&Outreach WG";
+         dot:shape "box";
+         dot:style "filled";
+         org:chair :_g158;
+         org:name "Education&Outreach WG";
+         org:partOf :_g159 .
+    
+    :_g163     a org:InterestGroup,
+                org:WorkingGroup;
+         = :_g163;
+         contact:homePage <http://www.w3.org/QA/WG/>,
+                <http://www.w3.org/WAI/IG/>;
+         contact:homePageAddress "http://www.w3.org/QA/WG/",
+                "http://www.w3.org/WAI/IG/";
+         contact:mailbox <mailto:w3c-wai-ig@w3.org>,
+                <mailto:www-qa@w3.org>;
+         dot:URL "http://www.w3.org/QA/WG/",
+                "http://www.w3.org/WAI/IG/";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "QA Interest Group",
+                "QA Working Group",
+                "WAI Interest Group";
+         dot:shape "box",
+                "elipse";
+         dot:style "filled";
+         org:chair :_g158,
+                :_g171,
+                :_g190,
+                :_g191,
+                :_g195;
+         org:name "QA Interest Group",
+                "QA Working Group",
+                "WAI Interest Group";
+         org:partOf :_g159,
+                :_g187;
+         org:teamContact :_g171,
+                :_g190 .
+    
+    :_g165     a org:CoordinationGroup;
+         = :_g165;
+         contact:homePage <http://www.w3.org/WAI/CG/Group>;
+         contact:homePageAddress "http://www.w3.org/WAI/CG/Group";
+         contact:mailbox <mailto:w3c-wai-cg@w3.org>;
+         dot:URL "http://www.w3.org/WAI/CG/Group";
+         dot:label "WAI Coordination Group";
+         org:chair :_g158;
+         org:name "WAI Coordination Group";
+         org:partOf :_g159 .
+    
+    :_g167     a org:Activity;
+         = :_g167;
+         contact:homePage <http://www.w3.org/WAI/Technical/Activity>;
+         contact:homePageAddress "http://www.w3.org/WAI/Technical/Activity";
+         dot:URL "http://www.w3.org/WAI/Technical/Activity";
+         dot:color "khaki3";
+         dot:label "WAI Technical Activity";
+         dot:shape "box";
+         dot:style "filled";
+         org:includes :_g169,
+                :_g172,
+                :_g175,
+                :_g178,
+                :_g182;
+         org:lead :_g168;
+         org:name "WAI Technical Activity";
+         org:partOf :_g157 .
+    
+    :_g168     a contact:Person,
+                org:Individual;
+         = :_g168;
+         contact:fullName "Daniel Dardailler";
+         contact:homePage <http://www.w3.org/People/danield>;
+         contact:homePageAddress "http://www.w3.org/People/danield";
+         contact:sortName "Dardailler";
+         dot:URL "http://www.w3.org/People/danield";
+         dot:label "Daniel Dardailler";
+         dot:shape "plaintext" .
+    
+    :_g169     a org:WorkingGroup;
+         = :_g169;
+         contact:homePage <http://www.w3.org/WAI/PF/Group>;
+         contact:homePageAddress "http://www.w3.org/WAI/PF/Group";
+         contact:mailbox <mailto:w3c-wai-pf@w3.org>;
+         dot:URL "http://www.w3.org/WAI/PF/Group";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "Protocols & Format WG";
+         dot:shape "box";
+         dot:style "filled";
+         org:chair :_g170,
+                :_g171;
+         org:name "Protocols & Format WG";
+         org:partOf :_g167 .
+    
+    :_g16     a contact:Person,
+                org:Individual;
+         = :_g16;
+         contact:fullName "David Fallside";
+         contact:mailbox <mailto:fallside@us.ibm.com>;
+         contact:sortName "Fallside";
+         dot:label "David Fallside";
+         dot:shape "plaintext" .
+    
+    :_g170     a contact:Person,
+                org:Individual;
+         = :_g170;
+         contact:fullName "Al Gilman";
+         contact:mailbox <mailto:asgilman@access.digex.net>;
+         contact:sortName "Gilman";
+         dot:label "Al Gilman";
+         dot:shape "plaintext" .
+    
+    :_g171     a contact:Person,
+                org:Individual;
+         = :_g171;
+         contact:fullName "Daniel Dardailler";
+         contact:mailbox <mailto:danield@w3.org>;
+         contact:sortName "Dardailler";
+         dot:label "Daniel Dardailler";
+         dot:shape "plaintext" .
+    
+    :_g172     a org:WorkingGroup;
+         = :_g172;
+         contact:homePage <http://www.w3.org/WAI/UA>;
+         contact:homePageAddress "http://www.w3.org/WAI/UA";
+         contact:mailbox <mailto:w3c-wai-ua@w3.org>;
+         dot:URL "http://www.w3.org/WAI/UA";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "User Agent Guidelines WG";
+         dot:shape "box";
+         dot:style "filled";
+         org:chair :_g173;
+         org:name "User Agent Guidelines WG";
+         org:partOf :_g167;
+         org:teamContact :_g174 .
+    
+    :_g173     a contact:Person,
+                org:Individual;
+         = :_g173;
+         contact:fullName "Jon Gunderson";
+         contact:mailbox <mailto:jongund@uiuc.edu>;
+         contact:sortName "Gunderson";
+         dot:label "Jon Gunderson";
+         dot:shape "plaintext" .
+    
+    :_g174     a contact:Person,
+                org:Individual;
+         = :_g174;
+         contact:fullName "Ian Jacobs";
+         contact:homePage <http://www.w3.org/People/Jacobs>;
+         contact:homePageAddress "http://www.w3.org/People/Jacobs";
+         contact:sortName "Jacobs";
+         dot:URL "http://www.w3.org/People/Jacobs";
+         dot:label "Ian Jacobs";
+         dot:shape "plaintext" .
+    
+    :_g175     a org:WorkingGroup;
+         = :_g175;
+         contact:homePage <http://www.w3.org/WAI/AU>;
+         contact:homePageAddress "http://www.w3.org/WAI/AU";
+         contact:mailbox <mailto:w3c-wai-au@w3.org>;
+         dot:URL "http://www.w3.org/WAI/AU";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "Authoring Tools Guidelines WG";
+         dot:shape "box";
+         dot:style "filled";
+         org:chair :_g176;
+         org:name "Authoring Tools Guidelines WG";
+         org:partOf :_g167;
+         org:teamContact :_g177 .
+    
+    :_g176     a contact:Person,
+                org:Individual;
+         = :_g176;
+         contact:fullName "Jutta Treviranus";
+         contact:mailbox <mailto:jutta.treviranus@utoronto.ca>;
+         contact:sortName "Treviranus";
+         dot:label "Jutta Treviranus";
+         dot:shape "plaintext" .
+    
+    :_g177     a contact:Person,
+                org:Individual;
+         = :_g177;
+         contact:fullName "Charles McCathieNevile";
+         contact:mailbox <mailto:charles@w3.org>;
+         contact:sortName "McCathieNevile";
+         dot:label "Charles McCathieNevile";
+         dot:shape "plaintext" .
+    
+    :_g178     a org:WorkingGroup;
+         = :_g178;
+         contact:homePage <http://www.w3.org/WAI/GL>;
+         contact:homePageAddress "http://www.w3.org/WAI/GL";
+         contact:mailbox <mailto:w3c-wai-gl@w3.org>;
+         dot:URL "http://www.w3.org/WAI/GL";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "Web Content Accessibility Guidelines WG";
+         dot:shape "box";
+         dot:style "filled";
+         org:chair :_g179,
+                :_g180;
+         org:name "Web Content Accessibility Guidelines WG";
+         org:partOf :_g167;
+         org:teamContact :_g181 .
+    
+    :_g179     a contact:Person,
+                org:Individual;
+         = :_g179;
+         contact:fullName "Jason White";
+         contact:mailbox <mailto:jasonw@ariel.ucs.unimelb.EDU.AU>;
+         contact:sortName "White";
+         dot:label "Jason White";
+         dot:shape "plaintext" .
+    
+    :_g180     a contact:Person,
+                org:Individual;
+         = :_g180;
+         contact:fullName "Gregg Vanderheiden";
+         contact:mailbox <mailto:gv@trace.wisc.edu>;
+         contact:sortName "Vanderheiden";
+         dot:label "Gregg Vanderheiden";
+         dot:shape "plaintext" .
+    
+    :_g181     a contact:Person,
+                org:Individual;
+         = :_g181;
+         contact:fullName "Wendy Chisholm";
+         contact:mailbox <mailto:chisholm@w3.org>;
+         contact:sortName "Chisholm";
+         dot:label "Wendy Chisholm";
+         dot:shape "plaintext" .
+    
+    :_g182     a org:WorkingGroup;
+         = :_g182;
+         contact:homePage <http://www.w3.org/WAI/ER/>;
+         contact:homePageAddress "http://www.w3.org/WAI/ER/";
+         contact:mailbox <mailto:w3c-wai-er-ig@w3.org>;
+         dot:URL "http://www.w3.org/WAI/ER/";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "Evaluation & Repair Tools Interest Group and Working Group";
+         dot:shape "box";
+         dot:style "filled";
+         org:name "Evaluation & Repair Tools Interest Group and Working Group";
+         org:partOf :_g167;
+         org:teamContact :_g168,
+                :_g181 .
+    
+    :_g185     a org:Domain;
+         dot:color "khaki2";
+         dot:label "Quality Assurance";
+         dot:shape "box";
+         dot:style "filled";
+         org:includes :_g187;
+         org:lead :_g171;
+         org:name "Quality Assurance";
+         org:partOf st:w3c .
+    
+    :_g187     a org:Activity;
+         = :_g187;
+         contact:homePage <http://www.w3.org/QA/>;
+         contact:homePageAddress "http://www.w3.org/QA/";
+         dot:URL "http://www.w3.org/QA/";
+         dot:color "khaki3";
+         dot:label "Quality Assurance Activity";
+         dot:shape "box";
+         dot:style "filled";
+         org:includes :_g163;
+         org:lead :_g171;
+         org:name "Quality Assurance Activity";
+         org:partOf :_g185 .
+    
+    :_g18     a org:Activity;
+         = :_g18;
+         contact:homePage <http://www.w3.org/XML/Activity>;
+         contact:homePageAddress "http://www.w3.org/XML/Activity";
+         dot:URL "http://www.w3.org/XML/Activity";
+         dot:color "khaki3";
+         dot:label "Extensible Markup Language (XML) Activity";
+         dot:shape "box";
+         dot:style "filled";
+         org:includes :_g20,
+                :_g23,
+                :_g26,
+                :_g29,
+                :_g32,
+                :_g35,
+                :_g38,
+                :_g41;
+         org:lead :_g12;
+         org:name "Extensible Markup Language (XML) Activity";
+         org:partOf :_g0 .
+    
+    :_g190     a contact:Person,
+                org:Individual;
+         = :_g190;
+         contact:fullName "Karl Dubost";
+         contact:mailbox <mailto:karl@w3.org>;
+         contact:sortName "Dubost";
+         dot:label "Karl Dubost";
+         dot:shape "plaintext" .
+    
+    :_g191     a contact:Person,
+                org:Individual;
+         = :_g191;
+         contact:fullName "Lofton Henderson";
+         contact:mailbox <mailto:lofton@rockynet.com>;
+         contact:sortName "Henderson";
+         dot:label "Lofton Henderson";
+         dot:shape "plaintext" .
+    
+    :_g195     a contact:Person,
+                org:Individual;
+         = :_g195;
+         contact:fullName "Lynne Rosenthal";
+         contact:mailbox <mailto:lynne.rosenthal@nist.gov>;
+         contact:sortName "Rosenthal";
+         dot:label "Lynne Rosenthal";
+         dot:shape "plaintext" .
+    
+    :_g1     a org:Individual;
+         = :_g1;
+         contact:fullName "Michael Sperberg-McQueen";
+         contact:homePage <http://www.w3.org/People/cmsmcq>;
+         contact:homePageAddress "http://www.w3.org/People/cmsmcq";
+         contact:sortName "Sperberg-McQueen";
+         dot:URL "http://www.w3.org/People/cmsmcq";
+         dot:label "Michael Sperberg-McQueen" .
+    
+    :_g20     a org:CoordinationGroup;
+         = :_g20;
+         contact:homePage <http://www.w3.org/XML/Group/>;
+         contact:homePageAddress "http://www.w3.org/XML/Group/";
+         contact:mailbox <mailto:w3c-xml-cg@w3.org>;
+         dot:URL "http://www.w3.org/XML/Group/";
+         dot:label "XML Coordination Group";
+         org:chair :_g21,
+                :_g22;
+         org:name "XML Coordination Group";
+         org:partOf :_g18 .
+    
+    :_g21     a contact:Person,
+                org:Individual;
+         = :_g21;
+         contact:fullName "Michael Sperberg-McQueen";
+         contact:mailbox <mailto:cmsmcq@w3.org>;
+         contact:sortName "Sperberg-McQueen";
+         dot:label "Michael Sperberg-McQueen";
+         dot:shape "plaintext" .
+    
+    :_g22     a contact:Person,
+                org:Individual;
+         = :_g22;
+         contact:fullName "Dave Hollander";
+         contact:mailbox <http://www.w3.org/Member/Mail/dmh@info2000.net>;
+         contact:sortName "Hollander";
+         dot:label "Dave Hollander";
+         dot:shape "plaintext" .
+    
+    :_g23     a org:InterestGroup;
+         = :_g23;
+         contact:homePage <http://www.w3.org/XML/Group/Plenary>;
+         contact:homePageAddress "http://www.w3.org/XML/Group/Plenary";
+         contact:mailbox <mailto:w3c-xml-plenary@w3.org>;
+         dot:URL "http://www.w3.org/XML/Group/Plenary";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "XML Plenary Interest Group";
+         dot:shape "elipse";
+         dot:style "filled";
+         org:chair :_g21,
+                :_g22;
+         org:name "XML Plenary Interest Group";
+         org:partOf :_g18 .
+    
+    :_g26     a org:WorkingGroup;
+         = :_g26;
+         contact:homePage <http://www.w3.org/XML/Group/Query>;
+         contact:homePageAddress "http://www.w3.org/XML/Group/Query";
+         contact:mailbox <mailto:w3c-xml-query-wg@w3.org>;
+         dot:URL "http://www.w3.org/XML/Group/Query";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "XML Query WG";
+         dot:shape "box";
+         dot:style "filled";
+         org:chair :_g27;
+         org:name "XML Query WG";
+         org:partOf :_g18;
+         org:teamContact :_g28 .
+    
+    :_g27     a contact:Person,
+                org:Individual;
+         = :_g27;
+         contact:fullName "Paul Cotton";
+         contact:mailbox <mailto:pcotton@microsoft.com>;
+         contact:sortName "Cotton";
+         dot:label "Paul Cotton";
+         dot:shape "plaintext" .
+    
+    :_g28     a contact:Person,
+                org:Individual;
+         = :_g28;
+         contact:fullName "Massimo Marchiori";
+         contact:homePage <http://www.w3.org/People/Massimo/>;
+         contact:homePageAddress "http://www.w3.org/People/Massimo/";
+         contact:sortName "Marchiori";
+         dot:URL "http://www.w3.org/People/Massimo/";
+         dot:label "Massimo Marchiori";
+         dot:shape "plaintext" .
+    
+    :_g29     a org:WorkingGroup;
+         = :_g29;
+         contact:homePage <http://www.w3.org/XML/Group/Schemas>;
+         contact:homePageAddress "http://www.w3.org/XML/Group/Schemas";
+         contact:mailbox <mailto:w3c-xml-schema-wg@w3.org>;
+         dot:URL "http://www.w3.org/XML/Group/Schemas";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "XML Schema WG";
+         dot:shape "box";
+         dot:style "filled";
+         org:chair :_g21,
+                :_g22;
+         org:name "XML Schema WG";
+         org:partOf :_g18 .
+    
+    :_g2     a org:Activity;
+         = :_g2;
+         contact:homePage <http://www.w3.org/DOM/Activity>;
+         contact:homePageAddress "http://www.w3.org/DOM/Activity";
+         dot:URL "http://www.w3.org/DOM/Activity";
+         dot:color "khaki3";
+         dot:label "Document Object Model";
+         dot:shape "box";
+         dot:style "filled";
+         org:includes :_g4,
+                :_g6;
+         org:lead :_g3;
+         org:name "Document Object Model";
+         org:partOf :_g0 .
+    
+    :_g32     a org:InterestGroup;
+         = :_g32;
+         contact:homePage <http://www.w3.org/XML/Group/1999/05/xml-schema-ig-charter.html>;
+         contact:homePageAddress "http://www.w3.org/XML/Group/1999/05/xml-schema-ig-charter.html";
+         contact:mailbox <mailto:w3c-xml-schema-ig@w3.org>;
+         dot:URL "http://www.w3.org/XML/Group/1999/05/xml-schema-ig-charter.html";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "XML Schema IG";
+         dot:shape "elipse";
+         dot:style "filled";
+         org:chair :_g21,
+                :_g22;
+         org:name "XML Schema IG";
+         org:partOf :_g18 .
+    
+    :_g35     a org:WorkingGroup;
+         = :_g35;
+         contact:homePage <http://www.w3.org/XML/Group/Linking>;
+         contact:homePageAddress "http://www.w3.org/XML/Group/Linking";
+         contact:mailbox <mailto:w3c-xml-linking-wg@w3.org>;
+         dot:URL "http://www.w3.org/XML/Group/Linking";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "XML Linking WG";
+         dot:shape "box";
+         dot:style "filled";
+         org:chair :_g36;
+         org:deliverable w:xlink;
+         org:name "XML Linking WG";
+         org:partOf :_g18;
+         org:teamContact :_g37 .
+    
+    :_g36     a contact:Person,
+                org:Individual;
+         = :_g36;
+         contact:fullName "Daniel Veillard";
+         contact:mailbox <mailto:Daniel.Veillard@imag.fr>;
+         contact:sortName "Veillard";
+         dot:label "Daniel Veillard";
+         dot:shape "plaintext" .
+    
+    :_g37     a contact:Person,
+                org:Individual;
+         = :_g37;
+         contact:fullName "Henry S. Thompson";
+         contact:mailbox <mailto:ht@w3.org>;
+         contact:sortName "S. Thompson";
+         dot:label "Henry S. Thompson";
+         dot:shape "plaintext" .
+    
+    :_g38     a org:InterestGroup;
+         = :_g38;
+         contact:homePage <http://www.w3.org/XML/Group/Linking#IG>;
+         contact:homePageAddress "http://www.w3.org/XML/Group/Linking#IG";
+         contact:mailbox <mailto:w3c-xml-linking-ig@w3.org>;
+         dot:URL "http://www.w3.org/XML/Group/Linking#IG";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "XML Linking IG";
+         dot:shape "elipse";
+         dot:style "filled";
+         org:chair :_g39;
+         org:name "XML Linking IG";
+         org:partOf :_g18;
+         org:teamContact :_g37 .
+    
+    :_g39     a contact:Person,
+                org:Individual;
+         = :_g39;
+         contact:fullName "Ron Daniel";
+         contact:mailbox <mailto:rdaniel@metacode.com>;
+         contact:sortName "Daniel";
+         dot:label "Ron Daniel";
+         dot:shape "plaintext" .
+    
+    :_g3     a contact:Person,
+                org:Individual;
+         = :_g3;
+         contact:fullName "Philippe Le Hx'\xe9garet";
+         contact:mailbox <mailto:plh@w3.org>;
+         contact:sortName "Le Hx'\xe9garet";
+         dot:label "Philippe Le Hx'\xe9garet";
+         dot:shape "plaintext" .
+    
+    :_g41     a org:WorkingGroup;
+         = :_g41;
+         contact:homePage <http://www.w3.org/XML/Group/Core>;
+         contact:homePageAddress "http://www.w3.org/XML/Group/Core";
+         contact:mailbox <mailto:w3c-xml-core-wg@w3.org>;
+         dot:URL "http://www.w3.org/XML/Group/Core";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "XML Core WG";
+         dot:shape "box";
+         dot:style "filled";
+         org:chair :_g42,
+                :_g43;
+         org:deliverable w:xml,
+                w:xmlarch,
+                w:xmlns;
+         org:name "XML Core WG";
+         org:partOf :_g18;
+         org:teamContact :_g44 .
+    
+    :_g42     a contact:Person,
+                org:Individual;
+         = :_g42;
+         contact:fullName "Paul Grosso";
+         contact:mailbox <mailto:paul@arbortext.com>;
+         contact:sortName "Grosso";
+         dot:label "Paul Grosso";
+         dot:shape "plaintext" .
+    
+    :_g43     a contact:Person,
+                org:Individual;
+         = :_g43;
+         contact:fullName "Arnaud Le Hors";
+         contact:mailbox <mailto:lehors@us.ibm.com>;
+         contact:sortName "Le Hors";
+         dot:label "Arnaud Le Hors";
+         dot:shape "plaintext" .
+    
+    :_g44     a contact:Person,
+                org:Individual;
+         = :_g44;
+         contact:fullName "Liam Quin";
+         contact:mailbox <mailto:lquin@w3.org>;
+         contact:sortName "Quin";
+         dot:label "Liam Quin";
+         dot:shape "plaintext" .
+    
+    :_g45     a org:Domain;
+         = :_g45;
+         contact:homePage <http://www.w3.org/DF/>;
+         contact:homePageAddress "http://www.w3.org/DF/";
+         dot:URL "http://www.w3.org/DF/";
+         dot:color "khaki2";
+         dot:label "Document Formats Domain";
+         dot:shape "box";
+         dot:style "filled";
+         org:includes :_g47,
+                :_g54,
+                :_g65,
+                :_g71,
+                :_g76;
+         org:lead :_g46;
+         org:name "Document Formats Domain";
+         org:partOf st:w3c .
+    
+    :_g46     a contact:Person,
+                org:Individual;
+         = :_g46;
+         contact:fullName "Vincent Quint";
+         contact:mailbox <mailto:quint@w3.org>;
+         contact:sortName "Quint";
+         dot:label "Vincent Quint";
+         dot:shape "plaintext" .
+    
+    :_g47     a org:Activity;
+         = :_g47;
+         contact:homePage <http://www.w3.org/International/Activity>;
+         contact:homePageAddress "http://www.w3.org/International/Activity";
+         dot:URL "http://www.w3.org/International/Activity";
+         dot:color "khaki3";
+         dot:label "Internationalization";
+         dot:shape "box";
+         dot:style "filled";
+         org:includes :_g49,
+                :_g52;
+         org:lead :_g48;
+         org:name "Internationalization";
+         org:partOf :_g45 .
+    
+    :_g48     a contact:Person,
+                org:Individual;
+         = :_g48;
+         contact:fullName "Martin Dx'\xfcrst";
+         contact:mailbox <mailto:duerst@w3.org>;
+         contact:sortName "Dx'\xfcrst";
+         dot:label "Martin Dx'\xfcrst";
+         dot:shape "plaintext" .
+    
+    :_g49     a org:WorkingGroup;
+         = :_g49;
+         contact:homePage <http://www.w3.org/International/Group>;
+         contact:homePageAddress "http://www.w3.org/International/Group";
+         contact:mailbox <mailto:w3c-i18n-wg@w3.org>;
+         dot:URL "http://www.w3.org/International/Group";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "Internationalization (I18N) Working Group";
+         dot:shape "box";
+         dot:style "filled";
+         org:chair :_g50;
+         org:name "Internationalization (I18N) Working Group";
+         org:partOf :_g47;
+         org:teamContact :_g48 .
+    
+    :_g4     a org:WorkingGroup;
+         = :_g4;
+         contact:homePage <http://www.w3.org/DOM/Group/>;
+         contact:homePageAddress "http://www.w3.org/DOM/Group/";
+         contact:mailbox <mailto:w3c-dom-wg@w3.org>;
+         dot:URL "http://www.w3.org/DOM/Group/";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "DOM Working Group";
+         dot:shape "box";
+         dot:style "filled";
+         org:chair :_g3;
+         org:deliverable w:dom;
+         org:name "DOM Working Group";
+         org:partOf :_g2 .
+    
+    :_g50     a contact:Person,
+                org:Individual;
+         = :_g50;
+         contact:fullName "Misha Wolf";
+         contact:mailbox <mailto:misha.wolf@reuters.com>;
+         contact:sortName "Wolf";
+         dot:label "Misha Wolf";
+         dot:shape "plaintext" .
+    
+    :_g52     a org:InterestGroup;
+         = :_g52;
+         contact:homePage <http://www.w3.org/International/Group/IG-charter>;
+         contact:homePageAddress "http://www.w3.org/International/Group/IG-charter";
+         contact:mailbox <mailto:w3c-i18n-ig@w3.org>;
+         dot:URL "http://www.w3.org/International/Group/IG-charter";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "Internationalization (I18N) Interest Group";
+         dot:shape "elipse";
+         dot:style "filled";
+         org:chair :_g48;
+         org:name "Internationalization (I18N) Interest Group";
+         org:partOf :_g47 .
+    
+    :_g54     a org:Activity;
+         = :_g54;
+         contact:homePage <http://www.w3.org/MarkUp/Activity>;
+         contact:homePageAddress "http://www.w3.org/MarkUp/Activity";
+         dot:URL "http://www.w3.org/MarkUp/Activity";
+         dot:color "khaki3";
+         dot:label "HTML";
+         dot:shape "box";
+         dot:style "filled";
+         org:includes :_g56,
+                :_g58,
+                :_g61;
+         org:lead :_g55;
+         org:name "HTML";
+         org:partOf :_g45 .
+    
+    :_g55     a org:Individual;
+         = :_g55;
+         contact:fullName "Masayasu Ishikawa";
+         contact:homePage <http://www.w3.org/People/mimasa/>;
+         contact:homePageAddress "http://www.w3.org/People/mimasa/";
+         contact:sortName "Ishikawa";
+         dot:URL "http://www.w3.org/People/mimasa/";
+         dot:label "Masayasu Ishikawa" .
+    
+    :_g56     a org:CoordinationGroup;
+         = :_g56;
+         contact:homePage <http://www.w3.org/MarkUp/CoordGroup/>;
+         contact:homePageAddress "http://www.w3.org/MarkUp/CoordGroup/";
+         contact:mailbox <mailto:w3c-html-cg@w3.org>;
+         dot:URL "http://www.w3.org/MarkUp/CoordGroup/";
+         dot:label "Hypertext Coordination Group";
+         org:chair :_g46;
+         org:name "Hypertext Coordination Group";
+         org:partOf :_g54 .
+    
+    :_g58     a org:WorkingGroup;
+         = :_g58;
+         contact:homePage <http://www.w3.org/MarkUp/Group/>;
+         contact:homePageAddress "http://www.w3.org/MarkUp/Group/";
+         contact:mailbox <mailto:w3c-html-wg@w3.org>;
+         dot:URL "http://www.w3.org/MarkUp/Group/";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "HTML Working Group";
+         dot:shape "box";
+         dot:style "filled";
+         org:chair :_g59;
+         org:deliverable w:html;
+         org:name "HTML Working Group";
+         org:partOf :_g54;
+         org:teamContact :_g60 .
+    
+    :_g59     a contact:Person,
+                org:Individual;
+         = :_g59;
+         contact:fullName "Steven Pemberton";
+         contact:mailbox <mailto:steven.pemberton@cwi.nl>;
+         contact:sortName "Pemberton";
+         dot:label "Steven Pemberton";
+         dot:shape "plaintext" .
+    
+    :_g60     a contact:Person,
+                org:Individual;
+         = :_g60;
+         contact:fullName "Masayasu Ishikawa";
+         contact:mailbox <mailto:mimasa@w3.org>;
+         contact:sortName "Ishikawa";
+         dot:label "Masayasu Ishikawa";
+         dot:shape "plaintext" .
+    
+    :_g61     a org:WorkingGroup;
+         = :_g61;
+         contact:homePage <http://www.w3.org/MarkUp/Forms/Group/>;
+         contact:homePageAddress "http://www.w3.org/MarkUp/Forms/Group/";
+         contact:mailbox <mailto:w3c-forms@w3.org>;
+         dot:URL "http://www.w3.org/MarkUp/Forms/Group/";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "XForms Working Group";
+         dot:shape "box";
+         dot:style "filled";
+         org:chair :_g59,
+                :_g63;
+         org:name "XForms Working Group";
+         org:partOf :_g54;
+         org:teamContact :_g107 .
+    
+    :_g63     a contact:Person,
+                org:Individual;
+         = :_g63;
+         contact:fullName "Sebastian Schnitzenbaumer";
+         contact:mailbox <mailto:schnitz@overflow.de>;
+         contact:sortName "Schnitzenbaumer";
+         dot:label "Sebastian Schnitzenbaumer";
+         dot:shape "plaintext" .
+    
+    :_g65     a org:Activity;
+         = :_g65;
+         contact:homePage <http://www.w3.org/Math/Activity>;
+         contact:homePageAddress "http://www.w3.org/Math/Activity";
+         dot:URL "http://www.w3.org/Math/Activity";
+         dot:color "khaki3";
+         dot:label "Math";
+         dot:shape "box";
+         dot:style "filled";
+         org:includes :_g67;
+         org:lead :_g66;
+         org:name "Math";
+         org:partOf :_g45 .
+    
+    :_g66     a contact:Person,
+                org:Individual;
+         = :_g66;
+         contact:fullName "Max Froumentin";
+         contact:mailbox <mailto:mf@w3.org>;
+         contact:sortName "Froumentin";
+         dot:label "Max Froumentin";
+         dot:shape "plaintext" .
+    
+    :_g67     a org:WorkingGroup;
+         = :_g67;
+         contact:homePage <http://www.w3.org/Math/Group/>;
+         contact:homePageAddress "http://www.w3.org/Math/Group/";
+         contact:mailbox <mailto:w3c-math-wg@w3.org>;
+         dot:URL "http://www.w3.org/Math/Group/";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "Math Working Group";
+         dot:shape "box";
+         dot:style "filled";
+         org:chair :_g68,
+                :_g69;
+         org:deliverable w:mathml;
+         org:name "Math Working Group";
+         org:partOf :_g65;
+         org:teamContact :_g66 .
+    
+    :_g68     a contact:Person,
+                org:Individual;
+         = :_g68;
+         contact:fullName "Patrick Ion";
+         contact:mailbox <mailto:ion@math.ams.org>;
+         contact:sortName "Ion";
+         dot:label "Patrick Ion";
+         dot:shape "plaintext" .
+    
+    :_g69     a contact:Person,
+                org:Individual;
+         = :_g69;
+         contact:fullName "Angel Diaz";
+         contact:mailbox <mailto:aldiaz@us.ibm.com>;
+         contact:sortName "Diaz";
+         dot:label "Angel Diaz";
+         dot:shape "plaintext" .
+    
+    :_g6     a org:InterestGroup;
+         = :_g6;
+         contact:homePage <http://www.w3.org/DOM/Group/IG>;
+         contact:homePageAddress "http://www.w3.org/DOM/Group/IG";
+         contact:mailbox <mailto:w3c-dom-ig@w3.org>;
+         dot:URL "http://www.w3.org/DOM/Group/IG";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "DOM Interest Group";
+         dot:shape "elipse";
+         dot:style "filled";
+         org:chair :_g3;
+         org:name "DOM Interest Group";
+         org:partOf :_g2 .
+    
+    :_g71     a org:Activity;
+         = :_g71;
+         contact:homePage <http://www.w3.org/Graphics/Activity>;
+         contact:homePageAddress "http://www.w3.org/Graphics/Activity";
+         dot:URL "http://www.w3.org/Graphics/Activity";
+         dot:color "khaki3";
+         dot:label "Graphics";
+         dot:shape "box";
+         dot:style "filled";
+         org:includes :_g73;
+         org:lead :_g72;
+         org:name "Graphics";
+         org:partOf :_g45 .
+    
+    :_g72     a contact:Person,
+                org:Individual;
+         = :_g72;
+         contact:fullName "Chris Lilley";
+         contact:mailbox <mailto:chris@w3.org>;
+         contact:sortName "Lilley";
+         dot:label "Chris Lilley";
+         dot:shape "plaintext" .
+    
+    :_g73     a org:WorkingGroup;
+         = :_g73;
+         contact:homePage <http://www.w3.org/Graphics/SVG/Group>;
+         contact:homePageAddress "http://www.w3.org/Graphics/SVG/Group";
+         contact:mailbox <mailto:w3c-svg-wg@w3.org>;
+         dot:URL "http://www.w3.org/Graphics/SVG/Group";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "SVG Working Group";
+         dot:shape "box";
+         dot:style "filled";
+         org:chair :_g72;
+         org:deliverable w:svg;
+         org:name "SVG Working Group";
+         org:partOf :_g71;
+         org:teamContact :_g75 .
+    
+    :_g75     a contact:Person,
+                org:Individual;
+         = :_g75;
+         contact:fullName "Dean Jackson";
+         contact:mailbox <mailto:dean@w3.org>;
+         contact:sortName "Jackson";
+         dot:label "Dean Jackson";
+         dot:shape "plaintext" .
+    
+    :_g76     a org:Activity;
+         = :_g76;
+         contact:homePage <http://www.w3.org/Style/Activity>;
+         contact:homePageAddress "http://www.w3.org/Style/Activity";
+         dot:URL "http://www.w3.org/Style/Activity";
+         dot:color "khaki3";
+         dot:label "Style";
+         dot:shape "box";
+         dot:style "filled";
+         org:includes :_g78,
+                :_g81;
+         org:lead :_g77;
+         org:name "Style";
+         org:partOf :_g45 .
+    
+    :_g77     a org:Individual;
+         = :_g77;
+         contact:fullName "Bert Bos";
+         contact:homePage <http://www.w3.org/People/Bos>;
+         contact:homePageAddress "http://www.w3.org/People/Bos";
+         contact:sortName "Bos";
+         dot:URL "http://www.w3.org/People/Bos";
+         dot:label "Bert Bos" .
+    
+    :_g78     a org:WorkingGroup;
+         = :_g78;
+         contact:homePage <http://www.w3.org/Style/Group/>;
+         contact:homePageAddress "http://www.w3.org/Style/Group/";
+         contact:mailbox <mailto:w3c-css-wg@w3.org>;
+         dot:URL "http://www.w3.org/Style/Group/";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "Cascading Stylesheets (CSS) Working Group";
+         dot:shape "box";
+         dot:style "filled";
+         org:chair :_g72;
+         org:deliverable w:css;
+         org:name "Cascading Stylesheets (CSS) Working Group";
+         org:partOf :_g76;
+         org:teamContact :_g80 .
+    
+    :_g80     a contact:Person,
+                org:Individual;
+         = :_g80;
+         contact:fullName "Bert Bos";
+         contact:mailbox <mailto:bert@w3.org>;
+         contact:sortName "Bos";
+         dot:label "Bert Bos";
+         dot:shape "plaintext" .
+    
+    :_g81     a org:WorkingGroup;
+         = :_g81;
+         contact:homePage <http://www.w3.org/Style/XSL/Group/>;
+         contact:homePageAddress "http://www.w3.org/Style/XSL/Group/";
+         contact:mailbox <mailto:w3c-xsl-wg@w3.org>;
+         dot:URL "http://www.w3.org/Style/XSL/Group/";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "XSL Working Group";
+         dot:shape "box";
+         dot:style "filled";
+         org:chair :_g82,
+                :_g83;
+         org:name "XSL Working Group";
+         org:partOf :_g76;
+         org:teamContact :_g66 .
+    
+    :_g82     a contact:Person,
+                org:Individual;
+         = :_g82;
+         contact:fullName "Sharon Adler";
+         contact:mailbox <mailto:sca@us.ibm.com>;
+         contact:sortName "Adler";
+         dot:label "Sharon Adler";
+         dot:shape "plaintext" .
+    
+    :_g83     a contact:Person,
+                org:Individual;
+         = :_g83;
+         contact:fullName "Steve Zilles";
+         contact:mailbox <mailto:szilles@Adobe.COM>;
+         contact:sortName "Zilles";
+         dot:label "Steve Zilles";
+         dot:shape "plaintext" .
+    
+    :_g85     a org:Domain;
+         dot:color "khaki2";
+         dot:label "Interaction Domain";
+         dot:shape "box";
+         dot:style "filled";
+         org:includes :_g101,
+                :_g106,
+                :_g87;
+         org:lead :_g86;
+         org:name "Interaction Domain";
+         org:partOf st:w3c .
+    
+    :_g86     a org:Individual;
+         = :_g86;
+         contact:fullName "Philipp Hoschka";
+         contact:mailbox <mailto:ph@w3.org>;
+         contact:sortName "Hoschka";
+         dot:label "Philipp Hoschka" .
+    
+    :_g87     a org:Activity;
+         = :_g87;
+         contact:homePage <http://www.w3.org/2001/di>;
+         contact:homePageAddress "http://www.w3.org/2001/di";
+         dot:URL "http://www.w3.org/2001/di";
+         dot:color "khaki3";
+         dot:label "Device Independence Activity";
+         dot:shape "box";
+         dot:style "filled";
+         org:includes :_g89,
+                :_g91,
+                :_g94,
+                :_g96,
+                :_g99;
+         org:lead :_g88;
+         org:name "Device Independence Activity";
+         org:partOf :_g85 .
+    
+    :_g88     a contact:Person,
+                org:Individual;
+         = :_g88;
+         contact:fullName "Kazuhiro Kitagawa";
+         contact:mailbox <mailto:kaz@w3.org>;
+         contact:sortName "Kitagawa";
+         dot:label "Kazuhiro Kitagawa";
+         dot:shape "plaintext" .
+    
+    :_g89     a org:CoordinationGroup;
+         = :_g89;
+         contact:homePage <http://lists.w3.org/Archives/Member/wapw3c/>;
+         contact:homePageAddress "http://lists.w3.org/Archives/Member/wapw3c/";
+         contact:mailbox <mailto:wapw3c@w3.org>;
+         dot:URL "http://lists.w3.org/Archives/Member/wapw3c/";
+         dot:label "W3C/WAP Forum Coordination Group";
+         org:chair :_g90;
+         org:name "W3C/WAP Forum Coordination Group";
+         org:partOf :_g87 .
+    
+    :_g8     a org:Activity;
+         = :_g8;
+         contact:homePage <http://www.w3.org/Addressing/>;
+         contact:homePageAddress "http://www.w3.org/Addressing/";
+         dot:URL "http://www.w3.org/Addressing/";
+         dot:color "khaki3";
+         dot:label "URI Activity";
+         dot:shape "box";
+         dot:style "filled";
+         org:includes :_g10;
+         org:lead :_g12;
+         org:name "URI Activity";
+         org:partOf :_g0 .
+    
+    :_g90     a contact:Person,
+                org:Individual;
+         = :_g90;
+         contact:fullName "Jean-Franx'\xe7ois Abramatic";
+         contact:mailbox <mailto:jfa@w3.org>;
+         contact:sortName "Abramatic";
+         dot:label "Jean-Franx'\xe7ois Abramatic";
+         dot:shape "plaintext" .
+    
+    :_g91     a org:WorkingGroup;
+         = :_g91;
+         contact:homePage <http://www.w3.org/Mobile/CCPP/Group/>;
+         contact:homePageAddress "http://www.w3.org/Mobile/CCPP/Group/";
+         contact:mailbox <mailto:w3c-ccpp-wg@w3.org>;
+         dot:URL "http://www.w3.org/Mobile/CCPP/Group/";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "CC/PP WG";
+         dot:shape "box";
+         dot:style "filled";
+         org:chair :_g92;
+         org:deliverable w:ccpp;
+         org:name "CC/PP WG";
+         org:partOf :_g87;
+         org:teamContact :_g88 .
+    
+    :_g92     a contact:Person,
+                org:Individual;
+         = :_g92;
+         contact:fullName "Johan Hjelm";
+         contact:mailbox <mailto:Johan.Hjelm@nrj.ericsson.se>;
+         contact:sortName "Hjelm";
+         dot:label "Johan Hjelm";
+         dot:shape "plaintext" .
+    
+    :_g94     a org:WorkingGroup;
+         = :_g94;
+         contact:homePage <http://www.w3.org/2001/di/Group/>;
+         contact:homePageAddress "http://www.w3.org/2001/di/Group/";
+         contact:mailbox <mailto:w3c-di-wg@w3.org>;
+         dot:URL "http://www.w3.org/2001/di/Group/";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "Device Independence Working Group Group";
+         dot:shape "box";
+         dot:style "filled";
+         org:chair :_g95;
+         org:name "Device Independence Working Group Group";
+         org:partOf :_g87 .
+    
+    :_g95     a contact:Person,
+                org:Individual;
+         = :_g95;
+         contact:fullName "Hidetaka Ohto";
+         contact:mailbox <mailto:taka@w3.org>;
+         contact:sortName "Ohto";
+         dot:label "Hidetaka Ohto";
+         dot:shape "plaintext" .
+    
+    :_g96     a org:InterestGroup;
+         = :_g96;
+         contact:homePage <http://www.w3.org/2001/di/Mobile/>;
+         contact:homePageAddress "http://www.w3.org/2001/di/Mobile/";
+         contact:mailbox <mailto:w3c-mobile-ig@w3.org>;
+         dot:URL "http://www.w3.org/2001/di/Mobile/";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "Mobile Access Interest Group";
+         dot:shape "elipse";
+         dot:style "filled";
+         org:chair :_g97;
+         org:name "Mobile Access Interest Group";
+         org:partOf :_g87;
+         org:teamContact :_g88 .
+    
+    :_g97     a contact:Person,
+                org:Individual;
+         = :_g97;
+         contact:fullName "Mark Baker";
+         contact:mailbox <mailto:mark.baker@canada.sun.com>;
+         contact:sortName "Baker";
+         dot:label "Mark Baker";
+         dot:shape "plaintext" .
+    
+    :_g99     a org:InterestGroup;
+         = :_g99;
+         contact:homePage <http://www.w3.org/TV/TVWeb/>;
+         contact:homePageAddress "http://www.w3.org/TV/TVWeb/";
+         contact:mailbox <mailto:www-tv@w3.org>;
+         dot:URL "http://www.w3.org/TV/TVWeb/";
+         dot:color "khaki4";
+         dot:fontcolor "white";
+         dot:label "TVWeb Interest Group";
+         dot:shape "elipse";
+         dot:style "filled";
+         org:chair :_g100;
+         org:name "TVWeb Interest Group";
+         org:partOf :_g87 .
+      [      log:implies  [
+             ] ].
+    
+      [      log:implies  [
+             ] ].
+    
+      [      log:implies  [
+             ] ].
+    
+      [      log:implies  [
+             ] ].
+    
+    msog1:Birthday     a rdf:Property,
+                s:Property;
+         = msog1:Birthday;
+         s:range contact:Date .
+    
+    msog1:First_Name     = msog1:First_Name;
+         s:domain contact:Person .
+    
+    msog1:Last_Name     = msog1:Last_Name;
+         s:domain contact:Person .
+    
+    msog1:Middle_Name     = msog1:Middle_Name;
+         s:domain contact:Person .
+    
+    msog1:Spouse     a rdf:Property,
+                s:Property;
+         s:subPropertyOf contact:partner .
+    
+    msog1:Suffix     = msog1:Suffix;
+         s:domain contact:Person .
+    
+    msog1:Title     = msog1:Title;
+         s:domain contact:Person .
+    
+    msog1:WebPage     a rdf:Property,
+                s:Property;
+         = msog1:WebPage;
+         s:subPropertyOf contact:homePage .
+      [      log:implies  [
+             ] ].
+    
+    <../../../2000/10/swap/pim/contact.n3#vcard_list>     = <../../../2000/10/swap/pim/contact.n3#vcard_list> .
+    
+    <../../../2000/10/swap/pim/contact.n3>     <http://purl.org/dc/elements/1.1/description> """
+ To illustrate with examples the creation of a schema of RDF properties
+ and classes, but using abstract things for people, rather than strings, etc.
+ If you have an "Assistant's phone number", thenreally you have an assitant who has
+ a phone number - and that is much more useful in general.
+ For example, when data about you and your assietnt in merged,
+ you will end up with an "assistant's email" and the like.
+""";
+         <http://purl.org/dc/elements/1.1/title> "Contact: Utility concepts for everyday life";
+         contact:_nspolicy  [
+             a contact:_SubjectToChange;
+             <http://purl.org/dc/elements/1.1/description> """If you change this, you have to tell the W3C SemWeb AD
+   folk, including Dan Connolly; so agreed 5 Jun 2001""" ];
+         rcs:id "$Id$",
+                "$Id$";
+         rcs:log """
+$Log$
+Revision 1.1  2001-12-08 03:29:52  timbl
+missing bits of retest
+
+Revision 1.7  2001/11/01 16:04:34  timbl
+fixes
+
+Revision 1.6  2001/06/13 23:58:48  timbl
+Fixed bug in log:includes that bindings were not taken into target of includes
+
+Revision 1.5  2001/06/05 23:12:42  connolly
+added mailboxURI and emailAddress in contrast to mailbox
+also: homePage and homePageAddress
+
+Revision 1.4  2001/06/05 22:01:57  connolly
+fixed :mailbox property as agreed in semweb-ad 5 Jun 2001.
+moved many of the n3 comments into RDF.
+updated ont: to March 2001 DAML namespace.
+
+""",
+                """
+$Log$
+Revision 1.1  2001-12-08 03:29:52  timbl
+missing bits of retest
+
+Revision 1.11  2001/11/01 15:52:37  connolly
+added webont, fixed dups
+
+Revision 1.6  2001/06/13 23:58:48  timbl
+Fixed bug in log:includes that bindings were not taken into target of includes
+
+Revision 1.5  2001/06/05 23:12:42  connolly
+added mailboxURI and emailAddress in contrast to mailbox
+also: homePage and homePageAddress
+
+Revision 1.4  2001/06/05 22:01:57  connolly
+fixed :mailbox property as agreed in semweb-ad 5 Jun 2001.
+moved many of the n3 comments into RDF.
+updated ont: to March 2001 DAML namespace.
+
+""" .
+      [      log:implies  [
+             ] ].
+    
+      [      log:implies  [
+             ] ].
+    
+      [      log:implies  [
+             ] ].
+    
+      [      log:implies  [
+             ] ].
+    
+      [      log:implies  [
+             ] ].
+    
+      [      log:implies  [
+             ] ].
+    
+      [      log:implies  [
+             ] ].
+    
+    <../../../2000/10/swap/test/sameThing.n3>     <http://purl.org/dc/elements/1.1/creator> :_g12;
+         <http://purl.org/dc/elements/1.1/description> "substituion of equals for equals in triples, plus some rules for unambiguous/unique properties (@@that probably belong elsewhere)";
+         <http://purl.org/dc/elements/1.1/relation> <../../../2000/10/swap/test/forgetDups.n3>;
+         <http://purl.org/dc/elements/1.1/rights> "copyright (c) 2001 W3C (MIT, Keio, INRIA)";
+         rcs:id "$Id$",
+                "$Id$" .
+    
+    this     log:forAll <../../../2000/10/swap/test/sameThing.n3#p>,
+                <../../../2000/10/swap/test/sameThing.n3#q>,
+                <../../../2000/10/swap/test/sameThing.n3#x>,
+                <../../../2000/10/swap/test/sameThing.n3#y>,
+                <../../../2000/10/swap/test/sameThing.n3#z>,
+                st:c,
+                st:d,
+                st:g,
+                st:n1,
+                st:n2,
+                st:p,
+                st:q,
+                st:x,
+                st:y,
+                st:z,
+                contact:p,
+                contact:x,
+                contact:y,
+                v:n1,
+                v:n2,
+                v:p,
+                v:s;
+         log:forSome :_g0,
+                :_g100,
+                :_g101,
+                :_g102,
+                :_g103,
+                :_g104,
+                :_g106,
+                :_g107,
+                :_g108,
+                :_g109,
+                :_g10,
+                :_g111,
+                :_g112,
+                :_g113,
+                :_g114,
+                :_g115,
+                :_g117,
+                :_g118,
+                :_g119,
+                :_g11,
+                :_g121,
+                :_g122,
+                :_g123,
+                :_g125,
+                :_g126,
+                :_g128,
+                :_g12,
+                :_g130,
+                :_g131,
+                :_g132,
+                :_g133,
+                :_g135,
+                :_g136,
+                :_g137,
+                :_g139,
+                :_g13,
+                :_g141,
+                :_g142,
+                :_g144,
+                :_g145,
+                :_g147,
+                :_g148,
+                :_g14,
+                :_g150,
+                :_g152,
+                :_g154,
+                :_g155,
+                :_g157,
+                :_g158,
+                :_g159,
+                :_g15,
+                :_g161,
+                :_g163,
+                :_g165,
+                :_g167,
+                :_g168,
+                :_g169,
+                :_g16,
+                :_g170,
+                :_g171,
+                :_g172,
+                :_g173,
+                :_g174,
+                :_g175,
+                :_g176,
+                :_g177,
+                :_g178,
+                :_g179,
+                :_g180,
+                :_g181,
+                :_g182,
+                :_g185,
+                :_g187,
+                :_g18,
+                :_g190,
+                :_g191,
+                :_g195,
+                :_g1,
+                :_g20,
+                :_g21,
+                :_g22,
+                :_g23,
+                :_g26,
+                :_g27,
+                :_g28,
+                :_g29,
+                :_g2,
+                :_g32,
+                :_g35,
+                :_g36,
+                :_g37,
+                :_g38,
+                :_g39,
+                :_g3,
+                :_g41,
+                :_g42,
+                :_g43,
+                :_g44,
+                :_g45,
+                :_g46,
+                :_g47,
+                :_g48,
+                :_g49,
+                :_g4,
+                :_g50,
+                :_g52,
+                :_g54,
+                :_g55,
+                :_g56,
+                :_g58,
+                :_g59,
+                :_g60,
+                :_g61,
+                :_g63,
+                :_g65,
+                :_g66,
+                :_g67,
+                :_g68,
+                :_g69,
+                :_g6,
+                :_g71,
+                :_g72,
+                :_g73,
+                :_g75,
+                :_g76,
+                :_g77,
+                :_g78,
+                :_g80,
+                :_g81,
+                :_g82,
+                :_g83,
+                :_g85,
+                :_g86,
+                :_g87,
+                :_g88,
+                :_g89,
+                :_g8,
+                :_g90,
+                :_g91,
+                :_g92,
+                :_g94,
+                :_g95,
+                :_g96,
+                :_g97,
+                :_g99 .
+    {
+        <../../../2000/10/swap/test/sameThing.n3#x>     contact:mailboxURI <../../../2000/10/swap/test/sameThing.n3#z> .
+        <../../../2000/10/swap/test/sameThing.n3#y>     contact:mailboxURI <../../../2000/10/swap/test/sameThing.n3#z> .
+        
+        }     log:implies {<../../../2000/10/swap/test/sameThing.n3#x>     = <../../../2000/10/swap/test/sameThing.n3#y> .
+        } .
+    {
+        <../../../2000/10/swap/test/sameThing.n3#x>     contact:emailAddress <../../../2000/10/swap/test/sameThing.n3#z> .
+        <../../../2000/10/swap/test/sameThing.n3#y>     contact:emailAddress <../../../2000/10/swap/test/sameThing.n3#z> .
+        
+        }     log:implies {<../../../2000/10/swap/test/sameThing.n3#x>     = <../../../2000/10/swap/test/sameThing.n3#y> .
+        } .
+    {
+        <../../../2000/10/swap/test/sameThing.n3#x>     contact:mailbox <../../../2000/10/swap/test/sameThing.n3#z> .
+        <../../../2000/10/swap/test/sameThing.n3#y>     contact:mailbox <../../../2000/10/swap/test/sameThing.n3#z> .
+        
+        }     log:implies {<../../../2000/10/swap/test/sameThing.n3#x>     = <../../../2000/10/swap/test/sameThing.n3#y> .
+        } .
+    {
+        <../../../2000/10/swap/test/sameThing.n3#x>     contact:homePage <../../../2000/10/swap/test/sameThing.n3#z> .
+        <../../../2000/10/swap/test/sameThing.n3#y>     contact:homePage <../../../2000/10/swap/test/sameThing.n3#z> .
+        
+        }     log:implies {<../../../2000/10/swap/test/sameThing.n3#x>     = <../../../2000/10/swap/test/sameThing.n3#y> .
+        } .
+    {
+        st:p     s:range st:z .
+        st:x     st:p st:y .
+        
+        }     log:implies {st:y     a st:z .
+        } .
+    {
+        st:x     contact:fullName st:y .
+        
+        }     log:implies {st:x     dot:label st:y .
+        } .
+    {
+        st:x     contact:homePage  [
+                 log:uri st:y ] .
+        
+        }     log:implies {st:x     dot:URL st:y .
+        } .
+    {
+        st:p     ontg1:inverseOf st:q .
+        st:x     st:p st:y .
+        
+        }     log:implies {st:y     st:q st:x .
+        } .
+    {
+        st:p     ontg1:inverseOf st:q .
+        
+        }     log:implies {st:q     ontg1:inverseOf st:p .
+        } .
+    {
+        st:x     a org:Consortium .
+        
+        }     log:implies {st:x     dot:color "khaki1";
+             dot:shape "circle";
+             dot:style "filled" .
+        } .
+    {
+        st:x     a org:Domain .
+        
+        }     log:implies {st:x     dot:color "khaki2";
+             dot:shape "box";
+             dot:style "filled" .
+        } .
+    {
+        st:x     a org:Activity .
+        
+        }     log:implies {st:x     dot:color "khaki3";
+             dot:shape "box";
+             dot:style "filled" .
+        } .
+    {
+        st:x     a org:WorkingGroup .
+        
+        }     log:implies {st:x     dot:color "khaki4";
+             dot:fontcolor "white";
+             dot:shape "box";
+             dot:style "filled" .
+        } .
+    {
+        st:x     a org:InterestGroup .
+        
+        }     log:implies {st:x     dot:color "khaki4";
+             dot:fontcolor "white";
+             dot:shape "elipse";
+             dot:style "filled" .
+        } .
+    {
+        st:n1     st:p st:n2 .
+        st:p     a dot:EdgeProperty .
+        st:theGraph     dot:hasNode st:n1 .
+        
+        }     log:implies {st:theGraph     dot:hasNode st:n2 .
+        } .
+    {
+        st:x     a contact:Person .
+        
+        }     log:implies {st:x     dot:shape "plaintext" .
+        } .
+    {
+        st:x     a org:Domain .
+        
+        }     log:implies {st:w3c     org:includes st:x .
+        } .
+    {
+        st:n1     st:p st:n2 .
+        st:p     a dot:EdgeProperty .
+        st:theGraph     dot:hasNode st:n2 .
+        
+        }     log:implies {st:theGraph     dot:hasNode st:n1 .
+        } .
+    {
+        st:p     a contact:Person;
+             contact:homepage  [
+                 log:uri st:y ] .
+        
+        }     log:implies {st:p     dot:URL st:y .
+        } .
+    {
+        st:x     org:name st:y .
+        
+        }     log:implies {st:x     dot:label st:y .
+        } .
+    
+    st:amaya_act     org:deliverable w:amaya .
+    
+    st:theGraph     dot:hasNode :_g0,
+                :_g100,
+                :_g101,
+                :_g102,
+                :_g103,
+                :_g104,
+                :_g106,
+                :_g107,
+                :_g108,
+                :_g109,
+                :_g10,
+                :_g111,
+                :_g112,
+                :_g113,
+                :_g114,
+                :_g115,
+                :_g117,
+                :_g118,
+                :_g119,
+                :_g11,
+                :_g121,
+                :_g122,
+                :_g123,
+                :_g125,
+                :_g126,
+                :_g128,
+                :_g12,
+                :_g130,
+                :_g131,
+                :_g132,
+                :_g133,
+                :_g135,
+                :_g136,
+                :_g137,
+                :_g139,
+                :_g13,
+                :_g141,
+                :_g142,
+                :_g144,
+                :_g145,
+                :_g147,
+                :_g148,
+                :_g14,
+                :_g150,
+                :_g152,
+                :_g154,
+                :_g155,
+                :_g157,
+                :_g158,
+                :_g159,
+                :_g15,
+                :_g161,
+                :_g163,
+                :_g165,
+                :_g167,
+                :_g168,
+                :_g169,
+                :_g16,
+                :_g170,
+                :_g171,
+                :_g172,
+                :_g173,
+                :_g174,
+                :_g175,
+                :_g176,
+                :_g177,
+                :_g178,
+                :_g179,
+                :_g180,
+                :_g181,
+                :_g182,
+                :_g185,
+                :_g187,
+                :_g18,
+                :_g190,
+                :_g191,
+                :_g195,
+                :_g20,
+                :_g21,
+                :_g22,
+                :_g23,
+                :_g26,
+                :_g27,
+                :_g28,
+                :_g29,
+                :_g2,
+                :_g32,
+                :_g35,
+                :_g36,
+                :_g37,
+                :_g38,
+                :_g39,
+                :_g3,
+                :_g41,
+                :_g42,
+                :_g43,
+                :_g44,
+                :_g45,
+                :_g46,
+                :_g47,
+                :_g48,
+                :_g49,
+                :_g4,
+                :_g50,
+                :_g52,
+                :_g54,
+                :_g56,
+                :_g58,
+                :_g59,
+                :_g60,
+                :_g61,
+                :_g63,
+                :_g65,
+                :_g66,
+                :_g67,
+                :_g68,
+                :_g69,
+                :_g6,
+                :_g71,
+                :_g72,
+                :_g73,
+                :_g75,
+                :_g76,
+                :_g78,
+                :_g80,
+                :_g81,
+                :_g82,
+                :_g83,
+                :_g85,
+                :_g87,
+                :_g88,
+                :_g89,
+                :_g8,
+                :_g90,
+                :_g91,
+                :_g92,
+                :_g94,
+                :_g95,
+                :_g96,
+                :_g97,
+                :_g99,
+                st:amaya_act,
+                st:w3c,
+                w:agents,
+                w:amaya,
+                w:annotea,
+                w:attachments,
+                w:busapp,
+                w:busmodel,
+                w:cannon,
+                w:ccpp,
+                w:creative,
+                w:css,
+                w:cssv,
+                w:di,
+                w:directory,
+                w:dns,
+                w:docs,
+                w:dom,
+                w:dpo,
+                w:ebXML,
+                w:encryption,
+                w:flow,
+                w:fo,
+                w:fullpotential,
+                w:html,
+                w:htmlv,
+                w:http11,
+                w:i18n,
+                w:i18n_many,
+                w:infoset,
+                w:intapp,
+                w:ip,
+                w:ipr,
+                w:jigsaw,
+                w:logic,
+                w:mathml,
+                w:mime,
+                w:multim,
+                w:ontology,
+                w:p3p,
+                w:picalc,
+                w:png,
+                w:privacy,
+                w:proof,
+                w:qos,
+                w:rdf,
+                w:rdfquery,
+                w:rdfs,
+                w:reliable,
+                w:routing,
+                w:rules,
+                w:screen,
+                w:security,
+                w:sep,
+                w:sig,
+                w:smil,
+                w:smtp,
+                w:soap,
+                w:social,
+                w:svg,
+                w:tcp,
+                w:trust,
+                w:uddi,
+                w:ui,
+                w:uni,
+                w:unicode,
+                w:uri,
+                w:voice,
+                w:wai,
+                w:wai_many,
+                w:webdav,
+                w:wsdl,
+                w:wsdv,
+                w:xforms,
+                w:xlink,
+                w:xml2,
+                w:xml,
+                w:xmlarch,
+                w:xmlns,
+                w:xmlp2,
+                w:xmlp,
+                w:xmlquery,
+                w:xmls,
+                w:xmlsv,
+                w:xpointer,
+                w:xslt;
+         dot:rankdir "LR" .
+    
+    st:w3c     a org:Consortium;
+         dot:URL "http://www.w3.org/";
+         dot:color "khaki1";
+         dot:label "World Wide Web\\nConsortium";
+         dot:shape "circle";
+         dot:style "filled";
+         org:includes :_g0,
+                :_g111,
+                :_g157,
+                :_g185,
+                :_g45,
+                :_g85;
+         org:name "World Wide Web\\nConsortium" .
+    
+    <structure.n3>     dot:digraph st:theGraph .
+    {
+        v:n1     a rm:external .
+        
+        }     log:implies {v:n1     dot:color "grey5";
+             dot:shape "plaintext" .
+        } .
+    {
+        v:n1     a rm:current .
+        
+        }     log:implies {v:n1     dot:color "gold1";
+             dot:style "filled" .
+        } .
+    {
+        v:n1     a rm:prototyped .
+        
+        }     log:implies {v:n1     dot:color "lawngreen";
+             dot:style "filled" .
+        } .
+    {
+        v:n1     a rm:planned .
+        
+        }     log:implies {v:n1     dot:color "lightskyblue1";
+             dot:style "filled" .
+        } .
+    {
+        v:n1     a rm:goal .
+        
+        }     log:implies {v:n1     dot:color "blue";
+             dot:shape "doublecircle" .
+        } .
+    {
+        v:n1     a rm:subgoal .
+        
+        }     log:implies {v:n1     dot:color "blue" .
+        } .
+    {
+        v:n1     a rm:program .
+        
+        }     log:implies {v:n1     dot:shape "box" .
+        } .
+    {
+        v:n1     a rm:done .
+        
+        }     log:implies {v:n1     dot:color "lightsalmon1";
+             dot:style "filled" .
+        } .
+    
+    <style.n3>     doc:cvsversion "$Id$" .
+    
+    <w3c.n3>     doc:version "$Id$" .
+    
+    contact:Address     a s:Class .
+    
+    contact:City     s:domain contact:address .
+    
+    contact:ContactLocation     a s:Class;
+         s:comment "A place with address, phone number, fax, etc" .
+    
+    contact:Country     s:domain contact:address .
+    
+    contact:Data     a s:Class .
+    
+    contact:LanguageCode     a s:Class .
+    
+    contact:Male     a s:Class;
+         ont:complementOf contact:Female;
+         ontg1g1:complementOf contact:Female .
+    
+    contact:Person     s:subClassOf contact:SocialEntity .
+    
+    contact:PostalCode     s:domain contact:address .
+    
+    contact:SocialEntity     a rdf:Class,
+                s:Class;
+         s:comment "The sort of thing which can have a phone number." .
+    
+    contact:StateOrProvince     s:domain contact:address .
+    
+    contact:Street2     s:domain contact:address .
+    
+    contact:Street3     s:domain contact:address .
+    
+    contact:Street     s:domain contact:address .
+    
+    contact:_SubjectToChange     s:label "subject to change" .
+    
+    contact:_addressProperty     a rdf:Property,
+                s:Property .
+    
+    contact:_nspolicy     a rdf:Property,
+                s:Property;
+         s:isDefinedBy <http://www.w3.org/1999/10/nsuri>;
+         s:label "namespace policy" .
+    
+    contact:address     a rdf:Property;
+         s:domain contact:ContactLocation;
+         s:range contact:Address .
+    
+    contact:child     a rdf:Property .
+    
+    contact:company     s:domain contact:Person .
+    
+    contact:departmentName     s:domain contact:Person .
+    
+    contact:description     a rdf:Property .
+    
+    contact:emailAddress     a ont:UnambiguousProperty,
+                ontg1g1:UnambiguousProperty;
+         s:domain contact:SocialEntity;
+         s:range contact:_EmailAddress;
+         contact:_example  [
+         ] .
+    
+    contact:fax     a rdf:Property .
+    
+    contact:fullName     a rdf:Property,
+                s:Property;
+         s:label "full name" .
+    
+    contact:home     a rdf:Property,
+                s:Property;
+         s:domain contact:Person;
+         s:range contact:ContactLocation .
+    
+    contact:homePage     a ont:UnambiguousProperty;
+         contact:_addressProperty contact:homePageAddress .
+    
+    contact:mailbox     a ont:UnambiguousProperty,
+                ontg1g1:UnambiguousProperty;
+         s:domain contact:SocialEntity;
+         s:range contact:Mailbox;
+         contact:_addressProperty contact:mailboxURI;
+         contact:_example  [
+         ] .
+    
+    contact:mailboxURI     a ont:UnambiguousProperty,
+                ontg1g1:UnambiguousProperty;
+         s:domain contact:SocialEntity;
+         s:range contact:_URI;
+         contact:_example  [
+         ] .
+    
+    contact:motherTongue     a rdf:Property;
+         s:domain contact:Person;
+         s:range contact:LanguageCode .
+    
+    contact:office     a rdf:Property,
+                s:Property;
+         s:domain contact:Person;
+         s:range contact:ContactLocation .
+    
+    contact:partner     s:hasSubProperty msog1:Spouse .
+    
+    contact:phone     a rdf:Property .
+    
+    contact:sortName     a rdf:Property,
+                s:Property;
+         s:comment "re-arranged for lexicographic ordering; ala Doe, John";
+         s:label "sort name" .
+    
+    contact:vacationHome     a rdf:Property,
+                s:Property;
+         s:domain contact:Person;
+         s:range contact:ContactLocation .
+    
+    org:chair     a dot:EdgeProperty;
+         s:range contact:Person;
+         dot:color "aquamarine1" .
+    
+    org:coordinatedBy     a dot:EdgeProperty;
+         ontg1:inverseOf org:coordinates;
+         dot:color "blue" .
+    
+    org:coordinates     ontg1:inverseOf org:coordinatedBy .
+    
+    org:deliverable     ontg1:inverseOf org:deliveredBy .
+    
+    org:deliveredBy     a dot:EdgeProperty;
+         ontg1:inverseOf org:deliverable;
+         dot:color "black" .
+    
+    org:includes     a rdf:Property;
+         ontg1:inverseOf org:partOf .
+    
+    org:partOf     a dot:EdgeProperty;
+         ontg1:inverseOf org:includes;
+         dot:color "khaki2" .
+    
+    org:teamContact     a dot:EdgeProperty;
+         s:range contact:Person;
+         dot:color "khaki3";
+         dot:label "tc" .
+    
+    rm:influencedBy     a dot:EdgeProperty;
+         dot:color "red";
+         dot:style "bold" .
+    
+    rm:needs     a dot:EdgeProperty;
+         dot:color "black" .
+    
+    rm:prototypes     a dot:EdgeProperty;
+         dot:color "green",
+                "green1";
+         dot:style "bold" .
+    
+    w:agents     a rm:goal;
+         dot:color "blue";
+         dot:label "Agents";
+         dot:shape "doublecircle";
+         rm:needs w:logic,
+                w:rdfquery,
+                w:rules,
+                w:trust .
+    
+    w:amaya     a rm:done,
+                rm:program;
+         dot:color "lightsalmon1";
+         dot:label "Amaya";
+         dot:shape "box";
+         dot:style "filled";
+         org:deliveredBy st:amaya_act;
+         rm:prototypes w:html,
+                w:http11,
+                w:mathml,
+                w:svg .
+    
+    w:annotea     a rm:current,
+                rm:program;
+         dot:color "gold1";
+         dot:label "Annotea";
+         dot:shape "box";
+         dot:style "filled";
+         rm:needs w:amaya;
+         rm:prototypes w:http11,
+                w:png,
+                w:rdf,
+                w:rdfquery,
+                w:xlink,
+                w:xpointer .
+    
+    w:attachments     a rm:planned;
+         dot:color "lightskyblue1";
+         dot:label "Binary\\nattachments";
+         dot:style "filled" .
+    
+    w:busapp     a rm:goal;
+         dot:color "blue";
+         dot:label "Inter-\\nBusiness";
+         dot:shape "doublecircle";
+         rm:needs w:busmodel,
+                w:directory,
+                w:flow,
+                w:xmlp2 .
+    
+    w:busmodel     a rm:external;
+         dot:color "grey5";
+         dot:label "Model actual\\nbusiness processes";
+         dot:shape "plaintext";
+         rm:influencedBy w:ebXML,
+                w:uddi .
+    
+    w:cannon     a rm:current;
+         dot:color "gold1";
+         dot:label "XML Cannonicalization";
+         dot:style "filled";
+         org:deliveredBy :_g152 .
+    
+    w:ccpp     a rm:current;
+         dot:color "gold1";
+         dot:label "CC/PP";
+         dot:style "filled";
+         org:deliveredBy :_g91;
+         rm:needs w:rdf .
+    
+    w:creative     a rm:goal;
+         dot:color "blue";
+         dot:label "Creative\\nSpace";
+         dot:shape "doublecircle";
+         rm:needs w:amaya,
+                w:annotea,
+                w:jigsaw .
+    
+    w:css     a rm:done;
+         dot:color "lightsalmon1";
+         dot:label "CSS";
+         dot:style "filled";
+         org:deliveredBy :_g78;
+         rm:needs w:cssv .
+    
+    w:cssv     a rm:done,
+                rm:program;
+         dot:color "lightsalmon1";
+         dot:label "CSS\\nvalidator";
+         dot:shape "box";
+         dot:style "filled" .
+    
+    w:di     a rm:current;
+         dot:color "gold1";
+         dot:label "Device\\nIndependence";
+         dot:style "filled";
+         rm:needs w:ccpp,
+                w:sep .
+    
+    w:directory     a rm:planned;
+         dot:color "lightskyblue1";
+         dot:label "service\\ndirectory\\nservice";
+         dot:style "filled";
+         rm:needs w:rdfquery,
+                w:wsdv .
+    
+    w:dns     a rm:external;
+         dot:color "grey5";
+         dot:label "DNS";
+         dot:shape "plaintext";
+         rm:needs w:ip .
+    
+    w:docs     a rm:goal;
+         dot:color "blue";
+         dot:label "document\\nprocessing";
+         dot:shape "doublecircle";
+         rm:needs w:xml2 .
+    
+    w:dom     a rm:done;
+         dot:color "lightsalmon1";
+         dot:label "DOM";
+         dot:style "filled";
+         org:deliveredBy :_g4;
+         rm:needs w:infoset,
+                w:xmlarch .
+    
+    w:dpo     a rm:external;
+         dot:color "grey5";
+         dot:label "DAML+OIL";
+         dot:shape "plaintext";
+         rm:needs w:rdfs .
+    
+    w:ebXML     a rm:external;
+         dot:color "grey5";
+         dot:label "ebXML";
+         dot:shape "plaintext" .
+    
+    w:encryption     a rm:current;
+         dot:color "gold1";
+         dot:label "XML\\nEncryption";
+         dot:style "filled";
+         rm:needs w:xmlns .
+    
+    w:flow     a rm:planned;
+         dot:color "lightskyblue1";
+         dot:label "Flow\\n(paper trail)";
+         dot:style "filled";
+         rm:influencedBy w:picalc .
+    
+    w:fo     a rm:current;
+         dot:color "gold1";
+         dot:label "Formatting\\nobjects";
+         dot:style "filled";
+         rm:influencedBy w:css .
+    
+    w:fullpotential     a rm:goal;
+         dot:color "blue";
+         dot:label "Full\\nPotential\\nOf The\\nWeb";
+         dot:shape "doublecircle";
+         rm:needs w:agents,
+                w:busapp,
+                w:creative,
+                w:docs,
+                w:intapp,
+                w:social,
+                w:ui,
+                w:uni .
+    
+    w:html     a rm:done;
+         dot:color "lightsalmon1";
+         dot:label "XHTML";
+         dot:style "filled";
+         org:deliveredBy :_g58;
+         rm:needs w:htmlv,
+                w:screen,
+                w:xmlns .
+    
+    w:htmlv     a rm:done,
+                rm:program;
+         dot:color "lightsalmon1";
+         dot:label "XHTML\\nvalidator";
+         dot:shape "box";
+         dot:style "filled" .
+    
+    w:http11     a rm:done;
+         dot:color "lightsalmon1";
+         dot:label "HTTP 1.1";
+         dot:style "filled";
+         rm:needs w:dns,
+                w:mime,
+                w:tcp .
+    
+    w:i18n     a rm:current;
+         dot:color "gold1";
+         dot:label "I18n";
+         dot:style "filled";
+         rm:needs w:i18n_many .
+    
+    w:i18n_many     a rm:external;
+         dot:color "grey5";
+         dot:label "many...";
+         dot:shape "plaintext" .
+    
+    w:infoset     a rm:done;
+         dot:color "lightsalmon1";
+         dot:label "infoset";
+         dot:style "filled";
+         rm:needs w:xmlns .
+    
+    w:intapp     a rm:goal;
+         dot:color "blue";
+         dot:label "Intranet\\napp2app";
+         dot:shape "doublecircle";
+         rm:needs w:attachments,
+                w:busmodel,
+                w:flow,
+                w:xmlp .
+    
+    w:ip     a rm:external;
+         dot:color "grey5";
+         dot:label "IP";
+         dot:shape "plaintext" .
+    
+    w:ipr     a rm:planned;
+         dot:color "lightskyblue1";
+         dot:label "Digital rights\\nmanagement";
+         dot:style "filled" .
+    
+    w:jigsaw     a rm:current,
+                rm:program;
+         dot:color "gold1";
+         dot:label "Jigsaw";
+         dot:shape "box";
+         dot:style "filled";
+         rm:prototypes w:http11,
+                w:webdav,
+                w:xmlp .
+    
+    w:logic     a rm:planned;
+         dot:color "lightskyblue1";
+         dot:label "Logic";
+         dot:style "filled";
+         rm:needs w:rules .
+    
+    w:mathml     a rm:done;
+         dot:color "lightsalmon1";
+         dot:label "MathML";
+         dot:style "filled";
+         org:deliveredBy :_g67;
+         rm:needs w:screen,
+                w:xmlns .
+    
+    w:mime     a rm:external;
+         dot:color "grey5";
+         dot:label "MIME";
+         dot:shape "plaintext" .
+    
+    w:multim     a rm:planned;
+         dot:color "lightskyblue1";
+         dot:label "Multimodal";
+         dot:style "filled" .
+    
+    w:ontology     a rm:current;
+         dot:color "gold1";
+         dot:label "Web\\nClassification";
+         dot:style "filled";
+         rm:influencedBy w:dpo;
+         rm:needs w:rdf,
+                w:rdfs .
+    
+    w:p3p     a rm:done;
+         dot:color "lightsalmon1";
+         dot:label "P3P";
+         dot:style "filled";
+         org:deliveredBy :_g144 .
+    
+    w:picalc     a rm:external;
+         dot:color "grey5";
+         dot:label "e.g. Pi\\ncalculus?";
+         dot:shape "plaintext" .
+    
+    w:png     a rm:done;
+         dot:color "lightsalmon1";
+         dot:label "PNG";
+         dot:style "filled" .
+    
+    w:privacy     a rm:planned;
+         dot:color "lightskyblue1";
+         dot:label "services\\nprivacy";
+         dot:style "filled";
+         rm:influencedBy w:p3p .
+    
+    w:proof     a rm:planned;
+         dot:color "lightskyblue1";
+         dot:label "Proof";
+         dot:style "filled";
+         rm:needs w:logic .
+    
+    w:qos     a rm:planned;
+         dot:color "lightskyblue1";
+         dot:label "QoS";
+         dot:style "filled" .
+    
+    w:rdf     a rm:done;
+         dot:color "lightsalmon1";
+         dot:label "RDF";
+         dot:style "filled";
+         rm:needs w:xmlns .
+    
+    w:rdfquery     a rm:prototyped;
+         dot:color "lawngreen";
+         dot:label "Query\\nService";
+         dot:style "filled";
+         rm:needs w:rules,
+                w:xmlp2 .
+    
+    w:rdfs     a rm:done;
+         dot:color "lightsalmon1";
+         dot:label "RDF\\nSchema";
+         dot:style "filled";
+         rm:needs w:rdf .
+    
+    w:reliable     a rm:planned;
+         dot:color "lightskyblue1";
+         dot:label "Reliable\\nmessaging";
+         dot:style "filled";
+         rm:needs w:flow .
+    
+    w:routing     a rm:planned;
+         dot:color "lightskyblue1";
+         dot:label "Routing";
+         dot:style "filled" .
+    
+    w:rules     a rm:prototyped;
+         dot:color "lawngreen";
+         dot:label "Rule/Query\\nlanguage";
+         dot:style "filled";
+         rm:influencedBy w:xmlquery;
+         rm:needs w:ontology .
+    
+    w:screen     a rm:planned;
+         dot:color "lightskyblue1";
+         dot:label "2D\\nintegration";
+         dot:style "filled" .
+    
+    w:security     a rm:subgoal;
+         dot:color "blue";
+         dot:label "Security";
+         rm:needs w:encryption,
+                w:sig .
+    
+    w:sep     a rm:subgoal;
+         dot:color "blue";
+         dot:label "Separate Form\\n and Content";
+         rm:needs w:ccpp,
+                w:css,
+                w:fo,
+                w:xslt .
+    
+    w:sig     a rm:done;
+         dot:color "lightsalmon1";
+         dot:label "XML\\nSignature";
+         dot:style "filled";
+         org:deliveredBy :_g152;
+         rm:needs w:cannon,
+                w:xmlns .
+    
+    w:smil     a rm:done;
+         dot:color "lightsalmon1";
+         dot:label "SMIL";
+         dot:style "filled";
+         org:deliveredBy :_g108;
+         rm:needs w:screen,
+                w:xlink,
+                w:xmlns .
+    
+    w:smtp     a rm:external;
+         dot:color "grey5";
+         dot:label "SMTP";
+         dot:shape "plaintext";
+         rm:needs w:dns,
+                w:mime,
+                w:tcp .
+    
+    w:soap     a rm:external;
+         dot:color "grey5";
+         dot:label "SOAP";
+         dot:shape "plaintext" .
+    
+    w:social     a rm:goal;
+         dot:color "blue";
+         dot:label "Socially\\nappropriate";
+         dot:shape "doublecircle";
+         rm:needs w:ipr,
+                w:p3p,
+                w:security .
+    
+    w:svg     a rm:done;
+         dot:color "lightsalmon1";
+         dot:label "SVG";
+         dot:style "filled";
+         org:deliveredBy :_g73;
+         rm:needs w:screen,
+                w:xlink,
+                w:xmlns .
+    
+    w:tcp     a rm:external;
+         dot:color "grey5";
+         dot:label "TCP";
+         dot:shape "plaintext";
+         rm:needs w:ip .
+    
+    w:trust     a rm:subgoal;
+         dot:color "blue";
+         dot:label "Trust";
+         rm:needs w:proof,
+                w:rules,
+                w:security .
+    
+    w:uddi     a rm:external;
+         dot:color "grey5";
+         dot:label "UDDI";
+         dot:shape "plaintext" .
+    
+    w:ui     a rm:goal;
+         dot:color "blue";
+         dot:label "Cool\\nU.I.";
+         dot:shape "doublecircle";
+         rm:needs w:dom,
+                w:html,
+                w:mathml,
+                w:multim,
+                w:png,
+                w:smil,
+                w:svg,
+                w:voice,
+                w:xforms .
+    
+    w:uni     a rm:goal;
+         dot:color "blue";
+         dot:label "Universality\\nand Accessibility";
+         dot:shape "doublecircle";
+         rm:needs w:di,
+                w:i18n,
+                w:sep,
+                w:wai .
+    
+    w:unicode     a rm:external;
+         dot:color "grey5";
+         dot:label "Unicode";
+         dot:shape "plaintext" .
+    
+    w:uri     a rm:done;
+         dot:color "lightsalmon1";
+         dot:label "URI";
+         dot:style "filled" .
+    
+    w:voice     a rm:current;
+         dot:color "gold1";
+         dot:label "Voice";
+         dot:style "filled";
+         org:deliveredBy :_g103;
+         rm:needs w:xmlns .
+    
+    w:wai     a rm:current;
+         dot:color "gold1";
+         dot:label "WAI";
+         dot:style "filled";
+         rm:needs w:wai_many .
+    
+    w:wai_many     a rm:external;
+         dot:color "grey5";
+         dot:label "many...";
+         dot:shape "plaintext" .
+    
+    w:webdav     a rm:external;
+         dot:color "grey5";
+         dot:label "WebDAV";
+         dot:shape "plaintext" .
+    
+    w:wsdl     a rm:external;
+         dot:color "grey5";
+         dot:label "WSDL";
+         dot:shape "plaintext" .
+    
+    w:wsdv     a rm:planned;
+         dot:color "lightskyblue1";
+         dot:label "Service Desc. Vocab.";
+         dot:style "filled";
+         rm:influencedBy w:wsdl;
+         rm:needs w:flow,
+                w:rdf .
+    
+    w:xforms     a rm:current;
+         dot:color "gold1";
+         dot:label "XForms";
+         dot:style "filled";
+         rm:needs w:screen,
+                w:xmlns .
+    
+    w:xlink     a rm:current;
+         dot:color "gold1";
+         dot:label "xlink";
+         dot:style "filled";
+         org:deliveredBy :_g35;
+         rm:needs w:uri,
+                w:xmlarch,
+                w:xmlns,
+                w:xpointer .
+    
+    w:xml2     a rm:subgoal;
+         dot:color "blue";
+         dot:label "xml\\nEnhanced";
+         rm:needs w:dom,
+                w:xlink,
+                w:xmlquery,
+                w:xmls,
+                w:xpointer,
+                w:xslt .
+    
+    w:xml     a rm:done;
+         dot:color "lightsalmon1";
+         dot:label "XML";
+         dot:style "filled";
+         org:deliveredBy :_g41;
+         rm:needs w:unicode,
+                w:xmlarch .
+    
+    w:xmlarch     a rm:planned;
+         dot:color "lightskyblue1";
+         dot:label "processing\\nmodel";
+         dot:style "filled";
+         org:deliveredBy :_g41 .
+    
+    w:xmlns     a rm:done;
+         dot:color "lightsalmon1";
+         dot:label "xml +\\nnamespaces";
+         dot:style "filled";
+         org:deliveredBy :_g41;
+         rm:needs w:uri,
+                w:xml .
+    
+    w:xmlp2     a rm:subgoal;
+         dot:color "blue";
+         dot:label "XML Prococol\\nEnhanced";
+         rm:needs w:attachments,
+                w:privacy,
+                w:qos,
+                w:reliable,
+                w:routing,
+                w:security,
+                w:xmlp .
+    
+    w:xmlp     a rm:current;
+         dot:color "gold1";
+         dot:label "XML\\nProtocol";
+         dot:style "filled";
+         rm:influencedBy w:soap;
+         rm:needs w:http11,
+                w:smtp .
+    
+    w:xmlquery     a rm:current;
+         dot:color "gold1";
+         dot:label "xml Query";
+         dot:style "filled";
+         rm:needs w:xmlarch .
+    
+    w:xmls     a rm:done;
+         dot:color "lightsalmon1";
+         dot:label "xml Schema";
+         dot:style "filled";
+         rm:needs w:xmlns,
+                w:xmlsv .
+    
+    w:xmlsv     a rm:done,
+                rm:program;
+         dot:color "lightsalmon1";
+         dot:label "XSV";
+         dot:shape "box";
+         dot:style "filled";
+         rm:needs w:infoset .
+    
+    w:xpointer     a rm:current;
+         dot:color "gold1";
+         dot:label "xpointer";
+         dot:style "filled";
+         rm:needs w:uri,
+                w:xmlarch,
+                w:xmlns .
+    
+    w:xslt     a rm:done;
+         dot:color "lightsalmon1";
+         dot:label "XSLT";
+         dot:style "filled";
+         rm:needs w:xmlarch .
+    
+    <http://www.w3.org/Member/Mail/Overview.html>     <http://purl.org/dc/elements/1.1/date> "2001-11-01T14:33:19Z";
+         <http://purl.org/dc/elements/1.1/title> "W3C Working Groups and Activities" .
+    
+    <http://www.w3.org/Member/Mail/dmh@info2000.net>     a contact:Mailbox .
+    
+    <mailto:Daniel.Veillard@imag.fr>     a contact:Mailbox .
+    
+    <mailto:Donald.Eastlake@motorola.com>     a contact:Mailbox .
+    
+    <mailto:Johan.Hjelm@nrj.ericsson.se>     a contact:Mailbox .
+    
+    <mailto:Norman.Walsh@East.Sun.COM>     a contact:Mailbox .
+    
+    <mailto:aaron.m.cohen@intel.com>     a contact:Mailbox .
+    
+    <mailto:aldiaz@us.ibm.com>     a contact:Mailbox .
+    
+    <mailto:ari@cdt.org>     a contact:Mailbox .
+    
+    <mailto:asgilman@access.digex.net>     a contact:Mailbox .
+    
+    <mailto:bert@w3.org>     a contact:Mailbox .
+    
+    <mailto:brian_mcbride@hp.com>     a contact:Mailbox .
+    
+    <mailto:charles@w3.org>     a contact:Mailbox .
+    
+    <mailto:chisholm@w3.org>     a contact:Mailbox .
+    
+    <mailto:chris@w3.org>     a contact:Mailbox .
+    
+    <mailto:cmsmcq@w3.org>     a contact:Mailbox .
+    
+    <mailto:connolly@w3.org>     a contact:Mailbox .
+    
+    <mailto:danbri@w3.org>     a contact:Mailbox .
+    
+    <mailto:danield@w3.org>     a contact:Mailbox .
+    
+    <mailto:dean@w3.org>     a contact:Mailbox .
+    
+    <mailto:djweitzner@w3.org>     a contact:Mailbox .
+    
+    <mailto:duerst@w3.org>     a contact:Mailbox .
+    
+    <mailto:em@w3.org>     a contact:Mailbox .
+    
+    <mailto:fallside@us.ibm.com>     a contact:Mailbox .
+    
+    <mailto:gv@trace.wisc.edu>     a contact:Mailbox .
+    
+    <mailto:hendler@cs.umd.edu>     a contact:Mailbox .
+    
+    <mailto:hoschka@w3.org>     a contact:Mailbox .
+    
+    <mailto:ht@w3.org>     a contact:Mailbox .
+    
+    <mailto:ion@math.ams.org>     a contact:Mailbox .
+    
+    <mailto:jasonw@ariel.ucs.unimelb.EDU.AU>     a contact:Mailbox .
+    
+    <mailto:jbrewer@w3.org>     a contact:Mailbox .
+    
+    <mailto:jfa@w3.org>     a contact:Mailbox .
+    
+    <mailto:jim.a.larson@intel.com>     a contact:Mailbox .
+    
+    <mailto:jongund@uiuc.edu>     a contact:Mailbox .
+    
+    <mailto:jutta.treviranus@utoronto.ca>     a contact:Mailbox .
+    
+    <mailto:karl@w3.org>     a contact:Mailbox .
+    
+    <mailto:kaz@w3.org>     a contact:Mailbox .
+    
+    <mailto:langhein@inf.ethz.ch>     a contact:Mailbox .
+    
+    <mailto:lehors@us.ibm.com>     a contact:Mailbox .
+    
+    <mailto:lofton@rockynet.com>     a contact:Mailbox .
+    
+    <mailto:lorrie@research.att.com>     a contact:Mailbox .
+    
+    <mailto:lquin@w3.org>     a contact:Mailbox .
+    
+    <mailto:lynne.rosenthal@nist.gov>     a contact:Mailbox .
+    
+    <mailto:mark.baker@canada.sun.com>     a contact:Mailbox .
+    
+    <mailto:mf@w3.org>     a contact:Mailbox .
+    
+    <mailto:mimasa@w3.org>     a contact:Mailbox .
+    
+    <mailto:misha.wolf@reuters.com>     a contact:Mailbox .
+    
+    <mailto:paul@arbortext.com>     a contact:Mailbox .
+    
+    <mailto:pcotton@microsoft.com>     a contact:Mailbox .
+    
+    <mailto:ph@w3.org>     a contact:Mailbox .
+    
+    <mailto:pics-interest@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/StO/pics-interest/> .
+    
+    <mailto:plh@w3.org>     a contact:Mailbox .
+    
+    <mailto:quint@w3.org>     a contact:Mailbox .
+    
+    <mailto:rdaniel@metacode.com>     a contact:Mailbox .
+    
+    <mailto:reagle@w3.org>     a contact:Mailbox .
+    
+    <mailto:rigo@w3.org>     a contact:Mailbox .
+    
+    <mailto:sca@us.ibm.com>     a contact:Mailbox .
+    
+    <mailto:schnitz@overflow.de>     a contact:Mailbox .
+    
+    <mailto:steven.pemberton@cwi.nl>     a contact:Mailbox .
+    
+    <mailto:swick@w3.org>     a contact:Mailbox .
+    
+    <mailto:symm@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/symm/> .
+    
+    <mailto:szilles@Adobe.COM>     a contact:Mailbox .
+    
+    <mailto:taka@w3.org>     a contact:Mailbox .
+    
+    <mailto:tmichel@w3.org>     a contact:Mailbox .
+    
+    <mailto:w3c-ccpp-wg@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-ccpp-wg/> .
+    
+    <mailto:w3c-css-wg@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-css-wg/> .
+    
+    <mailto:w3c-di-wg@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-di-wg/> .
+    
+    <mailto:w3c-dom-ig@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-dom-ig/> .
+    
+    <mailto:w3c-dom-wg@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-dom-wg/> .
+    
+    <mailto:w3c-dsig@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-dsig> .
+    
+    <mailto:w3c-forms@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-forms/> .
+    
+    <mailto:w3c-html-cg@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-html-cg/> .
+    
+    <mailto:w3c-html-wg@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-html-Wg/> .
+    
+    <mailto:w3c-i18n-ig@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-i18n-ig/> .
+    
+    <mailto:w3c-i18n-wg@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-i18n-wg/> .
+    
+    <mailto:w3c-ietf-xmldsig@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Public/w3c-ietf-xmldsig/> .
+    
+    <mailto:w3c-math-wg@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-math-wg/> .
+    
+    <mailto:w3c-mobile-ig@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-mobile-ig/> .
+    
+    <mailto:w3c-p3p-coordination@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-p3p-coordination> .
+    
+    <mailto:w3c-p3p-ig@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-p3p-ig/> .
+    
+    <mailto:w3c-p3p-powg@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-p3p-powg/> .
+    
+    <mailto:w3c-p3p-preferences@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-p3p-preferences/> .
+    
+    <mailto:w3c-p3p-specification@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-p3p-specification/> .
+    
+    <mailto:w3c-patent-wg@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-patent-wg/> .
+    
+    <mailto:w3c-rdfcore-wg@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/> .
+    
+    <mailto:w3c-semweb-cg@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-semweb-cg/> .
+    
+    <mailto:w3c-svg-wg@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-svg-wg/> .
+    
+    <mailto:w3c-uri-ig@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-uri-ig/> .
+    
+    <mailto:w3c-voice-wg@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-voice-wg/> .
+    
+    <mailto:w3c-wai-au@w3.org>     a contact:Mailbox;
+         contact:archive <http://www.w3.org/Archives/Public/w3c-wai-au/> .
+    
+    <mailto:w3c-wai-cg@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-wai-cg/> .
+    
+    <mailto:w3c-wai-eo@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Public/w3c-wai-eo/> .
+    
+    <mailto:w3c-wai-er-ig@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Public/w3c-wai-er-ig/> .
+    
+    <mailto:w3c-wai-gl@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Public/w3c-wai-gl/> .
+    
+    <mailto:w3c-wai-ig@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Public/w3c-wai-ig> .
+    
+    <mailto:w3c-wai-pf@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-wai-pf/> .
+    
+    <mailto:w3c-wai-ua@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Public/w3c-wai-ua/> .
+    
+    <mailto:w3c-xml-cg@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-xml-cg/> .
+    
+    <mailto:w3c-xml-core-wg@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-xml-core-wg/> .
+    
+    <mailto:w3c-xml-linking-ig@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-xml-linking-ig/> .
+    
+    <mailto:w3c-xml-linking-wg@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-xml-linking-wg/> .
+    
+    <mailto:w3c-xml-plenary@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-xml-plenary/> .
+    
+    <mailto:w3c-xml-query-wg@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-xml-query-wg/> .
+    
+    <mailto:w3c-xml-schema-ig@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-xml-schema-ig/> .
+    
+    <mailto:w3c-xml-schema-wg@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/w3c-xml-schema-wg/> .
+    
+    <mailto:w3c-xsl-wg@w3.org>     a contact:Mailbox;
+         contact:archive <../../../2000/Archives/Member/w3c-xsl-wg/> .
+    
+    <mailto:wapw3c@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Member/wapw3c/> .
+    
+    <mailto:www-qa@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Public/www-qa/> .
+    
+    <mailto:www-rdf-interest@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Public/www-rdf-interest/> .
+    
+    <mailto:www-tv@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Public/www-tv/> .
+    
+    <mailto:www-webont-wg@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Public/www-webont-wg/> .
+    
+    <mailto:xml-dist-app@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Public/xml-dist-app/> .
+    
+    <mailto:xml-encryption@w3.org>     a contact:Mailbox;
+         contact:archive <http://lists.w3.org/Archives/Public/xml-encryption/> .
+    
+#ENDS

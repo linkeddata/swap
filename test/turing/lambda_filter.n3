@@ -1,0 +1,11 @@
+@keywords a, of, is, has, prefix .
+
+@prefix : <http://yosi.us/lambda#> . 
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+{?x a RootExpression; eval ?y} => {?x eval ?y} .
+
+{
+ ?X results ?R } 
+=>
+{?X results ?R } .

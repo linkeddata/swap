@@ -1,0 +1,4197 @@
+#Processed by Id: cwm.py,v 1.165 2004/11/19 01:58:39 syosi Exp 
+        #    using base file:/devel/WWW/2000/10/swap/grammar/
+        
+#  Notation3 generation by
+#       notation3.py,v 1.166 2004/10/28 17:41:59 timbl Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/grammar/
+     @prefix : <http://www.w3.org/2000/10/swap/grammar/bnf#> .
+     @prefix rul: <http://www.w3.org/2000/10/swap/grammar/bnf-rules#> .
+     @prefix spa: <sparql.n3#> .
+    
+     @forSome <#_g0>,
+                <#_g1>,
+                <#_g2>,
+                <#_g3>,
+                <#_g4>,
+                <#_g5>,
+                <#_g6>,
+                <#_g7>,
+                <#_g8>,
+                <#_g9>,
+                <#_g10>,
+                <#_g11>,
+                <#_g12>,
+                <#_g13>,
+                <#_g14>,
+                <#_g15>,
+                <#_g16>,
+                <#_g17>,
+                <#_g18>,
+                <#_g19>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g23>,
+                <#_g24>,
+                <#_g25>,
+                <#_g26>,
+                <#_g27>,
+                <#_g28>,
+                <#_g29>,
+                <#_g30>,
+                <#_g31>,
+                <#_g32>,
+                <#_g33>,
+                <#_g34>,
+                <#_g35> .
+    
+    "!"     :canPrecede spa:UnaryExpression;
+         :canStartWith "!" .
+    
+    "!="     :canPrecede spa:RelationalExpression;
+         :canStartWith "!=" .
+    
+    "!~"     :canPrecede spa:PATTERN_LITERAL;
+         :canStartWith "!~" .
+    
+    "%"     :canPrecede spa:UnaryExpression;
+         :canStartWith "%" .
+    
+    "&amp;"     :canPrecede spa:QNAME;
+         :canStartWith "&amp;" .
+    
+    "&amp;&amp;"     :canPrecede spa:ValueLogical;
+         :canStartWith "&amp;&amp;" .
+    
+    "&gt;"     :canPrecede spa:AdditiveExpression;
+         :canStartWith "&gt;" .
+    
+    "&gt;&gt;"     :canStartWith "&gt;&gt;" .
+    
+    "&gt;&gt;&gt;"     :canStartWith "&gt;&gt;&gt;" .
+    
+    "&gt;="     :canPrecede spa:AdditiveExpression;
+         :canStartWith "&gt;=" .
+    
+    "&lt;"     :canPrecede spa:AdditiveExpression;
+         :canStartWith "&lt;" .
+    
+    "&lt;&lt;"     :canStartWith "&lt;&lt;" .
+    
+    "&lt;="     :canPrecede spa:AdditiveExpression;
+         :canStartWith "&lt;=" .
+    
+    "("     :canPrecede spa:Expression,
+                spa:RPAREN,
+                spa:VarOrURI,
+                <#_g27>;
+         :canStartWith "(" .
+    
+    ")"     :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g1>,
+                <#_g2>,
+                <#_g3>,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g23>,
+                <#_g24>,
+                <#_g25>,
+                <#_g34>,
+                <#_g35>;
+         :canStartWith ")" .
+    
+    ")(|"     :canPrecede spa:ConditionalAndExpression;
+         :canStartWith ")(|" .
+    
+    ","     :canPrecede spa:FromSelector,
+                spa:VAR,
+                spa:VarOrLiteral,
+                spa:VarOrURI;
+         :canStartWith "," .
+    
+    "-"     :canPrecede spa:MultiplicativeExpression;
+         :canStartWith "-" .
+    
+    "--"     :canStartWith "--" .
+    
+    "."     :canStartWith "." .
+    
+    "/"     :canPrecede spa:UnaryExpression;
+         :canStartWith "/" .
+    
+    ":"     :canPrecede spa:QuotedURI;
+         :canStartWith ":" .
+    
+    ";"     :canStartWith ";" .
+    
+    "="     :canStartWith "=" .
+    
+    "=="     :canPrecede spa:RelationalExpression;
+         :canStartWith "==" .
+    
+    "=~"     :canPrecede spa:PATTERN_LITERAL;
+         :canStartWith "=~" .
+    
+    "@"     :canStartWith "@" .
+    
+    "["     :canPrecede spa:GraphPattern;
+         :canStartWith "[" .
+    
+    "]"     :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                <#_g13>,
+                <#_g34>;
+         :canStartWith "]" .
+    
+    "^^"     :canPrecede spa:URI;
+         :canStartWith "^^" .
+    
+    "^cfg:oneOrMore"     :canPrecede spa:MultiplicativeExpression;
+         :canStartWith "^cfg:oneOrMore" .
+    
+    "^cfg:oneOrMore^cfg:oneOrMore"     :canStartWith "^cfg:oneOrMore^cfg:oneOrMore" .
+    
+    "^cfg:zeroOrMore"     :canPrecede spa:PatternElement,
+                spa:UnaryExpression,
+                <#_g1>,
+                <#_g2>,
+                <#_g3>;
+         :canStartWith "^cfg:zeroOrMore" .
+    
+    "^cfg:zeroOrOne"     :canStartWith "^cfg:zeroOrOne" .
+    
+    "and"     :canPrecede spa:Expression;
+         :canStartWith "and" .
+    
+    "ask"     :canPrecede <#_g1>,
+                <#_g2>,
+                <#_g3>;
+         :canStartWith "ask" .
+    
+    "construct"     :canPrecede spa:ConstructPattern,
+                spa:STAR;
+         :canStartWith "construct" .
+    
+    "describe"     :canPrecede spa:STAR,
+                spa:VarOrURI;
+         :canStartWith "describe" .
+    
+    "distinct"     :canPrecede spa:STAR,
+                spa:VAR;
+         :canStartWith "distinct" .
+    
+    "eq"     :canPrecede spa:EqualityExpression;
+         :canStartWith "eq" .
+    
+    "for"     :canStartWith "for" .
+    
+    "from"     :canPrecede spa:FromSelector;
+         :canStartWith "from" .
+    
+    "limit"     :canStartWith "limit" .
+    
+    "ne"     :canPrecede spa:EqualityExpression;
+         :canStartWith "ne" .
+    
+    "optional"     :canPrecede spa:PatternElement;
+         :canStartWith "optional" .
+    
+    "or"     :canStartWith "or" .
+    
+    "prefix"     :canPrecede spa:COLON,
+                spa:NCNAME;
+         :canStartWith "prefix" .
+    
+    "select"     :canPrecede spa:STAR,
+                spa:VAR,
+                <#_g4>,
+                <#_g7>;
+         :canStartWith "select" .
+    
+    "source"     :canPrecede spa:STAR,
+                spa:VarOrURI;
+         :canStartWith "source" .
+    
+    "union"     :canPrecede spa:GraphAndPattern;
+         :canStartWith "union" .
+    
+    "unsaid"     :canStartWith "unsaid" .
+    
+    "where"     :canPrecede spa:GraphPattern;
+         :canStartWith "where" .
+    
+    "{"     :canPrecede spa:ConstructPattern,
+                spa:GraphPattern;
+         :canStartWith "{" .
+    
+    "}"     :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                <#_g1>,
+                <#_g2>,
+                <#_g3>,
+                <#_g13>,
+                <#_g34>,
+                <#_g35>;
+         :canStartWith "}" .
+    
+    "~"     :canPrecede spa:UnaryExpression;
+         :canStartWith "~" .
+    
+    ()     a rul:Used .
+      ( "!"  )
+         a rul:Used .
+      ( "!="  )
+         a rul:Used .
+      ( "!~"  )
+         a rul:Used .
+      ( "%"  )
+         a rul:Used .
+      ( "&amp;"  )
+         a rul:Used .
+      ( "&amp;&amp;"  )
+         a rul:Used .
+      ( "&gt;"  )
+         a rul:Used .
+      ( "&gt;&gt;"  )
+         a rul:Used .
+      ( "&gt;&gt;&gt;"  )
+         a rul:Used .
+      ( "&gt;="  )
+         a rul:Used .
+      ( "&lt;"  )
+         a rul:Used .
+      ( "&lt;&lt;"  )
+         a rul:Used .
+      ( "&lt;="  )
+         a rul:Used .
+      ( "("  )
+         a rul:Used .
+      ( ")"  )
+         a rul:Used .
+      ( ")(|"  )
+         a rul:Used .
+      ( ","  )
+         a rul:Used .
+      ( "-"  )
+         a rul:Used .
+      ( "--"  )
+         a rul:Used .
+      ( "."  )
+         a rul:Used .
+      ( "/"  )
+         a rul:Used .
+      ( ":"  )
+         a rul:Used .
+      ( ";"  )
+         a rul:Used .
+      ( "="  )
+         a rul:Used .
+      ( "=="  )
+         a rul:Used .
+      ( "=~"  )
+         a rul:Used .
+      ( "@"  )
+         a rul:Used .
+      ( "["  )
+         a rul:Used .
+      ( "]"  )
+         a rul:Used .
+      ( "^^"  )
+         a rul:Used .
+      ( "^cfg:oneOrMore"  )
+         a rul:Used .
+      ( "^cfg:oneOrMore^cfg:oneOrMore"  )
+         a rul:Used .
+      ( "^cfg:zeroOrMore"  )
+         a rul:Used .
+      ( "^cfg:zeroOrOne"  )
+         a rul:Used .
+      ( "and"  )
+         a rul:Used .
+      ( "ask"  )
+         a rul:Used .
+      ( "construct"  )
+         a rul:Used .
+      ( "describe"  )
+         a rul:Used .
+      ( "distinct"  )
+         a rul:Used .
+      ( "eq"  )
+         a rul:Used .
+      ( "for"  )
+         a rul:Used .
+      ( "from"  )
+         a rul:Used .
+      ( "limit"  )
+         a rul:Used .
+      ( "ne"  )
+         a rul:Used .
+      ( "optional"  )
+         a rul:Used .
+      ( "or"  )
+         a rul:Used .
+      ( "prefix"  )
+         a rul:Used .
+      ( "select"  )
+         a rul:Used .
+      ( "source"  )
+         a rul:Used .
+      ( "union"  )
+         a rul:Used .
+      ( "unsaid"  )
+         a rul:Used .
+      ( "where"  )
+         a rul:Used .
+      ( "{"  )
+         a rul:Used .
+      ( "}"  )
+         a rul:Used .
+      ( "~"  )
+         a rul:Used .
+      ( spa:AMP 
+        spa:QNAME 
+        spa:LPAREN 
+        <#_g27> 
+        spa:RPAREN  )
+         a rul:Used .
+      ( spa:AND  )
+         a rul:Used .
+      ( spa:ASK  )
+         a rul:Used .
+      ( spa:AdditiveExpression 
+        <#_g23>  )
+         a rul:Used .
+      ( spa:AdditiveOperation 
+        <#_g24>  )
+         a rul:Used .
+      ( spa:ArgList  )
+         a rul:Used .
+      ( spa:BANG  )
+         a rul:Used .
+      ( spa:COMMA 
+        spa:VarOrLiteral  )
+         a rul:Used .
+      ( spa:COMMA  )
+         a rul:Used .
+      ( spa:CONSTRUCT 
+        spa:ConstructPattern  )
+         a rul:Used .
+      ( spa:CONSTRUCT 
+        spa:STAR  )
+         a rul:Used .
+      ( spa:CommaOpt 
+        spa:FromSelector  )
+         a rul:Used .
+      ( spa:CommaOpt 
+        spa:VAR  )
+         a rul:Used .
+      ( spa:CommaOpt 
+        spa:VarOrURI  )
+         a rul:Used .
+      ( spa:ConditionalAndExpression 
+        <#_g18>  )
+         a rul:Used .
+      ( spa:ConditionalOrExpression  )
+         a rul:Used .
+      ( spa:ConstructElement 
+        <#_g35>  )
+         a rul:Used .
+      ( spa:DATATYPE 
+        spa:URI  )
+         a rul:Used .
+      ( spa:DESCRIBE 
+        spa:STAR  )
+         a rul:Used .
+      ( spa:DESCRIBE 
+        spa:VarOrURI 
+        <#_g9>  )
+         a rul:Used .
+      ( spa:DISTINCT  )
+         a rul:Used .
+      ( spa:EQ 
+        spa:RelationalExpression  )
+         a rul:Used .
+      ( spa:EqualityExpression 
+        <#_g21>  )
+         a rul:Used .
+      ( spa:FLOATING_POINT_LITERAL  )
+         a rul:Used .
+      ( spa:FROM 
+        spa:FromSelector 
+        <#_g11>  )
+         a rul:Used .
+      ( spa:FromClause  )
+         a rul:Used .
+      ( spa:FunctionCall  )
+         a rul:Used .
+      ( spa:GE 
+        spa:AdditiveExpression  )
+         a rul:Used .
+      ( spa:GT 
+        spa:AdditiveExpression  )
+         a rul:Used .
+      ( spa:GraphAndPattern 
+        <#_g13>  )
+         a rul:Used .
+      ( spa:GroupGraphPattern  )
+         a rul:Used .
+      ( spa:INTEGER_LITERAL  )
+         a rul:Used .
+      ( spa:LANG  )
+         a rul:Used .
+      ( spa:LBRACE 
+        spa:ConstructPattern 
+        spa:RBRACE  )
+         a rul:Used .
+      ( spa:LBRACE 
+        spa:GraphPattern 
+        spa:RBRACE  )
+         a rul:Used .
+      ( spa:LBRACKET 
+        spa:GraphPattern 
+        spa:RBRACKET  )
+         a rul:Used .
+      ( spa:LE 
+        spa:AdditiveExpression  )
+         a rul:Used .
+      ( spa:LPAREN 
+        spa:Expression 
+        spa:RPAREN  )
+         a rul:Used .
+      ( spa:LPAREN 
+        spa:VarOrURI 
+        spa:CommaOpt 
+        spa:VarOrURI 
+        spa:CommaOpt 
+        spa:VarOrLiteral 
+        spa:RPAREN  )
+         a rul:Used .
+      ( spa:LT 
+        spa:AdditiveExpression  )
+         a rul:Used .
+      ( spa:Literal  )
+         a rul:Used .
+      ( spa:MINUS 
+        spa:MultiplicativeExpression  )
+         a rul:Used .
+      ( spa:MultiplicativeExpression 
+        <#_g24>  )
+         a rul:Used .
+      ( spa:MultiplicativeOperation 
+        <#_g25>  )
+         a rul:Used .
+      ( spa:NEQ 
+        spa:RelationalExpression  )
+         a rul:Used .
+      ( spa:NumericComparitor  )
+         a rul:Used .
+      ( spa:NumericLiteral  )
+         a rul:Used .
+      ( spa:OPTIONAL 
+        spa:PatternElement  )
+         a rul:Used .
+      ( spa:OptionalGraphPattern  )
+         a rul:Used .
+      ( spa:PLUS 
+        spa:MultiplicativeExpression  )
+         a rul:Used .
+      ( spa:PREFIX 
+        spa:COLON 
+        spa:QuotedURI  )
+         a rul:Used .
+      ( spa:PREFIX 
+        spa:NCNAME 
+        spa:COLON 
+        spa:QuotedURI  )
+         a rul:Used .
+      ( spa:PatternElement 
+        <#_g34>  )
+         a rul:Used .
+      ( spa:PrefixDecl 
+        <#_g0>  )
+         a rul:Used .
+      ( spa:PrefixDecl 
+        <#_g1>  )
+         a rul:Used .
+      ( spa:PrimaryExpression  )
+         a rul:Used .
+      ( spa:QNAME  )
+         a rul:Used .
+      ( spa:QName  )
+         a rul:Used .
+      ( spa:QuotedURI  )
+         a rul:Used .
+      ( spa:REM 
+        spa:UnaryExpression  )
+         a rul:Used .
+      ( spa:RelationalComparitor  )
+         a rul:Used .
+      ( spa:RelationalExpression 
+        <#_g22>  )
+         a rul:Used .
+      ( spa:SC_AND 
+        spa:ValueLogical  )
+         a rul:Used .
+      ( spa:SC_OR 
+        spa:ConditionalAndExpression  )
+         a rul:Used .
+      ( spa:SELECT 
+        <#_g4> 
+        spa:VAR 
+        <#_g6>  )
+         a rul:Used .
+      ( spa:SELECT 
+        <#_g7> 
+        spa:STAR  )
+         a rul:Used .
+      ( spa:SLASH 
+        spa:UnaryExpression  )
+         a rul:Used .
+      ( spa:SOURCE 
+        spa:STAR 
+        spa:PatternElement  )
+         a rul:Used .
+      ( spa:SOURCE 
+        spa:VarOrURI 
+        spa:PatternElement  )
+         a rul:Used .
+      ( spa:STAR 
+        spa:UnaryExpression  )
+         a rul:Used .
+      ( spa:STRING_LITERAL1  )
+         a rul:Used .
+      ( spa:STRING_LITERAL2  )
+         a rul:Used .
+      ( spa:STR_EQ 
+        spa:EqualityExpression  )
+         a rul:Used .
+      ( spa:STR_MATCH 
+        spa:PATTERN_LITERAL  )
+         a rul:Used .
+      ( spa:STR_NE 
+        spa:EqualityExpression  )
+         a rul:Used .
+      ( spa:STR_NMATCH 
+        spa:PATTERN_LITERAL  )
+         a rul:Used .
+      ( spa:SourceGraphPattern  )
+         a rul:Used .
+      ( spa:String 
+        <#_g30> 
+        <#_g32>  )
+         a rul:Used .
+      ( spa:StringComparitor 
+        <#_g21>  )
+         a rul:Used .
+      ( spa:StringEqualityExpression  )
+         a rul:Used .
+      ( spa:TILDE  )
+         a rul:Used .
+      ( spa:TextLiteral  )
+         a rul:Used .
+      ( spa:TriplePattern  )
+         a rul:Used .
+      ( spa:UNION 
+        spa:GraphAndPattern  )
+         a rul:Used .
+      ( spa:URI  )
+         a rul:Used .
+      ( spa:UnaryExpression 
+        <#_g25>  )
+         a rul:Used .
+      ( spa:UnaryExpressionNotPlusMinus  )
+         a rul:Used .
+      ( spa:VAR  )
+         a rul:Used .
+      ( spa:ValueLogical 
+        <#_g20>  )
+         a rul:Used .
+      ( spa:VarOrLiteral 
+        <#_g29>  )
+         a rul:Used .
+      ( spa:WHERE 
+        spa:GraphPattern  )
+         a rul:Used .
+      ( spa:WhereClause  )
+         a rul:Used .
+      ( <#_g0> 
+        spa:ReportFormat 
+        <#_g1> 
+        <#_g2> 
+        <#_g3>  )
+         a rul:Used .
+      ( <#_g5> 
+        <#_g6>  )
+         a rul:Used .
+      ( <#_g8> 
+        <#_g9>  )
+         a rul:Used .
+      ( <#_g10> 
+        <#_g11>  )
+         a rul:Used .
+      ( <#_g12> 
+        <#_g13>  )
+         a rul:Used .
+      ( <#_g14>  )
+         a rul:Used .
+      ( <#_g15> 
+        spa:Expression  )
+         a rul:Used .
+      ( <#_g16>  )
+         a rul:Used .
+      ( <#_g17> 
+        <#_g18>  )
+         a rul:Used .
+      ( <#_g19> 
+        <#_g20>  )
+         a rul:Used .
+      ( <#_g26> 
+        spa:UnaryExpression  )
+         a rul:Used .
+      ( <#_g28> 
+        <#_g29>  )
+         a rul:Used .
+      ( <#_g31>  )
+         a rul:Used .
+      ( <#_g33>  )
+         a rul:Used .
+    
+    spa:AMP     :TEST "&amp;";
+         :branch  [
+             :branchTail  (
+            "&amp;"  );
+             :condition "&amp;";
+             :sequence  (
+            "&amp;"  ) ];
+         :canPrecede spa:QNAME;
+         :canStartWith "&amp;";
+         :canStartWithLiteral "&amp;";
+         :mustBeOneSequence  (
+         (
+            "&amp;"  ) ) .
+    
+    spa:AND     :TEST "and";
+         :branch  [
+             :branchTail  (
+            "and"  );
+             :condition "and";
+             :sequence  (
+            "and"  ) ];
+         :canPrecede spa:Expression;
+         :canStartWith "and";
+         :canStartWithLiteral "and";
+         :mustBeOneSequence  (
+         (
+            "and"  ) ) .
+    
+    spa:ASK     :TEST "ask";
+         :branch  [
+             :branchTail  (
+            "ask"  );
+             :condition "ask";
+             :sequence  (
+            "ask"  ) ];
+         :canPrecede <#_g1>,
+                <#_g2>,
+                <#_g3>;
+         :canStartWith "ask";
+         :canStartWithLiteral "ask";
+         :mustBeOneSequence  (
+         (
+            "ask"  ) ) .
+    
+    spa:ASSIGN     :TEST "=";
+         :branch  [
+             :branchTail  (
+            "="  );
+             :condition "=";
+             :sequence  (
+            "="  ) ];
+         :canStartWith "=";
+         :canStartWithLiteral "=";
+         :mustBeOneSequence  (
+         (
+            "="  ) ) .
+    
+    spa:AT     :TEST "@";
+         :branch  [
+             :branchTail  (
+            "@"  );
+             :condition "@";
+             :sequence  (
+            "@"  ) ];
+         :canStartWith "@";
+         :canStartWithLiteral "@";
+         :mustBeOneSequence  (
+         (
+            "@"  ) ) .
+    
+    spa:AdditiveExpression     :TEST spa:MultiplicativeExpression;
+         :branch  [
+             :branchTail  (
+            spa:MultiplicativeExpression 
+            <#_g24>  );
+             :condition "!",
+                    "&amp;",
+                    "(",
+                    "~";
+             :sequence  (
+            spa:MultiplicativeExpression 
+            <#_g24>  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g23>,
+                <#_g34>;
+         :canStartWith "!",
+                "&amp;",
+                "(",
+                "~";
+         :mustBeOneSequence  (
+         (
+            spa:MultiplicativeExpression 
+            <#_g24>  ) ) .
+    
+    spa:AdditiveOperation     :TEST spa:MINUS,
+                spa:PLUS;
+         :branch  [
+             :branchTail  (
+            spa:PLUS 
+            spa:MultiplicativeExpression  );
+             :condition "^cfg:oneOrMore";
+             :sequence  (
+            spa:PLUS 
+            spa:MultiplicativeExpression  ) ],
+                 [
+             :branchTail  (
+            spa:MINUS 
+            spa:MultiplicativeExpression  );
+             :condition "-";
+             :sequence  (
+            spa:MINUS 
+            spa:MultiplicativeExpression  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g23>,
+                <#_g24>,
+                <#_g34>;
+         :canStartWith "-",
+                "^cfg:oneOrMore";
+         :mustBeOneSequence  (
+         (
+            spa:PLUS 
+            spa:MultiplicativeExpression  )
+         (
+            spa:MINUS 
+            spa:MultiplicativeExpression  ) ) .
+    
+    spa:ArgList     :TEST spa:VarOrLiteral;
+         :branch  [
+             :branchTail  (
+            spa:VarOrLiteral 
+            <#_g29>  );
+             :sequence  (
+            spa:VarOrLiteral 
+            <#_g29>  ) ];
+         :canPrecede spa:RPAREN;
+         :mustBeOneSequence  (
+         (
+            spa:VarOrLiteral 
+            <#_g29>  ) ) .
+    
+    spa:BANG     :TEST "!";
+         :branch  [
+             :branchTail  (
+            "!"  );
+             :condition "!";
+             :sequence  (
+            "!"  ) ];
+         :canPrecede spa:UnaryExpression;
+         :canStartWith "!";
+         :canStartWithLiteral "!";
+         :mustBeOneSequence  (
+         (
+            "!"  ) ) .
+    
+    spa:COLON     :TEST ":";
+         :branch  [
+             :branchTail  (
+            ":"  );
+             :condition ":";
+             :sequence  (
+            ":"  ) ];
+         :canPrecede spa:QuotedURI;
+         :canStartWith ":";
+         :canStartWithLiteral ":";
+         :mustBeOneSequence  (
+         (
+            ":"  ) ) .
+    
+    spa:COMMA     :TEST ",";
+         :branch  [
+             :branchTail  (
+            ","  );
+             :condition ",";
+             :sequence  (
+            ","  ) ];
+         :canPrecede spa:FromSelector,
+                spa:VAR,
+                spa:VarOrLiteral,
+                spa:VarOrURI;
+         :canStartWith ",";
+         :canStartWithLiteral ",";
+         :mustBeOneSequence  (
+         (
+            ","  ) ) .
+    
+    spa:CONSTRUCT     :TEST "construct";
+         :branch  [
+             :branchTail  (
+            "construct"  );
+             :condition "construct";
+             :sequence  (
+            "construct"  ) ];
+         :canPrecede spa:ConstructPattern,
+                spa:STAR;
+         :canStartWith "construct";
+         :canStartWithLiteral "construct";
+         :mustBeOneSequence  (
+         (
+            "construct"  ) ) .
+    
+    spa:CommaOpt     :TEST <#_g33>;
+         :branch  [
+             :branchTail (),
+                     (
+            <#_g33>  );
+             :condition ",";
+             :sequence  (
+            <#_g33>  ) ];
+         :canPrecede spa:FromSelector,
+                spa:VAR,
+                spa:VarOrLiteral,
+                spa:VarOrURI;
+         :canStartWith ",";
+         :mustBeOneSequence  (
+         (
+            <#_g33>  ) ) .
+    
+    spa:ConditionalAndExpression     :TEST spa:ValueLogical;
+         :branch  [
+             :branchTail  (
+            spa:ValueLogical 
+            <#_g20>  );
+             :condition "!",
+                    "&amp;",
+                    "(",
+                    "~";
+             :sequence  (
+            spa:ValueLogical 
+            <#_g20>  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g34>;
+         :canStartWith "!",
+                "&amp;",
+                "(",
+                "~";
+         :mustBeOneSequence  (
+         (
+            spa:ValueLogical 
+            <#_g20>  ) ) .
+    
+    spa:ConditionalOrExpression     :TEST spa:ConditionalAndExpression;
+         :branch  [
+             :branchTail  (
+            spa:ConditionalAndExpression 
+            <#_g18>  );
+             :condition "!",
+                    "&amp;",
+                    "(",
+                    "~";
+             :sequence  (
+            spa:ConditionalAndExpression 
+            <#_g18>  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g34>;
+         :canStartWith "!",
+                "&amp;",
+                "(",
+                "~";
+         :mustBeOneSequence  (
+         (
+            spa:ConditionalAndExpression 
+            <#_g18>  ) ) .
+    
+    spa:ConstructElement     :TEST spa:LBRACE,
+                spa:TriplePattern;
+         :branch  [
+             :branchTail  (
+            spa:TriplePattern  );
+             :condition "(";
+             :sequence  (
+            spa:TriplePattern  ) ],
+                 [
+             :branchTail  (
+            spa:LBRACE 
+            spa:ConstructPattern 
+            spa:RBRACE  );
+             :condition "{";
+             :sequence  (
+            spa:LBRACE 
+            spa:ConstructPattern 
+            spa:RBRACE  ) ];
+         :canPrecede spa:RBRACE,
+                <#_g1>,
+                <#_g2>,
+                <#_g3>,
+                <#_g35>;
+         :canStartWith "(",
+                "{";
+         :mustBeOneSequence  (
+         (
+            spa:TriplePattern  )
+         (
+            spa:LBRACE 
+            spa:ConstructPattern 
+            spa:RBRACE  ) ) .
+    
+    spa:ConstructPattern     :TEST <#_g16>;
+         :branch  [
+             :branchTail  (
+            <#_g16>  );
+             :condition "(",
+                    "{";
+             :sequence  (
+            <#_g16>  ) ];
+         :canPrecede spa:RBRACE,
+                <#_g1>,
+                <#_g2>,
+                <#_g3>;
+         :canStartWith "(",
+                "{";
+         :mustBeOneSequence  (
+         (
+            <#_g16>  ) ) .
+    
+    spa:DATATYPE     :TEST "^^";
+         :branch  [
+             :branchTail  (
+            "^^"  );
+             :condition "^^";
+             :sequence  (
+            "^^"  ) ];
+         :canPrecede spa:URI;
+         :canStartWith "^^";
+         :canStartWithLiteral "^^";
+         :mustBeOneSequence  (
+         (
+            "^^"  ) ) .
+    
+    spa:DECR     :TEST "--";
+         :branch  [
+             :branchTail  (
+            "--"  );
+             :condition "--";
+             :sequence  (
+            "--"  ) ];
+         :canStartWith "--";
+         :canStartWithLiteral "--";
+         :mustBeOneSequence  (
+         (
+            "--"  ) ) .
+    
+    spa:DESCRIBE     :TEST "describe";
+         :branch  [
+             :branchTail  (
+            "describe"  );
+             :condition "describe";
+             :sequence  (
+            "describe"  ) ];
+         :canPrecede spa:STAR,
+                spa:VarOrURI;
+         :canStartWith "describe";
+         :canStartWithLiteral "describe";
+         :mustBeOneSequence  (
+         (
+            "describe"  ) ) .
+    
+    spa:DISTINCT     :TEST "distinct";
+         :branch  [
+             :branchTail  (
+            "distinct"  );
+             :condition "distinct";
+             :sequence  (
+            "distinct"  ) ];
+         :canPrecede spa:STAR,
+                spa:VAR;
+         :canStartWith "distinct";
+         :canStartWithLiteral "distinct";
+         :mustBeOneSequence  (
+         (
+            "distinct"  ) ) .
+    
+    spa:DOT     :TEST ".";
+         :branch  [
+             :branchTail  (
+            "."  );
+             :condition ".";
+             :sequence  (
+            "."  ) ];
+         :canStartWith ".";
+         :canStartWithLiteral ".";
+         :mustBeOneSequence  (
+         (
+            "."  ) ) .
+    
+    spa:EQ     :TEST "==";
+         :branch  [
+             :branchTail  (
+            "=="  );
+             :condition "==";
+             :sequence  (
+            "=="  ) ];
+         :canPrecede spa:RelationalExpression;
+         :canStartWith "==";
+         :canStartWithLiteral "==";
+         :mustBeOneSequence  (
+         (
+            "=="  ) ) .
+    
+    spa:EqualityExpression     :TEST spa:RelationalExpression;
+         :branch  [
+             :branchTail  (
+            spa:RelationalExpression 
+            <#_g22>  );
+             :condition "!",
+                    "&amp;",
+                    "(",
+                    "~";
+             :sequence  (
+            spa:RelationalExpression 
+            <#_g22>  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g34>;
+         :canStartWith "!",
+                "&amp;",
+                "(",
+                "~";
+         :mustBeOneSequence  (
+         (
+            spa:RelationalExpression 
+            <#_g22>  ) ) .
+    
+    spa:Expression     :TEST spa:ConditionalOrExpression;
+         :branch  [
+             :branchTail  (
+            spa:ConditionalOrExpression  );
+             :condition "!",
+                    "&amp;",
+                    "(",
+                    "~";
+             :sequence  (
+            spa:ConditionalOrExpression  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g34>;
+         :canStartWith "!",
+                "&amp;",
+                "(",
+                "~";
+         :mustBeOneSequence  (
+         (
+            spa:ConditionalOrExpression  ) ) .
+    
+    spa:FLOATING_POINT_LITERAL     :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g23>,
+                <#_g24>,
+                <#_g25>,
+                <#_g29>,
+                <#_g34> .
+    
+    spa:FOR     :TEST "for";
+         :branch  [
+             :branchTail  (
+            "for"  );
+             :condition "for";
+             :sequence  (
+            "for"  ) ];
+         :canStartWith "for";
+         :canStartWithLiteral "for";
+         :mustBeOneSequence  (
+         (
+            "for"  ) ) .
+    
+    spa:FROM     :TEST "from";
+         :branch  [
+             :branchTail  (
+            "from"  );
+             :condition "from";
+             :sequence  (
+            "from"  ) ];
+         :canPrecede spa:FromSelector;
+         :canStartWith "from";
+         :canStartWithLiteral "from";
+         :mustBeOneSequence  (
+         (
+            "from"  ) ) .
+    
+    spa:FromClause     :TEST spa:FROM;
+         :branch  [
+             :branchTail  (
+            spa:FROM 
+            spa:FromSelector 
+            <#_g11>  );
+             :condition "from";
+             :sequence  (
+            spa:FROM 
+            spa:FromSelector 
+            <#_g11>  ) ];
+         :canPrecede <#_g3>;
+         :canStartWith "from";
+         :mustBeOneSequence  (
+         (
+            spa:FROM 
+            spa:FromSelector 
+            <#_g11>  ) ) .
+    
+    spa:FromSelector     :TEST spa:URI;
+         :branch  [
+             :branchTail  (
+            spa:URI  );
+             :sequence  (
+            spa:URI  ) ];
+         :canPrecede <#_g3>,
+                <#_g11>;
+         :mustBeOneSequence  (
+         (
+            spa:URI  ) ) .
+    
+    spa:FunctionCall     :TEST spa:AMP;
+         :branch  [
+             :branchTail  (
+            spa:AMP 
+            spa:QNAME 
+            spa:LPAREN 
+            <#_g27> 
+            spa:RPAREN  );
+             :condition "&amp;";
+             :sequence  (
+            spa:AMP 
+            spa:QNAME 
+            spa:LPAREN 
+            <#_g27> 
+            spa:RPAREN  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g23>,
+                <#_g24>,
+                <#_g25>,
+                <#_g34>;
+         :canStartWith "&amp;";
+         :mustBeOneSequence  (
+         (
+            spa:AMP 
+            spa:QNAME 
+            spa:LPAREN 
+            <#_g27> 
+            spa:RPAREN  ) ) .
+    
+    spa:GE     :TEST "&gt;=";
+         :branch  [
+             :branchTail  (
+            "&gt;="  );
+             :condition "&gt;=";
+             :sequence  (
+            "&gt;="  ) ];
+         :canPrecede spa:AdditiveExpression;
+         :canStartWith "&gt;=";
+         :canStartWithLiteral "&gt;=";
+         :mustBeOneSequence  (
+         (
+            "&gt;="  ) ) .
+    
+    spa:GT     :TEST "&gt;";
+         :branch  [
+             :branchTail  (
+            "&gt;"  );
+             :condition "&gt;";
+             :sequence  (
+            "&gt;"  ) ];
+         :canPrecede spa:AdditiveExpression;
+         :canStartWith "&gt;";
+         :canStartWithLiteral "&gt;";
+         :mustBeOneSequence  (
+         (
+            "&gt;"  ) ) .
+    
+    spa:GraphAndPattern     :TEST <#_g14>;
+         :branch  [
+             :branchTail  (
+            <#_g14>  );
+             :condition "!",
+                    "&amp;",
+                    "(",
+                    "[",
+                    "and",
+                    "optional",
+                    "source",
+                    "{",
+                    "~";
+             :sequence  (
+            <#_g14>  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                <#_g13>;
+         :canStartWith "!",
+                "&amp;",
+                "(",
+                "[",
+                "and",
+                "optional",
+                "source",
+                "{",
+                "~";
+         :mustBeOneSequence  (
+         (
+            <#_g14>  ) ) .
+    
+    spa:GraphPattern     :TEST spa:GraphAndPattern;
+         :branch  [
+             :branchTail  (
+            spa:GraphAndPattern 
+            <#_g13>  );
+             :condition "!",
+                    "&amp;",
+                    "(",
+                    "[",
+                    "and",
+                    "optional",
+                    "source",
+                    "{",
+                    "~";
+             :sequence  (
+            spa:GraphAndPattern 
+            <#_g13>  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET;
+         :canStartWith "!",
+                "&amp;",
+                "(",
+                "[",
+                "and",
+                "optional",
+                "source",
+                "{",
+                "~";
+         :mustBeOneSequence  (
+         (
+            spa:GraphAndPattern 
+            <#_g13>  ) ) .
+    
+    spa:GroupGraphPattern     :TEST spa:LBRACE;
+         :branch  [
+             :branchTail  (
+            spa:LBRACE 
+            spa:GraphPattern 
+            spa:RBRACE  );
+             :condition "{";
+             :sequence  (
+            spa:LBRACE 
+            spa:GraphPattern 
+            spa:RBRACE  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                <#_g13>,
+                <#_g34>;
+         :canStartWith "{";
+         :mustBeOneSequence  (
+         (
+            spa:LBRACE 
+            spa:GraphPattern 
+            spa:RBRACE  ) ) .
+    
+    spa:HOOK     :TEST "^cfg:zeroOrOne";
+         :branch  [
+             :branchTail  (
+            "^cfg:zeroOrOne"  );
+             :condition "^cfg:zeroOrOne";
+             :sequence  (
+            "^cfg:zeroOrOne"  ) ];
+         :canStartWith "^cfg:zeroOrOne";
+         :canStartWithLiteral "^cfg:zeroOrOne";
+         :mustBeOneSequence  (
+         (
+            "^cfg:zeroOrOne"  ) ) .
+    
+    spa:INCR     :TEST "^cfg:oneOrMore^cfg:oneOrMore";
+         :branch  [
+             :branchTail  (
+            "^cfg:oneOrMore^cfg:oneOrMore"  );
+             :condition "^cfg:oneOrMore^cfg:oneOrMore";
+             :sequence  (
+            "^cfg:oneOrMore^cfg:oneOrMore"  ) ];
+         :canStartWith "^cfg:oneOrMore^cfg:oneOrMore";
+         :canStartWithLiteral "^cfg:oneOrMore^cfg:oneOrMore";
+         :mustBeOneSequence  (
+         (
+            "^cfg:oneOrMore^cfg:oneOrMore"  ) ) .
+    
+    spa:INTEGER_LITERAL     :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g23>,
+                <#_g24>,
+                <#_g25>,
+                <#_g29>,
+                <#_g34> .
+    
+    spa:LANG     :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g23>,
+                <#_g24>,
+                <#_g25>,
+                <#_g29>,
+                <#_g32>,
+                <#_g34> .
+    
+    spa:LBRACE     :TEST "{";
+         :branch  [
+             :branchTail  (
+            "{"  );
+             :condition "{";
+             :sequence  (
+            "{"  ) ];
+         :canPrecede spa:ConstructPattern,
+                spa:GraphPattern;
+         :canStartWith "{";
+         :canStartWithLiteral "{";
+         :mustBeOneSequence  (
+         (
+            "{"  ) ) .
+    
+    spa:LBRACKET     :TEST "[";
+         :branch  [
+             :branchTail  (
+            "["  );
+             :condition "[";
+             :sequence  (
+            "["  ) ];
+         :canPrecede spa:GraphPattern;
+         :canStartWith "[";
+         :canStartWithLiteral "[";
+         :mustBeOneSequence  (
+         (
+            "["  ) ) .
+    
+    spa:LE     :TEST "&lt;=";
+         :branch  [
+             :branchTail  (
+            "&lt;="  );
+             :condition "&lt;=";
+             :sequence  (
+            "&lt;="  ) ];
+         :canPrecede spa:AdditiveExpression;
+         :canStartWith "&lt;=";
+         :canStartWithLiteral "&lt;=";
+         :mustBeOneSequence  (
+         (
+            "&lt;="  ) ) .
+    
+    spa:LIMIT     :TEST "limit";
+         :branch  [
+             :branchTail  (
+            "limit"  );
+             :condition "limit";
+             :sequence  (
+            "limit"  ) ];
+         :canStartWith "limit";
+         :canStartWithLiteral "limit";
+         :mustBeOneSequence  (
+         (
+            "limit"  ) ) .
+    
+    spa:LPAREN     :TEST "(";
+         :branch  [
+             :branchTail  (
+            "("  );
+             :condition "(";
+             :sequence  (
+            "("  ) ];
+         :canPrecede spa:Expression,
+                spa:RPAREN,
+                spa:VarOrURI,
+                <#_g27>;
+         :canStartWith "(";
+         :canStartWithLiteral "(";
+         :mustBeOneSequence  (
+         (
+            "("  ) ) .
+    
+    spa:LSHIFT     :TEST "&lt;&lt;";
+         :branch  [
+             :branchTail  (
+            "&lt;&lt;"  );
+             :condition "&lt;&lt;";
+             :sequence  (
+            "&lt;&lt;"  ) ];
+         :canStartWith "&lt;&lt;";
+         :canStartWithLiteral "&lt;&lt;";
+         :mustBeOneSequence  (
+         (
+            "&lt;&lt;"  ) ) .
+    
+    spa:LT     :TEST "&lt;";
+         :branch  [
+             :branchTail  (
+            "&lt;"  );
+             :condition "&lt;";
+             :sequence  (
+            "&lt;"  ) ];
+         :canPrecede spa:AdditiveExpression;
+         :canStartWith "&lt;";
+         :canStartWithLiteral "&lt;";
+         :mustBeOneSequence  (
+         (
+            "&lt;"  ) ) .
+    
+    spa:Literal     :TEST spa:NumericLiteral,
+                spa:TextLiteral,
+                spa:URI;
+         :branch  [
+             :branchTail  (
+            spa:URI  );
+             :sequence  (
+            spa:URI  ) ],
+                 [
+             :branchTail  (
+            spa:NumericLiteral  );
+             :sequence  (
+            spa:NumericLiteral  ) ],
+                 [
+             :branchTail  (
+            spa:TextLiteral  );
+             :sequence  (
+            spa:TextLiteral  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g23>,
+                <#_g24>,
+                <#_g25>,
+                <#_g29>,
+                <#_g34>;
+         :mustBeOneSequence  (
+         (
+            spa:URI  )
+         (
+            spa:NumericLiteral  )
+         (
+            spa:TextLiteral  ) ) .
+    
+    spa:MINUS     :TEST "-";
+         :branch  [
+             :branchTail  (
+            "-"  );
+             :condition "-";
+             :sequence  (
+            "-"  ) ];
+         :canPrecede spa:MultiplicativeExpression;
+         :canStartWith "-";
+         :canStartWithLiteral "-";
+         :mustBeOneSequence  (
+         (
+            "-"  ) ) .
+    
+    spa:MultiplicativeExpression     :TEST spa:UnaryExpression;
+         :branch  [
+             :branchTail  (
+            spa:UnaryExpression 
+            <#_g25>  );
+             :condition "!",
+                    "&amp;",
+                    "(",
+                    "~";
+             :sequence  (
+            spa:UnaryExpression 
+            <#_g25>  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g23>,
+                <#_g24>,
+                <#_g34>;
+         :canStartWith "!",
+                "&amp;",
+                "(",
+                "~";
+         :mustBeOneSequence  (
+         (
+            spa:UnaryExpression 
+            <#_g25>  ) ) .
+    
+    spa:MultiplicativeOperation     :TEST spa:REM,
+                spa:SLASH,
+                spa:STAR;
+         :branch  [
+             :branchTail  (
+            spa:STAR 
+            spa:UnaryExpression  );
+             :condition "^cfg:zeroOrMore";
+             :sequence  (
+            spa:STAR 
+            spa:UnaryExpression  ) ],
+                 [
+             :branchTail  (
+            spa:SLASH 
+            spa:UnaryExpression  );
+             :condition "/";
+             :sequence  (
+            spa:SLASH 
+            spa:UnaryExpression  ) ],
+                 [
+             :branchTail  (
+            spa:REM 
+            spa:UnaryExpression  );
+             :condition "%";
+             :sequence  (
+            spa:REM 
+            spa:UnaryExpression  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g23>,
+                <#_g24>,
+                <#_g25>,
+                <#_g34>;
+         :canStartWith "%",
+                "/",
+                "^cfg:zeroOrMore";
+         :mustBeOneSequence  (
+         (
+            spa:STAR 
+            spa:UnaryExpression  )
+         (
+            spa:SLASH 
+            spa:UnaryExpression  )
+         (
+            spa:REM 
+            spa:UnaryExpression  ) ) .
+    
+    spa:NCNAME     :canPrecede spa:COLON .
+    
+    spa:NEQ     :TEST "!=";
+         :branch  [
+             :branchTail  (
+            "!="  );
+             :condition "!=";
+             :sequence  (
+            "!="  ) ];
+         :canPrecede spa:RelationalExpression;
+         :canStartWith "!=";
+         :canStartWithLiteral "!=";
+         :mustBeOneSequence  (
+         (
+            "!="  ) ) .
+    
+    spa:NumericComparitor     :TEST spa:GE,
+                spa:GT,
+                spa:LE,
+                spa:LT;
+         :branch  [
+             :branchTail  (
+            spa:LT 
+            spa:AdditiveExpression  );
+             :condition "&lt;";
+             :sequence  (
+            spa:LT 
+            spa:AdditiveExpression  ) ],
+                 [
+             :branchTail  (
+            spa:GT 
+            spa:AdditiveExpression  );
+             :condition "&gt;";
+             :sequence  (
+            spa:GT 
+            spa:AdditiveExpression  ) ],
+                 [
+             :branchTail  (
+            spa:LE 
+            spa:AdditiveExpression  );
+             :condition "&lt;=";
+             :sequence  (
+            spa:LE 
+            spa:AdditiveExpression  ) ],
+                 [
+             :branchTail  (
+            spa:GE 
+            spa:AdditiveExpression  );
+             :condition "&gt;=";
+             :sequence  (
+            spa:GE 
+            spa:AdditiveExpression  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g34>;
+         :canStartWith "&gt;",
+                "&gt;=",
+                "&lt;",
+                "&lt;=";
+         :mustBeOneSequence  (
+         (
+            spa:LT 
+            spa:AdditiveExpression  )
+         (
+            spa:GT 
+            spa:AdditiveExpression  )
+         (
+            spa:LE 
+            spa:AdditiveExpression  )
+         (
+            spa:GE 
+            spa:AdditiveExpression  ) ) .
+    
+    spa:NumericLiteral     :TEST spa:FLOATING_POINT_LITERAL,
+                spa:INTEGER_LITERAL;
+         :branch  [
+             :branchTail  (
+            spa:INTEGER_LITERAL  );
+             :sequence  (
+            spa:INTEGER_LITERAL  ) ],
+                 [
+             :branchTail  (
+            spa:FLOATING_POINT_LITERAL  );
+             :sequence  (
+            spa:FLOATING_POINT_LITERAL  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g23>,
+                <#_g24>,
+                <#_g25>,
+                <#_g29>,
+                <#_g34>;
+         :mustBeOneSequence  (
+         (
+            spa:INTEGER_LITERAL  )
+         (
+            spa:FLOATING_POINT_LITERAL  ) ) .
+    
+    spa:OPTIONAL     :TEST "optional";
+         :branch  [
+             :branchTail  (
+            "optional"  );
+             :condition "optional";
+             :sequence  (
+            "optional"  ) ];
+         :canPrecede spa:PatternElement;
+         :canStartWith "optional";
+         :canStartWithLiteral "optional";
+         :mustBeOneSequence  (
+         (
+            "optional"  ) ) .
+    
+    spa:OR     :TEST "or";
+         :branch  [
+             :branchTail  (
+            "or"  );
+             :condition "or";
+             :sequence  (
+            "or"  ) ];
+         :canStartWith "or";
+         :canStartWithLiteral "or";
+         :mustBeOneSequence  (
+         (
+            "or"  ) ) .
+    
+    spa:OptionalGraphPattern     :TEST spa:LBRACKET,
+                spa:OPTIONAL;
+         :branch  [
+             :branchTail  (
+            spa:OPTIONAL 
+            spa:PatternElement  );
+             :condition "optional";
+             :sequence  (
+            spa:OPTIONAL 
+            spa:PatternElement  ) ],
+                 [
+             :branchTail  (
+            spa:LBRACKET 
+            spa:GraphPattern 
+            spa:RBRACKET  );
+             :condition "[";
+             :sequence  (
+            spa:LBRACKET 
+            spa:GraphPattern 
+            spa:RBRACKET  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                <#_g13>,
+                <#_g34>;
+         :canStartWith "[",
+                "optional";
+         :mustBeOneSequence  (
+         (
+            spa:OPTIONAL 
+            spa:PatternElement  )
+         (
+            spa:LBRACKET 
+            spa:GraphPattern 
+            spa:RBRACKET  ) ) .
+    
+    spa:PATTERN_LITERAL     :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g34> .
+    
+    spa:PLUS     :TEST "^cfg:oneOrMore";
+         :branch  [
+             :branchTail  (
+            "^cfg:oneOrMore"  );
+             :condition "^cfg:oneOrMore";
+             :sequence  (
+            "^cfg:oneOrMore"  ) ];
+         :canPrecede spa:MultiplicativeExpression;
+         :canStartWith "^cfg:oneOrMore";
+         :canStartWithLiteral "^cfg:oneOrMore";
+         :mustBeOneSequence  (
+         (
+            "^cfg:oneOrMore"  ) ) .
+    
+    spa:PREFIX     :TEST "prefix";
+         :branch  [
+             :branchTail  (
+            "prefix"  );
+             :condition "prefix";
+             :sequence  (
+            "prefix"  ) ];
+         :canPrecede spa:COLON,
+                spa:NCNAME;
+         :canStartWith "prefix";
+         :canStartWithLiteral "prefix";
+         :mustBeOneSequence  (
+         (
+            "prefix"  ) ) .
+    
+    spa:PatternElement     :TEST spa:GroupGraphPattern,
+                spa:OptionalGraphPattern,
+                spa:SourceGraphPattern,
+                spa:TriplePattern,
+                <#_g15>;
+         :branch  [
+             :branchTail  (
+            spa:TriplePattern  );
+             :condition "(";
+             :sequence  (
+            spa:TriplePattern  ) ],
+                 [
+             :branchTail  (
+            spa:GroupGraphPattern  );
+             :condition "{";
+             :sequence  (
+            spa:GroupGraphPattern  ) ],
+                 [
+             :branchTail  (
+            spa:SourceGraphPattern  );
+             :condition "source";
+             :sequence  (
+            spa:SourceGraphPattern  ) ],
+                 [
+             :branchTail  (
+            spa:OptionalGraphPattern  );
+             :condition "[",
+                    "optional";
+             :sequence  (
+            spa:OptionalGraphPattern  ) ],
+                 [
+             :branchTail  (
+            spa:Expression  ),
+                     (
+            <#_g15> 
+            spa:Expression  );
+             :condition "!",
+                    "&amp;",
+                    "(",
+                    "and",
+                    "~";
+             :sequence  (
+            <#_g15> 
+            spa:Expression  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                <#_g13>,
+                <#_g34>;
+         :canStartWith "!",
+                "&amp;",
+                "(",
+                "[",
+                "and",
+                "optional",
+                "source",
+                "{",
+                "~";
+         :mustBeOneSequence  (
+         (
+            spa:TriplePattern  )
+         (
+            spa:GroupGraphPattern  )
+         (
+            spa:SourceGraphPattern  )
+         (
+            spa:OptionalGraphPattern  )
+         (
+            <#_g15> 
+            spa:Expression  ) ) .
+    
+    spa:PrefixDecl     :TEST spa:PREFIX;
+         :branch  [
+             :branchTail  (
+            spa:PREFIX 
+            spa:NCNAME 
+            spa:COLON 
+            spa:QuotedURI  );
+             :condition "prefix";
+             :sequence  (
+            spa:PREFIX 
+            spa:NCNAME 
+            spa:COLON 
+            spa:QuotedURI  ) ],
+                 [
+             :branchTail  (
+            spa:PREFIX 
+            spa:COLON 
+            spa:QuotedURI  );
+             :condition "prefix";
+             :sequence  (
+            spa:PREFIX 
+            spa:COLON 
+            spa:QuotedURI  ) ];
+         :canPrecede spa:ReportFormat,
+                <#_g0>,
+                <#_g1>,
+                <#_g2>,
+                <#_g3>;
+         :canStartWith "prefix";
+         :mustBeOneSequence  (
+         (
+            spa:PREFIX 
+            spa:NCNAME 
+            spa:COLON 
+            spa:QuotedURI  )
+         (
+            spa:PREFIX 
+            spa:COLON 
+            spa:QuotedURI  ) ) .
+    
+    spa:PrimaryExpression     :TEST spa:FunctionCall,
+                spa:LPAREN,
+                spa:Literal,
+                spa:VAR;
+         :branch  [
+             :branchTail  (
+            spa:VAR  );
+             :sequence  (
+            spa:VAR  ) ],
+                 [
+             :branchTail  (
+            spa:Literal  );
+             :sequence  (
+            spa:Literal  ) ],
+                 [
+             :branchTail  (
+            spa:FunctionCall  );
+             :condition "&amp;";
+             :sequence  (
+            spa:FunctionCall  ) ],
+                 [
+             :branchTail  (
+            spa:LPAREN 
+            spa:Expression 
+            spa:RPAREN  );
+             :condition "(";
+             :sequence  (
+            spa:LPAREN 
+            spa:Expression 
+            spa:RPAREN  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g23>,
+                <#_g24>,
+                <#_g25>,
+                <#_g34>;
+         :canStartWith "&amp;",
+                "(";
+         :mustBeOneSequence  (
+         (
+            spa:VAR  )
+         (
+            spa:Literal  )
+         (
+            spa:FunctionCall  )
+         (
+            spa:LPAREN 
+            spa:Expression 
+            spa:RPAREN  ) ) .
+    
+    spa:QNAME     :canPrecede spa:CommaOpt,
+                spa:LPAREN,
+                spa:PatternElement,
+                spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                spa:ReportFormat,
+                <#_g0>,
+                <#_g1>,
+                <#_g2>,
+                <#_g3>,
+                <#_g9>,
+                <#_g11>,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g23>,
+                <#_g24>,
+                <#_g25>,
+                <#_g29>,
+                <#_g34> .
+    
+    spa:QName     :TEST spa:QNAME;
+         :branch  [
+             :branchTail  (
+            spa:QNAME  );
+             :sequence  (
+            spa:QNAME  ) ];
+         :canPrecede spa:CommaOpt,
+                spa:PatternElement,
+                spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                spa:ReportFormat,
+                <#_g0>,
+                <#_g1>,
+                <#_g2>,
+                <#_g3>,
+                <#_g9>,
+                <#_g11>,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g23>,
+                <#_g24>,
+                <#_g25>,
+                <#_g29>,
+                <#_g34>;
+         :mustBeOneSequence  (
+         (
+            spa:QNAME  ) ) .
+    
+    spa:Query     :TEST <#_g0>;
+         :branch  [
+             :branchTail  (
+            spa:ReportFormat 
+            <#_g1> 
+            <#_g2> 
+            <#_g3>  ),
+                     (
+            <#_g0> 
+            spa:ReportFormat 
+            <#_g1> 
+            <#_g2> 
+            <#_g3>  );
+             :condition "ask",
+                    "construct",
+                    "describe",
+                    "prefix",
+                    "select";
+             :sequence  (
+            <#_g0> 
+            spa:ReportFormat 
+            <#_g1> 
+            <#_g2> 
+            <#_g3>  ) ];
+         :canStartWith "ask",
+                "construct",
+                "describe",
+                "prefix",
+                "select";
+         :mustBeOneSequence  (
+         (
+            <#_g0> 
+            spa:ReportFormat 
+            <#_g1> 
+            <#_g2> 
+            <#_g3>  ) ) .
+    
+    spa:QuotedURI     :TEST spa:URI;
+         :branch  [
+             :branchTail  (
+            spa:URI  );
+             :sequence  (
+            spa:URI  ) ];
+         :canPrecede spa:CommaOpt,
+                spa:PatternElement,
+                spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                spa:ReportFormat,
+                <#_g0>,
+                <#_g1>,
+                <#_g2>,
+                <#_g3>,
+                <#_g9>,
+                <#_g11>,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g23>,
+                <#_g24>,
+                <#_g25>,
+                <#_g29>,
+                <#_g34>;
+         :mustBeOneSequence  (
+         (
+            spa:URI  ) ) .
+    
+    spa:RBRACE     :TEST "}";
+         :branch  [
+             :branchTail  (
+            "}"  );
+             :condition "}";
+             :sequence  (
+            "}"  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                <#_g1>,
+                <#_g2>,
+                <#_g3>,
+                <#_g13>,
+                <#_g34>,
+                <#_g35>;
+         :canStartWith "}";
+         :canStartWithLiteral "}";
+         :mustBeOneSequence  (
+         (
+            "}"  ) ) .
+    
+    spa:RBRACKET     :TEST "]";
+         :branch  [
+             :branchTail  (
+            "]"  );
+             :condition "]";
+             :sequence  (
+            "]"  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                <#_g13>,
+                <#_g34>;
+         :canStartWith "]";
+         :canStartWithLiteral "]";
+         :mustBeOneSequence  (
+         (
+            "]"  ) ) .
+    
+    spa:REM     :TEST "%";
+         :branch  [
+             :branchTail  (
+            "%"  );
+             :condition "%";
+             :sequence  (
+            "%"  ) ];
+         :canPrecede spa:UnaryExpression;
+         :canStartWith "%";
+         :canStartWithLiteral "%";
+         :mustBeOneSequence  (
+         (
+            "%"  ) ) .
+    
+    spa:RPAREN     :TEST ")";
+         :branch  [
+             :branchTail  (
+            ")"  );
+             :condition ")";
+             :sequence  (
+            ")"  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g1>,
+                <#_g2>,
+                <#_g3>,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g23>,
+                <#_g24>,
+                <#_g25>,
+                <#_g34>,
+                <#_g35>;
+         :canStartWith ")";
+         :canStartWithLiteral ")";
+         :mustBeOneSequence  (
+         (
+            ")"  ) ) .
+    
+    spa:RSIGNEDSHIFT     :TEST "&gt;&gt;";
+         :branch  [
+             :branchTail  (
+            "&gt;&gt;"  );
+             :condition "&gt;&gt;";
+             :sequence  (
+            "&gt;&gt;"  ) ];
+         :canStartWith "&gt;&gt;";
+         :canStartWithLiteral "&gt;&gt;";
+         :mustBeOneSequence  (
+         (
+            "&gt;&gt;"  ) ) .
+    
+    spa:RUNSIGNEDSHIFT     :TEST "&gt;&gt;&gt;";
+         :branch  [
+             :branchTail  (
+            "&gt;&gt;&gt;"  );
+             :condition "&gt;&gt;&gt;";
+             :sequence  (
+            "&gt;&gt;&gt;"  ) ];
+         :canStartWith "&gt;&gt;&gt;";
+         :canStartWithLiteral "&gt;&gt;&gt;";
+         :mustBeOneSequence  (
+         (
+            "&gt;&gt;&gt;"  ) ) .
+    
+    spa:RelationalComparitor     :TEST spa:EQ,
+                spa:NEQ;
+         :branch  [
+             :branchTail  (
+            spa:EQ 
+            spa:RelationalExpression  );
+             :condition "==";
+             :sequence  (
+            spa:EQ 
+            spa:RelationalExpression  ) ],
+                 [
+             :branchTail  (
+            spa:NEQ 
+            spa:RelationalExpression  );
+             :condition "!=";
+             :sequence  (
+            spa:NEQ 
+            spa:RelationalExpression  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g34>;
+         :canStartWith "!=",
+                "==";
+         :mustBeOneSequence  (
+         (
+            spa:EQ 
+            spa:RelationalExpression  )
+         (
+            spa:NEQ 
+            spa:RelationalExpression  ) ) .
+    
+    spa:RelationalExpression     :TEST spa:AdditiveExpression;
+         :branch  [
+             :branchTail  (
+            spa:AdditiveExpression 
+            <#_g23>  );
+             :condition "!",
+                    "&amp;",
+                    "(",
+                    "~";
+             :sequence  (
+            spa:AdditiveExpression 
+            <#_g23>  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g34>;
+         :canStartWith "!",
+                "&amp;",
+                "(",
+                "~";
+         :mustBeOneSequence  (
+         (
+            spa:AdditiveExpression 
+            <#_g23>  ) ) .
+    
+    spa:ReportFormat     :TEST spa:ASK,
+                spa:CONSTRUCT,
+                spa:DESCRIBE,
+                spa:SELECT;
+         :branch  [
+             :branchTail  (
+            spa:SELECT 
+            <#_g4> 
+            spa:VAR 
+            <#_g6>  );
+             :condition "select";
+             :sequence  (
+            spa:SELECT 
+            <#_g4> 
+            spa:VAR 
+            <#_g6>  ) ],
+                 [
+             :branchTail  (
+            spa:SELECT 
+            <#_g7> 
+            spa:STAR  );
+             :condition "select";
+             :sequence  (
+            spa:SELECT 
+            <#_g7> 
+            spa:STAR  ) ],
+                 [
+             :branchTail  (
+            spa:CONSTRUCT 
+            spa:ConstructPattern  );
+             :condition "construct";
+             :sequence  (
+            spa:CONSTRUCT 
+            spa:ConstructPattern  ) ],
+                 [
+             :branchTail  (
+            spa:CONSTRUCT 
+            spa:STAR  );
+             :condition "construct";
+             :sequence  (
+            spa:CONSTRUCT 
+            spa:STAR  ) ],
+                 [
+             :branchTail  (
+            spa:DESCRIBE 
+            spa:VarOrURI 
+            <#_g9>  );
+             :condition "describe";
+             :sequence  (
+            spa:DESCRIBE 
+            spa:VarOrURI 
+            <#_g9>  ) ],
+                 [
+             :branchTail  (
+            spa:DESCRIBE 
+            spa:STAR  );
+             :condition "describe";
+             :sequence  (
+            spa:DESCRIBE 
+            spa:STAR  ) ],
+                 [
+             :branchTail  (
+            spa:ASK  );
+             :condition "ask";
+             :sequence  (
+            spa:ASK  ) ];
+         :canPrecede <#_g1>,
+                <#_g2>,
+                <#_g3>;
+         :canStartWith "ask",
+                "construct",
+                "describe",
+                "select";
+         :mustBeOneSequence  (
+         (
+            spa:SELECT 
+            <#_g4> 
+            spa:VAR 
+            <#_g6>  )
+         (
+            spa:SELECT 
+            <#_g7> 
+            spa:STAR  )
+         (
+            spa:CONSTRUCT 
+            spa:ConstructPattern  )
+         (
+            spa:CONSTRUCT 
+            spa:STAR  )
+         (
+            spa:DESCRIBE 
+            spa:VarOrURI 
+            <#_g9>  )
+         (
+            spa:DESCRIBE 
+            spa:STAR  )
+         (
+            spa:ASK  ) ) .
+    
+    spa:SC_AND     :TEST "&amp;&amp;";
+         :branch  [
+             :branchTail  (
+            "&amp;&amp;"  );
+             :condition "&amp;&amp;";
+             :sequence  (
+            "&amp;&amp;"  ) ];
+         :canPrecede spa:ValueLogical;
+         :canStartWith "&amp;&amp;";
+         :canStartWithLiteral "&amp;&amp;";
+         :mustBeOneSequence  (
+         (
+            "&amp;&amp;"  ) ) .
+    
+    spa:SC_OR     :TEST ")(|";
+         :branch  [
+             :branchTail  (
+            ")(|"  );
+             :condition ")(|";
+             :sequence  (
+            ")(|"  ) ];
+         :canPrecede spa:ConditionalAndExpression;
+         :canStartWith ")(|";
+         :canStartWithLiteral ")(|";
+         :mustBeOneSequence  (
+         (
+            ")(|"  ) ) .
+    
+    spa:SELECT     :TEST "select";
+         :branch  [
+             :branchTail  (
+            "select"  );
+             :condition "select";
+             :sequence  (
+            "select"  ) ];
+         :canPrecede spa:STAR,
+                spa:VAR,
+                <#_g4>,
+                <#_g7>;
+         :canStartWith "select";
+         :canStartWithLiteral "select";
+         :mustBeOneSequence  (
+         (
+            "select"  ) ) .
+    
+    spa:SEMICOLON     :TEST ";";
+         :branch  [
+             :branchTail  (
+            ";"  );
+             :condition ";";
+             :sequence  (
+            ";"  ) ];
+         :canStartWith ";";
+         :canStartWithLiteral ";";
+         :mustBeOneSequence  (
+         (
+            ";"  ) ) .
+    
+    spa:SLASH     :TEST "/";
+         :branch  [
+             :branchTail  (
+            "/"  );
+             :condition "/";
+             :sequence  (
+            "/"  ) ];
+         :canPrecede spa:UnaryExpression;
+         :canStartWith "/";
+         :canStartWithLiteral "/";
+         :mustBeOneSequence  (
+         (
+            "/"  ) ) .
+    
+    spa:SOURCE     :TEST "source";
+         :branch  [
+             :branchTail  (
+            "source"  );
+             :condition "source";
+             :sequence  (
+            "source"  ) ];
+         :canPrecede spa:STAR,
+                spa:VarOrURI;
+         :canStartWith "source";
+         :canStartWithLiteral "source";
+         :mustBeOneSequence  (
+         (
+            "source"  ) ) .
+    
+    spa:STAR     :TEST "^cfg:zeroOrMore";
+         :branch  [
+             :branchTail  (
+            "^cfg:zeroOrMore"  );
+             :condition "^cfg:zeroOrMore";
+             :sequence  (
+            "^cfg:zeroOrMore"  ) ];
+         :canPrecede spa:PatternElement,
+                spa:UnaryExpression,
+                <#_g1>,
+                <#_g2>,
+                <#_g3>;
+         :canStartWith "^cfg:zeroOrMore";
+         :canStartWithLiteral "^cfg:zeroOrMore";
+         :mustBeOneSequence  (
+         (
+            "^cfg:zeroOrMore"  ) ) .
+    
+    spa:STRING_LITERAL1     :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g23>,
+                <#_g24>,
+                <#_g25>,
+                <#_g29>,
+                <#_g30>,
+                <#_g32>,
+                <#_g34> .
+    
+    spa:STRING_LITERAL2     :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g23>,
+                <#_g24>,
+                <#_g25>,
+                <#_g29>,
+                <#_g30>,
+                <#_g32>,
+                <#_g34> .
+    
+    spa:STR_EQ     :TEST "eq";
+         :branch  [
+             :branchTail  (
+            "eq"  );
+             :condition "eq";
+             :sequence  (
+            "eq"  ) ];
+         :canPrecede spa:EqualityExpression;
+         :canStartWith "eq";
+         :canStartWithLiteral "eq";
+         :mustBeOneSequence  (
+         (
+            "eq"  ) ) .
+    
+    spa:STR_MATCH     :TEST "=~";
+         :branch  [
+             :branchTail  (
+            "=~"  );
+             :condition "=~";
+             :sequence  (
+            "=~"  ) ];
+         :canPrecede spa:PATTERN_LITERAL;
+         :canStartWith "=~";
+         :canStartWithLiteral "=~";
+         :mustBeOneSequence  (
+         (
+            "=~"  ) ) .
+    
+    spa:STR_NE     :TEST "ne";
+         :branch  [
+             :branchTail  (
+            "ne"  );
+             :condition "ne";
+             :sequence  (
+            "ne"  ) ];
+         :canPrecede spa:EqualityExpression;
+         :canStartWith "ne";
+         :canStartWithLiteral "ne";
+         :mustBeOneSequence  (
+         (
+            "ne"  ) ) .
+    
+    spa:STR_NMATCH     :TEST "!~";
+         :branch  [
+             :branchTail  (
+            "!~"  );
+             :condition "!~";
+             :sequence  (
+            "!~"  ) ];
+         :canPrecede spa:PATTERN_LITERAL;
+         :canStartWith "!~";
+         :canStartWithLiteral "!~";
+         :mustBeOneSequence  (
+         (
+            "!~"  ) ) .
+    
+    spa:SourceGraphPattern     :TEST spa:SOURCE;
+         :branch  [
+             :branchTail  (
+            spa:SOURCE 
+            spa:STAR 
+            spa:PatternElement  );
+             :condition "source";
+             :sequence  (
+            spa:SOURCE 
+            spa:STAR 
+            spa:PatternElement  ) ],
+                 [
+             :branchTail  (
+            spa:SOURCE 
+            spa:VarOrURI 
+            spa:PatternElement  );
+             :condition "source";
+             :sequence  (
+            spa:SOURCE 
+            spa:VarOrURI 
+            spa:PatternElement  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                <#_g13>,
+                <#_g34>;
+         :canStartWith "source";
+         :mustBeOneSequence  (
+         (
+            spa:SOURCE 
+            spa:STAR 
+            spa:PatternElement  )
+         (
+            spa:SOURCE 
+            spa:VarOrURI 
+            spa:PatternElement  ) ) .
+    
+    spa:String     :TEST spa:STRING_LITERAL1,
+                spa:STRING_LITERAL2;
+         :branch  [
+             :branchTail  (
+            spa:STRING_LITERAL1  );
+             :sequence  (
+            spa:STRING_LITERAL1  ) ],
+                 [
+             :branchTail  (
+            spa:STRING_LITERAL2  );
+             :sequence  (
+            spa:STRING_LITERAL2  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g23>,
+                <#_g24>,
+                <#_g25>,
+                <#_g29>,
+                <#_g30>,
+                <#_g32>,
+                <#_g34>;
+         :mustBeOneSequence  (
+         (
+            spa:STRING_LITERAL1  )
+         (
+            spa:STRING_LITERAL2  ) ) .
+    
+    spa:StringComparitor     :TEST spa:STR_EQ,
+                spa:STR_MATCH,
+                spa:STR_NE,
+                spa:STR_NMATCH;
+         :branch  [
+             :branchTail  (
+            spa:STR_EQ 
+            spa:EqualityExpression  );
+             :condition "eq";
+             :sequence  (
+            spa:STR_EQ 
+            spa:EqualityExpression  ) ],
+                 [
+             :branchTail  (
+            spa:STR_NE 
+            spa:EqualityExpression  );
+             :condition "ne";
+             :sequence  (
+            spa:STR_NE 
+            spa:EqualityExpression  ) ],
+                 [
+             :branchTail  (
+            spa:STR_MATCH 
+            spa:PATTERN_LITERAL  );
+             :condition "=~";
+             :sequence  (
+            spa:STR_MATCH 
+            spa:PATTERN_LITERAL  ) ],
+                 [
+             :branchTail  (
+            spa:STR_NMATCH 
+            spa:PATTERN_LITERAL  );
+             :condition "!~";
+             :sequence  (
+            spa:STR_NMATCH 
+            spa:PATTERN_LITERAL  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g34>;
+         :canStartWith "!~",
+                "=~",
+                "eq",
+                "ne";
+         :mustBeOneSequence  (
+         (
+            spa:STR_EQ 
+            spa:EqualityExpression  )
+         (
+            spa:STR_NE 
+            spa:EqualityExpression  )
+         (
+            spa:STR_MATCH 
+            spa:PATTERN_LITERAL  )
+         (
+            spa:STR_NMATCH 
+            spa:PATTERN_LITERAL  ) ) .
+    
+    spa:StringEqualityExpression     :TEST spa:EqualityExpression;
+         :branch  [
+             :branchTail  (
+            spa:EqualityExpression 
+            <#_g21>  );
+             :condition "!",
+                    "&amp;",
+                    "(",
+                    "~";
+             :sequence  (
+            spa:EqualityExpression 
+            <#_g21>  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g34>;
+         :canStartWith "!",
+                "&amp;",
+                "(",
+                "~";
+         :mustBeOneSequence  (
+         (
+            spa:EqualityExpression 
+            <#_g21>  ) ) .
+    
+    spa:TILDE     :TEST "~";
+         :branch  [
+             :branchTail  (
+            "~"  );
+             :condition "~";
+             :sequence  (
+            "~"  ) ];
+         :canPrecede spa:UnaryExpression;
+         :canStartWith "~";
+         :canStartWithLiteral "~";
+         :mustBeOneSequence  (
+         (
+            "~"  ) ) .
+    
+    spa:TextLiteral     :TEST spa:String;
+         :branch  [
+             :branchTail  (
+            spa:String 
+            <#_g30> 
+            <#_g32>  );
+             :sequence  (
+            spa:String 
+            <#_g30> 
+            <#_g32>  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g23>,
+                <#_g24>,
+                <#_g25>,
+                <#_g29>,
+                <#_g34>;
+         :mustBeOneSequence  (
+         (
+            spa:String 
+            <#_g30> 
+            <#_g32>  ) ) .
+    
+    spa:TriplePattern     :TEST spa:LPAREN;
+         :branch  [
+             :branchTail  (
+            spa:LPAREN 
+            spa:VarOrURI 
+            spa:CommaOpt 
+            spa:VarOrURI 
+            spa:CommaOpt 
+            spa:VarOrLiteral 
+            spa:RPAREN  );
+             :condition "(";
+             :sequence  (
+            spa:LPAREN 
+            spa:VarOrURI 
+            spa:CommaOpt 
+            spa:VarOrURI 
+            spa:CommaOpt 
+            spa:VarOrLiteral 
+            spa:RPAREN  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                <#_g1>,
+                <#_g2>,
+                <#_g3>,
+                <#_g13>,
+                <#_g34>,
+                <#_g35>;
+         :canStartWith "(";
+         :mustBeOneSequence  (
+         (
+            spa:LPAREN 
+            spa:VarOrURI 
+            spa:CommaOpt 
+            spa:VarOrURI 
+            spa:CommaOpt 
+            spa:VarOrLiteral 
+            spa:RPAREN  ) ) .
+    
+    spa:UNION     :TEST "union";
+         :branch  [
+             :branchTail  (
+            "union"  );
+             :condition "union";
+             :sequence  (
+            "union"  ) ];
+         :canPrecede spa:GraphAndPattern;
+         :canStartWith "union";
+         :canStartWithLiteral "union";
+         :mustBeOneSequence  (
+         (
+            "union"  ) ) .
+    
+    spa:UNSAID     :TEST "unsaid";
+         :branch  [
+             :branchTail  (
+            "unsaid"  );
+             :condition "unsaid";
+             :sequence  (
+            "unsaid"  ) ];
+         :canStartWith "unsaid";
+         :canStartWithLiteral "unsaid";
+         :mustBeOneSequence  (
+         (
+            "unsaid"  ) ) .
+    
+    spa:URI     :TEST spa:QName,
+                spa:QuotedURI;
+         :branch  [
+             :branchTail  (
+            spa:QuotedURI  );
+             :sequence  (
+            spa:QuotedURI  ) ],
+                 [
+             :branchTail  (
+            spa:QName  );
+             :sequence  (
+            spa:QName  ) ];
+         :canPrecede spa:CommaOpt,
+                spa:PatternElement,
+                spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                spa:ReportFormat,
+                <#_g0>,
+                <#_g1>,
+                <#_g2>,
+                <#_g3>,
+                <#_g9>,
+                <#_g11>,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g23>,
+                <#_g24>,
+                <#_g25>,
+                <#_g29>,
+                <#_g34>;
+         :mustBeOneSequence  (
+         (
+            spa:QuotedURI  )
+         (
+            spa:QName  ) ) .
+    
+    spa:UnaryExpression     :TEST spa:UnaryExpressionNotPlusMinus;
+         :branch  [
+             :branchTail  (
+            spa:UnaryExpressionNotPlusMinus  );
+             :condition "!",
+                    "&amp;",
+                    "(",
+                    "~";
+             :sequence  (
+            spa:UnaryExpressionNotPlusMinus  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g23>,
+                <#_g24>,
+                <#_g25>,
+                <#_g34>;
+         :canStartWith "!",
+                "&amp;",
+                "(",
+                "~";
+         :mustBeOneSequence  (
+         (
+            spa:UnaryExpressionNotPlusMinus  ) ) .
+    
+    spa:UnaryExpressionNotPlusMinus     :TEST spa:PrimaryExpression,
+                <#_g26>;
+         :branch  [
+             :branchTail  (
+            <#_g26> 
+            spa:UnaryExpression  );
+             :condition "!",
+                    "~";
+             :sequence  (
+            <#_g26> 
+            spa:UnaryExpression  ) ],
+                 [
+             :branchTail  (
+            spa:PrimaryExpression  );
+             :condition "&amp;",
+                    "(";
+             :sequence  (
+            spa:PrimaryExpression  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g23>,
+                <#_g24>,
+                <#_g25>,
+                <#_g34>;
+         :canStartWith "!",
+                "&amp;",
+                "(",
+                "~";
+         :mustBeOneSequence  (
+         (
+            <#_g26> 
+            spa:UnaryExpression  )
+         (
+            spa:PrimaryExpression  ) ) .
+    
+    spa:VAR     :canPrecede spa:CommaOpt,
+                spa:PatternElement,
+                spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g1>,
+                <#_g2>,
+                <#_g3>,
+                <#_g6>,
+                <#_g9>,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g23>,
+                <#_g24>,
+                <#_g25>,
+                <#_g29>,
+                <#_g34> .
+    
+    spa:ValueLogical     :TEST spa:StringEqualityExpression;
+         :branch  [
+             :branchTail  (
+            spa:StringEqualityExpression  );
+             :condition "!",
+                    "&amp;",
+                    "(",
+                    "~";
+             :sequence  (
+            spa:StringEqualityExpression  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g34>;
+         :canStartWith "!",
+                "&amp;",
+                "(",
+                "~";
+         :mustBeOneSequence  (
+         (
+            spa:StringEqualityExpression  ) ) .
+    
+    spa:VarOrLiteral     :TEST spa:Literal,
+                spa:VAR;
+         :branch  [
+             :branchTail  (
+            spa:VAR  );
+             :sequence  (
+            spa:VAR  ) ],
+                 [
+             :branchTail  (
+            spa:Literal  );
+             :sequence  (
+            spa:Literal  ) ];
+         :canPrecede spa:RPAREN,
+                <#_g29>;
+         :mustBeOneSequence  (
+         (
+            spa:VAR  )
+         (
+            spa:Literal  ) ) .
+    
+    spa:VarOrURI     :TEST spa:URI,
+                spa:VAR;
+         :branch  [
+             :branchTail  (
+            spa:VAR  );
+             :sequence  (
+            spa:VAR  ) ],
+                 [
+             :branchTail  (
+            spa:URI  );
+             :sequence  (
+            spa:URI  ) ];
+         :canPrecede spa:CommaOpt,
+                spa:PatternElement,
+                <#_g1>,
+                <#_g2>,
+                <#_g3>,
+                <#_g9>;
+         :mustBeOneSequence  (
+         (
+            spa:VAR  )
+         (
+            spa:URI  ) ) .
+    
+    spa:WHERE     :TEST "where";
+         :branch  [
+             :branchTail  (
+            "where"  );
+             :condition "where";
+             :sequence  (
+            "where"  ) ];
+         :canPrecede spa:GraphPattern;
+         :canStartWith "where";
+         :canStartWithLiteral "where";
+         :mustBeOneSequence  (
+         (
+            "where"  ) ) .
+    
+    spa:WhereClause     :TEST spa:WHERE;
+         :branch  [
+             :branchTail  (
+            spa:WHERE 
+            spa:GraphPattern  );
+             :condition "where";
+             :sequence  (
+            spa:WHERE 
+            spa:GraphPattern  ) ];
+         :canStartWith "where";
+         :mustBeOneSequence  (
+         (
+            spa:WHERE 
+            spa:GraphPattern  ) ) .
+    
+    :eof     :canStartWith "@EOFDUMMY" .
+    
+    <#_g0>     :TEST spa:PrefixDecl;
+         :branch  [
+             :branchTail ();
+             :condition "ask",
+                    "construct",
+                    "describe",
+                    "select";
+             :sequence () ],
+                 [
+             :branchTail  (
+            spa:PrefixDecl 
+            <#_g0>  );
+             :condition "prefix";
+             :sequence  (
+            spa:PrefixDecl 
+            <#_g0>  ) ];
+         :canPrecede spa:ReportFormat;
+         :canStartWith "prefix";
+         :mustBeOneSequence  (
+        () 
+         (
+            spa:PrefixDecl 
+            <#_g0>  ) );
+         :zeroOrMore spa:PrefixDecl .
+    
+    <#_g1>     :TEST spa:PrefixDecl;
+         :branch  [
+             :branchTail ();
+             :condition "from",
+                    "where";
+             :sequence () ],
+                 [
+             :branchTail  (
+            spa:PrefixDecl 
+            <#_g1>  );
+             :condition "prefix";
+             :sequence  (
+            spa:PrefixDecl 
+            <#_g1>  ) ];
+         :canPrecede <#_g2>,
+                <#_g3>;
+         :canStartWith "prefix";
+         :mustBeOneSequence  (
+        () 
+         (
+            spa:PrefixDecl 
+            <#_g1>  ) );
+         :zeroOrMore spa:PrefixDecl .
+    
+    <#_g2>     :TEST spa:FromClause;
+         :branch  [
+             :branchTail ();
+             :condition "where";
+             :sequence () ],
+                 [
+             :branchTail  (
+            spa:FromClause  );
+             :condition "from";
+             :sequence  (
+            spa:FromClause  ) ];
+         :canPrecede <#_g3>;
+         :canStartWith "from";
+         :mustBeOneSequence  (
+        () 
+         (
+            spa:FromClause  ) );
+         :zeroOrOne spa:FromClause .
+    
+    <#_g3>     :TEST spa:WhereClause;
+         :branch  [
+             :branchTail ();
+             :sequence () ],
+                 [
+             :branchTail  (
+            spa:WhereClause  );
+             :condition "where";
+             :sequence  (
+            spa:WhereClause  ) ];
+         :canStartWith "where";
+         :mustBeOneSequence  (
+        () 
+         (
+            spa:WhereClause  ) );
+         :zeroOrOne spa:WhereClause .
+    
+    <#_g4>     :TEST spa:DISTINCT;
+         :branch  [
+             :branchTail ();
+             :sequence () ],
+                 [
+             :branchTail  (
+            spa:DISTINCT  );
+             :condition "distinct";
+             :sequence  (
+            spa:DISTINCT  ) ];
+         :canPrecede spa:VAR;
+         :canStartWith "distinct";
+         :mustBeOneSequence  (
+        () 
+         (
+            spa:DISTINCT  ) );
+         :zeroOrOne spa:DISTINCT .
+    
+    <#_g5>     :TEST spa:CommaOpt;
+         :branch  [
+             :branchTail  (
+            spa:CommaOpt 
+            spa:VAR  );
+             :condition ",";
+             :sequence  (
+            spa:CommaOpt 
+            spa:VAR  ) ];
+         :canPrecede <#_g1>,
+                <#_g2>,
+                <#_g3>,
+                <#_g6>;
+         :canStartWith ",";
+         :mustBeOneSequence  (
+         (
+            spa:CommaOpt 
+            spa:VAR  ) ) .
+    
+    <#_g6>     :TEST <#_g5>;
+         :branch  [
+             :branchTail ();
+             :condition "from",
+                    "prefix",
+                    "where";
+             :sequence () ],
+                 [
+             :branchTail  (
+            <#_g5> 
+            <#_g6>  );
+             :condition ",";
+             :sequence  (
+            <#_g5> 
+            <#_g6>  ) ];
+         :canPrecede <#_g1>,
+                <#_g2>,
+                <#_g3>;
+         :canStartWith ",";
+         :mustBeOneSequence  (
+        () 
+         (
+            <#_g5> 
+            <#_g6>  ) );
+         :zeroOrMore <#_g5> .
+    
+    <#_g7>     :TEST spa:DISTINCT;
+         :branch  [
+             :branchTail ();
+             :condition "^cfg:zeroOrMore";
+             :sequence () ],
+                 [
+             :branchTail  (
+            spa:DISTINCT  );
+             :condition "distinct";
+             :sequence  (
+            spa:DISTINCT  ) ];
+         :canPrecede spa:STAR;
+         :canStartWith "distinct";
+         :mustBeOneSequence  (
+        () 
+         (
+            spa:DISTINCT  ) );
+         :zeroOrOne spa:DISTINCT .
+    
+    <#_g8>     :TEST spa:CommaOpt;
+         :branch  [
+             :branchTail  (
+            spa:CommaOpt 
+            spa:VarOrURI  );
+             :condition ",";
+             :sequence  (
+            spa:CommaOpt 
+            spa:VarOrURI  ) ];
+         :canPrecede <#_g1>,
+                <#_g2>,
+                <#_g3>,
+                <#_g9>;
+         :canStartWith ",";
+         :mustBeOneSequence  (
+         (
+            spa:CommaOpt 
+            spa:VarOrURI  ) ) .
+    
+    <#_g9>     :TEST <#_g8>;
+         :branch  [
+             :branchTail ();
+             :condition "from",
+                    "prefix",
+                    "where";
+             :sequence () ],
+                 [
+             :branchTail  (
+            <#_g8> 
+            <#_g9>  );
+             :condition ",";
+             :sequence  (
+            <#_g8> 
+            <#_g9>  ) ];
+         :canPrecede <#_g1>,
+                <#_g2>,
+                <#_g3>;
+         :canStartWith ",";
+         :mustBeOneSequence  (
+        () 
+         (
+            <#_g8> 
+            <#_g9>  ) );
+         :zeroOrMore <#_g8> .
+    
+    <#_g10>     :TEST spa:CommaOpt;
+         :branch  [
+             :branchTail  (
+            spa:CommaOpt 
+            spa:FromSelector  );
+             :condition ",";
+             :sequence  (
+            spa:CommaOpt 
+            spa:FromSelector  ) ];
+         :canPrecede <#_g3>,
+                <#_g11>;
+         :canStartWith ",";
+         :mustBeOneSequence  (
+         (
+            spa:CommaOpt 
+            spa:FromSelector  ) ) .
+    
+    <#_g11>     :TEST <#_g10>;
+         :branch  [
+             :branchTail ();
+             :condition "where";
+             :sequence () ],
+                 [
+             :branchTail  (
+            <#_g10> 
+            <#_g11>  );
+             :condition ",";
+             :sequence  (
+            <#_g10> 
+            <#_g11>  ) ];
+         :canPrecede <#_g3>;
+         :canStartWith ",";
+         :mustBeOneSequence  (
+        () 
+         (
+            <#_g10> 
+            <#_g11>  ) );
+         :zeroOrMore <#_g10> .
+    
+    <#_g12>     :TEST spa:UNION;
+         :branch  [
+             :branchTail  (
+            spa:UNION 
+            spa:GraphAndPattern  );
+             :condition "union";
+             :sequence  (
+            spa:UNION 
+            spa:GraphAndPattern  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                <#_g13>;
+         :canStartWith "union";
+         :mustBeOneSequence  (
+         (
+            spa:UNION 
+            spa:GraphAndPattern  ) ) .
+    
+    <#_g13>     :TEST <#_g12>;
+         :branch  [
+             :branchTail ();
+             :condition "]",
+                    "}";
+             :sequence () ],
+                 [
+             :branchTail  (
+            <#_g12> 
+            <#_g13>  );
+             :condition "union";
+             :sequence  (
+            <#_g12> 
+            <#_g13>  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET;
+         :canStartWith "union";
+         :mustBeOneSequence  (
+        () 
+         (
+            <#_g12> 
+            <#_g13>  ) );
+         :zeroOrMore <#_g12> .
+    
+    <#_g14>     :TEST spa:PatternElement;
+         :branch  [
+             :branchTail  (
+            spa:PatternElement 
+            <#_g34>  );
+             :condition "!",
+                    "&amp;",
+                    "(",
+                    "[",
+                    "and",
+                    "optional",
+                    "source",
+                    "{",
+                    "~";
+             :sequence  (
+            spa:PatternElement 
+            <#_g34>  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                <#_g13>;
+         :canStartWith "!",
+                "&amp;",
+                "(",
+                "[",
+                "and",
+                "optional",
+                "source",
+                "{",
+                "~";
+         :mustBeOneSequence  (
+         (
+            spa:PatternElement 
+            <#_g34>  ) );
+         :oneOrMore spa:PatternElement .
+    
+    <#_g15>     :TEST spa:AND;
+         :branch  [
+             :branchTail ();
+             :condition "!",
+                    "&amp;",
+                    "(",
+                    "~";
+             :sequence () ],
+                 [
+             :branchTail  (
+            spa:AND  );
+             :condition "and";
+             :sequence  (
+            spa:AND  ) ];
+         :canPrecede spa:Expression;
+         :canStartWith "and";
+         :mustBeOneSequence  (
+        () 
+         (
+            spa:AND  ) );
+         :zeroOrOne spa:AND .
+    
+    <#_g16>     :TEST spa:ConstructElement;
+         :branch  [
+             :branchTail  (
+            spa:ConstructElement 
+            <#_g35>  );
+             :condition "(",
+                    "{";
+             :sequence  (
+            spa:ConstructElement 
+            <#_g35>  ) ];
+         :canPrecede spa:RBRACE,
+                <#_g1>,
+                <#_g2>,
+                <#_g3>;
+         :canStartWith "(",
+                "{";
+         :mustBeOneSequence  (
+         (
+            spa:ConstructElement 
+            <#_g35>  ) );
+         :oneOrMore spa:ConstructElement .
+    
+    <#_g17>     :TEST spa:SC_OR;
+         :branch  [
+             :branchTail  (
+            spa:SC_OR 
+            spa:ConditionalAndExpression  );
+             :condition ")(|";
+             :sequence  (
+            spa:SC_OR 
+            spa:ConditionalAndExpression  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g34>;
+         :canStartWith ")(|";
+         :mustBeOneSequence  (
+         (
+            spa:SC_OR 
+            spa:ConditionalAndExpression  ) ) .
+    
+    <#_g18>     :TEST <#_g17>;
+         :branch  [
+             :branchTail ();
+             :condition "!",
+                    "&amp;",
+                    "(",
+                    ")",
+                    "[",
+                    "]",
+                    "and",
+                    "optional",
+                    "source",
+                    "union",
+                    "{",
+                    "}",
+                    "~";
+             :sequence () ],
+                 [
+             :branchTail  (
+            <#_g17> 
+            <#_g18>  );
+             :condition ")(|";
+             :sequence  (
+            <#_g17> 
+            <#_g18>  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g34>;
+         :canStartWith ")(|";
+         :mustBeOneSequence  (
+        () 
+         (
+            <#_g17> 
+            <#_g18>  ) );
+         :zeroOrMore <#_g17> .
+    
+    <#_g19>     :TEST spa:SC_AND;
+         :branch  [
+             :branchTail  (
+            spa:SC_AND 
+            spa:ValueLogical  );
+             :condition "&amp;&amp;";
+             :sequence  (
+            spa:SC_AND 
+            spa:ValueLogical  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g34>;
+         :canStartWith "&amp;&amp;";
+         :mustBeOneSequence  (
+         (
+            spa:SC_AND 
+            spa:ValueLogical  ) ) .
+    
+    <#_g20>     :TEST <#_g19>;
+         :branch  [
+             :branchTail ();
+             :condition "!",
+                    "&amp;",
+                    "(",
+                    ")",
+                    ")(|",
+                    "[",
+                    "]",
+                    "and",
+                    "optional",
+                    "source",
+                    "union",
+                    "{",
+                    "}",
+                    "~";
+             :sequence () ],
+                 [
+             :branchTail  (
+            <#_g19> 
+            <#_g20>  );
+             :condition "&amp;&amp;";
+             :sequence  (
+            <#_g19> 
+            <#_g20>  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g34>;
+         :canStartWith "&amp;&amp;";
+         :mustBeOneSequence  (
+        () 
+         (
+            <#_g19> 
+            <#_g20>  ) );
+         :zeroOrMore <#_g19> .
+    
+    <#_g21>     :TEST spa:StringComparitor;
+         :branch  [
+             :branchTail ();
+             :condition "!",
+                    "&amp;",
+                    "&amp;&amp;",
+                    "(",
+                    ")",
+                    ")(|",
+                    "[",
+                    "]",
+                    "and",
+                    "optional",
+                    "source",
+                    "union",
+                    "{",
+                    "}",
+                    "~";
+             :sequence () ],
+                 [
+             :branchTail  (
+            spa:StringComparitor 
+            <#_g21>  );
+             :condition "!~",
+                    "=~",
+                    "eq",
+                    "ne";
+             :sequence  (
+            spa:StringComparitor 
+            <#_g21>  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g34>;
+         :canStartWith "!~",
+                "=~",
+                "eq",
+                "ne";
+         :mustBeOneSequence  (
+        () 
+         (
+            spa:StringComparitor 
+            <#_g21>  ) );
+         :zeroOrMore spa:StringComparitor .
+    
+    <#_g22>     :TEST spa:RelationalComparitor;
+         :branch  [
+             :branchTail ();
+             :condition "!",
+                    "!~",
+                    "&amp;",
+                    "&amp;&amp;",
+                    "(",
+                    ")",
+                    ")(|",
+                    "=~",
+                    "[",
+                    "]",
+                    "and",
+                    "eq",
+                    "ne",
+                    "optional",
+                    "source",
+                    "union",
+                    "{",
+                    "}",
+                    "~";
+             :sequence () ],
+                 [
+             :branchTail  (
+            spa:RelationalComparitor  );
+             :condition "!=",
+                    "==";
+             :sequence  (
+            spa:RelationalComparitor  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g34>;
+         :canStartWith "!=",
+                "==";
+         :mustBeOneSequence  (
+        () 
+         (
+            spa:RelationalComparitor  ) );
+         :zeroOrOne spa:RelationalComparitor .
+    
+    <#_g23>     :TEST spa:NumericComparitor;
+         :branch  [
+             :branchTail ();
+             :condition "!",
+                    "!=",
+                    "!~",
+                    "&amp;",
+                    "&amp;&amp;",
+                    "(",
+                    ")",
+                    ")(|",
+                    "==",
+                    "=~",
+                    "[",
+                    "]",
+                    "and",
+                    "eq",
+                    "ne",
+                    "optional",
+                    "source",
+                    "union",
+                    "{",
+                    "}",
+                    "~";
+             :sequence () ],
+                 [
+             :branchTail  (
+            spa:NumericComparitor  );
+             :condition "&gt;",
+                    "&gt;=",
+                    "&lt;",
+                    "&lt;=";
+             :sequence  (
+            spa:NumericComparitor  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g34>;
+         :canStartWith "&gt;",
+                "&gt;=",
+                "&lt;",
+                "&lt;=";
+         :mustBeOneSequence  (
+        () 
+         (
+            spa:NumericComparitor  ) );
+         :zeroOrOne spa:NumericComparitor .
+    
+    <#_g24>     :TEST spa:AdditiveOperation;
+         :branch  [
+             :branchTail ();
+             :condition "!",
+                    "!=",
+                    "!~",
+                    "&amp;",
+                    "&amp;&amp;",
+                    "&gt;",
+                    "&gt;=",
+                    "&lt;",
+                    "&lt;=",
+                    "(",
+                    ")",
+                    ")(|",
+                    "==",
+                    "=~",
+                    "[",
+                    "]",
+                    "and",
+                    "eq",
+                    "ne",
+                    "optional",
+                    "source",
+                    "union",
+                    "{",
+                    "}",
+                    "~";
+             :sequence () ],
+                 [
+             :branchTail  (
+            spa:AdditiveOperation 
+            <#_g24>  );
+             :condition "-",
+                    "^cfg:oneOrMore";
+             :sequence  (
+            spa:AdditiveOperation 
+            <#_g24>  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g23>,
+                <#_g34>;
+         :canStartWith "-",
+                "^cfg:oneOrMore";
+         :mustBeOneSequence  (
+        () 
+         (
+            spa:AdditiveOperation 
+            <#_g24>  ) );
+         :zeroOrMore spa:AdditiveOperation .
+    
+    <#_g25>     :TEST spa:MultiplicativeOperation;
+         :branch  [
+             :branchTail ();
+             :condition "!",
+                    "!=",
+                    "!~",
+                    "&amp;",
+                    "&amp;&amp;",
+                    "&gt;",
+                    "&gt;=",
+                    "&lt;",
+                    "&lt;=",
+                    "(",
+                    ")",
+                    ")(|",
+                    "-",
+                    "==",
+                    "=~",
+                    "[",
+                    "]",
+                    "^cfg:oneOrMore",
+                    "and",
+                    "eq",
+                    "ne",
+                    "optional",
+                    "source",
+                    "union",
+                    "{",
+                    "}",
+                    "~";
+             :sequence () ],
+                 [
+             :branchTail  (
+            spa:MultiplicativeOperation 
+            <#_g25>  );
+             :condition "%",
+                    "/",
+                    "^cfg:zeroOrMore";
+             :sequence  (
+            spa:MultiplicativeOperation 
+            <#_g25>  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g23>,
+                <#_g24>,
+                <#_g34>;
+         :canStartWith "%",
+                "/",
+                "^cfg:zeroOrMore";
+         :mustBeOneSequence  (
+        () 
+         (
+            spa:MultiplicativeOperation 
+            <#_g25>  ) );
+         :zeroOrMore spa:MultiplicativeOperation .
+    
+    <#_g26>     :TEST spa:BANG,
+                spa:TILDE;
+         :branch  [
+             :branchTail  (
+            spa:TILDE  );
+             :condition "~";
+             :sequence  (
+            spa:TILDE  ) ],
+                 [
+             :branchTail  (
+            spa:BANG  );
+             :condition "!";
+             :sequence  (
+            spa:BANG  ) ];
+         :canPrecede spa:UnaryExpression;
+         :canStartWith "!",
+                "~";
+         :mustBeOneSequence  (
+         (
+            spa:TILDE  )
+         (
+            spa:BANG  ) ) .
+    
+    <#_g27>     :TEST spa:ArgList;
+         :branch  [
+             :branchTail ();
+             :condition ")";
+             :sequence () ],
+                 [
+             :branchTail  (
+            spa:ArgList  );
+             :sequence  (
+            spa:ArgList  ) ];
+         :canPrecede spa:RPAREN;
+         :mustBeOneSequence  (
+        () 
+         (
+            spa:ArgList  ) );
+         :zeroOrOne spa:ArgList .
+    
+    <#_g28>     :TEST spa:COMMA;
+         :branch  [
+             :branchTail  (
+            spa:COMMA 
+            spa:VarOrLiteral  );
+             :condition ",";
+             :sequence  (
+            spa:COMMA 
+            spa:VarOrLiteral  ) ];
+         :canPrecede spa:RPAREN,
+                <#_g29>;
+         :canStartWith ",";
+         :mustBeOneSequence  (
+         (
+            spa:COMMA 
+            spa:VarOrLiteral  ) ) .
+    
+    <#_g29>     :TEST <#_g28>;
+         :branch  [
+             :branchTail ();
+             :condition ")";
+             :sequence () ],
+                 [
+             :branchTail  (
+            <#_g28> 
+            <#_g29>  );
+             :condition ",";
+             :sequence  (
+            <#_g28> 
+            <#_g29>  ) ];
+         :canPrecede spa:RPAREN;
+         :canStartWith ",";
+         :mustBeOneSequence  (
+        () 
+         (
+            <#_g28> 
+            <#_g29>  ) );
+         :zeroOrMore <#_g28> .
+    
+    <#_g30>     :TEST spa:LANG;
+         :branch  [
+             :branchTail ();
+             :condition "!",
+                    "!=",
+                    "!~",
+                    "%",
+                    "&amp;",
+                    "&amp;&amp;",
+                    "&gt;",
+                    "&gt;=",
+                    "&lt;",
+                    "&lt;=",
+                    "(",
+                    ")",
+                    ")(|",
+                    ",",
+                    "-",
+                    "/",
+                    "==",
+                    "=~",
+                    "[",
+                    "]",
+                    "^^",
+                    "^cfg:oneOrMore",
+                    "^cfg:zeroOrMore",
+                    "and",
+                    "eq",
+                    "ne",
+                    "optional",
+                    "source",
+                    "union",
+                    "{",
+                    "}",
+                    "~";
+             :sequence () ],
+                 [
+             :branchTail  (
+            spa:LANG  );
+             :sequence  (
+            spa:LANG  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g23>,
+                <#_g24>,
+                <#_g25>,
+                <#_g29>,
+                <#_g32>,
+                <#_g34>;
+         :mustBeOneSequence  (
+        () 
+         (
+            spa:LANG  ) );
+         :zeroOrOne spa:LANG .
+    
+    <#_g31>     :TEST spa:DATATYPE;
+         :branch  [
+             :branchTail  (
+            spa:DATATYPE 
+            spa:URI  );
+             :condition "^^";
+             :sequence  (
+            spa:DATATYPE 
+            spa:URI  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g23>,
+                <#_g24>,
+                <#_g25>,
+                <#_g29>,
+                <#_g34>;
+         :canStartWith "^^";
+         :mustBeOneSequence  (
+         (
+            spa:DATATYPE 
+            spa:URI  ) ) .
+    
+    <#_g32>     :TEST <#_g31>;
+         :branch  [
+             :branchTail ();
+             :condition "!",
+                    "!=",
+                    "!~",
+                    "%",
+                    "&amp;",
+                    "&amp;&amp;",
+                    "&gt;",
+                    "&gt;=",
+                    "&lt;",
+                    "&lt;=",
+                    "(",
+                    ")",
+                    ")(|",
+                    ",",
+                    "-",
+                    "/",
+                    "==",
+                    "=~",
+                    "[",
+                    "]",
+                    "^cfg:oneOrMore",
+                    "^cfg:zeroOrMore",
+                    "and",
+                    "eq",
+                    "ne",
+                    "optional",
+                    "source",
+                    "union",
+                    "{",
+                    "}",
+                    "~";
+             :sequence () ],
+                 [
+             :branchTail  (
+            <#_g31>  );
+             :condition "^^";
+             :sequence  (
+            <#_g31>  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                spa:RPAREN,
+                <#_g13>,
+                <#_g18>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g23>,
+                <#_g24>,
+                <#_g25>,
+                <#_g29>,
+                <#_g34>;
+         :canStartWith "^^";
+         :mustBeOneSequence  (
+        () 
+         (
+            <#_g31>  ) );
+         :zeroOrOne <#_g31> .
+    
+    <#_g33>     :TEST spa:COMMA;
+         :branch  [
+             :branchTail ();
+             :sequence () ],
+                 [
+             :branchTail  (
+            spa:COMMA  );
+             :condition ",";
+             :sequence  (
+            spa:COMMA  ) ];
+         :canPrecede spa:FromSelector,
+                spa:VAR,
+                spa:VarOrLiteral,
+                spa:VarOrURI;
+         :canStartWith ",";
+         :mustBeOneSequence  (
+        () 
+         (
+            spa:COMMA  ) );
+         :zeroOrOne spa:COMMA .
+    
+    <#_g34>     :TEST spa:PatternElement;
+         :branch  [
+             :branchTail ();
+             :condition "]",
+                    "union",
+                    "}";
+             :sequence () ],
+                 [
+             :branchTail  (
+            spa:PatternElement 
+            <#_g34>  );
+             :condition "!",
+                    "&amp;",
+                    "(",
+                    "[",
+                    "and",
+                    "optional",
+                    "source",
+                    "{",
+                    "~";
+             :sequence  (
+            spa:PatternElement 
+            <#_g34>  ) ];
+         :canPrecede spa:RBRACE,
+                spa:RBRACKET,
+                <#_g13>;
+         :canStartWith "!",
+                "&amp;",
+                "(",
+                "[",
+                "and",
+                "optional",
+                "source",
+                "{",
+                "~";
+         :mustBeOneSequence  (
+        () 
+         (
+            spa:PatternElement 
+            <#_g34>  ) );
+         :zeroOrMore spa:PatternElement .
+    
+    <#_g35>     :TEST spa:ConstructElement;
+         :branch  [
+             :branchTail ();
+             :condition "from",
+                    "prefix",
+                    "where",
+                    "}";
+             :sequence () ],
+                 [
+             :branchTail  (
+            spa:ConstructElement 
+            <#_g35>  );
+             :condition "(",
+                    "{";
+             :sequence  (
+            spa:ConstructElement 
+            <#_g35>  ) ];
+         :canPrecede spa:RBRACE,
+                <#_g1>,
+                <#_g2>,
+                <#_g3>;
+         :canStartWith "(",
+                "{";
+         :mustBeOneSequence  (
+        () 
+         (
+            spa:ConstructElement 
+            <#_g35>  ) );
+         :zeroOrMore spa:ConstructElement .
+    
+#ENDS

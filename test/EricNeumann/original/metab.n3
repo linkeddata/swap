@@ -1,0 +1,117 @@
+# Test data in notation3 http://www.w3.org/DesignIssues/Notation3.html
+#    
+@prefix bg: <http://www.bg.org/bio#> .
+@prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
+@prefix rules: <http://infomesh.net/2001/05/rdflint/rules#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix v: <http://infomesh.net/2001/05/rdflint/vars#> . 
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+@prefix : <#> .
+
+bg:catalyzes a daml:ObjectProperty;
+	daml:minCardinality "1"; 
+	daml:range bg:Reaction . 
+
+
+bg:Protein a daml:Class ;
+	daml:hasProperty bg:modification ;
+	daml:subClassOf bg:BioChemical .
+
+bg:modification a daml:Property;
+	daml:range rdfs:Literal . 
+
+bg:Enzyme a daml:Class;
+	daml:subClassOf bg:Protein;
+	daml:hasProperty bg:catalyzes .
+
+bg:BioChemical a daml:Class;
+	daml:hasProperty bg:isUpStream;
+	daml:hasProperty bg:isDownStream .
+
+bg:Compound a daml:Class;
+	daml:subClassOf bg:BioChemical .
+
+bg:Reaction a daml:Class;
+	daml:hasProperty bg:consumes ;
+	daml:hasProperty bg:produces .
+	
+bg:reactsIn a daml:ObjectProperty;
+	daml:range bg:Reaction . 
+
+bg:isProducedBy a daml:ObjectProperty;
+	daml:range bg:Reaction . 
+
+bg:consumes a daml:ObjectProperty;
+	daml:range bg:Substrate;
+	daml:inverseOf bg:reactsIn .
+
+bg:produces a daml:ObjectProperty;
+	daml:range bg:Product;
+	daml:inverseOf bg:isProducedBy .
+
+bg:metabolizes a daml:ObjectProperty .
+
+bg:synthesizes a daml:ObjectProperty .
+
+bg:Substrate a daml:Class;
+	daml:subClassOf bg:BioChemical ;
+	daml:hasProperty bg:reactsIn . 
+
+bg:Product a daml:Class;
+	daml:subClassOf bg:BioChemical ;
+	daml:hasProperty bg:isProducedBy . 
+
+this log:forAll v:e, v:r, v:s, v:p .
+	{ v:e bg:catalyzes v:r . 
+	v:r bg:consumes v:s . } 
+	log:implies 
+	{ v:e bg:metabolizes v:s . } .
+
+this log:forAll v:e, v:r, v:p .
+	{ v:e bg:catalyzes v:r . 
+	v:r bg:produces v:p . } 
+	# log:implies 
+	=>
+	{ v:e bg:synthesizes v:p . } .
+
+# bg:Cause a daml:Class .
+
+bg:isUpStream a daml:TransitiveProperty;
+	 daml:range bg:BioChemical  .
+
+bg:isDownStream a daml:TransitiveProperty;
+	daml:inverseOf bg:isUpStream ;
+	daml:range bg:BioChemical  . 
+
+
+this log:forAll v:r, v:s, v:p .
+	{v:r bg:consumes v:s .
+	v:r bg:produces v:p }
+	log:implies
+	{v:s bg:isUpStream v:p . 
+	v:p bg:isDownStream v:s .  
+# 	shouldn't be needed since it is defined as inverseOf Upstream, but is!!!
+	} .
+
+# Test Metabolic System
+# 
+
+ :glucose6P a bg:Compound .
+ :fructose6P a bg:Compound .
+ :Glu2Fru a bg:Reaction .
+ :GluIsomerase a bg:Enzyme .
+
+ :glucose6P bg:reactsIn :Glu2Fru .
+ :Glu2Fru bg:produces :fructose6P .
+ :GluIsomerase bg:catalyzes :Glu2Fru .
+
+ :fructose1P a bg:Compound .
+ :Fru62Fru1 a bg:Reaction .
+ :FruPIsomerase a bg:Enzyme .
+
+ :fructose6P bg:reactsIn :Fru62Fru1 .
+ :Fru62Fru1 bg:produces :fructose1P .
+ :FruPIsomerase bg:catalyzes :Fru62Fru1 .
+
+# bg:influence

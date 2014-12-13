@@ -1,0 +1,54 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+
+
+<> dc:title	"Local asumptions about contacts";
+
+
+dc:description """
+ Contact, FOAF, vCard and LDIF vocabularies all cover contact information 
+ for people.  The mappings in contactStitch.n3 sometimes produce 
+ ambiguities, which these asumptions will clear up.  If they are true for your data.
+ They should not be taken as generally applicable facts and should be used with care.
+ .
+""",
+"$Id$".
+
+
+
+
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix o2:  <http://www.w3.org/2007/ont/o2#>.   # Just for 'chain' missing from owl
+
+@prefix wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix v: <http://www.w3.org/2006/vcard/ns#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix con: <http://www.w3.org/2000/10/swap/pim/contact#> .
+@prefix ldif: <http://www.w3.org/2007/ont/ldif#>.
+@prefix link: <http://www.w3.org/2006/link#>.
+@prefix doc:  <http://www.w3.org/2000/10/swap/pim/doc#> .
+
+  
+# Assuming that a person has only one work addres allows us to associate
+# any work phone number with a work street, etc
+
+con:work a owl:FunctionalProperty.  # You can only have one work address etc
+con:home a owl:FunctionalProperty.
+
+
+# In  western tradition people tend to like their given name first.
+# In  many countries, the opposite
+
+con:givenName owl:equivalentProperty con:firstName. # Western only!
+con:familyName owl:equivalentProperty con:lastName. # Assumpion made by much software.
+
+
+#  The FOAF system requires that a foaf:mbox is owned by only one person.
+# The same with con:mailbox.
+# This is not necessarily true of vcard and ldif mailboxes, but is often
+# a useful asumption with a controlled dataset.
+
+foaf:mbox owl:equivalentProperty ldif:email, v:email.
+
+# ends

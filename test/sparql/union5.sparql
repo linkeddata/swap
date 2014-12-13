@@ -1,0 +1,57 @@
+PREFIX dc10:  <http://purl.org/dc/elements/1.1/>
+PREFIX dc11:  <http://purl.org/dc/elements/1.0/>
+PREFIX my: <http://www.example.org/my#>
+PREFIX : <http://www.example.org/#>
+
+SELECT *
+WHERE {
+        { {?x :p1a ?y }
+         UNION
+          { ?x :p1b ?y} } 
+        { {?x :p2a ?y}
+  	 UNION
+ 	  { ?x :p2b ?y} }
+        { {?x :p3a ?y}
+ 	  UNION
+	  { ?x :p3b ?y} }
+        { {?x :p4a ?y}
+          UNION
+          { ?x :p4b ?y} }
+        { {?x :p5a ?y }
+         UNION
+          { ?x :p5b ?y} }
+        { {?x :p6a ?y}
+         UNION
+          { ?x :p6b ?y} }
+        { {?x :p7a ?y}
+          UNION
+          { ?x :p7b ?y} }
+        { {?x :p8a ?y}
+          UNION
+          { ?x :p8b ?y} }
+        { {?x :p9a ?y }
+         UNION
+          { ?x :p9b ?y} }
+        { {?x :p10a ?y}
+         UNION
+          { ?x :p10b ?y} }
+        { {?x :p11a ?y}
+          UNION
+          { ?x :p11b ?y} }
+        { {?x :p12a ?y}
+          UNION
+          { ?x :p12b ?y} }
+        { {?x :p13a ?y }
+         UNION
+          { ?x :p13b ?y} }
+        { {?x :p14a ?y}
+         UNION
+          { ?x :p14b ?y} }
+        { {?x :p15a ?y}
+          UNION
+          { ?x :p15b ?y} }
+        { {?x :p16a ?y}
+          UNION
+          { ?x :p16b ?y} }
+
+}

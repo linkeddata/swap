@@ -1,0 +1,25 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix ccpp: <http://www.w3.org/2000/07/04-ccpp#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix : <#>.
+
+<> dc:source <http://www.w3.org/TR/CCPP-struct-vocab/#xtocid-33666513>,
+ <http://www.w3.org/TR/2001/WD-CCPP-struct-vocab-20010315/#xtocid-33666513>.
+
+
+<#MyProfile> ccpp:component [ = <#TerminalHardware>;
+                             rdf:type <#HardwarePlatform>;
+                             :display "320x200";
+                           ];
+            ccpp:component [ = <#TerminalSoftware>;
+                             rdf:type <#SoftwarePlatform>;
+                             :OSName "EPOC";
+                             :OSVersion "2.0";
+                             :OSVendor  "Symbian";
+                           ];
+            ccpp:component [ = <#TerminalBrowser>;
+                             rdf:type <#BrowserUA>;
+                             :BrowserName "Mozilla";
+                             :BrowserVersion "5.0";
+			     :vendor "Symbian";
+                             :htmlVersionsSupported ("3.0" "4.0")].

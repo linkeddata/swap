@@ -1,0 +1,14 @@
+# example from http://www.w3.org/2000/10/swap/doc/Reach
+
+@keywords is, of, a.
+@prefix : <conf_reg_ex#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+
+@forAll WHO.
+
+{ WHO foaf:homepage ?PG.
+ ?PG log:semantics [ log:includes { WHO a Vegetarian } ]
+} => { WHO a Vegetarian}.
+
+<joe_profile.n3#joe> foaf:homepage <joe_profile.n3>.

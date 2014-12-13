@@ -1,0 +1,36 @@
+
+
+
+<rdf:RDF xmlns="http://www.example.com/schema#"
+    xmlns:ccpp="http://www.w3.org/2002/05/20-ccpp#"
+    xmlns:ex="http://www.example.com/schema#"
+    xmlns:log="http://www.w3.org/2000/10/swap/log#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+
+    <rdf:Description rdf:about="http://www.example.com/schema#MyProfile">
+        <ccpp:component rdf:resource="http://www.example.com/schema#TerminalBrowser"/>
+        <ccpp:component rdf:resource="http://www.example.com/schema#TerminalHardware"/>
+        <ccpp:component rdf:resource="http://www.example.com/schema#TerminalSoftware"/>
+    </rdf:Description>
+
+    <BrowserUA rdf:about="http://www.example.com/schema#TerminalBrowser">
+        <htmlVersionsSupported rdf:parseType="Resource">
+            <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag"/>
+            <rdf:_1>3.0</rdf:_1>
+            <rdf:_2>4.0</rdf:_2>
+        </htmlVersionsSupported>
+        <name>Mozilla</name>
+        <vendor>Symbian</vendor>
+        <version>5.0</version>
+    </BrowserUA>
+
+    <HardwarePlatform rdf:about="http://www.example.com/schema#TerminalHardware">
+        <display>320x200</display>
+    </HardwarePlatform>
+
+    <SoftwarePlatform rdf:about="http://www.example.com/schema#TerminalSoftware">
+        <name>EPOC</name>
+        <vendor>Symbian</vendor>
+        <version>2.0</version>
+    </SoftwarePlatform>
+</rdf:RDF>

@@ -1,0 +1,226 @@
+
+
+
+<rdf:RDF xmlns="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:math="http://www.w3.org/2000/10/swap/math#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+
+    <Class rdf:about="http://www.w3.org/2000/10/swap/math#Function">
+        <comment>A math:Function is unique in terms of math:EqualTo. </comment>
+        <label>Function</label>
+        <subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    </Class>
+
+    <Class rdf:about="http://www.w3.org/2000/10/swap/math#List">
+        <comment>The class of things that are DAML lists were all of the 
+      members are math:Value items.</comment>
+        <label>List</label>
+        <subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#LIst"/>
+    </Class>
+
+    <Class rdf:about="http://www.w3.org/2000/10/swap/math#LogicalOperator">
+        <comment>a logical operator allows evaluation eihter way, or testing relationship
+         between two values</comment>
+        <subClassOf rdf:resource="http://www.w3.org/2000/10/swap/math#Function"/>
+        <subClassOf rdf:resource="http://www.w3.org/2000/10/swap/math#ReverseFunction"/>
+    </Class>
+
+    <Class rdf:about="http://www.w3.org/2000/10/swap/math#ReverseFunction">
+        <comment>A math:ReverseFunction is unambiguous in terms of math:EqualTo. </comment>
+        <subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    </Class>
+
+    <Class rdf:about="http://www.w3.org/2000/10/swap/math#StrictProperty">
+        <label>StrictProperty</label>
+        <subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    </Class>
+
+    <Class rdf:about="http://www.w3.org/2000/10/swap/math#TwoMemberedList">
+        <comment>This is the class of things that are math lists with only two members.</comment>
+        <label>TwoMemberedList</label>
+        <subClassOf rdf:resource="http://www.w3.org/2000/10/swap/math#List"/>
+    </Class>
+
+    <Class rdf:about="http://www.w3.org/2000/10/swap/math#Value">
+        <comment>The class of things that are numeric float values as in Python.</comment>
+        <label>Value</label>
+        <subClassOf rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+    </Class>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#absoluteValue">
+        <comment>The object is calulated as the absolute value of the subject.</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <label>negation</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#atan2">
+        <comment>The subject is a pair of numbers. The object is calulated as the arc tangent value of the ratio of the two subject values.</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <label>atan2</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#cos">
+        <comment>The subject is an angle expressed in radians. The object is calulated as the cosine value of the subject.</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <label>cos</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#degrees">
+        <comment>The subject is an angle expressed in radians. The object is calulated as the conversion in degrees of the value of the subject.</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <label>degrees</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#difference">
+        <comment>The subject is a pair of numbers. The object
+is calculated by subtracting the second number of the pair from the first.
+</comment>
+        <label>difference</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </rdf:Property>
+
+    <math:StrictProperty rdf:about="http://www.w3.org/2000/10/swap/math#equalTo">
+        <comment>True iff the subject is a string representation of a number which  is EQUAL TO a number of which the object is a string representation.</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <label>equalTo</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </math:StrictProperty>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#exponentiation">
+        <comment>The subject is a pair of numbers. The object
+is calculated by raising the first number of the power of the second.
+</comment>
+        <label>exponentiation</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </rdf:Property>
+
+    <math:StrictProperty rdf:about="http://www.w3.org/2000/10/swap/math#greaterThan">
+        <comment>True iff the subject is a string representation of a number which  is greater than the number of which the object is a string representation.</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <label>greaterThan</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </math:StrictProperty>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#integerQuotient">
+        <comment>The subject is a pair of integer numbers. The object
+is calculated by dividing the first number of the pair by the second, ignoring remainder.
+</comment>
+        <label>integerQuotient</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </rdf:Property>
+
+    <math:StrictProperty rdf:about="http://www.w3.org/2000/10/swap/math#lessThan">
+        <comment>True iff the subject is a string representation of a number which  is LESS than a number of which the object is a string representation.</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <label>lessThan</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </math:StrictProperty>
+
+    <math:Function rdf:about="http://www.w3.org/2000/10/swap/math#memberCount">
+        <comment>The number of items in a list. The subject is a list,
+the object is calculated as the number of members.</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/math#List"/>
+        <label>memberCount</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </math:Function>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#negation">
+        <comment>The subject or object is calculated to be the negation of the other.</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <label>negation</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </rdf:Property>
+
+    <math:StrictProperty rdf:about="http://www.w3.org/2000/10/swap/math#notEqualTo">
+        <comment>True iff the subject is a string representation of a number which  is NOT EQUAL to a number of which the object is a string representation.</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <label>notEqualTo</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </math:StrictProperty>
+
+    <math:StrictProperty rdf:about="http://www.w3.org/2000/10/swap/math#notGreaterThan">
+        <comment>True iff the subject is a string representation of a number which is NOT greater than the number of which the object is a string representation.</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <label>notGreaterThan</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </math:StrictProperty>
+
+    <math:StrictProperty rdf:about="http://www.w3.org/2000/10/swap/math#notLessThan">
+        <comment>True iff the subject is a string representation of a number which  is NOT LESS than a number of which the object is a string representation.</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <label>notlessThan</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </math:StrictProperty>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#product">
+        <comment>The subject is a list of numbers.
+The object is calculated as the arithmentic product of those numbers.
+</comment>
+        <label>product</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#quotient">
+        <comment>The subject is a pair of numbers. The object
+is calculated by dividing the first number of the pair by the second.
+</comment>
+        <label>quotient</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#remainder">
+        <comment>The subject is a pair of integers. The object
+is calculated by dividing the first number of the pair by the second and taking the remainder.
+</comment>
+        <label>remainder</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#rounded">
+        <comment>The object is calulated as the subject rounded to the nearest integer.</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <label>rounded</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#sin">
+        <comment>The subject is an angle expressed in radians. The object is calulated as the sine value of the subject.</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <label>sin</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#sinh">
+        <comment>The subject is an angle expressed in radians. The object is calulated as the hyperbolic sine value of the subject.</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <label>sinh</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#sum">
+        <comment>The subject is a list of numbers.
+The object is calculated as the arithmentic sum of those numbers.
+</comment>
+        <label>sum</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#tan">
+        <comment>The subject is an angle expressed in radians. The object is calulated as the tangent value of the subject.</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <label>tan</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#tanh">
+        <comment>The subject is an angle expressed in radians. The object is calulated as the hyperbolic tangent value of the subject.</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <label>tanh</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </rdf:Property>
+</rdf:RDF>

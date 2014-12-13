@@ -1,0 +1,42 @@
+#  Tracking of issues in a very simple form
+# Just use your own properties to add your own functionality
+#
+#
+
+# Anything can raise an issue
+
+{
+   [] tr:effectiveDate :d; tr:raises :i.
+} log:implies {
+   [] tr:asOf :d; tr:forIssue :i; tr:stateIs :s
+}.
+
+# Rule: Everything remains at rest unless a force acts upon it.
+
+tr:successor rdf:Property; label "next";
+    rdfs:comment """The successor of a document in a series
+for example of meeting minutes is the minutes of the next
+meeting, in the sense that if you go through that chain,
+you won't skip any of the formal record.  The effective (meeting) date of the
+document must be later the date of the prior document.
+"""
+
+{[] tr:asOf :m1; tr:forIssue :i; tr:stateIs :s.
+ :m2 tr:successor :m2.
+ :m2 not:Includes { :i [] [] }.
+ :m2 not:Includes { [] [] :i }.
+} log:implies {
+ [] tr:asOf :m2; tr:forIssue :i; tr:stateIs :s.
+}
+
+# Rule:  Transisions
+
+{ 
+
+
+#
+
+#
+
+#ends
+

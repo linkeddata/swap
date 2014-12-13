@@ -1,0 +1,98 @@
+@keywords is, of, a.
+
+@prefix : <one_trip_per_month#>.
+@prefix trav: <one_trip_per_month#>.
+
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix dt: <http://www.w3.org/2001/XMLSchema#>.
+
+<> s:seeAlso <../../../../2002/12/cal/calAx.n3>,
+  <http://www.w3.org/People/Connolly/>.
+
+@prefix str: <http://www.w3.org/2000/10/swap/string#>.
+@prefix math: <http://www.w3.org/2000/10/swap/math#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+
+@prefix cal: <http://www.w3.org/2002/12/cal/icaltzd#>.
+@prefix k: <http://www.cyc.com/2004/06/04/cyc#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+
+@prefix dwc: <http://www.w3.org/People/Connolly/#>.
+
+dwc:me a OneTripPerMonthAgent.
+
+# supplement geo info from home page just a bit
+dwc:_5055_www2007
+  cal:location Banf.
+<../,danc_home.rdf> a cal:Vcalendar.
+
+far a owl:SymmetricProperty.
+far opposite k:near.
+
+dwc:mci far Banf, Paris. # could derive this from lat/long
+Banf far Paris. # one trip to both places is a no-go
+# (#$travelTime  OBJ1 OBJ2 MOVEMENT TIME) 
+
+# the conjecture/invitation/proposal
+<> a cal:Vcalendar; cal:component XTech.
+XTech
+  cal:dtstart "2007-05-15"^^dt:date;
+  cal:dtend "2007-05-18"^^dt:date;
+  cal:location Paris.
+
+XTech cal:attendee dwc:me.
+
+
+###
+# PersonMonth, OneTripPerMonthAgent, owl-expressible bits
+
+RestrictedPersonMonth s:subClassOf
+   [ owl:onProperty [ owl:inverseOf k:passengers ]; owl:maxCardinality 1 ].
+
+# rules...
+
+{
+  ?WHO a OneTripPerMonthAgent;
+    is k:passengers of ?TRIP.
+
+  # TODO: refine this so that the midpoint of the trip
+  # is in the month, since I sometimes take my March
+  # trip from 28 Feb to 4 Mar.
+  ?WHEN a k:CalendarMonth; k:temporalBoundsIntersect ?TRIP.
+} => {
+ ?WHO k:subAbstractions [
+   a RestrictedPersonMonth;
+   is k:temporallySubsumes of ?WHEN;
+ ]
+}.
+
+
+# If you attend something far from home, you take a trip.
+#@@ the Cyc vocabulary we're borrowing implies
+# there's only one destination per trip; we don't mean that.
+{ ?E cal:attendee ?WHO.
+  ?E cal:location ?WHERE.
+  ?WHERE far ?HOME .
+  ?WHO foaf:based_near ?HOME.
+} =>
+{
+  [] a k:Translation-RoundTrip;
+    k:passengers ?WHO;
+    k:temporallyIntersects ?E;
+    k:origin-RoundTrip ?HOME;
+    k:destination-RoundTrip ?WHERE.
+}.
+
+# trips to places that are far apart are different trips
+{
+  ?T1 a k:Translation-RoundTrip; k:destination-RoundTrip ?L1.
+  ?T2 a k:Translation-RoundTrip; k:destination-RoundTrip ?L2.
+  ?L1 far ?L2
+} => { ?T1 owl:differentFrom ?T2 }.
+
+
+{ ?E k:passengers [ k:subAbstractions ?WHO_WHEN ]
+} => { ?E k:passengers ?WHO_WHEN }.
+
+

@@ -1,0 +1,51 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<> dc:title "Travel terms";
+  dc:description "$Id$";
+  s:seeAlso <grokTravItin.pl>, <travel>, <travel.html>.
+
+@prefix dt: <http://www.w3.org/2001/XMLSchema#>.
+@prefix r: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix ont: <http://www.daml.org/2001/03/daml+oil#>.
+@prefix k: <http://opencyc.sourceforge.net/daml/cyc.daml#> .
+
+@prefix : <http://www.w3.org/2000/10/swap/pim/travelTerms#>.
+@prefix trav: <http://www.w3.org/2000/10/swap/pim/travelTerms#>.
+
+:Flight s:label "Flight";
+  s:subClassOf k:Translocation.
+
+:flightNumber s:label "flight number";
+  a ont:UniqueProperty;
+  s:subPropertyOf k:nameString, r:value;
+  s:domain :Flight;
+  s:range [ is s:range of dt:positiveInteger ];
+  s:comment "@@range specification needs a new datatyping property".
+
+:departureTime s:label "departure time";
+  a ont:UniqueProperty;
+  s:domain :Flight;
+  s:range :TimeString;
+  s:comment """a string representing the departure time,
+   in the timezone of the flight's fromLocation""",
+   "hmm... model this as the time of a departure subevent?".
+
+:arrivalTime s:label "arrival time";
+  a ont:UniqueProperty;
+  s:domain :Flight;
+  s:range :TimeString.
+
+:TimeString s:label "time string";
+  a s:Class;
+  s:comment "a string of the form HH:MM; e.g. 12:00, 14:23",
+   "@@TODO: relate this to xml schema time stuff, cyc calendar stuff, etc.".
+
+:carrier s:label "carrier";
+  a ont:UniqueProperty;
+  s:subPropertyOf k:performedBy;
+  s:domain :Flight;
+  s:range k:AirlineCompany.
+
+

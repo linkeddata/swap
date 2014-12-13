@@ -1,0 +1,27 @@
+#   test cwm time built-ins
+#
+#  usage: cwm --think
+#
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix time: <http://www.w3.org/2000/10/swap/time#> .
+
+@prefix v: <#>.
+@prefix TEST: <TEST#>.
+@prefix : <#>.
+
+@forAll :f, :t, :x, :y, :z.
+
+
+"year %Y month %M day %d date: %D" a :TestFormat.
+"" a :TestFormat.
+
+{ :f a :TestFormat; time:gmTime :x} log:implies
+{ :f TEST:gmTime :x}.
+
+{ :f a :TestFormat; time:localTime :x} log:implies
+{ :f TEST:localTime :x}.
+
+log:implies a log:Chaff.  # purge rules
+
+
+#ends

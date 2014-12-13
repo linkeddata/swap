@@ -1,0 +1,137 @@
+<?xml-stylesheet href='http://www.w3.org/2002/06/rdfs2html' type='application/xml'?>
+
+
+<!-- Processed by Id: cwm.py,v 1.129 2003/04/08 16:12:43 timbl Exp -->
+<!--     using base file:/home/connolly/w3ccvs/WWW/2000/10/swap/-->
+<!-- and hand edited since then -->
+<!-- $Id$ -->
+
+
+
+<r:RDF xmlns="http://www.w3.org/2000/10/swap/pim/email#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:email="http://www.w3.org/2000/10/swap/pim/email#"
+    xmlns:log="http://www.w3.org/2000/10/swap/log#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:r="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:s="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:ss="http://www.w3.org/2000/10/swap/util/sniffSchema#"
+    xmlns:str="http://www.w3.org/2000/10/swap/string#">
+
+    <r:Description r:about="">
+      <owl:versionInfo>$Id$</owl:versionInfo>
+      <s:seeAlso r:resource="../util/sniffSchema.n3"/>
+      <s:seeAlso r:resource="http://www.faqs.org/rfcs/rfc822.html"/>
+    </r:Description>
+
+    <owl:Class r:about="http://www.w3.org/2000/10/swap/pim/email#Message">
+      <s:label>Message</s:label>
+    </owl:Class>
+
+    <owl:Class r:about="http://www.w3.org/2000/10/swap/pim/email#Agent">
+      <s:label>Agent</s:label>
+      <s:comment>"AGENT (person,  system  or  process)" -- RFC822 4.4.2</s:comment>
+    </owl:Class>
+
+    <owl:Class r:about="http://www.w3.org/2000/10/swap/pim/email#Mailbox">
+      <s:label>Mailbox</s:label>
+    </owl:Class>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/email#cc">
+        <s:label>cc</s:label>
+	<s:domain r:resource="http://www.w3.org/2000/10/swap/pim/email#Message"/>
+	<s:range r:resource="http://www.w3.org/2000/10/swap/pim/email#Agent"/>
+    </r:Property>
+
+    <owl:FunctionalProperty r:about="http://www.w3.org/2000/10/swap/pim/email#date">
+        <s:label>date</s:label>
+	<s:domain r:resource="http://www.w3.org/2000/10/swap/pim/email#Message"/>
+        <s:comment>unmodified date header field value</s:comment>
+        <ss:rangeIntersects r:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </owl:FunctionalProperty>
+
+    <owl:FunctionalProperty r:about="http://www.w3.org/2000/10/swap/pim/email#date_iso">
+        <s:label>date_iso</s:label>
+        <s:comment>date header field converted to YYYY-MM-DDTHH:MM:SSZ form</s:comment>
+        <ss:rangeIntersects r:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </owl:FunctionalProperty>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/email#from">
+        <s:label>from</s:label>
+	<s:domain r:resource="http://www.w3.org/2000/10/swap/pim/email#Message"/>
+	<s:range r:resource="http://www.w3.org/2000/10/swap/pim/email#Agent"/>
+    </r:Property>
+
+    <owl:InverseFunctionalProperty r:about="http://www.w3.org/2000/10/swap/pim/email#mbox">
+        <s:label>mbox</s:label>
+	<s:domain r:resource="http://www.w3.org/2000/10/swap/pim/email#Agent"/>
+	<s:range r:resource="http://www.w3.org/2000/10/swap/pim/email#Mailbox"/>
+    </owl:InverseFunctionalProperty>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/email#phrase">
+        <s:label>phrase</s:label>
+        <s:comment>note handling of non-ascii chars</s:comment>
+	<s:domain r:resource="http://www.w3.org/2000/10/swap/pim/email#Agent"/>
+        <s:range r:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/email#received_iso">
+        <s:label>received_iso</s:label>
+	<s:domain r:resource="http://www.w3.org/2000/10/swap/pim/email#Message"/>
+        <ss:rangeIntersects r:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/email#recipients">
+        <s:label>recipients</s:label>
+	<s:domain r:resource="http://www.w3.org/2000/10/swap/pim/email#Message"/>
+        <s:comment>@@not in RFC822. artificial. explain/motivate?</s:comment>
+        <ss:rangeIntersects r:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/email#references">
+        <s:label>references</s:label>
+	<s:domain r:resource="http://www.w3.org/2000/10/swap/pim/email#Message"/>
+	<s:range r:resource="http://www.w3.org/2000/10/swap/pim/email#Message"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/email#senders">
+        <s:label>senders</s:label>
+	<s:domain r:resource="http://www.w3.org/2000/10/swap/pim/email#Message"/>
+        <s:comment>@@not in RFC822. artificial. explain/motivate?</s:comment>
+        <ss:rangeIntersects r:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </r:Property>
+
+    <owl:FunctionalProperty r:about="http://www.w3.org/2000/10/swap/pim/email#subject">
+        <s:label>subject</s:label>
+	<s:domain r:resource="http://www.w3.org/2000/10/swap/pim/email#Message"/>
+        <s:comment>domain message. note handling of non-ascii chars</s:comment>
+        <s:range r:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </owl:FunctionalProperty>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/email#to">
+        <ss:label>to</ss:label>
+	<s:domain r:resource="http://www.w3.org/2000/10/swap/pim/email#Message"/>
+	<s:range r:resource="http://www.w3.org/2000/10/swap/pim/email#Agent"/>
+    </r:Property>
+
+
+<!-- an example -->
+
+    <r:Description r:about="mid:000001c2f845$eb8be140$9c0b77ca@xobjects">
+        <date>Tue, 1 Apr 2003 17:50:00 +0800</date>
+        <date_iso>2003-04-02T07:50:00Z</date_iso>
+        <from r:parseType="Resource">
+            <mbox r:resource="mailto:yzqu@seu.edu.cn"/>
+            <phrase>Yuzhong Qu</phrase>
+        </from>
+        <received_iso>2003-04-01T17:56:46Z</received_iso>
+        <recipients>public-webont-comments@w3.org
+</recipients>
+        <senders>yzqu@seu.edu.cn
+</senders>
+        <subject>typo error in (normative) appendix B of OWL Reference</subject>
+        <to r:parseType="Resource">
+            <mbox r:resource="mailto:public-webont-comments@w3.org"/>
+        </to>
+    </r:Description>
+</r:RDF>

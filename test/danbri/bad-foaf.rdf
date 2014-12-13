@@ -1,0 +1,14 @@
+<!-- See http://rdfweb.org/topic/FoafContradictions -->
+<rdf:RDF
+  xmlns:rdf ="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:foaf="http://xmlns.com/foaf/0.1/"
+   >
+<foaf:Person> 
+<foaf:nick>danbri</foaf:nick> 
+ <foaf:topic> 
+   <foaf:Person> 
+    <foaf:name>Elvis Presley</foaf:name> 
+   </foaf:Person> 
+   </foaf:topic> 
+</foaf:Person> 
+</rdf:RDF>

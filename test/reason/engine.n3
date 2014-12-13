@@ -1,0 +1,74 @@
+# USAGE : cwm --crypto --rdf|--n3  <request> --n3 engine.n3 --think --filter="filter.n3" --rdf
+# USAGE : cwm --crypto --rdf http://dig.csail.mit.edu/2005/09/rein/examples/judy-req.rdf --n3 http://dig.csail.mit.edu/2005/09/rein/engine.n3 --think --filter="http://dig.csail.mit.edu/2005/09/rein/filter.n3" --rdf
+
+@keywords is, of, a.
+
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix rein: <http://dig.csail.mit.edu/2005/09/rein/network#> .
+@prefix session: <http://redfoot.net/2005/session#>.
+@prefix : <http://dig.csail.mit.edu/2005/09/rein/engine#>.
+
+# semantics of policy-language property
+@forAll RESOURCE, POLICY, LANG, META.
+{ RESOURCE rein:policy POLICY.
+  POLICY.log:semantics log:includes { POLICY rein:policy-language LANG }
+} => {  POLICY rein:policy-language LANG }.
+
+# semantics of meta-policy property
+{ POLICY rein:policy-language LANG.
+  LANG.log:semantics log:includes { LANG rein:meta-policy META }
+} => { LANG rein:meta-policy META }.
+
+# if policy-lang does not have a meta-policy
+# load policy, policy-language and check whether 
+# it infers that (requester access resource) is true
+
+@forAll REQ, WHO, RESOURCE, POLICY, LANG, ACCESS, F, G, WHO2.
+
+{  REQ a rein:Request.
+   REQ rein:requester WHO.
+   REQ rein:resource RESOURCE.
+   REQ rein:access ACCESS.
+   RESOURCE rein:policy POLICY.
+   POLICY rein:policy-language LANG.
+   LANG.log:semantics log:notIncludes { [] rein:meta-policy [] }.
+   ( REQ.log:semantics
+     { RESOURCE rein:policy POLICY }
+     { POLICY rein:policy-language LANG }
+     POLICY.log:semantics
+     LANG.log:semantics
+     <http://www.agfa.com/w3c/euler/rpo-rules.n3>.log:semantics
+   ) log:conjunction F.
+   F log:conclusion G.
+} => { G :has :ans }.
+
+
+# if policy-lang does have a meta-policy
+# load meta policy and check whether 
+# it infers that (requester access resource) is true
+
+@forAll REQ, WHO, RESOURCE, POLICY, LANG, META, ACCESS, F, G, WHO2.
+
+{  REQ a rein:Request.
+   REQ rein:requester WHO.
+   REQ rein:resource RESOURCE.
+   REQ rein:access ACCESS.
+   RESOURCE rein:policy POLICY.
+   POLICY rein:policy-language LANG.
+   LANG rein:meta-policy META.
+   ( REQ.log:semantics
+     { RESOURCE rein:policy POLICY }
+     { POLICY rein:policy-language LANG }
+     { LANG rein:meta-policy META }
+     META.log:semantics
+   ) log:conjunction F.
+   F log:conclusion G.
+} => { G :has :ans }.
+
+
+# result is obtained after filtering thru filter.n3
+
+#ends

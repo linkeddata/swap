@@ -1,0 +1,28 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+PREFIX sioc: <http://rdfs.org/sioc/ns#> 
+PREFIX rss: <http://purl.org/rss/1.0/>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+
+CONSTRUCT {
+  ?channel rdf:type sioc:Forum .
+  ?channel sioc:link ?channel_url .
+  ?channel dc:title ?channel_title .
+  ?channel dc:description ?channel_description .
+  ?channel sioc:container_of ?item .
+  ?item rdf:type sioc:Post .
+  ?item sioc:link ?item_url .
+  ?item dc:title ?item_title .
+  ?item sioc:content ?item_content .
+}
+WHERE {
+  ?channel rdf:type rss:channel .
+  ?channel rss:link ?channel_url .
+  ?channel rss:title ?channel_title .
+  ?channel rss:description ?channel_description .
+  ?channel rss:items ?items .
+  ?items ?li ?item .
+  ?item rdf:type rss:item .
+  ?item rss:link ?item_url .
+  ?item rss:title ?item_title .
+  ?item rss:description ?item_content .
+}

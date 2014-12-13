@@ -1,0 +1,71 @@
+@prefix : <#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+### 
+### NOTE THE NON-STANDARD owl NAMESPACE.   THIS IS WHAT THIS TEST
+### IS ABOUT.  By using our own NS instead of the standard one, 
+### (http://www.w3.org/2002/07/owl#), we get automatic lookup of
+### axioms....     IF run with "cwm --mode=a" (NOT IMPLEMENTED).
+###
+### The rest of this is unchanged from ../demo1/biology
+###
+@prefix owl: <http://www.w3.org/2003/07/ferrell#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<>  dc:title "Biology Ontology (demo)";
+    dc:creator "Sandro Hawke, sandro@w3.org";
+    dc:description """An Ontology of Biology, based on the standard 
+                      binomial nomenclature of Carolus Linnaeus.
+
+                      Far from being complete, this is just a small
+                      demonstration of what one could do.""";
+    dc:date "2003-03-28";
+    dc:language "en";
+    dc:subject "Biology";
+
+    a owl:Ontology;
+    owl:imports rdfs:, owl:;
+    owl:versionInfo "$Id$";
+
+    rdfs:seeAlso <http://www.wikipedia.org/wiki/Binomial_nomenclature>
+.
+
+
+# Some familiar names
+
+:Dog owl:sameClassAs :CanisFamiliaris.
+:Human owl:sameClassAs :HomoSapiens.
+:RedWolf owl:sameClassAs :CanisRufus.
+
+# Some binomial names
+
+:Canis a owl:Class.
+
+:CanisFamiliaris 
+  rdfs:comment """The class of animals designated 
+               Canis familiaris (domestic dog).  This
+	       includes all the dog breeds, but
+	       not wolves.""";
+  rdfs:label "Canis familiaris";
+  rdfs:seeAlso <http://www.agrobiologicals.com/glossary/G3089.htm>;
+  a owl:Class;
+  owl:subClassOf :Canis.
+
+:CanisFamiliarisDingo 
+  owl:subClassOf :CanisFamiliaris;
+  rdfs:seeAlso <http://www.naturalworlds.org/wolf/canis/Canis_familiaris_dingo.htm>.
+
+:CanisRufus a owl:Class;
+  owl:subClassOf :Canis;
+  rdfs:label "Red Wolf";
+  rdfs:comment """As of 1999 there were about 300 individuals of this 
+	       endangered species""";
+  rdfs:seeAlso <http://druidry.org/obod/endangered/redwolf.html>.
+
+:HomoSapiens a owl:Class.
+
+# Some class relationships
+
+:CanisFamiliaris owl:disjointWith :HomoSapiens.
+:CanisFamiliaris owl:disjointWith :CanisRufus.
+

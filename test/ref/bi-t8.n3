@@ -1,0 +1,94 @@
+     @prefix : <#> .
+    @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    :testh1     a :success .
+    
+    :testh2     a :success .
+    
+    :testh3     a :success .
+    
+    :testh4     a :success .
+    
+    :testh5     a :success .
+    
+    :testh6     a :success .
+    
+    :testh7     a :success .
+    
+    :testh8     a :success .
+    {
+        "a"     string:startsWith "abc" .
+        
+        }     => {:testh_7     a :FAILURE .
+        } .
+    {
+        "aaa"     string:greaterThan "abc" .
+        
+        }     => {:testh_2     a :FAILURE .
+        } .
+    {
+        "aaa"     string:lessThan "abc" .
+        
+        }     => {:testh4     a :success .
+        } .
+    {
+        "aaa"     string:notGreaterThan "abc" .
+        
+        }     => {:testh3     a :success .
+        } .
+    {
+        "aaa"     string:notLessThan "abc" .
+        
+        }     => {:testh_6     a :FAILURE .
+        } .
+    {
+        "abc"     string:greaterThan "aaa" .
+        
+        }     => {:testh1     a :success .
+        } .
+    {
+        "abc"     string:greaterThan "abc" .
+        
+        }     => {:testh_1     a :FAILURE .
+        } .
+    {
+        "abc"     string:lessThan "aaa" .
+        
+        }     => {:testh_4     a :FAILURE .
+        } .
+    {
+        "abc"     string:lessThan "abc" .
+        
+        }     => {:testh_5     a :FAILURE .
+        } .
+    {
+        "abc"     string:notGreaterThan "aaa" .
+        
+        }     => {:testh_3     a :FAILURE .
+        } .
+    {
+        "abc"     string:notGreaterThan "abc" .
+        
+        }     => {:testh2     a :success .
+        } .
+    {
+        "abc"     string:notLessThan "aaa" .
+        
+        }     => {:testh5     a :success .
+        } .
+    {
+        "abc"     string:notLessThan "abc" .
+        
+        }     => {:testh6     a :success .
+        } .
+    {
+        "abc"     string:startsWith "a" .
+        
+        }     => {:testh7     a :success .
+        } .
+    {
+        "def"     string:startsWith "def" .
+        
+        }     => {:testh8     a :success .
+        } .
+    

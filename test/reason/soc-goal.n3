@@ -1,0 +1,3 @@
+@prefix : <socrates#>.
+
+{ :socrates a ?C } => { :socrates a ?C }.

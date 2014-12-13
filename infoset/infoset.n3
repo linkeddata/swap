@@ -1,0 +1,342 @@
+# An RDF Schema for the XML infoset
+#
+#Processed by Id: cwm.py,v 1.32 2001/04/05 21:33:55 timbl Exp 
+# Originally from:
+        #    using base http://www.w3.org/2001/04/infoset
+#
+# Problems with that were: 
+#
+# - Identifiers with "." in chjanged to use "_" as N3 doesn't like "."
+#   This is an RDF/N3 problem.
+#
+# - rdfs:domain used as literally in the spec, not DAML-style.
+#   This is a rdfs problem and a problem with the NOTE.
+#
+#  These are marked @@ and should be union classes.
+#
+#   Base was: http://www.w3.org/2001/04/infoset
+# Original RDF parsed by Id: xml2rdf.py,v 1.14 2001/04/21 22:14:02 timbl Exp 
+
+# Comments from the original RDF/XML:
+
+# this can be decoded as US-ASCII or iso-8859-1 as well,
+#     since it contains no characters outside the US-ASCII repertoire 
+# From Id: infoset.rdf,v 1.2 2001/04/06 20:11:13 dom Exp  
+
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix : <http://www.w3.org/2001/04/infoset#> .
+    # 
+#
+# This RDF schema's namespace name
+#
+#  http://www.w3.org/2001/04/infoset#
+#
+# will only be used to describe the infoitems and properties defined in
+# the corresponding version of the XML Infoset specification, which is
+#
+#  http://www.w3.org/TR/2001/WD-xml-infoset-20010316
+#
+# Any new version of the specification that changes the infoitems or
+# properties will have a new RDF schema with a different namespace
+# name.
+#
+# This RDF schema for the XML Infoset is not a normative part of the 
+# XML Infoset Specification.  If this schema is found not to match
+# the normative text of the specification, it will be corrected without
+# changing the namespace name.
+#
+#
+        #Enumeration classes and their members
+        
+    :AttributeType     a rdfs:Class .
+    
+    :AttributeType_ID     a :AttributeType .
+    
+    :AttributeType_IDREF     a :AttributeType .
+    
+    :AttributeType_IDREFS     a :AttributeType .
+    
+    :AttributeType_ENTITY     a :AttributeType .
+    
+    :AttributeType_ENTITIES     a :AttributeType .
+    
+    :AttributeType_NMTOKEN     a :AttributeType .
+    
+    :AttributeType_NMTOKENS     a :AttributeType .
+    
+    :AttributeType_NOTATION     a :AttributeType .
+    
+    :AttributeType_CDATA     a :AttributeType .
+    
+    :AttributeType_ENUMERATION     a :AttributeType .
+    
+    :Boolean     a rdfs:Class .
+    
+    :Boolean_true     a :Boolean .
+    
+    :Boolean_false     a :Boolean .
+    
+    :Standalone     a rdfs:Class .
+    
+    :Standalone_yes     a :Standalone .
+    
+    :Standalone_no     a :Standalone .
+    
+    :Unknown     a rdfs:Class;
+         rdfs:subClassOf :AttributeType,
+                :Literal,
+                :Boolean,
+                :Notation,
+                :References .
+    
+    :Unknown_unknown     a :Unknown .
+    
+    :NoValue     a rdfs:Class;
+         rdfs:subClassOf :AttributeType,
+                :Literal,
+                :Boolean,
+                :Standalone,
+                :Notation,
+                :References .
+    
+    :NoValue_noValue     a :Unknown# Property classes derived from standard classes 
+         .
+    
+    :Literal     a rdfs:Class .
+    
+    rdfs:Literal     rdfs:subClassOf :Literal .
+    
+    :Integer     a rdfs:Class;
+         rdfs:subClassOf rdfs:Literal.
+
+
+##################  InfoItem Classes
+
+    :InfoItem     a rdfs:Class .
+    
+    :Document     a rdfs:Class;
+         rdfs:subClassOf :InfoItem .
+    
+    :Element     a rdfs:Class;
+         rdfs:subClassOf :InfoItem .
+    
+    :Attribute     a rdfs:Class;
+         rdfs:subClassOf :InfoItem .
+    
+    :ProcessingInstruction     a rdfs:Class;
+         rdfs:subClassOf :InfoItem .
+    
+    :Character     a rdfs:Class;
+         rdfs:subClassOf :InfoItem .
+    
+    :UnexpandedEntityReference     a rdfs:Class;
+         rdfs:subClassOf :InfoItem .
+    
+    :Comment     a rdfs:Class;
+         rdfs:subClassOf :InfoItem .
+    
+    :DocumentTypeDeclaration     a rdfs:Class;
+         rdfs:subClassOf :InfoItem .
+    
+    :UnparsedEntity     a rdfs:Class;
+         rdfs:subClassOf :InfoItem .
+    
+    :Notation     a rdfs:Class;
+         rdfs:subClassOf :InfoItem .
+    
+    :Namespace     a rdfs:Class;
+         rdfs:subClassOf :InfoItem.
+
+
+##### Set containers 
+         
+    
+    :InfoItemSet     a rdfs:Class;
+         rdfs:subClassOf rdf:Bag .
+    
+    :AttributeSet     a rdfs:Class;
+         rdfs:subClassOf :InfoItemSet .
+    
+    :UnparsedEntitySet     a rdfs:Class;
+         rdfs:subClassOf :InfoItemSet .
+    
+    :NamespaceSet     a rdfs:Class;
+         rdfs:subClassOf :InfoItemSet .
+    
+    :NotationSet     a rdfs:Class;
+         rdfs:subClassOf :InfoItemSet.
+
+# Sequence containers 
+
+    
+    :InfoItemSeq     a rdfs:Class;
+         rdfs:subClassOf rdf:Seq,
+                :References .
+    
+    :References     a rdfs:Class.
+
+#Info item properties
+
+    
+    :allDeclarationsProcessed     a rdfs:Property;
+         rdfs:domain :Document;
+         rdfs:range :Boolean .
+    
+    :attributes     a rdfs:Property;
+         rdfs:domain :Element;
+         rdfs:range :AttributeSet .
+    
+    :attributeType     a rdfs:Property;
+         rdfs:domain :Attribute;
+         rdfs:range :AttributeType .
+    
+    :baseURI     a rdfs:Property;
+	   rdfs:domain :InfoItem;	# @@ new version  tbl
+#         rdfs:domain :Document,     # @@@@ SHould be union
+#                :Element,
+#                :ProcessingInstruction;
+         rdfs:range :Literal .
+    
+    :characterCode     a rdfs:Property;
+         rdfs:domain :Character;
+         rdfs:range :Integer .
+    
+    :characterEncodingScheme     a rdfs:Property;
+         rdfs:domain :Document;
+         rdfs:range rdfs:Literal .
+    
+    :children     a rdfs:Property;
+         rdfs:domain :InfoItem;
+#   @@ should be union of   :Document,
+#                :Element,
+#                :DocumentTypeDeclaration;
+         rdfs:range :InfoItemSeq .
+    
+    :content     a rdfs:Property;
+         rdfs:domain :InfoItem;
+# @@ should be union of  :ProcessingInstruction,
+#                :Comment;
+         rdfs:range rdfs:Literal .
+    
+    :namespaceAttributes     a rdfs:Property;
+         rdfs:domain :Element;
+         rdfs:range :AttributeSet .
+    
+    :declarationBaseURI     a rdfs:Property;
+         rdfs:domain :InfoItem;
+# @@ should be union of :UnexpandedEntityReference,
+#                :UnparsedEntity,
+#                :Notation;
+         rdfs:range :Literal .
+    
+    :documentElement     a rdfs:Property;
+         rdfs:domain :Document;
+         rdfs:range :Element .
+    
+    :elementContentWhitespace     a rdfs:Property;
+         rdfs:domain :Character;
+         rdfs:range :Boolean .
+    
+    :unparsedEntities     a rdfs:Property;
+         rdfs:domain :Document;
+         rdfs:range :UnparsedEntitySet .
+    
+    :inScopeNamespaces     a rdfs:Property;
+         rdfs:domain :Element;
+         rdfs:range :NamespaceSet .
+    
+    :localName     a rdfs:Property;
+         rdfs:domain :InfoItem;
+# @@ should union of :Element,
+#                :Attribute;
+         rdfs:range rdfs:Literal .
+    
+    :name     a rdfs:Property;
+         rdfs:domain :InfoItem;
+# @@ should be union of :UnexpandedEntityReference,
+#                :UnparsedEntity,
+#                :Notation;
+         rdfs:range rdfs:Literal .
+    
+    :namespaceName     a rdfs:Property;
+         rdfs:domain  :InfoItem;
+# @@ should be union of  :Element,
+#                :Attribute,
+#                :Namespace;
+         rdfs:range :Literal .
+    
+    :normalizedValue     a rdfs:Property;
+         rdfs:domain :Attribute;
+         rdfs:range rdfs:Literal .
+    
+    :notation     a rdfs:Property;
+         rdfs:domain :UnparsedEntity;
+         rdfs:range :Notation .
+    
+    :notationName     a rdfs:Property;
+         rdfs:domain :UnparsedEntity;
+         rdfs:range :Literal .
+    
+    :notations     a rdfs:Property;
+         rdfs:domain :Document;
+         rdfs:range :NotationSet .
+    
+    :ownerElement     a rdfs:Property;
+         rdfs:domain :Attribute;
+         rdfs:range :Element .
+    
+    :parent     a rdfs:Property;
+         rdfs:domain :InfoItem;
+# @@ should be union of :Element,
+#                :ProcessingInstruction,
+#                :Character,
+#                :UnexpandedEntityReference,
+#                :Comment,
+#                :DocumentTypeDeclaration;
+         rdfs:range :InfoItem .
+    
+    :prefix     a rdfs:Property;
+         rdfs:domain :InfoItem;
+# @@ should be union of :Namespace,
+#                :Element,
+#                :Attribute;
+         rdfs:range :Literal .
+    
+    :publicIdentifier     a rdfs:Property;
+         rdfs:domain :InfoItem;
+# @@ should be union of :UnexpandedEntityReference,
+#                :UnparsedEntity,
+#                :DocumentTypeDeclaration,
+#                :Notation;
+         rdfs:range :Literal .
+    
+    :references     a rdfs:Property;
+         rdfs:domain :Attribute;
+         rdfs:range :References .
+    
+    :specified     a rdfs:Property;
+         rdfs:domain :Attribute;
+         rdfs:range :Boolean .
+    
+    :standalone     a rdfs:Property;
+         rdfs:domain :Document;
+         rdfs:range :Standalone .
+    
+    :systemIdentifier     a rdfs:Property;
+         rdfs:domain :InfoItem;
+# @@ should be union of :UnexpandedEntityReference,
+#                :UnparsedEntity,
+#                :DocumentTypeDeclaration,
+#                :Notation;
+         rdfs:range :Literal .      #  @@ Actually, a URI.
+    
+    :target     a rdfs:Property;
+         rdfs:domain :ProcessingInstruction;
+         rdfs:range rdfs:Literal .
+    
+    :version     a rdfs:Property;
+         rdfs:domain :Document;
+         rdfs:range :Literal .
+    
+ #ENDS

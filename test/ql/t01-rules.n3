@@ -1,0 +1,15 @@
+
+     @prefix : <#> .
+     @prefix ex: <http://www.example.com/foo#> .
+     @prefix math: <http://www.w3.org/2000/10/swap/math#> .
+    @forAll :p, :t.
+    {
+        :t     math:greaterThan 25 .
+          [      a ex:Reading;
+                 ex:place :p;
+                 ex:temp :t ].
+        
+        }     => {:p     ex:had :t .
+        } .
+    
+#ENDS

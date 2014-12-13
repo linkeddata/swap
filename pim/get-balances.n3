@@ -1,0 +1,60 @@
+#  n3
+#prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix string: <http://www.w3.org/2000/10/swap/string#>.
+@prefix math: <http://www.w3.org/2000/10/swap/math#>.
+@prefix q:  <http://www.w3.org/2000/10/swap/pim/qif#>.
+@prefix ofx: <http://www.w3.org/2000/10/swap/pim/ofx#> .
+@prefix : <#>.
+@prefix foo: <#>.
+
+
+# Bank account version:
+
+{ ?STMTRS 
+
+         ofx:CURDEF ?curdef;
+         ofx:BANKACCTFROM [
+           ofx:BANKID ?bankid;
+           ofx:ACCTID ?acctid;
+           ofx:ACCTTYPE ?acctype;
+        ];
+
+        ofx:LEDGERBAL [
+           ofx:BALAMT ?balamt;
+           ofx:DTASOF ?dtasof;
+        ].
+ } => {
+    []      a q:BankAccount;
+            q:accountId ?acctid; ofx:ACCTTYPE ?acctype;
+            q:curCode ?curdef;
+            q:balance [
+                q:amount ?balamt;
+                q:asof ?dtasof;
+            ].
+ }.
+
+# Creditcard version:
+
+{ ?CCStmtRs 
+         ofx:CURDEF ?curdef;
+         ofx:CCACCTFROM [
+           ofx:ACCTID ?acctid;
+        ];
+
+        ofx:LEDGERBAL [
+           ofx:BALAMT ?balamt;
+           ofx:DTASOF ?dtasof;
+        ].
+ } => {
+    []      a q:CreditCardAccount;
+            q:accountId ?acctid;
+            q:curCode ?curdef;
+            q:balance [
+                q:amount ?balamt;
+                q:asof ?dtasof;
+            ].
+ }.
+
+#ends

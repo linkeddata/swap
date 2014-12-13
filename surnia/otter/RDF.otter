@@ -1,0 +1,32 @@
+% $Id$
+
+% check for internal consistency with something like
+%   mace -P -N 10 -k 768000 < otter/owlAx.otter
+% but it's gotten too big.  :-(
+
+
+formula_list(usable).
+
+% rdf1
+all xxx aaa yyy (
+  rdf(xxx, aaa, yyy)
+  -> 
+  rdf(aaa, rdf_type, rdf_Property)
+).
+
+% rdf2
+all xxx aaa lll (
+  rdf(xxx, aaa, lll) &
+  'foo:xmlLit'(lll)
+  ->
+  (exists nnn (
+     rdf(xxx, aaa, nnn) &
+     rdf(nnn, rdf_type, rdf_XMLLiteral)
+  ))
+).
+
+
+% $Log$
+% Revision 1.1  2003-11-07 06:52:30  sandro
+% up to about 70% on RDF Core tests; may have broken OWL stuff
+%

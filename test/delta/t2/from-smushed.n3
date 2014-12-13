@@ -1,0 +1,23 @@
+     @prefix : <../bank.n3#> .
+    
+      [      :accountBalance "-4000";
+             :accountBank _:ag_L19C22;
+             :accountHolder _:ag_L18C22;
+             :accountNumber "1234567-0" ].
+    
+    _:ag_L18C22     :dateOfBirth "1966--6";
+         :ssn "123456789" .
+    
+    _:ag_L19C22     :id "10-23-45" .
+      [      :accountBalance "40000";
+             :accountBank _:ag_L19C22;
+             :accountHolder _:ag_L18C22;
+             :accountNumber "1234567-1" ].
+    
+      [      :accountBalance "3333";
+             :accountBank _:ag_L19C22;
+             :accountHolder  [
+                 :dateOfBirth "1987-06-05" ];
+             :accountNumber "555-1212-0" ].
+    
+

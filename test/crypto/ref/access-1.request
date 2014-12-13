@@ -1,0 +1,38 @@
+     @prefix : <crypto/access-sign-request.n3#> .
+     @prefix ac: <crypto/access-tiina.private#> .
+     @prefix acc: <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+    
+     @forAll :d,
+                :k,
+                :kp,
+                :str,
+                :x,
+                :z,
+                ac:x,
+                ac:y .
+    
+    """     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+    
+      [      :credential <http://example.com/swap/test/crypto/access-elisa.cert>,
+                    <http://example.com/swap/test/crypto/access-tiina.cert>;
+             :forDocument <http://www.w3.org/Member>;
+             :junk "32746213462187364732164732164321" ].
+    
+"""     acc:endorsement  [
+             acc:key """
+NjU1MzcKCjEyMjcxNTk2NjgwODU5MjE5NzcxMjkxMTk5NTE2MzExNzE0MjI5Mjk4OTczNjE1MDA5
+OTU3NDk3MzMxNTU3ODMzMzMxNjExNTgyMzAyNjYzMjczMTcyMzY5NTk4NjAwMDA4NTQzMTE4NjU1
+NDE4MTQwMjE4NjUyNDUwNTAyMjE5Nzk2ODg4NjMxMTg0MDUzMTIwMjEzNzExMzI0Njk5MzE4MTAy
+NDA1MDQ4NDE0OTgzMjIyMTk2MzQ5NTgzNzU3MDgwNjg5NjAxMzQyMzM4Njk5NDE4OTgxNjkxODM5
+ODEzNjAxNTM1NjU1MTYzNTY4NDc0Mjk2Mzk1MTIyNjcyNzA4NjMyMzg2MDkzMzA5MzQwNTU4OTE5
+NDc0NzU5MzQ1NTk0MTkzMjY5MzQyNTQyMDYwMDIyMQ=3D=3D
+""";
+             acc:signature """
+NzQ5NzMyNDY2NTg5MjEyNjQ4Njk0MzUxODgxNzAyNTUwNjM5Mjk1MTk1NzI5NzIzMTEzOTczNDA5
+NDg3OTc0NzkzNjY2MDc4NDAwODc4MTAyMTg5MzYzNzM4MjIwMjI5MDY1NTEwODg5NjI1MDY5ODY3
+NTkwNjE2NzQ4MjI0MDg0NDU3MTE0MjcwNjg0MzYyNjAyMzEwMTI3NzM0NzAxNDc3NzUyNjc4MTEw
+NTYyMDg4OTI3MTk1NTc5MjQ5NjkxNzYzMjMwOTE2NTYzMzY5MzIxNzI4OTc4MzQ4NTMzNzYxODE2
+Mjc3MjExNTc4MzM4MjM0NDY3MDQ3ODcyMTQxNTQwMTMyMTQ3MDA5MzMwNjA3OTAzNTYyMDM5ODIz
+OTEzMzM1OTQyMjQ2MTU1ODE4ODYyMjM=3D
+""" ] .
+    

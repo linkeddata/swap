@@ -1,0 +1,116 @@
+#Processed by Id: cwm.py,v 1.197 2007/12/13 15:38:39 syosi Exp 
+        #    using base file:///devel/WWW/2000/10/swap/test/serialize/abraham-bernstein.rdf
+        
+#  Notation3 generation by
+#       notation3.py,v 1.200 2007/12/11 21:18:08 syosi Exp
+
+#   Base was: file:///devel/WWW/2000/10/swap/test/serialize/abraham-bernstein.rdf
+     @prefix : <http://swrc.ontoware.org/ontology#> .
+    @prefix ns3: <http://data.semanticweb.org/ns/swc/ontology#> .
+    @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+    @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+    
+    <http://data.semanticweb.org/conference/eswc/2007/demo-2>     :author <http://data.semanticweb.org/person/abraham-bernstein> .
+    
+    <http://data.semanticweb.org/conference/eswc/2007/paper-96>     :author <http://data.semanticweb.org/person/abraham-bernstein> .
+    
+    <http://data.semanticweb.org/conference/eswc/2007/paper-99>     :author <http://data.semanticweb.org/person/abraham-bernstein> .
+    
+    <http://data.semanticweb.org/conference/eswc/2008/paper/133>     <http://purl.org/dc/elements/1.1/creator> <http://data.semanticweb.org/person/abraham-bernstein>;
+         :author <http://data.semanticweb.org/person/abraham-bernstein>;
+         <http://xmlns.com/foaf/0.1/maker> <http://data.semanticweb.org/person/abraham-bernstein> .
+    
+    <http://data.semanticweb.org/conference/eswc/2008/paper/32>     <http://purl.org/dc/elements/1.1/creator> <http://data.semanticweb.org/person/abraham-bernstein>;
+         :author <http://data.semanticweb.org/person/abraham-bernstein>;
+         <http://xmlns.com/foaf/0.1/maker> <http://data.semanticweb.org/person/abraham-bernstein> .
+    
+    <http://data.semanticweb.org/conference/iswc-aswc/2007/tracks/posters-demos/papers/338>     <http://purl.org/dc/elements/1.1/creator> <http://data.semanticweb.org/person/abraham-bernstein>;
+         :author <http://data.semanticweb.org/person/abraham-bernstein>;
+         <http://xmlns.com/foaf/0.1/maker> <http://data.semanticweb.org/person/abraham-bernstein> .
+    
+    <http://data.semanticweb.org/conference/iswc-aswc/2007/tracks/research/papers/281>     <http://purl.org/dc/elements/1.1/creator> <http://data.semanticweb.org/person/abraham-bernstein>;
+         :author <http://data.semanticweb.org/person/abraham-bernstein>;
+         <http://xmlns.com/foaf/0.1/maker> <http://data.semanticweb.org/person/abraham-bernstein> .
+    
+    <http://data.semanticweb.org/conference/iswc-aswc/2007/tracks/research/papers/295>     <http://purl.org/dc/elements/1.1/creator> <http://data.semanticweb.org/person/abraham-bernstein>;
+         :author <http://data.semanticweb.org/person/abraham-bernstein>;
+         <http://xmlns.com/foaf/0.1/maker> <http://data.semanticweb.org/person/abraham-bernstein> .
+    
+    <http://data.semanticweb.org/conference/iswc/2006/paper-44>     :author <http://data.semanticweb.org/person/abraham-bernstein>;
+         <http://xmlns.com/foaf/0.1/maker> <http://data.semanticweb.org/person/abraham-bernstein> .
+    
+    <http://data.semanticweb.org/conference/iswc/2008/paper/poster_demo/87>     <http://purl.org/dc/elements/1.1/creator> <http://data.semanticweb.org/person/abraham-bernstein>;
+         :author <http://data.semanticweb.org/person/abraham-bernstein>;
+         <http://xmlns.com/foaf/0.1/maker> <http://data.semanticweb.org/person/abraham-bernstein> .
+    
+    <http://data.semanticweb.org/conference/iswc/2008/paper/research/60>     <http://purl.org/dc/elements/1.1/creator> <http://data.semanticweb.org/person/abraham-bernstein>;
+         :author <http://data.semanticweb.org/person/abraham-bernstein>;
+         <http://xmlns.com/foaf/0.1/maker> <http://data.semanticweb.org/person/abraham-bernstein> .
+    
+    <http://data.semanticweb.org/conference/iswc/2008/research/pcmember>     ns3:heldBy <http://data.semanticweb.org/person/abraham-bernstein> .
+    
+    <http://data.semanticweb.org/conference/www/2008/paper/45>     <http://purl.org/dc/elements/1.1/creator> <http://data.semanticweb.org/person/abraham-bernstein>;
+         :author <http://data.semanticweb.org/person/abraham-bernstein>;
+         <http://xmlns.com/foaf/0.1/maker> <http://data.semanticweb.org/person/abraham-bernstein> .
+    
+    <http://data.semanticweb.org/organization/univ-zuerich>     <http://xmlns.com/foaf/0.1/member> <http://data.semanticweb.org/person/abraham-bernstein> .
+    
+    <http://data.semanticweb.org/organization/university-of-zurich>     <http://xmlns.com/foaf/0.1/member> <http://data.semanticweb.org/person/abraham-bernstein> .
+    
+    <http://data.semanticweb.org/person/abraham-bernstein>     a <http://xmlns.com/foaf/0.1/Person>;
+         ns3:affiliation "University of Zurich";
+         ns3:holdsRole <http://data.semanticweb.org/conference/iswc/2008/research/pcmember>,
+                 [
+         ];
+         :affiliation <http://data.semanticweb.org/organization/univ-zuerich>,
+                <http://data.semanticweb.org/organization/university-of-zurich>;
+         rdfs:label "Abraham Bernstein";
+         rdfs:seeAlso <http://ontoworld.org/wiki/Special:ExportRDF/Abraham_Bernstein>,
+                <http://www.ifi.uzh.ch/ddis/fileadmin/user_upload/avi/foaf.rdf>;
+         = <http://ontoworld.org/wiki/Special:URIResolver/Abraham_Bernstein>,
+                <http://semanticweb.org/id/Abraham_Bernstein>;
+         <http://xmlns.com/foaf/0.1/based_near> <http://dbpedia.org/resource/Switzerland>;
+         <http://xmlns.com/foaf/0.1/family_name> "Bernstein";
+         <http://xmlns.com/foaf/0.1/firstName> "Abraham";
+         <http://xmlns.com/foaf/0.1/homepage> <http://www.ifi.unizh.ch/ddis/people/bernstein/>;
+         <http://xmlns.com/foaf/0.1/made> <http://data.semanticweb.org/conference/eswc/2007/demo-2>,
+                <http://data.semanticweb.org/conference/eswc/2007/paper-96>,
+                <http://data.semanticweb.org/conference/eswc/2007/paper-99>,
+                <http://data.semanticweb.org/conference/eswc/2008/paper/133>,
+                <http://data.semanticweb.org/conference/eswc/2008/paper/32>,
+                <http://data.semanticweb.org/conference/iswc-aswc/2007/tracks/posters-demos/papers/338>,
+                <http://data.semanticweb.org/conference/iswc-aswc/2007/tracks/research/papers/281>,
+                <http://data.semanticweb.org/conference/iswc-aswc/2007/tracks/research/papers/295>,
+                <http://data.semanticweb.org/conference/iswc/2006/paper-44>,
+                <http://data.semanticweb.org/conference/iswc/2008/paper/poster_demo/87>,
+                <http://data.semanticweb.org/conference/iswc/2008/paper/research/60>,
+                <http://data.semanticweb.org/conference/www/2008/paper/45>;
+         <http://xmlns.com/foaf/0.1/mbox_sha1sum> "8704ad77580618cb845036d3a15626d30fd828c3",
+                "b2fd03f06df0171f95240e1d58ff3d47be82c74a";
+         <http://xmlns.com/foaf/0.1/name> "Abraham Bernstein";
+         <http://xmlns.com/foaf/0.1/page> <http://ontoworld.org/wiki/Abraham_Bernstein> .
+      [      rdf:_1 <http://data.semanticweb.org/person/abraham-bernstein> ].
+    
+      [      rdf:_2 <http://data.semanticweb.org/person/abraham-bernstein> ].
+    
+      [      rdf:_2 <http://data.semanticweb.org/person/abraham-bernstein> ].
+    
+      [      rdf:_1 <http://data.semanticweb.org/person/abraham-bernstein> ].
+    
+      [      rdf:_2 <http://data.semanticweb.org/person/abraham-bernstein> ].
+    
+      [      ns3:heldBy <http://data.semanticweb.org/person/abraham-bernstein> ].
+    
+      [      rdf:_1 <http://data.semanticweb.org/person/abraham-bernstein> ].
+    
+      [      rdf:_2 <http://data.semanticweb.org/person/abraham-bernstein> ].
+    
+      [      rdf:_2 <http://data.semanticweb.org/person/abraham-bernstein> ].
+    
+      [      rdf:_3 <http://data.semanticweb.org/person/abraham-bernstein> ].
+    
+      [      rdf:_3 <http://data.semanticweb.org/person/abraham-bernstein> ].
+    
+      [      rdf:_2 <http://data.semanticweb.org/person/abraham-bernstein> ].
+    
+#ENDS

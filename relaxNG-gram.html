@@ -1,0 +1,224 @@
+
+
+
+<html xmlns="">
+
+    <head>
+        <title>Relax NG non-XML Grammar</title>
+    </head>
+
+    <body>
+        <h1>Relax NG non-XML Grammar</h1>
+        <address>source: <a href="relaxNG.g">relaxNG.g</a>
+        </address>
+        <dl>
+            <dt>
+                <a name="topLevel"
+                    id="topLevel">topLevel</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <a href="#decl">decl</a>
+                <sub></sub> * ( <a href="#pattern">pattern</a>
+                <sub></sub> <br class=""/> | <a href="#grammar">grammar</a>
+                <sub></sub>  ) <tt>END</tt> </dd>
+            <dt>
+                <a name="decl"
+                    id="decl">decl</a>
+                <sub></sub>
+            </dt>
+            <dd>( <tt>"namespace"</tt> <tt>identifier</tt> <tt>"="</tt> ( <a href="#literal">literal</a>
+                <sub></sub> <br class=""/> | <tt>"inherit"</tt>  )  ) <br class=""/> | ( <tt>"default"</tt> <tt>"namespace"</tt> [ <tt>identifier</tt>  ] <tt>"="</tt> ( <a href="#literal">literal</a>
+                <sub></sub> <br class=""/> | <tt>"inherit"</tt>  )  ) <br class=""/> | ( <tt>"datatypes"</tt> <tt>identifier</tt> <tt>"="</tt> <a href="#literal">literal</a>
+                <sub></sub>  ) </dd>
+            <dt>
+                <a name="pattern"
+                    id="pattern">pattern</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <a href="#UnaryExpr">UnaryExpr</a>
+                <sub></sub> [ ( <tt>"\\|"</tt> <a href="#UnaryExpr">UnaryExpr</a>
+                <sub></sub>  ) + <br class=""/> | ( <tt>","</tt> <a href="#UnaryExpr">UnaryExpr</a>
+                <sub></sub>  ) + <br class=""/> | ( <tt>"&#38;"</tt> <a href="#UnaryExpr">UnaryExpr</a>
+                <sub></sub>  ) +  ] </dd>
+            <dt>
+                <a name="UnaryExpr"
+                    id="UnaryExpr">UnaryExpr</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <a href="#PrimaryExpr">PrimaryExpr</a>
+                <sub></sub> [ <tt>"\\*"</tt> <br class=""/> | <tt>"\\+"</tt> <br class=""/> | <tt>"\\?"</tt>  ] </dd>
+            <dt>
+                <a name="PrimaryExpr"
+                    id="PrimaryExpr">PrimaryExpr</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>"empty"</tt> <br class=""/> | <tt>"text"</tt> <br class=""/> | <tt>"notAllowed"</tt> <br class=""/> | ( <tt>"element"</tt> <a href="#NameClass">NameClass</a>
+                <sub>0</sub> <tt>"{"</tt> <a href="#pattern">pattern</a>
+                <sub></sub> <tt>"}"</tt>  ) <br class=""/> | ( <tt>"attribute"</tt> <a href="#NameClass">NameClass</a>
+                <sub>1</sub> <tt>"{"</tt> <a href="#pattern">pattern</a>
+                <sub></sub> <tt>"}"</tt>  ) <br class=""/> | ( <tt>"list"</tt> <tt>"{"</tt> <a href="#pattern">pattern</a>
+                <sub></sub> <tt>"}"</tt>  ) <br class=""/> | ( <tt>"mixed"</tt> <tt>"{"</tt> <a href="#pattern">pattern</a>
+                <sub></sub> <tt>"}"</tt>  ) <br class=""/> | ( <tt>"grammar"</tt> <tt>"{"</tt> <a href="#grammar">grammar</a>
+                <sub></sub> <tt>"}"</tt>  ) <br class=""/> | ( <tt>"\\("</tt> <a href="#pattern">pattern</a>
+                <sub></sub> <tt>"\\)"</tt>  ) <br class=""/> | ( <tt>"externalRef"</tt> <a href="#literal">literal</a>
+                <sub></sub> [ <a href="#inherit">inherit</a>
+                <sub></sub>  ]  ) <br class=""/> | ( <tt>"parent"</tt> <a href="#ref">ref</a>
+                <sub></sub>  ) <br class=""/> | <a href="#ref">ref</a>
+                <sub></sub> <br class=""/> | <a href="#datatypeValue">datatypeValue</a>
+                <sub></sub> <br class=""/> | ( <a href="#datatypeName">datatypeName</a>
+                <sub></sub> [ ( <a href="#params">params</a>
+                <sub></sub> [ <a href="#Except">Except</a>
+                <sub></sub>  ]  ) <br class=""/> | <a href="#Except">Except</a>
+                <sub></sub> <br class=""/> | <a href="#datatypeValue">datatypeValue</a>
+                <sub></sub>  ]  ) </dd>
+            <dt>
+                <a name="Except"
+                    id="Except">Except</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>"-"</tt> <a href="#PrimaryExpr">PrimaryExpr</a>
+                <sub></sub> </dd>
+            <dt>
+                <a name="NameClass"
+                    id="NameClass">NameClass</a>
+                <sub>inAttr</sub>
+            </dt>
+            <dd>
+                <a href="#PrimaryNameClass">PrimaryNameClass</a>
+                <sub>inAttr</sub> [ ( <tt>"\\|"</tt> <a href="#PrimaryNameClass">PrimaryNameClass</a>
+                <sub>inAttr</sub>  ) *  ] </dd>
+            <dt>
+                <a name="PrimaryNameClass"
+                    id="PrimaryNameClass">PrimaryNameClass</a>
+                <sub>inAttr</sub>
+            </dt>
+            <dd>
+                <a href="#UnprefixedNameClass">UnprefixedNameClass</a>
+                <sub>inAttr</sub> <br class=""/> | <a href="#PrefixedNameClass">PrefixedNameClass</a>
+                <sub></sub> <br class=""/> | <a href="#AnyNameClass">AnyNameClass</a>
+                <sub>inAttr</sub> <br class=""/> | <a href="#NsNameClass">NsNameClass</a>
+                <sub>inAttr</sub> <br class=""/> | <a href="#ParenNameClass">ParenNameClass</a>
+                <sub>inAttr</sub> </dd>
+            <dt>
+                <a name="UnprefixedNameClass"
+                    id="UnprefixedNameClass">UnprefixedNameClass</a>
+                <sub>inAttr</sub>
+            </dt>
+            <dd>
+                <tt>identifier</tt> </dd>
+            <dt>
+                <a name="PrefixedNameClass"
+                    id="PrefixedNameClass">PrefixedNameClass</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>CName</tt> </dd>
+            <dt>
+                <a name="NsNameClass"
+                    id="NsNameClass">NsNameClass</a>
+                <sub>inAttr</sub>
+            </dt>
+            <dd>
+                <tt>nsName</tt> [ <tt>"-"</tt> <a href="#PrimaryNameClass">PrimaryNameClass</a>
+                <sub>inAttr</sub>  ] </dd>
+            <dt>
+                <a name="AnyNameClass"
+                    id="AnyNameClass">AnyNameClass</a>
+                <sub>inAttr</sub>
+            </dt>
+            <dd>
+                <tt>"\\*"</tt> [ <tt>"-"</tt> <a href="#PrimaryNameClass">PrimaryNameClass</a>
+                <sub>inAttr</sub>  ] </dd>
+            <dt>
+                <a name="ParenNameClass"
+                    id="ParenNameClass">ParenNameClass</a>
+                <sub>inAttr</sub>
+            </dt>
+            <dd>
+                <tt>"\\("</tt> <a href="#NameClass">NameClass</a>
+                <sub>inAttr</sub> <tt>"\\)"</tt> </dd>
+            <dt>
+                <a name="ref"
+                    id="ref">ref</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>identifierNotKeyword</tt> </dd>
+            <dt>
+                <a name="datatypeName"
+                    id="datatypeName">datatypeName</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>CName</tt> <br class=""/> | <tt>"string"</tt> <br class=""/> | <tt>"token"</tt> </dd>
+            <dt>
+                <a name="datatypeValue"
+                    id="datatypeValue">datatypeValue</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <a href="#literal">literal</a>
+                <sub></sub> </dd>
+            <dt>
+                <a name="params"
+                    id="params">params</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>"{"</tt> ( <tt>identifier</tt> <tt>"="</tt> <a href="#literal">literal</a>
+                <sub></sub>  ) + <tt>"}"</tt> </dd>
+            <dt>
+                <a name="grammar"
+                    id="grammar">grammar</a>
+                <sub></sub>
+            </dt>
+            <dd>( <a href="#definition">definition</a>
+                <sub></sub> <br class=""/> | <a href="#include">include</a>
+                <sub></sub>  ) + </dd>
+            <dt>
+                <a name="definition"
+                    id="definition">definition</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <a href="#defLHS">defLHS</a>
+                <sub></sub> <a href="#pattern">pattern</a>
+                <sub></sub> </dd>
+            <dt>
+                <a name="defLHS"
+                    id="defLHS">defLHS</a>
+                <sub></sub>
+            </dt>
+            <dd>( <tt>"start"</tt> ( <tt>"="</tt> <br class=""/> | <tt>"\\|="</tt> <br class=""/> | <tt>"&#38;="</tt>  )  ) <br class=""/> | <tt>identDEF</tt> </dd>
+            <dt>
+                <a name="include"
+                    id="include">include</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>"include"</tt> <a href="#literal">literal</a>
+                <sub></sub> [ <a href="#inherit">inherit</a>
+                <sub></sub>  ] [ <tt>"{"</tt> <a href="#definition">definition</a>
+                <sub></sub> * <tt>"}"</tt>  ] </dd>
+            <dt>
+                <a name="inherit"
+                    id="inherit">inherit</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>"inherit"</tt> <tt>"="</tt> <tt>identifier</tt> </dd>
+            <dt>
+                <a name="literal"
+                    id="literal">literal</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>literal1</tt> <br class=""/> | <tt>literal2</tt> </dd>
+        </dl>
+    </body>
+</html>

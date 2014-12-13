@@ -1,0 +1,15 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix math: <http://www.w3.org/2000/10/swap/math#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix : <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#>.
+
+
+## measurement data
+
+:meas47 :p1x "30.2"; :p1y "23.3";
+        :p2x "135.1"; :p2y "16.8";
+        :p3x "10.8"; :p3y "89.3";
+        :p4x "164.2"; :p4y "85.6".

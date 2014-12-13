@@ -1,0 +1,229 @@
+
+#  Notation3 generation by
+#       notation3.py,v 1.193 2007/01/26 03:33:01 timbl Exp
+
+     @prefix : <http://www.w3.org/2004/11/n3test#> .
+    
+     @forSome <#_g0> .
+    
+    <file:///devel/WWW/2000/10/swap/test/anon-prop.n3>     a :Input;
+         :description "Parse and regen anonymous property";
+         :expected "Positive";
+         <#_g0>  [
+             :isFile () ] .
+    
+    <file:///devel/WWW/2000/10/swap/test/contexts.n3>     a :Input;
+         :description "Parse and generate simple contexts";
+         :expected "Positive";
+         <#_g0>  [
+             :isFile () ] .
+    
+    <file:///devel/WWW/2000/10/swap/test/i18n/hiragana.n3>     a :Input;
+         :description "N3 string, qname and IRI with utf-8 non-ascii characters";
+         :expected "Positive";
+         <#_g0>  [
+             :isFile () ] .
+    
+    <file:///devel/WWW/2000/10/swap/test/lists.n3>     a :Input;
+         :description "parsing and generation of N3 list syntax";
+         :expected "Positive";
+         <#_g0>  [
+             :isFile () ] .
+    
+    <file:///devel/WWW/2000/10/swap/test/n3parser.tests>     a :Input;
+         :description "we might as well be nice and self-referential";
+         :expected "Positive";
+         <#_g0>  [
+             :isFile () ] .
+    
+    <file:///devel/WWW/2000/10/swap/test/strquot.n3>     a :Input;
+         :description "N3 string quoting with escaping";
+         :expected "Positive";
+         <#_g0>  [
+             :isFile () ] .
+    
+    <file:///devel/WWW/2000/10/swap/test/syntax/djb1a.n3>     a :Input;
+         :description "djb noticed a:b was parsed as rdf:type token";
+         :expected "Positive";
+         <#_g0>  [
+             :isFile () ] .
+    
+    <file:///devel/WWW/2000/10/swap/test/syntax/dot-dash.n3>     a :Input;
+         :description "combinations of - and _ in identifiers";
+         :expected "Positive";
+         <#_g0>  [
+             :isFile () ] .
+    
+    <file:///devel/WWW/2000/10/swap/test/syntax/equals1.n3>     a :Input;
+         :description "The = keyword";
+         :expected "Positive";
+         <#_g0>  [
+             :isFile () ] .
+    
+    <file:///devel/WWW/2000/10/swap/test/syntax/equals2.n3>     a :Input;
+         :description "The = keyword";
+         :expected "Positive";
+         <#_g0>  [
+             :isFile () ] .
+    
+    <file:///devel/WWW/2000/10/swap/test/syntax/keywords1.n3>     a :Input;
+         :description "@keywords in n3";
+         :expected "Positive";
+         <#_g0>  [
+             :isFile () ] .
+    
+    <file:///devel/WWW/2000/10/swap/test/syntax/keywords2.n3>     a :Input;
+         :description "using no keywords in n3";
+         :expected "Positive";
+         <#_g0>  [
+             :isFile () ] .
+    
+    <file:///devel/WWW/2000/10/swap/test/syntax/lstring.n3>     a :Input;
+         :description "N3 string nested triple quoting";
+         :expected "Positive";
+         <#_g0>  [
+             :isFile () ] .
+    
+    <file:///devel/WWW/2000/10/swap/test/syntax/neg-formula-predicate.n3>     a :Input;
+         :description "A predicate cannot be a formula, I hope";
+         :expected "Negative";
+         <#_g0>  [
+             :isFile () ] .
+    
+    <file:///devel/WWW/2000/10/swap/test/syntax/neg-keywords3.n3>     a :Input;
+         :description "@keywords is not a valid predicate";
+         :expected "Negative";
+         <#_g0>  [
+             :isFile () ] .
+    
+    <file:///devel/WWW/2000/10/swap/test/syntax/neg-literal-predicate.n3>     a :Input;
+         :description "A predicate cannot be a literal, I hope";
+         :expected "Negative";
+         <#_g0>  [
+             :isFile () ] .
+    
+    <file:///devel/WWW/2000/10/swap/test/syntax/neg-single-quote.n3>     a :Input;
+         :description "single quoted strings are illegal";
+         :expected "Negative";
+         <#_g0>  [
+             :isFile () ] .
+    
+    <file:///devel/WWW/2000/10/swap/test/syntax/neg-thisadoc.n3>     a :Input;
+         :description "The `this' keyword is no longer legal ";
+         :expected "Negative";
+         <#_g0>  [
+             :isFile () ] .
+    
+    <file:///devel/WWW/2000/10/swap/test/syntax/no-last-nl.n3>     a :Input;
+         :description "An N3 file with no final newline character";
+         :expected "Positive";
+         <#_g0>  [
+             :isFile () ] .
+    
+    <file:///devel/WWW/2000/10/swap/test/syntax/numbers.n3>     a :Input;
+         :description "Number syntax";
+         :expected "Positive";
+         <#_g0>  [
+             :isFile () ] .
+    
+    <file:///devel/WWW/2000/10/swap/test/syntax/path1.n3>     a :Input;
+         :description "Path syntax, simple";
+         :expected "Positive";
+         <#_g0>  [
+             :isFile () ] .
+    
+    <file:///devel/WWW/2000/10/swap/test/syntax/path2.n3>     a :Input;
+         :description "Path syntax, more";
+         :expected "Positive";
+         <#_g0>  [
+             :isFile () ] .
+    
+    <file:///devel/WWW/2000/10/swap/test/syntax/qvars1.n3>     a :Input;
+         :description "Quick variable syntax, simple";
+         :expected "Positive";
+         <#_g0>  [
+             :isFile () ] .
+    
+    <file:///devel/WWW/2000/10/swap/test/syntax/qvars2.n3>     a :Input;
+         :description "Quick variable syntax, more";
+         :expected "Positive";
+         <#_g0>  [
+             :isFile () ] .
+    
+    <file:///devel/WWW/2000/10/swap/test/syntax/this-quantifiers.n3>     a :Input;
+         :description "Can still read the old 'this log:forSome' syntax";
+         :expected "Positive";
+         <#_g0>  [
+             :isFile () ] .
+    
+    <file:///devel/WWW/2000/10/swap/test/syntax/this-rules.n3>     a :Input;
+         :description "Can still read the old 'this log:forAll' syntax";
+         :expected "Positive";
+         <#_g0>  [
+             :isFile () ] .
+    
+    <file:///devel/WWW/2000/10/swap/test/syntax/too-nested.n3>     a :Input;
+         :description "Are we exceeding a maximum recursion limit or two?";
+         :expected "Positive";
+         <#_g0>  [
+             :isFile () ] .
+    
+    <file:///devel/WWW/2000/10/swap/test/syntax/trailing-semicolon.n3>     a :Input;
+         :description "Propertylists can end in trailing semicolon.";
+         :expected "Positive";
+         <#_g0>  [
+             :isFile () ] .
+    
+    <file:///devel/WWW/2000/10/swap/test/syntax/zero-objects.n3>     a :Input;
+         :description "A statement that says nothing at all";
+         :expected "Negative";
+         <#_g0>  [
+             :isFile () ] .
+    
+    <file:///devel/WWW/2000/10/swap/test/syntax/zero-predicates.n3>     a :Input;
+         :description "A statement that says nothing at all";
+         :expected "Positive";
+         <#_g0>  [
+             :isFile () ] .
+    
+    <file:///devel/WWW/2000/10/swap/test/tests-work.txt>     a :Input;
+         :description "something that isn't n3";
+         :expected "Negative";
+         <#_g0>  [
+             :isFile () ] .
+    
+    <#_g0>     a :N3Parser;
+         :command """CLASSPATH="/devel/rhino/rhino1_6R5/js.jar" java org.mozilla.javascript.tools.shell.Main ../pyjs/testn3.js %s""";
+         :failsParsing <file:///devel/WWW/2000/10/swap/test/anon-prop.n3>,
+                <file:///devel/WWW/2000/10/swap/test/contexts.n3>,
+                <file:///devel/WWW/2000/10/swap/test/i18n/hiragana.n3>,
+                <file:///devel/WWW/2000/10/swap/test/lists.n3>,
+                <file:///devel/WWW/2000/10/swap/test/n3parser.tests>,
+                <file:///devel/WWW/2000/10/swap/test/strquot.n3>,
+                <file:///devel/WWW/2000/10/swap/test/syntax/djb1a.n3>,
+                <file:///devel/WWW/2000/10/swap/test/syntax/dot-dash.n3>,
+                <file:///devel/WWW/2000/10/swap/test/syntax/equals1.n3>,
+                <file:///devel/WWW/2000/10/swap/test/syntax/equals2.n3>,
+                <file:///devel/WWW/2000/10/swap/test/syntax/keywords1.n3>,
+                <file:///devel/WWW/2000/10/swap/test/syntax/keywords2.n3>,
+                <file:///devel/WWW/2000/10/swap/test/syntax/lstring.n3>,
+                <file:///devel/WWW/2000/10/swap/test/syntax/neg-formula-predicate.n3>,
+                <file:///devel/WWW/2000/10/swap/test/syntax/neg-keywords3.n3>,
+                <file:///devel/WWW/2000/10/swap/test/syntax/neg-literal-predicate.n3>,
+                <file:///devel/WWW/2000/10/swap/test/syntax/neg-single-quote.n3>,
+                <file:///devel/WWW/2000/10/swap/test/syntax/neg-thisadoc.n3>,
+                <file:///devel/WWW/2000/10/swap/test/syntax/no-last-nl.n3>,
+                <file:///devel/WWW/2000/10/swap/test/syntax/numbers.n3>,
+                <file:///devel/WWW/2000/10/swap/test/syntax/path1.n3>,
+                <file:///devel/WWW/2000/10/swap/test/syntax/path2.n3>,
+                <file:///devel/WWW/2000/10/swap/test/syntax/qvars1.n3>,
+                <file:///devel/WWW/2000/10/swap/test/syntax/qvars2.n3>,
+                <file:///devel/WWW/2000/10/swap/test/syntax/this-quantifiers.n3>,
+                <file:///devel/WWW/2000/10/swap/test/syntax/this-rules.n3>,
+                <file:///devel/WWW/2000/10/swap/test/syntax/too-nested.n3>,
+                <file:///devel/WWW/2000/10/swap/test/syntax/trailing-semicolon.n3>,
+                <file:///devel/WWW/2000/10/swap/test/syntax/zero-objects.n3>,
+                <file:///devel/WWW/2000/10/swap/test/syntax/zero-predicates.n3>,
+                <file:///devel/WWW/2000/10/swap/test/tests-work.txt> .
+    
+#ENDS

@@ -1,0 +1,128 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+
+<> dc:description """cwm does a little SPKI""",
+   """
+   test ala: python cwm.py spki2may.n3 --think
+   The relevant conclusion is: :cert1 s:issuer [sA:authorizes :req1].
+   """;
+   dc:source <http://www.anr.mcnc.org/~csc591w/cs591w/draft-ietf-spki-cert-examples-01.txt>.
+
+
+<> dc:description """
+  Maybe we could use the kestrel time ontology?
+  @prefix time: <http://www.kestrel.edu/DAML/2000/12/TIME.daml>
+  """.
+
+# terms from SPKI syntax
+@prefix s: <http://example/@@spki-vocab#>.
+
+# SPKI tag types
+@prefix sT: <http://example/@@spki-tag-vocab#>.
+
+# aux terms: their meaning is given in SPKI,
+# but not their name/syntax.
+@prefix sA: <http://example/@@spki-aux-vocab#>.
+
+# terms from this example
+@prefix : <http://example/stuff#>.
+@prefix ex: <http://example/stuff#>.
+
+
+<http://www.anr.mcnc.org/~csc591w/cs591w/draft-ietf-spki-cert-examples-01.txt>
+  <#excerpt> """
+#(cert
+# (issuer (hash sha1 |TLCgPLFlGTzgUbcaYLW8kGTEnUk=|))
+# (subject (hash sha1 |Ve1L/7MqiJcj+LSa/l10fl3tuTQ=|))
+# (propagate)
+#   (tag (http (* prefix http://acme.com/company-private/personnel/ )))
+#   (tag (pkpfs //ftp.clark.net/pub/cme/spki.* (* set read write)))
+# (not-before "1998-03-01_12:42:17")
+# (not-after "2012-01-01_00:00:00")
+#)
+""".
+
+:cert1
+ s:issuer [ s:sha1 "TLCgPLFlGTzgUbcaYLW8kGTEnUk="];
+ s:subject [ s:sha1 "Ve1L/7MqiJcj+LSa/l10fl3tuTQ="];
+ a s:propagate; #@@??
+  s:tag [ a sT:http;
+          s:prefix "http://acme.com/company-private/personnel/"];
+  s:tag [ a sT:pkpfs;
+          sA:path "//ftp.clark.net/pub/cme/spki.*";
+          sA:operations  (s:set s:read s:write) ];
+  s:not-before "1998-03-01_12:42:17";
+  s:not-after "2012-01-01_00:00:00".
+
+
+###
+# an example HTTP request...
+
+@prefix http: <http://example/@@http-vocab#>.
+
+:req1
+  http:requestURI "http://acme.com/company-private/personnel/file43";
+  sA:signedBy :uk1.
+
+# some user's key.
+:uk1 s:sha1 "Ve1L/7MqiJcj+LSa/l10fl3tuTQ=".
+
+
+
+####
+# tag matching, HTTP prefix case...
+
+<http://www.anr.mcnc.org/~csc591w/cs591w/draft-ietf-spki-cert-examples-01.txt>
+  <#excerpt> """
+# 2.2 HTTP
+#  (tag (http http://acme.com/company-private/personnel ))
+# This <tag> gives the Subject permission to access the web page at the
+# given URI.  To give permission for an entire tree under a given URI,
+# one might use:
+#  (tag (http (* prefix http://acme.com/company-private/personnel/ )))
+# 2.4 Public Key Protected File System tags
+#  (tag (pkpfs <pathname> <access> ))
+# refers to a hypothetical distributed file system whose access is
+# controlled by public key challenge/response.  The <pathname> can be a
+# single pathname, a set of files (specified by normal "*" convention)
+# or a directory sub-structure (specified by (* prefix ...)).
+# This gives read and write access to all files starting with "spki.".
+""".
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix str: <http://www.w3.org/2000/10/swap/string#> .
+@forAll :r, :t, :addr, :pat.
+
+
+{ :r http:requestURI :addr.
+  :t a sT:http; s:prefix :pat.
+  :addr str:startsWith :pat
+}
+  log:implies { :t sA:matches :r }.
+
+
+
+
+####
+# SPKI evaluation rule
+
+@forAll :cert, :req, :whoK, :CK, :f.
+
+ { :cert s:tag [ sA:matches :req ];
+         s:subject [ s:sha1 :f];
+         s:issuer :CK.
+   :req sA:signedBy [ s:sha1 :f] }
+ log:implies { :CK sA:authorizes :req }.
+
+
+<> dc:description """
+$Log$
+Revision 1.3  2004-06-25 01:26:59  timbl
+The @forAll form is now the primary form used by cwm, not this log:forAll.
+Supporess withh  --n3=v
+--reify and --dereify introduced, not supported by tests yet.
+See doc/changes.html
+
+Revision 1.2  2002/05/02 22:37:48  connolly
+evaluation rule works!
+
+""".

@@ -1,0 +1,10 @@
+.*
+,*
+*.pyc
+diffs
+temp
+xdiffs
+all
+.arch-ids
+
+

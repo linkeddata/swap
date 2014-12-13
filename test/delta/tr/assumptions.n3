@@ -1,0 +1,13 @@
+# Assumptions made when doing diffs of the TR page
+#
+
+@prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+# No two distinct people have the same full name
+contact:fullName a owl:InverseFunctionalProperty.
+
+# No two distinct entities share the same home page
+contact:homePage a owl:InverseFunctionalProperty.
+
+#ends

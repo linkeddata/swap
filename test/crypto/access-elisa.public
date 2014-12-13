@@ -1,0 +1,24 @@
+#Processed by Id: cwm.py,v 1.171 2005/07/12 18:47:01 syosi Exp 
+        #    using base file:/home/syosi/CVS-local/WWW/2000/10/swap/test/crypto/
+        
+#  Notation3 generation by
+#       notation3.py,v 1.180 2005/06/09 21:05:14 syosi Exp
+
+#   Base was: file:/home/syosi/CVS-local/WWW/2000/10/swap/test/crypto/
+     @prefix : <access-elisa.private#> .
+     @prefix acc: <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+    
+     @forAll :x,
+                :y,
+                <access-onlyPublic.n3#x> .
+    
+    """
+NjU1MzcKCjEzMTc4NTkyNzM4NDYzNTYyODExOTYwODA0MzI5ODc4MjcxMjA0ODEwMTg0MzAwNzUy
+NDA2MDkyNjc5MzA3MTg1NjYyMjA0NjA4ODY3NjU4MzIwMzkwNzU4NjM1ODQ1ODExMTk4MjgwMTAz
+MDI2NDM5MzY2ODg1MTE0MTMwMDg5MjQzMzEwNTI1OTMzMjQ4ODc2NTIxMDkwMzExNjk2ODMwMjcx
+ODAyNTAwNTgxODgzODc2ODM3NjczNzY1NzIyNjczMDk3MjkyMTI5MzI2NjIwMTQ1MTQwMzA0Nzcx
+OTA3MTg5MDc4OTE1NjY3NjAwNzA3NTcyMDU5MTcxMDg1MzA1ODY5MzQ4MDU1MTY1OTIxMDEwOTIy
+NjQ0MjI1MDc3NTI2MTMxNjY5ODk0NjExMjUxMzI1OQ=3D=3D
+"""     a acc:MemberKey .
+    
+#ENDS

@@ -1,0 +1,1396 @@
+# Generated from KIF-style axioms
+@prefix : <#> .
+@prefix ko: <kif-ops#> .
+@prefix v: <vars#>
+# Saying that relation "Type" holds for objects S and O is logically equivalent to saying that relation "PropertyValue" holds for objects "type", S, and O.
+
+ .  :Ax001 =         (ko:means (:Type v:s v:o) (:PropertyValue :type v:s v:o))
+
+# Section 2.3.         No Repeats List
+# This relation is used in the axiomatization of properties "cardinality", "minCardinality", and "maxCardinality".
+
+ 
+
+# A "no-repeats-list" is a list for which no item occurs more than once.
+
+ .  :Ax002 =         (ko:means (:no_repeats_list v:l) 
+
+           (:or (ko:equals v:l :nil) 
+
+               (:exists (v:x) (ko:equals v:l (:listof v:x))) 
+
+               (:and (:not (:item (:rest v:l) (:first v:l))) 
+
+                    (:no_repeats_list (:rest v:l)))))
+
+# Section 3.    RDF
+# As stated in the introduction, each RDF statement with predicate P, subject S, and object O is translated into a KIF sentence of the form "(PropertyValue P S O)".
+
+# Section 3.1.         Classes
+# This section axiomatizes the classes that are included in RDF and defines one additional class (i.e., FunctionalProperty) that is useful in axiomatizing other classes and properties.
+
+# Section 3.1.1.      Resource
+# All things being described by RDF expressions are called resources.
+
+ 
+
+# "Resource" is type "Class".
+
+ .  :Ax003 =         (:Type :Resource :Class)
+
+# Section 3.1.2.      Property
+ 
+
+# If an object P is type "Property" then P is also type "Resource".  (I.e., properties are resources.)
+
+ .  :Ax004 =          (ko:implies (:Type v:p :Property) (:Type v:p :Resource))
+
+ 
+
+# The first argument of relation "PropertyValue" is type "Property".
+
+ .  :Ax005 =         (ko:implies (:PropertyValue v:p v:s v:o) (:Type v:p :Property))
+
+# Section 3.1.3.      Class
+ 
+
+# If an object C is type "Class" then C is also type "Resource" (i.e., classes are resources), and no object can be both type "Property" and type "Class" (i.e., properties and classes are disjoint).
+
+ .  :Ax006 =         (ko:implies (:Type v:c :Class) (:Type v:c :Resource))
+
+ .  :Ax007 =         (:not (:and (:Type v:x :Property) (:Type v:x :Class)))
+
+# Section 3.1.4.      FunctionalProperty
+# The class "FunctionalProperty" is not in RDF or RDF-S.  We define "FunctionalProperty" only for convenience in axiomatizing other classes and properties. 
+
+ 
+
+# If an object A is type "FunctionalProperty" then A is also type "Property".  (I.e., functional properties are properties.)
+
+ .  :Ax008 =         (ko:implies (:Type v:a :FunctionalProperty) (:Type v:a :Property))
+
+ 
+
+# If an object FP is type "FunctionalProperty", and objects V1 and V2 are both values of FP for some object, then V1 is equal to V2.  (I.e., a functional property is functional in its value.)
+
+ .  :Ax009 =         (ko:implies (:and (:Type v:fp :FunctionalProperty) 
+
+               (:PropertyValue v:fp v:s v:v1) 
+
+               (:PropertyValue v:fp v:s v:v2))
+
+          (ko:equals v:v1 v:v2))
+
+# Section 3.1.5.      Literal
+ 
+
+# "Literal" is type "Class".
+
+ .  :Ax010 =     (:Type :Literal :Class)
+
+# Section 3.1.6.      Statement
+ 
+
+# If an object S is type "Statement", then S is also type "Resource".  (I.e., statements are resources.)
+
+ .  :Ax011 =      (ko:implies (:Type v:s :Statement) (:Type v:s :Resource))
+
+ 
+
+# If an object ST is type "Statement", then there exists a value of "Predicate" for ST, a value of "Subject" for ST, and a value of "Object" for ST. (I.e., every statement has a predicate, subject, and object.)
+
+ .  :Ax012 =     (ko:implies (:Type :Statement v:st)
+
+          (:exists (v:p v:s v:o) 
+
+                  (:and (:PropertyValue :Predicate v:st v:p)
+
+                       (:PropertyValue :Subject v:st v:r)
+
+                       (:PropertyValue :Object v:st v:o))))
+
+# Section 3.1.7.      Container
+ 
+
+# If an object C is type "Container", then C is also type "Resource".  (I.e., containers are resources.)
+
+ .  :Ax013 =      (ko:implies (:Type v:c :Container) (:Type v:c :Resource))
+
+ 
+
+# If an object C is type "Container", then C is a KIF list.  (I.e., a container is considered to be a list as defined in KIF.)
+
+ .  :Ax014 =     (ko:implies (:Type v:c :Container) (:List v:c))
+
+ 
+
+# If an object C is type "Container", then C is type "Bag" or type "Seq" or type "Alt".  (I.e., a container is a bag, a sequence, or an alternative.)
+
+ .  :Ax015 =     (ko:implies (:Type v:c :Container) 
+
+          (:or (:Type v:c :Bag) 
+
+              (:Type v:c :Seq) 
+
+              (:Type v:c :Alt))) 
+
+# Section 3.1.7.1.            Bag
+ 
+
+# If an object B is type "Bag", then B is also type "Container".  (I.e., bags are containers.)
+
+ .  :Ax016 =     (ko:implies (:Type v:b :Bag) (:Type v:b :Container))
+
+# Section 3.1.7.2.            Seq
+ 
+
+# If an object S is type "Seq", then S is also type "Container".  (I.e., sequences are containers.)
+
+ .  :Ax017 =     (ko:implies (:Type v:s :Seq) (:Type v:s :Container))
+
+ 
+
+# No object X is both type "Bag" and type "Seq".  (I.e., bags and sequences are disjoint.)
+
+ .  :Ax018 =     (:not (:and (:Type v:x :Bag) (:Type v:x :Seq)))
+
+# Section 3.1.7.3.            Alt
+ 
+
+# If an object A is type "Alt", then A is also type "Container".  (I.e., alternatives are containers.)
+
+ .  :Ax019 =     (ko:implies (:Type v:a :Alt) (:Type v:a :Container))
+
+# Section 3.1.7.4.            ContainerMembershipProperty
+ 
+
+# If an object C is type "ContainerMembershipProperty", then C is also type "Property".  (I.e., container membership properties are properties.)
+
+ .  :Ax020 =     (ko:implies (:Type v:c :ContainerMembershipProperty) (:Type v:c :Property))
+
+# Section 3.2.         Properties
+# This section axiomatizes the properties that are included in RDF.
+
+# Section 3.2.1.      type
+# "type" is used to indicate that a resource is a member of a class.
+
+ 
+
+# "type" is type "Property".  (I.e., "type" is a property.)
+
+ .  :Ax021 =     (:Type :type :Property)
+
+ 
+
+# The first argument of "Type" is a resource and the second argument of "Type" is a class.
+
+ .  :Ax022 =     (ko:implies (:Type v:r v:c) (:and (:Type v:r :Resource) (:Type v:c :Class)))
+
+# Section 3.2.2.      subject
+ 
+
+# "Subject" is type "FunctionalProperty", and if an object SB is the value of "Subject" for an object ST, then ST is type "Statement" and SB is type "Resource".  (I.e., every statement has exactly one subject, and that subject is a resource.)
+
+ .  :Ax023 =     (:Type :Subject :FunctionalProperty)
+
+ .  :Ax024 =     (ko:implies (:PropertyValue :Subject v:st v:sb) 
+
+          (:and (:Type v:st :Statement) (:Type v:sb :Resource))) 
+
+# Section 3.2.3.      predicate
+ 
+
+# "Predicate" is type "FunctionalProperty", and if an object P is the value of "Predicate" for an object ST, then P is type "Property" and ST is type "Statement".  (I.e., every statement has exactly one predicate, and that predicate is a property.)
+
+ .  :Ax025 =     (:Type :Predicate :FunctionalProperty)
+
+ .  :Ax026 =     (ko:implies (:PropertyValue :Predicate v:st v:p) 
+
+          (:and (:Type v:st :Statement) (:Type v:p :Property))) 
+
+# Section 3.2.4.      object
+ 
+
+# "Object" is type "FunctionalProperty", and if an object O is the value of "Object" for an object ST, then O is either type "Resource" or type "Literal" and ST is type "Statement".  (I.e., every statement has exactly one object, and that object is either a resource or a literal.)
+
+ .  :Ax027 =     (:Type :Object :FunctionalProperty) 
+
+ .  :Ax028 =     (ko:implies (:PropertyValue :Object v:st v:o)
+
+          (:and (:Type v:st :Statement)
+
+               (:or (:Type v:o :Resource) (:Type v:o :Literal))))
+
+# Section 3.2.5.      value
+ 
+
+# "value" is type "Property", and if an object V is a value of "value" for an object SV, then SV is type "Resource" and V is either type "Resource" or type "Literal".
+
+ .  :Ax029 =     (:Type :value :Property)
+
+ .  :Ax030 =     (ko:implies (:PropertyValue :value v:sv v:v) 
+
+          (:and (:Type v:sv :Resource) 
+
+               (:or (:Type v:v :Resource) (:Type v:v :Literal))))
+
+# Section 3.2.6.      _1, _2, _3, …
+ 
+
+# For each positive integer N, "_N" is type "FunctionalProperty", and if an object O is the value of "_N" for an object C, then C is type "Collection".  (The _N of a collection is intended to be the Nth element of that collection.)
+
+ .  :Ax031 =     (:Type :FunctionalProperty _1)
+
+ .  :Ax032 =     (ko:implies (:PropertyValue _1 v:c v:o) (:Type :Collection v:c))
+
+ 
+
+# and similarly for _2, _3, etc.
+
+# Section 4.    RDF-S
+# RDF-S is a collection of classes and properties that is added to RDF.  Statements in RDF-S are RDF statements.  
+
+# Section 4.1.         Classes
+# This section axiomatizes the classes that are added to RDF in RDF-S.
+
+# Section 4.1.1.      ConstraintResource
+# "ConstraintResource" is a class of RDF-S constructs involved in the expression of constraints.
+
+ 
+
+# "Resource" is a value of "subClassOf" for "ConstraintResource".  (I.e., constraint resources are resources.)
+
+ .  :Ax033 =     (:PropertyValue :subClassOf :ConstraintResource :Resource)
+
+# Section 4.1.2.      ConstraintProperty
+ 
+
+# An object CP is type "ConstraintProperty" if and only if it is type "ConstraintResource" and type "Property".  (I.e., constraint properties are exactly those constraint resources that are also properties.)
+
+ .  :Ax034 =     (ko:means (:Type v:cp :ConstraintProperty)
+
+           (:and (:Type v:cp :ConstraintResource)
+
+                (:Type v:cp :Property)))
+
+# Section 4.2.         Properties
+# This section axiomatizes the properties that are added to RDF in RDF-S.
+
+# Section 4.2.1.      subClassOf
+ 
+
+# "subClassOf" is type "Property".
+
+ .  :Ax035 =     (:Type :subClassOf :Property)
+
+ 
+
+# If an object CSUPER is a value of "subClassOf" for an object CSUB, then CSUPER is type "Class", CSUB is type "Class", CSUB is not CSUPER, and if an object X is type CSUB then it is also type CSUPER.  (I.e., the arguments of subClassOf are classes, and objects in a subclass are also in the superclass.)
+
+ .  :Ax036 =     (ko:implies (:PropertyValue :subClassOf v:csub v:csuper) 
+
+          (:and (:Type v:csub :Class)
+
+               (:Type v:csuper :Class)
+
+               (ko:notequals v:csub v:csuper)
+
+               (:forall (v:x) (ko:implies (:Type v:x v:csub) (:Type v:x v:csuper)))))
+
+# Section 4.2.2.      subPropertyOf
+ 
+
+# "subPropertyOf" is type "Property".
+
+ .  :Ax037 =     (:Type :subPropertyOf :Property)
+
+ 
+
+# If an object SUPERP is a value of "subPropertyOf" of an object SUBP, then SUBP is type "Property", SUPERP is type "Property", and if an object V is a value of SUBP for an object O then V is also a value of SUPERP for O.  (I.e., if a subProperty has a value V for an object O, then the superproperty also has value V for O.)
+
+ .  :Ax038 =     (ko:implies (:PropertyValue :subPropertyOf v:subP v:superP) 
+
+          (:and (:Type v:subP :Property)
+
+               (:Type v:superP :Property)
+
+               (:forall (v:o v:v) (ko:implies (:PropertyValue v:subP v:o v:v) 
+
+                                   (:PropertyValue v:superP v:o v:v)))))
+
+# Section 4.2.3.      seeAlso
+ 
+
+# "seeAlso" is type "Property", and "Resource" is a value of both "domain" and "range" for "seeAlso.  (I.e., "seeAlso" is a property whose arguments are resources.)
+
+ .  :Ax039 =     (:Type :seeAlso :Property)
+
+ .  :Ax040 =     (:PropertyValue :domain :seeAlso :Resource)
+
+ .  :Ax041 =     (:PropertyValue :range :seeAlso :Resource)
+
+# Section 4.2.4.      isDefinedBy
+ 
+
+# "seeAlso" is a value of "subPropertyOf" for "isDefinedBy".  (I.e., "isDefinedBy" is a subproperty of "seeAlso".)
+
+ .  :Ax042 =     (:PropertyValue :subPropertyOf :isDefinedBy :seeAlso)
+
+# Section 4.2.5.      comment
+ 
+
+# "comment" is type "Property", and "Literal" is the value of "range" for "comment".  (I.e., "comment" is a property whose value is a literal.)
+
+ .  :Ax043 =     (:Type :comment :Property)
+
+ .  :Ax044 =     (:PropertyValue :range :comment :Literal)
+
+# Section 4.2.6.      label
+ 
+
+# "label" is type "Property", and "Literal" is the value of "range" for "label".  (I.e., "label" is a property whose value is a literal.)
+
+ .  :Ax045 =     (:Type :label :Property)
+
+ .  :Ax046 =     (:PropertyValue :range :label :Literal)
+
+# Section 4.3.         Constraint Properties
+ 
+
+# "Property" is a value of "subClassOf" for "ConstraintProperty".  (I.e., constraint properties are properties.)
+
+ .  :Ax047 =     (:PropertyValue :subClassOf :ConstraintProperty :Property)
+
+# Section 4.3.1.      range
+ 
+
+# "range" is type "ConstraintProperty" and type "FunctionalProperty".
+
+ .  :Ax048 =     (:Type :range :ConstraintProperty)
+
+ .  :Ax049 =     (:Type :range :FunctionalProperty)
+
+ 
+
+# If an object R is the value of "range" for an object P, then P is type "Property", R is type "Class", and if an object Y is a value of P then Y is type R.  (I.e., if R is the range of P, then P is a property, R is a class, and every value of P is an R.)
+
+ .  :Ax050 =     (ko:implies (:PropertyValue :range v:p v:r) 
+
+          (:and (:Type v:p :Property)
+
+               (:Type v:r :Class)
+
+               (:forall (v:x v:y) 
+
+                       (ko:implies (:PropertyValue v:p v:x v:y) (:Type v:y v:r)))))
+
+ 
+
+# Note that the following can be inferred from the axioms regarding "domain" and "range":
+
+ .  :Th1 =         (:PropertyValue :domain :range :Property)
+
+ .  :Th2 =         (:PropertyValue :range :range :Class)
+
+# Section 4.3.2.      domain
+ 
+
+# "domain" is type "ConstraintProperty".
+
+ .  :Ax051 =     (:Type :domain :ConstraintProperty)
+
+ 
+
+# If an object D is a value of "domain" for an object P, then P is type "Property", D is type "Class", and if P has a value for an object X then X is type D.  (I.e., if D is a domain of P, then P is a property, D is a class, and every object that has a value of P is a D.)
+
+ .  :Ax052 =     (ko:implies (:PropertyValue :domain v:p v:d) 
+
+          (:and (:Type v:p :Property)
+
+               (:Type v:d :Class)
+
+               (:forall (v:x v:y) 
+
+                       (ko:implies (:PropertyValue v:p v:x v:y) (:Type v:x v:d))))) 
+
+ 
+
+# Note that the following can be inferred from the axioms regarding "domain" and "range":
+
+ .  :Th3 =         (:PropertyValue :domain :domain :Property)
+
+ .  :Th4 =         (:PropertyValue :range :domain :Class)
+
+# Section 5.    DAML+OIL
+# DAML+OIL is a collection of classes, properties, and objects that is added to RDF and RDF-S.  Statements in DAML+OIL are RDF statements.  
+
+# Section 5.1.         Classes
+# This section axiomatizes the classes that are added to RDF and RDF-S.
+
+# Section 5.1.1.      Thing
+ 
+
+# If an object C is type "class", then if NC is the value of "complementOf" for C and L is a two element list containing C and NC, then L is a value of "unionOf" for "Thing".  (I.e., "Thing" is the union of any class and its complement.)
+
+ .  :Ax053 =     (ko:implies (:Type v:c :Class)
+
+          (:forall (v:nc v:l) 
+
+                  (ko:implies (:and (:PropertyValue :complementOf v:c v:nc)
+
+                           (:Type v:l :List)
+
+                           (:PropertyValue :item v:l v:c)
+
+                           (:PropertyValue :item v:l v:nc)
+
+                           (:forall (v:x) (ko:implies (:PropertyValue :item v:l v:x) 
+
+                                            (:or (ko:equals v:x v:c) 
+
+                                                (ko:equals v:x v:nc)))))
+
+                      (:PropertyValue :unionOf :Thing v:l))))
+
+# Section 5.1.2.      Nothing
+ 
+
+# "Nothing" is the value of "complementOf" for "Thing".  (I.e., "Nothing" is the complement of "Thing".)
+
+ .  :Ax054 =     (:PropertyValue :complementOf :Thing :Nothing)
+
+# Section 5.1.3.      Disjoint
+ 
+
+# "Disjoint" is type "Class".
+
+ .  :Ax055 =     (:Type :Disjoint :Class)
+
+ 
+
+# Saying that an object is type "Disjoint" is logically equivalent to saying that the object is type "List", that every item in the list is type "Class", and that the classes in the list are pairwise joint.
+
+ .  :Ax056 =     (ko:means (:Type v:l :Disjoint)
+
+           (:and (:Type v:l :List)
+
+                (:forall (v:c) (ko:implies (:PropertyValue :Item v:c v:l)
+
+                                 (:Type v:c :Class)))
+
+                (:forall (v:c1 v:c2) 
+
+                        (ko:implies (:and (:PropertyValue :item v:c1 v:l)
+
+                                 (:PropertyValue :item v:c2 v:l) 
+
+                                 (:not (ko:equals v:c1 v:c2))) 
+
+                            (:PropertyValue :disjointWith v:c1 v:c2)))))
+
+ 
+
+# Note that the following can be inferred from the axioms regarding "Disjoint" and "subClassOf":
+
+ .  :Th5 =         (:PropertyValue :subClassOf :Disjoint :List)
+
+# Section 5.1.4.      Restriction
+ 
+
+# "Restriction" is type "Class".
+
+ .  :Ax057 =     (:Type :Restriction :Class)
+
+# Section 5.1.5.      NonNegativeInteger
+ 
+
+# "Integer" is a value of "subClassOf" for "NonNegativeInteger".  (I.e., non-negative integers are integers.)
+
+ .  :Ax058 =     (:subClassOf :NonNegativeInteger :Integer)
+
+# Section 5.1.6.      TransitiveProperty
+ 
+
+# "TransitiveProperty" is type "Class".
+
+ .  :Ax059 =     (:Type :TransitiveProperty :Class)
+
+ 
+
+# Saying that an object P is type "TransitiveProperty" is logically equivalent to saying that P is a property and that if an object Y is a value of P for an object X and an object Z is a value of P for Y then Z is a value of P for X.
+
+ .  :Ax060 =     (ko:means (:Type v:p :TransitiveProperty)
+
+           (:and (:Type v:p :Property)
+
+                (:forall (v:x v:y v:z) 
+
+                        (ko:implies (:and (:PropertyValue v:p v:x v:y) 
+
+                                 (:PropertyValue v:p v:y v:z)) 
+
+                            (:PropertyValue v:p v:x v:z)))))
+
+ 
+
+# Note that the following can be inferred from the axioms regarding "TransitiveProperty" and "subClassOf":
+
+ .  :Th6 =         (:PropertyValue :subClassOf :TransitiveProperty :Property)
+
+# Section 5.1.7.      UniqueProperty
+ 
+
+# "UniqueProperty" is type "Class".
+
+ .  :Ax061 =     (:Type :UniqueProperty :Class)
+
+ 
+
+# Saying that an object P is type "UniqueProperty" is logically equivalent to saying that P is type "Property" and that if an object Y is a value of P for an object X and an object Z is a value of P for X then Y is equal to Z (i.e., then Y and Z are the same object).
+
+ .  :Ax062 =     (ko:means (:Type v:p :UniqueProperty) 
+
+           (:and (:Type v:p :Property) 
+
+                (:forall (v:x v:y v:z) 
+
+                        (ko:implies (:and (:PropertyValue v:p v:x v:y) 
+
+                                 (:PropertyValue v:p v:x v:z)) 
+
+                            (ko:equals v:y v:z)))))
+
+ 
+
+# Note that the following can be inferred from the axioms regarding "UniqueProperty" and "subClassOf":
+
+ .  :Th7 =         (:PropertyValue :subClassOf :UniqueProperty :Property)
+
+# Section 5.1.8.      UnambiguousProperty
+ 
+
+#"UnambiguousProperty" is type "Class".
+
+ .  :Ax063 =     (:Type :UnambiguousProperty :Class)
+
+ 
+
+# Saying that an object P is type "UnambiguousProperty" is logically equivalent to saying that P is type "Property" and that if an object V is a value of P for an object X and V is a value of P for an object Y then X is equal to Y (i.e., then X and Y are the same object).
+
+ .  :Ax064 =     (ko:means (:Type v:p :UnambiguousProperty) 
+
+           (:and (:Type v:p :Property)
+
+                (:forall (v:x v:y v:v) 
+
+                        (ko:implies (:and (:PropertyValue v:p v:x v:v) 
+
+                                 (:PropertyValue v:p v:y v:v)) 
+
+                            (ko:equals v:x v:y)))))
+
+ 
+
+# Note that the following can be inferred from the axioms regarding "UnambiguousProperty" and "subClassOf":
+
+ .  :Th8 =         (:PropertyValue :subClassOf :UnambiguousProperty :Property)
+
+# Section 5.1.9.      List
+ 
+
+# "Seq" is a value of "subClassOf" for "List".  (I.e., lists are sequences.)
+
+ .  :Ax065 =     (:PropertyValue :subClassOf :List :Seq)
+
+# Section 5.1.10.  Ontology
+ 
+
+# An ontology is type "Class".
+
+ .  :Ax066 =     (:Type :Ontology :Class)
+
+# Section 5.2.         Properties
+# This section axiomatizes the properties that are added to RDF and RDF-S.
+
+# Section 5.2.1.      equivalentTo
+ 
+
+# "equivalentTo" is type "Property".
+
+ .  :Ax067 =     (:Type :equivalentTo :Property)
+
+ 
+
+# An object Y is a value of "equivalentTo" for an object X if and only if X is equal to Y.  (I.e., saying that objects X and Y are "equivalentTo" is logically equivalent to saying that X and Y denote the same object.)
+
+ .  :Ax068 =     (ko:means (:PropertyValue :equivalentTo v:x v:y) (ko:equals v:x v:y))
+
+# Section 5.2.2.      sameClassAs
+ 
+
+# The values of "subPropertyOf" for "sameClassAs" include "equivalentTo" and "subClassOf".  (I.e., "sameClassAs" is "equivalentTo" for classes, and two classes that are the same are also subclasses of each other.)
+
+ .  :Ax069 =     (:PropertyValue :subPropertyOf :sameClassAs :equivalentTo)
+
+ .  :Ax070 =     (:PropertyValue :subPropertyOf :sameClassAs :subClassOf)
+
+# Section 5.2.3.      samePropertyAs
+ 
+
+# The values of "subPropertyOf" for "samePropertyAs" include "equivalentTo" and "subPropertyOf".  (I.e., "samePropertyAs" is "equivalentTo" for properties, and two properties that are the same are also subproperties of each other.)
+
+ .  :Ax071 =     (:PropertyValue :subPropertyOf :samePropertyAs :equivalentTo)
+
+ .  :Ax072 =     (:PropertyValue :subPropertyOf :samePropertyAs :subPropertyOf)
+
+# Section 5.2.4.      disjointWith
+ 
+
+# "disjointWith" is type "Property".
+
+ .  :Ax073 =     (:Type :disjointWith :Property)
+
+ 
+
+# Saying that an object C2 is a value of "disjointWith" for an object C1 is logically equivalent to saying that C1 is type "Class", C2 is type "Class", and that no object X is both type C1 and type C2.
+
+ .  :Ax074 =     (ko:means (:PropertyValue :disjointWith v:c1 v:c2)
+
+           (:and (:Type v:c1 :Class)
+
+                (:Type v:c2 :Class)
+
+                (:not (:exists (v:x) (:and (:Type v:x v:c1) (:Type v:x v:c2)))))) 
+
+# Note that the following can be inferred from the axioms regarding "disjointWith", "domain", and "range":
+
+ .  :Th9 =         (:PropertyValue :domain :disjointWith :Class)
+
+ .  :Th10 =     (:PropertyValue :range :disjointWith :Class)
+
+# Section 5.2.5.      unionOf
+ 
+
+# "unionOf" is a property.
+
+ .  :Ax075 =     (:Type :unionOf :Property)
+
+ 
+
+# Saying that an object L is a value of "unionOf" for an object C1 is logically equivalent to saying that C1 is type "Class", L is type "List", every item in list L is type "Class", and the objects of type C1 are exactly the objects that are of type one or more of the classes in the list L.
+
+ .  :Ax076 =     (ko:means (:PropertyValue :unionOf v:c1 v:l)
+
+           (:and (:Type v:c1 :Class)
+
+                (:Type v:l :List)
+
+                (:forall (v:x) (ko:implies (:PropertyValue :item v:x v:l)
+
+                                 (:Type v:x :Class)))
+
+                (:forall (v:x) 
+
+                        (ko:means (:Type v:x v:c1) 
+
+                             (:exists (v:c2) 
+
+                                     (:and (:PropertyValue :item v:c2 v:l) 
+
+                                          (:Type v:x v:c2)))))))
+
+ 
+
+# Note that the following can be inferred from the axioms regarding "unionOf", "domain", and "range":
+
+ .  :Th11 =     (:PropertyValue :domain :unionOf :Class)
+
+ .  :Th12 =     (:PropertyValue :range :unionOf :List)
+
+# Section 5.2.6.      disjointUnionOf
+ 
+
+# "disjointUnionOf" is type "Property".
+
+ .  :Ax077 =     (:Type :disjointUnionOf :Property)
+
+ 
+
+# Saying that an object L is a value of "disjointUnionOf" for an object C is logically equivalent to saying that L is type "Disjoint" and L is a value of "unionOf" for C.  (I.e., an object C is a disjoint union of an object L if and only if L is a list of pairwise disjoint classes and C is the union of the list L of classes.)
+
+ .  :Ax078 =     (ko:means (:PropertyValue :disjointUnionOf v:c v:l) 
+
+           (:and (:PropertyValue :unionOf v:c v:l) (:Type v:l :Disjoint)))
+
+ 
+
+# Note that the following can be inferred from the axioms regarding "disjointUnionOf", "unionOf", "domain", and "range":
+
+ .  :Th13 =     (:PropertyValue :domain :disjointUnionOf :Class)
+
+ .  :Th14 =     (:PropertyValue :range :disjointUnionOf :Disjoint)
+
+# Section 5.2.7.      intersectionOf
+ 
+
+# "intersectionOf" is type "Property".
+
+ .  :Ax079 =     (:Type :intersectionOf :Property)
+
+ 
+
+# Saying that an object L is a value of "intersectionOf" for an object C1 is logically equivalent to saying that C1 is type "Class", L is type "List", all of the items in list L are type "Class", and the objects that are type C1 are exactly those objects that are type all of the classes in list L.
+
+ .  :Ax080 =     (ko:means (:PropertyValue :intersectionOf v:c1 v:l)
+
+           (:and (:Type v:c1 :Class)
+
+                (:Type v:l :List)
+
+                (:forall (v:x) (ko:implies (:PropertyValue :item v:x v:l)
+
+                                 (:Type v:x :Class)))
+
+                (:forall (v:x) 
+
+                        (ko:means (:Type v:x v:c1) 
+
+                             (:forall (v:c2) 
+
+                                     (ko:implies (:PropertyValue :item v:c2 v:l) 
+
+                                         (:Type v:x v:c2 )))))))
+
+ 
+
+# Note that the following can be inferred from the axioms regarding "intersectionOf", "domain", and "range":
+
+ .  :Th15 =     (:PropertyValue :domain :intersectionOf :Class)
+
+ .  :Th16 =     (:PropertyValue :range :intersectionOf :List)
+
+# Section 5.2.8.      complementOf
+ 
+
+# "complementOf" is type "Property".
+
+ .  :Ax081 =     (:Type :complementOf :Property)
+
+ 
+
+# Saying that an object C2 is a value of "complementOf" for an object C1 is logically equivalent to saying that C1 and C2 are disjoint classes and all objects are either type C1 or type C2.
+
+ .  :Ax082 =     (ko:means (:PropertyValue :complementOf v:c1 v:c2)
+
+           (:and (:PropertyValue :disjointWith v:c1 v:c2) 
+
+                (:forall (v:x) (:or (:Type v:x v:c1) (:Type v:x v:c2)))))
+
+# Note that the following can be inferred from the axioms regarding "complementOf", "disjointWith", "domain", and "range":
+
+ .  :Th17 =     (:PropertyValue :domain :complementOf :Class)
+
+ .  :Th18 =     (:PropertyValue :range :complementOf :Class)
+
+ .  :Th19 =     (:PropertyValue :complementOf :Thing :Nothing)
+
+# Section 5.2.9.      one of
+ 
+
+# "oneOf" is type "Property".
+
+ .  :Ax083 =     (:Type :oneOf :Property)
+
+ 
+
+# Saying that an object L is a value of "oneOf" for an object C is logically equivalent to saying that C is type "Class", L is type "List", and the objects that are type C are exactly the objects that are values of "item" for L.  (I.e., saying that C is "oneOf" L is saying that C is a class, L is a list, and the objects of type C are the objects on the list L.)
+
+ .  :Ax084 =     (ko:means (:PropertyValue :oneOf v:c v:l) 
+
+           (:and (:Type v:c :Class)
+
+                (:Type v:l :List)
+
+                (:forall (v:x) (ko:means (:Type v:x v:c) 
+
+                                  (:PropertyValue :item v:l v:x)))))
+
+ 
+
+# Note that the following can be inferred from the axioms regarding "oneOf", "domain", and "range":
+
+ .  :Th20 =     (:PropertyValue :domain :oneOf :Class)
+
+ .  :Th21 =     (:PropertyValue :range :oneOf :List)
+
+# Section 5.2.10.  onProperty
+ 
+
+# "onProperty" is type "Property".
+
+ .  :Ax085 =     (:Type :onProperty :Property)
+
+ 
+
+# "Ristriction" is a value of "domain" for "onProperty".  (I.e., the first argument of onProperty is a restriction.)
+
+ .  :Ax086 =     (:PropertyValue :domain :onProperty :Restriction)
+
+ 
+
+# "Property" is the value of "range" for "onProperty".  (I.e., the second argument of onProperty is a property.)
+
+ .  :Ax087 =     (:PropertyValue :range :onProperty :Property)
+
+# Section 5.2.11.  toClass
+ 
+
+# "toClass" is type "Property".
+
+ .  :Ax088 =     (:Type :toClass :Property)
+
+ 
+
+# "Restriction" is a value of "domain" for "toClass".  (I.e., the first argument of toClass is a restriction.)
+
+ .  :Ax089 =     (:PropertyValue :domain :toClass :Restriction)
+
+ 
+
+# "Class" is the value of "range" for "toClass".  (I.e., the second argument of toClass is a class.)
+
+ .  :Ax090 =     (:PropertyValue :range :toClass :Class)
+
+ 
+
+# If a property P is a value of "onProperty" for a restriction R and a class C is a value of "toClass" for R, then an object I is type R if and only if every value of P for I is type C.  (I.e., a "toClass" restriction of C on a property P is the class of all objects I such that all values of P for I are type C.)
+
+ .  :Ax091 =     (ko:implies (:and (:PropertyValue :onProperty v:r v:p)
+
+               (:PropertyValue :toClass v:r v:c)) 
+
+          (:forall (v:i) (ko:means (:Type v:i v:r)
+
+                            (:forall (v:j) (ko:implies (:PropertyValue v:p v:i v:j) 
+
+                                             (:Type v:j v:c))))))
+
+# Section 5.2.12.  hasValue
+ 
+
+# "hasValue" is type "Property".
+
+ .  :Ax092 =     (:Type :hasValue :Property)
+
+ 
+
+# "Restriction" is a value of "domain" for "hasValue".  (I.e., the first argument of hasValue is a restriction.)
+
+ .  :Ax093 =     (:PropertyValue :domain :hasValue :Restriction)
+
+ 
+
+# If a property P is a value of "onProperty" for a restriction R and an object V is a value for "hasValue" for R, then an object I is type R if and only if V is a value of P for I.  (I.e., a "hasValue" restriction of V on a property P is the class of all objects that have V as a value  of P.)
+
+ .  :Ax094 =     (ko:implies (:and (:PropertyValue :onProperty v:r v:p) 
+
+               (:PropertyValue :hasValue v:r v:v)) 
+
+          (:forall (v:i) (ko:means (:Type v:i v:r) (:PropertyValue v:p v:i v:v))))
+
+ 
+
+# Note that the following can be inferred from the axioms regarding "qualifiedBy", "onProperty", "hasValue" and "minCardinality":
+
+ .  :Th22 =     (ko:implies (:and (:PropertyValue :qualifiedBy v:c1 v:q) 
+
+               (:PropertyValue :onProperty v:q v:p)
+
+               (:PropertyValue :hasValue v:q v:c2)) 
+
+          (:PropertyValue :minCardinality v:p 1))
+
+# Section 5.2.13.  hasClass
+ 
+
+# "hasClass" is type "Property".
+
+ .  :Ax095 =     (:Type :hasClass :Property)
+
+ 
+
+# "Restriction" is a value of "domain" for "hasClass".  (I.e., the first argument of hasClass is a restriction.)
+
+ .  :Ax096 =     (:PropertyValue :domain :hasClass :Restriction)
+
+ 
+
+# "Class" is the value of "range" for "hasClass".  (I.e., the second argument of hasClass is a class.)
+
+ .  :Ax097 =     (:PropertyValue :range :hasClass :Class)
+
+ 
+
+# If a property P is a value of "onProperty" for a restriction R and a class C is a value of "hasClass" for R, then an object I is type R if and only if there exists a value of P for I that is type C.  (I.e., a "hasClass" restriction of C on a property P is the class of all objects I which have a value of P that is type C.)
+
+ .  :Ax098 =     (ko:implies (:and (:PropertyValue :onProperty v:r v:p)
+
+               (:PropertyValue :hasClass v:r v:c)) 
+
+          (:forall (v:i) (ko:means (:Type v:i v:r)
+
+                            (:exists (v:j) (:and (:PropertyValue v:p v:i v:j) 
+
+                                              (:Type v:j v:c))))))
+
+# Section 5.2.14.  minCardinality
+ 
+
+# "minCardinality" is type "Property".
+
+ .  :Ax099 =     (:Type :minCardinality :Property)
+
+ 
+
+# "Restriction" is a value of "domain" for "minCardinality".  (I.e., the first argument of minCardinality is a restriction.)
+
+ .  :Ax100 = (:PropertyValue :domain :minCardinality :Restriction)
+
+ 
+
+# "NonNegativeInteger" is the value of "range" for "minCardinality".  (I.e., the second argument of minCardinality is a non-negative integer.)
+
+ .  :Ax101 = (:PropertyValue :range :minCardinality :NonNegativeInteger)
+
+ 
+
+# If a property P is a value of "onProperty" for a restriction R and a non-negative integer N is a value of "minCardinality" for R, then an object I is type R if and only if there is a "no-repeats-list" all of whose items are values of P for I and whose length is greater than or equal to N.  (I.e., a "minCardinality" restriction of N on a property P is the class of all objects I which have at least N values of P.)
+
+ .  :Ax102 = (ko:implies (:and (:PropertyValue :onProperty v:r v:p)
+
+                     (:PropertyValue :minCardinality v:r v:n))
+
+                (:forall (v:i) 
+
+                        (ko:means (:Type v:i v:r) 
+
+                             (:exists (v:vl) 
+
+                                     (:and (:no_repeats_list v:vl) 
+
+                                          (:forall (v:v) 
+
+                                                  (ko:implies (:PropertyValue 
+
+                                                        :item v:vl v:v) 
+
+                                                      (:PropertyValue
+
+                                                        v:p v:i v:v))) 
+
+                                          (ko:greaterThanOrEqualTo (:length v:vl) v:n))))))
+
+# Section 5.2.15.  maxCardinality
+ 
+
+# "maxCardinality" is type "Property".
+
+ .  :Ax103 = (:Type :maxCardinality :Property)
+
+ 
+
+# "Restriction" is a value of "domain" for "maxCardinality".  (I.e., the first argument of maxCardinality is a restriction.)
+
+ .  :Ax104 = (:PropertyValue :domain :maxCardinality :Restriction)
+
+ 
+
+# "NonNegativeInteger" is the value of "range" for "maxCardinality".  (I.e., the second argument of maxCardinality is a non-negative integer.)
+
+ .  :Ax105 = (:PropertyValue :range :maxCardinality :NonNegativeInteger)
+
+ 
+
+# If a property P is a value of "onProperty" for a restriction R and a non-negative integer N is a value of "maxCardinality" for R, then an object I is type R if and only if all "no-repeats-lists" whose items are exactly the values of P have length less than or equal to N.  (I.e., a "maxCardinality" restriction of N on a property P is the class of all objects I which have at most N values of P.)
+
+ .  :Ax106 = (ko:implies (:and (:PropertyValue :onProperty v:r v:p)
+
+                     (:PropertyValue :maxCardinality v:r v:n))
+
+                (:forall (v:i) 
+
+                        (ko:means (:Type v:i v:r)
+
+                             (:forall (v:vl) 
+
+                                     (ko:implies (:and (:no_repeats_list v:vl) 
+
+                                              (:forall 
+
+                                                (v:v) 
+
+                                                (ko:means (:PropertyValue 
+
+                                                       :item v:vl v:v) 
+
+                                                     (:PropertyValue 
+
+                                                       v:p v:i v:v))))
+
+                                         (ko:equalsLessThanFixMe (:length v:vl) v:n))))))
+
+# Section 5.2.16.  cardinality
+ 
+
+# "cardinality" is type "Property".
+
+ .  :Ax107 = (:Type :cardinality :Property)
+
+ 
+
+# "Restriction" is a value of "domain" for "cardinality".  (I.e., the first argument of cardinality is a restriction.)
+
+ .  :Ax108 = (:PropertyValue :domain :cardinality :Restriction)
+
+ 
+
+# "NonNegativeInteger" is the value of "range" for "cardinality".  (I.e., the second argument of cardinality is a non-negative integer.)
+
+ .  :Ax109 = (:PropertyValue :range :cardinality :NonNegativeInteger)
+
+ 
+
+# If a property P is a value of "onProperty" for a restriction R and a non-negative integer N is a value of "cardinality" for R, then an object I is type R if and only if all "no-repeats-lists" whose items are exactly the values of P have length N.  (I.e., a "cardinality" restriction of N on a property P is the class of all objects I which have exactly N values of P.)
+
+ .  :Ax110 = (ko:implies (:and (:PropertyValue :onProperty v:r v:p)
+
+                     (:PropertyValue :cardinality v:r v:n))
+
+                (:forall (v:i) 
+
+                        (ko:means (:Type v:i v:r)
+
+                             (:forall (v:vl) 
+
+                                     (ko:implies (:and (:no_repeats_list v:vl) 
+
+                                              (:forall 
+
+                                                (v:v) 
+
+                                                (ko:means (:PropertyValue 
+
+                                                       :item v:vl v:v) 
+
+                                                     (:PropertyValue 
+
+                                                       v:p v:i v:v))))
+
+                                         (ko:equals (:length v:vl) v:n))))))
+
+# Section 5.2.17.  hasClassQ
+ 
+
+# "hasClassQ" is type "Property".
+
+ .  :Ax111 = (:Type :hasClassQ :Property)
+
+ 
+
+# "Restriction" is a value of "domain" for "hasClassQ".  (I.e., the first argument of hasClassQ is a restriction.)
+
+ .  :Ax112 = (:PropertyValue :domain :hasClassQ :Restriction)
+
+ 
+
+# "Class" is the value of "range" for "hasClassQ".  (I.e., the second argument of hasClassQ is a class.)
+
+ .  :Ax113 = (:PropertyValue :range :hasClassQ :Class)
+
+# Section 5.2.18.  minCardinalityQ
+ 
+
+# "minCardinalityQ" is type "Property".
+
+ .  :Ax114 = (:Type :minCardinalityQ :Property)
+
+ 
+
+# "Restriction" is a value of "domain" for "minCardinalityQ".  (I.e., the first argument of minCardinalityQ is a restriction.)
+
+ .  :Ax115 = (:PropertyValue :domain :minCardinalityQ :Restriction)
+
+ 
+
+# "NonNegativeInteger" is the value of "range" for "minCardinalityQ".  (I.e., the second argument of minCardinalityQ is a non-negative integer.)
+
+ .  :Ax116 = (:PropertyValue :range :minCardinalityQ :NonNegativeInteger)
+
+ 
+
+# If a property P is a value of "onProperty" for a restriction R, a non-negative integer N is a value of "minCardinalityQ" for R, and a class C is a value of "hasClassQ" for R, then an object I is type R if and only if there is a "no-repeats-list" all of whose items are type C and values of P for I and whose length is greater than or equal to N.  (I.e., a "minCardinalityQ" restriction of N on a property P is the class of all objects I which have at least N values of P that are type C.)
+
+ .  :Ax117 = (ko:implies (:and (:PropertyValue :onProperty v:r v:p)
+
+                     (:PropertyValue :minCardinalityQ v:r v:n)
+
+                     (:PropertyValue :hasClassQ v:r v:c))
+
+                (:forall 
+
+                  (v:i) 
+
+                  (ko:means (:Type v:i v:r) 
+
+                       (:exists 
+
+                         (v:vl) 
+
+                         (:and (:no_repeats_list v:vl) 
+
+                              (:forall 
+
+                                (v:v) 
+
+                                (ko:implies (:PropertyValue :item v:vl v:v)
+
+                                    (:and (:PropertyValue v:p v:i v:v) 
+
+                                         (:Type v:v v:c))) 
+
+                              (ko:greaterThanOrEqualTo (:length v:vl) v:n))))))        )
+
+# Section 5.2.19.  maxCardinalityQ
+ 
+
+# "maxCardinalityQ" is type "Property".
+
+ .  :Ax118 = (:Type :maxCardinalityQ :Property)
+
+ 
+
+# "Restriction" is a value of "domain" for "maxCardinalityQ".  (I.e., the first argument of maxCardinalityQ is a restriction.)
+
+ .  :Ax119 = (:PropertyValue :domain :maxCardinalityQ :Restriction)
+
+ 
+
+# "NonNegativeInteger" is the value of "range" for "maxCardinalityQ".  (I.e., the second argument of maxCardinalityQ is a non-negative integer.)
+
+ .  :Ax120 = (:PropertyValue :range :maxCardinalityQ :NonNegativeInteger)
+
+ 
+
+# If a property P is a value of "onProperty" for a restriction R, a non-negative integer N is a value of "maxCardinalityQ" for R, and a class C is a value of "hasClassQ" for R, then an object I is type R if and only if all "no-repeats-lists" whose items are exactly the values of P that are type C have length less than or equal to N.  (I.e., a "maxCardinalityQ" restriction of N on a property P is the class of all objects I which have at most N values of P that are type C.)
+
+ .  :Ax121 = (ko:implies (:and (:PropertyValue :onProperty v:r v:p)
+
+                     (:PropertyValue :maxCardinalityQ v:r v:n)
+
+                     (:PropertyValue :hasClassQ v:r v:c))
+
+                (:forall 
+
+                  (v:i) 
+
+                  (ko:means (:Type v:i v:r)
+
+                       (:forall 
+
+                         (v:vl) 
+
+                         (ko:implies (:and (:no_repeats_list v:vl) 
+
+                                  (:forall 
+
+                                    (v:v) 
+
+                                    (ko:means (:PropertyValue :item v:vl v:v) 
+
+                                         (:and (:PropertyValue v:p v:i v:v)
+
+                                              (:Type v:v v:c)))))
+
+                             (ko:equalsLessThanFixMe (:length v:vl) v:n))))))
+
+# Section 5.2.20.  cardinalityQ
+ 
+
+# "cardinalityQ" is type "Property".
+
+ .  :Ax122 = (:Type :cardinalityQ :Property)
+
+ 
+
+# "Restriction" is a value of "domain" for "cardinalityQ".  (I.e., the first argument of cardinalityQ is a restriction.)
+
+ .  :Ax123 = (:PropertyValue :domain :cardinalityQ :Restriction)
+
+ 
+
+# "NonNegativeInteger" is the value of "range" for "cardinalityQ".  (I.e., the second argument of cardinalityQ is a non-negative integer.)
+
+ .  :Ax124 = (:PropertyValue :range :cardinalityQ :NonNegativeInteger)
+
+ 
+
+# If a property P is a value of "onProperty" for a restriction R, a non-negative integer N is a value of "cardinalityQ" for R and a class C is a value of "hasClassQ" for R, then an object I is type R if and only if all "no-repeats-lists" whose items are exactly the values of P that are type C have length N.  (I.e., a "cardinalityQ" restriction of N on a property P is the class of all objects I which have exactly N values of P that are type C.)
+
+ .  :Ax125 = (ko:implies (:and (:PropertyValue :onProperty v:r v:p)
+
+                     (:PropertyValue :cardinalityQ v:r v:n)
+
+                     (:PropertyValue :hasClassQ v:r v:c))
+
+                (:forall 
+
+                  (v:i) 
+
+                  (ko:means (:Type v:i v:r)
+
+                       (:forall 
+
+                         (v:vl) 
+
+                         (ko:implies (:and (:no_repeats_list v:vl) 
+
+                                  (:forall 
+
+                                    (v:v) 
+
+                                    (ko:means (:PropertyValue :item v:vl v:v) 
+
+                                         (:and (:PropertyValue v:p v:i v:v)
+
+                                              (:Type v:v v:c)))))
+
+                             (ko:equals (:length v:vl) v:n))))))
+
+# Section 5.2.21.  inverseOf
+ 
+
+# "inverseOf" is type "Property".
+
+ .  :Ax126 = (:Type :inverseOf :Property)
+
+ 
+
+# Saying that an object P2 is a value of "inverseOf" for an object P1 is logically equivalent to saying that P1 is type "Property", P2 is type "Property", and that an object X2 is a value of P1 for an an object X1 if and only X1 is a value of P2 for X2.
+
+ .  :Ax127 = (ko:means (:PropertyValue :inverseOf v:p1 v:p2) 
+
+                 (:and (:Type v:p1 :Property)
+
+                      (:Type v:p2 :Property)
+
+                      (:forall (v:x1 v:x2) 
+
+                              (ko:means (:PropertyValue v:p1 v:x1 v:x2) 
+
+                                   (:PropertyValue v:p2 v:x2 v:x1)))))
+
+ 
+
+# Note that the following can be inferred from the axioms regarding "inverseOf", "domain", and "range":
+
+ .  :Th23 =     (:PropertyValue :domain :inverseOf :Property)
+
+ .  :Th24 =     (:PropertyValue :range :inverseOf :Property)
+
+# Section 5.2.22.  first
+ 
+
+# "first" is type "FunctionalProperty".
+
+ .  :Ax128 = (:Type :first :FunctionalProperty)
+
+ 
+
+# Saying that an object X is the value of "first" for an object L is logically equivalent to saying that L is type "List" and the value of "_1" for L is X.  (I.e., "first" is "_1" for lists.)
+
+ .  :Ax129 = (ko:means (:PropertyValue :first v:l v:x) 
+
+                 (:and (:Type v:l :List) (:PropertyValue _1 v:l v:x)))
+
+# Section 5.2.23.  rest
+ 
+
+# "rest" is type "FunctionalProperty".
+
+ .  :Ax130 = (:Type :rest :FunctionalProperty)
+
+ 
+
+# Saying that an object R is the value of "rest" for an object L is logically equivalent to saying that L is type "List", R is type "List", and L has the same items in the same order as list R with one additional object as its first item.
+
+ .  :Ax131 = (ko:means (:PropertyValue :rest v:l v:r)
+
+                 (:and (:Type v:l :List)
+
+                      (:Type v:r :List)
+
+                      (:exists (v:x) (ko:equals v:l (:cons v:x v:r)))))
+
+ 
+
+# Note that the following can be inferred from the axioms regarding "oneOf", "domain", and "range":
+
+ .  :Th25 =     (:PropertyValue :domain :rest :List)
+
+ .  :Th26 =     (:PropertyValue :range :rest :List)
+
+# Section 5.2.24.  item
+ 
+
+# "item" is type "Property".
+
+ .  :Ax132 = (:Type :item :Property)
+
+ 
+
+# Saying that an object X is a value of "item" for an object L is logically equivalent to saying that L is type "List" and either X is the value of "first" for L or X is a value of "item" for the value of "rest" of L.  (I.e., Saying that X is an item of L is saying that X is the first item in list L or there is a list R that is the rest of list L and X is an item in the list R.)
+
+ .  :Ax133 = (ko:means (:PropertyValue :item v:l v:x)
+
+                 (:and (:Type v:l :List)
+
+                      (:or (:PropertyValue :first v:l v:x) 
+
+                          (:exists (v:r) 
+
+                                  (:and (:PropertyValue :rest v:l v:r) 
+
+                                       (:PropertyValue :item v:r v:x))))))
+
+ 
+
+# Note that the following can be inferred from the axioms regarding "item", and "domain":
+
+ .  :Th27 =     (:PropertyValue :domain :item :List)
+
+# Section 5.2.25.  versionInfo
+ 
+
+# "versionInfo" is a property.
+
+ .  :Ax134 = (:Type :versionInfo :Property)
+
+# Section 5.2.26.  imports
+ 
+
+# "imports" is a property.
+
+ .  :Ax135 = (:Type :imports :Property)
+
+# Section 5.3.         Other Objects
+# Section 5.3.1.      nil
+ 
+
+# "nil" is a list for which there are no values of "item".  (I.e., "nil" is the empty list.)
+
+ .  :Ax136 = (:Type :nil :List)
+
+ .  :Ax137 = (:not (:PropertyValue :item :nil v:x))
+
+.
+# ENDS

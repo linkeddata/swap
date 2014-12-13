@@ -1,0 +1,15 @@
+# cribbed from 
+# http://www.w3.org/Talks/2002/10/09-swcal/tools.dot
+# in http://www.w3.org/Talks/2002/10/09-swcal/all.htm
+
+digraph world {
+  rankdir=LR;
+
+  "itin.nt" -> "cwm2";
+  "itin2pda.n3" -> "cwm2";
+  "cwm2" [ shape="diamond", label="cwm"];
+  "cwm2" -> "itin-pda.rdf";
+  "itin-pda.rdf" -> "pdkb.pl";
+  "pdkb.pl" [ shape="diamond", label="palmagent/pdkb.pl"];
+  "pdkb.pl" -> "PDA"
+}

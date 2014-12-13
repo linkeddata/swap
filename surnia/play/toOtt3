@@ -1,0 +1,77 @@
+
+%set(auto).
+set(process_input).
+clear(print_kept).
+clear(print_new_demod).
+clear(print_back_demod).
+clear(print_back_sub).
+set(control_memory).
+assign(max_mem, 768000).
+assign(pick_given_ratio, 4).
+assign(stats_level, 1).
+set(hyper_res).
+set(factor).
+set(unit_deletion).
+
+weight_list(pick_given).
+    weight(owl_differentFrom, 20).
+%   weight(owl_equivalentClass, 20).
+%   weight(owl_FunctionalProperty, 20).
+%   weight(rdf(x,rdf_type,owl_FunctionalProperty), 100).
+%   weight(owl_InverseFunctionalProperty, 20).
+%   weight(instanceOfAll(_,_), 200).
+%   weight(instanceOfAny(_,_), 200).
+%   weight(rdfs_subClassOf, 200).
+%   weight(owl_sameAs, 200).
+
+end_of_list.
+
+%include('util/owlAx.otter').
+formula_list(sos).
+exists s (exists t (exists u (exists s0 (exists s1 (exists s2 (((((((((((((((((((((rdf(s2, rdf_type, rdf_List) & rdf(s2, rdf_first, ns6_small)) & rdf(s1, rdf_type, rdf_List)) & rdf(s2, rdf_rest, s1)) & rdf(s1, rdf_first, ns6_medium)) & rdf(s0, rdf_type, rdf_List)) & rdf(s1, rdf_rest, s0)) & rdf(s0, rdf_first, ns6_large)) & rdf(s0, rdf_rest, rdf_nil)) & rdf(ns6_T1, owl_oneOf, s2)) & rdf(u, rdf_type, rdf_List)) & rdf(u, rdf_first, ns6_large)) & rdf(t, rdf_type, rdf_List)) & rdf(u, rdf_rest, t)) & rdf(t, rdf_first, ns6_medium)) & rdf(s, rdf_type, rdf_List)) & rdf(t, rdf_rest, s)) & rdf(s, rdf_first, ns6_small)) & rdf(s, rdf_rest, rdf_nil)) & rdf(ns6_T2, owl_oneOf, u)) & rdf(ns6_myT, rdf_type, ns6_T1)) &  -rdf(ns6_myT, rdf_type, ns6_T2))))))).
+
+end_of_list.
+formula_list(usable).
+all CLASS LIST (
+   rdf(CLASS, owl_oneOf, LIST)
+   ->    % BIDIR
+   (all INST (
+      rdf(INST, rdf_type, CLASS) <-> inList(INST, LIST)
+   ))
+).
+
+all MEMBER LIST HEAD TAIL (
+   ( rdf(LIST, rdf_first, HEAD) &
+     rdf(LIST, rdf_rest, TAIL) )
+   ->
+   ( inList(MEMBER, LIST)
+     <->
+      ( rdf(MEMBER, owl_sameAs, HEAD) |
+        inList(MEMBER, TAIL) )
+    )
+).
+
+all MEMBER (-inList(MEMBER, rdf_nil)).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

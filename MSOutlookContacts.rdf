@@ -1,0 +1,296 @@
+
+<!-- Processed by Id: cwm.py,v 1.190 2006/08/09 23:20:42 syosi Exp -->
+<!--     using base file:/devel/WWW/2000/10/swap/MSOutlookContacts.n3-->
+
+
+<rdf:RDF xmlns="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:link="http://www.w3.org/2006/link#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+
+    <Property rdf:about="MSOutlookContacts#Account">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Anniversary">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Assistant_s_Name">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Assistant_s_Phone">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Billing_Information">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Birthday">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Business_City">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Business_Country">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Business_Fax">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Business_Phone">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Business_Phone_2">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Business_Postal_Code">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Business_State">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Business_Street">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Business_Street_2">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Business_Street_3">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Callback">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Car_Phone">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Categories">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Children">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Company">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Company_Main_Phone">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Department">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Directory_Server">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#E-mail_2_Address">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#E-mail_2_Display_Name">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#E-mail_3_Address">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#E-mail_3_Display_Name">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#E-mail_Address">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#E-mail_Display_Name">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#First_Name">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Gender">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Government_ID_Number">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Hobby">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Home_City">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Home_Country">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Home_Fax">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Home_Phone">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Home_Phone_2">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Home_Postal_Code">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Home_State">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Home_Street">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Home_Street_2">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Home_Street_3">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#ISDN">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Initials">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Internet_Free_Busy">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Job_Title">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Keywords">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Language">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Last_Name">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Location">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Manager_s_Name">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Middle_Name">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Mileage">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Mobile_Phone">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Notes">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Office_Location">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Organizational_ID_Number">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Other_City">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Other_Country">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Other_Fax">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Other_Phone">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Other_Postal_Code">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Other_State">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Other_Street">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Other_Street_2">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Other_Street_3">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#PO_Box">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Pager">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Primary_Phone">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Priority">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Private">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Profession">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Radio_Phone">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Referred_By">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Sensitivity">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Spouse">
+        <subPropertyOf rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#partner"/>
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Suffix">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#TTY_TDD_Phone">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Telex">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Title">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#User_1">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#User_2">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#User_3">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#User_4">
+    </Property>
+
+    <Property rdf:about="MSOutlookContacts#Web_Page">
+    </Property>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#birthday">
+        <link:obsoletes rdf:resource="MSOutlookContacts#Birthday"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#firstName">
+        <link:obsoletes rdf:resource="MSOutlookContacts#First_Name"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#lastName">
+        <link:obsoletes rdf:resource="MSOutlookContacts#Last_Name"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#middleName">
+        <link:obsoletes rdf:resource="MSOutlookContacts#Middle_Name"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#personalSuffix">
+        <link:obsoletes rdf:resource="MSOutlookContacts#Suffix"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#personalTitle">
+        <link:obsoletes rdf:resource="MSOutlookContacts#Title"/>
+    </rdf:Description>
+</rdf:RDF>

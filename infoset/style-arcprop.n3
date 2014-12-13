@@ -1,0 +1,168 @@
+#  Style sheet in for Roadmap charts
+#
+#   W3C Source code licence
+#  $Id $
+
+@prefix doc: <http://www.w3.org/2000/10/swap/pim/doc.n3#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dot: <http://www.w3.org/2001/02pd/gv#>.
+@prefix is: <http://www.w3.org/2001/05id/infoset#> .
+@prefix xc: <xmlContent#>.
+@prefix dpo:  <http://www.daml.org/2001/03/daml+oil#> .
+@prefix sws: <http://www.w3.org/2001/03swell/finiteSet#>.
+
+# NOTE rdf2dot.xsl needs namespace URIs absolutized @@
+
+@prefix iu: <infosetUtil#>.
+@prefix dl: <http://www.w3.org/2001/03swell/lists#>.
+
+@prefix : <?#>.  # Just for variables in fact
+@prefix v: <?#>.  # Just for variables in fact
+
+this log:forAll :n1, :n2, :p, :s, :s2, :CR, :CD.
+
+<> doc:cvsversion "$Id$".
+
+
+{ :n1 a s:Class} log:implies { :n1 dot:color "skyblue1"; dot:style "filled" }.
+{ :n1 s:label :s } log:implies { :n1 dot:label :s }.
+s:Class s:label "Class".
+
+{ :n1 s:subClassOf is:InformationItem; s:label :s }
+   log:implies { :n1 dot:shape "diamond" }.
+
+{ :CR s:subClassOf s:Literal; s:label :s. }
+  log:implies { :CR dot:shape "box" }.
+
+{ :p s:domain :CD; s:range :CR; s:label :s. }
+  log:implies
+{ :CD [ a dot:EdgeProperty; dot:label :s; dot:color "red" ] :CR. }.
+
+#@@ key: blue for many-to-one
+{ :CD s:subClassOf [ dpo:onProperty :p;
+	dpo:toClass :CR].
+  :CR s:label :s2.
+  :p a dpo:UniqueProperty;
+     s:label :s. }
+  log:implies
+{ :CD [ a dot:EdgeProperty; dot:label :s; dot:color "blue" ] :CR. }.
+
+#@@ key: purple for many to one, partitioned
+{ :CD s:subClassOf [ dpo:onProperty :p;
+	dpo:toClass :n1].
+  :n1 dpo:disjointUnionOf [ dl:member :CR ].
+  :CR s:label :s2.
+  :p a dpo:UniqueProperty;
+     s:label :s. }
+  log:implies
+{ :n1 [ a dot:EdgeProperty; dot:color "purple" ] :CR. }.
+
+#@@ key: purple bold for partitioned
+{ :CD dpo:disjointUnionOf [ dl:member :CR ].
+  :CR s:label :s2.
+ }
+  log:implies
+{ :CD [ a dot:EdgeProperty; dot:color "purple"; dot:style "bold" ] :CR. }.
+
+#@@ key: bold orange for one-to-many, unordered
+{ :CD s:subClassOf [ dpo:onProperty :p;
+	dpo:toClass [ sws:setOf :CR]].
+  :p a dpo:UniqueProperty; s:label :s.
+  :CR s:label :s2. }
+  log:implies
+{ :CD [ a dot:EdgeProperty; dot:label :s; dot:color "orange"; dot:style "bold" ] :CR.}.
+
+# key: bold purple for ordered list/forest over X/Y/Z
+{ :CD dl:listOf :CR .
+  :CR s:label :s2 }
+  log:implies
+{ :CD [ a dot:EdgeProperty; dot:color "green" ] :CR. }.
+
+#@@ key: bold green for one-to-many, ordered
+#{ :CD s:subClassOf [ dpo:onProperty :p;
+#	dpo:toClass [ dl:listOf :CR]].
+#  :p a dpo:UniqueProperty; s:label :s.
+#  :CR s:label :s2 }
+#  log:implies
+#{ :CD [ a dot:EdgeProperty; dot:label :s; dot:color "green"; dot:style "bold" ] :CR. }.
+
+#@@ key: bold purple for ordered list/forest over X/Y/Z
+#{ :CD dl:listOf [ dpo:disjointUnionOf [ dl:member :CR ] ].
+#  :CR s:label :s2 }
+#  log:implies
+#{ :CD [ a dot:EdgeProperty; dot:color "purple"; dot:style "bold" ] :CR. }.
+
+#@@ key: purple for choice of X/Y/Z
+{ :CD dpo:oneOf [ dl:member :n1 ].
+  :n1 s:label :s }
+  log:implies
+{ :CD [ a dot:EdgeProperty; dot:label "one of..."; dot:color "green" ] :n1.
+  :n1 dot:shape "plaintext" }.
+
+##########
+<> dot:digraph :theGraph.
+
+:theGraph dot:label "XML Infoset $Date$";
+	         dot:rankdir "LR".
+
+:theGraph dot:subgraph :key.
+
+:key dot:label "Items and Properties";
+  dot:hasNode :anItem, :One,
+	:Parts, :Part1, :Part2, :Part3,
+        :Many, :ABC, :DEF,
+        :LItems.
+
+:anItem is:itemName "Item";
+  s:subClassOf [
+    dpo:onProperty :mToOne;
+    dpo:toClass :One;
+  ];
+  s:subClassOf [
+    dpo:onProperty :mToParts;
+    dpo:toClass :Parts;
+  ];
+  s:subClassOf [
+    dpo:onProperty :mToMany;
+    dpo:toClass [ sws:setOf :ABC];
+  ];
+  s:subClassOf [
+    dpo:onProperty :mToList;
+    dpo:toClass [ dl:listOf :DEF];
+  ];
+  .
+:mToOne s:label "many-to-one"; a dpo:UniqueProperty.
+:One s:label "A Class"; a s:Class.
+:Super s:label "Superclass".
+:mToParts s:label "many-to-1"; a dpo:UniqueProperty.
+:Parts s:label "X|Y|Z"; a s:Class;
+  dpo:disjointUnionOf (:Part1 :Part2 :Part3).
+:Part1 s:label "X"; a s:Class.
+:Part2 s:label "Y"; a s:Class.
+:Part3 s:label "Z"; a s:Class.
+:mToMany s:label "many-to-many"; a dpo:UniqueProperty.
+:mToList s:label "many-to-list"; a dpo:UniqueProperty.
+:DEF s:label "DEF"; a s:Class.
+:ABC s:label "ABC"; a s:Class.
+
+:theGraph dot:hasNode is:Document.    # arbitrary seed to trace out from
+:theGraph dot:hasNode xc:Content.    # arbitrary seed to trace out from
+
+this log:forAll :n1, :n2, :p, :s.
+
+{ :theGraph dot:hasNode :n1.
+  :n1 :p :n2.
+  :p a dot:EdgeProperty.
+ }
+   log:implies { :theGraph dot:hasNode :n2. }.
+
+{ :theGraph dot:hasNode :n2.
+  :n1 :p :n2.
+  :p a dot:EdgeProperty.
+ }
+   log:implies { :theGraph dot:hasNode :n1. }.
+
+
+# ends

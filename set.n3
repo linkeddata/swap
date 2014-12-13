@@ -1,0 +1,70 @@
+#   Set Builtins
+#
+# see cwm_set.py
+# 
+# $Id$
+
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix set: <http://www.w3.org/2000/10/swap/set#>.
+@prefix : <#>.
+
+
+set:in
+    a rdf:Property;
+    rdfs:label "in";
+    rdfs:comment """This set contains that as a member.
+    Cwm will bind the subject to each of the members of the object.""";
+    rdfs:range rdfs:Class.
+    
+set:member
+    a rdf:Property;
+    owl:inverseOf set:in;
+    rdfs:label "member";
+    rdfs:comment """This is a member of that set.
+    Cwm will bind the object to each of the members of the suject.""";
+    rdfs:domain rdfs:Class.
+
+set:union
+    a rdf:Property;
+    rdfs:range rdfs:Class;
+    rdfs:label "union";
+    rdfs:comment """The subject is a list [sic] of sets,
+    and the objet is the union of the sets in the object""".
+    
+set:intersection
+    a rdf:Property;
+    rdfs:range rdfs:Class;
+    rdfs:label "intersection";
+    rdfs:comment """The subject is a list of sets,
+    and the objet is the intersection of the sets in the object""".
+    
+set:symmetricDifference
+    a rdf:Property;
+    rdfs:range rdfs:Class;
+    rdfs:label "symmetric difference";
+    rdfs:comment """The subject is a list of sets,
+    and the objet is the symmetricDifference of the sets in the object""".
+    
+set:difference
+    a rdf:Property;
+    rdfs:range rdfs:Class;
+    rdfs:label "difference";
+    rdfs:comment """The subject is a list of sets,
+    and the objet is the difference of the sets in the object""".
+    
+#set:oneOf
+#    a rdf:Property;
+#    rdfs:range rdfs:Class;
+#    rdfs:label "one of";
+#    rdfs:comment """The subject @@ in the object""".
+    
+
+
+
+# ends
+

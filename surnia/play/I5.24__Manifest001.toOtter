@@ -1,0 +1,34 @@
+set(auto).
+clear(sigint_interact).
+% include('otter/owlAx.otter').
+set(auto).
+formula_list(usable).
+%  prefix ns14_ <http://www.w3.org/2002/03owlt/I5.24/premises001#>
+%  prefix owl_ <http://www.w3.org/2002/07/owl#>
+%  prefix rdf_ <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+%  prefix rdfs_ <http://www.w3.org/2000/01/rdf-schema#>
+rdf(ns14_prop, rdf_type, rdf_Property).
+rdf(ns14_A, rdf_type, owl_Class).
+rdf(ns14_B, rdf_type, owl_Class).
+rdf(ns14_A, rdfs_subClassOf, ns14_B).
+rdf(ns14_prop, rdfs_range, ns14_A).
+
+-rdf(ns14_prop, rdfs_range, ns14_B).
+
+all PRED CLASS (
+   rdf(PRED, rdfs_range, CLASS) 
+   <->      % maybe needed for FunctionalProperty004
+   (all SUBJ OBJ (
+     rdf(SUBJ, PRED, OBJ) -> rdf(OBJ, rdf_type, CLASS)
+   ))
+).
+
+all C1 C2 (
+   rdf(C1, rdfs_subClassOf, C2)
+   <->     % <- needed for equivalentClass/Manifest002
+   (all INST (
+     rdf(INST, rdf_type, C1) -> rdf(INST, rdf_type, C2) 
+   ))
+).
+
+end_of_list.

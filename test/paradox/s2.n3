@@ -1,0 +1,7 @@
+#  Sandro's paradox
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix : <#>.
+
+{[ is log:conclusion of [is log:semantics of <>]] log:notIncludes  { :a :b :c }}  -> { :a :b :c }.
+

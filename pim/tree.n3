@@ -1,0 +1,73 @@
+@prefix g: <http://www.w3.org/2001/02pd/geneology#>.
+@prefix : <http://www.w3.org/2000/10/swap/pim/tree.n3#>.
+@keywords is, of, a.
+@prefix dot: <http://www.w3.org/2001/02pd/gv#>.
+@prefix string: <http://www.w3.org/2000/10/swap/string#>.
+
+# Propogation of names:
+
+{ ?WHO g:husband [ g:surName ?N ] } => { ?WHO g:marriedName ?N }.
+{ ?WHO g:father  [ g:surName ?N ] } => { ?WHO g:surName ?N }.
+{ ?WHO g:husband [];
+       g:father  [ g:surName ?N ] } => { ?WHO g:maidenName ?N }.
+{ ?WHO g:father [ g:wife ?HER ] } => { ?WHO g:mother ?HER }.
+{ ?WHO g:mother [ g:husband ?HIM ] } => { ?WHO g:father ?HIM }.
+
+{ ?x g:husband ?y } => { ?y g:wife ?x }.
+{ ?y g:wife ?x } => { ?y a g:Man. ?x a g:Woman }.
+
+# Fairly conventional view of life:
+
+<> dot:digraph familyTree.
+
+{ ?ch g:father ?him; g:mother ?her.
+} => {
+	?him g:wife ?her.
+}.
+
+{ 	?him g:wife ?her.
+} => {
+	[] 	a Marriage;
+		is g:marriage of ?him, ?her;
+		is dot:hasNode of familyTree.
+	?her	g:husband ?him.
+ }.
+
+{ ?ch g:father [ g:marriage ?m ] }  =>  { ?m offspring ?ch }.
+
+familyTree dot:hasEdgeProperty offspring, g:marriage.  #, g:child.
+
+#offspring a dot:EdgeProperty; dot:color "black".
+#marriage a dot:EdgeProperty; dot:color "black".
+
+#g:father a dot:EdgeProperty, dot:color "blue"
+#g:mother a dot:EdgeProperty, dop
+
+{ ?x g:father ?y } =>  { ?y a g:Man; g:child ?x.  ?x a Person }.
+{ ?x g:mother ?y } =>  { ?y a g:Woman; g:child ?x.  ?x a Person }.
+
+{ ?x a Marriage } => {
+	familyTree dot:hasNode ?x.
+	?x 	dot:color "black";
+		dot:shape	"plaintext";
+		dot:label "=".
+}.
+
+{ ?x a g:Man} => {
+	?x a Person;
+		dot:color "blue";
+		dot:shape "box"}. 
+
+{ ?x a g:Woman} => {
+	?x 	a Person;
+		dot:color "Red";
+		dot:shape "box"}. 
+
+{ ?x a Person} => { familyTree dot:hasNode ?x}.
+
+# { ?x g:givenName ?n } =>  { familyTree dot:hasNode ?x. ?x dot:label ?n}.
+{ ?x g:givenName ?n; g:surName ?s.
+  ( ?n "\\n" ?s ) string:concatenation ?nn } =>  { familyTree dot:hasNode ?x. ?x dot:label ?nn}.
+
+#ENDS
+

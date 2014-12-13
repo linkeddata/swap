@@ -1,0 +1,33 @@
+     @prefix : <http://inferenceweb.stanford.edu/2004/07/iw.owl#> .
+     @prefix JTP: <http://.../registry/IE/JTP.owl#> .
+     @prefix to: <http://.../tonysns4_5.owl#> .
+     @prefix ton: <http://.../tonysns4_1.owl#> .
+    
+    JTP:JTP     a <http://.../iw.owl#InferenceEngine> .
+    
+    <http://.../tonysns4_0.owl#tonysns4_0>     a :NodeSet;
+         :conclusion """ 
+(|http://www.w3.org/1999/02/22-rdf-syntax-ns#|::type 
+|http://.../tonys.daml#|::|TonysSpecialty| ?x) 
+""";
+         :hasLanguage <http://.../registry/LG/KIF.owl#KIF>;
+         :isConsequentOf  (
+         [
+                 a :InferenceStep;
+                 :hasAntecedent  (
+                ton:tonysns4_1 
+                to:tonysns4_5  );
+                 :hasInferenceEngine JTP:JTP;
+                 :hasRule <http://.../registry/DPR/GMP.owl#GMP>;
+                 :hasVariableMapping  (
+                 [
+                         a :VariableMapping;
+                         :Term """ 
+|http://.../tonys.daml#|::|SEAFOOD| 
+""";
+                         :Variable "?x" ] ) ] ) .
+    
+    ton:tonysns4_1     a :NodeSet .
+    
+    to:tonysns4_5     a :NodeSet .
+    

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE rdf:RDF SYSTEM "atom.dtd">
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+
+  <feed xmlns="http://purl.org/atom/ns#">
+    <!-- required elements -->
+    <version>0.2</version>
+    <title>dive into mark</title>
+    <link>http://diveintomark.org/</link>
+    <modified>2003-08-05T12:29:29Z</modified>
+    <!-- optional elements -->
+    <tagline>A lot of effort went into making this effortless</tagline>
+    <id>tag:diveintomark.org,2003:3</id>
+    <generator>
+      <name>Movable Type</name>
+      <url>http://www.movabletype./org/?v=2.64</url>
+    </generator>
+    <copyright>Copyright (c) 2003, Mark Pilgrim</copyright>
+
+    <entry>
+      <!-- required elements -->
+      <title>Atom 0.2 snapshot</title>
+      <link>http://diveintomark.org/2003/08/05/atom02</link>
+      <id>tag:diveintomark.org,2003:3.2397</id>
+      <issued>2003-08-05T08:29:29-04:00</issued>
+      <modified>2003-08-05T18:30:02Z</modified>
+      <!-- optional elements -->
+      <created>2003-08-05T12:29:29Z</created>
+      <summary>The Atom 0.2 snapshot is out.  Here are some sample feeds.</summary>
+      <author>
+        <name>Mark Pilgrim</name>
+        <url>http://diveintomark.org/</url>
+        <email>f8dy@example.com</email>
+      </author>
+      <contributor>
+        <name>Sam Ruby</name>
+        <url>http://intertwingly.net/blog/</url>
+        <email>rubys@example.com</email>
+      </contributor>
+      <contributor>
+        <name>Joe Gregorio</name>
+        <url>http://bitworking.org/</url>
+        <email>joe@example.com</email>
+      </contributor>
+      <content xml:lang="en-us">
+        <type>application/xhtml+xml</type>
+        <body xmlns="http://www.w3.org/1999/xhtml">
+          <p>The Atom 0.2 snapshot is out.  Changes from the <a href="http://intertwingly.net/foo.html">0.1 snapshot</a>:</p>
+          <ol>
+            <li>MAY contain <code>feed/copyright</code>.  Free-form copyright statement that applies to the feed (XXX more here).  Datatype is &lt;xsd:string&gt;.  If present, MUST NOT be blank.</li>
+            <li>
+              <p>MAY contain <code>feed/generator</code>.  Datatype is &lt;xsd:string&gt;.  If present, MUST be full URI and SHOULD point to the home page of the program which generated the feed.</p>
+              <p>Has optional <code>@name</code> attribute, whose datatype is also &lt;xsd:string&gt;.  If present, @name MUST NOT be blank.</p>
+            </li>
+            <li>several other changes not listed here</li>
+          </ol>
+        </body>
+      </content>
+    </entry>
+  </feed>
+
+</rdf:RDF>

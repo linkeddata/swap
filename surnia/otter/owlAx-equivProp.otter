@@ -1,0 +1,32 @@
+% $Id$
+formula_list(usable).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   owl_EquivalentProperty
+%
+
+all PRED1 PRED2 (
+   rdf(PRED1, owl_equivalentProperty, PRED2)
+   <->
+   (all SUBJ OBJ (
+      ( rdf(SUBJ, PRED1, OBJ) <-> rdf(SUBJ, PRED2, OBJ) )
+   ))
+).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   rdfs_subPropertyOf
+%
+
+all PRED1 PRED2 (
+   rdf(PRED1, rdfs_subPropertyOf, PRED2)
+   <->
+   (all SUBJ OBJ (
+      ( rdf(SUBJ, PRED1, OBJ) -> rdf(SUBJ, PRED2, OBJ) )
+   ))
+).
+
+
+% $Log $

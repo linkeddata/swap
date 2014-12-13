@@ -1,0 +1,465 @@
+#Processed by Id: cwm.py,v 1.82 2001/11/15 22:11:23 timbl Exp 
+        #    using base file:/home/connolly/w3ccvs/WWW/2000/10/swap/p3p/
+        
+#  Notation3 generation by
+#       notation3.py,v 1.98 2001/11/15 22:11:24 timbl Exp
+
+#   Base was: file:/home/connolly/w3ccvs/WWW/2000/10/swap/p3p/
+     @prefix : <http://www.w3.org/2001/09/P3Pv1#> .
+     @prefix appel: <http://www.w3.org/2001/02/APPELv1#> .
+     @prefix dc: <http://purl.org/dc/elements/1.1/> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix ont: <http://www.daml.org/2001/03/daml+oil#> .
+     @prefix p3bd: <http://www.w3.org/TR/P3P/base#> .
+     @prefix p3p: <http://www.w3.org/2001/09/P3Pv1> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+    
+    this     log:forAll <p3pAArules.n3#F>,
+                <p3pAArules.n3#o>,
+                <p3pAArules.n3#p>,
+                <p3pAArules.n3#s>,
+                <p3pAArules.n3#x>;
+         log:forSome <p3pAArules.n3#_gInterestingCategory>,
+                <p3pAArules.n3#_gRule2Target> .
+    
+    <forShoppers.rdf#forShoppers>     a <p3pAArules.n3#_gRule2Target>,
+                :Policy;
+         <p3pAArules.n3#theseRules>  [
+             appel:behavior "limited";
+             appel:prompt "yes";
+             appel:description """Warning! Service collects some kind of identifiable 
+                                          information""" ],
+                 [
+             appel:behavior "limited";
+             appel:prompt "yes";
+             appel:description """Warning! Service collects physical and/or online 
+                                          contact information and/or financial account 
+                                          identifiers and/or other data that may be 
+                                          personally-identifiable""" ] .
+    {
+        <p3pAArules.n3#F>     log:notIncludes {<p3pAArules.n3#p>     :access :nonident .
+            } .
+        <p3pAArules.n3#p>     a :Policy;
+             log:racine  [
+                 log:semantics <p3pAArules.n3#F> ] .
+        
+        }     log:implies {<p3pAArules.n3#p>     <p3pAArules.n3#theseRules>  [
+                 appel:behavior "limited";
+                 appel:prompt "yes";
+                 appel:description """Warning! Service collects some kind of identifiable 
+                                          information""" ] .
+        } .
+    {
+        <p3pAArules.n3#p>     a  [
+             ] .
+        
+        }     log:implies {<p3pAArules.n3#p>     <p3pAArules.n3#theseRules>  [
+                 appel:behavior "limited";
+                 appel:prompt "yes";
+                 appel:description """Warning! Service collects physical and/or online 
+                                          contact information and/or financial account 
+                                          identifiers and/or other data that may be 
+                                          personally-identifiable""" ] .
+        } .
+    {
+        <p3pAArules.n3#o>     :categories  [
+                 a  [
+                 ] ] .
+        <p3pAArules.n3#p>     a :Policy;
+             log:racine  [
+                 log:semantics  [
+                     log:includes {<p3pAArules.n3#p>     :statement  [
+                             :data  [
+                                 :ref <p3pAArules.n3#x> ] ] .
+                    } ] ] .
+        
+        }     log:implies {<p3pAArules.n3#p>     a  [
+             ] .
+        } .
+    
+    <p3pAArules.n3#theseRules>     a appel:RULESET;
+         appel:crtdby "W3C";
+         appel:crtdon "2000-03-15T10:55:32+01:00" .
+    
+    <p3pAArules.n3>     <http://purl.org/dc/elements/1.1/description> """
+  transcription of
+  Figure B.1: "Almost Anonymous" Ruleset 
+  from APPEL spec
+
+  using bwm's 2Dec P3P model
+  """;
+         <http://purl.org/dc/elements/1.1/source> <http://lists.w3.org/Archives/Public/www-archive/2001Dec/0006.html>,
+                <http://www.w3.org/TR/P3P-preferences> .
+    
+    <p3pbase.rdf>     a :DataSchema .
+    
+    appel:crtdby     s:subPropertyOf <http://purl.org/dc/elements/1.1/creator> .
+    
+    appel:crtdon     s:subPropertyOf <http://purl.org/dc/elements/1.1/date> .
+    
+    :financial     a <p3pAArules.n3#_gInterestingCategory> .
+    
+    :online     a <p3pAArules.n3#_gInterestingCategory> .
+    
+    :other-category     a <p3pAArules.n3#_gInterestingCategory> .
+    
+    :physical     a <p3pAArules.n3#_gInterestingCategory> .
+    
+    :uniqueid     a <p3pAArules.n3#_gInterestingCategory> .
+    
+    p3bd:business.cert     a :Data-Def;
+         :categories :uniqueid;
+         :short-description "Organization Identity certificate";
+         :structref p3bd:certificate .
+    
+    p3bd:business.contact-info     a :Data-Def;
+         :categories :demographic,
+                :online,
+                :physical;
+         :short-description "Contact Information for the Organization";
+         :structref p3bd:contact .
+    
+    p3bd:business.department     a :Data-Def;
+         :categories :demographic;
+         :short-description "Department or Division of Organization" .
+    
+    p3bd:business.name     a :Data-Def;
+         :categories :demographic;
+         :short-description "Organization Name" .
+    
+    p3bd:certificate.format     a :Data-Struct;
+         :categories :uniqueid;
+         :short-description "Certificate format" .
+    
+    p3bd:certificate.key     a :Data-Struct;
+         :categories :uniqueid;
+         :short-description "Certificate key" .
+    
+    p3bd:contact.online     a :Data-Struct;
+         :categories :online;
+         :short-description "Online Address Information" .
+    
+    p3bd:contact.postal     a :Data-Struct;
+         :short-description "Postal Address Information" .
+    
+    p3bd:contact.telecom     a :Data-Struct;
+         :categories :physical;
+         :short-description "Telecommunications Information" .
+    
+    p3bd:date.fractionsecond     a :Data-Struct;
+         :short-description "Fraction of Second" .
+    
+    p3bd:date.hms.hour     a :Data-Struct;
+         :short-description "Hour" .
+    
+    p3bd:date.hms.minute     a :Data-Struct;
+         :short-description "Minutes" .
+    
+    p3bd:date.hms.second     a :Data-Struct;
+         :short-description "Second" .
+    
+    p3bd:date.timezone     a :Data-Struct;
+         :short-description "Time Zone" .
+    
+    p3bd:date.ymd.day     a :Data-Struct;
+         :short-description "Day" .
+    
+    p3bd:date.ymd.month     a :Data-Struct;
+         :short-description "Month" .
+    
+    p3bd:date.ymd.year     a :Data-Struct;
+         :short-description "Year" .
+    
+    p3bd:dynamic.clickstream     a :Data-Def;
+         :categories :computer,
+                :demographic,
+                :navigation;
+         :short-description "Click-stream Information";
+         :structref p3bd:loginfo .
+    
+    p3bd:dynamic.clientevents     a :Data-Def;
+         :categories :navigation;
+         :short-description "User's Interaction with a Resource" .
+    
+    p3bd:dynamic.cookies     a :Data-Def;
+         :short-description "Use of HTTP Cookies" .
+    
+    p3bd:dynamic.http     a :Data-Def;
+         :categories :computer,
+                :navigation;
+         :short-description "HTTP Protocol Information";
+         :structref p3bd:httpinfo .
+    
+    p3bd:dynamic.interactionrecord     a :Data-Def;
+         :categories :interactive;
+         :short-description "Server Stores the Transaction History" .
+    
+    p3bd:dynamic.miscdata     a :Data-Def;
+         :short-description "Miscellaneous Non-base Data Schema = information" .
+    
+    p3bd:dynamic.searchtext     a :Data-Def;
+         :categories :interactive;
+         :short-description "Search Terms" .
+    
+    p3bd:httpinfo.referer     a :Data-Struct;
+         :categories :navigation;
+         :short-description "Last URI Requested by the User" .
+    
+    p3bd:httpinfo.useragent     a :Data-Struct;
+         :categories :computer;
+         :short-description "User Agent Information" .
+    
+    p3bd:ipaddr.fullip     a :Data-Struct;
+         :categories :computer;
+         :short-description "Full IP Address" .
+    
+    p3bd:ipaddr.hostname     a :Data-Struct;
+         :categories :computer;
+         :short-description "Complete Host and Domain Name" .
+    
+    p3bd:ipaddr.partialhostname     a :Data-Struct;
+         :categories :demographic;
+         :short-description "Partial Hostname" .
+    
+    p3bd:ipaddr.partialip     a :Data-Struct;
+         :categories :demographic;
+         :short-description "Partial IP Address" .
+    
+    p3bd:login.id     a :Data-Struct;
+         :categories :uniqueid;
+         :short-description "Login ID" .
+    
+    p3bd:login.password     a :Data-Struct;
+         :categories :uniqueid;
+         :short-description "Login Password" .
+    
+    p3bd:loginfo.clientip     a :Data-Struct;
+         :short-description "Client's IP Address or Hostname" .
+    
+    p3bd:loginfo.other.bytes     a :Data-Struct;
+         :categories :navigation;
+         :short-description "Data Bytes in Response" .
+    
+    p3bd:loginfo.other.httpmethod     a :Data-Struct;
+         :categories :navigation;
+         :short-description "HTTP Request Method" .
+    
+    p3bd:loginfo.other.statuscode     a :Data-Struct;
+         :categories :navigation;
+         :short-description "Response Status Code" .
+    
+    p3bd:loginfo.timestamp     a :Data-Struct;
+         :categories :navigation;
+         :short-description "Request Timestamp" .
+    
+    p3bd:loginfo.uri     a :Data-Struct;
+         :categories :navigation;
+         :short-description "URI of Requested Resource" .
+    
+    p3bd:online.email     a :Data-Struct;
+         :categories :online;
+         :short-description "Email Address" .
+    
+    p3bd:online.uri     a :Data-Struct;
+         :categories :online;
+         :short-description "Home Page Address" .
+    
+    p3bd:personname.family     a :Data-Struct;
+         :categories :physical;
+         :short-description "Family Name (Last Name)" .
+    
+    p3bd:personname.given     a :Data-Struct;
+         :categories :physical;
+         :short-description "Given Name (First Name)" .
+    
+    p3bd:personname.middle     a :Data-Struct;
+         :categories :physical;
+         :short-description "Middle Name" .
+    
+    p3bd:personname.nickname     a :Data-Struct;
+         :categories :demographic;
+         :short-description "Nickname" .
+    
+    p3bd:personname.prefix     a :Data-Struct;
+         :categories :demographic;
+         :short-description "Name Prefix" .
+    
+    p3bd:personname.suffix     a :Data-Struct;
+         :categories :demographic;
+         :short-description "Name Suffix" .
+    
+    p3bd:postal.city     a :Data-Struct;
+         :categories :demographic;
+         :short-description "City" .
+    
+    p3bd:postal.country     a :Data-Struct;
+         :categories :demographic;
+         :short-description "Country Name" .
+    
+    p3bd:postal.name     a :Data-Struct .
+    
+    p3bd:postal.organization     a :Data-Struct;
+         :categories :demographic;
+         :short-description "Organization Name" .
+    
+    p3bd:postal.postalcode     a :Data-Struct;
+         :categories :demographic;
+         :short-description "Postal Code" .
+    
+    p3bd:postal.stateprov     a :Data-Struct;
+         :categories :demographic;
+         :short-description "State or Province" .
+    
+    p3bd:postal.street     a :Data-Struct;
+         :categories :physical;
+         :short-description "Street Address" .
+    
+    p3bd:telecom.fax     a :Data-Struct;
+         :categories :physical;
+         :short-description "Fax Number" .
+    
+    p3bd:telecom.mobile     a :Data-Struct;
+         :categories :physical;
+         :short-description "Mobile Telephone Number" .
+    
+    p3bd:telecom.pager     a :Data-Struct;
+         :categories :physical;
+         :short-description "Pager Number" .
+    
+    p3bd:telecom.telephone     a :Data-Struct;
+         :categories :physical;
+         :short-description "Telephone Number" .
+    
+    p3bd:telephonenum.comment     a :Data-Struct;
+         :categories :physical;
+         :short-description "Telephone Optional Comments" .
+    
+    p3bd:telephonenum.ext     a :Data-Struct;
+         :categories :physical;
+         :short-description "Telephone Extension" .
+    
+    p3bd:telephonenum.intcode     a :Data-Struct;
+         :categories :physical;
+         :short-description "International Telephone Code" .
+    
+    p3bd:telephonenum.loccode     a :Data-Struct;
+         :categories :physical;
+         :short-description "Local Telephone Area Code" .
+    
+    p3bd:telephonenum.number     a :Data-Struct;
+         :categories :physical;
+         :short-description "Telephone Number" .
+    
+    p3bd:thirdparty.bdate     a :Data-Def;
+         :categories :demographic;
+         :short-description "Third Party's Birth Date";
+         :structref p3bd:date .
+    
+    p3bd:thirdparty.business-info     a :Data-Def;
+         :categories :demographic,
+                :online,
+                :physical;
+         :short-description "Third Party's Business Contact Information";
+         :structref p3bd:contact .
+    
+    p3bd:thirdparty.cert     a :Data-Def;
+         :categories :uniqueid;
+         :short-description "Third Party's Identity Certificate";
+         :structref p3bd:certificate .
+    
+    p3bd:thirdparty.department     a :Data-Def;
+         :categories :demographic;
+         :short-description "Department or Division of Organization where Third Party is Employed" .
+    
+    p3bd:thirdparty.employer     a :Data-Def;
+         :categories :demographic;
+         :short-description "Name of Third Party's Employer" .
+    
+    p3bd:thirdparty.gender     a :Data-Def;
+         :categories :demographic;
+         :short-description "Third Party's Gender" .
+    
+    p3bd:thirdparty.home-info     a :Data-Def;
+         :categories :demographic,
+                :online,
+                :physical;
+         :short-description "Third Party's Home Contact Information";
+         :structref p3bd:contact .
+    
+    p3bd:thirdparty.jobtitle     a :Data-Def;
+         :categories :demographic;
+         :short-description "Third Party's Job Title" .
+    
+    p3bd:thirdparty.login     a :Data-Def;
+         :categories :uniqueid;
+         :short-description "Third Party's Login Information";
+         :structref p3bd:login .
+    
+    p3bd:thirdparty.name     a :Data-Def;
+         :categories :demographic,
+                :physical;
+         :short-description "Third Party's Name";
+         :structref p3bd:personname .
+    
+    p3bd:uri.authority     a :Data-Struct;
+         :short-description "URI Authority" .
+    
+    p3bd:uri.querystring     a :Data-Struct;
+         :short-description "Query-string Portion of URI" .
+    
+    p3bd:uri.stem     a :Data-Struct;
+         :short-description "URI Stem" .
+    
+    p3bd:user.bdate     a :Data-Def;
+         :categories :demographic;
+         :short-description "User's Birth Date";
+         :structref p3bd:date .
+    
+    p3bd:user.business-info     a :Data-Def;
+         :categories :demographic,
+                :online,
+                :physical;
+         :short-description "User's Business Contact Information";
+         :structref p3bd:contact .
+    
+    p3bd:user.cert     a :Data-Def;
+         :categories :uniqueid;
+         :short-description "User's Identity Certificate";
+         :structref p3bd:certificate .
+    
+    p3bd:user.department     a :Data-Def;
+         :categories :demographic;
+         :short-description "Department or Division of Organization where User is Employed" .
+    
+    p3bd:user.employer     a :Data-Def;
+         :categories :demographic;
+         :short-description "Name of User's Employer" .
+    
+    p3bd:user.gender     a :Data-Def;
+         :categories :demographic;
+         :short-description "User's Gender" .
+    
+    p3bd:user.home-info     a :Data-Def;
+         :categories :demographic,
+                :online,
+                :physical;
+         :short-description "User's Home Contact Information";
+         :structref p3bd:contact .
+    
+    p3bd:user.jobtitle     a :Data-Def;
+         :categories :demographic;
+         :short-description "User's Job Title" .
+    
+    p3bd:user.login     a :Data-Def;
+         :categories :uniqueid;
+         :short-description "User's Login Information";
+         :structref p3bd:login .
+    
+    p3bd:user.name     a :Data-Def;
+         :categories :demographic,
+                :physical;
+         :short-description "User's Name";
+         :structref p3bd:personname .
+    
+#ENDS

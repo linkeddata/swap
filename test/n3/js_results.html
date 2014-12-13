@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+ <head profile="http://www.w3.org/2000/08/w3c-synd/#"><meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <style type="text/css" xml:space="preserve">
+td.pass {background-color : green; }
+td.partial {background-color : teal; }
+td.failure {background-color: red; }
+td.pretty {width : 10em; }
+td.pad_me {width : 4em; }
+h1 {background-color: red; }
+div.diff { width: 80%; 
+	border : 1px solid black; }
+pre {	border : 1px solid black; 
+	width: 60%; 
+	background-color: grey; }
+  </style>
+  <title>N3 test result report:
+2007-07-02T12:03:48Z
+  </title>
+ </head>
+ <body>
+  <h1>
+Notation3 Parser Test Results
+  </h1>
+  <table border="1">
+   <caption>Color Key:</caption>
+   <tbody>
+     <tr>
+       <td class="pass pad_me"></td>
+       <td>Parser parses the file, and generates the expected output. Or, on a negative test, fails to parse the file</td>
+     </tr>
+     <tr>
+       <td class="partial pad_me"></td>
+       <td>Parser parses the file</td>
+     </tr>
+     <tr>
+       <td class="failure pad_me"></td>
+       <td>Parser throws an exception on the file. Or, on a negative test, fails to throw an exception</td>
+     </tr>
+   </tbody>
+  </table
+
+  <table border="1">
+   <thead>
+    <tr>
+     <td>
+Test file
+     </td>
+     <td>
+Description
+     </td>
+     <td>
+Class
+     </td>
+<td class="pretty">CLASSPATH="/devel/rhino/rhino1_6R5/js.jar" java org.mozilla.javascript.tools.shell.Main ../pyjs/testn3.js %s</td>
+    <tr>
+   </thead>
+   <tbody>
+<tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/neg-formula-predicate.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/neg-formula-predicate.n3</a></td><td>A predicate cannot be a formula, I hope</td><td>Negative</td><td class="pass">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/neg-keywords3.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/neg-keywords3.n3</a></td><td>@keywords is not a valid predicate</td><td>Negative</td><td class="pass">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/neg-literal-predicate.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/neg-literal-predicate.n3</a></td><td>A predicate cannot be a literal, I hope</td><td>Negative</td><td class="pass">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/neg-single-quote.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/neg-single-quote.n3</a></td><td>single quoted strings are illegal</td><td>Negative</td><td class="pass">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/neg-thisadoc.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/neg-thisadoc.n3</a></td><td>The `this' keyword is no longer legal </td><td>Negative</td><td class="pass">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/tests-work.txt
+">
+file:///devel/WWW/2000/10/swap/test/tests-work.txt</a></td><td>something that isn't n3</td><td>Negative</td><td class="pass">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/zero-objects.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/zero-objects.n3</a></td><td>A statement that says nothing at all</td><td>Negative</td><td class="pass">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/anon-prop.n3
+">
+file:///devel/WWW/2000/10/swap/test/anon-prop.n3</a></td><td>Parse and regen anonymous property</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/contexts.n3
+">
+file:///devel/WWW/2000/10/swap/test/contexts.n3</a></td><td>Parse and generate simple contexts</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/djb1a.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/djb1a.n3</a></td><td>djb noticed a:b was parsed as rdf:type token</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/dot-dash.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/dot-dash.n3</a></td><td>combinations of - and _ in identifiers</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/equals1.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/equals1.n3</a></td><td>The = keyword</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/equals2.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/equals2.n3</a></td><td>The = keyword</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/i18n/hiragana.n3
+">
+file:///devel/WWW/2000/10/swap/test/i18n/hiragana.n3</a></td><td>N3 string, qname and IRI with utf-8 non-ascii characters</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/keywords1.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/keywords1.n3</a></td><td>@keywords in n3</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/keywords2.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/keywords2.n3</a></td><td>using no keywords in n3</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/lists.n3
+">
+file:///devel/WWW/2000/10/swap/test/lists.n3</a></td><td>parsing and generation of N3 list syntax</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/lstring.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/lstring.n3</a></td><td>N3 string nested triple quoting</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/n3parser.tests
+">
+file:///devel/WWW/2000/10/swap/test/n3parser.tests</a></td><td>we might as well be nice and self-referential</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/no-last-nl.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/no-last-nl.n3</a></td><td>An N3 file with no final newline character</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/numbers.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/numbers.n3</a></td><td>Number syntax</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/path1.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/path1.n3</a></td><td>Path syntax, simple</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/path2.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/path2.n3</a></td><td>Path syntax, more</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/qvars1.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/qvars1.n3</a></td><td>Quick variable syntax, simple</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/qvars2.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/qvars2.n3</a></td><td>Quick variable syntax, more</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/strquot.n3
+">
+file:///devel/WWW/2000/10/swap/test/strquot.n3</a></td><td>N3 string quoting with escaping</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/this-quantifiers.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/this-quantifiers.n3</a></td><td>Can still read the old 'this log:forSome' syntax</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/this-rules.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/this-rules.n3</a></td><td>Can still read the old 'this log:forAll' syntax</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/too-nested.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/too-nested.n3</a></td><td>Are we exceeding a maximum recursion limit or two?</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/trailing-semicolon.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/trailing-semicolon.n3</a></td><td>Propertylists can end in trailing semicolon.</td><td>Positive</td><td class="failure">&nbsp</td></tr><tr>
+    <td>
+<a href="
+file:///devel/WWW/2000/10/swap/test/syntax/zero-predicates.n3
+">
+file:///devel/WWW/2000/10/swap/test/syntax/zero-predicates.n3</a></td><td>A statement that says nothing at all</td><td>Positive</td><td class="failure">&nbsp</td></tr>
+   </tbody>
+  </table>
+
+ </body>
+</html>

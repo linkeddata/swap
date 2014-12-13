@@ -1,0 +1,5 @@
+# Does closure -e work?
+
+:b :p :c.   :d :q :e.  :b = :d.
+
+#ends

@@ -1,0 +1,45 @@
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix math: <http://www.w3.org/2000/10/swap/math#>.
+
+
+@keywords is, a, of.
+
+
+<http://w3.org/People/Berners-Lee/card.rdf> distance 0.
+
+@forAll HASH1, HASH2, PAGE1, F, PAGE2, D1, D2, WHO, NAME.
+
+{ PAGE1 distance D1.
+   PAGE1 log:semanticsOrError F.
+   F log:rawType log:Formula.
+   (D1 1) math:sum D2.
+  F log:includes {WHO	foaf:mbox_sha1sum HASH2;
+			rdfs:seeAlso PAGE2;
+			foaf:name NAME.}
+	    
+} => {	PAGE2 distance D2.
+	WHO	foaf:mbox_sha1sum HASH2;
+			rdfs:seeAlso PAGE2;
+			foaf:name NAME.
+    }.
+
+
+{ PAGE1 distance D1.
+   PAGE1 log:semanticsOrError F.
+   F log:rawType log:Formula.
+   (D1 1) math:sum D2.
+  F log:includes {WHO	foaf:mbox HASH2;
+			rdfs:seeAlso PAGE2;
+			foaf:name NAME.}
+	    
+} => {	PAGE2 distance D2.
+	WHO		foaf:mbox HASH2;
+			rdfs:seeAlso PAGE2;
+			foaf:name NAME. }.
+
+
+
+#ends

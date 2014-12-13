@@ -1,0 +1,47 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+
+#@prefix db: 		<http://localhost/SqlDB#>.
+# Tables:
+@prefix acls: 		<mysql://rdftest.w3.org/OrderTracking/acls#>.
+@prefix uris: 		<mysql://rdftest.w3.org/OrderTracking/uris#>.
+@prefix ids: 		<mysql://rdftest.w3.org/OrderTracking/ids#>.
+@prefix idInclusions:	<mysql://rdftest.w3.org/OrderTracking/idInclusions#>.
+
+@prefix : <#>.
+@prefix v: <#>.
+
+@forAll :urisRow, :aacl, :acl, :access, :u1, :g1, :accessor .
+
+<mysql://root@localhost/w3c> is log:definitiveService of
+	acls:acl, acls:access, acls:id, ids:value, idInclusions:id, 
+	idInclusions:groupId, uris:acl, uris:uri.
+{
+ :urisRow uris:uri "http://www.w3.org/Member/Overview.html" .
+ :urisRow uris:acl :aacl .
+ :acl acls:acl :aacl .
+ :acl acls:access :access .
+ :u1 ids:value "eric" .
+ :g1 idInclusions:id :u1 .
+ :g1 idInclusions:groupId :accessor .
+ :acl acls:id :accessor .
+} log:implies {
+
+ :aacl :RESULT :u1
+
+}.
+
+# should create this SQL:
+# SELECT 
+#   c.id as u1_id,
+#   a.id as urisRow_id,
+#   d.id as g1_id,d.groupId as g1_groupId,
+#   b.access as access,
+#   a.acl as aacl,
+#   b.acl as acl_acl,b.id as acl_id,b.access as acl_access,
+#   d.groupId as accessor
+# FROM uris AS a,acls AS b,ids AS c,idInclusions AS d
+# WHERE (a.uri="http://www.w3.org/Member/Overview.html")
+#   AND (a.acl=b.acl)
+#   AND (c.value="eric")
+#   AND (c.id=d.id)
+#   AND (d.groupId=b.id)

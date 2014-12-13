@@ -1,0 +1,6 @@
+@prefix : <http://www.w3.org/2000/10/swap/test/animals#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+:Dog rdfs:subClassOf :Mammal.
+:Cat rdfs:subClassOf :Mammal.
+

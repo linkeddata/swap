@@ -1,0 +1,150 @@
+Loading http://www.w3.org/2002/03owlt/editors-draft/draft/Manifest.rdf...   Done.
+
+Trying each NotOwlFeatureTest ...
+
+http://www.w3.org/2002/03owlt/I3.2/Manifest001#test skipped, unsupported test type
+http://www.w3.org/2002/03owlt/I3.2/Manifest002#test skipped, unsupported test type
+http://www.w3.org/2002/03owlt/I3.2/Manifest003#test skipped, unsupported test type
+http://www.w3.org/2002/03owlt/I3.4/Manifest001#test skipped, unsupported test type
+http://www.w3.org/2002/03owlt/I4.1/Manifest001#test skipped, unsupported test type
+
+Trying each PositiveEntailmentTest ...
+
+http://www.w3.org/2002/03owlt/AllDifferent/Manifest001#test  [special time limit: 30s] PASSED 7.20893597603s
+http://www.w3.org/2002/03owlt/FunctionalProperty/Manifest001#test PASSED 0.482010960579s
+http://www.w3.org/2002/03owlt/FunctionalProperty/Manifest002#test PASSED 0.945665001869s
+http://www.w3.org/2002/03owlt/FunctionalProperty/Manifest003#test PASSED 0.464604020119s
+http://www.w3.org/2002/03owlt/FunctionalProperty/Manifest004#test  [special time limit: 50s] PASSED 10.4779419899s
+http://www.w3.org/2002/03owlt/I4.6/Manifest003#test PASSED 3.51759803295s
+http://www.w3.org/2002/03owlt/I5.1/Manifest001#test PASSED 1.35887908936s
+http://www.w3.org/2002/03owlt/I5.2/Manifest002#test (...unknown...)
+http://www.w3.org/2002/03owlt/I5.24/Manifest001#test (...unknown...)
+http://www.w3.org/2002/03owlt/I5.24/Manifest004#test (...unknown...)
+http://www.w3.org/2002/03owlt/InverseFunctionalProperty/Manifest001#test PASSED 1.28960192204s
+http://www.w3.org/2002/03owlt/InverseFunctionalProperty/Manifest002#test PASSED 0.943228006363s
+http://www.w3.org/2002/03owlt/InverseFunctionalProperty/Manifest003#test PASSED 0.463822007179s
+http://www.w3.org/2002/03owlt/InverseFunctionalProperty/Manifest004#test  [special time limit: 50s] PASSED 13.2460240126s
+http://www.w3.org/2002/03owlt/SymmetricProperty/Manifest001#test PASSED 0.464476943016s
+http://www.w3.org/2002/03owlt/TransitiveProperty/Manifest001#test PASSED 3.50270104408s
+http://www.w3.org/2002/03owlt/allValuesFrom/Manifest001#test PASSED 1.70442306995s
+http://www.w3.org/2002/03owlt/cardinality/Manifest001#test PASSED 0.221935033798s
+http://www.w3.org/2002/03owlt/cardinality/Manifest002#test PASSED 0.225018024445s
+http://www.w3.org/2002/03owlt/cardinality/Manifest003#test PASSED 0.236206054688s
+http://www.w3.org/2002/03owlt/cardinality/Manifest004#test (...unknown...)
+http://www.w3.org/2002/03owlt/complementOf/Manifest001#test PASSED 2.84405303001s
+http://www.w3.org/2002/03owlt/description-logic/Manifest901#test (...unknown...)
+http://www.w3.org/2002/03owlt/description-logic/Manifest903#test skipped; uses unsupported datatype Int 200 too big
+http://www.w3.org/2002/03owlt/differentFrom/Manifest001#test PASSED 0.463745951653s
+http://www.w3.org/2002/03owlt/differentFrom/Manifest002#test (...unknown...)
+http://www.w3.org/2002/03owlt/disjointWith/Manifest001#test PASSED 2.14452600479s
+http://www.w3.org/2002/03owlt/disjointWith/Manifest002#test PASSED 1.89404690266s
+http://www.w3.org/2002/03owlt/distinctMembers/Manifest001#test PASSED 2.85128200054s
+http://www.w3.org/2002/03owlt/equivalentClass/Manifest001#test PASSED 1.28064203262s
+http://www.w3.org/2002/03owlt/equivalentClass/Manifest002#test PASSED 3.81693696976s
+http://www.w3.org/2002/03owlt/equivalentClass/Manifest003#test PASSED 1.12919402122s
+http://www.w3.org/2002/03owlt/equivalentClass/Manifest004#test (...unknown...)
+http://www.w3.org/2002/03owlt/equivalentClass/Manifest006#test (...unknown...)
+http://www.w3.org/2002/03owlt/equivalentProperty/Manifest001#test PASSED 0.954928994179s
+http://www.w3.org/2002/03owlt/equivalentProperty/Manifest002#test PASSED 0.334649920464s
+http://www.w3.org/2002/03owlt/equivalentProperty/Manifest003#test PASSED 0.250512003899s
+http://www.w3.org/2002/03owlt/equivalentProperty/Manifest004#test (...unknown...)
+http://www.w3.org/2002/03owlt/equivalentProperty/Manifest005#test (...unknown...)
+http://www.w3.org/2002/03owlt/equivalentProperty/Manifest006#test PASSED 0.468163013458s
+http://www.w3.org/2002/03owlt/intersectionOf/Manifest001#test PASSED 5.39742898941s
+http://www.w3.org/2002/03owlt/inverseOf/Manifest001#test PASSED 0.530861973763s
+http://www.w3.org/2002/03owlt/oneOf/Manifest002#test PASSED 0.984425067902s
+http://www.w3.org/2002/03owlt/oneOf/Manifest003#test PASSED 0.21905195713s
+http://www.w3.org/2002/03owlt/unionOf/Manifest001#test PASSED 0.76135802269s
+http://www.w3.org/2002/03owlt/unionOf/Manifest002#test PASSED 9.02312409878s
+
+Trying each NegativeEntailmentTest ...
+
+http://www.w3.org/2002/03owlt/allValuesFrom/Manifest002#test (...unknown...)
+http://www.w3.org/2002/03owlt/description-logic/Manifest902#test (...unknown...)
+http://www.w3.org/2002/03owlt/description-logic/Manifest904#test skipped; uses unsupported datatype Int 200 too big
+http://www.w3.org/2002/03owlt/equivalentClass/Manifest005#test (...unknown...)
+http://www.w3.org/2002/03owlt/imports/Manifest002#test (...unknown...)
+http://www.w3.org/2002/03owlt/someValuesFrom/Manifest002#test (...unknown...)
+
+Trying each TrueTest ...
+
+
+Trying each OWLforOWLTest ...
+
+http://www.w3.org/2002/03owlt/I5.5/Manifest001#test skipped, unsupported test type
+http://www.w3.org/2002/03owlt/I5.5/Manifest002#test skipped, unsupported test type
+http://www.w3.org/2002/03owlt/Nothing/Manifest002#test skipped, unsupported test type
+
+Trying each InconsistencyTest ...
+
+http://www.w3.org/2002/03owlt/I5.5/Manifest003#test PASSED 0.167479991913s
+http://www.w3.org/2002/03owlt/I5.5/Manifest004#test PASSED 0.147885918617s
+http://www.w3.org/2002/03owlt/description-logic/Manifest001#test (...unknown...)
+http://www.w3.org/2002/03owlt/description-logic/Manifest002#test (...unknown...)
+http://www.w3.org/2002/03owlt/description-logic/Manifest003#test (...unknown...)
+http://www.w3.org/2002/03owlt/description-logic/Manifest004#test (...unknown...)
+http://www.w3.org/2002/03owlt/description-logic/Manifest007#test (...unknown...)
+http://www.w3.org/2002/03owlt/description-logic/Manifest008#test (...unknown...)
+http://www.w3.org/2002/03owlt/description-logic/Manifest010#test (...unknown...)
+http://www.w3.org/2002/03owlt/description-logic/Manifest011#test PASSED 9.61800396442s
+http://www.w3.org/2002/03owlt/description-logic/Manifest012#test (...unknown...)
+http://www.w3.org/2002/03owlt/description-logic/Manifest013#test (...unknown...)
+http://www.w3.org/2002/03owlt/description-logic/Manifest014#test (...unknown...)
+http://www.w3.org/2002/03owlt/description-logic/Manifest015#test (...unknown...)
+http://www.w3.org/2002/03owlt/description-logic/Manifest017#test (...unknown...)
+http://www.w3.org/2002/03owlt/description-logic/Manifest019#test (...unknown...)
+http://www.w3.org/2002/03owlt/description-logic/Manifest022#test (...unknown...)
+http://www.w3.org/2002/03owlt/description-logic/Manifest023#test (...unknown...)
+http://www.w3.org/2002/03owlt/description-logic/Manifest026#test (...unknown...)
+http://www.w3.org/2002/03owlt/description-logic/Manifest027#test (...unknown...)
+http://www.w3.org/2002/03owlt/description-logic/Manifest029#test (...unknown...)
+http://www.w3.org/2002/03owlt/description-logic/Manifest030#test (...unknown...)
+http://www.w3.org/2002/03owlt/description-logic/Manifest032#test (...unknown...)
+http://www.w3.org/2002/03owlt/description-logic/Manifest033#test (...unknown...)
+http://www.w3.org/2002/03owlt/description-logic/Manifest101#test PASSED 8.87483203411s
+http://www.w3.org/2002/03owlt/description-logic/Manifest102#test PASSED 9.81947994232s
+http://www.w3.org/2002/03owlt/description-logic/Manifest103#test PASSED 8.99140501022s
+http://www.w3.org/2002/03owlt/description-logic/Manifest104#test PASSED 5.08492898941s
+http://www.w3.org/2002/03owlt/description-logic/Manifest105#test (...unknown...)
+http://www.w3.org/2002/03owlt/description-logic/Manifest106#test (...unknown...)
+http://www.w3.org/2002/03owlt/description-logic/Manifest107#test (...unknown...)
+http://www.w3.org/2002/03owlt/description-logic/Manifest108#test (...unknown...)
+http://www.w3.org/2002/03owlt/description-logic/Manifest109#test (...unknown...)
+http://www.w3.org/2002/03owlt/description-logic/Manifest110#test (...unknown...)
+http://www.w3.org/2002/03owlt/description-logic/Manifest111#test (...unknown...)
+http://www.w3.org/2002/03owlt/description-logic/Manifest602#test skipped; uses unsupported datatype unsupported datatype: 1, type /2001/XMLSchema#int
+http://www.w3.org/2002/03owlt/description-logic/Manifest603#test skipped; uses unsupported datatype unsupported datatype: 1, type /2001/XMLSchema#int
+http://www.w3.org/2002/03owlt/description-logic/Manifest604#test skipped; uses unsupported datatype unsupported datatype: 0, type /2001/XMLSchema#int
+http://www.w3.org/2002/03owlt/description-logic/Manifest608#test skipped; uses unsupported datatype unsupported datatype: 0, type /2001/XMLSchema#decimal
+http://www.w3.org/2002/03owlt/description-logic/Manifest610#test skipped; uses unsupported datatype unsupported datatype: 1, type /2001/XMLSchema#int
+http://www.w3.org/2002/03owlt/description-logic/Manifest611#test skipped; uses unsupported datatype unsupported datatype: 1, type /2001/XMLSchema#int
+http://www.w3.org/2002/03owlt/description-logic/Manifest612#test skipped; uses unsupported datatype unsupported datatype: 1, type /2001/XMLSchema#int
+http://www.w3.org/2002/03owlt/description-logic/Manifest613#test skipped; uses unsupported datatype unsupported datatype: 1, type /2001/XMLSchema#int
+http://www.w3.org/2002/03owlt/description-logic/Manifest614#test skipped; uses unsupported datatype unsupported datatype: 1, type /2001/XMLSchema#int
+http://www.w3.org/2002/03owlt/description-logic/Manifest615#test skipped; uses unsupported datatype unsupported datatype: 1, type /2001/XMLSchema#int
+http://www.w3.org/2002/03owlt/description-logic/Manifest617#test skipped; uses unsupported datatype unsupported datatype: 1, type /2001/XMLSchema#int
+http://www.w3.org/2002/03owlt/description-logic/Manifest623#test skipped; uses unsupported datatype unsupported datatype: 1, type /2001/XMLSchema#int
+http://www.w3.org/2002/03owlt/description-logic/Manifest626#test skipped; uses unsupported datatype unsupported datatype: 1, type /2001/XMLSchema#int
+http://www.w3.org/2002/03owlt/description-logic/Manifest627#test skipped; uses unsupported datatype unsupported datatype: 1, type /2001/XMLSchema#int
+http://www.w3.org/2002/03owlt/description-logic/Manifest629#test skipped; uses unsupported datatype unsupported datatype: 1, type /2001/XMLSchema#int
+http://www.w3.org/2002/03owlt/description-logic/Manifest630#test skipped; uses unsupported datatype unsupported datatype: 1, type /2001/XMLSchema#int
+http://www.w3.org/2002/03owlt/description-logic/Manifest632#test skipped; uses unsupported datatype unsupported datatype: 1, type /2001/XMLSchema#int
+http://www.w3.org/2002/03owlt/description-logic/Manifest633#test skipped; uses unsupported datatype unsupported datatype: 1, type /2001/XMLSchema#int
+http://www.w3.org/2002/03owlt/description-logic/Manifest641#test skipped; uses unsupported datatype unsupported datatype: 1, type /2001/XMLSchema#short
+http://www.w3.org/2002/03owlt/description-logic/Manifest642#test skipped; uses unsupported datatype unsupported datatype: 1, type /2001/XMLSchema#short
+http://www.w3.org/2002/03owlt/description-logic/Manifest643#test skipped; uses unsupported datatype unsupported datatype: 1, type /2001/XMLSchema#short
+http://www.w3.org/2002/03owlt/maxCardinality/Manifest001#test  [special time limit: 1100s] PASSED 103.218225956s
+http://www.w3.org/2002/03owlt/maxCardinality/Manifest002#test (...unknown...)
+
+Trying each ImportEntailmentTest ...
+
+http://www.w3.org/2002/03owlt/imports/Manifest001#test skipped, unsupported test type
+http://www.w3.org/2002/03owlt/imports/Manifest003#test skipped, unsupported test type
+
+Trying each ImportLevelTest ...
+
+http://www.w3.org/2002/03owlt/imports/Manifest004#test skipped, unsupported test type
+http://www.w3.org/2002/03owlt/imports/Manifest005#test skipped, unsupported test type
+http://www.w3.org/2002/03owlt/imports/Manifest006#test skipped, unsupported test type
+http://www.w3.org/2002/03owlt/imports/Manifest007#test skipped, unsupported test type
+http://www.w3.org/2002/03owlt/imports/Manifest008#test skipped, unsupported test type

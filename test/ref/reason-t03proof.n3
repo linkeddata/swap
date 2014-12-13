@@ -1,0 +1,58 @@
+     @prefix : <reason/t3.n3#> .
+    @prefix foo: <#> .
+    @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    @prefix pr: <http://www.w3.org/2000/10/swap/reason#> .
+    
+     @forSome foo:_g0 .
+      [      a pr:Conjunction,
+                    pr:Proof;
+             pr:component  [
+                 a pr:Extraction;
+                 pr:because foo:_g0;
+                 pr:gives {:a     :b :c .
+                } ],
+                     [
+                 a pr:Extraction;
+                 pr:because foo:_g0;
+                 pr:gives {{
+                    :a     :b :c .
+                    
+                    }     log:implies {:a2     :b2 :c2 .
+                    } .
+                } ],
+                     [
+                 a pr:Extraction;
+                 pr:because  [
+                     a pr:Inference;
+                     pr:evidence  (
+                     [
+                             a pr:Extraction;
+                             pr:because foo:_g0;
+                             pr:gives {:a     :b :c .
+                            } ] );
+                     pr:rule  [
+                         a pr:Extraction;
+                         pr:because foo:_g0;
+                         pr:gives {{
+                            :a     :b :c .
+                            
+                            }     log:implies {:a2     :b2 :c2 .
+                            } .
+                        } ] ];
+                 pr:gives {:a2     :b2 :c2 .
+                } ];
+             pr:gives {:a     :b :c .
+            :a2     :b2 :c2 .
+            {
+                :a     :b :c .
+                
+                }     log:implies {:a2     :b2 :c2 .
+                } .
+            } ].
+    
+    foo:_g0     a pr:Parsing;
+         pr:because  [
+             a pr:CommandLine;
+             pr:args "['../cwm.py', '--quiet', 'reason/t3.n3', '--think', '--base=foo', '--why']" ];
+         pr:source <reason/t3.n3> .
+    

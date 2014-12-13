@@ -1,0 +1,318 @@
+#makeReport.n3 
+#
+#An n3 file that takes the output of tester.py, which contains a wealth of information about 
+# n3 parser tests and what passes what, and makes a pretty html table of it.
+#
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix n3test: <http://www.w3.org/2004/11/n3test#> .
+@prefix crypto: <http://www.w3.org/2000/10/swap/crypto#>. # for md5
+@prefix time: <http://www.w3.org/2000/10/swap/time#>.  # for localTime
+
+
+#
+#We start out with the header of the document. None of this is ever different.
+#
+"A" log:outputString
+"""<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+ <head profile="http://www.w3.org/2000/08/w3c-synd/#"><meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <style type="text/css" xml:space="preserve">
+td.pass {background-color : #cfc; }
+td.partial {background-color : #ffc; }
+td.failure {background-color: #fdd; }
+td.pretty {width : 10em; }
+td.pad_me {width : 4em; }
+h1 {background-color: white; }
+div.diff { width: 80%; 
+	border : 1px solid black; }
+pre {	border : 1px solid black; 
+	width: 60%; 
+	background-color: #ddd; }
+  </style>
+  <title>N3 test result report:
+""" .
+
+#
+# When I ran the file .
+{"" time:localTime ?x} log:implies
+{"AB" log:outputString ?x} .
+
+#
+# The head of the page. This is the end of fixed stuff
+"B" log:outputString
+"""
+  </title>
+ </head>
+ <body>
+  <h1>
+Notation3 Parser Test Results
+  </h1>
+  <table border="1">
+   <caption>Color Key:</caption>
+   <tbody>
+     <tr>
+       <td class="pass pad_me"></td>
+       <td>Parser parses the file, and generates the expected output. Or, on a negative test, fails to parse the file</td>
+     </tr>
+     <tr>
+       <td class="partial pad_me"></td>
+       <td>Parser parses the file</td>
+     </tr>
+     <tr>
+       <td class="failure pad_me"></td>
+       <td>Parser throws an exception on the file. Or, on a negative test, fails to throw an exception</td>
+     </tr>
+   </tbody>
+  </table>
+""" .
+
+#
+#The beginning of the table, including its first two column headings
+#
+"C" log:outputString
+"""
+  <table border="1">
+   <thead>
+    <tr>
+     <td>
+Test file
+     </td>
+     <td>
+Description
+     </td>
+     <td>
+Class
+     </td>
+""" .
+
+#
+# A column for every parser.
+#
+{?parser a n3test:N3Parser; n3test:command ?y . 
+	("D" ?y) string:concatenation ?x . 
+	("<td class=\"pretty\">" ?y "</td>") string:concatenation ?z} log:implies
+{?x log:outputString ?z} .
+
+#
+# The end of the table header, and beginning of the table body
+#
+"E" log:outputString
+"""
+    </tr>
+   </thead>
+   <tbody>
+""" .
+
+#
+#A row for every file. We will have to be careful to sort by file, then command
+#
+{?file a n3test:Input; log:uri ?uri;
+	n3test:description ?a;
+	n3test:expected ?b .
+	("G" ?b ?file) string:concatenation ?x .
+	("G" ?b ?file "zzzzzzzzzzzzzzzzz") string:concatenation ?y .
+	("""<tr>
+    <td>
+<a href="
+""" 
+?uri 
+"""
+">
+"""
+?uri """</a></td><td>"""
+?a
+"</td><td>"
+?b
+"</td>") string:concatenation ?z .} log:implies
+{?x log:outputString ?z .
+ ?y log:outputString "</tr>"} .
+
+#
+# The rule if there is no reference file given, yet the parser succeeded
+#
+{?parser a n3test:N3Parser; 
+	n3test:command ?y; 
+	n3test:parses ?file .
+	?file n3test:expected "Positive" .
+	?file ?parser [n3test:doesNotMatch () ] .
+	("GPositive" ?file ?y) string:concatenation ?x .
+	("""<td class="partial">&nbsp;</td>""") string:concatenation ?z . } log:implies
+{?x log:outputString ?z } .
+
+{?parser a n3test:N3Parser; 
+	n3test:command ?y; 
+	n3test:parses ?file .
+	?file n3test:expected "Undecided" .
+	?file ?parser [n3test:doesNotMatch () ] .
+	("GUndecided" ?file ?y) string:concatenation ?x .
+	("""<td class="partial">&nbsp;</td>""") string:concatenation ?z . } log:implies
+{?x log:outputString ?z } .
+
+{?parser a n3test:N3Parser; 
+	n3test:command ?y; 
+	n3test:parses ?file .
+	?file n3test:expected "Negative" .
+	?file ?parser [n3test:doesNotMatch () ] .
+	("GNegative" ?file ?y) string:concatenation ?x .
+	("""<td class="failure">&nbsp;</td>""") string:concatenation ?z . } log:implies
+{?x log:outputString ?z } .
+
+#
+# The rule if the parser passed.
+#
+{?parser a n3test:N3Parser; 
+	n3test:command ?y; 
+	n3test:parses ?file .
+	?file n3test:expected "Positive" .
+	?file ?parser ?q .
+	?q ?r ?s .
+	?r a n3test:Diff .
+	?r n3test:diffString ?t .
+	?t string:equalIgnoringCase "" .
+	("GPositive" ?file ?y) string:concatenation ?x .
+	("""<td class="pass">&nbsp;</td>""") string:concatenation ?z . } log:implies
+{?x log:outputString ?z } .
+
+{?parser a n3test:N3Parser; 
+	n3test:command ?y; 
+	n3test:parses ?file .
+	?file n3test:expected "Undecided" .
+	?file ?parser ?q .
+	?q ?r ?s .
+	?r a n3test:Diff .
+	?r n3test:diffString ?t .
+	?t string:equalIgnoringCase "" .
+	("GUndecided" ?file ?y) string:concatenation ?x .
+	("""<td class="pass">&nbsp;</td>""") string:concatenation ?z . } log:implies
+{?x log:outputString ?z } .
+
+{?parser a n3test:N3Parser; 
+	n3test:command ?y; 
+	n3test:parses ?file .
+	?file n3test:expected "Negative" .
+	?file ?parser ?q .
+	?q ?r ?s .
+	?r a n3test:Diff .
+	?r n3test:diffString ?t .
+	?t string:equalIgnoringCase "" .
+	("GNegative" ?file ?y) string:concatenation ?x .
+	("""<td class="failure">&nbsp;</td>""") string:concatenation ?z . } log:implies
+{?x log:outputString ?z } .
+
+#
+# The rule if the parser passed, but the reference file does not match the output
+# A link is made to the diff, using md5
+#
+{?parser a n3test:N3Parser; 
+	n3test:command ?y; 
+	n3test:parses ?file .
+	?file ?parser ?q .
+	?file n3test:expected "Positive" .
+	?q ?r ?s .
+	?r a n3test:Diff;
+	n3test:diffString ?t;
+	log:uri ?b .
+	?b crypto:md5 ?c .
+	?t string:notEqualIgnoringCase "" .
+	("GPositive" ?file ?y) string:concatenation ?x .
+	("<td class=\"partial\"><a href=\"#a" ?c "\">diff</a></td>") string:concatenation ?z . } log:implies
+{?x log:outputString ?z } .
+
+{?parser a n3test:N3Parser; 
+	n3test:command ?y; 
+	n3test:parses ?file .
+	?file ?parser ?q .
+	?file n3test:expected "Undecided" .
+	?q ?r ?s .
+	?r a n3test:Diff;
+	n3test:diffString ?t;
+	log:uri ?b .
+	?b crypto:md5 ?c .
+	?t string:notEqualIgnoringCase "" .
+	("GUndecided" ?file ?y) string:concatenation ?x .
+	("<td class=\"partial\"><a href=\"#a" ?c "\">diff</a></td>") string:concatenation ?z . } log:implies
+{?x log:outputString ?z } .
+
+{?parser a n3test:N3Parser; 
+	n3test:command ?y; 
+	n3test:parses ?file .
+	?file ?parser ?q .
+	?file n3test:expected "Negative" .
+	?q ?r ?s .
+	?r a n3test:Diff;
+	n3test:diffString ?t;
+	log:uri ?b .
+	?b crypto:md5 ?c .
+	?t string:notEqualIgnoringCase "" .
+	("GNegative" ?file ?y) string:concatenation ?x .
+	("<td class=\"failure\"><a href=\"#a" ?c "\">diff</a></td>") string:concatenation ?z . } log:implies
+{?x log:outputString ?z } .
+
+
+#
+#Finally, if the parser crashed on the file
+#
+{?parser a n3test:N3Parser; 
+	n3test:command ?y; 
+	n3test:failsParsing ?file .
+	?file n3test:expected "Undecided" .
+	("GUndecided" ?file ?y) string:concatenation ?x .
+	("""<td class="failure">&nbsp;</td>""") string:concatenation ?z . } log:implies
+{?x log:outputString ?z } .
+
+{?parser a n3test:N3Parser; 
+	n3test:command ?y; 
+	n3test:failsParsing ?file .
+	?file n3test:expected "Positive" .
+	("GPositive" ?file ?y) string:concatenation ?x .
+	("""<td class="failure">&nbsp;</td>""") string:concatenation ?z . } log:implies
+{?x log:outputString ?z } .
+
+{?parser a n3test:N3Parser; 
+	n3test:command ?y; 
+	n3test:failsParsing ?file .
+	?file n3test:expected "Negative" .
+	("GNegative" ?file ?y) string:concatenation ?x .
+	("""<td class="pass">&nbsp;</td>""") string:concatenation ?z . } log:implies
+{?x log:outputString ?z } .
+
+
+
+
+# The end of the table
+#
+"R" log:outputString
+"""
+   </tbody>
+  </table>
+""" .
+
+#
+# The diffs. They were cleaned up for inclusion in html already.
+#
+{?parser a n3test:N3Parser;  
+	n3test:parses ?file .
+	?file ?parser ?q .
+	?q n3test:isFile ?m .
+	?m log:uri ?n .
+	?q ?a ?s .
+	?s log:uri ?o .
+	?a a n3test:Diff;
+	n3test:diffString ?diff;
+	log:uri ?b .
+	?b crypto:md5 ?c .
+	("S" ?c) string:concatenation ?x .
+	("<div class=\"diff\" id=\"a" ?c "\"> diff from " ?n " to " ?o " <pre>" ?diff "</pre></div>") string:concatenation ?z . } log:implies
+{?x log:outputString ?z } .
+
+#
+# The end of the file
+# 
+"ZZZZZZ" log:outputString
+"""
+ </body>
+</html>
+""" .

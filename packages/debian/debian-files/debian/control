@@ -1,0 +1,12 @@
+Source: swap-cwm
+Section: interpreters
+Priority: optional
+Maintainer: Dan Brickley <danbri@w3.org>
+Build-Depends: debhelper
+Standards-Version: 0.9
+
+Package: swap-cwm
+Architecture: all
+Depends: python
+Suggests: 
+Description: RDF and Semantic Web engine for Python

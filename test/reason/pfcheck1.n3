@@ -1,0 +1,17 @@
+@prefix paw: <paw-proof.n3#>.
+@prefix : <http://dig.csail.mit.edu/2005/09/rein/engine#> .
+@prefix session: <http://redfoot.net/2005/session#> .
+@prefix http: <http://dig.csail.mit.edu/2005/09/rein/examples/http-access#> .
+
+{
+                  @forSome paw:_g4 .
+                 paw:_g4     session:id :test;
+                     session:secret "judy-passwd" .
+                    [      a :Request;
+                          :access http:can-get;
+                          :requester paw:_g4;
+                          :resource <http://demo.policyawareweb.org/images/award.jpg> ].
+                
+                }     a :RequestFormula .
+
+{ ?X a :RequestFormula } => { :test a :Pass }.

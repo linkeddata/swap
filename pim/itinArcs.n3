@@ -1,0 +1,44 @@
+<> a <http://www.w3.org/2000/10/swap/log#N3Document> .
+
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+<> dc:description """comput xplanet arcs from an itinerary""",
+"$Id$";
+dc:relation <airportLookup.n3>.
+
+@prefix dt: <http://www.w3.org/2001/XMLSchema#> .
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix str: <http://www.w3.org/2000/10/swap/string#> .
+
+@prefix k: <http://opencyc.sourceforge.net/daml/cyc.daml#> .
+@prefix trav: <http://www.w3.org/2000/10/swap/pim/travelTerms#>.
+@prefix apt: <http://www.daml.org/2001/10/html/airport-ont#>.
+
+@prefix : <itinArcs#>.
+
+@forAll :LAT1, :LON1, :LAT2, :LON2, :NUM, :YMD,
+  :K, :TXT, :IT, :P, :Q, :X, :Y.
+
+
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+
+#@@ use subproperty in stead?
+{ ?S  apt:latitude ?O } => { ?S geo:lat ?O }.
+{ ?S  apt:longitude ?O } => { ?S geo:long ?O }.
+
+# report lat/long of flights...
+{ [ k:subEvents [
+      k:fromLocation [
+        geo:lat :LAT1;
+        geo:long :LON1;
+      ];
+      k:toLocation [
+        geo:lat :LAT2;
+        geo:long :LON2;
+      ];
+  ] ].
+
+  (:LAT1 " " :LON1 " " :LAT2 " " :LON2 " color=blue\n") str:concatenation :TXT.
+}
+ log:implies { [ log:outputString :TXT] }.
+

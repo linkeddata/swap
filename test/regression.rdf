@@ -1,0 +1,627 @@
+
+<!-- Processed by Id: cwm.py,v 1.183 2006/01/13 14:48:54 syosi Exp -->
+<!--     using base file:/devel/WWW/2000/10/swap/test/regression.n3-->
+
+
+<rdf:RDF xmlns="http://www.w3.org/2000/10/swap/test.n3#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:test="http://www.w3.org/2000/10/swap/test.n3#">
+
+    <CwmProofTest rdf:about="#t1001">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>-rdf animal.rdf -n3</arguments>
+        <description>Parse a small RDF file, generate N3</description>
+        <referenceOutput rdf:resource="ref/animal.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1001a">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>'data:text/rdf+n3;charset=utf-8;base64,QHByZWZpeCBsb2c6IDxodHRwOi8vd3d3LnczLm9yZy8yMDAwLzEwL3N3YXAvbG9nIz4gLgp7fSA9PiB7OmEgOmIgOmN9IC4g'</arguments>
+        <description>Read a data: uri</description>
+        <referenceOutput rdf:resource="ref/base64.n3"/>
+    </CwmProofTest>
+
+    <CwmTest rdf:about="#t1002">
+        <arguments>-rdf=z animal.rdf</arguments>
+        <description>Parse a small RDF file and regenerate RDF</description>
+        <referenceOutput rdf:resource="ref/animal-1.rdf"/>
+    </CwmTest>
+
+    <CwmTest rdf:about="#t1002a">
+        <arguments>--n3 xml-syntax/xml_prefix.n3 --rdf</arguments>
+        <description>Do not redefine the xml: prefix</description>
+        <referenceOutput rdf:resource="ref/xml-redefine.rdf"/>
+    </CwmTest>
+
+    <CwmProofTest rdf:about="#t1002b">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>--rdf xml-syntax/xmlbase3.rdf --n3</arguments>
+        <description>Allow for relative xml:base</description>
+        <referenceOutput rdf:resource="ref/xml-base3.n3"/>
+    </CwmProofTest>
+
+    <CwmTest rdf:about="#t1002c">
+        <arguments>--n3 xml-syntax/xml_prefix2.n3 --rdf</arguments>
+        <description>do not redefine xml: and xmlns: even if told to</description>
+        <referenceOutput rdf:resource="ref/xml-redefine2.rdf"/>
+    </CwmTest>
+
+    <CwmTest rdf:about="#t1002d">
+        <arguments>--n3 xml-syntax/rdf_prefix.n3 --rdf</arguments>
+        <description>Allow for redefinition of rdf:</description>
+        <referenceOutput rdf:resource="ref/rdf-redefine.rdf"/>
+    </CwmTest>
+
+    <CwmTest rdf:about="#t1002e">
+        <arguments>--rdf xml-syntax/xmllit.rdf --ntriples</arguments>
+        <description>rdf:parseType="Literal"</description>
+        <referenceOutput rdf:resource="ref/xmllit.nt"/>
+    </CwmTest>
+
+    <CwmTest rdf:about="#t1003">
+        <arguments>--rdf=T xml-syntax/in-xml.xml -n3</arguments>
+        <description>Parse RDF embedded in foreign XML</description>
+        <referenceOutput rdf:resource="ref/in-xml-t.n3"/>
+    </CwmTest>
+
+    <CwmProofTest rdf:about="#t1004">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>--rdf xml-syntax/in-xml.xml -n3</arguments>
+        <description>Ignore RDF embedded in foreign XML</description>
+        <referenceOutput rdf:resource="ref/in-xml.n3"/>
+    </CwmProofTest>
+
+    <CwmTest rdf:about="#t1005">
+        <arguments>reluri-1.n3 --rdf</arguments>
+        <description>test generation of relative URIs</description>
+        <referenceOutput rdf:resource="ref/reluri-1.rdf"/>
+    </CwmTest>
+
+    <CwmProofTest rdf:about="#t1005a">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>syntax/no-last-nl.n3</arguments>
+        <description>An N3 file with no final newline character</description>
+        <referenceOutput rdf:resource="ref/no-last-nl.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1005b">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>syntax/dot-dash.n3</arguments>
+        <description>combinations of - and _ in identifiers</description>
+        <referenceOutput rdf:resource="ref/dot-dash.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1005c">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>syntax/keywords1.n3</arguments>
+        <description>@keywords in n3</description>
+        <referenceOutput rdf:resource="ref/keywords1.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1005d">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>syntax/keywords2.n3</arguments>
+        <description>using no keywords in n3</description>
+        <referenceOutput rdf:resource="ref/keywords2.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1005e">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>syntax/djb1a.n3</arguments>
+        <description>djb noticed a:b was parsed as rdf:type token</description>
+        <referenceOutput rdf:resource="ref/djb1a-out.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1006">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>contexts.n3</arguments>
+        <description>Parse and generate simple contexts</description>
+        <referenceOutput rdf:resource="ref/contexts-1.n3"/>
+    </CwmProofTest>
+
+    <CwmTest rdf:about="#t1006a">
+        <arguments>-rdf=z &#60; animal.rdf</arguments>
+        <description>reading data from stdin</description>
+        <referenceOutput rdf:resource="ref/animal-1.rdf"/>
+    </CwmTest>
+
+    <CwmProofTest rdf:about="#t1007">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>anon-prop.n3</arguments>
+        <description>Parse and regen anonymous property</description>
+        <referenceOutput rdf:resource="ref/anon-prop-1.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1007a">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>--rdf nodeID/ex1.rdf --n3</arguments>
+        <description>Parse RDF/XML nodeID to N3</description>
+        <referenceOutput rdf:resource="ref/bnode.n3"/>
+    </CwmProofTest>
+
+    <CwmTest rdf:about="#t1007b">
+        <arguments>--rdf nodeID/ex1.rdf</arguments>
+        <description>Parse RDF/XML nodeID and regen RDF/XML</description>
+        <referenceOutput rdf:resource="ref/bnode.rdf"/>
+    </CwmTest>
+
+    <CwmTest rdf:about="#t1007c">
+        <arguments>nodeID/classes.n3 -rdf</arguments>
+        <description>use nodeID's with classes</description>
+        <referenceOutput rdf:resource="nodeID/classes.ref.rdf"/>
+    </CwmTest>
+
+    <CwmProofTest rdf:about="#t1007d">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>anonymous_loop.n3</arguments>
+        <description>A loop of anonymous nodes wasn't being printed at all</description>
+        <referenceOutput rdf:resource="ref/anonymous_loop.ref"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1008">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>daml-pref.n3 -rdf daml-ont.rdf -n3</arguments>
+        <description>Convert some RDF/XML into RDF/N3</description>
+        <referenceOutput rdf:resource="ref/daml-ont.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1008a">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>--rdf syntax/colon-in-uri.rdf --n3</arguments>
+        <description>When rdf/xml localnames are not valid qNames</description>
+        <referenceOutput rdf:resource="ref/colon-in-uri.n3"/>
+    </CwmProofTest>
+
+    <CwmTest rdf:about="#t1009">
+        <arguments>-n3=e strquot.n3</arguments>
+        <description>N3 string quoting with escaping</description>
+        <referenceOutput rdf:resource="ref/strquot.n3"/>
+    </CwmTest>
+
+    <CwmProofTest rdf:about="#t1009aa">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>-n3 strquot.n3</arguments>
+        <description>N3 string quoting with utf-8 literals</description>
+        <referenceOutput rdf:resource="ref/strquot_a.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1009ab">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>-n3 i18n/n3string.n3</arguments>
+        <description>log:n3string genertating utf-8 literals was double encoding</description>
+        <referenceOutput rdf:resource="ref/n3string.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1009b">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>--rdf xml-syntax/non-ascii-pred.rdf</arguments>
+        <description>XML to XML with utf-8 non-ascii characters</description>
+        <referenceOutput rdf:resource="xml-syntax/non-ascii-pred.rdf"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1010">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>syntax/path1.n3</arguments>
+        <description>Path syntax, simple</description>
+        <referenceOutput rdf:resource="ref/path1.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1011">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>syntax/path2.n3</arguments>
+        <description>Path syntax, more</description>
+        <referenceOutput rdf:resource="ref/path2.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t10115">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>syntax/numbers.n3</arguments>
+        <description>Number syntax</description>
+        <referenceOutput rdf:resource="ref/numbers.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t10116">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>syntax/numbers.n3 --ntriples</arguments>
+        <description>Number syntax suppressed on output</description>
+        <referenceOutput rdf:resource="ref/numbers-n.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1012">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>syntax/qvars1.n3</arguments>
+        <description>Quick variable syntax, simple</description>
+        <referenceOutput rdf:resource="ref/qvars1.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1013">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>syntax/qvars2.n3</arguments>
+        <description>Quick variable syntax, more</description>
+        <referenceOutput rdf:resource="ref/qvars2.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1014">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>--n3 syntax/lstring.n3</arguments>
+        <description>N3 string nested triple quoting</description>
+        <referenceOutput rdf:resource="ref/lstring-out.n3"/>
+    </CwmProofTest>
+
+    <CwmTest rdf:about="#t1015">
+        <arguments>-n3 equiv-syntax.n3 -rdf</arguments>
+        <description>conversion of N3 = to RDF</description>
+        <referenceOutput rdf:resource="ref/equiv-syntax.n3"/>
+    </CwmTest>
+
+    <CwmTest rdf:about="#t1016">
+        <arguments>--pipe --rdf animal.rdf owl-ex.rdf smush-examples.rdf --n3 daml-ont.n3</arguments>
+        <description>Pipe mode for flat rdf and flat n3 to n3</description>
+        <referenceOutput rdf:resource="ref/piped-t016-out.n3"/>
+    </CwmTest>
+
+    <CwmProofTest rdf:about="#t1017">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>-n3 lists.n3</arguments>
+        <description>parsing and generation of N3 list syntax</description>
+        <referenceOutput rdf:resource="ref/lists.n3"/>
+    </CwmProofTest>
+
+    <CwmTest rdf:about="#t1018">
+        <arguments>-n3 lists-simple.n3 -rdf</arguments>
+        <description>conversion of subset of N3 list syntax to RDF</description>
+        <referenceOutput rdf:resource="ref/lists-simple-1.rdf"/>
+    </CwmTest>
+
+    <CwmProofTest rdf:about="#t1018a1">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>-rdf list/itemType.rdf -n3</arguments>
+        <description>make sure typeNodes in RDF/XML Collections are parsed</description>
+        <referenceOutput rdf:resource="ref/itemType.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1019">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>-rdf norm/fix.rdf</arguments>
+        <description>Avoiding default namespace on attrs</description>
+        <referenceOutput rdf:resource="ref/prefix1.rdf"/>
+    </CwmProofTest>
+
+    <CwmTest rdf:about="#t1020">
+        <arguments>-rdf norm/fix.rdf -rdf=d</arguments>
+        <description>Avoiding default namespace on attrs</description>
+        <referenceOutput rdf:resource="ref/prefix2.rdf"/>
+    </CwmTest>
+
+    <CwmTest rdf:about="#t1021">
+        <arguments>-rdf norm/fix.rdf -rdf=p</arguments>
+        <description>Avoiding default namespace on attrs</description>
+        <referenceOutput rdf:resource="ref/prefix3.rdf"/>
+    </CwmTest>
+
+    <CwmProofTest rdf:about="#t1022">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>-rdf owl-ex.rdf -n3</arguments>
+        <description>Early DAML (now OWL) example in XML/RDF</description>
+        <referenceOutput rdf:resource="ref/daml-ex.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1023">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>rules12.n3 -rules</arguments>
+        <description>log:implies Rules - try one iteration first.</description>
+        <referenceOutput rdf:resource="ref/rules12-1.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1024">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>rules12.n3 -think</arguments>
+        <description>log:implies rules, iterating</description>
+        <referenceOutput rdf:resource="ref/rules12-n.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1024a">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>unify/reflexive.n3 -think</arguments>
+        <description>match same variable twice in one statement</description>
+        <referenceOutput rdf:resource="unify/reflexive-ref.n3"/>
+    </CwmProofTest>
+
+    <CwmTest rdf:about="#t1026">
+        <arguments>--closure=T rules13.n3 --think --data</arguments>
+        <description>log:implies and log:Truth rules, with means, many times</description>
+        <referenceOutput rdf:resource="ref/rules13-n.n3"/>
+    </CwmTest>
+
+    <CwmProofTest rdf:about="#t1027">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>two-route.n3 -think</arguments>
+        <description>test different rules giving same result</description>
+        <referenceOutput rdf:resource="ref/two-route.n3"/>
+    </CwmProofTest>
+
+    <CwmTest rdf:about="#t1028">
+        <arguments>--closure=T daml-ex.n3 invalid-ex.n3 schema-rules.n3 -think</arguments>
+        <description>Schema validity 1</description>
+        <referenceOutput rdf:resource="ref/schema1.n3"/>
+    </CwmTest>
+
+    <CwmProofTest rdf:about="#t1029">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>daml-ex.n3 invalid-ex.n3 schema-rules.n3 -think -filter=schema-filter.n3</arguments>
+        <description>Schema validity using filtering out essential output</description>
+        <referenceOutput rdf:resource="ref/schema2.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1029a">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>daml-ex.n3 invalid-ex.n3 schema-rules.n3 --solve=schema-filter.n3</arguments>
+        <description>the --solve= option</description>
+        <referenceOutput rdf:resource="ref/schema2.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1029b">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>log-filter.n3 --think --data</arguments>
+        <description>log:filter should do the same thing as --filter</description>
+        <referenceOutput rdf:resource="ref/schema2.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1030">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>underbarscope.n3 --think</arguments>
+        <description>The scope of _:me should be the formula</description>
+        <referenceOutput rdf:resource="ref/underbarscope-out.n3"/>
+    </CwmProofTest>
+
+    <CwmTest rdf:about="#t103005">
+        <arguments>includes/genBnodeInNestedFormula.n3 --think</arguments>
+        <description>Generation of var. exist'ly quant'd in nested formulae</description>
+        <referenceOutput rdf:resource="ref/genBnodeInNestedFormula-out.n3"/>
+    </CwmTest>
+
+    <CwmTest rdf:about="#t10301a">
+        <arguments>--rdf animal.rdf --ntriples</arguments>
+        <description>Test the --ntriples output flag</description>
+        <referenceOutput rdf:resource="ref/animal-ntriples.n3"/>
+    </CwmTest>
+
+    <CwmTest rdf:about="#t10301b">
+        <arguments>rules12.n3 --n3=a</arguments>
+        <description>Test the --n3=a output flag</description>
+        <referenceOutput rdf:resource="ref/rules-flag-a.n3"/>
+    </CwmTest>
+
+    <CwmTest rdf:about="#t10301c">
+        <arguments>rules12.n3 --n3=t</arguments>
+        <description>Test the --n3=t output flag</description>
+        <referenceOutput rdf:resource="ref/rules-flag-t.n3"/>
+    </CwmTest>
+
+    <CwmProofTest rdf:about="#t1033">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>includes/t1.n3 -think</arguments>
+        <description>Simple use of log:includes</description>
+        <referenceOutput rdf:resource="ref/bi-t1.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1034">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>includes/t2.n3 -think</arguments>
+        <description>Simple use of log:includes</description>
+        <referenceOutput rdf:resource="ref/bi-t2.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1035">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>includes/t3.n3 -think</arguments>
+        <description>Simple use of log:includes</description>
+        <referenceOutput rdf:resource="ref/bi-t3.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1036">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>includes/t4.n3 -think</arguments>
+        <description>Simple use of log:includes - negative test</description>
+        <referenceOutput rdf:resource="ref/bi-t4.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1037">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>includes/t6.n3 --think</arguments>
+        <description>Simple use of log:includes</description>
+        <referenceOutput rdf:resource="ref/bi-t6.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1039">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>includes/t8.n3 --think</arguments>
+        <description>Simple use of string built-ins</description>
+        <referenceOutput rdf:resource="ref/bi-t8.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1039a">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>includes/builtins.n3 --think --data</arguments>
+        <description>Builtins and log:includes</description>
+        <referenceOutput rdf:resource="ref/includes-builtins.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1040">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>includes/t9br.n3 -think</arguments>
+        <description>Filter event by date using strcmp BI's</description>
+        <referenceOutput rdf:resource="ref/bi-t9.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1041">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>includes/t10.n3 -think</arguments>
+        <description>log:resolvesTo and log:includes</description>
+        <referenceOutput rdf:resource="ref/bi-t10.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1042">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>includes/t11.n3 -think</arguments>
+        <description>log:resolvesTo and log:includes - schema checking</description>
+        <referenceOutput rdf:resource="ref/bi-t11.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1044">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>includes/quantifiers_limited.n3 --think --purge-rules</arguments>
+        <description>log:includes handling of univ./exist. quantifiers</description>
+        <referenceOutput rdf:resource="ref/bi-quant.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1045">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>includes/quant-implies.n3 --think</arguments>
+        <description>log:implies handling of quantifiers</description>
+        <referenceOutput rdf:resource="ref/bi-quant-imp.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1046">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>includes/concat.n3 --think --data</arguments>
+        <description>Test string concatetnation built-in</description>
+        <referenceOutput rdf:resource="ref/bi-concat.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1047">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>includes/uri-startswith.n3 -think</arguments>
+        <description>Dan's bug case with uri and startswith</description>
+        <referenceOutput rdf:resource="ref/bi-uri-startswith.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1048">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>resolves-rdf.n3 -think</arguments>
+        <description>log:resolvesTo with RDF/xml syntax</description>
+        <referenceOutput rdf:resource="ref/resolves-rdf.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1048a">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>includes/xsd.n3 --think --strings</arguments>
+        <description>Cwm builtins should support most xsd datatypes</description>
+        <referenceOutput rdf:resource="includes/xsd.ref"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1048b">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>includes/uri-object-invalid.n3 --think</arguments>
+        <description>trying to match log:uri of a non-string simply matches None</description>
+        <referenceOutput rdf:resource="includes/uri-object-invalid.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1049">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>sameDan.n3 sameThing.n3 --think --apply=forgetDups.n3 --purge --n3="/" </arguments>
+        <description>Smushing multiple descriptions of the same thing using log:lessThan, log:uri, daml:equivalentTo</description>
+        <referenceOutput rdf:resource="ref/sameDan.n3"/>
+    </CwmProofTest>
+
+    <CwmTest rdf:about="#t10497">
+        <arguments>--closure=e on-add/smush.n3 --data</arguments>
+        <description>Smushing things which are = using --closure=e</description>
+        <referenceOutput rdf:resource="ref/smush6.n3"/>
+    </CwmTest>
+
+    <CwmProofTest rdf:about="#t1050">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>time/t1.n3 --think --purge</arguments>
+        <description>basic ISo time handling functions</description>
+        <referenceOutput rdf:resource="ref/timet1.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1050s">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>time/t1s.n3 --think --purge</arguments>
+        <description>basic ISo time handling functions - stringy</description>
+        <referenceOutput rdf:resource="ref/timet1s.n3"/>
+    </CwmProofTest>
+
+    <CwmTest rdf:about="#t1051">
+        <arguments>--rdf smush-examples.rdf --n3 smush-schema.n3 sameThing.n3 --think --apply=forgetDups.n3 --purge --filter=smush-query.n3 --rdf</arguments>
+        <description>Data aggregation challenge from Jan 2001</description>
+        <referenceOutput rdf:resource="ref/smush.rdf"/>
+    </CwmTest>
+
+    <CwmProofTest rdf:about="#t1052">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>--rdf animal.rdf --n3 vblsNotURIs.n3 --think</arguments>
+        <description>Should not get URIs of anonymous nodes</description>
+        <referenceOutput rdf:resource="ref/vblsNotURIs-out.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1053">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>includes/n3ExprFor.n3 --think</arguments>
+        <description>Parsing strings with n3ExprFor</description>
+        <referenceOutput rdf:resource="ref/n3ExprFor-out.n3"/>
+    </CwmProofTest>
+
+    <CwmTest rdf:about="#t1054">
+        <arguments>os/environ.n3 -think</arguments>
+        <description>Read operating system environment variable</description>
+        <environment>TEST_PARAMETER_1=TEST_VALUE_1</environment>
+        <referenceOutput rdf:resource="ref/environ.n3"/>
+    </CwmTest>
+
+    <CwmProofTest rdf:about="#t1055">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>roadmap/todot.n3 --think --strings</arguments>
+        <description>using notIncludes and --strings to make a graphviz file</description>
+        <environment>TARGET=roadmap/test.graph</environment>
+        <referenceOutput rdf:resource="ref/roadmap-test.dot"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1056">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>includes/conjunction.n3 --think</arguments>
+        <description>log:conjunction of formulae</description>
+        <referenceOutput rdf:resource="ref/conjunction.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1057">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>includes/conclusion.n3 --think</arguments>
+        <description>log:conclusion deductive closure</description>
+        <referenceOutput rdf:resource="ref/conclusion.n3"/>
+    </CwmProofTest>
+
+    <CwmTest rdf:about="#t1058">
+        <arguments>os/argv.n3 --think --with foo bar baz</arguments>
+        <description>os:argv argument values</description>
+        <referenceOutput rdf:resource="ref/argv-1.n3"/>
+    </CwmTest>
+
+    <CwmTest rdf:about="#t1059">
+        <arguments>os/argv.n3 --think --with boof</arguments>
+        <description>os:argv argument other values</description>
+        <referenceOutput rdf:resource="ref/argv-2.n3"/>
+    </CwmTest>
+
+    <CwmProofTest rdf:about="#t1060">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>syntax/colon-no-qname.n3</arguments>
+        <description>don't make QNames with more than 1 colon</description>
+        <referenceOutput rdf:resource="ref/colon-no-qname.n3"/>
+    </CwmProofTest>
+
+    <CwmProofTest rdf:about="#t1062">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/test.n3#CwmTest"/>
+        <arguments>dt/dtlit1.n3 --think</arguments>
+        <description>simple test for log:dtlit</description>
+        <referenceOutput rdf:resource="ref/dtlit1.n3"/>
+    </CwmProofTest>
+
+    <CwmTest rdf:about="#t1063">
+        <arguments>xml-syntax/basic-serialization.n3 --rdf</arguments>
+        <description>extremely basic RDF serialization test</description>
+        <referenceOutput rdf:resource="ref/xml-syntax-basic-serialization.rdf"/>
+    </CwmTest>
+</rdf:RDF>

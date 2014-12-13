@@ -1,0 +1,12 @@
+     @prefix : <#> .
+    
+     @forAll :b,
+                :c .
+    {
+        
+          [      :parent :b;
+                 :sister :c ].
+        
+        }     => {:b     :aunt :c .
+        } .
+    

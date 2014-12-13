@@ -1,0 +1,62 @@
+#Processed by Id: cwm.py,v 1.176 2005/08/10 17:03:22 syosi Exp 
+        #    using base file:/devel/WWW/2000/10/swap/test/reason/foo
+        
+#  Notation3 generation by
+#       notation3.py,v 1.182 2005/08/15 16:28:43 syosi Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/test/reason/foo
+     @prefix : <t3.n3#> .
+     @prefix foo: <#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix reason: <http://www.w3.org/2000/10/swap/reason#> .
+    
+     @forSome foo:_g0 .
+      [      a reason:Conjunction,
+                    reason:Proof;
+             reason:component  [
+                 a reason:Extraction;
+                 reason:because foo:_g0;
+                 reason:gives {:a     :b :c .
+                } ],
+                     [
+                 a reason:Extraction;
+                 reason:because foo:_g0;
+                 reason:gives {{
+                    :a     :b :c .
+                    
+                    }     log:implies {:a2     :b2 :c2 .
+                    } .
+                } ],
+                     [
+                 a reason:Extraction;
+                 reason:because  [
+                     a reason:Inference;
+                     reason:evidence  [
+                         a reason:Extraction;
+                         reason:because foo:_g0;
+                         reason:gives {:a     :b :c .
+                        } ];
+                     reason:rule  [
+                         a reason:Extraction;
+                         reason:because foo:_g0;
+                         reason:gives {{
+                            :a     :b :c .
+                            
+                            }     log:implies {:a2     :b2 :c2 .
+                            } .
+                        } ] ];
+                 reason:gives {:a2     :b2 :c2 .
+                } ];
+             reason:gives {:a     :b :c .
+            :a2     :b2 :c2 .
+            {
+                :a     :b :c .
+                
+                }     log:implies {:a2     :b2 :c2 .
+                } .
+            } ].
+    
+    foo:_g0     a reason:Parsing;
+         reason:source <t3.n3> .
+    
+#ENDS

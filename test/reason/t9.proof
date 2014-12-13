@@ -1,0 +1,56 @@
+#Processed by Id: cwm.py,v 1.179 2005/10/28 01:38:42 timbl Exp 
+        #    using base file:/devel/WWW/2000/10/swap/test/reason/foo
+        
+#  Notation3 generation by
+#       notation3.py,v 1.184 2005/10/24 16:58:38 timbl Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/test/reason/foo
+     @prefix : <http://www.w3.org/2000/10/swap/reason#> .
+    @prefix foo: <#> .
+    @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    @prefix n3: <http://www.w3.org/2004/06/rei#> .
+    
+     @forSome foo:_g0 .
+      [      a :Conjunction,
+                    :Proof;
+             :component foo:_g0,
+                     [
+                 a :Inference;
+                 :binding  [
+                     :boundTo  [
+                         n3:uri "file:/devel/WWW/2000/10/swap/test/reason/c" ];
+                     :variable  [
+                         n3:nodeId "file:/devel/WWW/2000/10/swap/test/reason/t9.n3#_g_L3C10" ] ];
+                 :evidence  (
+                 [
+                         a :Extraction;
+                         :because foo:_g0;
+                         :gives {<a>     <b> <c> .
+                        } ] );
+                 :rule  [
+                     a :Extraction;
+                     :because foo:_g0;
+                     :gives {{
+                         @forSome foo:_g1 .
+                        <a>     <b> foo:_g1 .
+                        
+                        }     log:implies {<a>     a <Success> .
+                        } .
+                    } ] ];
+             :gives {<a>     a <Success>;
+                 <b> <c> .
+            {
+                 @forSome foo:_g1 .
+                <a>     <b> foo:_g1 .
+                
+                }     log:implies {<a>     a <Success> .
+                } .
+            } ].
+    
+    foo:_g0     a :Parsing;
+         :because  [
+             a :CommandLine;
+             :args "['/devel/WWW/2000/10/swap/cwm.py', 't9.n3', '--think', '--why', '--base=foo']" ];
+         :source <t9.n3> .
+    
+#ENDS

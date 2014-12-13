@@ -1,0 +1,95 @@
+
+
+
+<html xmlns="">
+
+    <head>
+        <title>KIF Expression Grammar</title>
+    </head>
+
+    <body>
+        <h1>KIF Expression Grammar</h1>
+        <address>source: <a href="kifExpr.g">kifExpr.g</a>
+        </address>
+        <dl>
+            <dt>
+                <a name="variable"
+                    id="variable">variable</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>indvar</tt> <br class=""/> | <tt>seqvar</tt> </dd>
+            <dt>
+                <a name="operator"
+                    id="operator">operator</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <a href="#termop">termop</a>
+                <sub></sub> <br class=""/> | <a href="#sentop">sentop</a>
+                <sub></sub> <br class=""/> | <a href="#defop">defop</a>
+                <sub></sub> </dd>
+            <dt>
+                <a name="termop"
+                    id="termop">termop</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>"value"</tt> <br class=""/> | <tt>"listof"</tt> <br class=""/> | <tt>"quote"</tt> <br class=""/> | <tt>"if"</tt> </dd>
+            <dt>
+                <a name="sentop"
+                    id="sentop">sentop</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>"holds"</tt> <br class=""/> | <tt>"="</tt> <br class=""/> | <tt>"/="</tt> <br class=""/> | <tt>"not"</tt> <br class=""/> | <tt>"and"</tt> <br class=""/> | <tt>"or"</tt> <br class=""/> | <tt>"=&#62;"</tt> <br class=""/> | <tt>"&#60;="</tt> <br class=""/> | <tt>"&#60;=&#62;"</tt> <br class=""/> | <tt>"forall"</tt> <br class=""/> | <tt>"exists"</tt> </dd>
+            <dt>
+                <a name="defop"
+                    id="defop">defop</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>"defobject"</tt> <br class=""/> | <tt>"defunction"</tt> <br class=""/> | <tt>"defrelation"</tt> <br class=""/> | <tt>"deflogical"</tt> <br class=""/> | <tt>":="</tt> <br class=""/> | <tt>":-&#62;"</tt> <br class=""/> | <tt>":&#60;="</tt> <br class=""/> | <tt>":=&#62;"</tt> </dd>
+            <dt>
+                <a name="constant"
+                    id="constant">constant</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>word</tt> </dd>
+            <dt>
+                <a name="term"
+                    id="term">term</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>indvar</tt> <br class=""/> | <a href="#constant">constant</a>
+                <sub></sub> <br class=""/> | <tt>charref</tt> <br class=""/> | <tt>string</tt> <br class=""/> | <tt>block</tt> <br class=""/> | <a href="#quoterm">quoterm</a>
+                <sub></sub> </dd>
+            <dt>
+                <a name="quoterm"
+                    id="quoterm">quoterm</a>
+                <sub></sub>
+            </dt>
+            <dd>( <tt>"\\("</tt> <tt>"quote"</tt> <a href="#listexpr">listexpr</a>
+                <sub></sub> <tt>"\\)"</tt>  ) <br class=""/> | ( <tt>"'"</tt> <a href="#listexpr">listexpr</a>
+                <sub></sub>  ) </dd>
+            <dt>
+                <a name="listexpr"
+                    id="listexpr">listexpr</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <a href="#atom">atom</a>
+                <sub></sub> <br class=""/> | ( <tt>"\\("</tt> <a href="#listexpr">listexpr</a>
+                <sub></sub> * <tt>"\\)"</tt>  ) </dd>
+            <dt>
+                <a name="atom"
+                    id="atom">atom</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>word</tt> <br class=""/> | <tt>charref</tt> <br class=""/> | <tt>string</tt> <br class=""/> | <tt>block</tt> </dd>
+        </dl>
+    </body>
+</html>

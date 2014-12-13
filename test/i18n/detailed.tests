@@ -1,0 +1,33 @@
+# List of regression tests
+#
+#      Internationalization tests
+#
+# Note: Command lines must be for running in the directory above.
+#
+@prefix : <#>.
+@prefix x: <#>.
+@prefix test: <http://www.w3.org/2000/10/swap/test.n3#>.
+@prefix dc:  <http://purl.org/dc/elements/1.1/>. # yuk - under protest - no hash
+
+
+
+
+:int001 a test:CwmTest;
+    test:referenceOutput <../ref/hiragana.n3>;
+    test:description   "N3 string, qname and IRI with utf-8 non-ascii characters";
+    test:arguments     "i18n/hiragana.n3".
+
+:int002 a test:CwmTest;
+    test:referenceOutput <hiragana-2.ref.rdf>;
+    test:description   "N3 string, qname and IRI with utf-8 non-ascii. N3 to XML";
+    test:arguments     "i18n/hiragana.n3 --rdf".
+
+:int003 a test:CwmTest;
+    test:referenceOutput <hiragana-2.ref.rdf>;
+    test:description   "XML to XML with utf-8 non-ascii characters";
+    test:arguments     "--rdf i18n/hiragana.rdf".
+
+
+
+
+#ends

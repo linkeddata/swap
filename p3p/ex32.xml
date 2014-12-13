@@ -1,0 +1,130 @@
+<POLICIES xmlns="http://www.w3.org/2001/09/P3Pv1">
+<POLICY name="forShoppers" 
+                    discuri="http://www.catalog.example.com/Privacy/PrivacyPracticeShopping.html"
+                    opturi="http://catalog.example.com/preferences.html">
+                 <ENTITY>
+                  <DATA-GROUP>
+                   <DATA ref="#business.name">CatalogExample</DATA>
+                   <DATA ref="#business.contact-info.postal.street">4000 Lincoln Ave.</DATA>
+                   <DATA ref="#business.contact-info.postal.city">Birmingham</DATA>
+                   <DATA ref="#business.contact-info.postal.stateprov">MI</DATA>
+                   <DATA ref="#business.contact-info.postal.postalcode">48009</DATA>
+                   <DATA ref="#business.contact-info.postal.country">USA</DATA>
+                   <DATA ref="#business.contact-info.online.email">catalog@example.com</DATA>
+                   <DATA ref="#business.contact-info.telecom.telephone.intcode">1</DATA>
+                   <DATA ref="#business.contact-info.telecom.telephone.loccode">248</DATA>
+                   <DATA ref="#business.contact-info.telecom.telephone.number">3926753</DATA>
+                  </DATA-GROUP>
+                 </ENTITY>
+                 <ACCESS><contact-and-other/></ACCESS>
+                 <DISPUTES-GROUP>
+                  <DISPUTES resolution-type="independent"
+                    service="http://www.PrivacySeal.example.org"
+                    short-description="PrivacySeal.example.org">
+                   <IMG src="http://www.PrivacySeal.example.org/Logo.gif" alt="PrivacySeal's logo"/>
+                   <REMEDIES><correct/></REMEDIES>
+                  </DISPUTES>
+                 </DISPUTES-GROUP>
+                 <STATEMENT>
+                  <CONSEQUENCE>
+                    We record some information in order to serve your request 
+                    and to secure and improve our Web site.
+                  </CONSEQUENCE>
+                  <PURPOSE><admin/><develop/></PURPOSE>
+                  <RECIPIENT><ours/></RECIPIENT>
+                  <RETENTION><stated-purpose/></RETENTION>
+                  <DATA-GROUP>
+                   <DATA ref="#dynamic.clickstream"/>
+                   <DATA ref="#dynamic.http.useragent"/>
+                  </DATA-GROUP>
+                 </STATEMENT>
+                 <STATEMENT>
+                  <CONSEQUENCE>
+                    We use this information when you make a purchase.
+                  </CONSEQUENCE>
+                  <PURPOSE><current/></PURPOSE>
+                  <RECIPIENT><ours/></RECIPIENT>
+                  <RETENTION><stated-purpose/></RETENTION>
+                  <DATA-GROUP>
+                   <DATA ref="#user.name"/>
+                   <DATA ref="#user.home-info.postal"/>
+                   <DATA ref="#user.home-info.telecom.telephone"/>
+                   <DATA ref="#user.business-info.postal"/>
+                   <DATA ref="#user.business-info.telecom.telephone"/>
+                   <DATA ref="#user.home-info.online.email"/>
+                   <DATA ref="#user.login.id"/>
+                   <DATA ref="#user.login.password"/>
+                   <DATA ref="#dynamic.miscdata">
+                    <CATEGORIES><purchase/></CATEGORIES>
+                   </DATA>
+                  </DATA-GROUP>
+                 </STATEMENT>
+                 <STATEMENT>
+                  <CONSEQUENCE>
+                    At your request, we will send you carefully selected marketing 
+                    solicitations that we think you will be interested in.
+                  </CONSEQUENCE>
+                  <PURPOSE>
+                   <contact required="opt-in"/>
+                   <individual-decision required="opt-in"/>
+                   <tailoring required="opt-in"/>
+                  </PURPOSE>
+                  <RECIPIENT><ours/><same required="opt-in"/></RECIPIENT>
+                  <RETENTION><stated-purpose/></RETENTION>
+                  <DATA-GROUP>
+                   <DATA ref="#user.name" optional="yes"/>
+                   <DATA ref="#user.home-info.postal" optional="yes"/>
+                   <DATA ref="#user.home-info.telecom.telephone" optional="yes"/>
+                   <DATA ref="#user.business-info.postal" optional="yes"/>
+                   <DATA ref="#user.business-info.telecom.telephone" optional="yes"/>
+                   <DATA ref="#user.home-info.online.email" optional="yes"/>
+                  </DATA-GROUP>
+                 </STATEMENT>
+                 <STATEMENT>
+                  <CONSEQUENCE>
+                    We allow you to set a password so that you
+                    can access your own information.
+                  </CONSEQUENCE>
+                  <PURPOSE><individual-decision required="opt-in"/></PURPOSE>
+                  <RECIPIENT><ours/></RECIPIENT>
+                  <RETENTION><stated-purpose/></RETENTION>
+                  <DATA-GROUP>
+                   <DATA ref="#dynamic.miscdata">
+                    <CATEGORIES><uniqueid/></CATEGORIES>
+                   </DATA>
+                  </DATA-GROUP>
+                 </STATEMENT>
+                 <STATEMENT>
+                  <CONSEQUENCE>
+                    At your request, we will tailor our site and 
+                    highlight products related to your interests.
+                  </CONSEQUENCE>
+                  <PURPOSE>
+                    <pseudo-decision required="opt-in"/>
+                    <tailoring required="opt-in"/>
+                  </PURPOSE>
+                  <RECIPIENT><ours/></RECIPIENT>
+                  <RETENTION><stated-purpose/></RETENTION>
+                  <DATA-GROUP>
+                   <DATA ref="#user.bdate.ymd.year" optional="yes"/>
+                   <DATA ref="#user.gender" optional="yes"/>
+                  </DATA-GROUP>
+                 </STATEMENT>
+                 <STATEMENT>
+                  <CONSEQUENCE>
+                    We tailor our site based on your past visits.
+                  </CONSEQUENCE>
+                  <PURPOSE><tailoring/><develop/></PURPOSE>
+                  <RECIPIENT><ours/></RECIPIENT>
+                  <RETENTION><stated-purpose/></RETENTION>
+                  <DATA-GROUP>
+                   <DATA ref="#dynamic.cookies">
+                    <CATEGORIES><state/></CATEGORIES>
+                   </DATA>
+                   <DATA ref="#dynamic.miscdata">
+                    <CATEGORIES><preference/></CATEGORIES>
+                   </DATA>
+                  </DATA-GROUP>
+                 </STATEMENT>
+                </POLICY>
+</POLICIES>

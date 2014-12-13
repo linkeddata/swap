@@ -1,0 +1,152 @@
+
+<!-- Processed by Id: cwm.py,v 1.184 2006/03/09 06:28:53 vkolovsk Exp -->
+<!--     using base file:/devel/WWW/2000/10/swap/reason.n3-->
+
+
+<rdf:RDF xmlns="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:s="http://www.w3.org/2000/01/rdf-schema#">
+
+    <Class rdf:about="http://www.w3.org/2000/10/swap/reason#Binding">
+        <comment>A binding is given eg in a proof or query result.
+	The binding specifies which variable was bound (:variable),
+	and what term it was bound to.
+	</comment>
+        <label>binding</label>
+    </Class>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/reason#CommandLine">
+        <subClassOf rdf:resource="http://www.w3.org/2000/10/swap/reason#Step"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/reason#Conjunction">
+        <label>The step of conjunction introduction: 
+	taking a bunch of compent statements
+	and building a formula from them.</label>
+        <subClassOf rdf:resource="http://www.w3.org/2000/10/swap/reason#Step"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/reason#Extraction">
+        <comment>The step of taking one statement out of a formula.
+	The step is identified by the :gives formula (the statement)
+	and the :because step's :gives formula (the formula extracted
+	from).
+	</comment>
+        <label>Conjunction elimination</label>
+        <subClassOf rdf:resource="http://www.w3.org/2000/10/swap/reason#Step"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/reason#Inference">
+        <label>GMP Inference</label>
+        <subClassOf rdf:resource="http://www.w3.org/2000/10/swap/reason#Step"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/reason#Parsing">
+        <comment>The formula given was derived from parsing a
+	resource.</comment>
+        <label>parsing</label>
+        <subClassOf rdf:resource="http://www.w3.org/2000/10/swap/reason#Step"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/reason#Proof">
+        <comment>A Proof step is the last step in the proof, 
+	a step which :gives that which was to be proved.
+	Typically a document will assert just one :Proof,
+	which a checker can then check and turn into
+	the Formula proved - Q.E.D. .
+	</comment>
+        <label>proof</label>
+        <subClassOf rdf:resource="http://www.w3.org/2000/10/swap/reason#Step"/>
+    </rdf:Description>
+
+    <Class rdf:about="http://www.w3.org/2000/10/swap/reason#Step">
+        <comment>A step in a proof.
+
+	See :gives for the arc to the formula actually proved at this step.
+	</comment>
+        <label>proof step</label>
+    </Class>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/reason#args">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/reason#Commandline"/>
+        <label>A human-readable representation of the arguments given
+	    on the command line</label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/reason#because">
+        <comment>gives the step whose data was input to this step.</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/reason#Extraction"/>
+        <label>from</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/reason#Step"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/reason#boundTo">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <comment>
+	This binding binds its variable to this term.
+	</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/reason#Binding"/>
+        <label>bound to</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/reify#Term"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/reason#component">
+        <comment>A step whose data was used in building this conjunction</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/reason#Conjunction"/>
+        <label>component</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/reason#Step"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/reason#evidence">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <comment>The :evidence for a GMP inference step is a list of
+    formulas, each proved by other means, which combined entail the
+    result of making the given substitution in the antecedent of the rule.</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/reason#Inference"/>
+        <label>antecedents</label>
+        <range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/reason#gives">
+        <comment>The proof step gives the formula as a result.
+	For some steps, like extraction of a statement from a formula,
+	it is essential to give the result formula in a proof to define
+	what step has been taken.  For other steps, such as GMP inference,
+	the specification of the rule and bindings defines the result,
+	and so the proof can still be checked if the reason:gives ars</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/reason#Step"/>
+        <label>gives</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/reify#Formula"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/reason#rule">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <comment>The inference step was performed using a rule (implication)
+    given.</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/reason#Inference"/>
+        <label>rule</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/reason#Step"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/reason#source">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <comment>The source document which was parsed.
+	</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/reason#Parsing"/>
+        <label>source</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/pim/soc#Work"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/reason#variable">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <comment>
+	The given string is that used as the identifier of the variable
+	which is bound by this binding.  The variable name has to be given as
+	a string, rather than the variable being put here, or the variable
+	would be treated as a variable.</comment>
+        <domain rdf:resource="http://www.w3.org/2000/10/swap/reason#Binding"/>
+        <label>variable</label>
+        <range rdf:resource="http://www.w3.org/2000/10/swap/reify#String"/>
+    </rdf:Property>
+</rdf:RDF>

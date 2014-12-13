@@ -1,0 +1,243 @@
+% $Id$
+
+formula_list(usable).
+
+% maybe good to have around.  hrm.
+all X (X=X).
+
+% Needed if you uncomment the recursive versions below...
+%
+% all SUB SUPER (
+%    subset(SUPER, SUB) 
+%   <->
+%    (all X (item(X, SUB) -> item(X, SUPER)))
+% ).
+
+%  for folks who really ONLY want owlAx-card
+
+all X Y (
+   rdf(X, owl_differentFrom, Y)
+   ->
+   -(X=Y)
+).
+
+all X Y (
+   rdf(X, owl_differentFrom, Y)
+   ->
+   -(Y=X)
+).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   A (very) little number theory
+%
+
+all X Y Z (
+   rdf(X, 'foo:succ', Y) &
+   rdf(X, 'foo:succ', Z) 
+  ->
+   Y=Z
+).
+
+all X Y Z (
+   rdf(X, 'foo:succ', Y) &
+   rdf(Z, 'foo:succ', Y) 
+  ->
+   X=Z
+).
+
+
+'foo:zero'=i0.
+rdf('foo:zero', 'foo:succ', i1).
+rdf(i1, 'foo:succ', i2).
+rdf(i2, 'foo:succ', i3).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% MaxCardinality
+%
+
+all S (
+   maxCardinality(S, i0)
+   <->
+   -(exists A (item(A, S)))
+).
+
+all S (
+   maxCardinality(S, i1)
+   <->
+   -(exists A B ( A!=B & item(A, S) & item(B, S)))
+).
+
+all S (
+   maxCardinality(S, i2)
+   <->
+   -(exists A B C ( A!=B & A!=C & B!=C & 
+                    B!=A & C!=A & C!=B &   % performance hint
+                    item(A, S) & item(B, S) & item(C, S)))
+).
+
+    
+
+
+%% TEST passed
+%maxCardinality(dogs, i2).
+%item(taiko, dogs).
+%item(tsuzumi, dogs).
+%item(dirtmaster, dogs).
+%taiko!=tsuzumi.
+%tsuzumi!=dirtmaster.
+%
+%taiko!=dirtmaster.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% MinCardinality 
+%
+
+all S (
+   minCardinality(S, i0)
+).
+
+all S (
+   minCardinality(S, i1)
+   <->
+   (exists A (item(A, S)))
+).
+
+all S (
+   minCardinality(S, i2)
+   <->
+   (exists A B ( A!=B & item(A, S) & item(B, S)))
+).
+
+all S (
+   minCardinality(S, i2)
+   <->
+   (exists A B ( A!=B & item(A, S) & item(B, S)))
+).
+
+all S (
+   minCardinality(S, i3)
+   <->
+   (exists A B C ( A!=B & B!=C & A!=C & 
+                   item(A, S) & item(B, S) & item(C, S)))
+).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%%   I think this is correct, but it's much slower in 
+%%%   my tests so far.  
+%%%
+%%%   ... and I'm less confident it's correct, so leave it
+%%%   commented out for now.
+%%%
+%%%   (it probably needs at least some number theory axioms)
+%%%
+%?%  all S N LESSER (
+%?%     rdf(LESSER, 'foo:succ', N)
+%?%    ->
+%?%     ( minCardinality(S, N) 
+%?%      <->
+%?%       (exists SUBSET A (
+%?%         item(A, S) &
+%?%         minCardinality(SUBSET, LESSER) &
+%?%         -item(A, SUBSET) & 
+%?%         subset(S, SUBSET) 
+%?%       ))
+%?%     )
+%?%  ).
+
+% TEST
+%minCardinality(sons, i1).
+%-(exists X (item(X, sons))).
+
+% TEST
+% minCardinality(foo, i2).
+% -minCardinality(foo, i1).
+
+% TEST THEOREM
+% -(
+% all X (minCardinality(X, i3) -> minCardinality(X, i2))
+% ).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   owl_[min/max]cardinality
+%
+
+all RESTRICTION PROPERTY CARDINALITY INST (
+   ( rdf(RESTRICTION, rdf_type, owl_Restriction) &
+     rdf(RESTRICTION, owl_onProperty, PROPERTY) &
+     rdf(RESTRICTION, owl_cardinality, CARDINALITY) &
+     rdf(INST, rdf_type, RESTRICTION) )
+   ->
+   % there is a set with that cardinality
+   % and it matches the values  of rdf(INST, PROPERTY...)
+   ( exists SET ( all VAL (
+     ( rdf(INST, PROPERTY, VAL) -> item(VAL, SET) ) &
+       minCardinality(SET, CARDINALITY) &
+       maxCardinality(SET, CARDINALITY)
+   )))
+).
+
+all RESTRICTION PROPERTY CARDINALITY INST (
+   ( rdf(RESTRICTION, rdf_type, owl_Restriction) &
+     rdf(RESTRICTION, owl_onProperty, PROPERTY) &
+     rdf(RESTRICTION, owl_maxCardinality, CARDINALITY) &
+     rdf(INST, rdf_type, RESTRICTION) )
+   ->
+   % there is a set with that cardinality
+   % and it matches the values  of rdf(INST, PROPERTY...)
+   ( exists SET ( all VAL (
+     ( rdf(INST, PROPERTY, VAL) -> item(VAL, SET) ) &
+       maxCardinality(SET, CARDINALITY)
+   )))
+%% for debugging, we want to know the name of the set...
+%   ( all VAL (
+%     ( rdf(INST, PROPERTY, VAL) -> item(VAL, pset(RESTRICTION,INST)) ) &
+%       maxCardinality(pset(RESTRICTION,INST), CARDINALITY)
+%   ))
+).
+
+all RESTRICTION PROPERTY CARDINALITY INST (
+   ( rdf(RESTRICTION, rdf_type, owl_Restriction) &
+     rdf(RESTRICTION, owl_onProperty, PROPERTY) &
+     rdf(RESTRICTION, owl_minCardinality, CARDINALITY) &
+     rdf(INST, rdf_type, RESTRICTION) )
+   ->
+   % there is a set with that cardinality
+   % and it matches the values  of rdf(INST, PROPERTY...)
+   ( exists SET ( all VAL (
+     ( rdf(INST, PROPERTY, VAL) -> item(VAL, SET) ) &
+       minCardinality(SET, CARDINALITY)
+   )))
+).
+
+
+	
+% $Log$
+% Revision 1.10  2003-08-08 18:53:32  sandro
+% a cardinality test is working!
+%
+% Revision 1.9  2003/08/08 16:16:21  sandro
+% getting closer...
+%
+% Revision 1.8  2003/08/08 15:01:37  sandro
+% a failed experiment #3
+%
+% Revision 1.4  2003/08/01 16:27:35  sandro
+% modified to run in swap/surnia instead of swap
+%
+% Revision 1.3  2003/08/01 04:24:32  sandro
+% intermediate; about to play with paramodulation
+%
+% Revision 1.2  2003/07/31 21:45:56  sandro
+% in progress, working on test 008, then back to 001.
+%
+% Revision 1.1  2003/07/31 20:56:30  sandro
+% still in progress, but passing surnia-test-003
+%

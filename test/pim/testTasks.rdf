@@ -1,0 +1,77 @@
+<rdf:RDF
+  xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+  xmlns='http://www.w3.org/2000/10/swap/ical#'
+  xmlns:i='http://www.w3.org/2000/10/swap/ical#'
+  xmlns:x='http://www.w3.org/2000/01/foo-X@@#'
+><Vcalendar rdf:about=''><calscale rdf:resource='http://www.w3.org/2000/10/swap/ical#gregorian'/>
+<prodid>-//Ximian//NONSGML Evolution Calendar//EN</prodid>
+<version>2.0</version>
+</Vcalendar>
+<Vtimezone><tzid>/softwarestudio.org/Olson_20011030_5/America/Chicago</tzid>
+<x:licLocation>America/Chicago</x:licLocation>
+<standard rdf:parseType='Resource'><tzoffsetfrom>-0500</tzoffsetfrom>
+<tzoffsetto>-0600</tzoffsetto>
+<tzname>CST</tzname>
+<dtstart rdf:parseType='Resource'>
+<value>19701025T020000</value>
+</dtstart>
+<rrule rdf:parseType='Resource'>
+<bymonth>10</bymonth>
+<byday>-1SU</byday>
+<interval>1</interval>
+<freq>YEARLY</freq>
+</rrule>
+</standard
+><daylight rdf:parseType='Resource'><tzoffsetfrom>-0600</tzoffsetfrom>
+<tzoffsetto>-0500</tzoffsetto>
+<tzname>CDT</tzname>
+<dtstart rdf:parseType='Resource'>
+<value>19700405T020000</value>
+</dtstart>
+<rrule rdf:parseType='Resource'>
+<bymonth>4</bymonth>
+<byday>1SU</byday>
+<interval>1</interval>
+<freq>YEARLY</freq>
+</rrule>
+</daylight
+></Vtimezone
+><Vtimezone><tzid>/softwarestudio.org/Olson_20011030_5/America/New_York</tzid>
+<x:licLocation>America/New_York</x:licLocation>
+<standard rdf:parseType='Resource'><tzoffsetfrom>-0400</tzoffsetfrom>
+<tzoffsetto>-0500</tzoffsetto>
+<tzname>EST</tzname>
+<dtstart rdf:parseType='Resource'>
+<value>19701025T020000</value>
+</dtstart>
+<rrule rdf:parseType='Resource'>
+<bymonth>10</bymonth>
+<byday>-1SU</byday>
+<interval>1</interval>
+<freq>YEARLY</freq>
+</rrule>
+</standard
+><daylight rdf:parseType='Resource'><tzoffsetfrom>-0500</tzoffsetfrom>
+<tzoffsetto>-0400</tzoffsetto>
+<tzname>EDT</tzname>
+<dtstart rdf:parseType='Resource'>
+<value>19700405T020000</value>
+</dtstart>
+<rrule rdf:parseType='Resource'>
+<bymonth>4</bymonth>
+<byday>1SU</byday>
+<interval>1</interval>
+<freq>YEARLY</freq>
+</rrule>
+</daylight
+></Vtimezone
+><Vtodo><uid>20020630T230723Z-3895-69-1-21@jammer</uid>
+<dtstamp>20020630T230723Z</dtstamp>
+<summary>wash dishes</summary>
+<class rdf:resource='http://www.w3.org/2000/10/swap/ical#public'/>
+<percentComplete>0</percentComplete>
+<status>NEEDS-ACTION</status>
+<priority>0</priority>
+<sequence>1</sequence>
+</Vtodo
+></rdf:RDF>

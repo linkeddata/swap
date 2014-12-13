@@ -1,0 +1,18 @@
+#  test owl:imports - this is a strange things to be in OWL
+#
+#  test for cwm:  cwm --closure=i imports.n3
+#
+
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+
+<> owl:imports <myDingo.n3>.
+<> owl:imports <myDingo.n3>.   # Should not hurt
+
+<foobarbazsjkhf.n3> owl:imports  <error://whatever.com/>. # Should not
+<foobarbazsjkhf.n3> owl:imports  <biology.n3>.  # Should not
+
+
+<> owl:imports <>.     # Tautology should not cause a loop
+
+#ends
+

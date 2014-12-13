@@ -1,0 +1,26 @@
+#Processed by Id: cwm.py,v 1.180 2005/11/02 00:06:26 timbl Exp 
+        #    using base file:/devel/WWW/2000/10/swap/test/reason/t2.n3
+        
+#  Notation3 generation by
+#       notation3.py,v 1.185 2005/11/02 00:06:26 timbl Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/test/reason/t2.n3
+     @prefix : <http://www.w3.org/2000/10/swap/reason#> .
+    
+      [      a :Conjunction,
+                    :Proof;
+#             :component  [
+#                 a :Parsing;
+#                 :because  [
+#                     a :CommandLine;
+#                     :args "['/devel/WWW/2000/10/swap/cwm.py', 't2.n3', '--why']" ];
+#                 :source <> ];
+             :component  [
+                 a :Premise;
+                 :gives  { <Boston> <weather> <sunny> } ];
+             :component  [
+                 a :Premise;
+                 :gives  { <NewYork> <weather> <cloudy> } ];
+             :gives {<Boston> <weather> <sunny>. <NewYork> <weather> <cloudy> } ].
+    
+#ENDS

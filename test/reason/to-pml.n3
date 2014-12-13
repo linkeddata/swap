@@ -1,0 +1,116 @@
+# Rules to take a proof as emitted by cwm into a proof as input by InferenceWeb
+#
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix os: <http://www.w3.org/2000/10/swap/os#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#>.
+
+@prefix rea: <http://www.w3.org/2000/10/swap/reason#> .
+@prefix n3: <http://www.w3.org/2004/06/rei#> .
+@prefix iw: <http://inferenceweb.stanford.edu/2004/07/iw.owl#> .
+
+# A little ontology to see that we have some common understanding
+
+
+# Translation rules (much could be done with OWL but we have rules)
+
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+{ ?S a [ s:subClassOf ?C] } => { ?S a ?C }. # a bit of RDFS
+
+
+##### all proof steps
+# make up a nearby URI
+{ ?S a rea:Step } => { ?S :aux [] }.
+{ ?S :aux [ log:rawUri ?I ].
+  (?I "[^#]#(.*)") string:search (?FRAG).
+  ?X log:uri ("#aux_" ?FRAG).string:concatenation.os:baseAbsolute.
+} => {
+ ?X a iw:NodeSet; iw:isConsequentOf ?S; s:label "@@step".
+}.
+
+{ ?NODESET iw:isConsequentOf ?STEP. } => { ?STEP a iw:InferenceStep }.
+
+#### gives (only on some. hmm.)
+{
+  ?NODESET iw:isConsequentOf ?x.
+  ?x	rea:gives ?y.
+    ?y  log:n3String ?s.
+ } => {
+ ?NODESET   iw:hasConclusion ?s; #  No nested RDF!
+    iw:hasLanguage n3:N3;
+ }.  
+
+
+##### root proof step
+{ ?x a  rea:Proof } => {
+    ?x iw:hasInferenceEngine  <http://inferenceweb.stanford.edu/registry/IE/CWM.owl#CWM>
+}.
+
+########## Extraction setp
+{ ?THEN a rea:Extraction } =>
+  { ?THEN a iw:InferenceStep;
+     iw:rule rea:Extraction; # looked for AND-ELIM; didn't find it.
+  }.
+{ ?THEN a rea:Extraction; rea:because ?IF.
+  ?NODESET iw:isConsequentOf ?IF } =>
+  { ?THEN iw:hasAntecedent ?NODESET
+  }.
+
+########## Conjunction step
+{ ?THEN a rea:Conjunction; rea:component ?IF.
+  ?NODESET iw:isConsequentOf ?IF 
+ } =>
+  { ?THEN a iw:InferenceStep;
+     iw:rule <http://inferenceweb.stanford.edu/registry/DPR/AND-INTRO.owl#AND-INTRO>;
+     iw:hasAntecedent ?NODESET }.
+
+########
+{ ?x	a rea:Inference;
+	rea:rule  ?RULESTEP.
+  ?NODESET iw:isConsequentOf ?RULESTEP. 
+
+} => {
+  ?x a iw:InferenceStep;
+     iw:hasRule <http://inferenceweb.stanford.edu/registry/DPR/GMP.owl#GMP>;
+     iw:hasAntecedent ?NODESET.
+}.
+
+{ ?x	a rea:Inference;
+	rea:binding [
+	    rea:variable  [n3:uri ?var ];
+	    rea:boundTo  [ n3:uri ?val ]]. #@@can be bound to bnodes too. hmm.
+
+} => { ?x iw:hasVariableMapping [
+				    a iw:Mapping;
+				    iw:mapFrom  ?var; iw:mapTo ?val ].
+}.
+
+{ ?x	rea:evidence [ is list:in of ?y] }
+  => {
+ ?x  iw:hasAntecedent [ a iw:NodeSet; iw:isConsequentOf ?y; s:label "@@evidence" ]
+ }.
+
+
+########## Provenance
+
+
+@prefix time: <http://www.w3.org/2000/10/swap/time#> .
+@prefix dt: <http://www.w3.org/2001/XMLSchema#>.
+
+{  ?x a rea:Parsing; rea:source ?y.
+  "" time:localTime ?NOW.
+  (?NOW dt:dateTime) log:dtlit ?NOW_T.
+ }
+ => {
+ ?x
+  iw:hasRule
+   <http://inferenceweb.stanford.edu/registry/DPR/Told.owl#Told>;
+  iw:hasSourceUsage [
+   a iw:SourceUsage;
+   iw:hasSource ?y;
+   iw:usageTime ?NOW_T
+  ]
+}.

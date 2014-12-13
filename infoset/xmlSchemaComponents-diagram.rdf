@@ -1,0 +1,1191 @@
+
+<!-- Processed by Id: cwm.py,v 1.96 2002/06/07 20:07:17 timbl Exp -->
+<!--     using base bogus:-->
+
+
+<rdf:RDF xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#"
+    xmlns:doc="http://www.w3.org/2000/10/swap/pim/doc.n3#"
+    xmlns:dot="http://www.w3.org/2001/02pd/gv#"
+    xmlns:log="http://www.w3.org/2000/10/swap/log#"
+    xmlns:ont="http://www.daml.org/2001/03/daml+oil#"
+    xmlns:r="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/bogus@@#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:s="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:v="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:xu="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/util@@#">
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#0_work">
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs1"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs10"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs11"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs12"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs13"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs14"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs15"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs16"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs17"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs2"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs3"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs4"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs5"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs6"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs7"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs8"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs9"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g1"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g10"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g11"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g12"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g13"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g14"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g15"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g16"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g17"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g18"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g19"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g2"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g20"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g21"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g22"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g23"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g24"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g25"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g26"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g27"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g28"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g29"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g3"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g30"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g31"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g32"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g33"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g34"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g35"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g36"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g37"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g38"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g39"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g4"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g40"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g5"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g6"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g7"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g8"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g9"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g35">
+        <ont:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#restriction"/>
+        <ont:rest rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g36"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g40">
+        <ont:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#union"/>
+        <ont:rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g32">
+        <xu:subSetOf rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g33"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g30">
+        <ont:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#lax"/>
+        <ont:rest rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g31"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g33">
+        <ont:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#extension"/>
+        <ont:rest rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g34"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g34">
+        <ont:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#list"/>
+        <ont:rest rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g35"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g31">
+        <ont:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#strict"/>
+        <ont:rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g38">
+        <ont:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#atomic"/>
+        <ont:rest rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g39"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g39">
+        <ont:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#list"/>
+        <ont:rest rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g40"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g16">
+        <ont:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#restriction"/>
+        <ont:rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g17">
+        <xu:subSetOf rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g18"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g14">
+        <ont:oneOf rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g15"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g15">
+        <ont:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#extension"/>
+        <ont:rest rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g16"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g12">
+        <ont:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#choice"/>
+        <ont:rest rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g13"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g13">
+        <ont:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#sequence"/>
+        <ont:rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g10">
+        <ont:oneOf rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g11"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g11">
+        <ont:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#all"/>
+        <ont:rest rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g12"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g27">
+        <ont:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#unique"/>
+        <ont:rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g26">
+        <ont:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#keyref"/>
+        <ont:rest rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g27"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g25">
+        <ont:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#key"/>
+        <ont:rest rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g26"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g24">
+        <ont:oneOf rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g25"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g23">
+        <ont:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#restriction"/>
+        <ont:rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g22">
+        <ont:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#extension"/>
+        <ont:rest rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g23"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g21">
+        <xu:subSetOf rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g22"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g20">
+        <ont:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#restriction"/>
+        <ont:rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g2">
+        <ont:oneOf rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g3"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g3">
+        <ont:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#global"/>
+        <ont:rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g1">
+        <ont:unionOf rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g4"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g6">
+        <xu:pairA rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/util@@#Value"/>
+        <xu:pairB rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g7"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g7">
+        <ont:oneOf rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g8"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g4">
+        <ont:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g2"/>
+        <ont:rest rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g5"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g5">
+        <ont:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Complex_Type_Definition"/>
+        <ont:rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g18">
+        <ont:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#substitution"/>
+        <ont:rest rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g19"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g8">
+        <ont:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#default"/>
+        <ont:rest rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g9"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g9">
+        <ont:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#fixed"/>
+        <ont:rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g19">
+        <ont:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#extension"/>
+        <ont:rest rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g20"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g29">
+        <ont:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#skip"/>
+        <ont:rest rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g30"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g36">
+        <ont:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#union"/>
+        <ont:rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g28">
+        <ont:oneOf rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g29"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g37">
+        <ont:oneOf rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g38"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#0_work">
+        <log:forAll rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#TXT"/>
+        <log:forAll rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#n1"/>
+        <log:forAll rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#n2"/>
+        <log:forAll rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#p"/>
+        <log:forAll rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#s"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs1"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs10"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs11"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs12"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs13"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs14"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs15"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs16"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs17"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs2"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs3"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs4"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs5"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs6"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs7"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs8"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs9"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g1"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g10"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g11"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g12"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g13"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g14"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g15"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g16"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g17"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g18"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g19"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g2"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g20"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g21"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g22"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g23"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g24"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g25"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g26"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g27"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g28"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g29"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g3"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g30"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g31"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g32"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g33"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g34"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g35"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g36"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g37"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g38"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g39"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g4"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g40"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g5"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g6"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g7"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g8"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g9"/>
+    </rdf:Description>
+
+    <dot:EdgeProperty rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs4">
+        <dot:label>attribute declaration</dot:label>
+    </dot:EdgeProperty>
+
+    <dot:EdgeProperty rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs17">
+        <dot:label>type definitions</dot:label>
+    </dot:EdgeProperty>
+
+    <dot:EdgeProperty rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs15">
+        <dot:label>particles</dot:label>
+    </dot:EdgeProperty>
+
+    <dot:EdgeProperty rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs13">
+        <dot:label>model group definitions</dot:label>
+    </dot:EdgeProperty>
+
+    <dot:EdgeProperty rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs12">
+        <dot:label>model group</dot:label>
+    </dot:EdgeProperty>
+
+    <dot:EdgeProperty rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs16">
+        <dot:label>base type definition</dot:label>
+    </dot:EdgeProperty>
+
+    <dot:EdgeProperty rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs11">
+        <dot:label>identity-constraint definitions</dot:label>
+    </dot:EdgeProperty>
+
+    <dot:EdgeProperty rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs8">
+        <dot:label>attribute uses</dot:label>
+    </dot:EdgeProperty>
+
+    <dot:EdgeProperty rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs9">
+        <dot:label>attribute wildcard</dot:label>
+    </dot:EdgeProperty>
+
+    <dot:EdgeProperty rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs10">
+        <dot:label>element declarations</dot:label>
+    </dot:EdgeProperty>
+
+    <dot:EdgeProperty rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs5">
+        <dot:label>attribute declarations</dot:label>
+    </dot:EdgeProperty>
+
+    <dot:EdgeProperty rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs6">
+        <dot:label>attribute group definitions</dot:label>
+    </dot:EdgeProperty>
+
+    <dot:EdgeProperty rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs7">
+        <dot:label>substitution group affiliation</dot:label>
+    </dot:EdgeProperty>
+
+    <dot:EdgeProperty rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs14">
+        <dot:label>notation declarations</dot:label>
+    </dot:EdgeProperty>
+
+    <dot:EdgeProperty rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs1">
+        <dot:label>type definition</dot:label>
+    </dot:EdgeProperty>
+
+    <dot:EdgeProperty rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs2">
+        <dot:label>attribute uses</dot:label>
+    </dot:EdgeProperty>
+
+    <dot:EdgeProperty rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs3">
+        <dot:label>attribute wildcard</dot:label>
+    </dot:EdgeProperty>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#theGraph">
+        <dot:hasNode rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Annotation"/>
+        <dot:hasNode rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Declaration"/>
+        <dot:hasNode rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Group_Definition"/>
+        <dot:hasNode rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Use"/>
+        <dot:hasNode rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Complex_Type_Definition"/>
+        <dot:hasNode rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Element_Declaration"/>
+        <dot:hasNode rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Identity-constraint_Definition"/>
+        <dot:hasNode rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Model_Group"/>
+        <dot:hasNode rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Model_Group_Definition"/>
+        <dot:hasNode rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Notation_Declaration"/>
+        <dot:hasNode rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Particle"/>
+        <dot:hasNode rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Simple_Type_Definition"/>
+        <dot:hasNode rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Wildcard"/>
+        <dot:hasNode rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#key-schema"/>
+        <dot:label>XML Infoset $Date$</dot:label>
+        <dot:rankdir>LR</dot:rankdir>
+    </rdf:Description>
+
+    <dot:EdgeProperty rdf:about="http://www.w3.org/2000/01/rdf-schema#subClassOf">
+        <dot:color>skyblue2</dot:color>
+    </dot:EdgeProperty>
+
+    <dot:EdgeProperty rdf:about="http://www.w3.org/2000/01/rdf-schema#subPropertyOf">
+        <dot:color>khaki2</dot:color>
+    </dot:EdgeProperty>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style.n3">
+        <doc:cvsversion>$Id$</doc:cvsversion>
+        <dot:digraph rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#theGraph"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style.n3#_g2">
+        <log:implies rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style.n3#_g3"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style.n3#_g0">
+        <log:implies rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style.n3#_g1"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style.n3#_g4">
+        <log:implies rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style.n3#_g7"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style.n3#_g9">
+        <log:implies rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style.n3#_g11"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style.n3#_g16">
+        <log:implies rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style.n3#_g17"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style.n3#_g14">
+        <log:implies rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style.n3#_g15"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style.n3#_g12">
+        <log:implies rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style.n3#_g13"/>
+    </rdf:Description>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#notation_declarations">
+        <s:comment>A set of notation declarations.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#key-schema"/>
+        <s:label>notation declarations</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Notation_Declaration"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#attributes">
+        <s:comment>A sequence of attribute information items.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Annotation"/>
+        <s:label>attributes</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/util@@#AttributeInfoItem"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#p-max_occurs">
+        <s:comment>Either a non-negative integer
+or unbounded.</s:comment>
+        <s:comment>Either a non-negative integer or unbounded.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Particle"/>
+        <s:label>max occurs</s:label>
+    </rdf:Property>
+
+    <xu:AbsentProperty rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#ct-target_namespace">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <s:comment>Either absent or a namespace name, as defined in .</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Complex_Type_Definition"/>
+        <s:label>target namespace</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/util@@#NSName"/>
+    </xu:AbsentProperty>
+
+    <xu:AbsentProperty rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#mg-target_namespace">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <s:comment>Either absent or a namespace name, as defined in .</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Model_Group_Definition"/>
+        <s:label>target namespace</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/util@@#NSName"/>
+    </xu:AbsentProperty>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#ct-final">
+        <s:comment>
+    A subset of {extension, restriction}.
+   </s:comment>
+        <s:comment>A subset of {extension, restriction}.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Complex_Type_Definition"/>
+        <s:label>final</s:label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#public_identifier">
+        <s:comment>Optional if is present. A public identifier, as defined in .</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Notation_Declaration"/>
+        <s:label>public identifier</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/util@@#PublicIdentifier"/>
+    </rdf:Property>
+
+    <s:Class rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Complex_Type_Definition">
+        <_gs8 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Use"/>
+        <_gs9 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Wildcard"/>
+        <s:label>Complex Type Definition</s:label>
+        <dot:color>skyblue1</dot:color>
+        <dot:label>Complex Type Definition</dot:label>
+        <dot:style>filled</dot:style>
+    </s:Class>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#mg-name">
+        <s:comment>An NCName as defined by .</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Model_Group_Definition"/>
+        <s:label>name</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/util@@#NCName"/>
+    </rdf:Property>
+
+    <xu:AbsentProperty rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#ag-target_namespace">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <s:comment>Either absent or a namespace name, as defined in .</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Group_Definition"/>
+        <s:label>target namespace</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/util@@#NSName"/>
+    </xu:AbsentProperty>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#type_definitions">
+        <s:comment>A set of named simple and complex type definitions.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#key-schema"/>
+        <s:label>type definitions</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Complex_Type_Definition"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#a-name">
+        <s:comment>An NCName as defined by .</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Declaration"/>
+        <s:label>name</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/util@@#NCName"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#compositor">
+        <s:comment>One of all, choice or sequence.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Model_Group"/>
+        <s:label>compositor</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g10"/>
+    </rdf:Property>
+
+    <xu:OptionalProperty rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#ag-attribute_wildcard">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <s:comment>Optional. A wildcard.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Group_Definition"/>
+        <s:label>attribute wildcard</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Wildcard"/>
+    </xu:OptionalProperty>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#element_declarations">
+        <s:comment>A set of named (top-level) element declarations.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#key-schema"/>
+        <s:label>element declarations</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Element_Declaration"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#e-name">
+        <s:comment>An NCName as defined by .</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Element_Declaration"/>
+        <s:label>name</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/util@@#NCName"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#a-annotation">
+        <s:comment>Optional. An annotation.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Declaration"/>
+        <s:label>annotation</s:label>
+    </rdf:Property>
+
+    <xu:OptionalProperty rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#ct-attribute_wildcard">
+        <rdf:type rdf:resource="http://www.daml.org/2001/03/daml+oil#UniqueProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <s:comment>Optional. A wildcard.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Complex_Type_Definition"/>
+        <s:label>attribute wildcard</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Wildcard"/>
+    </xu:OptionalProperty>
+
+    <s:Class rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Use">
+        <_gs4 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Declaration"/>
+        <s:label>Attribute Use</s:label>
+        <dot:color>skyblue1</dot:color>
+        <dot:label>Attribute Use</dot:label>
+        <dot:style>filled</dot:style>
+    </s:Class>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#referenced_key">
+        <s:comment>
+    Required if @@ is keyref, forbidden
+otherwise.  An identity-constraint definition with 
+equal to key or unique.
+   </s:comment>
+        <s:comment>Required if is keyref, forbidden otherwise. An identity-constraint definition with equal to key or unique.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Identity-constraint_Definition"/>
+        <s:label>referenced key</s:label>
+    </rdf:Property>
+
+    <s:Class rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Particle">
+        <s:label>Particle</s:label>
+        <dot:color>skyblue1</dot:color>
+        <dot:label>Particle</dot:label>
+        <dot:style>filled</dot:style>
+    </s:Class>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#au-value_constraint">
+        <s:comment>Optional.  A pair
+consisting of a value and one of default, fixed.</s:comment>
+        <s:comment>Optional. A pair consisting of a value and one of default, fixed.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Use"/>
+        <s:label>value constraint</s:label>
+    </rdf:Property>
+
+    <xu:OptionalProperty rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#e-scope">
+        <rdf:type rdf:resource="http://www.daml.org/2001/03/daml+oil#UniqueProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <s:comment>Optional.  Either global or a complex type
+definition.</s:comment>
+        <s:comment>Optional. Either global or a complex type definition.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Element_Declaration"/>
+        <s:label>scope</s:label>
+    </xu:OptionalProperty>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#rc-annotation">
+        <s:comment>Optional. An annotation.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Identity-constraint_Definition"/>
+        <s:label>annotation</s:label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#required">
+        <s:comment>A boolean.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Use"/>
+        <s:label>required</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/util@@#Boolean"/>
+    </rdf:Property>
+
+    <xu:AbsentProperty rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#c-target_namespace">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <s:comment>Either absent or a namespace name, as defined in .</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Identity-constraint_Definition"/>
+        <s:label>target namespace</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/util@@#NSName"/>
+    </xu:AbsentProperty>
+
+    <xu:AbsentProperty rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#a-target_namespace">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <s:comment>Either absent or a namespace name, as defined in .</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Declaration"/>
+        <s:label>target namespace</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/util@@#NSName"/>
+    </xu:AbsentProperty>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#model_group">
+        <s:comment>A model group.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Model_Group_Definition"/>
+        <s:label>model group</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Model_Group"/>
+    </rdf:Property>
+
+    <s:Class rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Simple_Type_Definition">
+        <_gs16 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Simple_Type_Definition"/>
+        <s:label>Simple Type Definition</s:label>
+        <dot:color>skyblue1</dot:color>
+        <dot:label>Simple Type Definition</dot:label>
+        <dot:style>filled</dot:style>
+    </s:Class>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#particles">
+        <s:comment>A list of particles</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Model_Group"/>
+        <s:label>particles</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Particle"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#st-annotation">
+        <s:comment>Optional. An annotation.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Simple_Type_Definition"/>
+        <s:label>annotation</s:label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#variety">
+        <s:comment>One of {atomic, list, union}. Depending on the value of , further properties are defined as follows: atomic A built-in primitive simple type definition (or the simple ur-type definition). list A simple type definition. union A non-empty sequence of simple type definitions.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Simple_Type_Definition"/>
+        <s:label>variety</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g37"/>
+    </rdf:Property>
+
+    <xu:OptionalProperty rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#class_exemplar">
+        <rdf:type rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/util@@#UniqueProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <s:comment>Optional. A top-level element definition.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Element_Declaration"/>
+        <s:label>substitution group affiliation</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Element_Declaration"/>
+    </xu:OptionalProperty>
+
+    <s:Class rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Wildcard">
+        <s:label>Wildcard</s:label>
+        <dot:color>skyblue1</dot:color>
+        <dot:label>Wildcard</dot:label>
+        <dot:style>filled</dot:style>
+    </s:Class>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#n-name">
+        <s:comment>An NCName as defined by .</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Notation_Declaration"/>
+        <s:label>name</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/util@@#NCName"/>
+    </rdf:Property>
+
+    <s:Class rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Identity-constraint_Definition">
+        <s:label>Identity-constraint Definition</s:label>
+        <dot:color>skyblue1</dot:color>
+        <dot:label>Identity-constraint Definition</dot:label>
+        <dot:style>filled</dot:style>
+    </s:Class>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#e-exact">
+        <s:comment>A subset of {substitution, extension, restriction}.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Element_Declaration"/>
+        <s:label>disallowed substitutions</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g17"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#amg-annotation">
+        <s:comment>Optional. An annotation.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Model_Group"/>
+        <s:label>annotation</s:label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#attribute">
+        <s:comment>An attribute declaration.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Use"/>
+        <s:label>attribute declaration</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Declaration"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#ct-name">
+        <s:comment>Optional. An NCName as defined by .</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Complex_Type_Definition"/>
+        <s:label>name</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/util@@#NCName"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#user_information">
+        <s:comment>A sequence of element information items.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Annotation"/>
+        <s:label>user information</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/util@@#ElementInfoItem"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#a-scope">
+        <s:comment>Optional. Either global or a complex type definition.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Declaration"/>
+        <s:label>scope</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g1"/>
+    </rdf:Property>
+
+    <xu:OptionalProperty rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#system_identifier">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <s:comment>
+    Optional if @@ is present.  A URI reference.
+   </s:comment>
+        <s:comment>Optional if is present. A URI reference.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Notation_Declaration"/>
+        <s:label>system identifier</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/util@@#URIReference"/>
+    </xu:OptionalProperty>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#p-min_occurs">
+        <s:comment>A non-negative
+integer.</s:comment>
+        <s:comment>A non-negative integer.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Particle"/>
+        <s:label>min occurs</s:label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#st-name">
+        <s:comment>Optional. An NCName as defined by .</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Simple_Type_Definition"/>
+        <s:label>name</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/util@@#NCName"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#identity-constraint_definitions">
+        <s:comment>A set of constraint definitions.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Element_Declaration"/>
+        <s:label>identity-constraint definitions</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Identity-constraint_Definition"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#identity-constraint_name">
+        <s:comment>One of key, keyref or unique.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Identity-constraint_Definition"/>
+        <s:label>identity-constraint category</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g24"/>
+    </rdf:Property>
+
+    <xu:OptionalProperty rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#a-value_constraint">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <s:comment>Optional. A pair consisting of a value and one of default, fixed.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Declaration"/>
+        <s:label>value constraint</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g6"/>
+    </xu:OptionalProperty>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#attribute_group_definitions">
+        <s:comment>A set of named attribute group definitions.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#key-schema"/>
+        <s:label>attribute group definitions</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Group_Definition"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#ag-annotation">
+        <s:comment>Optional. An annotation.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Group_Definition"/>
+        <s:label>annotation</s:label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#facets">
+        <s:comment>A set of constraining
+facets.</s:comment>
+        <s:comment>A set of constraining facets.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Simple_Type_Definition"/>
+        <s:label>facets</s:label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#fields">
+        <s:comment>
+    A non-empty list of restricted XPath () expressions.</s:comment>
+        <s:comment>A non-empty list of restricted XPath () expressions.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Identity-constraint_Definition"/>
+        <s:label>fields</s:label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#ct-exact">
+        <s:comment>
+    A subset of {extension, restriction}.
+   </s:comment>
+        <s:comment>A subset of {extension, restriction}.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Complex_Type_Definition"/>
+        <s:label>prohibited substitutions</s:label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#ct-base_type_definition">
+        <s:comment>
+    Either a simple type definition or a complex type definition.
+   </s:comment>
+        <s:comment>Either a simple type definition or a complex type definition.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Complex_Type_Definition"/>
+        <s:label>base type definition</s:label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#term">
+        <s:comment>One of a model group, a wildcard, or an  element declaration.</s:comment>
+        <s:comment>One of a model group, a wildcard, or an element declaration.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Particle"/>
+        <s:label>term</s:label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#a-simple_type_definition">
+        <s:comment>A simple type definition.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Declaration"/>
+        <s:label>type definition</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Simple_Type_Definition"/>
+    </rdf:Property>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#TODO">
+        <includes rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g0"/>
+    </rdf:Description>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#attribute_declarations">
+        <s:comment>A set of named (top-level) attribute declarations.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#key-schema"/>
+        <s:label>attribute declarations</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Declaration"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#ag-attribute_declarations">
+        <s:comment>A set of attribute uses.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Group_Definition"/>
+        <s:label>attribute uses</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Use"/>
+    </rdf:Property>
+
+    <s:Class rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Model_Group_Definition">
+        <_gs12 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Model_Group"/>
+        <s:label>Model Group Definition</s:label>
+        <dot:color>skyblue1</dot:color>
+        <dot:label>Model Group Definition</dot:label>
+        <dot:style>filled</dot:style>
+    </s:Class>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#content_type">
+        <s:comment>One of empty, a simple type definition or a pair
+consisting of a content model (I.e. a ) and one of mixed, element-only.
+   </s:comment>
+        <s:comment>One of empty, a simple type definition or a pair consisting of a content model (I.e. a ) and one of mixed, element-only.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Complex_Type_Definition"/>
+        <s:label>content type</s:label>
+    </rdf:Property>
+
+    <xu:AbsentProperty rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#n-target_namespace">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <s:comment>Either absent or a namespace name, as defined in .</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Notation_Declaration"/>
+        <s:label>target namespace</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/util@@#NSName"/>
+    </xu:AbsentProperty>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#e-annotation">
+        <s:comment>Optional. An annotation.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Element_Declaration"/>
+        <s:label>annotation</s:label>
+    </rdf:Property>
+
+    <s:Class rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Declaration">
+        <_gs1 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Simple_Type_Definition"/>
+        <s:label>Attribute Declaration</s:label>
+        <dot:color>skyblue1</dot:color>
+        <dot:label>Attribute Declaration</dot:label>
+        <dot:style>filled</dot:style>
+    </s:Class>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#c-name">
+        <s:comment>An NCName as defined by .</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Identity-constraint_Definition"/>
+        <s:label>name</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/util@@#NCName"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#application_information">
+        <s:comment>A sequence of element information items.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Annotation"/>
+        <s:label>application information</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/util@@#Element"/>
+    </rdf:Property>
+
+    <xu:OptionalProperty rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#e-value_constraint">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <s:comment>Optional.  A
+pair consisting of a value and one of default, fixed.</s:comment>
+        <s:comment>Optional. A pair consisting of a value and one of default, fixed.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Element_Declaration"/>
+        <s:label>value constraint</s:label>
+    </xu:OptionalProperty>
+
+    <xu:AbsentProperty rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#st-target_namespace">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <s:comment>Either absent or a namespace name, as defined in .</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Simple_Type_Definition"/>
+        <s:label>target namespace</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/util@@#NSName"/>
+    </xu:AbsentProperty>
+
+    <s:Class rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Annotation">
+        <s:label>Annotation</s:label>
+        <dot:color>skyblue1</dot:color>
+        <dot:label>Annotation</dot:label>
+        <dot:style>filled</dot:style>
+    </s:Class>
+
+    <s:Class rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Element_Declaration">
+        <_gs11 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Identity-constraint_Definition"/>
+        <_gs7 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Element_Declaration"/>
+        <s:label>Element Declaration</s:label>
+        <dot:color>skyblue1</dot:color>
+        <dot:label>Element Declaration</dot:label>
+        <dot:style>filled</dot:style>
+    </s:Class>
+
+    <s:Class rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#key-schema">
+        <_gs10 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Element_Declaration"/>
+        <_gs13 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Model_Group_Definition"/>
+        <_gs14 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Notation_Declaration"/>
+        <_gs17 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Complex_Type_Definition"/>
+        <_gs5 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Declaration"/>
+        <_gs6 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Group_Definition"/>
+        <s:label>Schema</s:label>
+        <dot:color>skyblue1</dot:color>
+        <dot:label>Schema</dot:label>
+        <dot:style>filled</dot:style>
+    </s:Class>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#annotations">
+        <s:comment>A set of annotations.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#key-schema"/>
+        <s:label>annotations</s:label>
+    </rdf:Property>
+
+    <s:Class rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Model_Group">
+        <_gs15 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Particle"/>
+        <s:label>Model Group</s:label>
+        <dot:color>skyblue1</dot:color>
+        <dot:label>Model Group</dot:label>
+        <dot:style>filled</dot:style>
+    </s:Class>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#st-final">
+        <s:comment>A subset of {extension, list, restriction, union}.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Simple_Type_Definition"/>
+        <s:label>final</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g32"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#n-annotation">
+        <s:comment>Optional. An annotation.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Notation_Declaration"/>
+        <s:label>annotation</s:label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#w-annotation">
+        <s:comment>Optional. An annotation.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Wildcard"/>
+        <s:label>annotation</s:label>
+    </rdf:Property>
+
+    <xu:AbsentProperty rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#e-target_namespace">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <s:comment>Either absent or a namespace name, as defined in .</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Element_Declaration"/>
+        <s:label>target namespace</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/util@@#NSName"/>
+    </xu:AbsentProperty>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#derivation_method">
+        <s:comment>Either extension or restriction.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Complex_Type_Definition"/>
+        <s:label>derivation method</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g14"/>
+    </rdf:Property>
+
+    <s:Class rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Notation_Declaration">
+        <s:label>Notation Declaration</s:label>
+        <dot:color>skyblue1</dot:color>
+        <dot:label>Notation Declaration</dot:label>
+        <dot:style>filled</dot:style>
+    </s:Class>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#ct-attribute_declarations">
+        <s:comment>A set of attribute uses.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Complex_Type_Definition"/>
+        <s:label>attribute uses</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Use"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#ct-annotations">
+        <s:comment>A set of annotations.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Complex_Type_Definition"/>
+        <s:label>annotations</s:label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#mg-annotation">
+        <s:comment>Optional. An annotation.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Model_Group_Definition"/>
+        <s:label>annotation</s:label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#ag-name">
+        <s:comment>An NCName as defined by .</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Group_Definition"/>
+        <s:label>name</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/util@@#NCName"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#e-abstract">
+        <s:comment>A boolean.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Element_Declaration"/>
+        <s:label>abstract</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/util@@#Boolean"/>
+    </rdf:Property>
+
+    <s:Class rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Group_Definition">
+        <_gs2 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Use"/>
+        <_gs3 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Wildcard"/>
+        <s:label>Attribute Group Definition</s:label>
+        <dot:color>skyblue1</dot:color>
+        <dot:label>Attribute Group Definition</dot:label>
+        <dot:style>filled</dot:style>
+    </s:Class>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#ct-abstract">
+        <s:comment>A boolean</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Complex_Type_Definition"/>
+        <s:label>abstract</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/util@@#Boolean"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#e-final">
+        <s:comment>A subset of {extension, restriction}.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Element_Declaration"/>
+        <s:label>substitution group exclusions</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g21"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#process_contents">
+        <s:comment>One of skip, lax or strict.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Wildcard"/>
+        <s:label>process contents</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaRanges.n3#_g28"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#st-base_type_definition">
+        <s:comment>A simple type definition, which may be the simple ur-type definition.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Simple_Type_Definition"/>
+        <s:label>base type definition</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Simple_Type_Definition"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#type_definition">
+        <s:comment>Either a simple type
+definition or a complex type definition.</s:comment>
+        <s:comment>Either a simple type definition or a complex type definition.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Element_Declaration"/>
+        <s:label>type definition</s:label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#namespace_constraint">
+        <s:comment>
+    One of any; a pair of not and a namespace name
+or absent; or a set whose
+members are either namespace names or absent.
+   </s:comment>
+        <s:comment>One of any; a pair of not and a namespace name or absent; or a set whose members are either namespace names or absent.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Wildcard"/>
+        <s:label>namespace constraint</s:label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#model_group_definitions">
+        <s:comment>A set of named model group definitions.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#key-schema"/>
+        <s:label>model group definitions</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Model_Group_Definition"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#fundamental_facets">
+        <s:comment>A set of
+fundamental facets.</s:comment>
+        <s:comment>A set of fundamental facets.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Simple_Type_Definition"/>
+        <s:label>fundamental facets</s:label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#nillable">
+        <s:comment>A boolean.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Element_Declaration"/>
+        <s:label>nillable</s:label>
+        <s:range rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/util@@#Boolean"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#selector">
+        <s:comment>
+    A restricted XPath () expression.</s:comment>
+        <s:comment>A restricted XPath () expression.</s:comment>
+        <s:domain rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Identity-constraint_Definition"/>
+        <s:label>selector</s:label>
+    </rdf:Property>
+</rdf:RDF>

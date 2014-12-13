@@ -1,0 +1,42 @@
+
+#  Notation3 generation by
+#       notation3.py,v 1.187 2006/01/13 14:48:54 syosi Exp
+
+#   Base was: file:/Documents and Settings/kolovski/My Documents/mindswap/Policy Aware Web/www/2000/10/swap/test/rete/builtin4.n3
+     @prefix : <#> .
+    @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    @prefix math: <http://www.w3.org/2000/10/swap/math#> .
+    @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+     @forAll :s,
+                :valX,
+                :valY,
+                :x,
+                :y,
+                :z .
+    
+    <http://cwmTest/t1>     a "http://u'http://cwmTest/t1' + u'http://cwmTest/t1' = 6",
+                "http://u'http://cwmTest/t1' + u'http://cwmTest/t2' = 7";
+         <http://cwmTest/hasValue> 3 .
+    
+    <http://cwmTest/t2>     a "http://u'http://cwmTest/t2' + u'http://cwmTest/t1' = 7",
+                "http://u'http://cwmTest/t2' + u'http://cwmTest/t2' = 8";
+         <http://cwmTest/hasValue> 4 .
+    {
+        
+          ( "http://"
+            :x
+            " + "
+            :y
+            " = "
+            :z )
+             string:concatenation :s .
+          ( :valX
+            :valY )
+             math:sum :z .
+        :x     <http://cwmTest/hasValue> :valX .
+        :y     <http://cwmTest/hasValue> :valY .
+        
+        }     log:implies {:x     a :s .
+        } .
+    

@@ -1,0 +1,165 @@
+#Processed by Id: cwm.py,v 1.184 2006/03/09 06:28:53 vkolovsk Exp 
+        #    using base file:/Users/connolly/w3ccvs/WWW/2000/10/swap/test/dpo/daml+oil-ex.daml
+        
+#  Notation3 generation by
+#       notation3.py,v 1.187 2006/01/13 14:48:54 syosi Exp
+
+#   Base was: file:/Users/connolly/w3ccvs/WWW/2000/10/swap/test/dpo/daml+oil-ex.daml
+    @prefix : <http://www.daml.org/2000/12/daml+oil-ex#> .
+    @prefix ex: <http://www.daml.org/2000/12/daml+oil-ex#> .
+@prefix daml: <http://www.w3.org/2002/07/owl#>.
+    @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+    @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+    
+    <>     a daml:Ontology;
+         daml:imports <http://www.daml.org/2000/12/daml+oil>;
+         daml:versionInfo "$Id$";
+         rdfs:comment "An example ontology" .
+    
+    :Adam     a ex:Person;
+         rdfs:comment "Adam is a person.";
+         rdfs:label "Adam" .
+    
+    :Animal     a rdfs:Class;
+         rdfs:comment """
+    Animals have exactly two parents, ie:
+    If x is an animal, then it has exactly 2 parents 
+    (but it is NOT the case that anything that has 2 parents is an animal).
+  """,
+                """
+    This class of animals is illustrative of a number of ontological idioms.
+  """;
+         rdfs:label "Animal";
+         rdfs:subClassOf  [
+             a daml:Restriction;
+             daml:cardinality 2;
+             daml:onProperty :hasParent ] .
+    
+    :Car     a rdfs:Class;
+         rdfs:comment "no car is a person";
+         rdfs:subClassOf  [
+             a rdfs:Class;
+             daml:complementOf :Person ] .
+    
+    :Female     a rdfs:Class;
+         daml:disjointWith :Male;
+         rdfs:subClassOf :Animal .
+    
+    :Height     a rdfs:Class;
+         daml:oneOf  (
+        :short
+        :medium
+        :tall ) .
+    
+    :HumanBeing     a rdfs:Class;
+         daml:equivalentClass :Person .
+    
+    :Male     a rdfs:Class;
+         rdfs:subClassOf :Animal .
+    
+    :Man     a rdfs:Class;
+         rdfs:subClassOf :Male,
+                :Person .
+    
+    :MarriedPerson     a rdfs:Class;
+         daml:intersectionOf  (
+        :Person
+         [
+                 a daml:Restriction;
+                 daml:cardinality 1;
+                 daml:onProperty :hasSpouse ] ) .
+    
+        :Man daml:disjointWith :Woman.
+
+    :Person     a rdfs:Class;
+         daml:unionOf  (
+        :Man
+        :Woman );
+         rdfs:comment "every person is a man or a woman";
+         rdfs:subClassOf :Animal,
+                 [
+             a daml:Restriction;
+             daml:onProperty :hasParent;
+             daml:allValuesFrom :Person ],
+                 [
+             a daml:Restriction;
+             daml:cardinality 1;
+             daml:onProperty :hasFather ],
+                 [
+             a daml:Restriction;
+             daml:maxCardinality 1;
+             daml:onProperty :hasSpouse ],
+                 [
+             a daml:Restriction;
+             daml:hasClassQ :FullTimeOccupation;
+             daml:maxCardinalityQ 1;
+             daml:onProperty :hasOccupation ] .
+    
+    :TallMan     a rdfs:Class;
+         daml:intersectionOf  (
+        :TallThing
+        :Man ) .
+    
+    :TallThing     a rdfs:Class;
+         daml:equivalentClass  [
+             a daml:Restriction;
+             daml:hasValue :tall;
+             daml:onProperty :hasHeight ] .
+    
+    :Woman     a rdfs:Class;
+         rdfs:subClassOf :Female,
+                :Person .
+    
+    :descendant     a daml:TransitiveProperty .
+    
+    :hasAncestor     a daml:TransitiveProperty;
+         rdfs:label "hasAncestor" .
+    
+    :hasChild     a rdf:Property;
+         daml:inverseOf :hasParent .
+    
+    :hasFather     a rdf:Property;
+         rdfs:range :Male;
+         rdfs:subPropertyOf :hasParent .
+    
+    :hasHeight     a rdf:Property;
+         rdfs:range :Height .
+    
+    :hasMom     a rdf:Property;
+         daml:equivalentProperty :hasMother .
+    
+    :hasMother     a daml:FunctionalProperty;
+         rdfs:range :Female;
+         rdfs:subPropertyOf :hasParent .
+    
+    :hasParent     a rdf:Property;
+         rdfs:subPropertyOf :hasAncestor;
+         rdfs:domain :Animal;
+         rdfs:range :Animal .
+    
+    :medium     a ex:Height .
+    
+    :short     a ex:Height .
+    
+    :tall     a ex:Height .
+    ( :Car :Person :Plant ) a daml:AllDisjoint.
+    
+#ENDS
+
+:hasSpouse a daml:SymmetricProperty; rdfs:subPropertyOf daml:differentFrom.
+:hasAncestor rdfs:subPropertyOf daml:differentFrom.
+:husband rdfs:subPropertyOf :hasSpouse;
+  rdfs:domain :Woman; rdfs:range :Man.
+:wife daml:inverseOf :husband.
+
+@keywords is, of, a.
+bob a Man; hasHeight tall.
+bob hasMother wilma.
+wilma hasFather lawrence.
+
+wilma :hasSpouse fred, fredo.
+fredo hasChild bob.
+lawrence wife jill.
+jill hasChild wilma.
+
+chevy1 a Car.

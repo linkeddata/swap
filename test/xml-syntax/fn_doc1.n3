@@ -1,0 +1,12 @@
+@prefix fn: <http://www.w3.org/2006/xpath-functions#>.
+@prefix x: <http://www.w3.org/2007/ont/xml#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+
+<http://www.w3.org/2001/sw/grddl-wg/td/titleauthor.html> a :InformationResource.
+
+{
+ ?IR a :InformationResource; log:uri ?I.
+ ?I fn:doc ?NODE.
+ # extra /* due to wierd <envelope> stuff
+ (?NODE """/*/*""") x:xpath [ x:nodeName ?N ].
+} => { :test :rootEltName ?N }.

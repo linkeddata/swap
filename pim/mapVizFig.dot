@@ -1,0 +1,37 @@
+digraph world {
+  rankdir=LR;
+
+subgraph stepB {
+  "xplanet" [ shape="diamond"];
+  
+  "itin-markers" -> "xplanet";
+  "itin-arcs" -> "xplanet";
+  "xplanet" -> "itin-map.png";
+
+  itinKB2 [ label="itin.rdf"];
+
+  cwm3 [ label="cwm", shape="diamond"];
+  cwm4 [ label="cwm", shape="diamond"];
+  itinKB2 -> cwm3;
+  "itinMarks.n3" [ shape="parallelogram"];
+  "itinMarks.n3" -> cwm3;
+  cwm3 -> "itin-markers";
+  itinKB2 -> cwm4;
+  "itinArcs.n3" -> cwm4;
+  "itinArcs.n3" [ shape="parallelogram"];
+  cwm4 -> "itin-arcs";
+}
+
+subgraph stepA {
+
+  cwm2 [ label="cwm", shape="diamond"];
+  "itin.nt" -> cwm2;
+  "airportLookup.n3" -> cwm2;
+  "airportLookup.n3" [ shape="parallelogram"];
+  "DAML airport data" -> cwm2
+  cwm2 -> itinKB1;
+  itinKB1 [ label="itin.rdf"];
+
+}
+
+}

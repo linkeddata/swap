@@ -1,0 +1,14 @@
+#  test definitive document - this is the definitive table
+#
+@prefix day: <daysoftheweek.n3#>.
+
+"0" day:label "Sunday".
+"1" day:label "Monday".
+"2" day:label "Tuesday".
+"3" day:label "Wednesday".
+"4" day:label "Thursday".
+"5" day:label "Friday".
+"6" day:label "Saturday".
+
+
+#ends	

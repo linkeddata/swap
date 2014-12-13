@@ -1,0 +1,96 @@
+#   Originally Quicken(tm) Interchange Format now generic RDF vocabulary
+#
+
+@prefix r:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+
+@prefix :  <http://www.w3.org/2000/10/swap/pim/qif#> .
+@prefix q: <http://www.w3.org/2000/10/swap/pim/qif#> .
+@prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#> .
+@prefix trip: <http://www.w3.org/ns/pim/trip#>.
+@prefix gen:	<http://www.w3.org/2006/gen/ont#> .
+@prefix ui: <http://www.w3.org/ns/ui#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+
+<> doc:version "$Id$";
+  dc:title "An ontology for personal finances";
+  s:seeAlso <qif2n3.py>, <http://dev.w3.org/cvsweb/2000/quacken/>,
+	<http://dev.w3.org/cvsweb/~checkout~/2000/quacken/vocab.n3?rev=1.1>,
+        <http://www.intuit.com/support/quicken/2002/win/1177.html>;
+	s:comment """An ontology for data exported, for example, by Quicken,
+	as an interchange format. Also a generally useful ontology for
+	bank tranactions.  See also the OFX ontology.""".
+
+
+q:Transaction a s:Class; s:label "transaction"; ui:sortBy q:date.
+
+q:Classified a s:Class; s:label "classified"; s:subClassOf q:Transaction.
+q:Unclassified a s:Class; s:label "unclassified"; s:subClassOf q:Transaction.
+q:UnclassifiedIncome a s:Class; s:label "unclassified income"; s:subClassOf q:Unclassified.
+q:UnclassifiedOutgoing a s:Class; s:label "unclassified outgoing"; s:subClassOf q:Unclassified.
+
+q:Account a s:Class; s:label "account".
+
+q:Bank a s:Class.  # should be Bank_transaction probably (where used? - in .qif)
+
+q:Cat a s:Class; s:label "category".
+q:category a r:Property; s:label "category"; s:domain q:Transaction.
+
+q:amount a r:Property; s:label "amount"; s:domain q:Transaction.
+q:date   a r:Property; s:label "date"; s:domain q:Transaction.
+q:payee  a r:Property; s:label "payee"; s:domain q:Transaction;
+    s:subPropertyOf s:label. # If you have to use omne thing, use this.
+
+q:toAccount a r:Property; s:label "account"; s:domain q:Transaction;
+    s:range :Account;
+    s:comment"The account to which money flows when the amount is positive.".
+
+q:accordingTo a r:Property; s:label "statement";
+    s:domain q:Transaction; s:range doc:Work;
+    s:comment "The document which is the source of data for this transaction.".
+
+q:SupportingDocument a s:Class;
+    s:label "supporting document";
+    s:subClassOf gen:InformationResource .
+
+q:Receipt  a s:Class;
+    s:label "receipt";
+    s:subClassOf q:SupportingDocument .   
+    
+# Split transactions
+#
+q:splitPart a r:Property;
+    s:label "part";
+    s:domain  q:Transaction, q:SplitTransaction; s:range  q:Transaction;
+    s:comment """A transaction representing a part of this transaction.
+    The sum of the amounts of the parts must equal the amount of this transaction.""".
+
+q:splitReverse a r:Property;
+    s:label "part";
+    s:domain  q:Transaction, q:SplitTransaction; s:range  q:Transaction;
+    s:comment """A reverse transaction, putting this transaction back in the Split account, for redistribution as parts.
+    The amount of the reverse transaction must be the negation of this transaction.""".
+
+q:SplitTransaction a s:Class;
+    s:label "split transaction";
+    s:subClassOf q:Transaction;
+    s:comment "A transaction which has to be split into parts for classification.".
+    
+####### For for the essential metadata about a supporting document
+#
+#
+q:DocumentMetadataForm a ui:Form;
+    dc:title "Basic document metadata";
+    is ui:creationForm of q:SupportingDocument;
+    a ui:Group; ui:part
+        [ ui:sequence 1; a ui:Heading;  ui:contents "Edit Metadata"@en], 
+        [ ui:sequence 2; a ui:SingleLineTextField; ui:property dc:title; ui:size 80 ],
+        [ ui:sequence 3; a ui:Comment;  ui:contents
+        """The date is the date of the document, for example for an invoice or email,
+        or if none available a date of e.g. a described transaction, event etc."""@en; ui:style "background-color: #ffe;"],
+        [ ui:sequence 4; a ui:DateField; ui:property dc:date ],
+        [ ui:sequence 5; a ui:MultiLineTextField; ui:property s:comment ].
+
+
+
+#ENDS

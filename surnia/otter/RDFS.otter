@@ -1,0 +1,129 @@
+% $Id$
+
+% check for internal consistency with something like
+%   mace -P -N 10 -k 768000 < otter/owlAx.otter
+% but it's gotten too big.  :-(
+
+formula_list(usable).
+
+% rdfs1
+
+all xxx aaa lll (
+  rdf(xxx, aaa, lll) &
+  'foo:plainLit'(lll)
+  ->
+  (exists nnn (
+     rdf(xxx, aaa, nnn) &
+     rdf(nnn, rdf_type, rdfs_Literal)
+  ))
+).
+
+% rdfs2
+all aaa xxx yyy zzz (
+   rdf(aaa, rdfs_domain, zzz) &
+   rdf(xxx, aaa, yyy)
+   -> 
+   rdf(xxx, rdf_type, zzz)
+).
+
+% rdfs3
+all aaa xxx uuu zzz (
+   rdf(aaa, rdfs_range, zzz) &
+   rdf(xxx, aaa, uuu)
+   -> 
+   rdf(uuu, rdf_type, zzz)
+).
+
+% rdfs4a
+all aaa xxx yyy (
+   rdf(xxx, aaa, yyy)
+   ->
+   rdf(xxx, rdf_type, rdfs_Resource)
+).
+
+
+% rdfs4b
+all aaa xxx uuu (
+   rdf(xxx, aaa, uuu)
+   ->
+   rdf(uuu, rdf_type, rdfs_Resource)
+).
+
+% rdfs5
+all aaa bbb ccc uuu xxx yyy zzz (
+    rdf(aaa, rdfs_subPropertyOf, bbb) &
+    rdf(bbb, rdfs_subPropertyOf, ccc)
+    -> 
+    rdf(aaa, rdfs_subPropertyOf, ccc)
+).
+
+% rdfs6
+all aaa bbb ccc uuu xxx yyy zzz (
+    rdf(xxx, rdf_type, rdf_Property)
+    ->
+    rdf(xxx, rdfs_subPropertyOf, xxx)
+).
+
+% rdfs7 	
+
+all aaa bbb ccc uuu xxx yyy zzz (
+    rdf(aaa, rdfs_subPropertyOf, bbb) &
+    rdf(xxx, aaa, yyy)
+    -> 
+    rdf(xxx, bbb, yyy)
+).
+
+% rdfs8 	
+
+all aaa bbb ccc uuu xxx yyy zzz (
+    rdf(xxx, rdf_type, rdfs_Class)
+    ->
+    rdf(xxx, rdfs_subClassOf, rdfs_Resource)
+).
+
+% rdfs9 	
+
+all aaa bbb ccc uuu xxx yyy zzz (
+    rdf(xxx, rdfs_subClassOf, yyy) &
+    rdf(aaa, rdf_type, xxx) 
+    ->
+    rdf(aaa, rdf_type, yyy)
+).
+
+% rdfs10 	
+
+all aaa bbb ccc uuu xxx yyy zzz (
+    rdf(xxx, rdf_type, rdfs_Class)
+    ->
+    rdf(xxx, rdfs_subClassOf, xxx)
+).
+
+% rdfs11 	
+
+all aaa bbb ccc uuu xxx yyy zzz (
+    rdf(xxx, rdfs_subClassOf, yyy) &
+    rdf(yyy, rdfs_subClassOf, zzz)
+    ->
+    rdf(xxx, rdfs_subClassOf, zzz)
+).
+
+% rdfs12 	
+
+all aaa bbb ccc uuu xxx yyy zzz (
+    rdf(xxx, rdf_type, rdfs_ContainerMembershipProperty)
+    -> 
+    rdf(xxx, rdfs_subPropertyOf, rdfs_member)
+).
+
+% rdfs13 
+
+all aaa bbb ccc uuu xxx yyy zzz (
+    rdf(xxx, rdf_type, rdfs_Datatype)
+    ->
+    rdf(xxx, rdfs_subClassOf, rdfs_Literal)
+).
+
+% $Log$
+% Revision 1.1  2003-11-07 06:52:30  sandro
+% up to about 70% on RDF Core tests; may have broken OWL stuff
+%

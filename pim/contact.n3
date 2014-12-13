@@ -1,0 +1,236 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+
+<> dc:title "Contact: Utility concepts for everyday life";
+#    ----------------------------------
+dc:description """
+ To illustrate with examples the creation of a schema of RDF properties
+ and classes, but using abstract things for people, rather than strings, etc.
+ If you have an "Assistant's phone number", then really you have an assitant who has
+ a phone number - and that is much more useful in general.
+ For example, when data about you and your assietnt in merged,
+ you will end up with an "assistant's email" and the like.
+""",
+"$Id$". # see changelog at the bottom.
+
+
+@prefix : <http://www.w3.org/2000/10/swap/pim/contact#> .
+@prefix con: <http://www.w3.org/2000/10/swap/pim/contact#> . # Hint
+
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . # type, Property
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix link: <http://www.w3.org/2006/link#>.
+@prefix doc:  <http://www.w3.org/2000/10/swap/pim/doc#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+
+@keywords is, of, a.
+
+<> doc:persistencePolicy [ a :_SubjectToChange;
+   dc:description """If you change this, you have to tell the W3C SemWeb AD
+   folk, including Dan Connolly; so agreed 5 Jun 2001.
+   TimBl takes this as being met by a mail to sw-team.""" ];
+   doc:creator <http://www.w3.org/People/Berners-Lee/card#i>.
+
+doc:persistencePolicy
+	rdfs:seeAlso <http://www.w3.org/1999/10/nsuri>.
+:_SubjectToChange rdfs:label "subject to change". 
+
+
+
+<contact> doc:rules <contact-rules>.
+
+
+
+:SocialEntity a rdfs:Class;
+    rdfs:comment  """The sort of thing which can have a phone number.
+    Typically a person or an incorporated company, or unincorporated group.""".
+
+:Person rdfs:subClassOf :SocialEntity;
+    is rdfs:domain of :personalTitle,
+	:firstName,
+	:middleName,
+	:middleInitial,
+	:familyName, :givenName,   # Added 2007-02, not force first,last or last,first
+	:lastName,
+	:personalSuffix,
+	:title,			# In the organization @ ?wise? 2007-02
+	:organization,         # SocialEntity, was company
+	:departmentName ;
+	rdfs:comment """A person in the normal sense of the word.""".
+
+
+:fullName a rdf:Property; rdfs:label "full name".
+
+:sortName a rdf:Property; rdfs:label "sort name";
+   rdfs:comment "re-arranged for lexicographic ordering; ala Doe, John".
+
+:nearestAirport a rdf:Property; rdfs:label "nearest airport";
+   rdfs:comment """?X nearestAirport ?Y locates ?X in an international
+   context; for example, for the purpose of organizing a face-to-face
+   meeting of a W3C working group. This property is intended to mitigate
+   privacy risks of giving out detailed contact info.""";
+
+  rdfs:seeAlso <http://lists.w3.org/Archives/Public/www-webont-wg/2001Nov/0006.html>,
+	<http://www.w3.org/2001/sw/WebOnt/webont-airports.rdf>,
+	<http://www.perceive.net/pages/page/articles/year/2002/month/12#9>,
+	<http://www.w3.org/2001/sw/Europe/200303/geo/intro.html>,
+	<http://www.w3.org/2001/tag/ilist#httpRange-14>.
+
+:knownAs a rdf:Property;
+	rdfs:label "name";
+    	rdfs:comment """A person may be known as various strings.
+	For example, an email friendly name string.
+	If you have an email from someone using a string as the human-readable phrase,
+	then it is reasonable to assume that there are :knownAs that.""".
+
+:ContactLocation a rdfs:Class;
+    rdfs:label "contact point";
+    rdfs:comment  """A place, or mobile situation, with address, phone number, fax, etc. 
+    Related to a person by home, office, etc.
+    Note one person's workplace may be another person's home.
+    A person may have more than one home and more than one workplace.
+    (In practice it sometimes maybe useful with restriucted datasets to
+    assume that this is not the case, when extracting data from other ontologies
+    with no concept of ContactLocation).  Strongly related to a person: 
+    in some ways a role that a person can be in.""";
+	is rdfs:domain of :phone, :fax.
+
+
+:assistant a rdf:Property;
+    rdfs:label "assistant";
+    rdfs:comment """A person (or other agent) who is an assistant to the subject.""";
+    rdfs:domain foaf:Agent;
+    rdfs:ramge foaf:Agent.
+    
+:participant a rdf:Property;
+    rdfs:label "participant";
+    rdfs:comment """A person (or other agent) who  particpates in an event, meeting, etc.""";
+    rdfs:ramge foaf:Agent.
+    
+    
+:preferredURI a rdf:Property;
+    rdfs:label "preferred";
+    rdfs:comment """A string which is the URI a person, organization, etc, prefers that people use for them.""".
+
+:office a rdf:Property;
+    rdfs:label "work";  # Would have been better :work
+    rdfs:domain :Person; rdfs:range :ContactLocation.
+    
+:home a rdf:Property;
+    rdfs:label "home";
+    rdfs:domain :Person; rdfs:range :ContactLocation.
+
+:vacationHome a rdf:Property;
+    rdfs:label "vacation";
+    rdfs:domain :Person; rdfs:range :ContactLocation.
+
+:mobile a rdf:Property;
+    rdfs:label "mobile";
+    rdfs:domain :Person; rdfs:range :ContactLocation.
+
+:emergency a rdf:Property;
+    rdfs:label "emergency only";
+    rdfs:domain :Person; rdfs:range :ContactLocation.
+
+########## Properties of the ConactLocation
+
+:address a rdf:Property;
+    rdfs:domain :ContactLocation; rdfs:range :Address;
+    rdfs:label "address"@en .
+
+:Address a rdfs:Class;
+    is rdfs:domain of :street, :street2, :street3,
+		:city, :stateOrProvince, :postalCode, :country .
+
+region a rdf:Property;
+    rdfs:label "region";
+    rdfs:comment """The sub-national unit such as state (us),
+province (ca), county (uk), département (fr), and so on""".
+    
+:zip rdfs:subPropertyOf :postalCode.
+
+:Phone a rdfs:Class;
+    rdfs:label "phone"@en, "tel."@fr;
+    rdfs:comment"""
+    An end-point in the public swiitched telephone system.
+    Anything identified by a URI with tel: scheme is in this class.
+    """.
+    
+:Fax rdfs:subClassOf :Phone; rdfs:label "fax".
+:MobilePhone rdfs:subClassOf :Phone; rdfs:label "mobile".
+:Pager rdfs:subClassOf :Phone.
+
+:phone a rdf:Property; rdfs:domain :ContactLocation; rdfs:range :Phone. # Added 2007-02-02
+:fax a rdf:Property ; rdfs:domain :ContactLocation; rdfs:range :Fax.   # 
+
+#  vcard:homePhone   o2:chain (home phone). 
+
+:birthday a rdf:Property; rdfs:domain :SocialEntity; rdfs:range :Date .
+
+# :Data a rdfs:Class.    # See ... ICalendar, etc etc ???
+
+
+:child a rdf:Property .
+# { :x :child :y } log:implies {{ :x a :Person } means { y a :person } }
+
+
+
+:mailbox a owl:InverseFunctionalProperty;
+  rdfs:domain :SocialEntity;
+  rdfs:range :Mailbox;
+  :_example { :_Dan :mailbox <mailto:connolly@w3.org> }.
+
+
+:emailAddress a owl:InverseFunctionalProperty;
+  rdfs:label "email";
+  rdfs:comment "emailAddress is a string.  Use of this is discouraged. Use :mailbox instead ";
+  rdfs:domain :SocialEntity;
+  rdfs:range :_EmailAddress;
+  :_example { :_Dan :emailAddress "connolly@w3.org" }.
+
+# :_EmailAddress rdfs:subClassOf dt:string; dt:pattern "[^@]+@[^@]+". # or something like that. Check RFC822
+
+:mailboxURI a  owl:InverseFunctionalProperty;
+  rdfs:comment "mailboxURI is a string.  Use of this is discouraged. Use :mailbox instead ";
+  rdfs:domain :SocialEntity;
+  rdfs:range :_URI;
+  :_example { :_Dan :mailboxURI "mailto:connolly@w3.org" }.
+
+# move these rules to a transcription of the mailto: URI scheme spec.
+
+:_addressProperty a rdf:Property.
+:mailbox :_addressProperty :mailboxURI.
+
+
+#  { :ent :mailboxURI [ log:equalTo [ is string:concatenation of ( "mailto:" [ :_uriEncode :addr ] ) ] ] } log:implies { :ent :emailAddress :addr }. # only goes one way because we could use PUT to HTTP resources to deliver mail.
+
+
+:Male a rdfs:Class.
+:Female a rdfs:Class.
+
+:motherTongue a rdf:Property; rdfs:domain :Person; rdfs:range :LanguageCode .
+
+:LanguageCode a rdfs:Class. # A ISO langiuage 1 or 2 part string: a  datatype
+			    # IETF RFC____ obsoletes ISO codes (2006)
+			    
+:description a rdf:Property .
+
+:partner a rdf:Property;
+    rdfs:range :Person; rdfs:domain Person.
+
+# Web pages of various kinds
+
+:webPage a rdf:Property;
+    rdfs:label "web page";
+    rdfs:comment "A related web page".   # NOT inverse functional
+
+:publicHomePage rdfs:subPropertyOf :homePage.
+:homePage a owl:InverseFunctionalProperty;
+	    rdfs:subPropertyOf webPage;
+  :_addressProperty :homePageAddress.
+:homePageAddress a  owl:InverseFunctionalProperty;
+    rdfs:comment """Use is discouraged""".
+
+
+##### ends
+

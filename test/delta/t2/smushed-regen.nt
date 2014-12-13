@@ -1,0 +1,41 @@
+    
+    _:aza     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#id> "10-23-45" .
+    
+    _:aza     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#address> _:azaza .
+    
+    _:aza     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#dateOfBirth> "1966--6" .
+    
+    _:aza     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#phoneNumber> "+1 202 555 1212" .
+    
+    _:aza     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#ssn> "123456789" .
+    
+    _:azaza     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountBalance> "-3347.47" .
+    
+    _:azaza     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountBank> _:aza .
+    
+    _:azaza     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountHolder> _:aza .
+    
+    _:azaza     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountNumber> "1234567-0" .
+    
+    _:azaza     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#city> "Anytown" .
+    
+    _:azaza     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#street> "77 Accacia Avenue" .
+    
+    _:azaza     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountBalance> "40000" .
+    
+    _:azaza     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountBank> _:aza .
+    
+    _:azaza     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountHolder> _:aza .
+    
+    _:azaza     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountNumber> "1234567-1" .
+    
+    _:azaza     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountBalance> "3333" .
+    
+    _:azaza     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountBank> _:aza .
+    
+    _:azaza     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountHolder> _:azaza .
+    
+    _:azaza     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountNumber> "555-1212-0" .
+    
+    _:azaza     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#dateOfBirth> "1987-06-05" .
+    

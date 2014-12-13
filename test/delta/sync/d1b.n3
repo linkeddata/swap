@@ -1,0 +1,31 @@
+     @prefix : <#> .
+     @prefix delta: <http://www.w3.org/2004/delta#> .
+     @prefix i: <http://www.w3.org/2002/12/cal/ical#> .
+     @prefix zone: <http://www.w3.org/2002/12/cal/tzd/America/New_York#> .
+    
+     @forAll :_g0,
+                :_g1,
+                :_g2,
+                :_g3 .
+    {
+        <http://www.w3.org/uid/009608A4-6FFB-11D9-B3B2-000A9580D8C0>     i:dtend :_g0 .
+        
+        }     delta:deletion {:_g0     zone:tz "2005-01-23T16:00:00" .
+        } .
+    {
+        <http://www.w3.org/uid/009608A4-6FFB-11D9-B3B2-000A9580D8C0>     i:dtend :_g2 .
+        
+        }     delta:insertion {:_g2     zone:tz "2005-01-23T17:00:00" .
+        } .
+    {
+        <http://www.w3.org/uid/009608A4-6FFB-11D9-B3B2-000A9580D8C0>     i:dtstart :_g1 .
+        
+        }     delta:deletion {:_g1     zone:tz "2005-01-23T15:00:00" .
+        } .
+    {
+        <http://www.w3.org/uid/009608A4-6FFB-11D9-B3B2-000A9580D8C0>     i:dtstart :_g3 .
+        
+        }     delta:insertion {:_g3     zone:tz "2005-01-23T16:00:00" .
+        } .
+    
+

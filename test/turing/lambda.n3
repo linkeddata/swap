@@ -1,0 +1,143 @@
+@keywords a, of, is, has, prefix .
+
+@prefix : <http://yosi.us/lambda#> . 
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix implies: <http://www.w3.org/2000/10/swap/log#implies> .
+
+#
+# The evaluator.
+#   The evaluator is a classic eval-apply loop
+#
+# we need a representation of functions
+# a function is represented as
+# (function <variable> <code> <environment>)
+#
+# an environment is represented as
+# ((<variable> <value>) (<variable> <value>) ... )
+#
+#
+#
+
+#
+# environment bindings
+#
+{(?X ?E) a NeedsFindBinding .
+ ?E rdf:first ?L . # (?X ?B) 
+ ?L rdf:first ?X; rdf:rest ?L2 .
+ ?L2 rdf:first ?B; rdf:rest rdf:nil .
+ ?E rdf:rest ?R .
+}
+=>
+{(?X ?E) bindsThunked ?B .
+ ?B a NeedsUnthunk } .
+
+#case 5
+{(thunk ?A ?E) a NeedsUnthunk}
+=>
+{(?A ?E) a NeedsEval} .
+
+{(thunk ?A ?E) a NeedsUnthunk .
+ (?A ?E) eval ?R .
+}
+=>
+{(thunk ?A ?E) unthunk ?R} .
+
+{(?X ?E) bindsThunked ?B .
+ ?B unthunk ?R .
+}
+=>
+{(?X ?E) binds ?R} .
+
+{(?X ?E) a NeedsFindBinding .
+ ?E rdf:rest ?R .
+}
+=>
+{(?X ?R) a NeedsFindBinding} .
+
+{(?X ?E) a NeedsFindBinding .
+ ?E rdf:rest ?R .
+ (?X ?R) binds ?B .
+}
+=>
+{(?X ?E) binds ?B } .
+#
+# eval
+# every eval is of the form
+# (<expression> <env>) a NeedsEval
+# <expression> is either a 
+# 1.  lambda statement
+# 2.  variable
+# 3.  existing function
+# 4.  application
+
+
+#case 1.
+{((lambda (?X) ?Y) ?E) a NeedsEval .
+}
+=>
+{((lambda (?X) ?Y) ?E) eval (function ?X ?Y ?E) } .
+
+
+#case 2
+{(?X ?E) a NeedsEval}
+=>
+{(?X ?E) a NeedsFindBinding} .
+
+{(?X ?E) a NeedsEval;
+         binds ?R}
+=>
+{(?X ?E) eval ?R } .
+
+#case 3
+{((function ?X ?Y ?E) ?F) a NeedsEval}
+=>
+{((function ?X ?Y ?E) ?F) eval (function ?X ?Y ?E)} .
+
+#case 4
+{((?A ?B) ?E) a NeedsEval}
+=>
+{(?A ?E) a NeedsEval .
+# (?B ?E) a NeedsEval 
+} .
+
+{((?A ?B) ?E) a NeedsEval .
+ (?A ?E) eval ?F .
+# (?B ?E) eval ?X 
+}
+=>
+{(?F (thunk ?B ?E)) a NeedsApply} .
+
+{((?A ?B) ?E) a NeedsEval .
+ (?A ?E) eval ?F .
+# (?B ?E) eval ?X .
+ (?F (thunk ?B ?E)) apply ?R }
+=>
+{((?A ?B) ?E) eval ?R} .
+
+
+#
+# The apply part of the loop
+#  
+#
+{((function ?X ?Y ?E) ?A) a NeedsApply}
+=>
+{(?Y [ rdf:first (?X ?A); rdf:rest ?E]) a NeedsEval } .
+
+{((function ?X ?Y ?E) ?A) a NeedsApply .
+ (?Y [ rdf:first (?X ?A); rdf:rest ?E]) eval ?R }
+=>
+{ ((function ?X ?Y ?E) ?A) apply ?R } .
+
+
+#
+# convienence
+#
+{?X a NeedsRun}
+=>
+{(?X ()) a NeedsEval} .
+
+{?X a NeedsRun .
+ (?X ()) eval ?R } 
+=>
+{?X results ?R } .
+

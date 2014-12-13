@@ -1,0 +1,90 @@
+#  Find and graph all dependencies
+
+@prefix doc: <http://www.w3.org/2000/10/swap/pim/doc.n3#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix rm:    <http://www.w3.org/2001/04/roadmap/vocab#>.   #  @@@@@@@@@@@@@
+@prefix dot: <http://www.w3.org/2001/02pd/gv#>.
+@prefix swws: <http://www.w3.org/2001/04/roadmap/swws#>. # rdf2dot.xsl needs namespace URIs absolutized @@
+@prefix : <http://www.w3.org/2001/04/roadmap/about#>.
+@prefix w:  <http://www.w3.org/2001/04/roadmap/w3c#>.
+
+<> dot:digraph :theGraph.
+
+:theGraph
+#	dot:label "How the diagram was made   http://www.w3.org/2001/04/roadmap/about.svg";
+	dot:rankdir "LR";
+	dot:fontname "Helvetica";
+	dot:fontsize "24".
+
+:theGraph dot:hasNode :icon.
+:icon dot:shape "webimage";
+	dot:label "";   # Don't overprint image
+	dot:shapefile "/Icons/WWW/w3c_home.png";  #@@@ fix so <> can be used.  Use the SVG?
+	dot:URL "http://www.w3.org/".    # Try this
+
+:theGraph dot:hasNode :w3c, :style, :all, :cwm, :rdf, :rdf2dot, :xsl, :dot, :svg. 
+
+:w3c dot:label "w3c.n3";  		dot:color "skyblue1"; dot:style "filled"; dot:shape "box";
+#	dot:fontsize "36";      # works on nodes but not on graph as a whole.
+	dot:URL "w3c.n3";
+	:feeds :cwm.
+
+:style dot:label "style.n3\\n";  	dot:color "skyblue1"; dot:style "filled"; dot:shape "box";
+	dot:URL "style.n3";
+	:feeds :cwm.
+
+:all dot:label "all.n3\\nrules";  	dot:color "skyblue1"; dot:style "filled"; dot:shape "box";
+	dot:URL "all.n3";
+	:feeds :cwm.
+
+:cwm dot:label "cwm.py\\ngeneric\\nprocessor";
+	dot:URL "../../../2000/10/swap/cwm.py";
+	:makes :rdf.
+
+:rdf dot:label "all.rdf";  	dot:color "skyblue1"; dot:style "filled"; dot:shape "box";
+	dot:URL "all.rdf";
+	:feeds :xsl.
+
+:rdf2dot dot:label "rdf2dot.xsl";	dot:color "lightsalmon1"; dot:style "filled"; dot:shape "box";
+	dot:URL "../../02pd/rdf2dot.xsl";
+	:feeds :xsl.
+
+:xsl dot:label "xsl";
+	dot:URL "/Style/XSL/";
+	:makes :dot.
+
+:dot dot:label "all.dot";  	dot:color "mediumorchid1"; dot:style "filled"; dot:shape "box";
+	dot:URL "all.dot";
+	:feeds :gv.
+
+:gv dot:label "Graphviz";
+	dot:URL "http://www.research.att.com/sw/tools/graphviz/";
+	:makes :svg, :png, :gif, :ps.
+
+:svg dot:label "all.svg";  	dot:color "gold1"; dot:style "filled"; dot:shape "box";
+	dot:URL "all.svg".
+
+:png dot:label "all.png";  	dot:color "gold2"; dot:style "filled"; dot:shape "box";
+	dot:URL "all.png".
+
+:gif dot:label "all.gif";  	dot:color "gold3"; dot:style "filled"; dot:shape "box";
+	dot:URL "all.gif".
+
+:ps dot:label "all.ps";  	dot:color "gold4"; dot:style "filled"; dot:shape "box";
+	dot:URL "all.ps".
+
+:feeds a dot:EdgeProperty.
+
+:makes a dot:EdgeProperty; dot:color "red"; dot:style "bold".
+
+
+
+
+this log:forAll :n1, :n2, :p, :s.
+
+{ :n1 :feeds :n2 } log:implies { :theGraph dot:hasNode :n1, :n2 }.
+
+{ :n1 :makes :n2 } log:implies { :theGraph dot:hasNode :n1, :n2 }.
+
+
+# end

@@ -1,0 +1,17 @@
+%
+%   Does it work even with reaching a nil or anything...?!
+%
+
+set(auto).
+include('util/owlAx-card.otter').
+formula_list(usable).
+
+inList(a, list).
+inList(b, list).
+inList(c, list).
+inList(d, list).
+cardinality(list, two).
+
+-rdf(a, owl_sameAs, b).
+-rdf(a, owl_sameAs, c).
+

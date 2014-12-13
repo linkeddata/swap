@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head profile="http://www.w3.org/2003/g/data-view">
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+  <title>Cwm enhancement roadmap</title>
+  <meta name="generator" content="amaya 9.4, see http://www.w3.org/Amaya/" />
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <link rel="transformation"
+  href="http://www.w3.org/2002/12/cal/glean-hcal.xsl" />
+</head>
+
+<body>
+
+<div class="noprint">
+<p><a href="/">W3C</a> | <a href="/2001/sw/Overview.html">Semantic Web</a> |
+<a href="/2000/01/sw/Overview.html">Advanced Development</a> | <a
+href="/2000/10/swap/">SWAP</a> | <a href="cwm.html">Cwm</a></p>
+</div>
+
+<h1><a href="../../../../DesignIssues/Notation3.html"><img alt="n3"
+style="float: right;" src="../../../../RDF/icons/n3_small" /></a> <a
+href="cwm">Cwm</a> Development Agenda and Release Roadmap</h1>
+
+<p>See also:</p>
+<ul>
+  <li><a href="changes.html">Changes already made</a>. Things move from this
+    page to that.</li>
+  <li><a href="../admin/bugStatus.html">Outstanding bugs.</a> Bugs (and some
+    small requests for enhancement) are tracked in RDF, and available as a
+    TODO list in an online calendar.</li>
+  <li><a href="http://projects.semwebcentral.org/projects/cwm/">semwebcentral
+    project entry</a></li>
+</ul>
+
+<div><h2 id="dec2006">PAW Dec 2006 work</h2>
+<p>idea: work on bugs like
+
+<a href="http://lists.w3.org/Archives/Public/public-cwm-bugs/2006Sep/0000.html">log:includes { _:x p _:x} isn't working</a> with DanK.</p>
+
+<h3>Goals:</h3>
+  <ul>
+    <li>General Software Engineering
+    <ul>
+      <li>installation stuff; making PYTHONPATH not needed. goals: from cvs checkout *and* from tar.gz, python setup.py</li>
+
+      <li>resource leak found in PAW demo (@@public record of bug?) DanK, pls report to public-cwm-bugs</li>
+      <li>replace diag.py with python logging stuff</li>
+      <li>stamp out premature optimization: interning, canonicalization</li>
+    </ul>
+    </li>
+    <li>python RDF API (to share with rdflib, 4suite?
+    <ul>
+      <li>get rid of global store in myStore</li>
+    </ul>
+    </li>
+    <li>rules/proof layer stuff
+    <ul>
+      <li>explore the unify() routine in Jos's 85 line Euler.js</li>
+      <li>explore Jos's euler.py? port backward-chainer to swap/cwm?</li>
+  </ul>
+  </li>  <!-- there's no nxml-mode for subethaedit, is there? -->
+  <!-- how about cvs/hg integration? -->
+</ul>
+
+</div>
+
+<div>
+<h2 id="weekly">Weekly Meeting Agenda</h2>
+
+<p>In connection with the <a href="http://www.policyawareweb.org/">PAW
+project</a>, we have <span id="ev442" class="vevent"><span
+class="description"><b class="summary">paw/cwm dev meetings</b> starting
+<abbr class="dtstart" title="2006-03-09T11:00:00-0400">9 Mar at
+11:00ET</abbr> for 90 mins and <span class="rrule">every <span
+class="interval">2</span>nd <abbr title="WEEKLY" class="freq">week</abbr> on
+<abbr class="byday" title="WE">Thursday</abbr> thereafter until further
+notice. </span></span></span>.</p>
+
+<!--
+repeat doesn't quite work right.
+ em><a href="http://suda.co.uk/projects/X2V/get-vcal.php?uri=http://www.w3.org/2000/10/swap/doc/plans.html">iCal</a></em-->
+
+<p>Meetings were held <a
+href="http://www.policyawareweb.org/2005/pf-dev/08-31-paw-minutes">31
+Aug</a>, <a
+href="http://www.policyawareweb.org/2005/pf-dev/09-14-paw-minutes.html">15
+september</a>, <a
+href="http://www.policyawareweb.org/2005/pf-dev/09-28-paw-minutes.html">28
+September</a>, <a
+href="http://www.policyawareweb.org/2005/pf-dev/10-12-paw-minutes.html">12
+Oct</a>, and <a
+href="http://www.policyawareweb.org/2005/pf-dev/10-26-paw-minutes.html">26
+Oct</a>, and <a
+href="http://www.policyawareweb.org/2005/ftf2/10-28-paw-minutes.html">28 Oct
+(all paw-team meeting)</a>, 4 Nov (no records), <a
+href="http://www.policyawareweb.org/2005/pf-dev/11-23-paw-minutes.html">23
+Nov</a>.. 7 Dec, 21 Dec, 2006 Jan 4, <a
+href="http://www.policyawareweb.org/2006/PAWf2fJan2006.html">Jan 19</a>, 1
+Feb (IRC only), <a
+href="http://www.policyawareweb.org/2005/pf-dev/02-15-paw-minutes">15
+Feb</a>,
+<a href="http://www.policyawareweb.org/2005/pf-dev/03-09-paw-minutes">9 March</a>,
+<a href="http://www.policyawareweb.org/2005/pf-dev/03-23-paw-minutes">23 March</a>, and 6 Apr meeting. The 20 Apr meeting was cancelled.</p>
+<ol>
+  <li>Convene, take roll, review records and agenda.
+    <ul>
+      <li>Meeting coordinates: <a href="irc://irc.freenode.net/paw">#paw on
+        irc.freenode.net</a> Dial in <a
+        href="tel:+1-617-761-6200;postdial=79296">+1-617-761-6200 Code 79296
+        ("SW CWM")</a>.</li>
+      <li>Round the table updates <em>(a sort of roll call and agenda
+        review)</em> expected: Yarden aka Jordan (?), Vlad, Eikeon aka Dan K. 
+	DanC, TimBL, Yosi</li>
+	<li class="vtodo">misc action: <strong class="summary">Eikeon
+	to ask Ron to copy TimBL's keys across from the pychinko space
+	to the policyawareweb.org space</strong></li>
+    </ul>
+  </li>
+  <li>Vlad's progress integrating pychinko and cwm
+    <p>much progress has been made on built-ins in pychinko. functions seem
+    to work as well as relational ops as of ~Sep. log:includes progress?
+    log:semantics? formulas as 1st-class objects?</p>
+    <p>15 Feb Conclusion: The TAR file will have the whole source tree in,
+    with swap/<a href="http://svn.mindswap.org/pychinko/">pychinko</a>... but
+    the CVS won't. Aim for: --pythink ? -or --rete or -run. release with a
+    few tests and explanation of when to use --rete vs --think.</p>
+
+    <p class="vtodo"><strong class="summary">ACTION: Vlad to Send mail
+    to public-cwm-announce@w3.org about the inclusion of the rete as
+    an alpha test, test users welcome</strong>. <em>Vlad sent the
+    relevant mail message, but it seems to be stuck in a moderation
+    queue as of 7 Apr</em></p>
+
+  </li>
+  <li>PAW demo item? How is it going? Debugging cwm --why and proof checking.
+    Diag.tracking.
+
+    <p>Tim and Vlad talked about cwm proofs.  On 26 Apr, Vlad reported
+    reducing the size of the generated proof from 355KB to
+    54KB:</p>
+
+    <blockquote>
+      This is the command I ran to generate the proof:
+      <pre>
+      cwm.py <a href="http://www.policyawareweb.org/2006/lean/troop42-policy.n3">http://www.policyawareweb.org/2006/lean/troop42-policy.n3</a>
+<a href="http://www.policyawareweb.org/2006/lean/bengine.n3">http://www.policyawareweb.org/2006/lean/bengine.n3</a> --think 
+--filter="<a href="http://www.policyawareweb.org/2006/lean/bfilter.n3">http://www.policyawareweb.org/2006/lean/bfilter.n3</a>" --why >
+proof.n3
+      </pre>
+      <p>To check the proof I tried:</p>
+      <pre>
+	check.py proof.n3
+      </pre>
+
+      <p>The proof and the "lean" REIN files are available in the SVN:
+      svn+ssh://mindswap.org/home/svn/paw/www/2006/lean
+      </p>
+    </blockquote>
+
+    <p>Perhaps that addresses the "Indexing for speed in a world of
+    nested formaule with variables" performance issues?</p>
+
+    <p>Yosi implemented log:supports, though Dan sent a <a
+    href="http://lists.w3.org/Archives/Public/public-cwm-talk/2006AprJun/0003.html">can't
+    reproduce log:supports results</a> message 26 Apr. Is somebody
+    working on using log:supports rather than
+    log:conclusion/log:includes in the REIN engine? Lalana?</p>
+
+    <p class="vtodo"><strong class="summary">ACTION TimBL: To think
+    about phasing out statement[CONTEXT]</strong>.  (Tim: Upgraded the
+    javascript API.)</p>
+    
+    <p>See also: <a
+    href="http://www.policyawareweb.org/2005/demo/pfproxy.py">pfproxy.py</a>,
+    <a href="http://www.policyawareweb.org/2005site/dev.html">PAW dev SVN
+    info</a></p>
+
+    <p>older test case: DanC ran it at the face-face meeting.:</p>
+    <pre>cwm --rdf http://dig.csail.mit.edu/2005/09/rein/examples/judy-req.rdf --n3 http://dig.csail.mit.edu/2005/09/rein/engine.n3 --think --filter="http://dig.csail.mit.edu/2005/09/rein/filter.n3" --why</pre>
+    <p>TBL checked in minimally-working code in the 26 Oct 2005 meeting.</p>
+  </li>
+  <li>
+    cwm systems paper
+    <ul>
+      <li class="vtodo"><strong class="summary">ACTION: Vlad to submit cwm
+        systems paper to <a href="http://www.dsi.unive.it/~tplp/">Journal of
+        Theory and Practice of Logic Programming (TPLP) special issue on
+        Logic Programming and the Web</a></strong>
+	Progress: see <cite><a href="paper/">A Reasoner for the
+	Web</a></cite>, in progress.
+      </li>
+    </ul>
+  </li>
+  <li>N3 semantics.
+    <ul>
+      <li><strong class="summary">ACTION: LK to submit N3 semantics
+      paper to <a href="http://www.dsi.unive.it/~tplp/">Journal of
+      Theory and Practice of Logic Programming (TPLP) special issue on
+      Logic Programming and the Web</a></strong> In progress; see
+      <cite><a
+      href="http://dig.csail.mit.edu/2006/Papers/TPLP/n3logic-tplp">A
+      Logic For the Web [DRAFT]</a></cite>
+      </li>
+    </ul>
+  </li>
+  <li>N3 changes and n3.n3
+    <p>Unicode problems in reg exps using predictiveParser.</p>
+    <p>N3 decimal - any reasons why not move 1.0 in N3, turtle and sparql to
+    xsd:decimal? Also, true and false keywords.</p>
+    <p class="vtodo"><strong class="summary">ACTION TimBL/Yosi. Change n3.n3
+    to include @true, @false, and separate type for decimal, and make sure
+    output format of those is right - must preserve type. And make
+    tests.</strong></p>
+    <p>update 10 Feb: <a
+    href="http://dig.csail.mit.edu/breadcrumbs/node/85">bnf2turtle -- write a
+    turtle version of an EBNF grammar</a></p>
+    <p>Issue: BNF in html won't build. </p>
+    <p>Report: Nottaion3 spec has changed.</p>
+  </li>
+  <li>Common RDF API. (was: clean-up priorities)
+    <ul>
+      <li class="vtodo"><strong class="summary">ACTION: DanC to work with
+        timbl to separate operators from term.py, look at other class
+        organization</strong></li>
+      <li class="vtodo"><strong class="summary">ACTION: DanC to kill
+        sumOf</strong></li>
+    </ul>
+    <p>Experience with AJAR/<a href="/2005/ajar/tab">Tabulator</a> stuff
+    suggests compromise of (subject, predicate, object, why) why why is used
+    for provenence filtering and SPARQL source.</p>
+    <p>Earlier, we discussed a very clean common class structure for the
+    basic N3 language elements. Arrive at common class tree for that. The
+    [new] fact that pychinko seems to be happy using cwm classes now suggest
+    that there is a clean break here and cooperation will be easy.</p>
+    <p>Wiki page on <a
+    href="http://esw.w3.org/topic/WebDataInterfaceDesign">WebDataInterface
+    design</a></p>
+  </li>
+  <li>the N3 abstract syntax interface to parsers and serializers.
+    <p class="vtodo"><strong class="summary">ACTION TimBL: Add
+    formulaFromN3String formulaFromRDFXMLString() methods to
+    store.</strong></p>
+    <p>Possible to preserve similarity between parser and unparser interface
+    to allow straight-through data merge at speed?</p>
+    <p>aka: on arch of rdflib doing N3 formulae (Eikeon)</p>
+  </li>
+  <li>Common test suites -- manifests of manifests?
+    <p>getting rdflib to pass the N3 parsing tests</p>
+  </li>
+  <li>Nary operations and built-ins
+    <p>@@ links to Nary Note and Rules charter. <a
+    href="http://esw.w3.org/topic/NaryRelations">NaryRelations in ESW
+    wiki</a></p>
+  </li>
+</ol>
+
+<p>p.s. The <b>cwm/Inferenceweb integration</b> item has moved to the
+TAMI agenda. Some technical discussion is in the inferenceweb archive;
+see <a
+href="http://projects.semwebcentral.org/pipermail/inferenceweb/2006-March/000004.html">Thu
+Mar 23 discussion</a>, for example</p>
+
+</div>
+<hr />
+
+<h2 id="Release">by Release 1.1 2005/11/?? (Requires Python 2.3)</h2>
+
+<p>This contains performance work which would have been been in 0.9 except
+for unexpected medical situation. This will use Python sets where appropriate
+(instead of homebrew sets or sequences) and will therefore <strong>require
+python 2.3.</strong></p>
+
+<p><strong>Release candidate rc1 was made 2005/08</strong></p>
+<ul>
+  <li>done with cwm.py 1.180: Need for deep unification in nested formulae.
+    This was a point where proof checking of a more complex scario broke
+    down: the proof used different variable names in rules, and cwm doesn't
+    match nested fromulae with different variable names. Formula
+    canonicalization;</li>
+  <li>RDFlib fork joined with pychinko. Mindswap and rdflib sites are
+    cross-linked, right?</li>
+</ul>
+
+<p>CVS version 2005-10-24:</p>
+<ul>
+  <li>--why works with a greater variety of files, see
+    test/reason/detailed.tests. Beacuse proofs don't handle bnodes, the
+    --n3=B option is used with proofs.</li>
+  <li>--n3=B flag allows blank nnodes to be explicitly named on input</li>
+</ul>
+
+<p>To do:</p>
+<ul>
+  <li>Distribution mechanisms
+    <ul>
+      <li>dpkg debian packaging Done once setup.py -&gt; RPM -alien-&gt;
+        debian.</li>
+    </ul>
+  </li>
+  <li>Speed benchmark</li>
+  <li>allow alternative parsers; in particular,
+    <ul>
+      <li>redland (<a
+        href="http://lists.w3.org/Archives/Public/public-cwm-bugs/2004Jun/0011.html">RFE</a>)</li>
+    </ul>
+  </li>
+  <li>Add crypto testing to regression tests.  This will require developers
+    to have <a href="http://www.amk.ca/python/code/crypto">pycrypto</a>
+    installed.</li>
+  <li>Fix bugs in unification</li>
+</ul>
+
+<h2>Longer Term</h2>
+
+<p>There is no timescale for these enhahcements, as they are not subject to
+existing funded development or volunteer commitment. Bother are of course
+welcome at any time!</p>
+
+<p></p>
+
+<p>Code Cleanup</p>
+
+<p>Philosophy: To be able to integrate with other projects such as redfoot,
+pychinko, redland, etc, make the base classes for N3 terms as light as
+possible.  Move functionality such as indexing for query, parsing, pretty
+printing, serializing, etc into separate modules.</p>
+<ul>
+  <li>cut all code to 80 column</li>
+  <li>make API tests, including very simple API for user wanting to use just
+    RDF level.</li>
+  <li>clean up serialier/output notation interface renaming functions and
+    adding start/end list and set</li>
+  <li>n3xml namespace?</li>
+  <li> make new ultrlight term class structure</li>
+  <li>tetss for other programs like toIcal, </li>
+  <li>Make regression test manifest format less fussy about directory in
+    which test is run or make it run in the same directory as the file
+  etc</li>
+  <li>List other apps on home page</li>
+  <li>Clean interface to indexed formula so that different versions with
+    different indexing can be used</li>
+  <li>Abstract interface to stored formula so that persistent store can be
+    used (rdlib, 3store, etc)</li>
+  <li>Reification: write it up - in tutorial and some reference form
+    (ontology comments? DesignIssues? )</li>
+  <li>N3 formal grammar (<a
+    href="http://lists.w3.org/Archives/Public/public-cwm-bugs/2004Jun/0015.html">RFE
+    10 Jul</a>) Not included in test as of 2004-11-10.
+    <ul>
+      <li>20041105: predictiveParser.py does all the positive parser tests
+        yosi has come up with. . The tests are only run pre-release (to check
+        consistency of tests and grammar) not in post release. <em>TODO:
+        Include the grammar code in the tarball. Negative test generation and
+        inclusion of Turtle negative tests wait for 1.1</em></li>
+    </ul>
+  </li>
+  <li>RDF/XML generation does not use collection syntax still.</li>
+</ul>
+
+<h3>Performance</h3>
+
+<p>Performance: Make test/perform test suite with standard tests so as to
+plot perfromance changes version to version.</p>
+
+<p>Develop specific benchmarks for specific problems, such as pipelineable
+cases, large store/small rules, large rules/small data, etc.. Include
+feedback from users to characterize different types of way in whic cwm is
+used.</p>
+
+<h3>Clones</h3>
+
+<p>Cwm demonstrates the power of a particular langauge and a particular
+general-purpose tool. Encourage and liaise with compatible systems, and share
+test data. Work to define subsets of the rule langauges which work with
+different types of engine.</p>
+<ul>
+  <li>Rete rule-based system</li>
+  <li>Backward-chaining systems, eg Euler.</li>
+  <li>Compiled systems</li>
+</ul>
+
+<h3>Syntax</h3>
+
+<p></p>
+
+<p>N3 grammar close the loop: Connect N3 grammar to syntax tests by
+generating parser directly from the grammar. . Closing the loop on the
+syntax. We have a definition of the N3 syntax in N3. This is only a form of
+documentation until we have automatically generated a parser and/or a test
+suite from that syntax definition. A straightforward job - We have a syntax
+validator based on the BNF in RDF already. The interesting bit is the
+ontology for annotating the BNF grammar with RDF production rules, because it
+could then be reused to annotating foreign and legacy grammars to enable
+automatic extraction of RDF from them. (Apart from the niceness of having
+something defined it itself of course.) (<em>July 2004 this is done without
+the grammar annotation necessary to actually generate triples in the
+store</em>)</p>
+
+<p>RDF Output - Use Collections for lists.</p>
+
+<p>N3 syntax - test set syntax (,) (&lt;a&gt;,) (&lt;a&gt;, &lt;b&gt;)</p>
+
+<p>Extended RDF output syntax for formulae (how? have RDF Core locked
+<em>all</em> the exits? Prevents RDF2 not superset of RDF/XML1)</p>
+
+<h3>Query/Inference</h3>
+
+<p></p>
+
+<p>Built-ins for lists. in (needs muli value function, below); append,
+prepend, second..seventh, last, concat.</p>
+
+<p>Sets, plus builtins, see syntax in N3. Information is lost, and
+optimizations are lost, when sets are actually represented as ordered lists
+because that is the only syntax easy to use in RDF. owl:oneOf provides the
+constructor for sets.</p>
+
+<p>Build cwm on python sets, requiring python 2.3, to gain speed.</p>
+
+<p>Builtins extracting closed world data: s=Q(F, y, G) is set of x such that
+formula F.substite((y, x)) log:includes G.</p>
+
+<p>Symbols used as variables as separate python class - save some time
+checking occurrences</p>
+
+<p>Paramodulation - smushing built into store. Reuse redirection used for
+lists?</p>
+
+<p>Builtin operations:</p>
+<ul>
+  <li>Return many bindings from builtin eg list:in, os:argv</li>
+  <li>Fairly complete XQ functions and operators implementations (use same
+    URIs?)</li>
+  <li>Extract datatype, language and string from a literal.</li>
+</ul>
+
+<p>Remove all vestiges of the old pair represetation of symbols.</p>
+
+<p>Implement backward chainer (like Euler) on the same store. Allow forward
+and backward chainers to interact, share built-ins.</p>
+
+<h3>Store</h3>
+
+<p>Implement versions of the store based on Redland, Jena, etc.</p>
+
+<p>Implement rete method. Rules with state as objects. <em>&lt;= student
+project?</em></p>
+
+<p></p>
+
+<h3>Net</h3>
+
+<p>Implement <strong>persistent cache</strong> - make an ontology (based very
+stongly on HTTP headers) for recording the results of an HTTP (etc) get.
+Store metadata about fetched ontologies. Build an index into the persistent
+cache for offline working.</p>
+
+<p>Functions: find the closure of these documents under eg --closure=ptr and
+make sure than they are all in my persistent cache. Allow environment
+variable to specify persistent cache mode (default: ontologies only, write to
+cache when online and expiry check fails, read from cache when offline).
+Provide pcache.urlopen() as a transparent extension of urlopen()</p>
+
+<p>Persistent Cache management and software installation become the same
+thing.</p>
+
+<p></p>
+
+<h3>Remote Operation</h3>
+
+<p></p>
+
+<p>Support DAWG remote query protocol as client, as currently done using
+SQL.</p>
+
+<p>DAWG server.</p>
+
+<p>Variations of DAWG using N3 where DAWG is not exactly N3.</p>
+
+<p>IRC bot (sWBot) -- Your friendly N3-happy robotic chat room companion. See
+sandbox security below.</p>
+
+<p></p>
+
+<h3>Security</h3>
+
+<p>Sandboxed version of cwm, which is immune to attacks from rules in data,
+builtin functions in untrusted rules, confientiality violations by indirect
+web access, and so on. While you can build a secure trusted system without
+needing a sandbox at all (it isn't really the way to build one) sandboxing is
+handy for things like demo servers and IRC bots.</p>
+
+<p></p>
+
+<p></p>
+
+<div class="noprint">
+<hr />
+
+<p>$Id$</p>
+</div>
+</body>
+</html>

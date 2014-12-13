@@ -1,0 +1,24 @@
+     @prefix : <foo#> .
+    
+     @forAll :x,
+                :y,
+                :z .
+    
+    :grass     :color :blue;
+         :is :relaxing;
+         :sounds :quiet .
+    
+    :sky     :color :blue;
+         :is :relaxing;
+         :sounds :quiet .
+    {
+        :x     :color :blue .
+        
+        }     => {:x     :is :relaxing .
+        } .
+    {
+        :x     :sounds :quiet .
+        
+        }     => {:x     :is :relaxing .
+        } .
+    

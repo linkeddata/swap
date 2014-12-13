@@ -1,0 +1,1 @@
+CLASSPATH="/devel/rhino/rhino1_6R5/js.jar" java org.mozilla.javascript.tools.shell.Main ../pyjs/testn3.js %s

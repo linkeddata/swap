@@ -1,0 +1,17 @@
+     @prefix : <foo.n3#> .
+    @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+    
+     @forAll :x .
+    
+    :test_param_1     :is "TEST_VALUE_1" .
+    {
+        "TEST_PARAMETER_1"     os:environ :x .
+        
+        }     => {:test_param_1     :is :x .
+        } .
+    {
+        "THIS_gotta_BE_undefined"     os:environ :x .
+        
+        }     => {:test2     a :FAILURE .
+        } .
+    

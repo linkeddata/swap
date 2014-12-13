@@ -1,0 +1,7 @@
+set(auto).
+clear(control_memory).
+include('util/owlAx-equivProp.otter').
+formula_list(usable).
+exists s (exists t ((((((((((((((((rdf(ns6_p, rdf_type, owl_ObjectProperty) & rdf(ns6_p, rdfs_domain, ns6_d)) & rdf(ns6_q, rdf_type, owl_ObjectProperty)) & rdf(ns6_q, rdfs_domain, ns6_d)) & rdf(ns6_q, rdf_type, owl_FunctionalProperty)) & rdf(ns6_p, rdf_type, owl_FunctionalProperty)) & rdf(ns6_v, rdf_type, owl_Thing)) & rdf(ns6_d, rdf_type, owl_Class)) & rdf(t, rdf_type, owl_Restriction)) & rdf(t, owl_onProperty, ns6_p)) & rdf(t, owl_hasValue, ns6_v)) & rdf(ns6_d, owl_equivalentClass, t)) & rdf(s, rdf_type, owl_Restriction)) & rdf(s, owl_onProperty, ns6_q)) & rdf(s, owl_hasValue, ns6_v)) & rdf(ns6_d, owl_equivalentClass, s)) &  -((rdf(ns6_p, rdf_type, owl_ObjectProperty) & rdf(ns6_q, rdf_type, owl_ObjectProperty)) & rdf(ns6_p, owl_equivalentProperty, ns6_q)))).
+
+end_of_list.

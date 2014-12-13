@@ -1,0 +1,190 @@
+<rdf:RDF
+  xmlns:rdf ="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xmlns:daml="http://www.daml.org/2000/12/daml+oil#"
+  xmlns     ="http://www.daml.org/2000/12/daml+oil-ex#"
+>
+
+<daml:Ontology rdf:about="">
+  <daml:versionInfo>$Id$</daml:versionInfo>
+  <rdfs:comment>An example ontology</rdfs:comment>
+  <daml:imports rdf:resource="http://www.daml.org/2000/12/daml+oil"/>
+</daml:Ontology>
+
+<rdfs:Class rdf:ID="Animal">
+  <rdfs:label>Animal</rdfs:label>
+  <rdfs:comment>
+    This class of animals is illustrative of a number of ontological idioms.
+  </rdfs:comment>
+</rdfs:Class>
+
+<rdfs:Class rdf:ID="Male">
+  <rdfs:subClassOf rdf:resource="#Animal"/>
+</rdfs:Class>
+
+<rdfs:Class rdf:ID="Female">
+  <rdfs:subClassOf rdf:resource="#Animal"/>
+  <daml:disjointWith rdf:resource="#Male"/>
+</rdfs:Class>
+
+<rdfs:Class rdf:ID="Man">
+  <rdfs:subClassOf rdf:resource="#Person"/>
+  <rdfs:subClassOf rdf:resource="#Male"/>
+</rdfs:Class>
+
+<rdfs:Class rdf:ID="Woman">
+  <rdfs:subClassOf rdf:resource="#Person"/>
+  <rdfs:subClassOf rdf:resource="#Female"/>
+</rdfs:Class>
+
+<rdf:Property rdf:ID="hasParent">
+  <rdfs:domain rdf:resource="#Animal"/>
+  <rdfs:range rdf:resource="#Animal"/>
+</rdf:Property>
+
+<rdf:Property rdf:ID="hasFather">
+  <rdfs:subPropertyOf rdf:resource="#hasParent"/>
+  <rdfs:range rdf:resource="#Male"/>
+</rdf:Property>
+
+<rdfs:Class rdf:ID="Person">
+  <rdfs:subClassOf rdf:resource="#Animal"/>
+  <rdfs:subClassOf>
+    <daml:Restriction>
+      <daml:onProperty rdf:resource="#hasParent"/>
+      <daml:toClass rdf:resource="#Person"/>
+    </daml:Restriction>
+  </rdfs:subClassOf>
+  <rdfs:subClassOf>
+    <daml:Restriction daml:cardinality="1">
+      <daml:onProperty rdf:resource="#hasFather"/>
+    </daml:Restriction>
+  </rdfs:subClassOf>
+</rdfs:Class>
+
+<rdfs:Class rdf:about="#Animal">
+  <rdfs:comment>
+    Animals have exactly two parents, ie:
+    If x is an animal, then it has exactly 2 parents 
+    (but it is NOT the case that anything that has 2 parents is an animal).
+  </rdfs:comment>
+  <rdfs:subClassOf>
+    <daml:Restriction daml:cardinality="2">
+      <daml:onProperty rdf:resource="#hasParent"/>
+    </daml:Restriction>
+  </rdfs:subClassOf>
+</rdfs:Class>
+
+<rdfs:Class rdf:about="#Person">
+  <rdfs:subClassOf>
+    <daml:Restriction daml:maxcardinality="1">
+      <daml:onProperty rdf:resource="#hasSpouse"/>
+    </daml:Restriction>
+  </rdfs:subClassOf>
+</rdfs:Class>
+
+<rdfs:Class rdf:about="#Person">
+  <rdfs:subClassOf>
+    <daml:Restriction daml:maxcardinalityQ="1">
+      <daml:onProperty rdf:resource="#hasOccupation"/>
+      <daml:hasClassQ rdf:resource="#FullTimeOccupation"/>
+    </daml:Restriction>
+  </rdfs:subClassOf>
+</rdfs:Class>
+
+<daml:UniqueProperty rdf:ID="hasMother">
+  <rdfs:subPropertyOf rdf:resource="#hasParent"/>
+  <rdfs:range rdf:resource="#Female"/>
+</daml:UniqueProperty>
+
+<rdf:Property rdf:ID="hasChild">
+  <daml:inverseOf rdf:resource="#hasParent"/>
+</rdf:Property>
+
+<daml:TransitiveProperty rdf:ID="hasAncestor">
+  <rdfs:label>hasAncestor</rdfs:label>
+</daml:TransitiveProperty>
+
+<daml:TransitiveProperty rdf:ID="descendant"/>
+
+<rdf:Property rdf:ID="hasMom">
+  <daml:samePropertyAs rdf:resource="#hasMother"/>
+</rdf:Property>
+
+<rdfs:Class rdf:ID="Car">
+  <rdfs:comment>no car is a person</rdfs:comment>
+  <rdfs:subClassOf>
+    <rdfs:Class>
+      <daml:complementOf rdf:resource="#Person"/>
+    </rdfs:Class>
+  </rdfs:subClassOf>
+</rdfs:Class>
+
+<!-- @@CAVEAT: daml:collection is an extension of RDF 1.0 syntax;
+     don't expect existing tools to support it. 
+     See http://www.daml.org/2000/12/reference.html#collection for details.
+-->
+
+<daml:Disjoint rdf:parseType="daml:collection">
+  <rdfs:Class rdf:about="#Car"/>
+  <rdfs:Class rdf:about="#Person"/>
+  <rdfs:Class rdf:about="#Plant"/>
+</daml:Disjoint>
+
+<rdfs:Class rdf:about="#Person">
+  <rdfs:comment>every person is a man or a woman</rdfs:comment>
+  <daml:disjointUnionOf rdf:parseType="daml:collection">
+    <rdfs:Class rdf:about="#Man"/>
+    <rdfs:Class rdf:about="#Woman"/>
+  </daml:disjointUnionOf>
+</rdfs:Class>
+
+<rdfs:Class rdf:ID="TallMan">
+  <daml:intersectionOf rdf:parseType="daml:collection">
+    <rdfs:Class rdf:about="#TallThing"/>
+    <rdfs:Class rdf:about="#Man"/>
+  </daml:intersectionOf>
+</rdfs:Class>
+
+<rdfs:Class rdf:ID="MarriedPerson">
+  <daml:intersectionOf rdf:parseType="daml:collection">
+    <rdfs:Class rdf:about="#Person"/>
+    <daml:Restriction daml:cardinality="1">
+      <daml:onProperty rdf:resource="#hasSpouse"/>
+    </daml:Restriction>
+  </daml:intersectionOf>
+</rdfs:Class>
+
+<rdfs:Class rdf:ID="HumanBeing">
+  <daml:sameClassAs rdf:resource="#Person"/>
+</rdfs:Class>
+
+<Person rdf:ID="Adam">
+  <rdfs:label>Adam</rdfs:label>
+  <rdfs:comment>Adam is a person.</rdfs:comment>
+</Person>
+
+<rdf:Property rdf:ID="hasHeight">
+  <rdfs:range rdf:resource="#Height"/>
+</rdf:Property>
+
+<rdfs:Class rdf:ID="Height">
+  <daml:oneOf rdf:parseType="daml:collection">
+    <Height rdf:ID="short"/>
+    <Height rdf:ID="medium"/>
+    <Height rdf:ID="tall"/>
+  </daml:oneOf>
+</rdfs:Class>
+
+<!-- TallThing is EXACTLY the class of things whose hasHeight is tall -->
+
+<rdfs:Class rdf:ID="TallThing">
+  <daml:sameClassAs>
+    <daml:Restriction>
+      <daml:onProperty rdf:resource="#hasHeight"/>
+      <daml:hasValue rdf:resource="#tall"/>
+    </daml:Restriction>
+  </daml:sameClassAs>
+</rdfs:Class>
+
+</rdf:RDF>

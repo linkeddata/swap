@@ -1,0 +1,12 @@
+     @prefix : <#> .
+     @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+    
+      [      :script "\u3072\u3089\u304C\u306A";
+             s:label "Martin J D\u00FCrst" ].
+    
+      [      :related :ひらがな;
+             s:label "A test with a non-ascii qname" ].
+    
+      [      :related :Dürst;
+             s:label "A test with a non-ascii fragid" ].
+    

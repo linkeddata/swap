@@ -1,0 +1,36 @@
+# Just a test of a problem in outputting a particular combination of nodes.
+
+
+# Failure was in dpo tests:
+#
+#    :Ax033     =  (
+#        :PropertyValue 
+#        :subClassOf 
+#        :ConstraintResource 
+#        :Resource  );
+#         a ko:Axiom;
+#         <convert.n3#inN3>  [
+#             a log:Truth .                 # woops! can't have . in [] except at end
+#        :Ax033     <convert.n3#inN3> {:ConstraintResource     :subClassOf :Resource .
+#            } ] .
+
+# Here is a simple example of something which is context, subject, and object:
+ 
+@prefix : <#> .
+{ :sky :color :blue } is :inN3 of :Ax033; a :Truth .
+
+# Incorrect answer:
+#  :Ax033     :inN3  [
+#           a :Truth .
+#      :Ax033     :inN3 {:sky :color :blue
+#          } ] .
+#
+#  Answer after a fix -- partially satisfactory as it has an extra =
+#  which will fall out to the original after a coreference shakedown.
+#   ("unification"?)
+#
+#    :Ax033     :inN3  [
+#             a :Truth;
+#             = {
+#            :sky     :color :blue .
+#            } ] .

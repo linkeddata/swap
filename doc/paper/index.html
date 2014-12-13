@@ -1,0 +1,779 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="EN" lang="EN">
+<head>
+<meta name="generator" content=
+"HTML Tidy for Mac OS X (vers 1st December 2004), see www.w3.org" />
+<meta http-equiv="content-type" content=
+"application/xhtml+xml; charset=us-ascii" />
+<title>cwm Systems Paper</title>
+
+<style type="text/css">
+/*<![CDATA[*/
+code           { font-family: monospace; }
+
+div.constraint,
+div.issue,
+div.note,
+div.notice     { margin-left: 2em; }
+
+div.issue
+p.title        { margin-left: -2em; }
+
+ol.enumar      { list-style-type: decimal; }
+ol.enumla      { list-style-type: lower-alpha; }
+ol.enumlr      { list-style-type: lower-roman; }
+ol.enumua      { list-style-type: upper-alpha; }
+ol.enumur      { list-style-type: upper-roman; }
+
+li p           { margin-top: 0.3em;
+                 margin-bottom: 0.3em; }
+
+sup small      { font-style: italic;
+                 color: #8F8F8F;
+               }
+    
+.footnote      { font-style: italic;
+                 color: #8F8F8F;
+               }
+    
+div.exampleInner pre { margin-left: 1em;
+                       margin-top: 0em; margin-bottom: 0em}
+div.exampleOuter {border: 4px double gray;
+                  margin: 0em; padding: 0em}
+div.exampleInner { background-color: #d5dee3;
+                   border-top-width: 4px;
+                   border-top-style: double;
+                   border-top-color: #d3d3d3;
+                   border-bottom-width: 4px;
+                   border-bottom-style: double;
+                   border-bottom-color: #d3d3d3;
+                   padding: 4px; margin: 0em }
+div.exampleWrapper { margin: 4px }
+div.exampleHeader { font-weight: bold;
+                    margin: 4px}
+
+div.issue { border-bottom-color: black;
+            border-bottom-style: solid;
+            border-bottom-width: 1pt;
+            margin-bottom: 20pt;
+}
+
+th.issue-toc-head { border-bottom-color: black;
+                    border-bottom-style: solid;
+                    border-bottom-width: 1pt;
+}
+
+      
+table.small    { font-size: x-small; }
+/*]]>
+*/
+</style>
+<link rel="stylesheet" href=
+"http://www.w3.org/2004/04/xhlt91/article.css" type="text/css" />
+<link rel="documentclass" title="tlp" href=
+"ftp://ftp.cup.cam.ac.uk/pub/texarchive/journals/latex/tlp-cls/" />
+<link rel="usepackage" title="aopmath" href=
+"ftp://ftp.cup.cam.ac.uk/pub/texarchive/journals/latex/tlp-cls/" />
+<link rel="bibliographystyle" title="acmtrans" href=
+"ftp://ftp.cup.cam.ac.uk/pub/texarchive/journals/latex/tlp-cls/" />
+<link rel="usepackage" title="url" href=
+"ftp://cam.ctan.org/tex-archive/macros/latex/contrib/misc/url.sty" />
+<link href=
+"http://www.tex.ac.uk/cgi-bin/texfaq2html?label=setURL" />
+<!-- where do these come from? -->
+<link rel="usepackage" title="epsfig" />
+<link rel="usepackage" title="psfig" href=
+"http://www.tex.ac.uk/tex-archive/nonfree/graphics/psfig/" />
+</head>
+<body>
+<div class="online">
+<p>Under consideration for publication in <a href=
+"http://www.dsi.unive.it/~tplp/">Theory and Practice of Logic
+Programming (TPLP) special issue on Logic Programming and the
+Web</a>.</p>
+<p>See also: <a href=
+"http://www.w3.org/2004/04/xhlt91/">Transforming XHTML to LaTeX and
+BibTeX</a>, <a href=
+"http://www.thaiopensource.com/nxml-mode/">nxml-mode for
+emacs</a></p>
+</div>
+<div class="maketitle">
+<h1 id="title">A Reasoner for the Web</h1>
+<address><span class="vcard"><a class="fn url" href=
+"http://www.w3.org/People/Berners-Lee/" title=
+"Berners-Lee et. al.">Tim Berners-Lee</a></span>, <span class=
+"vcard"><span class="fn">Vladimir Kolovski</span></span>,
+<span class="vcard"><a class="fn url" href=
+"http://www.w3.org/People/Connolly/">Dan Connolly</a></span>,
+<span class="vcard"><a class="fn url" href=
+"http://www.cs.umd.edu/~hendler/">James Hendler</a></span>,
+<span class="vcard"><span class="fn">Vladimir
+Kolovski</span></span>, <span class="vcard"><span class="fn">Yoseph
+Scharf</span></span>.</address>
+</div>
+<div class="abstract">
+<h2 id="abstract">Abstract</h2>
+<p>Cwm (pronounced coom) is a general-purpose data processor for
+the Semantic Web. It is a forward chaining reasoner that can be
+used for querying, checking, transforming and filtering
+information. Its core language is RDF, extended to include rules,
+and it uses RDF/XML or RDF/N3 serializations as required. Cwm's
+logic and functions are both specially adapeted to be used
+effectively in the environment of an unbounded webb of data and
+rules of diverse provenance. We discuss those features and give the
+experience gained in the design and use of this reasoner for the
+Semantic Web.</p>
+</div>
+<div class="body">
+<div class="div1">
+<h2 id="N10111">Introduction: Motivation and Goals</h2>
+<p>The popularity of the Semantic Web is ever-increasing, one of
+the main reasons being the improving tool support for its
+foundational languages (The Resource Description Framework
+(RDF)<a href="#RDFC04">[RDFC04]</a> and Web Ontology Language
+(OWL)<a href="#owl">[OWL]</a>). This tool support usually comes in
+the form of ontology editors and reasoners for OWL<span class=
+"footnote">Because of its clear and concise semantics, OWL-DL can
+boast a large number of reasoners.</span>. <span class=
+"online">@@DanC: I don't get this at all. RDF's semantics are
+simpler than OWL's; the reason OWL's semantics are more concise
+that RDF's is that the OWL spec doesn't try to teach model theory
+to Java programmers like the RDF spec does. The reason people
+develop OWL reasoners is that OWL's semantics are richer; i.e.
+they're adequate for problem domains that RDF is not adequate
+for.</span> However, for the general purpose manipulation of data,
+a rule-based engine makes intuitive things which are unintuitive,
+difficult or sometimes impossible using Description Logics. The
+requirements for such a rule engine were twofold: to be a general
+tool to allow Semantic Web based systems to be built, so as to
+provide feedback on the overall architecture, and provide an
+on-ramp for newcomers; and to provide a platform on which to build
+more sophisticated applications to research future directions for
+Semantic Web design.</p>
+<p>In the context of the Semantic Web, RDF is the lingua franca for
+representing machine-processable documents. RDF uses URIs as
+symbols. The <i>Web</i> in Semantic <i>Web</i> comes from the fact
+that from your document you can link to just about any web resource
+you like. However, the Web contains many sources of information,
+with different characteristics and relationships to any given
+reader. Whereas a closed system may be built based on a single
+knowledge base of believed facts, an open web-based system exists
+in an unbounded sea of interconnected information resources. This
+requires that an agent be aware of the provenance of information,
+and responsible for its disposition. A tool in this type of
+environment should have the ability to determine what document or
+message said what and match graphs against variable graphs.</p>
+<p>The goal of the Semantic Web is the beneficial reuse of data in
+unplanned ways. (@@this is discussed in the N3 section)</p>
+<p>We introduce a tool called Cwm<em class="footnote">"Cwm" was
+originally for Closed World Machine, is a misnomer as it explicitly
+deals with open worlds. Cwm is the Welsh for valley, something
+not closed by open to the rest of the world.</em> motivated by the above
+requirements. Cwm is a general-purpose data processor for the
+Semantic Web. Cwm is to RDF somewhat as sed, awk, grep, etc. are to
+text files, or XSLT is to XML: desiged as a general workhorse or
+tool for small one-off processing tasks. It is a forward chaining
+reasoner which can be used for querying, checking, transforming and
+filtering information. Since RDF itself is not sufficient to
+express rules, Cwm is based on an extension of RDF called Notation3
+(N3) which has support for quoting (making statements about
+statements), variables and rules.</p>
+<p>Being based on a more expressive logic language added a host of
+features to Cwm not available to other RDF processing tools:
+possibility of filtering RDF graphs after merging them, for
+example. Since N3 is expressive enough so that positive
+datalog-like rules can be expressed in it, cwm is able to reason
+using a first order logic but without classical negation. Combining
+this reasoning functionality with its ability to retrieve documents
+form the web as needed, the system can be considered a reasoner for
+the web. It has grown from a proof of concept application to a
+popular rule engine, used in major research projects. The goal of
+this paper is to explain the functionality and distinguishing
+features of this tool in more detail.</p>
+<p>The second goal cwm, as a platform for research, was in a way to
+serve as a experimental ground for more expressive Semantic Web
+applications (which cover some of the upper layers of the Semantic
+Web layer cake). To this end, we have added <i>proof</i>
+generation/checking support to the system, and also a crypto module
+which empowers Cwm users with the tools to build <i>trust</i>
+systems on the Semantic Web.</p>
+<p>In the next section there will be a brief introduction to N3,
+mainly describing how it extends RDF. Then, we will briefly explain
+the system architecture of cwm. From that point on, we will talk
+about the distinguishing features of the tool, such as its builtin
+functions, proof generation and proof checking. Cwm has been used
+as the rule engine in research projects (Policy Aware Web) and for
+automating tasks at the W3C - we will cover that in Applications,
+and wrap up with Future Work and Conclusions.</p>
+</div>
+</div>
+<div class="back">
+<div class="div1">
+<h2 id="N10112">Preliminaries: N3</h2>
+<p>Notation3 (N3) is a language which is a compact and readable
+alternative to RDF's XML syntax, but also is extended to allow
+greater expressiveness. It has two important subsets, one of which
+is RDF 1.0 equivalent, and one of which is RDF extended with rules.
+In this section, we will briefly introduce N3 show how it is
+different from RDF.</p>
+<p>N3 syntax is very readable, using the <i>subject</i>
+<i>predicate</i> <i>object</i> form. E.g.:</p>
+<pre>
+:John :parent :Bob.
+</pre>
+<p>The colon form of qname is similar to XML's qname
+form<span class="online">@@refer to XML namespace spec?</span>. In
+this paper, for the sake of space, we do not define the namespaces
+to which prefxes refer. <span class="online">@@in a footnote we
+could</span> Blank nodes (bnodes, RDF's form of existential
+variable) are expressed using '[]', for example: <tt>[ :brother
+:John ]</tt> specifies something that has <tt>:brother
+:John</tt>.</p>
+<p>An N3 rule is written as a statement whose predicate is
+<code>log:implies</code>, for example:<span class="online">@@we
+haven't explained ?var syntax</span></p>
+<pre>
+{ ?x parent ?y. ?y sister ?z } log:implies { ?x aunt ?z }.
+</pre>
+<p>A set of statements surrounded by braces is called an N3
+formula. Formula is a generalization of an RDF-graph, adding
+variables.</p>
+<p>N3 rules are at the same time more and less expressive than
+Datalog. On one hand, N3 is restricted to binary predicates
+(triples), but on the other, existentials (bnodes) are allowed in
+the consequents of the rules. Another restriction worth mentioning
+is that, since monotonicity is one of the design goals for N3,
+there is no negation-as-failure. The only form of negation allowed
+in N3 is what we term <em>scoped negation as failure</em>, which
+will be described in section <a rel="ref" href=
+"#neg23">4.8@@</a>.</p>
+<p>One of the design goals of N3 is that information, such as but
+not limited to rules, which requires greater expresive power than
+RDF, should be sharable in the same way as RDF can be shared. This
+means that one person should be able to express knowledge in N3 for
+a certain purpose, and later independently someone else reuse that
+knowledge for a different unforeseen purpose. As the context of the
+later use is unknown, this prevents us from making implicit closed
+assumptions about the total set of knowledge in the system as a
+whole. As a result of this, N3 does not make the Closed World
+Assumption in general.</p>
+<h2 id="N10114">Architecture</h2>
+<p>Figure 1 represents a high-level architecture diagram of Cwm. In
+the following subsections, we will expand on the most important
+sections of the diagram.</p>
+<div class="figure" id="cwmarch"><object data="CwmArch2.pdf"
+height="4in"><img border="0" src="index.1.jpg" width="646" height=
+"460" alt="cwm architecture diagram" /></object>
+<p class="caption">cwm software architecture</p>
+</div>
+<h3 id="Parsing">Parsing and Serialization</h3>
+<p>The N3 and RDF languages are grammatically similar, to the
+extent that it is possible to translate one into the other in a
+streaming mode. The efficiencies evident from this mode of
+operation led to a design of an abstract syntax interface which
+parsers and serializers supported. This is still in use, but
+experience was that as the N3 language became more sophisticated,
+the streaming interface became more burdensome to support as an
+output format for the serialization module
+(<code>pretty.py</code>).</p>
+<h3 id="Store">Store</h3>
+<p>The store (<code>llyn.py</code>) is a triple store, extended to
+cover the full N3 language, and also to record the provenance of
+each statement. A statement therefore is stored as the subject,
+predicate and object of RDF, plus the '<em>context</em>' the
+identity of the formula in which the statement is, and a record of
+the <em>reason</em> object which stores the reason for the
+statement having been added to the store. This is used in proof
+processing.</p>
+<p>The store was originally designed and built with four indices,
+so that list was kept of each statement in which a given term
+occurred as, respectively, the subject, predicate, object or
+context. When there was a need to improve performance, this was
+changed so than now 7 indices are used, as almost every combination
+of subject , predicate, object pattern with wildcards are indexed.
+This is a questionable tradeoff, as many tasks involve the input
+and output of data with relatively little processing, so the
+indexing overhead may dominate.</p>
+<h3 id="Inference">Inference engine</h3>
+<p>The inference engine is essentially a simple forward chaining
+reasoner for N3 rules.</p>
+<p>The matching engine which runs the rules operates simply by
+recursive search, with some optimizations. Firstly, the rule set is
+analyzed to determine which rules can possible affect the output of
+some other rules. A partial order is found, which for example in
+some cases will produce a pipeline. Otherwise, where rules can
+interact, they are tried repeatedly until no further rule firings
+occur. The second optimization is that, when matching a graph
+template, which is a series of template statements, the statements
+are ordered for processing as a function of the length of the index
+which would have to be searched, doing the smallest indexes first.
+This provides a significant improvement in many real-world examples
+where the data is very asymmetrical, in that some areas of the
+graph are dense and tabular in form, and others sparsely
+connected.</p>
+<p>The inference engine also performs two extensions to its normal
+role, these being the execution of built-in functions, and the
+delegation of parts of the query to remote systems or remote
+documents.</p>
+<h2 id="N10113">Features</h2>
+<h3 id="filterdiff">Filtering</h3>
+<p>Filtering in cwm (using --filter) is a convenient way to reduce
+the data being output. When a filter runs <em>only</em> the
+information gathered by the rules is preserved: everything else is
+discarded. We use a filter to select the logical relationships that
+we want from the mass of what is already known.</p>
+For an example, let's say that for a particular genealogical
+knowledge base, we only want to know whether Joe and Bob are
+related. Thus, in addition to the data file (say, family.n3) that
+holds all of the family facts and the rules (uncle, cousin,sibling
+etc.) we wil add a filter file (uncleFilter.n3) that only looks for
+the facts we are interested in:
+<pre>
+# What is the relationship between Joe and Bob
+{ :Joe ?p :Bob } log:implies { ?p a :RelationshipBetweeJoeAndBob }.
+
+# Is Bob an Uncle of Joe?
+{ :Joe :uncle :Bob } log:implies { :Joe :uncle :Bob }.
+</pre>
+<p>When we ask cwm to consider the implication it concludes:</p>
+<pre>
+&gt; python cwm.py family.n3 --think --filter=uncleFilter.n3
+    :Joe     :uncle :Bob .
+    :uncle     a :RelationshipBetweeJoeAndBob .
+</pre>
+<p>The command line can be read as: <em>read family.n3 and the
+deduce any new information you can given any rules you have. Now
+just tell me the information selected by the filter
+uncleFilter.n3</em>. Note that any data in the filter is
+<strong>not</strong> used - the filter file is only searched for
+rules.</p>
+<h3 id="Deltas">Deltas</h3>
+<p>As the Semantic Web is built, using RDF graphs<a href=
+"#RDFC04">[RDFC04]</a> to represent data such as
+bibliographies<a href="#DC02">[DC02]</a>, syndication
+summaries<a href="#RSS">[RSS]</a> and medical terminology<a href=
+"#Gol03">[Gol03]</a>,a need arises for difference and sum functions
+for RDF graphs. The problem of updating and synchronizing data in
+the Semantic Web motivates an analog to text diffs for RDF graphs.
+An accompanying delta.py program will compare graphs and generate
+difference files (deltas). [REF rdf diff @@unpublished] addresses
+the problem of comparing two RDF graphs, generating a set of
+differences, and updating a graph from a set of differences. The
+paper discusses two forms of difference information, the
+context-sensitive <q>weak</q> patch, and the context-free
+<q>strong</q> patch. It also gives a proposed <strong style=
+"font-weight: 400">update ontology</strong> for patch files for
+RDF.</p>
+<h3><a name="Built-in" id="Built-in">Built-in</a> functions</h3>
+<p>Many reasoning engines have an ability to perform arithmetic,
+but arithmetic facts separated out from the facts of the knowledge
+base as being fundamentally different things. In cwm, this is not
+the case: arithmetic facts, as with all other facts where the
+validity can be checked or the result evaluated by machine, are
+represented as RDF properties. This is done for various reasons.
+Philosophically, the design was not prepared to commit to a
+partitioning of knowledge into two parts in this fashion. It was
+felt necessary to be able to reason about these functions as well
+as to evaluate them. We understand that this causes problems for a
+Derscription Logic based systems, but this is not a DL system. it
+was also done for architectural simplicity. Making this simple
+decision allows all the language support for RDF and N3 to be
+immediately adopted for the arithmetic expressions; the store can
+store them, the serializer can output them and so on. Contrast this
+with the situation in for example SPARQL<a href=
+"#SPARQL">[SPARQL]</a>, in which a special place in th query
+expression is reserved for filter expressions, and whole separate
+syntax is supported for it.</p>
+<p>Within the reasoner, built-in functions are made part of the
+query. During query optimization, <em>light</em> builtins (such as
+negation of an integer) are assumed to be faster than searching the
+store, and are performed the moment they can be, while
+<em>heavy</em> builtins, such as accessing the Web, making a remote
+query, or recusively invoking the reasoner itself, are assumed to
+take a long time, and are postponed until anything faster,
+including searching the local store, as been done.</p>
+<p>There is also support for N-ary bultins, implemented using
+lists</p>
+<pre>
+{   (?x.tempInF "32") math:difference ?a.
+    (?a "0.5555") math:product ?c.
+} =&gt; {
+     ?x  tempInC ?c.
+}
+</pre>
+<h3><a name="Logic" id="Logic">Logic</a> Built-ins</h3>
+<p>As we mentioned before, our design goals were that the</p>
+<p>a) tool has to be able to interact with the web, and</p>
+<p>b) rather than retrieving all the data into one big dataset and
+believing it, rules often have to know which data came from what
+document. For this, the concept of a formula - a set of RDF
+statements - is introduced.</p>
+<p>In order to interact with the web, cwm has a builtin called
+<code>log:semantics</code>. The <code>log:semantics</code> of a
+document is the formula which one gets by parsing a Semantic Web
+document. Cwm regards the web as being a mapping between symbols
+and formulas. As it is a built-in function, when cwm needs to
+evaluate it it will retrieve the document (in N3 or RDF/XML format)
+and parse it, returning the formula. Example:</p>
+<pre>
+{ &lt;foo.rdf&gt; log:semantics ?f } =&gt; { ?f a :InterestingFormula}.
+</pre>
+<p>After a formula has been retrieved, it is possible to inquire
+into its contents by using log:includes. One formula
+<code>log:includes</code> a second formula if for each statement in
+the second, there is a corresponding one in the first.</p>
+<p>So let's say we we have a concept of a Semantic Web home page
+for a person. We decide on the policy that if someone's home page
+says that they are a vegetarian, then we believe that they are a
+vegetarian.</p>
+<pre>
+
+{?x :homePage log:includes { ?x a :Vegetarian }}=&gt; { ?x a :Vegetarian}.
+</pre>
+<p>Future work could include extending Cwm's concept of the
+semantic od a web resource to include the GRDDL algorithm for
+extracing RDF semantics from various sorts of XML documents.</p>
+<h3>Proof generation</h3>
+<p>The proof generation facility is an integral part of the CWM
+software. For a cwm command line which would have produced a given
+result, adding <code>--why</code> to the command line instead
+produces a proof of that result. The proof is a chain of inference
+steps (assertions and rules) with pointers to all the supporting
+material.</p>
+<p>This supporting material is generated every time a fact is added
+to the KB. When this event occurs, the reason for modifying the KB
+is stored along with the modification. Possible reasons include,
+but are not limited to: a triple being inferred by a rule (with a
+record of the bindings substituted) , being introduced by a builtin
+or being retrieved from a web resource. This reasons are described
+in the proof ontology available at [ref].</p>
+<p>An important point needs to be made here. An interesting aspect
+of proof checking on the Web is that the proofs presented may
+contain not just traditional logics, but also proof steps grounded
+in <q>nonlogical</q>; justifications. For example, suppose that two
+parties A and B agree on an oracle Z that is to be trusted on the
+matter of membership to some group. Then, if A wants to prove
+membership to that group it will generate a proof of membership and
+one of the inference steps in the proof will be <q>because Z says
+so</q>. Thus, in many cases, there will be inference steps like the
+one described - justifications that must be shared between parties
+without the ability to appeal to a formal theory. Thus, in cwm,
+steps in a proof may be made by reference to an agreed upon
+<q>oracle</q> rather than to a logical mechanism. The web bultin
+functions allow these trust-like processing to be reduced to
+operations in logic on the web.</p>
+<p>A separate program, check.py, is used to validate a proof.</p>
+<h3>Trust/ Digital Signatures</h3>
+<p><a name="Intro0" id="Intro"></a>The security, trust, information
+quality and privacy issues arising from the vision of the Semantic
+Web as a global information integration infrastructure are
+essential. Cwm provides the tools with which to write responsible
+systems. The software itself doesn't make it easier to decide on
+the trust model to use - but it does provide the capability to
+express it. Moreover, CWM includes a cryptography module which
+allows a user to generate public/private keys and sign and verify
+documents. Between them, the logical and cryptographic
+functionality, together with the capacity to look up the web, allow
+a wide variety of trust-aware systems to be built from scratch. One
+appeal of this technique is that because the language does not have
+any assumptions about the trust infrastructure built in, the user
+is not forced to trust based the topology of existing systems, such
+as a formalized hierarchical public key system. All kinds of
+different forms of trust can be used for different data. Another
+appeal is that in fact the trusted code base is fairly small, only
+the basic builtin functions (code shared by all users and will be
+hopefully well inspected), and declarative rules which may
+themselves by automatically analyzed.</p>
+<h3>Web-aware queries</h3>
+<p>The cwm system can operate in modes in when a symbol occurs
+during processing, it will be dereferenced on the web so that any
+published information about the symbol may be loaded. The loading
+can be triggred by a symbol appearing as subject, predicate, or
+object when a statement is loaded, or when a statement occurs with
+in a query term being matched. These modes can be controlled
+individually from the cwm command line.</p>
+<p>Our experience is that it is wise to follow predicates when
+statements are loaded, forming what we term the <em>ontological
+closure</em> of the loaded data. The ontologies recursively loaded
+are small in number, and provide useful metadata to control
+processing as described below.</p>
+<p>(One simple property, <code>log:rules</code>, links an ontology
+and a web resource containing N3 rules which apply to the terms in
+the ontology. This allows some of the the semantics of the
+ontology, or translations into other ontologies, to be sepcified in
+terms of N3 rules where this is convenient, and automatically
+picked up by Cwm whenever terms in the ontology are used.)</p>
+<p>It is, however, generally unwise to follow subject or object
+links when loading statements, as in a well-connected web the
+entire Semantic Web could be eventually loaded.</p>
+<p>By contrast, when a query is being matched, it is very
+reasonable to load any URIs occuring in subject or object positions
+the query, as this typically brings in new data but not an
+unbounded amount. A query is evaluated by matching a graph template
+to the graph of data which can be found on the web. If each node in
+the graph, has useful and relevant information associated with it,
+and that information is loaded by the query engine when the node is
+first mentioned, then it is possible for the query to successively
+bring in documents which together form the parts of a large graph
+as it is needed.</p>
+<p>These modes of operation, and ones like them, are, we belive,
+important to the development of the Semantic Web. Future research
+should be directed toward protocols which involve conventions for
+the sort of information which is published against the URIs used as
+symbols for arbitrary things in the Semantic Web.</p>
+<h4 id="Definitive">Definitive documents</h4>
+<p>There are times when a particular document on the web contains
+all cases of a particular relation. For example, the relationship
+between a US state and its two letter code exists in 50 cases.
+Another document might for example store a definitive list of the
+MIT course numbers.</p>
+<p>In this case, queries involving these properties become
+self-answering according to the following protocol. The query
+processor looks up the ontology for the property when it find it in
+a query. The ontology file mentions that there is a definitive
+document for the property, with a statement like for example</p>
+<pre>
+state:code log:definitiveDocument &lt;stateCodes.rdf&gt;.
+</pre>
+<p>The client then converts any query or query part of the form
+<code>?s state:code ?y</code> into a query on that document.</p>
+<pre>
+
+</pre>
+<h4 id="Remote">Remote query processing</h4>
+<p>The modes mentioned above allow cwm to pick up data while it is
+processing a query, by loading RDF or N3 documents. We were also
+interested in applications in which large quantities of existing
+data were in live SQL databases. The cwm query engine has the
+ability to pick up metadata from the schemas (the ontological
+closure above) which directs it, for certain specific Properties,
+to convert that part of the query into an SQL query. This is done
+by making the assertion that the property has a
+<code>log:definitiveService</code> whose URI is a made up form of
+mySQL URI which carries the information on how to access the
+data.</p>
+<p>The implementation is a proof of concept only: it operates only
+with mySQL databases. We would recommend that, now (2006) that
+SPARQL will soon be available as a standard, that future designs
+implement this functionality by converting the query into SPARQL.
+In this way, systems of federated SPARQL servers should be set up.
+This is a very interesting direction for future research,
+specifically the protocols for defining the conditions under which
+a given server should be contacted for a given form of query.</p>
+<div id="neg23">
+<h3>Scoped Negation as Failure</h3>
+<p>While some sources of data are definitive, others (such as a set
+of temperature measurements) are not: one never knows when evidence
+may come to light of another. This aspect of the Semantic Web makes
+negation as failure (NAF) meaningless unless it is associated to a
+specific dataset. The effect of a default with an explicit domain
+is achieved with <code>log:notIncludes</code>, the negation of
+<code>log:includes</code>. In the example below, if an order has an
+item which is car, and the order doesn't say that the car has some
+color, then the car is black.</p>
+<pre>
+{    &lt;thisOrder.rdf&gt;  log:semantics ?ORDER.
+     ?ORDER  log:includes    { ?x  biz:item ?y. ?y a ex:Car };
+     ?ORDER  log:notIncludes { ?y  ex:color [] }
+} =&gt; {
+     ?y ex:Color "black"
+}.
+</pre></div>
+<h2 id="N10115">Applications</h2>
+<p>We now discuss some applications for which we have used cwm. It
+has also been used as a general teaching and introductory tool for
+new develepers<a href="#swtut2003">[N3CWM2003]</a>. To validate the
+usefulness of the technology, we used cwm for a variety of tasks,
+including tax code calculations, creation and filtering of calendar
+information, project management tasks such as dependency analysis
+and bug tracking, and all kinds of quick manipulations of data
+occuring in everyday personal or enterprise use of data. Here we
+mention two specific applications as examples.</p>
+<h3>Policy Aware Web</h3>
+<p>The Policy-Aware Web (PAW) Project is a collaboration between
+Mindswap and DIG<span class="online">@@expand DIG acronym? do we
+really want to talk about project organization? Perhaps cite
+<cite><a href=
+"http://www.w3.org/2004/09/Policy-Aware-Web-acl.pdf">Creating the
+Policy-Aware Web: Discretionary, Rules-based Access for the World
+Wide Web</a></cite> book chapter?</span> aimed at developing a
+framework for decentralized, rule-based access control on the Web
+using Semantic Web technologies. The main design goals of the
+project are to keep access control policies as transparent as
+possible, and offload the work of proving whether access should be
+granted or not to the client, instead of the server. The latter is
+done by requiring the clients to generate proofs (using CWM) of
+their rights to access a particular resource protected by N3
+policies. Thus, cwm's proof generation/checking features are
+extensively used in PAW.</p>
+<div class="figure" id="pawfig"><object data="paw.jpg" height=
+"5in"><img border="0" src="paw.jpg" width="865" height="569" alt=
+"policy aware web scenario" /></object>
+<p class="caption">policy aware web scenario</p>
+</div>
+<h3>Automating Technical Reports</h3>
+<p>CWM has also been used in the <q><abbr title=
+"Technical Reports">Technical Report</abbr> Automation</q> project.
+This W3C project, based on the use of Semantic Web tools and
+technologies, has allowed the streamlining the publication paper
+trail of W3C Technical Reports, to maintain an RDF-formalized index
+of these publications and to completely automate the maintenance of
+the lists of Technical Reports.</p>
+<p>The <a href="http://www.w3.org/TR/">W3C Technical Reports
+index</a> lists the formal work product of each W3C Working Group
+categorized by one of six <q>maturity levels</q>. The maturity
+levels indicate the state of the work, from (first) working draft
+to adopted standard (called <q>W3C Recommendation</q>). The
+<a href="http://www.w3.org/Consortium/Process/">W3C Process</a>
+defines the formal steps necessary for a document to advance in
+maturity level.</p>
+<p>For many years the Technical Reports index had been maintained
+manually and the critical workflow data that it contained was not
+available in machine processable form. Checking the prerequisites
+for each maturity advancement was entirely manual. Eventually, the
+W3C pages listing the Working Groups, their chartered time periods,
+their deliverables, and the Technical Reports index itself were all
+turned into authoritative sources of Semantic Web data by adding
+RDF markup to the existing HTML. The next step was to have data
+extraction tools which in turn allowed cwm to check some of the
+dependencies and prerequisites at the time a new document is
+proposed for publication. The W3C Technical Reports index is now
+built automatically by cwm and is available to users in multiple
+views as well as in machine-processable RDF form, allowing a
+variety of analyses to be performed.</p>
+<h2>Related Work</h2>
+<p>Euler is an inference engine supporting logic based proofs.
+Unlike cwm, it is a backward-chaining reasoner enhanced with Euler
+path detection.</p>
+<p>Pychinko is a Python implementation of the classic Rete pattern
+matching algorithm [REF]. Rete has shown to be, in many cases, the
+most efficient way to apply rules to a set of facts--the basic
+functionality of an expert system. Pychinko employs an optimized
+implementation of the algorithm to handle facts, expressed as
+triples, and process them using a set of N3 rules. Pychinko tries
+to closely mimic the features available in Cwm, as it is one of the
+most widely used rule engines in the RDF community. Pychinko has
+proven to be faster than Cwm, however it's limitation lies in its
+expressivity: Pychinko cannot handle most of the cwm builtins. It
+is worth mentioning here that the RETE engine used in Pychinko has
+been ported to Cwm - thus Cwm can now boast the same performance
+improvements.</p>
+<h2 id="conc">Conclusion and Future Work</h2>
+<p>The N3 language enabled our use of the Semantic Web both by its
+simplicity and ease of use as a data language, and in the fact that
+its extra expressive power allowed rules and rules about what
+document said what to be written. The extra logical operations
+added in Cwm to seemed to be a fairly complete set, in that new
+applications were made by combining the old ones, and did not
+require the constant additions of new builtins. That said, many
+areas such as date and time processing, arithmetic for various
+forms of number, and functions on lists and sets are covered quite
+incompletely.</p>
+<p>The cwm system is a useful, and much used, tool for many
+practical small applications. However, it was not optimised for
+speed, and as applications grow there are needs for cwm-compatible
+fast processors for specific forms of problem. The pychinko port is
+a significant step in this direction.</p>
+<p>In general our experience demonstrates both the need for and the
+adequacy of the N3 formula as a quoting system for procesing of
+data in real web-like environment, where the provenance of data is
+as important a factor as its content.</p>
+<p>Particularly interesting were applications in which a small N3
+file caused cwm to find and integrate in real time data from
+diverse sources on the web, and also small query files which cause
+cwm to follow links to the point where the query can be resolved.
+We hope in future to do more research into such systems which work
+intimately and scalably in the Web.</p>
+<h2 id="acknowledgements">Acknowledgements</h2>
+<p>This work is supported in part by funding from US Defense
+Advanced Research Projects Agency (DARPA) and Air Force Research
+Laboratory, Air Force Materiel Command, USAF, under agreement
+number F30602-00-2-0593, <cite><a href=
+"http://www.w3.org/2000/01/sw/DevelopmentProposal">Semantic Web
+Development</a></cite>.</p>
+<p>This work was also funded under <a href=
+"http://www.nsf.gov/">NSF</a> <a href=
+"http://www.nsf.gov/pubs/2004/nsf04012/nsf04012.htm">ITR
+04-012</a>.</p>
+<p>Originally written by Berners-Lee and Connolly, CWM has been
+significantly enhanced and extended by Scharf. Kolovski ported the
+<em>pychinko</em> rete engine, and authored this paper. Sean
+Palmer, Mark Nottingham, Jos de Roo, and other members of the W3C
+Semantic Web Interest Group provided code, tests, comments and
+encouragement.</p>
+<h2 id="refs">References</h2>
+<dl class="bib">
+<dt class="TechReport">[<a name="RDFC04" id=
+"RDFC04">RDFC04</a>]</dt>
+<dd><span class="author">Klyne, G. and Carroll, J. J.</span>
+<cite><a href=
+"http://www.w3.org/TR/2004/REC-rdf-concepts-20040210/">Resource
+Description Framework (RDF): Concepts and Abstract
+Syntax</a></cite> <tt class=
+"number">http://www.w3.org/TR/2004/REC-rdf-concepts-20040210/</tt>
+<span class="institution">W3C</span> Recommendation 10 <span class=
+"month">February</span> <span class="year">2004</span>.
+<p class="online"><a href=
+"http://www.w3.org/TR/rdf-concepts/">Latest version</a> available
+at <code>http://www.w3.org/TR/rdf-concepts/</code></p>
+</dd>
+<dt class="TechReport">[<a name="DC02" id="DC02">DC02</a>]</dt>
+<dd><span class="author">Beckett, D. and Miller, E. and Brickley,
+D.</span> <cite><a href=
+"http://dublincore.org/documents/2002/07/31/dcmes-xml/">Expressing
+Simple Dublin Core in RDF/XML</a></cite> <span class=
+"institution">Dublin Core Metadata Initiative</span> Recommendation
+31 <span class="month">July</span> <span class="year">2002</span>
+<tt class=
+"number">http://dublincore.org/documents/2002/07/31/dcmes-xml/</tt></dd>
+<dt class="misc">[<a name="RSS" id="RSS">RSS</a>]</dt>
+<dd><span class="author">Gabe Beged-Dov and Dan Brickley and Rael
+Dornfest and Ian Davis and Leigh Dodds and Jonathan Eisenzopf and
+David Galbraith and R.V. Guha and Ken MacLeod and Eric Miller and
+Aaron Swartz and Eric van der Vlist</span> <cite><a href=
+"http://web.resource.org/rss/1.0/">RDF Site Summary (RSS)
+1.0</a></cite> 6 <span class="month">December</span> <span class=
+"year">2000</span></dd>
+<dt class="Article">[<a name="Gol03" id="Gol03">Gol03</a>]</dt>
+<dd><span class="author">Golbeck, Jennifer and Fragoso, Gilberto
+and Hartel, Frank and Hendler, James and Parsia, Bijan and
+Oberthaler, Jim</span> <cite><a href=
+"http://www.mindswap.org/papers/WebSemantics-NCI.pdf">The national
+cancer institute's thesaurus and ontology</a></cite>. <span class=
+"journal">Journal of Web Semantics</span>, <span class=
+"volume">1</span>(<span class="number">1</span>), <span class=
+"month">Dec</span> <span class="year">2003</span>.</dd>
+<dt class="TechReport" id="owl">[OWL]</dt>
+<dd><span class="author">Dean, Mike and Schreiber, Guus</span>
+<cite><a href="http://www.w3.org/TR/owl-ref/">OWL Web Ontology
+Language Reference</a></cite> <tt class=
+"number">http://www.w3.org/TR/2004/REC-owl-ref-20040210/</tt>
+<span class="institution">W3C</span> Recommendation 10 <span class=
+"month">February</span> <span class="year">2004</span></dd>
+<dt class="misc" id="swtut2003">[N3CWM2003]</dt>
+<dd><span class="author">Tim Berners-Lee and Dan Connolly and
+Sandro Hawke</span>. <cite><a href=
+"http://www.w3.org/2000/10/swap/doc/">Semantic Web Tutorial Using
+N3</a></cite> <span class="address">Budapest</span> <span class=
+"year">2003</span></dd>
+<dt class="TechReport"><a name="SPARQL" id=
+"SPARQL">[SPARQL]</a></dt>
+<dd><span class="author">Seaborne, Andy and Prud'hommeaux,
+Eric</span> <cite><a href=
+"http://www.w3.org/TR/2006/CR-rdf-sparql-query-20060406/">SPARQL
+Query Language for RDF</a></cite> , <span class=
+"institution">W3C</span> Candidate Recommendation (work in
+progress), 6 <span class="month">April</span> <span class=
+"year">2006</span>, <tt class=
+"number">http://www.w3.org/TR/2006/CR-rdf-sparql-query-20060406/</tt>.
+<a href="http://www.w3.org/TR/rdf-sparql-query/" title=
+"Latest version of SPARQL Query Language for RDF">Latest
+version</a> available at http://www.w3.org/TR/rdf-sparql-query/
+.</dd>
+</dl>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,89 @@
+#Processed by Id: cwm.py,v 1.27 2001/02/05 19:58:24 timbl Exp 
+        #    using base file:/devel/WWW/2000/10/swap/test/viz/
+        
+#  Notation3 generation by
+#       notation3.py,v 1.54 2001/02/12 18:38:31 timbl Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/test/viz/
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix ex: <http://www.daml.org/2000/10/daml-ex#> .
+     @prefix daml: <http://www.daml.org/2000/10/daml-ont#> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+     @prefix : <daml2viz.n3#> .
+    
+      [      :aaato ex:Person;
+             :from ex:Man ].
+    
+      [      :aaato ex:Male;
+             :from ex:Man ].
+    
+      [      :aaato ex:Person;
+             :from ex:Woman ].
+    
+      [      :aaato ex:Female;
+             :from ex:Woman ].
+    
+      [      :aaato ex:Animal;
+             :from ex:Female ].
+    
+      [      :aaato ex:Animal;
+             :from ex:Male ].
+    
+      [      :aaato ex:Animal;
+             :from ex:Person ].
+    
+      [      :aaato  [
+                 a :node;
+                 :shape "circle" ];
+             :from ex:Car ].
+    
+    ex:Animal     a :node;
+         :shape "circle" .
+    
+    ex:Car     a :node;
+         :shape "circle" .
+    
+    ex:Female     a :node;
+         :shape "circle" .
+    
+    ex:Height     a :node;
+         :shape "circle" .
+    
+    ex:Male     a :node;
+         :shape "circle" .
+    
+    ex:Man     a :node;
+         :shape "circle" .
+    
+    ex:Person     a :node;
+         :shape "circle" .
+    
+    ex:TallMan     a :node;
+         :shape "circle" .
+    
+    ex:TallThing     a :node;
+         :shape "circle" .
+    
+    ex:Woman     a :node;
+         :shape "circle" .
+    
+    ex:child     a :node;
+         :shape "square" .
+    
+    ex:father     a :node;
+         :shape "square" .
+    
+    ex:height     a :node;
+         :shape "square" .
+    
+    ex:mom     a :node;
+         :shape "square" .
+    
+    ex:occupation     a :node;
+         :shape "square" .
+    
+    ex:parent     a :node;
+         :shape "square" .
+    
+ #ENDS

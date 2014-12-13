@@ -1,0 +1,47 @@
+# $Id$
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix str: <http://www.w3.org/2000/10/swap/string#>.
+
+@prefix : <heartbeat#>.
+@keywords is, of, a.
+
+@prefix org: <http://www.w3.org/2001/04/roadmap/org#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>. #@@ missing #
+@prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#>.
+
+months03    a InterestingPeriod.
+months06    a InterestingPeriod.
+months12    a InterestingPeriod.
+months18    a InterestingPeriod.
+
+
+{
+ <http://www.w3.org/2002/01/tr-automation/tr.rdf> log:semantics ?F
+} => { ?F a TRKB }.
+
+@forAll DOC, WHEN, PG, GROUP, PLONG, PSHORT.
+
+{
+  ([ is log:semantics of <heartbeat-aux.n3> ]
+  ) log:conjunction [ log:conclusion ?AUDITKB].
+} => { ?AUDITKB a AuditKB }.
+
+{
+  ?AUDITKB a AuditKB.
+  PSHORT a InterestingPeriod.
+
+  <http://www.w3.org/2000/04/mem-news/public-groups.rdf>.log:semantics log:includes {
+   [ a org:WorkingGroup; contact:homePage PG ].
+  }.
+
+  ?AUDITKB log:includes {
+    GROUP contact:homePage PG;
+  }.
+
+  ?AUDITKB log:notIncludes {
+   GROUP publishedInRecent PSHORT
+  }
+}
+ => { PSHORT noPub PG }.
+
+

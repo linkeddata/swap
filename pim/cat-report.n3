@@ -1,0 +1,197 @@
+#  n3
+#
+#  Categorized stuff
+#
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix string: <http://www.w3.org/2000/10/swap/string#>.
+@prefix math: <http://www.w3.org/2000/10/swap/math#>.
+@prefix q:  <http://www.w3.org/2000/10/swap/pim/qif#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix trip: <http://www.w3.org/ns/pim/trip#>.
+@prefix flow: <http://www.w3.org/2005/01/wf/flow#>.
+
+@prefix os: <http://www.w3.org/2000/10/swap/os#>.
+@prefix tax:  <http://www.w3.org/2000/10/swap/pim/tax.n3#>.
+
+#
+@prefix : <#>.
+@prefix foo: <#>.
+
+@forAll :a, :c, :d, :k, :l, :p, :s, :t, :x, :y, :z.
+
+# Select subclasses of TaxCategories.
+#  Must be at least one entry, and must have a label
+
+{ [] a :c. :c a q:Cat; s:label [] } log:implies { :c a q:toBeDisplayed }.
+ 
+#q:Unclassified a q:toBeDisplayed; s:label "Unclassified transactions".
+q:UnclassifiedIncome a q:toBeDisplayed; s:label "Unclassified Income".
+q:UnclassifiedOutgoing a q:toBeDisplayed;  s:label "Unclassified Outgoings".
+
+####################################################################
+
+"00" log:outputString
+"""<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Spending and Income by category - personal financial report</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <!-- <link type="text/css" rel="stylesheet" href="report.css" /> -->
+  <style type="text/css" media="all">
+""".
+
+{ <file:///Users/timbl/Documents/2011/Financial/Data/report.css> log:content ?stylesheet } => { "01" log:outputString  ?stylesheet }.
+
+"02" log:outputString
+"""
+  </style>
+</head>
+
+<body>
+<h1>Spending and Income by category</h1>
+""".
+
+#  Heading of section
+
+#  Did have: (:y!log:uri "(/Financial/.*)")!string:scrape
+
+{
+#   [] a ?y.
+
+    ?y a q:toBeDisplayed; s:label ?l.
+    
+    ?y log:uri ?uri.
+        (?uri ".*#(.*)") string:scrape ?a. 
+##       (?uri "/Documents/(.*)") string:scrape ?tail .
+     ?uri os:baseRelative ?rel.
+    
+    ( "<h2><a name='" ?a "' href='"  ?rel  "'>  " ?l """</a></h2><table>
+ <tbody>
+  <tr><th>Date</th>
+   <th>Details ("payee")</th>
+   <th>Amount</th></tr>""" ) string:concatenation ?s .
+   
+   ( ?l " 00000000 " ) string:concatenation ?k.
+   
+} => {
+    ?k log:outputString ?s.
+}.
+
+# Each line:
+
+{  
+    [] a :y;
+	q:payee :p;
+	# q:amount :x;
+        q:in_USD ?dollars; 
+	q:date :d;
+	log:uri ?URI;
+	q:toAccount [s:label :a].
+     
+     ("%6.2f" ?dollars) string:format :x.
+     
+    :y a q:toBeDisplayed; s:label :l.
+    
+    ( :l " 11111111 " :d ?URI "0") string:concatenation :k.
+    (  "<tr class='"  :a
+	 "'><td class='date'><a href='../"  (?URI "/Financial/(.*)")!string:scrape "'>" (:d "^([^T]*)")!string:scrape
+#       "</a></td><td class='cat'>" :l
+       "</td><td class='payee'>" :p
+#       "</td><td class='to'>" :a
+       "</td><td class='amount'>" :x "</td></tr>\n") string:concatenation :s
+} log:implies {
+   :k log:outputString :s
+}.
+
+#### Comment underneath
+{  
+    [] a :y;
+        s:comment :p;
+	q:date :d;
+	log:uri ?URI;
+	q:toAccount [s:label :a].
+     
+    :y a q:toBeDisplayed; s:label :l.
+    ( :l " 11111111 " :d ?URI "1") string:concatenation :k.
+    (  "<tr class='"  :a
+	 "'><td class='date'>"
+       "</td><td class='comment'>" :p
+       "</td><td class='amount'></td></tr>\n") string:concatenation :s
+} log:implies {
+   :k log:outputString :s
+}.
+
+#### Trip underneath
+{  
+    [] a :y;
+        trip:trip [dc:title :p; log:uri ?tripURI];
+	q:date :d;
+	log:uri ?URI;
+	q:toAccount [s:label :a].
+     
+    :y a q:toBeDisplayed; s:label :l.
+     (?tripURI "/Documents/(.*)")  string:scrape ?tail .
+
+    ( :l " 11111111 " :d ?URI "2") string:concatenation :k.
+    (  "<tr class='"  :a
+	 "'><td class='date'>"
+       "</td><td class='comment'> Trip: <a href='../../../" ?tail "'>" :p
+       "</a></td><td class='amount'></td></tr>\n") string:concatenation :s
+} log:implies {
+   :k log:outputString :s
+}.
+
+#### Attachment underneath
+{  
+    [] a :y;
+	q:date :d;
+	log:uri ?URI;
+        
+        flow:attachment [
+     #   dc:title :p; 
+        log:uri ?fileURI];
+
+	q:toAccount [s:label :a].
+     (?fileURI "/Documents/(.*)") string:scrape ?tail .  # Only works on local files
+    :y a q:toBeDisplayed; s:label :l.
+    ( :l " 11111111 " :d ?URI "3") string:concatenation :k.
+    (  "<tr class='"  "attachment"
+	 "'><td class='date'>"
+       "</td><td class='attach'> See: <a href='../../../" ?tail "'>" ?tail
+       "</a></td><td class='amount'></td></tr>\n") string:concatenation :s
+} log:implies {
+   :k log:outputString :s
+}.
+
+# Total if available
+
+{  
+    :y a q:toBeDisplayed; s:label :l; q:total :x.
+    ( :l " 90000000 " ) string:concatenation :k.
+    (  "<tr><td class='date'>"
+#       "</td><td class='cat'>" :l
+       "</td><td class='payee'>" "Total"
+       "</td><td class='amount'><b>" :x "</b></td></tr>\n") string:concatenation :s
+} log:implies {
+   :k log:outputString :s
+}.
+
+
+
+# end section:
+
+{   :y a q:toBeDisplayed; s:label :l.
+    ( :l " 99999999 ") string:concatenation :k.
+} log:implies {
+    :l log:outputString "</table>\n"
+}.
+
+
+
+
+"zz" log:outputString """</body>
+</html>
+""".
+
+#ends

@@ -1,0 +1,48 @@
+#    Test filter in N3
+#
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix mech: <s1.n3#> .
+@prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
+@prefix : <#> .
+
+#  Simple one-triple template:
+#
+
+@forAll <#x> , <#y> .
+{ <#x> mech:includes <#y> } log:implies { <#y> mech:partOf <#x> } .
+
+#  Non-trivial template including existentials and statements about predicates:
+
+@forAll <#p>, <#z> .   #  as well as x and y above
+
+{ <#x> <#p> <#y> .
+  <#y> <#p> <#z> .
+  <#p> a daml:TransitiveProperty . } log:implies { <#x> <#p> <#z> } .
+
+# Intoduce a symmetric implication for convienience
+# Could be just labelled as self[-inverse i suppose.
+
+{ <#x> log:means <#y> }  log:implies {	<#x> log:implies <#y> .
+							<#y> log:implies <#x> . } . 
+
+# and in fact,
+
+{ <#x> log:means <#y> }  log:means {	<#x> log:implies <#y> .
+							<#y> log:implies <#x> . } . 
+
+@prefix bar: <baz#> .
+
+<> log:asserts {
+   {
+      {	<#p1> daml:inverse <#p2> .
+	 	<#x1> <#p1> <#x2> .
+      } log:means
+	{ 	<#x2> <#p2> <x1> .
+      } .
+    } log:forall <#p1>, <#p2>, <#x1>, <#x2> .
+} .
+
+# <>log:asserts { . } .   # Problem representing this in N3 or RDF
+
+# ENDS
+

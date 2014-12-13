@@ -1,0 +1,33 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+
+
+<> dc:title "Rules for Contact: Utility concepts for everyday life";
+#    -------------------------------------------------------------
+
+   dc:description """
+ These rules are written as being true statements about the terms in the
+<contact#> namespace.
+""",
+"$Id$". # see changelog at the bottom.
+
+
+@prefix : <http://www.w3.org/2000/10/swap/pim/contact#> .
+@prefix con: <http://www.w3.org/2000/10/swap/pim/contact#> . # Hint
+
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . # type, Property
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ont:  <http://www.daml.org/2001/03/daml+oil#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . # type, Property
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ont:  <http://www.daml.org/2001/03/daml+oil#> .
+@prefix doc:  <http://www.w3.org/2000/10/swap/pim/doc#> .
+@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
+
+
+
+{ ?x [ is :_addressProperty of ?p] [ is log:uri of ?p] }  =>  { ?x ?p ?y }.
+
+#  { :ent :mailboxURI [ log:equalTo [ is log:concat of ( "mailto:" [ :_uriEncode :addr ] ) ] ] }  =>  { :ent :emailAddress :addr }. # only goes one way because we could use PUT to HTTP resources to deliver mail.
+
+
+#ends

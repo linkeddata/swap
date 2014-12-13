@@ -1,0 +1,100 @@
+     @prefix : <#> .
+     @prefix Addresses: <mysql://rdftest@swada.w3.org/OrderTracking/Addresses#> .
+     @prefix Customers: <mysql://rdftest@swada.w3.org/OrderTracking/Customers#> .
+     @prefix Orders: <mysql://rdftest@swada.w3.org/OrderTracking/Orders#> .
+     @prefix Products: <mysql://rdftest@swada.w3.org/OrderTracking/Products#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    
+    @forAll :billAddr,
+                :billAddrEK,
+                :billCity,
+                :billState,
+                :billStreet,
+                :c,
+                :cEK,
+                :d,
+                :first,
+                :last,
+                :o,
+                :p,
+                :pEK,
+                :productName .
+    
+    Addresses:city     log:definitiveService <mysql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Addresses:id     log:definitiveService <mysql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Addresses:state     log:definitiveService <mysql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Addresses:street     log:definitiveService <mysql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Customers:billingAddress     log:definitiveService <mysql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Customers:familyName     log:definitiveService <mysql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Customers:givenName     log:definitiveService <mysql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Customers:id     log:definitiveService <mysql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Orders:customer     log:definitiveService <mysql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Orders:id     log:definitiveService <mysql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    <mysql://rdftest@swada.w3.org/OrderTracking/Orders#id.2185>     :RESULT "123 Elm Street",
+                "Biff",
+                "EdgeCity",
+                "Thompson",
+                "XX",
+                "pool" .
+    
+    <mysql://rdftest@swada.w3.org/OrderTracking/Orders#id.2186>     :RESULT "123 Elm Street",
+                "Chip",
+                "EdgeCity",
+                "Thompson",
+                "XX",
+                "skateboard" .
+    
+    <mysql://rdftest@swada.w3.org/OrderTracking/Orders#id.2187>     :RESULT "123 Elm Street",
+                "Chip",
+                "EdgeCity",
+                "Thompson",
+                "XX",
+                "nose ring" .
+    
+    <mysql://rdftest@swada.w3.org/OrderTracking/Orders#id.3183>     :RESULT "123 Elm Street",
+                "Chip",
+                "EdgeCity",
+                "Thompson",
+                "XX",
+                "other ring" .
+    
+    Orders:orderDate     log:definitiveService <mysql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Orders:product     log:definitiveService <mysql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Products:id     log:definitiveService <mysql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Products:name     log:definitiveService <mysql://rdftest@swada.w3.org/OrderTracking/> .
+    {
+        :billAddr     Addresses:city :billCity;
+             Addresses:id :billAddrEK;
+             Addresses:state :billState;
+             Addresses:street :billStreet .
+        :c     Customers:billingAddress :billAddrEK;
+             Customers:familyName :first;
+             Customers:givenName :last;
+             Customers:id :cEK .
+        :o     Orders:customer :cEK;
+             Orders:orderDate :d;
+             Orders:product :pEK .
+        :p     Products:id :pEK;
+             Products:name :productName .
+        
+        }     log:implies {:o     :RESULT :billCity,
+                    :billState,
+                    :billStreet,
+                    :first,
+                    :last,
+                    :productName .
+        } .
+    

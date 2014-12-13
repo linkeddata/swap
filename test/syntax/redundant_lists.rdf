@@ -1,0 +1,20 @@
+<a:RDF xmlns="file:/home/syosi/CVS-local/WWW/2000/10/swap/test/syntax/redundant_lists.rdf#"
+    xmlns:a="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+
+    <a:Description a:about="#r">
+        <t a:parseType="Resource">
+            <a:first a:resource="#b"/>
+            <a:rest a:parseType="Resource">
+                <a:first a:resource="#c"/>
+                <a:rest a:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </a:rest>
+        </t>
+    </a:Description>
+
+    <a:Description a:about="#y">
+        <u a:parseType="Resource">
+            <a:first a:resource="#c"/>
+            <a:rest a:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </u>
+    </a:Description>
+</a:RDF>

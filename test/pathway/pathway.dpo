@@ -1,0 +1,2012 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<!DOCTYPE rdf:RDF [
+	 <!ENTITY rdf 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'>
+	 <!ENTITY a 'http://www.daml.org/2000/12/daml+oil#'>
+	 <!ENTITY b 'http://www.w3.org/2000/01/rdf-schema#'>
+	 <!ENTITY c ''>
+]>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	 xmlns:a="http://www.daml.org/2000/12/daml+oil#"
+	 xmlns:c=""
+	 xmlns:b="http://www.w3.org/2000/01/rdf-schema#">
+<c:record rdf:about="ACCESSION"/>
+<c:sub_record rdf:about="AUTHORS"/>
+<c:record rdf:about="BASE_COUNT"/>
+<c:feature_type rdf:about="CAAT_region"/>
+<c:feature_type rdf:about="CDS"/>
+<c:feature_type rdf:about="C_region"/>
+<c:record rdf:about="DEFINITION"/>
+<c:feature_type rdf:about="D_loop"/>
+<c:feature_type rdf:about="D_segment"/>
+<c:record rdf:about="FEATURES"/>
+<c:feature_type rdf:about="GC_signal"/>
+<c:sub_record rdf:about="JOURNAL"/>
+<c:feature_type rdf:about="J_region"/>
+<c:record rdf:about="KEYWORDS"/>
+<c:record rdf:about="LOCUS"/>
+<c:feature_type rdf:about="LTR"/>
+<c:feature_type rdf:about="N_region"/>
+<c:sub_record rdf:about="ORGANISM"/>
+<c:record rdf:about="ORIGIN"/>
+<c:feature_type rdf:about="RBS"/>
+<c:record rdf:about="REFERENCE"/>
+<c:record rdf:about="SEGMENT"/>
+<c:record rdf:about="SEQUENCE"/>
+<c:record rdf:about="SOURCE"/>
+<c:feature_type rdf:about="STS"/>
+<c:feature_type rdf:about="S_region"/>
+<c:feature_type rdf:about="TATA_signal"/>
+<c:sub_record rdf:about="TITLE"/>
+<c:record rdf:about="VERSION"/>
+<c:feature_type rdf:about="V_region"/>
+<c:feature_type rdf:about="_10_signal"/>
+<c:feature_type rdf:about="_35_signal"/>
+<a:Thing rdf:about="_EC_number"/>
+<b:Class rdf:about="_anon0">
+	<a:oneOf rdf:resource="_anon1"/>
+</b:Class>
+<a:List rdf:about="_anon1">
+	<a:rest rdf:resource="_anon2"/>
+	<a:first rdf:resource="double"/>
+</a:List>
+<a:Restriction rdf:about="_anon10">
+	<a:onProperty rdf:resource="has_function"/>
+	<a:hasValue rdf:resource="signal_transduction"/>
+</a:Restriction>
+<a:List rdf:about="_anon100">
+	<a:first rdf:resource="SEQUENCE"/>
+	<a:rest rdf:resource="_anon101"/>
+</a:List>
+<a:List rdf:about="_anon101">
+	<a:first rdf:resource="SOURCE"/>
+	<a:rest rdf:resource="_anon102"/>
+</a:List>
+<a:List rdf:about="_anon102">
+	<a:first rdf:resource="VERSION"/>
+	<a:rest rdf:resource="_anon103"/>
+</a:List>
+<a:Empty rdf:about="_anon103"/>
+<a:Restriction rdf:about="_anon104">
+	<a:hasValue rdf:resource="field"/>
+	<a:onProperty rdf:resource="has_content"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon105">
+	<a:hasValue rdf:resource="organ"/>
+	<a:onProperty rdf:resource="part_of"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon106">
+	<a:hasValue rdf:resource="age"/>
+	<a:onProperty rdf:resource="has_state"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon107">
+	<a:hasValue rdf:resource="developmental_stage"/>
+	<a:onProperty rdf:resource="has_state"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon108">
+	<a:hasValue rdf:resource="biological_system"/>
+	<a:onProperty rdf:resource="part_of"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon109">
+	<a:minCardinality>1</a:minCardinality>
+	<a:hasValue rdf:resource="chemical"/>
+	<a:onProperty rdf:resource="upstream"/>
+</a:Restriction>
+<a:List rdf:about="_anon11">
+	<a:rest rdf:resource="_anon12"/>
+	<a:first rdf:resource="dna"/>
+</a:List>
+<a:Restriction rdf:about="_anon110">
+	<a:minCardinality>1</a:minCardinality>
+	<a:hasValue rdf:resource="chemical"/>
+	<a:onProperty rdf:resource="downstream"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon111">
+	<a:hasValue rdf:resource="chemical"/>
+	<a:onProperty rdf:resource="downstream"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon112">
+	<a:onProperty rdf:resource="has_part"/>
+	<a:hasValue rdf:resource="reaction"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon113">
+	<a:minCardinality>0</a:minCardinality>
+	<a:onProperty rdf:resource="has_part"/>
+	<a:hasValue rdf:resource="reaction"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon114">
+	<a:hasValue rdf:resource="chemical"/>
+	<a:onProperty rdf:resource="upstream"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon115">
+	<a:onProperty rdf:resource="delta_H"/>
+	<a:hasValue rdf:resource="parameter"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon116">
+	<a:onProperty rdf:resource="delta_S"/>
+	<a:hasValue rdf:resource="parameter"/>
+</a:Restriction>
+<a:List rdf:about="_anon117">
+	<a:rest rdf:resource="_anon118"/>
+	<a:first rdf:resource="cofactor"/>
+</a:List>
+<a:List rdf:about="_anon118">
+	<a:first rdf:resource="_anon119"/>
+	<a:rest rdf:resource="_anon120"/>
+</a:List>
+<a:Restriction rdf:about="_anon119">
+	<a:onProperty rdf:resource="loosely_bound_to"/>
+	<a:hasValue rdf:resource="protein"/>
+</a:Restriction>
+<a:List rdf:about="_anon12">
+	<a:first rdf:resource="_anon13"/>
+	<a:rest rdf:resource="_anon14"/>
+</a:List>
+<a:Empty rdf:about="_anon120"/>
+<a:List rdf:about="_anon121">
+	<a:first rdf:resource="_anon122"/>
+	<a:rest rdf:resource="_anon126"/>
+</a:List>
+<b:Class rdf:about="_anon122">
+	<a:unionOf rdf:resource="_anon123"/>
+</b:Class>
+<a:List rdf:about="_anon123">
+	<a:rest rdf:resource="_anon124"/>
+	<a:first rdf:resource="metal_ion"/>
+</a:List>
+<a:List rdf:about="_anon124">
+	<a:rest rdf:resource="_anon125"/>
+	<a:first rdf:resource="small_molecule"/>
+</a:List>
+<a:Empty rdf:about="_anon125"/>
+<a:Empty rdf:about="_anon126"/>
+<a:List rdf:about="_anon127">
+	<a:rest rdf:resource="_anon128"/>
+	<a:first rdf:resource="dna"/>
+</a:List>
+<a:List rdf:about="_anon128">
+	<a:first rdf:resource="_anon129"/>
+	<a:rest rdf:resource="_anon130"/>
+</a:List>
+<a:Restriction rdf:about="_anon129">
+	<a:hasValue rdf:resource="deoxynucleotide"/>
+	<a:onProperty rdf:resource="polymer_of"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon13">
+	<a:hasValue rdf:resource="deoxynucleotide"/>
+	<a:onProperty rdf:resource="polymer_of"/>
+</a:Restriction>
+<a:List rdf:about="_anon130">
+	<a:first rdf:resource="_anon131"/>
+	<a:rest rdf:resource="_anon132"/>
+</a:List>
+<a:Restriction rdf:about="_anon131">
+	<a:toClass rdf:resource="deoxynucleotide"/>
+	<a:onProperty rdf:resource="polymer_of"/>
+</a:Restriction>
+<a:List rdf:about="_anon132">
+	<a:first rdf:resource="_anon133"/>
+	<a:rest rdf:resource="_anon137"/>
+</a:List>
+<a:Restriction rdf:about="_anon133">
+	<a:hasValue rdf:resource="_anon134"/>
+	<a:onProperty rdf:resource="has_strandedness"/>
+</a:Restriction>
+<b:Class rdf:about="_anon134">
+	<a:oneOf rdf:resource="_anon135"/>
+</b:Class>
+<a:List rdf:about="_anon135">
+	<a:rest rdf:resource="_anon136"/>
+	<a:first rdf:resource="single"/>
+</a:List>
+<a:Empty rdf:about="_anon136"/>
+<a:Empty rdf:about="_anon137"/>
+<a:Restriction rdf:about="_anon138">
+	<a:toClass rdf:resource="_anon139"/>
+	<a:onProperty rdf:resource="inc:has_name"/>
+</a:Restriction>
+<b:Class rdf:about="_anon139"/>
+<a:List rdf:about="_anon14">
+	<a:first rdf:resource="_anon15"/>
+	<a:rest rdf:resource="_anon16"/>
+</a:List>
+<a:Restriction rdf:about="_anon140">
+	<a:toClass rdf:resource="genbank_file"/>
+	<a:onProperty rdf:resource="has_content"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon141">
+	<a:onProperty rdf:resource="part_of"/>
+	<a:hasValue rdf:resource="physical_structure"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon142">
+	<a:onProperty rdf:resource="has_child"/>
+	<a:hasValue rdf:resource="process"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon143">
+	<a:onProperty rdf:resource="has_role"/>
+	<a:hasValue rdf:resource="role"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon144">
+	<a:hasValue rdf:resource="biological_function"/>
+	<a:onProperty rdf:resource="has_part"/>
+</a:Restriction>
+<a:List rdf:about="_anon145">
+	<a:rest rdf:resource="_anon146"/>
+	<a:first rdf:resource="macromolecule"/>
+</a:List>
+<a:List rdf:about="_anon146">
+	<a:first rdf:resource="_anon147"/>
+	<a:rest rdf:resource="_anon148"/>
+</a:List>
+<a:Restriction rdf:about="_anon147">
+	<a:hasValue rdf:resource="amino_acid"/>
+	<a:onProperty rdf:resource="polymer_of"/>
+</a:Restriction>
+<a:List rdf:about="_anon148">
+	<a:first rdf:resource="_anon149"/>
+	<a:rest rdf:resource="_anon150"/>
+</a:List>
+<a:Restriction rdf:about="_anon149">
+	<a:toClass rdf:resource="amino_acid"/>
+	<a:onProperty rdf:resource="polymer_of"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon15">
+	<a:toClass rdf:resource="deoxynucleotide"/>
+	<a:onProperty rdf:resource="polymer_of"/>
+</a:Restriction>
+<a:List rdf:about="_anon150">
+	<a:first rdf:resource="_anon151"/>
+	<a:rest rdf:resource="_anon152"/>
+</a:List>
+<a:Restriction rdf:about="_anon151">
+	<a:hasValue rdf:resource="messenger_rna"/>
+	<a:onProperty rdf:resource="translated_from"/>
+</a:Restriction>
+<a:Empty rdf:about="_anon152"/>
+<a:List rdf:about="_anon153">
+	<a:rest rdf:resource="_anon154"/>
+	<a:first rdf:resource="protein"/>
+</a:List>
+<a:List rdf:about="_anon154">
+	<a:first rdf:resource="_anon155"/>
+	<a:rest rdf:resource="_anon156"/>
+</a:List>
+<a:Restriction rdf:about="_anon155">
+	<a:hasValue rdf:resource="amino_acid"/>
+	<a:onProperty rdf:resource="polymer_of"/>
+</a:Restriction>
+<a:List rdf:about="_anon156">
+	<a:first rdf:resource="_anon157"/>
+	<a:rest rdf:resource="_anon158"/>
+</a:List>
+<a:Restriction rdf:about="_anon157">
+	<a:toClass rdf:resource="amino_acid"/>
+	<a:onProperty rdf:resource="polymer_of"/>
+</a:Restriction>
+<a:List rdf:about="_anon158">
+	<a:first rdf:resource="_anon159"/>
+	<a:rest rdf:resource="_anon160"/>
+</a:List>
+<a:Restriction rdf:about="_anon159">
+	<a:onProperty rdf:resource="binds"/>
+	<a:hasValue rdf:resource="prosthetic_group"/>
+</a:Restriction>
+<a:List rdf:about="_anon16">
+	<a:first rdf:resource="_anon17"/>
+	<a:rest rdf:resource="_anon21"/>
+</a:List>
+<a:Empty rdf:about="_anon160"/>
+<a:Restriction rdf:about="_anon161">
+	<a:onProperty rdf:resource="part_of"/>
+	<a:hasValue rdf:resource="process"/>
+</a:Restriction>
+<a:List rdf:about="_anon162">
+	<a:rest rdf:resource="_anon163"/>
+	<a:first rdf:resource="protein"/>
+</a:List>
+<a:List rdf:about="_anon163">
+	<a:first rdf:resource="_anon164"/>
+	<a:rest rdf:resource="_anon165"/>
+</a:List>
+<a:Restriction rdf:about="_anon164">
+	<a:hasValue rdf:resource="amino_acid"/>
+	<a:onProperty rdf:resource="polymer_of"/>
+</a:Restriction>
+<a:List rdf:about="_anon165">
+	<a:first rdf:resource="_anon166"/>
+	<a:rest rdf:resource="_anon167"/>
+</a:List>
+<a:Restriction rdf:about="_anon166">
+	<a:toClass rdf:resource="amino_acid"/>
+	<a:onProperty rdf:resource="polymer_of"/>
+</a:Restriction>
+<a:List rdf:about="_anon167">
+	<a:first rdf:resource="_anon168"/>
+	<a:rest rdf:resource="_anon169"/>
+</a:List>
+<a:Restriction rdf:about="_anon168">
+	<a:onProperty rdf:resource="catalyses"/>
+	<a:hasValue rdf:resource="reaction"/>
+</a:Restriction>
+<a:List rdf:about="_anon169">
+	<a:first rdf:resource="_anon170"/>
+	<a:rest rdf:resource="_anon171"/>
+</a:List>
+<a:Restriction rdf:about="_anon17">
+	<a:hasValue rdf:resource="_anon18"/>
+	<a:onProperty rdf:resource="has_strandedness"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon170">
+	<a:onProperty rdf:resource="binds"/>
+	<a:hasValue rdf:resource="prosthetic_group"/>
+</a:Restriction>
+<a:Empty rdf:about="_anon171"/>
+<a:Restriction rdf:about="_anon172">
+	<a:onProperty rdf:resource="has_child"/>
+	<a:hasValue rdf:resource="metabolic_pathway"/>
+</a:Restriction>
+<a:List rdf:about="_anon173">
+	<a:rest rdf:resource="_anon174"/>
+	<a:first rdf:resource="nucleic_acid"/>
+</a:List>
+<a:List rdf:about="_anon174">
+	<a:first rdf:resource="_anon175"/>
+	<a:rest rdf:resource="_anon176"/>
+</a:List>
+<a:Restriction rdf:about="_anon175">
+	<a:hasValue rdf:resource="deoxynucleotide"/>
+	<a:onProperty rdf:resource="polymer_of"/>
+</a:Restriction>
+<a:List rdf:about="_anon176">
+	<a:first rdf:resource="_anon177"/>
+	<a:rest rdf:resource="_anon178"/>
+</a:List>
+<a:Restriction rdf:about="_anon177">
+	<a:toClass rdf:resource="deoxynucleotide"/>
+	<a:onProperty rdf:resource="polymer_of"/>
+</a:Restriction>
+<a:List rdf:about="_anon178">
+	<a:first rdf:resource="_anon179"/>
+	<a:rest rdf:resource="_anon180"/>
+</a:List>
+<a:Restriction rdf:about="_anon179">
+	<a:onProperty rdf:resource="has_strandedness"/>
+	<a:hasValue rdf:resource="http://www.daml.org/2000/12/daml+oil#Thing"/>
+</a:Restriction>
+<b:Class rdf:about="_anon18">
+	<a:oneOf rdf:resource="_anon19"/>
+</b:Class>
+<a:Empty rdf:about="_anon180"/>
+<a:List rdf:about="_anon181">
+	<a:rest rdf:resource="_anon182"/>
+	<a:first rdf:resource="nucleic_acid"/>
+</a:List>
+<a:List rdf:about="_anon182">
+	<a:first rdf:resource="_anon183"/>
+	<a:rest rdf:resource="_anon184"/>
+</a:List>
+<a:Restriction rdf:about="_anon183">
+	<a:onProperty rdf:resource="polymer_of"/>
+	<a:hasValue rdf:resource="ribonucleotide"/>
+</a:Restriction>
+<a:List rdf:about="_anon184">
+	<a:first rdf:resource="_anon185"/>
+	<a:rest rdf:resource="_anon186"/>
+</a:List>
+<a:Restriction rdf:about="_anon185">
+	<a:onProperty rdf:resource="polymer_of"/>
+	<a:toClass rdf:resource="ribonucleotide"/>
+</a:Restriction>
+<a:Empty rdf:about="_anon186"/>
+<a:Restriction rdf:about="_anon187">
+	<a:toClass rdf:resource="_anon188"/>
+	<a:onProperty rdf:resource="has_name"/>
+</a:Restriction>
+<b:Class rdf:about="_anon188"/>
+<a:Restriction rdf:about="_anon189">
+	<a:hasValue rdf:resource="_anon190"/>
+	<a:onProperty rdf:resource="has_name"/>
+</a:Restriction>
+<a:List rdf:about="_anon19">
+	<a:rest rdf:resource="_anon20"/>
+	<a:first rdf:resource="single"/>
+</a:List>
+<b:Class rdf:about="_anon190"/>
+<a:Restriction rdf:about="_anon191">
+	<a:hasValue rdf:resource="cell_state"/>
+	<a:onProperty rdf:resource="has_state"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon192">
+	<a:onProperty rdf:resource="part_of"/>
+	<a:hasValue rdf:resource="tissue"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon193">
+	<a:hasValue rdf:resource="gene_structure"/>
+	<a:onProperty rdf:resource="has_structure"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon194">
+	<a:hasValue rdf:resource="function"/>
+	<a:onProperty rdf:resource="has_function"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon195">
+	<a:hasValue rdf:resource="rna"/>
+	<a:onProperty rdf:resource="transcribed_to"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon196">
+	<a:onProperty rdf:resource="located_at"/>
+	<a:hasValue rdf:resource="map_location"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon197">
+	<a:onProperty rdf:resource="comprised_of"/>
+	<a:hasValue rdf:resource="dna"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon198">
+	<a:onProperty rdf:resource="has_name"/>
+	<a:hasValue rdf:resource="http://www.daml.org/2000/12/daml+oil#Thing"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon199">
+	<a:onProperty rdf:resource="has_content"/>
+	<a:hasValue rdf:resource="http://www.daml.org/2000/12/daml+oil#Thing"/>
+</a:Restriction>
+<a:List rdf:about="_anon2">
+	<a:rest rdf:resource="_anon3"/>
+	<a:first rdf:resource="single"/>
+</a:List>
+<a:Empty rdf:about="_anon20"/>
+<a:Restriction rdf:about="_anon200">
+	<a:onProperty rdf:resource="is_part_of"/>
+	<a:hasValue rdf:resource="process"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon201">
+	<a:toClass rdf:resource="_anon202"/>
+	<a:onProperty rdf:resource="has_content"/>
+</a:Restriction>
+<b:Class rdf:about="_anon202"/>
+<a:Restriction rdf:about="_anon203">
+	<a:toClass rdf:resource="_anon204"/>
+	<a:onProperty rdf:resource="in_column"/>
+</a:Restriction>
+<b:Class rdf:about="_anon204"/>
+<a:Restriction rdf:about="_anon205">
+	<a:hasValue rdf:resource="amino_acid"/>
+	<a:onProperty rdf:resource="polymer_of"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon206">
+	<a:toClass rdf:resource="amino_acid"/>
+	<a:onProperty rdf:resource="polymer_of"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon207">
+	<a:onProperty rdf:resource="catalyses"/>
+	<a:hasValue rdf:resource="oxidation_reduction"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon208">
+	<a:onProperty rdf:resource="binds"/>
+	<a:hasValue rdf:resource="nad"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon209">
+	<a:hasValue rdf:resource="dna_structure"/>
+	<a:onProperty rdf:resource="located_at"/>
+</a:Restriction>
+<a:List rdf:about="_anon21">
+	<a:first rdf:resource="_anon22"/>
+	<a:rest rdf:resource="_anon23"/>
+</a:List>
+<a:List rdf:about="_anon210">
+	<a:rest rdf:resource="_anon211"/>
+	<a:first rdf:resource="cofactor"/>
+</a:List>
+<a:List rdf:about="_anon211">
+	<a:first rdf:resource="_anon212"/>
+	<a:rest rdf:resource="_anon213"/>
+</a:List>
+<b:Class rdf:about="_anon212">
+	<a:complementOf rdf:resource="metal_ion"/>
+</b:Class>
+<a:List rdf:about="_anon213">
+	<a:first rdf:resource="_anon214"/>
+	<a:rest rdf:resource="_anon215"/>
+</a:List>
+<a:Restriction rdf:about="_anon214">
+	<a:hasValue rdf:resource="protein"/>
+	<a:onProperty rdf:resource="strongly_bound_to"/>
+</a:Restriction>
+<a:Empty rdf:about="_anon215"/>
+<a:Restriction rdf:about="_anon216">
+	<a:hasValue rdf:resource="amino_acid"/>
+	<a:onProperty rdf:resource="polymer_of"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon217">
+	<a:toClass rdf:resource="amino_acid"/>
+	<a:onProperty rdf:resource="polymer_of"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon218">
+	<a:onProperty rdf:resource="catalyses"/>
+	<a:hasValue rdf:resource="reaction"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon219">
+	<a:onProperty rdf:resource="binds"/>
+	<a:hasValue rdf:resource="coenzyme"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon22">
+	<a:hasValue rdf:resource="messenger_rna"/>
+	<a:onProperty rdf:resource="transcribed_from"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon220">
+	<a:onProperty rdf:resource="comprised_of"/>
+	<a:hasValue rdf:resource="process"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon221">
+	<a:hasValue rdf:resource="biopathway"/>
+	<a:onProperty rdf:resource="has_part"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon222">
+	<a:hasValue rdf:resource="biological_function"/>
+	<a:onProperty rdf:resource="has_function"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon223">
+	<a:onProperty rdf:resource="part_of"/>
+	<a:hasValue rdf:resource="process"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon224">
+	<a:minCardinality>1</a:minCardinality>
+	<a:onProperty rdf:resource="part_of"/>
+	<a:hasValue rdf:resource="process"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon225">
+	<a:hasValue rdf:resource="biopathway"/>
+	<a:onProperty rdf:resource="has_child"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon226">
+	<a:onProperty rdf:resource="has_part"/>
+	<a:hasValue rdf:resource="reaction"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon227">
+	<a:toClass rdf:resource="_anon228"/>
+	<a:onProperty rdf:resource="unique_id"/>
+</a:Restriction>
+<b:Class rdf:about="_anon228"/>
+<a:Restriction rdf:about="_anon229">
+	<a:hasValue rdf:resource="_anon230"/>
+	<a:onProperty rdf:resource="upstream"/>
+</a:Restriction>
+<a:Empty rdf:about="_anon23"/>
+<b:Class rdf:about="_anon230">
+	<a:unionOf rdf:resource="_anon231"/>
+</b:Class>
+<a:List rdf:about="_anon231">
+	<a:rest rdf:resource="_anon232"/>
+	<a:first rdf:resource="biopathway"/>
+</a:List>
+<a:List rdf:about="_anon232">
+	<a:rest rdf:resource="_anon233"/>
+	<a:first rdf:resource="gene"/>
+</a:List>
+<a:List rdf:about="_anon233">
+	<a:rest rdf:resource="_anon234"/>
+	<a:first rdf:resource="chemical"/>
+</a:List>
+<a:List rdf:about="_anon234">
+	<a:rest rdf:resource="_anon235"/>
+	<a:first rdf:resource="process"/>
+</a:List>
+<a:Empty rdf:about="_anon235"/>
+<a:Restriction rdf:about="_anon236">
+	<a:hasValue rdf:resource="_anon237"/>
+	<a:onProperty rdf:resource="downstream"/>
+</a:Restriction>
+<b:Class rdf:about="_anon237">
+	<a:unionOf rdf:resource="_anon238"/>
+</b:Class>
+<a:List rdf:about="_anon238">
+	<a:rest rdf:resource="_anon239"/>
+	<a:first rdf:resource="biopathway"/>
+</a:List>
+<a:List rdf:about="_anon239">
+	<a:rest rdf:resource="_anon240"/>
+	<a:first rdf:resource="gene"/>
+</a:List>
+<a:Restriction rdf:about="_anon24">
+	<a:hasValue rdf:resource="http://www.daml.org/2000/12/daml+oil#Thing"/>
+	<a:onProperty rdf:resource="upstream"/>
+</a:Restriction>
+<a:List rdf:about="_anon240">
+	<a:rest rdf:resource="_anon241"/>
+	<a:first rdf:resource="chemical"/>
+</a:List>
+<a:List rdf:about="_anon241">
+	<a:rest rdf:resource="_anon242"/>
+	<a:first rdf:resource="process"/>
+</a:List>
+<a:Empty rdf:about="_anon242"/>
+<a:List rdf:about="_anon243">
+	<a:rest rdf:resource="_anon244"/>
+	<a:first rdf:resource="dna"/>
+</a:List>
+<a:List rdf:about="_anon244">
+	<a:first rdf:resource="_anon245"/>
+	<a:rest rdf:resource="_anon246"/>
+</a:List>
+<a:Restriction rdf:about="_anon245">
+	<a:hasValue rdf:resource="deoxynucleotide"/>
+	<a:onProperty rdf:resource="polymer_of"/>
+</a:Restriction>
+<a:List rdf:about="_anon246">
+	<a:first rdf:resource="_anon247"/>
+	<a:rest rdf:resource="_anon248"/>
+</a:List>
+<a:Restriction rdf:about="_anon247">
+	<a:toClass rdf:resource="deoxynucleotide"/>
+	<a:onProperty rdf:resource="polymer_of"/>
+</a:Restriction>
+<a:List rdf:about="_anon248">
+	<a:first rdf:resource="_anon249"/>
+	<a:rest rdf:resource="_anon253"/>
+</a:List>
+<a:Restriction rdf:about="_anon249">
+	<a:hasValue rdf:resource="_anon250"/>
+	<a:onProperty rdf:resource="has_strandedness"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon25">
+	<a:onProperty rdf:resource="downstream"/>
+	<a:hasValue rdf:resource="http://www.daml.org/2000/12/daml+oil#Thing"/>
+</a:Restriction>
+<b:Class rdf:about="_anon250">
+	<a:oneOf rdf:resource="_anon251"/>
+</b:Class>
+<a:List rdf:about="_anon251">
+	<a:rest rdf:resource="_anon252"/>
+	<a:first rdf:resource="double"/>
+</a:List>
+<a:Empty rdf:about="_anon252"/>
+<a:Empty rdf:about="_anon253"/>
+<a:Restriction rdf:about="_anon254">
+	<a:minCardinality>2</a:minCardinality>
+	<a:onProperty rdf:resource="has_part"/>
+	<a:hasValue rdf:resource="protein"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon255">
+	<a:hasValue rdf:resource="_anon256"/>
+	<a:onProperty rdf:resource="upstream"/>
+</a:Restriction>
+<b:Class rdf:about="_anon256">
+	<a:intersectionOf rdf:resource="_anon257"/>
+</b:Class>
+<a:List rdf:about="_anon257">
+	<a:rest rdf:resource="_anon258"/>
+	<a:first rdf:resource="chemical"/>
+</a:List>
+<a:List rdf:about="_anon258">
+	<a:first rdf:resource="_anon259"/>
+	<a:rest rdf:resource="_anon263"/>
+</a:List>
+<a:Restriction rdf:about="_anon259">
+	<a:hasValue rdf:resource="_anon260"/>
+	<a:onProperty rdf:resource="located_in"/>
+</a:Restriction>
+<a:List rdf:about="_anon26">
+	<a:rest rdf:resource="_anon27"/>
+	<a:first rdf:resource="rna"/>
+</a:List>
+<b:Class rdf:about="_anon260">
+	<a:oneOf rdf:resource="_anon261"/>
+</b:Class>
+<a:List rdf:about="_anon261">
+	<a:rest rdf:resource="_anon262"/>
+	<a:first rdf:resource="compartment_A"/>
+</a:List>
+<a:Empty rdf:about="_anon262"/>
+<a:Empty rdf:about="_anon263"/>
+<a:Restriction rdf:about="_anon264">
+	<a:onProperty rdf:resource="across"/>
+	<a:hasValue rdf:resource="boundary"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon265">
+	<a:hasValue rdf:resource="_anon266"/>
+	<a:onProperty rdf:resource="downstream"/>
+</a:Restriction>
+<b:Class rdf:about="_anon266">
+	<a:intersectionOf rdf:resource="_anon267"/>
+</b:Class>
+<a:List rdf:about="_anon267">
+	<a:rest rdf:resource="_anon268"/>
+	<a:first rdf:resource="chemical"/>
+</a:List>
+<a:List rdf:about="_anon268">
+	<a:first rdf:resource="_anon269"/>
+	<a:rest rdf:resource="_anon273"/>
+</a:List>
+<a:Restriction rdf:about="_anon269">
+	<a:hasValue rdf:resource="_anon270"/>
+	<a:onProperty rdf:resource="located_in"/>
+</a:Restriction>
+<a:List rdf:about="_anon27">
+	<a:first rdf:resource="_anon28"/>
+	<a:rest rdf:resource="_anon29"/>
+</a:List>
+<b:Class rdf:about="_anon270">
+	<a:oneOf rdf:resource="_anon271"/>
+</b:Class>
+<a:List rdf:about="_anon271">
+	<a:rest rdf:resource="_anon272"/>
+	<a:first rdf:resource="compartment_B"/>
+</a:List>
+<a:Empty rdf:about="_anon272"/>
+<a:Empty rdf:about="_anon273"/>
+<a:Restriction rdf:about="_anon274">
+	<a:hasValue rdf:resource="gene_network"/>
+	<a:onProperty rdf:resource="has_child"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon275">
+	<a:hasValue rdf:resource="_anon276"/>
+	<a:onProperty rdf:resource="has_part"/>
+</a:Restriction>
+<b:Class rdf:about="_anon276">
+	<a:intersectionOf rdf:resource="_anon277"/>
+</b:Class>
+<a:List rdf:about="_anon277">
+	<a:rest rdf:resource="_anon278"/>
+	<a:first rdf:resource="reaction"/>
+</a:List>
+<a:List rdf:about="_anon278">
+	<a:first rdf:resource="_anon279"/>
+	<a:rest rdf:resource="_anon280"/>
+</a:List>
+<a:Restriction rdf:about="_anon279">
+	<a:hasValue rdf:resource="gene"/>
+	<a:onProperty rdf:resource="upstream"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon28">
+	<a:onProperty rdf:resource="polymer_of"/>
+	<a:hasValue rdf:resource="ribonucleotide"/>
+</a:Restriction>
+<a:List rdf:about="_anon280">
+	<a:first rdf:resource="_anon281"/>
+	<a:rest rdf:resource="_anon282"/>
+</a:List>
+<a:Restriction rdf:about="_anon281">
+	<a:onProperty rdf:resource="downstream"/>
+	<a:hasValue rdf:resource="gene"/>
+</a:Restriction>
+<a:Empty rdf:about="_anon282"/>
+<a:List rdf:about="_anon283">
+	<a:rest rdf:resource="_anon284"/>
+	<a:first rdf:resource="dna"/>
+</a:List>
+<a:List rdf:about="_anon284">
+	<a:first rdf:resource="_anon285"/>
+	<a:rest rdf:resource="_anon286"/>
+</a:List>
+<a:Restriction rdf:about="_anon285">
+	<a:hasValue rdf:resource="deoxynucleotide"/>
+	<a:onProperty rdf:resource="polymer_of"/>
+</a:Restriction>
+<a:List rdf:about="_anon286">
+	<a:first rdf:resource="_anon287"/>
+	<a:rest rdf:resource="_anon288"/>
+</a:List>
+<a:Restriction rdf:about="_anon287">
+	<a:toClass rdf:resource="deoxynucleotide"/>
+	<a:onProperty rdf:resource="polymer_of"/>
+</a:Restriction>
+<a:List rdf:about="_anon288">
+	<a:first rdf:resource="_anon289"/>
+	<a:rest rdf:resource="_anon293"/>
+</a:List>
+<a:Restriction rdf:about="_anon289">
+	<a:hasValue rdf:resource="_anon290"/>
+	<a:onProperty rdf:resource="has_strandedness"/>
+</a:Restriction>
+<a:List rdf:about="_anon29">
+	<a:first rdf:resource="_anon30"/>
+	<a:rest rdf:resource="_anon31"/>
+</a:List>
+<b:Class rdf:about="_anon290">
+	<a:oneOf rdf:resource="_anon291"/>
+</b:Class>
+<a:List rdf:about="_anon291">
+	<a:rest rdf:resource="_anon292"/>
+	<a:first rdf:resource="double"/>
+</a:List>
+<a:Empty rdf:about="_anon292"/>
+<a:List rdf:about="_anon293">
+	<a:first rdf:resource="_anon294"/>
+	<a:rest rdf:resource="_anon299"/>
+</a:List>
+<a:Restriction rdf:about="_anon294">
+	<a:hasValue rdf:resource="_anon295"/>
+	<a:onProperty rdf:resource="part_of"/>
+</a:Restriction>
+<b:Class rdf:about="_anon295">
+	<a:unionOf rdf:resource="_anon296"/>
+</b:Class>
+<a:List rdf:about="_anon296">
+	<a:rest rdf:resource="_anon297"/>
+	<a:first rdf:resource="chromosome"/>
+</a:List>
+<a:List rdf:about="_anon297">
+	<a:rest rdf:resource="_anon298"/>
+	<a:first rdf:resource="plasmid"/>
+</a:List>
+<a:Empty rdf:about="_anon298"/>
+<a:Empty rdf:about="_anon299"/>
+<a:Empty rdf:about="_anon3"/>
+<a:Restriction rdf:about="_anon30">
+	<a:onProperty rdf:resource="polymer_of"/>
+	<a:toClass rdf:resource="ribonucleotide"/>
+</a:Restriction>
+<a:List rdf:about="_anon300">
+	<a:rest rdf:resource="_anon301"/>
+	<a:first rdf:resource="rna"/>
+</a:List>
+<a:List rdf:about="_anon301">
+	<a:first rdf:resource="_anon302"/>
+	<a:rest rdf:resource="_anon303"/>
+</a:List>
+<a:Restriction rdf:about="_anon302">
+	<a:onProperty rdf:resource="polymer_of"/>
+	<a:hasValue rdf:resource="ribonucleotide"/>
+</a:Restriction>
+<a:List rdf:about="_anon303">
+	<a:first rdf:resource="_anon304"/>
+	<a:rest rdf:resource="_anon305"/>
+</a:List>
+<a:Restriction rdf:about="_anon304">
+	<a:onProperty rdf:resource="polymer_of"/>
+	<a:toClass rdf:resource="ribonucleotide"/>
+</a:Restriction>
+<a:List rdf:about="_anon305">
+	<a:first rdf:resource="_anon306"/>
+	<a:rest rdf:resource="_anon307"/>
+</a:List>
+<a:Restriction rdf:about="_anon306">
+	<a:hasValue rdf:resource="dna"/>
+	<a:onProperty rdf:resource="transcribed_from"/>
+</a:Restriction>
+<a:List rdf:about="_anon307">
+	<a:first rdf:resource="_anon308"/>
+	<a:rest rdf:resource="_anon309"/>
+</a:List>
+<a:Restriction rdf:about="_anon308">
+	<a:toClass rdf:resource="dna"/>
+	<a:onProperty rdf:resource="transcribed_from"/>
+</a:Restriction>
+<a:List rdf:about="_anon309">
+	<a:first rdf:resource="_anon310"/>
+	<a:rest rdf:resource="_anon311"/>
+</a:List>
+<a:List rdf:about="_anon31">
+	<a:first rdf:resource="_anon32"/>
+	<a:rest rdf:resource="_anon33"/>
+</a:List>
+<a:Restriction rdf:about="_anon310">
+	<a:hasValue rdf:resource="protein"/>
+	<a:onProperty rdf:resource="translated_to"/>
+</a:Restriction>
+<a:List rdf:about="_anon311">
+	<a:first rdf:resource="_anon312"/>
+	<a:rest rdf:resource="_anon313"/>
+</a:List>
+<a:Restriction rdf:about="_anon312">
+	<a:toClass rdf:resource="protein"/>
+	<a:onProperty rdf:resource="translated_to"/>
+</a:Restriction>
+<a:Empty rdf:about="_anon313"/>
+<a:Restriction rdf:about="_anon314">
+	<a:hasValue rdf:resource="compartment"/>
+	<a:onProperty rdf:resource="located_in"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon315">
+	<a:toClass rdf:resource="_anon316"/>
+	<a:onProperty rdf:resource="inc:has_name"/>
+</a:Restriction>
+<b:Class rdf:about="_anon316"/>
+<a:Restriction rdf:about="_anon317">
+	<a:onProperty rdf:resource="has_content"/>
+	<a:toClass rdf:resource="record"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon318">
+	<a:hasValue rdf:resource="tissue"/>
+	<a:onProperty rdf:resource="transcribed_from"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon319">
+	<a:onProperty rdf:resource="affected_by"/>
+	<a:hasValue rdf:resource="condition"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon32">
+	<a:onProperty rdf:resource="catalyses"/>
+	<a:hasValue rdf:resource="covalent_reaction"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon320">
+	<a:hasValue rdf:resource="methodology"/>
+	<a:onProperty rdf:resource="produced_by"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon321">
+	<a:hasValue rdf:resource="complex"/>
+	<a:onProperty rdf:resource="forms_complex"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon322">
+	<a:onProperty rdf:resource="binds"/>
+	<a:hasValue rdf:resource="macromolecule"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon323">
+	<a:minCardinality>2</a:minCardinality>
+	<a:onProperty rdf:resource="binds"/>
+	<a:hasValue rdf:resource="macromolecule"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon324">
+	<a:cardinality>1</a:cardinality>
+	<a:hasValue rdf:resource="complex"/>
+	<a:onProperty rdf:resource="forms_complex"/>
+</a:Restriction>
+<a:List rdf:about="_anon325">
+	<a:rest rdf:resource="_anon326"/>
+	<a:first rdf:resource="enzyme"/>
+</a:List>
+<a:List rdf:about="_anon326">
+	<a:first rdf:resource="_anon327"/>
+	<a:rest rdf:resource="_anon328"/>
+</a:List>
+<a:Restriction rdf:about="_anon327">
+	<a:hasValue rdf:resource="amino_acid"/>
+	<a:onProperty rdf:resource="polymer_of"/>
+</a:Restriction>
+<a:List rdf:about="_anon328">
+	<a:first rdf:resource="_anon329"/>
+	<a:rest rdf:resource="_anon330"/>
+</a:List>
+<a:Restriction rdf:about="_anon329">
+	<a:toClass rdf:resource="amino_acid"/>
+	<a:onProperty rdf:resource="polymer_of"/>
+</a:Restriction>
+<a:Empty rdf:about="_anon33"/>
+<a:List rdf:about="_anon330">
+	<a:first rdf:resource="_anon331"/>
+	<a:rest rdf:resource="_anon332"/>
+</a:List>
+<a:Restriction rdf:about="_anon331">
+	<a:onProperty rdf:resource="catalyses"/>
+	<a:hasValue rdf:resource="oxidation_reduction"/>
+</a:Restriction>
+<a:Empty rdf:about="_anon332"/>
+<a:Restriction rdf:about="_anon333">
+	<a:hasValue rdf:resource="_anon334"/>
+	<a:onProperty rdf:resource="param_type"/>
+</a:Restriction>
+<b:Class rdf:about="_anon334"/>
+<a:Restriction rdf:about="_anon335">
+	<a:hasValue rdf:resource="_anon336"/>
+	<a:onProperty rdf:resource="param_value"/>
+</a:Restriction>
+<b:Class rdf:about="_anon336"/>
+<a:Restriction rdf:about="_anon337">
+	<a:hasValue rdf:resource="_anon338"/>
+	<a:onProperty rdf:resource="param_unit"/>
+</a:Restriction>
+<b:Class rdf:about="_anon338"/>
+<a:Restriction rdf:about="_anon339">
+	<a:onProperty rdf:resource="has_content"/>
+	<a:hasValue rdf:resource="pair"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon34">
+	<a:onProperty rdf:resource="has_function"/>
+	<a:hasValue rdf:resource="signal_transduction"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon340">
+	<a:minCardinality>1</a:minCardinality>
+	<a:onProperty rdf:resource="has_content"/>
+	<a:hasValue rdf:resource="pair"/>
+</a:Restriction>
+<a:Disjoint rdf:about="_anon341">
+	<a:rest rdf:resource="_anon342"/>
+	<a:first rdf:resource="metal"/>
+</a:Disjoint>
+<a:Disjoint rdf:about="_anon342">
+	<a:rest rdf:resource="_anon343"/>
+	<a:first rdf:resource="non_metal"/>
+</a:Disjoint>
+<a:Empty rdf:about="_anon343"/>
+<a:Disjoint rdf:about="_anon344">
+	<a:rest rdf:resource="_anon345"/>
+	<a:first rdf:resource="chromosome"/>
+</a:Disjoint>
+<a:Disjoint rdf:about="_anon345">
+	<a:rest rdf:resource="_anon346"/>
+	<a:first rdf:resource="plasmid"/>
+</a:Disjoint>
+<a:Empty rdf:about="_anon346"/>
+<a:Disjoint rdf:about="_anon347">
+	<a:rest rdf:resource="_anon348"/>
+	<a:first rdf:resource="dna"/>
+</a:Disjoint>
+<a:Disjoint rdf:about="_anon348">
+	<a:rest rdf:resource="_anon349"/>
+	<a:first rdf:resource="rna"/>
+</a:Disjoint>
+<a:Empty rdf:about="_anon349"/>
+<a:Restriction rdf:about="_anon35">
+	<a:onProperty rdf:resource="has_child"/>
+	<a:hasValue rdf:resource="signal_transduction_pathway"/>
+</a:Restriction>
+<b:Class rdf:about="_anon350">
+	<a:unionOf rdf:resource="_anon351"/>
+</b:Class>
+<a:List rdf:about="_anon351">
+	<a:first rdf:resource="_anon352"/>
+	<a:rest rdf:resource="_anon353"/>
+</a:List>
+<a:Restriction rdf:about="_anon352">
+	<a:hasValue rdf:resource="ec_number"/>
+	<a:onProperty rdf:resource="has_ec_number"/>
+</a:Restriction>
+<a:Empty rdf:about="_anon353"/>
+<b:Class rdf:about="_anon354">
+	<a:unionOf rdf:resource="_anon355"/>
+</b:Class>
+<a:List rdf:about="_anon355">
+	<a:first rdf:resource="_anon356"/>
+	<a:rest rdf:resource="_anon357"/>
+</a:List>
+<a:Restriction rdf:about="_anon356">
+	<a:cardinality>1</a:cardinality>
+	<a:hasValue rdf:resource="accession_number"/>
+	<a:onProperty rdf:resource="has_accession_number"/>
+</a:Restriction>
+<a:Empty rdf:about="_anon357"/>
+<b:Class rdf:about="_anon358">
+	<a:unionOf rdf:resource="_anon359"/>
+</b:Class>
+<a:List rdf:about="_anon359">
+	<a:first rdf:resource="_anon360"/>
+	<a:rest rdf:resource="_anon361"/>
+</a:List>
+<a:Restriction rdf:about="_anon36">
+	<a:hasValue rdf:resource="_anon37"/>
+	<a:onProperty rdf:resource="inc:has_name"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon360">
+	<a:minCardinality>1</a:minCardinality>
+	<a:onProperty rdf:resource="has_species"/>
+	<a:hasValue rdf:resource="species"/>
+</a:Restriction>
+<a:Empty rdf:about="_anon361"/>
+<a:Disjoint rdf:about="_anon362">
+	<a:rest rdf:resource="_anon363"/>
+	<a:first rdf:resource="small_molecule"/>
+</a:Disjoint>
+<a:Disjoint rdf:about="_anon363">
+	<a:rest rdf:resource="_anon364"/>
+	<a:first rdf:resource="macromolecule"/>
+</a:Disjoint>
+<a:Empty rdf:about="_anon364"/>
+<b:Class rdf:about="_anon365">
+	<a:intersectionOf rdf:resource="_anon366"/>
+</b:Class>
+<a:List rdf:about="_anon366">
+	<a:rest rdf:resource="_anon367"/>
+	<a:first rdf:resource="record"/>
+</a:List>
+<a:List rdf:about="_anon367">
+	<a:first rdf:resource="_anon368"/>
+	<a:rest rdf:resource="_anon372"/>
+</a:List>
+<a:Restriction rdf:about="_anon368">
+	<a:hasValue rdf:resource="_anon369"/>
+	<a:onProperty rdf:resource="has_content"/>
+</a:Restriction>
+<b:Class rdf:about="_anon369">
+	<a:oneOf rdf:resource="_anon370"/>
+</b:Class>
+<b:Class rdf:about="_anon37">
+	<a:oneOf rdf:resource="_anon38"/>
+</b:Class>
+<a:List rdf:about="_anon370">
+	<a:first rdf:resource="ORGANISM"/>
+	<a:rest rdf:resource="_anon371"/>
+</a:List>
+<a:Empty rdf:about="_anon371"/>
+<a:Empty rdf:about="_anon372"/>
+<a:Disjoint rdf:about="_anon373">
+	<a:first rdf:resource="_anon374"/>
+	<a:rest rdf:resource="_anon377"/>
+</a:Disjoint>
+<b:Class rdf:about="_anon374">
+	<a:oneOf rdf:resource="_anon375"/>
+</b:Class>
+<a:List rdf:about="_anon375">
+	<a:rest rdf:resource="_anon376"/>
+	<a:first rdf:resource="compartment_A"/>
+</a:List>
+<a:Empty rdf:about="_anon376"/>
+<a:Disjoint rdf:about="_anon377">
+	<a:first rdf:resource="_anon378"/>
+	<a:rest rdf:resource="_anon381"/>
+</a:Disjoint>
+<b:Class rdf:about="_anon378">
+	<a:oneOf rdf:resource="_anon379"/>
+</b:Class>
+<a:List rdf:about="_anon379">
+	<a:rest rdf:resource="_anon380"/>
+	<a:first rdf:resource="compartment_B"/>
+</a:List>
+<a:List rdf:about="_anon38">
+	<a:first rdf:resource="AUTHORS"/>
+	<a:rest rdf:resource="_anon39"/>
+</a:List>
+<a:Empty rdf:about="_anon380"/>
+<a:Empty rdf:about="_anon381"/>
+<a:List rdf:about="_anon39">
+	<a:first rdf:resource="JOURNAL"/>
+	<a:rest rdf:resource="_anon40"/>
+</a:List>
+<b:Class rdf:about="_anon4">
+	<a:unionOf rdf:resource="_anon5"/>
+</b:Class>
+<a:List rdf:about="_anon40">
+	<a:first rdf:resource="ORGANISM"/>
+	<a:rest rdf:resource="_anon41"/>
+</a:List>
+<a:List rdf:about="_anon41">
+	<a:first rdf:resource="TITLE"/>
+	<a:rest rdf:resource="_anon42"/>
+</a:List>
+<a:Empty rdf:about="_anon42"/>
+<a:Restriction rdf:about="_anon43">
+	<a:onProperty rdf:resource="is_part_of"/>
+	<a:toClass rdf:resource="record"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon44">
+	<a:cardinality>1</a:cardinality>
+	<a:onProperty rdf:resource="is_part_of"/>
+	<a:hasValue rdf:resource="record"/>
+</a:Restriction>
+<a:List rdf:about="_anon45">
+	<a:rest rdf:resource="_anon46"/>
+	<a:first rdf:resource="protein"/>
+</a:List>
+<a:List rdf:about="_anon46">
+	<a:first rdf:resource="_anon47"/>
+	<a:rest rdf:resource="_anon48"/>
+</a:List>
+<a:Restriction rdf:about="_anon47">
+	<a:hasValue rdf:resource="amino_acid"/>
+	<a:onProperty rdf:resource="polymer_of"/>
+</a:Restriction>
+<a:List rdf:about="_anon48">
+	<a:first rdf:resource="_anon49"/>
+	<a:rest rdf:resource="_anon50"/>
+</a:List>
+<a:Restriction rdf:about="_anon49">
+	<a:toClass rdf:resource="amino_acid"/>
+	<a:onProperty rdf:resource="polymer_of"/>
+</a:Restriction>
+<a:List rdf:about="_anon5">
+	<a:rest rdf:resource="_anon6"/>
+	<a:first rdf:resource="protein"/>
+</a:List>
+<a:List rdf:about="_anon50">
+	<a:first rdf:resource="_anon51"/>
+	<a:rest rdf:resource="_anon52"/>
+</a:List>
+<a:Restriction rdf:about="_anon51">
+	<a:onProperty rdf:resource="catalyses"/>
+	<a:hasValue rdf:resource="reaction"/>
+</a:Restriction>
+<a:Empty rdf:about="_anon52"/>
+<a:Restriction rdf:about="_anon53">
+	<a:hasValue rdf:resource="_anon54"/>
+	<a:onProperty rdf:resource="has_part"/>
+</a:Restriction>
+<b:Class rdf:about="_anon54">
+	<a:intersectionOf rdf:resource="_anon55"/>
+</b:Class>
+<a:List rdf:about="_anon55">
+	<a:rest rdf:resource="_anon56"/>
+	<a:first rdf:resource="ordered_set"/>
+</a:List>
+<a:List rdf:about="_anon56">
+	<a:first rdf:resource="_anon57"/>
+	<a:rest rdf:resource="_anon67"/>
+</a:List>
+<a:Restriction rdf:about="_anon57">
+	<a:hasValue rdf:resource="_anon58"/>
+	<a:onProperty rdf:resource="has_content"/>
+</a:Restriction>
+<b:Class rdf:about="_anon58">
+	<a:intersectionOf rdf:resource="_anon59"/>
+</b:Class>
+<a:List rdf:about="_anon59">
+	<a:rest rdf:resource="_anon60"/>
+	<a:first rdf:resource="pair"/>
+</a:List>
+<a:List rdf:about="_anon6">
+	<a:rest rdf:resource="_anon7"/>
+	<a:first rdf:resource="nucleic_acid"/>
+</a:List>
+<a:List rdf:about="_anon60">
+	<a:first rdf:resource="_anon61"/>
+	<a:rest rdf:resource="_anon66"/>
+</a:List>
+<a:Restriction rdf:about="_anon61">
+	<a:hasValue rdf:resource="_anon62"/>
+	<a:onProperty rdf:resource="has_content"/>
+</a:Restriction>
+<b:Class rdf:about="_anon62">
+	<a:unionOf rdf:resource="_anon63"/>
+</b:Class>
+<a:List rdf:about="_anon63">
+	<a:rest rdf:resource="_anon64"/>
+	<a:first rdf:resource="exon"/>
+</a:List>
+<a:List rdf:about="_anon64">
+	<a:rest rdf:resource="_anon65"/>
+	<a:first rdf:resource="intron"/>
+</a:List>
+<a:Empty rdf:about="_anon65"/>
+<a:Empty rdf:about="_anon66"/>
+<a:Empty rdf:about="_anon67"/>
+<a:Restriction rdf:about="_anon68">
+	<a:toClass rdf:resource="_anon69"/>
+	<a:onProperty rdf:resource="has_part"/>
+</a:Restriction>
+<b:Class rdf:about="_anon69">
+	<a:unionOf rdf:resource="_anon70"/>
+</b:Class>
+<a:Empty rdf:about="_anon7"/>
+<a:List rdf:about="_anon70">
+	<a:rest rdf:resource="_anon71"/>
+	<a:first rdf:resource="exon"/>
+</a:List>
+<a:List rdf:about="_anon71">
+	<a:rest rdf:resource="_anon72"/>
+	<a:first rdf:resource="intron"/>
+</a:List>
+<a:Empty rdf:about="_anon72"/>
+<a:List rdf:about="_anon73">
+	<a:rest rdf:resource="_anon74"/>
+	<a:first rdf:resource="macromolecule"/>
+</a:List>
+<a:List rdf:about="_anon74">
+	<a:first rdf:resource="_anon75"/>
+	<a:rest rdf:resource="_anon76"/>
+</a:List>
+<a:Restriction rdf:about="_anon75">
+	<a:hasValue rdf:resource="nucleotide"/>
+	<a:onProperty rdf:resource="polymer_of"/>
+</a:Restriction>
+<a:List rdf:about="_anon76">
+	<a:first rdf:resource="_anon77"/>
+	<a:rest rdf:resource="_anon78"/>
+</a:List>
+<a:Restriction rdf:about="_anon77">
+	<a:toClass rdf:resource="nucleotide"/>
+	<a:onProperty rdf:resource="polymer_of"/>
+</a:Restriction>
+<a:Empty rdf:about="_anon78"/>
+<a:List rdf:about="_anon79">
+	<a:rest rdf:resource="_anon80"/>
+	<a:first rdf:resource="metal"/>
+</a:List>
+<a:Restriction rdf:about="_anon8">
+	<a:hasValue rdf:resource="dna"/>
+	<a:onProperty rdf:resource="transcribed_from"/>
+</a:Restriction>
+<a:List rdf:about="_anon80">
+	<a:rest rdf:resource="_anon81"/>
+	<a:first rdf:resource="ion"/>
+</a:List>
+<a:Empty rdf:about="_anon81"/>
+<a:List rdf:about="_anon82">
+	<a:rest rdf:resource="_anon83"/>
+	<a:first rdf:resource="enzyme"/>
+</a:List>
+<a:List rdf:about="_anon83">
+	<a:first rdf:resource="_anon84"/>
+	<a:rest rdf:resource="_anon85"/>
+</a:List>
+<a:Restriction rdf:about="_anon84">
+	<a:hasValue rdf:resource="amino_acid"/>
+	<a:onProperty rdf:resource="polymer_of"/>
+</a:Restriction>
+<a:List rdf:about="_anon85">
+	<a:first rdf:resource="_anon86"/>
+	<a:rest rdf:resource="_anon87"/>
+</a:List>
+<a:Restriction rdf:about="_anon86">
+	<a:toClass rdf:resource="amino_acid"/>
+	<a:onProperty rdf:resource="polymer_of"/>
+</a:Restriction>
+<a:List rdf:about="_anon87">
+	<a:first rdf:resource="_anon88"/>
+	<a:rest rdf:resource="_anon89"/>
+</a:List>
+<a:Restriction rdf:about="_anon88">
+	<a:onProperty rdf:resource="catalyses"/>
+	<a:hasValue rdf:resource="hydrolysis"/>
+</a:Restriction>
+<a:Empty rdf:about="_anon89"/>
+<a:Restriction rdf:about="_anon9">
+	<a:onProperty rdf:resource="around"/>
+	<a:hasValue rdf:resource="compartment"/>
+</a:Restriction>
+<a:Restriction rdf:about="_anon90">
+	<a:hasValue rdf:resource="_anon91"/>
+	<a:onProperty rdf:resource="inc:has_name"/>
+</a:Restriction>
+<b:Class rdf:about="_anon91">
+	<a:oneOf rdf:resource="_anon92"/>
+</b:Class>
+<a:List rdf:about="_anon92">
+	<a:first rdf:resource="ACCESSION"/>
+	<a:rest rdf:resource="_anon93"/>
+</a:List>
+<a:List rdf:about="_anon93">
+	<a:first rdf:resource="DEFINITION"/>
+	<a:rest rdf:resource="_anon94"/>
+</a:List>
+<a:List rdf:about="_anon94">
+	<a:first rdf:resource="FEATURES"/>
+	<a:rest rdf:resource="_anon95"/>
+</a:List>
+<a:List rdf:about="_anon95">
+	<a:first rdf:resource="KEYWORDS"/>
+	<a:rest rdf:resource="_anon96"/>
+</a:List>
+<a:List rdf:about="_anon96">
+	<a:first rdf:resource="LOCUS"/>
+	<a:rest rdf:resource="_anon97"/>
+</a:List>
+<a:List rdf:about="_anon97">
+	<a:first rdf:resource="ORIGIN"/>
+	<a:rest rdf:resource="_anon98"/>
+</a:List>
+<a:List rdf:about="_anon98">
+	<a:first rdf:resource="REFERENCE"/>
+	<a:rest rdf:resource="_anon99"/>
+</a:List>
+<a:List rdf:about="_anon99">
+	<a:first rdf:resource="SEGMENT"/>
+	<a:rest rdf:resource="_anon100"/>
+</a:List>
+<a:Thing rdf:about="_anticodon"/>
+<a:Thing rdf:about="_bound_moiety"/>
+<a:Thing rdf:about="_citation"/>
+<a:Thing rdf:about="_codon"/>
+<a:Thing rdf:about="_codon_start"/>
+<a:Thing rdf:about="_cons_splice"/>
+<a:Thing rdf:about="_db_xref"/>
+<a:Thing rdf:about="_direction"/>
+<a:Thing rdf:about="_frequency"/>
+<a:Thing rdf:about="_function"/>
+<a:Thing rdf:about="_gene"/>
+<a:Thing rdf:about="_label"/>
+<a:Thing rdf:about="_map"/>
+<a:Thing rdf:about="_mod_base"/>
+<b:Class rdf:about="accession_number">
+	<b:subClassOf rdf:resource="label"/>
+</b:Class>
+<rdf:Property rdf:about="across"/>
+<b:Class rdf:about="actin_binding">
+	<b:subClassOf rdf:resource="binding"/>
+</b:Class>
+<rdf:Property rdf:about="affected_by"/>
+<b:Class rdf:about="age">
+	<b:subClassOf rdf:resource="condition"/>
+</b:Class>
+<c:feature_type rdf:about="allele"/>
+<b:Class rdf:about="amino_acid">
+	<b:subClassOf rdf:resource="small_molecule"/>
+</b:Class>
+<b:Class rdf:about="anatomy">
+	<b:subClassOf rdf:resource="physical_structure"/>
+</b:Class>
+<b:Class rdf:about="anticoagulant">
+	<b:subClassOf rdf:resource="biological_function"/>
+</b:Class>
+<b:Class rdf:about="apoptosis_inhibitor">
+	<b:subClassOf rdf:resource="regulation"/>
+</b:Class>
+<rdf:Property rdf:about="around"/>
+<b:Class rdf:about="atom">
+	<b:subClassOf rdf:resource="_anon187"/>
+	<b:subClassOf rdf:resource="_anon189"/>
+	<b:subClassOf rdf:resource="chemical"/>
+</b:Class>
+<c:feature_type rdf:about="attenuator"/>
+<b:Class rdf:about="binding">
+	<b:subClassOf rdf:resource="biological_function"/>
+</b:Class>
+<rdf:Property rdf:about="binds">
+	<a:inverseOf rdf:resource="bound_to"/>
+</rdf:Property>
+<b:Class rdf:about="biological_function">
+	<b:subClassOf rdf:resource="_anon161"/>
+	<b:subClassOf rdf:resource="function"/>
+</b:Class>
+<b:Class rdf:about="biological_system">
+	<b:subClassOf rdf:resource="_anon220"/>
+	<b:subClassOf rdf:resource="_anon221"/>
+</b:Class>
+<b:Class rdf:about="biopathway">
+	<b:subClassOf rdf:resource="_anon222"/>
+	<b:subClassOf rdf:resource="_anon223"/>
+	<b:subClassOf rdf:resource="_anon224"/>
+	<b:subClassOf rdf:resource="_anon225"/>
+	<b:subClassOf rdf:resource="_anon226"/>
+	<b:subClassOf rdf:resource="_anon227"/>
+	<b:subClassOf rdf:resource="_anon229"/>
+	<b:subClassOf rdf:resource="_anon236"/>
+	<b:subClassOf rdf:resource="transformation"/>
+</b:Class>
+<rdf:Property rdf:about="bound_to"/>
+<b:Class rdf:about="boundary">
+	<b:subClassOf rdf:resource="_anon9"/>
+	<b:subClassOf rdf:resource="physical_structure"/>
+</b:Class>
+<b:Class rdf:about="boundary_transport">
+	<b:subClassOf rdf:resource="_anon255"/>
+	<b:subClassOf rdf:resource="_anon264"/>
+	<b:subClassOf rdf:resource="_anon265"/>
+	<b:subClassOf rdf:resource="reaction"/>
+</b:Class>
+<b:Class rdf:about="carbohydrate">
+	<b:subClassOf rdf:resource="small_molecule"/>
+</b:Class>
+<rdf:Property rdf:about="catalysed_by"/>
+<rdf:Property rdf:about="catalyses">
+	<a:inverseOf rdf:resource="catalysed_by"/>
+	<b:domain rdf:resource="macromolecule"/>
+	<b:range rdf:resource="reaction"/>
+</rdf:Property>
+<b:Class rdf:about="cell">
+	<b:subClassOf rdf:resource="_anon191"/>
+	<b:subClassOf rdf:resource="_anon192"/>
+	<b:subClassOf rdf:resource="physical_structure"/>
+</b:Class>
+<b:Class rdf:about="cell_adhesion">
+	<b:subClassOf rdf:resource="biological_function"/>
+</b:Class>
+<b:Class rdf:about="cell_cycle_regulator">
+	<b:subClassOf rdf:resource="regulation"/>
+</b:Class>
+<b:Class rdf:about="cell_state">
+	<b:subClassOf rdf:resource="modifier"/>
+</b:Class>
+<b:Class rdf:about="chaperone">
+	<b:subClassOf rdf:resource="biological_function"/>
+</b:Class>
+<b:Class rdf:about="chemical">
+	<b:subClassOf rdf:resource="_anon314"/>
+</b:Class>
+<b:Class rdf:about="chromosome">
+	<b:subClassOf rdf:resource="dna_structure"/>
+</b:Class>
+<b:Class rdf:about="classification">
+	<b:subClassOf rdf:resource="mental_structure"/>
+</b:Class>
+<b:Class rdf:about="coenzyme">
+	<a:intersectionOf rdf:resource="_anon117"/>
+</b:Class>
+<b:Class rdf:about="coenzyme_requiring_enzyme">
+	<b:subClassOf rdf:resource="_anon216"/>
+	<b:subClassOf rdf:resource="_anon217"/>
+	<b:subClassOf rdf:resource="_anon218"/>
+	<b:subClassOf rdf:resource="_anon219"/>
+	<b:subClassOf rdf:resource="enzyme"/>
+</b:Class>
+<b:Class rdf:about="cofactor">
+	<a:intersectionOf rdf:resource="_anon121"/>
+</b:Class>
+<b:Class rdf:about="compartment">
+	<b:subClassOf rdf:resource="_anon141"/>
+	<b:subClassOf rdf:resource="physical_structure"/>
+</b:Class>
+<a:Thing rdf:about="compartment_A"/>
+<a:Thing rdf:about="compartment_B"/>
+<b:Class rdf:about="complement_dna">
+	<a:intersectionOf rdf:resource="_anon11"/>
+</b:Class>
+<b:Class rdf:about="complex">
+	<b:subClassOf rdf:resource="_anon254"/>
+	<b:subClassOf rdf:resource="macromolecule"/>
+</b:Class>
+<rdf:Property rdf:about="comprised_of"/>
+<b:Class rdf:about="condition"/>
+<c:feature_type rdf:about="conflict"/>
+<b:Class rdf:about="coordinate">
+	<b:subClassOf rdf:resource="mental_structure"/>
+</b:Class>
+<b:Class rdf:about="covalent_reaction">
+	<b:subClassOf rdf:resource="reaction"/>
+</b:Class>
+<b:Class rdf:about="cytoskeletal_regulator">
+	<b:subClassOf rdf:resource="regulation"/>
+</b:Class>
+<b:Class rdf:about="defenseimmunity_protein">
+	<b:subClassOf rdf:resource="biological_function"/>
+</b:Class>
+<rdf:Property rdf:about="delta_H"/>
+<rdf:Property rdf:about="delta_S"/>
+<b:Class rdf:about="deoxynucleotide">
+	<b:subClassOf rdf:resource="nucleotide"/>
+</b:Class>
+<b:Class rdf:about="developmental_stage">
+	<b:subClassOf rdf:resource="condition"/>
+</b:Class>
+<b:Class rdf:about="disease">
+	<b:subClassOf rdf:resource="condition"/>
+</b:Class>
+<b:Class rdf:about="disease_state">
+	<b:subClassOf rdf:resource="modifier"/>
+</b:Class>
+<b:Class rdf:about="dna">
+	<a:intersectionOf rdf:resource="_anon173"/>
+</b:Class>
+<b:Class rdf:about="dna_structure">
+	<b:subClassOf rdf:resource="physical_structure"/>
+</b:Class>
+<c:selector rdf:about="double"/>
+<b:Class rdf:about="double_stranded_dna">
+	<a:intersectionOf rdf:resource="_anon243"/>
+</b:Class>
+<rdf:Property rdf:about="downstream"/>
+<b:Class rdf:about="ec_number">
+	<b:subClassOf rdf:resource="label"/>
+</b:Class>
+<rdf:Property rdf:about="enclosed_by">
+	<a:inverseOf rdf:resource="around"/>
+</rdf:Property>
+<c:feature_type rdf:about="enhancer"/>
+<b:Class rdf:about="environment">
+	<b:subClassOf rdf:resource="condition"/>
+</b:Class>
+<b:Class rdf:about="enzyme">
+	<b:subClassOf rdf:resource="_anon350"/>
+	<a:intersectionOf rdf:resource="_anon45"/>
+</b:Class>
+<b:Class rdf:about="enzyme_activator">
+	<b:subClassOf rdf:resource="regulation"/>
+</b:Class>
+<b:Class rdf:about="enzyme_function">
+	<b:subClassOf rdf:resource="biological_function"/>
+</b:Class>
+<b:Class rdf:about="enzyme_inhibitor">
+	<b:subClassOf rdf:resource="regulation"/>
+</b:Class>
+<b:Class rdf:about="exon">
+	<b:subClassOf rdf:resource="dna_structure"/>
+</b:Class>
+<b:Class rdf:about="expressed_sequence_tag">
+	<b:subClassOf rdf:resource="_anon318"/>
+	<b:subClassOf rdf:resource="_anon319"/>
+	<b:subClassOf rdf:resource="_anon320"/>
+	<b:subClassOf rdf:resource="complement_dna"/>
+	<a:equivalentTo rdf:resource="complement_dna"/>
+</b:Class>
+<b:Class rdf:about="expression_profile"/>
+<b:Class rdf:about="fad">
+	<b:subClassOf rdf:resource="prosthetic_group"/>
+</b:Class>
+<b:Class rdf:about="feature_type">
+	<b:subClassOf rdf:resource="format_component"/>
+</b:Class>
+<b:Class rdf:about="field">
+	<b:subClassOf rdf:resource="_anon201"/>
+	<b:subClassOf rdf:resource="_anon203"/>
+	<b:subClassOf rdf:resource="format_component"/>
+</b:Class>
+<c:feature_type rdf:about="five_UTR"/>
+<c:feature_type rdf:about="five_clip"/>
+<b:Class rdf:about="format_component"/>
+<rdf:Property rdf:about="forms_complex"/>
+<rdf:Property rdf:about="forms_polymer"/>
+<b:Class rdf:about="function"/>
+<b:Class rdf:about="genbank_file">
+	<b:subClassOf rdf:resource="_anon315"/>
+	<b:subClassOf rdf:resource="_anon317"/>
+	<b:subClassOf rdf:resource="format_component"/>
+</b:Class>
+<b:Class rdf:about="genbank_release">
+	<b:subClassOf rdf:resource="_anon138"/>
+	<b:subClassOf rdf:resource="_anon140"/>
+	<b:subClassOf rdf:resource="format_component"/>
+</b:Class>
+<b:Class rdf:about="gene">
+	<b:subClassOf rdf:resource="_anon193"/>
+	<b:subClassOf rdf:resource="_anon194"/>
+	<b:subClassOf rdf:resource="_anon195"/>
+	<b:subClassOf rdf:resource="_anon196"/>
+	<b:subClassOf rdf:resource="_anon197"/>
+</b:Class>
+<b:Class rdf:about="gene_network">
+	<b:subClassOf rdf:resource="_anon274"/>
+	<b:subClassOf rdf:resource="_anon275"/>
+	<b:subClassOf rdf:resource="biopathway"/>
+</b:Class>
+<b:Class rdf:about="gene_regulation">
+	<b:subClassOf rdf:resource="function"/>
+</b:Class>
+<b:Class rdf:about="gene_structure">
+	<b:subClassOf rdf:resource="_anon53"/>
+	<b:subClassOf rdf:resource="_anon68"/>
+	<b:subClassOf rdf:resource="physical_structure"/>
+</b:Class>
+<b:Class rdf:about="genomic_dna">
+	<a:intersectionOf rdf:resource="_anon283"/>
+</b:Class>
+<rdf:Property rdf:about="has_accession_number">
+	<b:domain rdf:resource="_anon4"/>
+	<b:range rdf:resource="accession_number"/>
+</rdf:Property>
+<rdf:Property rdf:about="has_child"/>
+<rdf:Property rdf:about="has_content"/>
+<rdf:Property rdf:about="has_ec_number">
+	<b:range rdf:resource="ec_number"/>
+	<b:domain rdf:resource="enzyme"/>
+</rdf:Property>
+<rdf:Property rdf:about="has_function"/>
+<rdf:Property rdf:about="has_name">
+	<b:range rdf:resource="name"/>
+	<a:inverseOf rdf:resource="name_of"/>
+</rdf:Property>
+<rdf:Property rdf:about="has_part">
+	<a:inverseOf rdf:resource="part_of"/>
+</rdf:Property>
+<rdf:Property rdf:about="has_role"/>
+<rdf:Property rdf:about="has_species">
+	<b:range rdf:resource="species"/>
+</rdf:Property>
+<rdf:Property rdf:about="has_state"/>
+<rdf:Property rdf:about="has_strandedness">
+	<b:range rdf:resource="_anon0"/>
+	<b:domain rdf:resource="nucleic_acid"/>
+</rdf:Property>
+<rdf:Property rdf:about="has_structure"/>
+<b:Class rdf:about="holoenzyme">
+	<a:intersectionOf rdf:resource="_anon162"/>
+</b:Class>
+<b:Class rdf:about="holoprotein">
+	<a:intersectionOf rdf:resource="_anon153"/>
+</b:Class>
+<b:Class rdf:about="hydrolase">
+	<a:intersectionOf rdf:resource="_anon82"/>
+</b:Class>
+<b:Class rdf:about="hydrolysis">
+	<b:subClassOf rdf:resource="covalent_reaction"/>
+</b:Class>
+<c:feature_type rdf:about="hyphen"/>
+<c:feature_type rdf:about="iDNA"/>
+<rdf:Property rdf:about="in_column"/>
+<c:feature_type rdf:about="inc:exon"/>
+<c:feature_type rdf:about="inc:gene"/>
+<rdf:Property rdf:about="inc:has_name"/>
+<c:feature_type rdf:about="inc:intron"/>
+<b:Class rdf:about="interaction">
+	<b:subClassOf rdf:resource="_anon321"/>
+	<b:subClassOf rdf:resource="_anon322"/>
+	<b:subClassOf rdf:resource="_anon323"/>
+	<b:subClassOf rdf:resource="_anon324"/>
+	<b:subClassOf rdf:resource="reaction"/>
+</b:Class>
+<b:Class rdf:about="intron">
+	<b:subClassOf rdf:resource="dna_structure"/>
+</b:Class>
+<b:Class rdf:about="ion">
+	<b:subClassOf rdf:resource="chemical"/>
+</b:Class>
+<rdf:Property rdf:about="is_part_of"/>
+<b:Class rdf:about="label">
+	<b:subClassOf rdf:resource="mental_structure"/>
+</b:Class>
+<b:Class rdf:about="ligand_binding_or_carrier">
+	<b:subClassOf rdf:resource="binding"/>
+</b:Class>
+<b:Class rdf:about="ligand_function">
+	<b:subClassOf rdf:resource="signal_transduction"/>
+</b:Class>
+<b:Class rdf:about="ligation">
+	<b:subClassOf rdf:resource="covalent_reaction"/>
+</b:Class>
+<rdf:Property rdf:about="located_at"/>
+<rdf:Property rdf:about="located_in">
+	<b:subPropertyOf rdf:resource="located_at"/>
+</rdf:Property>
+<rdf:Property rdf:about="loosely_binds">
+	<b:subPropertyOf rdf:resource="binds"/>
+	<a:inverseOf rdf:resource="loosely_bound_to"/>
+</rdf:Property>
+<rdf:Property rdf:about="loosely_bound_to"/>
+<c:feature_type rdf:about="mRNA"/>
+<b:Class rdf:about="macromolecule">
+	<b:subClassOf rdf:resource="chemical"/>
+</b:Class>
+<b:Class rdf:about="map_location">
+	<b:subClassOf rdf:resource="_anon209"/>
+	<b:subClassOf rdf:resource="physical_structure"/>
+</b:Class>
+<c:feature_type rdf:about="mat_peptide"/>
+<b:Class rdf:about="mental_structure"/>
+<b:Class rdf:about="messenger_rna">
+	<a:intersectionOf rdf:resource="_anon300"/>
+</b:Class>
+<b:Class rdf:about="metabolic_pathway">
+	<b:subClassOf rdf:resource="_anon172"/>
+	<b:subClassOf rdf:resource="biopathway"/>
+</b:Class>
+<b:Class rdf:about="metal">
+	<b:subClassOf rdf:resource="atom"/>
+</b:Class>
+<b:Class rdf:about="metal_ion">
+	<a:intersectionOf rdf:resource="_anon79"/>
+</b:Class>
+<b:Class rdf:about="methodology">
+	<b:subClassOf rdf:resource="mental_structure"/>
+</b:Class>
+<b:Class rdf:about="microtubule_binding">
+	<b:subClassOf rdf:resource="binding"/>
+</b:Class>
+<c:feature_type rdf:about="misc_RNA"/>
+<c:feature_type rdf:about="misc_binding"/>
+<c:feature_type rdf:about="misc_difference"/>
+<c:feature_type rdf:about="misc_feature"/>
+<c:feature_type rdf:about="misc_recomb"/>
+<c:feature_type rdf:about="misc_signal"/>
+<c:feature_type rdf:about="misc_structure"/>
+<c:feature_type rdf:about="modified_base"/>
+<b:Class rdf:about="modifier"/>
+<b:Class rdf:about="molecular_function_unknown">
+	<b:subClassOf rdf:resource="biological_function"/>
+</b:Class>
+<b:Class rdf:about="motor">
+	<b:subClassOf rdf:resource="biological_function"/>
+</b:Class>
+<c:feature_type rdf:about="mutation"/>
+<b:Class rdf:about="nad">
+	<b:subClassOf rdf:resource="prosthetic_group"/>
+</b:Class>
+<b:Class rdf:about="nad_requiring_oxidoreductase">
+	<b:subClassOf rdf:resource="_anon205"/>
+	<b:subClassOf rdf:resource="_anon206"/>
+	<b:subClassOf rdf:resource="_anon207"/>
+	<b:subClassOf rdf:resource="_anon208"/>
+	<b:subClassOf rdf:resource="enzyme"/>
+</b:Class>
+<b:Class rdf:about="name">
+	<b:subClassOf rdf:resource="label"/>
+</b:Class>
+<rdf:Property rdf:about="name_of"/>
+<b:Class rdf:about="non_metal">
+	<b:subClassOf rdf:resource="atom"/>
+</b:Class>
+<b:Class rdf:about="nucleic_acid">
+	<a:intersectionOf rdf:resource="_anon73"/>
+</b:Class>
+<b:Class rdf:about="nucleic_acid_binding">
+	<b:subClassOf rdf:resource="binding"/>
+</b:Class>
+<b:Class rdf:about="nucleotide">
+	<b:subClassOf rdf:resource="small_molecule"/>
+</b:Class>
+<b:Class rdf:about="obsolete">
+	<b:subClassOf rdf:resource="biological_function"/>
+</b:Class>
+<c:feature_type rdf:about="old_sequence"/>
+<b:Class rdf:about="ordered_set">
+	<b:subClassOf rdf:resource="_anon339"/>
+	<b:subClassOf rdf:resource="_anon340"/>
+	<b:subClassOf rdf:resource="mental_structure"/>
+</b:Class>
+<b:Class rdf:about="organ">
+	<b:subClassOf rdf:resource="anatomy"/>
+</b:Class>
+<b:Class rdf:about="organism_classification">
+	<b:subClassOf rdf:resource="classification"/>
+</b:Class>
+<b:Class rdf:about="oxidation_reduction">
+	<b:subClassOf rdf:resource="covalent_reaction"/>
+</b:Class>
+<b:Class rdf:about="oxidoreductase">
+	<a:intersectionOf rdf:resource="_anon325"/>
+</b:Class>
+<b:Class rdf:about="pair">
+	<b:subClassOf rdf:resource="_anon198"/>
+	<b:subClassOf rdf:resource="_anon199"/>
+	<b:subClassOf rdf:resource="mental_structure"/>
+</b:Class>
+<rdf:Property rdf:about="param_type"/>
+<rdf:Property rdf:about="param_unit"/>
+<rdf:Property rdf:about="param_value"/>
+<b:Class rdf:about="parameter">
+	<b:subClassOf rdf:resource="_anon333"/>
+	<b:subClassOf rdf:resource="_anon335"/>
+	<b:subClassOf rdf:resource="_anon337"/>
+</b:Class>
+<rdf:Property rdf:about="part_of"/>
+<b:Class rdf:about="physical_structure"/>
+<b:Class rdf:about="plasmid">
+	<b:subClassOf rdf:resource="dna_structure"/>
+</b:Class>
+<c:feature_type rdf:about="polyA_signal"/>
+<c:feature_type rdf:about="polyA_site"/>
+<rdf:Property rdf:about="polymer_of">
+	<a:inverseOf rdf:resource="forms_polymer"/>
+	<b:range rdf:resource="small_molecule"/>
+</rdf:Property>
+<c:feature_type rdf:about="precursor_RNA"/>
+<c:feature_type rdf:about="prim_transcript"/>
+<c:feature_type rdf:about="primer"/>
+<c:feature_type rdf:about="primer_bind"/>
+<b:Class rdf:about="process">
+	<b:subClassOf rdf:resource="_anon142"/>
+	<b:subClassOf rdf:resource="_anon143"/>
+	<b:subClassOf rdf:resource="_anon144"/>
+	<b:subClassOf rdf:resource="transformation"/>
+</b:Class>
+<rdf:Property rdf:about="produced_by"/>
+<b:Class rdf:about="prosthetic_group">
+	<a:intersectionOf rdf:resource="_anon210"/>
+</b:Class>
+<b:Class rdf:about="protein">
+	<a:intersectionOf rdf:resource="_anon145"/>
+	<b:subClassOf rdf:resource="_anon354"/>
+	<b:subClassOf rdf:resource="_anon358"/>
+</b:Class>
+<b:Class rdf:about="protein_tagging">
+	<b:subClassOf rdf:resource="biological_function"/>
+</b:Class>
+<c:feature_type rdf:about="rRNA"/>
+<b:Class rdf:about="reaction">
+	<b:subClassOf rdf:resource="_anon109"/>
+	<b:subClassOf rdf:resource="_anon110"/>
+	<b:subClassOf rdf:resource="_anon111"/>
+	<b:subClassOf rdf:resource="_anon112"/>
+	<b:subClassOf rdf:resource="_anon113"/>
+	<b:subClassOf rdf:resource="_anon114"/>
+	<b:subClassOf rdf:resource="_anon115"/>
+	<b:subClassOf rdf:resource="_anon116"/>
+	<b:subClassOf rdf:resource="transformation"/>
+</b:Class>
+<b:Class rdf:about="receptor">
+	<b:subClassOf rdf:resource="signal_transduction"/>
+</b:Class>
+<b:Class rdf:about="receptor_signalling_protein">
+	<b:subClassOf rdf:resource="_anon10"/>
+	<b:subClassOf rdf:resource="protein"/>
+</b:Class>
+<b:Class rdf:about="record">
+	<b:subClassOf rdf:resource="_anon104"/>
+	<b:subClassOf rdf:resource="_anon90"/>
+	<b:subClassOf rdf:resource="format_component"/>
+</b:Class>
+<b:Class rdf:about="regulation">
+	<b:subClassOf rdf:resource="biological_function"/>
+</b:Class>
+<c:feature_type rdf:about="rep_origin"/>
+<c:feature_type rdf:about="repeat_region"/>
+<c:feature_type rdf:about="repeat_unit"/>
+<b:Class rdf:about="ribonucleotide">
+	<b:subClassOf rdf:resource="nucleotide"/>
+</b:Class>
+<b:Class rdf:about="ribosomal_rna">
+	<b:subClassOf rdf:resource="rna"/>
+</b:Class>
+<b:Class rdf:about="ribosomal_rna_function">
+	<b:subClassOf rdf:resource="biological_function"/>
+</b:Class>
+<b:Class rdf:about="ribozyme">
+	<a:intersectionOf rdf:resource="_anon26"/>
+</b:Class>
+<b:Class rdf:about="rna">
+	<a:intersectionOf rdf:resource="_anon181"/>
+</b:Class>
+<b:Class rdf:about="role">
+	<b:subClassOf rdf:resource="_anon200"/>
+	<b:subClassOf rdf:resource="mental_structure"/>
+</b:Class>
+<c:feature_type rdf:about="satellite"/>
+<c:feature_type rdf:about="scRNA"/>
+<b:Class rdf:about="selector">
+	<b:subClassOf rdf:resource="modifier"/>
+</b:Class>
+<b:Class rdf:about="sequence_entry">
+	<b:subClassOf rdf:resource="format_component"/>
+</b:Class>
+<c:feature_type rdf:about="sig_peptide"/>
+<b:Class rdf:about="signal_transduction">
+	<b:subClassOf rdf:resource="biological_function"/>
+</b:Class>
+<b:Class rdf:about="signal_transduction_pathway">
+	<b:subClassOf rdf:resource="_anon34"/>
+	<b:subClassOf rdf:resource="_anon35"/>
+	<b:subClassOf rdf:resource="biopathway"/>
+</b:Class>
+<c:selector rdf:about="single"/>
+<b:Class rdf:about="single_stranded_dna">
+	<a:intersectionOf rdf:resource="_anon127"/>
+</b:Class>
+<b:Class rdf:about="small_molecule">
+	<b:subClassOf rdf:resource="chemical"/>
+</b:Class>
+<b:Class rdf:about="small_nuclear_rna_function">
+	<b:subClassOf rdf:resource="biological_function"/>
+</b:Class>
+<b:Class rdf:about="small_nucleolar_rna_function">
+	<b:subClassOf rdf:resource="biological_function"/>
+</b:Class>
+<c:feature_type rdf:about="snRNA"/>
+<c:feature_type rdf:about="source2"/>
+<b:Class rdf:about="species">
+	<a:equivalentTo rdf:resource="_anon365"/>
+	<b:subClassOf rdf:resource="organism_classification"/>
+</b:Class>
+<c:feature_type rdf:about="stem_loop"/>
+<b:Class rdf:about="storage_protein">
+	<b:subClassOf rdf:resource="biological_function"/>
+</b:Class>
+<rdf:Property rdf:about="strongly_binds">
+	<b:subPropertyOf rdf:resource="binds"/>
+	<a:inverseOf rdf:resource="strongly_bound_to"/>
+</rdf:Property>
+<rdf:Property rdf:about="strongly_bound_to"/>
+<b:Class rdf:about="structural_protein">
+	<b:subClassOf rdf:resource="biological_function"/>
+</b:Class>
+<b:Class rdf:about="sub_feature_type">
+	<b:subClassOf rdf:resource="format_component"/>
+</b:Class>
+<b:Class rdf:about="sub_record">
+	<b:subClassOf rdf:resource="_anon36"/>
+	<b:subClassOf rdf:resource="_anon43"/>
+	<b:subClassOf rdf:resource="_anon44"/>
+	<b:subClassOf rdf:resource="record"/>
+</b:Class>
+<c:feature_type rdf:about="tRNA"/>
+<c:feature_type rdf:about="terminator"/>
+<c:feature_type rdf:about="three_UTR"/>
+<c:feature_type rdf:about="three_clip"/>
+<b:Class rdf:about="tissue">
+	<b:subClassOf rdf:resource="_anon105"/>
+	<b:subClassOf rdf:resource="_anon106"/>
+	<b:subClassOf rdf:resource="_anon107"/>
+	<b:subClassOf rdf:resource="_anon108"/>
+	<b:subClassOf rdf:resource="physical_structure"/>
+</b:Class>
+<rdf:Property rdf:about="transcribed_from">
+	<a:inverseOf rdf:resource="transcribed_to"/>
+</rdf:Property>
+<rdf:Property rdf:about="transcribed_to"/>
+<b:Class rdf:about="transcription_factor_binding">
+	<b:subClassOf rdf:resource="binding"/>
+</b:Class>
+<b:Class rdf:about="transfer_rna">
+	<b:subClassOf rdf:resource="_anon8"/>
+	<b:subClassOf rdf:resource="rna"/>
+</b:Class>
+<b:Class rdf:about="transfer_rna_function">
+	<b:subClassOf rdf:resource="biological_function"/>
+</b:Class>
+<b:Class rdf:about="transformation">
+	<b:subClassOf rdf:resource="_anon24"/>
+	<b:subClassOf rdf:resource="_anon25"/>
+</b:Class>
+<c:feature_type rdf:about="transit_peptide"/>
+<rdf:Property rdf:about="translated_from">
+	<a:inverseOf rdf:resource="translated_to"/>
+</rdf:Property>
+<rdf:Property rdf:about="translated_to"/>
+<b:Class rdf:about="transporter">
+	<b:subClassOf rdf:resource="biological_function"/>
+</b:Class>
+<c:feature_type rdf:about="transposon"/>
+<b:Class rdf:about="tumor_suppressor">
+	<b:subClassOf rdf:resource="regulation"/>
+</b:Class>
+<b:Class rdf:about="two_component_response_regulator">
+	<b:subClassOf rdf:resource="signal_transduction"/>
+</b:Class>
+<b:Class rdf:about="two_component_sensor_molecule">
+	<b:subClassOf rdf:resource="signal_transduction"/>
+</b:Class>
+<rdf:Property rdf:about="unique_id"/>
+<c:feature_type rdf:about="unsure"/>
+<rdf:Property rdf:about="upstream"/>
+<c:feature_type rdf:about="variation"/>
+</rdf:RDF>

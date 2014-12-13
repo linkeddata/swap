@@ -1,0 +1,47 @@
+#Processed by Id: cwm.py,v 1.93 2002/05/14 22:11:04 timbl Exp 
+        #    using base file:/devel/WWW/2000/10/swap/test/fink/web.info3
+        
+#  Notation3 generation by
+#       notation3.py,v 1.108 2002/05/15 00:38:10 timbl Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/test/fink/web.info3
+     @prefix : <byMaintainer.n3#> .
+     @prefix con: <http://www.w3.org/2000/10/swap/pim/contact#> .
+     @prefix fink: <http://www.w3.org/2000/10/swap/util/fink#> .
+     @prefix lic: <http://www.w3.org/2000/10/swap/util/fink-lic#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix pkg: <http://www.w3.org/2000/10/swap/util/fink-pkg#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    <mailto:dmrrsn@users.sourceforge.net>     :knownAs "Dave Morrison";
+         :packageMaintained pkg:mhonarc .
+    
+    <mailto:fink-devel@lists.sourceforge.net>     :packageMaintained pkg:apache,
+                pkg:lynx,
+                pkg:php .
+    
+    <mailto:finlayd@users.sourceforge.net>     :knownAs "Finlay Dobbie";
+         :packageMaintained pkg:links .
+    
+    <mailto:jhiggs@iprsystems.com>     :knownAs "Jeremy Higgs";
+         :packageMaintained pkg:aria .
+    
+    <mailto:kilian@users.sourceforge.net>     :knownAs "Kilian Koepsell";
+         :packageMaintained pkg:junkbuster,
+                pkg:zope .
+    
+    <mailto:max@quendi.de>     :knownAs "Max Horn";
+         :packageMaintained pkg:dillo .
+    
+    <mailto:msek@users.sourceforge.net>     :knownAs "Masanori Sekino";
+         :packageMaintained pkg:mozilla .
+    
+    <mailto:pldms@mac.com>     :knownAs "";
+         :packageMaintained pkg:amaya .
+    
+    <mailto:zauc@noos.fr>     :knownAs "Sylvain Cuaz";
+         :packageMaintained pkg:tidy,
+                pkg:wget .
+    
+#ENDS

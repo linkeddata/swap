@@ -1,0 +1,26 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<> rdfs:comment """
+
+  This is a very simple, very rough start of an ontology
+  of personal information, such as one might keep in notes
+  about one's friends (if one wrote that kind of stuff
+  down).
+
+  Really, this is just a demo of a trivial ontology.
+
+  $Id$
+
+""".
+
+
+<#name> rdfs:comment """
+   a commonly used or standard name for
+   the person (or animal, or whatever)
+""".
+
+<#pet> rdfs:comment """
+   the relationship from an pet's owner or
+   keeper to the pat itself
+""".
+

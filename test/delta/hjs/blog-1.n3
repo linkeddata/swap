@@ -1,0 +1,66 @@
+#Processed by Id: cwm.py,v 1.148 2004/03/21 04:24:32 timbl Exp 
+        #    using base file:/Users/hjs/Programming/w3c/2000/10/swap/tmp/blog-1.rdf
+        
+#  Notation3 generation by
+#       notation3.py,v 1.153 2004/03/21 04:24:35 timbl Exp
+
+#   Base was: file:/Users/hjs/Programming/w3c/2000/10/swap/tmp/blog-1.rdf
+     @prefix : <atom.owl#> .
+    
+    <http://bblfish.net/blog/>     a :Feed;
+         :author <person:HenryStory>;
+         :contributor <person:JamesTodd>;
+         :copyright "Create Commons";
+         :generator "BlogEd version X.beta";
+         :hasEntry <http://bblfish.net/henry/story/blog/entry1>;
+         :hasLink <nouri://webFeedLink>;
+         :hasTitle <nouri://feedTitleContent>;
+         :info "not quite sure what the purpose of this is. It should give info about the feed format...";
+         :lang "de",
+                "en";
+         :tagline "Learning by doing";
+         :version "Atom 0.3",
+                "BlogEd2 beta" .
+    
+    <http://bblfish.net/henry/story/blog/entry1>     a :Entry;
+         :author <person:HenryStory>;
+         :hasContent <nouri://entry1Body>;
+         :hasLink <nouri://entry1Link>;
+         :hasTitle <nouri://entry1Title>;
+         :issued "7 May 2004, blah" .
+    
+    <nouri://entry1Body>     a :Content;
+         :data "<span>It is getting late.<br/>Time to sleep.</span>";
+         :mode "xml";
+         :type "text/xhtml" .
+    
+    <nouri://entry1Link>     a :Link;
+         :href "http://bblfish.net/henry/story/blog/entry1",
+                "text/html";
+         :rel "service.feed" .
+    
+    <nouri://entry1Title>     a :Content;
+         :data "<h1>My <b>first</b> blog entry ever!</h1>";
+         :mode "xml";
+         :type "text/xhtml" .
+    
+    <nouri://feedTitleContent>     a :Content;
+         :data "<span>The <b>BlogEd</b> example blog</span>";
+         :mode "xml";
+         :type "text/xhtml" .
+    
+    <nouri://webFeedLink>     a :Link;
+         :href "http://bblfish.net/henry/story/blog/";
+         :rel "service.feed";
+         :type "text/html" .
+    
+    <person:HenryStory>     a :Person;
+         :email "henry.story@bblfish.net";
+         :name "Henry Story";
+         :url "http://bblfish.net/" .
+    
+    <person:JamesTodd>     a :Person;
+         :email "todd@sun.com";
+         :name "James Todd" .
+    
+#ENDS

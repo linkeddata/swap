@@ -1,0 +1,79 @@
+#   Publish/subscribe
+
+
+Subscribable  rdfs:subClassOf doc:Work;
+	rdfs:comment """An information resource for which one ask for notification of changes""".
+
+SubscriptionService a [].
+
+@keywords a, is , of.
+
+######### Subscribe message, request
+
+{
+
+<>.dc:creator 
+
+
+[ subscrbes to  .....
+   has notiftyport ,......
+    liektorsad ...
+]
+
+<>.message.dc:creator.contact:email
+
+#  $I herby:subscribe
+
+[	a Subscription;
+
+	notifies  [ a :UDPSubscriber; ip "18.29.0.1:2000"];
+	notifies  [ a :HTTPSubscriber; http-post <http://incomming.w3.org/bar>.];
+	notifies  [ a :SMTPSubscriber; email <mailto:foo@scfhh.com>.];
+
+	notificationsFor  <bar.rdf>;
+	RDF_deltasFor  <foo.rdf>;
+	CVS_deltasFor  <foo.rdf>;
+	HTML_deltasFor  <foo.rdf>;
+	newVersionsOf  <baz.rdf>.
+
+	myNotificationPort ps:subscribesTo  <foo.rdf>. 
+]
+}
+#   alterntive short formm......
+
+<baz.rdf>  deltaSubscriber <http://incomming.w3.org/bar>.
+
+
+###############
+
+[	a Update;
+	forNotificationOf  [ a :HTTPSubscriber; http-post <http://incomming.w3.org/bar>.];
+	
+]
+##############  remove message using generic RDF update
+
+{ 	?x notifies   [ a :HTTPSubscriber; http-post <http://incomming.w3.org/bar>.];
+	watches <foo.rdf>;
+} update:becomes { 
+	?x notifies   [ a :HTTPSubscriber; http-post <http://incomming.w3.org/bar>.
+}
+
+# rule on subscribeserver
+
+{    ?incoming log:includes {   ?P update:becomes ?Q }.
+	?P ?log:includes 
+
+
+
+HTTP POST
+
+<vars>
+?x
+</vars>
+<whewre>
+  <
+</where?
+<insert>
+...
+<delete>
+

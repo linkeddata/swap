@@ -1,0 +1,21 @@
+#  Notation3 generation by
+#       notation3.py,v 1.187 2006/01/13 14:48:54 syosi Exp
+
+#   Base was: file:/Documents and Settings/kolovski/My Documents/mindswap/Policy Aware Web/www/2000/10/sameVarRules1.n3
+     @prefix : <#> .
+    @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    
+     @forAll :z .
+    
+    <http://cwmTest/test>     <http://cwmTest/succeeded> <http://cwmTest/ob> .
+      [      <http://cwmTest/hasValue> "2";
+             <http://cwmTest/p> <http://cwmTest/ob> ].
+    {
+        
+          [      <http://cwmTest/hasValue> "2";
+                 <http://cwmTest/p> :z ].
+        
+        }     log:implies {<http://cwmTest/test>     <http://cwmTest/succeeded> :z .
+        } .
+    
+#ENDS

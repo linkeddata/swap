@@ -1,0 +1,67 @@
+1: ...
+ [by parsing <witch.n3>]
+
+2: :GIRL a :WOMAN .
+ [by erasure from step 1]
+
+3: :DUCK :SAMEWEIGHT :GIRL .
+ [by erasure from step 1]
+
+4: :DUCK a :FLOATS .
+ [by erasure from step 1]
+
+5: @forAll :x, :y . { :x a wit:FLOATS; wit:SAMEWEIGHT :y . } log:implies {:y a wit:FLOATS . } .
+ [by erasure from step 1]
+
+6: ...
+ [by rule from step 5 applied to steps [3, 4]
+  with bindings {'y': '<file:///home/connolly/w3ccvs/WWW/2000/10/swap/test/reason/witch#GIRL>', 'x': '<file:///home/connolly/w3ccvs/WWW/2000/10/swap/test/reason/witch#DUCK>'}]
+
+7: :GIRL a :FLOATS .
+ [by erasure from step 6]
+
+8: @forAll :x . { :x a wit:FLOATS . } log:implies {:x a wit:ISMADEOFWOOD . } .
+ [by erasure from step 1]
+
+9: ...
+ [by rule from step 8 applied to steps [7]
+  with bindings {'x': '<file:///home/connolly/w3ccvs/WWW/2000/10/swap/test/reason/witch#GIRL>'}]
+
+10: :GIRL a :ISMADEOFWOOD .
+ [by erasure from step 9]
+
+11: @forAll :x . { :x a wit:ISMADEOFWOOD . } log:implies {:x a wit:BURNS . } .
+ [by erasure from step 1]
+
+12: ...
+ [by rule from step 11 applied to steps [10]
+  with bindings {'x': '<file:///home/connolly/w3ccvs/WWW/2000/10/swap/test/reason/witch#GIRL>'}]
+
+13: :GIRL a :BURNS .
+ [by erasure from step 12]
+
+14: @forAll witch:x . { witch:x a :BURNS, :WOMAN . } log:implies {witch:x a :WITCH . } .
+ [by erasure from step 1]
+
+15: ...
+ [by rule from step 14 applied to steps [2, 13]
+  with bindings {'x': '<file:///home/connolly/w3ccvs/WWW/2000/10/swap/test/reason/witch#GIRL>'}]
+
+16: :GIRL a :WITCH .
+ [by erasure from step 15]
+
+17: ...
+ [by parsing <witch-goal.n3>]
+
+18: { :GIRL a :WITCH . } log:implies {:GIRL a :WITCH . } .
+ [by erasure from step 17]
+
+19: :GIRL a :WITCH .
+ [by rule from step 18 applied to steps [16]
+  with bindings {}]
+
+     @prefix : <file:///home/connolly/w3ccvs/WWW/2000/10/swap/test/reason/witch#> .
+    
+    :GIRL     a :WITCH .
+    
+

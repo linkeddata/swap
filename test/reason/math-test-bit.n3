@@ -1,0 +1,47 @@
+# Author: sbp
+#  $Id$
+
+@prefix : <#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+
+# @@@@ won't work with --why:
+#
+# @forAll :x.
+#
+#  { :x is math:sum of (3 (8 3)!math:difference ) }    => { :x :valueOf "3 + (8 - 3)" } .
+
+
+# This should be the same problem without having to use --why :-
+#
+# Ok, its tricky, but the poit is that it contains bnodes in lists in  subformulae.
+# The canonicalizion and unification doesn't cope.
+#
+#{
+# {
+#    @forAll :x.
+#    { :x is math:sum of (3 (8 3)!math:difference ) }    => { :x :valueOf "3 + (8 - 3)" } .
+#  } log:includes
+#  {
+#    @forAll :x.
+#    { :x is math:sum of (3 (8 3)!math:difference ) }    => { :x :valueOf "3 + (8 - 3)" } .
+#  }
+#}  => { :Test2 a :SUCCESS }.   
+
+
+# is this a simpler form?
+
+{
+ {
+    @forAll :x.
+    { :x is math:sum of (3 [ :foo :bar ]) }    => {  } .
+  } log:includes
+  {
+    @forAll :x.
+    { :x is math:sum of (3 [ :foo :bar ]) }    => {  } .
+  }
+}  => { :Test3 a :SUCCESS }.   
+
+#ends
+

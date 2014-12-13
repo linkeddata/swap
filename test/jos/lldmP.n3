@@ -1,0 +1,73 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix math: <http://www.w3.org/2000/10/swap/math#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix : <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#>.
+
+
+## measurement axioms
+
+:p1 a :Point; :incident :L1.
+:p2 a :Point; :incident :L1.
+:p3 a :Point; :incident :L3; :between2 :d53.
+:p4 a :Point; :incident :L4; :between2 :d64.
+:p5 a :Point; :incident :L1, :L3; :between1 :d53.
+:p6 a :Point; :incident :L1, :L4; :between1 :d64.
+:L1 a :Line; :contains :p1, :p2, :p5, :p6; :perpendicular :L3, :L4.
+:L3 a :Line; :contains :p3, :p5.
+:L4 a :Line; :contains :p4, :p6.
+:d53 a :Distance; :op1 :d.
+:d54 a :Distance; :op2 :d.
+:d a :LLDM.
+
+
+## measurement implications
+
+{ :rule1a. ?m :p1x ?x; :p2x ?y. (?x ?y) math:difference ?z} log:implies { ?m :dx12 ?z}.
+{ :rule1b. ?m :p5x ?x; :p1x ?y. (?x ?y) math:difference ?z} log:implies { ?m :dx51 ?z}.
+{ :rule1c. ?m :p5x ?x; :p3x ?y. (?x ?y) math:difference ?z} log:implies { ?m :dx53 ?z}.
+{ :rule1d. ?m :p6x ?x; :p4x ?y. (?x ?y) math:difference ?z} log:implies { ?m :dx64 ?z}.
+{ :rule1e. ?m :p6x ?x; :p2x ?y. (?x ?y) math:difference ?z} log:implies { ?m :dx62 ?z}.
+{ :rule1f. ?m :p1y ?x; :p2y ?y. (?x ?y) math:difference ?z} log:implies { ?m :dy12 ?z}.
+{ :rule1g. ?m :p1y ?x; :p3y ?y. (?x ?y) math:difference ?z} log:implies { ?m :dy13 ?z}.
+{ :rule1h. ?m :p2y ?x; :p4y ?y. (?x ?y) math:difference ?z} log:implies { ?m :dy24 ?z}.
+{ :rule1i. ?m :p5y ?x; :p3y ?y. (?x ?y) math:difference ?z} log:implies { ?m :dy53 ?z}.
+{ :rule1j. ?m :p6y ?x; :p4y ?y. (?x ?y) math:difference ?z} log:implies { ?m :dy64 ?z}.
+
+{ :rule2a. ?m :dy12 ?y; :dx12 ?x. (?y ?x) math:quotient ?z} log:implies { ?m :L1c ?z}.
+{ :rule2b. ?m :L1c ?x. ("1" ?x) math:quotient ?z} log:implies { ?m :dL3m ?z}.
+{ :rule2c. ?m :dL3m ?x. ("0" ?x) math:difference ?z} log:implies { ?m :L3c ?z}.
+
+{ :rule3a. ?m :L1c ?x; :p1x ?y. (?x ?y) math:product ?z} log:implies { ?m :pL1x1 ?z}.
+{ :rule3b. ?m :L1c ?x; :p2x ?y. (?x ?y) math:product ?z} log:implies { ?m :pL1x2 ?z}.
+{ :rule3c. ?m :L3c ?x; :p3x ?y. (?x ?y) math:product ?z} log:implies { ?m :pL3x3 ?z}.
+{ :rule3d. ?m :L3c ?x; :p4x ?y. (?x ?y) math:product ?z} log:implies { ?m :pL3x4 ?z}.
+{ :rule3e. ?m :pL1x1 ?x; :pL3x3 ?y. (?x ?y) math:difference ?z} log:implies { ?m :dd13 ?z}.
+{ :rule3f. ?m :dd13 ?x; :dy13 ?y. (?x ?y) math:difference ?z} log:implies { ?m :ddy13 ?z}.
+{ :rule3g. ?m :pL1x2 ?x; :pL3x4 ?y. (?x ?y) math:difference ?z} log:implies { ?m :dd24 ?z}.
+{ :rule3h. ?m :dd24 ?x; :dy24 ?y. (?x ?y) math:difference ?z} log:implies { ?m :ddy24 ?z}.
+{ :rule3i. ?m :L1c ?x; :L3c ?y. (?x ?y) math:difference ?z} log:implies { ?m :ddL13 ?z}.
+{ :rule3j. ?m :L1c ?x; :dx51 ?y. (?x ?y) math:product ?z} log:implies { ?m :pL1dx51 ?z}.
+{ :rule3k. ?m :L1c ?x; :dx62 ?y. (?x ?y) math:product ?z} log:implies { ?m :pL1dx62 ?z}.
+
+{ :rule4a. ?m :ddy13 ?x; :ddL13 ?y. (?x ?y) math:quotient ?z} log:implies { ?m :p5x ?z}.
+{ :rule4b. ?m :pL1dx51 ?x; :p1y ?y. (?x ?y) math:sum ?z} log:implies { ?m :p5y ?z}.
+{ :rule4c. ?m :ddy24 ?x; :ddL13 ?y. (?x ?y) math:quotient ?z} log:implies { ?m :p6x ?z}.
+{ :rule4d. ?m :pL1dx62 ?x; :p2y ?y. (?x ?y) math:sum ?z} log:implies { ?m :p6y ?z}.
+
+{ :rule5a. ?m :dx53 ?x. (?x "2") math:exponentiation ?z} log:implies { ?m :sdx53 ?z}.
+{ :rule5b. ?m :dx64 ?x. (?x "2") math:exponentiation ?z} log:implies { ?m :sdx64 ?z}.
+{ :rule5c. ?m :dy53 ?x. (?x "2") math:exponentiation ?z} log:implies { ?m :sdy53 ?z}.
+{ :rule5d. ?m :dy64 ?x. (?x "2") math:exponentiation ?z} log:implies { ?m :sdy64 ?z}.
+{ :rule5e. ?m :sdx53 ?x; :sdy53 ?y. (?x ?y) math:sum ?z} log:implies { ?m :ssd53 ?z}.
+{ :rule5f. ?m :sdx64 ?x; :sdy64 ?y. (?x ?y) math:sum ?z} log:implies { ?m :ssd64 ?z}.
+
+{ :rule6a. ?m :ssd53 ?x. (?x "0.5") math:exponentiation ?z} log:implies { ?m :d53 ?z}.
+{ :rule6b. ?m :ssd64 ?x. (?x "0.5") math:exponentiation ?z} log:implies { ?m :d64 ?z}.
+
+{ :rule9a. ?m :d53 ?x; :d64 ?y. (?x ?y) math:difference ?z} log:implies { ?m :d ?z}.
+
+{ :rule10a. ?m :d ?x. ?x math:lessThan "-2.25"} log:implies { ?m a :LLDAlarm}.
+{ :rule10b. ?m :d ?x. ?x math:greaterThan "2.25"} log:implies { ?m a :LLDAlarm}.

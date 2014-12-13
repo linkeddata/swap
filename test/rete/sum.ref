@@ -1,0 +1,34 @@
+#  Notation3 generation by
+#       notation3.py,v 1.187 2006/01/13 14:48:54 syosi Exp
+
+#   Base was: file:/Documents and Settings/kolovski/My Documents/mindswap/Policy Aware Web/www/2000/10/test.sum1.n3
+     @prefix : <#> .
+    @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    @prefix math: <http://www.w3.org/2000/10/swap/math#> .
+    @prefix sum: <sum.n3#> .
+    
+     @forAll :a,
+                :c,
+                :x,
+                :y .
+    
+    sum:b     sum:has "8";
+         sum:hasVal 4 .
+    
+    sum:c     sum:has "8";
+         sum:hasVal 4 .
+    
+    sum:d     sum:has "8";
+         sum:hasVal 4 .
+    {
+        
+          ( :a
+            :a )
+             math:sum :c .
+        :x     sum:hasVal :a .
+        :y     sum:hasVal :a .
+        
+        }     log:implies {:x     sum:has :c .
+        } .
+    
+#ENDS

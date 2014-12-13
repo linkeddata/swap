@@ -1,0 +1,59 @@
+# $Id$
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix str: <http://www.w3.org/2000/10/swap/string#>.
+@prefix t: <http://www.w3.org/2000/10/swap/time#>.
+@prefix math: <http://www.w3.org/2000/10/swap/math#>.
+
+@prefix : <heartbeat#>.
+@keywords is, of, a.
+
+@prefix org: <http://www.w3.org/2001/04/roadmap/org#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>. #@@ missing #
+@prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#>.
+
+
+{
+ <http://www.w3.org/2002/01/tr-automation/tr.rdf> log:semantics ?F
+} => { ?F a TRKB }.
+
+# some duplication...
+months03    a InterestingPeriod; days 91.
+months06    a InterestingPeriod; days 182.
+months12    a InterestingPeriod; days 365.
+months18    a InterestingPeriod; days 547.
+
+{
+  ?PERIOD days ?N.
+  "".t:gmTime t:inSeconds ?NOW.
+
+ (?NOW
+   (?N 24 60 60).math:product ) math:difference
+  [ is t:inSeconds of ?WHEN ].
+} => { ?PERIOD start ?WHEN }.
+
+
+@forAll DOC, WHEN, PG, GROUP.
+
+{ ?F a TRKB;
+     log:includes {
+       [] org:deliveredBy [ contact:homePage PG ]
+  }
+} => {
+  [] contact:homePage PG
+}.
+
+{ ?F a TRKB;
+    log:includes {
+     DOC dc:date WHEN;
+           org:deliveredBy [ contact:homePage PG ]
+	 }.
+   ?GRP contact:homePage PG
+} => {
+   ?GRP published WHEN
+}.
+
+{
+      ?P a InterestingPeriod; start ?PS.
+      ?GRP published ?WHEN.
+      ?WHEN str:notLessThan ?PS.
+} => { ?GRP publishedInRecent ?P }.

@@ -1,0 +1,11 @@
+This is a port of Google's Hello example.
+
+To build, run:
+
+    ../../builder/build.py Hello
+
+and then open output/Hello.html in a web browser.
+
+test.py is a simple test of the *Python source* of the example. It does not
+actually *do* anything other than check for a certain class of errors in the 
+source code.

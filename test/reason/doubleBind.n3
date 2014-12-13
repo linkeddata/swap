@@ -1,0 +1,16 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@keywords a.
+
+# @forAll x.
+# bar color y.
+{
+    {	@forAll x.
+	{ flag color x}=> {sky color blue}
+    } log:includes
+    {	@forAll y.
+	{flag color y}=> {sky color blue}
+    }.
+#    bar color ?x
+} => { (foo bar) a RESULT }.
+
+#end

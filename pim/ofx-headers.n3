@@ -1,0 +1,6 @@
+#  Placeholder for OFX header ontology for 
+# predicates representing OFX headers
+#
+
+@prefix ofxh: <http://www.w3.org/2000/10/swap/pim/ofx-headers#>.
+

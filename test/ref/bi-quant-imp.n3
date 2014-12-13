@@ -1,0 +1,20 @@
+     @prefix : <#> .
+    
+     @forAll :x .
+    
+    :today     a :Greatday,
+                :Sunnyday .
+      [      a :Birthday,
+                    :Greatday,
+                    :Sunnyday ].
+    
+      [      a :God ].
+    {
+        :x     a :Sunnyday .
+        
+        }     => {:x     a :Greatday .
+        },
+                {
+          [      a :God ].
+        } .
+    

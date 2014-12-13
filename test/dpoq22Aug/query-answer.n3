@@ -1,0 +1,239 @@
+#Processed by Id: cwm.py,v 1.67 2001/08/31 20:53:11 timbl Exp 
+        #    using base file:/home/connolly/w3ccvs/WWW/2000/10/swap/test/dpoq22Aug/query-answer.daml
+        
+#  Notation3 generation by
+#       notation3.py,v 1.88 2001/08/30 21:21:00 connolly Exp
+
+#   Base was: file:/home/connolly/w3ccvs/WWW/2000/10/swap/test/dpoq22Aug/query-answer.daml
+     @prefix : <#> .
+     @prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+    
+    :Conjunction     a daml:Class;
+         rdfs:subClassOf  [
+             a daml:Restriction;
+             daml:onProperty :conjunct;
+             daml:minCardinality " 1 " ] .
+    
+    :Constant     a daml:Class;
+         daml:disjointUnionOf  (
+        :ObjectConstant 
+        :LiteralConstant  ) .
+    
+    :DamlKB     a daml:Class;
+         rdfs:comment """ 
+	A DamlKB is a well-formed DAML+OIL knowledge base.
+  """ .
+    
+    :Expression     a daml:Class;
+         daml:disjointUnionOf  (
+        :Conjunction 
+        :Triple 
+        :Term  ) .
+    
+    :Identifier     a daml:Class;
+         rdfs:subClassOf rdfs:Literal .
+    
+    :LiteralConstant     a daml:Class;
+         rdfs:comment " A LiteralConstant denotes a resource in the datatype domain ";
+         rdfs:subClassOf  [
+             a daml:Restriction;
+             daml:onProperty :literalValue;
+             daml:cardinality " 1 " ] .
+    
+    :ObjectConstant     a daml:Class;
+         rdfs:comment " An ObjectConstant denotes a resource in the object domain ";
+         rdfs:subClassOf  [
+             a daml:Restriction;
+             daml:onProperty :qName;
+             daml:cardinality " 1 " ] .
+    
+    :PropertyConstant     a daml:Class;
+         rdfs:subClassOf :ObjectConstant .
+    
+    :PropertyTerm     a daml:Class;
+         daml:disjointUnionOf  (
+        :Variable 
+        :PropertyConstant  ) .
+    
+    :QualifiedName     a daml:Class;
+         rdfs:subClassOf  [
+             daml:intersectionOf  (
+             [
+                     daml:onProperty :nsName;
+                     daml:cardinality " 1 " ]
+             [
+                     daml:onProperty :localName;
+                     daml:cardinality " 1 " ] ) ] .
+    
+    :Query     a daml:Class;
+         rdfs:comment """ 
+	A Query represents a question posed to the reasoner.
+
+	It consists of two principle parts: query premise and query pattern.
+
+	A query premise is an ordinary DAML KB that is effectively asserted
+	to the queried KB for the duration of the query. It should contain
+	assumptions particular to the current query. The query premise can be
+	empty to indicate the absence of such assumptions.
+
+	A query pattern is the question itself. It is in effect a conjunction 
+   	of one or more triples. Each triple corresponds to a RDF Statement except 
+	that its predicate, subject, or object can be variables. Variables present
+	in a query pattern, if any, are implicitly quantified existentially at
+	the beginning of the pattern. Syntactically, a query pattern is in xml
+	markup.
+  """;
+         rdfs:subClassOf  [
+             daml:intersectionOf  (
+             [
+                     daml:onProperty :queryPremise;
+                     daml:maxCardinality " 1 " ]
+             [
+                     daml:onProperty :queryPattern;
+                     daml:cardinality " 1 " ] ) ] .
+    
+    :QueryAnswer     a daml:Class;
+         rdfs:comment """
+	A QueryAnswer represents ONE answer to a query.
+
+	It consists of two principle parts: the query posed and 
+	a set of bindings to the query variables representing an 
+	instantiation of those query variables.
+  """;
+         rdfs:subClassOf  [
+             a daml:Restriction;
+             daml:onProperty :query;
+             daml:cardinality " 1 " ] .
+    
+    :QueryAnswerKB     a daml:Class;
+         rdfs:comment """ 
+	A QueryAnswerKB is a DamlKB that contains zero or more upmost Descriptions, all
+	of which are instances of QueryAnswer. 
+
+	All Descriptions in a QueryAnswerKB should be explicitly named and indicate 
+	the most specific types to which the subjects of the Descriptions belong.
+  """;
+         rdfs:subClassOf :DamlKB .
+    
+    :QueryKB     a daml:Class;
+         rdfs:comment """ 
+	A QueryKB is a DamlKB that contains exactly one upmost Description, which is
+	an instance of Query. 
+
+	All Descriptions in a QueryKB should be explicitly named and indicate the most
+	specific types to which the subjects of the Descriptions belong.
+  """;
+         rdfs:subClassOf :DamlKB .
+    
+    :Term     a daml:Class;
+         daml:disjointUnionOf  (
+        :Variable 
+        :Constant  ) .
+    
+    :Triple     a daml:Class;
+         rdfs:subClassOf  [
+             daml:intersectionOf  (
+             [
+                     daml:onProperty :predicate;
+                     daml:cardinality " 1 " ]
+             [
+                     daml:onProperty :subject;
+                     daml:cardinality " 1 " ]
+             [
+                     daml:onProperty :object;
+                     daml:cardinality " 1 " ] ) ] .
+    
+    :URI     a daml:Class;
+         rdfs:subClassOf rdfs:Literal .
+    
+    :Variable     a daml:Class;
+         rdfs:subClassOf  [
+             a daml:Restriction;
+             daml:onProperty :vName;
+             daml:cardinality " 1 " ] .
+    
+    :VariableBinding     a daml:Class;
+         rdfs:subClassOf  [
+             daml:intersectionOf  (
+             [
+                     daml:onProperty :var;
+                     daml:toClass :Variable ]
+             [
+                     daml:onProperty :var;
+                     daml:cardinality " 1 " ]
+             [
+                     daml:onProperty :val;
+                     daml:toClass :Term ]
+             [
+                     daml:onProperty :val;
+                     daml:cardinality " 1 " ] ) ] .
+    
+    :conjunct     a rdf:Property;
+         rdfs:domain :Conjunction;
+         rdfs:range :Triple .
+    
+    :literalValue     a rdf:Property;
+         rdfs:domain :LiteralConstant;
+         rdfs:range rdfs:Literal .
+    
+    :localName     a rdf:Property;
+         rdfs:domain :QualifiedName;
+         rdfs:range :Identifier .
+    
+    :nsName     a rdf:Property;
+         rdfs:domain :QualifiedName;
+         rdfs:range :URI .
+    
+    :object     a rdf:Property;
+         rdfs:domain :Triple;
+         rdfs:range :Term .
+    
+    :predicate     a rdf:Property;
+         rdfs:domain :Triple;
+         rdfs:range :PropertyTerm .
+    
+    :qName     a rdf:Property;
+         rdfs:domain :ObjectConstant;
+         rdfs:range :QualifiedName .
+    
+    :query     a rdf:Property;
+         rdfs:comment """
+	A value of query is a URI of the QueryKB as the Query posed.
+  """;
+         rdfs:domain :QueryAnswer;
+         rdfs:range :URI .
+    
+    :queryPattern     a rdf:Property;
+         rdfs:domain :Query;
+         rdfs:range :Conjunction .
+    
+    :queryPremise     a rdf:Property;
+         rdfs:comment """
+	A value of queryPremise is a URI of the DamlKB as the premise part
+	of the Query.
+  """;
+         rdfs:domain :Query;
+         rdfs:range :URI .
+    
+    :subject     a rdf:Property;
+         rdfs:domain :Triple;
+         rdfs:range :Term .
+    
+    :vName     a rdf:Property;
+         rdfs:domain :Variable;
+         rdfs:range :Identifier .
+    
+    :variableBinding     a rdf:Property;
+         rdfs:domain :QueryAnswer;
+         rdfs:range :VariableBinding .
+    
+    <>     a daml:Ontology;
+         daml:imports <http://www.daml.org/2001/03/daml+oil>,
+                <http://www.w3.org/1999/02/22-rdf-syntax-ns>,
+                <http://www.w3.org/2000/01/rdf-schema>;
+         daml:versionInfo "$Id$";
+         rdfs:comment " An ontology of basic query answering terms " .
+    
+#ENDS

@@ -1,0 +1,439 @@
+#Processed by Id: cwm.py,v 1.93 2002/05/14 22:11:04 timbl Exp 
+        #    using base file:/devel/WWW/2000/10/swap/test/fink/defaults.n3
+        
+#  Notation3 generation by
+#       notation3.py,v 1.108 2002/05/15 00:38:10 timbl Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/test/fink/defaults.n3
+     @prefix : <#> .
+     @prefix con: <http://www.w3.org/2000/10/swap/pim/contact#> .
+     @prefix fink: <http://www.w3.org/2000/10/swap/util/fink#> .
+     @prefix lic: <http://www.w3.org/2000/10/swap/util/fink-lic#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix pkg: <http://www.w3.org/2000/10/swap/util/fink-pkg#> .
+    
+    this     log:forAll :x,
+                :y,
+                :z .
+    
+    pkg:abs     a :topApplication .
+    
+    pkg:amaya     a :topApplication .
+    
+    pkg:anacron     a :topApplication .
+    
+    pkg:aplus_fsf     a :topApplication .
+    
+    pkg:apt     a :topApplication .
+    
+    pkg:aria     a :topApplication .
+    
+    pkg:aspell     a :topApplication .
+    
+    pkg:audiofile     a :topApplication .
+    
+    pkg:autoconf     a :topApplication .
+    
+    pkg:autoconf25     a :topApplication .
+    
+    pkg:autocutsel     a :topApplication .
+    
+    pkg:aview     a :topApplication .
+    
+    pkg:axyftp     a :topApplication .
+    
+    pkg:basiliskii     a :topApplication .
+    
+    pkg:bbkeys     a :topApplication .
+    
+    pkg:bbmail     a :topApplication .
+    
+    pkg:bbpager     a :topApplication .
+    
+    pkg:blt     a :topApplication .
+    
+    pkg:bluefish     a :topApplication .
+    
+    pkg:bundle_gnome     a :topApplication .
+    
+    pkg:bundle_tetex     a :topApplication .
+    
+    pkg:calcoo     a :topApplication .
+    
+    pkg:cfv     a :topApplication .
+    
+    pkg:cgoban     a :topApplication .
+    
+    pkg:compress_zlib_pm     a :topApplication .
+    
+    pkg:crafty_enormousbook     a :topApplication .
+    
+    pkg:crafty_largebook     a :topApplication .
+    
+    pkg:crafty_smallbook     a :topApplication .
+    
+    pkg:crafty_tb_four     a :topApplication .
+    
+    pkg:curl     a :topApplication .
+    
+    pkg:curl_ssl     a :topApplication .
+    
+    pkg:db3     a :topApplication .
+    
+    pkg:db4     a :topApplication .
+    
+    pkg:dbd_mysql_pm     a :topApplication .
+    
+    pkg:dia     a :topApplication .
+    
+    pkg:dillo     a :topApplication .
+    
+    pkg:docbook_bundle     a :topApplication .
+    
+    pkg:dopewars     a :topApplication .
+    
+    pkg:dpkg_bootstrap     a :topApplication .
+    
+    pkg:dvipdfm     a :topApplication .
+    
+    pkg:eboard_extras     a :topApplication .
+    
+    pkg:ee     a :topApplication .
+    
+    pkg:emacs     a :topApplication .
+    
+    pkg:enlightenment     a :topApplication .
+    
+    pkg:eterm     a :topApplication .
+    
+    pkg:ethereal     a :topApplication .
+    
+    pkg:ethereal_ssl     a :topApplication .
+    
+    pkg:ettercap     a :topApplication .
+    
+    pkg:ettercap_ssl     a :topApplication .
+    
+    pkg:expect     a :topApplication .
+    
+    pkg:findutils     a :topApplication .
+    
+    pkg:fix_fink     a :topApplication .
+    
+    pkg:freeciv     a :topApplication .
+    
+    pkg:freetype_hinting     a :topApplication .
+    
+    pkg:frotz     a :topApplication .
+    
+    pkg:fvwm     a :topApplication .
+    
+    pkg:fvwm2     a :topApplication .
+    
+    pkg:fvwm2_no_gnome     a :topApplication .
+    
+    pkg:gabber     a :topApplication .
+    
+    pkg:gabber_ssl     a :topApplication .
+    
+    pkg:gaim     a :topApplication .
+    
+    pkg:gal19     a :topApplication .
+    
+    pkg:gal19_data     a :topApplication .
+    
+    pkg:gawk     a :topApplication .
+    
+    pkg:ghostscript6     a :topApplication .
+    
+    pkg:ghostscript6_nox     a :topApplication .
+    
+    pkg:ghostscript_nox     a :topApplication .
+    
+    pkg:ghx     a :topApplication .
+    
+    pkg:gimp     a :topApplication .
+    
+    pkg:glut     a :topApplication .
+    
+    pkg:gmt     a :topApplication .
+    
+    pkg:gnapster     a :topApplication .
+    
+    pkg:gnome_pim     a :topApplication .
+    
+    pkg:gnome_vfs_ssl     a :topApplication .
+    
+    pkg:gnubg_bearoff     a :topApplication .
+    
+    pkg:gnuchess_largebook     a :topApplication .
+    
+    pkg:gnumeric     a :topApplication .
+    
+    pkg:gnupg     a :topApplication .
+    
+    pkg:gnupg_egd     a :topApplication .
+    
+    pkg:gperiodic     a :topApplication .
+    
+    pkg:grace     a :topApplication .
+    
+    pkg:gri     a :topApplication .
+    
+    pkg:gtk_doc     a :topApplication .
+    
+    pkg:gtk_gnutella     a :topApplication .
+    
+    pkg:gtk_plusextra     a :topApplication .
+    
+    pkg:gtkglarea     a :topApplication .
+    
+    pkg:gwydion_dylan     a :topApplication .
+    
+    pkg:gwydion_dylan_bootstrap     a :topApplication .
+    
+    pkg:html_parser_pm     a :topApplication .
+    
+    pkg:hugs     a :topApplication .
+    
+    pkg:hx     a :topApplication .
+    
+    pkg:icecast     a :topApplication .
+    
+    pkg:icewm     a :topApplication .
+    
+    pkg:icewm_basic     a :topApplication .
+    
+    pkg:ifmslide     a :topApplication .
+    
+    pkg:intltool     a :topApplication .
+    
+    pkg:irssi     a :topApplication .
+    
+    pkg:ispell_french     a :topApplication .
+    
+    pkg:ispell_german     a :topApplication .
+    
+    pkg:ispell_italian     a :topApplication .
+    
+    pkg:jless     a :topApplication .
+    
+    pkg:junkbuster     a :topApplication .
+    
+    pkg:jwhois     a :topApplication .
+    
+    pkg:kinput2     a :topApplication .
+    
+    pkg:latex2html     a :topApplication .
+    
+    pkg:libmpeg     a :topApplication .
+    
+    pkg:libogg     a :topApplication .
+    
+    pkg:libpoll     a :topApplication .
+    
+    pkg:libproplist     a :topApplication .
+    
+    pkg:libstroke     a :topApplication .
+    
+    pkg:libtool     a :topApplication .
+    
+    pkg:libtool14     a :topApplication .
+    
+    pkg:libungif     a :topApplication .
+    
+    pkg:links_ssl     a :topApplication .
+    
+    pkg:lynx_ssl     a :topApplication .
+    
+    pkg:lyx     a :topApplication .
+    
+    pkg:macaulay2     a :topApplication .
+    
+    pkg:mesa     a :topApplication .
+    
+    pkg:mgv     a :topApplication .
+    
+    pkg:mhonarc     a :topApplication .
+    
+    pkg:mozilla     a :topApplication .
+    
+    pkg:mrtg     a :topApplication .
+    
+    pkg:mtr     a :topApplication .
+    
+    pkg:mutt_ssl     a :topApplication .
+    
+    pkg:ncftp     a :topApplication .
+    
+    pkg:nedit     a :topApplication .
+    
+    pkg:neon     a :topApplication .
+    
+    pkg:nethack     a :topApplication .
+    
+    pkg:nmap     a :topApplication .
+    
+    pkg:ntaim     a :topApplication .
+    
+    pkg:ocaml     a :topApplication .
+    
+    pkg:octave     a :topApplication .
+    
+    pkg:openssh     a :topApplication .
+    
+    pkg:oroborus     a :topApplication .
+    
+    pkg:oroborus2     a :topApplication .
+    
+    pkg:pan     a :topApplication .
+    
+    pkg:pari_gp     a :topApplication .
+    
+    pkg:pcre     a :topApplication .
+    
+    pkg:pdfscreen     a :topApplication .
+    
+    pkg:pdfslide     a :topApplication .
+    
+    pkg:pgplot     a :topApplication .
+    
+    pkg:php     a :topApplication .
+    
+    pkg:pine     a :topApplication .
+    
+    pkg:plotutils     a :topApplication .
+    
+    pkg:ppower4     a :topApplication .
+    
+    pkg:pth     a :topApplication .
+    
+    pkg:pymol     a :topApplication .
+    
+    pkg:python21     a :topApplication .
+    
+    pkg:python_nox     a :topApplication .
+    
+    pkg:qt     a :topApplication .
+    
+    pkg:qt2     a :topApplication .
+    
+    pkg:r_recommended     a :topApplication .
+    
+    pkg:rdesktop     a :topApplication .
+    
+    pkg:recode     a :topApplication .
+    
+    pkg:revtex     a :topApplication .
+    
+    pkg:rsync     a :topApplication .
+    
+    pkg:ruby     a :topApplication .
+    
+    pkg:scientificpython     a :topApplication .
+    
+    pkg:scilab     a :topApplication .
+    
+    pkg:sdl_image     a :topApplication .
+    
+    pkg:sdl_mixer     a :topApplication .
+    
+    pkg:sdl_net     a :topApplication .
+    
+    pkg:seminar     a :topApplication .
+    
+    pkg:sjeng_zhbook     a :topApplication .
+    
+    pkg:spice     a :topApplication .
+    
+    pkg:spim     a :topApplication .
+    
+    pkg:stunnel     a :topApplication .
+    
+    pkg:stunnel_egd     a :topApplication .
+    
+    pkg:template_notex_pm     a :topApplication .
+    
+    pkg:template_pm     a :topApplication .
+    
+    pkg:tex2im     a :topApplication .
+    
+    pkg:texmacs     a :topApplication .
+    
+    pkg:texpower     a :topApplication .
+    
+    pkg:tgif     a :topApplication .
+    
+    pkg:tightvnc     a :topApplication .
+    
+    pkg:tkcvs     a :topApplication .
+    
+    pkg:ttfmkfontdir     a :topApplication .
+    
+    pkg:units     a :topApplication .
+    
+    pkg:upclient     a :topApplication .
+    
+    pkg:uri_pm     a :topApplication .
+    
+    pkg:vim     a :topApplication .
+    
+    pkg:vim_nox     a :topApplication .
+    
+    pkg:vnc     a :topApplication .
+    
+    pkg:wget_ssl     a :topApplication .
+    
+    pkg:windowmaker     a :topApplication .
+    
+    pkg:wmcalclock     a :topApplication .
+    
+    pkg:wmmoonclock     a :topApplication .
+    
+    pkg:wmweather     a :topApplication .
+    
+    pkg:xboard     a :topApplication .
+    
+    pkg:xchat     a :topApplication .
+    
+    pkg:xchat_ssl     a :topApplication .
+    
+    pkg:xemacs     a :topApplication .
+    
+    pkg:xephem     a :topApplication .
+    
+    pkg:xfce     a :topApplication .
+    
+    pkg:xfig     a :topApplication .
+    
+    pkg:xfree86_rootless     a :topApplication .
+    
+    pkg:xgalaga     a :topApplication .
+    
+    pkg:xinvaders3d     a :topApplication .
+    
+    pkg:xmahjongg     a :topApplication .
+    
+    pkg:xscorch     a :topApplication .
+    
+    pkg:xv     a :topApplication .
+    
+    pkg:yorick     a :topApplication .
+    
+    pkg:zope     a :topApplication .
+    {
+        this     log:forSome :_g3 .
+        "1"     os:argv :_g3 .
+          [      log:semantics  [
+                     log:includes {:x     fink:depends :y .
+                    };
+                     log:notIncludes {
+                      [      fink:depends :x ].
+                    } ];
+                 log:uri :_g3 ].
+        
+        }     log:implies {:x     a :topApplication .
+        } .
+    
+#ENDS

@@ -1,0 +1,20 @@
+delta/detailed.tests#t4 -- granularity cmdline option test
+
+delta should by default lump formulae that have the same left-hand side
+together into one formula. It should also do this when passed the "-g 1" or
+"--granularity=1" command-line option. It should not perform extra work to lump
+formulae if it is passed the "-g 0" or "--granularity=0" command-line option.
+
+Note that as far as I (eefi) can tell as of July 12, 2005, the extra work to
+lump formulae makes a difference only when the left-hand side is an empty
+formula. In other instances, the way delta constructs patches automatically
+lumps things that are related to the same left-hand side together.
+
+issue originally raised in the following bug:
+http://lists.w3.org/Archives/Public/public-cwm-bugs/2005Jun/0008
+
+options passed to cwm:
+delta/t4/test.n3 --think --with "`../delta.py -f delta/t4/from.n3 -t delta/t4/to.n3`" "`../delta.py -g 1 -f delta/t4/from.n3 -t delta/t4/to.n3`" "`../delta.py --granularity=1 -f delta/t4/from.n3 -t delta/t4/to.n3`" "`../delta.py -g 0 -f delta/t4/from.n3 -t delta/t4/to.n3`" "`../delta.py --granularity=0 -f delta/t4/from.n3 -t delta/t4/to.n3`"
+
+reference output:
+delta/t4/output.n3

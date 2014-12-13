@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+  <title>Using RDF to model XML structures (Abstract)</title>
+  <meta name="generator" content="amaya 5.3, see http://www.w3.org/Amaya/" />
+</head>
+
+<body>
+<p><a href="../../../../">W3C</a></p>
+
+<h1>Using RDF to model XML structures</h1>
+
+<p>XML is a relatively simple technology, by itself. But the collection of
+specifications built on XML at W3C and elsewhere is growing at an extreme
+pace. W3C has launched a <a href="/QA/">Quality Assurance</a> activity in
+recognition of the need for, for example, more uniform testing and
+translation practices. Formal methods are being applied to clarify
+specifications such as RDF (cf <a href="/TR/rdf-mt/">RDF Model Theory</a>)
+and XML Schema (<a href="/TR/xmlschema-formal/">XML Schema: Formal
+Description</a>). But these post-hoc clarification efforts are surely not
+optimal.</p>
+
+<blockquote>
+  <p>Semanticists should be obstetricians, not coroners of programming
+  languages.</p>
+  <address>
+    <p>-- John Reynolds</p>
+
+  </address>
+</blockquote>
+
+<p>In the <a href="../../../01/sw/">Advanced Development component of the W3C
+Semantic Web Activity</a>, we're testing the hypothesis that application of
+XML and RDF to a wide variety of W3C's operations will lead to an increase in
+quality and efficiency. In this paper, we explore the application of RDF to
+modelling of XML structures.</p>
+
+<p>The <a href="/TR/2001/REC-xml-infoset-20011024/"><cite>XML Information
+Set</cite></a> complements the XML 1.0 specifiction with an abstract model of
+the information in an XML document. The model of an XML document is a
+collection of information items; named properties associate items with
+values.</p>
+
+<p>The item/property/value structure of the XML information set is the same
+shape as the subject/predicate/object structure used in the Resource
+Description Framework (<a href="/RDF/">RDF</a>). <a
+href="/TR/xml-infoset-rdfs"><cite>An RDF Schema for the XML Information
+Set</cite></a> is an April 2001 W3C Note that takes the terms from the XML
+information set, considers them as RDF properties, and constructs an RDF
+Schema as a result.</p>
+
+<p>But the resulting RDF Schema does not capture many of the interesting
+features of the structure of the infoset; for example, that elements have
+many children but (at most) one parent.</p>
+
+<p>Using additional RDF vocabulary from <a
+href="http://www.daml.org/2001/03/daml+oil-index.html">DAML+OIL</a>, we can
+capture the structure of the XML information set much more completely. A <a
+href="infoset-daml.n3">transcription</a> from the text of the infoset spec
+into RDF using DAML+OIL terms follows point by point; it was an afternoon's
+work.</p>
+
+<p>The resulting schema is usable with generic RDF tools; ising some <a
+href="/2001/02pd/">tools for visualizing RDF as circles-and-arrows
+diagrams</a>, we have produced a UML-like <a href="infoset-diagram.svg">SVG
+diagram of the schema</a>.</p>
+
+<h2>Background/Fodder</h2>
+
+<p>@@more about how XML Schemas talk about documents; RDF documents talk
+about all sorts of stuff, including XML documents. (mention DSD?)</p>
+
+<p><a href="xmlContent-diagram.svg">simpler infoset diagram</a>. hmm... same
+as xpath data model?</p>
+
+<p>@@xml schema component model is also a DLG. <a
+href="xmlSchemaComponents-diagram.svg">diagram</a>. vs <a
+href="/TR/xmlschema-1/#component-diagram">diagram from spec</a></p>
+<ul>
+  <li>rdf-logic <a
+    href="http://lists.w3.org/Archives/Public/www-rdf-logic/2001Feb/0013.html">plan
+    for taking over the world</a>... Feb 01 2001</li>
+  <li>circles-and-arrows tools</li>
+  <li>XML pipeline position papers: <a
+    href="/XML/2001/07/xmlpm-connolly.html">Toward a Simple XML Processing
+    Model</a>, <a href="/2001/06/rdf-xproc/1">A story about RDF and
+  XML</a></li>
+  <li>larch stuff</li>
+  <li><a
+    href="http://lists.w3.org/Archives/Public/public-webont-comments/2002Apr/0004.html">danbri's
+    comments on webont</a></li>
+  <li><a href="/TR/xml-infoset-rdfs">An RDF Schema for the XML Information
+    Set</a>, W3C Note 6 April 2001, Richard Tobin</li>
+  <li><a href="../xml2infoset.py">xml2infoset.py</a> -- code to get an RDF
+    model of an XML document; slightly different vocabulary (<a
+    href="http://rdfig.xmlhack.com/2002/03/14/2002-03-14.html#1016078265.427807">rdfig
+    14Mar</a>)</li>
+  <li>xmlContent: <a href="xmlContent-diagram.svg">diagram</a> in
+  progress.</li>
+  <li><a href="http://www.lysator.liu.se/~alla/dia/">dia</a> -- an open
+    source diagramming tool that uses (compressed) XML for its storage format
+    and has UML support</li>
+  <li><a href="http://www-db.stanford.edu/~melnik/rdf/uml/">Representing UML
+    in RDF</a>, circa Nov 2000 by Sergey Melnik</li>
+  <li><a href="http://www.omg.org/mda/faq_mda.htm">MDA FAQ</a></li>
+  <li><a href="/XML/Schema">XML Schema stuff</a>: <a
+    href="/2001/05/serialized-infoset-schema.html">PSVI serialization</a></li>
+  <li><a href="http://infomesh.net/2002/03-10xslir/README.html">XSLIR</a> --
+    sean's work on schema validation, circa March 2002</li>
+  <li><a
+    href="http://rdfig.xmlhack.com/2001/06/27/2001-06-27.html#993632552.869612">notes</a>
+    on RelaxNG formal spec</li>
+  <li><a
+    href="http://ubot.lockheedmartin.com/ubot/details/uml_to_daml.html">lockheed
+    martin UBOT UML/DAML tools</a></li>
+</ul>
+
+<h2>Related work</h2>
+<ul>
+  <li>Catalasys@@, UML stuff</li>
+</ul>
+<address>
+  <p><a href="../../../../People/Connolly/">Dan Connolly</a>, Dan
+  Brickley@@Apr 2002<br />
+  $Revision$ of $Date$ by $Author$</p>
+
+</address>
+</body>
+</html>

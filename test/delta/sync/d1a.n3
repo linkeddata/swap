@@ -1,0 +1,10 @@
+     @prefix : <http://www.w3.org/2002/12/cal/ical#> .
+     @prefix delta: <http://www.w3.org/2004/delta#> .
+    {
+        
+        }     delta:deletion {<http://www.w3.org/uid/009608A4-6FFB-11D9-B3B2-000A9580D8C0>     :summary "Meet" .
+        };
+         delta:insertion {<http://www.w3.org/uid/009608A4-6FFB-11D9-B3B2-000A9580D8C0>     :summary "Meet everyone in the group" .
+        } .
+    
+

@@ -1,0 +1,26 @@
+     @prefix : <http://www.w3.org/2000/10/swap/reason#> .
+    @prefix foo: <#> .
+    
+     @forSome foo:_g0 .
+      [      a :Conjunction,
+                    :Proof;
+             :component  [
+                 a :Extraction;
+                 :because foo:_g0;
+                 :gives {<reason/a>     <reason/b> <reason/c> .
+                } ],
+                     [
+                 a :Extraction;
+                 :because foo:_g0;
+                 :gives {<reason/a2>     <reason/b2> <reason/c2> .
+                } ];
+             :gives {<reason/a>     <reason/b> <reason/c> .
+            <reason/a2>     <reason/b2> <reason/c2> .
+            } ].
+    
+    foo:_g0     a :Parsing;
+         :because  [
+             a :CommandLine;
+             :args "['../cwm.py', '--quiet', 'reason/t2.n3', '--think', '--base=foo', '--why']" ];
+         :source <reason/t2.n3> .
+    

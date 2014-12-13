@@ -1,0 +1,134 @@
+@keywords is, of, a.
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+@prefix str: <http://www.w3.org/2000/10/swap/string#> .
+
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix session: <http://redfoot.net/2005/session#>.
+@prefix rein: <http://dig.csail.mit.edu/2005/09/rein/network#> .
+@prefix http: <http://dig.csail.mit.edu/2005/09/rein/examples/http-access#> .
+@prefix t: <http://dig.csail.mit.edu/2005/09/rein/examples/troop#> .
+@prefix : <http://dig.csail.mit.edu/2005/09/rein/examples/troop42#> .
+
+@forAll REQ, PHOTO, LOC, WHO, PG, X, TXT.
+
+# policy language used 
+<> rein:policy-language <http://dig.csail.mit.edu/2005/09/rein/examples/http-access.rdf>. 
+
+{ <http://dig.csail.mit.edu/2005/09/rein/examples/troop42.rdf> log:semantics ?F }
+	=> { ?F a TroopStuff }.
+
+
+# Photos take at meetings of the troop can be shared with any  
+# current member of the troop
+# troop page lists current members and their foaf pages
+# the requester is a member of the troop if the secret provided
+# can be verified against the foaf:hexdigest of foaf pages of
+# one of the members
+{ REQ a rein:Request.
+  REQ rein:resource PHOTO.
+  ?F a TroopStuff; log:includes
+        { PHOTO a t:Photo; t:location LOC.
+          LOC a t:Meeting }.
+
+  REQ rein:requester WHO.
+  WHO session:secret ?S.
+  ?S crypto:md5 TXT.
+
+  ?F a TroopStuff; log:includes
+        { [] t:member [ is foaf:maker of PG ].
+          LOC t:attendee [ is foaf:maker of PG ] }.
+  PG log:semantics [ log:includes
+        { PG foaf:maker [ session:hexdigest TXT ] }
+    ].
+
+} => { WHO  http:can-get PHOTO }.
+
+
+# Photos taken at a jamboree can be shared with anyone in the  
+# troop or with anyone who attended the jamboree.
+
+# (i) anyone who is in the troop
+{ REQ a rein:Request.
+  REQ rein:resource PHOTO.
+  ?F a TroopStuff; log:includes 
+	{ PHOTO a t:Photo; t:location LOC. 
+	  LOC a t:Jamboree }.
+
+  REQ rein:requester WHO.
+  WHO session:secret ?S.
+  ?S crypto:md5 TXT.
+
+  ?F a TroopStuff; log:includes
+    	{ [] t:member [ is foaf:maker of PG ]. }.
+  PG log:semantics [ log:includes
+        { PG foaf:maker [ session:hexdigest TXT ] }
+    ].
+
+} => { WHO  http:can-get PHOTO }.
+
+
+# (ii) anyone who attended the jamboree
+{ REQ a rein:Request.
+  REQ rein:resource PHOTO.
+  ?F a TroopStuff; log:includes 
+	{ PHOTO a t:Photo; t:location LOC. 
+	  LOC a t:Jamboree }.
+
+  REQ rein:requester WHO.
+  WHO session:secret ?S.
+  ?S crypto:md5 TXT.
+
+  ?F a TroopStuff; log:includes
+    	{ LOC t:attendee [ is foaf:maker of PG ]. }.
+  PG log:semantics [ log:includes
+        { PG foaf:maker [ session:hexdigest TXT ] }
+    ].
+
+} => { WHO  http:can-get PHOTO }.
+
+
+
+# policy rule states only members of the troop have access to pics on the policyaware site
+# troop page lists members and their foaf pages
+# foaf page includes hexstring of their password
+# uses the properties of the rein:Request class
+#{ [] rein:requester WHO.
+#  WHO session:secret ?S.
+#  ?S crypto:md5 TXT.
+#  ?F a TroopStuff; log:includes
+#    { thisTroop member [ is foaf:maker of PG ] }.
+#  PG log:semantics [ log:includes 
+#	{ PG foaf:maker [ session:hexdigest TXT ] } 
+#    ].
+#  [] rein:resource ?PHOTO.
+#  ?PHOTO log:uri [ str:startsWith "http://demo.policyawareweb.org/images/group.jpg" ].
+#} => { WHO  http:can-get ?PHOTO }.
+
+# simple policy that lists the people who have access to the pics
+# uses the properties of the rein:Request class
+{ [] rein:requester WHO.
+  WHO session:login :amy.
+  [] rein:resource ?PHOTO.
+  ?PHOTO log:uri [ str:startsWith "http://demo.policyawareweb.org/images/" ].
+} => { WHO http:can-get ?PHOTO }.
+
+# no-one with the secret "girlscout" has access to any picture
+# uses the properties of the rein:Request class
+#{ [] rein:requester WHO. 
+#  WHO session:secret "girlscout".
+#  [] rein:resource ?PHOTO.
+#  ?PHOTO log:uri [ str:startsWith "http://www.policyawareweb.org/" ].
+#} => { WHO  http:cannot-get ?PHOTO }.
+
+# possible to write policies without using rein:Request properties
+{ WHO t:member t:w3c.
+  ?PHOTO a http:photo.
+  ?PHOTO log:uri [ str:startsWith "http://demo.policyawareweb.org/images/group.jpg" ].
+} => { WHO http:can-get ?PHOTO }.
+
+#ends
+
+
+

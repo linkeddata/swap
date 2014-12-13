@@ -1,0 +1,13 @@
+$ date; time cwm data.n3 --filter=q.n3 > out.n3
+Fri Mar  8 11:55:02  2002
+
+real    0m41.680s
+user    0m39.707s
+sys     0m0.921s
+
+timbl@CREST /devel/WWW/2000/10/swap/test/perform
+$ cwm -revision
+cwm= $Revision$ llyn= $Revision$
+
+timbl@CREST /devel/WWW/2000/10/swap/test/perform
+$

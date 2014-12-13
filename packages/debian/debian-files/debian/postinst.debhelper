@@ -1,0 +1,7 @@
+# Automatically added by dh_installdocs
+if [ "$1" = "configure" ]; then
+	if [ -d /usr/doc -a ! -e /usr/doc/swap-cwm -a -d /usr/share/doc/swap-cwm ]; then
+		ln -sf ../share/doc/swap-cwm /usr/doc/swap-cwm
+	fi
+fi
+# End automatically added section

@@ -1,0 +1,356 @@
+<html>
+<head>
+  <title>Examples - Getting ino the semantic web and RDF using N3</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <link href="/StyleSheets/base.css" rel="stylesheet" type="text/css">
+  <link href="/StyleSheets/base.css" rel="stylesheet" type="text/css">
+</head>
+
+<body lang="en">
+<p><a href="/">W3C </a>| <a href="/2000/01/sw/Overview.html">Semantic Web</a>
+| <a href="Overview.html">SWAP</a></p>
+
+<p></p>
+
+<h1>Examples - Getting into RDF &amp; Semantic Web  using N3</h1>
+
+<p></p>
+
+<p>This is a collection of examples to accompany the <a
+href="Primer.html">Primer. </a> (The files have URIs starting
+http://www.w3.org/2000/10/swap/test/ if you are reading this on paper.) These
+are designed as examples, to show how something can be done, not as working
+products.</p>
+
+<p>Remember, to convert an RDF document from n3 syntax into xml syntax,
+<code>cwm xxx.n3 -rdf </code> should do it  among other things.  I haven't
+exhaustively tested all combinations of n3 and RDF in all cases.</p>
+
+<h2 id="Merging">Merging graphs</h2>
+
+<p>When explaining why the semantic web needs to be a web not a tree, I used
+slides showing information in blue from one source (blue links) with that
+from another sources (red and green links).<img
+src="/2000/Talks/0906-xmlweb-tbl/arcs-3.gif"
+alt="blue, red and green arcs merged" width="30%" align="right"></p>
+<ul>
+  <li><a href="/2000/Talks/0906-xmlweb-tbl/slide6-0.html">The first
+    diagram</a> shows some information maybe from someone's personal
+    information that they will attend an event which has a given home page.
+    It also has the person's email address and given name.</li>
+  <li><a href="/2000/Talks/0906-xmlweb-tbl/slide7-0.html">The second
+    diagram</a>shows how information about the meeting has been read from
+    another source, and also privacy policy link has been picked up from the
+    meeting page indicating what the privacy policy is.</li>
+</ul>
+
+<p>The key point, of course, is that URIs are used to identify the overlap
+concepts such as  the person, meeting and its home page.  This allows the
+graphs to be merged. It is a simple RDF example, let's see what it looks
+like:</p>
+<ul>
+  <li>The blue arcs (<a href="test/meet/blue.n3">in N3</a>, <a
+    href="test/meet/blue.rdf">in XML</a> made by <code>cwm -rdf
+    blue.n3</code>)</li>
+  <li>The red arcs (<a href="test/meet/red.n3">in N3</a>, <a
+    href="test/meet/red.rdf">in XML</a>)</li>
+  <li>The green arcs (<a href="test/meet/green.n3">in N3</a>, <a
+    href="test/meet/green.rdf">in XML</a>)</li>
+  <li>The merged graph (<a href="test/meet/white.n3">in N3</a> made by<code>
+    cwm red.n3 blue.n3 green.n3 &gt; white.n3</code>, <a
+    href="test/meet/white.rdf">in XML</a>)</li>
+</ul>
+
+<p></p>
+
+<h2 id="Ontologies">Ontologies in DAML</h2>
+
+<p></p>
+
+<h3 id="Family">Family relationships - GEDCOM</h3>
+
+<p></p>
+
+<p>Here is an ontology for geneology, (where from?). Thanks to <a
+href="http://www.agfa.com/w3c/jdroo/">Jos De Roo</a><a></a> for <a
+href="http://lists.w3.org/Archives/Public/www-rdf-logic/2001Mar/0018.html">putting
+this into N3</a><a></a>.</p>
+<ul>
+  <li>Some rules relating relationships. One's father's sister is ones' aunt,
+    and so on. (<a
+    href="test/gedcom/gedcom-relations.n3">gedcom/gedcom-relations.n3</a><a></a>)</li>
+  <li>Some data of some imaginary families (<a
+    href="test/gedcom/gedcom-facts.n3">gedcom/gedcom-facts.n3</a><a></a>);</li>
+  <li>The same data after processing by the rules, with each person's
+    extended family relationships calculated (<a
+    href="test/gedcom/lots.n3">gedcom/lots.n3</a>)</li>
+  <li><a href="test/gedcom/Makefile ">gedcom/Makefile</a>shows (for unix
+    people) the commands to buld them
+    <p></p>
+  </li>
+</ul>
+
+<p></p>
+
+<h3 id="TAMBIS">TAMBIS</h3>
+
+<blockquote>
+  <p><i>The owners of the next two ontologies retain all rights, so you
+  should </i><strong><i>not</i></strong><i> copy them for the purposes of
+  making your own ontology.</i></p>
+</blockquote>
+
+<p>These examples do not contain rules, just ontology information in DAML.
+DAML allows you to describe the properties and class you create and the
+relationships between them. Here are two fairly large examples from
+biochemistry. They seem to have been generated using the OILED software. They
+are just here as examples.</p>
+
+<p>The tambis ontology was provided as an example by Ian Horrocks.  Files in
+<code>test/tambis</code></p>
+<ul>
+  <li>tambis/tambis-full.daml was the original file;</li>
+  <li>tambis/tambis-no-ents.daml has the XML entities expanded, but with
+    universally quanitified variables still unidentified;</li>
+  <li>tambis/tambis-forSome.n3 has existential variables declared as such (by
+    a hack)</li>
+  <li>tambis/tambis.n3 is what the ontology looks like in N3</li>
+</ul>
+
+<h3 id="BioPathWay">BioPathWays</h3>
+
+<p>Eric Neumann kindly provided a sketch ontology from the <a
+href="http://www.biopathways.org/">biopathways consortium</a>.</p>
+<ul>
+  <li>pathway/Makefile has the recipes, very similar to above for Tambis</li>
+  <li>pathway/pathway.daml original file in RDF</li>
+  <li>pathway/pathway.noents  with XML entities expanded</li>
+  <li><a href="test/pathway/pathway.n3">pathway/pathway.n3</a> result in
+  N3</li>
+  <li><a href="test/pathway/pathway.rdf">pathway/pathway.rdf</a> result
+    regenerated in RDF</li>
+</ul>
+
+<h2 id="Schema">Schema validation I</h2>
+
+<p>In the semantic web, there are many different forms of document validity.
+One useful form is to check that the document doesn't violate any rules
+associated with the vocabularies it uses, and that for each namespace it
+uses, every term it uses is actually mentioned in the schema for that
+namespace.</p>
+<ul>
+  <li><a href="test/daml-ex.n3 ">daml-ex.n3</a>  An example schema using
+  DAML</li>
+  <li><a href="test/invalid-ex.n3 ">invalid-ex.n3</a>  A document which
+    declares terms in an invalid way</li>
+  <li><a href="test/schema-rules.n3">schema-rules.n3</a> A set of rules about
+    the DAML vocabulary</li>
+  <li><a href="test/schema-filter.n3">schema-filter.n3</a> A filter to remove
+    all the worlkings and preserve just the result</li>
+</ul>
+
+<p>The command line I used with the closed world machine was</p>
+<pre>cwm daml-ex.n3 invalid-ex.n3 schema-rules.n3 -think -filter=schema-filter.n3</pre>
+
+<p>This combines the schema, the document and the rules, and draws all
+possible conclusions, then filters out any conclusions of invalidity.</p>
+
+<p>The rules are by no means complete, and this is by no means the only way
+to do validation. A special-purpose program would be more efficient of
+course. However, this demonstrates how easy it is when data is a semantic
+form to process it using a general purpose engine.</p>
+
+<p>(update Mar 2002: see <a href="util/validate.n3">validate.n3</a> discussed
+<a href="#Following">below</a>)</p>
+
+<h2 id="Rules">Rules making rules</h2>
+
+<p>The a transitive property, like ancestor, is one such that if Fred is
+Joe's ancenstor, and Joe is Bill's ancenstor, then Fred is Bill's ancenstor.
+That (for all Fred, Joe and Bill)  is a  rule for "ancenstor", and the fact
+that that is true for any transitive property in place of "ancenstor" is the
+definition of transitivity.</p>
+<ul>
+  <li><a href="test/rules12.n3">rules12.n3</a> has the "implies" rules to
+    draw the above conclusion in two stages, first concluding a specific rule
+    for ancenstor from the general rule for transitivity, and secondly using
+    it in the specific case of Fred and company.</li>
+  <li><a href="test/rules13.n3">rules13.n3</a> has hte same, but uses
+    "log:means" (a bidirectional implication) to indicate that transitivity
+    is that and only that. "Means" is not a primitive for cwm, so it is
+    defined in terms of log:implies. This doesn't then acheive anything
+    spectacularly new otherwise.</li>
+</ul>
+
+<p>
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mtable>
+  </mtable>
+</math>
+</p>
+
+<h2>KIF to RDF: Converting axioms</h2>
+
+<p>There were some axioms for RDF and RDFS and DAML prodcued by Deborah
+McGuiness and Fikes for the DAML work, in KIF.  KIF list syntax is pretty
+like N3 list syntax so a sed file converts the KIF to N3 list syntax. Then, a
+bunch of rules decorate the lists with their equivalent in N3.  The result is
+quite a mess, but all the intermediate results are labelled as "log:Chaff".
+This magic class has the feature in cwm that -purge removes any statements
+from the store which mention (as subject, verb or object) anything which is
+in class Chaff.</p>
+
+<p>The process is very recursive, and so uses the -think option on cwm, which
+iterates over all rules. It takes (2001/02) a long time, partly beccause it
+is not directed in its simple-minded approach, and partly because it is not
+optimised.  The rules are by no means complete, so the axoim set is not
+translated in its entirity. This example is unfinished but still may be
+instructive.</p>
+<ul>
+  <li>dpo/Makefile  contains the recipes - files are all in the dpo
+    subdirectory</li>
+  <li>dpo/axioms.txt  was cut and pasted from the axiomatic semantics
+  document</li>
+  <li>dpo/axioms.n3 is the result ofmaking this into N3 format for the KIF
+    lists</li>
+  <li>dpo/axioms.sed was the stream editor file used to do that;</li>
+  <li>dpo/kludge.n3 labels everything in the file as an axiom</li>
+  <li>dpo/consts.n3 is a list of all the constants which are deemed the same
+    in KIF and N3</li>
+  <li>dpo/convert.n3 has the actual rules for deriving some N3 expressions
+    from some KIF expressions;</li>
+  <li>dpo/result.n3 is the result of conversion</li>
+  <li>dpo/purged,n3 is the result of converting and purging the
+  log:Chaff;</li>
+  <li>dpo/purged2.n3 is the result of purging it still futher (too far!)
+    removing all lists as well</li>
+  <li>dpo/noKIF.n3 is the file usedto do that, to label all lists as
+    log:Chaff.</li>
+</ul>
+
+<h2><a name="Integratin">Integrating applications: Roadmaps, Organizations
+and diagrams</a></h2>
+
+<p>Many see the semantic web's impact on the industry as a tool for
+Enterprise Application Integration.  That is, just as the web integrates
+human-oriented information systems, so the Semantic Web integrates
+applications in which data has well-defined meaning. Here are some files
+which represent data which deal with technical architecture and the
+organizational structure around W3C. Imagine that these had been produced
+from specific applications for technical design and organizational
+management. Now it happens that there is a need bit of free softrware called
+GRphviz which is a tool for drawing diagrams. Putting all three together we
+can draw digrams of relationships between technical architecure and
+consortium organization. We can also make rule files to extract subsets of
+this data when focussing on a specific problem or area.</p>
+<ul>
+  <li>How the data is processed - <a
+    href="../../../2001/04/roadmap/about.svg">diagram</a></li>
+  <li>Technical architecture;  <a
+    href="../../../2001/04/roadmap/all.svg">diagram</a><a></a>, <a
+    href="../../../2001/04/roadmap/w3c.n3">data</a><a></a></li>
+  <li>Organizational  <a
+    href="../../../2001/04/roadmap/structure.svg">diagram</a><a></a>, <a
+    href="../../../2001/04/roadmap/structure.n3">data</a><a></a></li>
+  <li>Subsets: technical architecture planned for: web services, semantic
+    web, both</li>
+</ul>
+
+<h2><a name="Following">Following links: Schema validation II</a></h2>
+
+<p>The schema validation above looked for inconsistencies with a schema. The
+example worked by the file and the schemas being given to cwm on the command
+line. However, it would be more useful to find the schemas automatically. By
+using notation3's formulae, it is possible to extract all the predicates used
+in an RDF document.  If the namespace's URI scheme is dereferencable (such as
+http:), or if the user has a local schema catalog, then one should be able to
+look up the schema in real time.  The is done with cwm's builtin
+<code>log:semantics</code> which gives the N3 formula corresponding to the
+parsing of the semantic content of a resource.</p>
+<ul>
+  <li>The rule file which checks schema validity - <a
+    href="util/validate.n3">validate.n3</a></li>
+</ul>
+
+<p>Note how, when validate.n3 follows a URI to a schema, it doesn't just
+believe it - it looks objectively at what it says.  People early on with the
+Semantic Web were always afraid that inconsistencies could be sown which
+would trip up browsing agents. It is fundamental that you don't beleive
+everying on the Web. The log:semantics and  log:includes built-ins allow
+rules to look objectively at other documents to see what they say.</p>
+
+<p>As well as checking that the prediccates used are indeed declared as
+Properties in the schema, this file also checks consistency as the example <a
+href="#Schema">above</a>.  This involves, for each schema, finding the set of
+facts which the schema implies.  In other words, you don't have to state
+explicitly in the schema that something is (say) a class, if you have already
+said that it is a subclass of something. The validate.n3 rules takes each
+schema, merges it with the schema rules, and finds all the conclusions. This
+gives an <em>augmented schema</em> -- the schema plus the things implied by
+it according to the defined meanings of the terms (like subclass) used.  This
+uses the built-ins  <code>log:merge</code> (for merging formulae) and
+<code>log:conclusion</code>  (for doing, in effect, a <code>cwm
+--think</code> internally on a specfic formula).</p>
+
+<h3 id="Secure">Secure links - toward trust on the web</h3>
+
+<p>Try using the crypto module (thanks to Sean Palmer) for making rules which
+only accept information from resources on the web if they have the right
+cryptographic hash, or the right digital signature.</p>
+
+<h3 id="Secure1">Secure applications: Delegated authentication</h3>
+
+<p>Adding cryptographic functions to an semantic web engine makes it into a
+trust engine.  This is important for the</p>
+
+<p>Suppose we want to give access to the W3C "member lounge" web site to the
+emplyees of member organizations. We trust any organization's appointed
+representative to say who is an employee.  This can be done very simply using
+public key cryprography.  The bare bones of the system are mapped out in part
+of the <a href="test/crypto/">cwm cryptography test suite</a>.</p>
+
+<p></p>
+
+<p></p>
+<hr>
+
+<p></p>
+
+<h1>Appendix - Test files</h1>
+
+<p>There is a regresion test for cwm which uses many files.</p>
+<ul>
+  <li><a href="test/retest.sh">retest.sh</a></li>
+</ul>
+
+<p></p>
+
+<h2 id="Parser">Parser test files</h2>
+
+<p>These are simple semantic web examples in N3 and RDF syntaxes made
+typically in order to test the software, but you can use them to test your
+understanding.</p>
+<ul>
+  <li><a href="test/s1.n3 ">s1.n3</a>  some simple schema information</li>
+  <li>animal.rdf  a little DAML ontology about an animal - from a DAML
+    discussion</li>
+  <li>double-conclusion.n3  Testing that a reasoner wouldn't draw duplicate
+    conclusions</li>
+</ul>
+
+<h2 id="References">References</h2>
+<ul>
+  <li><a href="/DesignIssues/Notation3.html">Notation3 - Design Issues
+    article</a></li>
+</ul>
+
+<p></p>
+<hr>
+
+<p></p>
+
+<p>Tim BL, with his director hat off</p>
+
+<p>$Id$</p>
+</body>
+</html>

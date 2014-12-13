@@ -1,0 +1,249 @@
+@keywords is, a, of.
+@prefix : <http://www.w3.org/2000/10/swap/util/time#>.
+@prefix l: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
+
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+
+<> dc:source <http://www.cs.rochester.edu/~ferguson/daml/daml-time-nov2002.txt>;
+   owl:versionInfo "$Id$".
+
+<http://www.cs.rochester.edu/~ferguson/daml/daml-time-nov2002.txt>
+  dc:title "A DAML Ontology of Time";
+  dc:creator "Jerry R. Hobbs";
+  dc:date "November 2002".
+
+# 2.1.  Instants and Intervals
+
+#instant s:subClassOf temporal-entity.
+Instant s:subClassOf TemporalEntity.
+Interval s:subClassOf TemporalEntity.
+
+#(A T)[temporal-entity(T) --> [instant(T) v interval(T)]]
+#hmm... why? seems to me a conference is a TemporalEntity
+# hmm... perhaps section 2.5.  Linking Time and Events: explains
+TemporalEntity s:subClassOf [owl:unionOf (Instant Interval) ].
+
+#begins(t,T) --> instant(t) & temporal-entity(T)
+begins s:domain Instant; s:range TemporalEntity.
+ends s:domain Instant; s:range TemporalEntity.
+
+{ ?t a Instant } log:means { ?t begins ?t }.
+{ ?t a Instant } log:means { ?t ends ?t }.
+
+#temporal-entity(T) & begins(t1,T) & begins(t2,T) --> t1=t2
+begins a owl:InverseFunctionalProperty.
+ends a owl:InverseFunctionalProperty.
+
+# inside(t,T) --> instant(t) & interval(T)
+inside s:range Instant; s:domain Interval.
+
+# (A t,T)[begins-or-in(t,T) <--> [begins(t,T) v inside(t,T)]]
+begins s:subPropertyOf beginsOrIn.
+inside s:subPropertyOf beginsOrIn.
+{ ?t beginsOrIn ?T. ?t [ log:negative begins ] ?T } => { ?t inside ?T }.
+{ ?t beginsOrIn ?T. ?t [ log:negative inside ] ?T } => { ?t begins ?T }.
+
+
+#        time-between(T,t1,t2)
+#            --> temporal-entity(T) & instant(t1) & instant(t2)
+timeBetween s:domain TemporalEntity;
+  s:range [ is log:crossProduct of (Instant Instant) ].
+
+#        (A t1,t2)[t1 =/= t2 --> 
+#                  (A T)[time-between(T,t1,t2) 
+#                        <--> begins(t1,T) & ends(t2,T)]]
+{ ?t1 owl:differentFrom ?t2.
+  ?T timeBetween (?t1 ?t2)
+} => { ?t1 begins ?T. ?t2 ends ?T }.
+
+{ ?t1 begins ?T. ?t2 ends ?T.
+  ?t1 owl:differentFrom ?t2.
+} => { ?T timeBetween (?t1 ?t2) }.
+
+#        (A T)[proper-interval(T) 
+#              <--> interval(T) 
+#                   & (A t1,t2)[begins(t1,T) & ends(t2,T) --> t1 =/= t2]]
+ProperInterval s:subClassOf Interval.
+{ ?T a ProperInterval;
+     is begins of ?t1;
+     is begins of ?t2 } => { ?t1 owl:differentFrom ?t2 }.
+{ ?T a Interval;
+     is begins of ?t1;
+     is begins of ?t2.
+  ?t1 owl:differentFrom ?t2 
+} => { ?T a ProperInterval }.
+
+
+####
+# 2.2.  Before:
+
+#	(A T1,T2)[before(T1,T2) 
+#	    <--> (E t1,t2)[ends(t1,T1) & begins(t2,T2) & before(t1,t2)]]
+
+{ ?T1 before ?T2 }
+ => { [ ends ?T1 ] before [ begins ?T2 ] }.
+{ [ ?ends ?T1] before [ begins ?T2 ] }
+ => { ?T1 before ?T2 }.
+
+#The before relation is anti-reflexive, anti-symmetric and transitive.
+{ ?T1 before ?T2 } => { ?T1 owl:differentFrom ?T2 }.
+{ ?T1 before ?T2 } => { ?T2 [ log:negative before ] ?T1 }.
+before a owl:TransitiveProperty.
+
+# The end of an interval is not before the beginning of the interval.
+{ ?t1 begins ?T. ?t2 ends ?T } => { ?t2 [ log:negative before ] ?t1 }.
+
+#The beginning of a proper interval is before the end of the interval.
+{ ?T a ProperInterval; is begins of ?t1; is ends of ?t2.
+} => { ?t1 before ?t2 }.
+
+#The converse of this is a theorem.
+{ ?t1 begins ?T. ?t2 ends ?T. ?t1 before ?t2.
+} => { ?T a ProperInterval }.
+
+#If one instant is before another, there is a time between them.
+{ ?t1 a Instant. ?t2 a Instant. ?t1 before ?t2.
+} => { [] timeBetween (?t1 ?t2 ) }.
+
+#2.2-8
+{ ?t inside ?T. ?t1 begins ?T. ?t2 ends ?T. }
+ => { ?t1 before ?t. ?t before ?t2 }.
+
+#2.2-9
+{ ?T1 after ?T2 } log:means { ?T2 before ?T1 }.
+
+# 2.3.  Interval Relations
+
+#2.3-1
+intEqual a owl:SymmetricProperty;
+  s:domain ProperInterval;
+  s:range ProperInterval.
+{ ?T1 intEqual ?T2. ?t1 begins ?T1. } => { ?t1 begins ?T2 }.
+{ ?T1 intEqual ?T2. ?t2 ends ?T1. } => { ?t2 ends ?T2 }.
+
+###
+#2.4.  Optional Extensions:
+#@@ skipped
+
+# int-during is used in 2.5
+# I think iCalendar assumes TotalOrder and No-Pts-at-Inf
+
+#######
+#2.5.  Linking Time and Events: explains
+atTime s:range Instant.  # 2.5-1
+during s:range Interval. # 2.5-2
+{ ?e during ?T. ?t inside ?T } => { ?e atTime ?t }. # 2.5-3
+{ ?e during ?T. ?T1 intDuring ?T } => { ?e during ?T1 }.
+
+#hmm...
+#(A s,p)[tseqp(s,p) <--> tseq(s) & (A t)[member(t,s) --> p(t)]]
+# not traditional FOL
+
+#@@skipping lots.
+
+
+# 3.1.  Temporal Units:
+# This development assumes ordinary arithmetic is available.
+
+Qty owl:unionOf ( Real [ owl:oneOf (infinity) ] ).
+
+duration a owl:FunctionalProperty;
+  s:domain [ is log:crossProduct of (Interval TemproalUnit) ];
+  s:range Qty.
+
+#e.g        duration([5:14,5:17), *Minute*) = 3
+
+durationProperty
+  s:domain TemporalUnit;
+  s:range [ s:subClassOf owl:FunctionalProperty ].
+
+#@@hmm... second 3.3-1
+Second  durationProperty seconds; intervalClass Seconds.
+Minute durationProperty minutes; intervalClass Minutes.
+Hour durationProperty hours; intervalClass Hours.
+Day durationProperty days; intervalClass Days.
+Week durationProperty weeks; intervalClass Weeks.
+Month durationProperty months; intervalClass Months.
+Year durationProperty years; intervalClass Years.
+
+{ ?UNIT durationProperty ?P.
+  (?T ?UNIT) duration ?x } => { ?T ?P ?x }.
+{ ?UNIT durationProperty ?P.
+  ?T ?P ?x } => { (?T ?UNIT) duration ?x }.
+
+{ ?T minutes ?x } log:means { ?T seconds [ is math:product of (60 ?x) ] }.
+{ ?T hours   ?x } log:means { ?T minutes [ is math:product of (60 ?x) ] }.
+{ ?T days    ?x } log:means { ?T hours   [ is math:product of (24 ?x) ] }.
+{ ?T weeks   ?x } log:means { ?T days    [ is math:product of ( 7 ?x) ] }.
+{ ?T years   ?x } log:means { ?T months  [ is math:product of (12 ?x) ] }.
+
+
+
+# 3.2.  Concatenation and Hath
+
+#@@ 3.2-1 just some of its theorems:
+
+{ ?x concatenation ?S } => { [] member ?S; intStarts ?x }.
+{ ?x concatenation ?S } => { [] member ?S; intFinishes ?x }.
+
+# 3.2-2
+# 3.2-3
+
+hath s:domain [ is log:crossProduct of (Integer TemporalUnit) ];
+   s:range ProperInterval.
+
+{ ?U intervalClass ?C.
+  (?T ?U) duration 1 } log:means
+  { ?T a ?C. ?U intervalClass ?C.}.
+
+{ ?S s:subClassOf [ is intervalClass of ?u ].
+  ?x concatenation ?S.
+  ?S card N } => { (?N ?u) hath ?x }.
+
+{ (?N ?u) hath ?x } =>
+  { ?u intervalClass [
+       is s:subClassOf of [ card ?N; is concatenation of ?x ]
+    ] }.
+
+#@@ continue with 3.3.1-7, 3.3.8-12
+
+############
+# RDFS rules
+s:domain s:domain s:Property.
+s:range s:domain s:Property.
+
+{ ?S [ s:domain ?C ] [] } => { ?S a ?C }.
+{ [] [ s:range ?C ] ?O } => { ?O a ?C }.
+{ ?S [ s:subPropertyOf ?P] ?O } => { ?S ?P ?O }.
+{ ?S a [ s:subClassOf ?C ] } => { ?S a ?C }.
+
+# OWL
+{ ?P a owl:SymmetricProperty } => { ?P owl:inverseOf ?O }.
+{ ?S [ owl:inverseOf ?P ] ?O } => { ?O ?P ?S }.
+
+{ ?P a owl:InverseFunctionalProperty.
+  ?X ?P ?Z.
+  ?Y ?P ?Z.
+} => { ?X = ?Y }.
+
+{ ?P a owl:TransitiveProperty.
+  ?S ?P [ ?P ?O ] }
+ => { ?S ?P ?O }.
+
+# log:
+{ ?F log:means ?G } => { ?F => ?G. ?G => ?F }.
+
+# log extensions
+owl:differentFrom log:negative owl:sameAs.
+
+log:crossProduct a owl:InverseFunctionalProperty.
+
+{ [ l:first ?X; l:rest () ]
+   a [ is log:crossProduct of [ l:first ?C; l:rest () ] ]} =>
+  { ?X a ?C. }.
+{ [ l:first ?X; l:rest ?LX ]
+   a [ is log:crossProduct of [ l:first ?C; l:rest ?LC ] ]} =>
+  { ?X a ?C. ?LX a [ is log:crossProduct of ?LC ] }.

@@ -1,0 +1,146 @@
+
+<!-- Processed by Id: cwm.py,v 1.186 2006/07/07 03:30:52 syosi Exp -->
+<!--     using base file:/devel/WWW/2000/10/swap/pim/doc.n3-->
+
+
+<r:RDF xmlns="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:doc="http://www.w3.org/2000/10/swap/pim/doc#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:r="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:s="http://www.w3.org/2000/01/rdf-schema#">
+
+    <r:Description r:about="">
+        <doc:creator r:resource="http://www.w3.org/People/Berners-Lee/card#i"/>
+        <doc:ipr r:resource="../LICENSE.n3"/>
+        <doc:version>$Id$</doc:version>
+    </r:Description>
+
+    <r:Description r:about="http://www.w3.org/2000/10/swap/pim/doc#OpenSourceLicense">
+        <comment>Class of licenses which can be called Open Soutrce
+                according to opensource.org</comment>
+        <label>Opem Source licence</label>
+        <subClassOf r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+    </r:Description>
+
+    <Class r:about="http://www.w3.org/2000/10/swap/pim/doc#Work">
+        <comment>An abstract information thing of value, typically intellectual property</comment>
+        <label>work</label>
+    </Class>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/doc#adminPage">
+        <comment>A web page allowing a human user to administer this work,
+            for example changing access control, version control information etc.</comment>
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+        <label>administrative page</label>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/doc#creator">
+        <comment>The person (not string) who created this.</comment>
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+        <label>creator</label>
+        <range r:resource="http://www.w3.org/2000/10/swap/pim/contact#SocialEntity"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/doc#dependsOn">
+        <comment>The meaning or value of this work depends on that of that work.</comment>
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+        <label>depends on</label>
+        <range r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/doc#derivativeWork">
+        <comment>A work wholey or partly used in the creation of this one.</comment>
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+        <label>derivative work</label>
+        <range r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+        <owl:inverseOf r:resource="http://www.w3.org/2000/10/swap/pim/doc#derivedFrom"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/doc#derivedFrom">
+        <comment>A work wholey or partly used in the creation of this one.</comment>
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+        <label>derived from</label>
+        <range r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/doc#ipr">
+        <comment>Terms and intellectual property rights licensing conditions.</comment>
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+        <label>rights</label>
+        <range r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/doc#mayControl">
+        <comment>This may change that access control for that</comment>
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/contact#SocialEntity"/>
+        <label>may control</label>
+        <range r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/doc#mayRead">
+        <comment>This may access that for read -- compare 'r' unix</comment>
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/contact#SocialEntity"/>
+        <label>may read</label>
+        <range r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/doc#mayWrite">
+        <comment>This may access that to modify it -- compare 'w' unix</comment>
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/contact#SocialEntity"/>
+        <label>may write</label>
+        <range r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/doc#obsoletes">
+        <comment>This work is more upto date than that and makes it obsolete.</comment>
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+        <label>obsoletes</label>
+        <range r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/doc#persistencePolicy">
+        <comment>Publishers policy regarding the peristence of the mapping
+                between URI and its meaning and/or representation in bits.</comment>
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+        <label>persistence policy</label>
+        <range r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/doc#rules">
+        <comment>
+	The subject is a namespace document; the object is a document
+	containing rules. The rules are valid information about the terms
+	defined in the namespace document.
+	</comment>
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/contact#Work"/>
+        <label>rules</label>
+        <range r:resource="http://www.w3.org/2000/10/swap/pim/contact#Work"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/doc#subLicense">
+        <r:type r:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+        <comment>For any license, a sublicense is a licensing offering a subset of the rights. 
+If A doc:sublicense B then anything under license A can be released under
+licence B.</comment>
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+        <label>sub-license</label>
+        <range r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/doc#version">
+        <comment>This generic work has a specific version in the
+	follwing specific document</comment>
+        <comment>This version of this document (eg number, date, etc). A string</comment>
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+        <label>version</label>
+        <range r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/doc#versionOf">
+        <comment>This work is a a specific version of the follwing generic document.
+		OBSOLETE - use its inverse, version.</comment>
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+        <range r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+        <owl:inverseOf r:resource="http://www.w3.org/2000/10/swap/pim/doc#version"/>
+    </r:Property>
+</r:RDF>

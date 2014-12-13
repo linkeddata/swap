@@ -1,0 +1,59 @@
+
+body {
+  font-family: Trebuchet MS, sans-serif;
+  color: black;
+  background: white;
+  margin-left: 3em;
+  margin-right: 2em;
+}
+
+/* pre is always an example, even if it doesn't say so! */
+
+/* pre { margin-left: 2em; } */
+
+pre, .example {
+  background: #f5f2f5;
+  border-style: dotted;
+  border-width: 1px;
+  font-family: monospace
+  list-style-position: inside;
+  margin-left: 1em;
+  margin-right: 1em;
+  padding: 0.5em;
+}
+
+h1 { text-align: center }
+h3 { font-style: italic }   /* distinguish from h2 */
+
+address { text-align: right }
+
+div.intro {
+  margin-left: 5%;
+  margin-right: 5%;
+  font-style: italic
+}
+
+pre {
+}
+
+a:link img, a:visited img {
+   border-style: none
+}
+
+a img {
+  color: white;		/* The only way to hide the border in NS 4.x */
+}
+
+UL.toc {
+  list-style: disc;
+  list-style: none;
+}
+
+div.issue {
+  padding: 0.5em;
+  border: none;
+  margin-right: 5%;
+}
+
+.hideme { display: none }
+

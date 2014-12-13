@@ -1,0 +1,31 @@
+# List of regression tests
+#
+#      Teset for cwm command line features
+#
+# Note: Command lines must be for running in the directory above.
+#
+@prefix : <#>.
+@prefix x: <#>.
+@prefix test: <http://www.w3.org/2000/10/swap/test.n3#>.
+@prefix dc:  <http://purl.org/dc/elements/1.1/>. # yuk - under protest - no hash
+
+
+
+:cwm001 a test:CwmTest;
+    test:referenceOutput <sum.ref>;
+    test:addressesProblemRaisedBy <>;
+    test:description   "Testing the RETE with cwm builtins";
+    test:arguments     """rete/sum.n3 --rete""".
+
+
+
+:cwm002 a test:CwmTest;
+    test:referenceOutput <simple.ref>;
+    test:addressesProblemRaisedBy <>;
+    test:description   "Simple n-triples test";
+    test:arguments     """rete/simple.n3 --rete""".
+
+
+
+
+#ends

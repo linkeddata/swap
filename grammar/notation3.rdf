@@ -1,0 +1,1140 @@
+
+<!-- Processed by Id: cwm.py,v 1.185 2006/05/30 21:08:05 syosi Exp -->
+<!--     using base file:/home/connolly/w3ccvs/WWW/2000/10/swap/grammar/notation3.n3-->
+
+
+<rdf:RDF xmlns="http://www.w3.org/2000/10/swap/grammar/regex#"
+    xmlns:g="http://www.w3.org/2000/10/swap/grammar/ebnf#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:re="http://www.w3.org/2000/10/swap/grammar/regex#">
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#ECHAR">
+        <rdf:value>40</rdf:value>
+        <rdfs:comment>[40] ECHAR ::= #x5C [tbnrf#x5C#x22']</rdfs:comment>
+        <rdfs:label>ECHAR</rdfs:label>
+        <seq rdf:parseType="Resource">
+            <rdf:first rdf:parseType="Resource">
+                <matches>[\\]</matches>
+            </rdf:first>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:parseType="Resource">
+                    <matches>[tbnrf\\"']</matches>
+                </rdf:first>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </seq>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#HEX">
+        <rdf:value>42</rdf:value>
+        <rdfs:comment>[42]   HEX                     ::=   [0-9] | [A-F] | [a-f]</rdfs:comment>
+        <rdfs:label>HEX</rdfs:label>
+        <alt rdf:parseType="Resource">
+            <rdf:first rdf:parseType="Resource">
+                <matches>[0-9]</matches>
+            </rdf:first>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:parseType="Resource">
+                    <matches>[A-F]</matches>
+                </rdf:first>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:parseType="Resource">
+                        <matches>[a-f]</matches>
+                    </rdf:first>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </rdf:rest>
+        </alt>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#NameChar3">
+        <rdf:value>34</rdf:value>
+        <rdfs:comment>[34]   	NameChar3	   ::=   	NameStartChar3 | "-" | "_" | [0-9]</rdfs:comment>
+        <rdfs:label>NameChar3</rdfs:label>
+        <alt rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#NameStartChar3"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first>-</rdf:first>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first>_</rdf:first>
+                    <rdf:rest rdf:parseType="Resource">
+                        <rdf:first rdf:parseType="Resource">
+                            <matches>[0-9]</matches>
+                        </rdf:first>
+                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                    </rdf:rest>
+                </rdf:rest>
+            </rdf:rest>
+        </alt>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#NameChar3x">
+        <rdf:value>34x</rdf:value>
+        <rdfs:comment>[34x]   	NameChar3x	   ::=   	NameStartChar3 | "-" | "_" | [0-9] | #xB7 | [#x0300-#x036F] | [#x203F-#x2040]</rdfs:comment>
+        <rdfs:label>NameChar3x</rdfs:label>
+        <alt rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#NameStartChar3"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first>-</rdf:first>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first>_</rdf:first>
+                    <rdf:rest rdf:parseType="Resource">
+                        <rdf:first rdf:parseType="Resource">
+                            <matches>[0-9]</matches>
+                        </rdf:first>
+                        <rdf:rest rdf:parseType="Resource">
+                            <rdf:first rdf:parseType="Resource">
+                                <matches>[·]</matches>
+                            </rdf:first>
+                            <rdf:rest rdf:parseType="Resource">
+                                <rdf:first rdf:parseType="Resource">
+                                    <matches>[̀-ͯ]</matches>
+                                </rdf:first>
+                                <rdf:rest rdf:parseType="Resource">
+                                    <rdf:first rdf:parseType="Resource">
+                                        <matches>[‿-⁀]</matches>
+                                    </rdf:first>
+                                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                </rdf:rest>
+                            </rdf:rest>
+                        </rdf:rest>
+                    </rdf:rest>
+                </rdf:rest>
+            </rdf:rest>
+        </alt>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#NameStartChar3">
+        <rdf:value>33</rdf:value>
+        <rdfs:comment>[33] NameStartChar3	   ::=   	[A-Z] | [a-z]</rdfs:comment>
+        <rdfs:label>NameStartChar3</rdfs:label>
+        <alt rdf:parseType="Resource">
+            <rdf:first rdf:parseType="Resource">
+                <matches>[A-Z]</matches>
+            </rdf:first>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:parseType="Resource">
+                    <matches>[a-z]</matches>
+                </rdf:first>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </alt>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#NameStartChar3x">
+        <rdf:value>33x</rdf:value>
+        <rdfs:comment>[33x] NameStartChar3x	   ::=   	[A-Z] | [a-z] | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF] | [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D] | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]</rdfs:comment>
+        <rdfs:label>NameStartChar3x</rdfs:label>
+        <alt rdf:parseType="Resource">
+            <rdf:first rdf:parseType="Resource">
+                <matches>[A-Z]</matches>
+            </rdf:first>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:parseType="Resource">
+                    <matches>[a-z]</matches>
+                </rdf:first>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:parseType="Resource">
+                        <matches>[À-Ö]</matches>
+                    </rdf:first>
+                    <rdf:rest rdf:parseType="Resource">
+                        <rdf:first rdf:parseType="Resource">
+                            <matches>[Ø-ö]</matches>
+                        </rdf:first>
+                        <rdf:rest rdf:parseType="Resource">
+                            <rdf:first rdf:parseType="Resource">
+                                <matches>[ø-˿]</matches>
+                            </rdf:first>
+                            <rdf:rest rdf:parseType="Resource">
+                                <rdf:first rdf:parseType="Resource">
+                                    <matches>[Ͱ-ͽ]</matches>
+                                </rdf:first>
+                                <rdf:rest rdf:parseType="Resource">
+                                    <rdf:first rdf:parseType="Resource">
+                                        <matches>[Ϳ-῿]</matches>
+                                    </rdf:first>
+                                    <rdf:rest rdf:parseType="Resource">
+                                        <rdf:first rdf:parseType="Resource">
+                                            <matches>[‌-‍]</matches>
+                                        </rdf:first>
+                                        <rdf:rest rdf:parseType="Resource">
+                                            <rdf:first rdf:parseType="Resource">
+                                                <matches>[⁰-↏]</matches>
+                                            </rdf:first>
+                                            <rdf:rest rdf:parseType="Resource">
+                                                <rdf:first rdf:parseType="Resource">
+                                                    <matches>[Ⰰ-⿯]</matches>
+                                                </rdf:first>
+                                                <rdf:rest rdf:parseType="Resource">
+                                                    <rdf:first rdf:parseType="Resource">
+                                                        <matches>[、-퟿]</matches>
+                                                    </rdf:first>
+                                                    <rdf:rest rdf:parseType="Resource">
+                                                        <rdf:first rdf:parseType="Resource">
+                                                            <matches>[豈-﷏]</matches>
+                                                        </rdf:first>
+                                                        <rdf:rest rdf:parseType="Resource">
+                                                            <rdf:first rdf:parseType="Resource">
+                                                                <matches>[ﷰ-�]</matches>
+                                                            </rdf:first>
+                                                            <rdf:rest rdf:parseType="Resource">
+                                                                <rdf:first rdf:parseType="Resource">
+                                                                    <matches>[ -￿]</matches>
+                                                                </rdf:first>
+                                                                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                                            </rdf:rest>
+                                                        </rdf:rest>
+                                                    </rdf:rest>
+                                                </rdf:rest>
+                                            </rdf:rest>
+                                        </rdf:rest>
+                                    </rdf:rest>
+                                </rdf:rest>
+                            </rdf:rest>
+                        </rdf:rest>
+                    </rdf:rest>
+                </rdf:rest>
+            </rdf:rest>
+        </alt>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#STRING_LITERAL2">
+        <rdf:value>38</rdf:value>
+        <rdfs:comment>[38] STRING_LITERAL2 ::= '"' ( [^#x22#x5C#x0A#x0D] | ECHAR | UCHAR)* '"'</rdfs:comment>
+        <rdfs:label>STRING_LITERAL2</rdfs:label>
+        <seq rdf:parseType="Resource">
+            <rdf:first>"</rdf:first>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:parseType="Resource">
+                    <star rdf:parseType="Resource">
+                        <alt rdf:parseType="Resource">
+                            <rdf:first rdf:parseType="Resource">
+                                <matches>[^"\\
+&#13;]</matches>
+                            </rdf:first>
+                            <rdf:rest rdf:parseType="Resource">
+                                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#ECHAR"/>
+                                <rdf:rest rdf:parseType="Resource">
+                                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#UCHAR"/>
+                                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                </rdf:rest>
+                            </rdf:rest>
+                        </alt>
+                    </star>
+                </rdf:first>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first>"</rdf:first>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </rdf:rest>
+        </seq>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#STRING_LITERAL_LONG2">
+        <rdf:value>39</rdf:value>
+        <rdfs:comment>[39] STRING_LITERAL_LONG2 ::= '"""' ( ( '"' | '""' )? ( [^#x22#x5C] | ECHAR | UCHAR ) )* '"""'</rdfs:comment>
+        <rdfs:label>STRING_LITERAL_LONG2</rdfs:label>
+        <seq rdf:parseType="Resource">
+            <rdf:first>"""</rdf:first>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:parseType="Resource">
+                    <star rdf:parseType="Resource">
+                        <seq rdf:parseType="Resource">
+                            <rdf:first rdf:parseType="Resource">
+                                <opt rdf:parseType="Resource">
+                                    <alt rdf:parseType="Resource">
+                                        <rdf:first>"</rdf:first>
+                                        <rdf:rest rdf:parseType="Resource">
+                                            <rdf:first>""</rdf:first>
+                                            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                        </rdf:rest>
+                                    </alt>
+                                </opt>
+                            </rdf:first>
+                            <rdf:rest rdf:parseType="Resource">
+                                <rdf:first rdf:parseType="Resource">
+                                    <alt rdf:parseType="Resource">
+                                        <rdf:first rdf:parseType="Resource">
+                                            <matches>[^"\\]</matches>
+                                        </rdf:first>
+                                        <rdf:rest rdf:parseType="Resource">
+                                            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#ECHAR"/>
+                                            <rdf:rest rdf:parseType="Resource">
+                                                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#UCHAR"/>
+                                                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                            </rdf:rest>
+                                        </rdf:rest>
+                                    </alt>
+                                </rdf:first>
+                                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                            </rdf:rest>
+                        </seq>
+                    </star>
+                </rdf:first>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first>"""</rdf:first>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </rdf:rest>
+        </seq>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#UCHAR">
+        <rdf:value>41</rdf:value>
+        <rdfs:comment>[41]   UCHAR                   ::=   '\' ( 'u' HEX HEX HEX HEX | 'U' HEX HEX HEX HEX HEX HEX HEX HEX )</rdfs:comment>
+        <rdfs:label>UCHAR</rdfs:label>
+        <seq rdf:parseType="Resource">
+            <rdf:first>\</rdf:first>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:parseType="Resource">
+                    <alt rdf:parseType="Resource">
+                        <rdf:first rdf:parseType="Resource">
+                            <seq rdf:parseType="Resource">
+                                <rdf:first>u</rdf:first>
+                                <rdf:rest rdf:parseType="Resource">
+                                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#HEX"/>
+                                    <rdf:rest rdf:parseType="Resource">
+                                        <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#HEX"/>
+                                        <rdf:rest rdf:parseType="Resource">
+                                            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#HEX"/>
+                                            <rdf:rest rdf:parseType="Resource">
+                                                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#HEX"/>
+                                                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                            </rdf:rest>
+                                        </rdf:rest>
+                                    </rdf:rest>
+                                </rdf:rest>
+                            </seq>
+                        </rdf:first>
+                        <rdf:rest rdf:parseType="Resource">
+                            <rdf:first rdf:parseType="Resource">
+                                <seq rdf:parseType="Resource">
+                                    <rdf:first>U</rdf:first>
+                                    <rdf:rest rdf:parseType="Resource">
+                                        <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#HEX"/>
+                                        <rdf:rest rdf:parseType="Resource">
+                                            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#HEX"/>
+                                            <rdf:rest rdf:parseType="Resource">
+                                                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#HEX"/>
+                                                <rdf:rest rdf:parseType="Resource">
+                                                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#HEX"/>
+                                                    <rdf:rest rdf:parseType="Resource">
+                                                        <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#HEX"/>
+                                                        <rdf:rest rdf:parseType="Resource">
+                                                            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#HEX"/>
+                                                            <rdf:rest rdf:parseType="Resource">
+                                                                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#HEX"/>
+                                                                <rdf:rest rdf:parseType="Resource">
+                                                                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#HEX"/>
+                                                                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                                                </rdf:rest>
+                                                            </rdf:rest>
+                                                        </rdf:rest>
+                                                    </rdf:rest>
+                                                </rdf:rest>
+                                            </rdf:rest>
+                                        </rdf:rest>
+                                    </rdf:rest>
+                                </seq>
+                            </rdf:first>
+                            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                        </rdf:rest>
+                    </alt>
+                </rdf:first>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </seq>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#barename">
+        <rdf:value>8</rdf:value>
+        <rdfs:comment>[8] barename ::= qname</rdfs:comment>
+        <rdfs:label>barename</rdfs:label>
+        <g:seq rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#qname"/>
+            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </g:seq>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#boolean">
+        <rdf:value>17</rdf:value>
+        <rdfs:comment>[17] boolean ::= "@true" | "@false"</rdfs:comment>
+        <rdfs:label>boolean</rdfs:label>
+        <g:alt rdf:parseType="Resource">
+            <rdf:first>@true</rdf:first>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first>@false</rdf:first>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </g:alt>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#decimal">
+        <rdf:value>28</rdf:value>
+        <rdfs:comment>[28] decimal	::= [+-]? [0-9]+ ("." [0-9]+)?</rdfs:comment>
+        <rdfs:label>decimal</rdfs:label>
+        <seq rdf:parseType="Resource">
+            <rdf:first rdf:parseType="Resource">
+                <opt rdf:parseType="Resource">
+                    <matches>[+-]</matches>
+                </opt>
+            </rdf:first>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:parseType="Resource">
+                    <rep rdf:parseType="Resource">
+                        <matches>[0-9]</matches>
+                    </rep>
+                </rdf:first>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:parseType="Resource">
+                        <opt rdf:parseType="Resource">
+                            <seq rdf:parseType="Resource">
+                                <rdf:first>.</rdf:first>
+                                <rdf:rest rdf:parseType="Resource">
+                                    <rdf:first rdf:parseType="Resource">
+                                        <rep rdf:parseType="Resource">
+                                            <matches>[0-9]</matches>
+                                        </rep>
+                                    </rdf:first>
+                                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                </rdf:rest>
+                            </seq>
+                        </opt>
+                    </rdf:first>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </rdf:rest>
+        </seq>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#declaration">
+        <rdf:value>7</rdf:value>
+        <rdfs:comment>[7] declaration ::= "@prefix" prefix uriref |   "@keywords" (barename ("," barename)*)?</rdfs:comment>
+        <rdfs:label>declaration</rdfs:label>
+        <g:alt rdf:parseType="Resource">
+            <rdf:first rdf:parseType="Resource">
+                <g:seq rdf:parseType="Resource">
+                    <rdf:first>@prefix</rdf:first>
+                    <rdf:rest rdf:parseType="Resource">
+                        <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#prefix"/>
+                        <rdf:rest rdf:parseType="Resource">
+                            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#uriref"/>
+                            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                        </rdf:rest>
+                    </rdf:rest>
+                </g:seq>
+            </rdf:first>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:parseType="Resource">
+                    <g:seq rdf:parseType="Resource">
+                        <rdf:first>@keywords</rdf:first>
+                        <rdf:rest rdf:parseType="Resource">
+                            <rdf:first rdf:parseType="Resource">
+                                <g:opt rdf:parseType="Resource">
+                                    <g:seq rdf:parseType="Resource">
+                                        <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#barename"/>
+                                        <rdf:rest rdf:parseType="Resource">
+                                            <rdf:first rdf:parseType="Resource">
+                                                <g:star rdf:parseType="Resource">
+                                                    <g:seq rdf:parseType="Resource">
+                                                        <rdf:first>,</rdf:first>
+                                                        <rdf:rest rdf:parseType="Resource">
+                                                            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#barename"/>
+                                                            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                                        </rdf:rest>
+                                                    </g:seq>
+                                                </g:star>
+                                            </rdf:first>
+                                            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                        </rdf:rest>
+                                    </g:seq>
+                                </g:opt>
+                            </rdf:first>
+                            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                        </rdf:rest>
+                    </g:seq>
+                </rdf:first>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </g:alt>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#document">
+        <rdf:value>1</rdf:value>
+        <rdfs:comment>[1] document ::= (statement ".")*</rdfs:comment>
+        <rdfs:label>document</rdfs:label>
+        <g:star rdf:parseType="Resource">
+            <g:seq rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#statement"/>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first>.</rdf:first>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </g:seq>
+        </g:star>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#double">
+        <rdf:value>27</rdf:value>
+        <rdfs:comment>[27] double	::= [+-]? [0-9]+ ("." [0-9]+)? ( [eE] [+-]? [0-9]+)</rdfs:comment>
+        <rdfs:label>double</rdfs:label>
+        <seq rdf:parseType="Resource">
+            <rdf:first rdf:parseType="Resource">
+                <opt rdf:parseType="Resource">
+                    <matches>[+-]</matches>
+                </opt>
+            </rdf:first>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:parseType="Resource">
+                    <rep rdf:parseType="Resource">
+                        <matches>[0-9]</matches>
+                    </rep>
+                </rdf:first>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:parseType="Resource">
+                        <opt rdf:parseType="Resource">
+                            <seq rdf:parseType="Resource">
+                                <rdf:first>.</rdf:first>
+                                <rdf:rest rdf:parseType="Resource">
+                                    <rdf:first rdf:parseType="Resource">
+                                        <rep rdf:parseType="Resource">
+                                            <matches>[0-9]</matches>
+                                        </rep>
+                                    </rdf:first>
+                                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                </rdf:rest>
+                            </seq>
+                        </opt>
+                    </rdf:first>
+                    <rdf:rest rdf:parseType="Resource">
+                        <rdf:first rdf:parseType="Resource">
+                            <seq rdf:parseType="Resource">
+                                <rdf:first rdf:parseType="Resource">
+                                    <matches>[eE]</matches>
+                                </rdf:first>
+                                <rdf:rest rdf:parseType="Resource">
+                                    <rdf:first rdf:parseType="Resource">
+                                        <opt rdf:parseType="Resource">
+                                            <matches>[+-]</matches>
+                                        </opt>
+                                    </rdf:first>
+                                    <rdf:rest rdf:parseType="Resource">
+                                        <rdf:first rdf:parseType="Resource">
+                                            <rep rdf:parseType="Resource">
+                                                <matches>[0-9]</matches>
+                                            </rep>
+                                        </rdf:first>
+                                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                    </rdf:rest>
+                                </rdf:rest>
+                            </seq>
+                        </rdf:first>
+                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                    </rdf:rest>
+                </rdf:rest>
+            </rdf:rest>
+        </seq>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#evar">
+        <rdf:value>36</rdf:value>
+        <rdfs:comment>[36] evar ::= "_:" localname</rdfs:comment>
+        <rdfs:label>evar</rdfs:label>
+        <seq rdf:parseType="Resource">
+            <rdf:first>_:</rdf:first>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#localname"/>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </seq>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#existential">
+        <rdf:value>5</rdf:value>
+        <rdfs:comment>[5] existential ::= "@forSome" varlist</rdfs:comment>
+        <rdfs:label>existential</rdfs:label>
+        <g:seq rdf:parseType="Resource">
+            <rdf:first>@forSome</rdf:first>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#varlist"/>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </g:seq>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#formulacontent">
+        <rdf:value>2</rdf:value>
+        <rdfs:comment>[2] formulacontent ::= (statement ("." statement)*)?</rdfs:comment>
+        <rdfs:label>formulacontent</rdfs:label>
+        <g:opt rdf:parseType="Resource">
+            <g:seq rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#statement"/>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:parseType="Resource">
+                        <g:star rdf:parseType="Resource">
+                            <g:seq rdf:parseType="Resource">
+                                <rdf:first>.</rdf:first>
+                                <rdf:rest rdf:parseType="Resource">
+                                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#statement"/>
+                                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                </rdf:rest>
+                            </g:seq>
+                        </g:star>
+                    </rdf:first>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </g:seq>
+        </g:opt>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#integer">
+        <rdf:value>26</rdf:value>
+        <rdfs:comment>[26] integer ::= [+-]? [0-9]+</rdfs:comment>
+        <rdfs:label>integer</rdfs:label>
+        <seq rdf:parseType="Resource">
+            <rdf:first rdf:parseType="Resource">
+                <opt rdf:parseType="Resource">
+                    <matches>[+-]</matches>
+                </opt>
+            </rdf:first>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:parseType="Resource">
+                    <rep rdf:parseType="Resource">
+                        <matches>[0-9]</matches>
+                    </rep>
+                </rdf:first>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </seq>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#langstring">
+        <rdf:value>37</rdf:value>
+        <rdfs:comment>[37] langstring ::= (STRING_LITERAL2 | STRING_LITERAL_LONG2) "@" [a-z]+ ("-" [a-z0-9]+)*</rdfs:comment>
+        <rdfs:label>langstring</rdfs:label>
+        <seq rdf:parseType="Resource">
+            <rdf:first rdf:parseType="Resource">
+                <alt rdf:parseType="Resource">
+                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#STRING_LITERAL2"/>
+                    <rdf:rest rdf:parseType="Resource">
+                        <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#STRING_LITERAL_LONG2"/>
+                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                    </rdf:rest>
+                </alt>
+            </rdf:first>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first>@</rdf:first>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:parseType="Resource">
+                        <rep rdf:parseType="Resource">
+                            <matches>[a-z]</matches>
+                        </rep>
+                    </rdf:first>
+                    <rdf:rest rdf:parseType="Resource">
+                        <rdf:first rdf:parseType="Resource">
+                            <star rdf:parseType="Resource">
+                                <seq rdf:parseType="Resource">
+                                    <rdf:first>-</rdf:first>
+                                    <rdf:rest rdf:parseType="Resource">
+                                        <rdf:first rdf:parseType="Resource">
+                                            <rep rdf:parseType="Resource">
+                                                <matches>[a-z0-9]</matches>
+                                            </rep>
+                                        </rdf:first>
+                                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                    </rdf:rest>
+                                </seq>
+                            </star>
+                        </rdf:first>
+                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                    </rdf:rest>
+                </rdf:rest>
+            </rdf:rest>
+        </seq>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#language">
+        <rdfs:isDefinedBy rdf:resource=""/>
+        <g:start rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#document"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#literal">
+        <rdf:value>16</rdf:value>
+        <rdfs:comment>[16] literal ::= (STRING_LITERAL2 | STRING_LITERAL_LONG2) ("^^" symbol) | langstring</rdfs:comment>
+        <rdfs:label>literal</rdfs:label>
+        <g:alt rdf:parseType="Resource">
+            <rdf:first rdf:parseType="Resource">
+                <g:seq rdf:parseType="Resource">
+                    <rdf:first rdf:parseType="Resource">
+                        <g:alt rdf:parseType="Resource">
+                            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#STRING_LITERAL2"/>
+                            <rdf:rest rdf:parseType="Resource">
+                                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#STRING_LITERAL_LONG2"/>
+                                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                            </rdf:rest>
+                        </g:alt>
+                    </rdf:first>
+                    <rdf:rest rdf:parseType="Resource">
+                        <rdf:first rdf:parseType="Resource">
+                            <g:seq rdf:parseType="Resource">
+                                <rdf:first>^^</rdf:first>
+                                <rdf:rest rdf:parseType="Resource">
+                                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#symbol"/>
+                                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                </rdf:rest>
+                            </g:seq>
+                        </rdf:first>
+                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                    </rdf:rest>
+                </g:seq>
+            </rdf:first>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#langstring"/>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </g:alt>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#localname">
+        <rdf:value>31</rdf:value>
+        <rdfs:comment>[31] localname ::= (NameStartChar3|"_") NameChar3*</rdfs:comment>
+        <rdfs:label>localname</rdfs:label>
+        <seq rdf:parseType="Resource">
+            <rdf:first rdf:parseType="Resource">
+                <alt rdf:parseType="Resource">
+                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#NameStartChar3"/>
+                    <rdf:rest rdf:parseType="Resource">
+                        <rdf:first>_</rdf:first>
+                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                    </rdf:rest>
+                </alt>
+            </rdf:first>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:parseType="Resource">
+                    <star rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#NameChar3"/>
+                </rdf:first>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </seq>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#numeral">
+        <rdf:value>19</rdf:value>
+        <rdfs:comment>[19] numeral ::= integer | double | decimal</rdfs:comment>
+        <rdfs:label>numeral</rdfs:label>
+        <g:alt rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#integer"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#double"/>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#decimal"/>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </rdf:rest>
+        </g:alt>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#objecttail">
+        <rdf:value>11</rdf:value>
+        <rdfs:comment>[11] objecttail ::= ("," term)*</rdfs:comment>
+        <rdfs:label>objecttail</rdfs:label>
+        <g:star rdf:parseType="Resource">
+            <g:seq rdf:parseType="Resource">
+                <rdf:first>,</rdf:first>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#term"/>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </g:seq>
+        </g:star>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#pathitem">
+        <rdf:value>15</rdf:value>
+        <rdfs:comment>[15] pathitem ::= symbol | evar | uvar | numeral | literal | "{" formulacontent "}" | "[" propertylist "]" |  "("  term* ")" | boolean</rdfs:comment>
+        <rdfs:label>pathitem</rdfs:label>
+        <g:alt rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#symbol"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#evar"/>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#uvar"/>
+                    <rdf:rest rdf:parseType="Resource">
+                        <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#numeral"/>
+                        <rdf:rest rdf:parseType="Resource">
+                            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#literal"/>
+                            <rdf:rest rdf:parseType="Resource">
+                                <rdf:first rdf:parseType="Resource">
+                                    <g:seq rdf:parseType="Resource">
+                                        <rdf:first>{</rdf:first>
+                                        <rdf:rest rdf:parseType="Resource">
+                                            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#formulacontent"/>
+                                            <rdf:rest rdf:parseType="Resource">
+                                                <rdf:first>}</rdf:first>
+                                                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                            </rdf:rest>
+                                        </rdf:rest>
+                                    </g:seq>
+                                </rdf:first>
+                                <rdf:rest rdf:parseType="Resource">
+                                    <rdf:first rdf:parseType="Resource">
+                                        <g:seq rdf:parseType="Resource">
+                                            <rdf:first>[</rdf:first>
+                                            <rdf:rest rdf:parseType="Resource">
+                                                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#propertylist"/>
+                                                <rdf:rest rdf:parseType="Resource">
+                                                    <rdf:first>]</rdf:first>
+                                                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                                </rdf:rest>
+                                            </rdf:rest>
+                                        </g:seq>
+                                    </rdf:first>
+                                    <rdf:rest rdf:parseType="Resource">
+                                        <rdf:first rdf:parseType="Resource">
+                                            <g:seq rdf:parseType="Resource">
+                                                <rdf:first>(</rdf:first>
+                                                <rdf:rest rdf:parseType="Resource">
+                                                    <rdf:first rdf:parseType="Resource">
+                                                        <g:star rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#term"/>
+                                                    </rdf:first>
+                                                    <rdf:rest rdf:parseType="Resource">
+                                                        <rdf:first>)</rdf:first>
+                                                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                                    </rdf:rest>
+                                                </rdf:rest>
+                                            </g:seq>
+                                        </rdf:first>
+                                        <rdf:rest rdf:parseType="Resource">
+                                            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#boolean"/>
+                                            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                        </rdf:rest>
+                                    </rdf:rest>
+                                </rdf:rest>
+                            </rdf:rest>
+                        </rdf:rest>
+                    </rdf:rest>
+                </rdf:rest>
+            </rdf:rest>
+        </g:alt>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#pathtail">
+        <rdf:value>14</rdf:value>
+        <rdfs:comment>[14] pathtail ::= | "!" term | "^" term</rdfs:comment>
+        <rdfs:label>pathtail</rdfs:label>
+        <g:alt rdf:parseType="Resource">
+            <rdf:first rdf:parseType="Resource">
+                <g:seq rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:first>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:parseType="Resource">
+                    <g:seq rdf:parseType="Resource">
+                        <rdf:first>!</rdf:first>
+                        <rdf:rest rdf:parseType="Resource">
+                            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#term"/>
+                            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                        </rdf:rest>
+                    </g:seq>
+                </rdf:first>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:parseType="Resource">
+                        <g:seq rdf:parseType="Resource">
+                            <rdf:first>^</rdf:first>
+                            <rdf:rest rdf:parseType="Resource">
+                                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#term"/>
+                                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                            </rdf:rest>
+                        </g:seq>
+                    </rdf:first>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </rdf:rest>
+        </g:alt>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#prefix">
+        <rdf:value>32</rdf:value>
+        <rdfs:comment>[32] prefix  ::= (("_" NameChar3+) | (NameStartChar3 NameChar3*))? ":"</rdfs:comment>
+        <rdfs:label>prefix</rdfs:label>
+        <seq rdf:parseType="Resource">
+            <rdf:first rdf:parseType="Resource">
+                <opt rdf:parseType="Resource">
+                    <alt rdf:parseType="Resource">
+                        <rdf:first rdf:parseType="Resource">
+                            <seq rdf:parseType="Resource">
+                                <rdf:first>_</rdf:first>
+                                <rdf:rest rdf:parseType="Resource">
+                                    <rdf:first rdf:parseType="Resource">
+                                        <rep rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#NameChar3"/>
+                                    </rdf:first>
+                                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                </rdf:rest>
+                            </seq>
+                        </rdf:first>
+                        <rdf:rest rdf:parseType="Resource">
+                            <rdf:first rdf:parseType="Resource">
+                                <seq rdf:parseType="Resource">
+                                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#NameStartChar3"/>
+                                    <rdf:rest rdf:parseType="Resource">
+                                        <rdf:first rdf:parseType="Resource">
+                                            <star rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#NameChar3"/>
+                                        </rdf:first>
+                                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                    </rdf:rest>
+                                </seq>
+                            </rdf:first>
+                            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                        </rdf:rest>
+                    </alt>
+                </opt>
+            </rdf:first>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first>:</rdf:first>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </seq>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#property">
+        <rdf:value>10a</rdf:value>
+        <rdfs:comment>[10a] property ::= verb term objecttail</rdfs:comment>
+        <rdfs:label>property</rdfs:label>
+        <g:seq rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#verb"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#term"/>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#objecttail"/>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </rdf:rest>
+        </g:seq>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#propertylist">
+        <rdf:value>10</rdf:value>
+        <rdfs:comment>[10] propertylist ::= (property (";" property)*)?</rdfs:comment>
+        <rdfs:label>propertylist</rdfs:label>
+        <g:opt rdf:parseType="Resource">
+            <g:seq rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#property"/>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:parseType="Resource">
+                        <g:star rdf:parseType="Resource">
+                            <g:seq rdf:parseType="Resource">
+                                <rdf:first>;</rdf:first>
+                                <rdf:rest rdf:parseType="Resource">
+                                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#property"/>
+                                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                </rdf:rest>
+                            </g:seq>
+                        </g:star>
+                    </rdf:first>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </g:seq>
+        </g:opt>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#qname">
+        <rdf:value>30</rdf:value>
+        <rdfs:comment>[30] qname  ::= prefix? localname</rdfs:comment>
+        <rdfs:label>qname</rdfs:label>
+        <seq rdf:parseType="Resource">
+            <rdf:first rdf:parseType="Resource">
+                <opt rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#prefix"/>
+            </rdf:first>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#localname"/>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </seq>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#simpleStatement">
+        <rdf:value>9</rdf:value>
+        <rdfs:comment>[9] simpleStatement ::= term propertylist</rdfs:comment>
+        <rdfs:label>simpleStatement</rdfs:label>
+        <g:seq rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#term"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#propertylist"/>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </g:seq>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#statement">
+        <rdf:value>3</rdf:value>
+        <rdfs:comment>[3] statement  ::= declaration | universal | existential | simpleStatement</rdfs:comment>
+        <rdfs:label>statement</rdfs:label>
+        <g:alt rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#declaration"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#universal"/>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#existential"/>
+                    <rdf:rest rdf:parseType="Resource">
+                        <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#simpleStatement"/>
+                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                    </rdf:rest>
+                </rdf:rest>
+            </rdf:rest>
+        </g:alt>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#symbol">
+        <rdf:value>18</rdf:value>
+        <rdfs:comment>[18] symbol ::= uriref | qname</rdfs:comment>
+        <rdfs:label>symbol</rdfs:label>
+        <g:alt rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#uriref"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#qname"/>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </g:alt>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#term">
+        <rdf:value>13</rdf:value>
+        <rdfs:comment>[13] term ::= pathitem pathtail</rdfs:comment>
+        <rdfs:label>term</rdfs:label>
+        <g:seq rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#pathitem"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#pathtail"/>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </g:seq>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#universal">
+        <rdf:value>4</rdf:value>
+        <rdfs:comment>[4] universal ::= "@forAll" varlist</rdfs:comment>
+        <rdfs:label>universal</rdfs:label>
+        <g:seq rdf:parseType="Resource">
+            <rdf:first>@forAll</rdf:first>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#varlist"/>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </g:seq>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#uriref">
+        <rdf:value>29</rdf:value>
+        <rdfs:comment>[29] uriref ::=	'&#60;' ([^&#60;&#62;'{}|^`]-[#x01-#x20])* '&#62;'</rdfs:comment>
+        <rdfs:label>uriref</rdfs:label>
+        <seq rdf:parseType="Resource">
+            <rdf:first>&#60;</rdf:first>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:parseType="Resource">
+                    <star rdf:parseType="Resource">
+                        <diff rdf:parseType="Resource">
+                            <rdf:first rdf:parseType="Resource">
+                                <matches>[^&#60;&#62;'{}|^`]</matches>
+                            </rdf:first>
+                            <rdf:rest rdf:parseType="Resource">
+                                <rdf:first rdf:parseType="Resource">
+                                    <matches>[- ]</matches>
+                                </rdf:first>
+                                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                            </rdf:rest>
+                        </diff>
+                    </star>
+                </rdf:first>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first>&#62;</rdf:first>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </rdf:rest>
+        </seq>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#uvar">
+        <rdf:value>35</rdf:value>
+        <rdfs:comment>[35] uvar ::= "?" localname</rdfs:comment>
+        <rdfs:label>uvar</rdfs:label>
+        <seq rdf:parseType="Resource">
+            <rdf:first>?</rdf:first>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#localname"/>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </seq>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#varlist">
+        <rdf:value>6</rdf:value>
+        <rdfs:comment>[6] varlist ::= (symbol ("," symbol)*)?</rdfs:comment>
+        <rdfs:label>varlist</rdfs:label>
+        <g:opt rdf:parseType="Resource">
+            <g:seq rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#symbol"/>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:parseType="Resource">
+                        <g:star rdf:parseType="Resource">
+                            <g:seq rdf:parseType="Resource">
+                                <rdf:first>,</rdf:first>
+                                <rdf:rest rdf:parseType="Resource">
+                                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#symbol"/>
+                                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                </rdf:rest>
+                            </g:seq>
+                        </g:star>
+                    </rdf:first>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </g:seq>
+        </g:opt>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/notation3#verb">
+        <rdf:value>12</rdf:value>
+        <rdfs:comment>[12] verb ::= term | "@has" term | "@is" term "@of" | "@a" | "=" | "=&#62;" | "&#60;="</rdfs:comment>
+        <rdfs:label>verb</rdfs:label>
+        <g:alt rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#term"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:parseType="Resource">
+                    <g:seq rdf:parseType="Resource">
+                        <rdf:first>@has</rdf:first>
+                        <rdf:rest rdf:parseType="Resource">
+                            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#term"/>
+                            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                        </rdf:rest>
+                    </g:seq>
+                </rdf:first>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:parseType="Resource">
+                        <g:seq rdf:parseType="Resource">
+                            <rdf:first>@is</rdf:first>
+                            <rdf:rest rdf:parseType="Resource">
+                                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/notation3#term"/>
+                                <rdf:rest rdf:parseType="Resource">
+                                    <rdf:first>@of</rdf:first>
+                                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                </rdf:rest>
+                            </rdf:rest>
+                        </g:seq>
+                    </rdf:first>
+                    <rdf:rest rdf:parseType="Resource">
+                        <rdf:first>@a</rdf:first>
+                        <rdf:rest rdf:parseType="Resource">
+                            <rdf:first>=</rdf:first>
+                            <rdf:rest rdf:parseType="Resource">
+                                <rdf:first>=&#62;</rdf:first>
+                                <rdf:rest rdf:parseType="Resource">
+                                    <rdf:first>&#60;=</rdf:first>
+                                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                </rdf:rest>
+                            </rdf:rest>
+                        </rdf:rest>
+                    </rdf:rest>
+                </rdf:rest>
+            </rdf:rest>
+        </g:alt>
+    </rdf:Description>
+</rdf:RDF>

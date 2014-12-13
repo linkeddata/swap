@@ -1,0 +1,252 @@
+#  n3
+# 
+#  Convert new OFX concepts back to old boring QIF ones
+#
+#  This takes the output of (for example) qfx2n3.py - an OFX-standard
+# file except in N3 format (.ofx3), and it generates a series of transaction
+# in a much simpler format rather like the old quicken interchange format (.qu3).
+#
+#  Actually reverse makes more sense as modelling is much better - this
+# way removes information.  The .ofx3 file is a self-describing statement.
+#
+#  This invents URIs for bank accounts and transactions, so that other files
+# can easily refer to them, and different statements will refer to the
+# same bank account easily.
+#
+# Example Makefile extract to convert downloaded .ofx files:
+#.ofx.ofx3:
+#	sed -f $(PIM)/qfx2n3.sed < $< > $@
+#.ofx3.qu3:
+#	$(CWM) $< -apply=qfx2qu.n3 -apply=qfx2qu.n3 --purge > $@
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix crypto: <http://www.w3.org/2000/10/swap/crypto#>.
+@prefix string: <http://www.w3.org/2000/10/swap/string#>.
+@prefix math: <http://www.w3.org/2000/10/swap/math#>.
+@prefix os: <http://www.w3.org/2000/10/swap/os#>.
+@prefix qu:  <http://www.w3.org/2000/10/swap/pim/qif#>.
+@prefix cur:	<http://www.w3.org/2007/ont/currency#>.
+
+# QFX (OFX) format:
+@prefix ofx: <http://www.w3.org/2000/10/swap/pim/ofx#> .
+@prefix ofxh: <http://www.w3.org/2000/10/swap/pim/ofx-headers#> .
+#
+
+@prefix : <#>.
+
+@forAll :a, :b, :d, :i, :l, :m, :n, :p, :r, :s, :t, :x.
+
+
+
+########## Rule for getting credit card account:
+#
+# Bug: does not pick up any bank name for the account.
+# I guess this is to do with the way credit cards work: they are not really
+# connected to  a bank as they can be transferred from bank to bank.
+# could use last 4 digits of card number
+
+{
+:s ofx:OFX  [
+
+#   ofx:SIGNONMSGSRSV1[
+#       ofx:SONRS[
+#        ofx:DTSERVER "2005-09-01T08:54:01";
+#        ofx:LANGUAGE "ENG";
+#        ofx:DTACCTUP "20050901085401.000[-4:EDT]";
+#        ofx:FI[
+#            ofx:ORG ?f ;      #          e.g. "Bank of America";
+#            ofx:FID "BANK OF AMERICA";
+#              ];   # FI
+#	];   # SONRS
+#    ];   # SIGNONMSGSRSV1
+	    
+	
+   ofx:CREDITCARDMSGSRSV1[
+       ofx:CCSTMTTRNRS  [
+           ofx:CCSTMTRS  [
+               ofx:CURDEF ?currency;
+               ofx:CCACCTFROM  [
+                   ofx:ACCTID :a;   # This is the credit card number
+#                   ofx:ACCTTYPE :l;
+#                   ofx:BANKID :b
+	       ];
+               ofx:BANKTRANLIST :x
+                        ]]]].
+
+# Construct a unique identifier for account which will match
+# between different statements:
+
+    (:a ".*(....)") string:scrape ?a4. # Last 4 digits only
+    ?lab is string:concatenation of ( "CCARD_" ?a4 ).
+    ?account 	log:uri [is os:baseAbsolute of
+		    [is string:concatenation of ( "acc#CCARD_" ?a4 )]].
+	
+} log:implies {
+   :x	qu:listForAccount ?account;
+	qu:payeeField ofx:NAME;   # New version
+	qu:sourceDocument :s.
+	
+   ?account   ofx:ACCTID ?a4;
+        qu:currencyCode ?currency;
+	 # Extending their ontology by inventing an account type for consistency
+	 # :-/
+        ofx:ACCTTYPE ?lab;  s:label ?lab; # was "CREDITCARD"
+#        ofx:BANKID :b.
+}.
+
+
+
+############### POST 2005 rule for finding responses - bank version:
+
+{
+:s ofx:OFX  [
+   ofx:BANKMSGSRSV1[
+       ofx:STMTTRNRS  [
+           ofx:STMTRS  [
+               ofx:CURDEF ?currency;
+               ofx:BANKACCTFROM  [
+                   ofx:ACCTID :a;
+                   ofx:ACCTTYPE :l;
+                   ofx:BANKID :b ];
+               ofx:BANKTRANLIST :x
+                        ]]]].
+
+# Construct a unique identifier for account which will match
+# between different statements: 
+
+    (:a ".*(....)") string:scrape ?a4. # Last 4 digits only
+    ?lab is string:concatenation of ( :l ?a4 ).
+    ?account 	log:uri [is os:baseAbsolute of
+		    [is string:concatenation of ( "acc#" :b "_" :a )]].
+	
+} => {
+   :x	qu:listForAccount ?account;
+	qu:payeeField ofx:NAME;   # New version
+	qu:sourceDocument :s.
+   ?account   ofx:ACCTID :a;
+        qu:currencyCode ?currency;
+        ofx:ACCTTYPE :l;  s:label ?lab;
+        ofx:BANKID :b.
+}.
+
+
+########### ORIGINAL pre-2005-06 rule: 
+{
+:s ofx:OFX  [
+   ofx:BANKMSGSRSV1[
+       ofx:STMTTRNRS  [
+           ofx:STMTTRN  [    # sic. Later becomes STMTTRS. Maybe was Fleet bug.
+               ofx:BANKACCTFROM  [
+                   ofx:ACCTID :a;
+                   ofx:ACCTTYPE :l;
+                   ofx:BANKID :b ];
+               ofx:BANKTRANLIST :x
+                        ]]]].
+
+# Construct a unique identifier for account which will match
+# between different statements:
+
+    (:a ".*(....)") string:scrape ?a4. # Last 4 digits only
+
+    ?account 	log:uri [is os:baseAbsolute of
+		    [is string:concatenation of ( "acc#" :b "_" :a )]].
+	
+} log:implies {
+   :x	qu:listForAccount ?account;
+	qu:payeeField ofx:MEMO;  # Old version
+	qu:sourceDocument :s.
+	
+   ?account   ofx:ACCTID :a;
+        ofx:ACCTTYPE :l;  s:label :l;
+        ofx:BANKID :b.
+}.
+
+
+###################### Now we have isolated the statement list
+
+# Convert statements to basic financial ontology
+#
+# We use NAME as that is what there is, while before
+# we used MEMO which was in practice a longer version of NAME.
+#
+# We used to put URIs of transactions in aocmmon space by year but then we got clashes between two 
+# CC statments for dfferent accounts as their FIT was just (date, serialthatday).
+#
+
+{  [qu:listForAccount ?account; qu:payeeField ?p; qu:sourceDocument :s] ofx:STMTTRN ?original.
+  ?original
+   ofx:DTPOSTED :d;
+   ofx:FITID    :i;
+   ?p           :m;
+   ofx:TRNAMT   :x .
+   
+   :i crypto:sha ?id.
+   :s log:uri ?filename.
+#   (?filename "([A-Za-z0-9-_]*)") string:scrape ?base.
+   :r log:uri [is os:baseAbsolute of
+	[is string:concatenation of ( ?filename "#" ?id  )]].
+#   ofx:TRNTYPE  :t 
+} log:implies {
+:r  qu:toAccount ?account ;
+   qu:date :d;
+   qu:payee :m;  	# Quicken seems to mix it like this
+   qu:accordingTo :s;	# useful to track the source
+   qu:ofxTransaction ?original;
+   qu:amount :x .
+}.
+
+
+###############
+
+# For those with check numbers, get the check number:
+{  [qu:listForAccount ?account; qu:sourceDocument :s] ofx:STMTTRN [
+   ofx:FITID    :i;
+   ofx:CHECKNUM   :x ].
+   :i crypto:sha ?id.
+   :s log:uri ?filename.
+#   (?filename "([A-Za-z0-9-_]*)") string:scrape ?base.
+   :r log:uri [is os:baseAbsolute of
+	[is string:concatenation of ( ?filename "#" ?id  )]].
+#   ofx:TRNTYPE  :t 
+} log:implies {
+:r  qu:number :x .
+}.
+
+#################
+# Where we know currency, calculate normalized value
+#
+#
+# Note the different properties for the currency code of a transaction
+# and the currency code of an abstract currency.
+#
+{
+    ?trans qu:toAccount ?account.
+    ?account qu:currencyCode ?code .
+    ?cur cur:code ?code;  cur:in_USD ?rate.
+    ?trans qu:amount ?string.
+    (?rate ?string) math:product ?y.
+ } => {
+    ?trans qu:in_USD ?y;
+        qu:currency ?cur.
+ }.
+
+
+############  It is a pain to have an uneditable rdfs:comment in the statement file.
+## suppress this.
+#
+#{
+#    ?trans qu:toAccount ?account.
+#    ?account qu:currencyCode ?code .
+#    ?cur cur:code ?code.
+#    ?code string:notEqualIgnoringCase "USD".
+#    ?trans qu:amount ?string.
+#    ("(Original currency " ?code " " ?string ")") string:concatenation ?note.
+# } => {
+#    ?trans s:comment ?note.
+# }.
+
+
+   
+
+#ends

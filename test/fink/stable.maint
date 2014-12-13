@@ -1,0 +1,658 @@
+#Processed by Id: cwm.py,v 1.96 2002/06/07 20:07:17 timbl Exp 
+        #    using base file:/devel/WWW/2000/10/swap/test/fink/stable.info3
+        
+#  Notation3 generation by
+#       notation3.py,v 1.108 2002/05/15 00:38:10 timbl Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/test/fink/stable.info3
+     @prefix : <byMaintainer.n3#> .
+     @prefix con: <http://www.w3.org/2000/10/swap/pim/contact#> .
+     @prefix fink: <http://www.w3.org/2000/10/swap/util/fink#> .
+     @prefix lic: <http://www.w3.org/2000/10/swap/util/fink-lic#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix pkg: <http://www.w3.org/2000/10/swap/util/fink-pkg#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    <mailto:MrVacBob@mac.com>     :knownAs "Alexander Strange";
+         :packageMaintained pkg:gimp_v1_2_3_r4,
+                pkg:gimp_v1_2_3_r8,
+                pkg:gtk_plus_v1_2_10_r10,
+                pkg:gtk_plus_v1_2_10_r5,
+                pkg:intercal_threaded_v0_7_r2,
+                pkg:libmpeg_v1_3_1_r4,
+                pkg:sdl_net_v1_2_3_r1,
+                pkg:xscorch_v0_1_14_r2 .
+    
+    <mailto:Paul.Gaborit@enstimac.fr>     :knownAs "Paul GABORIT";
+         :packageMaintained pkg:dia_v0_88_1_r2,
+                pkg:dia_v0_88_1_r5 .
+    
+    <mailto:andrei.verovski@bigfoot.com>     :knownAs "Andrei Verovski";
+         :packageMaintained pkg:mysql_v3_23_49_r1,
+                pkg:mysql_v3_23_49_r2 .
+    
+    <mailto:andrewrohl@mac.com>     :knownAs "Andrew Rohl";
+         :packageMaintained pkg:ncftp_v3_1_2_r1,
+                pkg:povray_v3_1_r4,
+                pkg:rasmol_v2_7_1_1_r2,
+                pkg:rman_v3_0_9_r2 .
+    
+    <mailto:aplus@aplusdev.org>     :knownAs "Brian Redman";
+         :packageMaintained pkg:aplus_fsf_v4_18_8_r2 .
+    
+    <mailto:ashley@semantic.org>     :knownAs "Ashley Yakeley";
+         :packageMaintained pkg:hugs_v1998_200102_r3,
+                pkg:units_v1_74_r2 .
+    
+    <mailto:bbum@codefab.com>     :knownAs "Bill Bumgarner";
+         :packageMaintained pkg:rsync_v2_5_5_r1 .
+    
+    <mailto:bhines@alumni.ucsd.edu>     :knownAs "Ben Hines";
+         :packageMaintained pkg:dnstracer_v1_4_r1,
+                pkg:jwhois_v3_1_0_r1,
+                pkg:launch_v1_0a9_r2,
+                pkg:unrar_v3_0_r1,
+                pkg:yydecode_v0_2_8_r2 .
+    
+    <mailto:chrisp@users.sourceforge.net>     :knownAs "Christoph Pfisterer";
+         :packageMaintained pkg:apt_v0_5_4_r1,
+                pkg:bluefish_v0_6_r2,
+                pkg:enlightenment_v0_16_5_r6,
+                pkg:fnlib_v0_5_r2,
+                pkg:glib_v1_2_10_r3,
+                pkg:guile_v1_4_r3,
+                pkg:icewm_v1_0_8_r1,
+                pkg:imlib_v1_9_10_r2,
+                pkg:libghttp_v1_0_9_r2,
+                pkg:libole2_v0_2_4_r1,
+                pkg:libproplist_v0_10_1_r3,
+                pkg:librep_v0_14_r5,
+                pkg:libtool_v1_3_5_r9,
+                pkg:mesa_v3_5_r1,
+                pkg:openssl_v0_9_6c_r1,
+                pkg:popt_v1_6_2_r1,
+                pkg:qt_v2_3_1_r1,
+                pkg:recode_v3_6_r5,
+                pkg:sed_v3_02_r3 .
+    
+    <mailto:costabel@wanadoo.fr>     :knownAs "Martin Costabel";
+         :packageMaintained pkg:agqt_v0_9_1_r1,
+                pkg:ispell_french_v1_0_r1,
+                pkg:ispell_german_v20011124_r1,
+                pkg:ispell_italian_v2001_r2,
+                pkg:texmacs_v1_0_r2 .
+    
+    <mailto:cswinehart@mac.com>     :knownAs "Christian Swinehart";
+         :packageMaintained pkg:anacron_v2_3_r3,
+                pkg:bbkeys_v0_8_3_r1,
+                pkg:bbmail_v0_6_11_r1,
+                pkg:bbpager_v0_3_0_r1,
+                pkg:blackbox_rootless_v0_61_1_r1,
+                pkg:debianutils_v1_15_r4,
+                pkg:dict_v1_5_5_r2,
+                pkg:egd_v0_8_r1,
+                pkg:frotz_v2_42_r1,
+                pkg:gnupg_egd_v1_0_6_r2,
+                pkg:gnupg_v1_0_6_r9,
+                pkg:mutt_ssl_v1_3_27i_r4,
+                pkg:mutt_ssl_v1_3_27i_r5,
+                pkg:mutt_v1_3_27i_r1,
+                pkg:pcre_v3_5_r1,
+                pkg:pcre_v3_7_r2 .
+    
+    <mailto:cswinehart@users.sourceforge.net>     :knownAs "Christian Swinehart";
+         :packageMaintained pkg:debianutils_v1_16_r1 .
+    
+    <mailto:dmrrsn@users.sourceforge.net>     :knownAs "Dave Morrison";
+         :packageMaintained pkg:app_defaults_v20010814_r2,
+                pkg:bundle_tetex_v20010808_r4,
+                pkg:context_v2001_11_13_r1,
+                pkg:detex_v2_7_r2,
+                pkg:digest_md5_pm_v2_16_r5,
+                pkg:dvipdfm_v0_13_2c_r5,
+                pkg:fix_fink_v1_0_r1,
+                pkg:foiltex_v2_1_3_r3,
+                pkg:fvwm2_no_gnome_v2_4_6_r2,
+                pkg:fvwm2_v2_4_6_r2,
+                pkg:fvwm_icons_v2_4_0_r5,
+                pkg:fvwm_v1_24r_r3,
+                pkg:gc_v6_0_r3,
+                pkg:gdbm_v1_8_0_r6,
+                pkg:gmp_v4_0_1_r2,
+                pkg:gnumeric_v1_0_2_r5,
+                pkg:hyperref_v6_71_r2,
+                pkg:hyperref_v6_72_r1,
+                pkg:ifmslide_v0_45_r2,
+                pkg:latex2html_v2002_r1,
+                pkg:latex2html_v2002_r2,
+                pkg:libjpeg_v6b_r5,
+                pkg:libpng_v1_0_12_r6,
+                pkg:libstroke_v0_5_1_r4,
+                pkg:libtiff_v3_5_7_r7,
+                pkg:macaulay2_v0_9_2_r4,
+                pkg:mhonarc_v2_5_2_r1,
+                pkg:mhonarc_v2_5_3_r1,
+                pkg:mpack_v1_5_r2,
+                pkg:natbib_v7_0a_r2,
+                pkg:oberdiek_v20010827_r2,
+                pkg:pari_gp_v2_1_1_r5,
+                pkg:pdfscreen_v1_5_r2,
+                pkg:pdfslide_v0_50_r2,
+                pkg:pdftex_v20010417_r6,
+                pkg:ppower4_v0_8_4_r4,
+                pkg:revtex_v4_0_r3,
+                pkg:seminar_v1_0e_r2,
+                pkg:singular_factory_v1_3b_r3,
+                pkg:singular_libfac_v0_3_2_r2,
+                pkg:system_tetex_v20010808_r7,
+                pkg:system_tetex_v20010808_r8,
+                pkg:tetex_base_v1_0_r9,
+                pkg:tetex_macosx_v20010808_r4,
+                pkg:tetex_texmf_v1_0_2_r6,
+                pkg:texinfo_v4_0_r4,
+                pkg:texpower_v0_0_8f_r2,
+                pkg:transfig_v3_2_3d_r6,
+                pkg:type1inst_v0_6_1_r3,
+                pkg:x_ghostscript_fonts_v20020206_r2,
+                pkg:x_ghostscript_fonts_v20020206_r3,
+                pkg:xdvi_v22_56_r1,
+                pkg:xdvi_v22_57_r1,
+                pkg:xfig_v3_2_3d_r7 .
+    
+    <mailto:ek@macnews.de>     :knownAs "Eric Knauel";
+         :packageMaintained pkg:fetchmail_v5_9_0_r1 .
+    
+    <mailto:fink-devel@lists.sourceforge.net>     :packageMaintained pkg:apache_v1_3_20_r3,
+                pkg:autoconf25_v2_52_r1,
+                pkg:autoconf_v2_13_r3,
+                pkg:automake_v1_5_r1,
+                pkg:bison_v1_29_r1,
+                pkg:bundle_gnome_v1_4_r3,
+                pkg:diffutils_v2_7_r3,
+                pkg:emacs_nox_v20_7_r5,
+                pkg:emacs_v20_7_r5,
+                pkg:enlightenment_v0_16_5_r7,
+                pkg:flex_v2_5_4a_r2,
+                pkg:fnlib_v0_5_r3,
+                pkg:freetype_hinting_v1_3_1_r3,
+                pkg:freetype_hinting_v1_3_1_r6,
+                pkg:freetype_v1_3_1_r4,
+                pkg:freetype_v1_3_1_r6,
+                pkg:giflib_v4_1_0_r2,
+                pkg:giflib_v4_1_0_r5,
+                pkg:guile_v1_4_r4,
+                pkg:imlib_v1_9_10_r8,
+                pkg:imlib_v1_9_10_r9,
+                pkg:joe_v2_8_r3,
+                pkg:libghttp_v1_0_9_r3,
+                pkg:libole2_v0_2_4_r2,
+                pkg:libproplist_v0_10_1_r4,
+                pkg:librep_v0_14_r6,
+                pkg:libtool_v1_3_5_r10,
+                pkg:libungif_v4_1_0b1_r2,
+                pkg:libungif_v4_1_0b1_r5,
+                pkg:lynx_ssl_v2_8_4_r1,
+                pkg:lynx_v2_8_4_r1,
+                pkg:m4_v1_4_r5,
+                pkg:mc_v4_5_54_r3,
+                pkg:openssl_v0_9_6c_r3,
+                pkg:oroborus_v1_14_0_r4,
+                pkg:php_v4_0_6_r4,
+                pkg:popt_v1_6_2_r2,
+                pkg:recode_v3_6_r6,
+                pkg:rep_gtk_v0_15_r3,
+                pkg:system_libgl_v1_2_r3,
+                pkg:system_xfree86_v4_1_r5,
+                pkg:system_xtools_v1_0_r7,
+                pkg:textutils_v2_0_r4,
+                pkg:xforms_v0_89_r2 .
+    
+    <mailto:finlayd@users.sourceforge.net>     :knownAs "Finlay Dobbie";
+         :packageMaintained pkg:blackbox_v0_61_1_r3,
+                pkg:figlet_v22_r3,
+                pkg:ghx_v0_1_39_r2,
+                pkg:hx_v0_1_39_r5,
+                pkg:hxd_v0_1_39_r1,
+                pkg:links_ssl_v0_96_r2,
+                pkg:links_v0_96_r1,
+                pkg:passwd_v20011202_r1,
+                pkg:passwd_v20020329_r1 .
+    
+    <mailto:jerwin@ponymail.com>     :knownAs "Jeremy Erwin";
+         :packageMaintained pkg:expat_v1_95_1_r2,
+                pkg:expat_v1_95_1_r3 .
+    
+    <mailto:jhiggs@iprsystems.com>     :knownAs "Jeremy Higgs";
+         :packageMaintained pkg:a2ps_v4_12_r4,
+                pkg:aria_v0_10_0_r2,
+                pkg:ettercap_ssl_v0_6_3_1_r1,
+                pkg:ettercap_v0_6_3_1_r1,
+                pkg:fspanel_v0_7_r1,
+                pkg:gnapster_v1_5_0_r1,
+                pkg:gnomemm_v1_2_2_r1,
+                pkg:gnomemm_v1_2_2_r3,
+                pkg:libsigc_plus_plus_v1_0_4_r1,
+                pkg:libsigc_plus_plus_v1_0_4_r2,
+                pkg:mrtg_v2_9_17_r1,
+                pkg:mtr_v0_44_r1,
+                pkg:nano_v1_0_7_r2,
+                pkg:nmap_v2_54beta30_r2,
+                pkg:ntaim_v996288522_r2,
+                pkg:oroborus2_v2_0_4_r1,
+                pkg:pth_v1_4_0_r5,
+                pkg:pth_v1_4_0_r6,
+                pkg:xfce_v3_8_10_r1,
+                pkg:xfce_v3_8_10_r2,
+                pkg:xmahjongg_v3_5_r1 .
+    
+    <mailto:jsw@cdc.noaa.gov>     :knownAs "",
+                "Jeffrey Whitaker";
+         :packageMaintained pkg:aquaterm_v0_3_0a_r4,
+                pkg:aspell_v_33_7_1_r2,
+                pkg:autocutsel_v0_6_r1,
+                pkg:bsdmktemp_v1_3_1_r1,
+                pkg:f2c_v20010618_r1,
+                pkg:f2c_v20020123_r2,
+                pkg:fftw_v2_1_3_r10,
+                pkg:fftw_v2_1_3_r9,
+                pkg:fort77_v1_18_r3,
+                pkg:freetype2_shlibs_v2_0_8_r2,
+                pkg:freetype2_v2_0_8_r3,
+                pkg:freetype2_v2_0_8_r4,
+                pkg:g77_v2_95_2_r2,
+                pkg:ghostscript6_nox_v6_01_r1,
+                pkg:ghostscript6_nox_v6_01_r2,
+                pkg:ghostscript6_v6_01_r1,
+                pkg:ghostscript_fonts_v6_0_r3,
+                pkg:ghostscript_nox_v7_02_r1,
+                pkg:ghostscript_v7_02_r2,
+                pkg:gmt_v3_4_1_r1,
+                pkg:gnuplot_v3_7_1_r4,
+                pkg:gnuplot_v3_8h_0_r7,
+                pkg:grace_v5_1_5_r4,
+                pkg:grace_v5_1_7_r1,
+                pkg:gri_v2_8_6_r3,
+                pkg:gtk_plusextra_v0_99_16_r2,
+                pkg:gtk_plusextra_v0_99_16_r3,
+                pkg:gv_v3_5_8_r4,
+                pkg:hdf5_v1_4_2_r3,
+                pkg:hdf5_v1_4_2_r4,
+                pkg:hdf_v4_1r4_r2,
+                pkg:icewm_basic_v1_0_9_r1,
+                pkg:icewm_v1_0_9_r1,
+                pkg:imagemagick_v5_4_1_r3,
+                pkg:ispell_v3_2_06_r1,
+                pkg:lesstif_v0_93_18_r2,
+                pkg:lesstif_v0_93_18_r3,
+                pkg:libwww_v5_3_2_r2,
+                pkg:libwww_v5_3_2_r3,
+                pkg:lyx_v1_1_6fix3_r3,
+                pkg:macosx_file_pm_v0_61_r1,
+                pkg:manconf_v20020121_r1,
+                pkg:mgv_v3_1_5_r2,
+                pkg:nedit_v5_2_r2,
+                pkg:netcdf_v3_5_0_r3,
+                pkg:numeric_v21_0_r1,
+                pkg:ocaml_v3_04_r1,
+                pkg:octave_v2_1_35_r6,
+                pkg:pgplot_v5_2_r2,
+                pkg:pine_v4_43_r1,
+                pkg:pine_v4_44_r1,
+                pkg:plotutils_v2_4_1_r1,
+                pkg:plotutils_v2_4_1_r2,
+                pkg:pmw_v0_8_5_r2,
+                pkg:pspell_v_12_2_r1,
+                pkg:pwm_v20010309_r3,
+                pkg:python21_v2_1_3_r4,
+                pkg:python_nox_v2_2_1_r1,
+                pkg:python_nox_v2_2_1_r6,
+                pkg:python_nox_v2_2_r6,
+                pkg:python_v2_1_2_r1,
+                pkg:python_v2_2_1_r1,
+                pkg:python_v2_2_1_r6,
+                pkg:python_v2_2_r7,
+                pkg:r_base_v1_4_0_r3,
+                pkg:r_base_v1_4_1_r3,
+                pkg:r_recommended_v1_4_0_r2,
+                pkg:r_recommended_v1_4_1_r1,
+                pkg:rlpr_v2_04_r3,
+                pkg:ruby_v1_6_6_r1,
+                pkg:ruby_v1_6_6_r2,
+                pkg:rxvt_ml_v2_7_7_r1,
+                pkg:rxvt_v2_7_7_r3,
+                pkg:scientificpython_v2_2_r5,
+                pkg:scilab_v2_6_r6,
+                pkg:screen_v3_9_9_r1,
+                pkg:tcltk_v8_3_3_r6,
+                pkg:tcltk_v8_3_3_r7,
+                pkg:tex2im_v1_3_r3,
+                pkg:tex2im_v1_5_r1,
+                pkg:tgif_v4_1_41_r1,
+                pkg:tightvnc_v1_2_2_r1,
+                pkg:tightvnc_v1_2_3_r1,
+                pkg:udunits_v1_11_7_r2,
+                pkg:vim_nox_v6_0_r4,
+                pkg:vim_v6_0_r2,
+                pkg:vnc_v3_3_3r2_r4,
+                pkg:vnc_v3_3_3r2_r5,
+                pkg:xaw3d_v1_5_r3,
+                pkg:xemacs_base_pkg_v1_61_r1,
+                pkg:xemacs_base_pkg_v1_63_r1,
+                pkg:xemacs_efs_pkg_v1_27_r1,
+                pkg:xemacs_efs_pkg_v1_29_r1,
+                pkg:xemacs_sumo_pkg_v20020329_r1,
+                pkg:xemacs_sumo_pkg_v20020522_r1,
+                pkg:xemacs_v21_4_5_r2,
+                pkg:xemacs_v21_5_4_r1,
+                pkg:xfree86_base_v4_2_0_r4,
+                pkg:xfree86_rootless_v4_2_0_r2,
+                pkg:xless_v1_7_r1 .
+    
+    <mailto:kilian@users.sourceforge.net>     :knownAs "Kilian Koepsell";
+         :packageMaintained pkg:cgoban_v1_9_12_r1,
+                pkg:gnugo_v3_0_0_r1,
+                pkg:junkbuster_v2_0_2_r1,
+                pkg:zope_v2_5_0_r1 .
+    
+    <mailto:mattsash@mac.com>     :knownAs "Matt Stephenson";
+         :packageMaintained pkg:aalib_v1_4rc4_r5,
+                pkg:abs_v0_908_r1,
+                pkg:aview_v1_3_0rc1_r3,
+                pkg:basiliskii_v0_9_r2,
+                pkg:blt_v2_4y_r1,
+                pkg:bluefish_v0_7_r1,
+                pkg:calcoo_v1_3_7_r1,
+                pkg:dosunix_v1_0_13_r1,
+                pkg:freeciv_v1_12_0_r5,
+                pkg:glut_v3_7_r1,
+                pkg:gperiodic_v1_3_3_r1,
+                pkg:gtk_gnutella_v0_85_r3,
+                pkg:pymol_v0_80_r1 .
+    
+    <mailto:max@quendi.de>     :knownAs "Max Horn";
+         :packageMaintained pkg:align_v1_0_0_r1,
+                pkg:apt_v0_5_4_r3,
+                pkg:automake_v1_4_p5_r2,
+                pkg:base_files_v1_5_r1,
+                pkg:bitchx_v1_0c18_r3,
+                pkg:bzip2_v1_0_2_r1,
+                pkg:class_dump_v2_1_5_r1,
+                pkg:cpio_v2_4_2_r3,
+                pkg:curl_ssl_v7_9_2_r2,
+                pkg:curl_ssl_v7_9_6_r3,
+                pkg:curl_v7_9_2_r2,
+                pkg:curl_v7_9_6_r3,
+                pkg:daemonic_v20010902_r1,
+                pkg:dillo_v0_6_4_r1,
+                pkg:dpkg_bootstrap_v1_9_20_r1,
+                pkg:dpkg_v1_9_20_r1,
+                pkg:eterm_v0_9_r1,
+                pkg:ethereal_ssl_v0_9_3_r1,
+                pkg:ethereal_v0_9_3_r1,
+                pkg:fileutils_v4_1_r3,
+                pkg:findutils_v4_1_r4,
+                pkg:fink_v0_9_10_r1,
+                pkg:fink_v0_9_11_r1,
+                pkg:fink_v0_9_12_r1,
+                pkg:gabber_ssl_v0_8_7_r1,
+                pkg:gabber_v0_8_7_r1,
+                pkg:gaim_v0_56_r3,
+                pkg:gawk_v3_1_0_r3,
+                pkg:gettext_v0_10_40_r2,
+                pkg:grep_v2_4_2_r3,
+                pkg:gtkmm_v1_2_8_r1,
+                pkg:gtkmm_v1_2_8_r2,
+                pkg:gzip_v1_2_4a_r6,
+                pkg:irssi_v0_8_4_r1,
+                pkg:irssi_v0_8_4a_r1,
+                pkg:less_v358_r4,
+                pkg:libiconv_v1_7_r3,
+                pkg:libmikmod_v3_1_9_r2,
+                pkg:libmikmod_v3_1_9_r3,
+                pkg:libpcap_v0_6_2_r4,
+                pkg:libpcap_v0_6_2_r5,
+                pkg:libtool14_v1_4_2_r4,
+                pkg:libtool14_v1_4_2_r5,
+                pkg:libxml2_v2_4_13_r1,
+                pkg:libxml2_v2_4_21_r3,
+                pkg:ncurses_v5_2_r6,
+                pkg:neon_v0_18_5_r1,
+                pkg:neon_v0_18_5_r3,
+                pkg:openjade_v1_3_r3,
+                pkg:openssh_v3_1p1_r2,
+                pkg:openurl_v20010728_r1,
+                pkg:pan_v0_11_2_r1,
+                pkg:pan_v0_11_3_r1,
+                pkg:patch_v2_5_4_r2,
+                pkg:pdksh_v5_2_14_r1,
+                pkg:sawfish_v1_0_1_r1,
+                pkg:sdl_image_v1_2_1_r2,
+                pkg:sdl_image_v1_2_1_r3,
+                pkg:sdl_mixer_v1_2_1_r1,
+                pkg:sdl_mixer_v1_2_1_r2,
+                pkg:sdl_v1_2_3_r1,
+                pkg:sdl_v1_2_4_r2,
+                pkg:slang_v1_4_5_r2,
+                pkg:slang_v1_4_5_r3,
+                pkg:smpeg_v0_4_4_r3,
+                pkg:spim_nox_v6_3_r1,
+                pkg:spim_v6_3_r2,
+                pkg:tar_v1_13_19_r1,
+                pkg:tree_v1_3_r2,
+                pkg:windowmaker_v0_80_0_r3,
+                pkg:windowmaker_v0_80_0_r6,
+                pkg:windowmaker_v0_80_0_r7,
+                pkg:xchat_ssl_v1_8_8_r1,
+                pkg:xchat_v1_8_8_r1,
+                pkg:xfree86_rootless_v4_1_99_20011205_r1,
+                pkg:xgalaga_v2_0_34_r1,
+                pkg:zlib_v1_1_4_r1 .
+    
+    <mailto:msek@users.sourceforge.net>     :knownAs "Masanori Sekino";
+         :packageMaintained pkg:bonobo_conf_v0_13_r1,
+                pkg:bonobo_conf_v0_13_r2,
+                pkg:bonobo_v1_0_17_r1,
+                pkg:bonobo_v1_0_17_r2,
+                pkg:canna_v3_5b2_r4,
+                pkg:canna_v3_5b2_r5,
+                pkg:compface_v1_4_r1,
+                pkg:compface_v1_4_r2,
+                pkg:control_center_v1_4_0_4_r2,
+                pkg:control_center_v1_4_0_4_r3,
+                pkg:cvs2cl_v2_38_r1,
+                pkg:ee_v1_4_2_r3,
+                pkg:esound_v0_2_23_r4,
+                pkg:gal19_data_v0_19_r1,
+                pkg:gal19_shlibs_v0_19_r1,
+                pkg:gal19_v0_19_r1,
+                pkg:gal19_v0_19_r2,
+                pkg:gconf_v1_0_7_r3,
+                pkg:gconf_v1_0_7_r5,
+                pkg:gdk_pixbuf_shlibs_v0_16_0_r2,
+                pkg:gdk_pixbuf_v0_16_0_r3,
+                pkg:gdk_pixbuf_v0_16_0_r6,
+                pkg:glib_v1_2_10_r5,
+                pkg:glibwww_v0_2_r3,
+                pkg:glibwww_v0_2_r4,
+                pkg:gnome_applets_v1_4_0_5_r2,
+                pkg:gnome_audio_v1_4_0_r3,
+                pkg:gnome_core_v1_4_0_6_r2,
+                pkg:gnome_core_v1_4_0_6_r3,
+                pkg:gnome_games_v1_4_0_3_r5,
+                pkg:gnome_games_v1_4_0_3_r6,
+                pkg:gnome_libs_v1_4_1_4_r2,
+                pkg:gnome_libs_v1_4_1_4_r3,
+                pkg:gnome_pim_v1_4_0_r1,
+                pkg:gnome_print_v0_35_r2,
+                pkg:gnome_print_v0_35_r3,
+                pkg:gnome_user_docs_v1_4_1_1_r2,
+                pkg:gnome_utils_v1_4_1_2_r2,
+                pkg:gnome_vfs_ssl_v1_0_3_r2,
+                pkg:gnome_vfs_ssl_v1_0_3_r5,
+                pkg:gnome_vfs_v1_0_3_r2,
+                pkg:gnome_vfs_v1_0_3_r5,
+                pkg:gtk_doc_v0_9_r1,
+                pkg:gtkhtml_v1_0_1_r2,
+                pkg:gtkhtml_v1_0_1_r3,
+                pkg:indent_v2_2_6_r1,
+                pkg:intltool_v0_18_r1,
+                pkg:jless_v358_iso254_r1,
+                pkg:kinput2_v3_0_r3,
+                pkg:libglade_v0_16_r4,
+                pkg:libglade_v0_16_r5,
+                pkg:libgtop_v1_0_13_r2,
+                pkg:libgtop_v1_0_13_r5,
+                pkg:libogg_v1_0rc3_r3,
+                pkg:libvorbis_v1_0rc3_r3,
+                pkg:libxml_v1_8_16_r1,
+                pkg:libxml_v1_8_16_r2,
+                pkg:libxpg4_v20010605_r8,
+                pkg:mozilla_v0_9_8_r1,
+                pkg:netpbm_bin_v9_24_r2,
+                pkg:netpbm_shlibs_v9_24_r2,
+                pkg:netpbm_v9_24_r3,
+                pkg:netpbm_v9_24_r4,
+                pkg:nkf_v1_92_r1,
+                pkg:oaf_v0_6_7_r2,
+                pkg:oaf_v0_6_7_r3,
+                pkg:orbit_v0_5_12_r1,
+                pkg:orbit_v0_5_15_r2,
+                pkg:pkgconfig_v0_11_0_r1,
+                pkg:pstree_v2_17_r1,
+                pkg:scrollkeeper_v0_2_r7,
+                pkg:ttfmkfontdir_v1_0_r1,
+                pkg:xfontpath_v0_3_r1,
+                pkg:xmms_v1_2_6_r3,
+                pkg:xmms_v1_2_7_r1 .
+    
+    <mailto:munro1@llnl.gov>     :knownAs "";
+         :packageMaintained pkg:yorick_doc_v1_5_r1,
+                pkg:yorick_v1_5_08_r1 .
+    
+    <mailto:neeracher@mac.com>     :knownAs "Matthias Neeracher";
+         :packageMaintained pkg:clisp_v2_27_r1,
+                pkg:crafty_enormousbook_v18_r1,
+                pkg:crafty_largebook_v18_r1,
+                pkg:crafty_smallbook_v18_r1,
+                pkg:crafty_tb_four_v18_r1,
+                pkg:crafty_tb_three_v18_r1,
+                pkg:crafty_v18_11_r1,
+                pkg:eboard_extras_v1pl2_r1,
+                pkg:eboard_v0_3_5_r1,
+                pkg:expect_v5_33_0_r1,
+                pkg:fortune_mod_v9708_r2,
+                pkg:gnubg_bearoff_v0_11_r1,
+                pkg:gnubg_v0_11_r2,
+                pkg:gnuchess_largebook_v5_02_r1,
+                pkg:gnuchess_v5_02_r1,
+                pkg:gtkglarea_v1_2_3_r2,
+                pkg:gwydion_dylan_bootstrap_v2_3_5_r2,
+                pkg:gwydion_dylan_v2_3_5_r2,
+                pkg:nethack_v3_3_1_r4,
+                pkg:nethack_v3_4_0_r1,
+                pkg:psutils_a4_v1_17_r1,
+                pkg:psutils_v1_17_r1,
+                pkg:sjeng_v11_1_r1,
+                pkg:sjeng_zhbook_v11_0_r1,
+                pkg:storable_pm_v1_0_14_r1,
+                pkg:xboard_v4_2_3_r1,
+                pkg:xinvaders3d_v1_3_6_r1,
+                pkg:yap_v4_3_19_r1 .
+    
+    <mailto:ogorman@users.sourceforge.net>     :knownAs "";
+         :packageMaintained pkg:dlcompat_v20020413_r1 .
+    
+    <mailto:pds@mac.com>     :knownAs "Paul Swenson";
+         :packageMaintained pkg:bash_v2_05_r3,
+                pkg:netcat_v1_10_r4 .
+    
+    <mailto:peter@pogma.com>     :knownAs "";
+         :packageMaintained pkg:db3_v3_3_11_r5,
+                pkg:db3_v3_3_11_r6,
+                pkg:db4_v4_0_14_r5,
+                pkg:db4_v4_0_14_r6,
+                pkg:spice_v3f5sfix_r2,
+                pkg:term_readkey_pm_v2_18_r1,
+                pkg:xephem_v3_5_2_r2,
+                pkg:xephem_v3_5_2_r3 .
+    
+    <mailto:pldms@mac.com>     :knownAs "";
+         :packageMaintained pkg:amaya_v5_3_r2,
+                pkg:amaya_v5_3_r3 .
+    
+    <mailto:ranger@befunk.com>     :knownAs "Benjamin Reed";
+         :packageMaintained pkg:libpoll_v1_1_r3,
+                pkg:qt2_v2_3_2_r1 .
+    
+    <mailto:samj@debian.org>     :knownAs "Sam Johnston";
+         :packageMaintained pkg:rdesktop_v1_1_0_r1 .
+    
+    <mailto:schaffner@artclip.ch>     :knownAs "Christian Schaffner";
+         :packageMaintained pkg:appconfig_pm_v1_52_r1,
+                pkg:data_showtable_pm_v3_3_r1,
+                pkg:dbd_mysql_pm_v2_1010_r1,
+                pkg:dbd_mysql_pm_v2_1017_r1,
+                pkg:dbi_pm_v1_210_r2,
+                pkg:template_notex_pm_v2_07_r2,
+                pkg:template_pm_v2_07_r2,
+                pkg:tkcvs_v7_0_3_r1 .
+    
+    <mailto:szucker@mac.com>     :knownAs "Sasha Zucker";
+         :packageMaintained pkg:docbook_bundle_v4_1_2_r1,
+                pkg:docbook_dsssl_ldp_v3_8_r2,
+                pkg:docbook_dsssl_nwalsh_v1_76_r1,
+                pkg:docbook_dtd_v4_1_2_r2,
+                pkg:sgml_entities_iso8879_v1986_r3,
+                pkg:xearth_v1_1_r1,
+                pkg:xv_v3_10a_r2 .
+    
+    <mailto:thdi@hrz.tu-chemnitz.de>     :knownAs "Thomas Diemer";
+         :packageMaintained pkg:stunnel_egd_v3_22_r1,
+                pkg:stunnel_v3_22_r1 .
+    
+    <mailto:thesin@southofheaven.net>     :knownAs "";
+         :packageMaintained pkg:compress_zlib_pm_v1_16_r1,
+                pkg:dopewars_v1_5_4_r1,
+                pkg:html_parser_pm_v3_25_r2,
+                pkg:html_tagset_pm_v3_03_r2,
+                pkg:ircii_v20010612_r1,
+                pkg:mime_base64_pm_v2_12_r2,
+                pkg:uri_pm_v1_18_r1,
+                pkg:wmweather_v1_31_r1 .
+    
+    <mailto:thesin@users.sourceforge.net>     :knownAs "";
+         :packageMaintained pkg:audiofile_v0_2_3_r4,
+                pkg:axyftp_v0_5_1_r5,
+                pkg:bladeenc_v0_94_2_r1,
+                pkg:icecast_v1_3_11_r4,
+                pkg:ircii_v20020403_r1,
+                pkg:proftpd_v1_2_5rc1_r1,
+                pkg:shout_v0_8_0_r2,
+                pkg:wmmoonclock_v1_27_r1,
+                pkg:wmweather_v1_31_r2 .
+    
+    <mailto:thesin@users.sourceforge.nett>     :knownAs "";
+         :packageMaintained pkg:wmcalclock_v1_25_r1 .
+    
+    <mailto:thomas.kotzian@gmx.at>     :knownAs "Thomas Kotzian";
+         :packageMaintained pkg:cfv_v1_11_r1,
+                pkg:par_v1_1_r1,
+                pkg:python_fchksum_v1_6_r3 .
+    
+    <mailto:zauc@noos.fr>     :knownAs "Sylvain Cuaz";
+         :packageMaintained pkg:3dpong_v0_4_r2,
+                pkg:ant_v1_4_1_r2,
+                pkg:cvs_v1_11_r3,
+                pkg:readline_shlibs_v4_2a_r4,
+                pkg:readline_v4_2a_r4,
+                pkg:readline_v4_2a_r5,
+                pkg:tidy_v4aug00_r1,
+                pkg:upclient_v4_2_1_23_r1,
+                pkg:wget_ssl_v1_8_1_r1,
+                pkg:wget_v1_8_1_r1 .
+    
+    <mailto:zauc@users.sf.net>     :knownAs "Sylvain Cuaz";
+         :packageMaintained pkg:sed_v3_02_r4 .
+    
+#ENDS

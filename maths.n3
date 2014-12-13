@@ -1,0 +1,196 @@
+# Schema for CWM's mathematical built-ins, SBP 2001-12
+#
+# $Id$
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+
+math:StrictProperty a s:Class;
+    s:label "StrictProperty";
+    s:subClassOf rdf:Property.
+
+
+<> s:comment """This is an ontolgy of built-in functions where the numbers are
+actually passed around as strings, rather than numbers.
+It is implemented for example by CWM.
+""".
+
+
+math:Value a s:Class; s:label "Value"; 
+   s:subClassOf string:String; 
+   s:comment "The class of things that are numeric float values as in Python." .
+
+math:Function a s:Class;
+   s:subClassOf rdf:Property;
+   s:label "Function";
+   s:comment "A math:Function is unique in terms of math:EqualTo. ".
+
+math:ReverseFunction a s:Class;
+   s:subClassOf rdf:Property;
+   s:comment "A math:ReverseFunction is unambiguous in terms of math:EqualTo. ".
+
+math:LogicalOperator a s:Class; s:subClassOf math:Function, math:ReverseFunction;
+   s:comment """a logical operator allows evaluation eihter way, or testing relationship
+         between two values""".
+
+math:List a s:Class; s:label "List"; 
+   s:subClassOf rdf:LIst; 
+   s:comment """The class of things that are lists were all of the 
+      members are math:Value items.""" .
+
+math:TwoMemberedList a s:Class; s:label "TwoMemberedList"; 
+   s:subClassOf math:List; 
+   s:comment 
+     "This is the class of things that are math lists with only two members." .
+
+# Reverse functions:  (obsolete - we stdize on forwrad ones i think -tbl)
+#
+#math:differenceOf a math:ReverseFunction; s:label "differenceOf"; 
+#   s:domain math:Value; s:range math:TwoMemberedList; 
+#   s:comment "The difference of the list members. (obsolete)" .
+#
+#math:factors a math:ReverseFunction; s:label "factors"; 
+#   s:domain math:Value; s:range math:List;
+#   owl:inverse math:product; 
+#   s:comment "A list of values which multiply to produce the subject. (obsolete)" .
+#
+#math:quotientOf a math:ReverseFunction; s:label "quotientOf"; 
+#   s:domain math:Value; s:range math:TwoMemberedList; 
+#   s:comment "The quotient of the list members (obsolete)" .
+#
+#math:remainderOf a math:ReverseFunction; s:label "remainderOf"; 
+#   s:domain math:Value; s:range math:TwoMemberedList; 
+#   s:comment "The remainder of the list members (obsolete)" .
+#
+#math:negationOf a math:Function, math:ReverseFunction;
+#   s:label "negation"; 
+#   s:domain math:Value; s:range math:Value; 
+#   s:comment "The subject is the negotation of the object (obsolete)" .
+#
+#math:exponentiationOf a math:ReverseFunction; s:label "exponentiationOf"; 
+#   s:domain math:Value; s:range math:TwoMemberedList; 
+#   s:comment "For exponOf(x, (y, z)), x = y^z   (obsolete)" .
+
+#  Forward function
+
+math:memberCount a math:Function; s:label "memberCount"; 
+   s:domain math:List; s:range math:Value; 
+   s:comment """The number of items in a list. The subject is a list,
+the object is calculated as the number of members.""" .
+
+
+# Logical operators:
+
+math:greaterThan a math:StrictProperty; s:label "greater than"; 
+   s:comment """True iff the subject is a string representation of a number which  is greater than the number of which the object is a string representation.""";
+   s:domain math:Value; s:range math:Value .
+
+math:notGreaterThan a math:StrictProperty;
+    s:label "not greater than"; 
+    s:comment """True iff the subject is a string representation of a number which is NOT greater than the number of which the object is a string representation.""";
+    s:domain math:Value; s:range math:Value .
+
+math:lessThan a math:StrictProperty; s:label "less than"; 
+   s:comment """True iff the subject is a string representation of a number which  is LESS than a number of which the object is a string representation.""";
+   s:domain math:Value; s:range math:Value .
+
+math:notLessThan a math:StrictProperty; s:label "not less than"; 
+   s:comment """True iff the subject is a string representation of a number which  is NOT LESS than a number of which the object is a string representation.""";
+   s:domain math:Value; s:range math:Value .
+
+math:equalTo a math:StrictProperty; s:label "equal to"; 
+   s:comment """True iff the subject is a string representation of a number which  is EQUAL TO a number of which the object is a string representation.""";
+   s:domain math:Value; s:range math:Value .
+
+math:notEqualTo a math:StrictProperty; s:label "not equal to"; 
+   s:comment """True iff the subject is a string representation of a number which  is NOT EQUAL to a number of which the object is a string representation.""";
+   s:domain math:Value; s:range math:Value .
+
+
+math:sum a rdf:Property;
+	s:label "sum";
+	s:range math:Value;
+	s:comment
+"""The subject is a list of numbers.
+The object is calculated as the arithmentic sum of those numbers.
+""".
+
+math:difference a rdf:Property;
+	s:label "difference";
+	s:range math:Value;
+	s:comment
+"""The subject is a pair of numbers. The object
+is calculated by subtracting the second number of the pair from the first.
+""".
+
+math:product a rdf:Property;
+	s:label "product";
+	s:range math:Value;
+	s:comment
+"""The subject is a list of numbers.
+The object is calculated as the arithmentic product of those numbers.
+""".
+
+math:quotient a rdf:Property;
+	s:label "quotient";
+	s:range math:Value;
+	s:comment
+"""The subject is a pair of numbers. The object
+is calculated by dividing the first number of the pair by the second.
+""".
+
+math:intgerQuotient a rdf:Property;
+	s:label "integerQuotient";
+	s:range math:Value;
+	s:comment
+"""The subject is a pair of integer numbers. The object
+is calculated by dividing the first number of the pair by the second, ignoring remainder.
+""".
+
+math:remainder a rdf:Property;
+	s:label "remainder";
+	s:range math:Value;
+	s:comment
+"""The subject is a pair of integers. The object
+is calculated by dividing the first number of the pair by the second and taking the remainder.
+""".
+
+
+math:exponentiation a rdf:Property;
+	s:label "exponentiation";
+	s:range math:Value;
+	s:comment
+"""The subject is a pair of numbers. The object
+is calculated by raising the first number of the power of the second.
+""".
+
+math:negation a rdf:Property;
+	s:label "negation";
+	s:range math:Value;
+	s:domain math:Value;
+	s:comment
+"""The subject or object is calculated to be the negation of the other.""".
+
+math:absoluteValue a rdf:Property;
+	s:label "negation";
+	s:range math:Value;
+	s:domain math:Value;
+	s:comment
+"""The object is calulated as the absolute value of the subject.""".
+
+math:rounded a rdf:Property;
+	s:label "rounded";
+	s:range math:Value;
+	s:domain math:Value;
+	s:comment
+"""The object is calulated as the subject rounded to the nearest integer.""".
+
+
+
+#ends
+

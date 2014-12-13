@@ -1,0 +1,771 @@
+#Processed by Id: cwm.py,v 1.96 2002/06/07 20:07:17 timbl Exp 
+        #    using base http://ilrt.org/discovery/2001/06/schemas/ical-full/hybrid.rdf
+        
+#  Notation3 generation by
+#       notation3.py,v 1.108 2002/05/15 00:38:10 timbl Exp
+
+#   Base was: http://ilrt.org/discovery/2001/06/schemas/ical-full/hybrid.rdf
+     @prefix : <#> .
+     @prefix dc: <http://purl.org/dc/elements/1.1/> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+    
+    <>     <http://purl.org/dc/elements/1.1/constributor> "Libby Miller";
+         <http://purl.org/dc/elements/1.1/creator> "Michael Arick";
+         <http://purl.org/dc/elements/1.1/date> "2001-06-17";
+         <http://purl.org/dc/elements/1.1/description> "This RDF Schema represents a hybrid of two RDF schema  written by Michael Arick and Libby Miller.  These schema are intended to implement calendar/scheduling data (see iCalendar, calsh working group, IETF).";
+         <http://purl.org/dc/elements/1.1/title> "Hybrid iCal-like RDF Schema" .
+    
+    :ABS-TRIGGER     a :Property;
+         rdfs:comment "When an alarm is triggered -- date and time or just date.";
+         rdfs:label "Absolute Trigger";
+         rdfs:range :TimeEntry;
+         rdfs:subClassOf :TRIGGER .
+    
+    :ACTION     a rdf:Property;
+         rdfs:comment "The action to be invoked when the alarm is triggered. Must be specified once in a VALARM";
+         rdfs:domain :VALARM;
+         rdfs:label "Action";
+         rdfs:range :TEXT .
+    
+    :ALTREP     a :Parameter;
+         rdfs:comment "Alternate Text Representation";
+         rdfs:domain :COMMENT,
+                :CONTACT,
+                :DESCRIPTION,
+                :LOCATION,
+                :RESOURCES,
+                :SUMMARY;
+         rdfs:range :URI .
+    
+    :ANNIVERSARY     a rdfs:Class;
+         rdfs:comment "An event which may occur repeatedly";
+         rdfs:label "Anniversary";
+         rdfs:subClassOf :REC-VEVENT .
+    
+    :ATTACH     a :Property;
+         rdfs:comment "A property pointing to the URI of an attatchment, or an  object with a BINARY value to point to an inline binary object";
+         rdfs:domain :CAL-COMPONENT,
+                :VALARM;
+         rdfs:label "Attachment";
+         rdfs:range :Attachment .
+    
+    :ATTENDEE     a :Property;
+         rdfs:comment "Defines an attendee within a calendar component";
+         rdfs:domain :CAL-COMPONENT,
+                :EMAIL-VALARM;
+         rdfs:label "Attendee";
+         rdfs:range :CAL-ADDRESS .
+    
+    :Attachment     a rdfs:Class .
+    
+    :BINARY     a rdfs:Class;
+         rdfs:comment "Used to identify properties that contain a character encoding of inline binary data.";
+         rdfs:label "binary";
+         rdfs:subClassOf <http://www.w3.org/2001/XMLSchema-datatypes#base64binary> .
+    
+    :BINARY-Attachment     a rdfs:Class;
+         rdfs:comment "A binary-attachment";
+         rdfs:domain :BINARY;
+         rdfs:label "Binary Attachment";
+         rdfs:subClassOf :Attachment .
+    
+    :BOOLEAN     a rdfs:Class;
+         rdfs:comment "A boolean data type. The iCalendar rfc 2445 defines it as a literal, either TRUE or FALSE (case insensitive) ";
+         rdfs:label "boolean";
+         rdfs:subClassOf <http://www.w3.org/2001/XMLSchema-datatypes#boolean> .
+    
+    :BYDAY     a rdf:Property;
+         rdfs:comment "A list of day values for recurrance";
+         rdfs:domain :RECUR;
+         rdfs:label "By day";
+         rdfs:range :TEXT .
+    
+    :BYHOUR     a rdf:Property;
+         rdfs:comment "A list of hour values for recurrance";
+         rdfs:domain :RECUR;
+         rdfs:label "By hour";
+         rdfs:range :INTEGER .
+    
+    :BYMINUTE     a rdf:Property;
+         rdfs:comment "A list of minute values for recurrance";
+         rdfs:domain :RECUR;
+         rdfs:label "By minute";
+         rdfs:range :INTEGER .
+    
+    :BYMONTH     a rdf:Property;
+         rdfs:comment "A list of INTEGERS representing months in a year values for recurrance";
+         rdfs:domain :RECUR;
+         rdfs:label "By month";
+         rdfs:range :INTEGER .
+    
+    :BYMONTHDAY     a rdf:Property;
+         rdfs:comment "A list of INTEGERS representing days in a month values for recurrance";
+         rdfs:domain :RECUR;
+         rdfs:label "By month day";
+         rdfs:range :INTEGER .
+    
+    :BYSECOND     a rdf:Property;
+         rdfs:comment "A list of second values for recurrance";
+         rdfs:domain :RECUR;
+         rdfs:label "By second";
+         rdfs:range :INTEGER .
+    
+    :BYSETPOS     a rdf:Property;
+         rdfs:comment "A list of INTEGERS representing the nth occurrance of the repetition within the set of evets specified by the rule";
+         rdfs:domain :RECUR;
+         rdfs:label "By set position";
+         rdfs:range :INTEGER .
+    
+    :BYWEEKNO     a rdf:Property;
+         rdfs:comment "A list of INTEGERS representing weeks in a year values for recurrance";
+         rdfs:domain :RECUR;
+         rdfs:label "By week number";
+         rdfs:range :INTEGER .
+    
+    :BYYEARDAY     a rdf:Property;
+         rdfs:comment "A list of INTEGERS representing days in a year values for recurrance";
+         rdfs:domain :RECUR;
+         rdfs:label "By year day";
+         rdfs:range :INTEGER .
+    
+    :CAL-ADDRESS     a rdfs:Class;
+         rdfs:comment "Used to identify properties that contain a calendar user address. When used to address an Internet email transport address for a calendar user, the value must be a MAILTO uri";
+         rdfs:label "Calendar user address";
+         rdfs:subClassOf <http://www.w3.org/2001/XMLSchema-datatypes#anyURL> .
+    
+    :CAL-COMPONENT     a rdfs:Class;
+         rdfs:comment "A superclass of all calendar components";
+         rdfs:label "Calendar component" .
+    
+    :CALSCALE     a :Property;
+         rdfs:comment "The calendar scale used for the calendar information in a VCALENDAR. The default is GREGORIAN.";
+         rdfs:domain :VCALENDAR;
+         rdfs:label "Calendar scale";
+         rdfs:range rdfs:Literal .
+    
+    :CANCELLED     a :VEVENT-STATUS-CHOICE,
+                :VJOURNAL-STATUS-CHOICE,
+                :VTODO-STATUS-CHOICE .
+    
+    :CATEGORIES     a :Property;
+         rdfs:comment "Subject categories for the CAL-COMPONENT";
+         rdfs:domain :CAL-COMPONENT;
+         rdfs:label "Categories";
+         rdfs:range :TEXT .
+    
+    :CLASSIFICATION     a :Property;
+         rdfs:comment "Classification in terms of privacy of the CAL-COMPONENT";
+         rdfs:domain :CAL-COMPONENT;
+         rdfs:label "Classification";
+         rdfs:range :CLASSIFICATION-CHOICE .
+    
+    :CLASSIFICATION-CHOICE     a rdfs:Class .
+    
+    :CN     a :Parameter;
+         rdfs:comment "Common Name";
+         rdfs:domain :ATTENDEE,
+                :ORGANIZER;
+         rdfs:range rdfs:Literal .
+    
+    :COMPLETED     a :Property,
+                :VTODO-STATUS-CHOICE;
+         rdfs:comment "Defines the date and time that a VTODO was actually  completed. The date and time must be in UTC format (i.e suffixed with   a Z)";
+         rdfs:domain :VTODO;
+         rdfs:label "Completed";
+         rdfs:range :DATE-TIME .
+    
+    :CONFIDENTIAL     a :CLASSIFICATION-CHOICE .
+    
+    :CONFIRMED     a :VEVENT-STATUS-CHOICE .
+    
+    :CONTACT     a :Property;
+         rdfs:comment "A representation or a reference to contact information  associated with a calendar component";
+         rdfs:domain :CAL-COMPONENT;
+         rdfs:label "Contact";
+         rdfs:range rdf:TEXT .
+    
+    :COUNT     a rdf:Property;
+         rdfs:comment "the number of occurrances at which to range-bound the recurance. If specified, the DTSTART value counts as the first of these";
+         rdfs:domain :RECUR;
+         rdfs:label "Count";
+         rdfs:range :INTEGER .
+    
+    :CREATED     a :Property;
+         rdfs:comment "Date/time a CAL-COMPONENT was created (not VFREEBUSY) (UTC)";
+         rdfs:domain :CAL-COMPONENT;
+         rdfs:label "Date/time created";
+         rdfs:range :DATE-TIME .
+    
+    :CUTYPE     a :Parameter;
+         rdfs:comment "Calendar User Type";
+         rdfs:domain :ATTENDEE;
+         rdfs:range rdfs:Literal .
+    
+    :DATE     a rdfs:Class;
+         rdfs:comment " A value type which is used to identify values that specify a  calendar date.";
+         rdfs:label "Date";
+         rdfs:subClassOf :TimeEntry,
+                :TriggerEntry,
+                <http://www.w3.org/2001/XMLSchema-datatypes#date> .
+    
+    :DATE-TIME     a rdfs:Class;
+         rdfs:comment " A value type which is used to identify values that specify a precise calendar date and time of day. ";
+         rdfs:label "Date-time";
+         rdfs:subClassOf :TimeEntry,
+                <http://www.w3.org/2001/XMLSchema-datatypes#dateTime> .
+    
+    :DELEGATED-FROM     a :Parameter;
+         rdfs:comment "Delegators";
+         rdfs:domain :ATTENDEE;
+         rdfs:range :CAL-ADDRESS .
+    
+    :DELEGATED-TO     a :Parameter;
+         rdfs:comment "Delegatees";
+         rdfs:domain :ATTENDEE;
+         rdfs:range :CAL-ADDRESS .
+    
+    :DESCRIPTION     a :Property;
+         rdfs:comment "A textual description of the CAL-COMPONENT, more complex  than that provided by the SUMMARY property";
+         rdfs:domain :CAL-COMPONENT;
+         rdfs:label "Description";
+         rdfs:range :TEXT .
+    
+    :DIR     a :Parameter;
+         rdfs:comment "Directory Entry Reference";
+         rdfs:domain :ATTENDEE,
+                :ORGANIZER;
+         rdfs:range :URI .
+    
+    :DRAFT     a :VJOURNAL-STATUS-CHOICE .
+    
+    :DTEND     a :Property;
+         rdfs:comment "The date and time that the a calendar component ends";
+         rdfs:domain :VEVENT,
+                :VFREEBUSY;
+         rdfs:label "Date-time end";
+         rdfs:range :TimeEntry .
+    
+    :DTSTAMP     a :Property;
+         rdfs:comment "Date/time a VCALENDAR was created (UTC)";
+         rdfs:domain :VCALENDAR;
+         rdfs:label "Date/time stamp";
+         rdfs:range :DATE-TIME .
+    
+    :DTSTART     a :Property;
+         rdfs:comment "Specifies when the calendar component begins. If used   with a VFREEBUSY component, the time must be in UTC format";
+         rdfs:domain :CAL-COMPONENT,
+                :VTIMEZONE;
+         rdfs:label "Date time start";
+         rdfs:range :DATE .
+    
+    :DUE     a :Property;
+         rdfs:comment "Defines the date and time when the VTODO is expected to   be completed";
+         rdfs:domain :VTODO;
+         rdfs:label "Date time due";
+         rdfs:range :TimeEntry .
+    
+    :DURATION     a rdfs:Class;
+         rdfs:comment "a duration of time";
+         rdfs:label "duration of time" .
+    
+    :DURATION-PROP     a :Property;
+         rdfs:comment "A positive duration of time";
+         rdfs:domain :CAL-COMPONENT,
+                :VALARM;
+         rdfs:label "Duration";
+         rdfs:range :DURATION .
+    
+    :EMAIL-VALARM     a rdfs:Class;
+         rdfs:comment "An alarm that causes an e-mail to be sent to the attendee";
+         rdfs:label "E-Mail alarm";
+         rdfs:subClassOf :VALARM .
+    
+    :ENCODING     a :Parameter;
+         rdfs:comment "Inline Encoding";
+         rdfs:range rdfs:Resource .
+    
+    :EXDATE     a rdf:Property;
+         rdfs:comment "Defines the list of date/time exceptions for a recurring  calendar component";
+         rdfs:domain :REC-CAL-COMPONENT;
+         rdfs:label "Recurrance Date exceptions";
+         rdfs:range :TimeEntry .
+    
+    :EXRULE     a rdf:Property;
+         rdfs:comment "Points to a rule or repeating pattern for an exception to a  recurrance set";
+         rdfs:domain :REC-CAL-COMPONENT;
+         rdfs:label "Recurrance exception rule";
+         rdfs:range :RECUR .
+    
+    :FBTYPE     a :Parameter;
+         rdfs:comment "Free/Busy Time Type";
+         rdfs:domain :FREEBUSY-PROP;
+         rdfs:range :TEXT .
+    
+    :FINAL     a :VJOURNAL-STATUS-CHOICE .
+    
+    :FLOAT     a rdfs:Class;
+         rdfs:comment "float data type";
+         rdfs:label "Float";
+         rdfs:subClassOf <http://www.w3.org/2001/XMLSchema-datatypes#float> .
+    
+    :FMTTYPE     a :Parameter;
+         rdfs:comment "Format Type";
+         rdfs:domain :ATTACH;
+         rdfs:range :TEXT .
+    
+    :FREEBUSY-PROP     a :Property;
+         rdfs:comment "Defines one or more free or busy time intervals. the  duration times and dates must be in UTC format";
+         rdfs:domain :VFREEBUSY;
+         rdfs:label "Free-busy time";
+         rdfs:range :PERIOD .
+    
+    :FREQ     a rdf:Property;
+         rdfs:comment "The type of the recurrance rule";
+         rdfs:domain :RECUR;
+         rdfs:label "Frequency";
+         rdfs:range :TEXT .
+    
+    :GEO     a rdfs:Class;
+         rdfs:comment "A geographical location. May have a TEXT description and/or long/lat properties";
+         rdfs:label "Geographical position";
+         rdfs:subClassOf <http://www.w3.org/2001/XMLSchema-datatypes#base64binary> .
+    
+    :GEO-NAME     a rdf:Property;
+         rdfs:comment "Geographical location name";
+         rdfs:domain :GEO;
+         rdfs:label "Geographical location name";
+         rdfs:range :TEXT .
+    
+    :IN-PROCESS     a :VTODO-STATUS-CHOICE .
+    
+    :INTEGER     a rdfs:Class;
+         rdfs:comment "a signed integer";
+         rdfs:label "Integer";
+         rdfs:subClassOf <http://www.w3.org/2001/XMLSchema-datatypes#integer> .
+    
+    :INTERVAL     a rdf:Property;
+         rdfs:comment "How often the recurrance rule repeats. The dfault is 1, i.e. _every_ year etc";
+         rdfs:domain :RECUR;
+         rdfs:label "Interval";
+         rdfs:range :INTEGER .
+    
+    :LANGUAGE     a :Parameter;
+         rdfs:comment "Language";
+         rdfs:domain :ATTENDEE,
+                :CATEGORIES,
+                :COMMENT,
+                :CONTACT,
+                :LOCATION,
+                :ORGANIZER,
+                :RESOURCES,
+                :SUMMARY,
+                :TZNAME,
+                :X-PROP;
+         rdfs:range rdfs:TEXT .
+    
+    :LAST-MODIFIED     a :Property;
+         rdfs:comment "Date/time a CAL-COMPONENT was last modified (not VFREEBUSY)  (UTC)";
+         rdfs:domain :CAL-COMPONENT,
+                :VTIMEZONE;
+         rdfs:label "Date/time last modified";
+         rdfs:range :DATE-TIME .
+    
+    :LATITUDE     a rdf:Property;
+         rdfs:comment "The latitude must be between 0 and 90";
+         rdfs:domain :GEO;
+         rdfs:label "Latitude";
+         rdfs:range :FLOAT .
+    
+    :LOCATION     a :Property;
+         rdfs:comment "This Location can have a Geographical location applied to it.    Otherwise, it is simply a textual description of the location of an EVENT or   TODO.";
+         rdfs:domain :VEVENT,
+                :VTODO;
+         rdfs:label "Location";
+         rdfs:range :TEXT .
+    
+    :LONGITUDE     a rdf:Property;
+         rdfs:comment "The longitude must be between 0 and 180";
+         rdfs:domain :GEO;
+         rdfs:label "Longitude";
+         rdfs:range :FLOAT .
+    
+    :MEMBER     a :Parameter;
+         rdfs:comment "Group or List Membership";
+         rdfs:domain :ATTENDEE;
+         rdfs:range :CAL-ADDRESS .
+    
+    :METHOD     a :Property;
+         rdfs:comment "See the iTIP RFC for more information about methods";
+         rdfs:domain :VCALENDAR;
+         rdfs:label "Method";
+         rdfs:range :TEXT .
+    
+    :NEEDS-ACTION     a :VTODO-STATUS-CHOICE .
+    
+    :OPAQUE     a :TRANSP-CHOICE .
+    
+    :ORGANIZER     a :Property;
+         rdfs:comment "Points to the organizer of the calendar component";
+         rdfs:domain :CAL-COMPONENT;
+         rdfs:label "Organizer";
+         rdfs:range :CAL-ADDRESS .
+    
+    :PARTSTAT     a :Parameter;
+         rdfs:comment "Participation Status";
+         rdfs:domain :ATTENDEE;
+         rdfs:range :TEXT .
+    
+    :PERCENT-COMPLETE     a :Property;
+         rdfs:comment "This property is used by an assignee or delegatee of a   VTODO to convey the percent completion of a VTODO to the ORGANIZER";
+         rdfs:domain :VEVENT,
+                :VTODO;
+         rdfs:label "Percent complete";
+         rdfs:range :INTEGER .
+    
+    :PERIOD     a rdfs:Class;
+         rdfs:comment "a precise period of time. Either a start DATE-TIME and an end DATE-TIME or a start DATE-TIME and a DURATION";
+         rdfs:label "a period of time" .
+    
+    :PRIORITY     a :Property;
+         rdfs:comment "Defines the relative priority for a calendar component  (VEVENT or VTODO)";
+         rdfs:domain :VEVENT,
+                :VTODO;
+         rdfs:label "Priority";
+         rdfs:range :INTEGER .
+    
+    :PRIVATE     a :CLASSIFICATION-CHOICE .
+    
+    :PRODID     a :Property;
+         rdfs:comment "The identifier for the product that created the iCalendar  object";
+         rdfs:domain :VCALENDAR;
+         rdfs:label "Product Identifier";
+         rdfs:range :TEXT .
+    
+    :PUBLIC     a :CLASSIFICATION-CHOICE .
+    
+    :Parameter     a rdfs:Class;
+         rdfs:comment "All iCalendar property parameters subclass from this class";
+         rdfs:label "Property Parameter";
+         rdfs:subClassOf rdf:Property .
+    
+    :Property     a rdfs:Class;
+         rdfs:comment "iCalendar properties derive from this.";
+         rdfs:label "iCalendar property";
+         rdfs:subClassOf rdf:Property .
+    
+    :RANGE     a :Parameter;
+         rdfs:comment "Recurrence Identifier Range";
+         rdfs:domain :recurrenceid;
+         rdfs:range rdfs:Literal .
+    
+    :RANGE-CHOICE     a rdfs:Class .
+    
+    :RDATE     a rdf:Property;
+         rdfs:comment "Defines the list of dates/times for a recurring  calendar component";
+         rdfs:domain :REC-CAL-COMPONENT;
+         rdfs:label "Recurrance date";
+         rdfs:range :TimeEntry .
+    
+    :REC-CAL-COMPONENT     a rdfs:Class;
+         rdfs:comment "A recurring calendar component. Only VEVENTs, VTODOs and VJOURNALs can recur";
+         rdfs:label "Recurring calendar component" .
+    
+    :REC-VEVENT     a rdfs:Class;
+         rdfs:comment "A recurring event";
+         rdfs:label "Recurring Event";
+         rdfs:subClassOf :REC-CAL-COMPONENT,
+                :VEVENT .
+    
+    :REC-VFREEBUSY     a rdfs:Class;
+         rdfs:comment "A recurring free-busy object";
+         rdfs:label "Recurring Free-busy";
+         rdfs:subClassOf :REC-CAL-COMPONENT,
+                :VFREEBUSY .
+    
+    :REC-VJOURNAL     a rdfs:Class;
+         rdfs:comment "A recurring journal entry";
+         rdfs:label "Recurring Journal";
+         rdfs:subClassOf :REC-CAL-COMPONENT,
+                :VJOURNAL .
+    
+    :REC-VTODO     a rdfs:Class;
+         rdfs:comment "A recurring todo";
+         rdfs:label "Recurring TODO";
+         rdfs:subClassOf :REC-CAL-COMPONENT,
+                :VTODO .
+    
+    :RECUR     a rdfs:Class;
+         rdfs:comment "A recurrence rule";
+         rdfs:label "Recurrence rule" .
+    
+    :RECURRANCE-ID     a :Property;
+         rdfs:comment "An identifier for a specific instance of a REC-CAL-COMPONENT   (a VEVENT, VTODO or VJOURNAL)";
+         rdfs:domain :REC-CAL-COMPONENT;
+         rdfs:label "Recurrance identifier";
+         rdfs:range :TimeEntry .
+    
+    :REL-TRIGGER     a :Property;
+         rdfs:comment "When an alarm is triggered -- relative to the associated event  or todo";
+         rdfs:label "Relative Trigger";
+         rdfs:range :DURATION;
+         rdfs:subClassOf :TRIGGER .
+    
+    :RELATED-TO     a rdf:Property;
+         rdfs:comment "A relationship or reference between one calendar component  and another";
+         rdfs:domain :CAL-COMPONENT;
+         rdfs:label "Related to";
+         rdfs:range rdfs:Resource .
+    
+    :RELTYPE     a :Parameter;
+         rdfs:comment "Alarm Trigger Relationship";
+         rdfs:domain <>;
+         rdfs:range :TEXT .
+    
+    :REPEAT     a rdf:Property;
+         rdfs:comment "The number of times the alarm should be repeated after the initial trigger";
+         rdfs:domain :VALARM;
+         rdfs:label "Repeat Count";
+         rdfs:range :INTEGER .
+    
+    :REQUEST-STATUS     a :Property;
+         rdfs:comment "The status code for a scheduling request";
+         rdfs:domain :CAL-COMPONENT;
+         rdfs:label "Request status";
+         rdfs:range :TEXT .
+    
+    :RESOURCES     a :Property;
+         rdfs:comment "The equipment or resources anticipated for an activity  specified by a calendar entity";
+         rdfs:domain :CAL-COMPONENT;
+         rdfs:label "Resources";
+         rdfs:range :TEXT .
+    
+    :ROLE     a :Parameter;
+         rdfs:comment "Participation Role";
+         rdfs:domain :ATTENDEE;
+         rdfs:range :TEXT .
+    
+    :RRULE     a rdf:Property;
+         rdfs:comment "Points to a rule or repeating pattern for an exception to a  recurrance set";
+         rdfs:domain :REC-CAL-COMPONENT;
+         rdfs:label "Recurrance rule";
+         rdfs:range :RECUR .
+    
+    :RSVP     a :Parameter;
+         rdfs:comment "RSVP Expectation";
+         rdfs:domain :ATTENDEE;
+         rdfs:range :BOOLEAN .
+    
+    :SENT-BY     a :Parameter;
+         rdfs:comment "Sent By";
+         rdfs:domain :ATTENDEE,
+                :ORGANIZER;
+         rdfs:range :CAL-ADDRESS .
+    
+    :SEQUENCE     a :Property;
+         rdfs:comment "The revision number of a calendar component wh=ithin a  sequence of revisions (not VFREEBUSY)";
+         rdfs:domain :CAL-COMPONENT;
+         rdfs:label "Sequence";
+         rdfs:range :INTEGER .
+    
+    :STATUS     a :Property;
+         rdfs:comment "The overall status or confirmation for the calendar  component, used by the ORGANIZER to indicate whether an event is  (definitely) aking place.";
+         rdfs:label "Status" .
+    
+    :SUMMARY     a :Property;
+         rdfs:comment "A one-line textual summary of the CAL-COMPONENT or VALARM  ";
+         rdfs:domain :CAL-COMPONENT,
+                :VALARM;
+         rdfs:label "Summary";
+         rdfs:range :TEXT .
+    
+    :TENTATIVE     a :VEVENT-STATUS-CHOICE .
+    
+    :TEXT     a rdfs:Class;
+         rdfs:comment "An object with an rdf:value of human-readable text";
+         rdfs:label "Text";
+         rdfs:subClassOf <http://www.w3.org/2001/XMLSchema-datatypes#string> .
+    
+    :THISANDFUTURE     a :RANGE-CHOICE .
+    
+    :THISANDPRIOR     a :RANGE-CHOICE .
+    
+    :TIME     a rdfs:Class;
+         rdfs:comment "Time of day. Three forms are possible: hour, min, sec floating, UTC (suffixed by a Z character) and local time with Time zone reference.";
+         rdfs:label "Time";
+         rdfs:subClassOf <http://www.w3.org/2001/XMLSchema-datatypes#time> .
+    
+    :TRANSP     a :Property;
+         rdfs:comment "Defines whether an event is transparent or not to busy   time searches. VJOURNALs, for example, are always transparent, as are   VTODOS. VEVENTS can be made so.";
+         rdfs:domain :VEVENT;
+         rdfs:label "Time transparency";
+         rdfs:range :TRANSP-CHOICE .
+    
+    :TRANSP-CHOICE     a rdfs:Class .
+    
+    :TRANSPARENT     a :TRANSP-CHOICE .
+    
+    :TRIGGER     a :Property;
+         rdfs:comment "When an alarm is triggered";
+         rdfs:domain :VALARM;
+         rdfs:label "Trigger" .
+    
+    :TZID     a :Parameter,
+                :Property;
+         rdfs:comment "\"Specifies the identifier for the time zone definition.\nUniquely identifies a VTIMEZONE calendar component\"",
+                "Specifies the identifier (TEXT in the RFC 2445) that uniquely  identifies the VTIMEZONE calendar component. It must be specified in a  VTIMEZONE component";
+         rdfs:domain :DTSTART,
+                :DUE,
+                :EXDATE,
+                :RDATE,
+                :RECUR-ID,
+                :VTIMEZONE;
+         rdfs:label "Time zone identifier";
+         rdfs:range rdfs:Resource .
+    
+    :TZNAME     a :Property;
+         rdfs:comment "The customary designation for a time zone description. you  can also have a language tag on this, which indicates that TEXT  should be a subclass of resource, not literal (this is what I have done)";
+         rdfs:domain :VTIMEZONE;
+         rdfs:label "Time zone name";
+         rdfs:range :TEXT .
+    
+    :TZOFFSETFROM     a :Property;
+         rdfs:comment "Specifies the offset which is in use prior to this time zone observance. Must be specified in a VTIMEZONE calendar component";
+         rdfs:domain :VTIMEZONE;
+         rdfs:label "Time zone offset from";
+         rdfs:range :UTC-OFFSET .
+    
+    :TZOFFSETTO     a :Property;
+         rdfs:comment "Specifies the offset which is in this time zone observance. Must be specified in a VTIMEZONE calendar component";
+         rdfs:domain :VTIMEZONE;
+         rdfs:label "Time zone offset to";
+         rdfs:range :UTC-OFFSET .
+    
+    :TZURL     a :Property;
+         rdfs:comment "Points to a network resource which a VTIMEZONE can point to  to get an up-to-date versioon of itself. It can be specified in a VTIMEZONE  calendar component";
+         rdfs:domain :VTIMEZONE;
+         rdfs:label "Time zone url";
+         rdfs:range :URI .
+    
+    :TimeEntry     a rdfs:Class;
+         rdfs:comment "Date or Date-Time";
+         rdfs:label "TimeEntry" .
+    
+    :UID     a rdf:Property;
+         rdfs:comment "The globally unique identifier for the calendar component";
+         rdfs:domain :CAL-COMPONENT;
+         rdfs:label "Unique identifier";
+         rdfs:range rdfs:Resource .
+    
+    :UNTIL     a rdf:Property;
+         rdfs:comment "Defines a date-time value which bounds the recurrance rule in an inclusive manner. If a DATE, must be UTC";
+         rdfs:domain :RECUR;
+         rdfs:label "Until";
+         rdfs:range :TimeEntry .
+    
+    :URI     a rdfs:Class;
+         rdfs:comment "A uri as defined by RFC 1738, RFC 2111 and any other IETF  registered value format";
+         rdfs:label "Uri";
+         rdfs:subClassOf <http://www.w3.org/2001/XMLSchema-datatypes#anyURI> .
+    
+    :URI-Attachment     a rdfs:Class;
+         rdfs:comment "A URI-attachment";
+         rdfs:domain :URI;
+         rdfs:label "URI Attachemnt";
+         rdfs:subClassOf :Attachment .
+    
+    :URL     a rdf:Property;
+         rdfs:comment "Points to a URL at whihc this calendar information may be  found, for example a more recent version";
+         rdfs:domain :CAL-COMPONENT;
+         rdfs:label "URL";
+         rdfs:range :URI .
+    
+    :UTC-OFFSET     a rdfs:Class;
+         rdfs:comment "This appears to be a special kind of integer in the iCalendar  specification.";
+         rdfs:label "UTC offset";
+         rdfs:subClassOf :Integer .
+    
+    :VALARM     a rdfs:Class;
+         rdfs:comment "An alarm object";
+         rdfs:label "Alarm" .
+    
+    :VALUE     a :Parameter;
+         rdfs:comment "Value Data Type";
+         rdfs:range rdfs:Resource .
+    
+    :VCALENDAR     a rdfs:Class;
+         rdfs:comment "A calendar of events";
+         rdfs:label "Calendar" .
+    
+    :VERSION     a :Property;
+         rdfs:comment "The higest version number or the minimum and maximum   range of the icalendar specification that is needed to interpret the   iCalendar object";
+         rdfs:domain :VCALENDAR;
+         rdfs:label "Version of iCalendar spcecification";
+         rdfs:range :TEXT .
+    
+    :VEVENT     a rdfs:Class;
+         rdfs:comment "An event";
+         rdfs:label "Event";
+         rdfs:subClassOf :CAL-COMPONENT .
+    
+    :VEVENT-STATUS     a :Property;
+         rdfs:comment "The overall status or confirmation for the event,   used by the ORGANIZER to indicate whether an event is  (definitely) aking place.";
+         rdfs:domain :VEVENT;
+         rdfs:label "Event Status";
+         rdfs:range :VEVENT-STATUS-CHOICE;
+         rdfs:subClassOf :STATUS .
+    
+    :VEVENT-STATUS-CHOICE     a rdfs:Class .
+    
+    :VFREEBUSY     a rdfs:Class;
+         rdfs:comment "A free-busy object";
+         rdfs:label "Free-busy";
+         rdfs:subClassOf :CAL-COMPONENT .
+    
+    :VJOURNAL     a rdfs:Class;
+         rdfs:comment "A journal object";
+         rdfs:label "Journal";
+         rdfs:subClassOf :CAL-COMPONENT .
+    
+    :VJOURNAL-STATUS     a :Property;
+         rdfs:comment "The overall status of the Journal entry.";
+         rdfs:domain :VJOURNAL;
+         rdfs:label "Journal Status";
+         rdfs:range :VJOURNAL-STATUS-CHOICE;
+         rdfs:subClassOf :STATUS .
+    
+    :VJOURNAL-STATUS-CHOICE     a rdfs:Class .
+    
+    :VTIMEZONE     a rdfs:Class;
+         rdfs:comment "A time zone object";
+         rdfs:label "Time zone" .
+    
+    :VTODO     a rdfs:Class;
+         rdfs:comment "A todo object";
+         rdfs:label "Todo";
+         rdfs:subClassOf :CAL-COMPONENT .
+    
+    :VTODO-STATUS     a :Property;
+         rdfs:comment "The overall status or confirmation for the todo,   used by the ORGANIZER to indicate the status of the todo.";
+         rdfs:domain :VTODO;
+         rdfs:label "ToDo Status";
+         rdfs:range :VTODO-STATUS-CHOICE;
+         rdfs:subClassOf :STATUS .
+    
+    :VTODO-STATUS-CHOICE     a rdfs:Class .
+    
+    :WKST     a rdf:Property;
+         rdfs:comment "Specifies the day on which the working week starts";
+         rdfs:domain :RECUR;
+         rdfs:label "Working week start";
+         rdfs:range :TEXT .
+    
+    :X-PROP     a :Property;
+         rdfs:comment "Any properties that aren't pre-defined.";
+         rdfs:domain :CAL-COMPONENT,
+                :VALARM,
+                :VTIMEZONE;
+         rdfs:label "Non-standard Property";
+         rdfs:range rdfs:Resource .
+    
+#ENDS

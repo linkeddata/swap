@@ -1,0 +1,13 @@
+# cribbed from 
+# http://www.w3.org/Talks/2002/10/09-swcal/tools.dot
+# in http://www.w3.org/Talks/2002/10/09-swcal/all.htm
+
+digraph world {
+  rankdir=LR;
+  "itin.txt" -> "grokTravItin.pl";
+  "grokTravItin.pl" -> "itin.nt";
+  "grokTravItin.pl" [ shape="diamond"];
+  "itin.nt" -> "cwm1";
+  "cwm1" [ shape="diamond", label="cwm"];
+  "cwm1" -> "itin.n3"
+}

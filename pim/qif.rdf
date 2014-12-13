@@ -1,0 +1,163 @@
+
+<!-- Processed by Id: cwm.py,v 1.198 2012/01/30 09:30:20 timbl Exp -->
+<!--     using base file:///devel/WWW/2000/10/swap/pim/qif.n3-->
+
+
+<r:RDF xmlns="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:doc="http://www.w3.org/2000/10/swap/pim/doc#"
+    xmlns:r="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:s="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:ui="http://www.w3.org/ns/ui#">
+
+    <r:Description r:about="">
+        <dc:title>An ontology for personal finances</dc:title>
+        <comment>An ontology for data exported, for example, by Quicken,
+	as an interchange format. Also a generally useful ontology for
+	bank tranactions.  See also the OFX ontology.</comment>
+        <seeAlso r:resource="qif2n3.py"/>
+        <seeAlso r:resource="http://dev.w3.org/cvsweb/2000/quacken/"/>
+        <seeAlso r:resource="http://dev.w3.org/cvsweb/~checkout~/2000/quacken/vocab.n3?rev=1.1"/>
+        <seeAlso r:resource="http://www.intuit.com/support/quicken/2002/win/1177.html"/>
+        <doc:version>$Id$</doc:version>
+    </r:Description>
+
+    <Class r:about="http://www.w3.org/2000/10/swap/pim/qif#Account">
+        <label>account</label>
+    </Class>
+
+    <Class r:about="http://www.w3.org/2000/10/swap/pim/qif#Bank">
+    </Class>
+
+    <Class r:about="http://www.w3.org/2000/10/swap/pim/qif#Cat">
+        <label>category</label>
+    </Class>
+
+    <Class r:about="http://www.w3.org/2000/10/swap/pim/qif#Classified">
+        <label>classified</label>
+        <subClassOf r:resource="http://www.w3.org/2000/10/swap/pim/qif#Transaction"/>
+    </Class>
+
+    <ui:Form r:about="http://www.w3.org/2000/10/swap/pim/qif#DocumentMetadataForm">
+        <r:type r:resource="http://www.w3.org/ns/ui#Group"/>
+        <dc:title>Basic document metadata</dc:title>
+        <ui:part r:parseType="Resource">
+            <r:type r:resource="http://www.w3.org/ns/ui#Heading"/>
+            <ui:contents xml:lang="en">Edit Metadata</ui:contents>
+            <ui:sequence r:datatype="http://www.w3.org/2001/XMLSchema#integer">1</ui:sequence>
+        </ui:part>
+        <ui:part r:parseType="Resource">
+            <r:type r:resource="http://www.w3.org/ns/ui#SingleLineTextField"/>
+            <ui:property r:resource="http://purl.org/dc/elements/1.1/title"/>
+            <ui:sequence r:datatype="http://www.w3.org/2001/XMLSchema#integer">2</ui:sequence>
+            <ui:size r:datatype="http://www.w3.org/2001/XMLSchema#integer">80</ui:size>
+        </ui:part>
+        <ui:part r:parseType="Resource">
+            <r:type r:resource="http://www.w3.org/ns/ui#Comment"/>
+            <ui:contents xml:lang="en">The date is the date of the document, for example for an invoice or email,
+        or if none available a date of e.g. a described transaction, event etc.</ui:contents>
+            <ui:sequence r:datatype="http://www.w3.org/2001/XMLSchema#integer">3</ui:sequence>
+            <ui:style>background-color: #ffe;</ui:style>
+        </ui:part>
+        <ui:part r:parseType="Resource">
+            <r:type r:resource="http://www.w3.org/ns/ui#DateField"/>
+            <ui:property r:resource="http://purl.org/dc/elements/1.1/date"/>
+            <ui:sequence r:datatype="http://www.w3.org/2001/XMLSchema#integer">4</ui:sequence>
+        </ui:part>
+        <ui:part r:parseType="Resource">
+            <r:type r:resource="http://www.w3.org/ns/ui#MultiLineTextField"/>
+            <ui:property r:resource="http://www.w3.org/2000/01/rdf-schema#comment"/>
+            <ui:sequence r:datatype="http://www.w3.org/2001/XMLSchema#integer">4</ui:sequence>
+        </ui:part>
+    </ui:Form>
+
+    <Class r:about="http://www.w3.org/2000/10/swap/pim/qif#Receipt">
+        <label>receipt</label>
+        <subClassOf r:resource="http://www.w3.org/2000/10/swap/pim/qif#SupportingDocument"/>
+    </Class>
+
+    <Class r:about="http://www.w3.org/2000/10/swap/pim/qif#SplitTransaction">
+        <comment>A transaction which has to be split into parts for classification.</comment>
+        <label>split transaction</label>
+        <subClassOf r:resource="http://www.w3.org/2000/10/swap/pim/qif#Transaction"/>
+    </Class>
+
+    <Class r:about="http://www.w3.org/2000/10/swap/pim/qif#SupportingDocument">
+        <label>supporting document</label>
+        <subClassOf r:resource="http://www.w3.org/2006/gen/ont#InformationResource"/>
+        <ui:creationForm r:resource="http://www.w3.org/2000/10/swap/pim/qif#DocumentMetadataForm"/>
+    </Class>
+
+    <Class r:about="http://www.w3.org/2000/10/swap/pim/qif#Transaction">
+        <label>transaction</label>
+        <ui:sortBy r:resource="http://www.w3.org/2000/10/swap/pim/qif#date"/>
+    </Class>
+
+    <Class r:about="http://www.w3.org/2000/10/swap/pim/qif#Unclassified">
+        <label>unclassified</label>
+        <subClassOf r:resource="http://www.w3.org/2000/10/swap/pim/qif#Transaction"/>
+    </Class>
+
+    <Class r:about="http://www.w3.org/2000/10/swap/pim/qif#UnclassifiedIncome">
+        <label>unclassified income</label>
+        <subClassOf r:resource="http://www.w3.org/2000/10/swap/pim/qif#Unclassified"/>
+    </Class>
+
+    <Class r:about="http://www.w3.org/2000/10/swap/pim/qif#UnclassifiedOutgoing">
+        <label>unclassified outgoing</label>
+        <subClassOf r:resource="http://www.w3.org/2000/10/swap/pim/qif#Unclassified"/>
+    </Class>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/qif#accordingTo">
+        <comment>The document which is the source of data for this transaction.</comment>
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/qif#Transaction"/>
+        <label>statement</label>
+        <range r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/qif#amount">
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/qif#Transaction"/>
+        <label>amount</label>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/qif#category">
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/qif#Transaction"/>
+        <label>category</label>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/qif#date">
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/qif#Transaction"/>
+        <label>date</label>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/qif#payee">
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/qif#Transaction"/>
+        <label>payee</label>
+        <subPropertyOf r:resource="http://www.w3.org/2000/01/rdf-schema#label"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/qif#splitPart">
+        <comment>A transaction representing a part of this transaction.
+    The sum of the amounts of the parts must equal the amount of this transaction.</comment>
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/qif#SplitTransaction"/>
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/qif#Transaction"/>
+        <label>part</label>
+        <range r:resource="http://www.w3.org/2000/10/swap/pim/qif#Transaction"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/qif#splitReverse">
+        <comment>A reverse transaction, putting this transaction back in the Split account, for redistribution as parts.
+    The amount of the reverse transaction must be the negation of this transaction.</comment>
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/qif#SplitTransaction"/>
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/qif#Transaction"/>
+        <label>part</label>
+        <range r:resource="http://www.w3.org/2000/10/swap/pim/qif#Transaction"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/qif#toAccount">
+        <comment>The account to which money flows when the amount is positive.</comment>
+        <domain r:resource="http://www.w3.org/2000/10/swap/pim/qif#Transaction"/>
+        <label>account</label>
+        <range r:resource="http://www.w3.org/2000/10/swap/pim/qif#Account"/>
+    </r:Property>
+</r:RDF>

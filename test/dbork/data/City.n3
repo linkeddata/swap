@@ -1,0 +1,42 @@
+#Processed by Id: cwm.py,v 1.121 2003/02/02 16:09:06 timbl Exp 
+        #    using base http://www.daml.ri.cmu.edu/ont/City.daml
+        
+#  Notation3 generation by
+#       notation3.py,v 1.133 2003/02/02 16:09:09 timbl Exp
+
+#   Base was: http://www.daml.ri.cmu.edu/ont/City.daml
+     @prefix : <#> .
+     @prefix country: <Country.n3#> .
+     @prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+     @prefix state: <State.n3#> .
+    
+    <>     a daml:Ontology;
+         daml:imports <http://www.daml.org/2001/03/daml+oil>,
+                <http://www.w3.org/1999/02/22-rdf-syntax-ns>,
+                <http://www.w3.org/2000/01/rdf-schema>;
+         daml:versionInfo """
+      $Id$
+    """;
+         rdfs:comment """
+      City Ontology.  Use as a top level ontology for describing cities.
+
+    """ .
+    
+    :City     a rdfs:Class;
+         rdfs:comment """ 
+      High level city concept.
+    """;
+         rdfs:label "City";
+         rdfs:subClassOf daml:Thing .
+    
+    :country     a rdf:Property;
+         rdfs:domain :City;
+         rdfs:range country:Country .
+    
+    :name     a rdf:Property;
+         rdfs:domain :City;
+         rdfs:range rdfs:Literal .
+    
+#ENDS

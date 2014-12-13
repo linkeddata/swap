@@ -1,0 +1,445 @@
+<?xml version="1.0"?>
+<r:RDF xmlns:r="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:s="http://www.w3.org/2000/01/rdf-schema#" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <s:Class r:ID="Attribute_Declaration">
+    <s:label>Attribute Declaration</s:label>
+  </s:Class>
+  <r:Property r:ID="a-name">
+    <s:label>name</s:label>
+    <s:comment>An NCName as defined by .</s:comment>
+    <s:domain r:resource="#Attribute_Declaration"/>
+  </r:Property>
+  <r:Property r:ID="a-target_namespace">
+    <s:label>target namespace</s:label>
+    <s:comment>Either absent or a namespace name, as defined in .</s:comment>
+    <s:domain r:resource="#Attribute_Declaration"/>
+  </r:Property>
+  <r:Property r:ID="a-simple_type_definition">
+    <s:label>type definition</s:label>
+    <s:comment>A simple type definition.</s:comment>
+    <s:domain r:resource="#Attribute_Declaration"/>
+  </r:Property>
+  <r:Property r:ID="a-scope">
+    <s:label>scope</s:label>
+    <s:comment>Optional. Either global or a complex type definition.</s:comment>
+    <s:domain r:resource="#Attribute_Declaration"/>
+  </r:Property>
+  <r:Property r:ID="a-value_constraint">
+    <s:label>value constraint</s:label>
+    <s:comment>Optional. A pair consisting of a value and one of default, fixed.</s:comment>
+    <s:domain r:resource="#Attribute_Declaration"/>
+  </r:Property>
+  <r:Property r:ID="a-annotation">
+    <s:label>annotation</s:label>
+    <s:comment>Optional. An annotation.</s:comment>
+    <s:domain r:resource="#Attribute_Declaration"/>
+  </r:Property>
+  <s:Class r:ID="Element_Declaration">
+    <s:label>Element Declaration</s:label>
+  </s:Class>
+  <r:Property r:ID="e-name">
+    <s:label>name</s:label>
+    <s:comment>An NCName as defined by .</s:comment>
+    <s:domain r:resource="#Element_Declaration"/>
+  </r:Property>
+  <r:Property r:ID="e-target_namespace">
+    <s:label>target namespace</s:label>
+    <s:comment>Either absent or a namespace name, as defined in .</s:comment>
+    <s:domain r:resource="#Element_Declaration"/>
+  </r:Property>
+  <r:Property r:ID="type_definition">
+    <s:label>type definition</s:label>
+    <s:comment>Either a simple type definition or a complex type definition.</s:comment>
+    <s:domain r:resource="#Element_Declaration"/>
+  </r:Property>
+  <r:Property r:ID="e-scope">
+    <s:label>scope</s:label>
+    <s:comment>Optional. Either global or a complex type definition.</s:comment>
+    <s:domain r:resource="#Element_Declaration"/>
+  </r:Property>
+  <r:Property r:ID="e-value_constraint">
+    <s:label>value constraint</s:label>
+    <s:comment>Optional. A pair consisting of a value and one of default, fixed.</s:comment>
+    <s:domain r:resource="#Element_Declaration"/>
+  </r:Property>
+  <r:Property r:ID="nillable">
+    <s:label>nillable</s:label>
+    <s:comment>A boolean.</s:comment>
+    <s:domain r:resource="#Element_Declaration"/>
+  </r:Property>
+  <r:Property r:ID="identity-constraint_definitions">
+    <s:label>identity-constraint definitions</s:label>
+    <s:comment>A set of constraint definitions.</s:comment>
+    <s:domain r:resource="#Element_Declaration"/>
+  </r:Property>
+  <r:Property r:ID="class_exemplar">
+    <s:label>substitution group affiliation</s:label>
+    <s:comment>Optional. A top-level element definition.</s:comment>
+    <s:domain r:resource="#Element_Declaration"/>
+  </r:Property>
+  <r:Property r:ID="e-final">
+    <s:label>substitution group exclusions</s:label>
+    <s:comment>A subset of {extension, restriction}.</s:comment>
+    <s:domain r:resource="#Element_Declaration"/>
+  </r:Property>
+  <r:Property r:ID="e-exact">
+    <s:label>disallowed substitutions</s:label>
+    <s:comment>A subset of {substitution, extension, restriction}.</s:comment>
+    <s:domain r:resource="#Element_Declaration"/>
+  </r:Property>
+  <r:Property r:ID="e-abstract">
+    <s:label>abstract</s:label>
+    <s:comment>A boolean.</s:comment>
+    <s:domain r:resource="#Element_Declaration"/>
+  </r:Property>
+  <r:Property r:ID="e-annotation">
+    <s:label>annotation</s:label>
+    <s:comment>Optional. An annotation.</s:comment>
+    <s:domain r:resource="#Element_Declaration"/>
+  </r:Property>
+  <s:Class r:ID="Complex_Type_Definition">
+    <s:label>Complex Type Definition</s:label>
+  </s:Class>
+  <r:Property r:ID="ct-name">
+    <s:label>name</s:label>
+    <s:comment>Optional. An NCName as defined by .</s:comment>
+    <s:domain r:resource="#Complex_Type_Definition"/>
+  </r:Property>
+  <r:Property r:ID="ct-target_namespace">
+    <s:label>target namespace</s:label>
+    <s:comment>Either absent or a namespace name, as defined in .</s:comment>
+    <s:domain r:resource="#Complex_Type_Definition"/>
+  </r:Property>
+  <r:Property r:ID="ct-base_type_definition">
+    <s:label>base type definition</s:label>
+    <s:comment>Either a simple type definition or a complex type definition.</s:comment>
+    <s:domain r:resource="#Complex_Type_Definition"/>
+  </r:Property>
+  <r:Property r:ID="derivation_method">
+    <s:label>derivation method</s:label>
+    <s:comment>Either extension or restriction.</s:comment>
+    <s:domain r:resource="#Complex_Type_Definition"/>
+  </r:Property>
+  <r:Property r:ID="ct-final">
+    <s:label>final</s:label>
+    <s:comment>A subset of {extension, restriction}.</s:comment>
+    <s:domain r:resource="#Complex_Type_Definition"/>
+  </r:Property>
+  <r:Property r:ID="ct-abstract">
+    <s:label>abstract</s:label>
+    <s:comment>A boolean</s:comment>
+    <s:domain r:resource="#Complex_Type_Definition"/>
+  </r:Property>
+  <r:Property r:ID="ct-attribute_declarations">
+    <s:label>attribute uses</s:label>
+    <s:comment>A set of attribute uses.</s:comment>
+    <s:domain r:resource="#Complex_Type_Definition"/>
+  </r:Property>
+  <r:Property r:ID="ct-attribute_wildcard">
+    <s:label>attribute wildcard</s:label>
+    <s:comment>Optional. A wildcard.</s:comment>
+    <s:domain r:resource="#Complex_Type_Definition"/>
+  </r:Property>
+  <r:Property r:ID="content_type">
+    <s:label>content type</s:label>
+    <s:comment>One of empty, a simple type definition or a pair consisting of a content model (I.e. a ) and one of mixed, element-only.</s:comment>
+    <s:domain r:resource="#Complex_Type_Definition"/>
+  </r:Property>
+  <r:Property r:ID="ct-exact">
+    <s:label>prohibited substitutions</s:label>
+    <s:comment>A subset of {extension, restriction}.</s:comment>
+    <s:domain r:resource="#Complex_Type_Definition"/>
+  </r:Property>
+  <r:Property r:ID="ct-annotations">
+    <s:label>annotations</s:label>
+    <s:comment>A set of annotations.</s:comment>
+    <s:domain r:resource="#Complex_Type_Definition"/>
+  </r:Property>
+  <s:Class r:ID="Attribute_Use">
+    <s:label>Attribute Use</s:label>
+  </s:Class>
+  <r:Property r:ID="required">
+    <s:label>required</s:label>
+    <s:comment>A boolean.</s:comment>
+    <s:domain r:resource="#Attribute_Use"/>
+  </r:Property>
+  <r:Property r:ID="attribute">
+    <s:label>attribute declaration</s:label>
+    <s:comment>An attribute declaration.</s:comment>
+    <s:domain r:resource="#Attribute_Use"/>
+  </r:Property>
+  <r:Property r:ID="au-value_constraint">
+    <s:label>value constraint</s:label>
+    <s:comment>Optional. A pair consisting of a value and one of default, fixed.</s:comment>
+    <s:domain r:resource="#Attribute_Use"/>
+  </r:Property>
+  <s:Class r:ID="Attribute_Group_Definition">
+    <s:label>Attribute Group Definition</s:label>
+  </s:Class>
+  <r:Property r:ID="ag-name">
+    <s:label>name</s:label>
+    <s:comment>An NCName as defined by .</s:comment>
+    <s:domain r:resource="#Attribute_Group_Definition"/>
+  </r:Property>
+  <r:Property r:ID="ag-target_namespace">
+    <s:label>target namespace</s:label>
+    <s:comment>Either absent or a namespace name, as defined in .</s:comment>
+    <s:domain r:resource="#Attribute_Group_Definition"/>
+  </r:Property>
+  <r:Property r:ID="ag-attribute_declarations">
+    <s:label>attribute uses</s:label>
+    <s:comment>A set of attribute uses.</s:comment>
+    <s:domain r:resource="#Attribute_Group_Definition"/>
+  </r:Property>
+  <r:Property r:ID="ag-attribute_wildcard">
+    <s:label>attribute wildcard</s:label>
+    <s:comment>Optional. A wildcard.</s:comment>
+    <s:domain r:resource="#Attribute_Group_Definition"/>
+  </r:Property>
+  <r:Property r:ID="ag-annotation">
+    <s:label>annotation</s:label>
+    <s:comment>Optional. An annotation.</s:comment>
+    <s:domain r:resource="#Attribute_Group_Definition"/>
+  </r:Property>
+  <s:Class r:ID="Model_Group_Definition">
+    <s:label>Model Group Definition</s:label>
+  </s:Class>
+  <r:Property r:ID="mg-name">
+    <s:label>name</s:label>
+    <s:comment>An NCName as defined by .</s:comment>
+    <s:domain r:resource="#Model_Group_Definition"/>
+  </r:Property>
+  <r:Property r:ID="mg-target_namespace">
+    <s:label>target namespace</s:label>
+    <s:comment>Either absent or a namespace name, as defined in .</s:comment>
+    <s:domain r:resource="#Model_Group_Definition"/>
+  </r:Property>
+  <r:Property r:ID="model_group">
+    <s:label>model group</s:label>
+    <s:comment>A model group.</s:comment>
+    <s:domain r:resource="#Model_Group_Definition"/>
+  </r:Property>
+  <r:Property r:ID="mg-annotation">
+    <s:label>annotation</s:label>
+    <s:comment>Optional. An annotation.</s:comment>
+    <s:domain r:resource="#Model_Group_Definition"/>
+  </r:Property>
+  <s:Class r:ID="Model_Group">
+    <s:label>Model Group</s:label>
+  </s:Class>
+  <r:Property r:ID="compositor">
+    <s:label>compositor</s:label>
+    <s:comment>One of all, choice or sequence.</s:comment>
+    <s:domain r:resource="#Model_Group"/>
+  </r:Property>
+  <r:Property r:ID="particles">
+    <s:label>particles</s:label>
+    <s:comment>A list of particles</s:comment>
+    <s:domain r:resource="#Model_Group"/>
+  </r:Property>
+  <r:Property r:ID="amg-annotation">
+    <s:label>annotation</s:label>
+    <s:comment>Optional. An annotation.</s:comment>
+    <s:domain r:resource="#Model_Group"/>
+  </r:Property>
+  <s:Class r:ID="Particle">
+    <s:label>Particle</s:label>
+  </s:Class>
+  <r:Property r:ID="p-min_occurs">
+    <s:label>min occurs</s:label>
+    <s:comment>A non-negative integer.</s:comment>
+    <s:domain r:resource="#Particle"/>
+  </r:Property>
+  <r:Property r:ID="p-max_occurs">
+    <s:label>max occurs</s:label>
+    <s:comment>Either a non-negative integer or unbounded.</s:comment>
+    <s:domain r:resource="#Particle"/>
+  </r:Property>
+  <r:Property r:ID="term">
+    <s:label>term</s:label>
+    <s:comment>One of a model group, a wildcard, or an element declaration.</s:comment>
+    <s:domain r:resource="#Particle"/>
+  </r:Property>
+  <s:Class r:ID="Wildcard">
+    <s:label>Wildcard</s:label>
+  </s:Class>
+  <r:Property r:ID="namespace_constraint">
+    <s:label>namespace constraint</s:label>
+    <s:comment>One of any; a pair of not and a namespace name or absent; or a set whose members are either namespace names or absent.</s:comment>
+    <s:domain r:resource="#Wildcard"/>
+  </r:Property>
+  <r:Property r:ID="process_contents">
+    <s:label>process contents</s:label>
+    <s:comment>One of skip, lax or strict.</s:comment>
+    <s:domain r:resource="#Wildcard"/>
+  </r:Property>
+  <r:Property r:ID="w-annotation">
+    <s:label>annotation</s:label>
+    <s:comment>Optional. An annotation.</s:comment>
+    <s:domain r:resource="#Wildcard"/>
+  </r:Property>
+  <s:Class r:ID="Identity-constraint_Definition">
+    <s:label>Identity-constraint Definition</s:label>
+  </s:Class>
+  <r:Property r:ID="c-name">
+    <s:label>name</s:label>
+    <s:comment>An NCName as defined by .</s:comment>
+    <s:domain r:resource="#Identity-constraint_Definition"/>
+  </r:Property>
+  <r:Property r:ID="c-target_namespace">
+    <s:label>target namespace</s:label>
+    <s:comment>Either absent or a namespace name, as defined in .</s:comment>
+    <s:domain r:resource="#Identity-constraint_Definition"/>
+  </r:Property>
+  <r:Property r:ID="identity-constraint_name">
+    <s:label>identity-constraint category</s:label>
+    <s:comment>One of key, keyref or unique.</s:comment>
+    <s:domain r:resource="#Identity-constraint_Definition"/>
+  </r:Property>
+  <r:Property r:ID="selector">
+    <s:label>selector</s:label>
+    <s:comment>A restricted XPath () expression.</s:comment>
+    <s:domain r:resource="#Identity-constraint_Definition"/>
+  </r:Property>
+  <r:Property r:ID="fields">
+    <s:label>fields</s:label>
+    <s:comment>A non-empty list of restricted XPath () expressions.</s:comment>
+    <s:domain r:resource="#Identity-constraint_Definition"/>
+  </r:Property>
+  <r:Property r:ID="referenced_key">
+    <s:label>referenced key</s:label>
+    <s:comment>Required if is keyref, forbidden otherwise. An identity-constraint definition with equal to key or unique.</s:comment>
+    <s:domain r:resource="#Identity-constraint_Definition"/>
+  </r:Property>
+  <r:Property r:ID="rc-annotation">
+    <s:label>annotation</s:label>
+    <s:comment>Optional. An annotation.</s:comment>
+    <s:domain r:resource="#Identity-constraint_Definition"/>
+  </r:Property>
+  <s:Class r:ID="Notation_Declaration">
+    <s:label>Notation Declaration</s:label>
+  </s:Class>
+  <r:Property r:ID="n-name">
+    <s:label>name</s:label>
+    <s:comment>An NCName as defined by .</s:comment>
+    <s:domain r:resource="#Notation_Declaration"/>
+  </r:Property>
+  <r:Property r:ID="n-target_namespace">
+    <s:label>target namespace</s:label>
+    <s:comment>Either absent or a namespace name, as defined in .</s:comment>
+    <s:domain r:resource="#Notation_Declaration"/>
+  </r:Property>
+  <r:Property r:ID="system_identifier">
+    <s:label>system identifier</s:label>
+    <s:comment>Optional if is present. A URI reference.</s:comment>
+    <s:domain r:resource="#Notation_Declaration"/>
+  </r:Property>
+  <r:Property r:ID="public_identifier">
+    <s:label>public identifier</s:label>
+    <s:comment>Optional if is present. A public identifier, as defined in .</s:comment>
+    <s:domain r:resource="#Notation_Declaration"/>
+  </r:Property>
+  <r:Property r:ID="n-annotation">
+    <s:label>annotation</s:label>
+    <s:comment>Optional. An annotation.</s:comment>
+    <s:domain r:resource="#Notation_Declaration"/>
+  </r:Property>
+  <s:Class r:ID="Annotation">
+    <s:label>Annotation</s:label>
+  </s:Class>
+  <r:Property r:ID="application_information">
+    <s:label>application information</s:label>
+    <s:comment>A sequence of element information items.</s:comment>
+    <s:domain r:resource="#Annotation"/>
+  </r:Property>
+  <r:Property r:ID="user_information">
+    <s:label>user information</s:label>
+    <s:comment>A sequence of element information items.</s:comment>
+    <s:domain r:resource="#Annotation"/>
+  </r:Property>
+  <r:Property r:ID="attributes">
+    <s:label>attributes</s:label>
+    <s:comment>A sequence of attribute information items.</s:comment>
+    <s:domain r:resource="#Annotation"/>
+  </r:Property>
+  <s:Class r:ID="Simple_Type_Definition">
+    <s:label>Simple Type Definition</s:label>
+  </s:Class>
+  <r:Property r:ID="st-name">
+    <s:label>name</s:label>
+    <s:comment>Optional. An NCName as defined by .</s:comment>
+    <s:domain r:resource="#Simple_Type_Definition"/>
+  </r:Property>
+  <r:Property r:ID="st-target_namespace">
+    <s:label>target namespace</s:label>
+    <s:comment>Either absent or a namespace name, as defined in .</s:comment>
+    <s:domain r:resource="#Simple_Type_Definition"/>
+  </r:Property>
+  <r:Property r:ID="st-base_type_definition">
+    <s:label>base type definition</s:label>
+    <s:comment>A simple type definition, which may be the simple ur-type definition.</s:comment>
+    <s:domain r:resource="#Simple_Type_Definition"/>
+  </r:Property>
+  <r:Property r:ID="facets">
+    <s:label>facets</s:label>
+    <s:comment>A set of constraining facets.</s:comment>
+    <s:domain r:resource="#Simple_Type_Definition"/>
+  </r:Property>
+  <r:Property r:ID="fundamental_facets">
+    <s:label>fundamental facets</s:label>
+    <s:comment>A set of fundamental facets.</s:comment>
+    <s:domain r:resource="#Simple_Type_Definition"/>
+  </r:Property>
+  <r:Property r:ID="st-final">
+    <s:label>final</s:label>
+    <s:comment>A subset of {extension, list, restriction, union}.</s:comment>
+    <s:domain r:resource="#Simple_Type_Definition"/>
+  </r:Property>
+  <r:Property r:ID="variety">
+    <s:label>variety</s:label>
+    <s:comment>One of {atomic, list, union}. Depending on the value of , further properties are defined as follows: atomic A built-in primitive simple type definition (or the simple ur-type definition). list A simple type definition. union A non-empty sequence of simple type definitions.</s:comment>
+    <s:domain r:resource="#Simple_Type_Definition"/>
+  </r:Property>
+  <r:Property r:ID="st-annotation">
+    <s:label>annotation</s:label>
+    <s:comment>Optional. An annotation.</s:comment>
+    <s:domain r:resource="#Simple_Type_Definition"/>
+  </r:Property>
+  <s:Class r:ID="key-schema">
+    <s:label>Schema</s:label>
+  </s:Class>
+  <r:Property r:ID="type_definitions">
+    <s:label>type definitions</s:label>
+    <s:comment>A set of named simple and complex type definitions.</s:comment>
+    <s:domain r:resource="#key-schema"/>
+  </r:Property>
+  <r:Property r:ID="attribute_declarations">
+    <s:label>attribute declarations</s:label>
+    <s:comment>A set of named (top-level) attribute declarations.</s:comment>
+    <s:domain r:resource="#key-schema"/>
+  </r:Property>
+  <r:Property r:ID="element_declarations">
+    <s:label>element declarations</s:label>
+    <s:comment>A set of named (top-level) element declarations.</s:comment>
+    <s:domain r:resource="#key-schema"/>
+  </r:Property>
+  <r:Property r:ID="attribute_group_definitions">
+    <s:label>attribute group definitions</s:label>
+    <s:comment>A set of named attribute group definitions.</s:comment>
+    <s:domain r:resource="#key-schema"/>
+  </r:Property>
+  <r:Property r:ID="model_group_definitions">
+    <s:label>model group definitions</s:label>
+    <s:comment>A set of named model group definitions.</s:comment>
+    <s:domain r:resource="#key-schema"/>
+  </r:Property>
+  <r:Property r:ID="notation_declarations">
+    <s:label>notation declarations</s:label>
+    <s:comment>A set of notation declarations.</s:comment>
+    <s:domain r:resource="#key-schema"/>
+  </r:Property>
+  <r:Property r:ID="annotations">
+    <s:label>annotations</s:label>
+    <s:comment>A set of annotations.</s:comment>
+    <s:domain r:resource="#key-schema"/>
+  </r:Property>
+</r:RDF>

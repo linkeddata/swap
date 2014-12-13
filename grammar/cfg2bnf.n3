@@ -1,0 +1,88 @@
+# Notation3 in Notation3
+# Context Free Grammar without tokenization
+#
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix cfg: <http://www.w3.org/2000/10/swap/grammar/bnf#>.
+@prefix rul: <http://www.w3.org/2000/10/swap/grammar/bnf-rules#>.
+@prefix : <http://www.w3.org/2000/10/swap/grammar/n3#>.
+@prefix n3: <http://www.w3.org/2000/10/swap/grammar/n3#>.
+@prefix list: <http://www.w3.org/2000/10/swap/list#>.
+@prefix string: <http://www.w3.org/2000/10/swap/string#>.
+@keywords a, is, of.
+
+<> rdfs:comment """ 
+
+These are rules to take the shortcut ontology such as cfg:zeroOrOneOf 
+and expland them into the base cfg:mustBeOneSequence.
+It also generates human-readable labels for things which have been
+generated.
+
+This file was split from n3.n3 on 2007-01-20.
+""".
+
+#__________________________________________________________________________
+
+#  Axioms reducing the shortcut CFG terms to cfg:musBeOneSequence.
+
+{ ?x cfg:zeroOrMore ?y } => {?x cfg:mustBeOneSequence ( () (?y ?x) ) }.
+
+{ ?x cfg:zeroOrMore [ cfg:label ?y].
+	( ?y "_s" ) string:concatenation ?str } => { ?x cfg:label ?str }.
+
+#__________________________________________________________________________
+
+{ ?x cfg:commaSeparatedPeriodTerminatedListOf ?y } =>
+{
+	?x cfg:mustBeOneSequence (
+		( "." )
+		( ?y [cfg:CSLTail ?y]  )
+	)
+}.
+
+{ ?x cfg:CSLTail ?y } =>
+{
+	?x cfg:mustBeOneSequence (
+		( "." )
+		( "," ?y ?x )
+	)
+}.
+
+{ ?x cfg:commaSeparatedPeriodTerminatedListOf [ cfg:label ?y].
+	( ?y "_csptl" ) string:concatenation ?str } => { ?x cfg:label ?str }.
+
+{ ?x cfg:CSLTail [ cfg:label ?y].
+	( ?y "_csptl_tail" ) string:concatenation ?str } => { ?x cfg:label ?str }.
+
+
+#__________________________________________________________________________
+
+# Without the period
+
+{ ?x cfg:commaSeparatedListOf ?y } =>
+{
+	?x cfg:mustBeOneSequence (
+		(  )
+		( ?y [cfg:CSLTail2 ?y]  )
+	)
+}.
+
+{ ?x cfg:CSLTail2 ?y } =>
+{
+	?x cfg:mustBeOneSequence (
+		( )
+		( "," ?y ?x )
+	)
+}.
+
+
+{ ?x cfg:commaSeparatedListOf [ cfg:label ?y].
+	( ?y "_csl" ) string:concatenation ?str } => { ?x cfg:label ?str }.
+
+{ ?x cfg:CSLTail2 [ cfg:label ?y].
+	( ?y "_csl_tail" ) string:concatenation ?str } => { ?x cfg:label ?str }.
+
+#__________________________________________________________________________
+
+
+#ends

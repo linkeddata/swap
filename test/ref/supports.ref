@@ -1,0 +1,23 @@
+     @prefix : <http://example.com/swap/test/supports/simple.n3#> .
+    @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    
+     @forAll :X .
+    
+    :Q     :Q :Q .
+    {
+        {
+            :a     :b :c .
+            :r     :e :g .
+            {
+                :a     :b :c .
+                
+                }     log:implies {:d     :e :f .
+                } .
+            
+            }     log:supports {:a     :b :c .
+            :d     :e :f .
+            } .
+        
+        }     log:implies {:Q     :Q :Q .
+        } .
+    

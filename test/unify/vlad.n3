@@ -1,0 +1,7 @@
+
+@forAll :c, :y.
+{{ :a :b :c} :y {:a :b :x}} => {<test> a <SUCCESS> }.
+
+
+{:a :b :c} :h {:a :b :c}.
+

@@ -1,0 +1,71 @@
+     @prefix : <http://www.w3.org/2000/10/swap/reason#> .
+    @prefix foo: <#> .
+    @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    @prefix n3: <http://www.w3.org/2004/06/rei#> .
+    @prefix t: <reason/t8.n3#> .
+    
+     @forSome foo:_g0 .
+      [      a :Conjunction,
+                    :Proof;
+             :component  [
+                 a :Extraction;
+                 :because foo:_g0;
+                 :gives { @forSome t:_g_L2C9 .
+                <reason/a>     <reason/b> t:_g_L2C9 .
+                } ],
+                     [
+                 a :Extraction;
+                 :because foo:_g0;
+                 :gives { @forAll t:x .
+                {
+                    <reason/a>     <reason/b> t:x .
+                    
+                    }     log:implies {t:x     <reason/b2> <reason/c2> .
+                    } .
+                } ],
+                     [
+                 a :Extraction;
+                 :because  [
+                     a :Inference;
+                     :binding  [
+                         :boundTo  [
+                             n3:uri "http://example.com/swap/test/reason/t8.n3#_g_L2C9" ];
+                         :variable  [
+                             n3:uri "http://example.com/swap/test/reason/t8.n3#x" ] ];
+                     :evidence  (
+                     [
+                             a :Extraction;
+                             :because foo:_g0;
+                             :gives { @forSome t:_g_L2C9 .
+                            <reason/a>     <reason/b> t:_g_L2C9 .
+                            } ] );
+                     :rule  [
+                         a :Extraction;
+                         :because foo:_g0;
+                         :gives { @forAll t:x .
+                        {
+                            <reason/a>     <reason/b> t:x .
+                            
+                            }     log:implies {t:x     <reason/b2> <reason/c2> .
+                            } .
+                        } ] ];
+                 :gives { @forSome t:_g_L2C9 .
+                t:_g_L2C9     <reason/b2> <reason/c2> .
+                } ];
+             :gives { @forAll t:x.
+                 @forSome t:_g_L2C9 .
+            <reason/a>     <reason/b> t:_g_L2C9 .
+            t:_g_L2C9     <reason/b2> <reason/c2> .
+            {
+                <reason/a>     <reason/b> t:x .
+                
+                }     log:implies {t:x     <reason/b2> <reason/c2> .
+                } .
+            } ].
+    
+    foo:_g0     a :Parsing;
+         :because  [
+             a :CommandLine;
+             :args "['../cwm.py', '--quiet', '--n3=B', 'reason/t8.n3', '--think', '--base=foo', '--why']" ];
+         :source <reason/t8.n3> .
+    
