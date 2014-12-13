@@ -20,7 +20,12 @@
 # AIMInstant, MSNInstant, ICQInstant, Address(values: City, Country, State, Street, ZIP), Birthday, Email(values), First, Last, (Middle), JobTitle, HomePage, Organization, Phone(values), UID.
 
 
-import AddressBook, objc
+# See https://developer.apple.com/library/mac/documentation/userexperience/Conceptual/AddressBook/AddressBook.html
+import AddressBook, objc, array
+
+import PIL
+from PIL import Image
+
 import sha
 import sys, codecs
 import getopt
@@ -219,8 +224,11 @@ def targetURIscheme(mac):
 def URIforPerson(person):
     itemUID = person.valueForKey_(AddressBook.kABUIDProperty);
     return unicode('Person/%s.ttl#this' % (uuid(person)[-12:]))
-#    return unicode('Person/%s.ttl#this' % (uuid(person)))
-#    return 'People/%s/%s/%s' % (itemUID[0],itemUID[1],itemUID[2:]), 
+
+def URIforPersonPhoto(person):
+    itemUID = person.valueForKey_(AddressBook.kABUIDProperty);
+    return unicode('Person/%s-image.png' % (uuid(person)[-12:]))
+
     
 def URIforGroup(group):
 #    return 'Groups/%s.ttl#this' % uuid(group)
@@ -228,7 +236,9 @@ def URIforGroup(group):
     return 'Group/%s.ttl#this' % name
 
 def documentPart(uri):
-    return uri.split('#')[0]
+    d = uri.split('#')[0]
+    sys.stderr.write('docpart ' + d + '\n'); # @@@ debug 
+    return d
 
 def localPart(uri):
     return uri.split('#')[1]
@@ -264,7 +274,7 @@ def renderOneGroup(group):
         item = members[i];
         assert 'Person' in `type(item)`   # This is an assumption we make at the moment @@
         itemUID = item.valueForKey_(AddressBook.kABUIDProperty); 
-        sv += 'vcard:hasMember <%s>; # %s\n' % (URIforPerson(item), fullName(item));
+        sv += 'vcard:hasMember <../%s>; # %s\n' % (URIforPerson(item), fullName(item));
     if sv[-2:] == ';\n': return sv[:-2] + '.\n'
     return sv + '.\n';
 
@@ -273,11 +283,48 @@ def renderOnePerson(s):
     
     sv = ' a vcard:Individual; vcard:fn %s;\n' % enquote(fullName(s));
     sv += renderComplexName(s);
+
+    image = s.imageData();
+    if image is not None:
+        sv += ' vcard:hasPhoto <../%s>;\n' % URIforPersonPhoto(s);
+
+
     for p in defaultPersonProperties + defaultRecordCreationProperties:
         if p not in MacIgnore + nameParts:
             sv +=  renderPropertyAndValue(s, p);
     if sv[-2:] == ';\n': return sv[:-2] + '.\n'
     return sv + '.\n';
+    
+    
+
+
+def writeOutImage(s, root):
+    image = s.imageData();
+    if image is not None:
+        l = image.length();
+        tempFileName = ',temp.tiff'
+        sys.stderr.write('URIforPersonPhoto(s) '+`URIforPersonPhoto(s)` + '\n')
+
+        fn = fileNameFromURI(URIforPersonPhoto(s), root);
+#        sys.stderr.write('fn ' + fn + '\n'); # @@@ debug 
+        #ni = NXImage.
+#        imgRep = image.representations().objectAtIndex_(0)
+#        data = imgRep.representationUsingType_properties_(NSPNGFileType, null);
+        
+        tempFile = open(tempFileName, 'w')
+        a = array.array('B');
+        for i in range(l):   # kludge @@ make space
+            a.append(0)
+        image.getBytes_length_(a, l)
+        sys.stderr.write('length of image:' + `len(a)` + '\n'); # @@@ debug 
+        a.tofile(tempFile);
+        tempFile.close();
+
+        tempFile = open(tempFileName, 'r')
+        pi = Image.open(tempFile);
+        
+        imageFile = open(fn, 'w');
+        pi.save(imageFile);
 
 
 def renderPropertyAndValue(s, p):
@@ -338,8 +385,12 @@ def renderValue(p, a, lab = None):
     else:
         return 'Error unknown type - give up - %s: ' % type(a) + `a`
 
+def fileNameFromURI(root, uri):
+    return (root + documentPart(uri)).encode('utf-8');
+
 def writeOutFile(group, uri, root, tail):
-    filename = (root + documentPart(uri)).encode('utf-8');
+    sys.stderr.write('uri '+`uri` + '\n')
+    filename = fileNameFromURI(root, uri);
     opf = open(filename, 'w')
     op = codecs.getwriter('utf-8')(opf)
     op.write(prefixes());
@@ -443,6 +494,7 @@ def main(argv):
             for person in abList:
                 writeOutFile(person, URIforPerson(person),
                             distributeRoot, renderOnePerson(person));
+                writeOutImage(person, distributeRoot);
         else:
             print prefixes();
             for person in abList:
@@ -452,6 +504,7 @@ def main(argv):
         if doDistribute:
             writeOutFile(me, URIforPerson(me),
                         distributeRoot, renderOnePerson(me));
+            writeOutImage(me, distributeRoot);
         else:
             print prefixes();
             print '<#me> = <%s>;\n' % URIforPerson(me)  + renderOnePerson(me);
