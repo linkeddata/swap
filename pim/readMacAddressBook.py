@@ -167,6 +167,11 @@ nameParts = [
     AddressBook.kABMiddleNameProperty,
     AddressBook.kABSuffixProperty ];
 
+emailRelated = [
+    AddressBook.kABEmailProperty,
+    AddressBook.kABEmailWorkLabel,
+    AddressBook.kABEmailHomeLabel];
+
 def prefixes():
   """Spit out the RDF etc. at the start of a FOAF file.
 removed: 
@@ -192,17 +197,6 @@ def enquote(s):
         return '"""' + t + '"""'
     return '"' + t + '"'
 
-def foafSuffix():
-  """Tail end of a FOAF file."""
-  return "# ends."
-
-def foafEmptyTag(tagName, rel, value):
-  """Returns the appropriate empty tag."""
-  return '<foaf:%s %s="%s" />'%(tagName, rel, value)
-
-def foafPO(tagName, value):
-  """Returns the appropriate namespace-prefixed tag combo for the given values."""
-  return '  foaf:%s %s; '%(tagName, enquote(value))
 
 def cleanLabel(lab):
     res = ''
@@ -268,15 +262,25 @@ def renderOneGroup(group):
     for p in defaultGroupProperties + defaultRecordCreationProperties:
         if p not in MacIgnore:
             sv +=  renderPropertyAndValue(group, p);
+    sv += ' .\n';
     members = group.members();
     print "# Members - ", members.count();
     for i in range(members.count()):
         item = members[i];
         assert 'Person' in `type(item)`   # This is an assumption we make at the moment @@
         itemUID = item.valueForKey_(AddressBook.kABUIDProperty); 
-        sv += 'vcard:hasMember <../%s>; # %s\n' % (URIforPerson(item), fullName(item));
-    if sv[-2:] == ';\n': return sv[:-2] + '.\n'
-    return sv + '.\n';
+#        sv += 'vcard:hasMember <../%s>; # %s\n' % (URIforPerson(item), fullName(item));
+        sv += '<../%s> vcard:fn %s; is vcard:hasMember of <#this>.\n' % (URIforPerson(item), enquote(fullName(item)));
+    return sv + '\n';
+
+def renderGroupName(group):
+    sv = ' a vcard:Group;\n';
+    for p in defaultGroupProperties:
+        if p not in MacIgnore:
+            sv +=  renderPropertyAndValue(group, p);
+    sv += ' .\n';
+    return sv
+
 
 def renderOnePerson(s):
     # sys.stderr.write(uuid(s)+ '\n'); # @@@ debug 
@@ -295,8 +299,12 @@ def renderOnePerson(s):
     if sv[-2:] == ';\n': return sv[:-2] + '.\n'
     return sv + '.\n';
     
-    
-
+def renderNameAndEmail(s):
+    sv = ' a vcard:Individual; vcard:fn %s;\n' % enquote(fullName(s));
+    for p in emailRelated:
+        sv +=  renderPropertyAndValue(s, p);
+    if sv[-2:] == ';\n': return sv[:-2] + '.\n'
+    return sv + '.\n';
 
 def writeOutImage(s, root):
     image = s.imageData();
@@ -321,10 +329,13 @@ def writeOutImage(s, root):
         tempFile.close();
 
         tempFile = open(tempFileName, 'r')
-        pi = Image.open(tempFile);
-        
-        imageFile = open(fn, 'w');
-        pi.save(imageFile);
+        try:
+            pi = Image.open(tempFile);
+        except IOError:
+            sys.stderr.write("*** Failed to open temp image file. Corrupt? So %s not written.\n" % fn)
+        else:
+            imageFile = open(fn, 'w');
+            pi.save(imageFile);
 
 
 def renderPropertyAndValue(s, p):
@@ -400,24 +411,79 @@ def writeOutFile(group, uri, root, tail):
     op.close();
     opf.close();
 
+def writeOutSummaryFile(book, root):
+
+    #////////////////////  List of all people just name and email
+    uri = 'people.ttl';
+    sys.stderr.write('uri '+`uri` + '\n')
+    filename = fileNameFromURI(root, uri);
+    opf = open(filename, 'w')
+    op = codecs.getwriter('utf-8')(opf)
+    op.write(prefixes());
+    
+    abList = book.people()
+    op.write("# people: %i\n" % len(abList));
+    for person in abList:
+        op.write( '<%s> vcard:inAddressBook <book.ttl#this>;\n' % URIforPerson(person) + renderNameAndEmail(person) );
+    op.write('\n');  # just to be sure
+    op.close();
+    opf.close();
+
+    #//////////////////////  List of groups
+    uri = 'groups.ttl';
+    sys.stderr.write('uri '+`uri` + '\n')
+    filename = fileNameFromURI(root, uri);
+    opf = open(filename, 'w')
+    op = codecs.getwriter('utf-8')(opf)
+    op.write(prefixes());
+    op.write("# groups: %i\n" % len(book.groups()));
+    for group in book.groups():
+        op.write( '<%s> is vcard:includesGroup of <book.ttl#this>;\n' % URIforGroup(group)  + renderGroupName(group) );
+    op.write('\n');  # just to be sure
+    op.close();
+    opf.close();
+    
+    #//////////////////////// Master book file
+    uri = 'book.ttl';
+    sys.stderr.write('uri '+`uri` + '\n')
+    filename = fileNameFromURI(root, uri);
+    opf = open(filename, 'w')
+    op = codecs.getwriter('utf-8')(opf)
+    op.write(prefixes());
+    op.write('<#this> vcard:nameEmailIndex <people.ttl>; \n'); # @@ squatting
+    op.write('        vcard:groupIndex <groups.ttl>. \n')
+    op.write('\n');  # just to be sure
+    op.close();
+    opf.close();
+    
+
+
+
 
 ##############
 
 
 def usage():
-  """Displays the usage information for the application."""
+  """Displays the command line syntax information for the application."""
   print """Usage:
 	python2.7 readAddressBook.py [args] >  ab.n3
+        pythpn2.7 readAddressBook.py -d=  -g -a -s
 
 Arguments:
 	-h, --help		Show this help.
         -m   --me               Dump just my own bsuiness card 
 	-a, --all		Use all people in the address book
         -g,  --groups           Dump the groups
+        -s,  --summary          Create linked summary files {book,groups,people}.ttl
 	-d x, --distribute=x	Use x as the prefix for a file tree to be writtn.
+                                Blank   (--distribute= )means this local directory
 
 If you distribute the data, many files wil be made in a tree, linking to each other
-Files (though not directories) will be created where necessary."""
+Files (though not directories) will be created where necessary."
+
+TODO
+    optionally push the data into a LDP server using HTTP PUT
+"""
 
 
 def main(argv):
@@ -427,10 +493,11 @@ def main(argv):
     doAllPeople = False
     doMe = False
     doGroups = False
+    doSummary = False;
     doDistribute = False
     distributeRoot = None               
     try:
-          opts, args = getopt.getopt(argv, "amgfe:hd:i:r", ["all", "me", "groups", "foaf", "exclude=", "help", "distribute=", "include=", "relationships"])
+          opts, args = getopt.getopt(argv, "amgsfe:hd:i:r", ["all", "me", "summary", "groups", "foaf", "exclude=", "help", "distribute=", "include=", "relationships"])
     except getopt.GetoptError:
           usage()
           sys.exit(2)
@@ -448,6 +515,8 @@ def main(argv):
             doAllPeople = True
         elif opt in ("-g", "--groups"):
             doGroups = True
+        elif opt in ("-s", "--summary"):
+            doSummary = True
         elif opt in ("-m", "--me"):
             doMe = True
         elif opt in ("-d", "--foaf"):
@@ -475,6 +544,10 @@ def main(argv):
     # For doing the whole address book:
     # abList = book.people()
     # print book.groups()
+    
+    if doSummary:
+        writeOutSummaryFile(book, distributeRoot);
+        
 
     if doGroups:
         # print book.groups();
@@ -509,23 +582,6 @@ def main(argv):
             print prefixes();
             print '<#me> = <%s>;\n' % URIforPerson(me)  + renderOnePerson(me);
         
-    elif False:
-    # For doing only the FOAF group:
-
-        abResults = book.recordsMatchingSearchElement_(AddressBook.ABGroup.searchElementForProperty_label_key_value_comparison_('GroupName', 0, 0, 'FOAF', AddressBook.kABPrefixMatchCaseInsensitive))
-
-        if abResults.count() == 0:
-            print """Error: do you have a 'FOAF' group defined?"""
-            sys.exit(2);
-
-        # Make a list of the members to process.
-        abList = abResults[0].members()
-
-        # Generate the FOAF document.
-      
-        # Make sure I'm in the 'good' list.
-        globalIDList[me.valueForProperty_('UID')] = me.valueForProperty_('First') + me.valueForProperty_('Last')
-        print "%s" % generateFOAFDocumentForPeople(me, abList)
 
 # Do the normal main/arguments processing.
 if __name__ == "__main__":
