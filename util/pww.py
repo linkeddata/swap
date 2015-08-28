@@ -13,7 +13,7 @@ e.g echo 'http//www.w3org' > /cvsroot/w3.org/.web_base
 import sys
 import string
 import os
-import re
+import re, urllib
 
 version = "$Id$"[1:-1]
 verbose = 0
@@ -60,6 +60,6 @@ for path in files:
     if verbose: print "# abs = "+abs
     basedir, base = baseDirBase(abs)
     if basedir:
-        print abs.replace(basedir, base)
+        print urllib.quote(abs.replace(basedir, base), ".:/")
 
 #ends

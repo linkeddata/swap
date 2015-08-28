@@ -1,13 +1,19 @@
 #!/usr/bin/python
-"""Correlate GPS data with Photo metadata
+"""Correlate GPS data with Photo metadata, generate maps, etc
 
 options:
 
 --help      -h
---gpsData   -g   dir   Input file directory containing gpsData.n3 and Photometa.n3
+--gpsData   -g   dir    Input file directory containing gpsData.n3 and Photometa.n3
+--timeline       file   Output file for timeline
+--startTIme      datetime  Ignore things before this  
+--endTIme        datetime  Ignore things on or after this  
+--outputMap      file   Output file for SVG map
+--speedClimb     file   Output SVG file for spped vs climb rate scatter plot
 --verbose   -v
 
-is or was http://www.w3.org/2000/10/swap/pim/day.py
+is or was https://github.com/linkeddata/swap/pim/day.py
+
 """
 
 # Regular python library
@@ -15,7 +21,7 @@ import os, sys, time
 from math import sin, cos, tan, sqrt
 from urllib import urlopen
 
-# SWAP  http://www.w3.org/2000/10/swap
+# SWAP  https://github.com/linkeddata/swap
 from swap import myStore, diag, uripath, notation3, isodate
 from swap.myStore import Namespace, formula, symbol, intern, bind, load
 from swap.diag import progress
@@ -64,6 +70,157 @@ def saveAs(uri, filename):
     saveStream.write(gifData)
     saveStream.close()
 
+
+def commandLineArg(argname):
+    for i in range(len(sys.argv)-2):
+	for p in [ '-', '--']:
+	    if sys.argv[i+1] == p + argname:
+		return sys.argv[i+2];
+	    if sys.argv[i+1].startswith(p + argname + '='):
+		return sys.argv[i+1][len(p+argname+'='):]
+    return None;
+
+
+
+################################ Point class
+
+class Point:
+    def __init__(self, lon, lat, ele, date):
+        self.lon = lon
+        self.lat = lat
+        self.ele = ele # float
+
+        pi = 3.14159265358979323846 # (say)
+        degree = pi/180
+        # r_earth = 6400000.0 # (say) meters
+        phi = self.lat * degree
+        
+        # See http://en.wikipedia.org/wiki/Earth_radius
+        a = 6.378137e6 # m
+        b = 6.3567523e6 #m
+        r_earth = sqrt(  ((a*a*cos(phi))**2 + ((a*a*sin(phi)))**2)/
+                        ((a*cos(phi))**2 + ((a*sin(phi)))**2))
+        # print "Local radius of earth = ", r_earth
+        
+        self.y_m_per_degree = r_earth * pi /180
+        self.x_m_per_degree = self.y_m_per_degree * cos(self.lat*degree)
+
+        self.dz = 0
+        self.ds = None
+        self.s = 0
+        self.grade = None
+
+        self.last = None
+        self.next = None
+
+        self.date = date;
+        if date is not None:
+
+            self.t = isodate.parse(date); ###
+            
+            self.kph = None
+            self.mps = None
+            self.dt = None
+            self.climb   = 0.0
+        
+        
+        # print "Point= ", self.date, self.t, ele
+
+
+        
+    def difference(self):
+        if self.last is None: return;
+        last = self.last;
+        
+        dx = (self.lon - last.lon) * self.x_m_per_degree
+        dy = (self.lat - last.lat) * self.y_m_per_degree
+        self.ds = sqrt(dx*dx + dy*dy)
+        
+        self.s = last.s + self.ds
+        
+        self.dt = self.t - last.t
+        
+        if self.dt > 0:
+            self.mps = self.ds/self.dt  # m/s
+            self.kph = self.mps * 3.6
+            self.climb = self.dz / self.dt
+        if self.ele is not None and last.ele is not None:
+            self.dz = self.ele - last.ele
+        else:
+            self.dz = 0
+        if self.ele is None:
+            self.ele = last.ele;  #  Assume when missing ele values
+        
+        if self.ds != 0:
+            self.grade = self.dz / self.ds
+        
+        # print "Point diff ", self.date, self.ds, self.dt, self.kph, self.dz, self.grade
+        
+    def generateClimb(self):
+        if self.dt is not None and self.dt != 0:
+            self.climb = self.dz / self.dt
+        
+        
+
+    def smooth(self, n, alpha): # eg 2, 0.7
+        a = b = self;
+        ele = lat = lon = 0.0;
+        ne = 0;
+        for i in range(n):
+            a = a.last
+            if a is None: return
+            lat += a.lat
+            lon += a.lon
+            if a.ele is not None:
+                ele += a.ele
+                ne += 1;
+            
+            b = b.next
+            if b is None: return
+            lat += b.lat
+            lon += b.lon
+            if b.ele is not None:
+                ele += b.ele;
+                ne += 1;
+        lat = lat / n / 2
+        lon = lon / n / 2
+        ele = ele / ne
+        
+        self.lat = alpha * lat + (1-alpha) * self.lat;
+        self.lon = alpha * lon + (1-alpha) * self.lon;
+        if ne > 0:
+            if self.ele is None:
+                self.ele = ele
+            else:
+                self.ele = alpha * ele + (1-alpha) * self.ele;
+        #print "Smoothing ", self.date, ne, ele
+    
+    # Do this to kph, climb etc AFTER the speeds have been worked out
+    def smoothAttribute(self, at, n, alpha): # eg 4, 0.7
+        a = b = self;
+        ne = 0
+        total = 0
+        if getattr(self, at) is not None:
+            total = 2 * getattr(self, at);  # double weight
+            ne += 2;
+        for i in range(n):
+            if a is not None:
+                a = a.last
+                if a is not None and getattr(a, at) is not None:
+                    total += getattr(a, at)
+                    ne += 1
+            if b is not None:
+                b = b.next
+                if b is not None and getattr(b, at) is not None:
+                    total += getattr(b, at)
+                    ne += 1
+
+        smoothed = total / ne
+        # print "Smoothing %s from %s to %s / %i = %s" % (at, getattr(self, at), total, ne, smoothed)
+        setattr(self,  at, smoothed);
+            
+            
+
 ################################ Map class
 
 class Map:
@@ -81,8 +238,12 @@ class Map:
     
         progress("Lat between %f and %f, Long %f and %f" % (minla, maxla, minlo, maxlo))
     
-        pageLong_m = 10.5 * 25.4 / 1000   # Say for 8.5 x 11" US Paper YMMV
-        pageShort_m = 8.0 * 25.4 / 1000     #This is printable
+        #pageLong_m = 10.5 * 25.4 / 1000   # Say for 8.5 x 11" US Paper YMMV
+        #pageShort_m = 8.0 * 25.4 / 1000     #This is printable
+
+        # Not to scale ?!!
+        pageLong_m = 7 * 25.4 / 1000   # Say for 8.5 x 11" US Paper YMMV
+        pageShort_m = 5 * 25.4 / 1000     #This is printable
 
         if svgStream==None: self.wr = sys.stdout.write
         else: self.wr = svgStream.write
@@ -93,6 +254,12 @@ class Map:
         self.midlo = (minlo + maxlo)/2.0
         self.total_m = 0 # Meters
         self.last = None   # (lon, lat, date)
+
+        self.t0 = isodate.parse("2035-01-01T00:00:00Z"); # Initialize to far future @@@ why doesnt 2099 or 2999 work?
+        self.t9 = isodate.parse("1999-01-01T00:00:00Z"); # Initialise to far past
+
+        self.speeds = [];
+#        self.elevations = [];
         
         pi = 3.14159265358979323846 # (say)
         degree = pi/180
@@ -108,6 +275,7 @@ class Map:
         
         self.y_m_per_degree = r_earth * pi /180
         self.x_m_per_degree = self.y_m_per_degree * cos(self.midla*degree)
+        
         progress('Metres per degree: (%f,%f)' % (self.x_m_per_degree, self.y_m_per_degree))
         # OpsenStreetMap Map
         
@@ -247,31 +415,45 @@ class Map:
 #               lon, self.midlo, lon - self.midlo, ((lon - self.midlo) * self.pixels_per_deg_lon)))
         return   ((lon - self.lolo) * self.pixels_per_deg_lon,
                   (self.hila - lat) * self.pixels_per_deg_lat)
-            
-    def startPath(self, lon, lat, date):
+    
+    def startPath(self, point):
+        lon = point.lon
+        lat = point.lat
+        ele = point.ele
+        date = point.date
         x, y = self.deg_to_px(lon, lat)
         self.last = (lon, lat, date)
-        self.walking = 0.0
-        self.wr("  <path   style='fill:none; stroke:red' d='M %f %f " % (x,y))
+        # self.walking = 0.0
+        self.wr("  <path   style='fill:none; stroke:red; stroke-width: 3' d='M %f %f " % (x,y))
 
-    def straightPath(self, lon, lat, date):
+    def straightPath(self, point, last):
+        lon = point.lon
+        lat = point.lat
+        ele = point.ele
+#        date = point.date
+        
         x, y = self.deg_to_px(lon, lat)
         self.wr("L %f %f " % (x,y))
-        lastlon, lastlat, lastdate = self.last
+        lastlon, lastlat, lastdate = last.lon, last.lat, last.date
         dx = (lon-lastlon) * self.x_m_per_degree
         dy = (lat-lastlat) * self.y_m_per_degree
         ds = sqrt(dx*dx + dy*dy)
 
-        t1 = isodate.parse(lastdate)
-        t2 = isodate.parse(date)
-        dt = t2-t1
-        if dt > 0:
-            speed = ds/dt  # m/s
-        else:
-            speed = 0.0  # well, infinity
+#        t1 = last.t
+#        t2 = point.t
+        
+#        if t1 < self.t0: self.t0 = t1
+#        if t2 > self.t9: self.t9 = t2
+        
+#        dt = t2-t1
+#        if dt > 0:
+#            speed = ds/dt  # m/s
+#            kph = speed * 3.6
+#        else:
+#            speed = 0.0  # well, infinity
         # progress('Path length: %sm, speed: %f m/s ' %(`ds`, speed))
-        if speed > 0.5 and speed < 2.0:
-            self.walking += dt
+#        if speed > 0.5 and speed < 2.0:
+#            self.walking += dt
         self.total_m += ds
         self.last = (lon, lat, date)
 
@@ -282,7 +464,7 @@ class Map:
 
     def endPath(self):
         progress('Track length so far:/m: %f' % (self.total_m))
-        progress('Time spent walking/min: %f' % (self.walking/60.0))
+        # progress('Time spent walking/min: %f' % (self.walking/60.0))
         self.wr("'/>\n\n")
 
     def photo(self, uri, lon, lat):
@@ -313,11 +495,10 @@ class Map:
 if __name__ == '__main__':
     import getopt
     verbose = 0
-    gpsData = "." # root of data
-    outputURI = "correlation.n3"
+    # gpsData = "." # root of data
     try:
         opts, args = getopt.getopt(sys.argv[1:], "hvg:o:",
-            ["help",  "verbose", "gpsData=", "output="])
+            ["help",  "verbose", "gpsData=", "timeline=", "speedClimb=", "outputMap=", "smooth="])
     except getopt.GetoptError:
         # print help information and exit:
         print __doc__
@@ -331,45 +512,113 @@ if __name__ == '__main__':
             verbose = 1
         if o in ("-g", "--gpsData"):
             gpsData = a
-        if o in ("-o", "--output"):
-            outputURI = a
 
-    if verbose: progress( "Loading Photo data...")
-    f = load(gpsData  + "/PhotoMeta.n3")
-    if verbose: progress( "Loaded.")
-    ss = f.statementsMatching(pred=FILE.date)
     events = []
-    for s in ss:
-        ph = s.subject()
-        photo = str(ph)
-        date = str(s.object())
-        da = f.any(subj=ph, pred=EXIF.dateTime)
-        if da != None:
-            date = str(da)
-        else:
-            progress("Warning: using file date %s for %s" %(date, photo))
-        events.append((date, "P", (ph, photo)))
-        if verbose: progress("%s: %s" %(date, photo))
-    
-#    photos.sort()
 
+    photoMetaFileName = commandLineArg('photometa');
+    if photoMetaFileName:
+        if verbose: progress( "Loading Photo data..." + photoMetaFileName)
+        f = load(photoMetaFileName)  # Was gpsData  + "/PhotoMeta.n3"
+        if verbose: progress( "Loaded.")
+        
+        ss = f.statementsMatching(pred=FILE.date)
+        for s in ss:
+            ph = s.subject()
+            photo = str(ph)
+            date = str(s.object())
+            da = f.any(subj=ph, pred=EXIF.dateTime)
+            if da != None:
+                date = str(da)
+            else:
+                progress("Warning: using file date %s for %s" %(date, photo))
+            events.append((date, "P", (ph, photo)))
+            if verbose: progress("%s: %s" %(date, photo))
+    
     if verbose: progress( "Loading GPS data...")
-    f = load(gpsData + "/gpsData.n3")
+    f = load(gpsData)
     if verbose: progress( "Loaded.")
     records = f.each(pred=rdf_type, obj=GPS.Record)
     progress( `len(records)`, "records")
-#    trackpoints = []
+
+    firstPoint = None;
+    doTime = True; 
     for record in records:
         tracks = f.each(subj=record, pred=GPS.track)
         progress ("  ", `len(tracks)`, "tracks")
         for track in tracks:
             points = f.each(subj=track, pred=GPS.trackpoint)
             for point in points:
-                t = str(f.the(subj=point, pred=WGS.time))
-                la = str(f.the(subj=point, pred=WGS.lat))
-                lo = str(f.the(subj=point, pred=WGS.long))
-                events.append((t, "T", (la, lo)))
+                date = f.any(subj=point, pred=WGS.time)
+                if date is not None:
+                    date = str(date)
+                la = f.the(subj=point, pred=WGS.lat)
+                lo = f.the(subj=point, pred=WGS.long)
+                ele = f.the(subj=point, pred=WGS.altitude)
+                if ele is not None: ele = float(str(ele));
+                if la is not None: la = float(str(la));
+                if lo is not None: lo = float(str(lo));
+                p = Point(lo, la, ele, date)
+                if date is None:
+                    doTime = False;                    
+                events.append((date, "T", p))
+                if firstPoint is None:
+                    firstPoint = p;
+                else:
+                    lastPoint.next = p
+                    p.last = lastPoint;
+                lastPoint = p;
 
+    point = firstPoint
+    while (point is not None):
+        point.smooth(6, 0.9);
+        point = point.next
+    
+    totalDistance = 0;
+    point = firstPoint
+    while (point is not None):
+        if point.ds is not None:
+            totalDistance += point.ds
+        point = point.next
+
+    if doTime:
+        point = firstPoint
+        while (point is not None):
+            point.difference();
+            point.generateClimb();
+            point = point.next
+        
+        point = firstPoint
+        while (point is not None):
+            point.smoothAttribute('kph', 6, 0.9);
+            point = point.next
+        
+        point = firstPoint
+        while (point is not None):
+            point.smoothAttribute('climb', 6, 0.9);
+            point = point.next
+        
+        point = firstPoint
+        climb_vs_kph = [];
+        totalClimb = 0
+        while (point is not None):
+            point.smoothAttribute('climb', 6, 0.9);
+    #        climb_vs_kph.append([point.climb, point.kph])
+            climb_vs_kph.append([point.kph, point.climb])
+            if point.climb is not None and point.climb > 0:  totalClimb += point.climb
+            if point.ds is not None:
+                totalDistance += point.ds
+            point = point.next
+        elapsed = lastPoint.t - firstPoint.t
+
+        print "Total climb (m)", totalClimb
+        print "Total disance (m)", totalDistance
+        print "Total time (s)", elapsed, elapsed/60
+        print "Average speed", totalDistance/elapsed, "m/s", totalDistance/elapsed * 3.6, "kph"
+    
+        
+    
+    
+    
     events.sort(compareByTime)
     
     last = None
@@ -381,16 +630,16 @@ if __name__ == '__main__':
     minlo, maxlo = 400.0, -400.0
     conclusions = formula()
     for i in range(n):
-        dt, ty, da = events[i]
+        dt, ty, p = events[i]
         if ty == "T": # Trackpoint
             last = i
-            (la, lo) = float(da[0]), float(da[1])
-            if la < minla: minla = la
-            if la > maxla: maxla = la
-            if lo < minlo: minlo = lo
-            if lo > maxlo: maxlo = lo
+            # (la, lo, ele) = float(da[0]), float(da[1]), da[2]
+            if p.lat < minla: minla = p.lat
+            if p.lat > maxla: maxla = p.lat
+            if p.lon < minlo: minlo = p.lon
+            if p.lon > maxlo: maxlo = p.lon
         elif ty == "P":
-            ph, photo = da
+            ph, photo = p
             if last == None:
                 progress("%s: Photo %s  before any trackpoints" %(dt, photo))
                 continue
@@ -403,14 +652,14 @@ if __name__ == '__main__':
                 progress( "%s: Photo %s off the end of trackpoints"% (dt, photo))
                 continue
             t = isodate.parse(dt)
-            dt1, ty1, (la1, lo1) = events[last]
+            dt1, ty1, (la1, lo1, ele1) = events[last]
             lat1, long1 = float(la1), float(lo1)
             t1 = isodate.parse(dt1)
-            dt2, ty2, (la2, lo2) = events[j]
+            dt2, ty2, (la2, lo2, ele2) = events[j]
             lat2, long2 = float(la2), float(lo2)
             t2 = isodate.parse(dt2)
             delta = t2-t1
-            progress( "%s: Photo %s  between trackpoints %s and %s" %(dt, da, dt1, dt2))
+            progress( "%s: Photo %s  between trackpoints %s and %s" %(dt, p, dt1, dt2))
 #           print "    Delta", delta, "seconds between", events[last], "and", events[j]
             a = (t - t1) / (t1-t2)
             lat = lat1 +  a * (lat2-lat1)
@@ -428,36 +677,115 @@ if __name__ == '__main__':
 #           guess = isodate.fullString(...)
 
     progress("Start Output")
-    print conclusions.close().n3String(base=base())
-
-    svgStream = open("map.svg", "w")
-    map = Map(minla, maxla, minlo, maxlo, svgStream=svgStream)
-
-    pathpoint = None
-    for i in range(n):
-        date, ty, da = events[i]
-        if ty == "T": # Trackpoint
-            (la, lo) = float(da[0]), float(da[1])
-            if pathpoint == None:
-                map.startPath(lo, la, date)
-                pathpoint = 1
-            else:
-                map.straightPath(lo, la, date)
-        elif ty == "P":
-            pass
-    map.endPath()
+    # print conclusions.close().n3String(base=base())
 
 
-    for st in conclusions.statementsMatching(pred=GPS.approxLocation):
-        photo = st.subject()
-        loc = st.object()
-        long = conclusions.the(subj=loc, pred=WGS.long)
-        lat = conclusions.the(subj=loc, pred=WGS.lat)
-        progress("Photo %s at lat=%s, long=%s" %(photo.uriref(), lat, long))
-        la, lo = float(lat), float(long)
-        map.photo(photo.uriref(), lo, la)
-    map.close()
-    svgStream.close()
+    mapFN = commandLineArg('outputMap');
+    if mapFN:
+
+        svgStream = open(mapFN, "w")   # Was "map.svg"
+        map = Map(minla, maxla, minlo, maxlo, svgStream=svgStream)
+
+        lastpoint = None
+        for i in range(n):
+            date, ty, point = events[i]
+            if ty == "T": # Trackpoint
+                if lastpoint == None:
+                    map.startPath(point)
+                    lastpoint = point
+                else:
+                    map.straightPath(point, lastpoint)
+            elif ty == "P":
+                pass
+        map.endPath()
+
+
+        for st in conclusions.statementsMatching(pred=GPS.approxLocation):
+            photo = st.subject()
+            loc = st.object()
+            long = conclusions.the(subj=loc, pred=WGS.long)
+            lat = conclusions.the(subj=loc, pred=WGS.lat)
+            progress("Photo %s at lat=%s, long=%s" %(photo.uriref(), lat, long))
+            la, lo = float(lat), float(long)
+            map.photo(photo.uriref(), lo, la)
+        map.close()
+        svgStream.close()
+
+############# Timeline speed vs distance
+
+    from timelineChart import ParallelChart, TimelineChart, TimelineSeries, ScatterSeries, timeArgument
+    
+    chartfn = commandLineArg('timeline');
+    if chartfn:
+
+	startTime = commandLineArg('startTime');
+	if (startTime):
+	    startTime = timeArgument(startTime);
+	else:
+	    startTime = -10e10;
+	
+	endTime = commandLineArg('endTime');
+	if (endTime):
+	    endTime = timeArgument(endTime);
+	else:
+	    endTime = 10e10;
+            
+            
+        def extractAttribute(at):
+            elevations = [];
+            for i in range(len(events)):
+                date, ty, da = events[i]
+                if ty == "T": # Trackpoint
+                    if getattr(da, at) is not None:
+                        elevations.append((da.t, getattr(da, at) ))
+            return elevations
+            
+
+            
+	# The main chart which holds the various series
+	chart = TimelineChart(start = startTime, end = endTime);
+
+
+        # distanceSeries = TimelineSeries(chart, extractAttribute('s'), bottom = 0.65, top = 0.9, color = 'brown');
+ 
+        climbSeries = TimelineSeries(chart, extractAttribute('climb'), bottom = 0.35, top = 0.9, color = 'orange');
+ 
+        speedSeries = TimelineSeries(chart, extractAttribute('kph'), bottom = 0.35, top = 0.9, leftLabels = 25,  color = 'green');
+        
+        elevationSeries = TimelineSeries(chart, extractAttribute('ele'), bottom=0.0, top= 0.3, color = 'blue');
+        
+               
+        # gradeSeries = TimelineSeries(chart, extractAttribute('grade'), bottom=0.35, top= 0.65, color = 'red');
+        
+        # Do grid before data so it goes in the background
+        chart.timeAxis(0); #   @@@ Seconds behind GMT 
+                             
+                                                         
+        # Now draw all graphs:
+        
+        elevationSeries.draw();
+        climbSeries.draw();
+        speedSeries.draw();
+        # distanceSeries.draw();
+        
+        chart.writeFile(chartfn);
+
+######################## Speed vs climb/descent rate
+
+    speedClimbFN = commandLineArg('speedClimb');
+    if speedClimbFN:
+        scChart = ParallelChart(500, 500);
+        speedSeries = ScatterSeries(scChart, climb_vs_kph);
+        speedSeries.draw();
+        scChart.xaxis();
+        scChart.writeFile(speedClimbFN);
+        
+
+
+
+
+######### Elevation even?
+
 
 def min(x, y):
         if x<y: return x

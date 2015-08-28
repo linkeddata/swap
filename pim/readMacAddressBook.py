@@ -156,6 +156,8 @@ MacToVCard = {
     'City': { 'predicate': 'vcard:locality'},
     'State': { 'predicate': 'vcard:region'},
     'ZIP': { 'predicate': 'vcard:postal-code'},
+    'Country': { 'predicate': 'vcard:country-name'},
+    'CountryCode': { 'predicate': 'vcard:country-code'},  #  @@@ Not in current VCARD spec
 };
 
 MacIgnore = [ AddressBook.kABBirthdayComponentsProperty ]
@@ -231,7 +233,7 @@ def URIforGroup(group):
 
 def documentPart(uri):
     d = uri.split('#')[0]
-    sys.stderr.write('docpart ' + d + '\n'); # @@@ debug 
+    # sys.stderr.write('docpart ' + d + '\n'); # @@@ debug 
     return d
 
 def localPart(uri):
@@ -265,13 +267,15 @@ def renderOneGroup(group):
     sv += ' .\n';
     members = group.members();
     print "# Members - ", members.count();
+    lines = []
     for i in range(members.count()):
         item = members[i];
         assert 'Person' in `type(item)`   # This is an assumption we make at the moment @@
         itemUID = item.valueForKey_(AddressBook.kABUIDProperty); 
 #        sv += 'vcard:hasMember <../%s>; # %s\n' % (URIforPerson(item), fullName(item));
-        sv += '<../%s> vcard:fn %s; is vcard:hasMember of <#this>.\n' % (URIforPerson(item), enquote(fullName(item)));
-    return sv + '\n';
+        lines.append('<../%s> vcard:fn %s; is vcard:hasMember of <#this>.' % (URIforPerson(item), enquote(fullName(item))));
+    lines.sort();  # maintainstability for source code control
+    return sv + '\n'.join(lines) + '\n';
 
 def renderGroupName(group):
     sv = ' a vcard:Group;\n';
@@ -383,6 +387,18 @@ def renderValue(p, a, lab = None):
     elif '__NSTaggedDate' in `type(a)` or '__NSDate' in `type(a)`:
         d = unicode(a);  # Looks like "2014-08-14 17:18:36 +0000"
         return '"%sT%s%s"^^xsd:dateTime' % (d[0:10], d[11:19], d[20:25]) # Missing tag info?
+        
+    elif 'NSDateComponents' in `type(a)`:
+        u = unicode(a)
+#        sys.stderr.write('@@@NSDateComponents - %s: unicode "%s"; python "%s"\n' % (type(a), u,`a`))
+#        sys.stderr.write('  year "%s"\n' % (a.valueForKey_('year')))
+#        sys.stderr.write('  month "%s"\n' % (a.valueForKey_('month')))
+#        sys.stderr.write('  day "%s"\n' % (a.valueForKey_('day')))
+        sv =  '"%04d-%02d-%02d"^^xsd:date' % (a.valueForKey_('year'), a.valueForKey_('month'), a.valueForKey_('day')) 
+        sys.stderr.write('  NSDateComponents Check Result: %s\n' % (sv))
+        return  sv;
+
+        
     elif type(a) is AddressBook.ABMultiValueCoreDataWrapper:
         sv = ''
         for i in range(a.count()):
@@ -393,14 +409,16 @@ def renderValue(p, a, lab = None):
                 sv += ',\n';
 #            sv += '\n';
         return sv
+
     else:
-        return 'Error unknown type - give up - %s: ' % type(a) + `a`
+        sys.stderr.write( 'Error unknown type - give up - %s.\n' % type(a) + `a`)
+        sys.exit(1);
 
 def fileNameFromURI(root, uri):
     return (root + documentPart(uri)).encode('utf-8');
 
 def writeOutFile(group, uri, root, tail):
-    sys.stderr.write('uri '+`uri` + '\n')
+    # sys.stderr.write('uri '+`uri` + '\n')
     filename = fileNameFromURI(root, uri);
     opf = open(filename, 'w')
     op = codecs.getwriter('utf-8')(opf)
@@ -411,11 +429,11 @@ def writeOutFile(group, uri, root, tail):
     op.close();
     opf.close();
 
-def writeOutSummaryFile(book, root):
+def writeOutSummaryFile(book, root, bookTitle):
 
     #////////////////////  List of all people just name and email
     uri = 'people.ttl';
-    sys.stderr.write('uri '+`uri` + '\n')
+    # sys.stderr.write('uri '+`uri` + '\n')
     filename = fileNameFromURI(root, uri);
     opf = open(filename, 'w')
     op = codecs.getwriter('utf-8')(opf)
@@ -423,9 +441,11 @@ def writeOutSummaryFile(book, root):
     
     abList = book.people()
     op.write("# people: %i\n" % len(abList));
+    entries = []
     for person in abList:
-        op.write( '<%s> vcard:inAddressBook <book.ttl#this>;\n' % URIforPerson(person) + renderNameAndEmail(person) );
-    op.write('\n');  # just to be sure
+        entries.append( '<%s> vcard:inAddressBook <book.ttl#this>;\n' % URIforPerson(person) + renderNameAndEmail(person));
+    entries.sort(); # maintain stability of file under small changes
+    op.write('\n'.join(entries) + '\n\n');  # just to be sure
     op.close();
     opf.close();
 
@@ -437,9 +457,11 @@ def writeOutSummaryFile(book, root):
     op = codecs.getwriter('utf-8')(opf)
     op.write(prefixes());
     op.write("# groups: %i\n" % len(book.groups()));
+    entries = []
     for group in book.groups():
-        op.write( '<%s> is vcard:includesGroup of <book.ttl#this>;\n' % URIforGroup(group)  + renderGroupName(group) );
-    op.write('\n');  # just to be sure
+        entries.append( '<%s> is vcard:includesGroup of <book.ttl#this>;\n' % URIforGroup(group)  + renderGroupName(group) );
+    entries.sort()
+    op.write('\n'.join(entries) + '\n');  # just to be sure
     op.close();
     opf.close();
     
@@ -450,8 +472,11 @@ def writeOutSummaryFile(book, root):
     opf = open(filename, 'w')
     op = codecs.getwriter('utf-8')(opf)
     op.write(prefixes());
-    op.write('<#this> vcard:nameEmailIndex <people.ttl>; \n'); # @@ squatting
-    op.write('        vcard:groupIndex <groups.ttl>. \n')
+    op.write('<#this> a vcard:AddressBook;\n'); # @@ squatting
+    if bookTitle is not None:
+        op.write('    dc:title """%s"""; \n' % bookTitle);
+    op.write('    vcard:nameEmailIndex <people.ttl>; \n'); # @@ squatting
+    op.write('    vcard:groupIndex <groups.ttl>. \n\n') # @@ squatting
     op.write('\n');  # just to be sure
     op.close();
     opf.close();
@@ -465,16 +490,23 @@ def writeOutSummaryFile(book, root):
 
 def usage():
   """Displays the command line syntax information for the application."""
-  print """Usage:
-	python2.7 readAddressBook.py [args] >  ab.n3
-        pythpn2.7 readAddressBook.py -d=  -g -a -s
+  print """Example usage:
+  
+    Extract my business card:
+    
+	python2.7 readAddressBook.py --me >  me.n3
+        
+    Make a tree of linked data pf the whole address book:
+    
+        pythpn2.7 readAddressBook.py --all ---distribute=
 
 Arguments:
 	-h, --help		Show this help.
         -m   --me               Dump just my own bsuiness card 
-	-a, --all		Use all people in the address book
-        -g,  --groups           Dump the groups
+        -g,  --groups           convert the groups
+        -p,  --people           convert the cards
         -s,  --summary          Create linked summary files {book,groups,people}.ttl
+	-a, --all		same as --people --groups --summary
 	-d x, --distribute=x	Use x as the prefix for a file tree to be writtn.
                                 Blank   (--distribute= )means this local directory
 
@@ -495,9 +527,11 @@ def main(argv):
     doGroups = False
     doSummary = False;
     doDistribute = False
-    distributeRoot = None               
+    distributeRoot = None
+    bookTitle = None;             
     try:
-          opts, args = getopt.getopt(argv, "amgsfe:hd:i:r", ["all", "me", "summary", "groups", "foaf", "exclude=", "help", "distribute=", "include=", "relationships"])
+          opts, args = getopt.getopt(argv, "apmgsfe:hd:t:i:r",
+            ["all", "people", "me", "summary", "groups", "foaf", "exclude=", "help", "distribute=", "title=", "include=", "relationships"])
     except getopt.GetoptError:
           usage()
           sys.exit(2)
@@ -508,11 +542,17 @@ def main(argv):
         elif opt in ("-d", "--distribute"):                
             doDistribute = True
             distributeRoot = arg               
+        elif opt in ("-t", "--title"):                
+            bookTitle = arg
         elif opt in ("-e", "--exclude"):
             global globalExcFile
             globalExcFile = arg
-        elif opt in ("-a", "--all"):
+        elif opt in ("-p", "--people"):
             doAllPeople = True
+        elif opt in ("-a", "--all"):
+            doSummary = True
+            doAllPeople = True
+            doGroups = True
         elif opt in ("-g", "--groups"):
             doGroups = True
         elif opt in ("-s", "--summary"):
@@ -531,6 +571,14 @@ def main(argv):
 
     # Get the shared address book.
     book = AddressBook.ABAddressBook.sharedAddressBook()
+    
+    if not book:
+        print """ERROR can't access address book: """ + `book`
+        print """Check in the System Preferences Security & Privacy pane,
+        in the Privcay tab, in the Contacts section, that you have allowed Terminal App
+        access to your contacts."""
+        sys.exit(1)
+        
 
     # Find out the 'me' entry.
     me = book.me()
@@ -546,7 +594,7 @@ def main(argv):
     # print book.groups()
     
     if doSummary:
-        writeOutSummaryFile(book, distributeRoot);
+        writeOutSummaryFile(book, distributeRoot, bookTitle);
         
 
     if doGroups:
