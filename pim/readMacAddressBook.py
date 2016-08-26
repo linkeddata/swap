@@ -10,10 +10,10 @@
 
 # Todo:
 # done Generate full name
-# - do hasName 
+# - do hasName
 # - option for different name order
 # done figure out relations
-# 
+#
 
 # For programmer reference:
 # Useful keys:
@@ -27,7 +27,7 @@ import PIL
 from PIL import Image
 
 import sha
-import sys, codecs
+import sys, codecs, os
 import getopt
 
 global globalExcFile
@@ -37,7 +37,7 @@ global globalIncFile
 global globalRels
 global globalIDList
 
-globalIDList = {} 
+globalIDList = {}
 globalExcFile = ""
 globalIncFile = False
 globalUseFOAF = False
@@ -130,7 +130,7 @@ addressKeys = [
 
 MacToVCard = {
     'Birthday': { 'predicate': 'vcard:anniversary'},
-    'Email': { 'predicate': 'vcard:hasEmail', 'uriScheme' : 'mailto:'}, 
+    'Email': { 'predicate': 'vcard:hasEmail', 'uriScheme' : 'mailto:'},
     'Address': { 'predicate': 'vcard:hasAddress'},  #  @@@  Add 'has' automatically where object property?
     'Creation': { 'predicate': 'dc:created'},
     'GroupName': { 'predicate': 'vcard:fn'},
@@ -150,8 +150,8 @@ MacToVCard = {
     'Middle': { 'predicate': 'vcard:additional-name', 'path': 'vcard:hasName' },
     'Last': { 'predicate': 'vcard:family-name', 'path': 'vcard:hasName' },
     'Suffix': { 'predicate': 'vcard:honorific-suffix', 'path': 'vcard:hasName' },
-    
-# Sub parts of address:    
+
+# Sub parts of address:
     'Street': { 'predicate': 'vcard:street-address'},
     'City': { 'predicate': 'vcard:locality'},
     'State': { 'predicate': 'vcard:region'},
@@ -176,25 +176,16 @@ emailRelated = [
 
 def prefixes():
   """Spit out the RDF etc. at the start of a FOAF file.
-removed: 
-@prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#>.
-@prefix airport: <http://www.daml.org/2001/10/html/airport-ont#>. 
-@prefix pos: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
-# @prefix trust: <http://trust.mindswap.org/on/trust.owl#>.
-@prefix owl: <http://www.w3.org/2002/07/owl#>.
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
-@prefix foaf: <http://xmlns.com/foaf/0.1/>.
 """
-  return """@prefix vcard: <http://www.w3.org/2006/vcard/ns#>. 
-@prefix ab: <http://www.w3.org/ns/pim/ab#>. 
+  return """@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
+@prefix ab: <http://www.w3.org/ns/pim/ab#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
 
 """
-  
+
 def enquote(s):
-    t = s.replace('\\', '\\\\').replace('"', "\\\"") 
+    t = s.replace('\\', '\\\\').replace('"', "\\\"")
     if '\n' in s:
         return '"""' + t + '"""'
     return '"' + t + '"'
@@ -206,35 +197,33 @@ def cleanLabel(lab):
         if ch in 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789':
             res += ch;
     return 'vcard:' + res;
-    
+
 def translatePredicate(mac):
     map = MacToVCard.get(mac, None );
-    if map is None: return 'ab:' + mac; 
+    if map is None: return 'ab:' + mac;
     return map['predicate'];
 
 def targetURIscheme(mac):
     map = MacToVCard.get(mac, None );
-    if map is None: return None; 
+    if map is None: return None;
     return map.get('uriScheme', None);
 
 def URIforPerson(person):
     itemUID = person.valueForKey_(AddressBook.kABUIDProperty);
-    return unicode('Person/%s.ttl#this' % (uuid(person)[-12:]))
+    return unicode('Person/%s/index.ttl#this' % (uuid(person)))
 
 def URIforPersonPhoto(person):
     itemUID = person.valueForKey_(AddressBook.kABUIDProperty);
-    return unicode('Person/%s-image.png' % (uuid(person)[-12:]))
+    return unicode('Person/%s/image.png' % (uuid(person)))
 
-    
+
 def URIforGroup(group):
 #    return 'Groups/%s.ttl#this' % uuid(group)
-    name = unicode(group.valueForKey_('GroupName')).replace(' ', '_');
-    return 'Group/%s.ttl#this' % name
+    name = unicode(group.valueForKey_('GroupName')).replace(' ', '_').replace('__', '_');
+    return 'Group/%s/index.ttl#this' % name
 
 def documentPart(uri):
-    d = uri.split('#')[0]
-    # sys.stderr.write('docpart ' + d + '\n'); # @@@ debug 
-    return d
+    return uri.split('#')[0]
 
 def localPart(uri):
     return uri.split('#')[1]
@@ -250,6 +239,10 @@ def fullName(person):
         if name is not None:
             if len(sv) > 0: sv += ' ';
             sv += name;
+    if sv == '':
+        sv = person.valueForKey_('Organization'); # hack
+        if (sv is None):
+            sv = ''
     return sv
 
 def renderComplexName(person):
@@ -271,9 +264,12 @@ def renderOneGroup(group):
     for i in range(members.count()):
         item = members[i];
         assert 'Person' in `type(item)`   # This is an assumption we make at the moment @@
-        itemUID = item.valueForKey_(AddressBook.kABUIDProperty); 
-#        sv += 'vcard:hasMember <../%s>; # %s\n' % (URIforPerson(item), fullName(item));
-        lines.append('<../%s> vcard:fn %s; is vcard:hasMember of <#this>.' % (URIforPerson(item), enquote(fullName(item))));
+        itemUID = item.valueForKey_(AddressBook.kABUIDProperty);
+        webid = getWebid(item)
+        if webid:
+            lines.append('<%s> vcard:fn %s; is vcard:hasMember of <#this>; = <../../%s> .' % (webid, enquote(fullName(item)), URIforPerson(item)));
+        else:
+            lines.append('<../../%s> vcard:fn %s; is vcard:hasMember of <#this>.' % (URIforPerson(item), enquote(fullName(item))));
     lines.sort();  # maintainstability for source code control
     return sv + '\n'.join(lines) + '\n';
 
@@ -285,11 +281,19 @@ def renderGroupName(group):
     sv += ' .\n';
     return sv
 
+def cardClass(s):
+    if s.valueForKey_('ABPersonFlags') == 1:
+        return 'Organization'
+    else:
+        return 'Individual'
+
 
 def renderOnePerson(s):
-    # sys.stderr.write(uuid(s)+ '\n'); # @@@ debug 
-    
-    sv = ' a vcard:Individual; vcard:fn %s;\n' % enquote(fullName(s));
+    # sys.stderr.write(uuid(s)+ '\n'); # @@@ debug
+    if s.valueForKey_('ABPersonFlags') == 1:
+        sv = ' a vcard:Organization; vcard:fn %s;\n' % enquote(fullName(s));
+    else:
+        sv = ' a vcard:Individual; vcard:fn %s;\n' % enquote(fullName(s));
     sv += renderComplexName(s);
 
     image = s.imageData();
@@ -302,9 +306,34 @@ def renderOnePerson(s):
             sv +=  renderPropertyAndValue(s, p);
     if sv[-2:] == ';\n': return sv[:-2] + '.\n'
     return sv + '.\n';
-    
+
+def getWebid(s):
+    p = AddressBook.kABURLsProperty
+    v = s.valueForProperty_(p)
+    if v is None: return None
+    a = v
+    if type(a) is AddressBook.ABMultiValueCoreDataWrapper:
+        for i in range(a.count()):
+            v = (a.valueAtIndex_(i))
+            label = (a.labelAtIndex_(i));
+            lab2 = cleanLabel(label)
+            # print "# Label " + `label`
+            if lab2.lower() == 'vcard:webid':  # Decision: be case-tolerant
+                if type(v) is objc.pyobjc_unicode:
+                    # print "# URL is unicode: " +  enquote(v)
+                    return enquote(v)
+                else:
+                    raise "  Bad URL type: " + `type(v)`
+            else:
+                pass
+                # print "# Still looking ", lab2
+        return None
+    else:
+        raise "Wrong type for webid URL: ", type(a)
+
+
 def renderNameAndEmail(s):
-    sv = ' a vcard:Individual; vcard:fn %s;\n' % enquote(fullName(s));
+    sv = ' a vcard:%s; vcard:fn %s;\n' % (cardClass(s), enquote(fullName(s)));
     for p in emailRelated:
         sv +=  renderPropertyAndValue(s, p);
     if sv[-2:] == ';\n': return sv[:-2] + '.\n'
@@ -315,20 +344,20 @@ def writeOutImage(s, root):
     if image is not None:
         l = image.length();
         tempFileName = ',temp.tiff'
-        sys.stderr.write('URIforPersonPhoto(s) '+`URIforPersonPhoto(s)` + '\n')
+        # sys.stderr.write('URIforPersonPhoto(s) '+`URIforPersonPhoto(s)` + '\n')
 
         fn = fileNameFromURI(URIforPersonPhoto(s), root);
-#        sys.stderr.write('fn ' + fn + '\n'); # @@@ debug 
+#        sys.stderr.write('fn ' + fn + '\n'); # @@@ debug
         #ni = NXImage.
 #        imgRep = image.representations().objectAtIndex_(0)
 #        data = imgRep.representationUsingType_properties_(NSPNGFileType, null);
-        
+
         tempFile = open(tempFileName, 'w')
         a = array.array('B');
         for i in range(l):   # kludge @@ make space
             a.append(0)
         image.getBytes_length_(a, l)
-        sys.stderr.write('length of image:' + `len(a)` + '\n'); # @@@ debug 
+        # sys.stderr.write('length of image:' + `len(a)` + '\n'); # @@@ debug
         a.tofile(tempFile);
         tempFile.close();
 
@@ -364,7 +393,7 @@ def renderValue(p, a, lab = None):
 
     if (lab):  # All other types must built bnode
         return '[ a %s; vcard:value %s]' % (cleanLabel(lab), renderValue(p, a, None))
-    
+
     if type(a) is objc.pyobjc_unicode:
         scheme = targetURIscheme(p);
         u = unicode(a);
@@ -378,27 +407,27 @@ def renderValue(p, a, lab = None):
                     if opener >= 0:
                         u = u[opener+1 : closer]
             return '<%s%s>' % (scheme, u)
-                        
+
         return  enquote(u);
-        
+
     if type(a) is objc._pythonify.OC_PythonInt:
         return unicode(int(a));
-        
+
     elif '__NSTaggedDate' in `type(a)` or '__NSDate' in `type(a)`:
         d = unicode(a);  # Looks like "2014-08-14 17:18:36 +0000"
         return '"%sT%s%s"^^xsd:dateTime' % (d[0:10], d[11:19], d[20:25]) # Missing tag info?
-        
+
     elif 'NSDateComponents' in `type(a)`:
         u = unicode(a)
 #        sys.stderr.write('@@@NSDateComponents - %s: unicode "%s"; python "%s"\n' % (type(a), u,`a`))
 #        sys.stderr.write('  year "%s"\n' % (a.valueForKey_('year')))
 #        sys.stderr.write('  month "%s"\n' % (a.valueForKey_('month')))
 #        sys.stderr.write('  day "%s"\n' % (a.valueForKey_('day')))
-        sv =  '"%04d-%02d-%02d"^^xsd:date' % (a.valueForKey_('year'), a.valueForKey_('month'), a.valueForKey_('day')) 
+        sv =  '"%04d-%02d-%02d"^^xsd:date' % (a.valueForKey_('year'), a.valueForKey_('month'), a.valueForKey_('day'))
         sys.stderr.write('  NSDateComponents Check Result: %s\n' % (sv))
         return  sv;
 
-        
+
     elif type(a) is AddressBook.ABMultiValueCoreDataWrapper:
         sv = ''
         for i in range(a.count()):
@@ -420,6 +449,12 @@ def fileNameFromURI(root, uri):
 def writeOutFile(group, uri, root, tail):
     # sys.stderr.write('uri '+`uri` + '\n')
     filename = fileNameFromURI(root, uri);
+    if not os.path.exists(os.path.dirname(filename)):
+        try:
+            os.makedirs(os.path.dirname(filename))
+        except OSError as exc: # Guard against race condition
+            if exc.errno != errno.EEXIST:
+                raise "Can't make directory " + os.path.dirname(filename)
     opf = open(filename, 'w')
     op = codecs.getwriter('utf-8')(opf)
     op.write(prefixes());
@@ -438,12 +473,12 @@ def writeOutSummaryFile(book, root, bookTitle):
     opf = open(filename, 'w')
     op = codecs.getwriter('utf-8')(opf)
     op.write(prefixes());
-    
+
     abList = book.people()
     op.write("# people: %i\n" % len(abList));
     entries = []
     for person in abList:
-        entries.append( '<%s> vcard:inAddressBook <book.ttl#this>;\n' % URIforPerson(person) + renderNameAndEmail(person));
+        entries.append( '<%s> vcard:inAddressBook <index.ttl#this>;\n' % URIforPerson(person) + renderNameAndEmail(person));
     entries.sort(); # maintain stability of file under small changes
     op.write('\n'.join(entries) + '\n\n');  # just to be sure
     op.close();
@@ -459,14 +494,14 @@ def writeOutSummaryFile(book, root, bookTitle):
     op.write("# groups: %i\n" % len(book.groups()));
     entries = []
     for group in book.groups():
-        entries.append( '<%s> is vcard:includesGroup of <book.ttl#this>;\n' % URIforGroup(group)  + renderGroupName(group) );
+        entries.append( '<%s> is vcard:includesGroup of <index.ttl#this>;\n' % URIforGroup(group)  + renderGroupName(group) );
     entries.sort()
     op.write('\n'.join(entries) + '\n');  # just to be sure
     op.close();
     opf.close();
-    
+
     #//////////////////////// Master book file
-    uri = 'book.ttl';
+    uri = 'index.ttl';
     sys.stderr.write('uri '+`uri` + '\n')
     filename = fileNameFromURI(root, uri);
     opf = open(filename, 'w')
@@ -474,13 +509,13 @@ def writeOutSummaryFile(book, root, bookTitle):
     op.write(prefixes());
     op.write('<#this> a vcard:AddressBook;\n'); # @@ squatting
     if bookTitle is not None:
-        op.write('    dc:title """%s"""; \n' % bookTitle);
+        op.write('    vcard:fn """%s"""; \n' % bookTitle);
     op.write('    vcard:nameEmailIndex <people.ttl>; \n'); # @@ squatting
     op.write('    vcard:groupIndex <groups.ttl>. \n\n') # @@ squatting
     op.write('\n');  # just to be sure
     op.close();
     opf.close();
-    
+
 
 
 
@@ -491,18 +526,18 @@ def writeOutSummaryFile(book, root, bookTitle):
 def usage():
   """Displays the command line syntax information for the application."""
   print """Example usage:
-  
+
     Extract my business card:
-    
+
 	python2.7 readAddressBook.py --me >  me.n3
-        
+
     Make a tree of linked data pf the whole address book:
-    
+
         pythpn2.7 readAddressBook.py --all ---distribute=
 
 Arguments:
 	-h, --help		Show this help.
-        -m   --me               Dump just my own bsuiness card 
+        -m   --me               Dump just my own bsuiness card
         -g,  --groups           convert the groups
         -p,  --people           convert the cards
         -s,  --summary          Create linked summary files {book,groups,people}.ttl
@@ -528,25 +563,28 @@ def main(argv):
     doSummary = False;
     doDistribute = False
     distributeRoot = None
-    bookTitle = None;             
+    doImages = True
+    bookTitle = None;
     try:
-          opts, args = getopt.getopt(argv, "apmgsfe:hd:t:i:r",
-            ["all", "people", "me", "summary", "groups", "foaf", "exclude=", "help", "distribute=", "title=", "include=", "relationships"])
+          opts, args = getopt.getopt(argv, "apmngsfe:hd:t:i:r",
+            ["all", "people", "me", "noImages", "summary", "groups", "foaf", "exclude=", "help", "distribute=", "title=", "include=", "relationships"])
     except getopt.GetoptError:
           usage()
           sys.exit(2)
-    for opt, arg in opts:                
-        if opt in ("-h", "--help"):      
-            usage()                     
-            sys.exit()                  
-        elif opt in ("-d", "--distribute"):                
+    for opt, arg in opts:
+        if opt in ("-h", "--help"):
+            usage()
+            sys.exit()
+        elif opt in ("-d", "--distribute"):
             doDistribute = True
-            distributeRoot = arg               
-        elif opt in ("-t", "--title"):                
+            distributeRoot = arg
+        elif opt in ("-t", "--title"):
             bookTitle = arg
         elif opt in ("-e", "--exclude"):
             global globalExcFile
             globalExcFile = arg
+        elif opt in ("-n", "--noImages"):
+            doImages = False
         elif opt in ("-p", "--people"):
             doAllPeople = True
         elif opt in ("-a", "--all"):
@@ -561,24 +599,31 @@ def main(argv):
             doMe = True
         elif opt in ("-d", "--foaf"):
             globalUseFOAF = True
-        elif opt in ("-i", "--include"): 
+        elif opt in ("-i", "--include"):
             global globalIncFile
             globalIncFile = arg
         elif opt in ("-r", "--relationships"):
             global globalRels
             globalRels = True
 
+# WE need PIL to process images because we prefer to convert the MAC-native TIFF
+# format for images to the web-happier PNG format.
+# http://pillow.readthedocs.io/en/3.1.x/reference/Image.html
+
+    if doImages:
+        import PIL
+        from PIL import Image
 
     # Get the shared address book.
     book = AddressBook.ABAddressBook.sharedAddressBook()
-    
+
     if not book:
         print """ERROR can't access address book: """ + `book`
         print """Check in the System Preferences Security & Privacy pane,
         in the Privcay tab, in the Contacts section, that you have allowed Terminal App
         access to your contacts."""
         sys.exit(1)
-        
+
 
     # Find out the 'me' entry.
     me = book.me()
@@ -586,16 +631,16 @@ def main(argv):
     if not me:
         print """You haven't marked an entry as yourself."""
         sys.exit(1)
-        
-    
-    
+
+
+
     # For doing the whole address book:
     # abList = book.people()
     # print book.groups()
-    
+
     if doSummary:
         writeOutSummaryFile(book, distributeRoot, bookTitle);
-        
+
 
     if doGroups:
         # print book.groups();
@@ -615,13 +660,15 @@ def main(argv):
             for person in abList:
                 writeOutFile(person, URIforPerson(person),
                             distributeRoot, renderOnePerson(person));
-                writeOutImage(person, distributeRoot);
+                if doImages:
+                    writeOutImage(person, distributeRoot);
         else:
             print prefixes();
             for person in abList:
                 print '<%s> ' % URIforPerson(person) + renderOnePerson(person);
 
     elif doMe:
+        print "# my webid: ", getWebid(me)
         if doDistribute:
             writeOutFile(me, URIforPerson(me),
                         distributeRoot, renderOnePerson(me));
@@ -629,7 +676,7 @@ def main(argv):
         else:
             print prefixes();
             print '<#me> = <%s>;\n' % URIforPerson(me)  + renderOnePerson(me);
-        
+
 
 # Do the normal main/arguments processing.
 if __name__ == "__main__":
@@ -638,4 +685,3 @@ if __name__ == "__main__":
     main(sys.argv[1:])
 
 #ends
-
