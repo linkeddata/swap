@@ -321,7 +321,7 @@ def getWebid(s):
             if lab2.lower() == 'vcard:webid':  # Decision: be case-tolerant
                 if type(v) is objc.pyobjc_unicode:
                     # print "# URL is unicode: " +  enquote(v)
-                    return enquote(v)
+                    return v
                 else:
                     raise "  Bad URL type: " + `type(v)`
             else:
