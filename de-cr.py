@@ -1,5 +1,11 @@
 #!/usr/bin/python
 #
+#   Sanitize a source file, data file etc
+#
+#  Unix uses LF by itself and no CR for lines.
+#  Null characters are  a bad idea as it makes e,g, hg treat a file as binary file.
+#  You can get the by pasing junk from say a pdf file into a HTML input field.
+#
 import sys
 import string
 import os
@@ -10,14 +16,19 @@ def strip(path):
     If the file does not contain a CR, don't touch it"""
     global nochange
     global verbose
+    global ascii
+    global allowZeroes
+    global nulls
     crs = 0
     total = 0
     newlines = 0
 
     input = open(path, "r")
     buf = input.read()  # Read the file
+    if not ascii:
+	buf = buf.decode('utf8')
     input.close()
-    if buf.find("\r") >=0:
+    if buf.find("\r") >=0 or buf.find("\0") >=0:
         if not nochange:
             temporary = path + ".decr-temp"
             output = open(temporary, "w")
@@ -25,7 +36,11 @@ def strip(path):
         for i in range(n):
 	    c = buf[i]
             if c != "\r" :
-                if not nochange: output.write(c)
+		if c == "\0" and not allowZeroes:
+		    nulls += 1
+		    continue
+                if not nochange:
+		    output.write(c.encode('utf8'))
                 total = total + 1
             else:
                 crs = crs + 1
@@ -36,13 +51,13 @@ def strip(path):
             output.close()
             os.rename(temporary, path)
         
-    if crs > 0 or verbose:
+    if crs > 0 or nulls > 0 or verbose:
         if nochange:
-            sys.stderr.write("de-cr: %i CRs found, %i needed LFs, %i non-cr characters in %s.\n"%(
-			crs, newlines, total, path))
+            sys.stderr.write("de-cr: %i CRs found, %i needed LFs, %i nulls, %i non-cr non-null characters in %s.\n"%(
+			crs, newlines, nulls, total, path))
         else:
-            sys.stderr.write("de-cr: %i CRs removed, %i LFs inserted, %i non-CR characters left in %s.\n"%(
-			crs, newlines, total, path))
+            sys.stderr.write("de-cr: %i CRs removed, %i LFs inserted, %i nulls, %i non-CR non-null characters left in %s.\n"%(
+			crs, newlines, nulls, total, path))
 
 
 def do(path):
@@ -63,20 +78,28 @@ def do(path):
 recursive = 0
 nochange = 1
 verbose = 0
+ascii = 0
+allowZeroes = 0
 doall = 0
 files = []
+nulls = 0
 
 for arg in sys.argv[1:]:
     if arg[0:1] == "-":
         if arg == "-r": recursive = 1    # Recursive
         elif arg == "-a": doall = 1   # Fix
         elif arg == "-f": nochange = 0   # Fix
+        elif arg == "-ascii": ascii = 1   # don't use UTF8 just ascii
+        elif arg == "-0": allowZeroes = 1   # allow nulls in output
+	
         elif arg == "-v": verbose = 1   # Tell me even about files which were ok
         else:
             print """Bad option argument.
             -r  recursive
             -a  do all files, not just .n3 .py and .rdf
             -f  fix files instead of just looking
+	    -ascii use ascii not UTF8
+	    -0  allow null characters
 
 This program restores a file to standard unix LF conventions
 for line end.  It removes CR characters, inserting a new LF to
