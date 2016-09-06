@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #
 """Print web URIs for files
-            
+
 To make this work:
 Put a .web_base file in the highest directory of a tree exported to the
 web giving the web address of the pace that directory is exported to.
@@ -58,8 +58,8 @@ if files == []:
 for path in files:
     abs = os.path.abspath(path)
     if verbose: print "# abs = "+abs
-    basedir, base = baseDirBase(abs)
+    basedir, newbase = baseDirBase(abs)
     if basedir:
-        print urllib.quote(abs.replace(basedir, base), ".:/")
+        print urllib.quote(abs.replace(basedir, newbase), ".:/#")
 
 #ends
