@@ -141,7 +141,7 @@ def internalCheck():
 
         date = str(kb.the(subj=x, pred=qu.date))
         if len(kb.each(subj=x, pred=qu.in_USD)) != 1:
-            progress("Ignoring !=1 amount transaction %s" % x)
+            progress("Ignoring !=1 date transaction %s" % x)
             continue
         amount = float(str(kb.the(subj=x, pred=qu.in_USD)))
         for y in transactions:
@@ -459,10 +459,10 @@ def doCommand(startDate, endDate, inputURIs=["/dev/stdin"],totalsFilename=None):
                 if sup in bottomCats:
                     bottomCats.remove(sup)
         if len(bottomCats) == 0:
-           noteError("No categoriy: %s  for <%s>"  # all cats: %s, raw cats:%s"
-                        %(`cats`, `s`))  #  ,`cats`, `kb.each(subj=s, pred=rdf.type)`)
+           noteError("No categoriy:  for <%s>"  # all cats: %s, raw cats:%s"
+                        %(`s`))  #  ,`cats`, `kb.each(subj=s, pred=rdf.type)`)
         elif bottomCats[0] not in bottomCategories and (bottomCats[0] not in [ qu.UnclassifiedIncome, qu.UnclassifiedOutgoing]):
-           noteError("Be more specifc: %s for <%s>"  %(`bottomCats[0]`, `s`)) # Won't get shown e.g. in year-cat.html
+           noteError("Be more specific: %s for <%s>"  %(`bottomCats[0]`, `s`)) # Won't get shown e.g. in year-cat.html
         if len(bottomCats) > 1:
            noteError("Inconsistent categories: %s"  # all cats: %s, raw cats:%s"
                         %(`bottomCats`))  #  ,`cats`, `kb.each(subj=s, pred=rdf.type)`)

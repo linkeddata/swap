@@ -19,7 +19,7 @@ from sys import argv
 def getArg(key):
     for i in range(len(argv)):
         if argv[i] == key and i+1 < len(argv):
-            return argv[1+1]
+            return argv[i+1]
     return None;
 
 class Turtleizer():
@@ -31,7 +31,7 @@ class Turtleizer():
         self.outs.write(str + '\n');
         
     def toTurtle(self, x, level = 0):
-        indent = '  ' * level;
+        indent = '    ' * level;
         if level == 0:
             ns = getArg('-namespace');
             if ns:
