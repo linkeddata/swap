@@ -259,7 +259,7 @@ def renderOneGroup(group):
             sv +=  renderPropertyAndValue(group, p);
     sv += ' .\n';
     members = group.members();
-    print "# Members - ", members.count();
+    # print "# Members - ", members.count();
     lines = []
     for i in range(members.count()):
         item = members[i];
@@ -298,7 +298,7 @@ def renderOnePerson(s):
 
     image = s.imageData();
     if image is not None:
-        sv += ' vcard:hasPhoto <../%s>;\n' % URIforPersonPhoto(s);
+        sv += ' vcard:hasPhoto <../../%s>;\n' % URIforPersonPhoto(s);
 
 
     for p in defaultPersonProperties + defaultRecordCreationProperties:
@@ -398,6 +398,7 @@ def renderValue(p, a, lab = None):
         scheme = targetURIscheme(p);
         u = unicode(a);
         if scheme is not None:
+            u.replace(" ", "") # beware of spaces in telephone numbers etc
             if scheme == 'urn:uuid': # like B6DD6A45-DF5B-4859-81A0-EFE29E4613D2:ABPerson
                 return '<%s%s>' % (scheme, unicode(a).split(':')[0])
             if scheme == 'mailto:':

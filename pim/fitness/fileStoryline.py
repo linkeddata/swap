@@ -1,10 +1,11 @@
+
 #   File jason files away by date
 #
 import sys, os
 for fn in  sys.argv[1:]:
     buf = open(fn).read()
     y = buf.find('"date"')
-    assert y >= 0 
+    assert y >= 0
     colon = buf.find(':', y);
     assert colon >= 0
     quote = buf.find('"', colon);
@@ -12,6 +13,6 @@ for fn in  sys.argv[1:]:
     print da
     dir = "~/Documents/%s/%s/%s" % (da[0:4], da[4:6], da[6:8]);
 #    command = 'mkdir -p %s; mv %s %s/%s; hg add  %s/%s ' % (dir,fn, dir, 'jsonstoryline.json');
-    command = 'mkdir -p %s; mv %s %s/%s; hg add  %s/%s ' % (dir,fn, dir, fn);
+    command = 'mkdir -p %s; mv -i %s %s/%s; hg add  %s ' % (dir,fn, dir, fn, dir);
     print command
     os.system(command)

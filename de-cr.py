@@ -19,9 +19,11 @@ def strip(path):
     global ascii
     global allowZeroes
     global nulls
+    global lineNumbers
     crs = 0
     total = 0
     newlines = 0
+    lines = 0
 
     input = open(path, "r")
     buf = input.read()  # Read the file
@@ -32,25 +34,30 @@ def strip(path):
         if not nochange:
             temporary = path + ".decr-temp"
             output = open(temporary, "w")
-	n = len(buf)
-        for i in range(n):
-	    c = buf[i]
-            if c != "\r" :
-		if c == "\0" and not allowZeroes:
-		    nulls += 1
-		    continue
-                if not nochange:
-		    output.write(c.encode('utf8'))
-                total = total + 1
-            else:
-                crs = crs + 1
-		if i < n-1 and buf[i+1] != "\n":
-		    newlines += 1
-		    if not nochange: output.write("\n")
+    n = len(buf)
+    for i in range(n):
+        c = buf[i]
+        if c == "\r" :
+            crs = crs + 1
+            if lineNumbers:
+                print "CR at ", lines
+            if i < n-1 and buf[i+1] != "\n":
+                newlines += 1
+                if not nochange: output.write("\n")
+        else:
+            if c == "\0" and not allowZeroes:
+                nulls += 1
+                continue
+            if not nochange:
+                output.write(c.encode('utf8'))
+            total = total + 1
+            if c == "\n":
+                lines += 1
+
         if not nochange:
             output.close()
             os.rename(temporary, path)
-        
+
     if crs > 0 or nulls > 0 or verbose:
         if nochange:
             sys.stderr.write("de-cr: %i CRs found, %i needed LFs, %i nulls, %i non-cr non-null characters in %s.\n"%(
@@ -68,11 +75,11 @@ def do(path):
             for name in os.listdir(path):
                 do(path + "/" + name)
     else:
-        if doall or path[-3:] == ".n3" or path[-4:] == ".rdf" or path[-3:] == ".py":
+        if doall or path.endswith(".n3") or  path[-3:] == ".js" or path[-4:] == ".rdf" or path[-3:] == ".py":
             strip(path)
         else:
             sys.stderr.write("de-cr: skipping "+path+"\n")
-        
+
 ######################################## Main program
 
 recursive = 0
@@ -83,15 +90,17 @@ allowZeroes = 0
 doall = 0
 files = []
 nulls = 0
+lineNumbers = 0
 
 for arg in sys.argv[1:]:
     if arg[0:1] == "-":
         if arg == "-r": recursive = 1    # Recursive
-        elif arg == "-a": doall = 1   # Fix
-        elif arg == "-f": nochange = 0   # Fix
+        elif arg == "-a": doall = 1   # not just .n3 .rdf .py
+        elif arg == "-n": lineNumbers = 1 # Print lf line numbers where CRs are
+        elif arg == "-f": nochange = 0   # Modify the file
         elif arg == "-ascii": ascii = 1   # don't use UTF8 just ascii
         elif arg == "-0": allowZeroes = 1   # allow nulls in output
-	
+
         elif arg == "-v": verbose = 1   # Tell me even about files which were ok
         else:
             print """Bad option argument.

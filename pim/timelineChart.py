@@ -456,7 +456,7 @@ class ParallelChart:
 	scale = int(log(x)/log(10)  + 0.00001)  # In case bad rounding
 	level = int(scale / 3);
 	suffix = ['n', 'µ', 'm', '', 'k', 'M', 'G', 'T'][level+3];
-	x2 = x /(10**(level*3));
+	x2 = x /(10.0**(level*3));
 	if x2 == int(x2): return "%d%s" % (x2, suffix) # @@ need Approx
 	s = ("%f" % x2)
 	if level != 0:

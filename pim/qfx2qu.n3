@@ -1,5 +1,5 @@
 #  n3
-# 
+#
 #  Convert new OFX concepts back to old boring QIF ones
 #
 #  This takes the output of (for example) qfx2n3.py - an OFX-standard
@@ -22,6 +22,7 @@
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
 @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
 @prefix string: <http://www.w3.org/2000/10/swap/string#>.
 @prefix math: <http://www.w3.org/2000/10/swap/math#>.
 @prefix os: <http://www.w3.org/2000/10/swap/os#>.
@@ -37,7 +38,17 @@
 
 @forAll :a, :b, :d, :i, :l, :m, :n, :p, :r, :s, :t, :x.
 
+########## Link to annotations file
 
+{
+ ?source ofx:OFX  ?ofx.
+?source  log:uri ?u.
+(?u "(^.*/)[^/]*$") string:scrape ?dir.
+( ?dir "annotations.n3") string:concatenation ?u2 .
+?annot log:uri ?u2 .
+} => {
+?source qu:annotationStore ?annot.
+} .
 
 ########## Rule for getting credit card account:
 #
@@ -60,8 +71,8 @@
 #              ];   # FI
 #	];   # SONRS
 #    ];   # SIGNONMSGSRSV1
-	    
-	
+
+
    ofx:CREDITCARDMSGSRSV1[
        ofx:CCSTMTTRNRS  [
            ofx:CCSTMTRS  [
@@ -81,12 +92,12 @@
     ?lab is string:concatenation of ( "CCARD_" ?a4 ).
     ?account 	log:uri [is os:baseAbsolute of
 		    [is string:concatenation of ( "acc#CCARD_" ?a4 )]].
-	
+
 } log:implies {
    :x	qu:listForAccount ?account;
 	qu:payeeField ofx:NAME;   # New version
 	qu:sourceDocument :s.
-	
+
    ?account   ofx:ACCTID ?a4;
         qu:currencyCode ?currency;
 	 # Extending their ontology by inventing an account type for consistency
@@ -113,13 +124,13 @@
                         ]]]].
 
 # Construct a unique identifier for account which will match
-# between different statements: 
+# between different statements:
 
     (:a ".*(....)") string:scrape ?a4. # Last 4 digits only
     ?lab is string:concatenation of ( :l ?a4 ).
     ?account 	log:uri [is os:baseAbsolute of
 		    [is string:concatenation of ( "acc#" :b "_" :a )]].
-	
+
 } => {
    :x	qu:listForAccount ?account;
 	qu:payeeField ofx:NAME;   # New version
@@ -131,7 +142,7 @@
 }.
 
 
-########### ORIGINAL pre-2005-06 rule: 
+########### ORIGINAL pre-2005-06 rule:
 {
 :s ofx:OFX  [
    ofx:BANKMSGSRSV1[
@@ -151,12 +162,12 @@
 
     ?account 	log:uri [is os:baseAbsolute of
 		    [is string:concatenation of ( "acc#" :b "_" :a )]].
-	
+
 } log:implies {
    :x	qu:listForAccount ?account;
 	qu:payeeField ofx:MEMO;  # Old version
 	qu:sourceDocument :s.
-	
+
    ?account   ofx:ACCTID :a;
         ofx:ACCTTYPE :l;  s:label :l;
         ofx:BANKID :b.
@@ -170,7 +181,7 @@
 # We use NAME as that is what there is, while before
 # we used MEMO which was in practice a longer version of NAME.
 #
-# We used to put URIs of transactions in aocmmon space by year but then we got clashes between two 
+# We used to put URIs of transactions in aocmmon space by year but then we got clashes between two
 # CC statments for dfferent accounts as their FIT was just (date, serialthatday).
 #
 
@@ -180,13 +191,13 @@
    ofx:FITID    :i;
    ?p           :m;
    ofx:TRNAMT   :x .
-   
+
    :i crypto:sha ?id.
    :s log:uri ?filename.
 #   (?filename "([A-Za-z0-9-_]*)") string:scrape ?base.
    :r log:uri [is os:baseAbsolute of
 	[is string:concatenation of ( ?filename "#" ?id  )]].
-#   ofx:TRNTYPE  :t 
+#   ofx:TRNTYPE  :t
 } log:implies {
 :r  qu:toAccount ?account ;
    qu:date :d;
@@ -208,7 +219,7 @@
 #   (?filename "([A-Za-z0-9-_]*)") string:scrape ?base.
    :r log:uri [is os:baseAbsolute of
 	[is string:concatenation of ( ?filename "#" ?id  )]].
-#   ofx:TRNTYPE  :t 
+#   ofx:TRNTYPE  :t
 } log:implies {
 :r  qu:number :x .
 }.
@@ -247,6 +258,6 @@
 # }.
 
 
-   
+
 
 #ends
