@@ -10,9 +10,9 @@ Also a bunch of programs for converting things into and out of RDF.
 
 See the home pages of:
 
-- [The SWAP project](http://linkeddata.github.io/swap//Overview.html)
-- [The CWM program](http://linkeddata.github.io/swap/doc/cwm.html)
-- [Examples of things we did](hhttp://linkeddata.github.io/swap/Examples.html)
+- [The SWAP project](https://linkeddata.github.io/swap//Overview.html)
+- [The CWM program](https://linkeddata.github.io/swap/doc/cwm.html)
+- [Examples of things we did](https://linkeddata.github.io/swap/Examples.html)
 
 Those pages are not maintained.
 
