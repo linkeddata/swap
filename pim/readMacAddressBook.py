@@ -398,7 +398,9 @@ def renderValue(p, a, lab = None):
         scheme = targetURIscheme(p);
         u = unicode(a);
         if scheme is not None:
-            u.replace(" ", "") # beware of spaces in telephone numbers etc
+            u = u.replace(" ", "") # beware of spaces in telephone numbers etc
+            if scheme == 'tel:':
+                u = u.replace('(', '-').replace(')', '-').replace('--', '-')
             if scheme == 'urn:uuid': # like B6DD6A45-DF5B-4859-81A0-EFE29E4613D2:ABPerson
                 return '<%s%s>' % (scheme, unicode(a).split(':')[0])
             if scheme == 'mailto:':
