@@ -13,7 +13,7 @@ If ommitted the namepsace reverts to the local namespace of the file.
 import json, sys, codecs
 from sys import argv
 
-#from swap import 
+#from swap import
 
 
 def getArg(key):
@@ -22,6 +22,9 @@ def getArg(key):
             return argv[i+1]
     return None;
 
+def encodeString(str):
+    return str.replace('\\', '\\\\"').replace('"', '\\"')
+
 class Turtleizer():
     def __init__(self, outFp):
         self.outs = outFp;
@@ -29,7 +32,7 @@ class Turtleizer():
 
     def writeln(self, str):
         self.outs.write(str + '\n');
-        
+
     def toTurtle(self, x, level = 0):
         indent = '    ' * level;
         if level == 0:
@@ -37,7 +40,7 @@ class Turtleizer():
             if ns:
                 self.writeln('@prefix : <%s#>.' % ns); # Note arg WITHOUT THE HASH
             self.writeln('<> :value ');
-        
+
         # self.writeln(indent + '#' + `x`[:30])
         if type(x) == type([]):
             self.writeln(indent + '(');
@@ -52,7 +55,7 @@ class Turtleizer():
                 self.writeln(indent + ';')
             self.writeln(indent + ']');
         elif type(x) == type(u''):
-            self.writeln('"""' + x.replace('"', '\\"') + '"""')
+            self.writeln('"""' + encodeString(x) + '"""')
         elif x == None:
             self.writeln(indent + `()`);
         elif `x` == 'True':
@@ -73,6 +76,3 @@ ttl = Turtleizer(outFile);
 ttl.toTurtle(inFile);
 
 # print `foo`;
-
-
-

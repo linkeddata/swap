@@ -4,7 +4,7 @@
  MS Outlook export of contact files.
  Hacked again to allow input from XHTML files for BoA mortgage page 2012
  To parse HTML files use "tidy -asxml" first.
- 
+
  Runtime options:
 
     -comma          Use comma as delimited instead of tab
@@ -12,7 +12,7 @@
     -sheet          Read the XML sheet file from an unzipped Excel .xlsx file
     -stringTableFileName foo  gives the string table XML file for excel
     -id             Generate sequential URIs for the items described by each row
-    -reverse        Generate the URIs in reverse order (e.g for reve chron order) 
+    -reverse        Generate the URIs in reverse order (e.g for reve chron order)
     -startId        With -id, start ids at this number (default 0) eg -startId 1
     -idfield        Use column 'id' to form the URI for each item
     -type           Declare each thing as of a type <#Item>.
@@ -20,7 +20,7 @@
     -schema         Generate a little RDF schema
     -nostrip        Do not strip empty cells
     -help           Display this message and exit.
-    
+
 This is or was http://www.w3.org/2000/10/swap/tab2n3.py
 It is open source under the W3C software license.
 http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231
@@ -43,7 +43,7 @@ def info(s):
 class DataTable(list):
     """An array of rows in a 2-d table whch has also
     column headings etc"""
-    
+
     def __init__(self):
         self.tab = {}
         self.col = -1
@@ -53,27 +53,27 @@ class DataTable(list):
         self.headings, self.tips = [], []
         self.cellType = ''
         self.kludge = 0; # Kludge: we are following a <br>
-        
+
         self.htmlTags = {
-            'table':    ['table'], 
+            'table':    ['table'],
             'row':      ['tr'],
-            'cell':     [ 'td', 'th' ] 
+            'cell':     [ 'td', 'th' ]
         }
         self.sheetTags = {
-            'table':    ['sheetdata'], 
+            'table':    ['sheetdata'],
             'row':      ['row'],
-            'cell':     [ 'c', ] 
+            'cell':     [ 'c', ]
         }
- 
+
 #  Unzipped Excel spreadsheet
-          
+
     def parseSheet(self, infile, stringTableFile):
         self.parseSharedStringTable(stringTableFile);
         tree = etree.parse(infile);
         root = tree.getroot();
         self.doElement(root, self.sheetTags, None)
         self.cleanup()
-        
+
         print self.diagnosticString()
         print 'self:', self
         return;
@@ -89,29 +89,29 @@ class DataTable(list):
             assert si.tag.split('}')[1] == 'si'
             t = si[0]
             assert t.tag.split('}')[1] == 't'
-            if t.text: 
+            if t.text:
                 self.shortStrings.append(t.text)
-                print "Short string %i:" % count, t.text 
+                print "Short string %i:" % count, t.text
             else:
                 self.shortStrings.append('')
             count += 1
 
 #  XHTML (or spreadsheet XML)
-          
+
     def parseXHTML(self, infile):
         tree = etree.parse(infile);
         root = tree.getroot();
         self.doElement(root, self.htmlTags, None);
         self.cleanup()
         return;
-   
+
     def pokeString(self, s, hide):
         print "Pokestring at %i,%i " % (self.row, self.col), s
         if self.row >= -1 and self.col >= 0:
             s = s.strip()
             if self.row > 0:
                 self[self.row][self.col] += s;
-            else:   # tr th p span   or    tr th span 
+            else:   # tr th p span   or    tr th span
                 if not hide:
                     if len(self.headings) < self.col + self.kludge + 1:
                         self.headings.append('')
@@ -121,7 +121,7 @@ class DataTable(list):
                     self.tips[self.col] += s;
 
     def doElement(self, e, tags, parent, level=0, hide = 0):
-        
+
         def newColumn():
             self.col += 1
             if self.col >= self.numberOfColumns: self.numberOfColumns = self.col + 1
@@ -139,13 +139,13 @@ class DataTable(list):
             self.row += 1;
             self.append([]);
             self.col = -1;
-            
+
         elif tag in tags['cell']: #   or (tag =='br' and col >= 0):
 
             self.cellType = tag
             newColumn()
             print "         column ", self.col
-            
+
         elif tag == 'br':
             self.kludge = 1  #  A break moves temporarily to the next stacked column
 
@@ -159,10 +159,10 @@ class DataTable(list):
             else:
                 print parent.tag, parent.attrib,  e.tag, e.attrib, e.text
                 assert False
- 
+
         #   Now poke any text content into the array:
-        
-        if tag != 'v' and (e.text) : self.pokeString(e.text, hide);        
+
+        if tag != 'v' and (e.text) : self.pokeString(e.text, hide);
 
         # Child elements
 
@@ -170,12 +170,13 @@ class DataTable(list):
             self.doElement(x, tags, e, level+1, hide or e.attrib.get('class',"") == 'hide')
 
         if (e.tail) :
-            print "Tail ", e.tail
-            self.pokeString(e.tail, hide);        
+            # print "Tail ", e.tail
+            # self.pokeString(e.tail, hide);
+            pass
 
         #  End tag actions:
 
-        self.kludge = 0;        
+        self.kludge = 0;
         if tag == 'table':
             self.row = self.col = -1;
         if e.attrib.get('class',"") == 'row-top' and not hide:  # BoA special
@@ -209,7 +210,7 @@ class DataTable(list):
     # Column headings can have newlines embedded
     def sanitize(self,s):
         return s.replace('\n', ' ')
-                
+
     def sanitizeID(self, s):
         res = ""
         for ch in s:
@@ -221,7 +222,7 @@ class DataTable(list):
         while res[-1:] == '_':
             res = res[:-1]
         return res
-        
+
 
     def readTabs(self, delim, inFp):
         result = []
@@ -234,7 +235,7 @@ class DataTable(list):
         while 1: # Next field
             if l == "":
                 result.append('') # Final empty field
-                return result  
+                return result
 
             if l[0] == '"':  # Is this a quoted string?
                 l = l[1:]  # Chop leading quote
@@ -255,7 +256,7 @@ class DataTable(list):
                                 l = l[1:]  # redundancy: tab follows quote
                             else:
                                 raise "CSV parse error: No tab after close quote: "+l;
-                                
+
                         break
                     else:  # Notterminated on this line
                         result[-1] = result[-1] + l + "\n" # wot no loop?
@@ -272,9 +273,9 @@ class DataTable(list):
                 else:
                     result.append(l)
                     return result           # end of values
-         
+
     def readCSV(self, inFP, delim):
-        
+
         self.headings = [ "" ];
 
         while len(self.headings) <2: # Hack for fidelity files which have pre-heading items
@@ -295,12 +296,12 @@ class DataTable(list):
             self.append(values);
             lineNo = lineNo + 1;
         return
-        
+
     def generateTurtle(self, argv, namespace):
         records = 0
-        
+
         # Convert headings into Predicates:
-        
+
         labels = []
         for i in range(0,len(self.headings)):
             h = self.headings[i]
@@ -309,8 +310,8 @@ class DataTable(list):
             #for j in range(0,len(h)):
             #    if h[j] not in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_":
             #        self.headings[i] = self.headings[i][:j] + "_" + self.headings[i] [j+1:]
-            self.headings[i] = self.headings[i][:1].lower() + self.headings[i][1:] # Predicates initial lower case 
-                    
+            self.headings[i] = self.headings[i][:1].lower() + self.headings[i][1:] # Predicates initial lower case
+
         if namespace: self.outln( "@prefix : <%s>." % namespace);
         if "-schema" in argv[1:]:
             self.outln( "# Schema");
@@ -323,7 +324,7 @@ class DataTable(list):
                 if i < len(self.tips) and self.tips[i]: self.outln( '; rdfs:comment """'+self.tips[i]+'"""')
                 self.outln( ".");
             self.outln('');
-     
+
 
         lastId = None;
 
@@ -362,9 +363,9 @@ class DataTable(list):
                     thisId =  "<#n%i>" % (rowNumber + self.idOffset)
                 elif  "-idfield" in argv[1:]:
                     thidId = "<#n%s>" % this_id;
-                    
+
                 if thisId != '[]' and lastId and '-next' in argv[1:]:
-                    self.outln( '  %s :next %s .' % (lastId, thisId)); 
+                    self.outln( '  %s :next %s .' % (lastId, thisId));
                 self.outln( thisId + str);
                 lastId = thisId;
 
@@ -372,11 +373,11 @@ class DataTable(list):
 
     def outln(self, s):
         self.outFP.write(s + '\n');
-    
+
     def convert(self, argv, inFP, outFP):
-        
+
         # Command line args:
-        
+
         self.outFP = outFP
 
         namespace = None;
@@ -384,17 +385,17 @@ class DataTable(list):
             if argv[i+1] == '-namespace': namespace = argv[i+2] + '#'
             if argv[i+1] == '-startId': self.idOffset = int(argv[i+2])
             if argv[i+1] == '-sheet': self.sheetRootFileName = argv[i+2]
-            
-                
+
+
         if "-help" in argv[1:]:
             info( __doc__);
             return
-            
+
         if "-comma" in argv[1:]:
             delim = ','
         else:
             delim = '\t'
-            
+
         if "-sheet" in argv[1:]:
             sheetFile = open(self.sheetRootFileName + '/worksheets/sheet1.xml');
             sstFile = open(self.sheetRootFileName + '/sharedStrings.xml');
@@ -405,7 +406,7 @@ class DataTable(list):
             self.readCSV(inFP, delim);
         self.generateTurtle(argv, namespace);
         return
-    
+
 
 t = DataTable();
 t.convert(sys.argv, sys.stdin, sys.stdout);

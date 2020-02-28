@@ -1,7 +1,7 @@
 
 // Convert mime mail message to HTML for viewing
 //
-//  Usage:    node mail2n3js 
+//  Usage:    node mail2n3js
 var fs = require('fs');
 var mp = require('mailparser');
 var message = fs.readFileSync(process.argv[2], 'utf8');
@@ -35,19 +35,21 @@ var mimeToTurtle = function(tree, id) {
     var i;
     s += '<'+id+'> ';
         for (i=0; i<tree.headers.length; i++) {
-            s += header2property(tree.headers[i].key) + ' ' +
-                    encodeString(tree.headers[i].value) + ';\n';
+            if (tree.headers[i].value !== undefined) {
+              s += header2property(tree.headers[i].key) + ' ' +
+                      encodeString(tree.headers[i].value) + ';\n';
+            }
         }
     s += '.\n # headers done';
     s += '#  tree.childNodes.length: ' +tree.childNodes.length;
-    
+
     if (tree.meta.contentType == 'multipart/alternative') {
-    
+
     } else if  (tree.meta.contentType == 'text/plain') {
-        s += '\n  <'+id+'>  mail:content """'+tree.content+'""".\n\n'; 
+        s += '\n  <'+id+'>  mail:content """'+tree.content+'""".\n\n';
     } else if  (tree.meta.contentType.slice(0,9) == 'text/html') {
-        s += '\n  <'+id+'>  mail:content """'+tree.content+'"""^^<http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral>.\n\n'; 
-    
+        s += '\n  <'+id+'>  mail:content """'+tree.content+'"""^^<http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral>.\n\n';
+
     }
     for (var j=0; j < tree.childNodes.length;  j++) {
         var id2 =  id + '_' + next++;
@@ -56,4 +58,3 @@ var mimeToTurtle = function(tree, id) {
     }
     return s;
 }
-
