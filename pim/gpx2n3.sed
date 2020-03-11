@@ -1,5 +1,5 @@
 1i\
-@prefix gps: <http://hackdiary.com/ns/gps#> . \
+@prefix gps: <http://www.w3.org/ns/pim/gpx#> . \
 @prefix wgs84: <http://www.w3.org/2003/01/geo/wgs84_pos#> .\
 \
 <#ThisRecord> a gps:Record;\
@@ -22,4 +22,3 @@ s?</gpx>?. #?
 #/<[A-Za-z]*>.*<\/[A-Za-z]*>/d
 /#$/!d
 s/#$//
-

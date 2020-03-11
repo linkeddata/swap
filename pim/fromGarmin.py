@@ -8,7 +8,7 @@ Options:
  -t     --tracks         Get tracks from the GPS
  -w     --waypoints      Get waypoints from the GPS
  -h     --help           Print this message
- 
+
 If neither --tracks or --waypoints are asked for, nothing will happen.
 
 This is an RDF application.
@@ -40,8 +40,8 @@ from garmin import Win32SerialLink, Garmin, UnixSerialLink, degrees, TimeEpoch, 
 
 RDF = Namespace(RDF_NS_URI)
 # RDFS = Namespace("http://www.w3.org/2000/01/rdf-schema#")
-GPS = Namespace("http://hackdiary.com/ns/gps#")
-bind("gps", "http://hackdiary.com/ns/gps#")  # Suggest as prefix in RDF file
+GPS = Namespace("http://www.w3.org/ns/pim/gpx#")
+bind("gps", "http://www.w3.org/ns/pim/gpx#")  # Suggest as prefix in RDF file
 WGS =  Namespace("http://www.w3.org/2003/01/geo/wgs84_pos#")
 bind("wgs84",  "http://www.w3.org/2003/01/geo/wgs84_pos#")
 
@@ -62,7 +62,7 @@ def doCommand(serialDevice=None, outputURI=None, doTracks=1, doWaypoints=1, verb
       if not serialDevice:  serialDevice =  "/dev/ttyS0"
 #      serialDevice =  "/dev/cu.USA19H191P1.1"
       phys = UnixSerialLink(serialDevice)
-      
+
    gps = Garmin(phys)
 
    print "GPS Product ID: %d Descriptions: %s Software version: %2.2f" % \
@@ -71,7 +71,7 @@ def doCommand(serialDevice=None, outputURI=None, doTracks=1, doWaypoints=1, verb
 
    f = formula() # Empty store of RDF data
    base = uripath.base()
-   
+
    record = f.newBlankNode()
    f.add(record, RDF.type, GPS.Record)
 
@@ -124,15 +124,15 @@ def doCommand(serialDevice=None, outputURI=None, doTracks=1, doWaypoints=1, verb
         op.write(s)
         op.close()
    else:
-        print s 
+        print s
 
 
-        
+
 ############################################################ Main program
 
 def usage():
     print __doc__
-        
+
 if __name__ == '__main__':
     import getopt
     verbose = 0
@@ -164,4 +164,3 @@ if __name__ == '__main__':
 
     doCommand(serialDevice=deviceName, outputURI=outputURI, doTracks=doTracks,
                 doWaypoints=doWaypoints, verbose=verbose)
-

@@ -6,8 +6,8 @@ options:
 --help      -h
 --gpsData   -g   dir    Input file directory containing gpsData.n3 and Photometa.n3
 --timeline       file   Output file for timeline
---startTIme      datetime  Ignore things before this  
---endTIme        datetime  Ignore things on or after this  
+--startTIme      datetime  Ignore things before this
+--endTIme        datetime  Ignore things on or after this
 --outputMap      file   Output file for SVG map
 --speedClimb     file   Output SVG file for spped vs climb rate scatter plot
 --verbose   -v
@@ -18,8 +18,9 @@ is or was https://github.com/linkeddata/swap/pim/day.py
 
 # Regular python library
 import os, sys, time
-from math import sin, cos, tan, sqrt
+from math import sin, cos, tan, sqrt, log
 from urllib import urlopen
+import requests
 
 # SWAP  https://github.com/linkeddata/swap
 from swap import myStore, diag, uripath, notation3, isodate
@@ -42,8 +43,8 @@ from swap import  isodate  # for isodate.fullString
 
 RDF = Namespace(RDF_NS_URI)
 # RDFS = Namespace("http://www.w3.org/2000/01/rdf-schema#")
-GPS = Namespace("http://hackdiary.com/ns/gps#")
-bind("gps", "http://hackdiary.com/ns/gps#")  # Suggest as prefix in RDF file
+GPS = Namespace("http://www.w3.org/ns/pim/gpx#")
+bind("gps", "http://www.w3.org/ns/pim/gpx#")  # Suggest as prefix in RDF file
 WGS =  Namespace("http://www.w3.org/2003/01/geo/wgs84_pos#")
 bind("wgs84",  "http://www.w3.org/2003/01/geo/wgs84_pos#")
 
@@ -55,7 +56,7 @@ monthName= ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct"
 
 rdf_type = RDF.type
 
- 
+
 def compareByTime(a, b):
     if a[0] < b[0]: return -1
     if a[0] > b[0]: return +1
@@ -94,14 +95,14 @@ class Point:
         degree = pi/180
         # r_earth = 6400000.0 # (say) meters
         phi = self.lat * degree
-        
+
         # See http://en.wikipedia.org/wiki/Earth_radius
         a = 6.378137e6 # m
         b = 6.3567523e6 #m
         r_earth = sqrt(  ((a*a*cos(phi))**2 + ((a*a*sin(phi)))**2)/
                         ((a*cos(phi))**2 + ((a*sin(phi)))**2))
         # print "Local radius of earth = ", r_earth
-        
+
         self.y_m_per_degree = r_earth * pi /180
         self.x_m_per_degree = self.y_m_per_degree * cos(self.lat*degree)
 
@@ -117,29 +118,29 @@ class Point:
         if date is not None:
 
             self.t = isodate.parse(date); ###
-            
+
             self.kph = None
             self.mps = None
             self.dt = None
             self.climb   = 0.0
-        
-        
+
+
         # print "Point= ", self.date, self.t, ele
 
 
-        
+
     def difference(self):
         if self.last is None: return;
         last = self.last;
-        
+
         dx = (self.lon - last.lon) * self.x_m_per_degree
         dy = (self.lat - last.lat) * self.y_m_per_degree
         self.ds = sqrt(dx*dx + dy*dy)
-        
+
         self.s = last.s + self.ds
-        
+
         self.dt = self.t - last.t
-        
+
         if self.dt > 0:
             self.mps = self.ds/self.dt  # m/s
             self.kph = self.mps * 3.6
@@ -150,17 +151,17 @@ class Point:
             self.dz = 0
         if self.ele is None:
             self.ele = last.ele;  #  Assume when missing ele values
-        
+
         if self.ds != 0:
             self.grade = self.dz / self.ds
-        
+
         # print "Point diff ", self.date, self.ds, self.dt, self.kph, self.dz, self.grade
-        
+
     def generateClimb(self):
         if self.dt is not None and self.dt != 0:
             self.climb = self.dz / self.dt
-        
-        
+
+
 
     def smooth(self, n, alpha): # eg 2, 0.7
         a = b = self;
@@ -174,7 +175,7 @@ class Point:
             if a.ele is not None:
                 ele += a.ele
                 ne += 1;
-            
+
             b = b.next
             if b is None: return
             lat += b.lat
@@ -185,7 +186,7 @@ class Point:
         lat = lat / n / 2
         lon = lon / n / 2
         ele = ele / ne
-        
+
         self.lat = alpha * lat + (1-alpha) * self.lat;
         self.lon = alpha * lon + (1-alpha) * self.lon;
         if ne > 0:
@@ -194,7 +195,7 @@ class Point:
             else:
                 self.ele = alpha * ele + (1-alpha) * self.ele;
         #print "Smoothing ", self.date, ne, ele
-    
+
     # Do this to kph, climb etc AFTER the speeds have been worked out
     def smoothAttribute(self, at, n, alpha): # eg 4, 0.7
         a = b = self;
@@ -218,14 +219,14 @@ class Point:
         smoothed = total / ne
         # print "Smoothing %s from %s to %s / %i = %s" % (at, getattr(self, at), total, ne, smoothed)
         setattr(self,  at, smoothed);
-            
-            
+
+
 
 ################################ Map class
 
 class Map:
     def __init__(self, minla, maxla, minlo, maxlo, svgStream=None):
-    
+
         def getSize(s, atr):
             i = s.find(atr+'="') + len(atr) + 2
             val = ""
@@ -235,9 +236,9 @@ class Map:
             x = int(val)
             progress("Found attribute %s=%i" %(atr,x))
             return x
-    
+
         progress("Lat between %f and %f, Long %f and %f" % (minla, maxla, minlo, maxlo))
-    
+
         #pageLong_m = 10.5 * 25.4 / 1000   # Say for 8.5 x 11" US Paper YMMV
         #pageShort_m = 8.0 * 25.4 / 1000     #This is printable
 
@@ -247,9 +248,9 @@ class Map:
 
         if svgStream==None: self.wr = sys.stdout.write
         else: self.wr = svgStream.write
-        
+
         self.marks = []  # List of marks on the map to avoid overlap
-        
+
         self.midla = (minla + maxla)/2.0
         self.midlo = (minlo + maxlo)/2.0
         self.total_m = 0 # Meters
@@ -260,25 +261,25 @@ class Map:
 
         self.speeds = [];
 #        self.elevations = [];
-        
+
         pi = 3.14159265358979323846 # (say)
         degree = pi/180
         # r_earth = 6400000.0 # (say) meters
         phi = self.midla * degree
-        
+
         # See http://en.wikipedia.org/wiki/Earth_radius
         a = 6.378137e6 # m
         b = 6.3567523e6 #m
         r_earth = sqrt(  ((a*a*cos(phi))**2 + ((a*a*sin(phi)))**2)/
                         ((a*cos(phi))**2 + ((a*sin(phi)))**2))
         print "Local radius of earth = ", r_earth
-        
+
         self.y_m_per_degree = r_earth * pi /180
         self.x_m_per_degree = self.y_m_per_degree * cos(self.midla*degree)
-        
+
         progress('Metres per degree: (%f,%f)' % (self.x_m_per_degree, self.y_m_per_degree))
         # OpsenStreetMap Map
-        
+
         hila = maxla + (maxla - minla) * 0.1  # Make  margins an extra 10% all round
         hilo = maxlo + (maxlo - minlo) * 0.1
         lola = minla - (maxla - minla) * 0.1
@@ -286,7 +287,7 @@ class Map:
 
         subtended_x = (hilo - lolo) * self.x_m_per_degree
         subtended_y = (hila - lola) * self.y_m_per_degree
-        
+
 
         progress("Area subtended  %f (E-W)  %f (N-S) meters" %(subtended_x, subtended_y))
 
@@ -300,7 +301,7 @@ class Map:
                 osmScale = subtended_x/pageShort_m
                 hila = self.midla + 0.5 * (pageLong_m * osmScale/self.y_m_per_degree)
                 lola = self.midla - 0.5 * (pageLong_m * osmScale/self.y_m_per_degree)
-            
+
         else:
             if subtended_x / pageLong_m >  subtended_y/pageShort_m:  # constrained by long width
                 osmScale = subtended_x / pageLong_m
@@ -310,28 +311,42 @@ class Map:
                 osmScale = subtended_y/pageShort_m
                 hilo = self.midlo + 0.5 * (pageLong_m * osmScale/self.x_m_per_degree)
                 lolo = self.midlo - 0.5 * (pageLong_m * osmScale/self.x_m_per_degree)
+        progress("OSM scale: %f" % osmScale)
+        zoom = 20 - log(osmScale/500, 2)
+        progress("float zoom: %f" % zoom)
+        zoomLevel = int(zoom)
+        progress("float zoom: %i" % zoomLevel)
+
 
         progress("Area subtended  %f (E-W)  %f (N-S) meters" %(subtended_x, subtended_y))
+
+        pizelsPerAtZ20ATEquator = 156412.0
 
         # osmScale = 10000  # say
         #self.pixels_per_m = 122.94/25.4 * 1000 / osmScale  # pixels per metre on the ground - dpi was 120 now 123
         #self.pixels_per_m = 85 /25.4 * 1000 / osmScale #  Calculating this doesn't sem to work -- lets look at the actual map
         #self.page_x = (hilo-lolo) * self.x_m_per_degree * self.pixels_per_m
         #self.page_y = (hila-lola) * self.y_m_per_degree * self.pixels_per_m
-        
+
         layers = 'C'; # Cyclemap
-        
+
         # Like http://tile.openstreetmap.org/cgi-bin/export?bbox=-71.2118,42.42694,-71.19273,42.44086&scale=25000&format=svg
 #        OSM_URI = ("http://tile.openstreetmap.org/cgi-bin/export?bbox=%f,%f,%f,%f&scale=%i&format=svg" % (lolo, lola, hilo, hila, osmScale))
 #        OSM_URI = ("http://render.openstreetmap.org/cgi-bin/export?bbox=%f,%f,%f,%f&scale=%i&format=svg" % (lolo, lola, hilo, hila, osmScale))
         OSM_URI = ("http://render.openstreetmap.org/cgi-bin/export?bbox=%f,%f,%f,%f&scale=%i&format=svg&layers=%s" % (lolo, lola, hilo, hila, osmScale, layers))
-        progress("FYI OSM map at: ", OSM_URI)
+        progress("Batch OSM map at: ", OSM_URI)
+        interactiveMapUri = "https://openstreetmap.org/#map=%i/%f/%f&layers=C" % (zoom, (lola + hila)/2.0, (lolo + hilo)/2.0)
+        progress("Interactive OSM map at: ", interactiveMapUri)
+
         try:
             pass
             #saveAs(OSM_URI, "background-map.svg")
-            osmStream = urlopen(OSM_URI)
-            osmData = osmStream.read()  # Beware of server overloaded errors
-            osmStream.close
+            if false:
+                osmStream = urlopen(OSM_URI)
+                osmData = osmStream.read()  # Beware of server overloaded errors
+                osmStream.close
+            else:
+                osmData = requests.get(OSM_URI, cookies={"_osm_totp_token": "102462"}, headers={'User-Agent': 'Mozilla/5.0'}).text
 
         except IOError:
             progress("Unable to get OSM map")
@@ -354,9 +369,9 @@ class Map:
         self.pixels_per_deg_lon = self.page_x / (hilo-lolo)
 #        self.pixels_per_deg_lat = self.pixels_per_m * r_earth * pi /180
 #        self.pixels_per_deg_lon = self.pixels_per_deg_lat * cos(self.midla*degree)
-        
-        
-        
+
+
+
 
 #        page_x = 800.0  # pixels
 #        page_y = 600.0
@@ -385,7 +400,7 @@ class Map:
                 saveAs(tigerURI, "tiger.gif")
             except IOError:
                 progress("Offline? No tigermap.")
-                
+
 #       tigerURI = ("http://tiger.census.gov/cgi-bin/mapper/map.gif?&lat=%f&lon=%f&ht=%f"
 #           +"&wid=%f&&on=majroads&on=miscell&tlevel=-&tvar=-&tmeth=i&mlat=&mlon=&msym=bigdot&mlabel=&murl="
 #           +"&conf=mapnew.con&iht=%i&iwd=%i" ) % (self.midla, self.midlo,  maxla-minla, maxlo-minlo, self.page_y, self.page_x)
@@ -402,7 +417,7 @@ class Map:
     xmlns:xlink='http://www.w3.org/1999/xlink'>
  <g>
  """  %   (self.page_x,self.page_y))  #"
- 
+
         progress('Map page size (%f,%f)'% (self.page_x,self.page_y))
 
 # <rect x='0' y='0' width='%ipx' height='%ipx' style='fill:#ddffbb'/>
@@ -415,7 +430,7 @@ class Map:
 #               lon, self.midlo, lon - self.midlo, ((lon - self.midlo) * self.pixels_per_deg_lon)))
         return   ((lon - self.lolo) * self.pixels_per_deg_lon,
                   (self.hila - lat) * self.pixels_per_deg_lat)
-    
+
     def startPath(self, point):
         lon = point.lon
         lat = point.lat
@@ -431,7 +446,7 @@ class Map:
         lat = point.lat
         ele = point.ele
 #        date = point.date
-        
+
         x, y = self.deg_to_px(lon, lat)
         self.wr("L %f %f " % (x,y))
         lastlon, lastlat, lastdate = last.lon, last.lat, last.date
@@ -441,10 +456,10 @@ class Map:
 
 #        t1 = last.t
 #        t2 = point.t
-        
+
 #        if t1 < self.t0: self.t0 = t1
 #        if t2 > self.t9: self.t9 = t2
-        
+
 #        dt = t2-t1
 #        if dt > 0:
 #            speed = ds/dt  # m/s
@@ -482,16 +497,16 @@ class Map:
                     <rect x='%i' y='%i' width='14' height='8' style='fill:#777;stroke:black'/>
                     <circle cx='%i' cy='%i' r='3'/>
                     </a>""" %(rel, x-7, y-4, x, y))
-        
+
     def close(self):
         self.wr("</svg>\n")
-        
+
 
 
 
 
 ############################################################ Main program
-    
+
 if __name__ == '__main__':
     import getopt
     verbose = 0
@@ -520,7 +535,7 @@ if __name__ == '__main__':
         if verbose: progress( "Loading Photo data..." + photoMetaFileName)
         f = load(photoMetaFileName)  # Was gpsData  + "/PhotoMeta.n3"
         if verbose: progress( "Loaded.")
-        
+
         ss = f.statementsMatching(pred=FILE.date)
         for s in ss:
             ph = s.subject()
@@ -533,7 +548,7 @@ if __name__ == '__main__':
                 progress("Warning: using file date %s for %s" %(date, photo))
             events.append((date, "P", (ph, photo)))
             if verbose: progress("%s: %s" %(date, photo))
-    
+
     if verbose: progress( "Loading GPS data...")
     f = load(gpsData)
     if verbose: progress( "Loaded.")
@@ -541,7 +556,7 @@ if __name__ == '__main__':
     progress( `len(records)`, "records")
 
     firstPoint = None;
-    doTime = True; 
+    doTime = True;
     for record in records:
         tracks = f.each(subj=record, pred=GPS.track)
         progress ("  ", `len(tracks)`, "tracks")
@@ -559,7 +574,7 @@ if __name__ == '__main__':
                 if lo is not None: lo = float(str(lo));
                 p = Point(lo, la, ele, date)
                 if date is None:
-                    doTime = False;                    
+                    doTime = False;
                 events.append((date, "T", p))
                 if firstPoint is None:
                     firstPoint = p;
@@ -572,7 +587,7 @@ if __name__ == '__main__':
     while (point is not None):
         point.smooth(6, 0.9);
         point = point.next
-    
+
     totalDistance = 0;
     point = firstPoint
     while (point is not None):
@@ -586,17 +601,17 @@ if __name__ == '__main__':
             point.difference();
             point.generateClimb();
             point = point.next
-        
+
         point = firstPoint
         while (point is not None):
             point.smoothAttribute('kph', 6, 0.9);
             point = point.next
-        
+
         point = firstPoint
         while (point is not None):
             point.smoothAttribute('climb', 6, 0.9);
             point = point.next
-        
+
         point = firstPoint
         climb_vs_kph = [];
         totalClimb = 0
@@ -614,13 +629,13 @@ if __name__ == '__main__':
         print "Total disance (m)", totalDistance
         print "Total time (s)", elapsed, elapsed/60
         print "Average speed", totalDistance/elapsed, "m/s", totalDistance/elapsed * 3.6, "kph"
-    
-        
-    
-    
-    
+
+
+
+
+
     events.sort(compareByTime)
-    
+
     last = None
     n = len(events)
 
@@ -667,13 +682,13 @@ if __name__ == '__main__':
             progress( "%s: Before (%f, %f)" % (dt1, lat1, long1))
             progress( "%s: Guess  (%f, %f)" % (dt, lat, long))
             progress( "%s: After  (%f, %f)" % (dt2, lat2, long2))
-            
+
             where = conclusions.newBlankNode()
             conclusions.add(ph, GPS.approxLocation, where)
             conclusions.add(where, WGS.lat, lat)
             conclusions.add(where, WGS.long, long)
 
-    
+
 #           guess = isodate.fullString(...)
 
     progress("Start Output")
@@ -714,7 +729,7 @@ if __name__ == '__main__':
 ############# Timeline speed vs distance
 
     from timelineChart import ParallelChart, TimelineChart, TimelineSeries, ScatterSeries, timeArgument
-    
+
     chartfn = commandLineArg('timeline');
     if chartfn:
 
@@ -723,14 +738,14 @@ if __name__ == '__main__':
 	    startTime = timeArgument(startTime);
 	else:
 	    startTime = -10e10;
-	
+
 	endTime = commandLineArg('endTime');
 	if (endTime):
 	    endTime = timeArgument(endTime);
 	else:
 	    endTime = 10e10;
-            
-            
+
+
         def extractAttribute(at):
             elevations = [];
             for i in range(len(events)):
@@ -739,35 +754,35 @@ if __name__ == '__main__':
                     if getattr(da, at) is not None:
                         elevations.append((da.t, getattr(da, at) ))
             return elevations
-            
 
-            
+
+
 	# The main chart which holds the various series
 	chart = TimelineChart(start = startTime, end = endTime);
 
 
         # distanceSeries = TimelineSeries(chart, extractAttribute('s'), bottom = 0.65, top = 0.9, color = 'brown');
- 
+
         climbSeries = TimelineSeries(chart, extractAttribute('climb'), bottom = 0.35, top = 0.9, color = 'orange');
- 
+
         speedSeries = TimelineSeries(chart, extractAttribute('kph'), bottom = 0.35, top = 0.9, leftLabels = 25,  color = 'green');
-        
+
         elevationSeries = TimelineSeries(chart, extractAttribute('ele'), bottom=0.0, top= 0.3, color = 'blue');
-        
-               
+
+
         # gradeSeries = TimelineSeries(chart, extractAttribute('grade'), bottom=0.35, top= 0.65, color = 'red');
-        
+
         # Do grid before data so it goes in the background
-        chart.timeAxis(0); #   @@@ Seconds behind GMT 
-                             
-                                                         
+        chart.timeAxis(0); #   @@@ Seconds behind GMT
+
+
         # Now draw all graphs:
-        
+
         elevationSeries.draw();
         climbSeries.draw();
         speedSeries.draw();
         # distanceSeries.draw();
-        
+
         chart.writeFile(chartfn);
 
 ######################## Speed vs climb/descent rate
@@ -779,7 +794,7 @@ if __name__ == '__main__':
         speedSeries.draw();
         scChart.xaxis();
         scChart.writeFile(speedClimbFN);
-        
+
 
 
 
