@@ -1,6 +1,6 @@
 #!/usr/bin/python2.7
 # MIT License.  (c)timbl, Richard Newman
-#
+#test
 # This is or was http://www.w3.org/2000/10/swap/pim/readMacAddressBook.py
 # See also http://www.w3.org/2000/10/swap/pim/vcard2n3.py
 
@@ -22,6 +22,8 @@
 
 # See https://developer.apple.com/library/mac/documentation/userexperience/Conceptual/AddressBook/AddressBook.html
 import AddressBook, objc, array
+
+import requests # https://stackoverflow.com/questions/111945/is-there-any-way-to-do-http-put-in-python
 
 import PIL
 from PIL import Image
@@ -346,7 +348,7 @@ def writeOutImage(s, root):
         tempFileName = ',temp.tiff'
         # sys.stderr.write('URIforPersonPhoto(s) '+`URIforPersonPhoto(s)` + '\n')
 
-        fn = fileNameFromURI(URIforPersonPhoto(s), root);
+        fn = fileNameFromURI(root, (URIforPersonPhoto(s)));
 #        sys.stderr.write('fn ' + fn + '\n'); # @@@ debug
         #ni = NXImage.
 #        imgRep = image.representations().objectAtIndex_(0)
