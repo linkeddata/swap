@@ -124,7 +124,7 @@ class SinkParser:
 
         self._store = store
         if genPrefix: store.setGenPrefix(genPrefix) # pass it on
-        
+
         self._thisDoc = thisDoc
         self.lines = 0              # for error handling
         self.startOfLine = 0        # For calculating character number
@@ -138,7 +138,7 @@ class SinkParser:
 
         self._reason2 = None    # Why these triples
         if diag.tracking: self._reason2 = BecauseOfData(
-                        store.newSymbol(thisDoc), because=self._reason) 
+                        store.newSymbol(thisDoc), because=self._reason)
 
         if baseURI: self._baseURI = baseURI
         else:
@@ -160,11 +160,11 @@ class SinkParser:
                 self._formula = store.newFormula()
         else:
             self._formula = openFormula
-        
+
 
         self._context = self._formula
         self._parentContext = None
-        
+
         if metaURI:
             self.makeStatement((SYMBOL, metaURI), # relate doc to parse tree
                             (SYMBOL, PARSES_TO_URI ), #pred
@@ -177,9 +177,9 @@ class SinkParser:
 
     def here(self, i):
         """String generated from position in file
-        
+
         This is for repeatability when refering people to bnodes in a document.
-        This has diagnostic uses less formally, as it should point one to which 
+        This has diagnostic uses less formally, as it should point one to which
         bnode the arbitrary identifier actually is. It gives the
         line and character number of the '[' charcacter or path character
         which introduced the blank node. The first blank node is boringly _L1C1.
@@ -187,11 +187,11 @@ class SinkParser:
         it makes the canonical ordering of bnodes repeatable."""
 
         return "%s_L%iC%i" % (self._genPrefix , self.lines,
-                                            i - self.startOfLine + 1) 
-        
+                                            i - self.startOfLine + 1)
+
     def formula(self):
         return self._formula
-    
+
     def loadStream(self, stream):
         return self.loadBuf(stream.read())   # Not ideal
 
@@ -204,7 +204,7 @@ class SinkParser:
 
     def feed(self, octets):
         """Feed an octet stream tothe parser
-        
+
         if BadSyntax is raised, the string
         passed in the exception object is the
         remainder after any statements have been parsed.
@@ -223,30 +223,30 @@ class SinkParser:
                                     "expected directive or statement")
 
     def directiveOrStatement(self, str,h):
-    
+
             i = self.skipSpace(str, h)
             if i<0: return i   # EOF
 
             j = self.directive(str, i)
             if j>=0: return  self.checkDot(str,j)
-            
+
             j = self.statement(str, i)
             if j>=0: return self.checkDot(str,j)
-            
+
             return j
 
 
     #@@I18N
     global _notNameChars
     #_namechars = string.lowercase + string.uppercase + string.digits + '_-'
-        
+
     def tok(self, tok, str, i):
         """Check for keyword.  Space must have been stripped on entry and
         we must not be at end of file."""
-        
+
         assert tok[0] not in _notNameChars # not for punctuation
         # was: string.whitespace which is '\t\n\x0b\x0c\r \xa0' -- not ascii
-        whitespace = '\t\n\x0b\x0c\r ' 
+        whitespace = '\t\n\x0b\x0c\r '
         if str[i:i+1] == "@":
             i = i+1
         else:
@@ -254,7 +254,7 @@ class SinkParser:
                 return -1   # No, this has neither keywords declaration nor "@"
 
         if (str[i:i+len(tok)] == tok
-            and (str[i+len(tok)] in  _notQNameChars )): 
+            and (str[i+len(tok)] in  _notQNameChars )):
             i = i + len(tok)
             return i
         else:
@@ -264,7 +264,7 @@ class SinkParser:
         j = self.skipSpace(str, i)
         if j<0: return j # eof
         res = []
-        
+
         j = self.tok('bind', str, i)        # implied "#". Obsolete.
         if j>0: raise BadSyntax(self._thisDoc, self.lines, str, i,
                                 "keyword bind is obsolete: use @prefix")
@@ -376,7 +376,7 @@ class SinkParser:
     def statement(self, str, i):
         r = []
 
-        i = self.object(str, i, r)  #  Allow literal for subject - extends RDF 
+        i = self.object(str, i, r)  #  Allow literal for subject - extends RDF
         if i<0: return i
 
         j = self.property_list(str, i, r[0])
@@ -400,7 +400,7 @@ class SinkParser:
 
         j = self.skipSpace(str, i)
         if j<0:return j # eof
-        
+
         r = []
 
         j = self.tok('has', str, i)
@@ -433,7 +433,7 @@ class SinkParser:
             res.append(('->', RDF_type))
             return j
 
-            
+
         if str[i:i+2] == "<=":
             res.append(('<-', self._store.newSymbol(Logic_NS+"implies")))
             return i+2
@@ -447,7 +447,7 @@ class SinkParser:
 
         if str[i:i+2] == ":=":
             # patch file relates two formulae, uses this    @@ really?
-            res.append(('->', Logic_NS+"becomes")) 
+            res.append(('->', Logic_NS+"becomes"))
             return i+2
 
         j = self.prop(str, i, r)
@@ -473,7 +473,7 @@ class SinkParser:
         x = self._context.newSymbol(uri)
         self._context.declareExistential(x)
         return x
-        
+
     def path(self, str, i, res):
         """Parse the path production.
         """
@@ -493,9 +493,9 @@ class SinkParser:
                             "EOF found in middle of path syntax")
             pred = res.pop()
             if ch == "^": # Reverse traverse
-                self.makeStatement((self._context, pred, obj, subj)) 
+                self.makeStatement((self._context, pred, obj, subj))
             else:
-                self.makeStatement((self._context, pred, subj, obj)) 
+                self.makeStatement((self._context, pred, subj, obj))
             res.append(obj)
         return j
 
@@ -569,7 +569,7 @@ class SinkParser:
                 while 1:
                     i = self.skipSpace(str, j)
                     if i<0: raise BadSyntax(self._thisDoc, self.lines, str, i,
-                                                    "needed '$}', found end.")                    
+                                                    "needed '$}', found end.")
                     if str[i:i+2] == '$}':
                         j = i+2
                         break
@@ -581,7 +581,7 @@ class SinkParser:
                             raise BadSyntax(self._thisDoc, self.lines,
                                                 str, i, "expected: ','")
                     else: first_run = False
-                    
+
                     item = []
                     j = self.item(str,i, item) #@@@@@ should be path, was object
                     if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i,
@@ -602,16 +602,16 @@ class SinkParser:
                 self._reason2 = becauseSubexpression
                 if subj is None: subj = self._store.newFormula()
                 self._context = subj
-                
+
                 while 1:
                     i = self.skipSpace(str, j)
                     if i<0: raise BadSyntax(self._thisDoc, self.lines,
                                     str, i, "needed '}', found end.")
-                    
+
                     if str[i:i+1] == "}":
                         j = i+1
                         break
-                    
+
                     j = self.directiveOrStatement(str,i)
                     if j<0: raise BadSyntax(self._thisDoc, self.lines,
                                     str, i, "expected statement or '}'")
@@ -637,7 +637,7 @@ class SinkParser:
             while 1:
                 i = self.skipSpace(str, j)
                 if i<0: raise BadSyntax(self._thisDoc, self.lines,
-                                    str, i, "needed ')', found end.")                    
+                                    str, i, "needed ')', found end.")
                 if str[i:i+2] == '$)':
                     j = i+2
                     break
@@ -676,7 +676,7 @@ class SinkParser:
                 return j
 
         return -1
-        
+
     def property_list(self, str, i, subj):
         """Parse property list
         Leaves the terminating punctuation in the buffer
@@ -734,11 +734,11 @@ class SinkParser:
         if str[i] == ".": return j  # empty list is OK
         i = what(str, i, res)
         if i<0: return -1
-        
+
         while 1:
             j = self.skipSpace(str, i)
             if j<0: return j # eof
-            ch = str[j:j+1]  
+            ch = str[j:j+1]
             if ch != ",":
                 if ch != ".":
                     return -1
@@ -798,6 +798,7 @@ class SinkParser:
                     if pfx == "_":  # Magic prefix 2001/05/30, can be overridden
                         res.append(self.anonymousNode(ln))
                         return j
+                    print('@@@@ pfx ' + pfx)
                     raise BadSyntax(self._thisDoc, self.lines, str, i,
                                 "Prefix \"%s:\" not bound" % (pfx))
             symb = self._store.newSymbol(ns + ln)
@@ -809,7 +810,7 @@ class SinkParser:
                         "Warning: no # on namespace %s," % ns)
             return j
 
-        
+
         i = self.skipSpace(str, i)
         if i<0: return -1
 
@@ -895,7 +896,7 @@ class SinkParser:
         varURI = self._store.newSymbol(self._baseURI + "#" +str[j:i])
         if varURI not in self._parentVariables:
             self._parentVariables[varURI] = self._parentContext.newUniversal(varURI
-                            , why=self._reason2) 
+                            , why=self._reason2)
         res.append(self._parentVariables[varURI])
         return i
 
@@ -916,7 +917,7 @@ class SinkParser:
         """
         xyz:def -> ('xyz', 'def')
         If not in keywords and keywordsSet: def -> ('', 'def')
-        :def -> ('', 'def')    
+        :def -> ('', 'def')
         """
 
         i = self.skipSpace(str, i)
@@ -955,7 +956,7 @@ class SinkParser:
                 res.append(('', ln))
                 return i
             return -1
-            
+
     def object(self, str, i, res):
         j = self.subject(str, i, res)
         if j>= 0:
@@ -1053,7 +1054,7 @@ class SinkParser:
                 return j
             else:
                 return -1
-    
+
     def uriOf(self, sym):
         if isinstance(sym, types.TupleType):
             return sym[1] # old system for --pipe
@@ -1086,12 +1087,12 @@ class SinkParser:
                     if str[j:j+3] == '"""': # ... current " is part of delim
                         i = j + 3
                         return i, ustr
-                
+
                     # we are inside of the string and current char is "
                     j = j + 1
                     ustr = ustr + '"'
                     continue
-            
+
             m = interesting.search(str, j)  # was str[j:].
             # Note for pos param to work, MUST be compiled  ... re bug?
             assert m , "Quote expected in string at ^ in %s^%s" %(
@@ -1108,7 +1109,7 @@ class SinkParser:
                 raise BadSyntax(self._thisDoc, startline, str, j,
                 "Unicode error appending characters %s to string, because\n\t%s"
                                 % (err, streason))
-                
+
 #           print "@@@ i = ",i, " j=",j, "m.end=", m.end()
 
             ch = str[i]
@@ -1157,7 +1158,7 @@ class SinkParser:
         count = 0
         value = 0
         while count < 4:  # Get 4 more characters
-            ch = str[j:j+1].lower() 
+            ch = str[j:j+1].lower()
                 # sbp http://ilrt.org/discovery/chatlogs/rdfig/2002-07-05
             j = j + 1
             if ch == "":
@@ -1178,7 +1179,7 @@ class SinkParser:
         count = 0
         value = '\\U'
         while count < 8:  # Get 8 more characters
-            ch = str[j:j+1].lower() 
+            ch = str[j:j+1].lower()
             # sbp http://ilrt.org/discovery/chatlogs/rdfig/2002-07-05
             j = j + 1
             if ch == "":
@@ -1190,7 +1191,7 @@ class SinkParser:
                                 "bad string literal hex escape")
             value = value + ch
             count = count + 1
-            
+
         uch = stringType(value).decode('unicode-escape')
         return j, uch
 
@@ -1210,7 +1211,7 @@ class BadSyntax(SyntaxError):
         self._i = i
         self._why = why
         self.lines = lines
-        self._uri = uri 
+        self._uri = uri
 
     def __str__(self):
         str = self._str
@@ -1248,16 +1249,16 @@ def toBool(s):
     if s == 'false' or s == 'False' or s == '0':
         return False
     raise ValueError(s)
-    
+
 class ToN3(RDFSink.RDFSink):
     """Serializer output sink for N3
-    
+
       keeps track of most recent subject and predicate reuses them.
       Adapted from Dan's ToRDFParser(Parser);
     """
 
     flagDocumentation = """Flags for N3 output are as follows:-
-        
+
 a   Anonymous nodes should be output using the _: convention (p flag or not).
 d   Don't use default namespace (empty prefix)
 c   Comments added at top about version and base URI used.
@@ -1299,7 +1300,7 @@ B   Turn any blank node into a existentially qualified explicitly named node.
         gp = genPrefix
         if gp == None:
             gp = "#_g"
-            if base!=None: 
+            if base!=None:
                 try:
                     gp = uripath.join(base, "#_g")
                 except ValueError:
@@ -1322,12 +1323,12 @@ B   Turn any blank node into a existentially qualified explicitly named node.
         self._needNL = 0    # Do we need to have a newline before a new element?
 
         if "l" in self._flags: self.noLists = 1
-        
+
     def dummyClone(self):
         "retun a version of myself which will only count occurrences"
         return ToN3(write=dummyWrite, base=self.base, genPrefix=self._genPrefix,
                     noLists=self.noLists, quiet=self._quiet, flags=self._flags )
-                    
+
     def writeEncoded(self, str):
         """Write a possibly unicode string out to the output"""
         try:
@@ -1337,14 +1338,14 @@ B   Turn any blank node into a existentially qualified explicitly named node.
 
     def setDefaultNamespace(self, uri):
         return self.bind("", uri)
-    
+
     def bind(self, prefixString, uri):
         """ Just accepting a convention here """
         assert ':' in uri # absolute URI references only
         if "p" in self._flags: return  # Ignore the prefix system completely
 #        if not prefixString:
 #            raise RuntimError("Please use setDefaultNamespace instead")
-        
+
         if (uri == self.defaultNamespace
             and "d" not in self._flags): return # don't duplicate ??
         self._endStatement()
@@ -1366,15 +1367,15 @@ B   Turn any blank node into a existentially qualified explicitly named node.
             x = uri
         self._write(u" @prefix : <%s> ." % x )
         self._newline()
-       
+
 
     def startDoc(self):
- 
+
         if not self._quiet:  # Suppress stuff which will confuse test diffs
             self._write(u"\n#  Notation3 generation by\n")
             idstr = u"$Id$"
             # CVS CHANGES THE ABOVE LINE
-            self._write(u"#       " + idstr[5:-2] + u"\n\n") 
+            self._write(u"#       " + idstr[5:-2] + u"\n\n")
             # Strip "$" in case the N3 file is checked in to CVS
             if self.base: self._write(u"#   Base was: " + self.base + u"\n")
         self._write(u"    " * self.indent)
@@ -1421,19 +1422,19 @@ B   Turn any blank node into a existentially qualified explicitly named node.
                     str2 = str3
                 if str2[0] in "0123456789": str2 = "a"+str2
                 if diag.chatty_flag > 60: progress(
-                                        "Anode %s  means %s" % (str2, value)) 
+                                        "Anode %s  means %s" % (str2, value))
                 self._anodeName[str2] = value
                 self._anodeId[value] = str2
                 return
 
-        self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])        
+        self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])
         self._write(self.representationOf(triple[CONTEXT], triple[OBJ]))
         self._needNL = 1
-                
+
 # Below is for writing an anonymous node
 
 # As object, with one incoming arc:
-        
+
     def startAnonymous(self,  triple):
         self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])
         self._write(u" [")
@@ -1529,7 +1530,7 @@ B   Turn any blank node into a existentially qualified explicitly named node.
         self._write(u"}")
         self._subj = subj
         self._pred = None
-     
+
     def startFormulaObject(self, triple):
         self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])
         self.indent = self.indent + 1
@@ -1544,18 +1545,18 @@ B   Turn any blank node into a existentially qualified explicitly named node.
 #        self._newline()
         self._subj = subj
         self._pred = pred
-     
+
     def _makeSubjPred(self, context, subj, pred):
 
         if pred == N3_li:
             if  self._needNL:
                 self._newline()
             return  # If we are in list mode, don't need to.
-        
+
         varDecl = (subj == context and "v" not in self._flags and (
                 pred == (SYMBOL, N3_forAll_URI) or
                 pred == (SYMBOL, N3_forSome_URI)))
-                
+
         if self._subj != subj or "s" in self._flags:
             self._endStatement()
             if self.indent == 1:  # Top level only - extra newline
@@ -1594,7 +1595,7 @@ B   Turn any blank node into a existentially qualified explicitly named node.
                 self._write(u" a ")
             else :
                 self._write( u" %s " % self.representationOf(context, pred))
-                
+
             self._pred = pred
         else:
             self._write(u",")
@@ -1675,7 +1676,7 @@ B   Turn any blank node into a existentially qualified explicitly named node.
         j = string.rfind(value, "#")
         if j<0:    #   and "/" in self._flags:   Always allow 2010-10-24 TimBL
             j=string.rfind(value, "/")   # Allow "/" namespaces as a second best
-        
+
         if (j>=0
             and "p" not in self._flags):   # Suppress use of prefixes?
             for ch in value[j+1:]:  #  Examples: "." ";"  we can't have in qname
@@ -1693,10 +1694,10 @@ B   Turn any blank node into a existentially qualified explicitly named node.
                 self.countNamespace(namesp)
                 prefix = self.prefixes.get(namesp, None) # @@ #CONVENTION
                 if prefix != None : return prefix + u":" + value[j+1:]
-            
+
                 if value[:j] == self.base:   # If local to output stream,
                     return u"<#" + value[j+1:] + u">" # use local frag id
-        
+
         if "r" not in self._flags and self.base != None:
             value = hexify(refTo(self.base, value))
         elif "u" in self._flags: value = backslashUify(value)
@@ -1721,7 +1722,7 @@ class tmToN3(RDFSink.RDFSink):
         gp = genPrefix
         if gp == None:
             gp = "#_g"
-            if base!=None: 
+            if base!=None:
                 try:
                     gp = uripath.join(base, "#_g")
                 except ValueError:
@@ -1744,7 +1745,7 @@ class tmToN3(RDFSink.RDFSink):
         self._anodeId = {} # For "a" flag - reverse mapping
 
         if "l" in self._flags: self.noLists = 1
-    
+
     def writeEncoded(self, str):
         """Write a possibly unicode string out to the output"""
         return self._writeRaw(str.encode('utf-8'))
@@ -1752,14 +1753,14 @@ class tmToN3(RDFSink.RDFSink):
     def _newline(self, extra=0):
         self._needNL = 0
         self._write("\n"+ "    " * (self.indent+extra))
-        
+
     def bind(self, prefixString, uri):
         """ Just accepting a convention here """
         assert ':' in uri # absolute URI references only
         if "p" in self._flags: return  # Ignore the prefix system completely
         if not prefixString:
             return self.setDefaultNamespace(uri)
-        
+
         if (uri == self.defaultNamespace
             and "d" not in self._flags): return # don't duplicate ??
         self.endStatement()
@@ -1778,7 +1779,7 @@ class tmToN3(RDFSink.RDFSink):
             x = uri
         self._write(" @prefix : <%s> ." % x )
         self._newline()
-    
+
     def start(self):
         pass
         self._parts = [0]
@@ -1796,7 +1797,7 @@ class tmToN3(RDFSink.RDFSink):
                 lit, dt, lang = node
                 singleLine = "n" in self._flags
                 if dt != None and "n" not in self._flags:
-                    dt_uri = dt          
+                    dt_uri = dt
                     if (dt_uri == INTEGER_DATATYPE):
                         self._write(str(long(lit)))
                         return
@@ -1827,12 +1828,12 @@ class tmToN3(RDFSink.RDFSink):
                 self._write(',\n')
             else:
                 pass
-    
+
     def symbolString(self, value):
         j = string.rfind(value, "#")
         if j<0: #and "/" in self._flags:
             j=string.rfind(value, "/")   # Allow "/" namespaces as a second best
-        
+
         if (j>=0
             and "p" not in self._flags):   # Suppress use of prefixes?
             for ch in value[j+1:]:  #  Examples: "." ";"  we can't have in qname
@@ -1850,17 +1851,17 @@ class tmToN3(RDFSink.RDFSink):
                 self.countNamespace(namesp)
                 prefix = self.prefixes.get(namesp, None) # @@ #CONVENTION
                 if prefix != None : return prefix + ":" + value[j+1:]
-            
+
                 if value[:j] == self.base:   # If local to output stream,
                     return "<#" + value[j+1:] + ">" #   use local frag id
-        
+
         if "r" not in self._flags and self.base != None:
             value = refTo(self.base, value)
         elif "u" in self._flags: value = backslashUify(value)
         else: value = hexify(value)
 
         return "<" + value + ">"    # Everything else
-        
+
     def IsOf(self):
         self._write('is ')
         self._predIsOfs[-1] = FRESH
@@ -1870,10 +1871,10 @@ class tmToN3(RDFSink.RDFSink):
 
     def forewardPath(self):
         self._write('!')
-        
+
     def backwardPath(self):
         self._write('^')
-        
+
     def endStatement(self):
         self._parts[-1] = 0
         self._nodeEnded = True
@@ -1885,7 +1886,7 @@ class tmToN3(RDFSink.RDFSink):
     def addSymbol(self, sym):
         self._types = SYMBOL
         self.addNode(sym)
-    
+
     def beginFormula(self):
         self._realEnd()
         self._parts.append(0)
@@ -1919,13 +1920,13 @@ class tmToN3(RDFSink.RDFSink):
         else:
             a = bNodes[Id]
         self.addNode(a)
-        
-    
+
+
     def beginAnonymous(self):
         self._realEnd()
         self._parts.append(0)
         self._write('[')
-        
+
 
     def endAnonymous(self):
         self._parts.pop()
@@ -1943,7 +1944,7 @@ class tmToN3(RDFSink.RDFSink):
         self._types = QUESTION
         self.addNode(sym)
 
-        
+
 ###################################################
 #
 #   Utilities
@@ -1967,14 +1968,14 @@ def stringToN3(str, singleLine=0, flags=""):
     if (len(str) > 20 and
         str[-1] <> u'"' and
         not singleLine and
-        (string.find(str, u"\n") >=0 
+        (string.find(str, u"\n") >=0
          or string.find(str, u'"') >=0)):
         delim= u'"""'
         forbidden = forbidden1   # (allow tabs too now)
     else:
         delim = u'"'
         forbidden = forbidden2
-        
+
     i = 0
 
     while i < len(str):
@@ -1993,7 +1994,7 @@ def stringToN3(str, singleLine=0, flags=""):
             else:
                 if 'e' in flags:
 #                res = res + ('\\u%04x' % ord(ch))
-                    res = res + (u'\\u%04X' % ord(ch)) 
+                    res = res + (u'\\u%04X' % ord(ch))
                     # http://www.w3.org/TR/rdf-testcases/#ntriples
                 else:
                     res = res + ch
@@ -2003,7 +2004,7 @@ def stringToN3(str, singleLine=0, flags=""):
     newstr = u""
     for ch in res + str[i:]:
         if ord(ch)>65535:
-            newstr = newstr + (u'\\U%08X' % ord(ch)) 
+            newstr = newstr + (u'\\U%08X' % ord(ch))
                 # http://www.w3.org/TR/rdf-testcases/#ntriples
         else:
             newstr = newstr + ch
@@ -2019,7 +2020,7 @@ def backslashUify(ustr):
     str  = u""
     for ch in ustr:  # .encode('utf-8'):
         if ord(ch) > 65535:
-            ch = u"\\U%08X" % ord(ch)       
+            ch = u"\\U%08X" % ord(ch)
         elif ord(ch) > 126:
             ch = u"\\u%04X" % ord(ch)
         else:
@@ -2033,7 +2034,7 @@ def hexify(ustr):
 
     >>> hexify("http://example/a b")
     'http://example/a%20b'
-    
+
     """   #"
 #    progress("String is "+`ustr`)
 #    s1=ustr.encode('utf-8')
@@ -2045,10 +2046,10 @@ def hexify(ustr):
             ch = "%c" % ord(ch)
         str = str + ch
     return str
-    
+
 def dummy():
         res = ""
-        if len(str) > 20 and (string.find(str, "\n") >=0 
+        if len(str) > 20 and (string.find(str, "\n") >=0
                                 or string.find(str, '"') >=0):
                 delim= '"""'
                 forbidden = "\\\"\a\b\f\r\v"    # (allow tabs too now)
@@ -2076,4 +2077,3 @@ if __name__ == '__main__':
     _test()
 
 #ends
-
