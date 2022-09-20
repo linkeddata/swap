@@ -111,9 +111,9 @@ urp --  ( ) shouldnt introduce a new subject;
 __version__ = "$Revision$"
 # $Id$
 
-import rdfpath
-import hotswap
-import pluggable
+from . import rdfpath
+from . import hotswap
+from . import pluggable
 
 
 #class Serializer(pluggable.Serializer):
@@ -138,7 +138,7 @@ def t_NUMERAL(t):
     try:
         t.value = int(t.value)
     except ValueError:
-        print "Integer value too large", t.value
+        print("Integer value too large", t.value)
         t.value = 0
     return t
 
@@ -151,11 +151,11 @@ def t_QUOTEDSTRING(t):
 # t_ignore = " \t"
 
 def t_error(t):
-    print "Illegal character '%s'" % t.value[0]
+    print("Illegal character '%s'" % t.value[0])
     t.skip(1)
     
 # Build the lexer
-import ply.lex
+from . import ply.lex
 ply.lex.lex()
 
 # Test it out
@@ -233,20 +233,20 @@ def p_name_2(t):
     t[0] = t[2]
     
 def p_error(t):
-    print "Syntax error at '%s'" % (t.value)
+    print("Syntax error at '%s'" % (t.value))
     raise RuntimeError
 
-import ply.yacc
+from . import ply.yacc
 ply.yacc.yacc(tabmodule="comsyn_ply_tab")
 
 debug=0
-print ply.yacc.parse("hello='world'", debug=debug)
-print ply.yacc.parse("hello=35", debug=debug)
-print ply.yacc.parse("hello=35;foo=bar;baz='Bux'", debug=debug)
-print ply.yacc.parse("a=(b='c')", debug=debug)
-print ply.yacc.parse("a=(x.b='c')", debug=debug)
-print ply.yacc.parse("a=(x.b.x.q='c');a.b=c.d", debug=debug)
-print ply.yacc.parse("=x;x.y=z", debug=debug)
+print(ply.yacc.parse("hello='world'", debug=debug))
+print(ply.yacc.parse("hello=35", debug=debug))
+print(ply.yacc.parse("hello=35;foo=bar;baz='Bux'", debug=debug))
+print(ply.yacc.parse("a=(b='c')", debug=debug))
+print(ply.yacc.parse("a=(x.b='c')", debug=debug))
+print(ply.yacc.parse("a=(x.b.x.q='c');a.b=c.d", debug=debug))
+print(ply.yacc.parse("=x;x.y=z", debug=debug))
 # the left is always a path
 #    if it has only one element, the subject is implied
 #    if it has 2 or more, the subject is given, and the others
@@ -270,7 +270,7 @@ class Parser(pluggable.Parser):
     def parse(self, stream, host):
         self.sink = host.pluginManager.get("store", rdfpath.Store)
         x = ply.yacc.parse(stream)
-        print "Result:", x
+        print("Result:", x)
 
 
 class xxxParser:
@@ -279,7 +279,7 @@ class xxxParser:
         self.kb = sink
 
     def load(self, inputURI):
-        stream = urllib.urlopen(inputURI)
+        stream = urllib.request.urlopen(inputURI)
         s = stream.read()
         global kb
         kb = self.kb

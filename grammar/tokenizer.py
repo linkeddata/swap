@@ -46,19 +46,19 @@ def tokenize(string, singleChars, whiteSpace, regexps):
                 yield string[i:j]
                 i = j
             else:
-                raise ValueError('I didn\'t match! %s' % `string[i:i+10]`)
+                raise ValueError('I didn\'t match! %s' % repr(string[i:i+10]))
                 
                 
 
 
 def deleteme(x):
-    print `x`
+    print(repr(x))
     return re.compile(x, re.S+re.U)
 
 def testharness():
     import sys
-    import dekeywordizer
-    import deprefixizer
+    from . import dekeywordizer
+    from . import deprefixizer
     explicitURI = "<[^>]*>"
     comment     = '#[^\\n]*'
     numericLiteral = """[-+]?[0-9]+(\\.[0-9]+)?(e[-+]?[0-9]+)?"""
@@ -87,4 +87,4 @@ def testharness():
                                     re.compile(explicitURI, re.S+re.U))
 
 if __name__ == '__main__':
-    print [a for a in testharness()]
+    print([a for a in testharness()])

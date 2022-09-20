@@ -19,7 +19,7 @@ is or was https://github.com/linkeddata/swap/pim/day.py
 # Regular python library
 import os, sys, time
 from math import sin, cos, tan, sqrt, log
-from urllib import urlopen
+from urllib.request import urlopen
 import requests
 
 # SWAP  https://github.com/linkeddata/swap
@@ -176,7 +176,7 @@ class Point:
                 ele += a.ele
                 ne += 1;
 
-            b = b.next
+            b = b.__next__
             if b is None: return
             lat += b.lat
             lon += b.lon
@@ -211,7 +211,7 @@ class Point:
                     total += getattr(a, at)
                     ne += 1
             if b is not None:
-                b = b.next
+                b = b.__next__
                 if b is not None and getattr(b, at) is not None:
                     total += getattr(b, at)
                     ne += 1
@@ -272,7 +272,7 @@ class Map:
         b = 6.3567523e6 #m
         r_earth = sqrt(  ((a*a*cos(phi))**2 + ((a*a*sin(phi)))**2)/
                         ((a*cos(phi))**2 + ((a*sin(phi)))**2))
-        print "Local radius of earth = ", r_earth
+        print("Local radius of earth = ", r_earth)
 
         self.y_m_per_degree = r_earth * pi /180
         self.x_m_per_degree = self.y_m_per_degree * cos(self.midla*degree)
@@ -516,12 +516,12 @@ if __name__ == '__main__':
             ["help",  "verbose", "gpsData=", "timeline=", "speedClimb=", "outputMap=", "smooth="])
     except getopt.GetoptError:
         # print help information and exit:
-        print __doc__
+        print(__doc__)
         sys.exit(2)
     output = None
     for o, a in opts:
         if o in ("-h", "--help"):
-            print __doc__
+            print(__doc__)
             sys.exit()
         if o in ("-v", "--verbose"):
             verbose = 1
@@ -553,13 +553,13 @@ if __name__ == '__main__':
     f = load(gpsData)
     if verbose: progress( "Loaded.")
     records = f.each(pred=rdf_type, obj=GPS.Record)
-    progress( `len(records)`, "records")
+    progress( repr(len(records)), "records")
 
     firstPoint = None;
     doTime = True;
     for record in records:
         tracks = f.each(subj=record, pred=GPS.track)
-        progress ("  ", `len(tracks)`, "tracks")
+        progress ("  ", repr(len(tracks)), "tracks")
         for track in tracks:
             points = f.each(subj=track, pred=GPS.trackpoint)
             for point in points:
@@ -586,31 +586,31 @@ if __name__ == '__main__':
     point = firstPoint
     while (point is not None):
         point.smooth(6, 0.9);
-        point = point.next
+        point = point.__next__
 
     totalDistance = 0;
     point = firstPoint
     while (point is not None):
         if point.ds is not None:
             totalDistance += point.ds
-        point = point.next
+        point = point.__next__
 
     if doTime:
         point = firstPoint
         while (point is not None):
             point.difference();
             point.generateClimb();
-            point = point.next
+            point = point.__next__
 
         point = firstPoint
         while (point is not None):
             point.smoothAttribute('kph', 6, 0.9);
-            point = point.next
+            point = point.__next__
 
         point = firstPoint
         while (point is not None):
             point.smoothAttribute('climb', 6, 0.9);
-            point = point.next
+            point = point.__next__
 
         point = firstPoint
         climb_vs_kph = [];
@@ -622,13 +622,13 @@ if __name__ == '__main__':
             if point.climb is not None and point.climb > 0:  totalClimb += point.climb
             if point.ds is not None:
                 totalDistance += point.ds
-            point = point.next
+            point = point.__next__
         elapsed = lastPoint.t - firstPoint.t
 
-        print "Total climb (m)", totalClimb
-        print "Total disance (m)", totalDistance
-        print "Total time (s)", elapsed, elapsed/60
-        print "Average speed", totalDistance/elapsed, "m/s", totalDistance/elapsed * 3.6, "kph"
+        print("Total climb (m)", totalClimb)
+        print("Total disance (m)", totalDistance)
+        print("Total time (s)", elapsed, elapsed/60)
+        print("Average speed", totalDistance/elapsed, "m/s", totalDistance/elapsed * 3.6, "kph")
 
 
 
@@ -639,7 +639,7 @@ if __name__ == '__main__':
     last = None
     n = len(events)
 
-    if verbose: progress( "First event:" , `events[0]`, "Last event:" , `events[n-1]`)
+    if verbose: progress( "First event:" , repr(events[0]), "Last event:" , repr(events[n-1]))
 
     minla, maxla = 90.0, -90.0
     minlo, maxlo = 400.0, -400.0
@@ -680,13 +680,13 @@ if __name__ == '__main__':
             lat = lat1 +  a * (lat2-lat1)
             long = long1 + a * (long2-long1)
             progress( "%s: Before (%f, %f)" % (dt1, lat1, long1))
-            progress( "%s: Guess  (%f, %f)" % (dt, lat, long))
+            progress( "%s: Guess  (%f, %f)" % (dt, lat, int))
             progress( "%s: After  (%f, %f)" % (dt2, lat2, long2))
 
             where = conclusions.newBlankNode()
             conclusions.add(ph, GPS.approxLocation, where)
             conclusions.add(where, WGS.lat, lat)
-            conclusions.add(where, WGS.long, long)
+            conclusions.add(where, WGS.long, int)
 
 
 #           guess = isodate.fullString(...)
@@ -720,8 +720,8 @@ if __name__ == '__main__':
             loc = st.object()
             long = conclusions.the(subj=loc, pred=WGS.long)
             lat = conclusions.the(subj=loc, pred=WGS.lat)
-            progress("Photo %s at lat=%s, long=%s" %(photo.uriref(), lat, long))
-            la, lo = float(lat), float(long)
+            progress("Photo %s at lat=%s, long=%s" %(photo.uriref(), lat, int))
+            la, lo = float(lat), float(int)
             map.photo(photo.uriref(), lo, la)
         map.close()
         svgStream.close()

@@ -5,7 +5,7 @@ __version__ = "$Revision$"
 # $Id$
 
 import re
-import cStringIO
+import io
 import xml.sax
 
 ianaBase = "http://www.isi.edu/in-notes/iana/assignments/media-types/"
@@ -127,7 +127,7 @@ def makeSeekable(stream):
     """
 
     tmp = stream.read()
-    s = cStringIO.StringIO(tmp)
+    s = io.StringIO(tmp)
     stream.fp = s
     stream.read = stream.fp.read
     stream.readline = stream.fp.readline
@@ -163,7 +163,7 @@ def sniffXML(stream, lang):
     parser.setFeature(xml.sax.handler.feature_namespaces, 1)
     try:
         parser.parse(stream)
-    except EnoughHasBeenRead, j:
+    except EnoughHasBeenRead as j:
         if j.nsname.endswith("#"):
             return j.nsname+j.elname
         else:
@@ -179,7 +179,7 @@ class EnoughHasBeenRead:
 class sniffXMLHandler(xml.sax.handler.ContentHandler):
 
     def startElementNS(self, name, qname, attrs):
-        raise EnoughHasBeenRead, name
+        raise EnoughHasBeenRead(name)
 
 
     

@@ -2,7 +2,7 @@
 #
 import sys, os
 for fn in  sys.argv[1:]:
-    print "Filename ", fn
+    print("Filename ", fn)
     if 0:  # Old 2014 moves format
         space = fn.rfind(' ')
         year = fn[space+1 : space+5]
@@ -22,7 +22,7 @@ for fn in  sys.argv[1:]:
         assert fn[underline+9:underline+14] == '.json'
         
     date = year + '-' + month + '-' + day
-    print "Date = %s-%s-%s" % (year, month, day)
+    print("Date = %s-%s-%s" % (year, month, day))
     assert len(year) == 4
     assert len(month) == 2
     assert len(day) == 2
@@ -30,5 +30,5 @@ for fn in  sys.argv[1:]:
     dir = "/Users/timbl/Documents/%s/%s/%s" % (year, month, day);
     dest = "/Users/timbl/Documents/%s/%s/%s/%s.json" % (year, month, day, type);
     command = 'mkdir -p "%s"; mv "%s" "%s" ' % (dir,fn, dest);
-    print command
+    print(command)
     os.system(command)

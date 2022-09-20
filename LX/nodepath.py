@@ -19,7 +19,7 @@ WISDOM:
 __version__ = "$Revision$"
 # $Id$
 
-from __future__ import generators
+
 import re
 import LX
 
@@ -48,7 +48,7 @@ class Node:
         try:
             (pre, post) = name2.split("_", 2)
         except ValueError:
-            raise AttributeError, ("no %s attribute" % name)
+            raise AttributeError("no %s attribute" % name)
         ns = getattr(self.kb.ns, pre)
         term = getattr(ns, post)
         result = Path(self, term, invert)
@@ -59,15 +59,15 @@ class Node:
     def __str__(self):
         try:
             name =  self.kb.nickname(self.fromTerm)
-        except LX.namespace.NoShortNameDeclared, error:
+        except LX.namespace.NoShortNameDeclared as error:
             name = "Node("+str(self.fromTerm)+")"
-        except LX.namespace.TermHasNoURI, error:
+        except LX.namespace.TermHasNoURI as error:
             name = "Node("+str(self.fromTerm)+")"
         done = {}
         return name+" -- "+self.dump(done)
 
     def __repr__(self):
-        return "Node"+"("+`self.kb`+","+`self.fromTerm`+")"
+        return "Node"+"("+repr(self.kb)+","+repr(self.fromTerm)+")"
 
     
     def preFill(self, attr, value, term, invert):
@@ -80,7 +80,7 @@ class Node:
 
     def dump(self, done):
         """needs shorter names, maybe line breaking, is-of handling, ..."""
-        if done.has_key(self):
+        if self in done:
             return "[loop]"
         done[self] = 1
         result = "[ "
@@ -89,7 +89,7 @@ class Node:
         except: pass
         keytexts = []
         # keytexts.append("**"+str(self.arcLists))
-        for (key, values) in self.arcLists.iteritems():
+        for (key, values) in self.arcLists.items():
             
             try:
                 nick = self.kb.nickname(key[0])
@@ -104,7 +104,7 @@ class Node:
                 if isinstance(v, Node):
                     valuetexts.append(v.dump(done))
                 else:
-                    valuetexts.append("<"+`v`+">")
+                    valuetexts.append("<"+repr(v)+">")
             keytext += ", ".join(valuetexts)
             keytexts.append(keytext)
         result += "; ".join(keytexts)
@@ -139,7 +139,7 @@ class Path:
         try:
             (pre, post) = name.split("_", 2)
         except ValueError:
-            raise AttributeError, ("no %s attribute" % name)
+            raise AttributeError("no %s attribute" % name)
         ns = getattr(self.kb.ns, pre)
 
         return self.stepTo(getattr(ns, post), invert)
@@ -152,9 +152,9 @@ class Path:
 
     def __repr__(self):
         if self.invert:
-            return "Path"+"("+`self.from_`+","+`self.via`+", invert=1)"
+            return "Path"+"("+repr(self.from_)+","+repr(self.via)+", invert=1)"
         else:
-            return "Path"+"("+`self.from_`+","+`self.via`+")"
+            return "Path"+"("+repr(self.from_)+","+repr(self.via)+")"
 
     def first(self):
         if isinstance(self.from_, Path):
@@ -182,12 +182,12 @@ class Path:
     def only(self):
         i = self.__iter__()
         try:
-            a = i.next();
+            a = next(i);
         except StopIteration:
-            raise KeyError, `self`+" 'only' violation, too few"
+            raise KeyError(repr(self)+" 'only' violation, too few")
         try:
-            b = i.next();
-            raise KeyError, `self`+" 'only' violation, too many"
+            b = next(i);
+            raise KeyError(repr(self)+" 'only' violation, too many")
         except StopIteration:
             pass
         return a
@@ -202,9 +202,9 @@ class Path:
                 uri = node.fromTerm.uri
             else:
                 if uri != node.fromTerm.uri:
-                    raise KeyError, 'more than one value for URI'
+                    raise KeyError('more than one value for URI')
         if uri is None:
-            raise KeyError, 'no value for URI'
+            raise KeyError('no value for URI')
         return uri
 
     # this doesnt work because we have a __getattr_ defined
@@ -217,36 +217,36 @@ class Path:
                 data = node.fromTerm.data
             else:
                 if data != node.fromTerm.data:
-                    raise KeyError, 'more than one value for DATA'
+                    raise KeyError('more than one value for DATA')
         if data is None:
-            raise KeyError, 'no value for DATA'
+            raise KeyError('no value for DATA')
         return data
 
     def x(self):
         """test"""
-        print "---------------"
-        print "I am: ",`self`
-        print "I have:",self.preFilled
+        print("---------------")
+        print("I am: ",repr(self))
+        print("I have:",self.preFilled)
         self.from_.x()
 
     def dump(self, done):
         """broken"""
-        if done.has_key(self):
-            print "[loop]"
+        if self in done:
+            print("[loop]")
             return
         done[self] = 1
-        print "[ ",
+        print("[ ", end=' ')
         for sub in self.preFilled:
-            print key,
+            print(key, end=' ')
             if isinstance(value, Path):
                 value.dump(done)
             else:
-                print "<"+`value`+">"
+                print("<"+repr(value)+">")
         try:
-            print '"'+'"^^<'.join(LX.logic.valuesForConstants[self.fromTerm])+'>',
+            print('"'+'"^^<'.join(LX.logic.valuesForConstants[self.fromTerm])+'>', end=' ')
         except KeyError:
             pass
-        print " ]",
+        print(" ]", end=' ')
 
 #class PathResultIterator:
 #    def __init__(self, path):

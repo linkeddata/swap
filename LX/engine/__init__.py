@@ -62,7 +62,7 @@ def any(prefs=__all__, store=None):
             continue
         try:
             engine = mod.Engine(store=store)
-        except NotAvailable, e:
+        except NotAvailable as e:
             continue
     if engine is None:
         return NotAvailable()
@@ -72,7 +72,7 @@ def think(engine=None, kb=None):
     try:
         mod = __import__("LX.engine."+engine).engine
     except ImportError:
-        raise RuntimeError, ("No such engine, \"%s\".  Try one of: llyn, %s" %
+        raise RuntimeError("No such engine, \"%s\".  Try one of: llyn, %s" %
                              (engine, ", ".join(__all__)))
                             
     mod = getattr(mod, engine)

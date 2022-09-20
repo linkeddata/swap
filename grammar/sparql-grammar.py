@@ -27,7 +27,7 @@ class PatternList(object):
         self.things = []
         self.ors.append(self.things)
     def __repr__(self):
-        return '(%s): %s' % (`self.repeat`, `self.things`)
+        return '(%s): %s' % (repr(self.repeat), repr(self.things))
 
     def __str__(self):
         if len(self.ors) == 1 and len(self.ors[0]) == 1 and self.repeat != ONCE:
@@ -47,7 +47,7 @@ class PatternList(object):
             retVal += '\n' + "  "*level + " cfg:mustBeOneSequence ( () ( "
             level = level + 6
         else:
-            raise RuntimeError('how did I get here? %s' & `self.repeat`)
+            raise RuntimeError('how did I get here? %s' & repr(self.repeat))
 
         if many and self.repeat != ONCE:
             retVal += '\n   ' + "  "*level + '['
@@ -91,7 +91,7 @@ class PatternList(object):
 web = False
 
 def makeGrammar():
-    import urllib
+    import urllib.request, urllib.parse, urllib.error
     retVal = """#SPARQL in Notation3
 # Context Free Grammar without tokenization
 #
@@ -107,7 +107,7 @@ def makeGrammar():
 
     """
     if web:
-        File = urllib.urlopen('http://www.w3.org/2005/01/yacker/uploads/sparqlTest/bnf')
+        File = urllib.request.urlopen('http://www.w3.org/2005/01/yacker/uploads/sparqlTest/bnf')
         this = ""
         ws = re.compile(r'\S')
         for string in File:
@@ -141,7 +141,7 @@ def makeGrammar():
         i = this.find('%%')
         i2 = this.find('%%', i+5)
         whole = this[i:i2]
-        next_rule = re.compile(ur'\n(?=\w)')
+        next_rule = re.compile(r'\n(?=\w)')
         rules = next_rule.split(whole)
         rules = rules[1:]
     rules[0] = rules[0] + ' cfg:eof'
@@ -153,7 +153,7 @@ def makeGrammar():
 ##    return
     rules = [(a[0], makeList(a[1].split(' '), a[0])) for a in rules]
     retVal += '. \n\n'.join([b[0] + ' ' + str(b[1]) for b in rules])
-    print "[" + ",\n".join(["(" + `a` + ")" for a in rules]) + "]"
+    print("[" + ",\n".join(["(" + repr(a) + ")" for a in rules]) + "]")
     retVal += '. \n\n\n'
     #
     # Here comes the hard part. I gave up
@@ -220,7 +220,7 @@ def makeList(matchString, ww):
                 patterns.pop()
     if len(patterns) == 1:
         return patterns[0]
-    print patterns[1]
+    print(patterns[1])
     return None
 
 class l(object): pass
@@ -238,9 +238,9 @@ newToken = counter()
 r_unilower = re.compile(r'(?<=\\u)([0-9a-f]{4})|(?<=\\U)([0-9a-f]{8})')
 r_hibyte = re.compile(r'[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F-\xFF]')
 def quote(s): 
-   if not isinstance(s, unicode): 
-      s = unicode(s, 'utf-8') # @@ not required?
-   if not (u'\\'.encode('unicode-escape') == '\\\\'): 
+   if not isinstance(s, str): 
+      s = str(s, 'utf-8') # @@ not required?
+   if not ('\\'.encode('unicode-escape') == '\\\\'): 
       s = s.replace('\\', r'\\')
    s = s.replace('"', r'\"')
    # s = s.replace(r'\\"', r'\"')
@@ -257,5 +257,5 @@ def writeGrammar():
     b.close()
 
 if __name__ == '__main__':
-    print 'Overwriting sparql.n3'
+    print('Overwriting sparql.n3')
     writeGrammar()

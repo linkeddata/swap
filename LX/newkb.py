@@ -212,7 +212,7 @@ class KB:
         if isinstance(kb, KB): return kb
         if isinstance(kb, list): return KB(copyFrom=kb)
         # nothing else for now
-        raise RuntimeError, "Not convertable to a KB"
+        raise RuntimeError("Not convertable to a KB")
     prep = staticmethod(prep)
 
     ################################################################
@@ -278,7 +278,7 @@ class KB:
         result+= "\n  exivars: "+", ".join(map(LX.expr.getNameInScope, self.exivars, [scope] * len(self.exivars)))
         result+= "\n  univars: "+", ".join(map(LX.expr.getNameInScope, self.univars, [scope] * len(self.univars)))
         result+= "\n  interpretation: "
-        for (key,valueList) in self.__interpretation.iteritems():
+        for (key,valueList) in self.__interpretation.items():
             result+="\n     %s -->  %s"%(key.getNameInScope(scope), ", ".join(map(str, valueList)))
         result+= "\n  formulas: "
         result+= "\n     "
@@ -349,8 +349,8 @@ class KB:
         needed for    rdf.py's    flatten kind of stuff.
         """
         if (p):
-            raise RuntimeError, "Use LX.rdf.Statement instead"
-            print formula, p, o
+            raise RuntimeError("Use LX.rdf.Statement instead")
+            print(formula, p, o)
             self.append(LX.logic.RDF(formula ,p,o))
             # self.append(p(formula, o))
             return

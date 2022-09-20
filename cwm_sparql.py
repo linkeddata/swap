@@ -10,22 +10,22 @@ from swap.term import LightBuiltIn, Function, ReverseFunction, MultipleFunction,
     MultipleReverseFunction, typeMap, LabelledNode, \
     CompoundTerm, N3Set, List, EmptyList, NonEmptyList, \
     Symbol, Fragment, Literal, Term, AnonymousNode, HeavyBuiltIn, toBool
-import diag
+from . import diag
 progress = diag.progress
 
-from RDFSink import RDFSink
-from set_importer import Set
+from .RDFSink import RDFSink
+from .set_importer import Set
 
-import uripath
+from . import uripath
 
-from toXML import XMLWriter
+from .toXML import XMLWriter
 
 try:
     from decimal import Decimal
 except ImportError:
-    from local_decimal import Decimal
+    from .local_decimal import Decimal
 
-from term import ErrorFlag as MyError
+from .term import ErrorFlag as MyError
 
 SPARQL_NS = 'http://www.w3.org/2000/10/swap/sparqlCwm'
 
@@ -38,7 +38,7 @@ class BI_truthValue(LightBuiltIn):
 ##            print '%s makes %s' % (obj, toBool(str(obj), obj.datatype.fragid))
 ##            print 'I got here on %s, %s, returning %s' % (subj, obj, toBool(str(subj), subj.datatype.fragid) is toBool(str(obj), obj.datatype.fragid))
             return toBool(str(subj), subj.datatype) is toBool(str(obj), obj.datatype)
-        raise TypeError("%s type cannot be converted to boolean" % `subj.__class`)
+        raise TypeError("%s type cannot be converted to boolean" % repr(subj.__class))
 
 class BI_typeErrorIsTrue(LightBuiltIn):
     """
@@ -129,7 +129,7 @@ class BI_dtLit(LightBuiltIn, Function, ReverseFunction):
 
     def evalSubj(self, obj, queue, bindings, proof, query):
         if not isinstance(obj, Literal):
-            raise TypeError('I can only find the datatype of a Literal, not a %s' % `obj.__class__.__name__`)
+            raise TypeError('I can only find the datatype of a Literal, not a %s' % repr(obj.__class__.__name__))
         return self.store.newList([self.store.newLiteral(str(obj)), obj.datatype])
 
 class BI_langLit(LightBuiltIn, Function, ReverseFunction):
@@ -150,7 +150,7 @@ class BI_langLit(LightBuiltIn, Function, ReverseFunction):
 
     def evalSubj(self, obj, queue, bindings, proof, query):
         if not isinstance(obj, Literal):
-            raise TypeError('I can only find the datatype of a Literal, not a %s' % `obj.__class__.__name__`)
+            raise TypeError('I can only find the datatype of a Literal, not a %s' % repr(obj.__class__.__name__))
         lang = obj.lang
         if not obj.lang:
             lang = ''
@@ -166,13 +166,13 @@ class BI_lamePred(HeavyBuiltIn, MultipleReverseFunction):
         retValCopy = Set()
         n = 0
         while retVals != retValCopy:
-            print n, retVals, retValCopy
+            print(n, retVals, retValCopy)
             n += 1
             retValCopy = retVals.copy()
             for node in retValCopy:
-                retVals.update(node._prec.values())
+                retVals.update(list(node._prec.values()))
         a = query.workingContext.occurringIn(retVals) ## Really slow. Need to generate this on the fly?
-        print 'a=', a
+        print('a=', a)
         return a
 
 #############################
@@ -186,7 +186,7 @@ class BI_lamePred(HeavyBuiltIn, MultipleReverseFunction):
 
 class BI_query(LightBuiltIn, Function):
     def evalObj(self,subj, queue, bindings, proof, query):
-        from query import applySparqlQueries
+        from .query import applySparqlQueries
         ns = self.store.newSymbol(SPARQL_NS)
         assert isinstance(subj, List)
         subj = [a for a in subj]
@@ -236,8 +236,8 @@ def sparql_output(query, F):
         try:
             resultFormulae.sort(Term.compareAnyTerm)
         except:
-            print [type(x) for x in resultFormulae]
-            print Term
+            print([type(x) for x in resultFormulae])
+            print(Term)
             raise
         for resultFormula in resultFormulae:
             xwr.startElement(RESULTS_NS+'result', [], prefixTracker.prefixes)
@@ -260,7 +260,7 @@ def sparql_output(query, F):
                         if binding.lang:
                             props.append(("http://www.w3.org/XML/1998/namespace lang", binding.lang))
                         xwr.startElement(RESULTS_NS+'literal', props,  prefixTracker.prefixes)
-                        xwr.data(unicode(binding))
+                        xwr.data(str(binding))
                         xwr.endElement()
                     xwr.endElement()
                 else:
@@ -270,7 +270,7 @@ def sparql_output(query, F):
         xwr.endElement()
         xwr.endElement()
         xwr.endDocument()
-        return u''.join(outputList)
+        return ''.join(outputList)
     if query.contains(obj=ns['AskQuery']):
         node = query.the(pred=store.type, obj=ns['AskQuery'])
         outputList = []
@@ -301,14 +301,14 @@ def sparql_output(query, F):
 
 
 def sparql_queryString(source, queryString):
-    from query import applySparqlQueries
+    from .query import applySparqlQueries
     store = source.store
     ns = store.newSymbol(SPARQL_NS)
-    from sparql import sparql_parser
-    import sparql2cwm
+    from .sparql import sparql_parser
+    from . import sparql2cwm
     convertor = sparql2cwm.FromSparql(store)
-    import StringIO
-    p = sparql_parser.N3Parser(StringIO.StringIO(queryString), sparql_parser.branches, convertor)
+    import io
+    p = sparql_parser.N3Parser(io.StringIO(queryString), sparql_parser.branches, convertor)
     q = p.parse(sparql_parser.start).close()
     F = store.newFormula()
     applySparqlQueries(source, q, F)
@@ -336,7 +336,7 @@ class BI_semantics(HeavyBuiltIn, Function):
         else: doc = subj
         F = store.any((store._experience, store.semantics, doc, None))
         if F != None:
-            if diag.chatty_flag > 10: progress("Already read and parsed "+`doc`+" to "+ `F`)
+            if diag.chatty_flag > 10: progress("Already read and parsed "+repr(doc)+" to "+ repr(F))
             return F
 
         if diag.chatty_flag > 10: progress("Reading and parsing " + doc.uriref())

@@ -81,7 +81,7 @@ class FormulaCache(object):
             f = load(uri, flags="B").close() # why B? -DWC
             setVerbosity(0)
             self._loaded[uri] = f
-            assert f.canonical is f, `f.canonical`
+            assert f.canonical is f, repr(f.canonical)
         return f
 
 def topLevelLoad(uri=None, flags=''):
@@ -134,7 +134,7 @@ def n3Entails(f, g, skipIncludes=0, level=0):
                 continue
 
             for t in f.statements:
-                fyi("Trying unify  statement %s" %(`t`), level=level+1, thresh=70) 
+                fyi("Trying unify  statement %s" %(repr(t)), level=level+1, thresh=70) 
                 if (t[PRED].unify(pred) != [] and
                     t[SUBJ].unify(subj) != [] and 
                     t[OBJ].unify(obj) != []):
@@ -222,7 +222,7 @@ class Checker(FormulaCache):
         f = proof.any(r, reason.gives)
         if f != None:
             assert isinstance(f, Formula), \
-                            "%s gives: %s which should be Formula" % (`r`, f)
+                            "%s gives: %s which should be Formula" % (repr(r), f)
             fs = " proof of %s" % f
         else:
             fs = ""
@@ -231,7 +231,7 @@ class Checker(FormulaCache):
         if r == None:
             if f is None: txt = 'None'
             else: txt = f.n3String()
-            raise InvalidProof("No reason for "+`f` + " :\n\n"+ txt +"\n\n", level=level)
+            raise InvalidProof("No reason for "+repr(f) + " :\n\n"+ txt +"\n\n", level=level)
         classesOfReason = knownReasons.intersection(proof.each(subj=r, pred=rdf.type))
         if len(classesOfReason) < 1:
             raise InvalidProof("%s does not have the type of any reason" % r)
@@ -361,7 +361,7 @@ class Checker(FormulaCache):
 
                 if isinstance(termq, Literal) \
                        or isinstance(termq, Formula):
-                    bindings[varname] = `termq`
+                    bindings[varname] = repr(termq)
                 else:
                     term = proof.any(subj=termq, pred=rei.uri)
                     if term:
@@ -431,7 +431,7 @@ class Checker(FormulaCache):
             out.write("@@num/name: %s [Premise]\n" %
                       body)
         else:
-            raise RuntimeError, t
+            raise RuntimeError(t)
 
 
         self._num[step] = num
@@ -472,7 +472,7 @@ def checkExtraction(r, f, checker, policy, level=0):
     proof = checker._pf
     r2 = proof.the(r, reason.because)
     if r2 == None:
-        raise InvalidProof("Extraction: no source formula given for %s." % (`r`), level)
+        raise InvalidProof("Extraction: no source formula given for %s." % (repr(r)), level)
     f2 = checker.result(r2, policy, level)
     if not isinstance(f2, Formula):
         raise InvalidProof("Extraction of %s gave something odd, %s" % (r2, f2), level)
@@ -578,7 +578,7 @@ def checkGMP(r, f, checker, policy, level=0):
 
     # Check: Every antecedent statement must be included as evidence
     antecedent = proof.newFormula()
-    for k in bindings.values():
+    for k in list(bindings.values()):
         if k in existentials: #k in evidenceFormula.existentials() or 
             antecedent.declareExistential(k)
     antecedent.loadFormulaWithSubstitution(ruleStatement[SUBJ], bindings)
@@ -748,7 +748,7 @@ def atomicFormulaTerms(f):
     (color, sky, blue)
     """
     # """ help emacs
-    if len(f) <> 1:
+    if len(f) != 1:
         raise ValueError("expected atomic formula; got: %s." %
                          f.statements)
 
@@ -766,7 +766,7 @@ def checkSupports(r, f, checker, policy, level):
         #log:includes is very special
     r2 = proof.the(r, reason.because)
     if r2 is None:
-        raise InvalidProof("Extraction: no source formula given for %s." % (`r`), level)
+        raise InvalidProof("Extraction: no source formula given for %s." % (repr(r)), level)
     fyi("Starting nested conclusion", level=level)
     f2 = checker.result(r2, Assumption(subj), level)
     if not isinstance(f2, Formula):
@@ -858,7 +858,7 @@ def main(argv):
         proof = topLevelLoad(flags=flags)
 
     # setVerbosity(60)
-    fyi("Length of proof formula: "+`len(proof)`, thresh=5)
+    fyi("Length of proof formula: "+repr(len(proof)), thresh=5)
 
     try:
         c = Checker(proof)
@@ -872,9 +872,9 @@ def main(argv):
         fyi("Proof looks OK.   %i Steps" % proofSteps, thresh=5)
         setVerbosity(0)
         txt = proved.n3String().encode('utf-8')
-        print "\n".join(['  ' + ln.strip() for ln in txt.split("\n")])
+        print("\n".join(['  ' + ln.strip() for ln in txt.split("\n")]))
 
-    except InvalidProof, e:
+    except InvalidProof as e:
         progress("Proof invalid:", e)
         sys.exit(-1)
 
@@ -920,7 +920,7 @@ def _s2f(s, base):
     """
     # """ emacs python mode needs help
 
-    import notation3
+    from . import notation3
     graph = formula()
     graph.setClosureMode("e")    # Implement sameAs by smushing
     p = notation3.SinkParser(graph.store, openFormula=graph, baseURI=base,

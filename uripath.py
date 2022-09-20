@@ -22,7 +22,7 @@ REFERENCES
 
 __version__ = "$Id$"
 
-from string import find, rfind, index
+# from string import find, rfind, index
 
 
 def splitFrag(uriref):
@@ -31,7 +31,7 @@ def splitFrag(uriref):
     Punctuation is thrown away.
 
     e.g.
-    
+
     >>> splitFrag("abc#def")
     ('abc', 'def')
 
@@ -40,7 +40,7 @@ def splitFrag(uriref):
 
     """
 
-    i = rfind(uriref, "#")
+    i = uriref.rfind("#")
     if i>= 0: return uriref[:i], uriref[i+1:]
     else: return uriref, None
 
@@ -48,7 +48,7 @@ def splitFragP(uriref, punct=0):
     """split a URI reference before the fragment
 
     Punctuation is kept.
-    
+
     e.g.
 
     >>> splitFragP("abc#def")
@@ -59,7 +59,7 @@ def splitFragP(uriref, punct=0):
 
     """
 
-    i = rfind(uriref, "#")
+    i = uriref.rfind("#")
     if i>= 0: return uriref[:i], uriref[i:]
     else: return uriref, ''
 
@@ -85,40 +85,40 @@ def join(here, there):
 
     >>> join('http://example/x/y/z', '')
     'http://example/x/y/z'
-    
+
     >>> join('mid:foo@example', '#foo')
     'mid:foo@example#foo'
-    
+
     We grok IRIs
 
     >>> len(u'Andr\\xe9')
     5
-    
+
     >>> join('http://example.org/', u'#Andr\\xe9')
     u'http://example.org/#Andr\\xe9'
     """
 
-    assert(find(here, "#") < 0), "Base may not contain hash: '%s'"% here # caller must splitFrag (why?)
+    assert(here.find("#") < 0), "Base may not contain hash: '%s'"% here # caller must splitFrag (why?)
 
-    slashl = find(there, '/')
-    colonl = find(there, ':')
+    slashl = there.find('/')
+    colonl = there.find(':')
 
     # join(base, 'foo:/') -- absolute
     if colonl >= 0 and (slashl < 0 or colonl < slashl):
         return there
 
-    bcolonl = find(here, ':')
+    bcolonl = here.find(':')
     assert(bcolonl >= 0), "Base uri '%s' is not absolute" % here # else it's not absolute
 
     path, frag = splitFragP(there)
     if not path: return here + frag
-    
+
     # join('mid:foo@example', '../foo') bzzt
-    if here[bcolonl+1:bcolonl+2] <> '/':
+    if here[bcolonl+1:bcolonl+2] != '/':
         raise ValueError ("Base <%s> has no slash after colon - with relative '%s'." %(here, there))
 
     if here[bcolonl+1:bcolonl+3] == '//':
-        bpath = find(here, '/', bcolonl+3)
+        bpath = here.find('/', bcolonl+3)
     else:
         bpath = bcolonl+1
 
@@ -135,7 +135,7 @@ def join(here, there):
     if there[:1] == '/':
         return here[:bpath] + there
 
-    slashr = rfind(here, '/')
+    slashr = here.find('/')
 
     while 1:
         if path[:2] == './':
@@ -144,7 +144,7 @@ def join(here, there):
             path = ''
         elif path[:3] == '../' or path == '..':
             path = path[3:]
-            i = rfind(here, '/', bpath, slashr)
+            i = here.find('/', bpath, slashr)
             if i >= 0:
                 here = here[:i+1]
                 slashr = i
@@ -154,7 +154,7 @@ def join(here, there):
     return here[:slashr+1] + path + frag
 
 
-    
+
 import re
 import string
 commonHost = re.compile(r'^[-_a-zA-Z0-9.]+:(//[^/]*)?/[^/]*$')
@@ -168,7 +168,7 @@ def refTo(base, uri):
 
     >>> refTo('file:/ex/x/y', 'file:/ex/x/q/r#s')
     'q/r#s'
-    
+
     >>> refTo(None, 'http://ex/x/y')
     'http://ex/x/y'
 
@@ -184,7 +184,7 @@ def refTo(base, uri):
     So 'http://ex/x/q:r' is not a URI. Use 'http://ex/x/q%3ar' instead:
     >>> x='http://ex/x/y';y='http://ex/x/q%3ar';join(x, refTo(x, y)) == y
     1
-    
+
     This one checks that it uses a root-realtive one where that is
     all they share.  Now uses root-relative where no path is shared.
     This is a matter of taste but tends to give more resilience IMHO
@@ -203,7 +203,7 @@ def refTo(base, uri):
 #    assert base # don't mask bugs -danc # not a bug. -tim
     if not base: return uri
     if base == uri: return ""
-    
+
     # Find how many path segments in common
     i=0
     while i<len(uri) and i<len(base):
@@ -225,9 +225,9 @@ def refTo(base, uri):
     while i>0 and uri[i-1] != '/' : i=i-1  # scan for slash
 
     if i < 3: return uri  # No way.
-    if string.find(base, "//", i-2)>0 \
-       or string.find(uri, "//", i-2)>0: return uri # An unshared "//"
-    if string.find(base, ":", i)>0: return uri  # An unshared ":"
+    if base.find("//", i-2)>0 \
+       or uri.find("//", i-2)>0: return uri # An unshared "//"
+    if base.find(":", i)>0: return uri  # An unshared ":"
     n = string.count(base, "/", i)
     if n == 0 and i<len(uri) and uri[i] == '#':
         return "./" + uri[i:]
@@ -239,7 +239,7 @@ def refTo(base, uri):
 import os
 def base():
         """The base URI for this process - the Web equiv of cwd
-        
+
         Relative or abolute unix-standard filenames parsed relative to
         this yeild the URI of the file.
         If we had a reliable way of getting a computer name,
@@ -260,41 +260,41 @@ def _fixslash(str):
 
 URI_unreserved = "ABCDEFGHIJJLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~"
     # unreserved  = ALPHA / DIGIT / "-" / "." / "_" / "~"
-    
+
 def canonical(str_in):
     """Convert equivalent URIs (or parts) to the same string
-    
+
     There are many differenet levels of URI canonicalization
     which are possible.  See http://www.ietf.org/rfc/rfc3986.txt
     Done:
     - Converfting unicode IRI to utf-8
     - Escaping all non-ASCII
     - De-escaping, if escaped, ALPHA (%41-%5A and %61-%7A), DIGIT (%30-%39),
-      hyphen (%2D), period (%2E), underscore (%5F), or tilde (%7E) (Sect 2.4) 
+      hyphen (%2D), period (%2E), underscore (%5F), or tilde (%7E) (Sect 2.4)
     - Making all escapes uppercase hexadecimal
     Not done:
     - Making URI scheme lowercase
     - changing /./ or  /foo/../ to / with care not to change host part
-    
-    
+
+
     >>> canonical("foo bar")
     'foo%20bar'
-    
+
     >>> canonical(u'http:')
     'http:'
-    
+
     >>> canonical('fran%c3%83%c2%a7ois')
     'fran%C3%83%C2%A7ois'
-    
+
     >>> canonical('a')
     'a'
-    
+
     >>> canonical('%4e')
     'N'
 
     >>> canonical('%9d')
     '%9D'
-    
+
     >>> canonical('%2f')
     '%2F'
 
@@ -305,7 +305,7 @@ def canonical(str_in):
     'aaa%2Fbbb'
 
     """
-    if type(str_in) == type(u''):
+    if type(str_in) == type(''):
         s8 = str_in.encode('utf-8')
     else:
         s8 = str_in
@@ -330,8 +330,8 @@ def canonical(str_in):
             s += ch
         i = i +1
     return s
-    
-    
+
+
 import unittest
 
 class Tests(unittest.TestCase):
@@ -363,7 +363,7 @@ class Tests(unittest.TestCase):
                  ('file:/ex/x/y/', 'file:/ex/x/y/', ''),
                  ('file:/ex/x/y/pdq', 'file:/ex/x/y/pdq', ''),
                  ('file:/ex/x/y/', 'file:/ex/x/y/z/', 'z/'),
-                 ('file:/devel/WWW/2000/10/swap/test/reluri-1.n3', 
+                 ('file:/devel/WWW/2000/10/swap/test/reluri-1.n3',
                   'file://meetings.example.com/cal#m1', 'file://meetings.example.com/cal#m1'),
                  ('file:/home/connolly/w3ccvs/WWW/2000/10/swap/test/reluri-1.n3', 'file://meetings.example.com/cal#m1', 'file://meetings.example.com/cal#m1'),
                  ('file:/some/dir/foo', 'file:/some/dir/#blort', './#blort'),
@@ -379,8 +379,8 @@ class Tests(unittest.TestCase):
                  )
 
         for inp1, inp2, exp in cases:
-            self.assertEquals(refTo(inp1, inp2), exp)
-            self.assertEquals(join(inp1, exp), inp2)
+            self.assertEqual(refTo(inp1, inp2), exp)
+            self.assertEqual(join(inp1, exp), inp2)
 
 
     def testSplit(self):
@@ -394,7 +394,7 @@ class Tests(unittest.TestCase):
             ("abc#de/f", "abc", "de/f"),
             )
         for inp, exp1, exp2 in cases:
-            self.assertEquals(splitFrag(inp), (exp1, exp2))
+            self.assertEqual(splitFrag(inp), (exp1, exp2))
 
     def testRFCCases(self):
 
@@ -426,7 +426,7 @@ class Tests(unittest.TestCase):
             (base, '../../', 'http://a/'),
             (base, '../../g', 'http://a/g')
             )
-        
+
         otherExamples = (
             (base, '', base),
             (base, '../../../g', 'http://a/g'), #@@disagree with RFC2396
@@ -437,25 +437,25 @@ class Tests(unittest.TestCase):
             (base, '.g', 'http://a/b/c/.g'),
             (base, 'g..', 'http://a/b/c/g..'),
             (base, '..g', 'http://a/b/c/..g'),
-            
+
             (base, './../g', 'http://a/b/g'),
             (base, './g/.', 'http://a/b/c/g/.'), #@@hmmm...
             (base, 'g/./h', 'http://a/b/c/g/./h'), #@@hmm...
             (base, 'g/../h', 'http://a/b/c/g/../h'),
             (base, 'g;x=1/./y', 'http://a/b/c/g;x=1/./y'), #@@hmmm...
             (base, 'g;x=1/../y', 'http://a/b/c/g;x=1/../y'),  #@@hmmm...
-            
+
             (base, 'g?y/./x', 'http://a/b/c/g?y/./x'),
             (base, 'g?y/../x', 'http://a/b/c/g?y/../x'),
             (base, 'g#s/./x', 'http://a/b/c/g#s/./x'),
             (base, 'g#s/../x', 'http://a/b/c/g#s/../x')
             )
-        
+
         for b, inp, exp in normalExamples + otherExamples:
             if exp is None:
                 self.assertRaises(ValueError, join, b, inp)
             else:
-                self.assertEquals(join(b, inp), exp)
+                self.assertEqual(join(b, inp), exp)
 
 def _test():
     import doctest, uripath

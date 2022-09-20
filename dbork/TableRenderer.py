@@ -123,7 +123,7 @@ class TableRenderer:
         try:
             data[0].isdigit() # Lord, there's got to be a better way. @@@   (@@ to do what? --tim)
             data = [data]
-        except AttributeError, e:
+        except AttributeError as e:
             data = data  #  @@? what does this do - tim   mean "pass"?
         for row in data:
             rowEntry = []
@@ -135,7 +135,7 @@ class TableRenderer:
                     self.widths.append(0)
                 datum = str(row[columnNo])
                 if (filter):
-                    datum = filter(datum)
+                    datum = list(filter(datum))
                 self._checkWidth(datum, len(self.data) - 1, columnNo)
                 rowEntry.append([datum, theType])
 
@@ -222,4 +222,4 @@ if __name__ == '__main__':
     renderer.underline(index=1)
 
     # Let's see what hath we wrought.
-    print renderer.toString()+"\n"
+    print(renderer.toString()+"\n")

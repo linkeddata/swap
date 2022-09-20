@@ -145,14 +145,14 @@ Why not use DOM instead?   I dunno.
 __version__ = "$Revision$"
 # $Id$
 
-import cStringIO
+import io
 import re
 
 class Streamer:
     """An base class for things which implement writeTo instead of
     __str__."""
     def __str__(self):
-        s = cStringIO.StringIO()
+        s = io.StringIO()
         self.writeTo(s)
         return s.getvalue()
 
@@ -246,7 +246,7 @@ class Element(Streamer):
             s.write(prefix)
         s.write("<")
         s.write(self.tag)
-        keys = self.attrs.keys()
+        keys = list(self.attrs.keys())
         keys.sort()
         for key in keys:
             if self.attrs[key] is not None:
@@ -313,7 +313,7 @@ class Comment:
         self.inline = inline
 
     def __str__(self):
-        s = cStringIO.StringIO()
+        s = io.StringIO()
         self.writeTo(s)
         return s.getvalue()
     
@@ -354,7 +354,7 @@ class Flow:
     def __getattr__(self, name):
         def func(*content, **kw):
             kw["inline"] = 0
-            return apply(Element, [name]+list(content), kw)
+            return Element(*[name]+list(content), **kw)
         return func
 
 class Inline:
@@ -367,13 +367,13 @@ class Inline:
     def __getattr__(self, name):
         def func(*content, **kw):
             kw["inline"] = 1
-            return apply(Element, [name]+list(content), kw)
+            return Element(*[name]+list(content), **kw)
         return func
 
 """Foo"""
 
 def createStdElements():
-    import html
+    from . import html
 
     flow = Flow()
     inline = Inline()
@@ -407,8 +407,8 @@ createStdElements()
 
 if __name__ =='__main__':
     import doctest, html
-    print "Performing doctest..."
-    print doctest.testmod(html) 
+    print("Performing doctest...")
+    print(doctest.testmod(html)) 
 
 # $Log$
 # Revision 1.6  2003-09-04 05:40:13  sandro

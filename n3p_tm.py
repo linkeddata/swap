@@ -7,9 +7,9 @@ $$
 
 from n3p import n3p
 import os
-from uripath import join
+from .uripath import join
 
-class absolutizer(unicode):
+class absolutizer(str):
     def __getitem__(self, other):
         return join(self, other)
 
@@ -226,7 +226,7 @@ def unEscape(string):
     else:
         real_str = string[1:-1]
         triple = False
-    ret = u''
+    ret = ''
     n = 0
     while n < len(real_str):
         ch = real_str[n]
@@ -243,12 +243,12 @@ def unEscape(string):
             elif a == 'u':
                 m = real_str[n+2:n+6]
                 assert len(m) == 4
-                ret += unichr(int(m, 16))
+                ret += chr(int(m, 16))
                 n += 5
             elif a == 'U':
                 m = real_str[n+2:n+10]
                 assert len(m) == 8
-                ret += unichr(int(m, 16))
+                ret += chr(int(m, 16))
                 n += 9
             else:
                 raise ValueError('Bad Escape')

@@ -17,8 +17,8 @@
 
 import string
 
-import uripath
-from ConstTerm import Symbol, StringLiteral, Namespace
+from . import uripath
+from .ConstTerm import Symbol, StringLiteral, Namespace
 
 RDF = Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 LIST = Namespace("http://www.daml.org/2001/03/daml+oil#")
@@ -28,7 +28,7 @@ LOG = Namespace("http://www.w3.org/2000/10/swap/log#")
 
 from string import *
 import re
-from yappsrt import *
+from .yappsrt import *
 
 class _ParserScanner(Scanner):
     def __init__(self, str):
@@ -264,7 +264,7 @@ class Parser(_Parser):
         try:
             ns = self._prefixes[pfx]
         except:
-            raise BadSyntax, "prefix %s not bound" % pfx
+            raise BadSyntax("prefix %s not bound" % pfx)
         else:
             return Symbol(ns + ln)
 
@@ -299,7 +299,7 @@ class Parser(_Parser):
         try:
             v = int(str)
         except ValueError:
-            v = long(str)
+            v = int(str)
         return IntegerLiteral(v) #@@
 
     def bindListPrefix(self):

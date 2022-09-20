@@ -15,7 +15,7 @@ If any diff files are given then the diff files are read merged separately
 and compared with the input files. the result is a list of differences
 instead of the canonicalizd graph. This is NOT a minimal diff.
 Exits with nonzero system status if graphs do not match.
- 
+
 This is an independent n-triples cannonicalizer. It uses heuristics, and
 will not terminate on all graphs. It is designed for testing:  the output and
 the reference output are both canonicalized and compared.
@@ -40,18 +40,18 @@ References:
  .google graph isomorphism
  See also eg http://www.w3.org/2000/10/rdf-tests/rdfcore/utils/ntc/compare.cc
  NTriples: see http://www.w3.org/TR/rdf-testcases/#ntriples
- 
+
  Not to mention,  published this month by coincidence:
   Kelly, Brian, [Whitehead Institute]  "Graph cannonicalization", Dr Dobb's Journal, May 2003.
- 
+
  $Id$
 This is or was http://www.w3.org/2000/10/swap/cant.py
 W3C open source licence <http://www.w3.org/Consortium/Legal/copyright-software.html>.
 
 2004-02-31 Serious bug fixed.  This is a test program, shoul dbe itself tested.
                 Quis custodiet ipsos custodes?
-                
-                
+
+
 From Manu Sporny 2012-01-16:
 
 Differences between cant.py and our implementation from Dave Longley:
@@ -62,7 +62,7 @@ I didn't see where you're dealing with graph isomorphisms (which require you to 
 # canticle - Canonicalizer of NTriples Independent of Cwm , Llyn, Etc. ?
 import os
 import sys
-import urllib
+import urllib.request, urllib.parse, urllib.error
 try:
     from swap import uripath  # http://www.w3.org/2000/10/swap/
 except ImportError:
@@ -82,19 +82,19 @@ uriref = r'<[^>]*>'
 language = r'[a-z0-9]+(?:-[a-z0-9]+)?'
 string_pattern = r'".*"'   # We know in ntriples that there can only be one string on the line
 langString = string_pattern + r'(?:@' + language + r')?'
-datatypeString = langString + '(?:\^\^' + uriref + r')?' 
+datatypeString = langString + '(?:\^\^' + uriref + r')?'
 #literal = langString + "|" + datatypeString
 object =  r'(' + nodeID + "|" + datatypeString + "|" + uriref + r')'
 ws = r'[ \t]*'
-com = ws + r'(#.*)?[\r\n]*' 
+com = ws + r'(#.*)?[\r\n]*'
 comment = re.compile("^"+com+"$")
-statement = re.compile( ws + object + ws + object + ws + object  + com) # 
+statement = re.compile( ws + object + ws + object + ws + object  + com) #
 
 
 #"
 
 def usage():
-    print __doc__
+    print(__doc__)
 
 def loadFiles(testFiles):
     graph = []
@@ -104,10 +104,10 @@ def loadFiles(testFiles):
         if verbose: stderr.write("Loading data from %s\n" % fn)
 
         uri = uripath.join(WD, fn)
-        inStream = urllib.urlopen(uri)
+        inStream = urllib.request.urlopen(uri)
         while 1:
             line = inStream.readline()
-            if line == "" : break           
+            if line == "" : break
 #           if verbose: stderr.write("%s\n" % line)
             m = comment.match(line)
             if m != None: continue
@@ -152,12 +152,12 @@ def main():
         if o in ("-d", "--diff", "--to"):
             diffFiles.append(a)
 
-    
+
 
     if testFiles == []: testFiles = [ "/dev/stdin" ]
     graph = loadFiles(testFiles)
     graph = canonicalize(graph)
-    
+
     if diffFiles != []:
         graph2 = loadFiles(diffFiles)
         graph2 = canonicalize(graph2)
@@ -197,9 +197,9 @@ def compareCanonicalGraphs(g1, g2):
             inserted.append(g2[i2])
             i2 += 1
     for triple in deleted:
-        print "- %s %s %s." % triple
+        print("- %s %s %s." % triple)
     for triple in inserted:
-        print "+ %s %s %s." % triple
+        print("+ %s %s %s." % triple)
     number = len(deleted) + len(inserted)
     if verbose:
         if number == 0: stderr.write("FILES MATCH.\n")
@@ -218,40 +218,40 @@ def canonicalize(g):
 
 def serialize(graph):
     graph.sort()
-    if verbose: print "# Canonicalized:"
+    if verbose: print("# Canonicalized:")
     for t in graph:
         for x in t:
             if x.startswith("__"): x = x[1:]
-            print x,
-        print "."
+            print(x, end=' ')
+        print(".")
 
 def compareFirst(a,b):
     "Compare consistently nested lists of strings"
-    d = cmp(`a[0]`, `b[0]`)
+    d = cmp(repr(a[0]), repr(b[0]))
     if verbose:
-        if d<0: stderr.write("Comparing:  %s]\n  LESS THAN %s\n" % (`a`,`b`))
-        elif d>0: stderr.write("Comparing:  %s]\n  LESS THAN %s\n" % (`b`,`a`))
-        else: stderr.write("Comparing:  %s]\n     EQUALS %s\n" % (`b`,`a`))
+        if d<0: stderr.write("Comparing:  %s]\n  LESS THAN %s\n" % (repr(a),repr(b)))
+        elif d>0: stderr.write("Comparing:  %s]\n  LESS THAN %s\n" % (repr(b),repr(a)))
+        else: stderr.write("Comparing:  %s]\n     EQUALS %s\n" % (repr(b),repr(a)))
     return d
-    
+
     #@@@@@@@@@@@@
     if a==None and b == None: return 0
     if a == None: return -1
     if b == None: return 1
-    if isinstance(a, types.IntType):
-        if isinstance (b,types.IntType): return a-b
+    if isinstance(a, int):
+        if isinstance (b,int): return a-b
         else:
             return -1  # Ints are less than strings or lists
-    if isinstance(a, types.StringTypes):
-        if isinstance (b, types.IntType): return 1
-        if isinstance (b,types.StringTypes):
+    if isinstance(a, (str,)):
+        if isinstance (b, int): return 1
+        if isinstance (b,(str,)):
             if a < b: return -1
             if a > b: return 1
             return 0
         else:
             return -1  # Strings are less than lists
     else:  # a is list
-        if isinstance (b,types.StringTypes):
+        if isinstance (b,(str,)):
             return 1
         else: # list vs list
 #           assert isinstance(a, types.ListType) or isinstance(a, TupleType)
@@ -261,7 +261,7 @@ def compareFirst(a,b):
                 d = compare(a[i], b[i], level+1)
                 if d != 0: return d
             return 0
-                
+
 def canon(graph, c0=0):
     """Try one pass at canonicalizing this using 1 step sigs.
     Return as a triple:
@@ -301,7 +301,7 @@ def canon(graph, c0=0):
         if verbose: stderr.write( "Bnode %3i) %s\n\n" % (i, signature[i]))
         s.append((signature[i], i))
     s.sort(compareFirst)
-    
+
     dups = 0
     c = c0
     if verbose: stderr.write("\nIn order\n")
@@ -320,7 +320,7 @@ def canon(graph, c0=0):
             canonical[original] = c
             if verbose: stderr.write( "\tBnode#%i canonicalized to new fixed C%i\n" %(s[i][1], c))
             c = c + 1
-            
+
     newGraph = []
     for j in range(len(graph)):
         triple = graph[j]

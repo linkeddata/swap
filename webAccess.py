@@ -15,16 +15,16 @@ Web access functionality building on urllib2
 import sys, os
 
 #import urllib
-import urllib2, urllib  # Python standard
+import urllib.request, urllib.error, urllib.parse, urllib.request, urllib.parse, urllib.error  # Python standard
 
-from why import newTopLevelFormula
+from .why import newTopLevelFormula
 
-import uripath # http://www.w3.org/2000/10/swap/uripath.py
-import diag
-from diag import progress
-import notation3   # Parser    @@@ Registery of parsers vs content types woudl be better.
+from . import uripath # http://www.w3.org/2000/10/swap/uripath.py
+from . import diag
+from .diag import progress
+from . import notation3   # Parser    @@@ Registery of parsers vs content types woudl be better.
 
-from OrderedSequence import indentString
+from .OrderedSequence import indentString
 
 HTTP_Content_Type = 'content-type' #@@ belongs elsewhere?
 
@@ -88,9 +88,9 @@ def webget(addr, referer=None, types=[]):
     # buggy in 2.4.2 with CStringIO
     if addr[:5] == 'data:':
         # return open_data(addr)
-        return urllib.urlopen(addr)
+        return urllib.request.urlopen(addr)
 
-    req = urllib2.Request(addr)
+    req = urllib.request.Request(addr)
 
     if types:
         req.add_header('Accept', ','.join(types))
@@ -98,7 +98,7 @@ def webget(addr, referer=None, types=[]):
     if referer: #consistently misspelt
         req.add_header('Referer', referer)
 
-    stream =  urllib2.urlopen(req)
+    stream =  urllib.request.urlopen(req)
 
     if print_all_file_names:
         diag.file_list.append(addr)
@@ -129,7 +129,7 @@ def load(store, uri=None, openFormula=None, asIfFrom=None, contentType=None,
             if diag.chatty_flag > 40: progress("Taking input from " + addr)
             netStream = urlopenForRDF(addr, referer)
             if diag.chatty_flag > 60:
-                progress("   Headers for %s: %s\n" %(addr, netStream.headers.items()))
+                progress("   Headers for %s: %s\n" %(addr, list(netStream.headers.items())))
             receivedContentType = netStream.headers.get(HTTP_Content_Type, None)
         else:
             if diag.chatty_flag > 40: progress("Taking input from standard input")
@@ -144,7 +144,7 @@ def load(store, uri=None, openFormula=None, asIfFrom=None, contentType=None,
         guess = None
         if receivedContentType:
             if diag.chatty_flag > 9:
-                progress("Recieved Content-type: " + `receivedContentType` + " for "+addr)
+                progress("Recieved Content-type: " + repr(receivedContentType) + " for "+addr)
             if receivedContentType.find('xml') >= 0 or (
                      receivedContentType.find('rdf')>=0
                      and not (receivedContentType.find('n3')>=0)  ):
@@ -153,7 +153,7 @@ def load(store, uri=None, openFormula=None, asIfFrom=None, contentType=None,
                 guess = "text/n3"
         if guess== None and contentType:
             if diag.chatty_flag > 9:
-                progress("Given Content-type: " + `contentType` + " for "+addr)
+                progress("Given Content-type: " + repr(contentType) + " for "+addr)
             if contentType.find('xml') >= 0 or (
                     contentType.find('rdf') >= 0  and not (contentType.find('n3') >= 0 )):
                 guess = "application/rdf+xml"
@@ -188,11 +188,11 @@ def load(store, uri=None, openFormula=None, asIfFrom=None, contentType=None,
     import os
     if guess == "x-application/sparql":
         if diag.chatty_flag > 49: progress("Parsing as SPARQL")
-        from sparql import sparql_parser
-        import sparql2cwm
+        from .sparql import sparql_parser
+        from . import sparql2cwm
         convertor = sparql2cwm.FromSparql(store, F, why=why)
-        import StringIO
-        p = sparql_parser.N3Parser(StringIO.StringIO(buffer), sparql_parser.branches, convertor)
+        import io
+        p = sparql_parser.N3Parser(io.StringIO(buffer), sparql_parser.branches, convertor)
         F = p.parse(sparql_parser.start).close()
     elif guess == 'application/rdf+xml':
         if diag.chatty_flag > 49: progress("Parsing as RDF")
@@ -203,7 +203,7 @@ def load(store, uri=None, openFormula=None, asIfFrom=None, contentType=None,
             flags = ''
         else:
             parser = os.environ.get("CWM_RDF_PARSER", "sax2rdf")
-        import rdfxml
+        from . import rdfxml
         p = rdfxml.rdfxmlparser(store, F,  thisDoc=asIfFrom, flags=flags,
                 parser=parser, why=why)
 
@@ -213,8 +213,8 @@ def load(store, uri=None, openFormula=None, asIfFrom=None, contentType=None,
         assert guess == 'text/n3'
         if diag.chatty_flag > 49: progress("Parsing as N3")
         if os.environ.get("CWM_N3_PARSER", 0) == 'n3p':
-            import n3p_tm
-            import triple_maker
+            from . import n3p_tm
+            from . import triple_maker
             tm = triple_maker.TripleMaker(formula=F, store=store)
             p = n3p_tm.n3p_tm(asIfFrom, tm)
         else:
@@ -284,11 +284,11 @@ def open_data(url, data=None):
     # data      := *urlchar
     # parameter := attribute "=" value
     import mimetools, time
-    from StringIO import StringIO
+    from io import StringIO
     try:
         [type, data] = url.split(',', 1)
     except ValueError:
-        raise IOError, ('data error', 'bad data URL')
+        raise IOError('data error', 'bad data URL')
     if not type:
         type = 'text/plain;charset=US-ASCII'
     semi = type.rfind(';')
@@ -330,13 +330,13 @@ def getParser(format, inputURI, workingContext, flags):
     if format == "rdf" :
         touch(_store)
         if "l" in flags["rdf"]:
-            from rdflib2rdf import RDFXMLParser
+            from .rdflib2rdf import RDFXMLParser
         else:
             rdfParserName = os.environ.get("CWM_RDF_PARSER", "sax2rdf")
             if rdfParserName == "rdflib2rdf":
-                from rdflib2rdf import RDFXMLParser
+                from .rdflib2rdf import RDFXMLParser
             elif rdfParserName == "sax2rdf":
-                from sax2rdf import RDFXMLParser
+                from .sax2rdf import RDFXMLParser
             else:
                 raise RuntimeError("Unknown RDF parser: " + rdfParserName)
         return RDFXMLParser(_store, workingContext, inputURI,

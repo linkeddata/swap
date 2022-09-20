@@ -5,7 +5,7 @@
 __version__ = "$Revision$"
 # $Id$
 
-import cStringIO
+import io
 import LX
 import LX.kb
 import LX.logic
@@ -114,7 +114,7 @@ class Serializer:
                 result += ".\n"
             result = result[:-1]
 
-            nspres = self.nsused.keys()
+            nspres = list(self.nsused.keys())
             nspres.sort()
             for pre in nspres:
                 self.makeComment(" prefix %s_ <%s#>" % (pre, self.nsused[pre]))
@@ -128,8 +128,8 @@ class Serializer:
 
     def prename(self, f, names, counter):
         global ns
-        if names.has_key(f): return
-        if operators.has_key(f): return
+        if f in names: return
+        if f in operators: return
         if f.isAtomic():
             #print "What to do with:", f
             result = None
@@ -167,7 +167,7 @@ class Serializer:
                 result = exivar(+counter["e"])
                 counter["e"] += 1
             else:
-                raise RuntimeError, ("Can't serialize term %s of class %s" %
+                raise RuntimeError("Can't serialize term %s of class %s" %
                                      (str(f), f.__class__))
             #print "names %s is %s" % (f, result)
             names[f] = result
@@ -177,13 +177,13 @@ class Serializer:
 
 
 def serialize(kb):
-    str = cStringIO.StringIO()
+    str = io.StringIO()
     s = Serializer(str)
     s.serializeKB(kb)
     return str.getvalue()
 
-import basicOtter
-import urllib
+from . import basicOtter
+import urllib.request, urllib.parse, urllib.error
 import re
 
 prefixPattern = re.compile("^%\s*@prefix\s+(?P<short>\w+)\s+<(?P<long>.+)>\s*$")
@@ -196,7 +196,7 @@ class Parser:
         self.consts = { }
 
     def load(self, inputURI):
-        stream = urllib.urlopen(inputURI)
+        stream = urllib.request.urlopen(inputURI)
         s = stream.read()
         tree = basicOtter.parse("inputDocument", s)
 
@@ -205,13 +205,13 @@ class Parser:
             m=prefixPattern.match(line)
             if m is not None:
                 prefix[m.group("short")] = m.group("long")
-        allShorts = "|".join(prefix.keys())
+        allShorts = "|".join(list(prefix.keys()))
         self.allShortsPattern = re.compile(allShorts)
 
         # traverse tree converting to kb.
         for f in tree:
             if f[0] in ("include", "set", "assign"):
-                print ("Warning: otter '%s' directive ignored" % f[0])
+                print(("Warning: otter '%s' directive ignored" % f[0]))
                 continue
             if f[0] == "formula_list":
                 continue
@@ -250,7 +250,7 @@ class Parser:
                     q=LX.logic.EXISTS
                     vc=LX.logic.ExiVar
                 else:
-                    raise RuntimeError, "bad quantifier string"
+                    raise RuntimeError("bad quantifier string")
                 n=2
                 newscope=scope.copy()
                 while isinstance(f[n], ""):
@@ -262,7 +262,7 @@ class Parser:
                 terms = []
                 for term in f:
                     terms.append(self.convertFormula(term))
-                return apply(LX.expr.CompoundExpr, terms)
+                return LX.expr.CompoundExpr(*terms)
             
 
 # $Log$

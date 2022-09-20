@@ -11,9 +11,9 @@
 def rdfxmlparser(store, openFormula, thisDoc=None,  flags="", why=None,
 		    parser='sax2rdf'):
     if parser == 'rdflib':
-        import rdflib_user
+        from . import rdflib_user
         return rdflib_user.rdflib_handoff(store, openFormula,thisDoc, why=why)
     else:   # parser == sax2xml
-        import sax2rdf
+        from . import sax2rdf
         return  sax2rdf.RDFXMLParser(store, openFormula,  thisDoc=thisDoc,
 			flags=flags, why=why)

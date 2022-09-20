@@ -17,7 +17,7 @@ $Id$
 """
 
 from string import find
-import yapps2, yappsrt
+from . import yapps2, yappsrt
 
 
 def toHTML(self, xwr):
@@ -39,7 +39,7 @@ def toHTML(self, xwr):
 
     xwr.endElement()
 
-from yapps2 import Eval, Terminal, NonTerminal, \
+from .yapps2 import Eval, Terminal, NonTerminal, \
      Sequence, Choice, Option, Plus, Star
 
 def expToHTML(sym, xwr, toplevel=1):
@@ -100,7 +100,7 @@ def generate(title, inputfilename, outputfilename=''):
     and an output filename (defaulting to X.py)."""
 
     import sys, codecs
-    from toXML import XMLWriter
+    from .toXML import XMLWriter
     dummy, dummy, dummy, encWriter = codecs.lookup('utf-8')
 
     if not outputfilename:

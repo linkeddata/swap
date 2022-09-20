@@ -50,19 +50,19 @@ try:
     from swap.notation3 import RDF_NS_URI
     from swap.llyn import Formula, CONTEXT, PRED, SUBJ, OBJ
 except ImportError:
-    import llyn, diag
-    from myStore import loadMany
-    from diag import verbosity, setVerbosity, progress
-    import notation3            # N3 parsers and generators
+    from . import llyn, diag
+    from .myStore import loadMany
+    from .diag import verbosity, setVerbosity, progress
+    from . import notation3            # N3 parsers and generators
 
 
-    from RDFSink import FORMULA, LITERAL, ANONYMOUS, Logic_NS
-    import uripath
-    from uripath import base
-    from myStore import  Namespace
-    import myStore
-    from notation3 import RDF_NS_URI
-    from llyn import Formula, CONTEXT, PRED, SUBJ, OBJ
+    from .RDFSink import FORMULA, LITERAL, ANONYMOUS, Logic_NS
+    from . import uripath
+    from .uripath import base
+    from .myStore import  Namespace
+    from . import myStore
+    from .notation3 import RDF_NS_URI
+    from .llyn import Formula, CONTEXT, PRED, SUBJ, OBJ
 
 #daml = Namespace("http://www.daml.org/2001/03/daml+oil#")
 OWL = Namespace("http://www.w3.org/2002/07/owl#")
@@ -71,18 +71,18 @@ LOG = Namespace("http://www.w3.org/2000/10/swap/log#")
 DELTA = Namespace("http://www.w3.org/2004/delta#")
 
 def debugBnode(n, f):
-    progress("For node %s" % `n`)
+    progress("For node %s" % repr(n))
     for s in f.statementsMatching(subj=n):
-        progress("     %s  %s; # could be ifp?" %(`s.predicate()`, `s.object()`)) 
+        progress("     %s  %s; # could be ifp?" %(repr(s.predicate()), repr(s.object()))) 
     for s in f.statementsMatching(obj=n):
-        progress("     is %s of  %s; # could be fp?" %(`s.predicate()`, `s.subject()`)) 
+        progress("     is %s of  %s; # could be fp?" %(repr(s.predicate()), repr(s.subject()))) 
 
 def lookUp(predicates, assumptions=Set()):
     """Look up all the schemas for the predicates given"""
     global verbose
     schemas = assumptions
     for pred in predicates:
-        if verbose > 3: progress("Predicate: %s" % `pred`)
+        if verbose > 3: progress("Predicate: %s" % repr(pred))
         u = pred.uriref()
         hash = u.find("#")
         if hash <0:
@@ -108,9 +108,9 @@ def nailFormula(f, assumptions=Set()):
     for node in nodes:
         if node.generated() or node in f.existentials():
             bnodes.add(node)
-            if verbose >=5: progress("Blank node: %s" % `node`)
+            if verbose >=5: progress("Blank node: %s" % repr(node))
         else:
-            if verbose >=5: progress("Fixed node: %s" % `node`)
+            if verbose >=5: progress("Fixed node: %s" % repr(node))
         sofar[node] = []
 
     meta = lookUp(predicates, assumptions)
@@ -146,12 +146,12 @@ def nailFormula(f, assumptions=Set()):
                     if y not in loose:  # y is the possible anchor
                         defi = (x, inverse, pred, y)
                         if x in loose:   # this node
-                            if verbose > 4: progress("   Nailed %s as %s%s%s" % (`x`, `y`, `char`, `pred`))
+                            if verbose > 4: progress("   Nailed %s as %s%s%s" % (repr(x), repr(y), repr(char), repr(pred)))
                             loose.discard(x)
                             newNailed.add(x)
                         else:
                             if verbose >=6 : progress(
-                                "   (ignored %s as %s%s%s)" % (`x`, `y`, `char`, `pred`))
+                                "   (ignored %s as %s%s%s)" % (repr(x), repr(y), repr(char), repr(pred)))
                         definitions.append(defi)
 #                       if verbose > 9: progress("   Definition[x] is now", definition[x])
                         if inverse: equivalentSet = Set(f.each(obj=y, pred=pred))
@@ -208,7 +208,7 @@ def nailFormula(f, assumptions=Set()):
                         "Can't nail: %s all have %s of %s." % (others, pred, obj))
                         continue  # Defn would be ambiguous in this graph
                     defi = (x, 1, pred, obj)
-                    if verbose>2: progress("   Weakly-nailed %s as %s%s%s" % (`x`, `obj`, "^", `pred`))
+                    if verbose>2: progress("   Weakly-nailed %s as %s%s%s" % (repr(x), repr(obj), "^", repr(pred)))
                     loose.discard(x)
                     newNailed.add(x)
                     definitions.append(defi)
@@ -220,7 +220,7 @@ def nailFormula(f, assumptions=Set()):
                 for n in loose:
                     progress("For node %s" % n)
                     for s in f.statementsMatching(subj=n):
-                        progress("     %s  %s; # could be ifp?" %(`s.predicate()`, `s.object()`)) 
+                        progress("     %s  %s; # could be ifp?" %(repr(s.predicate()), repr(s.object()))) 
                     for s in f.statementsMatching(obj=n):
                         progress("     is %s of  %s; # could be fp?" %(s.predicate(), s.subject())) 
                 
@@ -336,7 +336,7 @@ def patches(delta, f, only_f, originalBnodes, definitions, deleting=0):
         lhs = lhs.close()
         rhs = rhs.close()
         delta.add(subj=lhs, pred=patchVerb, obj=rhs)
-        if verbose >1: progress("PATCH: %s %s %s\n" %(lhs.n3String(), `patchVerb`, rhs.n3String()))
+        if verbose >1: progress("PATCH: %s %s %s\n" %(lhs.n3String(), repr(patchVerb), rhs.n3String()))
     return
 
 def consolidate(delta, patchVerb):
@@ -354,7 +354,7 @@ def consolidate(delta, patchVerb):
             list = []
             agenda[s.subject()] = list
         list.append(s)
-    for lhs, list in agenda.items():
+    for lhs, list in list(agenda.items()):
         if verbose >3: progress("Patches lhs= %s: %s" %(lhs, list))
         if len(list) > 1:
             rhs = delta.newFormula()
@@ -382,19 +382,19 @@ def differences(f, g, assumptions):
         if x in match: continue # done already
 
         if x in f._redirections:
-            if verbose > 3: progress("Redirected %s to %s. Ignoring" % (`x`, `f._redirections[x]`))
+            if verbose > 3: progress("Redirected %s to %s. Ignoring" % (repr(x), repr(f._redirections[x])))
             unmatched.discard(x)
             continue
 
-        if verbose > 3: progress("Definition of %s = %s%s%s"% (`x`, `y` , ".!^"[inverse], `pred`))
+        if verbose > 3: progress("Definition of %s = %s%s%s"% (repr(x), repr(y) , ".!^"[inverse], repr(pred)))
 
         if y.generated():
             while y in f._redirections:
                 y = f._redirections[y]
-                if verbose>4: progress(" redirected to  %s = %s%s%s"% (`x`,  `y`, "!^"[inverse], `pred`))
+                if verbose>4: progress(" redirected to  %s = %s%s%s"% (repr(x),  repr(y), "!^"[inverse], repr(pred)))
             yg = match.get(y, None)
             if yg == None:
-                if verbose>4: progress("  Had definition for %s in terms of %s which is not matched"%(`x`,`y`))
+                if verbose>4: progress("  Had definition for %s in terms of %s which is not matched"%(repr(x),repr(y)))
                 continue
         else:
             yg = y
@@ -408,12 +408,12 @@ def differences(f, g, assumptions):
 
         if len(matches) > 1:
             raise RuntimeError("""Rats. Wheras in the first graph %s%s%s uniquely selects %s,
-                    in the other graph there are more than 1 matches: %s""" % (`y`, "!^"[inverse], `pred`, `x`,  `matches`))
+                    in the other graph there are more than 1 matches: %s""" % (repr(y), "!^"[inverse], repr(pred), repr(x),  repr(matches)))
         for q in matches:  # pick only one  @@ python function?
             z = q
             break
         if verbose > 2:
-            progress("Found match for %s in %s " % (`x`,`z`))
+            progress("Found match for %s in %s " % (repr(x),repr(z)))
         match[x] = z
         unmatched.discard(x)
 
@@ -512,14 +512,14 @@ def main():
     version = "$Id$"[1:-1]
     if diffFiles == []:
         nailFormula(graph, assumptions)
-        if verbose > 1: print "# Smush generated by " + version
-        print graph.close().n3String(base=base(), flags="a")
+        if verbose > 1: print("# Smush generated by " + version)
+        print(graph.close().n3String(base=base(), flags="a"))
         sys.exit(0)
         
     graph2 = loadFiles(diffFiles)
     delta = differences(graph, graph2, assumptions)
-    if verbose >1: print "# Differences by " + version
-    print delta.close().n3String(base=base())
+    if verbose >1: print("# Differences by " + version)
+    print(delta.close().n3String(base=base()))
 #    sys.exit(len(delta))
 #    sys.exit(0)   # didn't crash
     if delta.contains():        # Any statements in delta at all?

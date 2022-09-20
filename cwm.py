@@ -288,12 +288,12 @@ rdf/xml files. Note that this requires rdflib.
             elif arg == "-reify": option_reify = 1
             elif arg == "-flat": option_flat = 1
             elif arg == "-help":
-                print doCommand.__doc__
-                print notation3.ToN3.flagDocumentation
-                print toXML.ToRDF.flagDocumentation
+                print(doCommand.__doc__)
+                print(notation3.ToN3.flagDocumentation)
+                print(toXML.ToRDF.flagDocumentation)
                 try:
                     from swap import  sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
-                    print sax2rdf.RDFXMLParser.flagDocumentation
+                    print(sax2rdf.RDFXMLParser.flagDocumentation)
                 except:
                     pass
                 return
@@ -358,7 +358,7 @@ rdf/xml files. Note that this requires rdflib.
             _outSink = notation3.Reifier(_outSink, _outURI+ "#_formula", flat=1)
 
         if diag.tracking: 
-            myReason = BecauseOfCommandLine(`sys.argv`)
+            myReason = BecauseOfCommandLine(repr(sys.argv))
             # @@ add user, host, pid, pwd, date time? Privacy!
         else:
             myReason = None
@@ -498,7 +498,7 @@ rdf/xml files. Note that this requires rdflib.
                 diag.tracking = int(_rhs)
                 
             elif option_pipe: ############## End of pipable options
-                print "# Command line error: %s illegal option with -pipe", arg
+                print("# Command line error: %s illegal option with -pipe", arg)
                 break
 
             elif arg == "-triples" or arg == "-ntriples":
@@ -659,12 +659,12 @@ rdf/xml files. Note that this requires rdflib.
                 _tmpstore = llyn.RDFStore( _outURI+"#_g", metaURI=_metaURI, argv=option_with, crypto=option_crypto)
 
                 tmpContext = _tmpstore.newFormula(_uri+ "#_formula")
-                _newURI = join(_baseURI, "_w_"+`_genid`)  # Intermediate
+                _newURI = join(_baseURI, "_w_"+repr(_genid))  # Intermediate
                 _genid = _genid + 1
                 _newContext = _tmpstore.newFormula(_newURI+ "#_formula")
                 _tmpstore.loadURI(_uri)
 
-                print targetkb
+                print(targetkb)
 
             elif arg == "-flatten":
                 #raise NotImplementedError
@@ -695,7 +695,7 @@ rdf/xml files. Note that this requires rdflib.
                 option_outputStyle = "-no"
 
             elif arg == '-sparqlResults':
-                from cwm_sparql import outputString, SPARQL_NS
+                from .cwm_sparql import outputString, SPARQL_NS
                 ns = _store.newSymbol(SPARQL_NS)
                 if not sparql_query_formula:
                     raise ValueError('No query')
@@ -735,7 +735,7 @@ rdf/xml files. Note that this requires rdflib.
                 elif option_outputStyle == "-no":
                     pass
                 elif option_outputStyle == "-debugString":
-                    print workingContext.debugString()
+                    print(workingContext.debugString())
                 else:  # "-best"
                     _store.dumpNested(workingContext, _outSink,
                             flags=option_flags[option_format])

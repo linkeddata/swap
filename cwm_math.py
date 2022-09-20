@@ -18,17 +18,17 @@ __author__ = 'Sean B. Palmer'
 __cvsid__ = '$Id$'
 __version__ = '$Revision$'
 
-import sys, string, re, urllib
+import sys, string, re, urllib.request, urllib.parse, urllib.error
 
-from term import LightBuiltIn, Function, ReverseFunction, ArgumentNotLiteral, Literal
-from local_decimal import Decimal
+from .term import LightBuiltIn, Function, ReverseFunction, ArgumentNotLiteral, Literal
+from .local_decimal import Decimal
 import types
 
 # from RDFSink import DAML_LISTS, RDF_type_URI, DAML_sameAs_URI
 
 MATH_NS_URI = 'http://www.w3.org/2000/10/swap/math#'
 
-from diag import progress
+from .diag import progress
 import sys, traceback
 
 def obsolete():
@@ -45,7 +45,7 @@ def tidy(x):
 
 def isString(x):
     # in 2.2, evidently we can test for isinstance(types.StringTypes)
-    return type(x) is type('') or type(x) is type(u'')
+    return type(x) is type('') or type(x) is type('')
 
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -64,14 +64,14 @@ def isString(x):
 # add, take, multiply, divide
 
 def numeric(s):
-    if type(s) == types.IntType or \
-       type(s) == types.LongType or \
-       type(s) is types.FloatType or \
+    if type(s) == int or \
+       type(s) == int or \
+       type(s) is float or \
        isinstance(s,Decimal): return s
-    if not isinstance(s, (Literal, str, unicode)):
+    if not isinstance(s, (Literal, str)):
         raise ArgumentNotLiteral(s)
     s = s.strip()  # 2009 in practice e.g. OFX values have leading spaces
-    if s.find('.') < 0 and s.find('e') < 0 : return long(s)
+    if s.find('.') < 0 and s.find('e') < 0 : return int(s)
     if 'e' not in s and 'E' not in s: return Decimal(s)
     return float(s)
 
@@ -125,13 +125,13 @@ class BI_factors(LightBuiltIn, ReverseFunction):
 class BI_quotient(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
         if len(subj_py) == 2:
-            if isinstance(numeric(subj_py[0]), long):
+            if isinstance(numeric(subj_py[0]), int):
                 return numeric(subj_py[1]).__rtruediv__(numeric(subj_py[0]))
             return numeric(subj_py[0]).__truediv__(numeric(subj_py[1]))
 
 class BI_integerQuotient(LightBuiltIn, Function):
     def evaluateObject(self, subj_py): 
-        if len(subj_py) == 2: return long(subj_py[0]) / long(subj_py[1])
+        if len(subj_py) == 2: return int(subj_py[0]) / int(subj_py[1])
 
 class BI_bit(LightBuiltIn, Function):
     """@@needs a test."""
@@ -248,4 +248,4 @@ def register(store):
     str.internFrag('memberCount', BI_memberCount)
 
 if __name__=="__main__": 
-   print string.strip(__doc__)
+   print(string.strip(__doc__))

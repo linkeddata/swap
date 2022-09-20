@@ -1,12 +1,12 @@
 """XML built-ins for cwm
 """
 
-from diag import progress, verbosity
-from term import LightBuiltIn, Function, ReverseFunction, MultipleFunction, \
+from .diag import progress, verbosity
+from .term import LightBuiltIn, Function, ReverseFunction, MultipleFunction, \
      HeavyBuiltIn
 
-from llyn import loadToStore # for caching in store's experience
-from sax2rdf import XMLtoDOM # for fn:doc
+from .llyn import loadToStore # for caching in store's experience
+from .sax2rdf import XMLtoDOM # for fn:doc
 
 #from Ft.Xml.XPath import Evaluate as evalXPath
 # http://packages.debian.org/unstable/python/python-xml
@@ -172,7 +172,7 @@ class BI_doc(HeavyBuiltIn, Function):
 
         try:
             lit = loadToStore(sym, ["application/xml", "text/xml"])
-        except IOError, e:
+        except IOError as e:
             progress("@@ioerror", e)
             return None # hmm... is built-in API evolving to support exceptions?
 

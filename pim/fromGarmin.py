@@ -65,8 +65,8 @@ def doCommand(serialDevice=None, outputURI=None, doTracks=1, doWaypoints=1, verb
 
    gps = Garmin(phys)
 
-   print "GPS Product ID: %d Descriptions: %s Software version: %2.2f" % \
-         (gps.prod_id, gps.prod_descs, gps.soft_ver)
+   print("GPS Product ID: %d Descriptions: %s Software version: %2.2f" % \
+         (gps.prod_id, gps.prod_descs, gps.soft_ver))
 
 
    f = formula() # Empty store of RDF data
@@ -77,41 +77,41 @@ def doCommand(serialDevice=None, outputURI=None, doTracks=1, doWaypoints=1, verb
 
    if doWaypoints:
         # show waypoints
-        if verbose: print "Getting waypoints"
+        if verbose: print("Getting waypoints")
         wpts = gps.getWaypoints()
         for w in wpts:
-            if verbose: progress(`w`)
+            if verbose: progress(repr(w))
             wpt = symbol(uripath.join(base, w.ident))
             f.add(record, GPS.waypoint, wpt)
-            f.add(wpt, WGS.lat, obj=intern(degrees(w.slat)))
-            f.add(wpt, WGS.long, obj=intern(degrees(w.slon)))
+            f.add(wpt, WGS.lat, obj=sys.intern(degrees(w.slat)))
+            f.add(wpt, WGS.long, obj=sys.intern(degrees(w.slon)))
 
 
    if doTracks:
       # show track
-      if verbose: print "Getting tracks"
+      if verbose: print("Getting tracks")
       tracks = gps.getTracks()
       for t in tracks:
         track = f.newBlankNode()
         f.add(record, GPS.track, track)
         for p in t:
             if isinstance(p, TrackHdr):
-                if verbose: progress(`p`)
-                f.add(track, GPS.disp, intern(p.dspl))
-                f.add(track, GPS.color, intern(p.color))
-                f.add(track, GPS.trk_ident, intern(p.trk_ident))
+                if verbose: progress(repr(p))
+                f.add(track, GPS.disp, sys.intern(p.dspl))
+                f.add(track, GPS.color, sys.intern(p.color))
+                f.add(track, GPS.trk_ident, sys.intern(p.trk_ident))
             else:
-                if verbose: progress(`p`)
+                if verbose: progress(repr(p))
                 point = f.newBlankNode()
                 f.add(track, GPS.trackpoint, point)
-                f.add(point, WGS.lat, obj=intern(degrees(p.slat)))
-                f.add(point, WGS.long, obj=intern(degrees(p.slon)))
+                f.add(point, WGS.lat, obj=sys.intern(degrees(p.slat)))
+                f.add(point, WGS.long, obj=sys.intern(degrees(p.slon)))
 #               if verbose: progress("    time=", p.time)
 #                progress('p.time='+`p.time`) # @@
-                if p.time == 0 or p.time == 0xffffffffL:
+                if p.time == 0 or p.time == 0xffffffff:
                     if verbose: progress("time=%8x, ignoring" % p.time)
                 else:
-                    f.add(point, WGS.time, obj=intern(isodate.fullString(TimeEpoch+p.time)))
+                    f.add(point, WGS.time, obj=sys.intern(isodate.fullString(TimeEpoch+p.time)))
 
    phys.f.close()  # Should really be done by the del() below, but isn't
    del(phys) # close serial link (?)
@@ -124,14 +124,14 @@ def doCommand(serialDevice=None, outputURI=None, doTracks=1, doWaypoints=1, verb
         op.write(s)
         op.close()
    else:
-        print s
+        print(s)
 
 
 
 ############################################################ Main program
 
 def usage():
-    print __doc__
+    print(__doc__)
 
 if __name__ == '__main__':
     import getopt
@@ -144,7 +144,7 @@ if __name__ == '__main__':
             ["help",  "verbose", "tracks", "waypoints", "device=", "output="])
     except getopt.GetoptError:
         # print help information and exit:
-        print __doc__
+        print(__doc__)
         sys.exit(2)
     output = None
     for o, a in opts:

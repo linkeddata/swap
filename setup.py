@@ -21,7 +21,7 @@ from time import time
 
 lib_dir = get_python_lib()
 swap_dir = join(lib_dir, "swap")
-print "swap dir: "+swap_dir
+print("swap dir: "+swap_dir)
 
 
 ##if exists(swap_dir):

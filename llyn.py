@@ -41,63 +41,63 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 
 # emacsbug="""emacs got confused by long string above"""
 
-from __future__ import generators
+
 # see http://www.amk.ca/python/2.2/index.html#SECTION000500000000000000000
 
-from set_importer import Set, ImmutableSet
+from .set_importer import Set, ImmutableSet
 
 import types
 import string
 import xml.dom.minidom
 
 import re
-import StringIO
+import io
 import sys
 import time, xml
 from warnings import warn
 
 
-import urllib # for log:content
+import urllib.request, urllib.parse, urllib.error # for log:content
 
-import uripath
-from uripath import canonical
+from . import uripath
+from .uripath import canonical
 
-from sax2rdf import XMLtoDOM
+from .sax2rdf import XMLtoDOM
 import xml.dom.minidom
 
-from why import smushedFormula, Premise, newTopLevelFormula, isTopLevel
+from .why import smushedFormula, Premise, newTopLevelFormula, isTopLevel
 
-import notation3    # N3 parsers and generators, and RDF generator
-from webAccess import webget
+from . import notation3    # N3 parsers and generators, and RDF generator
+from .webAccess import webget
 
-import diag  # problems importing the tracking flag,
+from . import diag  # problems importing the tracking flag,
              # and chatty_flag must be explicit it seems: use diag.tracking
 
-from diag import progress, verbosity, tracking
-from term import BuiltIn, LightBuiltIn, RDFBuiltIn, HeavyBuiltIn, Function, \
+from .diag import progress, verbosity, tracking
+from .term import BuiltIn, LightBuiltIn, RDFBuiltIn, HeavyBuiltIn, Function, \
     MultipleFunction, ReverseFunction, MultipleReverseFunction, \
     Literal, XMLLiteral, Symbol, Fragment, FragmentNil, Term, LabelledNode, \
     CompoundTerm, List, EmptyList, NonEmptyList, AnonymousNode, N3Set, \
     UnknownType
-from formula import Formula, StoredStatement
-import reify
+from .formula import Formula, StoredStatement
+from . import reify
 
 from weakref import WeakValueDictionary
 
-from query import think, applyRules, testIncludes
-import webAccess
-from webAccess import DocumentAccessError
-from local_decimal import Decimal
+from .query import think, applyRules, testIncludes
+from . import webAccess
+from .webAccess import DocumentAccessError
+from .local_decimal import Decimal
 
-from RDFSink import Logic_NS, RDFSink, forSomeSym, forAllSym
-from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
-from RDFSink import N3_nil, N3_first, N3_rest, OWL_NS, N3_Empty, N3_List, \
+from .RDFSink import Logic_NS, RDFSink, forSomeSym, forAllSym
+from .RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
+from .RDFSink import N3_nil, N3_first, N3_rest, OWL_NS, N3_Empty, N3_List, \
                     N3_li, List_NS
-from RDFSink import RDF_NS_URI
+from .RDFSink import RDF_NS_URI
 
-from RDFSink import FORMULA, LITERAL, LITERAL_DT, LITERAL_LANG, ANONYMOUS, SYMBOL
+from .RDFSink import FORMULA, LITERAL, LITERAL_DT, LITERAL_LANG, ANONYMOUS, SYMBOL
 
-from pretty import Serializer
+from .pretty import Serializer
 
 LITERAL_URI_prefix = "data:application/rdf+n3-literal;"
 Delta_NS = "http://www.w3.org/2004/delta#"
@@ -106,9 +106,9 @@ cvsRevision = "$Revision$"
 
 # Magic resources we know about
 
-from RDFSink import RDF_type_URI, DAML_sameAs_URI
+from .RDFSink import RDF_type_URI, DAML_sameAs_URI
 
-from why import Because, BecauseBuiltIn, BecauseOfRule, \
+from .why import Because, BecauseBuiltIn, BecauseOfRule, \
     BecauseOfExperience, becauseSubexpression, BecauseMerge ,report
 
 STRING_NS_URI = "http://www.w3.org/2000/10/swap/string#"
@@ -149,7 +149,7 @@ class DataObject:
 def arg_hash(arg):
     if isinstance(arg, dict):
         g = []
-        for k, v in arg.items():
+        for k, v in list(arg.items()):
             g.append((arg_hash(k), arg_hash(v)))
         return hash(tuple(g))
     if isinstance(arg, (tuple, list)):
@@ -342,7 +342,7 @@ class IndexedFormula(Formula):
         why     may be a reason for use when a proof will be required.
         """
         if self.canonical != None:
-            raise RuntimeError("Attempt to add statement to closed formula "+`self`)
+            raise RuntimeError("Attempt to add statement to closed formula "+repr(self))
         store = self.store
         
         if not isinstance(subj, Term): subj = store.intern(subj)
@@ -358,19 +358,19 @@ class IndexedFormula(Formula):
         obj = obj.substituteEquals(self._redirections, newBindings)
             
         if diag.chatty_flag > 90:
-            progress(u"Add statement (size before %i, %i statements) to %s:\n {%s %s %s}" % (
-                self.store.size, len(self.statements),`self`,  `subj`, `pred`, `obj`) )
+            progress("Add statement (size before %i, %i statements) to %s:\n {%s %s %s}" % (
+                self.store.size, len(self.statements),repr(self),  repr(subj), repr(pred), repr(obj)) )
         if self.statementsMatching(pred, subj, obj):
             if diag.chatty_flag > 97:
                 progress("Add duplicate SUPPRESSED %s: {%s %s %s}" % (
                     self,  subj, pred, obj) )
             return 0  # Return no change in size of store
             
-        assert not isinstance(pred, Formula) or pred.canonical is pred, "pred Should be closed"+`pred`
+        assert not isinstance(pred, Formula) or pred.canonical is pred, "pred Should be closed"+repr(pred)
         assert (not isinstance(subj, Formula)
                 or subj is self
-                or subj.canonical is subj), "subj Should be closed or self"+`subj`
-        assert not isinstance(obj, Formula) or obj.canonical is obj, "obj Should be closed"+`obj`+`obj.canonical`
+                or subj.canonical is subj), "subj Should be closed or self"+repr(subj)
+        assert not isinstance(obj, Formula) or obj.canonical is obj, "obj Should be closed"+repr(obj)+repr(obj.canonical)
         store.size = store.size+1 # rather nominal but should be monotonic
 
         if False and isTopLevel(self):
@@ -429,7 +429,7 @@ class IndexedFormula(Formula):
                     or Term.compareAnyTerm(obj, subj) < 0): var, val = subj, obj
                 else: var, val = obj, subj
                 newBindings[var] = val
-                if diag.chatty_flag > 90: progress("Equality: %s = %s" % (`var`, `val`))
+                if diag.chatty_flag > 90: progress("Equality: %s = %s" % (repr(var), repr(val)))
                 self.substituteEqualsInPlace(newBindings)               
                 return 1
 
@@ -450,7 +450,7 @@ class IndexedFormula(Formula):
         
         if diag.tracking:
             if (why is None): raise RuntimeError(
-                "Tracking reasons but no reason given for"+`s`)
+                "Tracking reasons but no reason given for"+repr(s))
             report(s, why)
 
         # Build 8 indexes.
@@ -518,7 +518,7 @@ class IndexedFormula(Formula):
         This is really a low-level method, used within add() and for cleaning up the store
         to save space in purge() etc.
         """
-        assert self.canonical is None, "Cannot remove statement from canonnical"+`self`
+        assert self.canonical is None, "Cannot remove statement from canonnical"+repr(self)
         self.store.size = self.store.size-1
         if diag.chatty_flag > 97:  progress("removing %s" % (s))
         context, pred, subj, obj = s.quad
@@ -536,7 +536,7 @@ class IndexedFormula(Formula):
     def newCanonicalize(F):  ## Horrible name!
         if self._hashval is not None:
             return
-        from term import Existential, Universal
+        from .term import Existential, Universal
         statements = []
         def convert(n):
             if isinstance(n, Universal):
@@ -564,11 +564,11 @@ class IndexedFormula(Formula):
         store = F.store
         if F.canonical != None:
             if diag.chatty_flag > 70:
-                progress("End formula -- @@ already canonical:"+`F`)
+                progress("End formula -- @@ already canonical:"+repr(F))
             return F.canonical
         if F.stayOpen:
             if diag.chatty_flag > 70:
-                progress("Canonicalizion ignored: @@ Knowledge base mode:"+`F`)
+                progress("Canonicalizion ignored: @@ Knowledge base mode:"+repr(F))
             return F
 
         F.store._equivalentFormulae.add(F)
@@ -606,7 +606,7 @@ class IndexedFormula(Formula):
             gl = G.statements
             gkey = len(gl), len(G.universals()), len(G.existentials())
             if gkey != l: raise RuntimeError("@@Key of %s is %s instead of %s"
-                %(G, `gkey`, `l`))
+                %(G, repr(gkey), repr(l)))
 
             gl.sort()
             for se, oe, in  ((fe, G.existentials()),
@@ -653,7 +653,7 @@ class IndexedFormula(Formula):
         F.canonical = F
         F.reallyCanonical = True
         if diag.chatty_flag > 70:
-            progress("End formula, a fresh one:"+`F`)
+            progress("End formula, a fresh one:"+repr(F))
 ##            for k in possibles:
 ##                print 'one choice is'
 ##                print k.n3String()
@@ -726,7 +726,7 @@ class IndexedFormula(Formula):
         pairs.sort(comparePair)
         for key, str in pairs:
             if not hasattr(str, "string"):
-                print `str`
+                print(repr(str))
             channel.write(str.string.encode('utf-8'))
 
 
@@ -736,18 +736,18 @@ class IndexedFormula(Formula):
         This formula is dumped, using ids for nested formula.
         Then, each nested formula mentioned is dumped."""
         red = ""
-        if self._redirections != {}: red = " redirections:" + `self._redirections`
-        str = `self`+ red + unicode(id(self)) + " is {"
+        if self._redirections != {}: red = " redirections:" + repr(self._redirections)
+        str = repr(self)+ red + str(id(self)) + " is {"
         for vv, ss in ((self.universals().copy(), "@forAll"),(self.existentials().copy(), "@forSome")):
             if vv != Set():
-                str = str + " " + ss + " " + `vv.pop()`
+                str = str + " " + ss + " " + repr(vv.pop())
                 for v in vv:
-                    str = str + ", " + `v`
+                    str = str + ", " + repr(v)
                 str = str + "."
         todo = []
         for s in self.statements:
             subj, pred, obj = s.spo()
-            str = str + "\n%28s  %20s %20s ." % (`subj`, `pred`, `obj`)
+            str = str + "\n%28s  %20s %20s ." % (repr(subj), repr(pred), repr(obj))
             for p in PRED, SUBJ, OBJ:
                 if (isinstance(s[p], CompoundTerm)
                     and s[p] not in already and s[p] not in todo and s[p] is not self):
@@ -767,10 +767,10 @@ class IndexedFormula(Formula):
 
         This function is extraordinarily slow, .08 seconds per call on reify/reify3.n3.
         It can hit the python recursion limit with a long list!"""
-        if diag.chatty_flag > 80: progress("New list was %s, now %s = %s"%(`bnode`, `list`, `list.value()`))
+        if diag.chatty_flag > 80: progress("New list was %s, now %s = %s"%(repr(bnode), repr(list), repr(list.value())))
         if isinstance(bnode, List): return  ##@@@@@ why is this necessary? weid.
         newBindings[bnode] = list
-        if diag.chatty_flag > 80: progress("...New list newBindings %s"%(`newBindings`))
+        if diag.chatty_flag > 80: progress("...New list newBindings %s"%(repr(newBindings)))
         self._existentialVariables.discard(bnode)
         possibles = self.statementsMatching(pred=self.store.rest, obj=bnode)  # What has this as rest?
         for s in possibles[:]:
@@ -794,7 +794,7 @@ class IndexedFormula(Formula):
 
     def _noteNewSet(self, bnode, set, newBindings):
         newBindings[bnode] = set
-        if diag.chatty_flag > 80: progress("...New set newBindings %s"%(`newBindings`))
+        if diag.chatty_flag > 80: progress("...New set newBindings %s"%(repr(newBindings)))
         self._existentialVariables.discard(bnode)
 
     def substituteEqualsInPlace(self, redirections, why=None):
@@ -827,7 +827,7 @@ class IndexedFormula(Formula):
         if self.canonical and other.canonical and self.store._equivalentFormulae.connected(self, other):
             yield (env1, env2)
         else:
-            from query import n3Equivalent, testIncludes
+            from .query import n3Equivalent, testIncludes
             freeVars = self.freeVariables()   ## We can't use these
             retVal = n3Equivalent(self, other, env1, env2, vars,
                        universals, existentials,
@@ -916,7 +916,7 @@ class BI_dtlit(LightBuiltIn, Function):
         if dt is self.store.symbol("http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"):
             try:
                 dom = XMLtoDOM(lex)
-            except SyntaxError, e:
+            except SyntaxError as e:
                 raise UnknownType # really malformed literal
             return self.store.newXMLLiteral(dom)
         else:
@@ -948,7 +948,7 @@ class BI_rawType(LightBuiltIn, Function):
         elif isinstance(subj, AnonymousNode): y = store.Blank
         else: y = store.Other  #  None?  store.Other?
         if diag.chatty_flag > 91:
-            progress("%s  rawType %s." %(`subj`, y))
+            progress("%s  rawType %s." %(repr(subj), y))
         return y
         
 
@@ -1016,7 +1016,7 @@ class BI_semantics(HeavyBuiltIn, Function):
         F = store.any((store._experience, store.semantics, doc, None))
         if F != None:
             if diag.chatty_flag > 10:
-                progress("Already read and parsed "+`doc`+" to "+ `F`)
+                progress("Already read and parsed "+repr(doc)+" to "+ repr(F))
             return F
 
         if diag.chatty_flag > 10: progress("Reading and parsing " + doc.uriref())
@@ -1040,7 +1040,7 @@ class BI_semanticsWithImportsClosure(HeavyBuiltIn, Function):
         else: doc = subj
         F = store.any((store._experience, store.semanticsWithImportsClosure, doc, None))
         if F != None:
-            if diag.chatty_flag > 10: progress("Already read and parsed "+`doc`+" to "+ `F`)
+            if diag.chatty_flag > 10: progress("Already read and parsed "+repr(doc)+" to "+ repr(F))
             return F
   
         if diag.chatty_flag > 10: progress("Reading and parsing with closure " + doc.uriref())
@@ -1057,7 +1057,7 @@ class BI_semanticsWithImportsClosure(HeavyBuiltIn, Function):
         store.storeQuad((store._experience, store.semanticsWithImportsClosure, doc, F))
         return F
         
-import httplib    
+import http.client    
 class BI_semanticsOrError(BI_semantics):
     """ Either get and parse to semantics or return an error message on any error """
     def evalObj(self, subj, queue, bindings, proof, query):
@@ -1065,15 +1065,15 @@ class BI_semanticsOrError(BI_semantics):
         store = subj.store
         x = store.any((store._experience, store.semanticsOrError, subj, None))
         if x != None:
-            if diag.chatty_flag > 10: progress(`store._experience`+`store.semanticsOrError`+": Already found error for "+`subj`+" was: "+ `x`)
+            if diag.chatty_flag > 10: progress(repr(store._experience)+repr(store.semanticsOrError)+": Already found error for "+repr(subj)+" was: "+ repr(x))
             return x
         try:
             return BI_semantics.evalObj(self, subj, queue, bindings, proof, query)
         except (IOError, SyntaxError, DocumentAccessError,
-                xml.sax._exceptions.SAXParseException, httplib.BadStatusLine):
+                xml.sax._exceptions.SAXParseException, http.client.BadStatusLine):
             message = sys.exc_info()[1].__str__()
             result = store.intern((LITERAL, message))
-            if diag.chatty_flag > 0: progress(`store.semanticsOrError`+": Error trying to access <" + `subj` + ">: "+ message) 
+            if diag.chatty_flag > 0: progress(repr(store.semanticsOrError)+": Error trying to access <" + repr(subj) + ">: "+ message) 
             store.storeQuad((store._experience,
                              store.semanticsOrError,
                              subj,
@@ -1098,10 +1098,10 @@ def loadToStore(term, types):
     store = term.store #hmm... separate store from term?
     C = store.any((store._experience, store.content, doc, None))
     if C != None:
-        if diag.chatty_flag > 10: progress("already read " + `doc`)
+        if diag.chatty_flag > 10: progress("already read " + repr(doc))
         return C
 
-    if diag.chatty_flag > 10: progress("Reading " + `doc`)
+    if diag.chatty_flag > 10: progress("Reading " + repr(doc))
     inputURI = doc.uriref()
 
     netStream = webget(inputURI, types)
@@ -1158,7 +1158,7 @@ class BI_conclusion(HeavyBuiltIn, Function):
             assert subj.canonical != None
             F = self.store.any((store._experience, store.cufi, subj, None))  # Cached value?
             if F != None:
-                if diag.chatty_flag > 10: progress("Bultin: " + `subj`+ " cached log:conclusion " + `F`)
+                if diag.chatty_flag > 10: progress("Bultin: " + repr(subj)+ " cached log:conclusion " + repr(F))
                 return F
 
             F = self.store.newFormula()
@@ -1169,7 +1169,7 @@ class BI_conclusion(HeavyBuiltIn, Function):
 #               F.collector = reason
 #               proof.append(reason)
             else: reason = None
-            if diag.chatty_flag > 10: progress("Bultin: " + `subj`+ " log:conclusion " + `F`)
+            if diag.chatty_flag > 10: progress("Bultin: " + repr(subj)+ " log:conclusion " + repr(F))
             self.store.copyFormula(subj, F, why=reason) # leave open
             think(F)
             F = F.close()
@@ -1198,7 +1198,7 @@ class BI_filter(LightBuiltIn, Function):
         if len(list) != 2:
             raise ValueError('I need a list of TWO formulae')
         if diag.chatty_flag > 30:
-            progress("=== begin filter of:" + `list`)
+            progress("=== begin filter of:" + repr(list))
         # list = [bindings.get(a,a) for a in list]
         base, filter = list
         F = self.store.newFormula()
@@ -1208,7 +1208,7 @@ class BI_filter(LightBuiltIn, Function):
         applyRules(base, filter, F)
         F = F.close()
         if diag.chatty_flag > 30:
-            progress("=== end filter of:" + `list` + "we got: " + `F`)
+            progress("=== end filter of:" + repr(list) + "we got: " + repr(F))
         return F
 
 class BI_vars(LightBuiltIn, Function):
@@ -1231,7 +1231,7 @@ class BI_universalVariableName(RDFBuiltIn): #, MultipleFunction):
         if not isinstance(subj, Formula): return None
         s = str(obj)
         if diag.chatty_flag > 180:
-            progress(`subj.universals()`)
+            progress(repr(subj.universals()))
         return obj in subj.universals()
         for v in subj.universals():
             if v.uriref() == s: return 1
@@ -1280,7 +1280,7 @@ class BI_conjunction(LightBuiltIn, Function):      # Light? well, I suppose so.
     def evalObj(self, subj, queue, bindings, proof, query):
         subj_py = subj.value()
         if diag.chatty_flag > 50:
-            progress("Conjunction input:"+`subj_py`)
+            progress("Conjunction input:"+repr(subj_py))
             for x in subj_py:
                 progress("    conjunction input formula %s has %i statements" 
                                                 % (x, x.size()))
@@ -1293,10 +1293,10 @@ class BI_conjunction(LightBuiltIn, Function):      # Light? well, I suppose so.
             if not isinstance(x, Formula): return None # Can't
             if (x.canonical == None): # Not closed! !!
                 F.canonical != None
-                progress("Conjunction input NOT CLOSED:"+`x`) #@@@
+                progress("Conjunction input NOT CLOSED:"+repr(x)) #@@@
             self.store.copyFormula(x, F, why=reason)   #  No, that is 
             if diag.chatty_flag > 74:
-                progress("    Formula %s now has %i" % (`F`,len(F.statements)))
+                progress("    Formula %s now has %i" % (repr(F),len(F.statements)))
         return F.canonicalize()
 
 class BI_n3String(LightBuiltIn, Function):      # Light? well, I suppose so.
@@ -1309,7 +1309,7 @@ class BI_n3String(LightBuiltIn, Function):      # Light? well, I suppose so.
     A canonical form is possisble but not simple."""
     def evalObj(self, subj, queue, bindings, proof, query):
         if diag.chatty_flag > 50:
-            progress("Generating N3 string for:"+`subj`)
+            progress("Generating N3 string for:"+repr(subj))
         if isinstance(subj, Formula):
             return self.store.intern((LITERAL, subj.n3String()))
 
@@ -1393,7 +1393,7 @@ class RDFStore(RDFSink) :
         self.clear()
         self.argv = argv     # List of command line arguments for N3 scripts
 
-        run = uripath.join(uripath.base(), ".RUN/") + `time.time()`  # Reserrved URI @@
+        run = uripath.join(uripath.base(), ".RUN/") + repr(time.time())  # Reserrved URI @@
 
         if metaURI != None: meta = metaURI
         else: meta = run + "meta#formula"
@@ -1491,7 +1491,7 @@ class RDFStore(RDFSink) :
 
 # List stuff - beware of namespace changes! :-(
 
-        from cwm_list import BI_first, BI_rest
+        from .cwm_list import BI_first, BI_rest
         rdf = self.symbol(List_NS[:-1])
         self.first = rdf.internFrag("first", BI_first)
         self.rest = rdf.internFrag("rest", BI_rest)
@@ -1500,17 +1500,17 @@ class RDFStore(RDFSink) :
         self.li = self.intern(N3_li)
         self.List = self.intern(N3_List)
 
-        import cwm_string  # String builtins
-        import cwm_os      # OS builtins
-        import cwm_time    # time and date builtins
-        import cwm_math    # Mathematics
-        import cwm_trigo   # Trignometry
-        import cwm_times    # time and date builtins
-        import cwm_maths   # Mathematics, perl/string style
-        import cwm_list    # List handling operations
-        import cwm_set     # Set operations
-        import cwm_sparql  # builtins for sparql
-        import cwm_xml     # XML Document Object Model operations
+        from . import cwm_string  # String builtins
+        from . import cwm_os      # OS builtins
+        from . import cwm_time    # time and date builtins
+        from . import cwm_math    # Mathematics
+        from . import cwm_trigo   # Trignometry
+        from . import cwm_times    # time and date builtins
+        from . import cwm_maths   # Mathematics, perl/string style
+        from . import cwm_list    # List handling operations
+        from . import cwm_set     # Set operations
+        from . import cwm_sparql  # builtins for sparql
+        from . import cwm_xml     # XML Document Object Model operations
         cwm_string.register(self)
         cwm_math.register(self)
         cwm_trigo.register(self)
@@ -1522,7 +1522,7 @@ class RDFStore(RDFSink) :
         cwm_set.register(self)
         cwm_sparql.register(self)
         cwm_xml.register(self)
-        import cwm_crypto  # Cryptography -- register this for the hash functions even if no pub key
+        from . import cwm_crypto  # Cryptography -- register this for the hash functions even if no pub key
         if crypto and cwm_crypto.USE_PKC == 0:
             raise RuntimeError("Public Key Crypto unavailable. Try installing pycrypto, and make sure it is in you PYTHONPATH")
         cwm_crypto.register(self)  # would like to anyway to catch bug if used but not available
@@ -1612,7 +1612,7 @@ class RDFStore(RDFSink) :
             store._experience.add(source, store.semantics, F, why=BecauseOfExperience("load document"))
             return F
             
-        if diag.chatty_flag > 40: progress("NOT caching semantics for",uri, "remember=%s, openFormula=%s" % (`remember`,`openFormula`))
+        if diag.chatty_flag > 40: progress("NOT caching semantics for",uri, "remember=%s, openFormula=%s" % (repr(remember),repr(openFormula)))
         return webAccess.load(store, uri, openFormula, asIfFrom, contentType, flags, \
                               referer=referer, why=why)  
 
@@ -1686,9 +1686,9 @@ class RDFStore(RDFSink) :
     
     def _fromPython(self, x, queue=None):
         """Takem a python string, seq etc and represent as a llyn object"""
-        if isinstance(x, tuple(types.StringTypes)):
+        if isinstance(x, tuple((str,))):
             return self.newLiteral(x)
-        elif type(x) is types.LongType or type(x) is types.IntType:
+        elif type(x) is int or type(x) is int:
             return self.newLiteral(str(x), self.integer)
         elif isinstance(x, Decimal):
             return self.newLiteral(str(x), self.decimal)
@@ -1696,10 +1696,10 @@ class RDFStore(RDFSink) :
             return self.newLiteral(x and 'true' or 'false', self.boolean)
         elif isinstance(x, xml.dom.minidom.Document):
             return self.newXMLLiteral(x)
-        elif type(x) is types.FloatType:
-            if `x`.lower() == "nan":  # We can get these form eg 2.math:asin
+        elif type(x) is float:
+            if repr(x).lower() == "nan":  # We can get these form eg 2.math:asin
                 return None
-            return self.newLiteral(`x`, self.float)
+            return self.newLiteral(repr(x), self.float)
         elif isinstance(x, Set) or isinstance(x, ImmutableSet):
             return self.newSet([self._fromPython(y) for y in x])
         elif isinstance(x, Term):
@@ -1718,23 +1718,23 @@ class RDFStore(RDFSink) :
         """
 
         if isinstance(what, Term): return what # Already interned.  @@Could mask bugs
-        if type(what) is not types.TupleType:
-            if isinstance(what, tuple(types.StringTypes)):
+        if type(what) is not tuple:
+            if isinstance(what, tuple((str,))):
                 return self.newLiteral(what, dt, lang)
 #           progress("llyn1450 @@@ interning non-string", `what`)
-            if type(what) is types.LongType:
+            if type(what) is int:
                 return self.newLiteral(str(what),  self.integer)
-            if type(what) is types.IntType:
-                return self.newLiteral(`what`,  self.integer)
-            if type(what) is types.FloatType:
+            if type(what) is int:
+                return self.newLiteral(repr(what),  self.integer)
+            if type(what) is float:
                 return self.newLiteral(repr(what),  self.float)
             if isinstance(what,Decimal):
                 return self.newLiteral(str(what), self.decimal)
             if isinstance(what, bool):
                 return self.newLiteral(what and 'true' or 'false', self.boolean)
-            if type(what) is types.ListType: #types.SequenceType:
+            if type(what) is list: #types.SequenceType:
                 return self.newList(what)
-            raise RuntimeError("Eh?  can't intern "+`what`+" of type: "+`what.__class__`)
+            raise RuntimeError("Eh?  can't intern "+repr(what)+" of type: "+repr(what.__class__))
 
         typ, urirefString = what
 
@@ -1772,7 +1772,7 @@ class RDFStore(RDFSink) :
                 elif typ == FORMULA:
                     raise RuntimeError("obsolete")
                     result = r.internFrag(urirefString[hash+1:], IndexedFormula)
-                else: raise RuntimeError, "did not expect other type:"+`typ`
+                else: raise RuntimeError("did not expect other type:"+repr(typ))
         return result
 
     def newList(self, value, context=None):
@@ -1788,10 +1788,10 @@ class RDFStore(RDFSink) :
     def reopen(self, F):
         if F.canonical is None:
             if diag.chatty_flag > 50:
-                progress("reopen formula -- @@ already open: "+`F`)
+                progress("reopen formula -- @@ already open: "+repr(F))
             return F # was open
         if diag.chatty_flag > 00:
-            progress("warning - reopen formula:"+`F`)
+            progress("warning - reopen formula:"+repr(F))
         key = len(F.statements), len(F.universals()), len(F.existentials())
         try:
             self._formulaeOfLength[key].remove(F)  # Formulae of same length
@@ -1843,7 +1843,7 @@ class RDFStore(RDFSink) :
         """
         
         context, pred, subj, obj = q
-        assert isinstance(context, Formula), "Should be a Formula: "+`context`
+        assert isinstance(context, Formula), "Should be a Formula: "+repr(context)
         return context.add(subj=subj, pred=pred, obj=obj, why=why)
         
 
@@ -1933,7 +1933,7 @@ class RDFStore(RDFSink) :
                     context.removeStatement(t)    # SLOW
                     total = total + 1
         if diag.chatty_flag > 30:
-            progress("Purged %i statements with %s" % (total,`subj`))
+            progress("Purged %i statements with %s" % (total,repr(subj)))
         return total
 
 
@@ -1963,11 +1963,11 @@ class URISyntaxError(ValueError):
 def isString(x):
     # in 2.2, evidently we can test for isinstance(types.StringTypes)
     #    --- but on some releases, we need to say tuple(types.StringTypes)
-    return type(x) is type('') or type(x) is type(u'')
+    return type(x) is type('') or type(x) is type('')
 
 #####################  Register this module
 
-from myStore import setStoreClass
+from .myStore import setStoreClass
 setStoreClass(RDFStore)
 
 #ends

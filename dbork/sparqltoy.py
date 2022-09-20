@@ -80,11 +80,11 @@ def constructParts(s):
                 if k.lower() == 'where':
                     return ns, s, conc
                 else:
-                    raise ValueError, "expecting 'where'; found " + s
+                    raise ValueError("expecting 'where'; found " + s)
             else:
-                raise ValueError, "expecting '{'; found " + s
+                raise ValueError("expecting '{'; found " + s)
         else:
-            raise ValueError, "expecting 'construct'; found " + s
+            raise ValueError("expecting 'construct'; found " + s)
             
 
 def mkSelectFormula(vars, ns, ant, kb=None):
@@ -99,7 +99,7 @@ def mkSelectFormula(vars, ns, ant, kb=None):
     n3p = notation3.SinkParser(kb, baseURI="file:/")
 
     pfxDecls = ''
-    for p, u in ns.items():
+    for p, u in list(ns.items()):
         pfxDecls += ("@prefix %s: <%s>.\n" % (p, u))
 
     r = pfxDecls + "<> <http://www.w3.org/2004/ql#where> " + ant + ("\n ; <http://www.w3.org/2004/ql#select> { (%s) a <#Answer> }." % (" ".join(vars)))
@@ -118,7 +118,7 @@ def mkConstructFormula(ns, ant, conc, kb=None):
     n3p = notation3.SinkParser(kb, baseURI="file:/")
 
     pfxDecls = ''
-    for p, u in ns.items():
+    for p, u in list(ns.items()):
         pfxDecls += ("@prefix %s: <%s>.\n" % (p, u))
 
     r = pfxDecls + "[] <http://www.w3.org/2004/ql#where> " + ant + \
@@ -143,23 +143,23 @@ def queryTriples(s):
     return f
 
 ######
-import BaseHTTPServer
+import http.server
 import cgi # for URL-encoded query parsing
 
 RDF_MediaType = "application/rdf+xml"
 XML_MediaType = 'text/xml; charset="utf-8"'
 
-class SparqlServer(BaseHTTPServer.HTTPServer):
+class SparqlServer(http.server.HTTPServer):
     """export toy SPARQL service interface, for generating HTTP traces
     """
 
     def __init__(self, addr, handlerClass):
-        BaseHTTPServer.HTTPServer.__init__(self, addr, handlerClass)
+        http.server.HTTPServer.__init__(self, addr, handlerClass)
 
         self._kb = llyn.RDFStore()
 
 
-class SparqleHandler(BaseHTTPServer.BaseHTTPRequestHandler):
+class SparqleHandler(http.server.BaseHTTPRequestHandler):
     QPath = '/sq?'
 
     def do_GET(self):
@@ -184,7 +184,7 @@ class SparqleHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             self.wfile.write("no query param")
             return
 
-        print "@@got query:", sparql
+        print("@@got query:", sparql)
 
         dataSet = kb.newFormula()
         try:
@@ -194,11 +194,11 @@ class SparqleHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         else:
             for d in ds:
                 load(kb, d, openFormula = dataSet)
-                print "@@loaded", d, "; size=", dataSet.size()
+                print("@@loaded", d, "; size=", dataSet.size())
 
         ns, ant, conc = constructParts(sparql) #@@ assume construct
         qf = mkConstructFormula(ns, ant, conc, kb)
-        print "@@query:", qf.n3String()
+        print("@@query:", qf.n3String())
         
         results = kb.newFormula()
         applyQueries(dataSet, qf, results)
@@ -239,7 +239,7 @@ def main(argv):
     hostPort = ('127.0.0.1', int(port))
     httpd = SparqlServer(hostPort, SparqleHandler)
 
-    print "sparqltoy %s\nserving on port %s ..." % (__version__, port)
+    print("sparqltoy %s\nserving on port %s ..." % (__version__, port))
     httpd.serve_forever()
 
 

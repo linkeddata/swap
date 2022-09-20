@@ -23,8 +23,8 @@ To DO: See also "@@" in comments
 Internationlization:
 - Decode incoming N3 file as unicode
 - Encode outgoing file
-- unicode \u  (??) escapes in parse
-- unicode \u  (??) escapes in string output
+- unicode \\u  (??) escapes in parse
+- unicode \\u  (??) escapes in string output
 
 Note currently unicode strings work in this code
 but fail when they are output into the python debugger
@@ -42,27 +42,27 @@ TimBL added RDF stream model.
 
 import string
 import codecs # python 2-ism; for writing utf-8 in RDF/xml output
-import urlparse
-import urllib
+import urllib.parse
+import urllib.request, urllib.parse, urllib.error
 import re
 import sys
 #import thing
-from uripath import refTo
-from diag import progress
+from .uripath import refTo
+from .diag import progress
 
 from random import choice, seed
 seed(23)
 
-from xmlC14n import Canonicalize
+from .xmlC14n import Canonicalize
 
-import RDFSink
-from set_importer import Set
+from . import RDFSink
+from .set_importer import Set
 
-from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
-from RDFSink import FORMULA, LITERAL, XMLLITERAL, LITERAL_DT, LITERAL_LANG, ANONYMOUS, SYMBOL
-from RDFSink import Logic_NS, NODE_MERGE_URI
+from .RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
+from .RDFSink import FORMULA, LITERAL, XMLLITERAL, LITERAL_DT, LITERAL_LANG, ANONYMOUS, SYMBOL
+from .RDFSink import Logic_NS, NODE_MERGE_URI
 
-from isXML import isXMLChar, NCNameChar, NCNameStartChar, setXMLVersion, getXMLVersion
+from .isXML import isXMLChar, NCNameChar, NCNameStartChar, setXMLVersion, getXMLVersion
 
 N3_forSome_URI = RDFSink.forSomeSym
 N3_forAll_URI = RDFSink.forAllSym
@@ -216,7 +216,7 @@ z  - Allow relative URIs for namespaces
 #                if self.namespaces.get("log", ":::") ==":::":
 #                    self.bind("log", Logic_NS)
             ats = []
-            ps = self.prefixes.values()
+            ps = list(self.prefixes.values())
             ps.sort()    # Cannonicalize output somewhat
             if self.defaultNamespace and "d" not in self._flags:
                 if "z" in self._flags:
@@ -251,7 +251,7 @@ z  - Allow relative URIs for namespaces
             elif pred == N3_rest:
                 return # Ignore rest
             else: raise RuntimeError ("Should only see %s and %s in list mode, for tuple %s and stack %s" 
-                                    %(N3_first, N3_rest, `tuple`, `self.stack`))
+                                    %(N3_first, N3_rest, repr(tuple), repr(self.stack)))
 
         if subj == context: # and context == self._formula:
             if pred == (SYMBOL, N3_forAll_URI):
@@ -261,7 +261,7 @@ z  - Allow relative URIs for namespaces
                 nid = self._nodeID.get(obj, None)
                 if nid == None and not("b" in self._flags):
                     self._nextnodeID += 1
-                    nid = 'b'+`self._nextnodeID`
+                    nid = 'b'+repr(self._nextnodeID)
                     self._nodeID[obj] = nid
                     #progress("object is now", obj, nid)
                 return
@@ -325,7 +325,7 @@ z  - Allow relative URIs for namespaces
                 self._xwr.data(v)
                 self._xwr.endElement()
             else:
-                raise RuntimeError("Unexpected subject", `subj`)
+                raise RuntimeError("Unexpected subject", repr(subj))
 
         if obj[0] not in (XMLLITERAL, LITERAL, LITERAL_DT, LITERAL_LANG):
             nid = self._nodeID.get(obj, None)
@@ -656,7 +656,7 @@ class XMLWriter:
             self._encwr(" %s=\"" % (n, ))
             if type(v) is type((1,1)):
 #               progress("@@@@@@ toXML.py 382: ", `v`)
-                v = `v`
+                v = repr(v)
             xmldata(self._encwr, v, self.attrEsc)
             self._encwr("\"")
             needNL = 1
@@ -725,7 +725,7 @@ class XMLWriter:
 ##NO = 0
 ##STALE = 1
 ##FRESH = 2
-import triple_maker
+from . import triple_maker
 tm = triple_maker
 
 def swap(List, a, b):
@@ -734,8 +734,8 @@ def swap(List, a, b):
     List[b] = q
 
 def findLegal(dict, str):
-    ns = Set(dict.values())
-    s = u''
+    ns = Set(list(dict.values()))
+    s = ''
     k = len(str)
     while k and str[k - 1] not in string.ascii_letters:
         k = k - 1
@@ -809,7 +809,7 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
 #                if self.namespaces.get("log", ":::") ==":::":
 #                    self.bind("log", Logic_NS)
             ats = []
-            ps = self.prefixes.values()
+            ps = list(self.prefixes.values())
             ps.sort()    # Cannonicalize output somewhat
             if self.defaultNamespace and "d" not in self._flags:
                 if "z" in self._flags:
@@ -847,7 +847,7 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
 
     def addNode(self, node, nameLess = 0):
         if self._modes[-1] == tm.ANONYMOUS and node is not None and self._parts[-1] == tm.NOTHING:
-            raise ValueError('You put a dot in a bNode:' + `node`)
+            raise ValueError('You put a dot in a bNode:' + repr(node))
         if self._modes[-1] == tm.FORMULA or self._modes[-1] == tm.ANONYMOUS:
             self._parts[-1] = self._parts[-1] + 1
             if self._parts[-1] > 3:
@@ -886,7 +886,7 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
                 try:
                     self._triples[-1][self._parts[-1]] = node
                 except:
-                    print self._parts, " - ", self._triples
+                    print(self._parts, " - ", self._triples)
                     raise
         if self._modes[-1] == tm.ANONYMOUS and self._pathModes[-1] == True:
             self.endStatement()
@@ -983,7 +983,7 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
         elif False:
             
             if self._parts[-1] != tm.OBJECT:
-                raise ValueError('try adding more to the statement' + `self._triples`)
+                raise ValueError('try adding more to the statement' + repr(self._triples))
 
             if self._pathModes[-1]:
                 swap(self._triples[-1], tm.PREDICATE, tm.OBJECT)
@@ -1032,20 +1032,20 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
                 self._modes[-1] = tm.ANONYMOUS
             self.endAnonymous()
         self._modes.pop()
-        print '_______________', self._modes
+        print('_______________', self._modes)
 
     def addAnonymous(self, Id):
         #print '\\\\\\\\', Id
         a = (ANONYMOUS, Id)
         if Id not in self._nodeID:
-            self._nodeID[Id] = 'b'+`self._nextNodeID`
+            self._nodeID[Id] = 'b'+repr(self._nextNodeID)
         self._nextNodeID += 1
         self.addNode(a)
         
 
     def beginAnonymous(self):
         self.namedAnonID += 1
-        a = (ANONYMOUS, `self.namedAnonID`)
+        a = (ANONYMOUS, repr(self.namedAnonID))
         if self._parts[-1] == tm.NOTHING:
             self.addNode(a, nameLess = 1)
         elif self._parts[-1] == tm.PREDICATE:

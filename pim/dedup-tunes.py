@@ -79,7 +79,7 @@ for arg in sys.argv[1:]:
 
         elif arg == "-v": verbose = 1   # Tell me even about files which were ok
         else:
-            print """Bad option argument.
+            print("""Bad option argument.
             -f  fix files instead of just looking: remove redundant files
 
 This program rmeoves (with -f) or counts (without -f)
@@ -88,7 +88,7 @@ like     song.mp3 and "song 1.mp3"
 
 Runs recusively through the directories.
 Command line argument is a directory (or more than one).
-"""
+""")
             sys.exit(-1)
     else:
         files.append(arg)

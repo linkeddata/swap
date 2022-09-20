@@ -6,7 +6,7 @@ This will try to profile cwm.
 """
 
 import hotshot, hotshot.stats
-from cwm import doCommand
+from .cwm import doCommand
 import os, sys
 
 

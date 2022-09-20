@@ -26,7 +26,7 @@ import sys
 import inspect
 import re
 import xml.sax
-from NTriplesSink import FormulaSink
+from .NTriplesSink import FormulaSink
 
 class Error(RuntimeError):
    pass
@@ -112,23 +112,23 @@ class docHandler(xml.sax.ContentHandler):
             self.parents.insert(0, me)
             self.awaitingFirstValue = 1
         else:
-            raise RuntimeError, "not upper or lower?"
+            raise RuntimeError("not upper or lower?")
 
     def prepareForIndividual(self):
         if len(self.parents) % 2 == 1:
-            print "# need to infer a property stripe"
+            print("# need to infer a property stripe")
             self.parents.insert(0, self.rdfli)
 
     def prepareForProperty(self):
         if len(self.parents) % 2 == 0:
-            print "# need to infer an individual stripe"
+            print("# need to infer an individual stripe")
             i = self.instanceOf()
             self.parents.insert(0, i)
             self.sink.insert((self.parents[2], self.parents[1], self.parents[0]))
 
     def endElementNS(self, name, qname):
         if self.awaitingFirstValue:
-            raise Error, "property with no value given"   # use this syntax for named things?
+            raise Error("property with no value given")   # use this syntax for named things?
         if self.firstValueBuffer is not None:
             self.sink.insert((self.parents[1], self.parents[0], self.firstValueBuffer))
             self.firstValueBuffer = None

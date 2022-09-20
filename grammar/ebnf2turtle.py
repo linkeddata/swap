@@ -398,7 +398,7 @@ def token(s):
     elif s[0] in '(?)*+|-':
         return ((s[0],) , s[1:])
     else:
-        raise ValueError, "unrecognized token: %s" % s
+        raise ValueError("unrecognized token: %s" % s)
 
 
 ##########
@@ -406,25 +406,25 @@ def token(s):
 #
 
 def startTurtle(pfx, ns, lang, start):
-    print "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>."
-    print "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>."
-    print "@prefix %s: <%s>." % (pfx, ns)
-    print "@prefix : <%s>." % ns
-    print "@prefix re: <http://www.w3.org/2000/10/swap/grammar/regex#>."
-    print "@prefix g: <http://www.w3.org/2000/10/swap/grammar/ebnf#>."
-    print
-    print ":%s rdfs:isDefinedBy <>; g:start :%s." % (lang, start)
+    print("@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.")
+    print("@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.")
+    print("@prefix %s: <%s>." % (pfx, ns))
+    print("@prefix : <%s>." % ns)
+    print("@prefix re: <http://www.w3.org/2000/10/swap/grammar/regex#>.")
+    print("@prefix g: <http://www.w3.org/2000/10/swap/grammar/ebnf#>.")
+    print()
+    print(":%s rdfs:isDefinedBy <>; g:start :%s." % (lang, start))
     
 def asTurtle(num, sym, expr, isToken, orig):
-    print
-    print ':%s rdfs:label "%s"; rdf:value "%s";' % (sym, sym, num)
-    print ' rdfs:comment "%s";' % esc(orig.strip())
+    print()
+    print(':%s rdfs:label "%s"; rdf:value "%s";' % (sym, sym, num))
+    print(' rdfs:comment "%s";' % esc(orig.strip()))
 
     if isToken: pfx = 're'
     else: pfx = 'g'
 
     ttlExpr(expr, pfx, indent='  ', obj=0)
-    print "."
+    print(".")
 
 
 def ttlExpr(expr, pfx, indent, obj=1):
@@ -437,52 +437,52 @@ def ttlExpr(expr, pfx, indent, obj=1):
         bra = ket = ''
 
     if op == ',':
-        print indent + bra + "%s:seq (" % pfx
+        print(indent + bra + "%s:seq (" % pfx)
         for a in args:
             ttlExpr(a, pfx, indent + '  ')
-        print indent + " )" + ket
+        print(indent + " )" + ket)
 
     elif op == '|':
-        print indent + bra + "%s:alt (" % pfx
+        print(indent + bra + "%s:alt (" % pfx)
         for a in args:
             ttlExpr(a, pfx, indent + '  ')
-        print indent + " )" + ket
+        print(indent + " )" + ket)
 
     elif op == '-':
-        print indent + bra + "%s:diff (" % pfx
+        print(indent + bra + "%s:diff (" % pfx)
         for a in args:
             ttlExpr(a, pfx, indent + '  ')
-        print indent + " )" + ket
+        print(indent + " )" + ket)
 
     elif op == '?':
-        print indent + bra + "%s:opt " % pfx
+        print(indent + bra + "%s:opt " % pfx)
         ttlExpr(args, pfx, indent + '  ')
-        if ket: print indent + ket
+        if ket: print(indent + ket)
 
     elif op == '+':
-        print indent + bra + "%s:plus " % pfx
+        print(indent + bra + "%s:plus " % pfx)
         ttlExpr(args, pfx, indent + '  ')
-        if ket: print indent + ket
+        if ket: print(indent + ket)
 
     elif op == '*':
-        print indent + bra + "%s:star " % pfx
+        print(indent + bra + "%s:star " % pfx)
         ttlExpr(args, pfx, indent + '  ')
-        if ket: print indent + ket
+        if ket: print(indent + ket)
 
     elif op == 'id':
         if obj:
-            print "%s:%s" % (indent, args)
+            print("%s:%s" % (indent, args))
         else:
-            print "%sg:seq ( :%s )" % (indent, args)
+            print("%sg:seq ( :%s )" % (indent, args))
     elif op == "'":
-        print '%s"%s"' %(indent, esc(args))
+        print('%s"%s"' %(indent, esc(args)))
     elif op == "[":
-        print '%s%s re:matches "[%s]" %s' % (indent, bra, cclass(args), ket)
+        print('%s%s re:matches "[%s]" %s' % (indent, bra, cclass(args), ket))
     elif op == "#":
         assert not('"' in args)
-        print r'%s%s re:matches "[%s]" %s' % (indent, bra, cclass(args), ket)
+        print(r'%s%s re:matches "[%s]" %s' % (indent, bra, cclass(args), ket))
     else:
-        raise RuntimeError, op
+        raise RuntimeError(op)
 
 
 def cclass(txt):
@@ -521,12 +521,12 @@ def cclass(txt):
         elif len(hx) < 10: hx = ("0000" + hx)[-8:]
 
         # This is just about hopelessly ugly
-        if unichr(int(hx, 16)) in "\\[]": ret += '\\\\'
+        if chr(int(hx, 16)) in "\\[]": ret += '\\\\'
 
         if len(hx) == 4: ret += r"\u" + hx
         elif len(hx) == 8: ret += r"\U" + hx
         else:
-            raise ValueError, "#x must preceede 1 to 8 hex digits"
+            raise ValueError("#x must preceede 1 to 8 hex digits")
         txt = txt[m.end(0):]
 
 

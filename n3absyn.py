@@ -137,9 +137,9 @@ def json_formula(fmla, vars={}):
 
 
         i = 0
-        while vn in varnames.values():
+        while vn in list(varnames.values()):
             i += 1
-            vn = vn + `i`
+            vn = vn + repr(i)
         varnames[v] = vn
 
     parts = [] # conjuncts
@@ -203,7 +203,7 @@ def json_term(t, varmap):
     elif isinstance(t, formula.Formula):
         return {'op': 'n3-quote', 'parts': [json_formula(t, varmap)]}
     else:
-        raise RuntimeError, "huh? + %s %s" % (t, t.__class__)
+        raise RuntimeError("huh? + %s %s" % (t, t.__class__))
 
 def lisp_form(f):
     """generate an s-expression from a formula JSON structure.
@@ -217,9 +217,9 @@ def lisp_form(f):
         yield "%f " % f
 
     # string
-    elif type(f) in (type(''), type(u'')):
+    elif type(f) in (type(''), type('')):
         if "\\" in f or '"' in f:
-            raise RuntimeError, 'commonlisp string quoting TODO: %s' % f
+            raise RuntimeError('commonlisp string quoting TODO: %s' % f)
         # @@ hmm... non-ascii chars?
         yield '"%s" ' % f
 
@@ -245,8 +245,7 @@ def lisp_form(f):
             # URI, i.e. a 0-ary function symbol
             if ':' in head:
                 if '|' in head:
-                    raise RuntimeError, \
-                          "quoting | in symbols not yet implemented"
+                    raise RuntimeError("quoting | in symbols not yet implemented")
                 yield '(URI::|%s|' % head
                 rest = f.get('parts', [])
                 assert(len(rest) == 0)
@@ -279,7 +278,7 @@ def lisp_form(f):
             rest = [f['f']]
 
         else:
-            raise RuntimeError, 'unimplemented list head: %s' % head
+            raise RuntimeError('unimplemented list head: %s' % head)
         
         for expr in rest:
             for s in lisp_form(expr):
@@ -287,7 +286,7 @@ def lisp_form(f):
         yield ')\n'
 
     else:
-        raise RuntimeError, 'unimplemented syntactic type: %s %s' % (f, type(f))
+        raise RuntimeError('unimplemented syntactic type: %s %s' % (f, type(f)))
 
     
 def ikl_sentence(f, subscripts):
@@ -334,7 +333,7 @@ def ikl_sentence(f, subscripts):
         rest = [f['f']]
 
     else:
-        raise RuntimeError, 'unimplemented IKL sentence head: %s' % head
+        raise RuntimeError('unimplemented IKL sentence head: %s' % head)
 
     for expr in rest:
         for s in ikl_sentence(expr, subscripts):
@@ -356,9 +355,9 @@ def ikl_term(f, subscripts):
         yield "(xsd:double %f)" % f #@@long uri form
 
     # string
-    elif type(f) in (type(''), type(u'')):
+    elif type(f) in (type(''), type('')):
         if "\\" in f or '"' in f:
-            raise RuntimeError, 'string quoting TODO: %s' % f
+            raise RuntimeError('string quoting TODO: %s' % f)
         if subscripts:
             yield "('%s' " % f # string
             sub = subscripts[0]
@@ -394,8 +393,7 @@ def ikl_term(f, subscripts):
             # URI, i.e. a 0-ary function symbol
             if ':' in head:
                 if '"' in head:
-                    raise RuntimeError, \
-                          "quoting \" in IKL names not yet implemented"
+                    raise RuntimeError("quoting \" in IKL names not yet implemented")
                 if subscripts:
                     for s in ikl_term(head, subscripts):
                         yield s
@@ -425,7 +423,7 @@ def ikl_term(f, subscripts):
                 return
 
         else:
-            raise RuntimeError, 'unimplemented IKL term head: %s' % head
+            raise RuntimeError('unimplemented IKL term head: %s' % head)
         
         for expr in rest:
             for s in ikl_term(expr):
@@ -433,7 +431,7 @@ def ikl_term(f, subscripts):
         yield ')\n'
 
     else:
-        raise RuntimeError, 'unimplemented syntactic type: %s %s' % (f, type(f))
+        raise RuntimeError('unimplemented syntactic type: %s %s' % (f, type(f)))
 
     
 from xml.sax.saxutils import escape
@@ -454,7 +452,7 @@ def xml_form(f):
         yield '<Data type="%s">%f</Data>\n' % (DT.double, f)
 
     # string
-    elif type(f) in (type(''), type(u'')):
+    elif type(f) in (type(''), type('')):
         yield '<Data>'
         yield escape(f)
         yield '</Data>\n'
@@ -491,7 +489,7 @@ def xml_form(f):
                 yield "</Data>"
 
             elif head == 'n3-quote':
-                raise RuntimeError, 'n3-quote not yet implemented'
+                raise RuntimeError('n3-quote not yet implemented')
 
             # Atomic formula
             elif head == 'holds':
@@ -532,10 +530,10 @@ def xml_form(f):
                 yield "</%s>\n" % tagname
 
         else:
-            raise RuntimeError, 'unimplemented list head: %s' % head
+            raise RuntimeError('unimplemented list head: %s' % head)
         
     else:
-        raise RuntimeError, 'unimplemented syntactic type: %s %s' % (f, type(f))
+        raise RuntimeError('unimplemented syntactic type: %s %s' % (f, type(f)))
 
 
 def mathml_top():
@@ -626,14 +624,14 @@ def mathml_fmla(f):
         yield '<cn type="rational">%f</cn>\n' % f
 
     # string
-    elif type(f) in (type(''), type(u'')):
+    elif type(f) in (type(''), type('')):
         yield '<ms>'
         yield escape(f)
         yield '</ms>\n'
 
 
     else:
-        raise RuntimeError, 'unimplemented syntactic type: %s %s' % (f, type(f))
+        raise RuntimeError('unimplemented syntactic type: %s %s' % (f, type(f)))
 
 class Namespace(object):
     def __init__(self, nsname):

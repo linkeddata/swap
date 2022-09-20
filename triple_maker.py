@@ -20,14 +20,14 @@ bNode is an error, and will be flagged when you try to endStatement()
 """
 
 
-import diag  # problems importing the tracking flag, and chatty_flag must be explicit it seems diag.tracking
-from diag import progress, verbosity
-from term import BuiltIn, LightBuiltIn, \
+from . import diag  # problems importing the tracking flag, and chatty_flag must be explicit it seems diag.tracking
+from .diag import progress, verbosity
+from .term import BuiltIn, LightBuiltIn, \
     HeavyBuiltIn, Function, ReverseFunction, \
     Literal, Symbol, Fragment, FragmentNil, Term,\
     CompoundTerm, List, EmptyList, NonEmptyList, AnonymousNode
 
-import RDFSink
+from . import RDFSink
 N3_forSome_URI = RDFSink.forSomeSym
 N3_forAll_URI = RDFSink.forAllSym
 
@@ -134,7 +134,7 @@ class TripleMaker:
             pass
         else:
             if self._parts[-1] != OBJECT:
-                raise ValueError('try adding more to the statement' + `self._triples`)
+                raise ValueError('try adding more to the statement' + repr(self._triples))
             formula = self.formulas[-1]
 
             if self._pathModes[-1]:

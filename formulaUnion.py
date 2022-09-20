@@ -8,37 +8,37 @@ $Id$
 reifyNS = 'http://www.w3.org/2004/06/rei#'
 owlOneOf = 'http://www.w3.org/2002/07/owl#oneOf'
 
-from __future__ import generators
+
 
 import types
 import string
 import re
-import StringIO
+import io
 import sys
 import time
-import uripath
+from . import uripath
 
-from OrderedSequence import merge
+from .OrderedSequence import merge
 
-import urllib # for log:content
+import urllib.request, urllib.parse, urllib.error # for log:content
 import md5, binascii  # for building md5 URIs
 
-import notation3    # N3 parsers and generators, and RDF generator
+from . import notation3    # N3 parsers and generators, and RDF generator
 # import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
-import diag  # problems importing the tracking flag, must be explicit it seems diag.tracking
-from diag import progress, verbosity, tracking
-from term import BuiltIn, LightBuiltIn, \
+from . import diag  # problems importing the tracking flag, must be explicit it seems diag.tracking
+from .diag import progress, verbosity, tracking
+from .term import BuiltIn, LightBuiltIn, \
     HeavyBuiltIn, Function, ReverseFunction, \
     Literal, AnonymousNode , AnonymousExistential, AnonymousUniversal, \
     Symbol, Fragment, FragmentNil,  Term, CompoundTerm, List, EmptyList, NonEmptyList
 
-from RDFSink import Logic_NS, RDFSink, forSomeSym, forAllSym
-from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
-from RDFSink import N3_nil, N3_first, N3_rest, OWL_NS, N3_Empty, N3_List, List_NS
-from RDFSink import RDF_NS_URI
-from RDFSink import RDF_type_URI
-from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
+from .RDFSink import Logic_NS, RDFSink, forSomeSym, forAllSym
+from .RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
+from .RDFSink import N3_nil, N3_first, N3_rest, OWL_NS, N3_Empty, N3_List, List_NS
+from .RDFSink import RDF_NS_URI
+from .RDFSink import RDF_type_URI
+from .RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
 
 
 
@@ -47,7 +47,7 @@ cvsRevision = "$Revision$"
 # Magic resources we know about
 
 
-from why import Because, BecauseBuiltIn, BecauseOfRule, \
+from .why import Because, BecauseBuiltIn, BecauseOfRule, \
     BecauseOfExperience, becauseSubexpression, BecauseMerge ,report
 
 

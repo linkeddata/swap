@@ -22,10 +22,10 @@ converted to integer second times without a valid timezone offset, such as "Z".
 import string
 import re
 
-import notation3    # N3 parsers and generators, and RDF generator
-import isodate      # Local, by mnot. implements <http://www.w3.org/TR/NOTE-datetime>
-from diag import progress, verbosity
-from term import LightBuiltIn, Function, ReverseFunction
+from . import notation3    # N3 parsers and generators, and RDF generator
+from . import isodate      # Local, by mnot. implements <http://www.w3.org/TR/NOTE-datetime>
+from .diag import progress, verbosity
+from .term import LightBuiltIn, Function, ReverseFunction
 
 
 URI_NS_URI = "http://www.w3.org/2000/10/swap/uri#"
@@ -40,7 +40,7 @@ class BI_uri_canon(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
         try:
             return uripath.canon(subj_py)
-        except ValueError, AssertionError:
+        except ValueError as AssertionError:
             progress("Warning: Failed to parse uri string '%s'" % subj_py)
             return None
 
@@ -50,7 +50,7 @@ class BI_uri_scheme(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
         try:
             return uripath.scheme(subj_py)
-        except ValueError, AssertionError:
+        except ValueError as AssertionError:
             progress("Warning: Failed to parse uri string '%s'" % subj_py)
             return None
 
@@ -60,7 +60,7 @@ class BI_uri_host(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
         try:
             return uripath.host(subj_py)
-        except ValueError, AssertionError:
+        except ValueError as AssertionError:
             progress("Warning: Failed to parse uri string '%s'" % subj_py)
             return None
 

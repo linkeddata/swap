@@ -7,7 +7,9 @@ magnitude is the log10 of the number we multiply it by to get an integer
 $Id$
 """
 
-from types import IntType, FloatType, LongType, StringTypes
+# timbl
+# from types import IntType, FloatType, LongType, StringTypes
+
 from math import log10
 
 class Decimal:
@@ -18,7 +20,7 @@ class Decimal:
     """
 
     _limit = 16
-    
+
     def normalize(self):
         """convert this Decimal into some sort of canonical form
 
@@ -33,9 +35,9 @@ class Decimal:
 ##        while self.magnitude > 2 * self.__class__._limit:
 ##            self.value = self.value / 10
 ##            self.magnitude = self.magnitude - 1
-        
-        
-    
+
+
+
     def __init__(self, other=0):
         """How to get a new Decimal
 
@@ -46,7 +48,7 @@ class Decimal:
             self.magnitude = other.magnitude
             return
         elif isinstance(other, IntType):
-            self.value = long(other)
+            self.value = int(other)
             self.magnitude = 0
             self.normalize()
             return
@@ -62,15 +64,15 @@ class Decimal:
             self.normalize()
             return
         elif isinstance(other,FloatType):
-            other = `other`
+            other = repr(other)
         try:
             other[0]
         except TypeError:
-            other = `other`
+            other = repr(other)
         other = other + 'q'
         i = 0
-        value = long(0)
-        magnitude = long(0)
+        value = int(0)
+        magnitude = int(0)
         sign = 1
         newsign = 1
         base = 10
@@ -104,7 +106,7 @@ class Decimal:
         self.value = value*sign
         self.normalize()
 
-        
+
     def __abs__(self):
         """x.__abs__() <==> abs(x)
         """
@@ -188,7 +190,7 @@ class Decimal:
         a.value = self.value // other.value
         a.normalize()
         return a
-        
+
     def __hash__(self):
         """x.__hash__() <==> hash(x)
         """
@@ -210,7 +212,7 @@ class Decimal:
         while power > 0:
             value = value // 10
             power = power - 1
-        return long(value * 10**(-power))
+        return int(value * 10**(-power))
     def __mod__(self, other):
         """x.__mod__(y) <==> x%y
         """
@@ -279,7 +281,7 @@ class Decimal:
 ##            c.normalize()
             a = self.__class__(pow(float(self),float(other),mod))
             return a
-        
+
     def __radd__(self, other):
         """x.__radd__(y) <==> y+x
         """
@@ -396,7 +398,7 @@ class Decimal:
 def n_root(base, power):
     """Find the nth root of a Decimal
     """
-    print 'trying to compute ', base, ' ** 1/ ', power
+    print('trying to compute ', base, ' ** 1/ ', power)
     accuracy = Decimal(1)
     n = 10 #Decimal._limit
     while n > 0:
@@ -409,7 +411,7 @@ def n_root(base, power):
         oldguess = guess
         counter = counter + 1
         if counter == 100:
-            print guess
+            print(guess)
             counter = 0
         h = 1 - base * (guess ** power)
         guess = guess + guess * h / power
@@ -418,5 +420,5 @@ def n_root(base, power):
             break
 #    print guess
     answer = Decimal(1) / Decimal(guess)
-    print answer
+    print(answer)
     return answer

@@ -53,9 +53,9 @@ to:
 
 """
 
-from RDFSink import FORMULA
-import diag
-from diag import progress
+from .RDFSink import FORMULA
+from . import diag
+from .diag import progress
 
 class ContextSink(object):
     def __init__(self, sink, openFormula,
@@ -82,14 +82,15 @@ class ContextSink(object):
     def newBlankNode(self):
         return self.sink.newBlankNode(self._context)
 
-    def makeStatement(self, (predicate, subject, object)):
+    def makeStatement(self, xxx_todo_changeme):
+        (predicate, subject, object) = xxx_todo_changeme
         self.sink.makeStatement((self._context, predicate, subject, object), why=self._reason2)
 
 
         
 
                     
-import uripath
+from . import uripath
 
 from rdflib.syntax.parser import ParserDispatcher
 from rdflib.URIRef import URIRef
@@ -136,9 +137,10 @@ class RDFXMLParser:
         else:
             raise Exception("Unexpected type")
 
-    def add(self, (s, p, o)):
+    def add(self, xxx_todo_changeme1):
         """Add triple to the sink (rdflib.syntax.parser.Parser calls
         this method)."""
+        (s, p, o) = xxx_todo_changeme1
         subject = self.__convert(s)
         predicate = self.__convert(p)
         object = self.__convert(o)                    

@@ -16,7 +16,7 @@
 
  Python/XML HOWTO
                 The Python/XML Special Interest Group
-                                   xml-sig@python.org 
+                                   xml-sig@python.org
                                (edited by amk1@bigfoot.com)
  http://py-howto.sourceforge.net/xml-howto/xml-howto.html
 
@@ -28,7 +28,7 @@
 
 
  RDF grammar http://www.w3.org/TR/rdf-syntax-grammar/ esp sections 6 and 7
-    
+
 ##################################### SAX pointers
  First hit on Python SAX parser
  http://www.gca.org/papers/xmleurope2000/papers/s28-04.html#N84395
@@ -73,10 +73,10 @@
 import string
 import sys
 
-import uripath
-from why import BecauseOfData
-import isXML
-import diag
+from . import uripath
+from .why import BecauseOfData
+from . import isXML
+from . import diag
 #from webAccess import urlopenForRDF   # http://www.w3.org/2000/10/swap/
 
 import xml.sax # PyXML stuff
@@ -94,11 +94,11 @@ from xml.sax.handler import feature_namespaces
 
 
 XMLLiteralsAsDomTrees = 1
-if XMLLiteralsAsDomTrees: 
+if XMLLiteralsAsDomTrees:
     import xml.dom  # for XMLLiterals
 
-import RDFSink
-from RDFSink import FORMULA,  ANONYMOUS, NODE_MERGE_URI
+from . import RDFSink
+from .RDFSink import FORMULA,  ANONYMOUS, NODE_MERGE_URI
 
 # States:
 
@@ -116,22 +116,22 @@ RDF_Specification = "http://www.w3.org/TR/REC-rdf-syntax/" # Must come in useful
 
 DAML_ONT_NS = "http://www.daml.org/2000/10/daml-ont#"  # DAML early version
 DPO_NS = "http://www.daml.org/2001/03/daml+oil#"  # DAML plus oil
-OWL_NS = "http://www.w3.org/2002/07/owl#"   # OWL 
+OWL_NS = "http://www.w3.org/2002/07/owl#"   # OWL
 
 List_NS = RDF_NS_URI     # Changed 200308
 
 XML_NS_URI = "http://www.w3.org/XML/1998/namespace"
 
-from diag import verbosity, progress, tracking
-from set_importer import Set
+from .diag import verbosity, progress, tracking
+from .set_importer import Set
 
 
 _nextId = 0        # For generation of arbitrary names for anonymous nodes
 
 
-coreSyntaxTerms = ['RDF', 'ID', 'about', 'parseType', 'resource', 'nodeID', 'datatype'] 
+coreSyntaxTerms = ['RDF', 'ID', 'about', 'parseType', 'resource', 'nodeID', 'datatype']
 syntaxTerms = coreSyntaxTerms + ['Description', 'li']
-oldTerms = ['aboutEach', 'aboutEachPrefix', 'bagID'] 
+oldTerms = ['aboutEach', 'aboutEachPrefix', 'bagID']
 
 nodeElementExceptions = {}
 for a in coreSyntaxTerms + oldTerms + ['li',]:
@@ -190,7 +190,7 @@ class RDFHandler(xml.sax.ContentHandler):
         self._items = [] # for <rdf:li> containers
         self._litDepth = 0
         self._usedIDs = Set()
-        
+
         version = "$Id$"
 #        self.sink.makeComment("RDF parsed by "+version[1:-1])
 
@@ -207,7 +207,7 @@ class RDFHandler(xml.sax.ContentHandler):
         if self._state == STATE_VALUE or \
            self._state == STATE_LITERAL:
             self.testdata += data
-        
+
 
     def flush(self):
         data = self.testdata
@@ -240,10 +240,10 @@ class RDFHandler(xml.sax.ContentHandler):
         self._state = STATE_DESCRIPTION
         self._items.append(0)
         properties = []
-        
-        for name, value in attrs.items():
+
+        for name, value in list(attrs.items()):
             ns, ln = name
-            
+
 # The following section was a kludge to work with presumably old bad RDF
 # files while RDF was being defined way back when.
 #            if ns:              # Removed 2010 as this is a kludge which creaks with sioc:about - timbl 2010-07-19
@@ -261,18 +261,18 @@ class RDFHandler(xml.sax.ContentHandler):
                         raise BadSyntax(sys.exc_info(), "Two elements cannot have the same ID, %s" % value)
                     self._usedIDs.add((self._base, value))
                     if self._subject:
-                        print "# oops - subject already", self._subject
+                        print("# oops - subject already", self._subject)
                         raise BadSyntax(sys.exc_info(), ">1 subject")
                     self._subject = self.sink.newSymbol(self.uriref("#" + value))
                 elif ln == "about":
                     if self._subject: raise BadSyntax(sys.exc_info(),
                         "Subject already defined to be %s, can't have attribute about='%s'" %
-                        (`self._subject`, value))
+                        (repr(self._subject), value))
                     self._subject = self.sink.newSymbol(self.uriref(value))
                 elif ln == "nodeID":
                     if self._subject: raise BadSyntax(sys.exc_info(),
                         "Subject already defined to be %s, can't have attribute nodeID='%s'" %
-                        (`self._subject`, value))
+                        (repr(self._subject), value))
                     if not isXML.isNCName(value):
                         raise  BadSyntax(sys.exc_info(), 'A nodeID must be a NCName %s' % value)
                     s = self._nodeIDs.get(value, None)
@@ -310,7 +310,7 @@ class RDFHandler(xml.sax.ContentHandler):
 
             else:  # Property attribute propAttr #MS1.0 6.10
                 uri = (ns + ln);
-                properties.append((uri, value)) 
+                properties.append((uri, value))
 #                print "@@@@@@ <%s> <%s>" % properties[-1]
 
         if self._subject == None:
@@ -330,14 +330,14 @@ class RDFHandler(xml.sax.ContentHandler):
                                         self._subject,
                                         self.sink.newLiteral(obj, dt, lang) ), why=self._reason2)
 
-            
+
 
     def _nodeElement(self, tagURI, attrs):  #MS1.0 6.2
         if tagURI == RDF_NS_URI + "Description":
-            self.idAboutAttr(attrs)  # Set up subject and context                
+            self.idAboutAttr(attrs)  # Set up subject and context
 
         elif tagURI in nodeElementExceptions:
-            raise ValueError, "%s as typednode not implemented" % tagURI
+            raise ValueError("%s as typednode not implemented" % tagURI)
         else:  # Unknown tag within STATE_NO_SUBJECT: typedNode #MS1.0 6.13
             c = self._context   # (Might be changed in idAboutAttr) #@@DC: huh?
             self.idAboutAttr(attrs)
@@ -378,8 +378,8 @@ class RDFHandler(xml.sax.ContentHandler):
                                     obj), why=self._reason2)
         self._state = STATE_NOVALUE  # NOT looking for value
         return
-    
-                
+
+
 
     def startPrefixMapping(self, prefix, uri):
         """Performance note:
@@ -417,23 +417,23 @@ class RDFHandler(xml.sax.ContentHandler):
         if self._state != STATE_LITERAL:
             self.flush()
         self.bnode = None
-        
+
         tagURI = ((name[0] or "") + name[1])
 
         if verbosity() > 80:
-            indent = ". " * len(self._stack) 
+            indent = ". " * len(self._stack)
             if not attrs:
                 progress(indent+'# State was', self._state, ', start tag: <' + tagURI + '>')
             else:
                 str = '# State =%s, start tag= <%s ' %( self._state, tagURI)
-                for name, value in attrs.items():
-                    str = str + "  " + `name` + '=' + '"' + `value` + '"'
+                for name, value in list(attrs.items()):
+                    str = str + "  " + repr(name) + '=' + '"' + repr(value) + '"'
                 progress(indent + str + '>')
 
 
         self._stack.append([self._state, self._context, self._predicate,
                                 self._subject, self._delayedStatement, self._base])
-                                
+
         self._delayedStatement = None
 
         self._base = uripath.join(self._base, attrs.get((XML_NS_URI, "base"), self._base))
@@ -444,8 +444,8 @@ class RDFHandler(xml.sax.ContentHandler):
             tagURI = uripath.join(self._base, tagURI)  # If relative, make absolute. Not needed for standard.
         except ValueError:
             pass
-                                             # Needed for portable RDF generated with --rdf=z 
-        
+                                             # Needed for portable RDF generated with --rdf=z
+
         self._language = attrs.get((XML_NS_URI, "lang"), None)
 
         value = attrs.get((RDF_NS_URI, "datatype"), None)
@@ -461,7 +461,7 @@ class RDFHandler(xml.sax.ContentHandler):
                 else:
                     self._nodeElement(tagURI, attrs)    # Parse it as RDF.
                 # http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-element-not-mandatory/test001.rdf
-                    
+
         elif self._state == STATE_NOT_RDF:
             if tagURI == RDF_NS_URI + "RDF" and "T" in self.flags:
                 self._state = STATE_NO_SUBJECT
@@ -470,7 +470,7 @@ class RDFHandler(xml.sax.ContentHandler):
 
         elif self._state == STATE_NO_SUBJECT:  #MS1.0 6.2 obj :: desription | container
             self._nodeElement(tagURI, attrs)
-                
+
         elif self._state == STATE_DESCRIPTION:   # Expect predicate (property) PropertyElt
             #  propertyElt #MS1.0 6.12
             #  http://www.w3.org/2000/03/rdf-tracking/#rdf-containers-syntax-ambiguity
@@ -480,24 +480,24 @@ class RDFHandler(xml.sax.ContentHandler):
                 self._items[-1] = item
             else:
                 if tagURI in propertyElementExceptions:
-                    raise BadSyntax(sys.exc_info(), 'Invalid predicate URI: %s' % tagURI) 
+                    raise BadSyntax(sys.exc_info(), 'Invalid predicate URI: %s' % tagURI)
                 self._predicate = self.sink.newSymbol(tagURI)
 
             self._state = STATE_VALUE  # May be looking for value but see parse type
 #           self._datatype = None
 #           self._language = None
             self.testdata = ""         # Flush value data
-            
+
             # print "\n  attributes:", `attrs`
             properties = []
             gotSubject = 0
             haveResource = 0
             haveParseType = 0
             haveExtras = 0
-            for name, value in attrs.items():
+            for name, value in list(attrs.items()):
                 ns, name = name
                 if name == "ID":
-                    print "# Warning: ID=%s on statement ignored" %  (value) # I consider these a bug
+                    print("# Warning: ID=%s on statement ignored" %  (value)) # I consider these a bug
                     raise ValueError("ID attribute?  Reification not supported.")
                 elif name == "parseType":
                     haveParseType = 1
@@ -512,7 +512,7 @@ class RDFHandler(xml.sax.ContentHandler):
                         self.idAboutAttr(attrs) #@@ not according to current syntax @@@@@@@@@@@
                         self.sink.makeStatement(( c, self._predicate, s, self._subject), why=self._reason2)
                         self._state = STATE_DESCRIPTION  # Nest description
-                        
+
                     elif value == "Quote":
                             c = self._context
                             s = self._subject
@@ -526,7 +526,7 @@ class RDFHandler(xml.sax.ContentHandler):
                             self._context = self._subject
                             self._subject = None
                             self._state = STATE_NO_SUBJECT  # Inside quote, there is no subject
-                        
+
                     elif (value=="Collection" or
                         value[-11:] == ":collection"):  # Is this a daml:collection qname?
 
@@ -561,7 +561,7 @@ class RDFHandler(xml.sax.ContentHandler):
                 elif name == "resource":
                     haveResource = 1
                     assert not gotSubject
-                    x = self.sink.newSymbol(self.uriref(value)) 
+                    x = self.sink.newSymbol(self.uriref(value))
                     self.sink.makeStatement((self._context,
                                              self._predicate,
                                              self._subject,
@@ -586,12 +586,12 @@ class RDFHandler(xml.sax.ContentHandler):
                                             obj ), why=self._reason2)
                 self._state = STATE_NOVALUE  # NOT looking for value
                 self._subject = obj
-            
+
             for ns, name, value in properties:
                 self._propertyAttr(ns, name, value)
-                
+
         elif self._state == STATE_LIST:   # damlCollection :: objs - make list
-            # Subject and predicate are set and dangling. 
+            # Subject and predicate are set and dangling.
             c = self._context
             s = self._subject  # The tail of the list so far
             p = self._predicate
@@ -599,8 +599,8 @@ class RDFHandler(xml.sax.ContentHandler):
             self.sink.makeStatement(( c,   # Link in new pair
                                       p,
                                       s,
-                                      pair ), why=self._reason2) 
-            self.idAboutAttr(attrs)  # set subject (the next item) and context 
+                                      pair ), why=self._reason2)
+            self.idAboutAttr(attrs)  # set subject (the next item) and context
             if tagURI != RDF_NS_URI + "Description":
                 self.sink.makeStatement((c,
                                          self.sink.newSymbol(RDF_NS_URI
@@ -618,23 +618,23 @@ class RDFHandler(xml.sax.ContentHandler):
                                         self.sink.newSymbol(RDF_NS_URI + "type"),
                                         self.sink.newSymbol(List_NS + "List"),
                                         self._subject), why=self._reason2) # new item
-            
+
             self._stack[-1][2] = self.sink.newSymbol(List_NS + "rest")  # Leave dangling link   #@check
             self._stack[-1][3] = pair  # Underlying state tracks tail of growing list
 
-         
+
         elif self._state == STATE_VALUE:   # Value :: Obj in this case #MS1.0 6.17  6.2
             c = self._context
             p = self._predicate
             s = self._subject
             self._nodeElement(tagURI, attrs)   # Parse the object thing's attributes
             self.sink.makeStatement((c, p, s, self._subject), why=self._reason2)
-            
+
             self._stack[-1][0] = STATE_NOVALUE  # When we return, cannot have literal now
 
         elif self._state == STATE_NOVALUE:
             str = ""
-            for e in self._stack: str = str + `e`+"\n"
+            for e in self._stack: str = str + repr(e)+"\n"
             raise BadSyntax(sys.exc_info(), """Expected no value, found name=%s; qname=%s, attrs=%s
             in nested context:\n%s""" %(name, qname, attrs, str))
 
@@ -647,9 +647,9 @@ class RDFHandler(xml.sax.ContentHandler):
                 self.literal_element_start(name, qname, attrs)
             #@@ need to capture the literal
         else:
-            raise RuntimeError, ("Unknown state in RDF parser", self._stack) # Unknown state
+            raise RuntimeError("Unknown state in RDF parser", self._stack) # Unknown state
 
-# aboutEachprefix { <#> forall r . { r startsWith ppp } l:implies ( zzz } ) 
+# aboutEachprefix { <#> forall r . { r startsWith ppp } l:implies ( zzz } )
 # aboutEach { <#> forall r . { ppp rdf:li r } l:implies ( zzz } )
 
 
@@ -657,47 +657,47 @@ class RDFHandler(xml.sax.ContentHandler):
         """Handle end element event
         """
         if verbosity() > 80:
-            indent = "- " * len(self._stack) 
-            progress(indent+'# End %s, State was'%name[1], self._state, ", delayed was ", `self._delayedStatement`)
+            indent = "- " * len(self._stack)
+            progress(indent+'# End %s, State was'%name[1], self._state, ", delayed was ", repr(self._delayedStatement))
 
         if self._delayedStatement == 1:
-                if verbosity() > 80: progress("Delayed subject "+`self._subject`)
+                if verbosity() > 80: progress("Delayed subject "+repr(self._subject))
                 self._stack[-1][3] = self._stack[-1][3].close()
         if self._state == STATE_LITERAL:
             self._litDepth = self._litDepth - 1
             if self._litDepth == 0:
                 buf = self.testdata
-		if XMLLiteralsAsDomTrees:
-		    e = self.domDocument.documentElement.firstChild
-		    if e is None:
-			raise ValueError("Weird: " + `self.domDocument.documentElement`)
-		    # progress('e is '+`e`)
-		    while e.nodeType == e.TEXT_NODE:
-			e = e.nextSibling
-		    #progress("@@@ e=", e, e.nodeName)
-		    self.domElement = e   # Leave for literal parser to pick up
-		    if self.sink:
-			self.sink.makeStatement(( self._context,
-					      self._predicate,
-					      self._subject,
-					      self.sink.newXMLLiteral(e) ),
-					       why=self._reason2)
-		else:
-		    self._datatype = self.sink.newSymbol("http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral")
-		    self.sink.makeStatement(( self._context,
-					      self._predicate,
-					      self._subject,
-					      self.sink.newLiteral(buf, self._datatype) ), why=self._reason2)
-		self.testdata = ""
+        if XMLLiteralsAsDomTrees:
+            e = self.domDocument.documentElement.firstChild
+            if e is None:
+                raise ValueError("Weird: " + repr(self.domDocument.documentElement))
+            # progress('e is '+`e`)
+            while e.nodeType == e.TEXT_NODE:
+                e = e.nextSibling
+            #progress("@@@ e=", e, e.nodeName)
+            self.domElement = e   # Leave for literal parser to pick up
+            if self.sink:
+                self.sink.makeStatement(( self._context,
+                      self._predicate,
+                      self._subject,
+                      self.sink.newXMLLiteral(e) ),
+                      why=self._reason2)
+        else:
+            self._datatype = self.sink.newSymbol("http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral")
+            self.sink.makeStatement(( self._context,
+                          self._predicate,
+                          self._subject,
+                          self.sink.newLiteral(buf, self._datatype) ), why=self._reason2)
+        self.testdata = ""
 
-            else:
-		if XMLLiteralsAsDomTrees:
-		    self.literal_element_end_DOM(name, qname)
-		else:
-		    self.literal_element_end(name, qname)
-                self._stack.pop()
-                return # don't pop state
-            
+#   eh?         else:
+        if XMLLiteralsAsDomTrees:
+            self.literal_element_end_DOM(name, qname)
+        else:
+            self.literal_element_end(name, qname)
+            self._stack.pop()
+            return # don't pop state
+
         elif self._state == STATE_VALUE:
             buf = self.testdata
             if self._datatype == None:    # RDFCore changes 2003 - can't have dt and lang
@@ -711,7 +711,7 @@ class RDFHandler(xml.sax.ContentHandler):
                                        self._subject,
                                        obj), why=self._reason2)
             self.testdata = ""
-            
+
         elif self._state == STATE_LIST:
             self.sink.makeStatement(( self._context,
                                       self.sink.newSymbol(List_NS + "rest"),
@@ -725,8 +725,8 @@ class RDFHandler(xml.sax.ContentHandler):
              self._state == STATE_NOT_RDF: # akuchlin@mems-exchange.org 2002-09-11
             pass
         else:
-            raise RuntimeError, ("Unknown RDF parser state '%s' in end tag" % self._state, self._stack)
-            
+            raise RuntimeError("Unknown RDF parser state '%s' in end tag" % self._state, self._stack)
+
 #       c1 = self._context
 #       if self._subject is c1 and self_context is not c1:
 #           self._subject = self._subject.close() # close before use
@@ -769,7 +769,7 @@ class RDFHandler(xml.sax.ContentHandler):
                 self.testdata += "<%s:%s" % (prefix, name[1])
             else:
                 self.testdata += "<%s" % name[1]
-            for ns in [name] + attrs.keys():
+            for ns in [name] + list(attrs.keys()):
                 ns = ns[0]
                 if not ns in declared:
                     prefix = nsMap.get(ns, None)
@@ -788,18 +788,18 @@ class RDFHandler(xml.sax.ContentHandler):
         else:
             self.testdata += "<%s" % name[1]
 
-        for (name, value) in attrs.items():
+        for (name, value) in list(attrs.items()):
             if name[0]:
                 name = declared[name[0]] + ":" + name[1]
             else:
                 name = name[1]
             self.testdata += (' %s=%s' % (name, quoteattr(value)))
         self.testdata += ">"
-        
+
     def literal_element_start_DOM(self, name, qname, attrs):
 
         declared = self.LiteralNS[-1].copy()
-        declared[u'http://www.w3.org/XML/1998/namespace'] = 'xml'
+        declared['http://www.w3.org/XML/1998/namespace'] = 'xml'
         self.LiteralNS.append(declared)
         nsMap = self._prefixMap[-1]
         if name[0]:
@@ -808,7 +808,7 @@ class RDFHandler(xml.sax.ContentHandler):
                 e = self.domDocument.createElementNS(name[0], prefix + ':' + name[1])
             else:
                 e = self.domDocument.createElementNS(name[0], name[1])
-            for ns in [name] + attrs.keys():
+            for ns in [name] + list(attrs.keys()):
                 ns = ns[0]
                 if ns and not ns in declared:
                     prefix = nsMap.get(ns, None)
@@ -825,7 +825,7 @@ class RDFHandler(xml.sax.ContentHandler):
                         e.setAttribute('xmlns:'+prefix, ns)   # use setAttributeNS? What NS?
                     else:
                         # self.testdata += (' xmlns="%s"' % ns)
-                        e.setAttribute('xmlns', ns) 
+                        e.setAttribute('xmlns', ns)
         else:
             e = self.domDocument.createElement(name[1])
 
@@ -833,12 +833,12 @@ class RDFHandler(xml.sax.ContentHandler):
         self.domElement = e
         # progress("@@@ self.domElement.namespaceURI=", self.domElement.namespaceURI)
 
-        for (name, value) in attrs.items():
+        for (name, value) in list(attrs.items()):
             if name[0]:
                 e.setAttributeNS(name[0], declared[name[0]] + ":" + name[1], value)
             else:
                 e.setAttributeNS(None, name[1], value)
-        
+
     def literal_element_start_DOM_OLD(self, name, qname, attrs):
 
         declared = self.LiteralNS[-1].copy()
@@ -853,22 +853,22 @@ class RDFHandler(xml.sax.ContentHandler):
         self.domElement = e
         # progress("@@@ self.domElement.namespaceURI=", self.domElement.namespaceURI)
 
-        for (name, value) in attrs.items():
+        for (name, value) in list(attrs.items()):
             if name[0]:
                 e.setAttributeNS(name[0],name[1], value)
             else:
                 e.setAttribute(name[1], value) #@@@ Missing prefix on qname
                 #@@@ may need calculating as in the non-dom case, alas.
-        
-    def literal_element_end(self, name, qname):
+
+    def literal_element_end(selsf, name, qname):
         if name[0]:
             prefix = self._prefixMap[-1][name[0]]
             if prefix:
-                end = u"</%s:%s>" % (prefix, name[1])
+                end = "</%s:%s>" % (prefix, name[1])
             else:
-                end = u"</%s>" % name[1]
+                end = "</%s>" % name[1]
         else:
-            end = u"</%s>" % name[1]
+            end = "</%s>" % name[1]
         self.testdata += end
         self.LiteralNS.pop()
 
@@ -914,7 +914,7 @@ class RDFXMLParser(RDFHandler):
         s.setByteStream(stream)
         try:
             self._p.parse(s)
-        except xml.sax._exceptions.SAXException, e:
+        except xml.sax._exceptions.SAXException as e:
             # was: raise SyntaxError() which left no info as to what had happened
             columnNumber = self._p.getColumnNumber()
             lineNumber = self._p.getLineNumber()
@@ -940,7 +940,7 @@ class XMLDOMParser(RDFXMLParser):
             why=why)
 
         RDFXMLParser.__init__(self, None, None, thisDoc=thisDoc,  flags=flags, why=why)
-            
+
         self._state = STATE_LITERAL
         self._litDepth = 0
         self.LiteralNS = [{}]
@@ -955,7 +955,7 @@ class XMLDOMParser(RDFXMLParser):
 #                               self.sink.newSymbol(pred),
 #                               self._subject,
 #                               self.sink.newSymbol(self.uriref(obj)) ), why=self._reason2)
-        
+
 
 
 
@@ -972,11 +972,11 @@ def XMLtoDOM(str):
     p = XMLDOMParser("foobar:") # Shouldn't need Doc URI etc
     p.feed(str)
     return p.domElement
-    
+
 def test(args = None):
     import sys, getopt
-    import notation3
-    
+    from . import notation3
+
     from time import time
 
     if not args:
@@ -1001,8 +1001,8 @@ def test(args = None):
     else:
         try:
             f = open(file, 'r')
-        except IOError, msg:
-            print file, ":", msg
+        except IOError as msg:
+            print(file, ":", msg)
             sys.exit(1)
 
     x = klass(notation3.ToN3(sys.stdout.write), "file:/test.rdf") # test only!
@@ -1026,17 +1026,16 @@ def test(args = None):
             for c in data:
                 p.feed(c, 1)
             p.close()
-    except RuntimeError, msg:
+    except RuntimeError as msg:
         t1 = time()
-        print msg
+        print(msg)
         if do_time:
-            print 'total time: %g' % (t1-t0)
+            print('total time: %g' % (t1-t0))
         sys.exit(1)
     t1 = time()
     if do_time:
-        print 'total time: %g' % (t1-t0)
+        print('total time: %g' % (t1-t0))
 
 
 if __name__ == '__main__':
     test()
-

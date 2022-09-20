@@ -6,14 +6,14 @@ This is meant to be used with a sparql.n3 based SPARQL parser, to add the query 
 $Id$
 """
 
-from set_importer import Set
-import uripath
-from term import Term, CompoundTerm
-from formula import Formula
-import diag
-from why import BecauseOfData
+from .set_importer import Set
+from . import uripath
+from .term import Term, CompoundTerm
+from .formula import Formula
+from . import diag
+from .why import BecauseOfData
 
-from cwm_sparql import SPARQL_NS
+from .cwm_sparql import SPARQL_NS
 
 knownFunctions = {}
 
@@ -27,16 +27,16 @@ reason2 = value.__get__([0])
 def abbr(prodURI):
    return prodURI.split('#').pop()
 
-class typedThing(unicode):
+class typedThing(str):
     def __new__(cls, val, retType=None, ArgTypes=[], trueOnError=False):
-        ret = unicode.__new__(cls, val)
+        ret = str.__new__(cls, val)
         ret.retType = retType
         ret.argTypes = ArgTypes
         ret.trueOnError = trueOnError
         return ret
 
     def __call__(self):
-        return unicode(self) + '__' + unicode(self.retType) + '__' + {False:'', True:'lenient__'}[self.trueOnError] + '_'.join(self.argTypes)
+        return str(self) + '__' + str(self.retType) + '__' + {False:'', True:'lenient__'}[self.trueOnError] + '_'.join(self.argTypes)
 
 def getType(ex):
     if isinstance(ex, typedThing):
@@ -92,7 +92,7 @@ advantage of merging instead of nesting sets
     def update(self, other={}, **values):
         if values:
             self.update(values)
-        for key, val in other.iteritems():
+        for key, val in other.items():
             self[key] = val
     def translate(self, fromkey, tokey):
         if fromkey not in self:
@@ -124,7 +124,8 @@ def makeTriple(subj, pred, obj, safeVersion=False):
                                          [(pred, ('objectList',
                                                   [obj]))])))
 
-def makeSafeVal(val, (subj, pred, obj), safeVersion=False):
+def makeSafeVal(val, xxx_todo_changeme, safeVersion=False):
+    (subj, pred, obj) = xxx_todo_changeme
     if safeVersion:
         store = pred[1].store
         typeErrorReturner = store.newSymbol(SPARQL_NS + '#typeErrorReturner')
@@ -153,7 +154,7 @@ needs to be coerced to a boolean. The second does boolean logic and pushes ``not
 
 After normalize, the last bottom up step to generate the n3 can be done.
     """
-    if verbose(): print expr
+    if verbose(): print(expr)
     step1 = Coerce()(expr)
     return NotNot()(step1)
 
@@ -162,7 +163,7 @@ class Coerce(object):
         self.k = 0
     def __call__(self, expr, coerce=True):
         try:
-            if verbose(): print '  ' * self.k, expr, coerce
+            if verbose(): print('  ' * self.k, expr, coerce)
             self.k = self.k + 1
             if expr[0] in ('Var', 'Literal', 'Number', 'String', 'symbol'):
                 ww = self.atom(expr, coerce)
@@ -173,10 +174,10 @@ class Coerce(object):
             else:
                 ww = getattr(self, 'on_' + expr[0])(expr, coerce)
             self.k = self.k - 1
-            if verbose(): print '  ' * self.k, '/', ww
+            if verbose(): print('  ' * self.k, '/', ww)
             return ww
         except AttributeError:
-             raise RuntimeError("COERCE why don't you define a %s function, to call on %s?" % ('on_' + expr[0], `expr`))
+             raise RuntimeError("COERCE why don't you define a %s function, to call on %s?" % ('on_' + expr[0], repr(expr)))
 
     def on_function(self, p, coerce):
         if coerce:
@@ -257,7 +258,7 @@ class NotNot(object):
     
     def __call__(self, expr, inv=False, Ored=False):
         try:
-            if verbose(): print '  ' * self.k, expr, inv
+            if verbose(): print('  ' * self.k, expr, inv)
             self.k = self.k + 1
             if not isinstance(expr, (list, tuple)):
                 return expr
@@ -269,10 +270,10 @@ class NotNot(object):
             else:
                 ww = getattr(self, 'on_' + expr[0])(expr, inv, Ored)
             self.k = self.k - 1
-            if verbose(): print '  ' * self.k, '/', ww
+            if verbose(): print('  ' * self.k, '/', ww)
             return ww
         except AttributeError:
-             raise RuntimeError("NOTNOT why don't you define a %s function, to call on %s?" % ('on_' + expr[0], `expr`))
+             raise RuntimeError("NOTNOT why don't you define a %s function, to call on %s?" % ('on_' + expr[0], repr(expr)))
 
     def expr(self, p, inv, ored):
         if inv:
@@ -365,9 +366,9 @@ class AST(object):
     def onStart(self, prod):
         if verbose():
             if callable(prod):
-                print (' ' * len(self.productions)) + prod()
+                print((' ' * len(self.productions)) + prod())
             else:
-                print (' ' * len(self.productions)) + `prod`
+                print((' ' * len(self.productions)) + repr(prod))
         #if callable(prod):
         #    prod = prod()
         self.productions.append([prod])
@@ -378,7 +379,7 @@ class AST(object):
       prod = self.sink.prod(k)
       if self.productions:
           self.productions[-1].append(prod)
-      if verbose(): print (' ' * len(self.productions)) + '/' + prodName + ': ' + `prod`
+      if verbose(): print((' ' * len(self.productions)) + '/' + prodName + ': ' + repr(prod))
       return prod
 
     def onToken(self, prod, tok):
@@ -387,7 +388,7 @@ class AST(object):
           self.productions[-1].append(k)
       except IndexError:
           return k
-      if verbose(): print (' ' * len(self.productions)) + `(prod, tok)`
+      if verbose(): print((' ' * len(self.productions)) + repr((prod, tok)))
 
 
 class productionHandler(object):
@@ -396,10 +397,10 @@ class productionHandler(object):
             try:
                 return getattr(self, 'on_' + abbr(production[0]))(production)
             except:
-                print production
+                print(production)
                 raise
         if True: # len(production) > 1:
-            raise RuntimeError("why don't you define a %s function, to call on %s?" % ('on_' + abbr(production[0]), `production`))
+            raise RuntimeError("why don't you define a %s function, to call on %s?" % ('on_' + abbr(production[0]), repr(production)))
         return production
 
 
@@ -612,8 +613,8 @@ class FromSparql(productionHandler):
                 if uri in self.anNodes:
                     return self.anNodes[uri]
             except:
-                print uri
-                print 'uri = ', uri
+                print(uri)
+                print('uri = ', uri)
                 raise
             self.anNodes[uri] = formula.newBlankNode(why=reason2())
             return self.anNodes[uri]
@@ -655,7 +656,7 @@ class FromSparql(productionHandler):
             includedStuff = pattern[4]
             notIncludedStuff = pattern[5]
 
-            for nodeName, graphIntersection in includedStuff.iteritems():
+            for nodeName, graphIntersection in includedStuff.items():
                 if not graphIntersection: continue
                 graph = f.newFormula()
                 for subGraph in graphIntersection:
@@ -668,10 +669,10 @@ class FromSparql(productionHandler):
                 else:
                     semantics = knowledge_base
                 tail.add(semantics, self.store.includes, graph, why=reason2())
-            includedVars = Set(self.vars.values())
+            includedVars = Set(list(self.vars.values()))
             excludedVars = includedVars.difference(tail.occurringIn(includedVars))
 
-            for nodeName, graphIntersection in notIncludedStuff.iteritems():
+            for nodeName, graphIntersection in notIncludedStuff.items():
                 if not graphIntersection: continue
 ##                graph = f.newFormula()
                 for subGraph in graphIntersection:
@@ -782,17 +783,17 @@ class FromSparql(productionHandler):
             for pred, obj in k[4]:
                 if positiveTriples is None:
                     positiveTriples = self.store.newFormula()
-                    for formSet in included.values():
+                    for formSet in list(included.values()):
                         for form in formSet:
                             positiveTriples.loadFormulaWithSubstitution(form)
                     positiveTriples = positiveTriples.close()
                     freeVariables = Set([x.uriref() for x in positiveTriples.freeVariables()])
                 if pred is self.sparql['bound']:
-                    variable = unicode(obj)
+                    variable = str(obj)
                     if variable not in freeVariables:
                         append = False
                 elif pred is self.sparql['notBound']:  ##@@@ This is broken!!
-                    variable = unicode(obj)
+                    variable = str(obj)
                     if variable in freeVariables:
                         append = False
             if append:
@@ -834,7 +835,7 @@ class FromSparql(productionHandler):
         if len(p) == 1:
             return None
         return None
-        raise NotImplementedError(`p`)
+        raise NotImplementedError(repr(p))
 
     def on_Var(self, p):
         uri = self.base + p[1][1][1:]
@@ -854,7 +855,7 @@ class FromSparql(productionHandler):
         else:
             class ___(object):
                 def __iter__(s):
-                    return iter(self.vars.values())
+                    return iter(list(self.vars.values()))
             varList = ___()
         return ('SelectVars', varList)
 
@@ -894,10 +895,10 @@ class FromSparql(productionHandler):
 
     def on_NumericLiteral(self, p):
         if abbr(p[1][0]) == 'INTEGER':
-            return ('Literal', self.store.newLiteral(`int(p[1][1])`, dt=self.xsd['integer'], lang=None))
+            return ('Literal', self.store.newLiteral(repr(int(p[1][1])), dt=self.xsd['integer'], lang=None))
         if abbr(p[1][0]) == 'FLOATING_POINT':
-            return ('Literal', self.store.newLiteral(`float(p[1][1])`, dt=self.xsd['double'], lang=None))
-        raise RuntimeError(`p`)
+            return ('Literal', self.store.newLiteral(repr(float(p[1][1])), dt=self.xsd['double'], lang=None))
+        raise RuntimeError(repr(p))
 
     def on_RDFTerm(self, p):
         return p[1]
@@ -1035,15 +1036,15 @@ class FromSparql(productionHandler):
                                 else:
                                     f.add(subj, pred, obj, why=reason2())
                         except:
-                            print '================'
-                            print 'subject= ', subject
-                            print 'predicate= ', predicate
-                            print 'pred= ', pred is self.sparql['OPTIONAL'], id(pred), id(self.sparql['OPTIONAL'])
-                            print 'object= ', object
+                            print('================')
+                            print('subject= ', subject)
+                            print('predicate= ', predicate)
+                            print('pred= ', pred is self.sparql['OPTIONAL'], id(pred), id(self.sparql['OPTIONAL']))
+                            print('object= ', object)
                             raise
             except:
-                print 'triples=',triples
-                print 'triple=',triple
+                print('triples=',triples)
+                print('triple=',triple)
                 raise
 
         f = f.close()
@@ -1230,7 +1231,7 @@ class FromSparql(productionHandler):
             return p[1]
         if abbr(p[1][0]) == 'GT_NOT':
             return (typedThing('Not', 'boolean'), p[2])
-        raise RuntimeError(`p`)
+        raise RuntimeError(repr(p))
 
     def on__Q_O_QTIMES_E____QUnaryExpression_E__Or__QDIVIDE_E____QUnaryExpression_E__C_E_Star(self, p):
         if len(p) == 1:
@@ -1335,16 +1336,16 @@ class FromSparql(productionHandler):
         return self.on_NumericLiteral(p[1:])[1]
 
     def on_DescribeQuery(self, p):
-        raise RuntimeError(`p`)
+        raise RuntimeError(repr(p))
 
     def on__QVarOrIRIref_E_Plus(self, p):
-        raise RuntimeError(`p`)
+        raise RuntimeError(repr(p))
 
     def on__O_QVarOrIRIref_E_Plus_Or__QTIMES_E__C(self, p):
-        raise RuntimeError(`p`)
+        raise RuntimeError(repr(p))
 
     def on__QWhereClause_E_Opt(self, p):
-        raise RuntimeError(`p`)
+        raise RuntimeError(repr(p))
 
     def on_DatasetClause(self, p):
         return None
@@ -1367,13 +1368,13 @@ class FromSparql(productionHandler):
     def on_OrderClause(self, p):
         clauses = [p[3]] + p[4]
         return clauses
-        raise RuntimeError(`p`)
+        raise RuntimeError(repr(p))
 
     def on__QOrderCondition_E_Plus(self, p):
         if len(p) == 1:
             return []
         return [p[1]] + p[2]
-        raise RuntimeError(`p`)
+        raise RuntimeError(repr(p))
 
     def on_OrderCondition(self, p):
         def listize(thing):
@@ -1383,7 +1384,7 @@ class FromSparql(productionHandler):
                 return self.store.newList([self.store.newSymbol(thing[1][1])] + [listize(x) for x in thing[2:]])
             return self.store.newList([self.store.newLiteral(thing[0])] + [listize(x) for x in thing[1:]])
         return listize(p[1])
-        raise RuntimeError(`p`)
+        raise RuntimeError(repr(p))
 
     def on__O_QASC_E__Or__QDESC_E__C(self, p):
         return p[1][1]
@@ -1426,7 +1427,7 @@ class FromSparql(productionHandler):
         return (p[2][0], p[2][1][1], p[2][2])
 
     def on_VarOrIRIref(self, p):
-        raise RuntimeError(`p`)
+        raise RuntimeError(repr(p))
 
     def on__O_QOR_E____QConditionalAndExpression_E__C(self, p):
         return p[2]
@@ -1469,7 +1470,7 @@ class FromSparql(productionHandler):
             return (typedThing('isBlank', 'boolean'), p[3])
         if funcName == 'IT_isLITERAL':
             return (typedThing('isLiteral', 'boolean'), p[3])
-        raise RuntimeError(`p`)
+        raise RuntimeError(repr(p))
 
     def on_RegexExpression(self, p):
         return ('Regex', p[3], p[5], p[6]) 
@@ -1530,11 +1531,11 @@ class FromSparql(productionHandler):
             return (None, p[1][1][1:])
         if abbr(p[1][0]) == 'GT_DTYPE':
             return (p[1][1], None)
-        raise RuntimeError(`p`)
+        raise RuntimeError(repr(p))
         
 
     def on_BooleanLiteral(self, p):
-        return ('Literal', (p[1][1] == u'true' and self.true or self.false))
+        return ('Literal', (p[1][1] == 'true' and self.true or self.false))
 
 
 class RulesMaker(object):
@@ -1594,7 +1595,7 @@ def unEscape(string):
         else:
             real_str = string[1:-1]
             triple = False
-    ret = u''
+    ret = ''
     n = 0
     while n < len(real_str):
         ch = real_str[n]
@@ -1611,12 +1612,12 @@ def unEscape(string):
             elif a == 'u':
                 m = real_str[n+2:n+6]
                 assert len(m) == 4
-                ret += unichr(int(m, 16))
+                ret += chr(int(m, 16))
                 n += 5
             elif a == 'U':
                 m = real_str[n+2:n+10]
                 assert len(m) == 8
-                ret += unichr(int(m, 16))
+                ret += chr(int(m, 16))
                 n += 9
             else:
                 raise ValueError('Bad Escape')

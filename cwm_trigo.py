@@ -19,10 +19,10 @@ __version__ = '$Revision$'
 __all__ = ["evaluateObject"]
 
 from math import sin, acos, asin, atan, atan2, cos, cosh, sinh, tan, tanh
-from term import LightBuiltIn, Function, ReverseFunction
+from .term import LightBuiltIn, Function, ReverseFunction
 import types
-from diag import progress
-from cwm_math import *
+from .diag import progress
+from .cwm_math import *
 
 MATH_NS_URI = 'http://www.w3.org/2000/10/swap/math#'
 
@@ -144,4 +144,4 @@ def register(store):
     str.internFrag('tanh', BI_tanh)
  
 if __name__=="__main__": 
-   print __doc__.strip()
+   print(__doc__.strip())

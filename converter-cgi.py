@@ -23,16 +23,16 @@ Agenda:
 """
 
 import string
-import urlparse
+import urllib.parse
 # import re
 # import StringIO
 
 #import urllib # for log:content
 import md5, binascii  # for building md5 URIs
-urlparse.uses_fragment.append("md5") #@@kludge/patch
-urlparse.uses_relative.append("md5") #@@kludge/patch
+urllib.parse.uses_fragment.append("md5") #@@kludge/patch
+urllib.parse.uses_relative.append("md5") #@@kludge/patch
 
-import notation3    # N3 parsers and generators, and RDF generator
+from . import notation3    # N3 parsers and generators, and RDF generator
 
               
             
@@ -44,7 +44,7 @@ import random
 import time
 import cgi
 import sys
-import StringIO
+import io
 
 def serveRequest(env):
     import random #for message identifiers. Hmm... should seed from request
@@ -53,22 +53,22 @@ def serveRequest(env):
 
     form = cgi.FieldStorage()
 
-    if form.has_key('data'):
+    if 'data' in form:
 	try:
 	    convert(form, env)
-	except BadSyntax, e:
-	    print "Status: 500 syntax error in input data"
-	    print "Content-type: text/plain"
-	    print
-	    print e
+	except BadSyntax as e:
+	    print("Status: 500 syntax error in input data")
+	    print("Content-type: text/plain")
+	    print()
+	    print(e)
 	    
 
 	except:
 	    import traceback
 
-	    print "Status: 500 error in python script. traceback follows"
-	    print "Content-type: text/plain"
-	    print
+	    print("Status: 500 error in python script. traceback follows")
+	    print("Content-type: text/plain")
+	    print()
 	    traceback.print_exc(sys.stdout)
 	    
     else:
@@ -83,31 +83,31 @@ def convert(form, env):
 
     data = form['data'].value
 
-    if form.has_key('genspace'):
+    if 'genspace' in form:
 	genspace = form['genspace'].value
     else: genspace = thisMessage + '#_'
 
-    if form.has_key('baseURI'):	baseURI = form['baseURI'].value
-    elif env.has_key('HTTP_REFERER'): baseURI = env['HTTP_REFERER']
+    if 'baseURI' in form:	baseURI = form['baseURI'].value
+    elif 'HTTP_REFERER' in env: baseURI = env['HTTP_REFERER']
     else: baseURI = None
 
     # output is buffered so that we only send
     # 200 OK if all went well
-    buf = StringIO.StringIO()
+    buf = io.StringIO()
 
     xlate = notation3.ToRDFParser(buf, baseURI, thisMessage, genspace)
     xlate.startDoc()
     xlate.feed(data)
     xlate.endDoc()
 
-    print "Content-Type: text/xml"
+    print("Content-Type: text/xml")
     #hmm... other headers? last-modified?
     # handle if-modified-since? i.e. handle input by reference?
-    print # end of HTTP response headers
-    print buf.getvalue()
+    print() # end of HTTP response headers
+    print(buf.getvalue())
 
 def showForm():
-    print """Content-Type: text/html
+    print("""Content-Type: text/html
 
 <html>
 <title>Notation3 to RDF Service</title>
@@ -135,7 +135,7 @@ bind dc: &lt;http://purl.org/dc/elements/1.1/&gt;
 
 </body>
 </html>
-"""
+""")
         
 ############################################################ Main program
     

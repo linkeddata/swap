@@ -12,16 +12,16 @@ See cwm.py and the os module in python
 """
 
 
-from term import LightBuiltIn, Function, ReverseFunction, MultipleFunction,\
+from .term import LightBuiltIn, Function, ReverseFunction, MultipleFunction,\
     MultipleReverseFunction, \
     CompoundTerm, N3Set, List, EmptyList, NonEmptyList
 
-from set_importer import Set
+from .set_importer import Set
 
-from diag import verbosity, progress
-import uripath
+from .diag import verbosity, progress
+from . import uripath
 
-from RDFSink import List_NS, Logic_NS
+from .RDFSink import List_NS, Logic_NS
 
 SetOperationsNamespace = "http://www.w3.org/2000/10/swap/set#"
 

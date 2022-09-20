@@ -80,10 +80,10 @@ def parse(s):
     try:
         a = r.groupdict('0')
     except:
-        raise ValueError, 'invalid date string format:'+s
+        raise ValueError('invalid date string format:'+s)
     y = int(a['year'])
     if y < 1970:
-        raise ValueError, 'Sorry, date must be in Unix era (1970 or after):'+s
+        raise ValueError('Sorry, date must be in Unix era (1970 or after):'+s)
     d = calendar.timegm((   int(a['year']), 
                         int(a['month']) or 1, 
                         int(a['day']) or 1, 
@@ -102,7 +102,7 @@ def parse(s):
     
 def fullString(i):
     """ given seconds since the epoch, return a full dateTime string in Z timezone. """
-    assert type(i) in [IntType, FloatType, LongType], "Wrong type: "+ `type(i)` +`i`
+    assert type(i) in [IntType, FloatType, LongType], "Wrong type: "+ repr(type(i)) +repr(i)
     year, month, day, hour, minute, second, wday, jday, dst = time.gmtime(i)
     return str(year) + '-%2.2d-%2.2dT%2.2d:%2.2d:%2.2dZ' % (month, day, hour, minute, second)
 

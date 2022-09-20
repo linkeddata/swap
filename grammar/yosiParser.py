@@ -5,9 +5,9 @@
 import sys
 import re
 
-import dekeywordizer
-import deprefixizer
-import tokenizer
+from . import dekeywordizer
+from . import deprefixizer
+from . import tokenizer
 #import triple_maker
 import toXML
 import notation3
@@ -175,7 +175,7 @@ class SinkParser:
                 elif numericLiteral.match(token):
                     m = numericLiteral.match(token)
                     if '.' not in token:
-                        tm.addLiteral(long(token))
+                        tm.addLiteral(int(token))
                     elif m is None:
                         raise ValueError("How exactly did I get here?")
                     elif m.groups(3) is not None:
@@ -183,7 +183,7 @@ class SinkParser:
                     elif m.groups(2) is not None:
                         tm.addLiteral(float(token))
                     else:
-                        tm.addLiteral(long(token))
+                        tm.addLiteral(int(token))
                 elif string.match(token):
                     if token[0:3] == '"""':
                         a = 3

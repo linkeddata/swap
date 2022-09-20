@@ -99,7 +99,7 @@ def eachGraph(text, store, it, props, cluster=''):
         eachNode(text, store, n, props) #@@hmm... node props = graph props?
 
     for sub in store.each(subj=it, pred=GV.subgraph):
-        raise RuntimeError, "subgraph not yet implemented@@"
+        raise RuntimeError("subgraph not yet implemented@@")
     text("}\n")
 
 def eachNode(text, store, gnode, props):
@@ -141,5 +141,5 @@ def main(argv):
 if __name__ == '__main__':
     try:
         main(sys.argv)
-    except Usage, e:
-        print >>sys.stderr, e
+    except Usage as e:
+        print(e, file=sys.stderr)

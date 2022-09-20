@@ -74,8 +74,8 @@ class DataTable(list):
         self.doElement(root, self.sheetTags, None)
         self.cleanup()
 
-        print self.diagnosticString()
-        print 'self:', self
+        print(self.diagnosticString())
+        print('self:', self)
         return;
 
     def parseSharedStringTable(self, infile):
@@ -91,7 +91,7 @@ class DataTable(list):
             assert t.tag.split('}')[1] == 't'
             if t.text:
                 self.shortStrings.append(t.text)
-                print "Short string %i:" % count, t.text
+                print("Short string %i:" % count, t.text)
             else:
                 self.shortStrings.append('')
             count += 1
@@ -106,7 +106,7 @@ class DataTable(list):
         return;
 
     def pokeString(self, s, hide):
-        print "Pokestring at %i,%i " % (self.row, self.col), s
+        print("Pokestring at %i,%i " % (self.row, self.col), s)
         if self.row >= -1 and self.col >= 0:
             s = s.strip()
             if self.row > 0:
@@ -144,7 +144,7 @@ class DataTable(list):
 
             self.cellType = tag
             newColumn()
-            print "         column ", self.col
+            print("         column ", self.col)
 
         elif tag == 'br':
             self.kludge = 1  #  A break moves temporarily to the next stacked column
@@ -157,7 +157,7 @@ class DataTable(list):
                 self.pokeString('date '+e.text, hide);
                 # print " ssss ", 'date '+e.text, 'at', self.row, self.col
             else:
-                print parent.tag, parent.attrib,  e.tag, e.attrib, e.text
+                print(parent.tag, parent.attrib,  e.tag, e.attrib, e.text)
                 assert False
 
         #   Now poke any text content into the array:
@@ -183,7 +183,7 @@ class DataTable(list):
             newColumn()
 
     def cleanup(self):
-        r = range(len(self));
+        r = list(range(len(self)));
         r.reverse();
         for i in r:
             if len(self[i]) < 10:
@@ -195,9 +195,9 @@ class DataTable(list):
 
     def diagnosticString(self):
         s = ""
-        s +=  " %i rows  Data: %s\n" % (len(self), `self`);
-        s += " %i headings:%s\n" % (len(self.headings), `self.headings`);
-        s+= " %i Tips: %s\n" % (len(self.tips),  `self.tips`)
+        s +=  " %i rows  Data: %s\n" % (len(self), repr(self));
+        s += " %i headings:%s\n" % (len(self.headings), repr(self.headings));
+        s+= " %i Tips: %s\n" % (len(self.tips),  repr(self.tips))
         s += "%i columns:\n" % (self.numberOfColumns)
         for row in range(len(self)):
             if len(self[row]) != len(self.headings):
@@ -283,7 +283,7 @@ class DataTable(list):
             for jj in range(len(self.headings)):
                 self.headings[jj] = self.headings[jj].strip()
                 if len(self.headings[jj]) == 0:
-                    self.headings[jj] = unichr(65+jj) #  Default to "A",  "B", etc
+                    self.headings[jj] = chr(65+jj) #  Default to "A",  "B", etc
             while self.headings[-1:] == [""]: self.headings = self.headings[:-1]; # Strip trailing comma on heading line (paypal)
             info( "# headings found: %i  %s" % (len(self.headings), self.headings))
         lineNo = 2

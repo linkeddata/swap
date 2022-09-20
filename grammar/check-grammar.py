@@ -62,8 +62,8 @@ def toYacc(x, tokenRegexps):
     if isinstance(x, Literal):
 	return "'" + str(x.value()) + "'"  # @@@ Escaping
     if x in tokenRegexps:
-	return deColonise(`x`).upper()
-    return deColonise(`x`)
+	return deColonise(repr(x)).upper()
+    return deColonise(repr(x))
 
 	
 def yaccConvert(yacc, top, tokenRegexps):
@@ -86,10 +86,10 @@ def yaccConvert(yacc, top, tokenRegexps):
     
 def yaccProduction(yacc, lhs,  tokenRegexps):
     if lhs is BNF.void:
-	print "\nvoid"
+	print("\nvoid")
 	return
     if lhs is BNF.eof:
-	print "\nEOF"
+	print("\nEOF")
 	return
     if isinstance(lhs, Literal):
 	literalTerminals[lhs.value()] = 1
@@ -98,15 +98,15 @@ def yaccProduction(yacc, lhs,  tokenRegexps):
 
     rhs = g.the(pred=BNF.matches, subj=lhs)
     if rhs != None:
-	print "\nToken %s matches regexp %s" %(lhs, rhs)
+	print("\nToken %s matches regexp %s" %(lhs, rhs))
 #	tokenRegexps[lhs] = re.compile(rhs.value())
 	return
     rhs = g.the(pred=BNF.mustBeOneSequence, subj=lhs)
     if rhs == None:
-	print recordError("No definition of " + `lhs`)
-	raise ValueError("No definition of %s  in\n %s" %(`lhs`, `g`))
+	print(recordError("No definition of " + repr(lhs)))
+	raise ValueError("No definition of %s  in\n %s" %(repr(lhs), repr(g)))
     options = rhs
-    print "\nProduction %s :: %s  ie %s" %(`lhs`, `options` , `options.value()`)
+    print("\nProduction %s :: %s  ie %s" %(repr(lhs), repr(options) , repr(options.value())))
     yacc.write("\n%s:" % toYacc(lhs, tokenRegexps))
 
     branches = g.each(subj=lhs, pred=BNF.branch)
@@ -116,7 +116,7 @@ def yaccProduction(yacc, lhs,  tokenRegexps):
 	    yacc.write("\t|\t")
 	first = 0
 	option = g.the(subj=branch, pred=BNF.sequence)
-	print "\toption: "+`option.value()`
+	print("\toption: "+repr(option.value()))
 	yacc.write("\t")
 	if option.value() == [] and yacc: yacc.write(" /* empty */")
 	for part in option:
@@ -131,10 +131,10 @@ literalTerminals = {}
 def doProduction(lhs):
     global branchTable
     if lhs is BNF.void:
-	print "\nvoid"
+	print("\nvoid")
 	return
     if lhs is BNF.eof:
-	print "\nEOF"
+	print("\nEOF")
 	return
     if isinstance(lhs, Literal):
 	literalTerminals[lhs.value()] = 1
@@ -145,41 +145,41 @@ def doProduction(lhs):
 
     rhs = g.the(pred=BNF.matches, subj=lhs)
     if rhs != None:
-	print "\nToken %s matches regexp %s" %(lhs, rhs)
+	print("\nToken %s matches regexp %s" %(lhs, rhs))
 	tokenRegexps[lhs] = re.compile(rhs.value())
 	cc = g.each(subj=lhs, pred=BNF.canStartWith)
-	if cc == []: print recordError("No recod of what token %s can start with" % `lhs`)
-	print "\tCan start with: %s" % cc 
+	if cc == []: print(recordError("No recod of what token %s can start with" % repr(lhs)))
+	print("\tCan start with: %s" % cc) 
 	return
     rhs = g.the(pred=BNF.mustBeOneSequence, subj=lhs)
     if rhs == None:
-	print recordError("No definition of " + `lhs`)
+	print(recordError("No definition of " + repr(lhs)))
 	return
 #	raise RuntimeError("No definition of %s  in\n %s" %(`lhs`, `g`))
     options = rhs
-    print "\nProduction %s :: %s  ie %s" %(`lhs`, `options` , `options.value()`)
+    print("\nProduction %s :: %s  ie %s" %(repr(lhs), repr(options) , repr(options.value())))
     succ = g.each(subj=lhs, pred=BNF.canPrecede)
-    print "\tCan precede ", succ
+    print("\tCan precede ", succ)
 
     branches = g.each(subj=lhs, pred=BNF.branch)
     for branch in branches:
 	option = g.the(subj=branch, pred=BNF.sequence)
-	print "\toption: "+`option.value()`
+	print("\toption: "+repr(option.value()))
 	for part in option:
 	    if part not in already and part not in agenda: agenda.append(part)
-	    y = `part`
+	    y = repr(part)
 	conditions = g.each(subj=branch, pred=BNF.condition)
 	if conditions == []:
-	    print recordError(" NO SELECTOR for %s option %s ie %s" %(`lhs`, `option`, `option.value()` ))
+	    print(recordError(" NO SELECTOR for %s option %s ie %s" %(repr(lhs), repr(option), repr(option.value()) )))
 	    if option.value == []: # Void case - the tricky one
 		succ = g.each(subj=lhs, pred=BNF.canPrecede)
 		for y in succ:
-		    print "\t\t\tCan precede ", `y`
-	print "\t\tConditions: %s" %(conditions)
+		    print("\t\t\tCan precede ", repr(y))
+	print("\t\tConditions: %s" %(conditions))
 	for str1 in conditions:
 	    if str1 in branchDict:
-		print recordError("Conflict: %s is also the condition for %s" % (
-				str1, branchDict[str1].value()))
+		print(recordError("Conflict: %s is also the condition for %s" % (
+				str1, branchDict[str1].value())))
 	    branchDict[str1.__str__()] = option
 #	    break
 
@@ -190,8 +190,8 @@ def doProduction(lhs):
 	    s2 = str2.__str__()
 # @@ check that selectors are distinct, not substrings
 	    if (s1.startswith(s2) or s2.startswith(s1)) and branchDict[str1] is not branchDict[str2]:
-		print "WARNING: for %s, %s indicates %s, but  %s indicates %s" % (
-			    lhs, s1, branchDict[str1], s2, branchDict[str2])
+		print("WARNING: for %s, %s indicates %s, but  %s indicates %s" % (
+			    lhs, s1, branchDict[str1], s2, branchDict[str2]))
 #		print recordError("Conflict: for %s, %s indicates %s, but  %s indicates %s" % (
 #			    option.value(), s1, branchDict[str1], s2, branchDict[str2]))
     branchTable[lhs] = branchDict
@@ -232,8 +232,8 @@ class PredictiveParser:
 	if i == len(str):
 	    return "",  i # eof
 	
-	if parser.verb: print "%i) Looking at:  ...%s$%s..." % (
-	    parser.lineNumber, str[i-10:i],str[i:i+10])
+	if parser.verb: print("%i) Looking at:  ...%s$%s..." % (
+	    parser.lineNumber, str[i-10:i],str[i:i+10]))
 	for double in "=>", "<=", "^^":
 	    if double == str[i:i+2]: return double, i
     
@@ -284,8 +284,8 @@ class PredictiveParser:
 	rhs = lookupTable.get(tok, None)  # Predict branch from token
 	if rhs == None: raise SyntaxError(
 		"Found %s when expecting some form of %s,\n\tsuch as %s\n\t%s"
-		    %(utf_8_encode(tok)[0], lhs, lookupTable.keys(), parser.around(str, this)))
-	print "%i  %s means expand %s as %s" %(parser.lineNumber,tok, lhs, rhs.value())
+		    %(utf_8_encode(tok)[0], lhs, list(lookupTable.keys()), parser.around(str, this)))
+	print("%i  %s means expand %s as %s" %(parser.lineNumber,tok, lhs, rhs.value()))
 	for term in rhs:
 	    if isinstance(term, Literal):
 		lit = term.value()
@@ -314,11 +314,11 @@ class PredictiveParser:
 # The Grammar formula
 
 grammarFile = argv[1].split("#")[0]
-print "Loading", grammarFile
+print("Loading", grammarFile)
 start = clock()
 g = load(grammarFile)
 taken = clock() - start
-print "Loaded %i statements in %fs, ie %f/s." % (len(g), taken, len(g)/taken)
+print("Loaded %i statements in %fs, ie %f/s." % (len(g), taken, len(g)/taken))
 
 document = g.newSymbol(argv[2])
 
@@ -336,16 +336,16 @@ while agenda:
     doProduction(x)
     
 if errors != []:
-    print "###### FAILED with %i errors." % len(errors)
-    for s in errors: print "\t%s" % s
+    print("###### FAILED with %i errors." % len(errors))
+    for s in errors: print("\t%s" % s)
     exit(-2)
 else:
-    print "Ok for predictive parsing"
+    print("Ok for predictive parsing")
 
 #print "Branch table:", branchTable
-print "Literal terminals:", literalTerminals.keys()
-print "Token regular expressions:"
-for r in tokenRegexps: print "\t%s matches %s" %(r, tokenRegexps[r].pattern) 
+print("Literal terminals:", list(literalTerminals.keys()))
+print("Token regular expressions:")
+for r in tokenRegexps: print("\t%s matches %s" %(r, tokenRegexps[r].pattern)) 
 
 yacc=open(argv[1]+"-yacc.y", "w")
 yaccConvert(yacc, document, tokenRegexps)

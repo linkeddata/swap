@@ -14,26 +14,26 @@ This is or was http://www.w3.org/2000/10/swap/pretty.py
 import types
 import string
 
-import diag
-from diag import progress, verbosity, tracking
-from term import   Literal, XMLLiteral, Symbol, Fragment, AnonymousNode, \
+from . import diag
+from .diag import progress, verbosity, tracking
+from .term import   Literal, XMLLiteral, Symbol, Fragment, AnonymousNode, \
     AnonymousVariable, FragmentNil, AnonymousUniversal, \
     Term, CompoundTerm, List, EmptyList, NonEmptyList, N3Set
-from formula import Formula, StoredStatement
+from .formula import Formula, StoredStatement
 
-from RDFSink import Logic_NS, RDFSink, forSomeSym, forAllSym
-from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4, \
+from .RDFSink import Logic_NS, RDFSink, forSomeSym, forAllSym
+from .RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4, \
             ANONYMOUS, SYMBOL, LITERAL, LITERAL_DT, LITERAL_LANG, XMLLITERAL
-from RDFSink import N3_nil, N3_first, N3_rest, OWL_NS, N3_Empty, N3_List, \
+from .RDFSink import N3_nil, N3_first, N3_rest, OWL_NS, N3_Empty, N3_List, \
                     List_NS
-from RDFSink import RDF_NS_URI
-from RDFSink import RDF_type_URI
+from .RDFSink import RDF_NS_URI
+from .RDFSink import RDF_type_URI
 
 cvsRevision = "$Revision$"
 
 # Magic resources we know about
 
-from RDFSink import RDF_type_URI, DAML_sameAs_URI
+from .RDFSink import RDF_type_URI, DAML_sameAs_URI
 
 STRING_NS_URI = "http://www.w3.org/2000/10/swap/string#"
 META_NS_URI = "http://www.w3.org/2000/10/swap/meta#"
@@ -117,7 +117,7 @@ class Serializer:
         best = 0
         mp = None
         counts = dummySink.namespaceCounts()
-        for r, count in counts.items():
+        for r, count in list(counts.items()):
             if verbosity() > 25: progress("    Count is %3i for %s" %(count, r))
             if (r != RDF_NS_URI
                 and count > 0
@@ -133,7 +133,7 @@ class Serializer:
 
         # Make up prefixes for things which don't have them:
         
-        for r, count in counts.items():
+        for r, count in list(counts.items()):
             if count > 1 and r != mp:
                 if self.store.prefixes.get(r, None) is None:
                     p = r
@@ -158,7 +158,7 @@ class Serializer:
                         else:
                             n = 2
                             while 1:
-                                pref = p[:3]+`n`
+                                pref = p[:3]+repr(n)
                                 if self.store.namespaces.get(pref, None) is None:
                                     break
                                 n = n + 1                       
@@ -170,7 +170,7 @@ class Serializer:
             self.sink.setDefaultNamespace(self.defaultNamespace)
 
 #       progress("&&&& Counts: ", counts)
-        prefixes = self.store.namespaces.keys()   #  bind in same way as input did FYI
+        prefixes = list(self.store.namespaces.keys())   #  bind in same way as input did FYI
         prefixes.sort()   # For repeatability of test results
         for pfx in prefixes:
             r = self.store.namespaces[pfx]
@@ -185,7 +185,7 @@ class Serializer:
     def dumpPrefixes(self):
         if self.defaultNamespace is not None:
             sink.setDefaultNamespace(self.defaultNamespace)
-        prefixes = self.store.namespaces.keys()   #  bind in same way as input did FYI
+        prefixes = list(self.store.namespaces.keys())   #  bind in same way as input did FYI
         prefixes.sort()
         for pfx in prefixes:
             uri = self.store.namespaces[pfx]
@@ -274,7 +274,7 @@ class Serializer:
 
     def _outputStatement(self, sink, quad, aWorks = 1):
         if isinstance(quad[1], Literal):
-            raise ValueError("Cannot have a literal as a predicate. This makes no sense, %s" % `quad[1]`)
+            raise ValueError("Cannot have a literal as a predicate. This makes no sense, %s" % repr(quad[1]))
         if isinstance(quad[1], Formula):
             raise ValueError("Cannot have a formula as a predicate. This makes no sense")
         sink.makeStatement(auxPairs(quad), aIsPossible=aWorks)
@@ -330,7 +330,7 @@ class Serializer:
                 self._outputStatement(sink, [fixSet(x) for x in s.quad])
                     
         if 0:  # Doesn't work as ther ei snow no list of bnodes
-            rs = self.store.resources.values()
+            rs = list(self.store.resources.values())
             if sorting: rs.sort(Term.compareAnyTerm)
             for r in rs :  # First the bare resource
                 statements = context.statementsMatching(subj=r)
@@ -338,7 +338,7 @@ class Serializer:
                 for s in statements :
                         self._outputStatement(sink, s.quad)
                 if not isinstance(r, Literal):
-                    fs = r.fragments.values()
+                    fs = list(r.fragments.values())
                     if sorting: fs.sort
                     for f in fs :  # then anything in its namespace
                         statements = context.statementsMatching(subj=f)
@@ -391,7 +391,7 @@ class Serializer:
     def _scan(self, x, context=None):
 #       progress("Scanning ", x, " &&&&&&&&")
 #       assert self.context._redirections.get(x, None) is None, "Should not be redirected: "+`x`
-        if verbosity() > 98: progress("scanning %s a %s in context %s" %(`x`, `x.__class__`,`context`),
+        if verbosity() > 98: progress("scanning %s a %s in context %s" %(repr(x), repr(x.__class__),repr(context)),
                         x.generated(), self._inContext.get(x, "--"))
         if isinstance(x, NonEmptyList) or isinstance(x, N3Set):
             for y in x:
@@ -502,12 +502,12 @@ class Serializer:
                         _isExistential)
             if verbosity() > 97:
                 progress( "Topology %s in %s is: ctx=%s,anon=%i obj=%i, pred=%i loop=%s ex=%i "%(
-                `x`, `context`, `ctx`, _anon, _asObj, _asPred, _loop, _isExistential))
+                repr(x), repr(context), repr(ctx), _anon, _asObj, _asPred, _loop, _isExistential))
             return ( _anon, _asObj+_asPred )  
 
         if verbosity() > 98:
             progress( "Topology %s in %s is: anon=%i obj=%i, pred=%i loop=%s ex=%i "%(
-            `x`, `context`,  _anon, _asObj, _asPred, _loop, _isExistential))
+            repr(x), repr(context),  _anon, _asObj, _asPred, _loop, _isExistential))
 ##        self._topology_returns[x] = ( _anon, _asObj+_asPred )
         return ( _anon, _asObj+_asPred )  
 
@@ -576,7 +576,7 @@ class Serializer:
 
         allStatements = context.statements[:]
         if equals:
-            for x, y in context._redirections.items():
+            for x, y in list(context._redirections.items()):
                 if not x.generated() and x not in context.variables():
                     allStatements.append(StoredStatement(
                         (context, context.store.sameAs, x, y)))
@@ -655,7 +655,7 @@ class Serializer:
                     for s in statements:
                         p = s.quad[PRED]
                         if p is not self.store.first and p is not self.store.rest:
-                            if verbosity() > 90: progress("Is list, has values for", `p`)
+                            if verbosity() > 90: progress("Is list, has values for", repr(p))
                             break # Something to print (later)
                     else:
                         if subj.generated(): return # Nothing.
@@ -681,7 +681,7 @@ class Serializer:
                         sink.endAnonymousNode()
                     return
                 else:
-                    if verbosity() > 90: progress("%s Not list, has property values." % `subj`)
+                    if verbosity() > 90: progress("%s Not list, has property values." % repr(subj))
                     sink.startAnonymousNode(auPair(subj))
                     for s in statements:  #   "[] color blue."  might be nicer. @@@  Try it?
                         try:
@@ -716,7 +716,7 @@ class Serializer:
 
         if isinstance(obj, NonEmptyList):
             if verbosity()>99:
-                progress("List found as object of dumpStatement " + `obj`
+                progress("List found as object of dumpStatement " + repr(obj)
                                         + context.debugString())
 
             collectionSyntaxOK = ("l" not in self.flags)

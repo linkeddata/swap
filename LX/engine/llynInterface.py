@@ -55,7 +55,7 @@ def toLX(store, formula, maxDepth=4, kb=None, kbMode=0, terms={}):
 
     result = None
     if maxDepth < 0:
-        raise RuntimeError, "Formulas too deeply nested, probably looping"
+        raise RuntimeError("Formulas too deeply nested, probably looping")
     for s in formula:
         #print "statement", s
         if s[PRED] is store.forAll or s[PRED] is store.forSome:
@@ -185,7 +185,7 @@ def addLXFormula(store, context, expr, terms={}, kb=None):
             t[index] = sym
         store.storeQuad(t)
     else: 
-        raise RuntimeError, "Can only convert atomic formula yet, not %s" % expr
+        raise RuntimeError("Can only convert atomic formula yet, not %s" % expr)
 
 
 # $Log$

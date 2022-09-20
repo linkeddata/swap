@@ -65,7 +65,7 @@ class Symbol(str):
 
     For now, at least, stick to US-ASCII characters in symbols:
 
-      >>> bug=Symbol(u"http://example/#D\u00fcrst")
+      >>> bug=Symbol(u"http://example/#D\\u00fcrst")
       Traceback (most recent call last):
         File "<string>", line 1, in ?
         File "ConstTerm.py", line 63, in __new__
@@ -124,7 +124,7 @@ class Namespace(object):
             return sym
 
         
-class StringLiteral(unicode):
+class StringLiteral(str):
     _seen = {}
     
     def __new__(cls, chars):
@@ -132,7 +132,7 @@ class StringLiteral(unicode):
         try:
             return seen[chars]
         except KeyError:
-            lit = unicode.__new__(cls, chars)
+            lit = str.__new__(cls, chars)
             seen[chars] = lit
             return lit
 

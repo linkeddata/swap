@@ -12,7 +12,7 @@ class SyntaxError:
         self.msg = msg
     def __repr__(self):
         if self.pos < 0: return "#<syntax-error>"
-        else: return "SyntaxError[@ char " + `self.pos` + ": " + self.msg + "]"
+        else: return "SyntaxError[@ char " + repr(self.pos) + ": " + self.msg + "]"
 
 class NoMoreTokens:
     "Another exception object, for when we run out of tokens"
@@ -53,7 +53,7 @@ class Scanner:
         "Print the last 10 tokens that have been scanned in"
         output = ''
         for t in self.tokens[-10:]:
-            output = '%s\n  (@%s)  %s  =  %s' % (output,t[0],t[2],`t[3]`)
+            output = '%s\n  (@%s)  %s  =  %s' % (output,t[0],t[2],repr(t[3]))
         return output
     
     def scan(self, restrict):
@@ -124,7 +124,7 @@ def print_error(input, err, scanner):
     p = err.pos
     # Figure out the line number
     line = count(input[:p], '\n')
-    print err.msg+" on line "+`line+1`+":"
+    print(err.msg+" on line "+repr(line+1)+":")
     # Now try printing part of the line
     text = input[max(p-80,0):p+80]
     p = p - max(p-80,0)
@@ -151,19 +151,19 @@ def print_error(input, err, scanner):
         p = p - 7
 
     # Now print the string, along with an indicator
-    print '> ',text
-    print '> ',' '*p + '^'
-    print 'List of nearby tokens:', scanner
+    print('> ',text)
+    print('> ',' '*p + '^')
+    print('List of nearby tokens:', scanner)
 
 def wrap_error_reporter(parser, rule):
     try: return getattr(parser, rule)()
-    except SyntaxError, s:
+    except SyntaxError as s:
         input = parser._scanner.input
         try:
             print_error(input, s, parser._scanner)
         except ImportError:
-            print 'Syntax Error',s.msg,'on line',1+count(input[:s.pos], '\n')
+            print('Syntax Error',s.msg,'on line',1+count(input[:s.pos], '\n'))
     except NoMoreTokens:
-        print 'Could not complete parsing; stopped around here:'
-        print parser._scanner
+        print('Could not complete parsing; stopped around here:')
+        print(parser._scanner)
 

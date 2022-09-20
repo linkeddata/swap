@@ -48,7 +48,7 @@ def n3NameGen(scope):
     while 1:
         name = "_:g%d" % val
         val = val + 1
-        if not scope.has_key(name): break
+        if name not in scope: break
     scope["__next"] = val
     return name
 
@@ -57,7 +57,7 @@ def prologNameGen(scope):
     while 1:
         name = "g%d" % val
         val = val + 1
-        if not scope.has_key(name): break
+        if name not in scope: break
     scope["__next"] = val
     return name
         
@@ -94,7 +94,7 @@ class Ident:
         if self.uri != None:
             return "<" + self.uri + ">"
         lr = repr(self)
-        if scope.has_key(lr):
+        if lr in scope:
             return scope[lr]
         else:
             name = n3NameGen(scope)
@@ -107,7 +107,7 @@ class Ident:
         if self.uri != None:
             return "'<" + self.uri + ">'"
         lr = repr(self)
-        if scope.has_key(lr):
+        if lr in scope:
             return scope[lr]
         else:
             name = prologNameGen(scope)
@@ -120,7 +120,7 @@ class Ident:
         if self.uri != None:
             return "'<" + self.uri + ">'"
         lr = repr(self)
-        if scope.has_key(lr):
+        if lr in scope:
             return scope[lr]
         else:
             name = prologNameGen(scope)
@@ -148,12 +148,12 @@ def getFromN3(term, scope):
     m = n3bnodepat.match(term)
     if m:
         k = m.group(0)
-        if scope.has_key(k): return scope[k]
+        if k in scope: return scope[k]
         i = Ident()
         scope[k] = i;
         scope[i] = k;
         return i
-    raise RuntimeError, "Can't parse N3 Term: %s" % term
+    raise RuntimeError("Can't parse N3 Term: %s" % term)
 
 def read(filename):
     global genidCount
@@ -167,7 +167,7 @@ def read(filename):
         line = s.readline()
         if not line: break
         parts = string.split(line[:-3], ' ', 2)
-        transparts = map(lambda x: getFromN3(x, mapping), parts);
+        transparts = [getFromN3(x, mapping) for x in parts];
         result.append(transparts)
     return result
 
