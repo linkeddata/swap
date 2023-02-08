@@ -4,6 +4,9 @@
 
 @prefix : <http://www.w3.org/2000/10/swap/reify#>.
 @prefix rei: <http://www.w3.org/2000/10/swap/reify#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
 
 # Each element of the language can be described as a bnode
 #
@@ -13,7 +16,7 @@
 :Term a rdf:Class;
 	s:label "Term".
 
-:RDFTerm a s:subClassOf :Term.
+:RDFTerm s:subClassOf :Term.
 
 :Symbol s:subClassOf :RDFTerm;
 	s:label "RDF symbol, identified by a URI".
