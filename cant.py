@@ -48,7 +48,7 @@ References:
 This is or was http://www.w3.org/2000/10/swap/cant.py
 W3C open source licence <http://www.w3.org/Consortium/Legal/copyright-software.html>.
 
-2004-02-31 Serious bug fixed.  This is a test program, shoul dbe itself tested.
+2004-02-31 Serious bug fixed.  This is a test program, should be itself tested.
                 Quis custodiet ipsos custodes?
 
 
@@ -106,7 +106,7 @@ def loadFiles(testFiles):
         uri = uripath.join(WD, fn)
         inStream = urllib.request.urlopen(uri)
         while 1:
-            line = inStream.readline()
+            line = inStream.readline().decode() # python3
             if line == "" : break
 #           if verbose: stderr.write("%s\n" % line)
             m = comment.match(line)
@@ -167,6 +167,10 @@ def main():
     else:
         serialize(graph)
 
+def cmp (a, b): # not defined in python3
+    if a > b: return 1
+    if a < b: return -1
+    return 0
 
 def compareCanonicalGraphs(g1, g2):
 
@@ -224,6 +228,9 @@ def serialize(graph):
             if x.startswith("__"): x = x[1:]
             print(x, end=' ')
         print(".")
+
+def sortKeyFunction(a):
+    return repr(a[0])
 
 def compareFirst(a,b):
     "Compare consistently nested lists of strings"
@@ -300,7 +307,7 @@ def canon(graph, c0=0):
         signature[i].sort()   # Signature is now intrinsic to the local environment of that bnode.
         if verbose: stderr.write( "Bnode %3i) %s\n\n" % (i, signature[i]))
         s.append((signature[i], i))
-    s.sort(compareFirst)
+    s.sort(key=sortKeyFunction)
 
     dups = 0
     c = c0

@@ -1,5 +1,5 @@
 #   Makeke various caninicalizations of things
-N=python ../../cant.py
+N=python3 ../../cant.py
 
 .SUFFIXES: .3 .2 .1 .nt
 
@@ -13,4 +13,3 @@ N=python ../../cant.py
 	$N < $<  > $@
 
 #ends
-
