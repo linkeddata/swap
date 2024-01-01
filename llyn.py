@@ -80,7 +80,7 @@ from .term import BuiltIn, LightBuiltIn, RDFBuiltIn, HeavyBuiltIn, Function, \
     CompoundTerm, List, EmptyList, NonEmptyList, AnonymousNode, N3Set, \
     UnknownType
 from .formula import Formula, StoredStatement
-from . import reify
+# from . import reify
 
 from weakref import WeakValueDictionary
 
@@ -1321,7 +1321,8 @@ class BI_reification(HeavyBuiltIn, Function, ReverseFunction):
     """
     def evalSubj(self, obj, queue, bindings, proof, query):
         f = obj.store.newFormula()
-        return reify.dereification(obj, f, obj.store)
+        raise NotImplementedError
+        # return reify.dereification(obj, f, obj.store)
 
     def evalObj(self, subj, queue, bindings, proof, query):
         f = subj.store.newFormula()
@@ -1644,7 +1645,7 @@ class RDFStore(RDFSink) :
         """
         while 1:
             uriRefString = RDFSink.genId(self)
-            hash = string.rfind(uriRefString, "#")
+            hash = uriRefString.rfind("#")
             if hash < 0 :     # This is a resource with no fragment
                 return uriRefString # ?!
             resid = uriRefString[:hash]
@@ -1662,7 +1663,7 @@ class RDFStore(RDFSink) :
         This is useful because it is usfeul
         to generate IDs with useful diagnostic ways but this lays them
         open to possibly clashing in pathalogical cases."""
-        hash = string.rfind(urirefString, "#")
+        hash = urirefString.rfind("#")
         if hash < 0 :     # This is a resource with no fragment
             result = self.resources.get(urirefString, None)
             if result is None: return
@@ -1749,7 +1750,7 @@ class RDFStore(RDFSink) :
             assert ':' in urirefString, "must be absolute: %s" % urirefString
 
 
-            hash = string.rfind(urirefString, "#")
+            hash = urirefString.rfind("#")
             if hash < 0 :     # This is a resource with no fragment
                 assert typ == SYMBOL, "If URI <%s>has no hash, must be symbol" % urirefString
                 result = self.resources.get(urirefString, None)
@@ -1759,7 +1760,7 @@ class RDFStore(RDFSink) :
             
             else :      # This has a fragment and a resource
                 resid = urirefString[:hash]
-                if string.find(resid, "#") >= 0:
+                if resid.find("#") >= 0:
                     raise URISyntaxError("Hash in document ID - can be from parsing XML as N3! -"+resid)
                 r = self.symbol(resid)
                 if typ == SYMBOL:

@@ -1284,7 +1284,7 @@ class Query(Formula):
     def remoteQuery(query, items):
         """Perform remote query as client on remote store
         Currently  this only goes to an SQL store, but should later use SPARQL etc
-        in remote HTTP/SOAP call."""
+        in remote HTTP call."""
         
         if diag.chatty_flag > 90:
             progress("    Remote service %s" % (items))
@@ -1295,51 +1295,12 @@ class Query(Formula):
         elif not serviceURI.startswith("mysql:"):
             raise ValueError("Unknown URI scheme for remote query service: %s" % serviceURI)
             
-        from . import dbork.SqlDB
-        from .dbork.SqlDB import ResultSet, SqlDBAlgae, ShowStatement
-
+        # from . import dbork.SqlDB
+        # from .dbork.SqlDB import ResultSet, SqlDBAlgae, ShowStatement
+        raise Error('Renmote SQL queries not implnted in py3 verstion')
         # SqlDB stores results in a ResultSet.
-        rs = ResultSet()
-        # QueryPiece qp stores query tree.
-        qp = rs.buildQuerySetsFromCwm(items, query.variables, query._existentialVariables)
-        # Extract access info from the first item.
-        if diag.chatty_flag > 90:
-            progress("    Remote service %s" %items[0].service.uri)
-        (user, password, host, database) = re.match(
-                "^mysql://(?:([^@:]+)(?::([^@]+))?)@?([^/]+)/([^/]+)/$",
-                items[0].service.uri).groups()
-        # Look for one of a set of pre-compiled rdb schemas.
-        HostDB2SchemeMapping = { "mysql://root@localhost/w3c" : "AclSqlObjects" }
-        if (items[0].service.uri in HostDB2SchemeMapping):
-            cachedSchema = HostDB2SchemeMapping.get(items[0].service.uri)
-        else:
-            cachedSchema = None
-        # The SqlDBAlgae object knows how to compile SQL query from query tree qp.
-        a = SqlDBAlgae(query.store.symbol(items[0].service.uri), cachedSchema,
-            user, password, host, database, query.meta, query.store.pointsAt,
-            query.store)
-        # Execute the query.
-        messages = []
-        nextResults, nextStatements = a._processRow([], [], qp, rs, messages, {})
-        # rs.results = nextResults # Store results as initial state for next use of rs.
-        if diag.chatty_flag > 90: progress(string.join(messages, "\n"))
-        if diag.chatty_flag > 90: progress("query matrix \"\"\""+
-                        rs.toString({'dataFilter' : None})+"\"\"\" .\n")
-
-        nbs = []
-        reason = Because("Remote query") # could be messages[0] which is the query
-        # Transform nextResults to format cwm expects.
-        for resultsRow in nextResults:
-            boundRow = {}
-            for i in range(len(query.variables)):
-                v = query.variables[i]
-                index = rs.getVarIndex(v)
-                interned = resultsRow[index]
-                boundRow[v] = interned  # bindings
-            nbs.append((boundRow, reason))
-
-        if diag.chatty_flag > 10: progress("====> bindings from remote query:"+repr(nbs))
-        return nbs   # No bindings for testing
+       # @@ code me or remove feature
+        return []   # No bindings for testing
 
 class BetterNone(object):
     __slots__ = []

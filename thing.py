@@ -203,7 +203,6 @@ reify = Namespace("http://www.w3.org/2004/06/rei#")
 # is being able to find synonyms and so translate documents.
 
 
-        
 class Term:
     """The Term object represents an RDF term.
     
@@ -219,8 +218,8 @@ class Term:
         This should be beefed up to guarantee unambiguity (see __repr__ documentation).
         """
         s = self.uriref()
-        p = string.rfind(s, "#")
-        if p<0: p=string.rfind(s, "/")   # Allow "/" namespaces as a second best
+        p = s.rfind("#")
+        if p<0: p = s.rfind("/")   # Allow "/" namespaces as a second best
         if (p>=0 and s[p+1:].find(".") <0 ): # Can't use prefix if localname includes "."
             prefix = self.store.prefixes.get(s[:p+1], None) # @@ #CONVENTION
             if prefix != None : return prefix + ":" + s[p+1:]
@@ -284,7 +283,7 @@ class Symbol(Term):
     
     def __init__(self, uri, store=None):
         Term.__init__(self, store)
-        assert string.find(uri, "#") < 0, "no fragments allowed: %s" % uri
+        assert uri.find("#") < 0, "no fragments allowed: %s" % uri
         assert ':' in uri, "must be absolute: %s" % uri
         self.uri = uri
         self.fragments = {}
@@ -665,7 +664,7 @@ def uri_encode(str):
         result = ""
         i=0
         while i<len(str) :
-            if string.find('"\'><"', str[i]) <0 :   # @@@ etc
+            if '"\'><"'.find(str[i]) <0 :   # @@@ etc
                 result.append("%%%2x" % (atoi(str[i])))
             else:
                 result.append(str[i])

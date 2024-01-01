@@ -97,7 +97,8 @@ N3_List = (SYMBOL, List_NS + "List")
 N3_Empty = (SYMBOL, List_NS + "Empty")
 
 XML_NS_URI = "http://www.w3.org/XML/1998/namespace"
-
+ASCII_LETTERS = "abcdefghijklmnopqrstuvwyzyABCDEFGHIJKLMNOPQRSTUVWXYZ"
+ASCII_DIGITS = '0123456789'
 
 
 option_noregen = 0   # If set, do not regenerate genids on output
@@ -105,8 +106,8 @@ option_noregen = 0   # If set, do not regenerate genids on output
 
 ########################## RDF 1.0 Syntax generator
 
-global _namechars       
-_namechars = string.lowercase + string.uppercase + string.digits + '_-'
+global _namechars
+_namechars = 'abcdefghijklmnopqrstuvwyzyABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-'
             
 def dummyWrite(x):
     pass
@@ -115,7 +116,7 @@ def dummyWrite(x):
 class ToRDF(RDFSink.RDFStructuredOutput):
     """keeps track of most recent subject, reuses it"""
 
-    _valChars = string.lowercase + string.uppercase + string.digits + "_ !#$%&().,+*/"
+    _valChars =  "abcdefghijklmnopqrstuvwyzyABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" + "_ !#$%&().,+*/"
     #@ Not actually complete, and can encode anyway
     def __init__(self, outFp, thisURI=None, base=None, flags=""):
         RDFSink.RDFSink.__init__(self)
@@ -155,7 +156,7 @@ class ToRDF(RDFSink.RDFStructuredOutput):
         else:
             realPrefix = prefix
             while prefix in self.illegals or prefix[:3] == 'xml':
-                prefix = choice(string.ascii_letters) + prefix
+                prefix = choice(ASCII_LETTERS) + prefix
             if realPrefix is not prefix:
                 self.illegals.add(prefix)
                 self.namespace_redirections[realPrefix] = prefix
@@ -535,7 +536,7 @@ class XMLWriter:
         
     #@@ on __del__, close all open elements?
 
-    _namechars = string.lowercase + string.uppercase + string.digits + '_-'
+    _namechars = "abcdefghijklmnopqrstuvwyzyABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" + '_-'
 
 
     def newline(self, howmany=1):
@@ -620,7 +621,7 @@ class XMLWriter:
             else:
                 if prefix: ln = prefix + ":" + ln
         for at, val in rawAttrs:
-            i = string.find(at," ")  #  USe space as delim like parser
+            i = at.find(" ")  #  USe space as delim like parser
             if i<=0:            # No namespace - that is fine for rdf syntax
 #                print  ("# Warning: %s has no namespace on attr %s" %
 #                        (ln, at)) 
@@ -737,11 +738,11 @@ def findLegal(dict, str):
     ns = Set(list(dict.values()))
     s = ''
     k = len(str)
-    while k and str[k - 1] not in string.ascii_letters:
+    while k and str[k - 1] not in ASCII_LETTERS:
         k = k - 1
     i = k
     while i:
-        if str[i - 1] not in string.ascii_letters:
+        if str[i - 1] not in ASCII_LETTERS:
             break
         i = i - 1
     j = i
@@ -752,7 +753,7 @@ def findLegal(dict, str):
         # we need to find a better string
         s = str[i:k]
         while s in ns or s[:3] == 'xml':
-            s = choice(string.ascii_letters) + s[:-1]
+            s = choice(ASCII_LETTERS) + s[:-1]
         return s
     else:
         return str[j:k]

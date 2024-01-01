@@ -258,7 +258,7 @@ class Parser(_Parser):
         return Symbol(uripath.join(self._baseURI, str[1:-1]))
 
     def qname(self, str):
-        i = string.find(str, ":")
+        i = str.find(":")
         pfx = str[:i]
         ln = str[i+1:]
         try:

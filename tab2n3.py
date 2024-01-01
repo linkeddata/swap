@@ -214,7 +214,8 @@ class DataTable(list):
     def sanitizeID(self, s):
         res = ""
         for ch in s:
-            if ch in string.ascii_letters or ch in string.digits:
+            if ch in 'abcdefghijklmnopqrstruvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ' or
+             ch in '0123456789':
                 res += ch
             else:
                 if res[-1:] != '_':
@@ -241,7 +242,7 @@ class DataTable(list):
                 l = l[1:]  # Chop leading quote
                 result.append("")
                 while 1:
-                    j = string.find(l, '"')  # Is it terminated on this line?
+                    j = l.find('"')  # Is it terminated on this line?
                     if j >= 0:   # Yes!
                         if l[j+1:j+2] == '"': # Two doublequotes means embedded doublequote
                             result[-1] =  result[-1] + l[:j] + '\\"'
@@ -266,7 +267,7 @@ class DataTable(list):
                             l=l[:-1]  # Strip CR and/or LF
 
             else:  # No leading quote: Must be tab or newline delim
-                i=string.find(l, delim)
+                i = l.find(delim)
                 if i>=0:
                     result.append(l[:i])
                     l = l[i+1:]
@@ -350,7 +351,7 @@ class DataTable(list):
                         this_id = self.sanitizeID(v)
                     else:
                         if open:  str+= "; "
-                        if string.find(v, "\n") >= 0:
+                        if v.find("\n") >= 0:
                             str += '\n    :%s """%s"""' % (pred, v)
                         else:
                             str += '\n    :%s "%s"' % (pred, v)

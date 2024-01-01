@@ -85,7 +85,7 @@ option_noregen = 0   # If set, do not regenerate genids on output
 # @@ I18n - the notname chars need extending for well known unicode non-text
 # characters. The XML spec switched to assuming unknown things were name
 # characaters.
-# _namechars = string.lowercase + string.uppercase + string.digits + '_-'
+# _namechars = string.lowercase + string.uppercase + digits + '_-'
 _notQNameChars = "\t\r\n !\"#$%&'()*.,+/;<=>?@[\\]^`{|}~" # else valid qname :-/
 _notNameChars = _notQNameChars + ":"  # Assume anything else valid name :-/
 _rdfns = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
@@ -806,8 +806,8 @@ class SinkParser:
                 res.append(self._variables[symb])
             else:
                 res.append(symb) # @@@ "#" CONVENTION
-            if not string.find(ns, "#"):progress(
-                        "Warning: no # on namespace %s," % ns)
+            if not ns.find("#"):progress(
+                "Warning: no # on namespace %s," % ns)
             return j
 
 
@@ -1136,7 +1136,7 @@ class SinkParser:
                 if not ch:
                     raise BadSyntax(self._thisDoc, startline, str, i,
                                     "unterminated string literal (2)")
-                k = string.find('abfrtvn\\"', ch)
+                k = 'abfrtvn\\"'.find(ch)
                 if k >= 0:
                     uch = '\a\b\f\r\t\v\n\\"'[k]
                     ustr = ustr + uch
@@ -1166,7 +1166,7 @@ class SinkParser:
             if ch == "":
                 raise BadSyntax(self._thisDoc, startline, str, i,
                                 "unterminated string literal(3)")
-            k = string.find("0123456789abcdef", ch)
+            k = "0123456789abcdef".find(ch)
             if k < 0:
                 raise BadSyntax(self._thisDoc, startline, str, i,
                                 "bad string literal hex escape")
@@ -1187,7 +1187,7 @@ class SinkParser:
             if ch == "":
                 raise BadSyntax(self._thisDoc, startline, str, i,
                                 "unterminated string literal(3)")
-            k = string.find("0123456789abcdef", ch)
+            k = "0123456789abcdef".find(ch)
             if k < 0:
                 raise BadSyntax(self._thisDoc, startline, str, i,
                                 "bad string literal hex escape")
@@ -1334,7 +1334,8 @@ B   Turn any blank node into a existentially qualified explicitly named node.
     def writeEncoded(self, str):
         """Write a possibly unicode string out to the output"""
         try:
-            return self._writeRaw(str.encode('utf-8'))
+            # return self._writeRaw(str.encode('utf-8'))
+            return self._writeRaw(str)
         except UnicodeDecodeError:
             raise UnicodeDecodeError(str, str.__class__)
 
@@ -1392,7 +1393,7 @@ B   Turn any blank node into a existentially qualified explicitly named node.
         return  # No formula returned - this is not a store
 
     def makeComment(self, str):
-        for line in string.split(str, "\n"):
+        for line in str.split("\n"):
             self._write("#" + line + "\n")  # Newline order??@@
         self._write("    " * self.indent + "    ")
 
@@ -1675,9 +1676,9 @@ B   Turn any blank node into a existentially qualified explicitly named node.
 #                return "<"+x+">"
 
 
-        j = string.rfind(value, "#")
+        j = value.find("#")
         if j<0:    #   and "/" in self._flags:   Always allow 2010-10-24 TimBL
-            j=string.rfind(value, "/")   # Allow "/" namespaces as a second best
+            j = value.rfind("/")   # Allow "/" namespaces as a second best
 
         if (j>=0
             and "p" not in self._flags):   # Suppress use of prefixes?
@@ -1832,9 +1833,9 @@ class tmToN3(RDFSink.RDFSink):
                 pass
 
     def symbolString(self, value):
-        j = string.rfind(value, "#")
+        j = value.rfind("#")
         if j<0: #and "/" in self._flags:
-            j=string.rfind(value, "/")   # Allow "/" namespaces as a second best
+            j = value.rfind("/")   # Allow "/" namespaces as a second best
 
         if (j>=0
             and "p" not in self._flags):   # Suppress use of prefixes?
@@ -1970,8 +1971,8 @@ def stringToN3(str, singleLine=0, flags=""):
     if (len(str) > 20 and
         str[-1] != '"' and
         not singleLine and
-        (string.find(str, "\n") >=0
-         or string.find(str, '"') >=0)):
+        (str.find("\n") >=0
+         or str.find('"') >=0)):
         delim= '"""'
         forbidden = forbidden1   # (allow tabs too now)
     else:
@@ -1991,7 +1992,7 @@ def stringToN3(str, singleLine=0, flags=""):
         if ch == '"' and delim == '"""' and str[j:j+3] != '"""':  #"
             res = res + ch
         else:
-            k = string.find('\a\b\f\r\t\v\n\\"', ch)
+            k = '\a\b\f\r\t\v\n\\"'.find(ch)
             if k >= 0: res = res + "\\" + 'abfrtvn\\"'[k]
             else:
                 if 'e' in flags:
@@ -2051,8 +2052,8 @@ def hexify(ustr):
 
 def dummy():
         res = ""
-        if len(str) > 20 and (string.find(str, "\n") >=0
-                                or string.find(str, '"') >=0):
+        if len(str) > 20 and (str.find("\n") >=0
+                                or str.find('"') >=0):
                 delim= '"""'
                 forbidden = "\\\"\a\b\f\r\v"    # (allow tabs too now)
         else:
@@ -2060,7 +2061,7 @@ def dummy():
                 forbidden = "\\\"\a\b\f\r\v\t\n"
         for i in range(len(str)):
                 ch = str[i]
-                j = string.find(forbidden, ch)
+                j = forbidden.find(ch)
                 if ch == '"' and delim == '"""' \
                                 and i+1 < len(str) and str[i+1] != '"':
                     j=-1   # Single quotes don't need escaping in long format

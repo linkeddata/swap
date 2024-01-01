@@ -211,7 +211,7 @@ rdf/xml files. Note that this requires rdflib.
         for argnum in range(1,len(sys.argv)):  # options after script name
             arg = sys.argv[argnum]
             if arg.startswith("--"): arg = arg[1:]   # Chop posix-style -- to -
-#            _equals = string.find(arg, "=")
+#            _equals = arg.find("=")
             _lhs = ""
             _rhs = ""
             try:
@@ -428,7 +428,7 @@ rdf/xml files. Note that this requires rdflib.
         for arg in sys.argv[1:]:  # Command line options after script name
             if verbosity()>5: progress("Processing %s." % (arg))
             if arg.startswith("--"): arg = arg[1:]   # Chop posix-style -- to -
-            _equals = string.find(arg, "=")
+            _equals = arg.find("=")
             _lhs = ""
             _rhs = ""
             if _equals >=0:
@@ -667,23 +667,24 @@ rdf/xml files. Note that this requires rdflib.
                 print(targetkb)
 
             elif arg == "-flatten":
-                #raise NotImplementedError
-                from swap import reify
-                workingContext = reify.flatten(workingContext)
+                raise NotImplementedError
+                # from swap import reify
+                # workingContext = reify.flatten(workingContext)
 
             elif arg == "-unflatten":
-                from swap import reify
-                workingContext = reify.unflatten(workingContext)
-                #raise NotImplementedError
+                # from swap import reify
+                # workingContext = reify.unflatten(workingContext)
+                raise NotImplementedError
                 
             elif arg == "-reify":
-                from swap import reify
-                workingContext = reify.reify(workingContext)
+                raise NotImplementedError
+                # from swap import reify
+                # workingContext = reify.reify(workingContext)
                 
-
             elif arg == "-dereify":
-                from swap import reify
-                workingContext = reify.dereify(workingContext)                
+                raise NotImplementedError
+                # from swap import reify
+                # workingContext = reify.dereify(workingContext)                
                 
 
             elif arg == "-size":

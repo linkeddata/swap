@@ -244,15 +244,6 @@ class RDFHandler(xml.sax.ContentHandler):
         for name, value in list(attrs.items()):
             ns, ln = name
 
-# The following section was a kludge to work with presumably old bad RDF
-# files while RDF was being defined way back when.
-#            if ns:              # Removed 2010 as this is a kludge which creaks with sioc:about - timbl 2010-07-19
-#                if string.find("ID about aboutEachPrefix bagID type", ln)>0:
-#                    if ns != RDF_NS_URI:
-#                       print ("# Warning -- %s attribute in %s namespace not RDF NS." %
-#                              name, ln)
-#                       ns = RDF_NS_URI  # Allowed as per dajobe: ID, bagID, about, resource, parseType or type
-
             if ns == RDF_NS_URI or ns == None:   # Opinions vary sometimes none but RDF_NS is common :-(
                 if ln == "ID":
                     if not isXML.isName(value):
@@ -667,36 +658,36 @@ class RDFHandler(xml.sax.ContentHandler):
             self._litDepth = self._litDepth - 1
             if self._litDepth == 0:
                 buf = self.testdata
-        if XMLLiteralsAsDomTrees:
-            e = self.domDocument.documentElement.firstChild
-            if e is None:
-                raise ValueError("Weird: " + repr(self.domDocument.documentElement))
-            # progress('e is '+`e`)
-            while e.nodeType == e.TEXT_NODE:
-                e = e.nextSibling
-            #progress("@@@ e=", e, e.nodeName)
-            self.domElement = e   # Leave for literal parser to pick up
-            if self.sink:
+            if XMLLiteralsAsDomTrees:
+                e = self.domDocument.documentElement.firstChild
+                if e is None:
+                    raise ValueError("Weird: " + repr(self.domDocument.documentElement))
+                # progress('e is '+`e`)
+                while e.nodeType == e.TEXT_NODE:
+                    e = e.nextSibling
+                #progress("@@@ e=", e, e.nodeName)
+                self.domElement = e   # Leave for literal parser to pick up
+                if self.sink:
+                    self.sink.makeStatement(( self._context,
+                        self._predicate,
+                        self._subject,
+                        self.sink.newXMLLiteral(e) ),
+                        why=self._reason2)
+            else:
+                self._datatype = self.sink.newSymbol("http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral")
                 self.sink.makeStatement(( self._context,
-                      self._predicate,
-                      self._subject,
-                      self.sink.newXMLLiteral(e) ),
-                      why=self._reason2)
-        else:
-            self._datatype = self.sink.newSymbol("http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral")
-            self.sink.makeStatement(( self._context,
-                          self._predicate,
-                          self._subject,
-                          self.sink.newLiteral(buf, self._datatype) ), why=self._reason2)
-        self.testdata = ""
+                            self._predicate,
+                            self._subject,
+                            self.sink.newLiteral(buf, self._datatype) ), why=self._reason2)
+                self.testdata = ""
 
-#   eh?         else:
-        if XMLLiteralsAsDomTrees:
-            self.literal_element_end_DOM(name, qname)
-        else:
-            self.literal_element_end(name, qname)
-            self._stack.pop()
-            return # don't pop state
+    #   eh?         else:
+            if XMLLiteralsAsDomTrees:
+                self.literal_element_end_DOM(name, qname)
+            else:
+                self.literal_element_end(name, qname)
+                self._stack.pop()
+                return # don't pop state
 
         elif self._state == STATE_VALUE:
             buf = self.testdata

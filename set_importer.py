@@ -27,10 +27,13 @@ A hack to import sets and frozensets, internally if possible
 
 try:
     Set = set
+    ImmutableSet = set
+    sorted = sorted
+
 except NameError:
     from sets import Set
 
-
+suppresssed = '''
 try:
     ImmutableSet = frozenset
 except NameError:
@@ -107,3 +110,5 @@ except NameError:
             for elt in filterfalse(otherdata.has_key, self):
                 data[elt] = value
             return self.__class__(data)
+
+            '''

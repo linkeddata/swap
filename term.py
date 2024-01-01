@@ -223,7 +223,7 @@ class Term(object):
         This could be beefed up to guarantee unambiguity.
         """
         s = self.uriref()
-        p = string.rfind(s, "#")
+        p = s.rfind("#")
         if p<0:  # No hash, use slash
             p=s.rfind("/", 0, len(s)-2) 
             # Allow "/" namespaces as a second best, not a trailing one
@@ -391,7 +391,7 @@ class Symbol(LabelledNode):
 
     def __init__(self, uri, store):
         Term.__init__(self, store)
-        assert string.find(uri, "#") < 0, "no fragments allowed: %s" % uri
+        assert uri.find("#") < 0, "no fragments allowed: %s" % uri
         assert ':' in uri, "must be absolute: %s" % uri
         self.uri = uri
         self.fragments = WeakValueDictionary()

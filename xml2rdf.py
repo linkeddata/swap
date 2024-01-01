@@ -104,7 +104,7 @@ class RDFXMLParser(xmllib.XMLParser):
     def tag2uri(self, str):
         """ Generate URI from tagname
         """
-        x = string.find(str, " ")
+        x = str.find(" ")
         if x < 0: return str
         return str[:x]+ str[x+1:]
     
@@ -122,11 +122,11 @@ class RDFXMLParser(xmllib.XMLParser):
         properties = []
         
         for name, value in list(attrs.items()):
-            x = string.find(name, " ")
+            x = name.find(" ")
             if x>=0:
                 ns = name[:x]
                 ln = name[x+1:]    # Strip any namespace on attributes!!! @@@@
-                if string.find("ID ambout AboutEachPrefix bagid type", name)>0:
+                if "ID ambout AboutEachPrefix bagid type".find(name) > 0:
                     if ns != RDF_NS_URI:
                         print(("# Warning -- %s attribute in %s namespace not RDF NS." %
                                name, ln))
@@ -253,7 +253,7 @@ class RDFXMLParser(xmllib.XMLParser):
             # print "\n  attributes:", `attrs`
 
             for name, value in list(attrs.items()):
-                x = string.find(name, " ")
+                x = name.find(" ")
                 if x>=0: name=name[x+1:]    # Strip any namespace on attributes!!! @@@@
                 if name == "ID":
                     print("# Warning: ID=%s on statement ignored" %  (value)) # I consider these a bug
