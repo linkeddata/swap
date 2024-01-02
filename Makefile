@@ -19,7 +19,7 @@ GRAMMAR =  grammar/n3.n3 grammar/README.txt grammar/predictiveParser.py grammar/
 
 TESTS = test/Makefile test/rdfcore-tests.n3 test/regression.n3 test/list/detailed.tests test/ql/detailed.tests test/math/detailed.tests test/norm/detailed.tests test/n3parser.tests test/cwm/detailed.tests test/ntriples/detailed.tests test/delta/detailed.tests test/syntax/detailed.tests test/reify/detailed.tests test/testmeta.n3 test/retest.py test/sparql/detailed.tests test/sets/detailed.tests test/reason/detailed.tests test/delta/t3/from.n3 test/delta/t3/to-same.n3 test/delta/t3/to-diff.n3 test/string/detailed.tests test/paw/detailed.tests test/includes/detailed.tests
 
-VERSION = 1.2.0
+VERSION = 3.0.0
 TARNAME = cwm-$(VERSION)
 
 TARBALL_STUFF = README LICENSE LICENSE.rdf LICENSE.n3

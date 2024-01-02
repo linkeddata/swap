@@ -1,6 +1,6 @@
-#    Makefile
+#    cwm test Makefile
 #
-P=python
+P=python3
 W=../../../..
 C=../cwm.py
 RC=../../rdf-tests/rdfcore

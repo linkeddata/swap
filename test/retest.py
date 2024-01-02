@@ -26,10 +26,10 @@ This is or was http://www.w3.org/2000/10/swap/test/retest.py
 W3C open source licence <http://www.w3.org/Consortium/Legal/copyright-software.html>.
 
 """
-from os import system, popen3
+from os import system
 import os
 import sys
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 # From PYTHONPATH equivalent to http://www.w3.org/2000/10
 
@@ -38,7 +38,7 @@ from swap.myStore import load, loadMany, Namespace
 from swap.uripath import refTo, base
 from swap import diag
 from swap.diag import progress
-from swap.term import AnonymousNode
+from swap.term import AnonymousNode, Term
 
 
 rdf = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
@@ -78,13 +78,13 @@ def problem(str):
 #       raise RuntimeError(str)
 
 def usage():
-    print __doc__
+    print(__doc__)
 
-from subprocess import Popen, call, PIPE
+from subprocess import call, PIPE
 
 def execute(cmd1, noStdErr=False):
     global verbose, no_action
-    if verbose: print "    "+cmd1
+    if verbose: print("    "+cmd1)
     if no_action: return
     stderr = None
     try:
@@ -107,18 +107,18 @@ def diff(case, ref=None, prog="diff -Bbwu"):
         a.write('\n')
         a.close()
     diffcmd = """%s %s ,temp/%s >,diffs/%s""" %(prog, ref, case, case)
-    if verbose: print "  ", diffcmd
+    if verbose: print("  ", diffcmd)
     if no_action: result = 0
     else: result = system(diffcmd)
     if result < 0:
         raise problem("Comparison fails: result %i executing %s" %(result, diffcmd))
-    if result > 0: print "Files differ, result=", result
-    d = urllib.urlopen(",diffs/"+case)
+    if result > 0: print("Files differ, result=", result)
+    d = urllib.request.urlopen(",diffs/"+case)
     buf = d.read()
     if len(buf) > 0:
         if just_fix_it == 0:
-            print "#  If this is OK,   cp ,temp/%s %s" %(case, ref)
-            print "######### Differences from reference output:\n" + buf
+            print("#  If this is OK,   cp ,temp/%s %s" %(case, ref))
+            print("######### Differences from reference output:\n" + buf)
             return 1
         else:
             os.system("cp ,temp/%s %s" %(case, ref))
@@ -131,16 +131,16 @@ def rdfcompare3(case, ref=None):
     if ref == None:
         ref = "ref/%s" % case
     diffcmd = """python ../cant.py -d %s -f ,temp/%s >,diffs/%s""" %(ref, case, case)
-    if verbose: print "  ", diffcmd
+    if verbose: print("  ", diffcmd)
     result = system(diffcmd)
     if result < 0:
         raise problem("Comparison fails: result %i executing %s" %(result, diffcmd))
-    if result > 0: print "Files differ, result=", result
-    d = urllib.urlopen(",diffs/"+case)
+    if result > 0: print("Files differ, result=", result)
+    d = urllib.request.urlopen(",diffs/"+case)
     buf = d.read()
     if len(buf) > 0:
 #       print "#  If this is OK,   cp ,temp/%s %s" %(case, ref)
-        print "######### Differences from reference output:\n" + buf
+        print("######### Differences from reference output:\n" + buf)
         return 1
     return result
 
@@ -161,19 +161,22 @@ def rdfcompare(case, ref=None):
     if ref == None:
         ref = "ref/%s" % case
     diffcmd = """java jena.rdfcompare %s ,temp/%s N-TRIPLE N-TRIPLE  >,diffs/%s""" %(ref, case, case)
-    if verbose: print "  ", diffcmd
+    if verbose: print("  ", diffcmd)
     result = system(diffcmd)
     if result != 0:
         raise problem("Comparison fails: result %s executing %s" %(result, diffcmd))
     return result
 
-
+def byCaseURI (testItem):
+    # print('@@ sort type ', type(testItem))
+    # print('@@ sort item ', testItem)
+    return testItem[1]
 
 def main():
     global verbose, proofs, chatty, normal, no_action
     start = 1
     cwm_command='../cwm.py'
-    python_command='python -tt'
+    python_command='python3 -tt'
     global ploughOn # even if error
     ploughOn = 0
     global verbose
@@ -283,12 +286,12 @@ def main():
         status = kb.the(t, rdft.status).string
         good = 1
         if status != "APPROVED":
-            if verbose: print "\tNot approved: "+ inputDocument[-40:]
+            if verbose: print("\tNot approved: "+ inputDocument[-40:])
             good = 0
         categories = kb.each(t, rdf.type)
         for cat in categories:
             if cat is triage.ReificationTest:
-                if verbose: print "\tNot supported (reification): "+ inputDocument[-40:]
+                if verbose: print("\tNot supported (reification): "+ inputDocument[-40:])
                 good = 0
 ##            if cat is triage.ParseTypeLiteralTest:
 ##                if verbose: print "\tNot supported (Parse type literal): "+ inputDocument[-40:]
@@ -311,15 +314,15 @@ def main():
         status = kb.the(t, rdft.status).string
         good = 1
         if status != "APPROVED":
-            if verbose: print "\tNot approved: "+ inputDocument[-40:]
+            if verbose: print("\tNot approved: "+ inputDocument[-40:])
             good = 0
         categories = kb.each(t, rdf.type)
         for cat in categories:
             if cat is triage.knownError:
-                if verbose: print "\tknown failure: "+ inputDocument[-40:]
+                if verbose: print("\tknown failure: "+ inputDocument[-40:])
                 good = 0
             if cat is triage.ReificationTest:
-                if verbose: print "\tNot supported (reification): "+ inputDocument[-40:]
+                if verbose: print("\tNot supported (reification): "+ inputDocument[-40:])
                 good = 0
         if good:
             RDFNegativeTestData.append((t.uriref(), case, description,  inputDocument))
@@ -340,7 +343,7 @@ def main():
         categories = kb.each(t, rdf.type)
         for cat in categories:
             if cat is triage.knownError:
-                if verbose: print "\tknown failure: "+ inputDocument[-40:]
+                if verbose: print("\tknown failure: "+ inputDocument[-40:])
                 good = 0
         if good:
             n3PositiveTestData.append((t.uriref(), case, description,  inputDocument))
@@ -382,8 +385,8 @@ def main():
             good = 1
             status = kb.the(subj=t, pred=dawg_test.approval)
             if status != dawg_test.Approved:
-                print status, name
-                if verbose: print "\tNot approved: "+ inputDocument[-40:]
+                print(status, name)
+                if verbose: print("\tNot approved: "+ inputDocument[-40:])
                 good = 0
             if good:
                 sparqlTestData.append((tt.uriref(), case, name, inputDocument, data, outputDocument))
@@ -401,24 +404,24 @@ def main():
         else: env = str(environment) + " "
         perfData.append((x, theTime, description, env, arguments))
 
-    testData.sort()
+    testData.sort(key=byCaseURI)
     cwmTests = len(testData)
-    if verbose: print "Cwm tests: %i" % cwmTests
-    RDFTestData.sort()
-    RDFNegativeTestData.sort()
+    if verbose: print("Cwm tests: %i" % cwmTests)
+    RDFTestData.sort(key=byCaseURI)
+    RDFNegativeTestData.sort(key=byCaseURI)
     rdfTests = len(RDFTestData)
     rdfNegativeTests = len(RDFNegativeTestData)
-    perfData.sort()
+    perfData.sort(key=byCaseURI)
     perfTests = len(perfData)
-    n3PositiveTestData.sort()
+    n3PositiveTestData.sort(key=byCaseURI)
     n3PositiveTests = len(n3PositiveTestData)
-    n3NegativeTestData.sort()
+    n3NegativeTestData.sort(key=byCaseURI)
     n3NegativeTests = len(n3NegativeTestData)
-    sparqlTestData.sort()
+    sparqlTestData.sort(key=byCaseURI)
     sparqlTests = len(sparqlTestData)
     totalTests = cwmTests + rdfTests + rdfNegativeTests + sparqlTests \
                  + perfTests + n3PositiveTests + n3NegativeTests
-    if verbose: print "RDF parser tests: %i" % rdfTests
+    if verbose: print("RDF parser tests: %i" % rdfTests)
 
     for t, u, case, refFile, description, env, arguments, verboseDebug in testData:
         tests = tests + 1
@@ -426,7 +429,7 @@ def main():
         
         urel = refTo(base(), u)
     
-        print "%3i/%i %-30s  %s" %(tests, totalTests, urel, description)
+        print("%3i/%i %-30s  %s" %(tests, totalTests, urel, description))
     #    print "      %scwm %s   giving %s" %(arguments, case)
         assert case and description and arguments
         cleanup = """sed -e 's/\$[I]d.*\$//g' -e "s;%s;%s;g" -e '/@prefix run/d' -e 's;%s;%s;g'""" % (WD, REFWD,
@@ -461,7 +464,7 @@ def main():
         if tests < start: continue
 
         urel = refTo(base(), u)
-        print "%3i/%i %-30s  %s" %(tests, totalTests, urel, name)
+        print("%3i/%i %-30s  %s" %(tests, totalTests, urel, name))
         inNtriples = case + '_1'
         outNtriples = case + '_2'
         try:
@@ -486,7 +489,7 @@ def main():
         if tests < start: continue
     
     
-        print "%3i/%i)  %s   %s" %(tests, totalTests, case, description)
+        print("%3i/%i)  %s   %s" %(tests, totalTests, case, description))
     #    print "      %scwm %s   giving %s" %(inputDocument, case)
         assert case and description and inputDocument and outputDocument
 #       cleanup = """sed -e 's/\$[I]d.*\$//g' -e "s;%s;%s;g" -e '/@prefix run/d' -e '/^#/d' -e '/^ *$/d'""" % (
@@ -503,7 +506,7 @@ def main():
         if tests < start: continue
     
     
-        print "%3i/%i)  %s   %s" %(tests, totalTests, case, description)
+        print("%3i/%i)  %s   %s" %(tests, totalTests, case, description))
     #    print "      %scwm %s   giving %s" %(inputDocument, case)
         assert case and description and inputDocument
 #       cleanup = """sed -e 's/\$[I]d.*\$//g' -e "s;%s;%s;g" -e '/@prefix run/d' -e '/^#/d' -e '/^ *$/d'""" % (
@@ -528,7 +531,7 @@ I should have.
         if tests < start: continue
     
     
-        print "%3i/%i)  %s   %s" %(tests, totalTests, case, description)
+        print("%3i/%i)  %s   %s" %(tests, totalTests, case, description))
     #    print "      %scwm %s   giving %s" %(inputDocument, case)
         assert case and description and inputDocument
 #       cleanup = """sed -e 's/\$[I]d.*\$//g' -e "s;%s;%s;g" -e '/@prefix run/d' -e '/^#/d' -e '/^ *$/d'""" % (
@@ -546,7 +549,7 @@ I should have.
         if tests < start: continue
     
     
-        print "%3i/%i)  %s   %s" %(tests, totalTests, case, description)
+        print("%3i/%i)  %s   %s" %(tests, totalTests, case, description))
     #    print "      %scwm %s   giving %s" %(inputDocument, case)
         assert case and description and inputDocument
 #       cleanup = """sed -e 's/\$[I]d.*\$//g' -e "s;%s;%s;g" -e '/@prefix run/d' -e '/^#/d' -e '/^ *$/d'""" % (
@@ -573,13 +576,13 @@ I should have.
         
         urel = refTo(base(), u)
     
-        print "%3i/%i %-30s  %s" %(tests, totalTests, urel, description)
+        print("%3i/%i %-30s  %s" %(tests, totalTests, urel, description))
         tt = os.times()[-1]
         a = system("""%s %s %s --quiet %s >,time.out""" %
                        (env, python_command, cwm_command, arguments))
         userTime = os.times()[-1] - tt
-        print """%spython %s --quiet %s 2>,time.out""" % \
-                       (env, cwm_command, arguments)
+        print("""%spython %s --quiet %s 2>,time.out""" % \
+                       (env, cwm_command, arguments))
 ##        c = file(',time.out', 'r')
 ##        timeOutput = c.read()
 ##        c.close()
@@ -588,7 +591,7 @@ I should have.
 ##        userTimeStr = timeList[1]
 ##        userTime = int(userTimeStr[0])*60 + float(userTimeStr[1] + '.' + userTimeStr[2])
         pyCount = pyStoneTime * userTime
-        print pyCount
+        print(pyCount)
         
     if problems != []:
         sys.stderr.write("\nProblems:\n")

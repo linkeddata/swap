@@ -992,33 +992,33 @@ class SinkParser:
             ch = str[i]
             if ch in "-+0987654321":
                 m = datetime_syntax.match(str, i);
-        if m != None:
-            j = m.end();
-            # print "date time "+str[i:j]
-            if 'T' in str[i:j]:
-                res.append(self._store.newLiteral(str[i:j],
-                   self._store.newSymbol(DATETIME_DATATYPE)))
-                return j
-            else:
-                res.append(self._store.newLiteral(str[i:j],
-                   self._store.newSymbol(DATE_DATATYPE)))
-            return j
+                if m != None:
+                    j = m.end();
+                    # print "date time "+str[i:j]
+                    if 'T' in str[i:j]:
+                        res.append(self._store.newLiteral(str[i:j],
+                        self._store.newSymbol(DATETIME_DATATYPE)))
+                        return j
+                    else:
+                        res.append(self._store.newLiteral(str[i:j],
+                        self._store.newSymbol(DATE_DATATYPE)))
+                    return j
 
-        m = number_syntax.match(str, i)
-        if m != None:
-            j = m.end()
-            if m.group('exponent') != None: # includes decimal exponent
-                res.append(float(str[i:j]))
-    #                   res.append(self._store.newLiteral(str[i:j],
-    #                       self._store.newSymbol(FLOAT_DATATYPE)))
-            elif m.group('decimal') != None:
-                res.append(Decimal(str[i:j]))
-            else:
-                res.append(int(str[i:j]))
-    #                   res.append(self._store.newLiteral(str[i:j],
-    #                       self._store.newSymbol(INTEGER_DATATYPE)))
-            return j
-        raise BadSyntax(self._thisDoc, self.lines, str, i,
+                m = number_syntax.match(str, i)
+                if m != None:
+                    j = m.end()
+                    if m.group('exponent') != None: # includes decimal exponent
+                        res.append(float(str[i:j]))
+            #                   res.append(self._store.newLiteral(str[i:j],
+            #                       self._store.newSymbol(FLOAT_DATATYPE)))
+                    elif m.group('decimal') != None:
+                        res.append(Decimal(str[i:j]))
+                    else:
+                        res.append(int(str[i:j]))
+            #                   res.append(self._store.newLiteral(str[i:j],
+            #                       self._store.newSymbol(INTEGER_DATATYPE)))
+                    return j
+                raise BadSyntax(self._thisDoc, self.lines, str, i,
                 "Bad number or datetime syntax")
 
 

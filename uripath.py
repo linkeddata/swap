@@ -99,7 +99,6 @@ def join(here, there):
     """
 
     assert(here.find("#") < 0), "Base may not contain hash: '%s'"% here # caller must splitFrag (why?)
-    print('@@ join ', here, there)
 
     slashl = there.find('/')
     colonl = there.find(':')
@@ -229,7 +228,7 @@ def refTo(base, uri):
     if base.find("//", i-2)>0 \
        or uri.find("//", i-2)>0: return uri # An unshared "//"
     if base.find(":", i)>0: return uri  # An unshared ":"
-    n = string.count(base, "/", i)
+    n = base.count("/", i)
     if n == 0 and i<len(uri) and uri[i] == '#':
         return "./" + uri[i:]
     elif n == 0 and i == len(uri):
@@ -307,7 +306,7 @@ def canonical(str_in):
 
     """
     if type(str_in) == type(''):
-        s8 = str_in.encode('utf-8')
+        s8 = str_in #  was: s8 = str_in.encode('utf-8')  # was a python2 thing
     else:
         s8 = str_in
     s = ''
