@@ -215,7 +215,7 @@ class Serializer:
             if isinstance(l, N3Set):
                 a = context.newBlankNode()
                 ll = [mm for mm in l] #I hate sorting things
-                ll.sort(Term.compareAnyTerm)
+                ll.sort(key=Term.sortKey)
                 list = self.store.newList(ll)
                 self._outputStatement(sink, (context, self.store.forSome, context, a))
                 l._list = list
@@ -285,8 +285,8 @@ class Serializer:
         uv = list(context.universals())
         ev = list(context.existentials())
         if sorting:
-            uv.sort(Term.compareAnyTerm)
-            ev.sort(Term.compareAnyTerm)
+            uv.sort(key=Term.sortKey)
+            ev.sort(key=Term.sortKey)
         if not dataOnly:
             for v in uv:
                 self._outputStatement(sink, (context, self.store.forAll, context, v))
@@ -331,10 +331,10 @@ class Serializer:
                     
         if 0:  # Doesn't work as ther ei snow no list of bnodes
             rs = list(self.store.resources.values())
-            if sorting: rs.sort(Term.compareAnyTerm)
+            if sorting: rs.sort(key=Term.sortKey)
             for r in rs :  # First the bare resource
                 statements = context.statementsMatching(subj=r)
-                if sorting: statements.sort(StoredStatement.comparePredObj)
+                if sorting: statements.sort(key=StoredStatement.keyForPredObj)
                 for s in statements :
                         self._outputStatement(sink, s.quad)
                 if not isinstance(r, Literal):
@@ -342,7 +342,7 @@ class Serializer:
                     if sorting: fs.sort
                     for f in fs :  # then anything in its namespace
                         statements = context.statementsMatching(subj=f)
-                        if sorting: statements.sort(StoredStatement.comparePredObj)
+                        if sorting: statements.sort(key=StoredStatement.keyForPredObj)
                         for s in statements:
                             self._outputStatement(sink, s.quad)
         sink.endDoc()
@@ -420,7 +420,7 @@ class Serializer:
     def _breakloops(self, context):
         _done = {}
         _todo = list(self._occurringAs[SUBJ])
-        _todo.sort(Term.compareAnyTerm)
+        _todo.sort(key=Term.sortKey)
         for x in _todo:
             if x in _done:
                 continue
@@ -623,7 +623,7 @@ class Serializer:
         if isinstance(subj, N3Set):
             #I hate having to sort things
             se = [mm for mm in subj]
-            se.sort(Term.compareAnyTerm)
+            se.sort(key=Term.sortKey)
             li = self.store.newList(se)
         else: se = None
         
@@ -640,7 +640,7 @@ class Serializer:
                 pass
             else:     #  Could have alternative syntax here
 
-                if sorting: statements.sort(StoredStatement.comparePredObj) # @@ Needed now Fs are canonical?
+                if sorting: statements.sort(key=StoredStatement.keyForPredObj) # @@ Needed now Fs are canonical?
 
                 if se is not None:
                     a = self.context.newBlankNode()
@@ -692,7 +692,7 @@ class Serializer:
                     return  # arcs as subject done
 
 
-        if sorting: statements.sort(StoredStatement.comparePredObj)
+        if sorting: statements.sort(key=StoredStatement.keyForPredObj)
         for s in statements:
             self.dumpStatement(sink, s.quad, sorting)
 
@@ -744,7 +744,7 @@ class Serializer:
         if isinstance(obj, N3Set):
             a = self.context.newBlankNode()
             tempobj = [mm for mm in obj] #I hate sorting things - yosi
-            tempobj.sort(Term.compareAnyTerm)
+            tempobj.sort(key=Term.sortKey)
             tempList = self.store.newList(tempobj)
             sink.startAnonymous(auxPairs((triple[CONTEXT],
                                         triple[PRED], triple[SUBJ], a)))
@@ -758,7 +758,7 @@ class Serializer:
         if _anon and _incoming == 1:  # Embedded anonymous node in N3
             sink.startAnonymous(auxPairs(triple))
             ss = context.statementsMatching(subj=obj)
-            if sorting: ss.sort(StoredStatement.comparePredObj)
+            if sorting: ss.sort(key=StoredStatement.keyForPredObj)
             for t in ss:
                 self.dumpStatement(sink, t.quad, sorting)
             sink.endAnonymous(sub.asPair(), pre.asPair())

@@ -33,8 +33,6 @@ TODO:
 import sys, time, re, operator
 import calendar # timegm - from python 
 
-from types import StringType, UnicodeType, IntType, LongType, FloatType
-
 __version__ = "0.6"
 date_parser = re.compile(r"""^
     (?P<year>\d{4,4})
@@ -75,7 +73,7 @@ $""", re.VERBOSE)
 
 def parse(s):
     """ parse a string and return seconds since the epoch. """
-    assert type(s) in [StringType, UnicodeType]
+    # assert type(s) in [StringType, UnicodeType]
     r = date_parser.search(s)
     try:
         a = r.groupdict('0')

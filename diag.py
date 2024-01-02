@@ -28,7 +28,7 @@ def progress(*args):
             if i < 0: break
             a = a[:i+1] + (" "*level) + a[i+1:]
             i = i+1
-        q = utf_8_encode("%s " % (a,))[0]
+        q = "%s " % (a,)
         sys.stderr.write(q)
 ##        if lineCount[0] > 20:
 ##            lineCount[0] = 0

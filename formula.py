@@ -850,7 +850,9 @@ class StoredStatement:
             if s is not o:
                 return s.compareAnyTerm(o)
         return 0
-
+    # Python3 requires we use keyfunctions instead of CMP
+    def keyForPredObj(self):
+        return [self.quad[PRED].sortKey(), self.quad[OBJ].sortKey()]
 
     def context(self):
         """Return the context of the statement"""

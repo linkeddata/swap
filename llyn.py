@@ -358,8 +358,10 @@ class IndexedFormula(Formula):
         obj = obj.substituteEquals(self._redirections, newBindings)
             
         if diag.chatty_flag > 90:
+            print('@@  llyn.py  ', type(subj)) 
+            print('@@  llyn.py  ', subj)
             progress("Add statement (size before %i, %i statements) to %s:\n {%s %s %s}" % (
-                self.store.size, len(self.statements),repr(self),  repr(subj), repr(pred), repr(obj)) )
+                self.store.size, len(self.statements), repr(self), repr(subj), repr(pred), repr(obj)) )
         if self.statementsMatching(pred, subj, obj):
             if diag.chatty_flag > 97:
                 progress("Add duplicate SUPPRESSED %s: {%s %s %s}" % (

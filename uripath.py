@@ -99,6 +99,7 @@ def join(here, there):
     """
 
     assert(here.find("#") < 0), "Base may not contain hash: '%s'"% here # caller must splitFrag (why?)
+    print('@@ join ', here, there)
 
     slashl = there.find('/')
     colonl = there.find(':')
@@ -135,7 +136,7 @@ def join(here, there):
     if there[:1] == '/':
         return here[:bpath] + there
 
-    slashr = here.find('/')
+    slashr = here.rfind('/')
 
     while 1:
         if path[:2] == './':
@@ -175,7 +176,7 @@ def refTo(base, uri):
     >>> refTo('http://ex/x/y', 'http://ex/x/y')
     ''
 
-    Note the relationship between refTo and join:
+    Note the relationship between refTo and join:q
     join(x, refTo(x, y)) == y
     which points out certain strings which cannot be URIs. e.g.
     >>> x='http://ex/x/y';y='http://ex/x/q:r';join(x, refTo(x, y)) == y

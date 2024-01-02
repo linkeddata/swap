@@ -1,4 +1,4 @@
-#!/usr/bin/python
+ #!/usr/bin/python3
 """
 $Id$
 
@@ -64,8 +64,12 @@ from swap import  RDFSink
 
 cvsRevision = "$Revision$"
     
-            
+       ############## Temp test setup
+# @@ this should be able to be set up in the launch.json file in vscode
 
+for arg in ["--chatty=100", "--n3", "test/t1.n3"]:
+    sys.argv.append(arg)
+print('@@ sys.argv', len(sys.argv))
 #################################################  Command line
 
     
@@ -199,6 +203,7 @@ rdf/xml files. Note that this requires rdflib.
         
         # The base URI for this process - the Web equiv of cwd
         _baseURI = uripath.base()
+        print('Current base: ', _baseURI)
         
         option_format = "n3"      # set the default format
         option_first_format = None
@@ -216,9 +221,12 @@ rdf/xml files. Note that this requires rdflib.
             _rhs = ""
             try:
                 [_lhs,_rhs]=arg.split('=',1)
+                print('@@@ oop 1  : ', _lhs, _rhs)
+
                 try:
                     _uri = join(option_baseURI, _rhs)
                 except ValueError:
+                    print('@@@ 2 oop : ', option_baseURI, _rhs)
                     _uri = _rhs
             except ValueError: pass
             if arg == "-ugly": option_outputStyle = arg
@@ -439,7 +447,12 @@ rdf/xml files. Note that this requires rdflib.
             except ValueError:
                 _uri =_rhs
             if arg[0] != "-":
+                print('cwm pass 2 option_baseURI', option_baseURI)
+                print('cwm pass 2 splitFrag(arg)[0]', splitFrag(arg)[0])
+
                 _inputURI = join(option_baseURI, splitFrag(arg)[0])
+                print('cwm pass 2 _inputURI', _inputURI)
+
                 assert ':' in _inputURI
                 ContentType={ "rdf": "application/xml+rdf", "n3":
                                 "text/n3",
@@ -656,15 +669,16 @@ rdf/xml files. Note that this requires rdflib.
             elif _lhs == "-prove":
 
                 # code copied from -filter without really being understood  -sdh
+                _newURI = join(_baseURI, "_w_"+repr(_genid))  # Intermediate
+                _metaURI = _newURI + "_meta"
                 _tmpstore = llyn.RDFStore( _outURI+"#_g", metaURI=_metaURI, argv=option_with, crypto=option_crypto)
 
                 tmpContext = _tmpstore.newFormula(_uri+ "#_formula")
-                _newURI = join(_baseURI, "_w_"+repr(_genid))  # Intermediate
                 _genid = _genid + 1
                 _newContext = _tmpstore.newFormula(_newURI+ "#_formula")
                 _tmpstore.loadURI(_uri)
 
-                print(targetkb)
+                print(_tmpstore)
 
             elif arg == "-flatten":
                 raise NotImplementedError

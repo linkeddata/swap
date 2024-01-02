@@ -1,7 +1,7 @@
 # $Id$
 
 
-PYTHON=python
+PYTHON=python3
 
 YAPPS=yapps2.py
 
@@ -9,9 +9,9 @@ TESTIN=test/sameDan.n3
 
 HTMLS= term.html formula.html pretty.html myStore.html check.html query.html RDFSink.html cwm.html cwm_crypto.html cwm_list.html cwm_math.html cwm_sparql.html cwm_maths.html cwm_os.html cwm_string.html cwm_time.html cwm_times.html diag.html llyn.html notation3.html reify.html sax2rdf.html rdflib2rdf.html thing.html toXML.html uripath.html xml2infoset.html why.html sparql2cwm.html doc/changes.html
 
-## SOURCES = cwm.py cant.py delta.py notation3.py query.py llyn.py uripath.py diag.py RDFSink.py reify.py why.py myStore.py webAccess.py OrderedSequence.py term.py formula.py pretty.py cwm_list.py cwm_string.py cwm_os.py cwm_time.py isodate.py cwm_math.py cwm_trigo.py cwm_times.py cwm_maths.py cwm_sparql.py cwm_set.py toXML.py update.py sax2rdf.py rdflib_user.py rdfxml.py  __init__.py local_decimal.py isXML.py my_profiler.py cwm_crypto.py set_importer.py triple_maker.py mixin.py sparql2cwm.py sparql/sparql_parser.py sparql/sparql_tokens.py sparql/sparqlClient.py sparql/sparql_tokens_table.py sparql/sparql_table.py sparql/table_generator.py sparql/__init__.py sparql/webserver.py
+SOURCES = cwm.py cant.py delta.py notation3.py query.py llyn.py uripath.py diag.py RDFSink.py reify.py why.py myStore.py webAccess.py OrderedSequence.py term.py formula.py pretty.py cwm_list.py cwm_string.py cwm_os.py cwm_time.py isodate.py cwm_math.py cwm_trigo.py cwm_times.py cwm_maths.py cwm_sparql.py cwm_set.py toXML.py update.py sax2rdf.py rdflib_user.py rdfxml.py  __init__.py local_decimal.py isXML.py my_profiler.py cwm_crypto.py set_importer.py triple_maker.py mixin.py sparql2cwm.py sparql/sparql_parser.py sparql/sparql_tokens.py sparql/sparqlClient.py sparql/sparql_tokens_table.py sparql/sparql_table.py sparql/table_generator.py sparql/__init__.py sparql/webserver.py
 
-SOURCES := $(shell python importList.py my_profiler.py cant.py check.py delta.py cwm.py) sparql/Makefile
+## SOURCES := $(shell python3 importList.py my_profiler.py cant.py check.py delta.py cwm.py) sparql/Makefile
 
 DOC=doc/CwmHelp.htm
 
@@ -38,6 +38,8 @@ TARBALL_STUFF = README LICENSE LICENSE.rdf LICENSE.n3
 .DELETE_ON_ERROR : swap
 
 #all: yappstest yappsdoc math.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf
+run: 
+	python3 cwm.py --chatty=100 --n3 --rdf --n3 test/t1.n3
 
 install : setup.py
 	./setup.py install
@@ -104,9 +106,9 @@ setup_tarball: $(SOURCES) $(HTMLS) $(TESTS) $(GRAMMAR) $(TARBALL_STUFF) tested f
 	for A in $(TARBALL_STUFF) $(HTMLS) $(GRAMMAR) $(TESTS); do echo "$$A" >> MANIFEST; done
 	for A in $(SOURCES); do echo swap/"$$A" >> MANIFEST; done
 	cat test/testfilelist | sed -e 's/^/test\//' >> MANIFEST
-	python setup.py sdist
-	-python setup.py bdist_rpm
-	-python setup.py bdist_wininst
+	python3 setup.py sdist
+	-python3 setup.py bdist_rpm
+	-python3 setup.py bdist_wininst
 	rm -rf swap
 	rm cwm
 	rm delta

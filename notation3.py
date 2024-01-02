@@ -210,6 +210,7 @@ class SinkParser:
         remainder after any statements have been parsed.
         So if there is more data to feed to the
         parser, it should be straightforward to recover."""
+
         str = octets.decode('utf-8')
         i = 0
         while i >= 0:
@@ -342,8 +343,8 @@ class SinkParser:
         return -1  # Not a directive, could be something else.
 
     def bind(self, qn, uri):
-        assert isinstance(uri,
-                    bytes), "Any unicode must be %x-encoded already"
+        # print('@@ type of uri', type(uri))
+        #assert isinstance(uri, bytes), "Any unicode must be %x-encoded already"
         if qn == "":
             self._store.setDefaultNamespace(uri)
         else:

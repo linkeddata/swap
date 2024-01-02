@@ -233,8 +233,8 @@ class Term(object):
             if prefix != None : return (prefix + ":" + s[p+1:]).encode('unicode_escape')
         if s.endswith("#_formula"):
             return "`"+s[-22:-9]+"`" # Hack - debug notation for formula
-        if p >= 0: return s[p+1:].encode('unicode_escape')
-        return s.encode('unicode_escape')
+        if p >= 0: return s[p+1:] # .encode('unicode_escape') # @@ chek what that was for 
+        return s # .encode('unicode_escape')
 
     def debugString(self, already=[]):
         return repr(self)  # unless more eleborate in superclass
@@ -266,6 +266,13 @@ class Term(object):
         if diff != 0: return diff
         return self.compareTerm(other)
     
+    # Python3 drops the functionaity of sorting with comparison functions
+    # So instead you have to use a key function.
+    # The sort keys must all be the same type, so we can't make integers sort as integers
+    # and strings sort as strings.
+
+    def sortKey(self):
+        return str(self.classOrder()) + '__' + self.representation() # works for simple terms only
 
     def asPair(self):
         """Representation in an earlier format, being phased out 2002/08
@@ -391,13 +398,16 @@ class Symbol(LabelledNode):
 
     def __init__(self, uri, store):
         Term.__init__(self, store)
+        assert isinstance(uri, str)
         assert uri.find("#") < 0, "no fragments allowed: %s" % uri
         assert ':' in uri, "must be absolute: %s" % uri
         self.uri = uri
         self.fragments = WeakValueDictionary()
 
     def uriref2(self, base):
-        assert ':' in base, "base must be absolute: %s" % base
+        if ':' in self.uri:
+            return self.uri # is absolute
+        assert base and ':' in base, "base <%s> must be absolute if URI <%s> is not: %s" % (base, self.uri)
         return refTo(base, self.uri)
 
     def uriref(self):
@@ -468,7 +478,9 @@ class Fragment(LabelledNode):
         Term.__init__(self, resource.store)
         self.resource = resource
         self.fragid = fragid
-
+        assert isinstance(resource, Symbol), "resource is of wrong type %s " % type(resource)
+        assert isinstance(fragid, str), "fragid is of wrong type %s " % type(fragid)
+        
     def compareTerm(self, other):
         if not isinstance(other, Fragment):
             return LabelledNode.compareTerm(self, other)
