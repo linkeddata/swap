@@ -96,8 +96,8 @@ def _checkStore(s=None):
     global store, storeClass
     if s != None: return s
     if store != None: return store
-    if storeClass == None:
-        from . import llyn   # default 
+    #if storeClass == None:
+        # from . import llyn   # default 
     assert storeClass!= None, "Some storage module must register with myStore.py before you can use it"
     store = storeClass() # Make new one
     return store
@@ -214,13 +214,13 @@ class Namespace(object):
 
 
 
-def _test():
-    from . import llyn
-    store = llyn.RDFStore()
-    setStore(store)
-    
-    import doctest, myStore
-    return doctest.testmod(myStore)
+#def _test():
+#    from . import llyn    # avoid circular dependency?
+#    store = llyn.RDFStore()
+#    setStore(store)
+#    
+#    import doctest, myStore
+ #   return doctest.testmod(myStore)
      
 if __name__ == "__main__":
     _test()

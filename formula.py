@@ -29,7 +29,6 @@ import sys # for outputstrings. shouldn't be here - DWC
 
 from .set_importer import Set, ImmutableSet, sorted
 
-from . import notation3    # N3 parsers and generators, and RDF generator
 
 from . import diag  # problems importing the tracking flag, must be explicit it seems diag.tracking
 from .diag import progress, verbosity, tracking
@@ -850,9 +849,14 @@ class StoredStatement:
             if s is not o:
                 return s.compareAnyTerm(o)
         return 0
+    
     # Python3 requires we use keyfunctions instead of CMP
+
     def keyForPredObj(self):
         return [self.quad[PRED].sortKey(), self.quad[OBJ].sortKey()]
+    
+    def keyForSubjPredObj(self):
+        return [self.quad[SUBJ].sortKey(), self.quad[PRED].sortKey(), self.quad[OBJ].sortKey()]
 
     def context(self):
         """Return the context of the statement"""
@@ -952,6 +956,8 @@ class StoredStatement:
         return f.close()  # probably slow - much slower than statement subclass of formula
 
 
+
+from . import notation3    # N3 parsers and generators, and RDF generator
 
 #ends
 

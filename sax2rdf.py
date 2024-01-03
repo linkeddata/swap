@@ -74,7 +74,7 @@ import string
 import sys
 
 from . import uripath
-from .why import BecauseOfData
+#  from .why import BecauseOfData  # can't:  circular
 from . import isXML
 from . import diag
 #from webAccess import urlopenForRDF   # http://www.w3.org/2000/10/swap/
@@ -179,8 +179,9 @@ class RDFHandler(xml.sax.ContentHandler):
             self._context = None
         self._reason = why      # Why the parser w
         self._reason2 = None    # Why these triples
-        if diag.tracking: self._reason2 = BecauseOfData(
-                    sink.newSymbol(thisDoc), because=self._reason)
+        # if diag.tracking: self._reason2 = BecauseOfData(
+        #            sink.newSymbol(thisDoc), because=self._reason)
+        if diag.tracking: self._reason2 = None # @@ fix
 
         self._subject = None
         self._predicate = None

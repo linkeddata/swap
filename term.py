@@ -47,6 +47,7 @@ from .RDFSink import FORMULA, LITERAL, LITERAL_LANG, LITERAL_DT, ANONYMOUS, \
 from .RDFSink import Logic_NS
 
 from .OrderedSequence import merge, intersection, minus
+# from .formula import Formula, StoredStatement  no circular
 
 from . import diag
 from .diag import progress
@@ -180,8 +181,8 @@ you can hash it (if you want to)
             return [self.substitution(x, otherEnvs) for x in node]
         if isinstance(node, tuple):
             return tuple([self.substitution(x, otherEnvs) for x in node])
-        if isinstance(node, (formula.StoredStatement, term.Term)):
-            return node.substitution(self)  ## Wrong!
+        # if isinstance(node, (StoredStatement, Term)): # @@ circular import
+        #    return node.substitution(self)  ## Wrong!
         return node
             
 
@@ -239,9 +240,9 @@ class Term(object):
     def debugString(self, already=[]):
         return repr(self)  # unless more eleborate in superclass
         
-    def representation(self, base=None):
+    def representation(self):
         """The string represnting this in N3 """
-        return "<" + self.uriref(base) + ">"
+        return "<" + self.uriref() + ">"
  
     def generated(self):
         """Boolean Is this thing a genid - is its name arbitrary? """
@@ -463,7 +464,7 @@ class Symbol(LabelledNode):
                             self, workingContext))
                 workingContext.store.copyFormula(F, workingContext)
             if "x" in mode:   # capture experience
-                workingContext.add(r, self.store.semantics, F)
+                workingContext.add(self, self.store.semantics, F)
         if not hasattr(self, "_semantics"):
             setattr(self, "_semantics", F)
         if diag.chatty_flag > 25:

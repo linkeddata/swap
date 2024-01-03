@@ -89,7 +89,7 @@ def execute(cmd1, noStdErr=False):
     stderr = None
     try:
         if noStdErr:
-            stderr = file('/dev/null', 'w')
+            stderr = open('/dev/null', 'w')
         result = call(cmd1, shell=True, stderr=stderr)
     finally:
         if stderr:
@@ -176,7 +176,7 @@ def main():
     global verbose, proofs, chatty, normal, no_action
     start = 1
     cwm_command='../cwm.py'
-    python_command='python3 -tt'
+    python_command='python3'
     global ploughOn # even if error
     ploughOn = 0
     global verbose
@@ -184,7 +184,7 @@ def main():
     global just_fix_it
     just_fix_it = 0
     if diag.print_all_file_names:
-        a = file('testfilelist','w')
+        a = open('testfilelist','w')
         a.write('')
         a.close()
     try:
@@ -568,8 +568,8 @@ I should have.
 
 
     timeMatcher = re.compile(r'\t([0-9]+)m([0-9]+)\.([0-9]+)s')
-##    from test.pystone import pystones
-##    pyStoneTime = pystones()[1]
+    # from test.pystone import pystones
+    # pyStoneTime = pystones()[1]
     for u, theTime, description, env, arguments in perfData:
         tests = tests + 1
         if tests < start: continue
@@ -590,7 +590,7 @@ I should have.
 ##        print timeList
 ##        userTimeStr = timeList[1]
 ##        userTime = int(userTimeStr[0])*60 + float(userTimeStr[1] + '.' + userTimeStr[2])
-        pyCount = pyStoneTime * userTime
+        pyCount =  userTime ## * pyStoneTime
         print(pyCount)
         
     if problems != []:

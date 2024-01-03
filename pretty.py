@@ -184,7 +184,7 @@ class Serializer:
 
     def dumpPrefixes(self):
         if self.defaultNamespace is not None:
-            sink.setDefaultNamespace(self.defaultNamespace)
+            self.sink.setDefaultNamespace(self.defaultNamespace)
         prefixes = list(self.store.namespaces.keys())   #  bind in same way as input did FYI
         prefixes.sort()
         for pfx in prefixes:
@@ -314,7 +314,7 @@ class Serializer:
         self.dumpLists()
 
         ss = context.statements[:]
-        ss.sort()
+        ss.sort(key = StoredStatement.keyForSubjPredObj)
         def fixSet(x):
             try:
                 return x._node
@@ -334,7 +334,7 @@ class Serializer:
             if sorting: rs.sort(key=Term.sortKey)
             for r in rs :  # First the bare resource
                 statements = context.statementsMatching(subj=r)
-                if sorting: statements.sort(key=StoredStatement.keyForPredObj)
+                if sorting: statements.sort(key = StoredStatement.keyForPredObj)
                 for s in statements :
                         self._outputStatement(sink, s.quad)
                 if not isinstance(r, Literal):
@@ -545,7 +545,7 @@ class Serializer:
             tm.endList()
         elif isinstance(node, N3Set):
             pass
-        elif isinstance(node, formula):
+        elif isinstance(node, Formula):
             tm.startFormula()
             self._dumpFormula(node)
             tm.endFormula()
@@ -580,7 +580,7 @@ class Serializer:
                 if not x.generated() and x not in context.variables():
                     allStatements.append(StoredStatement(
                         (context, context.store.sameAs, x, y)))
-        allStatements.sort()
+        allStatements.sort(key = StoredStatement.keyForSubjPredObj)
 #        context.statements.sort()
         # @@ necessary?
         self.dumpVariables(context, sink, sorting, pretty=1)

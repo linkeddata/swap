@@ -642,8 +642,6 @@ def describeStatement(s_l, ko, flags):
         return si
 
 
-
-
 class BecauseOfData(Because):
     """Directly from data in the resource whose URI is the string.
 
