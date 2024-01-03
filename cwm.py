@@ -204,7 +204,6 @@ rdf/xml files. Note that this requires rdflib.
         
         # The base URI for this process - the Web equiv of cwd
         _baseURI = uripath.base()
-        print('Current base: ', _baseURI)
         
         option_format = "n3"      # set the default format
         option_first_format = None
@@ -448,12 +447,7 @@ rdf/xml files. Note that this requires rdflib.
             except ValueError:
                 _uri =_rhs
             if arg[0] != "-":
-                print('cwm pass 2 option_baseURI', option_baseURI)
-                print('cwm pass 2 splitFrag(arg)[0]', splitFrag(arg)[0])
-
                 _inputURI = join(option_baseURI, splitFrag(arg)[0])
-                print('cwm pass 2 _inputURI', _inputURI)
-
                 assert ':' in _inputURI
                 ContentType={ "rdf": "application/xml+rdf", "n3":
                                 "text/n3",

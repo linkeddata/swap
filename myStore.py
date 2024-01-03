@@ -222,5 +222,5 @@ class Namespace(object):
 #    import doctest, myStore
  #   return doctest.testmod(myStore)
      
-if __name__ == "__main__":
-    _test()
+# if __name__ == "__main__":
+#    _test()

@@ -60,7 +60,7 @@ if sys.hexversion < 0x02030000:
     raise RuntimeError("Sorry, this software requires python2.3 or newer.")
 
 
-
+# RDF_type_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
 
 ########################################  Storage URI Handling
 #
@@ -372,17 +372,22 @@ class Node(Term):
 
 class LabelledNode(Node):
     "The labelled node is one which has a URI."
+
+    def sortKey(self):
+        if (self.uriref() == RDF_type_URI):
+            return str(self.classOrder()) + '__' + '<  >' # type always comes first in predicates
+        return str(self.classOrder()) + '__' + self.representation() # works for simple terms only
         
     def compareTerm(self, other):
         "Assume is also a LabelledNode - see function compareTerm in formula.py"
-        _type = RDF_type_URI
+        RDF_type_URItype = RDF_type_URI
         s = self.uriref()
-        if self is self.store.type:
+        if s == RDF_type_URI:
                 return -1
         o = other.uriref()
-        if other is self.store.type:
+        if o == RDF_type_URI:
                 return 1
-        retVal = cmp(s, o)
+        retVal = compareString(s, o)
         if retVal:
             return retVal
         progress( "Error with '%s' being the same as '%s'" %(s,o))
@@ -471,6 +476,10 @@ class Symbol(LabelledNode):
             progress("Web: Dereferencing %s gave %s" %(self, F))
         return F
                 
+def compareString(self, other):
+    if self < other: return -1
+    if self > other: return 1
+    return 0    
 
 class Fragment(LabelledNode):
     """    A Term which DOES have a fragment id in its URI
@@ -485,12 +494,13 @@ class Fragment(LabelledNode):
     def compareTerm(self, other):
         if not isinstance(other, Fragment):
             return LabelledNode.compareTerm(self, other)
-        if self is self.resource.store.type:
+        if self.uriref() == RDF_type_URI:
+        # if self is self.resource.store.type:
             return -1
-        if other is self.resource.store.type:
+        if other.uriref() == RDF_type_URI:
             return 1
         if self.resource is other.resource:
-            return cmp(self.fragid, other.fragid)
+            return compareString(self.fragid, other.fragid)
         return self.resource.compareTerm(other.resource)
    
     def uriref(self):

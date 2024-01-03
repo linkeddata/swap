@@ -30,12 +30,13 @@ from os import system
 import os
 import sys
 import urllib.request, urllib.parse, urllib.error
+from swap import uripath
 
 # From PYTHONPATH equivalent to http://www.w3.org/2000/10
 
 from swap import llyn
 from swap.myStore import load, loadMany, Namespace
-from swap.uripath import refTo, base
+from swap.uripath import refTo, base, join
 from swap import diag
 from swap.diag import progress
 from swap.term import AnonymousNode, Term
@@ -62,6 +63,11 @@ proofs = 0
 verbose = 0
 no_action = 0
 
+
+# The base URI for this process - the Web equiv of cwd
+processBaseURI = uripath.base()
+print('Current base: ', processBaseURI)
+
 def localize(uri):
     """Get URI relative to where this lives"""
     from swap import uripath
@@ -80,7 +86,7 @@ def problem(str):
 def usage():
     print(__doc__)
 
-from subprocess import call, PIPE
+from subprocess import call
 
 def execute(cmd1, noStdErr=False):
     global verbose, no_action
@@ -113,12 +119,14 @@ def diff(case, ref=None, prog="diff -Bbwu"):
     if result < 0:
         raise problem("Comparison fails: result %i executing %s" %(result, diffcmd))
     if result > 0: print("Files differ, result=", result)
-    d = urllib.request.urlopen(",diffs/"+case)
+    diffFileURI = join(processBaseURI, ",diffs/"+case)
+
+    d = urllib.request.urlopen(diffFileURI)
     buf = d.read()
     if len(buf) > 0:
         if just_fix_it == 0:
             print("#  If this is OK,   cp ,temp/%s %s" %(case, ref))
-            print("######### Differences from reference output:\n" + buf)
+            print("######### Differences from reference output:\n", buf)
             return 1
         else:
             os.system("cp ,temp/%s %s" %(case, ref))
