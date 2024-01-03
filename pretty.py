@@ -536,12 +536,13 @@ class Serializer:
         self._dumpFormula(context)
         self.tm.end()
 
-    def _dumpNode(self, node):
+    # Unsed - delete?
+    def _dumpNode(self, node, context):
         tm = self.tm
         _anon, _incoming = self._topology(node, context)
         if isinstance(node, List):
             tm.startList()
-            [self._dumpNode(x) for x in node]
+            [self._dumpNode(x, context) for x in node]
             tm.endList()
         elif isinstance(node, N3Set):
             pass

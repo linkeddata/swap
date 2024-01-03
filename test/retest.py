@@ -126,7 +126,7 @@ def diff(case, ref=None, prog="diff -Bbwu"):
     if len(buf) > 0:
         if just_fix_it == 0:
             print("#  If this is OK,   cp ,temp/%s %s" %(case, ref))
-            print("######### Differences from reference output:\n", buf)
+            print("######### Differences from reference output:\n", buf.decode('utf-8'))
             return 1
         else:
             os.system("cp ,temp/%s %s" %(case, ref))

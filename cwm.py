@@ -221,8 +221,6 @@ rdf/xml files. Note that this requires rdflib.
             _rhs = ""
             try:
                 [_lhs,_rhs]=arg.split('=',1)
-                print('@@@ oop 1  : ', _lhs, _rhs)
-
                 try:
                     _uri = join(option_baseURI, _rhs)
                 except ValueError:
