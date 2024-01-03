@@ -173,7 +173,7 @@ class SinkParser:
             self.makeStatement(((SYMBOL, metaURI), # quantifiers - use inverse?
                             (SYMBOL, N3_forSome_URI), #pred
                             self._context,  #subj
-                            subj))                      # obj
+                            self._context))                      # obj
 
     def here(self, i):
         """String generated from position in file
@@ -1741,6 +1741,7 @@ class tmToN3(RDFSink.RDFSink):
         self.defaultNamespace = None
         self.indent = 1         # Level of nesting of output
         self.base = base
+        self.bNodes = {}        # Map from bnode to generated ID
 #       self.nextId = 0         # Regenerate Ids on output
         self.regen = {}         # Mapping of regenerated Ids
 #       self.genPrefix = genPrefix  # Prefix for generated URIs on output
@@ -1918,11 +1919,11 @@ class tmToN3(RDFSink.RDFSink):
         function to call
 
         """
-        if Id not in bNodes:
+        if Id not in self.bNodes:
             a = self.formulas[-1].newBlankNode()
-            bNodes[Id] = a
+            self.bNodes[Id] = a
         else:
-            a = bNodes[Id]
+            a = self.bNodes[Id]
         self.addNode(a)
 
 

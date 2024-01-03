@@ -206,7 +206,19 @@ def pickEnv(choice, *envs):
         if choice is env.id:
             return env
     return []  ## Not here.
-        
+
+def compareStrings(self, other):
+    if self < other: return -1
+    if self > other: return 1
+    return 0    
+
+def compareNumbers(self, other):
+    if self < other: return -1
+    if self > other: return 1
+    return 0    
+
+# This class is the core one for the system.
+
 class Term(object):
     """The Term object represents an RDF term.
     
@@ -263,7 +275,7 @@ class Term(object):
             This is not done yet
             """
         if self is other: return 0
-        diff = cmp(self.classOrder(), other.classOrder())
+        diff = compareNumber(self.classOrder(), other.classOrder())
         if diff != 0: return diff
         return self.compareTerm(other)
     
@@ -387,7 +399,7 @@ class LabelledNode(Node):
         o = other.uriref()
         if o == RDF_type_URI:
                 return 1
-        retVal = compareString(s, o)
+        retVal = compareStrings(s, o)
         if retVal:
             return retVal
         progress( "Error with '%s' being the same as '%s'" %(s,o))
@@ -476,11 +488,6 @@ class Symbol(LabelledNode):
             progress("Web: Dereferencing %s gave %s" %(self, F))
         return F
                 
-def compareString(self, other):
-    if self < other: return -1
-    if self > other: return 1
-    return 0    
-
 class Fragment(LabelledNode):
     """    A Term which DOES have a fragment id in its URI
     """
@@ -568,10 +575,10 @@ class AnonymousNode(Node):
             otherSerial = other.uri
         else:
             otherSerial = other.serial
-        retVal = cmp(selfSerial, otherSerial)
+        retVal = compareStrings(selfSerial, otherSerial)
         if retVal:
             return retVal
-        return cmp(self.serial, other.serial)
+        return compareStrings(self.serial, other.serial)
 
     def classOrder(self):
         """Anonymous ndoes are higher than symbols as the = smushing
@@ -1407,9 +1414,9 @@ class Literal(Term):
     def compareTerm(self, other):
         "Assume is also a literal - see function compareTerm in formula.py"
         if self.datatype == other.datatype:
-            diff = cmp(self.string, other.string)
+            diff = compareStrings(self.string, other.string)
             if diff != 0 : return diff
-            return cmp(self.lang, other.lang)
+            return compareStrings(self.lang, other.lang)
         else:
             if self.datatype == None: return -1
             if other.datatype == None: return 1
@@ -1516,9 +1523,9 @@ class XMLLiteral(Literal):
     def compareTerm(self, other):
         "Assume is also a literal - see function compareTerm in formula.py"
         if self.datatype == other.datatype:
-            diff = cmp(str(self), str(other))
+            diff = compareStrings(str(self), str(other))
             return diff
-            return cmp(self.lang, other.lang)
+            return compareStrings(self.lang, other.lang)
         else:
             if self.datatype == None: return -1
             if other.datatype == None: return 1

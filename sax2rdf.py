@@ -275,7 +275,7 @@ class RDFHandler(xml.sax.ContentHandler):
                 elif ln == "aboutEachPrefix":
                     if value == " ":  # OK - a trick to make NO subject
                         self._subject = None
-                    else: raise ooops # can't do about each prefix yet
+                    else: raise NotImplementedError("can't do about each prefix yet")
                 elif ln == "bagID":
                     if not isXML.isName(value):
                         raise  BadSyntax(sys.exc_info(), 'A bagID must be a Name %s' % value)
@@ -852,7 +852,7 @@ class RDFHandler(xml.sax.ContentHandler):
                 e.setAttribute(name[1], value) #@@@ Missing prefix on qname
                 #@@@ may need calculating as in the non-dom case, alas.
 
-    def literal_element_end(selsf, name, qname):
+    def literal_element_end(self, name, qname):
         if name[0]:
             prefix = self._prefixMap[-1][name[0]]
             if prefix:

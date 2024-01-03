@@ -35,7 +35,7 @@ from .diag import progress, verbosity, tracking
 from .term import matchSet, \
     AnonymousNode , AnonymousExistential, AnonymousUniversal, \
     Term, CompoundTerm, List, \
-    unifySequence, unify
+    unifySequence, unify, compareStrings, compareNumbers
 
 from .RDFSink import Logic_NS
 from .RDFSink import CONTEXT, PRED, SUBJ, OBJ
@@ -128,7 +128,7 @@ class Formula(AnonymousNode, CompoundTerm):
         s.sort() # forumulae are all the same
         o.sort()
         for i in range(ls):
-            diff = cmp(s[i],o[i])
+            diff = s[i].compareTerm(o[i])
             if diff != 0: return diff
         return 0
         from . import why
@@ -702,6 +702,9 @@ For future reference, use newUniversal
         strings output.
 
         @@ what is this doing here??
+        This is a feature for writing reports. It allows rules to crate statements that
+        say that "foo bar" is an output String then use --strings on the command line to generate the
+        report.
         """
         if channel == None:
             channel = sys.stdout
@@ -711,7 +714,7 @@ For future reference, use newUniversal
         pairs = []
         for s in list:
             pairs.append((s[SUBJ], s[OBJ]))
-        pairs.sort(comparePair)
+        pairs.sort()
         for key, str in pairs:
             channel.write(str.string.encode('utf-8'))
 
@@ -815,7 +818,7 @@ class StoredStatement:
         Avoid loops by spotting reference to containing formula"""
         if self is other: return 0
         if not isinstance(other, StoredStatement):
-            return cmp(self.__class__, other.__class__)
+            return compareStrings(self.__class__, other.__class__)
         sc = self.quad[CONTEXT]
         oc = other.quad[CONTEXT]
         for p in [SUBJ, PRED, OBJ]: # Note NOT internal order
