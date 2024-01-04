@@ -12,7 +12,7 @@ Assumes wwe are using the process-global store -- uses Namespace() @@@
 
 flagHelp = """
 n           use iNdirect formulas when they get too large
-g           always give the :gives clause, even when not needed
+g           always give the :gives clause, even when            not needed
 """
 
 import string

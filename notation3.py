@@ -55,7 +55,7 @@ from .why import BecauseOfData, becauseSubexpression
 
 N3_forSome_URI = RDFSink.forSomeSym
 N3_forAll_URI = RDFSink.forAllSym
-
+FRESH = 2
 # Magic resources we know about
 
 
@@ -126,7 +126,7 @@ class SinkParser:
         if genPrefix: store.setGenPrefix(genPrefix) # pass it on
 
         self._thisDoc = thisDoc
-        self.lines = 0              # for error handling
+        self.lines = 0              # for error handling count line number
         self.startOfLine = 0        # For calculating character number
         self._genPrefix = genPrefix
         self.keywords = ['a', 'this', 'bind', 'has', 'is', 'of', 'true', 'false' ]
@@ -166,10 +166,11 @@ class SinkParser:
         self._parentContext = None
 
         if metaURI:
-            self.makeStatement((SYMBOL, metaURI), # relate doc to parse tree
-                            (SYMBOL, PARSES_TO_URI ), #pred
-                            (SYMBOL, thisDoc),  #subj
-                            self._context)                      # obj
+            # self.makeStatement((SYMBOL, metaURI), # relate doc to parse tree
+            #               (SYMBOL, PARSES_TO_URI ), #pred
+            #                (SYMBOL, thisDoc),  #subj
+            #                self._context)                      # obj
+
             self.makeStatement(((SYMBOL, metaURI), # quantifiers - use inverse?
                             (SYMBOL, N3_forSome_URI), #pred
                             self._context,  #subj
@@ -1035,7 +1036,7 @@ class SinkParser:
             if str[j:j+1] == "@":  # Language?
                 m = langcode.match(str, j+1)
                 if m == None:
-                    raise BadSyntax(self._thisDoc, startline, str, i,
+                    raise BadSyntax(self._thisDoc, self.lines, str, i,
                     "Bad language code syntax on string literal, after @")
                 i = m.end()
                 lang = str[j+1:i]
@@ -1209,11 +1210,11 @@ except ValueError:
 
 
 class BadSyntax(SyntaxError):
-    def __init__(self, uri, lines, str, i, why):
-        self._str = str.encode('utf-8') # Better go back to strings for errors
+    def __init__(self, uri, lineNumber, str, i, why):
+        # self._str = str.encode('utf-8') # Better go back to strings for errors - pre python3
         self._i = i
         self._why = why
-        self.lines = lines
+        self.lineNumber = lineNumber
         self._uri = uri
 
     def __str__(self):
@@ -1228,7 +1229,7 @@ class BadSyntax(SyntaxError):
         else: post=""
 
         return 'at line %i of <%s>:\nBad syntax (%s) at ^ in:\n"%s%s^%s%s"' \
-               % (self.lines +1, self._uri, self._why, pre,
+               % (self.lineNumber +1, self._uri, self._why, pre,
                                     str[st:i], str[i:i+60], post)
 
 

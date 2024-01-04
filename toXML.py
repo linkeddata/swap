@@ -121,12 +121,13 @@ class ToRDF(RDFSink.RDFStructuredOutput):
     def __init__(self, outFp, thisURI=None, base=None, flags=""):
         RDFSink.RDFSink.__init__(self)
         if outFp == None:
+            # raise ValueError ('No output file given for XML')
             self._xwr = XMLWriter(dummyWrite, self)
         else:
-            dummyEnc, dummyDec, dummyReader, encWriter = codecs.lookup('utf-8')
-            z = encWriter(outFp)
-            zw = z.write
-            self._xwr = XMLWriter(zw, self)
+            # dummyEnc, dummyDec, dummyReader, encWriter = codecs.lookup('utf-8')
+            # z = encWriter(outFp)
+            # zw = z.write
+            self._xwr = XMLWriter(outFp.write, self)
         self._subj = None
         self._base = base
         self._formula = None   # Where do we get this from? The outermost formula
@@ -519,12 +520,12 @@ class XMLWriter:
     """ taken from
     Id: tsv2xml.py,v 1.1 2000/10/02 19:41:02 connolly Exp connolly
     
-    Takes as argument a writer which does the (eg utf-8) encoding
+    Takes as argument a writer which does the (eg utf-8) encoding (python2 only)
     """
 
     def __init__(self, encodingWriter, counter, squeaky=0, version='1.0'):
-#       self._outFp = outFp
-        self._encwr = encodingWriter
+        # self._outFp = outFp
+        self._encwr =  encodingWriter
         self._elts = []
         self.squeaky = squeaky  # No, not squeaky clean output
         self.tab = 4        # Number of spaces to indent per level
@@ -768,9 +769,9 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
         if outFp == None:
             self._xwr = XMLWriter(dummyWrite, self)
         else:
-            dummyEnc, dummyDec, dummyReader, encWriter = codecs.lookup('utf-8')
-            z = encWriter(outFp)
-            zw = z.write
+            # dummyEnc, dummyDec, dummyReader, encWriter = codecs.lookup('utf-8')
+            # z = encWriter(outFp)
+            zw = outFp.write
             self._xwr = XMLWriter(zw, self)
         self._subj = None
         self._base = base
