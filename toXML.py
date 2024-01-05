@@ -156,8 +156,9 @@ class ToRDF(RDFSink.RDFStructuredOutput):
             prefix = self.namespace_redirections[prefix]
         else:
             realPrefix = prefix
-            while prefix in self.illegals or prefix[:3] == 'xml':
-                prefix = choice(ASCII_LETTERS) + prefix
+            while prefix in self.illegals or prefix in [ 'xml', 'xmlns' ]:
+                # prefix = choice(ASCII_LETTERS) + prefix # random choice bad for testing
+                prefix = prefix + '2'
             if realPrefix is not prefix:
                 self.illegals.add(prefix)
                 self.namespace_redirections[realPrefix] = prefix

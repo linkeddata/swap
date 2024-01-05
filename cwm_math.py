@@ -248,4 +248,4 @@ def register(store):
     str.internFrag('memberCount', BI_memberCount)
 
 if __name__=="__main__": 
-   print(string.strip(__doc__))
+   print(__doc__.strip())

@@ -7,8 +7,6 @@ magnitude is the log10 of the number we multiply it by to get an integer
 $Id$
 """
 
-# timbl
-# from types import IntType, FloatType, LongType, StringTypes
 
 from math import log10
 
@@ -24,8 +22,10 @@ class Decimal:
     def normalize(self):
         """convert this Decimal into some sort of canonical form
 
-
         """
+        self.value = int(self.value)
+        self.magnitude = int(self.magnitude)
+
         if self.value == 0:
             self.magnitude = 0
             return
@@ -38,32 +38,32 @@ class Decimal:
 
 
 
-    def __init__(self, other=0):
+    def __init__(self, other = 0):
         """How to get a new Decimal
 
-        What happened?
-        """
+        Argument can be string, int, long, or float, or existing Dedimal
+            """
         if isinstance(other, Decimal):
             self.value = other.value
             self.magnitude = other.magnitude
             return
-        elif isinstance(other, IntType):
-            self.value = int(other)
-            self.magnitude = 0
-            self.normalize()
-            return
-        elif isinstance(other, LongType):
+        elif isinstance(other, int):
             self.value = other
             self.magnitude = 0
             self.normalize()
             return
+        #elif isinstance(other, LongType):
+        #    self.value = other
+        #    self.magnitude = 0
+        #    self.normalize()
+        #    return
         elif hasattr(other,'__Decimal__') and callable(getattr(other, '__Decimal__')):
             a = other.__Decimal__()
             self.value = a.value
             self.magnitude = a.magnitude
             self.normalize()
             return
-        elif isinstance(other,FloatType):
+        elif isinstance(other,float):
             other = repr(other)
         try:
             other[0]
@@ -350,6 +350,7 @@ class Decimal:
         return self.__rdiv__(other)
 #    def __setattr__(self, other):
 #        pass
+    
     def __str__(self):
         """x.__str__() <==> str(x)
         """
@@ -371,8 +372,9 @@ class Decimal:
             if magnitude == 0 and magSign == 1:
                 output.append(".")
                 magSign = 0
-            digit = value.__mod__(10)
-            value = value // 10
+            # digit = value.__mod__(10)
+            digit = int(value % 10)
+            value = int(value) // 10
             output.append("0123456789"[digit])
             magnitude = magnitude-1
         while magnitude > 0:

@@ -72,6 +72,12 @@ def _sorter(n1,n2):
     if i: return i
     return cmp(n1.localName, n2.localName)
 
+def keyNamespaceLocalname(n):
+    '''keyNamespaceLocalname(n) -> string
+    Sorting key for NS attributes.'''
+
+    return [n.namespaceURI, n.localName]  # Namespace, localname
+
 
 def _sorter_ns(n1,n2):
     '''_sorter_ns((n,v),(n,v)) -> int
@@ -80,6 +86,10 @@ def _sorter_ns(n1,n2):
     if n1[0] == 'xmlns': return -1
     if n2[0] == 'xmlns': return 1
     return cmp(n1[0], n2[0])
+
+def keyNSURI(n):
+    "(an empty namespace URI is lexicographically least)."
+    return n[0]
 
 def _utilized(n, node, other_attrs, unsuppressedPrefixes):
     '''_utilized(n, node, other_attrs, unsuppressedPrefixes) -> boolean
@@ -183,10 +193,10 @@ class _implementation:
         Process a text or CDATA node.  Render various special characters
         as their C14N entity representations.'''
         if not _in_subset(self.subset, node): return
-        s = string.replace(node.data, "&", "&amp;")
-        s = string.replace(s, "<", "&lt;")
-        s = string.replace(s, ">", "&gt;")
-        s = string.replace(s, "\015", "&#xD;")
+        s = node.data.replace("&", "&amp;")
+        s = s.replace("<", "&lt;")
+        s = s.replace(">", "&gt;")
+        s = s.replace("\015", "&#xD;")
         if s: self.write(s)
     handlers[Node.TEXT_NODE] = _do_text
     handlers[Node.CDATA_SECTION_NODE] = _do_text
@@ -237,12 +247,12 @@ class _implementation:
         W(' ')
         W(n)
         W('="')
-        s = string.replace(value, "&", "&amp;")
-        s = string.replace(s, "<", "&lt;")
-        s = string.replace(s, '"', '&quot;')
-        s = string.replace(s, '\011', '&#x9')
-        s = string.replace(s, '\012', '&#xA')
-        s = string.replace(s, '\015', '&#xD')
+        s = value.replace("&", "&amp;")
+        s = s.replace("<", "&lt;")
+        s = s.replace('"', '&quot;')
+        s = s.replace('\011', '&#x9')
+        s = s.replace('\012', '&#xA')
+        s = s.replace('\015', '&#xD')
         W(s)
         W('"')
 
@@ -315,7 +325,7 @@ class _implementation:
                     ns_to_render.append((n, v))
 
             # Sort and render the ns, marking what was rendered.
-            ns_to_render.sort(_sorter_ns)
+            ns_to_render.sort(key = keyNSURI)
             for n,v in ns_to_render:
                 self._do_attr(n, v)
                 ns_rendered[n]=v    #0417
@@ -327,7 +337,7 @@ class _implementation:
                 other_attrs.extend(list(xml_attrs_local.values()))
             else:
                 other_attrs.extend(list(xml_attrs.values()))
-            other_attrs.sort(_sorter)
+            other_attrs.sort(key = keyNamespaceLocalname)
             for a in other_attrs:
                 self._do_attr(a.nodeName, a.value)
             W('>')

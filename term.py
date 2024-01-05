@@ -96,7 +96,8 @@ you can hash it (if you want to)
         if other is None:
             dict.__init__(self)
         else:
-            dict.__init__(self, other, **keywords)
+            # dict.__init__(self, other, **keywords)
+            dict.__init__(self, other)
         self.id = self
         for k, (a,b) in self.items():
             if isinstance(a, tuple):
@@ -121,6 +122,7 @@ you can hash it (if you want to)
     
     def newBinding(self, var, val):
         retVal = Env(self, {var: val})
+        # retVal = Env(self, var=val)
         retVal.id = self.id
         return retVal
     bind = newBinding
@@ -243,7 +245,7 @@ class Term(object):
         if (p>=0 and s[p+1:].find(".") <0 ):
             # Can't use prefix if localname includes "."
             prefix = self.store.prefixes.get(s[:p+1], None) # @@ #CONVENTION
-            if prefix != None : return (prefix + ":" + s[p+1:]).encode('unicode_escape')
+            if prefix != None : return (prefix + ":" + s[p+1:])
         if s.endswith("#_formula"):
             return "`"+s[-22:-9]+"`" # Hack - debug notation for formula
         if p >= 0: return s[p+1:] # .encode('unicode_escape') # @@ chek what that was for 
@@ -1398,8 +1400,8 @@ class Literal(Term):
 
     def __repr__(self):
         if len(self.string) < 8:
-            return '"%s"' % self.string.encode('unicode_escape') 
-        return str('"' + self.string[0:4] + '...' + self.string[-4:] + '"').encode('unicode_escape')#        return self.string
+            return '"%s"' % self.string #  .encode('unicode_escape') 
+        return str('"' + self.string[0:4] + '...' + self.string[-4:] + '"') #   was encode 
 
     def asPair(self):
         if self.datatype:

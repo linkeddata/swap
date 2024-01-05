@@ -79,7 +79,7 @@ from .term import BuiltIn, LightBuiltIn, RDFBuiltIn, HeavyBuiltIn, Function, \
     Literal, XMLLiteral, Symbol, Fragment, FragmentNil, Term, LabelledNode, \
     CompoundTerm, List, EmptyList, NonEmptyList, AnonymousNode, N3Set, \
     UnknownType
-from .formula import Formula, StoredStatement
+from .formula import Formula, StoredStatement # , keyForSubjPredObj
 # from . import reify
 
 from weakref import WeakValueDictionary
@@ -593,7 +593,7 @@ class IndexedFormula(Formula):
             return F
         if diag.chatty_flag > 70:
             progress('I got here, possibles = ', possibles)
-        fl.sort()
+        fl.sort(key = StoredStatement.keyForSubjPredObj)
         fe = F.existentials()
         #fe.sort(Term.compareAnyTerm)
         fu = F.universals ()
@@ -610,7 +610,7 @@ class IndexedFormula(Formula):
             if gkey != l: raise RuntimeError("@@Key of %s is %s instead of %s"
                 %(G, repr(gkey), repr(l)))
 
-            gl.sort()
+            gl.sort(key = StoredStatement.keyForSubjPredObj)
             for se, oe, in  ((fe, G.existentials()),
                              (fu, G.universals())):
                 if se != oe:

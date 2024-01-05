@@ -257,11 +257,10 @@ class RDFHandler(xml.sax.ContentHandler):
                         raise BadSyntax(sys.exc_info(), ">1 subject")
                     self._subject = self.sink.newSymbol(self.uriref("#" + value))
                 elif ln == "about":
-                    print('@@ about ')
                     if self._subject: raise BadSyntax(sys.exc_info(),
                         "Subject already defined to be %s, can't have attribute about='%s'" %
                         (repr(self._subject), value))
-                    print('base: ', self._base)
+                    # print('base: ', self._base)
                     self._subject = self.sink.newSymbol(self.uriref(value))
                 elif ln == "nodeID":
                     if self._subject: raise BadSyntax(sys.exc_info(),
@@ -382,7 +381,7 @@ class RDFHandler(xml.sax.ContentHandler):
         it takes extra space and more time to
         set up a new binding."""
 
-        #print "startPrefixMapping with prefix=", prefix, "uri=", `uri`
+        # print "startPrefixMapping with prefix=", prefix, "uri=", `uri`
         prefix = prefix or ""
         uri = uri or ""
         uri = self.uriref(uri)
