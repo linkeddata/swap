@@ -10,6 +10,11 @@ $Id$
 
 from math import log10
 
+def compareNumbers(self, other): # python3 has no cmp
+    if self < other: return -1
+    if self > other: return 1
+    return 0    
+
 class Decimal:
     """make a new Decimal
 
@@ -140,7 +145,7 @@ class Decimal:
         while other.magnitude > self.magnitude:
             self.magnitude = self.magnitude+1
             self.value = self.value * 10
-        a = cmp(self.value, other.value)
+        a = compareNumbers(self.value, other.value)
         self.normalize()
         return a
     def __coerce__(self, other):

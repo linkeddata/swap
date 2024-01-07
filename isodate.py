@@ -100,14 +100,14 @@ def parse(s):
     
 def fullString(i):
     """ given seconds since the epoch, return a full dateTime string in Z timezone. """
-    assert type(i) in [IntType, FloatType, LongType], "Wrong type: "+ repr(type(i)) +repr(i)
+    assert type(i) in [int, float], "Wrong type: "+ repr(type(i)) +repr(i)
     year, month, day, hour, minute, second, wday, jday, dst = time.gmtime(i)
     return str(year) + '-%2.2d-%2.2dT%2.2d:%2.2d:%2.2dZ' % (month, day, hour, minute, second)
 
 
 def asString(i):
     """ given seconds since the epoch, return a dateTime string. """
-    assert type(i) in [IntType, FloatType]
+    assert type(i) in [int, float]
     year, month, day, hour, minute, second, wday, jday, dst = time.gmtime(i)
     o = str(year)
     if (month, day, hour, minute, second) == (1, 1, 0, 0, 0): return o

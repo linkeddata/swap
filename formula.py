@@ -26,6 +26,8 @@ __version__ = '$Id$'[1:-1]
 import types
 import io
 import sys # for outputstrings. shouldn't be here - DWC
+from .compare import compareStrings
+
 
 from .set_importer import Set, ImmutableSet, sorted
 
@@ -490,9 +492,9 @@ For future reference, use newUniversal
         n = {}
         F1 = self.newFormula()
         F1.loadFormulaWithSubstitution(self, m2, why=Because("Vars in subexpressions must be renamed"))
-        for v in sorted(list(F1.existentials()), Term.compareAnyTerm):
+        for v in sorted(list(F1.existentials()), key = Term.sortKey):
             m[v] = F1.newBlankNode()
-        for v in sorted(list(F1.universals()), Term.compareAnyTerm):
+        for v in sorted(list(F1.universals()), key = Term.sortKey):
             n[v] = F1.newUniversal(v)
         e = F1.existentials()
         u = F1.universals()

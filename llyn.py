@@ -136,12 +136,12 @@ class DataObject:
     x = F.theObject(pred=rdfType obj=fooCar)
     for y in x[color][label]
     """
-    def __init__(context, term):
+    def __init__(self, context, term):
         self.context = context
         self.term = term
         
     def __getItem__(pred):   #   Use . or [] ?
-        values = context.objects(pred=pred, subj=self.term)
+        values = self.context.objects(pred=pred, subj=self.term)
         for v in value:
             yield DataObject(self.context, v)
 
@@ -277,7 +277,7 @@ class IndexedFormula(Formula):
         if pred is None: return s[PRED]
         if subj is None: return s[SUBJ]
         if obj is None: return s[OBJ]
-        raise ParameterError("You must give one wildcard")
+        raise ValueError("You must give one wildcard")
 
 
     def the(self, subj=None, pred=None, obj=None):
@@ -297,7 +297,7 @@ class IndexedFormula(Formula):
         if pred is None: return s[PRED]
         if subj is None: return s[SUBJ]
         if obj is None: return s[OBJ]
-        raise parameterError("You must give one wildcard using the()")
+        raise ValueError("You must give one wildcard using the()")
 
     def each(self, subj=None, pred=None, obj=None):
         """Return a list of values value filing the blank in the called parameters
@@ -313,7 +313,7 @@ class IndexedFormula(Formula):
         if pred is None: wc = PRED
         elif subj is None: wc = SUBJ
         elif obj is None: wc = OBJ
-        else: raise ParameterError("You must give one wildcard None for each()")
+        else: raise ValueError("You must give one wildcard None for each()")
         res = []
         for s in hits:
             res.append(s[wc])   # should use yeild @@ when we are ready

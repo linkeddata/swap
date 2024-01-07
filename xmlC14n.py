@@ -42,12 +42,20 @@ or
 
 import string
 from xml.dom import Node
-try:
-    from xml.ns import XMLNS
-except:
-    class XMLNS:
-        BASE = "http://www.w3.org/2000/xmlns/"
-        XML = "http://www.w3.org/XML/1998/namespace"
+from .compare import compareStrings, compareNumbers
+
+def compareNumbers(self, other):
+    if self < other: return -1
+    if self > other: return 1
+    return 0    
+
+
+#try:
+#    from xml.ns import XMLNS
+#except:
+class XMLNS:
+    BASE = "http://www.w3.org/2000/xmlns/"
+    XML = "http://www.w3.org/XML/1998/namespace"
 #try:
 #    import cStringIO
 #    StringIO = cStringIO
@@ -68,9 +76,9 @@ def _sorter(n1,n2):
     '''_sorter(n1,n2) -> int
     Sorting predicate for non-NS attributes.'''
 
-    i = cmp(n1.namespaceURI, n2.namespaceURI)
+    i = compareStrings(n1.namespaceURI, n2.namespaceURI)
     if i: return i
-    return cmp(n1.localName, n2.localName)
+    return compareStrings(n1.localName, n2.localName)
 
 def keyNamespaceLocalname(n):
     '''keyNamespaceLocalname(n) -> string
@@ -85,7 +93,7 @@ def _sorter_ns(n1,n2):
 
     if n1[0] == 'xmlns': return -1
     if n2[0] == 'xmlns': return 1
-    return cmp(n1[0], n2[0])
+    return compareStrings(n1[0], n2[0])
 
 def keyNSURI(n):
     "(an empty namespace URI is lexicographically least)."

@@ -85,6 +85,7 @@ class Serializer:
 #       assert F.canonical is not None, "Formula printed must be canonical"
         self.store = F.store
         self.sink = sink
+        self.base = self.sink.base
         self.defaultNamespace = None
         self.flags = flags
         self.sorting = sorting
@@ -95,6 +96,9 @@ class Serializer:
         self._occurringAs = [{}, {}, {}, {}]
         self._topology_returns = {}
         
+        # print('@@ serializer base', self.base)
+        # print('@@ serializer sink.+base', self.sink.base)
+
     def selectDefaultPrefix(self, printFunction):
 
         """ Symbol whose fragments have the most occurrences.
@@ -243,8 +247,6 @@ class Serializer:
                 list = list.rest
 
 
-        
-
     def dumpChronological(self):
         "Fast as possible. Only dumps data. No formulae or universals."
         context = self.context
@@ -302,7 +304,9 @@ class Serializer:
 
     def dumpBySubject(self, sorting=1):
         """ Dump one formula only by order of subject except
-            forSome's first for n3=a mode"""
+            forSome's first for n3=a mode
+            In the order of subjects, the document itself (<>) comes first.
+            """
         
         context = self.context
         uu = context.universals().copy()
@@ -329,7 +333,7 @@ class Serializer:
             else:
                 self._outputStatement(sink, [fixSet(x) for x in s.quad])
                     
-        if 0:  # Doesn't work as ther ei snow no list of bnodes
+        if 0:  # Doesn't work as there is now no list of bnodes
             rs = list(self.store.resources.values())
             if sorting: rs.sort(key=Term.sortKey)
             for r in rs :  # First the bare resource
@@ -574,14 +578,21 @@ class Serializer:
         """ Iterates over statements in formula, bunching them up into a set
         for each subject.
         """
-
+        def keySPO (st):
+            con, pred, subj, obj =  st.quad
+            if hasattr(subj, 'uri') and subj.uri == self.base:
+                s = "  " # this document comes first in order
+            else:
+                s = repr(subj)
+            return s + repr(pred) + repr(obj)
+            
         allStatements = context.statements[:]
         if equals:
             for x, y in list(context._redirections.items()):
                 if not x.generated() and x not in context.variables():
                     allStatements.append(StoredStatement(
                         (context, context.store.sameAs, x, y)))
-        allStatements.sort(key = StoredStatement.keyForSubjPredObj)
+        allStatements.sort(key = keySPO)
 #        context.statements.sort()
         # @@ necessary?
         self.dumpVariables(context, sink, sorting, pretty=1)

@@ -67,9 +67,9 @@ cvsRevision = "$Revision$"
        ############## Temp test setup
 # @@ this should be able to be set up in the launch.json file in vscode
 
-# for arg in ["--chatty=100", "--n3", "test/t1.n3"]:
+# for arg in "-n3 test/equiv-syntax.n3 -rdf".split(' '):
 #     sys.argv.append(arg)
-#  print('@@ sys.argv', len(sys.argv))
+# print('@@ sys.argv', len(sys.argv))
 
 #################################################  Command line
 

@@ -129,9 +129,9 @@ class ToRDF(RDFSink.RDFStructuredOutput):
             # zw = z.write
             self._xwr = XMLWriter(outFp.write, self)
         self._subj = None
-        self._base = base
+        self.base = base
         self._formula = None   # Where do we get this from? The outermost formula
-        if base == None: self._base = thisURI
+        if base == None: self.base = thisURI
         self._thisDoc = thisURI
         self._flags = flags
         self._nodeID = {}
@@ -149,7 +149,7 @@ class ToRDF(RDFSink.RDFStructuredOutput):
 
     def dummyClone(self):
         "retun a version of myself which will only count occurrences"
-        return ToRDF(None, self._thisDoc, base=self._base, flags=self._flags )
+        return ToRDF(None, self._thisDoc, base=self.base, flags=self._flags )
 
     def bind(self, prefix, namespace):
         if prefix in self.namespace_redirections:
@@ -200,9 +200,9 @@ z  - Allow relative URIs for namespaces
 
     def referenceTo(self, uri):
         "Conditional relative URI"
-        if "r" in self._flags or self._base == None:
+        if "r" in self._flags or self.base == None:
             return uri
-        return refTo(self._base, uri)
+        return refTo(self.base, uri)
 
     def flushStart(self):
         if not self._docOpen:
@@ -775,9 +775,9 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
             zw = outFp.write
             self._xwr = XMLWriter(zw, self)
         self._subj = None
-        self._base = base
+        self.base = base
         self._formula = None   # Where do we get this from? The outermost formula
-        if base == None: self._base = thisURI
+        if base == None: self.base = thisURI
         self._thisDoc = thisURI
         self._flags = flags
         self._nodeID = {}
@@ -790,7 +790,7 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
 
         def dummyClone(self):
             "retun a version of myself which will only count occurrences"
-            return tmToRDF(None, self._thisDoc, base=self._base, flags=self._flags )
+            return tmToRDF(None, self._thisDoc, base=self.base, flags=self._flags )
         
     def start(self):
         self._parts = [tm.NOTHING]
@@ -843,9 +843,9 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
 
     def referenceTo(self, uri):
         "Conditional relative URI"
-        if "r" in self._flags or self._base == None:
+        if "r" in self._flags or self.base == None:
             return uri
-        return refTo(self._base, uri)
+        return refTo(self.base, uri)
 
 
     def addNode(self, node, nameLess = 0):

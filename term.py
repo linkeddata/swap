@@ -25,6 +25,7 @@ Includes:
   # for yield
 
 import string, sys, types
+from .compare import compareStrings, compareNumbers
 
 from .set_importer import Set, ImmutableSet
 
@@ -209,16 +210,6 @@ def pickEnv(choice, *envs):
             return env
     return []  ## Not here.
 
-def compareStrings(self, other):
-    if self < other: return -1
-    if self > other: return 1
-    return 0    
-
-def compareNumbers(self, other):
-    if self < other: return -1
-    if self > other: return 1
-    return 0    
-
 # This class is the core one for the system.
 
 class Term(object):
@@ -277,7 +268,7 @@ class Term(object):
             This is not done yet
             """
         if self is other: return 0
-        diff = compareNumber(self.classOrder(), other.classOrder())
+        diff = compareNumbers(self.classOrder(), other.classOrder())
         if diff != 0: return diff
         return self.compareTerm(other)
     
@@ -509,7 +500,7 @@ class Fragment(LabelledNode):
         if other.uriref() == RDF_type_URI:
             return 1
         if self.resource is other.resource:
-            return compareString(self.fragid, other.fragid)
+            return compareStrings(self.fragid, other.fragid)
         return self.resource.compareTerm(other.resource)
    
     def uriref(self):

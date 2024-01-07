@@ -12,7 +12,8 @@ Options:
 --start=13      -s 13   Skip the first 12 tests
 --verbose       -v      Print what you are doing as you go
 --ignoreErrors  -i      Print error message but plough on though more tests if errors found
-                        (Summary error still raised when all tests ahve been tried)
+--crashes       -x      Stop if a test crashes cwm
+                        (Summary error still raised when all tests have been tried)
 --cwm=../cwm.py         Cwm command is ../cwm
 --help          -h      Print this message and exit
 
@@ -62,7 +63,7 @@ chatty = 0
 proofs = 0
 verbose = 0
 no_action = 0
-
+stopOnCrash = False
 
 # The base URI for this process - the Web equiv of cwd
 processBaseURI = uripath.base()
@@ -74,7 +75,7 @@ def localize(uri):
     return uripath.refTo("http://www.w3.org/2000/10/swap/test/retest.py", uri)
 
 def problem(str):
-    global ploughOn
+    global ploughOn, stopOnCrash
     global problems
     sys.stderr.write(str + "\n")
     problems.append(str)
@@ -113,7 +114,7 @@ def diff(case, ref=None, prog="diff -Bbwu"):
         a.write('\n')
         a.close()
     diffcmd = """%s %s ,temp/%s >,diffs/%s""" %(prog, ref, case, case)
-    if verbose: print("  ", diffcmd)
+    if verbose: print("  exit status: ", diffcmd)
     if no_action: result = 0
     else: result = system(diffcmd)
     if result < 0:
@@ -186,6 +187,7 @@ def main():
     cwm_command='../cwm.py'
     python_command='python3'
     global ploughOn # even if error
+    global stopOnCrash
     ploughOn = 0
     global verbose
     verbose = 0
@@ -196,7 +198,7 @@ def main():
         a.write('')
         a.close()
     try:
-        opts, testFiles = getopt.getopt(sys.argv[1:], "h?s:nNcipf:v",
+        opts, testFiles = getopt.getopt(sys.argv[1:], "h?s:nNcipf:vx",
             ["help", "start=", "testsFrom=", "no-action", "No-normal", "chatty",
                 "ignoreErrors", "proofs", "verbose","overwrite","cwm="])
     except getopt.GetoptError:
@@ -212,6 +214,8 @@ def main():
             verbose = 1
         if o in ("-i", "--ignoreErrors"):
             ploughOn = 1
+        if o in ("x", "crashes"):
+            stopOnCrash = True
         if o in ("-s", "--start"):
             start = int(a)
         if o in ("-f", "--testsFrom"):
