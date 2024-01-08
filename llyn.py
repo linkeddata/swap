@@ -595,9 +595,9 @@ class IndexedFormula(Formula):
             progress('I got here, possibles = ', possibles)
         fl.sort(key = StoredStatement.keyForSubjPredObj)
         fe = F.existentials()
-        #fe.sort(Term.compareAnyTerm)
+        #fe.sort(key = Term.sortKey)
         fu = F.universals ()
-        #fu.sort(Term.compareAnyTerm)
+        #fu.sort(key = Term.sortKey)
 
         for G in possibles:
         
@@ -725,11 +725,11 @@ class IndexedFormula(Formula):
         pairs = []
         for s in list:
             pairs.append((s[SUBJ], s[OBJ]))
-        pairs.sort(comparePair)
-        for key, str in pairs:
-            if not hasattr(str, "string"):
-                print(repr(str))
-            channel.write(str.string.encode('utf-8'))
+        pairs.sort(key = keyForPair)
+        for key, text in pairs:
+            # if not hasattr(text, "string"):
+                # print(repr(text))
+            channel.write(str(text))
 
 
     def debugString(self, already=[]):
@@ -850,6 +850,9 @@ def comparePair(self, other):
         x = self[i].compareAnyTerm(other[i])
         if x != 0:
             return x
+
+def keyForPair(pair):
+    return str(pair[0]) + '__' + str(pair[1])
 
 
 

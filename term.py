@@ -201,7 +201,7 @@ you can hash it (if you want to)
         try:
             return self._hashval
         except AttributeError:
-            self._hashval = hash(ImmutableSet(list(self.items())))
+            self._hashval = hash(frozenset(list(self.items())))
         return self._hashval
 
 def pickEnv(choice, *envs):
@@ -665,26 +665,22 @@ class CompoundTerm(Term):
     Examples: List, Formula"""
     pass
 
-class N3Set(ImmutableSet, CompoundTerm): #, 
+class N3Set(frozenset): # CompoundTerm 
     """There can only be one of every N3Set
 
     """
     res = {}
-    def __init__(self, stuff=[]):
-        """something"""
-        ImmutableSet.__init__(self, stuff)
+    # def __init__(self, stuff=[]):
+    #    """something"""
+    #    frozenset.__init__(self, stuff)
     
     def __new__(cls, stuff=[]):
-        new_set = ImmutableSet.__new__(cls, stuff)
-        new_set.__init__(stuff)
-        if new_set in cls.res:
-            return cls.res[new_set]
-        cls.res[new_set] = new_set
-        return new_set
+         return super().__new__(cls, stuff)
+    
 
 ##    def __setattr__(self, attr, value):
 ##        print "%s=%s" % (`attr`, `value`)
-##        ImmutableSet.__setattr__(self, attr, value)
+##        frozenset.__setattr__(self, attr, value)
         
     def uriref(self):
         raise NotImplementedError
@@ -1232,7 +1228,7 @@ def unify(self, other, bindings=Env(), otherBindings=Env(),
             yield (env11, envWithBinding)
         else:
             raise ValueError 
-    elif isinstance(self, (Set, ImmutableSet)):
+    elif isinstance(self, (Set, frozenset)):
         for x in unifySet(self, other, env1, env2, vars, existentials, n1Source=n1Source, n2Source=n2Source):
             yield x
     elif type(self) is tuple:
@@ -1420,10 +1416,10 @@ class Literal(Term):
         Hmm... encoding... assuming utf8? @@test this.
         Hmm... for a class of literals including this one,
         strictly speaking."""
-        x=hashlib.md5()
+        x = hashlib.md5()
         x.update(self.string.encode('utf-8'))
-        d=x.digest()
-        b16=binascii.hexlify(d)
+        d = x.digest()
+        b16 = d.hex()
         return "md5:" + b16
 
     def substitution(self, bindings, why=None, cannon=False):

@@ -186,7 +186,7 @@ class InferenceTask:
     def runBrilliant(self):
         """Perform task.
         Return number of  new facts.
-        Start again if new rule mayhave been generated.
+        Start again if new rule may have been generated.
         This should be much faster than even runSmart,
         despite being much simpler"""
         if self.repeat and self.targetContext is self.workingContext:
@@ -200,15 +200,12 @@ class InferenceTask:
         if "q" not in self.mode:
             self.gatherRules(self.ruleFormula)
 
-
         scheduler = self.scheduler
         if not canLoop:
             self.scheduler = None
 
         total = scheduler.run(int.__add__)
-
         self.scheduler = scheduler
-
         return total
         
 
@@ -390,7 +387,8 @@ class Rule:
         self.store = self.template.store
         self.statement = statement      #  original statement
         self.number = nextRule = nextRule+1
-        self.meta = self.conclusion.contains(pred=self.conclusion.store.implies) #generate rules?
+        # self.meta = self.conclusion.contains(pred=self.conclusion.store.implies) #generate rules?
+        # Suspect ^ not used.
 #       if task.repeat: self.already = []    # No neat to track dups if not 
 #       else: self.already = None
         self.already = []

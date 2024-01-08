@@ -27,7 +27,7 @@ A hack to import sets and frozensets, internally if possible
 
 try:
     Set = set
-    ImmutableSet = set
+    ImmutableSet = frozenset
     sorted = sorted
 
 except NameError:
