@@ -1421,7 +1421,7 @@ class Literal(Term):
         Hmm... for a class of literals including this one,
         strictly speaking."""
         x=hashlib.md5()
-        x.update(self.string)
+        x.update(self.string.encode('utf-8'))
         d=x.digest()
         b16=binascii.hexlify(d)
         return "md5:" + b16
