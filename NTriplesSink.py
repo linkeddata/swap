@@ -33,13 +33,15 @@ class FormulaSink:
                 # do URI-escaping to 7-bit ascii?  what's the spec say?
                 result = "<"+uri+">"
             else:
-                raise Error, "You can't give both a value and a uri"
+                raise Error("You can't give both a value and a uri")
         return result
 
     def insert(self, arg):
         for a in arg:
-            print a,
-        print "."
+            print(a,
+             end=" "
+             )
+        print(".")
 
 if __name__ == "__main__":
     import doctest, sys

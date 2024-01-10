@@ -55,7 +55,7 @@ else:
 class Problem(object):
     def __new__(cls, **keywords):
         self = object.__new__(cls)
-        for k, v in keywords.items():
+        for k, v in list(keywords.items()):
             setattr(self, k, v)
         return self
 
@@ -106,7 +106,7 @@ class BindingTree(object):
     __iter__ = choices
 
     def __repr__(self):
-        return u'%s(%s)' % (self.__class__.__name__, self._b)
+        return '%s(%s)' % (self.__class__.__name__, self._b)
 
     def __len__(self):
         return len(self._b)
@@ -124,7 +124,7 @@ class OrderedNodeSet(set):
     1
 """
     def first(self):
-        return iter(sorted(self)).next()
+        return next(iter(sorted(self)))
 
 
 class State(object):
@@ -150,18 +150,18 @@ class State(object):
     def _update(self):
         G1, G2 = self.problem.G1, self.problem.G2
         self.reverseMap = {}
-        for k, v in self.map.items():
+        for k, v in list(self.map.items()):
             self.reverseMap[v] = k
         self.t1_in = OrderedNodeSet()
         self.t1_out = OrderedNodeSet()
         self.t2_in = OrderedNodeSet()
         self.t2_out = OrderedNodeSet()
         
-        for node1, node2 in self.map.items():
-            self.t1_in.update(x for x in G1.predecessors(node1).keys() if x not in self.map)
-            self.t1_out.update(x for x in G1.followers(node1).keys() if x not in self.map)
-            self.t2_in.update(x for x in G2.predecessors(node2).keys() if x not in self.reverseMap)
-            self.t2_out.update(x for x in G2.followers(node2).keys() if x not in self.reverseMap)
+        for node1, node2 in list(self.map.items()):
+            self.t1_in.update(x for x in list(G1.predecessors(node1).keys()) if x not in self.map)
+            self.t1_out.update(x for x in list(G1.followers(node1).keys()) if x not in self.map)
+            self.t2_in.update(x for x in list(G2.predecessors(node2).keys()) if x not in self.reverseMap)
+            self.t2_out.update(x for x in list(G2.followers(node2).keys()) if x not in self.reverseMap)
 
         self.G1_not_taken = OrderedNodeSet(G1.nodes() - set(self.map))
         self.G2_not_taken = OrderedNodeSet(G2.nodes() - set(self.reverseMap))        
@@ -275,7 +275,7 @@ def F(s, n, m, extras):
     
     termin1, termout1, termin2, termout2, new1, new2 = 0,0,0,0,0,0
     
-    for obj, preds in G1.followers(n).items():
+    for obj, preds in list(G1.followers(n).items()):
         if obj in s.map:
             image = s.map[obj]
             e = G2.edge(m, image)
@@ -293,7 +293,7 @@ def F(s, n, m, extras):
             if obj not in s.t1_in and obj not in s.t1_out:
                 new1 += 1
 
-    for subj, preds in G1.predecessors(n).items():
+    for subj, preds in list(G1.predecessors(n).items()):
         if subj in s.map:
             image = s.map[subj]
             e = G2.edge(image, m)
@@ -312,7 +312,7 @@ def F(s, n, m, extras):
                 new1 += 1
 
 
-    for obj, preds in G2.followers(m).items():
+    for obj, preds in list(G2.followers(m).items()):
         progress("checking out %s's follower %s" % (m, obj))
         if obj in s.reverseMap:
             image = s.reverseMap[obj]
@@ -331,7 +331,7 @@ def F(s, n, m, extras):
             if obj not in s.t2_in and obj not in s.t2_out:
                 new2 += 1
 
-    for subj, preds in G2.predecessors(m).items():
+    for subj, preds in list(G2.predecessors(m).items()):
         if subj in s.reverseMap:
             image = s.reverseMap[subj]
             e = G1.edge(image, n)
@@ -405,7 +405,7 @@ def trueEasyMatches(self, s, n1, n2, newBindings=BindingTree(), boring=True):
     ## easy cases are easy
         if len(n1) == 1:
             progress('Size 1 --- easy')
-            return self(s, iter(n1).next(), iter(n2).next(), newBindings, False)
+            return self(s, next(iter(n1)), next(iter(n2)), newBindings, False)
     ## knock out everything we know
         for x1 in n1:
             if x1 in s.map and s.map[x1] not in n2:
@@ -451,7 +451,7 @@ def trueEasyMatches(self, s, n1, n2, newBindings=BindingTree(), boring=True):
             b = []
             s1 = list(s1)
             for k in orderings(list(s2)):
-                b.append(zip(s1, k))
+                b.append(list(zip(s1, k)))
             newBindings.int_or(b)
 
         progress('After that, newBindings=%s' % newBindings)
@@ -495,11 +495,11 @@ def representsSelf(x):
     return isLiteral(x) or isSymbol(x)
 
 def isLiteral(x):
-    return isinstance(x, (str, unicode)) and x[0:1] == '"'
+    return isinstance(x, str) and x[0:1] == '"'
 def isSymbol(x):
-    return isinstance(x, (str, unicode)) and x[0:1] == '<'
+    return isinstance(x, str) and x[0:1] == '<'
 def isExistential(x):
-    return isinstance(x, (str, unicode)) and x[0:1] == '_'
+    return isinstance(x, str) and x[0:1] == '_'
 def isUniversal(x):
     return False
 def isList(x):
@@ -516,13 +516,13 @@ def hardMatches(s, n1, n2, newBindings=BindingTree(), boring=True):
         matches = unifyFormulae(n1, n2)   ###@@@ bindings from higher up need to be taken into account
         if not matches:
             return False
-        newBindings.int_or([x.items() for x in matches])
+        newBindings.int_or([list(x.items()) for x in matches])
         return True
     return True
 
 
 ### stolen from cant.py
-import re, os, urllib
+import re, os, urllib.request, urllib.parse, urllib.error
 from sys import stderr
 
 name = "[A-Za-z][A-Za-z0-9]*" #http://www.w3.org/TR/rdf-testcases/#ntriples
@@ -599,7 +599,7 @@ those methods implemented as O(1) operations.
         if verbose: stderr.write("Loading data from %s\n" % name)
 
         uri = uripath.join(WD, name)
-        inStream = urllib.urlopen(uri)
+        inStream = urllib.request.urlopen(uri)
         for line in inStream:
             if line == "" : break           
 #           if verbose: stderr.write("%s\n" % line)
@@ -648,7 +648,7 @@ def main():
     pr = Problem(G1=g1,G2=g2)
     s = State(pr)
     for m in match(s):
-        print m
+        print(m)
 
 if __name__ == '__main__':
     import sys

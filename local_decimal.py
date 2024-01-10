@@ -7,8 +7,13 @@ magnitude is the log10 of the number we multiply it by to get an integer
 $Id$
 """
 
-from types import IntType, FloatType, LongType, StringTypes
+
 from math import log10
+
+def compareNumbers(self, other): # python3 has no cmp
+    if self < other: return -1
+    if self > other: return 1
+    return 0    
 
 class Decimal:
     """make a new Decimal
@@ -18,12 +23,14 @@ class Decimal:
     """
 
     _limit = 16
-    
+
     def normalize(self):
         """convert this Decimal into some sort of canonical form
 
-
         """
+        self.value = int(self.value)
+        self.magnitude = int(self.magnitude)
+
         if self.value == 0:
             self.magnitude = 0
             return
@@ -33,44 +40,44 @@ class Decimal:
 ##        while self.magnitude > 2 * self.__class__._limit:
 ##            self.value = self.value / 10
 ##            self.magnitude = self.magnitude - 1
-        
-        
-    
-    def __init__(self, other=0):
+
+
+
+    def __init__(self, other = 0):
         """How to get a new Decimal
 
-        What happened?
-        """
+        Argument can be string, int, long, or float, or existing Dedimal
+            """
         if isinstance(other, Decimal):
             self.value = other.value
             self.magnitude = other.magnitude
             return
-        elif isinstance(other, IntType):
-            self.value = long(other)
-            self.magnitude = 0
-            self.normalize()
-            return
-        elif isinstance(other, LongType):
+        elif isinstance(other, int):
             self.value = other
             self.magnitude = 0
             self.normalize()
             return
+        #elif isinstance(other, LongType):
+        #    self.value = other
+        #    self.magnitude = 0
+        #    self.normalize()
+        #    return
         elif hasattr(other,'__Decimal__') and callable(getattr(other, '__Decimal__')):
             a = other.__Decimal__()
             self.value = a.value
             self.magnitude = a.magnitude
             self.normalize()
             return
-        elif isinstance(other,FloatType):
-            other = `other`
+        elif isinstance(other,float):
+            other = repr(other)
         try:
             other[0]
         except TypeError:
-            other = `other`
+            other = repr(other)
         other = other + 'q'
         i = 0
-        value = long(0)
-        magnitude = long(0)
+        value = int(0)
+        magnitude = int(0)
         sign = 1
         newsign = 1
         base = 10
@@ -104,7 +111,7 @@ class Decimal:
         self.value = value*sign
         self.normalize()
 
-        
+
     def __abs__(self):
         """x.__abs__() <==> abs(x)
         """
@@ -138,7 +145,7 @@ class Decimal:
         while other.magnitude > self.magnitude:
             self.magnitude = self.magnitude+1
             self.value = self.value * 10
-        a = cmp(self.value, other.value)
+        a = compareNumbers(self.value, other.value)
         self.normalize()
         return a
     def __coerce__(self, other):
@@ -188,7 +195,7 @@ class Decimal:
         a.value = self.value // other.value
         a.normalize()
         return a
-        
+
     def __hash__(self):
         """x.__hash__() <==> hash(x)
         """
@@ -210,7 +217,7 @@ class Decimal:
         while power > 0:
             value = value // 10
             power = power - 1
-        return long(value * 10**(-power))
+        return int(value * 10**(-power))
     def __mod__(self, other):
         """x.__mod__(y) <==> x%y
         """
@@ -279,7 +286,7 @@ class Decimal:
 ##            c.normalize()
             a = self.__class__(pow(float(self),float(other),mod))
             return a
-        
+
     def __radd__(self, other):
         """x.__radd__(y) <==> y+x
         """
@@ -348,6 +355,7 @@ class Decimal:
         return self.__rdiv__(other)
 #    def __setattr__(self, other):
 #        pass
+    
     def __str__(self):
         """x.__str__() <==> str(x)
         """
@@ -369,8 +377,9 @@ class Decimal:
             if magnitude == 0 and magSign == 1:
                 output.append(".")
                 magSign = 0
-            digit = value.__mod__(10)
-            value = value // 10
+            # digit = value.__mod__(10)
+            digit = int(value % 10)
+            value = int(value) // 10
             output.append("0123456789"[digit])
             magnitude = magnitude-1
         while magnitude > 0:
@@ -396,7 +405,7 @@ class Decimal:
 def n_root(base, power):
     """Find the nth root of a Decimal
     """
-    print 'trying to compute ', base, ' ** 1/ ', power
+    print('trying to compute ', base, ' ** 1/ ', power)
     accuracy = Decimal(1)
     n = 10 #Decimal._limit
     while n > 0:
@@ -409,7 +418,7 @@ def n_root(base, power):
         oldguess = guess
         counter = counter + 1
         if counter == 100:
-            print guess
+            print(guess)
             counter = 0
         h = 1 - base * (guess ** power)
         guess = guess + guess * h / power
@@ -418,5 +427,5 @@ def n_root(base, power):
             break
 #    print guess
     answer = Decimal(1) / Decimal(guess)
-    print answer
+    print(answer)
     return answer

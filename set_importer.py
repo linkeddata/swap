@@ -3,34 +3,37 @@ A hack to import sets and frozensets, internally if possible
 
 """
 
-realcmp = cmp
-try:
-    my_sorted = sorted
-except NameError:
-    def my_sorted(iterable, cmp=None, key=None, reverse=False):
-        m = list(iterable)
-        if cmp is None and (key is not None or reverse is not None):
-           cmp = realcmp
-        if key is not None:
-            cmp2 = cmp
-            def cmp(x,y):
-                return cmp2(key(x), key(y))
-        if reverse is not None:
-            cmp3 = cmp
-            def cmp(x,y):
-                return cmp3(y,x)
-        m.sort(cmp)
-        return m
-
-sorted = my_sorted
+#realcmp = cmp
+#try:
+#    my_sorted = sorted
+#except NameError:
+#    def my_sorted(iterable, cmp=None, key=None, reverse=False):
+#        m = list(iterable)
+#        if cmp is None and (key is not None or reverse is not None):
+#           cmp = realcmp
+#        if key is not None:
+#            cmp2 = cmp
+#            def cmp(x,y):
+#                return cmp2(key(x), key(y))
+#        if reverse is not None:
+#            cmp3 = cmp
+#            def cmp(x,y):
+#                return cmp3(y,x)
+#        m.sort(cmp)
+#        return m
+#
+# sorted = my_sorted
 
 
 try:
     Set = set
+    ImmutableSet = frozenset
+    sorted = sorted
+
 except NameError:
     from sets import Set
 
-
+suppresssed = '''
 try:
     ImmutableSet = frozenset
 except NameError:
@@ -41,7 +44,7 @@ except NameError:
 
         def union(self, other):
             ret = self._data.copy()
-            if isinstance(other, BaseSet): 
+            if isinstance(other, BaseSet):
                 ret.update(other._data)
                 return self.__class__(ret)
 
@@ -73,7 +76,7 @@ except NameError:
                         ret[transform()] = value
             return self.__class__(ret)
 
-        
+
         def symmetric_difference(self, other):
             """Return the symmetric difference of two sets as a new set.
 
@@ -86,9 +89,9 @@ except NameError:
                 otherdata = other._data
             except AttributeError:
                 otherdata = Set(other)._data
-            for elt in ifilterfalse(otherdata.has_key, selfdata):
+            for elt in filterfalse(otherdata.has_key, selfdata):
                 data[elt] = value
-            for elt in ifilterfalse(selfdata.has_key, otherdata):
+            for elt in filterfalse(selfdata.has_key, otherdata):
                 data[elt] = value
             return self.__class__(data)
 
@@ -97,14 +100,15 @@ except NameError:
 
             (I.e. all elements that are in this set and not in the other.)
             """
-            
+
             data = {}
             try:
                 otherdata = other._data
             except AttributeError:
                 otherdata = Set(other)._data
             value = True
-            for elt in ifilterfalse(otherdata.has_key, self):
+            for elt in filterfalse(otherdata.has_key, self):
                 data[elt] = value
             return self.__class__(data)
 
+            '''

@@ -10,7 +10,7 @@ __version__ = "$Revision$"
 
 from html import *
 import LX
-import cStringIO
+import io
 import re
 
 class Entry:
@@ -56,7 +56,7 @@ class Serializer:
         for t in kb:
             assert t.function == LX.fol.RDF
             for term in t.args:
-                if not entry.has_key(term):
+                if term not in entry:
                     e = Entry(term)
                     e.label = term.getNameInScope(scope)
                     # interpretations?
@@ -68,7 +68,7 @@ class Serializer:
             entry[t.args[1]].asPredicate.append(t)
             entry[t.args[2]].asObject.append(t)
 
-        entries = entry.values()
+        entries = list(entry.values())
         entries.sort(lambda a, b: cmp(a.label, b.label))
 
         p1 = p("Terms used: ")

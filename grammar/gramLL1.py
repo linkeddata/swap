@@ -30,7 +30,7 @@ def main(argv):
         import simplejson #http://cheeseshop.python.org/pypi/simplejson
         import sys
         start = it['rules'][0][0]
-        print "SYNTAX_%s = " % start,
+        print("SYNTAX_%s = " % start, end=' ')
         simplejson.dump(it, sys.stdout)
 
 
@@ -49,9 +49,9 @@ def asGrammar(f, lang):
         seq = f.the(subj=lhs, pred=EBNF.seq)
 
         if alts is None and seq is None:
-            raise ValueError, "no alt nor seq for %s" % lhs
+            raise ValueError("no alt nor seq for %s" % lhs)
         elif alts and seq:
-            raise ValueError, "both alt and seq for %s" % lhs
+            raise ValueError("both alt and seq for %s" % lhs)
         elif alts:
             for alt in alts:
                 seq = f.the(subj=alt, pred=EBNF.seq)
@@ -87,11 +87,11 @@ def tokens(f, lang):
 
 def pattern(f, s):
     if isinstance(s, Literal):
-        return reesc(unicode(s))
+        return reesc(str(s))
 
     pat = f.the(subj=s, pred=REGEX.matches)
     if pat:
-        return '(?:%s)' % unicode(pat)
+        return '(?:%s)' % str(pat)
 
     parts = f.the(subj=s, pred=REGEX.seq)
     if parts:
@@ -111,7 +111,7 @@ def pattern(f, s):
     part = f.the(subj=s, pred=REGEX.opt)
     if part:
         return '(?:%s?)' % pattern(f, part)
-    raise ValueError, s
+    raise ValueError(s)
     
 def reesc(txt):
     r"""turn a string into a regex string constant for that string
@@ -141,7 +141,7 @@ def asSymbol(f, x):
     And we assume no non-terminal fragids start with '_'.
     """
     if isinstance(x, Literal):
-        return tokid(unicode(x)) #hmm...
+        return tokid(str(x)) #hmm...
     elif x is EBNF.empty or f.the(subj=x, pred=EBNF.seq) == RDF.nil:
         return 'EMPTY'
     elif x == EBNF.eof:
@@ -163,60 +163,60 @@ def asSymbol(f, x):
             y = f.the(subj=x, pred=EBNF.seq)
             if y: return '_seq_%d' % abs(id(x))
 
-            raise ValueError, "umm...@@"
+            raise ValueError("umm...@@")
         else:
             return x.fragid
     elif f.each(pred=EBNF.terminal, obj=x):
         return 'TOK_%s' % x.fragid
     else:
-        raise ValueError, x
+        raise ValueError(x)
 
 def toYacc(it):
-    print """
+    print("""
 %{
 int yylex (void);
 void yyerror (char const *);
 %}
-"""
+""")
     
     tokens = {}
     for pat, tok, dummy in it['tokens']:
         tokens[tok] = 1
         if tok.startswith("TOK"):
-            print "%%token %s" % tok
+            print("%%token %s" % tok)
 
-    print "%%"
+    print("%%")
     
     for rule in it['rules']:
         lhs = rule[0]
         rhs = rule[1:]
-        print "%s: " % lhs,
+        print("%s: " % lhs, end=' ')
         for sym in rhs:
-            if tokens.has_key(sym):
+            if sym in tokens:
                 if sym.startswith("TOK"):
-                    print sym,
+                    print(sym, end=' ')
                 else:
-                    print '"%s"' % sym,
+                    print('"%s"' % sym, end=' ')
             else:
-                print sym,
-        print ";"
-    print "%%"
+                print(sym, end=' ')
+        print(";")
+    print("%%")
 
 
 def toPly(it):
     t2r = dict([(tokid(tok), pat) for pat, tok, func in it['tokens']])
     t2t = dict([(tok, tokid(tok)) for pat, tok, func in it['tokens']])
-    print "tokens = ", `tuple(t2r.keys())`
+    print("tokens = ", repr(tuple(t2r.keys())))
 
-    print "# Tokens "
+    print("# Tokens ")
 
-    for t, pat in t2r.iteritems():
-        print "t_%s = %s" % (t, `pat`)
+    for t, pat in t2r.items():
+        print("t_%s = %s" % (t, repr(pat)))
 
-    print
-    print "import lex"
-    print "lex.lex()"
-    print
+    print()
+    print("import lex")
+    print("lex.lex()")
+    print()
 
     # collect all the rules about one symbol...
     rules = {}
@@ -229,33 +229,33 @@ def toPly(it):
 
     # find all the non-terminals; make sure the start symbol is 1st
     start = it['rules'][0][0]
-    nts = rules.keys()
+    nts = list(rules.keys())
     del nts[nts.index(start)]
     nts.insert(0, start)
     
     for lhs in nts:
         rhss = rules[lhs]
-        print "def p_%s(t):" % lhs
+        print("def p_%s(t):" % lhs)
         for rhs in rhss:
             rhs = ' '.join([t2t.get(s, s) for s in rhs])
             if lhs:
-                print '    """%s : %s' % (lhs, rhs)
+                print('    """%s : %s' % (lhs, rhs))
                 lhs = None
             else:
-                print '          | %s' % rhs
-        print '    """'
-        print "    pass"
-        print
+                print('          | %s' % rhs)
+        print('    """')
+        print("    pass")
+        print()
         
-    print
-    print "import yacc"
-    print "yacc.yacc()"
-    print
-    print """
+    print()
+    print("import yacc")
+    print("yacc.yacc()")
+    print()
+    print("""
 if __name__ == '__main__':
     import sys
     yacc.parse(file(sys.argv[1]).read())
-"""
+""")
     
     
 def tokid(s):

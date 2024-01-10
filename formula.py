@@ -1,4 +1,4 @@
-from __future__ import generators
+
 #! /usr/bin/python
 """
 
@@ -24,27 +24,28 @@ and the redfoot/rdflib interface, a python RDF API:
 __version__ = '$Id$'[1:-1]
 
 import types
-import StringIO
+import io
 import sys # for outputstrings. shouldn't be here - DWC
+from .compare import compareStrings
 
-from set_importer import Set, ImmutableSet, sorted
 
-import notation3    # N3 parsers and generators, and RDF generator
+from .set_importer import Set, ImmutableSet, sorted
 
-import diag  # problems importing the tracking flag, must be explicit it seems diag.tracking
-from diag import progress, verbosity, tracking
-from term import matchSet, \
+
+from . import diag  # problems importing the tracking flag, must be explicit it seems diag.tracking
+from .diag import progress, verbosity, tracking
+from .term import matchSet, \
     AnonymousNode , AnonymousExistential, AnonymousUniversal, \
     Term, CompoundTerm, List, \
-    unifySequence, unify
+    unifySequence, unify, compareStrings, compareNumbers
 
-from RDFSink import Logic_NS
-from RDFSink import CONTEXT, PRED, SUBJ, OBJ
-from RDFSink import FORMULA, SYMBOL
+from .RDFSink import Logic_NS
+from .RDFSink import CONTEXT, PRED, SUBJ, OBJ
+from .RDFSink import FORMULA, SYMBOL
 
 
 
-from why import Because, isTopLevel
+from .why import Because, isTopLevel
 
 
 ###################################### Forumula
@@ -92,7 +93,7 @@ class Formula(AnonymousNode, CompoundTerm):
             return "{}"
         if len(self.statements) == 1:
             st = self.statements[0]
-            return "{"+`st[SUBJ]`+" "+`st[PRED]`+" "+`st[OBJ]`+"}"
+            return "{"+repr(st[SUBJ])+" "+repr(st[PRED])+" "+repr(st[OBJ])+"}"
 
         s = Term.__repr__(self)
         return "{%i}" % len(self.statements)
@@ -104,7 +105,7 @@ class Formula(AnonymousNode, CompoundTerm):
         "Assume is also a Formula - see function compareTerm below"
         for f in self, other:
             if f.canonical is not f:
-                progress("@@@@@ Comparing formula NOT canonical", `f`)
+                progress("@@@@@ Comparing formula NOT canonical", repr(f))
         s = self.statements
         o = other.statements
         ls = len(s)
@@ -129,13 +130,13 @@ class Formula(AnonymousNode, CompoundTerm):
         s.sort() # forumulae are all the same
         o.sort()
         for i in range(ls):
-            diff = cmp(s[i],o[i])
+            diff = s[i].compareTerm(o[i])
             if diff != 0: return diff
         return 0
-        import why
+        from . import why
         raise RuntimeError("%s\n%s" % (dict(why.proofsOf), self.debugString()))
         raise RuntimeError("Identical formulae not interned! Length %i: %s\n\t%s\n vs\t%s" % (
-                    ls, `s`, self.debugString(), other.debugString()))
+                    ls, repr(s), self.debugString(), other.debugString()))
 
 
     def existentials(self):
@@ -355,11 +356,11 @@ For future reference, use newUniversal
         store = self.store
         if self in bindings:
             return bindings[self]
-        oc = self.occurringIn(bindings.keys())
+        oc = self.occurringIn(list(bindings.keys()))
         if oc == Set(): return self # phew!
 
         y = store.newFormula()
-        if verbosity() > 90: progress("substitution: formula"+`self`+" becomes new "+`y`,
+        if verbosity() > 90: progress("substitution: formula"+repr(self)+" becomes new "+repr(y),
                                     " because of ", oc)
         y.loadFormulaWithSubstitution(self, bindings, why=why)
         if keepOpen:
@@ -417,9 +418,9 @@ For future reference, use newUniversal
                                   why=why)
                 realStatementList.append((subj, pred, obj))
             except AssertionError:
-                print 'subj=%s' % subj.debugString()
-                print 'oldSubj=%s' % (s[SUBJ].debugString(),)
-                print 'subj.canonical=%s' % subj.canonical.debugString()
+                print('subj=%s' % subj.debugString())
+                print('oldSubj=%s' % (s[SUBJ].debugString(),))
+                print('subj.canonical=%s' % subj.canonical.debugString())
                 raise
         if diag.chatty_flag > 80:
             def thing2string(x):
@@ -491,9 +492,9 @@ For future reference, use newUniversal
         n = {}
         F1 = self.newFormula()
         F1.loadFormulaWithSubstitution(self, m2, why=Because("Vars in subexpressions must be renamed"))
-        for v in sorted(list(F1.existentials()), Term.compareAnyTerm):
+        for v in sorted(list(F1.existentials()), key = Term.sortKey):
             m[v] = F1.newBlankNode()
-        for v in sorted(list(F1.universals()), Term.compareAnyTerm):
+        for v in sorted(list(F1.universals()), key = Term.sortKey):
             n[v] = F1.newUniversal(v)
         e = F1.existentials()
         u = F1.universals()
@@ -576,7 +577,7 @@ For future reference, use newUniversal
         """
 
         if diag.chatty_flag > 99: progress("n3EntailedBy:  %s entailed by %s ?" %
-            (`pattern`, `kb`))
+            (repr(pattern), repr(kb)))
         if diag.chatty_flag > 139: progress("Pattern is %s\n\nKB is %s" %
             (pattern.debugString(), kb.debugString()))
         assert isinstance(kb, Formula), kb 
@@ -585,7 +586,7 @@ For future reference, use newUniversal
                         vars | pattern.existentials(),
                         # | pattern.universals(),
                         bindings)
-        if diag.chatty_flag > 99: progress("n3EntailedBy: match result: ", `nbs`)
+        if diag.chatty_flag > 99: progress("n3EntailedBy: match result: ", repr(nbs))
         if nbs == []: return []
         res = []
         for nb, rea in nbs:
@@ -599,7 +600,7 @@ For future reference, use newUniversal
             pu = Set([ nb.get(v,v) for v in pattern.universals()])
             if diag.chatty_flag > 99: progress("\tpu=%s; ku=%s" %(pu,ku))
             if not pu.issubset(ku): return [] # KB stronger -  more u's
-            if diag.chatty_flag > 99: progress("n3EntailwsBy: success with ", `nb`)
+            if diag.chatty_flag > 99: progress("n3EntailwsBy: success with ", repr(nb))
             res.append((nb, None))    # That works
         return res
             
@@ -624,7 +625,7 @@ For future reference, use newUniversal
         why     may be a reason for use when a proof will be required.
         """
         if self.canonical != None:
-            raise RuntimeError("Attempt to add statement to canonical formula "+`self`)
+            raise RuntimeError("Attempt to add statement to canonical formula "+repr(self))
 
         self.store.size += 1
 
@@ -640,7 +641,7 @@ For future reference, use newUniversal
         
         This implementation is alas slow, as removal of items from tha hash is slow.
         """
-        assert self.canonical == None, "Cannot remove statement from canonical "+`self`
+        assert self.canonical == None, "Cannot remove statement from canonical "+repr(self)
         self.store.size = self.store.size-1
         self.statements.remove(s)
         return
@@ -662,7 +663,7 @@ For future reference, use newUniversal
         store = F.store
         if F.canonical != None:
             if verbosity() > 70:
-                progress("Canonicalize -- @@ already canonical:"+`F`)
+                progress("Canonicalize -- @@ already canonical:"+repr(F))
             return F.canonical
         # @@@@@@@@ no canonicalization @@ warning
         F.canonical = F
@@ -671,7 +672,7 @@ For future reference, use newUniversal
 
     def n3String(self, base=None, flags=""):
         "Dump the formula to an absolute string in N3"
-        buffer=StringIO.StringIO()
+        buffer=io.StringIO()
         _outSink = notation3.ToN3(buffer.write,
                                       quiet=1, base=base, flags=flags)
         self.store.dumpNested(self, _outSink)
@@ -679,7 +680,7 @@ For future reference, use newUniversal
 
     def ntString(self, base=None, flags="bravestpun"):
         "Dump the formula to an absolute string in N3"
-        buffer=StringIO.StringIO()
+        buffer=io.StringIO()
         _outSink = notation3.ToN3(buffer.write,
                                       quiet=1, base=base, flags=flags)
         self.store.dumpBySubject(self, _outSink)
@@ -688,8 +689,8 @@ For future reference, use newUniversal
 
     def rdfString(self, base=None, flags=""):
         "Dump the formula to an absolute string in RDF/XML"
-        buffer=StringIO.StringIO()
-        import toXML
+        buffer=io.StringIO()
+        from . import toXML
         _outURI = 'http://example.com/'
         _outSink = toXML.ToRDF(buffer, _outURI, base=base, flags=flags)
         self.store.dumpNested(self, _outSink)
@@ -703,6 +704,9 @@ For future reference, use newUniversal
         strings output.
 
         @@ what is this doing here??
+        This is a feature for writing reports. It allows rules to crate statements that
+        say that "foo bar" is an output String then use --strings on the command line to generate the
+        report.
         """
         if channel == None:
             channel = sys.stdout
@@ -712,7 +716,7 @@ For future reference, use newUniversal
         pairs = []
         for s in list:
             pairs.append((s[SUBJ], s[OBJ]))
-        pairs.sort(comparePair)
+        pairs.sort()
         for key, str in pairs:
             channel.write(str.string.encode('utf-8'))
 
@@ -805,7 +809,7 @@ class StoredStatement:
         return self.quad[i]
 
     def __repr__(self):
-        return "{"+`self[SUBJ]`+" "+`self[PRED]`+" "+`self[OBJ]`+"}"
+        return "{"+repr(self[SUBJ])+" "+repr(self[PRED])+" "+repr(self[OBJ])+"}"
 
 #   The order of statements is only for canonical output
 #   We cannot override __cmp__ or the object becomes unhashable,
@@ -816,7 +820,7 @@ class StoredStatement:
         Avoid loops by spotting reference to containing formula"""
         if self is other: return 0
         if not isinstance(other, StoredStatement):
-            return cmp(self.__class__, other.__class__)
+            return compareStrings(self.__class__, other.__class__)
         sc = self.quad[CONTEXT]
         oc = other.quad[CONTEXT]
         for p in [SUBJ, PRED, OBJ]: # Note NOT internal order
@@ -850,7 +854,14 @@ class StoredStatement:
             if s is not o:
                 return s.compareAnyTerm(o)
         return 0
+    
+    # Python3 requires we use keyfunctions instead of CMP
 
+    def keyForPredObj(self):
+        return [self.quad[PRED].sortKey(), self.quad[OBJ].sortKey()]
+    
+    def keyForSubjPredObj(self):
+        return [self.quad[SUBJ].sortKey(), self.quad[PRED].sortKey(), self.quad[OBJ].sortKey()]
 
     def context(self):
         """Return the context of the statement"""
@@ -880,7 +891,7 @@ class StoredStatement:
     def occurringIn(self, vars):
         "Which variables in the list occur in this?"
         set = Set()
-        if verbosity() > 98: progress("----occuringIn: ", `self`)
+        if verbosity() > 98: progress("----occuringIn: ", repr(self))
         for p in PRED, SUBJ, OBJ:
             y = self[p]
             if y is self:
@@ -950,6 +961,8 @@ class StoredStatement:
         return f.close()  # probably slow - much slower than statement subclass of formula
 
 
+
+from . import notation3    # N3 parsers and generators, and RDF generator
 
 #ends
 

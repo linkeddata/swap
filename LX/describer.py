@@ -19,7 +19,7 @@ class ListDescriber:
 
         # for now, let's be strict about it
         if object.__class__ is not [].__class__:
-            raise DescriptionFailed, 'not strictly a list'
+            raise DescriptionFailed('not strictly a list')
 
         # here' a more general approach
         try:
@@ -27,14 +27,13 @@ class ListDescriber:
             first = object[0]
             rest = object[1:]
         except AttributeError:
-            raise DescriptionFailed, 'not a list -- has no __len__'
+            raise DescriptionFailed('not a list -- has no __len__')
         except TypeError:
-            raise DescriptionFailed, 'not a list -- has no __getitem__'
+            raise DescriptionFailed('not a list -- has no __getitem__')
         except IndexError:
             if ladder.has("term"):
-                raise RuntimeError, "FLAG GORE" + str(ladder.__dict__)
-                raise (DescriptionFailed,
-                       'Cannot describe empty list with a given term')
+                raise RuntimeError("FLAG GORE" + str(ladder.__dict__))
+                raise DescriptionFailed
                 # ... unless we use daml:equivalentTo, or some such
             else:
                 return LX.rdfns.nil
@@ -62,34 +61,34 @@ class CombinedDescriber:
             ladder = ladder.set("depth", ladder.depth+1)
             ladder = ladder.setIfMissing("tracePrefix", "")
             ladder = ladder.set("tracePrefix", ladder.tracePrefix+"|  ")
-            print ladder.tracePrefix, "/", "describe a",  type(object), object.__class__
-            print ladder.tracePrefix, "value:",  `object`[0:80]
+            print(ladder.tracePrefix, "/", "describe a",  type(object), object.__class__)
+            print(ladder.tracePrefix, "value:",  repr(object)[0:80])
         for describer in self.describers:
             dname = describer.__class__.__name__
             try:
                 if ladder.has("trace"):
-                    print ladder.tracePrefix, dname, "trying..."
+                    print(ladder.tracePrefix, dname, "trying...")
                 result = describer.describe(object, ladder)
                 if result is not None:
                     if ladder.has("trace"):
-                        print ladder.tracePrefix, "\\", dname, "worked!"
+                        print(ladder.tracePrefix, "\\", dname, "worked!")
                     return result
                 else:
                     if ladder.has("trace"):
-                        print ladder.tracePrefix, dname, "failed returning None"
+                        print(ladder.tracePrefix, dname, "failed returning None")
                     # return result
-            except DescriptionFailed, msg:
+            except DescriptionFailed as msg:
                 if ladder.has("trace"):
-                    print ladder.tracePrefix, dname, "failed", msg
+                    print(ladder.tracePrefix, dname, "failed", msg)
                 continue
             if ladder.has("trace"):
-                print ladder.tracePrefix, dname, "did something odd!"
+                print(ladder.tracePrefix, dname, "did something odd!")
         if ladder.has("trace"):
-            print ladder.tracePrefix, "*** All failed, punt back up stack"
+            print(ladder.tracePrefix, "*** All failed, punt back up stack")
             msg = "All available describers failed"
         else:
             msg = "Try turning on tracing"
-        raise DescriptionFailed, msg
+        raise DescriptionFailed(msg)
 
 
 def _test():

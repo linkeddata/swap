@@ -79,7 +79,7 @@ def t_NUMERAL(t):
     try:
         t.value = int(t.value)
     except ValueError:
-        print "Integer value too large", t.value
+        print("Integer value too large", t.value)
         t.value = 0
     return t
 
@@ -96,7 +96,7 @@ def t_newline(t):
     t.lineno += t.value.count("\n")
     
 def t_error(t):
-    print "Illegal character '%s'" % t.value[0]
+    print("Illegal character '%s'" % t.value[0])
     t.skip(1)
     
 # Build the lexer
@@ -251,13 +251,13 @@ def p_term_simple2(t):
     try:
         (pre, post) = t[1].split(":", 1)
     except ValueError:
-        raise RuntimeError, "Can't find the : in %s\n" % t[1]
+        raise RuntimeError("Can't find the : in %s\n" % t[1])
     uri = prefixes[pre]+post
     t[0] = LX.logic.ConstantForURI(uri)
     
 def p_term_numeral(t):
     '''term : NUMERAL'''
-    if constants.has_key(t[1]):
+    if t[1] in constants:
         t[0] = constants[y[1]]
     else:
         tt = LX.logic.Constant(str(t[1]))
@@ -279,7 +279,7 @@ def p_term_var(t):
         if t[1] == frame.name:
             t[0] = frame.variable
             return
-    if variables.has_key(t[1]):
+    if t[1] in variables:
         t[0] = variables[t[1]]
     else:
         tt = LX.fol.UniVar(t[1])
@@ -293,9 +293,9 @@ def p_term_compound(t):
     #   for now just read it in as FOL.
     args = [t[1]] + t[3]
     if len(args) == 3:
-        t[0] = apply(LX.fol.RDF, (args[1], args[0], args[2]))
+        t[0] = LX.fol.RDF(*(args[1], args[0], args[2]))
     else:
-        t[0] = apply(holds[len(args)], args)
+        t[0] = holds[len(args)](*args)
 
 def p_termlist_singleton(t):
     '''termlist : term'''
@@ -335,7 +335,7 @@ def p_formula_2(t):
           "or": LX.fol.OR,
           "implies": LX.fol.IMPLIES,
           "iff": LX.fol.MEANS}[t[2]]
-    t[0] = apply(f, (t[1], t[3]))
+    t[0] = f(*(t[1], t[3]))
 
 def p_formula_3(t):
      'formula : NOT formula'
@@ -359,7 +359,7 @@ def p_quantification(t):
     for var in varlist:
         frame = Frame()
         frame.name = var
-        frame.variable = apply(varclass, (var,))
+        frame.variable = varclass(*(var,))
         frame.quantifier = quantifier
         varStack.insert(0, frame)
     #print "varStack built up to", varStack
@@ -370,7 +370,7 @@ def p_formula_4(t):
      while 1:
          frame = varStack.pop(0)
          if frame == frameSep: break
-         f = apply(frame.quantifier, [frame.variable, f])
+         f = frame.quantifier(*[frame.variable, f])
          #print "f built up to ", f
      #print "varStack chopped to", varStack, "@@@ forgot to quantify"
      t[0] = f
@@ -380,7 +380,7 @@ def p_formula_5(t):
      t[0] = t[2]
     
 def p_error(t):
-    print "Syntax error at '%s' on line %s" % (t.value, t.lineno)
+    print("Syntax error at '%s' on line %s" % (t.value, t.lineno))
 
 import ply.yacc
 ply.yacc.yacc(tabmodule="lx_language_lbase_tab")
@@ -413,7 +413,7 @@ def parse(s, to_kb):
     kb = to_kb
     ply.yacc.parse(s)
 
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 class Parser:
 
@@ -421,7 +421,7 @@ class Parser:
         self.kb = sink
 
     def load(self, inputURI):
-        stream = urllib.urlopen(inputURI)
+        stream = urllib.request.urlopen(inputURI)
         s = stream.read()
         global kb
         kb = self.kb

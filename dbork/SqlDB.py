@@ -22,8 +22,8 @@ import sys
 import re
 import imp
 import MySQLdb
-import TableRenderer
-from TableRenderer import TableRenderer
+from . import TableRenderer
+from .TableRenderer import TableRenderer
 from diag import progress, progressIndent, verbosity, tracking
 from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
 
@@ -49,11 +49,11 @@ def NTriplesAtom(s, rowBindings, interner):
     else:
         try:
             subj = rowBindings[s.symbol()]
-        except TypeError, e:
+        except TypeError as e:
             subj = '"'+str(rowBindings[s.symbol()])+'"'
-        except KeyError, e:
-            print s.toString()
-            print s._literal()
+        except KeyError as e:
+            print(s.toString())
+            print(s._literal())
             subj = '"'+"KeyError:"+str(e)+" "+s.symbol()+'"'
     return subj
 
@@ -157,36 +157,36 @@ class ResultSet:
             try:
                 index = self.varIndex[q]
                 symbol = self.fragments[q]
-            except KeyError, e:
+            except KeyError as e:
                 index = self.varIndex[q] = len(self.indexVar)
                 self.indexVar.append(q)
                 symbol = self.ensureUniqueSymbol(symbol, q)
             return (VariableQueryPiece(symbol, index, 1)) # uri1#foo and uri2#foo may collide
-        except ValueError, e:
+        except ValueError as e:
             try:
                 variables.index(q)
                 try:
                     index = self.varIndex[q]
                     symbol = self.fragments[q]
-                except KeyError, e:
+                except KeyError as e:
                     index = self.varIndex[q] = len(self.indexVar)
                     self.indexVar.append(q)
                     symbol = self.ensureUniqueSymbol(symbol, q)
                 return (VariableQueryPiece(symbol, index, 0))
-            except ValueError, e:
+            except ValueError as e:
                 try:
                     return (LiteralQueryPiece(q.string))
-                except AttributeError, e:
+                except AttributeError as e:
                     try:
                         return (UriQueryPiece(q.uriref()))
-                    except Exception, e:
-                        raise RuntimeError, "what's a \""+q+"\"?"
+                    except Exception as e:
+                        raise RuntimeError("what's a \""+q+"\"?")
         
     def ensureUniqueSymbol(self, symbol, q):
         i = 0
         base = symbol
-        while self.symbols.has_key(symbol):
-            symbol = base + `i`
+        while symbol in self.symbols:
+            symbol = base + repr(i)
             i = i + 1
         # This is always called for new symbols so no need to check the
         # existent fragment to symbol mapping.
@@ -221,7 +221,7 @@ class ResultSet:
                     symbol = m.group("symbol")
                     try:
                         index = self.varIndex[symbol]
-                    except KeyError, e:
+                    except KeyError as e:
                         index = self.varIndex[symbol] = len(self.indexVar)
                         self.indexVar.append(symbol)
                     sentStruc.append(VariableQueryPiece(symbol, index, 0))
@@ -234,7 +234,7 @@ class ResultSet:
                         if (m):
                             sentStruc.append(LiteralQueryPiece(m.group("literal")))
                         else:
-                            raise RuntimeError, "what's a \""+word+"\"?"
+                            raise RuntimeError("what's a \""+word+"\"?")
         return SetQueryPiece(set)
     def getVarIndex(self, symbol):
         return self.varIndex[symbol]
@@ -280,10 +280,10 @@ class SqlDBAlgae(RdfDBAlgae):
             tableDescModule = imp.load_module(tableDescModuleName, fp, path, stuff)
             if (fp): fp.close
             self.structure = tableDescModule._AllTables
-        except ImportError, e:
-            print tableDescModuleName, " not found\n"
+        except ImportError as e:
+            print(tableDescModuleName, " not found\n")
             self.structure = None
-        except TypeError, e:
+        except TypeError as e:
             self.structure = None
 
         self.baseUri = baseURI
@@ -403,7 +403,7 @@ class SqlDBAlgae(RdfDBAlgae):
                     #    uri = uri[:-5]
                     sAlias = self._bindTableToConstant(sTable, s)
                 else:
-                    raise RuntimeError, "not implemented"
+                    raise RuntimeError("not implemented")
             else:
                 sAlias = self._bindTableToVariable(sTable, s)
 
@@ -425,7 +425,7 @@ class SqlDBAlgae(RdfDBAlgae):
                         firstAlias, firstField = scalarReference
                         self._addWhere(sAlias+"."+field+"="+firstAlias+"."+firstField, term)
                         self._addReaches(sAlias, firstAlias, term)
-                    except KeyError, e:
+                    except KeyError as e:
                         col = self._addSelect(sAlias+"."+field, o.symbol()+"_"+field, "\n         ")
                         self.scalarBindings.append([o, [col]])
                         self.scalarReferences[o.symbol()] = [sAlias, field]
@@ -435,7 +435,7 @@ class SqlDBAlgae(RdfDBAlgae):
         try:
             pk.isdigit() # Lord, there's got to be a better way. @@@
             pk = [pk]
-        except AttributeError, e:
+        except AttributeError as e:
             pk = pk
         cols = []
         fieldz = []
@@ -455,8 +455,8 @@ class SqlDBAlgae(RdfDBAlgae):
         try:
             ret = self.fieldBindings[name]
             if (self.duplicateFieldsInQuery):
-                raise KeyError, "force duplicate fields"
-        except KeyError, e:
+                raise KeyError("force duplicate fields")
+        except KeyError as e:
             self.selects.append(name)
             self.labels.append(label)
             self.selectPunct.append(punct)
@@ -466,14 +466,14 @@ class SqlDBAlgae(RdfDBAlgae):
     def _bindTableToVariable (self, table, qp):
         try:
             self.symbolBindings[qp.symbol()]
-        except KeyError, e:
+        except KeyError as e:
             self.symbolBindings[qp.symbol()] = {}
         try:
             binding = self.symbolBindings[qp.symbol()][table]
-        except KeyError, e:
+        except KeyError as e:
             try:
                 maxForTable = self.tableBindings[table]
-            except KeyError, e:
+            except KeyError as e:
                 maxForTable = self.tableBindings[table] = 0
             binding = table+"_"+repr(maxForTable)
             self.symbolBindings[qp.symbol()][table] = binding
@@ -490,14 +490,14 @@ class SqlDBAlgae(RdfDBAlgae):
         #    assert (0, "don't go there")
         try:
             self.symbolBindings[uri]
-        except KeyError, e:
+        except KeyError as e:
             self.symbolBindings[uri] = {}
         try:
             binding = self.symbolBindings[uri][table]
-        except KeyError, e:
+        except KeyError as e:
             try:
                 maxForTable = self.tableBindings[table]
-            except KeyError, e:
+            except KeyError as e:
                 maxForTable = self.tableBindings[table] = 0
             binding = table+"_"+repr(maxForTable)
             self.symbolBindings[uri][table] = binding
@@ -515,12 +515,12 @@ class SqlDBAlgae(RdfDBAlgae):
         field = m.group("field")
         try:
             fieldDesc = self.structure[table]['-fields'][field]
-        except KeyError, e:
+        except KeyError as e:
             fieldDesc = None
         try:
             target = fieldDesc['-target']
             return table, field, target[0], target[1]
-        except KeyError, e:
+        except KeyError as e:
             target = None
             return table, field, None, None
 
@@ -528,8 +528,8 @@ class SqlDBAlgae(RdfDBAlgae):
         try:
             pk = self.structure[table]['-primaryKey']
             return pk;
-        except KeyError, e:
-            raise RuntimeError, "no primary key for table \"table\""
+        except KeyError as e:
+            raise RuntimeError("no primary key for table \"table\"")
 
     def _composeUniques(self, values, table):
         segments = []
@@ -537,7 +537,7 @@ class SqlDBAlgae(RdfDBAlgae):
         try:
             pk.isdigit() # Lord, there's got to be a better way. @@@
             pk = [pk]
-        except AttributeError, e:
+        except AttributeError as e:
             pk = pk
         for field in pk:
             lvalue = CGI_escape(field)
@@ -552,7 +552,7 @@ class SqlDBAlgae(RdfDBAlgae):
         table1 = m.group("table")
         field = m.group("field")
         if (table1 != table):
-            raise RuntimeError, "\""+uri+"\" not based on "+self.baseUri.uri+table
+            raise RuntimeError("\""+uri+"\" not based on "+self.baseUri.uri+table)
         recordId = CGI_unescape(field)
         parts = string.split(recordId, '.')
         constraints = [];
@@ -637,7 +637,7 @@ class SqlDBAlgae(RdfDBAlgae):
                 Assure(nextResults[-1], queryPiece.getVarIndex(), st) # nextResults[-1][queryPiece.getVarIndex()] = uri
                 rowBindings[queryPiece.symbol()] = st
             # Grab sub-expressions from the results
-            for qpStr in self.disjunctionBindings.keys():
+            for qpStr in list(self.disjunctionBindings.keys()):
                 binding = self.disjunctionBindings[qpStr]
                 qp, cols = binding
                 rowBindings[qp] = self.interner.intern((LITERAL, answerRow[cols[0]]))
@@ -675,15 +675,15 @@ class SqlDBAlgae(RdfDBAlgae):
 
         try:
             statement = uniqueStatementsCheat[pred][subj][obj]
-        except KeyError, e:
+        except KeyError as e:
             statement = ['<db>', pred, subj, obj]
             try:
                 byPred = uniqueStatementsCheat[pred]
                 try:
                     bySubj = byPred[subj]
-                except KeyError, e:
+                except KeyError as e:
                     uniqueStatementsCheat[pred][subj] = {obj : statement}
-            except KeyError, e:
+            except KeyError as e:
                 uniqueStatementsCheat[pred] = {subj : {obj : statement}}
         return [statement]
 
@@ -692,40 +692,40 @@ class SqlDBAlgae(RdfDBAlgae):
         # versa. The first path is the first way the tables were constrained.
         # Additional paths represent over-constraints.
         self._fromReachesToAndEverythingToReaches(frm, to, [term])
-        for fromFrom in self.constraintReaches[frm].keys():
+        for fromFrom in list(self.constraintReaches[frm].keys()):
             if (fromFrom != to):
                 self._fromReachesToAndEverythingToReaches(fromFrom, to, [self.constraintReaches[frm][fromFrom], term])
 
     def _fromReachesToAndEverythingToReaches (self, frm, to, path):
         try:
             self.constraintReaches[frm]
-        except KeyError, e:
+        except KeyError as e:
             self.constraintReaches[frm] = {}
         try:
             self.constraintReaches[to]
-        except KeyError, e:
+        except KeyError as e:
             self.constraintReaches[to] = {}
         try:
             self.overConstraints[frm][to].append(path)
-        except KeyError, e:
+        except KeyError as e:
             #   print "  [c]-[g]->[p]\n"
             try:
-                for toTo in self.constraintReaches[to].keys():
+                for toTo in list(self.constraintReaches[to].keys()):
                     toPath = [self.constraintReaches[to][toTo], path]
                     try:
                         self.overConstraints[frm][toTo].append(path)
-                    except KeyError, e:
+                    except KeyError as e:
                         self.constraintReaches[frm][toTo] = toPath
                         self.constraintReaches[toTo][frm] = toPath
-            except KeyError, e:
+            except KeyError as e:
                 self.constraintReaches[to] = {}
             self.constraintReaches[frm][to] = path
             self.constraintReaches[to][frm] = path
 
     def _showConstraints (self):
         ret = []
-        for frm in self.constraintReaches.keys():
-            for to in self.constraintReaches[frm].keys():
+        for frm in list(self.constraintReaches.keys()):
+            for to in list(self.constraintReaches[frm].keys()):
                 ret.append(self._showConstraint(frm, to))
         return string.join(ret, "\n")
 
@@ -734,34 +734,34 @@ class SqlDBAlgae(RdfDBAlgae):
 #        return "frm:to: pathStr"
 
     def _mergeCommonConstraints (self, reachesSoFar, term, subTerm):
-        for fromTable in self.constraintReaches.keys():
+        for fromTable in list(self.constraintReaches.keys()):
             try:
                 reachesSoFar[fromTable]
-            except KeyError, e:
+            except KeyError as e:
                 try:
                     self.constraintHints[fromTable]
-                except KeyError, e:
+                except KeyError as e:
                     self.constraintHints[fromTable] = {}
                     #                       push (@{self.constraintHints[fromTable]}, "for fromTable")
-            for toTable in self.constraintReaches[fromTable].keys():
+            for toTable in list(self.constraintReaches[fromTable].keys()):
                 try:
                     reachesSoFar[fromTable][toTable]
-                except KeyError, e:
+                except KeyError as e:
                     self.constraintHints[fromTable][toTable].append([term, subTerm])
                     self.constraintHints[toTable][fromTable].append([term, subTerm])
-        for fromTable in eachesSoFa.keys():
+        for fromTable in list(eachesSoFa.keys()):
             try:
                 self.constraintReaches[fromTable]
-            except KeyError, e:
+            except KeyError as e:
                 try:
                     self.constraintHints[fromTable]
-                except KeyError, e:
+                except KeyError as e:
                     self.constraintHints[fromTable] = {}
                     #                       push (@{self.constraintHints[fromTable]}, "for fromTable")
-            for toTable in reachesSoFar[fromTable].keys():
+            for toTable in list(reachesSoFar[fromTable].keys()):
                 try:
                     self.constraintReaches[fromTable][toTable]
-                except KeyError, e:
+                except KeyError as e:
                     del reachesSoFar[fromTable][toTable]
                     del reachesSoFar[toTable][fromTable]
                     self.constraintHints[fromTable][toTable].append([term, subTerm])
@@ -774,46 +774,46 @@ class SqlDBAlgae(RdfDBAlgae):
             table, alias = self.tableAliases[iAliasSet]
             try:
                 self.constraintReaches[firstAlias][alias]
-            except KeyError, e:
+            except KeyError as e:
                 messages.append("  %s not constrained against %s" % (firstAlias, alias))
-                if (self.constraintReaches.has_key(firstAlias)):
-                    for reaches in self.constraintReaches[firstAlias].keys():
+                if (firstAlias in self.constraintReaches):
+                    for reaches in list(self.constraintReaches[firstAlias].keys()):
                         messages.append("    %s reaches %s" % (firstAlias, reaches))
                 else:
                     messages.append("    %s reaches NOTHING" % (firstAlias))
-                if (self.constraintReaches.has_key(alias)):
-                    for reaches in self.constraintReaches[alias].keys():
+                if (alias in self.constraintReaches):
+                    for reaches in list(self.constraintReaches[alias].keys()):
                         messages.append("    %s reaches %s" % (alias, reaches))
                 else:
                     messages.append("    %s reaches NOTHING" % (alias))
-                if (self.constraintHints.has_key(firstAlias) and self.constraintHints[firstAlias].has_key(alias)):
+                if (firstAlias in self.constraintHints and alias in self.constraintHints[firstAlias]):
                     for terms in self.constraintHints[firstAlias][alias]:
                         constrainedByStr = terms[1].toString({-brief : 1})
                         constrainedInStr = terms[0].toString({-brief : 1})
                         messages.append("    partially constrained by 'constrainedByStr' in 'constrainedInStr'")
         if (len(messages) > 0):
-            raise RuntimeError, "underconstraints exception:\n"+string.join(messages, "\n")
+            raise RuntimeError("underconstraints exception:\n"+string.join(messages, "\n"))
 
     def _checkForOverConstraint (self):
         messages = []
         done = {}
-        for frm in self.overConstraints.keys():
+        for frm in list(self.overConstraints.keys()):
             try:
                 done[frm]
-            except KeyError, e:
+            except KeyError as e:
                 break
             done[frm] = 1
-            for to in self.overConstraints[frm].keys():
+            for to in list(self.overConstraints[frm].keys()):
                 try:
                     done[frm]
-                except KeyError, e:
+                except KeyError as e:
                     break
                 if (to != frm):
                     messages.append("  frm over-constrained against to"._showPath(self.constraintReaches[frm][to]))
                     for path in self.overConstraints[frm][to]:
                         messages.append('    '._showPath(path))
         if (len(messages)):
-            raise RuntimeError, "overconstraints exception:\n"+string.join(messages, "\n")
+            raise RuntimeError("overconstraints exception:\n"+string.join(messages, "\n"))
 
     def _showPath(path) : # static
         pathStrs = []
@@ -897,13 +897,13 @@ if __name__ == '__main__':
     rs.results = nextResults
     def df(datum):
         return re.sub("http://localhost/SqlDB#", "mysql:", datum)
-    print string.join(messages, "\n")
-    print "query matrix \"\"\""+rs.toString({'dataFilter' : None})+"\"\"\" .\n"
+    print(string.join(messages, "\n"))
+    print("query matrix \"\"\""+rs.toString({'dataFilter' : None})+"\"\"\" .\n")
     for solutions in nextStatements:
-        print "query solution {"
+        print("query solution {")
         for statement in solutions:
-            print ShowStatement(statement)
-        print "} ."
+            print(ShowStatement(statement))
+        print("} .")
 
 blah = """
 testing with `python2.2 ./cwm.py test/dbork/aclQuery.n3 -think`

@@ -85,7 +85,7 @@ import MySQLdb # MySQL for Python
 from RDFSink import SYMBOL, LITERAL
 import toXML # RDF/XML sink
 
-import BaseHTTPServer
+import http.server
 import cgi # for URL-encoded query parsing
 
 
@@ -93,7 +93,7 @@ RDF_MediaType = "text/xml" #@@ cf. RDF Core
                            #"what mime type to use for RDF?" issue...
 
 
-class DBViewServer(BaseHTTPServer.HTTPServer):
+class DBViewServer(http.server.HTTPServer):
     """Export an SQL database, read-only, into HTTP/RDF.
 
     @@integration with http://www.w3.org/DesignIssues/RDB-RDF.html
@@ -119,7 +119,7 @@ class DBViewServer(BaseHTTPServer.HTTPServer):
 
     
     def __init__(self, addr, handlerClass, db, home, dbName):
-        BaseHTTPServer.HTTPServer.__init__(self, addr, handlerClass)
+        http.server.HTTPServer.__init__(self, addr, handlerClass)
         
         self._db = db
         self._home = home
@@ -127,7 +127,7 @@ class DBViewServer(BaseHTTPServer.HTTPServer):
         self._base = 'http://%s:%s%s%s' % (addr[0], addr[1], home, dbName)
 
 
-class DBViewHandler(BaseHTTPServer.BaseHTTPRequestHandler):
+class DBViewHandler(http.server.BaseHTTPRequestHandler):
     QPath = '/.dbq' # not an SQL name
     UIPath = '/.ui'
     
@@ -616,7 +616,7 @@ def parseQuery(qs):
     
     while 1:
         nameN = 'name%s' % i
-        if not form.has_key(nameN): break
+        if nameN not in form: break
 
         tname = form[nameN][0]
         tables.append(tname)
@@ -672,8 +672,8 @@ def testSvc():
     hostPort = (httpHost, int(httpPort))
     httpd = DBViewServer(hostPort, DBViewHandler, db, '/', dbName)
 
-    print "base:", httpd._base
-    print "Serving HTTP on port", httpPort, "..."
+    print("base:", httpd._base)
+    print("Serving HTTP on port", httpPort, "...")
     httpd.serve_forever()
 
 
@@ -717,12 +717,12 @@ def testSQL():
     
     for path in cases:
         path, fields = split(path, '?')
-        print "CGI parse:", cgi.parse_qs(fields)
+        print("CGI parse:", cgi.parse_qs(fields))
     
         fields, tables, keys, joins, cond = parseQuery(fields)
-        print "SQL parse:", fields, tables, keys, joins, cond
+        print("SQL parse:", fields, tables, keys, joins, cond)
 
-        print "as SQL:", asSQL(fields, tables, keys, joins, cond)
+        print("as SQL:", asSQL(fields, tables, keys, joins, cond))
 
 
 def testQ():
@@ -734,12 +734,12 @@ def testQ():
     path='/administration/.dbq?name1=users&fields1=family%2Cemail%2Ccity%2Cid&key1=id&name2=techplenary2002&fields2=plenary%2Cmeal_choice&key2=&kj2_1=id&name3=&fields3=&key3=&kj3_1=&kj3_2=&name4=&fields4=&key4=&kj4_1=&kj4_2=&kj4_3='
     
     path, fields = split(path, '?')
-    print "CGI parse:", cgi.parse_qs(fields)
+    print("CGI parse:", cgi.parse_qs(fields))
     
     fields, tables, keys, joins, cond = parseQuery(fields)
-    print "SQL parse:", fields, tables, keys, joins, cond
+    print("SQL parse:", fields, tables, keys, joins, cond)
 
-    print "as SQL:", asSQL(fields, tables, keys, joins, cond)
+    print("as SQL:", asSQL(fields, tables, keys, joins, cond))
     
     sink = toXML.ToRDF(sys.stdout, 'stdout:')
 
@@ -767,8 +767,8 @@ def main(argv):
     hostPort = (httpHost, int(httpPort))
     httpd = DBViewServer(hostPort, DBViewHandler, db, '/', dbName)
 
-    print "base:", httpd._base
-    print "Serving database %s HTTP on port %s ..." % (dbName, httpPort)
+    print("base:", httpd._base)
+    print("Serving database %s HTTP on port %s ..." % (dbName, httpPort))
     httpd.serve_forever()
 
 

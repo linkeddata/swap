@@ -19,6 +19,7 @@ __version__ = "$Revision$"
 
 from sys import stderr
 import LX.expr
+import sys
 # from LX.namespace import ns    BELOW to avoid loop problem
 
 ################################################################
@@ -73,7 +74,7 @@ class URIConstant(Constant):
     __slots__ = ["uri", "suggestedName"]
 
     def __new__(class_, uri):
-        uri=intern(uri)
+        uri=sys.intern(uri)
         #if uri.endswith("Run"):
         #    print >>stderr, "New called, uri:",uri,"  uri(id):",id(uri)
         try:
@@ -155,8 +156,8 @@ class DataConstant(Constant):
             #print "  creating new"
             result = Constant.__new__(class_)
             #print "  filling in"
-            result.suggestedName = u"lit_"+datapair[0][:30]
-            result.suggestedName = u"lit"
+            result.suggestedName = "lit_"+datapair[0][:30]
+            result.suggestedName = "lit"
             result.lexrep  = datapair[0]
             result.datatype= datapair[1]
             if value is None:
@@ -323,7 +324,7 @@ def getOpenVariables(expr, unusedButQuantified=None):
         elif isinstance(expr, Variable):
             return [expr]
         else:
-            raise RuntimeError, "unknown atomic term: %s" % expr
+            raise RuntimeError("unknown atomic term: %s" % expr)
     else:
         if isinstance(expr.function, Quantifier):
             assert(len(expr.args) == 2)
@@ -414,7 +415,7 @@ def asDataPair(value):
     if isinstance(value, int):
         # do nonNegativeInteger sometimes, ...?
         return (str(value), ns.xsd.int)
-    if isinstance(value, (str, unicode)):
+    if isinstance(value, str):
         return (value, None)
     raise NoSuitableDatatype(value)
 

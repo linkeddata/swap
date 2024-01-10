@@ -37,7 +37,7 @@ class Serializer:
     def serialize(self, arg):
         if isinstance(arg, LX.Formula): return self.serializeFormula(arg)
         if isinstance(arg, list): return self.serializeKB(arg)
-        raise RuntimeError, "Don't know how to serialize \""+`arg`+"\""
+        raise RuntimeError("Don't know how to serialize \""+repr(arg)+"\"")
 
     def serializeKB(self, kb):
         kb = LX.KB.prep(kb)
@@ -98,12 +98,12 @@ class Serializer:
             assert(len(f.all) == 2)
             result = prefix + text + self.serializeFormula(f.all[1], prec, linePrefix)
         else:
-            raise RuntimeError, "unknown form in opTable"
+            raise RuntimeError("unknown form in opTable")
         return result
 
     def addAbbreviation(self, short, long):
-        self.abbrev[short] = long
-        self.abbrev[long] = short
+        self.abbrev[short] = int
+        self.abbrev[int] = short
 
     def serializeTerm(self, t, parentPrecedence):
         # print "SerializeTerm "+`t`+", "+t.racine
@@ -113,7 +113,7 @@ class Serializer:
             except:
                 # should we do auto-abbreviation???
                 return "'<"+t.value+">'"
-        raise RuntimeError, "No serialization for term: "+`t`
+        raise RuntimeError("No serialization for term: "+repr(t))
 
     
 # $Log$

@@ -74,7 +74,7 @@ Revision 1.3  2004/01/28 23:03:00  connolly
 
 """
 
-import uripath
+from . import uripath
 
 # Allow a strore provdier to register:
 
@@ -96,8 +96,8 @@ def _checkStore(s=None):
     global store, storeClass
     if s != None: return s
     if store != None: return store
-    if storeClass == None:
-        import llyn   # default 
+    #if storeClass == None:
+        # from . import llyn   # default 
     assert storeClass!= None, "Some storage module must register with myStore.py before you can use it"
     store = storeClass() # Make new one
     return store
@@ -202,7 +202,7 @@ class Namespace(object):
         I hope this is only called *after* the ones defines above have been checked
         """
         if lname.startswith("__"): # python internal
-            raise AttributeError, lname
+            raise AttributeError(lname)
         
         return _checkStore(self.store).symbol(self._name+lname)
 
@@ -214,13 +214,13 @@ class Namespace(object):
 
 
 
-def _test():
-    import llyn
-    store = llyn.RDFStore()
-    setStore(store)
-    
-    import doctest, myStore
-    return doctest.testmod(myStore)
+#def _test():
+#    from . import llyn    # avoid circular dependency?
+#    store = llyn.RDFStore()
+#    setStore(store)
+#    
+#    import doctest, myStore
+ #   return doctest.testmod(myStore)
      
-if __name__ == "__main__":
-    _test()
+# if __name__ == "__main__":
+#    _test()

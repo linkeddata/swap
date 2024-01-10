@@ -42,19 +42,27 @@ or
 
 import string
 from xml.dom import Node
-try:
-    from xml.ns import XMLNS
-except:
-    class XMLNS:
-        BASE = "http://www.w3.org/2000/xmlns/"
-        XML = "http://www.w3.org/XML/1998/namespace"
+from .compare import compareStrings, compareNumbers
+
+def compareNumbers(self, other):
+    if self < other: return -1
+    if self > other: return 1
+    return 0    
+
+
+#try:
+#    from xml.ns import XMLNS
+#except:
+class XMLNS:
+    BASE = "http://www.w3.org/2000/xmlns/"
+    XML = "http://www.w3.org/XML/1998/namespace"
 #try:
 #    import cStringIO
 #    StringIO = cStringIO
 #except ImportError:
-import StringIO
+import io
 
-_attrs = lambda E: (E.attributes and E.attributes.values()) or []
+_attrs = lambda E: (E.attributes and list(E.attributes.values())) or []
 _children = lambda E: E.childNodes or []
 _IN_XML_NS = lambda n: n.namespaceURI == XMLNS.XML
 _inclusive = lambda n: n.unsuppressedPrefixes == None
@@ -62,15 +70,21 @@ _inclusive = lambda n: n.unsuppressedPrefixes == None
 
 # Does a document/PI has lesser/greater document order than the
 # first element?
-_LesserElement, _Element, _GreaterElement = range(3)
+_LesserElement, _Element, _GreaterElement = list(range(3))
 
 def _sorter(n1,n2):
     '''_sorter(n1,n2) -> int
     Sorting predicate for non-NS attributes.'''
 
-    i = cmp(n1.namespaceURI, n2.namespaceURI)
+    i = compareStrings(n1.namespaceURI, n2.namespaceURI)
     if i: return i
-    return cmp(n1.localName, n2.localName)
+    return compareStrings(n1.localName, n2.localName)
+
+def keyNamespaceLocalname(n):
+    '''keyNamespaceLocalname(n) -> string
+    Sorting key for NS attributes.'''
+
+    return [n.namespaceURI, n.localName]  # Namespace, localname
 
 
 def _sorter_ns(n1,n2):
@@ -79,7 +93,11 @@ def _sorter_ns(n1,n2):
 
     if n1[0] == 'xmlns': return -1
     if n2[0] == 'xmlns': return 1
-    return cmp(n1[0], n2[0])
+    return compareStrings(n1[0], n2[0])
+
+def keyNSURI(n):
+    "(an empty namespace URI is lexicographically least)."
+    return n[0]
 
 def _utilized(n, node, other_attrs, unsuppressedPrefixes):
     '''_utilized(n, node, other_attrs, unsuppressedPrefixes) -> boolean
@@ -90,7 +108,7 @@ def _utilized(n, node, other_attrs, unsuppressedPrefixes):
     elif n.startswith('xmlns'):
         n = n[5:]
     if (n=="" and node.prefix in ["#default", None]) or \
-        n == node.prefix or n in unsuppressedPrefixes: 
+        n == node.prefix or n in unsuppressedPrefixes:
             return 1
     for attr in other_attrs:
         if n == attr.prefix: return 1
@@ -113,10 +131,10 @@ class _implementation:
         self.comments = kw.get('comments', 0)
         self.unsuppressedPrefixes = kw.get('unsuppressedPrefixes')
         nsdict = kw.get('nsdict', { 'xml': XMLNS.XML, 'xmlns': XMLNS.BASE })
-        
+
         # Processing state.
         self.state = (nsdict, {'xml':''}, {}) #0422
-        
+
         if node.nodeType == Node.DOCUMENT_NODE:
             self._do_document(node)
         elif node.nodeType == Node.ELEMENT_NODE:
@@ -131,7 +149,7 @@ class _implementation:
         elif node.nodeType == Node.TEXT_NODE:
             self._do_text(node)
         else:
-            raise TypeError, str(node)
+            raise TypeError(str(node))
 
 
     def _inherit_context(self, node):
@@ -141,7 +159,7 @@ class _implementation:
         canonicalization.'''
 
         # Collect the initial list of xml:foo attributes.
-        xmlattrs = filter(_IN_XML_NS, _attrs(node))
+        xmlattrs = list(filter(_IN_XML_NS, _attrs(node)))
 
         # Walk up and get all xml:XXX attributes we inherit.
         inherited, parent = [], node.parentNode
@@ -174,7 +192,7 @@ class _implementation:
             elif child.nodeType == Node.DOCUMENT_TYPE_NODE:
                 pass
             else:
-                raise TypeError, str(child)
+                raise TypeError(str(child))
     handlers[Node.DOCUMENT_NODE] = _do_document
 
 
@@ -183,10 +201,10 @@ class _implementation:
         Process a text or CDATA node.  Render various special characters
         as their C14N entity representations.'''
         if not _in_subset(self.subset, node): return
-        s = string.replace(node.data, "&", "&amp;")
-        s = string.replace(s, "<", "&lt;")
-        s = string.replace(s, ">", "&gt;")
-        s = string.replace(s, "\015", "&#xD;")
+        s = node.data.replace("&", "&amp;")
+        s = s.replace("<", "&lt;")
+        s = s.replace(">", "&gt;")
+        s = s.replace("\015", "&#xD;")
         if s: self.write(s)
     handlers[Node.TEXT_NODE] = _do_text
     handlers[Node.CDATA_SECTION_NODE] = _do_text
@@ -237,12 +255,12 @@ class _implementation:
         W(' ')
         W(n)
         W('="')
-        s = string.replace(value, "&", "&amp;")
-        s = string.replace(s, "<", "&lt;")
-        s = string.replace(s, '"', '&quot;')
-        s = string.replace(s, '\011', '&#x9')
-        s = string.replace(s, '\012', '&#xA')
-        s = string.replace(s, '\015', '&#xD')
+        s = value.replace("&", "&amp;")
+        s = s.replace("<", "&lt;")
+        s = s.replace('"', '&quot;')
+        s = s.replace('\011', '&#x9')
+        s = s.replace('\012', '&#xA')
+        s = s.replace('\015', '&#xD')
         W(s)
         W('"')
 
@@ -262,14 +280,14 @@ class _implementation:
         ns_local = ns_parent.copy()
         xml_attrs_local = {}
 
-	# progress("_do_element node.nodeName=", node.nodeName)
-	# progress("_do_element node.namespaceURI", node.namespaceURI)
-	# progress("_do_element node.tocml()", node.toxml())
+        # progress("_do_element node.nodeName=", node.nodeName)
+        # progress("_do_element node.namespaceURI", node.namespaceURI)
+        # progress("_do_element node.tocml()", node.toxml())
         # Divide attributes into NS, XML, and others.
         other_attrs = initial_other_attrs[:]
         in_subset = _in_subset(self.subset, node)
         for a in _attrs(node):
-	    # progress("\t_do_element a.nodeName=", a.nodeName)
+            # progress("\t_do_element a.nodeName=", a.nodeName)
             if a.namespaceURI == XMLNS.BASE:
                 n = a.nodeName
                 if n == "xmlns:": n = "xmlns"        # DOM bug workaround
@@ -284,14 +302,14 @@ class _implementation:
 
         # Render the node
         W, name = self.write, None
-        if in_subset: 
+        if in_subset:
             name = node.nodeName
             W('<')
             W(name)
 
             # Create list of NS attributes to render.
             ns_to_render = []
-            for n,v in ns_local.items():
+            for n,v in list(ns_local.items()):
 
                 # If default namespace is XMLNS.BASE or empty,
                 # and if an ancestor was the same
@@ -309,13 +327,13 @@ class _implementation:
 
                 # If not previously rendered
                 # and it's inclusive  or utilized
-                if (n,v) not in ns_rendered.items() \
+                if (n,v) not in list(ns_rendered.items()) \
                   and (_inclusive(self) or \
                   _utilized(n, node, other_attrs, self.unsuppressedPrefixes)):
                     ns_to_render.append((n, v))
 
             # Sort and render the ns, marking what was rendered.
-            ns_to_render.sort(_sorter_ns)
+            ns_to_render.sort(key = keyNSURI)
             for n,v in ns_to_render:
                 self._do_attr(n, v)
                 ns_rendered[n]=v    #0417
@@ -324,10 +342,10 @@ class _implementation:
             # Else, add all local and ancestor xml attributes
             # Sort and render the attributes.
             if not _inclusive(self) or _in_subset(self.subset,node.parentNode):  #0426
-                other_attrs.extend(xml_attrs_local.values())
+                other_attrs.extend(list(xml_attrs_local.values()))
             else:
-                other_attrs.extend(xml_attrs.values())
-            other_attrs.sort(_sorter)
+                other_attrs.extend(list(xml_attrs.values()))
+            other_attrs.sort(key = keyNamespaceLocalname)
             for a in other_attrs:
                 self._do_attr(a.nodeName, a.value)
             W('>')
@@ -358,8 +376,8 @@ def Canonicalize(node, output=None, **kw):
                 prefixes that should be inherited.
     '''
     if output:
-        apply(_implementation, (node, output.write), kw)
+        _implementation(*(node, output.write), **kw)
     else:
-        s = StringIO.StringIO()
-        apply(_implementation, (node, s.write), kw)
+        s = io.StringIO()
+        _implementation(*(node, s.write), **kw)
         return s.getvalue()

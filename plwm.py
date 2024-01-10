@@ -15,10 +15,10 @@
 revision = '$Id$'
 
 import sys
-import ArgHandler
-import hotswap
-import pluggable
-import urllib
+from . import ArgHandler
+from . import hotswap
+from . import pluggable
+import urllib.request, urllib.parse, urllib.error
 
 class NotImplented(RuntimeError):
     pass
@@ -59,7 +59,7 @@ class Host:
 
     def open(self, url, readwrite="read"):
         # readwrite part not implemented
-        stream = urllib.urlopen(url)
+        stream = urllib.request.urlopen(url)
         stream.info().uri = url     # @@ absoluteize?  sanitize?
         return stream
 
@@ -87,7 +87,7 @@ class MyArgHandler(ArgHandler.ArgHandler):
 
     def __init__(self, host=None, *args, **kwargs):
         #apply(super(MyArgHandler, self).__init__, args, kwargs)
-        apply(ArgHandler.ArgHandler.__init__, [self]+list(args), kwargs)
+        ArgHandler.ArgHandler.__init__(*[self]+list(args), **kwargs)
         self.host = host
 
     def handle__pipe(self):
@@ -258,9 +258,9 @@ if __name__ == "__main__":
     hotswap.prepend("wrap_llyn")
     try:
         a.run()
-    except hotswap.NoMatchFound, e:
-        print e
-        print "Try  --help preplug  for more information\n"
+    except hotswap.NoMatchFound as e:
+        print(e)
+        print("Try  --help preplug  for more information\n")
         sys.exit(1)
 
     # who should do this, really?

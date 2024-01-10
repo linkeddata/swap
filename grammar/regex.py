@@ -11,9 +11,9 @@ regex = myStore.symbol('http://www.w3.org/2000/10/swap/grammar/regex')
 from swap.RDFSink import RDF_NS_URI
 rdf = myStore.symbol(RDF_NS_URI[:-1])
 
-knownClasses = {regex['Dot']: u'.',
-                regex['Start']: u'^',
-                regex['End']: u'$'}
+knownClasses = {regex['Dot']: '.',
+                regex['Start']: '^',
+                regex['End']: '$'}
 
 alreadyDone = {}
 
@@ -21,7 +21,7 @@ def processProduction(f, prod):
     if prod in alreadyDone:
         pass
     elif isinstance(prod, term.Literal):
-        alreadyDone[prod] = escape(unicode(prod)), regex['Sequence']
+        alreadyDone[prod] = escape(str(prod)), regex['Sequence']
     #print [x.asFormula().n3String() for x in f.statementsMatching(subj=prod)]
     else:
         for prop in knownProps:
@@ -34,23 +34,23 @@ def processProduction(f, prod):
             try:
                 alreadyDone[prod] = knownClasses[prod], regex['CharClass']
             except:
-                print [x.asFormula().n3String() for x in f.statementsMatching(subj=prod)]
+                print([x.asFormula().n3String() for x in f.statementsMatching(subj=prod)])
                 raise
     return alreadyDone[prod]
 
-knownModifications = {regex['Star'] : u'*',
-                      regex['NonGreedyStar'] : u'*?',
-                      regex['Plus'] : u'+',
-                      regex['Optional'] : u'?',
-                      regex['NonGreedyPlus'] : u'+?',
-                      regex['NonGreedyOptional'] : u'??'}
+knownModifications = {regex['Star'] : '*',
+                      regex['NonGreedyStar'] : '*?',
+                      regex['Plus'] : '+',
+                      regex['Optional'] : '?',
+                      regex['NonGreedyPlus'] : '+?',
+                      regex['NonGreedyOptional'] : '??'}
 
 
 def simpleModification(f, k, s):
     if s[-1:] in ')]':
         return s + k
     else:
-        return u'(?:%s)%s' % (s, k)
+        return '(?:%s)%s' % (s, k)
 
 
 def modifies(f, subj, obj):
@@ -71,13 +71,13 @@ def modifies(f, subj, obj):
 
 def group_literal(f, subj, obj):
     substring, cs = processProduction(f, obj)
-    return (u'[%s]' % substring), regex['ExplicitCharClass']
+    return ('[%s]' % substring), regex['ExplicitCharClass']
 
 def complement(f, subj, obj):
     substring, cs = processProduction(f, obj)
     if cs is not regex['ExplicitCharClass']:
         raise ValueError
-    return (u'[^%s]' % substring[1:-1]), regex['CharClass']
+    return ('[^%s]' % substring[1:-1]), regex['CharClass']
 
 def disjunction(f, subj, obj):
     k = [(x, processProduction(f, x)) for x in obj]
@@ -87,7 +87,7 @@ def disjunction(f, subj, obj):
     valuesAndTypes = [processProduction(f, x) for x in obj]
     def processSingleChar(x,y):
         if es_len(x) == 1 and y is not regex['CharClass']:
-            return u'[' + x + u']'
+            return '[' + x + ']'
         return x
     bigClass = []
     notClasses = []
@@ -97,7 +97,7 @@ def disjunction(f, subj, obj):
         else:
             notClasses.append(group((x,y), regex['Sequence']))
 
-    bigClassString = u'[' + u''.join([processSingleChar(x,y)[1:-1] for x,y in bigClass]) + u']', regex['ExplicitCharClass']
+    bigClassString = '[' + ''.join([processSingleChar(x,y)[1:-1] for x,y in bigClass]) + ']', regex['ExplicitCharClass']
     if not notClasses:
         return bigClassString
     if len(bigClass) == 1:
@@ -105,7 +105,7 @@ def disjunction(f, subj, obj):
     elif bigClass:
         notClasses.append(group(bigClassString, regex['Sequence']))
 
-    return u'(?:' + '|'.join(notClasses) + ')', regex['Disjunction']
+    return '(?:' + '|'.join(notClasses) + ')', regex['Disjunction']
 
 def sequence(f, subj, obj):
     k = [(x, processProduction(f, x)) for x in obj]
@@ -113,31 +113,32 @@ def sequence(f, subj, obj):
         if len(d) != 2:
             raise RuntimeError ((c,d))
     values = [group(processProduction(f, x), regex['Disjunction']) for x in obj]
-    return u''.join(values), regex['Sequence']
+    return ''.join(values), regex['Sequence']
 
 
-def group((val, t), condition):
+def group(xxx_todo_changeme, condition):
+    (val, t) = xxx_todo_changeme
     if t is condition:
-        return u'(?:%s)' % val
+        return '(?:%s)' % val
     return val
 
 def lookAhead(f, subj, obj):
     substring, cs = processProduction(f, obj)
-    return u'(?=%s)' % substring, regex['Regex']
+    return '(?=%s)' % substring, regex['Regex']
 
 
 def negativeLookAhead(f, subj, obj):
     substring, cs = processProduction(f, obj)
-    return u'(?!%s)' % substring, regex['Regex']
+    return '(?!%s)' % substring, regex['Regex']
 
 def lookBehind(f, subj, obj):
     substring, cs = processProduction(f, obj)
-    return u'(?<=%s)' % substring, regex['Regex']
+    return '(?<=%s)' % substring, regex['Regex']
 
 
 def negativeLookBehind(f, subj, obj):
     substring, cs = processProduction(f, obj)
-    return u'(?<!%s)' % substring, regex['Regex']
+    return '(?<!%s)' % substring, regex['Regex']
 
 
 knownProps = {regex['group_literal']: group_literal,
@@ -154,12 +155,12 @@ def makeRegex(f, base):
     s, _ = processProduction(f, base)
     for cls in f.each(subj=base, pred=rdf['type']):
         if cls is regex['CaseInsensitiveRegex']:
-            return u'(?i)'+s
+            return '(?i)'+s
     return s
 
 def escape(s):
     if s in '-<>':
-        return u'\\' + s
+        return '\\' + s
     return s.replace('\\','\\\\').replace('.','\\.').replace('?','\\?').replace('+','\\+').replace("[", "\\[").replace("]", "\\]").replace("(", "\\(").replace(")", "\\)")
 
 def es_len(s):
@@ -173,11 +174,11 @@ def main():
     baseRegex = sys.argv[2]
     f = myStore.load(inputFile)
     base = myStore.symbol(baseRegex)
-    g = u'(?P<foo>%s)' % makeRegex(f, base)
-    print `g`
+    g = '(?P<foo>%s)' % makeRegex(f, base)
+    print(repr(g))
     import re
     c = re.compile(g)
-    print c.match('3.4E-4').groups()
+    print(c.match('3.4E-4').groups())
     #print alreadyDone
 
 

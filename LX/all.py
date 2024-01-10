@@ -10,7 +10,7 @@ __version__ = "$Revision$"
 import LX
 
 for x in LX.__all__:
-    exec "from LX."+x+" import *"
+    exec("from LX."+x+" import *")
 
 # $Log$
 # Revision 1.2  2003-09-17 16:08:29  sandro

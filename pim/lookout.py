@@ -31,10 +31,10 @@
 # <connolly@w3.org>
 # http://www.w3.org/People/Connolly/
 
-# Copyright © 1998 World Wide Web Consortium,
+# Copyright 1998 World Wide Web Consortium,
 # (Massachusetts Institute of Technology, Institut National de
 # Recherche en Informatique et en Automatique, Keio University). All
-# Rights Reserved. 
+# Rights Reserved.
 #
 # Permission to use, copy, modify, and distribute this software
 # and its documentation for any purpose and without fee or
@@ -42,7 +42,7 @@
 #
 # W3C IPR SOFTWARE NOTICE
 # http://www.w3.org/COPYRIGHT
-# September 1997 
+# September 1997
 
 # This module depends on standard and built-in python modules, per
 # Python Library Reference
@@ -91,7 +91,7 @@ verbose=0
 boring = [                      # Example value:
 
 # Fields from Contacts:
-        
+
   "LastFirstSpaceOnly",     #        "Layman Andrew" ; # r
   "Email2EntryID",          #        "x\000x\000" ; # r
   "Email3EntryID",          #       "0" ; # r
@@ -150,11 +150,11 @@ boring = [                      # Example value:
 #      ms:BusyStatus                     "0" ; # rw
         "ConversationIndex",    #              "^V^@\ubd01\u5ea4\ub781\u1e50\uc7c8\u2510\ud211\uee8d\u
 #      ms:ResponseRequested              "1" ; # rw
-#      ms:Start                          "2001-02-14T00:00:00Eastern Daylight Time"  .  
+#      ms:Start                          "2001-02-14T00:00:00Eastern Daylight Time"  .
 
-  
+
             ]
-            
+
 OTHERS = ["Size", "OutlookInternalVersion", "NetMeetingAutoStart", "OutlookVersion",
                         "FormDescription",
                         "StoreID", "EntryID",  # UUIDs mess up the file but might be useful
@@ -244,7 +244,7 @@ def main():
                                 )
 
         print "# ENDS"
-        
+
 
 
 # DWC: outlook.Application is the Application class, per
@@ -259,7 +259,7 @@ def main():
 # the translation to python is straightforward.
 #
 # The Microsoft Outlook 97 Automation Server Programming Model
-#  Last Updated: June 26, 1998 
+#  Last Updated: June 26, 1998
 # http://www.microsoft.com/OutlookDev/Articles/Outprog.htm
 #
 
@@ -320,7 +320,7 @@ class outlookToN3(outlook.Application):
                 self.internal = []
                 self._nextId = 0
                 self.details = []   # Set of interesting subfields for this operations
-                
+
         def findContact(self, filter):
                 _mapi = self.GetNamespace(MAPI)
 
@@ -339,7 +339,7 @@ class outlookToN3(outlook.Application):
                 cal = _mapi.GetDefaultFolder(what)
                 print "\n# Folder %i:" % what
                 folderId = self._getItem(cal)
-                
+
                 list = cal.Items
                 n = len(list)
                 for i in range(n):
@@ -360,7 +360,7 @@ class outlookToN3(outlook.Application):
 
 
 
-                        
+
         def _getItem(self, item, indent=0, noun=0):
                 global verbose
                 try:
@@ -369,8 +369,8 @@ class outlookToN3(outlook.Application):
 #                       pkeys = []
                 except:
                         print "[ a ms:weirdThing ] #", `self`
-                        return                  
-                print "\n", "    "*indent, 
+                        return
+                print "\n", "    "*indent,
                 need_semicolon = 0
 
                 key = "EntryID"
@@ -412,7 +412,7 @@ class outlookToN3(outlook.Application):
                                                         else:
                                                                 msid = "???"
                                                                 print "@@@@@@@@ No EntryID in", `atts`
-                                                        
+
 
                                                 for ms, f in self.internal:
                                                         if ms is x:
@@ -422,9 +422,9 @@ class outlookToN3(outlook.Application):
                                                 else:
                                                         self._nextId = self._nextId + 1
                                                         frag = "#_g" + `self._nextId`
-                                                        self.internal.append((x, frag)) 
+                                                        self.internal.append((x, frag))
                                                         already = 0
-                                                                
+
                                                 print "%-32s  %s" % (PREFIX+key, str),
                                                 if (not already) and indent < 3 and key in self.details:
                                                         print " = ",
@@ -434,7 +434,7 @@ class outlookToN3(outlook.Application):
                                                 latest[key] = str
                                         tail = "# rw"
                                         if not _w : tail = "# r"
-                    
+
                 if latest.get("IsRecurring", '"0"') != '"0"':
                     rec = item.GetRecurrencePattern()
                     print ";\n    ms:recurrencePattern # isrec=",latest.get("IsRecurring", 0)
@@ -448,7 +448,7 @@ class outlookToN3(outlook.Application):
 
 
                 return id
-        
+
 
 
 def iso2vb(isotime):
@@ -469,8 +469,7 @@ def iso2vb(isotime):
         return ret
 
 
-        
-                        
-                
-if __name__ == '__main__': main()
 
+
+
+if __name__ == '__main__': main()

@@ -18,7 +18,7 @@ from string import find
 # cf
 # Compiling Little Languages in Python
 # at the 7th International Python Conference. 
-import spark 
+from . import spark 
 
 # http://www.w3.org/DesignIssues/Notation3
 
@@ -101,11 +101,11 @@ class AutoN3Parser(spark.GenericASTBuilder):
         return token.type
 
     def error(self, token):
-        print "@@parse error at line", token.lineno, ":", token.type, token.attr
+        print("@@parse error at line", token.lineno, ":", token.type, token.attr)
         raise SystemExit
     
     def resolve(self, list):
-        print "@@resolving ambiguity among:", list
+        print("@@resolving ambiguity among:", list)
         return list[0]
     
     def terminal(self, token):
@@ -153,8 +153,8 @@ class AST:
         return cmp(self.type, o)
 
     def dump(self, level=0):
-        print level * "  ",
-        print self.type
+        print(level * "  ", end=' ')
+        print(self.type)
         for k in self._kids:
             k.dump(level+1)
 
@@ -221,7 +221,7 @@ class Scanner0(spark.GenericScanner):
         return self.rv
 
     def error(self, s):
-        print "syntax error: bad token at line", self._ln
+        print("syntax error: bad token at line", self._ln)
         
 
 class Scanner(Scanner0):
@@ -276,9 +276,9 @@ def test():
     import sys
     f = open(sys.argv[1])
     tokens = scan(f)
-    print "TOKENS:", tokens
+    print("TOKENS:", tokens)
     t = parse(tokens)
-    print "AST:"
+    print("AST:")
     t.dump()
 
 

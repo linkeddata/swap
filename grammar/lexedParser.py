@@ -34,7 +34,7 @@ W3C open source licence. Enjoy. Tim BL
 __version__ = "$Id$"
 
 # SWAP http://www.w3.org/2000/10/swap
-import sparql_tokens
+from . import sparql_tokens
 
 try:
     from swap import webAccess, uripath, llyn, myStore, term, diag
@@ -93,8 +93,8 @@ def toYacc(x, tokenRegexps):
     if isinstance(x, Literal):
         return "'" + str(x.value()) + "'"  # @@@ Escaping
     if x in tokenRegexps:
-        return deColonise(`x`).upper()
-    return deColonise(`x`)
+        return deColonise(repr(x)).upper()
+    return deColonise(repr(x))
 
         
 def yaccConvert(yacc, top, tokenRegexps):
@@ -135,11 +135,11 @@ def yaccProduction(yacc, lhs,  tokenRegexps):
         return
     rhs = g.the(pred=BNF.mustBeOneSequence, subj=lhs)
     if rhs == None:
-        progress( recordError("No definition of " + `lhs`))
-        raise ValueError("No definition of %s  in\n %s" %(`lhs`, `g`))
+        progress( recordError("No definition of " + repr(lhs)))
+        raise ValueError("No definition of %s  in\n %s" %(repr(lhs), repr(g)))
     options = rhs
     if chatty_flag:
-        progress ("\nProduction %s :: %s  ie %s" %(`lhs`, `options` , `options.value()`))
+        progress ("\nProduction %s :: %s  ie %s" %(repr(lhs), repr(options) , repr(options.value())))
     yacc.write("\n%s:" % toYacc(lhs, tokenRegexps))
 
     branches = g.each(subj=lhs, pred=BNF.branch)
@@ -149,7 +149,7 @@ def yaccProduction(yacc, lhs,  tokenRegexps):
             yacc.write("\t|\t")
         first = 0
         option = g.the(subj=branch, pred=BNF.sequence)
-        if chatty_flag: progress( "\toption: "+`option.value()`)
+        if chatty_flag: progress( "\toption: "+repr(option.value()))
         yacc.write("\t")
         if option.value() == [] and yacc: yacc.write(" /* empty */")
         for part in option:
@@ -182,30 +182,30 @@ def doProduction(lhs):
         return
     rhs = g.the(pred=BNF.mustBeOneSequence, subj=lhs)
     if rhs == None:
-        progress (recordError("I can't find a definition of " + `lhs`))
+        progress (recordError("I can't find a definition of " + repr(lhs)))
         return
 #       raise RuntimeError("No definition of %s  in\n %s" %(`lhs`, `g`))
     options = rhs
-    if chatty_flag: progress ( "\nProduction %s :: %s  ie %s" %(`lhs`, `options` , `options.value()`))
+    if chatty_flag: progress ( "\nProduction %s :: %s  ie %s" %(repr(lhs), repr(options) , repr(options.value())))
     succ = g.each(subj=lhs, pred=BNF.canPrecede)
     if chatty_flag: progress("\tCan precede ", succ)
 
     branches = g.each(subj=lhs, pred=BNF.branch)
     for branch in branches:
         option = g.the(subj=branch, pred=BNF.sequence)
-        if chatty_flag: progress( "\toption: "+`option.value()`)
+        if chatty_flag: progress( "\toption: "+repr(option.value()))
         for part in option:
             if part not in already and part not in agenda: agenda.append(part)
-            y = `part`
+            y = repr(part)
         conditions = g.each(subj=branch, pred=BNF.condition)
         if conditions == []:
             progress(
                 recordError(" NO SELECTOR for %s option %s ie %s" %
-                (`lhs`, `option`, `option.value()` )))
+                (repr(lhs), repr(option), repr(option.value()) )))
             if option.value == []: # Void case - the tricky one
                 succ = g.each(subj=lhs, pred=BNF.canPrecede)
                 for y in succ:
-                    if chatty_flag: progress("\t\t\tCan precede ", `y`)
+                    if chatty_flag: progress("\t\t\tCan precede ", repr(y))
         if chatty_flag: progress("\t\tConditions: %s" %(conditions))
         for str1 in conditions:
             if str1 in branchDict:
@@ -217,8 +217,8 @@ def doProduction(lhs):
 
     for str1 in branchDict:
         for str2 in branchDict:
-            s1 = unicode(str1)
-            s2 = unicode(str2)
+            s1 = str(str1)
+            s2 = str(str2)
 # @@ check that selectors are distinct, not substrings
             if (s1.startswith(s2) or s2.startswith(s1)) and branchDict[str1] is not branchDict[str2]:
                 progress("WARNING: for %s, %s indicates %s, but  %s indicates %s" % (
@@ -228,8 +228,8 @@ def doProduction(lhs):
 
 ######################### Parser based on the RDF Context-free grammar
 
-whiteSpace = re.compile(ur'[ \t]*((#[^\n]*)?\r?\n)?')
-singleCharacterSelectors = u"\t\r\n !\"#$%&'()*.,+/;<=>?[\\]^`{|}~"
+whiteSpace = re.compile(r'[ \t]*((#[^\n]*)?\r?\n)?')
+singleCharacterSelectors = "\t\r\n !\"#$%&'()*.,+/;<=>?[\\]^`{|}~"
 notQNameChars = singleCharacterSelectors + "@"  # Assume anything else valid qname :-/
 notNameChars = notQNameChars + ":"  # Assume anything else valid name :-/
 
@@ -249,7 +249,7 @@ class PredictiveParser(object):
             parser.atMode = False
         else:
             parser.keywords = [ "a", "is", "of", "this" ]
-        print parser.keywords
+        print(parser.keywords)
         parser.verb = 1  # Verbosity
         parser.keywordMode = 0  # In a keyword statement, adding keywords
         
@@ -286,9 +286,9 @@ class PredictiveParser(object):
         rhs = lookupTable.get(name, None)  # Predict branch from token
         if rhs == None:
             progress("""Found %s when expecting some form of %s,
-\tsuch as %s\n\t%s"""  % (tok(), lhs, lookupTable.keys(), parser.around(None, None)))
+\tsuch as %s\n\t%s"""  % (tok(), lhs, list(lookupTable.keys()), parser.around(None, None)))
             raise SyntaxError("""Found %s when expecting some form of %s,
-\tsuch as %s\n\t%s"""  % (tok(), lhs, lookupTable.keys(), parser.around(None, None)))
+\tsuch as %s\n\t%s"""  % (tok(), lhs, list(lookupTable.keys()), parser.around(None, None)))
         if parser.verb: progress( "%i  %s means expand %s as %s" %(parser.lineNumber,tok(), lhs, rhs.value()))
         tree = [lhs]
         for term in rhs:
@@ -296,10 +296,10 @@ class PredictiveParser(object):
             if lit != name: # Not token
                 if lit in parser.tokenSet:
                     progress("Houston, we have a problem. %s is not equal to %s" % (lit, name))
-                progress("recursing on %s, which is not %s. Token is %s" % (lit, name, `tok()`))
+                progress("recursing on %s, which is not %s. Token is %s" % (lit, name, repr(tok())))
                 tree.append(parser.parseProduction(term, tok, stream))
             else:
-                progress("We found %s, which matches %s" % (lit, `tok()`))
+                progress("We found %s, which matches %s" % (lit, repr(tok())))
                 tree.append(tok())
                 tok(parser.token(stream))  # Next token
             if tok():
@@ -398,7 +398,7 @@ def main():
     
     #if parser.verb: progress "Branch table:", branchTable
     if verbose:
-        progress( "Literal terminals: %s" %  literalTerminals.keys())
+        progress( "Literal terminals: %s" %  list(literalTerminals.keys()))
         progress("Token regular expressions:")
         for r in tokenRegexps:
             progress( "\t%s matches %s" %(r, tokenRegexps[r].pattern) )
@@ -424,7 +424,7 @@ def main():
     p.verb = 1
     start = clock()
     #print lexer.token()
-    print p.parse(lexer.token)
+    print(p.parse(lexer.token))
     taken = clock() - start + 1
 #    progress("Loaded %i chars in %fs, ie %f/s." %
 #       (len(str), taken, len(str)/taken))

@@ -10,6 +10,7 @@
 import sys
 import inspect
 import re
+from functools import reduce
 
 class Error(RuntimeError):
    pass
@@ -92,15 +93,15 @@ class ArgHandler:
                                       width[1], line[1])
                s2 = line[2]
                s = wrap(s1+s2,79)
-               print re.sub('\\n', "\n"+" "*len(s1), s)
+               print(re.sub('\\n', "\n"+" "*len(s1), s))
                 
         else:
            member = self.findMember(whichOption)
            if member is None: return
-           line = self.genHelpEntry(member, long=1)
-           print "Option: ", line[0]
-           print "Arguments: ", line[1]
-           print "Description: ", wrap(line[2], 79)
+           line = self.genHelpEntry(member, int=1)
+           print("Option: ", line[0])
+           print("Arguments: ", line[1])
+           print("Description: ", wrap(line[2], 79))
 
     def handle__V__version(self):
         """Output version information.
@@ -108,10 +109,10 @@ class ArgHandler:
         (It would be nice if this gave the versions of all the
         modules, too, and was more automatic given python version
         conventions.)"""
-        print self.version
+        print(self.version)
 
     def handleNoArgs(self):
-        raise Error, "no options or parameters specified."
+        raise Error("no options or parameters specified.")
 
     def run(self):
 
@@ -127,9 +128,9 @@ class ArgHandler:
                     return 0
                 self.handleArg(arg)
                 self.advance()
-        except Error, e:
-            print e
-            print "Try --help for more information."
+        except Error as e:
+            print(e)
+            print("Try --help for more information.")
             return 1
            
     def handleArg(self, arg):
@@ -149,14 +150,14 @@ class ArgHandler:
        except ValueError:
           member = self.findMember(option)
           args = self.buildArgs(member)
-          apply(member[1], args)
+          member[1](*args)
           return
 
        member = self.findMember(left+"EQ")
-       apply(member[1], [right])
+       member[1](*[right])
 
     def handleExtraArgument(self, arg):
-       raise Error, "Extra argument: \"%s\"" % arg
+       raise Error("Extra argument: \"%s\"" % arg)
     
     def findMember(self, arg):
         matches=[]
@@ -176,25 +177,25 @@ class ArgHandler:
                         last_match = member
 
         if len(matches) == 0:
-           raise Error, "unknown argument: \"%s\"" % arg
+           raise Error("unknown argument: \"%s\"" % arg)
         if len(matches) == 1:
             return last_match
         if len(matches) > 4:
-           raise Error, ("ambiguous option might be: \"%s\"..." %
+           raise Error("ambiguous option might be: \"%s\"..." %
                        '", "'.join(matches[0:3]))
         if len(matches) > 1:
-           raise Error, ("ambiguous option might be: \"%s\"" %
+           raise Error("ambiguous option might be: \"%s\"" %
                        '", "'.join(matches))
 
     def buildArgs(self, member):
        """Call getNext as long as it's not a flag to fill in the
        argument list.   If we run out, fill in with defaults if
        possible."""
-       f = member[1].im_func
-       argcount = f.func_code.co_argcount
-       if f.func_code.co_flags & 4 :
-          raise Error, "handlers may not have variable arg lists"
-       defaults = f.func_defaults or ()
+       f = member[1].__func__
+       argcount = f.__code__.co_argcount
+       if f.__code__.co_flags & 4 :
+          raise Error("handlers may not have variable arg lists")
+       defaults = f.__defaults__ or ()
 
        i = 1   # skip "self"
        args = []
@@ -207,7 +208,7 @@ class ArgHandler:
              if indexIntoDefaults >= 0:      #defaultable
                 next = defaults[indexIntoDefaults]
              else:
-                raise Error, "not enough arguments to option \""+name+"\""
+                raise Error("not enough arguments to option \""+name+"\"")
           args.append(next)
           i+=1
        return args
@@ -216,13 +217,13 @@ class ArgHandler:
     def genHelpEntry(self, member, long=0):
 
         names = member[0].split("__")[1:]
-        names = map(lambda x: re.sub("_", "-", x), names)
-        names = map(lambda x: re.sub("EQ$", "=", x), names)
+        names = [re.sub("_", "-", x) for x in names]
+        names = [re.sub("EQ$", "=", x) for x in names]
         # primary sort key = case insensitive version, 
         # secondary is case sensitive
         sortKey = names[0].lower() + " " + names[0]
         #print names, member
-        f = member[1].im_func
+        f = member[1].__func__
         optdesc = ""
         for name in names:
             if len(name) == 1:
@@ -232,11 +233,11 @@ class ArgHandler:
         optdesc = optdesc[:-1]
 
         parmdesc = ""
-        argcount = f.func_code.co_argcount
-        if f.func_code.co_flags & 4 :
-            raise Error, "handlers may not have variable arg lists"
-        defaults = f.func_defaults or ()
-        argnames = f.func_code.co_varnames
+        argcount = f.__code__.co_argcount
+        if f.__code__.co_flags & 4 :
+            raise Error("handlers may not have variable arg lists")
+        defaults = f.__defaults__ or ()
+        argnames = f.__code__.co_varnames
         i = 1   # skip "self"
         #print "argcount", argcount
         #print "defaults", defaults
@@ -257,7 +258,7 @@ class ArgHandler:
         if f.__doc__ is None:
             docs = "<undocumented>"
         else:
-            if long:
+            if int:
                 docs = re.sub('(?m)^        ', "", f.__doc__)
             else:
                 doc = f.__doc__.split("\n\n", 2)

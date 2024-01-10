@@ -61,10 +61,10 @@ REGEX = Namespace("http://www.w3.org/2000/10/swap/grammar/regex#")
 #  There is a problem that 16-bit-character builds of python can't deal with
 #  our regexps
 
-wide_build = (len(u"\U00012345") == 1)
+wide_build = (len("\U00012345") == 1)
 def smartCompile(pattern, flags=0):
     if not wide_build:
-        pattern = pattern.replace(u"\U00010000-\U000effff", u"\ud800-\udb7f\udc00-\udfff")
+        pattern = pattern.replace("\U00010000-\U000effff", "\ud800-\udb7f\udc00-\udfff")
     return re.compile(pattern, flags)
 
 
@@ -89,8 +89,8 @@ def toYacc(x, tokenRegexps):
     if isinstance(x, Literal):
         return "'" + str(x.value()) + "'"  # @@@ Escaping
     if x in tokenRegexps:
-        return deColonise(`x`).upper()
-    return deColonise(`x`)
+        return deColonise(repr(x)).upper()
+    return deColonise(repr(x))
 
         
 def yaccConvert(yacc, top, tokenRegexps):
@@ -131,11 +131,11 @@ def yaccProduction(yacc, lhs,  tokenRegexps):
         return
     rhs = g.the(pred=BNF.mustBeOneSequence, subj=lhs)
     if rhs == None:
-        progress( recordError("No definition of " + `lhs`))
-        raise ValueError("No definition of %s  in\n %s" %(`lhs`, `g`))
+        progress( recordError("No definition of " + repr(lhs)))
+        raise ValueError("No definition of %s  in\n %s" %(repr(lhs), repr(g)))
     options = rhs
     if chatty_flag:
-        progress ("\nProduction %s :: %s  ie %s" %(`lhs`, `options` , `options.value()`))
+        progress ("\nProduction %s :: %s  ie %s" %(repr(lhs), repr(options) , repr(options.value())))
     yacc.write("\n%s:" % toYacc(lhs, tokenRegexps))
 
     branches = g.each(subj=lhs, pred=BNF.branch)
@@ -145,7 +145,7 @@ def yaccProduction(yacc, lhs,  tokenRegexps):
             yacc.write("\t|\t")
         first = 0
         option = g.the(subj=branch, pred=BNF.sequence)
-        if chatty_flag: progress( "\toption: "+`option.value()`)
+        if chatty_flag: progress( "\toption: "+repr(option.value()))
         yacc.write("\t")
         if option.value() == [] and yacc: yacc.write(" /* empty */")
         for part in option:
@@ -178,53 +178,53 @@ def doProduction(lhs):
         try:
             tokenRegexps[lhs] = smartCompile(rhs.value(), re.U)
         except:
-            print rhs.value().encode('utf-8')
+            print(rhs.value().encode('utf-8'))
             raise
         cc = g.each(subj=lhs, pred=BNF.canStartWith)
         if cc == []: progress (recordError(
-            "No record of what token %s can start with" % `lhs`))
+            "No record of what token %s can start with" % repr(lhs)))
         if chatty_flag: progress("\tCan start with: %s" % cc) 
         return
     if g.contains(subj=lhs, pred=RDF.type, obj=REGEX.Regex):
-        import regex
+        from . import regex
         rhs = regex.makeRegex(g, lhs)
         try:
             tokenRegexps[lhs] = smartCompile(rhs, re.U)
         except:
-            print rhs
+            print(rhs)
             raise
         cc = g.each(subj=lhs, pred=BNF.canStartWith)
         if cc == []: progress (recordError(
-            "No record of what token %s can start with" % `lhs`))
+            "No record of what token %s can start with" % repr(lhs)))
         if chatty_flag: progress("\tCan start with: %s" % cc) 
         return         
     
     rhs = g.the(pred=BNF.mustBeOneSequence, subj=lhs)
     if rhs == None:
-        progress (recordError("No definition of " + `lhs`))
+        progress (recordError("No definition of " + repr(lhs)))
         return
 #       raise RuntimeError("No definition of %s  in\n %s" %(`lhs`, `g`))
     options = rhs
-    if chatty_flag: progress ( "\nProduction %s :: %s  ie %s" %(`lhs`, `options` , `options.value()`))
+    if chatty_flag: progress ( "\nProduction %s :: %s  ie %s" %(repr(lhs), repr(options) , repr(options.value())))
     succ = g.each(subj=lhs, pred=BNF.canPrecede)
     if chatty_flag: progress("\tCan precede ", succ)
 
     branches = g.each(subj=lhs, pred=BNF.branch)
     for branch in branches:
         option = g.the(subj=branch, pred=BNF.sequence)
-        if chatty_flag: progress( "\toption: "+`option.value()`)
+        if chatty_flag: progress( "\toption: "+repr(option.value()))
         for part in option:
             if part not in already and part not in agenda: agenda.append(part)
-            y = `part`
+            y = repr(part)
         conditions = g.each(subj=branch, pred=BNF.condition)
         if conditions == []:
             progress(
                 recordError(" NO SELECTOR for %s option %s ie %s" %
-                (`lhs`, `option`, `option.value()` )))
+                (repr(lhs), repr(option), repr(option.value()) )))
             if option.value == []: # Void case - the tricky one
                 succ = g.each(subj=lhs, pred=BNF.canPrecede)
                 for y in succ:
-                    if chatty_flag: progress("\t\t\tCan precede ", `y`)
+                    if chatty_flag: progress("\t\t\tCan precede ", repr(y))
         if chatty_flag: progress("\t\tConditions: %s" %(conditions))
         for str1 in conditions:
             if str1 in branchDict:
@@ -236,8 +236,8 @@ def doProduction(lhs):
 
     for str1 in branchDict:
         for str2 in branchDict:
-            s1 = unicode(str1)
-            s2 = unicode(str2)
+            s1 = str(str1)
+            s2 = str(str2)
 # @@ check that selectors are distinct, not substrings
             if (s1.startswith(s2) or s2.startswith(s1)) and branchDict[str1] is not branchDict[str2]:
                 progress("WARNING: for %s, %s indicates %s, but  %s indicates %s" % (
@@ -247,8 +247,8 @@ def doProduction(lhs):
 
 ######################### Parser based on the RDF Context-free grammar
 
-whiteSpace = smartCompile(ur'[ \t]*((#[^\n]*)?\r?\n)?')
-singleCharacterSelectors = u"\t\r\n !\"#$%&'()*.,+/;<=>?[\\]^`{|}~"
+whiteSpace = smartCompile(r'[ \t]*((#[^\n]*)?\r?\n)?')
+singleCharacterSelectors = "\t\r\n !\"#$%&'()*.,+/;<=>?[\\]^`{|}~"
 notQNameChars = singleCharacterSelectors + "@"  # Assume anything else valid qname :-/
 notNameChars = notQNameChars + ":"  # Assume anything else valid name :-/
 
@@ -352,9 +352,9 @@ class PredictiveParser:
         rhs = lookupTable.get(tok, None)  # Predict branch from token
         if rhs == None:
             progress("""Found %s when expecting some form of %s,
-\tsuch as %s\n\t%s"""  % (tok, lhs, lookupTable.keys(), parser.around(str, here)))
+\tsuch as %s\n\t%s"""  % (tok, lhs, list(lookupTable.keys()), parser.around(str, here)))
             raise SyntaxError("""Found %s when expecting some form of %s,
-\tsuch as %s\n\t%s"""  % (tok, lhs, lookupTable.keys(), parser.around(str, here)))
+\tsuch as %s\n\t%s"""  % (tok, lhs, list(lookupTable.keys()), parser.around(str, here)))
         if parser.verb: progress( "%i  %s means expand %s as %s" %(parser.lineNumber,tok, lhs, rhs.value()))
         for term in rhs:
             if isinstance(term, Literal): # CFG Terminal
@@ -364,7 +364,7 @@ class PredictiveParser:
                 elif "@"+str[here:next-1] == lit: next = next-1
                 else: raise SyntaxError(
                     "Found %s where %s expected\n\t %s" %
-                        (`str[here:next]`, lit, parser.around(str, here)))
+                        (repr(str[here:next]), lit, parser.around(str, here)))
             else:
                 rexp = tokenRegexps.get(term, None)
                 if rexp == None: # Not token
@@ -469,7 +469,7 @@ def main():
     
     #if parser.verb: progress "Branch table:", branchTable
     if verbose:
-        progress( "Literal terminals: %s" %  literalTerminals.keys())
+        progress( "Literal terminals: %s" %  list(literalTerminals.keys()))
         progress("Token regular expressions:")
         for r in tokenRegexps:
             progress( "\t%s matches %s" %(r, tokenRegexps[r].pattern) )

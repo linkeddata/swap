@@ -8,13 +8,13 @@ __version__ = "$Revision$"
 import time
 import os.path
 import os
-from reporter import theNullReporter
+from .reporter import theNullReporter
 from sys import stderr
 import LX
 import LX.kb
-import sniff
-import urllib
-from cPickle import Pickler, Unpickler
+from . import sniff
+import urllib.request, urllib.parse, urllib.error
+from pickle import Pickler, Unpickler
 
 defaultSuffixes=[("rdf",  "applicate/rdf+xml"),
                  ("xml",  "applicate/xml"),
@@ -30,10 +30,10 @@ class NotModified(RuntimeError):
 
 class AlreadyLoaded(RuntimeError): pass
 
-class Opener(urllib.FancyURLopener):
+class Opener(urllib.request.FancyURLopener):
 
     def __init__(self, *args, **kwargs):
-        urllib.FancyURLopener.__init__(self, *args, **kwargs)
+        urllib.request.FancyURLopener.__init__(self, *args, **kwargs)
 
     # http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.25
     def http_error_304(self, url, fp, errcode, errmsg, headers, data=None):
@@ -48,12 +48,12 @@ class Meta:
         self.lastModText = stream_info.getheader("Last-Modified")
         try:
             self.lastMod = time.mktime(stream_info.getdate("Last-Modified"))
-        except TypeError, error:
+        except TypeError as error:
             self.lastMod = None
 
         try:
             self.expires = time.mktime(stream_info.getdate("Expires"))
-        except TypeError, error:
+        except TypeError as error:
             # make up an expiration time...
             now=time.time()
             age = now-self.lastMod
@@ -166,7 +166,7 @@ class Loader:
         try:
             self.openStream()
             self.cacheAction = "fetched"
-        except AlreadyLoaded, error:
+        except AlreadyLoaded as error:
             #print >>stderr, "Used cached version"
             self.cacheAction = "used cache"
             self.reporter.end("used cache")
@@ -225,7 +225,7 @@ class Loader:
         if mode <= 1:
             try:
                 self.loadLocal()
-            except NotCached, error:
+            except NotCached as error:
                 if mode == 0:
                     raise error
                 # fall through to trying the network
@@ -250,7 +250,7 @@ class Loader:
                         self.reporter.msg("cached version expired %f days ago"%
                                           ((time.time() - meta.expires)/86400))
                 else:
-                    print >>stderr, "Assuming cache has expired"
+                    print("Assuming cache has expired", file=stderr)
             
         opener = Opener()
 
@@ -277,10 +277,10 @@ class Loader:
                 self.stream = opener.open(self.uri+suffix)
                 self.reporter.msg("open connection for "+self.uri+suffix)
                 self.stream.baseURI = self.uri
-            except NotImplemented, error:
+            except NotImplemented as error:
                 if firstError is None: firstError = error
                 continue
-            except NotModified, e:
+            except NotModified as e:
                 self.reporter.msg("server says \"304 Not Modified\"; using cached version")
                 # self.reporter.msg(str(e.headers))
                 #self.reporter.msg("New Expires: "+time.mktime(e.headers.getdate("Expires")))
@@ -310,7 +310,7 @@ class Loader:
         pass
 
     def filename(self):
-        q=urllib.quote(self.uri, safe='')
+        q=urllib.parse.quote(self.uri, safe='')
         return os.path.expanduser(os.path.expandvars(self.cacheDirectory+q))
     
     def loadLocal(self):
@@ -318,7 +318,7 @@ class Loader:
         or raise NotCached."""
         try:
             f=file(self.filename()+",kb", "r")
-        except IOError, error:
+        except IOError as error:
             self.reporter.msg("not found in internal cache")
             raise NotCached()
         self.reporter.msg( "found in internal cache")
@@ -335,7 +335,7 @@ class Loader:
         
         try:
             f=file(self.filename()+",meta", "r")
-        except IOError, error:
+        except IOError as error:
             raise NotCached()
         p=Unpickler(f)
         return p.load()
@@ -347,7 +347,7 @@ class Loader:
 
         try:
             os.makedirs(os.path.dirname(self.filename()))
-        except OSError, error:
+        except OSError as error:
             if error.strerror != "File exists": raise error
 
         f=file(self.filename()+",meta", "w")
@@ -424,16 +424,16 @@ def __test1():
     l=Loader(kb2, "http://www.w3.org/TR/2003/CR-owl-test-20030818/Manifest.rdf")
     l.cacheDirectory = tdir
     l.cachePolicy="remote"
-    print "Get Manifest"
+    print("Get Manifest")
     t0 = time.time()
     l.run()
     assert(l.cacheAction=="fetched")
-    print "%fs" % (time.time() - t0)
-    print "Get Manifest"
+    print("%fs" % (time.time() - t0))
+    print("Get Manifest")
     l.cachePolicy="auto"
     t0 = time.time()
     l.run()
-    print "%fs" % (time.time() - t0)
+    print("%fs" % (time.time() - t0))
     assert(l.cacheAction=="used cache")
     
     

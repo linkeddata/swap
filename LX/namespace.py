@@ -39,9 +39,9 @@ class NamespaceCluster:
     def inverseLookup(self, term):
         try:
             uri = term.uri
-        except AttributeError, e:
+        except AttributeError as e:
             raise TermHasNoURI(term)
-        for (key, value) in self.__dict__.iteritems():
+        for (key, value) in self.__dict__.items():
             if uri.startswith(value.uri):
                 rest = uri[len(value.uri):]
                 if not value.strict:

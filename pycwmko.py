@@ -3,9 +3,9 @@
 
 """
 
-from pychinko import terms, interpreter
+from .pychinko import terms, interpreter
 #from pychinko import N3Loader
-from pychinko.helpers import removedups, convertBNodeToFact
+from .pychinko.helpers import removedups, convertBNodeToFact
 from swap import term, formula
 from swap.set_importer import Set
 import time
@@ -24,7 +24,7 @@ except NameError:
             yield ll[b]
 
 
-from pychinko import nodes, rete
+from .pychinko import nodes, rete
 
 class fullSet(object):
     def __contains__(self, other):
@@ -49,7 +49,7 @@ class directPychinkoQuery(object):
         #print self.rules
                 
         self.facts = self.buildFacts(rulesFormula)
-        print "converting and adding time:", time.time() - t
+        print("converting and adding time:", time.time() - t)
         t = time.time()
                 
                        
@@ -60,9 +60,9 @@ class directPychinkoQuery(object):
         #print "add facts time:", time.time() - t
         t = time.time()
         self.interp.run()
-        print "interp.run() time:", time.time() - t
+        print("interp.run() time:", time.time() - t)
 
-        print len(self.interp.inferredFacts), ' inferred fact(s)'
+        print(len(self.interp.inferredFacts), ' inferred fact(s)')
         #print "size of inferred facts:", len(self.interp.inferredFacts)
 #        print self.interp.inferredFacts
         # add the inferred facts back to cwm store
@@ -84,7 +84,7 @@ class directPychinkoQuery(object):
 #                        self.workingContext.add(*newTriple)
 #                else:
 #                        print "contains!"
-        print "add facts time to cwm:", time.time() - t
+        print("add facts time to cwm:", time.time() - t)
 
         """
         print "facts"
@@ -101,7 +101,7 @@ class directPychinkoQuery(object):
             if not t:
                     return None
 #            print "cnv:", t, type(t)            
-            if isinstance(t,unicode):                    
+            if isinstance(t,str):                    
                     return self.workingContext.newSymbol(t)
             elif isinstance(t,str):
                     return self.workingContext.newLiteral(t)
@@ -266,7 +266,7 @@ class directPychinkoQuery(object):
             if  isinstance(subj, formula.Formula) or \
                 isinstance(obj, formula.Formula):
                 
-                 print "The RETE cannot process nested formulas at the time - use it for ntriples only"
+                 print("The RETE cannot process nested formulas at the time - use it for ntriples only")
 #                raise NotImplementedError
                 
                  continue

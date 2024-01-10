@@ -33,8 +33,6 @@ TODO:
 import sys, time, re, operator
 import calendar # timegm - from python 
 
-from types import StringType, UnicodeType, IntType, LongType, FloatType
-
 __version__ = "0.6"
 date_parser = re.compile(r"""^
     (?P<year>\d{4,4})
@@ -75,15 +73,15 @@ $""", re.VERBOSE)
 
 def parse(s):
     """ parse a string and return seconds since the epoch. """
-    assert type(s) in [StringType, UnicodeType]
+    # assert type(s) in [StringType, UnicodeType]
     r = date_parser.search(s)
     try:
         a = r.groupdict('0')
     except:
-        raise ValueError, 'invalid date string format:'+s
+        raise ValueError('invalid date string format:'+s)
     y = int(a['year'])
     if y < 1970:
-        raise ValueError, 'Sorry, date must be in Unix era (1970 or after):'+s
+        raise ValueError('Sorry, date must be in Unix era (1970 or after):'+s)
     d = calendar.timegm((   int(a['year']), 
                         int(a['month']) or 1, 
                         int(a['day']) or 1, 
@@ -102,14 +100,14 @@ def parse(s):
     
 def fullString(i):
     """ given seconds since the epoch, return a full dateTime string in Z timezone. """
-    assert type(i) in [IntType, FloatType, LongType], "Wrong type: "+ `type(i)` +`i`
+    assert type(i) in [int, float], "Wrong type: "+ repr(type(i)) +repr(i)
     year, month, day, hour, minute, second, wday, jday, dst = time.gmtime(i)
     return str(year) + '-%2.2d-%2.2dT%2.2d:%2.2d:%2.2dZ' % (month, day, hour, minute, second)
 
 
 def asString(i):
     """ given seconds since the epoch, return a dateTime string. """
-    assert type(i) in [IntType, FloatType]
+    assert type(i) in [int, float]
     year, month, day, hour, minute, second, wday, jday, dst = time.gmtime(i)
     o = str(year)
     if (month, day, hour, minute, second) == (1, 1, 0, 0, 0): return o

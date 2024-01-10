@@ -31,7 +31,7 @@ def do(path):
                 do(thisPath)
     else: # Not directory
         if (path.endswith('.ttl')):
-            print "Looking at " + path
+            print("Looking at " + path)
             buf = file.open(path, 'r').read()
             lines = bug.split('\n')
             for i in range(len(lines)):
@@ -41,7 +41,7 @@ def do(path):
                 if start >= 0:
                     end = line.indexOf('>', start)
                     result = line[0:start+5] + line[start+5:end].replace(' ', '') + line[end:]
-                    print "    fixed to: " + result
+                    print("    fixed to: " + result)
                     URIsFixed += 1
                     line[i] = result
             buf2 = lines.join('\n')
@@ -65,7 +65,7 @@ for arg in sys.argv[1:]:
 
         elif arg == "-v": verbose = 1   # Tell me even about files which were ok
         else:
-            print """Bad option argument.
+            print("""Bad option argument.
             -f  fix files instead of just looking: remove redundant files
 
 This program rmeoves (with -f) or counts (without -f)
@@ -74,7 +74,7 @@ like     song.mp3 and "song 1.mp3"
 
 Runs recusively through the directories.
 Command line argument is a directory (or more than one).
-"""
+""")
             sys.exit(-1)
     else:
         files.append(arg)

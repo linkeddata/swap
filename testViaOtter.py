@@ -3,9 +3,9 @@ import os
 import sys
 import getopt
 
-import LX.old.rdf
-import LX.old.toShortNames
-import LX.engine.otter
+from . import LX.old.rdf
+from . import LX.old.toShortNames
+from . import LX.engine.otter
 
 def otterFormulaFromN3Files(files, base=",n32o"):
 
@@ -58,7 +58,7 @@ def main():
             base = a
             keepBase = 1
         if o in ("-g", "--goal"):
-            print "Got a goal:", a
+            print("Got a goal:", a)
             goal = otterFormulaFromN3Files([a], base+"-goal")
 
     if len(args) == 0: usage()
@@ -70,20 +70,20 @@ def main():
 
     try:
         proof = LX.engine.otter.run(prem, base+".prem")
-        print "Otter found an inconsistency in the premises"
+        print("Otter found an inconsistency in the premises")
     except LX.engine.otter.SOSEmpty:
-        print "Otter says: system is consistent (hyperres terminated)"
+        print("Otter says: system is consistent (hyperres terminated)")
 
     if goal:
         while goal.endswith("\n") or goal.endswith(" ") or goal.endswith("."):
             goal = goal[:-1]
         kb = prem + "\n" + "-(" + goal + ").\n"
         proof = LX.engine.otter.run(kb, base+".all")
-        print "Otter found a proof!"
+        print("Otter found a proof!")
     
 
 def usage():
-    print """
+    print("""
 usage:  testViaOtter [opts] premise...
 
  opts:  --keep basename       Set the tempfile prefix, and leave temp
@@ -93,7 +93,7 @@ usage:  testViaOtter [opts] premise...
 
 Always checks for satisfiability of the combined premises.
    
-"""
+""")
     sys.exit(1)
     
 if __name__ == "__main__":

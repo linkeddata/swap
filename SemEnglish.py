@@ -16,7 +16,7 @@ other sources:
 
 from string import *
 import re
-from yappsrt import *
+from .yappsrt import *
 
 class SemEnglishScanner(Scanner):
     def __init__(self, str):
@@ -53,7 +53,7 @@ class SemEnglish(Parser):
             AddPredicate = self.AddPredicate()
         if self._peek('"\\\\."', 'END', '"}"', 'Word', 'Number', '"\\\\("', '"\\\\["') == '"\\\\."':
             self._scan('"\\\\."')
-        print "@@got one statement"
+        print("@@got one statement")
 
     def Subject(self):
         _token_ = self._peek('Word', 'Number', '"\\\\("', '"\\\\["')
@@ -175,5 +175,5 @@ if __name__=='__main__':
             f = open(argv[2],'r')
         else:
             f = stdin
-        print parse(argv[1], f.read())
-    else: print 'Args:  <rule> [<filename>]'
+        print(parse(argv[1], f.read()))
+    else: print('Args:  <rule> [<filename>]')

@@ -100,7 +100,7 @@ def t_NUMERAL(t):
     try:
         t.value = int(t.value)
     except ValueError:
-        print "Integer value too large", t.value
+        print("Integer value too large", t.value)
         t.value = 0
     return t
 
@@ -117,7 +117,7 @@ def t_newline(t):
     t.lineno += t.value.count("\n")
     
 def t_error(t):
-    print "Illegal character '%s'" % t.value[0]
+    print("Illegal character '%s'" % t.value[0])
     t.skip(1)
     
 # Build the lexer
@@ -208,7 +208,7 @@ def p_term_simple1(t):
     # It seems like what's actually meant is this:
     # @@@ uri = "http://example.com#"+t[1]
     uri = t[1]
-    if constants.has_key(uri):
+    if uri in constants:
         t[0] = constants[uri]
     else:
         tt = LX.logic.Constant(uri)
@@ -236,7 +236,7 @@ def p_term_simple1(t):
 
 def p_term_numeral(t):
     '''term : NUMERAL'''
-    if constants.has_key(t[1]):
+    if t[1] in constants:
         t[0] = constants[t[1]]
     else:
         tt = LX.logic.Constant(str(t[1]))
@@ -254,7 +254,7 @@ def p_term_var(t):
         if t[1] == frame.name:
             t[0] = frame.variable
             return
-    if variables.has_key(t[1]):
+    if t[1] in variables:
         t[0] = variables[t[1]]
     else:
         tt = LX.fol.UniVar(t[1])
@@ -268,9 +268,9 @@ def p_term_compound(t):        # funterm
     #   for now just read it in as FOL.
     args = t[2]
     if len(args) == 3:
-        t[0] = apply(LX.fol.RDF, (args[1], args[0], args[2]))
+        t[0] = LX.fol.RDF(*(args[1], args[0], args[2]))
     else:
-        t[0] = apply(holds[len(args)], args)
+        t[0] = holds[len(args)](*args)
 
 def p_sequse(t):
     '''sequse :
@@ -325,10 +325,10 @@ def p_formula_2(t):
           "<=>": LX.fol.MEANS}[t[1]]
     #print "APPLYING", f, t[2]
     if (len(t[2]) > 2):
-        print "WARNING, too-high-arity on", f, " ** EXTRA IGNORED"
-        t[0] = apply(f, t[2][0:2])
+        print("WARNING, too-high-arity on", f, " ** EXTRA IGNORED")
+        t[0] = f(*t[2][0:2])
     else:
-        t[0] = apply(f, t[2])
+        t[0] = f(*t[2])
     # is LX.fol.AND allowed to be n-ary...???
     #    FIX HERE OR THERE????
 
@@ -363,7 +363,7 @@ def p_quantification(t):
     for var in varlist:
         frame = Frame()
         frame.name = var
-        frame.variable = apply(varclass, (var,))
+        frame.variable = varclass(*(var,))
         frame.quantifier = quantifier
         varStack.insert(0, frame)
     #print "varStack built up to", varStack
@@ -374,7 +374,7 @@ def p_formula_4(t):
      while 1:
          frame = varStack.pop(0)
          if frame == frameSep: break
-         f = apply(frame.quantifier, [frame.variable, f])
+         f = frame.quantifier(*[frame.variable, f])
          #print "f built up to ", f
      #print "varStack chopped to", varStack, "@@@ forgot to quantify"
      t[0] = f
@@ -388,7 +388,7 @@ def p_sentence_2(t):
      t[0] = t[1]
 
 def p_error(t):
-    print "Syntax error at '%s' on line %s" % (t.value, t.lineno)
+    print("Syntax error at '%s' on line %s" % (t.value, t.lineno))
 
 import ply.yacc
 ply.yacc.yacc(tabmodule="lx_language_kifax_tab")
@@ -422,7 +422,7 @@ def parse(s, to_kb):
     kb = to_kb
     ply.yacc.parse(s)
 
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 class Parser:
 
@@ -430,7 +430,7 @@ class Parser:
         self.kb = sink
 
     def load(self, inputURI):
-        stream = urllib.urlopen(inputURI)
+        stream = urllib.request.urlopen(inputURI)
         s = stream.read()
         global kb
         kb = self.kb

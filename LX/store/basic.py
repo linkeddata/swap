@@ -144,11 +144,11 @@ class Store:
         """
         try:
             reasons = self._why[formula]
-        except KeyError, e:
+        except KeyError as e:
             raise FormulaNotFound
         try:
             del reasons[why]
-        except KeyError, e:
+        except KeyError as e:
             raise GivenReasonNotUsed()
         if len(reasons) == 0:
             self._formulas.remove(formula)
@@ -164,10 +164,10 @@ class Store:
         return self._formulas.__iter__()
         
     def why(self, formula):
-        return self._why[formula].keys()
+        return list(self._why[formula].keys())
 
     def __in__(self, formula):
-        return formula in self._why.keys()
+        return formula in list(self._why.keys())
 
     def getFormulas(self):
         return self._formulas
@@ -190,11 +190,11 @@ class Store:
 class Print:
 
     def add(self, formula, why, formulaAdded=None):
-        print "(PRINT) Add '%s', because '%s', formulaAdded=%s" % (
-            formula, why, formulaAdded)
+        print("(PRINT) Add '%s', because '%s', formulaAdded=%s" % (
+            formula, why, formulaAdded))
         
     def remove(self, formula, why, formulaRemoved=None):
-        print "(PRINT) Remove '%s', because '%s', formulaRemoved=%s" % (formula, why, formulaRemoved)
+        print("(PRINT) Remove '%s', because '%s', formulaRemoved=%s" % (formula, why, formulaRemoved))
     
 
 if __name__ == "__main__":

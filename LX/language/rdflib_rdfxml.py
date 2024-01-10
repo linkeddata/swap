@@ -4,7 +4,7 @@ wrapper for rdflib's RDF/XML parser
 __version__ = "$Revision$"
 # $Id$
 
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 import rdflib.URIRef 
 import rdflib.BNode 
@@ -38,11 +38,11 @@ class ParserX(rdflib.syntax.parser.Parser):
         self.bnodes = { }
 
     def load(self, inputURI):
-        self.parse(urllib.urlopen(inputURI))
+        self.parse(urllib.request.urlopen(inputURI))
 
     def termFor(self, s):
         if isinstance(s, rdflib.URIRef.URIRef):
-            return LX.logic.ConstantForURI(unicode(s).encode('UTF-8'))
+            return LX.logic.ConstantForURI(str(s).encode('UTF-8'))
         if isinstance(s, rdflib.Literal.Literal):
             # print "LIT: ", str(s), s.datatype
             if s.datatype:
@@ -59,7 +59,7 @@ class ParserX(rdflib.syntax.parser.Parser):
                 self.bnodes[s] = tt
             return tt
         # that should be about it, right?
-        raise RuntimeError, "conversion from rdflib of: "+s.n3()
+        raise RuntimeError("conversion from rdflib of: "+s.n3())
         
     def add(self, t):
         self.kb.add(self.termFor(t[0]),

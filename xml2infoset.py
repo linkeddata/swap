@@ -257,7 +257,7 @@ class XMToRDFInfoset(xml.sax.handler.ContentHandler):
         """
         element = self._generate("e")
 
-        x = string.find(tag, " ")
+        x = tag.find(" ")
         if x>=0:
             ns = tag[:x]
             ln = tag[x+1:]
@@ -289,7 +289,7 @@ class XMToRDFInfoset(xml.sax.handler.ContentHandler):
         self._cursor = element
 
         for name, value in attrs.items():
-            x = string.find(name, " ")
+            x = name.find(" ")
             if x>=0:
                 ns = name[:x]
                 ln = name[x+1:]
@@ -342,7 +342,7 @@ class XMToRDFInfoset(xml.sax.handler.ContentHandler):
     def tag2uri(self, str):
         """ Generate URI from tagname
         """
-        x = string.find(str, " ")
+        x = str.find(" ")
         if x < 0: return str
         return str[:x]+ str[x+1:]
     

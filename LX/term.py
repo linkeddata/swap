@@ -16,7 +16,7 @@ class Term:
 
     def getVars(self):
         """not called OpenVars to give us more type checking"""
-        raise RuntimeError, "please override"
+        raise RuntimeError("please override")
     
 class Variable(Term):
     def __init__(self, name=None, uriref=None):

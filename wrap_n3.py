@@ -5,8 +5,8 @@ but I don't want to muck with that right now.
 
 """
 
-import pluggable
-import notation3
+from . import pluggable
+from . import notation3
 import sys
 
 class Parser(pluggable.Parser):
@@ -32,7 +32,7 @@ class Parser(pluggable.Parser):
         # host is not used yet
         #
         uri = stream.info().uri
-        print "Using sink", self.sink
+        print("Using sink", self.sink)
         self.sink.dumpPrefixes(sys.stdout)
         p = notation3.SinkParser(self.sink, uri)
         result = p.loadStream(stream)
@@ -42,8 +42,7 @@ class Parser(pluggable.Parser):
 class Serializer(pluggable.Serializer, notation3.ToN3):
 
     def __init__(self, stream, flags):
-        apply(notation3.ToN3.__init__, [self, stream.write],
-              {"flags": flags})
+        notation3.ToN3.__init__(*[self, stream.write], **{"flags": flags})
         
 
 #      r=notation3.SinkParser(notation3.ToN3(sys.stdout.write,

@@ -253,7 +253,7 @@ def doCommand(year, inputURI="/dev/stdin"):
 		    for c in classes:
 			if c in categories:
 			    mycat = kb.the(subj=c, pred=rdfs.label)
-		    progress( "# %s  %40s  %10s" %(date, payee, `amount`))
+		    progress( "# %s  %40s  %10s" %(date, payee, repr(amount)))
 		    rows = rows + """    <tr><td>%s</td><td>%s</td><td>%s</td>
 		    <td class='amount'>%7.2f</td><td class='amount'>0</td></tr>\n""" %(
 			date[:10], payee, mycat, amount)
@@ -280,7 +280,7 @@ def doCommand(year, inputURI="/dev/stdin"):
 		    "rows":	rows
 		     }
 
-	print substitute(form, values)
+	print(substitute(form, values))
         
 ############################################################ Main program
     
@@ -299,7 +299,7 @@ if __name__ == '__main__':
 	    ["help",  "verbose", "year=", "input="])
     except getopt.GetoptError:
         # print help information and exit:
-        print __doc__
+        print(__doc__)
         sys.exit(2)
     output = None
     for o, a in opts:

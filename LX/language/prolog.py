@@ -23,11 +23,11 @@ def test():
     t3 = LX.Term([3])
     t4 = LX.Term([4])
     s = Serializer()
-    print s.serialize((t1 & t2) | t3)
-    print s.serialize(t1 & (t2 | t3))
-    print s.serialize(t1 & (t2 | t3) | t4)
-    print s.serialize(t1 & (t2 | t3 | t4))
-    print s.serialize([(t1 & t2) | t3, t1 & (t2 | t3)])
+    print(s.serialize((t1 & t2) | t3))
+    print(s.serialize(t1 & (t2 | t3)))
+    print(s.serialize(t1 & (t2 | t3) | t4))
+    print(s.serialize(t1 & (t2 | t3 | t4)))
+    print(s.serialize([(t1 & t2) | t3, t1 & (t2 | t3)]))
     
 if __name__ =='__main__':
     test()

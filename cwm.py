@@ -1,4 +1,4 @@
-#!/usr/bin/python
+ #!/usr/bin/python3
 """
 $Id$
 
@@ -64,7 +64,12 @@ from swap import  RDFSink
 
 cvsRevision = "$Revision$"
     
-            
+       ############## Temp test setup
+# @@ this should be able to be set up in the launch.json file in vscode
+
+# for arg in "-n3 test/equiv-syntax.n3 -rdf".split(' '):
+#     sys.argv.append(arg)
+# print('@@ sys.argv', len(sys.argv))
 
 #################################################  Command line
 
@@ -211,7 +216,7 @@ rdf/xml files. Note that this requires rdflib.
         for argnum in range(1,len(sys.argv)):  # options after script name
             arg = sys.argv[argnum]
             if arg.startswith("--"): arg = arg[1:]   # Chop posix-style -- to -
-#            _equals = string.find(arg, "=")
+#            _equals = arg.find("=")
             _lhs = ""
             _rhs = ""
             try:
@@ -219,6 +224,7 @@ rdf/xml files. Note that this requires rdflib.
                 try:
                     _uri = join(option_baseURI, _rhs)
                 except ValueError:
+                    print('@@@ 2 oop : ', option_baseURI, _rhs)
                     _uri = _rhs
             except ValueError: pass
             if arg == "-ugly": option_outputStyle = arg
@@ -288,12 +294,12 @@ rdf/xml files. Note that this requires rdflib.
             elif arg == "-reify": option_reify = 1
             elif arg == "-flat": option_flat = 1
             elif arg == "-help":
-                print doCommand.__doc__
-                print notation3.ToN3.flagDocumentation
-                print toXML.ToRDF.flagDocumentation
+                print(doCommand.__doc__)
+                print(notation3.ToN3.flagDocumentation)
+                print(toXML.ToRDF.flagDocumentation)
                 try:
                     from swap import  sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
-                    print sax2rdf.RDFXMLParser.flagDocumentation
+                    print(sax2rdf.RDFXMLParser.flagDocumentation)
                 except:
                     pass
                 return
@@ -358,7 +364,7 @@ rdf/xml files. Note that this requires rdflib.
             _outSink = notation3.Reifier(_outSink, _outURI+ "#_formula", flat=1)
 
         if diag.tracking: 
-            myReason = BecauseOfCommandLine(`sys.argv`)
+            myReason = BecauseOfCommandLine(repr(sys.argv))
             # @@ add user, host, pid, pwd, date time? Privacy!
         else:
             myReason = None
@@ -428,7 +434,7 @@ rdf/xml files. Note that this requires rdflib.
         for arg in sys.argv[1:]:  # Command line options after script name
             if verbosity()>5: progress("Processing %s." % (arg))
             if arg.startswith("--"): arg = arg[1:]   # Chop posix-style -- to -
-            _equals = string.find(arg, "=")
+            _equals = arg.find("=")
             _lhs = ""
             _rhs = ""
             if _equals >=0:
@@ -498,7 +504,7 @@ rdf/xml files. Note that this requires rdflib.
                 diag.tracking = int(_rhs)
                 
             elif option_pipe: ############## End of pipable options
-                print "# Command line error: %s illegal option with -pipe", arg
+                print("# Command line error: %s illegal option with -pipe", arg)
                 break
 
             elif arg == "-triples" or arg == "-ntriples":
@@ -656,34 +662,36 @@ rdf/xml files. Note that this requires rdflib.
             elif _lhs == "-prove":
 
                 # code copied from -filter without really being understood  -sdh
+                _newURI = join(_baseURI, "_w_"+repr(_genid))  # Intermediate
+                _metaURI = _newURI + "_meta"
                 _tmpstore = llyn.RDFStore( _outURI+"#_g", metaURI=_metaURI, argv=option_with, crypto=option_crypto)
 
                 tmpContext = _tmpstore.newFormula(_uri+ "#_formula")
-                _newURI = join(_baseURI, "_w_"+`_genid`)  # Intermediate
                 _genid = _genid + 1
                 _newContext = _tmpstore.newFormula(_newURI+ "#_formula")
                 _tmpstore.loadURI(_uri)
 
-                print targetkb
+                print(_tmpstore)
 
             elif arg == "-flatten":
-                #raise NotImplementedError
-                from swap import reify
-                workingContext = reify.flatten(workingContext)
+                raise NotImplementedError
+                # from swap import reify
+                # workingContext = reify.flatten(workingContext)
 
             elif arg == "-unflatten":
-                from swap import reify
-                workingContext = reify.unflatten(workingContext)
-                #raise NotImplementedError
+                # from swap import reify
+                # workingContext = reify.unflatten(workingContext)
+                raise NotImplementedError
                 
             elif arg == "-reify":
-                from swap import reify
-                workingContext = reify.reify(workingContext)
+                raise NotImplementedError
+                # from swap import reify
+                # workingContext = reify.reify(workingContext)
                 
-
             elif arg == "-dereify":
-                from swap import reify
-                workingContext = reify.dereify(workingContext)                
+                raise NotImplementedError
+                # from swap import reify
+                # workingContext = reify.dereify(workingContext)                
                 
 
             elif arg == "-size":
@@ -695,7 +703,7 @@ rdf/xml files. Note that this requires rdflib.
                 option_outputStyle = "-no"
 
             elif arg == '-sparqlResults':
-                from cwm_sparql import outputString, SPARQL_NS
+                from .cwm_sparql import outputString, SPARQL_NS
                 ns = _store.newSymbol(SPARQL_NS)
                 if not sparql_query_formula:
                     raise ValueError('No query')
@@ -735,7 +743,7 @@ rdf/xml files. Note that this requires rdflib.
                 elif option_outputStyle == "-no":
                     pass
                 elif option_outputStyle == "-debugString":
-                    print workingContext.debugString()
+                    print(workingContext.debugString())
                 else:  # "-best"
                     _store.dumpNested(workingContext, _outSink,
                             flags=option_flags[option_format])

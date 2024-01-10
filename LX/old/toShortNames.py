@@ -44,6 +44,6 @@ if __name__ == "__main__":
     line = sys.stdin.readline()
     while line:
         line = trans(line)
-        print line,
+        print(line, end=' ')
         line = sys.stdin.readline()
 

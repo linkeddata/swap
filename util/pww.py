@@ -14,6 +14,7 @@ import sys
 import string
 import os
 import re, urllib
+import urllib.parse
 
 version = "$Id$"[1:-1]
 verbose = 0
@@ -23,14 +24,14 @@ def baseDirBase(abs):
 #    basedir, tail = os.path.split(abs)
     while basedir  != '/':
         wb = basedir + '/.web_base'
-        if verbose: print "# trying "+wb
+        if verbose: print("# trying " + wb)
         try:
             f = open(wb)
             break
         except IOError:
             basedir, tail = os.path.split(basedir)
             if basedir != '/': continue
-            print "No .web_base file for ", path
+            print("No .web_base file for " + path)
             return None, None
     if f:
         base = f.readline()
@@ -46,7 +47,7 @@ for arg in sys.argv[1:]:
             print__doc__
         elif arg == "-v": verbose = 1
         else:
-            print """Bad option argument.""" + __doc__
+            print("""Bad option argument.""" + __doc__)
             sys.exit(-1)
     else:
         files.append(arg)
@@ -57,9 +58,9 @@ if files == []:
 
 for path in files:
     abs = os.path.abspath(path)
-    if verbose: print "# abs = "+abs
+    if verbose: print("# abs = "+abs)
     basedir, newbase = baseDirBase(abs)
     if basedir:
-        print urllib.quote(abs.replace(basedir, newbase), ".:/#")
+        print(urllib.parse.quote(abs.replace(basedir, newbase), ".:/#"))
 
 #ends

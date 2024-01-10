@@ -19,11 +19,11 @@ REFERENCES
 
 __version__ = "$Id$"
 
-import uripath
+from . import uripath
 import time
 from warnings import warn
 
-from diag import progress
+from .diag import progress
 
 # The statement is stored as a quad - affectionately known as a triple ;-)
 # offsets when a statement is stored as a Python tuple (c, p, s, o)
@@ -86,10 +86,10 @@ N3_Empty = (SYMBOL, List_NS + "Empty")
 # Standard python modules:
 from os import getpid
 from time import time
-from uripath import base, join
+from .uripath import base, join
 
 # SWAP modules:
-from diag import verbosity, progress
+from .diag import verbosity, progress
 from os import environ
 
 runNamespaceValue = None
@@ -103,7 +103,7 @@ def runNamespace():
             runNamespaceValue = environ["CWM_RUN_NS"]
         except KeyError:
             runNamespaceValue = uripath.join(
-                uripath.base(), ".run-" + `time()` + "p"+ `getpid()` +"#")
+                uripath.base(), ".run-" + repr(time()) + "p"+ repr(getpid()) +"#")
         runNamespaceValue = join(base(), runNamespaceValue) # absolutize
     return runNamespaceValue
 
@@ -112,7 +112,7 @@ def uniqueURI():
     "A unique URI"
     global nextu
     nextu += 1
-    return runNamespace() + "u_" + `nextu`
+    return runNamespace() + "u_" + repr(nextu)
     
 class URISyntaxError(ValueError):
     """A parameter is passed to a routine that requires a URI reference"""
@@ -262,7 +262,7 @@ class RDFSink:
         while not subj:
             subj = self._genPrefix
             assert subj # don't mask bugs
-            subj = subj + `self._nextId`
+            subj = subj + repr(self._nextId)
             self._nextId = self._nextId + 1
             try:
                 self.checkNewId(subj)  # For a store, just in case, check really unique
@@ -363,7 +363,7 @@ class RDFStructuredOutput(RDFSink):
         pass
     
 
-from diag import printState
+from .diag import printState
 class TracingRDFSink:
     """An implementation of the RDFSink interface which helps me
     understand it, especially how it gets used by parsers vs. by an

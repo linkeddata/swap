@@ -20,7 +20,7 @@ __version__="$Id$"
 from string import rfind, split
 import re
 
-from ConstTerm import Symbol, StringLiteral
+from .ConstTerm import Symbol, StringLiteral
 
 
 class Sink(object):
@@ -76,7 +76,7 @@ def writeTerm(w, t, prefixes, vmap, level):
         lit = re.sub(r'[\"\\]', _escchar, t) # escape newlines? hmm...
         w('"%s"' % lit)
     else:
-        raise RuntimeError, "term not implemented: " + str(t)
+        raise RuntimeError("term not implemented: " + str(t))
         
 
 def withPrefix(i, prefixes):

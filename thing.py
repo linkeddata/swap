@@ -15,7 +15,7 @@ Includes:
 """
 
 
-from __future__ import generators  # for yield
+  # for yield
 
 import string
 #import re
@@ -25,20 +25,20 @@ import sys
 # import notation3    # N3 parsers and generators, and RDF generator
 # import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
-import urllib # for hasContent
-import uripath # DanC's tested and correct one
+import urllib.request, urllib.parse, urllib.error # for hasContent
+from . import uripath # DanC's tested and correct one
 import md5, binascii  # for building md5 URIs
 
-from uripath import refTo
-from RDFSink import runNamespace
+from .uripath import refTo
+from .RDFSink import runNamespace
 
 LITERAL_URI_prefix = "data:text/n3;"
 
 
-from RDFSink import List_NS
-from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
-from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
-from RDFSink import Logic_NS
+from .RDFSink import List_NS
+from .RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
+from .RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
+from .RDFSink import Logic_NS
 
 PARTS =  PRED, SUBJ, OBJ
 ALL4 = CONTEXT, PRED, SUBJ, OBJ
@@ -69,7 +69,7 @@ subcontext_cache_subcontexts = None
 store = None
 storeClass = None
 
-from diag import progress
+from .diag import progress
 progress("Warning: $SWAP/thing.py is obsolete: use term/py and myStore.py")
 
 def setStoreClass(c):
@@ -203,7 +203,6 @@ reify = Namespace("http://www.w3.org/2004/06/rei#")
 # is being able to find synonyms and so translate documents.
 
 
-        
 class Term:
     """The Term object represents an RDF term.
     
@@ -219,8 +218,8 @@ class Term:
         This should be beefed up to guarantee unambiguity (see __repr__ documentation).
         """
         s = self.uriref()
-        p = string.rfind(s, "#")
-        if p<0: p=string.rfind(s, "/")   # Allow "/" namespaces as a second best
+        p = s.rfind("#")
+        if p<0: p = s.rfind("/")   # Allow "/" namespaces as a second best
         if (p>=0 and s[p+1:].find(".") <0 ): # Can't use prefix if localname includes "."
             prefix = self.store.prefixes.get(s[:p+1], None) # @@ #CONVENTION
             if prefix != None : return prefix + ":" + s[p+1:]
@@ -284,7 +283,7 @@ class Symbol(Term):
     
     def __init__(self, uri, store=None):
         Term.__init__(self, store)
-        assert string.find(uri, "#") < 0, "no fragments allowed: %s" % uri
+        assert uri.find("#") < 0, "no fragments allowed: %s" % uri
         assert ':' in uri, "must be absolute: %s" % uri
         self.uri = uri
         self.fragments = {}
@@ -393,7 +392,7 @@ class Anonymous(Fragment):
 #
 _nextList = 0
 
-from diag import verbosity, progress
+from .diag import verbosity, progress
 
 class CompoundTerm(Term):
     """A compound term has occurrences of terms within it.
@@ -411,7 +410,7 @@ class List(CompoundTerm):
         _nextList = _nextList + 1
 
     def uriref(self):
-        return runNamespace() + "li"+ `self._id`
+        return runNamespace() + "li"+ repr(self._id)
 
     def precededBy(self, first):
         x = self._prec.get(first, None)
@@ -453,7 +452,7 @@ class List(CompoundTerm):
     def occurringIn(self, vars):
         "Which variables in the list occur in this list?"
         set = []
-        if verbosity() > 98: progress("----occuringIn: ", `self`)
+        if verbosity() > 98: progress("----occuringIn: ", repr(self))
         x = self
         while not isinstance(x, EmptyList):
             y = x.first
@@ -502,7 +501,7 @@ class NonEmptyList(List):
             return self.rest.unify(other.rest, vars, existentials,  bindings)
         
     def __repr__(self):
-        return "(" + `self.first` + "...)"
+        return "(" + repr(self.first) + "...)"
 
 class EmptyList(List):
         
@@ -611,7 +610,7 @@ class Literal(Term):
         if self.datatype is self.store.integer: return int(self.string)
         if self.datatype is self.store.float: return float(self.string)
         raise ValueError("Attempt to run built-in on unknown datatype %s of value %s." 
-                        % (`x.datatype`, x.string))
+                        % (repr(x.datatype), x.string))
 
     def uriref(self):
         # Unused at present but interesting! 2000/10/14
@@ -665,7 +664,7 @@ def uri_encode(str):
         result = ""
         i=0
         while i<len(str) :
-            if string.find('"\'><"', str[i]) <0 :   # @@@ etc
+            if '"\'><"'.find(str[i]) <0 :   # @@@ etc
                 result.append("%%%2x" % (atoi(str[i])))
             else:
                 result.append(str[i])
@@ -702,7 +701,7 @@ class BuiltIn(Fragment):
                 return Function.eval(self, subj, obj, queue, bindings, proof, query)
         elif isinstance(self, ReverseFunction):
                 return ReverseFunction.eval(self, subj, obj, queue, bindings, proof, query)
-        raise RuntimeError("Instance %s of built-in has no eval() or subsititue for it" %`self`)
+        raise RuntimeError("Instance %s of built-in has no eval() or subsititue for it" %repr(self))
         
 class LightBuiltIn(BuiltIn):
     """A light built-in is fast and is calculated immediately before searching the store.

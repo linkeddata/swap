@@ -58,29 +58,29 @@ kb = None;
 
 def printTransactionDetails(t):
     for st in kb.statementsMatching(subj=t):
-        print "     %-15s "%`st.predicate()`, str(st.object())
+        print("     %-15s "%repr(st.predicate()), str(st.object()))
     
 def printCategoryTotalsOnly(cats, totals, count):
     trans = 0
     inc, out = 0,0
     global kb
-    print "<table class='wide' style='border-collapse:collapse; border: 0.01em solid #aaa; text-align: '.' ><col style='text-align: left'>"
+    print("<table class='wide' style='border-collapse:collapse; border: 0.01em solid #aaa; text-align: '.' ><col style='text-align: left'>")
     for c in cats:
-        label = `c`
+        label = repr(c)
         tot = totals.get(c, 0)
         if tot != 0:
-            print "<tr><td>%s</td><td>" %(label),
+            print("<tr><td>%s</td><td>" %(label), end=' ')
             for s in kb.each(subj=c, pred=rdfs.subClassOf):
-                print " (%s)"% `s`,
-            print "</td><td class='amount'>%9.2f</td></tr>" %(tot),
-            print
+                print(" (%s)"% repr(s), end=' ')
+            print("</td><td class='amount'>%9.2f</td></tr>" %(tot), end=' ')
+            print()
             if tot > 0: inc = inc + tot
             else: out = out + tot
         trans = trans + count.get(c,0)
 
-    print "</table>"
-    print """<p>In %i transactions, Total income %9.2f, 
-    outgoings %9.2f, balance %92f</p>""" % (trans, inc, out, inc + out)
+    print("</table>")
+    print("""<p>In %i transactions, Total income %9.2f, 
+    outgoings %9.2f, balance %92f</p>""" % (trans, inc, out, inc + out))
 
 
 
@@ -110,7 +110,7 @@ def transactionRow(x):
     payee = kb.any(subj=x, pred=qu.payee)
     toAccount = kb.the(subj=x, pred=qu.toAccount)
     accLabel = kb.any(subj = toAccount, pred = rdfs.label)
-    if not accLabel: accLabel = `toAccount`[-4:]
+    if not accLabel: accLabel = repr(toAccount)[-4:]
     return " <tr class='%s'><td class='date'>%s</td><td><a href='%s'>%s</a></td><td style='width:7em;'>%s</td><td class='amount'>%7.2f</td></tr>\n" % (accLabel, date, baseRel(x.uriref()), payee, accLabel, amount)
     
     
@@ -150,7 +150,7 @@ def internalCheck():
                 usds = kb.each(subj=y, pred=qu.in_USD)
                 if len(usds) == 0:continue  # No amount => must be not in this period.
                 if len(usds) != 1:
-                    progress("Error: Ignoring: %i != 1 USD amounts for Internal transaction %s" % (len(usds), `y`+': '+ `usds`))
+                    progress("Error: Ignoring: %i != 1 USD amounts for Internal transaction %s" % (len(usds), repr(y)+': '+ repr(usds)))
                     transactions.remove(y)
                     continue
                 if abs(amount +
@@ -160,8 +160,8 @@ def internalCheck():
         else:
             unbalanced.append(x)
     if unbalanced:
-        print "<h2>Unbalanced internal transactions</h2>"
-        print transactionTable(unbalanced);
+        print("<h2>Unbalanced internal transactions</h2>")
+        print(transactionTable(unbalanced));
     return
 
 
@@ -183,8 +183,8 @@ def writeChart(filename, categories, totals, income, outgoings, shortTerm=0):
         
         label = kb.the(subj=c, pred=rdfs.label)
         if label == None:
-            label = `c`
-            sys.stderr.write("Warning: No label for category"+`c` +"\n")
+            label = repr(c)
+            sys.stderr.write("Warning: No label for category"+repr(c) +"\n")
         else:
             label = str(label)
         
@@ -354,7 +354,7 @@ def doCommand(startDate, endDate, inputURIs=["/dev/stdin"],totalsFilename=None):
     qu_Unclassified = qu.Unclassified
     taxCategories = kb.each(pred=rdf_type, obj=tax.Category)
     if verbose:
-        progress("Tax categories" + `taxCategories`)
+        progress("Tax categories" + repr(taxCategories))
     specialCategories = taxCategories + [qu.Classified, qu.Unclassified, qu.Transaction]
 
 ####### Analyse the data:
@@ -388,11 +388,11 @@ def doCommand(startDate, endDate, inputURIs=["/dev/stdin"],totalsFilename=None):
         # progress( "Categories: "+`cats`)
         
         month = monthNumber(s)
-        if month not in range(numberOfMonths) : continue
+        if month not in list(range(numberOfMonths)) : continue
                     
         payees = kb.each(subj=s, pred=qu_payee)
 	if not payees:
-	    progress("@@@ Error: No payee for "+`uri`)
+	    progress("@@@ Error: No payee for "+repr(uri))
 	    payee = "@@@@@@ Unknown";
             fatalErrors += 1;
 	
@@ -405,11 +405,11 @@ def doCommand(startDate, endDate, inputURIs=["/dev/stdin"],totalsFilename=None):
         if len(amounts) == 0:
             amounts = kb.each(subj=s, pred=qu_amount)
             if len(amounts) == 0:
-                progress("@@@ Error: No USD amount for "+`uri`)
+                progress("@@@ Error: No USD amount for "+repr(uri))
                 fatalErrors += 1;
 
             else:
-                progress("Warning: No USD amount for "+`uri`+", assuming USD")
+                progress("Warning: No USD amount for "+repr(uri)+", assuming USD")
         if len(amounts) >1:
             if (cat_ns.Internal not in cats or
                 len(amounts) != 2 ):
@@ -417,7 +417,7 @@ def doCommand(startDate, endDate, inputURIs=["/dev/stdin"],totalsFilename=None):
 
                 progress(
         "Error: More than one USD amount %s for transaction %s -- ignoring!\n"
-                        % (`amounts`,uri))
+                        % (repr(amounts),uri))
             else:
                 sum = float(amounts[0]) + float(amounts[1])
                 if sum != 0:
@@ -427,10 +427,10 @@ def doCommand(startDate, endDate, inputURIs=["/dev/stdin"],totalsFilename=None):
             continue
 
         if len(amounts) != 1:
-            progress("@@@ Error: No amount for "+`uri`);
+            progress("@@@ Error: No amount for "+repr(uri));
             fatalErrors += 1;
             ss = kb.statementsMatching(subj=s)
-            progress(`ss`+'; KB='+`kb.n3String()`)
+            progress(repr(ss)+'; KB='+repr(kb.n3String()))
             continue
         amount = float(amounts[0].__str__())
 #           print "%s  %40s  %10s month %i" %(date, payee, `amount`, month)
@@ -460,15 +460,15 @@ def doCommand(startDate, endDate, inputURIs=["/dev/stdin"],totalsFilename=None):
                     bottomCats.remove(sup)
         if len(bottomCats) == 0:
            noteError("No categoriy:  for <%s>"  # all cats: %s, raw cats:%s"
-                        %(`s`))  #  ,`cats`, `kb.each(subj=s, pred=rdf.type)`)
+                        %(repr(s)))  #  ,`cats`, `kb.each(subj=s, pred=rdf.type)`)
         elif bottomCats[0] not in bottomCategories and (bottomCats[0] not in [ qu.UnclassifiedIncome, qu.UnclassifiedOutgoing]):
-           noteError("Be more specific: %s for <%s>"  %(`bottomCats[0]`, `s`)) # Won't get shown e.g. in year-cat.html
+           noteError("Be more specific: %s for <%s>"  %(repr(bottomCats[0]), repr(s))) # Won't get shown e.g. in year-cat.html
         if len(bottomCats) > 1:
            noteError("Inconsistent categories: %s"  # all cats: %s, raw cats:%s"
-                        %(`bottomCats`))  #  ,`cats`, `kb.each(subj=s, pred=rdf.type)`)
+                        %(repr(bottomCats)))  #  ,`cats`, `kb.each(subj=s, pred=rdf.type)`)
 
     
-    print '<html xmlns="http://www.w3.org/1999/xhtml">'
+    print('<html xmlns="http://www.w3.org/1999/xhtml">')
 
     if '--summary' in sys.argv:
         title = "Monthly summary"
@@ -477,13 +477,13 @@ def doCommand(startDate, endDate, inputURIs=["/dev/stdin"],totalsFilename=None):
     else:
         title = "Report"
 
-    print """<head>
+    print("""<head>
         <meta charset='UTF-8'>
         <title>%s</title>
         <link rel="Stylesheet" href="report.css">
     </head>
     <body>
-    """ % (title)
+    """ % (title))
 #           <img src="sand-dollar.gif" alt="dollar" align="right"/>
     
 
@@ -494,17 +494,17 @@ def doCommand(startDate, endDate, inputURIs=["/dev/stdin"],totalsFilename=None):
 #  SUMMARY  TABLE OF CATEGORY BY MONTH
 
     if '--summary' in sys.argv:
-	print "<h2>Personal categories and months %s - %s</h2>" % (startDate, endDate)
-	print "<table class='wide' style='border-collapse:collapse; border: 0.01em solid #aaa; text-align: right' ><col style='text-align: left'>"
+	print("<h2>Personal categories and months %s - %s</h2>" % (startDate, endDate))
+	print("<table class='wide' style='border-collapse:collapse; border: 0.01em solid #aaa; text-align: right' ><col style='text-align: left'>")
 	
-	print "<tr><th></th><th>Total </th>" 
+	print("<tr><th></th><th>Total </th>") 
 	for month in range(numberOfMonths):
 	    m = month + int(startDate[5:7]) - 1
 	    while m > 11: m -= 12  # Modulo in python?
 	    
 	    
-	    print "<th><a href='year-chron.html#m%s'>%s</a></th>" %(("0"+`m+1`)[-2:], monthName[m]),
-	print "</tr>"
+	    print("<th><a href='year-chron.html#m%s'>%s</a></th>" %(("0"+repr(m+1))[-2:], monthName[m]), end=' ')
+	print("</tr>")
 	
 	
 	def listFor(c, depth=0):   # Any, because there could be 2 copies of same list :-(
@@ -513,7 +513,7 @@ def doCommand(startDate, endDate, inputURIs=["/dev/stdin"],totalsFilename=None):
 	    if subs == None:
 		subs = kb.each(pred = rdfs.subClassOf, obj = c);
 		if len(subs) > 0:
-		    sys.stderr.write( "Warning: for %s: no disjointUnionOf but subclasses %s\n" %(`c`, `subs`))
+		    sys.stderr.write( "Warning: for %s: no disjointUnionOf but subclasses %s\n" %(repr(c), repr(subs)))
 		for sub in subs: res += listFor(sub, depth+1)
 	    else:
 		for sub in subs: res += listFor(sub, depth+1)
@@ -524,27 +524,27 @@ def doCommand(startDate, endDate, inputURIs=["/dev/stdin"],totalsFilename=None):
 	for cat, depth in printOrder:
 	    label = kb.the(subj=cat, pred=rdfs.label)
 	    if label == None:
-		label = `cat`
-		sys.stderr.write("@@ No label for "+`cat` +"\n")
+		label = repr(cat)
+		sys.stderr.write("@@ No label for "+repr(cat) +"\n")
 	    else:
 		label = str(label)
 	    anchor = cat.fragid
 	    if totals.get(cat, None) != None:
-		print monthGridRow(anchor, anchor, totals[cat], byMonth.get(cat, [0] * numberOfMonths),
-		    numberOfMonths, indent = depth)
+		print(monthGridRow(anchor, anchor, totals[cat], byMonth.get(cat, [0] * numberOfMonths),
+		    numberOfMonths, indent = depth))
 
-	print "<tr><td colspan='14'> ___  </td></tr>"
-	print monthGridRow("Income", None,  income, incomeByMonth, numberOfMonths)
-	print monthGridRow("Outgoings", None, outgoings, outgoingsByMonth, numberOfMonths)
-	print monthGridRow("Balance", None, income + outgoings, monthTotals, numberOfMonths)
+	print("<tr><td colspan='14'> ___  </td></tr>")
+	print(monthGridRow("Income", None,  income, incomeByMonth, numberOfMonths))
+	print(monthGridRow("Outgoings", None, outgoings, outgoingsByMonth, numberOfMonths))
+	print(monthGridRow("Balance", None, income + outgoings, monthTotals, numberOfMonths))
 
-	print "</table>"
+	print("</table>")
 
     
 #  Chart of income stacked up against expenses
     if '--charts' in sys.argv:
-	print "<p><a href='chart.svg'><p>Chart of day-day income vs expense</p><img src='chart.svg'></a></p>"
-	print "<p><a href='all.svg'><p>Chart of all income vs expense</p><img src='all.svg'></a></p>"
+	print("<p><a href='chart.svg'><p>Chart of day-day income vs expense</p><img src='chart.svg'></a></p>")
+	print("<p><a href='all.svg'><p>Chart of all income vs expense</p><img src='all.svg'></a></p>")
 
 	writeChart(filename = "chart.svg",
 	    categories = bottomCategories + [ qu.UnclassifiedIncome, qu.UnclassifiedOutgoing],
@@ -573,11 +573,11 @@ def doCommand(startDate, endDate, inputURIs=["/dev/stdin"],totalsFilename=None):
 
 	#  Generate a list of errors found
 	errstr = ""
-	for x, list in errors.items():
+	for x, list in list(errors.items()):
 	    errstr += transactionRow(x)
-	    for e in list: errstr += "<tr><td colspan='4'>"+`e`+"</td></tr>\n"  #  @@@ encode error string
+	    for e in list: errstr += "<tr><td colspan='4'>"+repr(e)+"</td></tr>\n"  #  @@@ encode error string
 	if errstr:
-	    print "<h2>Inconsistencies</h2><table>\n" + errstr + "</table>\n"
+	    print("<h2>Inconsistencies</h2><table>\n" + errstr + "</table>\n")
 	
 	# List Unclassified Income and Spending
 	
@@ -589,35 +589,35 @@ def doCommand(startDate, endDate, inputURIs=["/dev/stdin"],totalsFilename=None):
 	    return st + transactionTable(ts)
 	
 	for cat in [ qu.UnclassifiedIncome, qu.UnclassifiedOutgoing]:
-	    print transactionList(cat)
+	    print(transactionList(cat))
 
-	print reimbursablesCheck();
+	print(reimbursablesCheck());
 	
 	internalCheck()
 
     if 0:
-	print "<h2>Tax Categories</h2>"
+	print("<h2>Tax Categories</h2>")
 	taxCategories = kb.each(pred=rdf_type, obj=tax.Category)
 	printCategoryTotalsOnly(taxCategories + [ qu.Unclassified], totals, count)
 
-	print "<h2>Tax stuff</h2>"
-	print "<table>"
-	print "<tr><th>-<th>Form line</th><th>amount</th></tr>"
-	print "</table>"
+	print("<h2>Tax stuff</h2>")
+	print("<table>")
+	print("<tr><th>-<th>Form line</th><th>amount</th></tr>")
+	print("</table>")
         
 	# print "<h2>Personal Category total</h2>"
 	# printCategoryTotalsOnly(quCategories + [ qu.Unclassified], totals, count)
 
-	print
+	print()
 
-	print "Note totals for tax and personal breakdowns must match."
+	print("Note totals for tax and personal breakdowns must match.")
 	dates = kb.statementsMatching(pred=qu.date)
-	print "There should be a total of %i transactions in each." % len(dates)
+	print("There should be a total of %i transactions in each." % len(dates))
 
     
 
     if 0:
-        print "<pre>(consistency check)"
+        print("<pre>(consistency check)")
         problems = 0
         for s in dates:
             tra = s.subject()
@@ -626,12 +626,12 @@ def doCommand(startDate, endDate, inputURIs=["/dev/stdin"],totalsFilename=None):
                 if typ is qu.Unclassified or typ is qu.Classified:
                     break # ok
             else:
-                print "@@@@ problem transcation with no classified or unclassified, with types", types
+                print("@@@@ problem transcation with no classified or unclassified, with types", types)
                 printTransactionDetails(tra)
                 problems = problems + 1
-        print problems, "problems.</pre>"
+        print(problems, "problems.</pre>")
     
-    print "</body></html>"
+    print("</body></html>")
     return fatalErrors
 
 
@@ -642,7 +642,7 @@ reportLink = "year-cat.html"
 global yearInQuestion, startDate, endDate
 
 def usage():
-    print __doc__
+    print(__doc__)
 
 startDate = None
 endDate = None

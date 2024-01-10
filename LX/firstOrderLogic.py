@@ -187,7 +187,7 @@ def getOpenVariables(expr):
         return [expr]
     elif isinstance(expr.function, Quantifier):
         # this kind of makes us think we should be instantiating a subclass
-        raise RuntimeError, "Not Implemented"
+        raise RuntimeError("Not Implemented")
     else:
         result = []
         for child in expr.all:

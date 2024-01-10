@@ -5,13 +5,13 @@ but I don't want to muck with that right now.
 
 """
 
-import pluggable
-import llyn
+from . import pluggable
+from . import llyn
 
 class Store(pluggable.Store, llyn.RDFStore):
 
     def __init__(self, host=None, copyFrom=None):
         if copyFrom is not None:
-            raise RuntimeError, "Not implemented"
+            raise RuntimeError("Not implemented")
         if host is not None: self.host = host
-        apply(llyn.RDFStore.__init__, [self])
+        llyn.RDFStore.__init__(*[self])

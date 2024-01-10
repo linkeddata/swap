@@ -91,10 +91,10 @@ class Formula(tuple):
             result = self[2] .openVars()
             if not isinstance(var, varClass):
                 msg = "found a %s expecting a %s" % (var.__class__, varClass)
-                raise TypeError, msg
+                raise TypeError(msg)
             if var not in result:
                 # maybe this should only be a warning?
-                raise RuntimeError, "Variable does not occur in child"
+                raise RuntimeError("Variable does not occur in child")
             result.remove(var)
         elif self.operator is LX.ATOMIC_SENTENCE:
             result = []
@@ -119,7 +119,7 @@ class Formula(tuple):
                 # We could do:   and name not in self.openVars()
                 # to allow:  all x ( P(x) & all x ( Q(x) ) )
                 # which makes sense, but is too confusing for humans
-                for x in xrange(2, 100000000):
+                for x in range(2, 100000000):
                     newname = "%s_%d" % (name, x)
                     if newname not in namesUsedOutside:
                         break

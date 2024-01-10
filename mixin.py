@@ -58,12 +58,12 @@ class mixinClass(object):
 ##                        operations[func][base] = dict[func]
                         if func in base.__dict__:
                             raise ValueError('''I can't let you override an existing method.
-Use real inheritance: %s.%s''' % (`base`, func))
+Use real inheritance: %s.%s''' % (repr(base), func))
                         setattr(base, func, dict[func])
         return object.__new__(metacls)
 
-class Mixin:
-    __metaclass__ = mixinClass
+class Mixin(metaclass=mixinClass):
+    pass
 
 
                         

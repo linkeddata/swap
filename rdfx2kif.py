@@ -20,9 +20,9 @@ References
 
 import os, sys
 
-import KIFSink
-import sax2rdf
-import xml2rdf # if you want the older RDF parser that doesn't require python2
+from . import KIFSink
+from . import sax2rdf
+from . import xml2rdf # if you want the older RDF parser that doesn't require python2
 
 def convert(text, addr, outFp):
     gen = KIFSink.Sink(outFp)

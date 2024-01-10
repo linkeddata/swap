@@ -137,7 +137,7 @@ def extract(path):
     b = input.read()
     input.close()
     
-    wr("# Length: " + `len(b)`+ "starts ")
+    wr("# Length: " + repr(len(b))+ "starts ")
     wr(" ".join(["%2x"%ord(ch) for ch in b[:8]]))
     wr("\n")
     if ord(b[0])==0 and ord(b[1]) == ord('B'):  #  UTF16 with MSB byte order unmarked    
@@ -197,7 +197,7 @@ def extract(path):
             return "%s %s;\n" % (dp, do)
 
         if len(kludges) != 0:
-            raise ValueError("Unknown Group pattern:"+`pos`)
+            raise ValueError("Unknown Group pattern:"+repr(pos))
 
         res = ""
         for p,o in  pos:
@@ -247,7 +247,7 @@ def extract(path):
                         pass
                     elif val in typeFields.get(n, []):
                         if relationshipModifiers.get(val, 0):
-                            if modifiers: print "# @@ multiple modifiers in: "+line
+                            if modifiers: print("# @@ multiple modifiers in: "+line)
                             modifiers = val + '-' + modifiers
                         else: classes.append('vc:'+val[0].upper()+val[1:])
                     else:
@@ -282,7 +282,7 @@ def extract(path):
                 return  '', orderedFields(value, map)  # Naked fields - see notes
             return pred, '[' + orderedFields(value, map) + classSpec + ']'
         if n == 'version':
-            assert value == "3.0", "value found: "+`value`
+            assert value == "3.0", "value found: "+repr(value)
             return "", ""
         if n == 'x.ablabel':
             return "", "" # used elsewhere
@@ -299,7 +299,7 @@ def extract(path):
         obj = None
         if n == 'tel':
             if value[0] != '+':
-                print "# @@ Warning: not international form tel: "+value
+                print("# @@ Warning: not international form tel: "+value)
             obj = '<tel:%s>' % (value.replace(' ','-'))
         elif n == 'url':
             obj = '<%s>' % (value)
@@ -312,7 +312,7 @@ def extract(path):
 
         elif n in singleTextField :  # Single text
             if classSpec:
-                raiseValueError("Unexpected class on %s: %s"%(n,`classSpec`))
+                raiseValueError("Unexpected class on %s: %s"%(n,repr(classSpec)))
             return pred, stringToN3(unesc, singleLine=0) # @@@ N3 escaping
 
         raise ValueError('Unknown tag:'+n)
@@ -412,12 +412,12 @@ for arg in sys.argv[1:]:
             _test()
             sys.exit(0)
         else:
-            print """Bad option argument.
+            print("""Bad option argument.
             -v  verbose
             -t  self-test
             -f  fix files instead of just looking
 
-"""
+""")
             sys.exit(-1)
     else:
         files.append(arg)

@@ -34,15 +34,15 @@ def kill(pid):
     time.sleep(0.10)
 
 def think(kb=None):
-    print "\n\n# Running Otter..."
+    print("\n\n# Running Otter...")
     try:
         proof = LX.engine.otter.run(kb)
-        print "# Contradiction found."
-        print "# for details try:  cat ,lx.engine.otter.fromOtter"
+        print("# Contradiction found.")
+        print("# for details try:  cat ,lx.engine.otter.fromOtter")
     except LX.engine.otter.SOSEmpty:
-        print "# Consistency proven."
-        print "# for details try:  cat ,lx.engine.otter.fromOtter"
-        print "# Done running Otter [ Inferences NOT incorporated back into cwm ]"
+        print("# Consistency proven.")
+        print("# for details try:  cat ,lx.engine.otter.fromOtter")
+        print("# Done running Otter [ Inferences NOT incorporated back into cwm ]")
 
 def run(string, fileBase=",lx.engine.otter", includes=None, maxSeconds=1,
         inputFileName=None, outputFileName=None):
@@ -123,7 +123,7 @@ def runOtter(toOtterFilename, fromOtterFilename=None, maxSeconds=1):
                 timeout = 1
                 try:
                     kill(pid)
-                except OSError, e:   # should only pass "No such process"
+                except OSError as e:   # should only pass "No such process"
                     if (str(e) == "[Errno 3] No such process"):
                         pass
                     else:
@@ -142,22 +142,22 @@ def runOtter(toOtterFilename, fromOtterFilename=None, maxSeconds=1):
             if line == "Search stopped because sos empty.\n":
                 sosEmpty = 1
         outputLog.close()
-    except KeyboardInterrupt, k:
-        print
-        print "Caught Interrupt; killing sub-reasoner process"
+    except KeyboardInterrupt as k:
+        print()
+        print("Caught Interrupt; killing sub-reasoner process")
         try:
             kill(pid)
         except OSError:
             pass
-        raise KeyboardInterrupt, k
+        raise KeyboardInterrupt(k)
 
     message = "During:\n   otter < %s > %s" % (toOtterFilename, fromOtterFilename)
     if result == []:
         if timeout:
-            raise TimeoutBeforeAnyProof, message
+            raise TimeoutBeforeAnyProof(message)
         if sosEmpty:
-            raise SOSEmpty, message
-        raise AbnormalRun, message
+            raise SOSEmpty(message)
+        raise AbnormalRun(message)
     #os.unlink(fromOtterFilename)     # or maybe sometimes you want it left around?
     #print "leaving", fromOtterFilename
     return result

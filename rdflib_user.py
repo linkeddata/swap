@@ -22,9 +22,9 @@ from rdflib.StringInputSource import StringInputSource
 from rdflib.URIRef import URIRef
 from rdflib.BNode import BNode
 from rdflib.Literal import Literal
-from RDFSink import FORMULA, ANONYMOUS, SYMBOL
-import diag
-from diag import progress
+from .RDFSink import FORMULA, ANONYMOUS, SYMBOL
+from . import diag
+from .diag import progress
 
 
 class rdflib_handoff:
@@ -52,10 +52,11 @@ class rdflib_handoff:
     def feed(self, buffer):
         self.parser(StringInputSource(buffer), self.format)
 
-    def add(self, (subject, predicate, object)):
+    def add(self, xxx_todo_changeme):
 #        print subject, ", a ", type(subject)
 #        print '---- has the property of ', predicate, ', of type ', type(predicate)
 #        print '---- with the value of ', object, ', of type ', type(object), '.'
+        (subject, predicate, object) = xxx_todo_changeme
         self.store.makeStatement((self.formula,
                self.convertRDFlibTypes(predicate),
                self.convertRDFlibTypes(subject),
@@ -63,7 +64,7 @@ class rdflib_handoff:
         return self
 
     def close(self):
-        for prefix, uri in self.prefix_ns_map.items():
+        for prefix, uri in list(self.prefix_ns_map.items()):
             if prefix == None: prefix = ""
             if ':' not in uri:
                 uri = self.asIfFrom + uri

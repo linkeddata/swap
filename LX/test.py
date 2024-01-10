@@ -10,15 +10,15 @@ import doctest
 import LX
 
 for x in LX.__all__:
-    print "Module", "%-25s" %x,
+    print("Module", "%-25s" %x, end=' ')
     lx = __import__("LX."+x)
     m = getattr(lx, x)
-    print "failed %3d of %3d doctest lines." % doctest.testmod(m)
+    print("failed %3d of %3d doctest lines." % doctest.testmod(m))
 
-    for (name, value) in m.__dict__.iteritems():
+    for (name, value) in m.__dict__.items():
         if name.startswith("__test") and callable(value):
-            print "...running",x+"."+name+"()"
-            apply(value, [])
+            print("...running",x+"."+name+"()")
+            value(*[])
     
 # $Log$
 # Revision 1.7  2003-09-17 16:09:58  sandro

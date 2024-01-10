@@ -1,5 +1,5 @@
-import rdfn3_yapps
-import notation3
+from . import rdfn3_yapps
+from . import notation3
 
 import sys
 
@@ -23,7 +23,7 @@ def test(text):
     gen.endDoc()
 
 def testKIF(text, addr):
-    import KIFSink
+    from . import KIFSink
     gen = KIFSink.Sink(sys.stdout.write)
     p = Parser(gen, addr)
     gen.startDoc()

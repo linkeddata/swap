@@ -2,10 +2,10 @@
 
 
 <rdf:RDF xmlns="http://example.com/m#"
-    xmlns:Uxml="http://example.com/xml#"
     xmlns:a="http://example.com/m#"
-    xmlns:exmlns="http://example.com/xmlns#"
-    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:xml2="http://example.com/xml#"
+    xmlns:xmlns2="http://example.com/xmlns#">
 
     <rdf:Description rdf:about="http://example.com/m#a">
         <b rdf:resource="http://example.com/m#c"/>
@@ -13,8 +13,8 @@
 
     <P xmlns="http://example.com/swap/test/xml-syntax/xml_prefix2.n3#"
         rdf:about="http://example.com/m#q">
-        <Uxml:v rdf:resource="http://example.com/xml#r"/>
-        <exmlns:w rdf:resource="http://example.com/xmlns#t"/>
+        <xml2:v rdf:resource="http://example.com/xml#r"/>
+        <xmlns2:w rdf:resource="http://example.com/xmlns#t"/>
     </P>
 
     <rdf:Description rdf:about="http://example.com/m#y">

@@ -14,26 +14,26 @@ This is or was http://www.w3.org/2000/10/swap/pretty.py
 import types
 import string
 
-import diag
-from diag import progress, verbosity, tracking
-from term import   Literal, XMLLiteral, Symbol, Fragment, AnonymousNode, \
+from . import diag
+from .diag import progress, verbosity, tracking
+from .term import   Literal, XMLLiteral, Symbol, Fragment, AnonymousNode, \
     AnonymousVariable, FragmentNil, AnonymousUniversal, \
     Term, CompoundTerm, List, EmptyList, NonEmptyList, N3Set
-from formula import Formula, StoredStatement
+from .formula import Formula, StoredStatement
 
-from RDFSink import Logic_NS, RDFSink, forSomeSym, forAllSym
-from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4, \
+from .RDFSink import Logic_NS, RDFSink, forSomeSym, forAllSym
+from .RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4, \
             ANONYMOUS, SYMBOL, LITERAL, LITERAL_DT, LITERAL_LANG, XMLLITERAL
-from RDFSink import N3_nil, N3_first, N3_rest, OWL_NS, N3_Empty, N3_List, \
+from .RDFSink import N3_nil, N3_first, N3_rest, OWL_NS, N3_Empty, N3_List, \
                     List_NS
-from RDFSink import RDF_NS_URI
-from RDFSink import RDF_type_URI
+from .RDFSink import RDF_NS_URI
+from .RDFSink import RDF_type_URI
 
 cvsRevision = "$Revision$"
 
 # Magic resources we know about
 
-from RDFSink import RDF_type_URI, DAML_sameAs_URI
+from .RDFSink import RDF_type_URI, DAML_sameAs_URI
 
 STRING_NS_URI = "http://www.w3.org/2000/10/swap/string#"
 META_NS_URI = "http://www.w3.org/2000/10/swap/meta#"
@@ -85,6 +85,7 @@ class Serializer:
 #       assert F.canonical is not None, "Formula printed must be canonical"
         self.store = F.store
         self.sink = sink
+        self.base = self.sink.base
         self.defaultNamespace = None
         self.flags = flags
         self.sorting = sorting
@@ -95,6 +96,9 @@ class Serializer:
         self._occurringAs = [{}, {}, {}, {}]
         self._topology_returns = {}
         
+        # print('@@ serializer base', self.base)
+        # print('@@ serializer sink.+base', self.sink.base)
+
     def selectDefaultPrefix(self, printFunction):
 
         """ Symbol whose fragments have the most occurrences.
@@ -117,7 +121,7 @@ class Serializer:
         best = 0
         mp = None
         counts = dummySink.namespaceCounts()
-        for r, count in counts.items():
+        for r, count in list(counts.items()):
             if verbosity() > 25: progress("    Count is %3i for %s" %(count, r))
             if (r != RDF_NS_URI
                 and count > 0
@@ -133,7 +137,7 @@ class Serializer:
 
         # Make up prefixes for things which don't have them:
         
-        for r, count in counts.items():
+        for r, count in list(counts.items()):
             if count > 1 and r != mp:
                 if self.store.prefixes.get(r, None) is None:
                     p = r
@@ -158,7 +162,7 @@ class Serializer:
                         else:
                             n = 2
                             while 1:
-                                pref = p[:3]+`n`
+                                pref = p[:3]+repr(n)
                                 if self.store.namespaces.get(pref, None) is None:
                                     break
                                 n = n + 1                       
@@ -170,7 +174,7 @@ class Serializer:
             self.sink.setDefaultNamespace(self.defaultNamespace)
 
 #       progress("&&&& Counts: ", counts)
-        prefixes = self.store.namespaces.keys()   #  bind in same way as input did FYI
+        prefixes = list(self.store.namespaces.keys())   #  bind in same way as input did FYI
         prefixes.sort()   # For repeatability of test results
         for pfx in prefixes:
             r = self.store.namespaces[pfx]
@@ -184,8 +188,8 @@ class Serializer:
 
     def dumpPrefixes(self):
         if self.defaultNamespace is not None:
-            sink.setDefaultNamespace(self.defaultNamespace)
-        prefixes = self.store.namespaces.keys()   #  bind in same way as input did FYI
+            self.sink.setDefaultNamespace(self.defaultNamespace)
+        prefixes = list(self.store.namespaces.keys())   #  bind in same way as input did FYI
         prefixes.sort()
         for pfx in prefixes:
             uri = self.store.namespaces[pfx]
@@ -215,7 +219,7 @@ class Serializer:
             if isinstance(l, N3Set):
                 a = context.newBlankNode()
                 ll = [mm for mm in l] #I hate sorting things
-                ll.sort(Term.compareAnyTerm)
+                ll.sort(key=Term.sortKey)
                 list = self.store.newList(ll)
                 self._outputStatement(sink, (context, self.store.forSome, context, a))
                 l._list = list
@@ -242,8 +246,6 @@ class Serializer:
                 listList[list] = 1
                 list = list.rest
 
-
-        
 
     def dumpChronological(self):
         "Fast as possible. Only dumps data. No formulae or universals."
@@ -274,7 +276,7 @@ class Serializer:
 
     def _outputStatement(self, sink, quad, aWorks = 1):
         if isinstance(quad[1], Literal):
-            raise ValueError("Cannot have a literal as a predicate. This makes no sense, %s" % `quad[1]`)
+            raise ValueError("Cannot have a literal as a predicate. This makes no sense, %s" % repr(quad[1]))
         if isinstance(quad[1], Formula):
             raise ValueError("Cannot have a formula as a predicate. This makes no sense")
         sink.makeStatement(auxPairs(quad), aIsPossible=aWorks)
@@ -285,8 +287,8 @@ class Serializer:
         uv = list(context.universals())
         ev = list(context.existentials())
         if sorting:
-            uv.sort(Term.compareAnyTerm)
-            ev.sort(Term.compareAnyTerm)
+            uv.sort(key=Term.sortKey)
+            ev.sort(key=Term.sortKey)
         if not dataOnly:
             for v in uv:
                 self._outputStatement(sink, (context, self.store.forAll, context, v))
@@ -302,7 +304,9 @@ class Serializer:
 
     def dumpBySubject(self, sorting=1):
         """ Dump one formula only by order of subject except
-            forSome's first for n3=a mode"""
+            forSome's first for n3=a mode
+            In the order of subjects, the document itself (<>) comes first.
+            """
         
         context = self.context
         uu = context.universals().copy()
@@ -314,7 +318,7 @@ class Serializer:
         self.dumpLists()
 
         ss = context.statements[:]
-        ss.sort()
+        ss.sort(key = StoredStatement.keyForSubjPredObj)
         def fixSet(x):
             try:
                 return x._node
@@ -329,20 +333,20 @@ class Serializer:
             else:
                 self._outputStatement(sink, [fixSet(x) for x in s.quad])
                     
-        if 0:  # Doesn't work as ther ei snow no list of bnodes
-            rs = self.store.resources.values()
-            if sorting: rs.sort(Term.compareAnyTerm)
+        if 0:  # Doesn't work as there is now no list of bnodes
+            rs = list(self.store.resources.values())
+            if sorting: rs.sort(key=Term.sortKey)
             for r in rs :  # First the bare resource
                 statements = context.statementsMatching(subj=r)
-                if sorting: statements.sort(StoredStatement.comparePredObj)
+                if sorting: statements.sort(key = StoredStatement.keyForPredObj)
                 for s in statements :
                         self._outputStatement(sink, s.quad)
                 if not isinstance(r, Literal):
-                    fs = r.fragments.values()
+                    fs = list(r.fragments.values())
                     if sorting: fs.sort
                     for f in fs :  # then anything in its namespace
                         statements = context.statementsMatching(subj=f)
-                        if sorting: statements.sort(StoredStatement.comparePredObj)
+                        if sorting: statements.sort(key=StoredStatement.keyForPredObj)
                         for s in statements:
                             self._outputStatement(sink, s.quad)
         sink.endDoc()
@@ -391,7 +395,7 @@ class Serializer:
     def _scan(self, x, context=None):
 #       progress("Scanning ", x, " &&&&&&&&")
 #       assert self.context._redirections.get(x, None) is None, "Should not be redirected: "+`x`
-        if verbosity() > 98: progress("scanning %s a %s in context %s" %(`x`, `x.__class__`,`context`),
+        if verbosity() > 98: progress("scanning %s a %s in context %s" %(repr(x), repr(x.__class__),repr(context)),
                         x.generated(), self._inContext.get(x, "--"))
         if isinstance(x, NonEmptyList) or isinstance(x, N3Set):
             for y in x:
@@ -420,7 +424,7 @@ class Serializer:
     def _breakloops(self, context):
         _done = {}
         _todo = list(self._occurringAs[SUBJ])
-        _todo.sort(Term.compareAnyTerm)
+        _todo.sort(key=Term.sortKey)
         for x in _todo:
             if x in _done:
                 continue
@@ -502,12 +506,12 @@ class Serializer:
                         _isExistential)
             if verbosity() > 97:
                 progress( "Topology %s in %s is: ctx=%s,anon=%i obj=%i, pred=%i loop=%s ex=%i "%(
-                `x`, `context`, `ctx`, _anon, _asObj, _asPred, _loop, _isExistential))
+                repr(x), repr(context), repr(ctx), _anon, _asObj, _asPred, _loop, _isExistential))
             return ( _anon, _asObj+_asPred )  
 
         if verbosity() > 98:
             progress( "Topology %s in %s is: anon=%i obj=%i, pred=%i loop=%s ex=%i "%(
-            `x`, `context`,  _anon, _asObj, _asPred, _loop, _isExistential))
+            repr(x), repr(context),  _anon, _asObj, _asPred, _loop, _isExistential))
 ##        self._topology_returns[x] = ( _anon, _asObj+_asPred )
         return ( _anon, _asObj+_asPred )  
 
@@ -536,16 +540,17 @@ class Serializer:
         self._dumpFormula(context)
         self.tm.end()
 
-    def _dumpNode(self, node):
+    # Unsed - delete?
+    def _dumpNode(self, node, context):
         tm = self.tm
         _anon, _incoming = self._topology(node, context)
         if isinstance(node, List):
             tm.startList()
-            [self._dumpNode(x) for x in node]
+            [self._dumpNode(x, context) for x in node]
             tm.endList()
         elif isinstance(node, N3Set):
             pass
-        elif isinstance(node, formula):
+        elif isinstance(node, Formula):
             tm.startFormula()
             self._dumpFormula(node)
             tm.endFormula()
@@ -573,14 +578,21 @@ class Serializer:
         """ Iterates over statements in formula, bunching them up into a set
         for each subject.
         """
-
+        def keySPO (st):
+            con, pred, subj, obj =  st.quad
+            if hasattr(subj, 'uri') and subj.uri == self.base:
+                s = "  " # this document comes first in order
+            else:
+                s = repr(subj)
+            return s + repr(pred) + repr(obj)
+            
         allStatements = context.statements[:]
         if equals:
-            for x, y in context._redirections.items():
+            for x, y in list(context._redirections.items()):
                 if not x.generated() and x not in context.variables():
                     allStatements.append(StoredStatement(
                         (context, context.store.sameAs, x, y)))
-        allStatements.sort()
+        allStatements.sort(key = keySPO)
 #        context.statements.sort()
         # @@ necessary?
         self.dumpVariables(context, sink, sorting, pretty=1)
@@ -623,7 +635,7 @@ class Serializer:
         if isinstance(subj, N3Set):
             #I hate having to sort things
             se = [mm for mm in subj]
-            se.sort(Term.compareAnyTerm)
+            se.sort(key=Term.sortKey)
             li = self.store.newList(se)
         else: se = None
         
@@ -640,7 +652,7 @@ class Serializer:
                 pass
             else:     #  Could have alternative syntax here
 
-                if sorting: statements.sort(StoredStatement.comparePredObj) # @@ Needed now Fs are canonical?
+                if sorting: statements.sort(key=StoredStatement.keyForPredObj) # @@ Needed now Fs are canonical?
 
                 if se is not None:
                     a = self.context.newBlankNode()
@@ -655,7 +667,7 @@ class Serializer:
                     for s in statements:
                         p = s.quad[PRED]
                         if p is not self.store.first and p is not self.store.rest:
-                            if verbosity() > 90: progress("Is list, has values for", `p`)
+                            if verbosity() > 90: progress("Is list, has values for", repr(p))
                             break # Something to print (later)
                     else:
                         if subj.generated(): return # Nothing.
@@ -681,7 +693,7 @@ class Serializer:
                         sink.endAnonymousNode()
                     return
                 else:
-                    if verbosity() > 90: progress("%s Not list, has property values." % `subj`)
+                    if verbosity() > 90: progress("%s Not list, has property values." % repr(subj))
                     sink.startAnonymousNode(auPair(subj))
                     for s in statements:  #   "[] color blue."  might be nicer. @@@  Try it?
                         try:
@@ -692,7 +704,7 @@ class Serializer:
                     return  # arcs as subject done
 
 
-        if sorting: statements.sort(StoredStatement.comparePredObj)
+        if sorting: statements.sort(key=StoredStatement.keyForPredObj)
         for s in statements:
             self.dumpStatement(sink, s.quad, sorting)
 
@@ -716,7 +728,7 @@ class Serializer:
 
         if isinstance(obj, NonEmptyList):
             if verbosity()>99:
-                progress("List found as object of dumpStatement " + `obj`
+                progress("List found as object of dumpStatement " + repr(obj)
                                         + context.debugString())
 
             collectionSyntaxOK = ("l" not in self.flags)
@@ -744,7 +756,7 @@ class Serializer:
         if isinstance(obj, N3Set):
             a = self.context.newBlankNode()
             tempobj = [mm for mm in obj] #I hate sorting things - yosi
-            tempobj.sort(Term.compareAnyTerm)
+            tempobj.sort(key=Term.sortKey)
             tempList = self.store.newList(tempobj)
             sink.startAnonymous(auxPairs((triple[CONTEXT],
                                         triple[PRED], triple[SUBJ], a)))
@@ -758,7 +770,7 @@ class Serializer:
         if _anon and _incoming == 1:  # Embedded anonymous node in N3
             sink.startAnonymous(auxPairs(triple))
             ss = context.statementsMatching(subj=obj)
-            if sorting: ss.sort(StoredStatement.comparePredObj)
+            if sorting: ss.sort(key=StoredStatement.keyForPredObj)
             for t in ss:
                 self.dumpStatement(sink, t.quad, sorting)
             sink.endAnonymous(sub.asPair(), pre.asPair())

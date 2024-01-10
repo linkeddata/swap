@@ -8,10 +8,10 @@
 #
 # parses DAML_ONT_NS or DPO_NS lists, generates DPO_NS
 
-import xmllib  # Comes with python 1.5 and greater
-import notation3 # http://www.w3.org/2000/10/swap/notation3.py
-import urlparse  # Comes with python 1.6, lacks file<->url mapping
-import urllib   # Opening resources in load()
+from . import xmllib  # Comes with python 1.5 and greater
+from . import notation3 # http://www.w3.org/2000/10/swap/notation3.py
+import urllib.parse  # Comes with python 1.6, lacks file<->url mapping
+import urllib.request, urllib.parse, urllib.error   # Opening resources in load()
 import string
 # States:
 
@@ -38,7 +38,7 @@ class RDFXMLParser(xmllib.XMLParser):
 
     def __init__(self, sink, thisURI, **kw):
         self.testdata = ""
-        apply(xmllib.XMLParser.__init__, (self,), kw)
+        xmllib.XMLParser.__init__(*(self,), **kw)
         self._stack =[]  # Stack of states
 
         self.sink = sink
@@ -57,12 +57,12 @@ class RDFXMLParser(xmllib.XMLParser):
 
     def load(self, uri, _baseURI=""):
         if uri:
-            _inputURI = urlparse.urljoin(_baseURI, uri) # Make abs from relative
-            netStream = urllib.urlopen(_inputURI)
+            _inputURI = urllib.parse.urljoin(_baseURI, uri) # Make abs from relative
+            netStream = urllib.request.urlopen(_inputURI)
             self.feed(netStream.read())     # @ May be big - buffered in memory!
             self.close()
         else:
-            _inputURI = urlparse.urljoin(_baseURI, "STDIN") # Make abs from relative
+            _inputURI = urllib.parse.urljoin(_baseURI, "STDIN") # Make abs from relative
             self.feed(sys.stdin.read())     # May be big - buffered in memory!
             self.close()
 
@@ -88,30 +88,30 @@ class RDFXMLParser(xmllib.XMLParser):
 
     def handle_cdata(self, data):
         self.flush()
-        print 'cdata:', `data`
+        print('cdata:', repr(data))
 
     def handle_proc(self, name, data):
         self.flush()
-        print 'processing:',name,`data`
+        print('processing:',name,repr(data))
 
     def handle_comment(self, data):
         self.flush()
         self.sink.makeComment(data)
 
     def syntax_error(self, message):
-        print 'error at line %d:' % self.lineno, message
+        print('error at line %d:' % self.lineno, message)
 
     def tag2uri(self, str):
         """ Generate URI from tagname
         """
-        x = string.find(str, " ")
+        x = str.find(" ")
         if x < 0: return str
         return str[:x]+ str[x+1:]
     
     def uriref(self, str):
         """ Generate uri from uriref in this document
         """ 
-        return urlparse.urljoin(self._thisURI,str)
+        return urllib.parse.urljoin(self._thisURI,str)
 
     def idAboutAttr(self, attrs):  #6.5 also proprAttr 6.10
         """ set up subject and maybe context from attributes
@@ -121,15 +121,15 @@ class RDFXMLParser(xmllib.XMLParser):
         self._subject = None
         properties = []
         
-        for name, value in attrs.items():
-            x = string.find(name, " ")
+        for name, value in list(attrs.items()):
+            x = name.find(" ")
             if x>=0:
                 ns = name[:x]
                 ln = name[x+1:]    # Strip any namespace on attributes!!! @@@@
-                if string.find("ID ambout AboutEachPrefix bagid type", name)>0:
+                if "ID ambout AboutEachPrefix bagid type".find(name) > 0:
                     if ns != RDF_NS_URI:
-                        print ("# Warning -- %s attribute in %s namespace not RDF NS." %
-                               name, ln)
+                        print(("# Warning -- %s attribute in %s namespace not RDF NS." %
+                               name, ln))
                         ns = RDF_NS_URI  # @@@@@@@@@@@@@@@@
                 uri = ns + ln
             else:
@@ -140,7 +140,7 @@ class RDFXMLParser(xmllib.XMLParser):
                 
                 if ln == "ID":
                     if self._subject:
-                        print "# oops - subject already", self._subject
+                        print("# oops - subject already", self._subject)
                         raise syntaxError # ">1 subject"
                     self._subject = self.uriref("#" + value)
                 elif ln == "about":
@@ -161,7 +161,7 @@ class RDFXMLParser(xmllib.XMLParser):
                     pass  #later
                 else:
                     if not ns:
-                        print "#@@@@@@@@@@@@ No namespace on property attribute", ln
+                        print("#@@@@@@@@@@@@ No namespace on property attribute", ln)
                         raise self.syntaxError 
                     properties.append((uri, value))# If no uri, syntax error @@
 #                    self.sink.makeComment("xml2rdf: Ignored attribute "+uri)
@@ -179,7 +179,7 @@ class RDFXMLParser(xmllib.XMLParser):
 
             
     def _generate(self):
-            generatedId = self._genPrefix + `self._nextId`  #
+            generatedId = self._genPrefix + repr(self._nextId)  #
             self._nextId = self._nextId + 1
             self.sink.makeStatement(( (RESOURCE, self._context),                                 
                                       (RESOURCE, notation3.N3_forSome_URI),
@@ -216,12 +216,12 @@ class RDFXMLParser(xmllib.XMLParser):
 
         if chatty:
             if not attrs:
-                print '# State =', self._state, 'start tag: <' + tagURI + '>'
+                print('# State =', self._state, 'start tag: <' + tagURI + '>')
             else:
-                print '# state =', self._state, 'start tag: <' + tagURI,
-                for name, value in attrs.items():
-                    print "    " + name + '=' + '"' + value + '"',
-                print '>'
+                print('# state =', self._state, 'start tag: <' + tagURI, end=' ')
+                for name, value in list(attrs.items()):
+                    print("    " + name + '=' + '"' + value + '"', end=' ')
+                print('>')
 
 
         self._stack.append([self._state, self._context, self._predicate, self._subject])
@@ -231,9 +231,9 @@ class RDFXMLParser(xmllib.XMLParser):
                 self._state = STATE_NO_SUBJECT
                 
                 # HACK @@ to grab prefixes
-                nslist = self._XMLParser__namespaces.items()
+                nslist = list(self._XMLParser__namespaces.items())
                 for t, d, nst in self.stack:     # Hack
-                    nslist = nslist + d.items()
+                    nslist = nslist + list(d.items())
   #              print "### Namespaces: ", `nslist`
                 for prefix, nsURI in nslist:
                     if nsURI:
@@ -252,15 +252,15 @@ class RDFXMLParser(xmllib.XMLParser):
             
             # print "\n  attributes:", `attrs`
 
-            for name, value in attrs.items():
-                x = string.find(name, " ")
+            for name, value in list(attrs.items()):
+                x = name.find(" ")
                 if x>=0: name=name[x+1:]    # Strip any namespace on attributes!!! @@@@
                 if name == "ID":
-                    print "# Warning: ID=%s on statement ignored" %  (value) # I consider these a bug
+                    print("# Warning: ID=%s on statement ignored" %  (value)) # I consider these a bug
                 elif name == "parseType":
-                    nslist = self._XMLParser__namespaces.items()  # Get namespaces (this is a qname)
+                    nslist = list(self._XMLParser__namespaces.items())  # Get namespaces (this is a qname)
                     for t, d, nst in self.stack:     # Hack - look inside parser - Yuk@@
-                        nslist = nslist + d.items()
+                        nslist = nslist + list(d.items())
                     if value == "Literal":
                         self._state = STATE_LITERAL # That's an XML subtree not a string
                         
@@ -282,7 +282,7 @@ class RDFXMLParser(xmllib.XMLParser):
                                 self.idAboutAttr(attrs)  # set subject and context for nested description
                                 if self._predicate == RDF_NS_URI+"is": # magic :-(
                                     self._subject = s  # Forget anonymous genid - context is subect
-                                    print "#@@@@@@@@@@@@@ decided subject is ",`s`[-10:-1]
+                                    print("#@@@@@@@@@@@@@ decided subject is ",repr(s)[-10:-1])
                                 else:
                                     self.sink.makeStatement(( (RESOURCE, c),
                                                           (RESOURCE, self._predicate),
@@ -350,7 +350,7 @@ class RDFXMLParser(xmllib.XMLParser):
             self._stack[-1][0] = STATE_NOVALUE  # When we return, cannot have literal now
 
         elif self._state == STATE_NOVALUE:
-            print "\n@@ Expected no value, found ", tag, attrs, "\n Stack: ",self._stack
+            print("\n@@ Expected no value, found ", tag, attrs, "\n Stack: ",self._stack)
             raise syntaxError # Found tag, expected empty
         else:
             raise internalError # Unknown state
@@ -387,11 +387,11 @@ class RDFXMLParser(xmllib.XMLParser):
 
     def unknown_entityref(self, ref):
         self.flush()
-        print '#*** unknown entity ref: &' + ref + ';'
+        print('#*** unknown entity ref: &' + ref + ';')
 
     def unknown_charref(self, ref):
         self.flush()
-        print '#*** unknown char ref: &#' + ref + ';'
+        print('#*** unknown char ref: &#' + ref + ';')
 
     def close(self):
         xmllib.XMLParser.close(self)
@@ -424,8 +424,8 @@ def test(args = None):
     else:
         try:
             f = open(file, 'r')
-        except IOError, msg:
-            print file, ":", msg
+        except IOError as msg:
+            print(file, ":", msg)
             sys.exit(1)
 
     data = f.read()
@@ -442,15 +442,15 @@ def test(args = None):
             for c in data:
                 x.feed(c)
             x.close()
-    except RuntimeError, msg:
+    except RuntimeError as msg:
         t1 = time()
-        print msg
+        print(msg)
         if do_time:
-            print 'total time: %g' % (t1-t0)
+            print('total time: %g' % (t1-t0))
         sys.exit(1)
     t1 = time()
     if do_time:
-        print 'total time: %g' % (t1-t0)
+        print('total time: %g' % (t1-t0))
 
 
 if __name__ == '__main__':

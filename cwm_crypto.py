@@ -17,7 +17,7 @@ __version__ = '$Revision$'
 # 2010: DeprecationWarning: the sha module is deprecated; use the hashlib module instead
 import hashlib # http://pydoc.org/2.5.1/hashlib.html
 # import, binascii, quopri, base64
-from term import Function, ReverseFunction, LightBuiltIn
+from .term import Function, ReverseFunction, LightBuiltIn
 
 USE_PKC = 1
 
@@ -69,10 +69,10 @@ def quoToKey(strkey, spl='\n\n'):
    """Returns a key from quopri (ee then m) version of a key."""
    bunc = base64.decodestring(quopri.decodestring(strkey.strip()))
    bits = bunc.split(spl)
-   if len(bits) == 2: return newKey(long(bits[0]), long(bits[1]))
+   if len(bits) == 2: return newKey(int(bits[0]), int(bits[1]))
    else: 
       e, n, d, p, q = bits
-      return newKey(long(e), long(n), long(d), long(p), long(q))
+      return newKey(int(e), int(n), int(d), int(p), int(q))
 
 # Signature encoding and decoding
 
@@ -169,7 +169,7 @@ class BI_verify(LightBuiltIn):
       keypair, (hash, signature) = subj_py, obj_py
       hash = hash.encode('ascii')
       RSAKey = quoToKey(keypair) # Dequote the key
-      signature = (long(baseDecode(signature)),) # convert the signature back
+      signature = (int(baseDecode(signature)),) # convert the signature back
       return RSAKey.verify(hash, signature)
 
 class BI_verifyBoolean(LightBuiltIn, Function): 
@@ -178,7 +178,7 @@ class BI_verifyBoolean(LightBuiltIn, Function):
       keypair, hash, signature = subj_py
       hash = hash.encode('ascii')
       RSAKey = quoToKey(keypair) # Dequote the key
-      signature = (long(baseDecode(signature)),)
+      signature = (int(baseDecode(signature)),)
       result = RSAKey.verify(hash, signature)
       return str(result)
 
@@ -207,4 +207,4 @@ def register(store):
       str.internFrag('publicKey', BI_publicKey)
 
 if __name__=="__main__": 
-   print __doc__.strip()
+   print(__doc__.strip())

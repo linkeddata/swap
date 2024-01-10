@@ -19,10 +19,10 @@ __author__ = 'Sean B. Palmer'
 __cvsid__ = '$Id$'
 __version__ = '$Revision$'
 
-import sys, string, re, urllib
+import sys, string, re, urllib.request, urllib.parse, urllib.error
 
-from term import LightBuiltIn, Function, ReverseFunction
-from local_decimal import Decimal
+from .term import LightBuiltIn, Function, ReverseFunction
+from .local_decimal import Decimal
 
 MATHS_NS_URI = 'http://www.w3.org/2000/10/swap/maths#'
 
@@ -36,7 +36,7 @@ def tidy(x):
 
 def isString(x):
     # in 2.2, evidently we can test for isinstance(types.StringTypes)
-    return type(x) is type('') or type(x) is type(u'')
+    return type(x) is type('') or type(x) is type('')
 
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -113,7 +113,7 @@ class BI_quotient(LightBuiltIn, Function):
 class BI_integerQuotient(LightBuiltIn, Function):
     def evaluateObject(self, subj_py): 
         t = None
-        if len(subj_py) == 2: t = long(subj_py[0]) / long(subj_py[1])
+        if len(subj_py) == 2: t = int(subj_py[0]) / int(subj_py[1])
         return tidy(t)
 
 class BI_quotientOf(LightBuiltIn, ReverseFunction):
@@ -227,4 +227,4 @@ def register(store):
     str.internFrag('memberCount', BI_memberCount)
 
 if __name__=="__main__": 
-   print string.strip(__doc__)
+   print(__doc__.strip())

@@ -7,7 +7,7 @@ $ ID:   $
 
 import string
 from unicodedata import category
-from set_importer import Set
+from .set_importer import Set
 
 LETTER_CATEGORIES = Set(["Ll", "Lu", "Lo", "Lt", "Nl"])
 NCNAME_CATEGORIES = LETTER_CATEGORIES.union(Set(["Mc", "Me", "Mn", "Lm", "Nd"]))
@@ -25,7 +25,7 @@ def isXMLChar10(character, char_class):
     usual use is isXMLChar(character, isXML.NCNameChar)
     """
     num = ord(character)
-    character = unicode(character)
+    character = str(character)
     if char_class == Letter:
         return isXMLChar10(character, BaseChar) or \
                isXMLChar10(character, Ideographic)

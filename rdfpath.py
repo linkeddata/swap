@@ -43,8 +43,8 @@
    wrap rdfstore22.Store()'s node() function
    
 """
-from __future__ import generators
-from cStringIO import StringIO
+
+from io import StringIO
 from ntriples import serialize
 
 class NameMapper:
@@ -231,7 +231,7 @@ class Store(list):
         myURI = None
         todo = []
 
-        for (key, value) in kwargs.iteritems():
+        for (key, value) in kwargs.items():
             predicateURI = self.nameMapper.externalize(key)
             if predicateURI == uri:
                 myURI = value
@@ -429,10 +429,10 @@ class PathStep:
 ##         return longer multi-path
 
 if __name__ =='__main__':
-    print "Performing doctest..."
+    print("Performing doctest...")
     import doctest, sys
     doctest.testmod(sys.modules[__name__])
-    print "Done."
+    print("Done.")
 
 # $Log$
 # Revision 1.2  2003-08-01 15:45:10  sandro

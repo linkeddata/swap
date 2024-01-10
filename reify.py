@@ -9,16 +9,17 @@ This simply puts the reification into the sink given,
 or a new one, depending on the function called.
 $Id$
 """
-from term import BuiltIn, LightBuiltIn, LabelledNode, \
+from .term import BuiltIn, LightBuiltIn, LabelledNode, \
     HeavyBuiltIn, Function, ReverseFunction, AnonymousNode, \
     Literal, Symbol, Fragment, FragmentNil, Term,\
     CompoundTerm, List, EmptyList, NonEmptyList, N3Set
-from formula import Formula, StoredStatement
-from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4, RDF_type_URI
-import uripath
-import diag
-from mixin import Mixin
-from set_importer import Set
+from .formula import Formula, StoredStatement
+from .RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4, RDF_type_URI
+from . import uripath
+from . import diag
+from .mixin import Mixin
+from .set_importer import Set
+from functools import reduce
 
 reifyNS = 'http://www.w3.org/2004/06/rei#'
 REIFY_NS = reifyNS
@@ -314,7 +315,7 @@ def dereification(x, f, sink, bnodes={}, xList=[]):
     xList.append(x)
     
     if x == None:
-        raise ValueError, "Can't dereify nothing. Suspect missing information in reified form."
+        raise ValueError("Can't dereify nothing. Suspect missing information in reified form.")
     y = f.the(subj=x, pred=rei["uri"])
     if y != None: return sink.newSymbol(y.value())
         
@@ -338,7 +339,7 @@ def dereification(x, f, sink, bnodes={}, xList=[]):
         xList.append(uset)
         ulist = uset #f.the(subj=uset, pred=f.newSymbol(owlOneOf))
         xList.append(ulist)
-        from diag import progress
+        from .diag import progress
         if diag.chatty_flag > 54:
             progress("universals = ",ulist)
         for v in ulist:
@@ -371,4 +372,4 @@ def dereification(x, f, sink, bnodes={}, xList=[]):
         bnodes[x] = z
         return z
     
-    raise ValueError, "Can't dereify %s - no clues I understand in %s" % (x, f)
+    raise ValueError("Can't dereify %s - no clues I understand in %s" % (x, f))

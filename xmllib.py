@@ -94,13 +94,13 @@ class XMLParser:
     # Interface -- initialize and reset this instance
     def __init__(self, **kw):
         self.__fixed = 0
-        if kw.has_key('accept_unquoted_attributes'):
+        if 'accept_unquoted_attributes' in kw:
             self.__accept_unquoted_attributes = kw['accept_unquoted_attributes']
-        if kw.has_key('accept_missing_endtag_name'):
+        if 'accept_missing_endtag_name' in kw:
             self.__accept_missing_endtag_name = kw['accept_missing_endtag_name']
-        if kw.has_key('map_case'):
+        if 'map_case' in kw:
             self.__map_case = kw['map_case']
-        if kw.has_key('accept_utf8'):
+        if 'accept_utf8' in kw:
             self.__accept_utf8 = kw['accept_utf8']
         self.reset()
 
@@ -116,7 +116,7 @@ class XMLParser:
             self.__fixclass(k)
 
     def __fixdict(self, dict):
-        for key in dict.keys():
+        for key in list(dict.keys()):
             if key[:6] == 'start_':
                 tag = key[6:]
                 start, end = self.elements.get(tag, (None, None))
@@ -196,7 +196,7 @@ class XMLParser:
                 data = pre + str + post
                 i = res.start(0)+len(str)
             elif all:
-                if self.entitydefs.has_key(str):
+                if str in self.entitydefs:
                     data = pre + self.entitydefs[str] + post
                     i = res.start(0)    # rescan substituted text
                 else:
@@ -288,7 +288,7 @@ class XMLParser:
                                                               'encoding',
                                                               'standalone')
                     if version[1:-1] != '1.0':
-                        raise RuntimeError, 'only XML version 1.0 supported'
+                        raise RuntimeError('only XML version 1.0 supported')
                     if encoding: encoding = encoding[1:-1]
                     if standalone: standalone = standalone[1:-1]
                     self.handle_xml(encoding, standalone)
@@ -347,7 +347,7 @@ class XMLParser:
                     name = res.group('name')
                     if self.__map_case:
                         name = string.lower(name)
-                    if self.entitydefs.has_key(name):
+                    if name in self.entitydefs:
                         self.rawdata = rawdata = rawdata[:res.start(0)] + self.entitydefs[name] + rawdata[i:]
                         n = len(rawdata)
                         i = res.start(0)
@@ -369,7 +369,7 @@ class XMLParser:
                 i = i+1
                 continue
             else:
-                raise RuntimeError, 'neither < nor & ??'
+                raise RuntimeError('neither < nor & ??')
             # We get here only if incomplete matches but
             # nothing else
             break
@@ -397,8 +397,8 @@ class XMLParser:
     # Internal -- parse comment, return length or -1 if not terminated
     def parse_comment(self, i):
         rawdata = self.rawdata
-        if rawdata[i:i+4] <> '<!--':
-            raise RuntimeError, 'unexpected call to handle_comment'
+        if rawdata[i:i+4] != '<!--':
+            raise RuntimeError('unexpected call to handle_comment')
         res = commentclose.search(rawdata, i+4)
         if res is None:
             return -1
@@ -463,8 +463,8 @@ class XMLParser:
     # Internal -- handle CDATA tag, return length or -1 if not terminated
     def parse_cdata(self, i):
         rawdata = self.rawdata
-        if rawdata[i:i+9] <> '<![CDATA[':
-            raise RuntimeError, 'unexpected call to parse_cdata'
+        if rawdata[i:i+9] != '<![CDATA[':
+            raise RuntimeError('unexpected call to parse_cdata')
         res = cdataclose.search(rawdata, i+9)
         if res is None:
             return -1
@@ -488,7 +488,7 @@ class XMLParser:
             self.syntax_error('illegal character in processing instruction')
         res = tagfind.match(rawdata, i+2)
         if res is None:
-            raise RuntimeError, 'unexpected call to parse_proc'
+            raise RuntimeError('unexpected call to parse_proc')
         k = res.end(0)
         name = res.group(0)
         if self.__map_case:
@@ -504,16 +504,16 @@ class XMLParser:
             attrdict, namespace, k = self.parse_attributes(name, k, j)
             if namespace:
                 self.syntax_error('namespace declaration inside namespace declaration')
-            for attrname in attrdict.keys():
-                if not self.__xml_namespace_attributes.has_key(attrname):
+            for attrname in list(attrdict.keys()):
+                if attrname not in self.__xml_namespace_attributes:
                     self.syntax_error("unknown attribute `%s' in xml:namespace tag" % attrname)
-            if not attrdict.has_key('ns') or not attrdict.has_key('prefix'):
+            if 'ns' not in attrdict or 'prefix' not in attrdict:
                 self.syntax_error('xml:namespace without required attributes')
             prefix = attrdict.get('prefix')
             if ncname.match(prefix) is None:
                 self.syntax_error('xml:namespace illegal prefix value')
                 return end.end(0)
-            if self.__namespaces.has_key(prefix):
+            if prefix in self.__namespaces:
                 self.syntax_error('xml:namespace prefix not unique')
             self.__namespaces[prefix] = attrdict['ns']
         else:
@@ -553,7 +553,7 @@ class XMLParser:
                 continue
             if '<' in attrvalue:
                 self.syntax_error("`<' illegal in attribute value")
-            if attrdict.has_key(attrname):
+            if attrname in attrdict:
                 self.syntax_error("attribute `%s' specified twice" % attrname)
             attrvalue = string.translate(attrvalue, attrtrans)
             attrdict[attrname] = self.translate_references(attrvalue)
@@ -591,7 +591,7 @@ class XMLParser:
                 prefix = ''
             ns = None
             for t, d, nst in self.stack:
-                if d.has_key(prefix):
+                if prefix in d:
                     ns = d[prefix]
             if ns is None and prefix != '':
                 ns = self.__namespaces.get(prefix)
@@ -603,7 +603,7 @@ class XMLParser:
         # translate namespace of attributes
         if self.__use_namespaces:
             nattrdict = {}
-            for key, val in attrdict.items():
+            for key, val in list(attrdict.items()):
                 res = qname.match(key)
                 if res is not None:
                     aprefix, key = res.group('prefix', 'local')
@@ -615,7 +615,7 @@ class XMLParser:
                             aprefix = ''
                         ans = None
                         for t, d, nst in self.stack:
-                            if d.has_key(aprefix):
+                            if aprefix in d:
                                 ans = d[aprefix]
                         if ans is None and aprefix != '':
                             ans = self.__namespaces.get(aprefix)
@@ -630,11 +630,11 @@ class XMLParser:
             attrdict = nattrdict
         attributes = self.attributes.get(nstag)
         if attributes is not None:
-            for key in attrdict.keys():
-                if not attributes.has_key(key):
+            for key in list(attrdict.keys()):
+                if key not in attributes:
                     self.syntax_error("unknown attribute `%s' in tag `%s'" % (key, tagname))
-            for key, val in attributes.items():
-                if val is not None and not attrdict.has_key(key):
+            for key, val in list(attributes.items()):
+                if val is not None and key not in attrdict:
                     attrdict[key] = val
         method = self.elements.get(nstag, (None, None))[0]
         self.finish_starttag(nstag, attrdict, method)
@@ -770,7 +770,7 @@ class XMLParser:
 
     # Example -- handle relatively harmless syntax errors, could be overridden
     def syntax_error(self, message):
-        raise RuntimeError, 'Syntax error at line %d: %s' % (self.lineno, message)
+        raise RuntimeError('Syntax error at line %d: %s' % (self.lineno, message))
 
     # To be overridden -- handlers for unknown objects
     def unknown_starttag(self, tag, attrs): pass
@@ -784,66 +784,66 @@ class TestXMLParser(XMLParser):
 
     def __init__(self, **kw):
         self.testdata = ""
-        apply(XMLParser.__init__, (self,), kw)
+        XMLParser.__init__(*(self,), **kw)
 
     def handle_xml(self, encoding, standalone):
         self.flush()
-        print 'xml: encoding =',encoding,'standalone =',standalone
+        print('xml: encoding =',encoding,'standalone =',standalone)
 
     def handle_doctype(self, tag, pubid, syslit, data):
         self.flush()
-        print 'DOCTYPE:',tag, `data`
+        print('DOCTYPE:',tag, repr(data))
 
     def handle_data(self, data):
         self.testdata = self.testdata + data
-        if len(`self.testdata`) >= 70:
+        if len(repr(self.testdata)) >= 70:
             self.flush()
 
     def flush(self):
         data = self.testdata
         if data:
             self.testdata = ""
-            print 'data:', `data`
+            print('data:', repr(data))
 
     def handle_cdata(self, data):
         self.flush()
-        print 'cdata:', `data`
+        print('cdata:', repr(data))
 
     def handle_proc(self, name, data):
         self.flush()
-        print 'processing:',name,`data`
+        print('processing:',name,repr(data))
 
     def handle_comment(self, data):
         self.flush()
-        r = `data`
+        r = repr(data)
         if len(r) > 68:
             r = r[:32] + '...' + r[-32:]
-        print 'comment:', r
+        print('comment:', r)
 
     def syntax_error(self, message):
-        print 'error at line %d:' % self.lineno, message
+        print('error at line %d:' % self.lineno, message)
 
     def unknown_starttag(self, tag, attrs):
         self.flush()
         if not attrs:
-            print 'start tag: <' + tag + '>'
+            print('start tag: <' + tag + '>')
         else:
-            print 'start tag: <' + tag,
-            for name, value in attrs.items():
-                print name + '=' + '"' + value + '"',
-            print '>'
+            print('start tag: <' + tag, end=' ')
+            for name, value in list(attrs.items()):
+                print(name + '=' + '"' + value + '"', end=' ')
+            print('>')
 
     def unknown_endtag(self, tag):
         self.flush()
-        print 'end tag: </' + tag + '>'
+        print('end tag: </' + tag + '>')
 
     def unknown_entityref(self, ref):
         self.flush()
-        print '*** unknown entity ref: &' + ref + ';'
+        print('*** unknown entity ref: &' + ref + ';')
 
     def unknown_charref(self, ref):
         self.flush()
-        print '*** unknown char ref: &#' + ref + ';'
+        print('*** unknown char ref: &#' + ref + ';')
 
     def close(self):
         XMLParser.close(self)
@@ -875,8 +875,8 @@ def test(args = None):
     else:
         try:
             f = open(file, 'r')
-        except IOError, msg:
-            print file, ":", msg
+        except IOError as msg:
+            print(file, ":", msg)
             sys.exit(1)
 
     data = f.read()
@@ -893,15 +893,15 @@ def test(args = None):
             for c in data:
                 x.feed(c)
             x.close()
-    except RuntimeError, msg:
+    except RuntimeError as msg:
         t1 = time()
-        print msg
+        print(msg)
         if do_time:
-            print 'total time: %g' % (t1-t0)
+            print('total time: %g' % (t1-t0))
         sys.exit(1)
     t1 = time()
     if do_time:
-        print 'total time: %g' % (t1-t0)
+        print('total time: %g' % (t1-t0))
 
 
 if __name__ == '__main__':

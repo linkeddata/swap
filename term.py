@@ -22,33 +22,36 @@ Includes:
 """
 
 
-from __future__ import generators  # for yield
+  # for yield
 
 import string, sys, types
+from .compare import compareStrings, compareNumbers
 
-from set_importer import Set, ImmutableSet
+from .set_importer import Set, ImmutableSet
 
 
-import uripath # DanC's tested and correct one
+from . import uripath # DanC's tested and correct one
 import hashlib, binascii  # for building md5 URIs
 
-from uripath import refTo
-from RDFSink import runNamespace
-from local_decimal import Decimal  # for xsd:decimal
+from .uripath import refTo
+from .RDFSink import runNamespace
+from .local_decimal import Decimal  # for xsd:decimal
+from functools import reduce
 
 LITERAL_URI_prefix = "data:application/rdf+n3-literal;"
 
 
-from RDFSink import List_NS
-from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
-from RDFSink import FORMULA, LITERAL, LITERAL_LANG, LITERAL_DT, ANONYMOUS, \
+from .RDFSink import List_NS
+from .RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
+from .RDFSink import FORMULA, LITERAL, LITERAL_LANG, LITERAL_DT, ANONYMOUS, \
                             SYMBOL, RDF_type_URI
-from RDFSink import Logic_NS
+from .RDFSink import Logic_NS
 
-from OrderedSequence import merge, intersection, minus
+from .OrderedSequence import merge, intersection, minus
+# from .formula import Formula, StoredStatement  no circular
 
-import diag
-from diag import progress
+from . import diag
+from .diag import progress
 
 from weakref import WeakValueDictionary
 
@@ -58,7 +61,7 @@ if sys.hexversion < 0x02030000:
     raise RuntimeError("Sorry, this software requires python2.3 or newer.")
 
 
-
+# RDF_type_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
 
 ########################################  Storage URI Handling
 #
@@ -94,9 +97,10 @@ you can hash it (if you want to)
         if other is None:
             dict.__init__(self)
         else:
-            dict.__init__(self, other, **keywords)
+            # dict.__init__(self, other, **keywords)
+            dict.__init__(self, other)
         self.id = self
-        for k, (a,b) in self.iteritems():
+        for k, (a,b) in self.items():
             if isinstance(a, tuple):
                 raise RuntimeError("%s : (%s, %s)" % (k,a,b))
 
@@ -119,6 +123,7 @@ you can hash it (if you want to)
     
     def newBinding(self, var, val):
         retVal = Env(self, {var: val})
+        # retVal = Env(self, var=val)
         retVal.id = self.id
         return retVal
     bind = newBinding
@@ -146,7 +151,7 @@ you can hash it (if you want to)
         if diag.chatty_flag > 85:
             progress(lambda : 'Env.flatten(%s,%s)' % (self, other))
         retVal = dict(other)
-        for key, (val, source) in self.items():
+        for key, (val, source) in list(self.items()):
             if key in other:
                 if source == dict.__getitem__(other, key)[1] and val != other[key]:
                     raise ValueError(self[key], other[key])
@@ -161,7 +166,7 @@ you can hash it (if you want to)
         return retVal
 
     def filter(self, varSet):
-        retVal = [(a,b) for (a,b) in self.items() if a in varSet]
+        retVal = [(a,b) for (a,b) in list(self.items()) if a in varSet]
         retVal = self.__class__(retVal)
         retVal.id = self.id
         return retVal
@@ -179,8 +184,8 @@ you can hash it (if you want to)
             return [self.substitution(x, otherEnvs) for x in node]
         if isinstance(node, tuple):
             return tuple([self.substitution(x, otherEnvs) for x in node])
-        if isinstance(node, (formula.StoredStatement, term.Term)):
-            return node.substitution(self)  ## Wrong!
+        # if isinstance(node, (StoredStatement, Term)): # @@ circular import
+        #    return node.substitution(self)  ## Wrong!
         return node
             
 
@@ -196,7 +201,7 @@ you can hash it (if you want to)
         try:
             return self._hashval
         except AttributeError:
-            self._hashval = hash(ImmutableSet(self.items()))
+            self._hashval = hash(frozenset(list(self.items())))
         return self._hashval
 
 def pickEnv(choice, *envs):
@@ -204,7 +209,9 @@ def pickEnv(choice, *envs):
         if choice is env.id:
             return env
     return []  ## Not here.
-        
+
+# This class is the core one for the system.
+
 class Term(object):
     """The Term object represents an RDF term.
     
@@ -222,25 +229,25 @@ class Term(object):
         This could be beefed up to guarantee unambiguity.
         """
         s = self.uriref()
-        p = string.rfind(s, "#")
+        p = s.rfind("#")
         if p<0:  # No hash, use slash
             p=s.rfind("/", 0, len(s)-2) 
             # Allow "/" namespaces as a second best, not a trailing one
         if (p>=0 and s[p+1:].find(".") <0 ):
             # Can't use prefix if localname includes "."
             prefix = self.store.prefixes.get(s[:p+1], None) # @@ #CONVENTION
-            if prefix != None : return (prefix + ":" + s[p+1:]).encode('unicode_escape')
+            if prefix != None : return (prefix + ":" + s[p+1:])
         if s.endswith("#_formula"):
             return "`"+s[-22:-9]+"`" # Hack - debug notation for formula
-        if p >= 0: return s[p+1:].encode('unicode_escape')
-        return s.encode('unicode_escape')
+        if p >= 0: return s[p+1:] # .encode('unicode_escape') # @@ chek what that was for 
+        return s # .encode('unicode_escape')
 
     def debugString(self, already=[]):
-        return `self`  # unless more eleborate in superclass
+        return repr(self)  # unless more eleborate in superclass
         
-    def representation(self, base=None):
+    def representation(self):
         """The string represnting this in N3 """
-        return "<" + self.uriref(base) + ">"
+        return "<" + self.uriref() + ">"
  
     def generated(self):
         """Boolean Is this thing a genid - is its name arbitrary? """
@@ -261,10 +268,17 @@ class Term(object):
             This is not done yet
             """
         if self is other: return 0
-        diff = cmp(self.classOrder(), other.classOrder())
+        diff = compareNumbers(self.classOrder(), other.classOrder())
         if diff != 0: return diff
         return self.compareTerm(other)
     
+    # Python3 drops the functionaity of sorting with comparison functions
+    # So instead you have to use a key function.
+    # The sort keys must all be the same type, so we can't make integers sort as integers
+    # and strings sort as strings.
+
+    def sortKey(self):
+        return str(self.classOrder()) + '__' + self.representation() # works for simple terms only
 
     def asPair(self):
         """Representation in an earlier format, being phased out 2002/08
@@ -363,17 +377,22 @@ class Node(Term):
 
 class LabelledNode(Node):
     "The labelled node is one which has a URI."
+
+    def sortKey(self):
+        if (self.uriref() == RDF_type_URI):
+            return str(self.classOrder()) + '__' + '<  >' # type always comes first in predicates
+        return str(self.classOrder()) + '__' + self.representation() # works for simple terms only
         
     def compareTerm(self, other):
         "Assume is also a LabelledNode - see function compareTerm in formula.py"
-        _type = RDF_type_URI
+        RDF_type_URItype = RDF_type_URI
         s = self.uriref()
-        if self is self.store.type:
+        if s == RDF_type_URI:
                 return -1
         o = other.uriref()
-        if other is self.store.type:
+        if o == RDF_type_URI:
                 return 1
-        retVal = cmp(s, o)
+        retVal = compareStrings(s, o)
         if retVal:
             return retVal
         progress( "Error with '%s' being the same as '%s'" %(s,o))
@@ -390,13 +409,16 @@ class Symbol(LabelledNode):
 
     def __init__(self, uri, store):
         Term.__init__(self, store)
-        assert string.find(uri, "#") < 0, "no fragments allowed: %s" % uri
+        assert isinstance(uri, str)
+        assert uri.find("#") < 0, "no fragments allowed: %s" % uri
         assert ':' in uri, "must be absolute: %s" % uri
         self.uri = uri
         self.fragments = WeakValueDictionary()
 
     def uriref2(self, base):
-        assert ':' in base, "base must be absolute: %s" % base
+        if ':' in self.uri:
+            return self.uri # is absolute
+        assert base and ':' in base, "base <%s> must be absolute if URI <%s> is not: %s" % (base, self.uri)
         return refTo(base, self.uri)
 
     def uriref(self):
@@ -421,7 +443,7 @@ class Symbol(LabelledNode):
         lname -- an XML name (limited to URI characters)
         """
         if lname.startswith("__"): # python internal
-            raise AttributeError, lname
+            raise AttributeError(lname)
         
         return self.internFrag(lname, Fragment)
 
@@ -452,14 +474,13 @@ class Symbol(LabelledNode):
                             self, workingContext))
                 workingContext.store.copyFormula(F, workingContext)
             if "x" in mode:   # capture experience
-                workingContext.add(r, self.store.semantics, F)
+                workingContext.add(self, self.store.semantics, F)
         if not hasattr(self, "_semantics"):
             setattr(self, "_semantics", F)
         if diag.chatty_flag > 25:
             progress("Web: Dereferencing %s gave %s" %(self, F))
         return F
                 
-
 class Fragment(LabelledNode):
     """    A Term which DOES have a fragment id in its URI
     """
@@ -467,16 +488,19 @@ class Fragment(LabelledNode):
         Term.__init__(self, resource.store)
         self.resource = resource
         self.fragid = fragid
-
+        assert isinstance(resource, Symbol), "resource is of wrong type %s " % type(resource)
+        assert isinstance(fragid, str), "fragid is of wrong type %s " % type(fragid)
+        
     def compareTerm(self, other):
         if not isinstance(other, Fragment):
             return LabelledNode.compareTerm(self, other)
-        if self is self.resource.store.type:
+        if self.uriref() == RDF_type_URI:
+        # if self is self.resource.store.type:
             return -1
-        if other is self.resource.store.type:
+        if other.uriref() == RDF_type_URI:
             return 1
         if self.resource is other.resource:
-            return cmp(self.fragid, other.fragid)
+            return compareStrings(self.fragid, other.fragid)
         return self.resource.compareTerm(other.resource)
    
     def uriref(self):
@@ -523,11 +547,11 @@ class AnonymousNode(Node):
     def __init__(self, store, uri=None):
         global nextId
         try:
-            if uri: assert isinstance(uri, tuple(types.StringTypes))
+            if uri: assert isinstance(uri, tuple((str,)))
         except:
-            print uri
-            print type(uri)
-            print '---------=============------------'
+            print(uri)
+            print(type(uri))
+            print('---------=============------------')
             raise
         Term.__init__(self, store)
         self._diagnosticURI = uri
@@ -544,10 +568,10 @@ class AnonymousNode(Node):
             otherSerial = other.uri
         else:
             otherSerial = other.serial
-        retVal = cmp(selfSerial, otherSerial)
+        retVal = compareStrings(selfSerial, otherSerial)
         if retVal:
             return retVal
-        return cmp(self.serial, other.serial)
+        return compareStrings(self.serial, other.serial)
 
     def classOrder(self):
         """Anonymous ndoes are higher than symbols as the = smushing
@@ -557,7 +581,7 @@ class AnonymousNode(Node):
 
     def uriref(self):
         if self._diagnosticURI: return self._diagnosticURI
-        return runNamespace() + "_g" + `self.serial`
+        return runNamespace() + "_g" + repr(self.serial)
 #       return runNamespace() + "_b" + `id(self)`
         
     def generated(self):
@@ -641,33 +665,29 @@ class CompoundTerm(Term):
     Examples: List, Formula"""
     pass
 
-class N3Set(ImmutableSet, CompoundTerm): #, 
+class N3Set(frozenset): # CompoundTerm 
     """There can only be one of every N3Set
 
     """
     res = {}
-    def __init__(self, stuff=[]):
-        """something"""
-        ImmutableSet.__init__(self, stuff)
+    # def __init__(self, stuff=[]):
+    #    """something"""
+    #    frozenset.__init__(self, stuff)
     
     def __new__(cls, stuff=[]):
-        new_set = ImmutableSet.__new__(cls, stuff)
-        new_set.__init__(stuff)
-        if new_set in cls.res:
-            return cls.res[new_set]
-        cls.res[new_set] = new_set
-        return new_set
+         return super().__new__(cls, stuff)
+    
 
 ##    def __setattr__(self, attr, value):
 ##        print "%s=%s" % (`attr`, `value`)
-##        ImmutableSet.__setattr__(self, attr, value)
+##        frozenset.__setattr__(self, attr, value)
         
     def uriref(self):
         raise NotImplementedError
 
     def substitution(self, bindings, why=None, cannon=False):
         "Return this or a version of me with variable substitution made"
-        if self.occurringIn(bindings.keys()) == Set():
+        if self.occurringIn(list(bindings.keys())) == Set():
             return self # phew!
 
         return self.__class__([x.substitution(bindings, why=why, cannon=cannon) for x in self])
@@ -676,7 +696,7 @@ class N3Set(ImmutableSet, CompoundTerm): #,
         "Return this or a version of me with substitution of equals made"
         if diag.chatty_flag > 100:
             progress("SubstituteEquals list %s with %s" % (self, bindings))
-        if self.occurringIn(bindings.keys()) == Set():
+        if self.occurringIn(list(bindings.keys())) == Set():
             return self # phew!
 
         new = self.__class__([x.substitution(bindings, why=why) for x in self])
@@ -734,7 +754,7 @@ class List(CompoundTerm):
         _nextList = _nextList + 1
 
     def uriref(self):
-        return runNamespace() + "li"+ `self._id`
+        return runNamespace() + "li"+ repr(self._id)
 
     def prepend(self, first):
         x = self._prec.get(first, None)
@@ -771,7 +791,7 @@ class List(CompoundTerm):
 
     def substitution(self, bindings, why=None, cannon=False):
         "Return this or a version of me with variable substitution made"
-        if self.occurringIn(bindings.keys()) == Set():
+        if self.occurringIn(list(bindings.keys())) == Set():
             return self # phew!
         s = self.asSequence()
         s.reverse()
@@ -787,7 +807,7 @@ class List(CompoundTerm):
         "Return this or a version of me with substitution of equals made"
         if diag.chatty_flag > 100:
             progress("SubstituteEquals list %s with %s" % (self, bindings))
-        if self.occurringIn(bindings.keys()) == Set():
+        if self.occurringIn(list(bindings.keys())) == Set():
             return self # phew!
         s = self.asSequence()
         s.reverse()
@@ -838,7 +858,7 @@ class List(CompoundTerm):
             else:
                 pass
             if val == 1:
-                print 'I won!'
+                print('I won!')
                 return 1
         return 0
 
@@ -882,7 +902,7 @@ class NonEmptyList(List):
                        n1Source, n2Source)
         
     def debugString(self, already=[]):
-        s = `self`+" is ("
+        s = repr(self)+" is ("
         for i in self:
             s = s + i.debugString(already) + " "
         return s + ")"
@@ -897,7 +917,7 @@ class NonEmptyList(List):
             p = p.rest
             if not isinstance(p, NonEmptyList):
                 raise ValueError("Index %i exceeds size of list %s"
-                        % (i, `self`))
+                        % (i, repr(self)))
             i = i - 1
 
 class EmptyList(List):
@@ -957,7 +977,7 @@ class EmptyList(List):
         return "()"
 
     def __getitem__(self, i):
-        raise ValueError("Index %i exceeds size of empty list %s" % (i, `self`))
+        raise ValueError("Index %i exceeds size of empty list %s" % (i, repr(self)))
 
 
 class FragmentNil(EmptyList, Fragment):
@@ -975,7 +995,7 @@ def unifySequence(self, other, vars=Set([]), existentials=Set([]),  bindings={},
     """
 
     if diag.chatty_flag > 99: progress("Unifying sequence %s with %s" %
-        (`self`, `other`))
+        (repr(self), repr(other)))
     i = start
     if len(self) != len(other): return []
     while 1:
@@ -988,13 +1008,13 @@ def unifySequence(self, other, vars=Set([]), existentials=Set([]),  bindings={},
     try:
         for a,b in nbs: pass
     except TypeError:
-        progress("Bad nbs, should be seq of pairs: >>>" + `nbs` + "<<<")
+        progress("Bad nbs, should be seq of pairs: >>>" + repr(nbs) + "<<<")
         raise
     res = []
     for nb, reason in nbs:
         b2 = bindings.copy()
         b2.update(nb)
-        done = Set(nb.keys())
+        done = Set(list(nb.keys()))
         nbs2 = unifySequence(self, other,
                     vars.difference(done),
                     existentials.difference(done), b2, start=i)
@@ -1011,7 +1031,7 @@ def unifySet(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
     implemented with indexing, and built-in functions, in query.py.
     """
     if diag.chatty_flag > 99: progress("Unifying set %s with %s" %
-        (`self`, `other`))
+        (repr(self), repr(other)))
     if len(self) != len(other): return []    # Match fail
     if self == Set([]): return [ ({}, None) ] # Perfect match
     self2 = self.copy() # Don't mess with parameters
@@ -1025,7 +1045,7 @@ def unifySet(self, other, vars=Set([]), existentials=Set([]),  bindings={}):
         for nb, reason in nbs:  # For each way the object matched,
             b2 = bindings.copy()
             b2.update(nb)
-            done = Set(nb.keys())
+            done = Set(list(nb.keys()))
             nbs2 = unifySet(self2, other2,  # Try the rest of the set
                         vars.difference(done),
                         existentials.difference(done), b2)
@@ -1049,7 +1069,7 @@ def matchSet(pattern, kb, vars=Set([]),  bindings={}):
     bindings map from pattern to kb.
     """
     if diag.chatty_flag > 99: progress("Matching pattern %s against %s, vars=%s" %
-        (`pattern`, `kb`, `vars`))
+        (repr(pattern), repr(kb), repr(vars)))
     if len(pattern) > len(kb): return []    # Match fail  @@@discuss corner cases
     if len(pattern) == 0: return [(bindings, None)] # Success
     
@@ -1064,7 +1084,7 @@ def matchSet(pattern, kb, vars=Set([]),  bindings={}):
         for nb, reason in nbs:
             b2 = bindings.copy()
             b2.update(nb)
-            done = Set(nb.keys())
+            done = Set(list(nb.keys()))
             nbs2 = matchSet(pattern2, kb2, vars.difference(done), b2)
             if nbs2 == []: continue
             for nb2, reason2 in nbs2:
@@ -1208,14 +1228,14 @@ def unify(self, other, bindings=Env(), otherBindings=Env(),
             yield (env11, envWithBinding)
         else:
             raise ValueError 
-    elif isinstance(self, (Set, ImmutableSet)):
+    elif isinstance(self, (Set, frozenset)):
         for x in unifySet(self, other, env1, env2, vars, existentials, n1Source=n1Source, n2Source=n2Source):
             yield x
     elif type(self) is tuple:
         for x in unifySequence(self, other, env1, env2, vars, existentials, n1Source=n1Source, n2Source=n2Source):
             yield x
     elif hasattr(self, 'unifySecondary') and hasattr(other, 'unifySecondary'):
-        if self.unifySecondary.im_func is other.unifySecondary.im_func:  # A reasonable definition of same type
+        if self.unifySecondary.__func__ is other.unifySecondary.__func__:  # A reasonable definition of same type
             for x in self.unifySecondary(other, env1, env2, vars, universals, existentials, n1Source=n1Source, n2Source=n2Source):
                 yield x
 
@@ -1287,47 +1307,47 @@ def toBool(val, dt=None):
     raise TypeError("%s type cannot be converted to boolean" % val)
 
 typeMap = { "decimal": Decimal,
-                "integer": long,
-                    "nonPositiveInteger": long,
-                        "negativeInteger": long,
+                "integer": int,
+                    "nonPositiveInteger": int,
+                        "negativeInteger": int,
                     "long": int,
                         "int": int,
                             "short": int,
                                 "byte": int,
-                    "nonNegativeInteger": long,
+                    "nonNegativeInteger": int,
                         "unsignedLong": int,
                             "unsignedInt": int,
                                 "unsignedShort": int,
                                     "unsignedByte": int,
-                        "positiveInteger": long,
+                        "positiveInteger": int,
             "boolean": toBool,
             "double": float,
             "float": float,
-            "duration": unicode,
-            "dateTime": unicode,
-            "time": unicode,
-            "date": unicode,
-            "gYearMonth": unicode,
-            "gYear": unicode,
-            "gMonthDay": unicode,
-            "gDay": unicode,
-            "gMonth": unicode,
-            "anyURI": unicode,
-            "QName": unicode,
-            "NOTATION": unicode,
-            "string": unicode,
-                "normalizedunicodeing": unicode,
-                    "token": unicode,
-                        "language": unicode,
-                        "Name": unicode,
-                            "NCNAME": unicode,
-                                "ID": unicode,
-                                "IDREF": unicode,
-                                    "IDREFS": unicode,
-                                "ENTITY": unicode,
-                                    "ENTITIES": unicode,
-                        "NMTOKEN": unicode,
-                            "NMTOKENS": unicode}
+            "duration": str,
+            "dateTime": str,
+            "time": str,
+            "date": str,
+            "gYearMonth": str,
+            "gYear": str,
+            "gMonthDay": str,
+            "gDay": str,
+            "gMonth": str,
+            "anyURI": str,
+            "QName": str,
+            "NOTATION": str,
+            "string": str,
+                "normalizedunicodeing": str,
+                    "token": str,
+                        "language": str,
+                        "Name": str,
+                            "NCNAME": str,
+                                "ID": str,
+                                "IDREF": str,
+                                    "IDREFS": str,
+                                "ENTITY": str,
+                                    "ENTITIES": str,
+                        "NMTOKEN": str,
+                            "NMTOKENS": str}
 ##
 ## We don't support base64Binary or hexBinary
 ##
@@ -1367,8 +1387,8 @@ class Literal(Term):
 
     def __repr__(self):
         if len(self.string) < 8:
-            return '"%s"' % self.string.encode('unicode_escape') 
-        return unicode('"' + self.string[0:4] + '...' + self.string[-4:] + '"').encode('unicode_escape')#        return self.string
+            return '"%s"' % self.string #  .encode('unicode_escape') 
+        return str('"' + self.string[0:4] + '...' + self.string[-4:] + '"') #   was encode 
 
     def asPair(self):
         if self.datatype:
@@ -1383,9 +1403,9 @@ class Literal(Term):
     def compareTerm(self, other):
         "Assume is also a literal - see function compareTerm in formula.py"
         if self.datatype == other.datatype:
-            diff = cmp(self.string, other.string)
+            diff = compareStrings(self.string, other.string)
             if diff != 0 : return diff
-            return cmp(self.lang, other.lang)
+            return compareStrings(self.lang, other.lang)
         else:
             if self.datatype == None: return -1
             if other.datatype == None: return 1
@@ -1396,10 +1416,10 @@ class Literal(Term):
         Hmm... encoding... assuming utf8? @@test this.
         Hmm... for a class of literals including this one,
         strictly speaking."""
-        x=hashlib.md5()
-        x.update(self.string)
-        d=x.digest()
-        b16=binascii.hexlify(d)
+        x = hashlib.md5()
+        x.update(self.string.encode('utf-8'))
+        d = x.digest()
+        b16 = d.hex()
         return "md5:" + b16
 
     def substitution(self, bindings, why=None, cannon=False):
@@ -1429,10 +1449,10 @@ class Literal(Term):
             except KeyError:
                 raise UnknownType(
           "Attempt to run built-in on unsupported XSD datatype %s of value %s." 
-                        % (`self.datatype`, self.string))
+                        % (repr(self.datatype), self.string))
 
         raise UnknownType("Attempt to run built-in on unknown datatype %s of value %s." 
-                        % (`self.datatype`, self.string))
+                        % (repr(self.datatype), self.string))
 
     def uriref(self):
         # Unused at present but interesting! 2000/10/14
@@ -1440,7 +1460,7 @@ class Literal(Term):
         return self.asHashURI() #something of a kludge?
         #return  LITERAL_URI_prefix + uri_encode(self.representation())    # tbl preferred
 
-from xmlC14n import Canonicalize # http://dev.w3.org/cvsweb/2001/xmlsec-python/c14n.py?rev=1.10
+from .xmlC14n import Canonicalize # http://dev.w3.org/cvsweb/2001/xmlsec-python/c14n.py?rev=1.10
 
 class XMLLiteral(Literal):
     """ A Literal is a representation of an RDF literal
@@ -1492,9 +1512,9 @@ class XMLLiteral(Literal):
     def compareTerm(self, other):
         "Assume is also a literal - see function compareTerm in formula.py"
         if self.datatype == other.datatype:
-            diff = cmp(unicode(self), unicode(other))
+            diff = compareStrings(str(self), str(other))
             return diff
-            return cmp(self.lang, other.lang)
+            return compareStrings(self.lang, other.lang)
         else:
             if self.datatype == None: return -1
             if other.datatype == None: return 1
@@ -1573,7 +1593,7 @@ class XMLLiteral(Literal):
 ##            else:
 ##                result.append(str[i])
 ##        return result
-from urllib import quote as uri_encode
+from urllib.parse import quote as uri_encode
 
 
 
@@ -1616,7 +1636,7 @@ class BuiltIn(Fragment):
             return Function.eval(self, subj, obj, queue, bindings, proof, query)
         elif isinstance(self, ReverseFunction):
             return ReverseFunction.eval(self, subj, obj, queue, bindings, proof, query)
-        raise RuntimeError("Instance %s of built-in has no eval() or subsititue for it" %`self`)
+        raise RuntimeError("Instance %s of built-in has no eval() or subsititue for it" %repr(self))
 
 class GenericBuiltIn(BuiltIn):
     def __init__(self, resource, fragid):

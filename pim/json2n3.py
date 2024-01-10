@@ -49,21 +49,21 @@ class Turtleizer():
             self.writeln(indent + ')');
         elif type(x) == type({}):
             self.writeln(indent + '[');
-            for key, value in x.items():
+            for key, value in list(x.items()):
                 self.writeln(indent + ':'+key + ' ');
                 self.toTurtle(value, level + 1);
                 self.writeln(indent + ';')
             self.writeln(indent + ']');
-        elif type(x) == type(u''):
+        elif type(x) == type(''):
             self.writeln('"""' + encodeString(x) + '"""')
         elif x == None:
-            self.writeln(indent + `()`);
-        elif `x` == 'True':
+            self.writeln(indent + repr(()));
+        elif repr(x) == 'True':
             self.writeln(indent + 'true');  #  Python to n3
-        elif `x` == 'False':
+        elif repr(x) == 'False':
             self.writeln(indent + 'false');
         else:
-            self.writeln(indent + `x`);
+            self.writeln(indent + repr(x));
 
 
         if level == 0:

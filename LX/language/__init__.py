@@ -38,8 +38,8 @@ def getSerializer(language=None, stream=None, flags=""):
         __import__(moduleName)
         return eval(moduleName+".Serializer(stream=stream, flags=flags)")
     else:
-        have = ", ".join(serializers.keys())
-        raise RuntimeError, ("No such serializer: \"%s\"\nWe have: %s" %
+        have = ", ".join(list(serializers.keys()))
+        raise RuntimeError("No such serializer: \"%s\"\nWe have: %s" %
                              (language, have))
 
 def getParser(language=None, sink=None, flags=""):
@@ -52,7 +52,7 @@ def getParser(language=None, sink=None, flags=""):
         # obsolete interface?
         return eval(moduleName+".Parser(sink=sink, flags=flags)")
     else:
-        raise RuntimeError, "No such parser: \"%s\"\nWe have: %s" % (language, ", ".join(parsers.keys()))
+        raise RuntimeError("No such parser: \"%s\"\nWe have: %s" % (language, ", ".join(list(parsers.keys()))))
     
 # $Log$
 # Revision 1.9  2003-11-07 06:53:05  sandro

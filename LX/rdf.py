@@ -48,7 +48,7 @@ def unflatten(f):
     The triples used to make those descriptions are optionally removed
     from the result, depending on the kind of inference required.
     """
-    raise RuntimeError, "Not Implemented"
+    raise RuntimeError("Not Implemented")
 
 class Reconstructed:
     def __init__(self, fromTerm):
@@ -56,25 +56,25 @@ class Reconstructed:
         self.args=[]
         self.op=None
     def dump(self, done):
-        if done.has_key(self):
-            print "[loop]"
+        if self in done:
+            print("[loop]")
             return
         done[self] = 1
-        print "[ ",
-        for (key, value) in self.__dict__.iteritems():
+        print("[ ", end=' ')
+        for (key, value) in self.__dict__.items():
             if key is "fromTerm": continue
             if key is "args": continue
             if key is "op": continue
-            print key,
+            print(key, end=' ')
             if isinstance(value, Reconstructed):
                 value.dump(done)
             else:
-                print "<"+str(value)+">"
+                print("<"+str(value)+">")
         try:
-            print '"'+'"^^<'.join(LX.logic.valuesForConstants[self.fromTerm])+'>',
+            print('"'+'"^^<'.join(LX.logic.valuesForConstants[self.fromTerm])+'>', end=' ')
         except KeyError:
             pass
-        print " ]",
+        print(" ]", end=' ')
 
 # could construct this from class info...
 decode = {
@@ -114,28 +114,28 @@ def reconstruct(kb, keys, recons, byClass=None, class_=Reconstructed, cluster=No
     
     for f in kb:
         if f.function != LX.logic.RDF:
-            raise RuntimeError, "Not pure-RDF KB!"
+            raise RuntimeError("Not pure-RDF KB!")
             continue
         (subj, pred, obj) = f.args
-        subjRecon = recons.setdefault(subj, apply(class_,[subj]))
+        subjRecon = recons.setdefault(subj, class_(*[subj]))
         if pred == ns.rdf.type and byClass is not None:
             byClass.setdefault(obj, []).append(subjRecon)
         if keys is not None:
             try:
                 k = keys[pred]
             except KeyError:
-                print "ignoring triple, pred", pred
+                print("ignoring triple, pred", pred)
                 continue
         elif cluster is not None:
             try:
                 k = "_".join(cluster.inverseLookup(pred))
             except KeyError:
-                print "ignoring triple, pred not in any NS", pred
+                print("ignoring triple, pred not in any NS", pred)
                 continue
         else:
             k = localKeys.setdefault(pred, pred.getNameInScope(nameTable))
             
-        objRecon = recons.setdefault(obj, apply(class_,[obj]))
+        objRecon = recons.setdefault(obj, class_(*[obj]))
         if isinstance(k, type("x")) or k[0] is None:
             setattr(subjRecon, k, objRecon)
         else:
@@ -183,7 +183,7 @@ def asExpr(r, map):
             newmap=map.copy()
             newmap[t] = v
             result=LX.expr.CompoundExpr(r.op, v, asExpr(r.args[0], newmap))
-            print "Result", result
+            print("Result", result)
             return result
         if r.op == LX.logic.EXISTS:
             t=r.args[0]
@@ -191,24 +191,24 @@ def asExpr(r, map):
             newmap=map.copy()
             newmap[t] = v
             result=LX.expr.CompoundExpr(r.op, v, asExpr(r.args[0], newmap))
-            print "Result", result
+            print("Result", result)
             return result
         e = [r.op]
         for t in r.args:
             e.append(asExpr(t, map))
-        result = apply(LX.expr.CompoundExpr, e)
-        print "Result", result
+        result = LX.expr.CompoundExpr(*e)
+        print("Result", result)
         return result
 
     if hasattr(r, "uri"):
         uri = str(r.uri.fromTerm)
-        print "URI", uri
+        print("URI", uri)
         result= LX.logic.ConstantForURI(uri)
-        print "Result", result
+        print("Result", result)
         return result
 
     result=LX.logic.Constant()         # constant with URI?  Odd for RDF.
-    print "Result", result
+    print("Result", result)
     return result
 
 ################################################################
@@ -218,10 +218,9 @@ class VariableDescriber:
 
     def describe(self, object, ladder):
         if not isinstance(object, LX.logic.Variable):
-            raise DescriptionFailed, 'not a variable term'
+            raise DescriptionFailed('not a variable term')
         if ladder.has("term"):
-            raise (DescriptionFailed,
-                       'Cannot describe variable as some term w/out eq')
+            raise DescriptionFailed
         else:
             #@@@   keep a global map to exivars?
             global vars
@@ -249,7 +248,7 @@ class URIRefDescriber:
         try:
             uri=object.uri
         except AttributeError:
-            raise DescriptionFailed, 'not a uriref term'
+            raise DescriptionFailed('not a uriref term')
         if ladder.has("term"):
             term = ladder.term
         else:
@@ -275,7 +274,7 @@ class FormulaDescriber:
     
     def describe(self, object, ladder):
         if object.isAtomic():
-            raise DescriptionFailed, "atomic (can't be formula)"
+            raise DescriptionFailed("atomic (can't be formula)")
         if ladder.has("term"):
             term = ladder.term
         else:

@@ -23,7 +23,7 @@ from string import split
 from sys import stderr
 
 def virtual():
-    raise RuntimeError, "Function should have been implemented in subclass"
+    raise RuntimeError("Function should have been implemented in subclass")
 
 class NotRDF(TypeError):
     """Something was treated as RDF, but it wasn't."""
@@ -43,7 +43,7 @@ class Expr(object):
     def __or__(self, other):     return CompoundExpr(pythonOperators["or"],  self, other)
     def __rshift__(self, other): return CompoundExpr(pythonOperators[">>"], self, other)
     def __neg__(self, other):    return CompoundExpr(pythonOperators["-"],  self)
-    def __call__(self, *args):   return apply(CompoundExpr, (self,)+args)  # (need apply() the handle varargs)
+    def __call__(self, *args):   return CompoundExpr(*(self,)+args)  # (need apply() the handle varargs)
 
     def isAtomic(self):
         return 0
@@ -118,7 +118,7 @@ class CompoundExpr(Expr, tuple):
         self = tuple.__new__(class_, (function,)+tuple(args))
         for arg in self:
             if not isinstance(arg, Expr):
-                raise RuntimeError, "What's %s doing here?"%arg
+                raise RuntimeError("What's %s doing here?"%arg)
         #if hasattr(function, "checkArgs"):
         #    function.checkArgs(args)
 
@@ -218,14 +218,14 @@ class CompoundExpr(Expr, tuple):
         """Like __str__ but it gives useful output before dying on
         badly-formed structures."""
         if levels <= 0:
-            print "<MAXDEPTH>"
+            print("<MAXDEPTH>")
             return
-        print "(",
+        print("(", end=' ')
         for arg in self.all:
             #print str(type(arg))+":",
             arg.dump(levels-1)
-            print " ",
-        print ")",
+            print(" ", end=' ')
+        print(")", end=' ')
         
     def serializeWithOperators(self, nameTable, operators,
                                parentLooseness=9999,
@@ -250,7 +250,7 @@ class CompoundExpr(Expr, tuple):
         if prec >= parentLooseness:
             prefix = "("; suffix = ")"
         if callable(form):
-            result = prefix+apply(form, [text, self, nameTable, operators, prec, linePrefix])+suffix
+            result = prefix+form(*[text, self, nameTable, operators, prec, linePrefix])+suffix
         elif form == "xfx" or form == "xfy" or form == "yfx":
             if (len(self.args) == 2):
                 left = self.args[0].serializeWithOperators(nameTable, operators, prec, linePrefix)
@@ -264,7 +264,7 @@ class CompoundExpr(Expr, tuple):
                     result = (prefix + "\n" + linePrefix + left + text +
                           "\n" + linePrefix + right + suffix)
             else:
-                raise RuntimeError, ("%s args on a binary operator %s" %
+                raise RuntimeError("%s args on a binary operator %s" %
                                      (len(self.args), self.args[0]))
         elif form == "fxy":
             assert(len(self.args) == 2)
@@ -274,7 +274,7 @@ class CompoundExpr(Expr, tuple):
             assert(len(self.args) == 1)
             result = prefix + text + self.args[0].serializeWithOperators(nameTable, operators, prec, linePrefix)
         else:
-            raise RuntimeError, "unknown associativity form in table of operators"
+            raise RuntimeError("unknown associativity form in table of operators")
         return result
 
         
@@ -317,7 +317,7 @@ class AtomicExpr(Expr):
         return self.suggestedName
 
     def dump(self, levels):
-        print self.suggestedName,
+        print(self.suggestedName, end=' ')
         
     def getNameInScope(self, nameTable):
         """return a string which names this thing unambiguously in
@@ -359,15 +359,15 @@ class AtomicExpr(Expr):
                 if m:
                     n = m.group(1)
         except KeyError: pass
-        for extra in xrange(1, 100000000):
+        for extra in range(1, 100000000):
             if extra == 1:
                 newName = n
             else:
                 newName = n + str(extra)
-            if newName not in nameTable.values():      # @ linear performance hit
+            if newName not in list(nameTable.values()):      # @ linear performance hit
                 nameTable[self] = newName
                 return newName
-        raise RuntimeError, "wayyyyy to many similarly named expressions"
+        raise RuntimeError("wayyyyy to many similarly named expressions")
 
 
     def serializeWithOperators(self, nameTable, operators,

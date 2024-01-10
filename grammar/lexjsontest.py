@@ -17,9 +17,9 @@ def main(argv):
     s = Scanner(it['tokens'], )
     s.feed(sys.stdin.read())
     while 1:
-        t, txt = s.next()
+        t, txt = next(s)
         if not t: break
-        print t, txt
+        print(t, txt)
 
 class Scanner(object):
     def __init__(self, tokens):
@@ -35,7 +35,7 @@ class Scanner(object):
     def feed(self, d):
         self._in += d
 
-    def next(self):
+    def __next__(self):
         while 1:
             if self._idx >= len(self._in): return None, None
 
@@ -55,7 +55,7 @@ class Scanner(object):
                     return besttok, beststr
                 # else whitespace/comment... try again
             else:
-                raise SyntaxError, self._in[self._idx:self._idx+30]
+                raise SyntaxError(self._in[self._idx:self._idx+30])
 
 
 def scanner(tokens, input):

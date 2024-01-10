@@ -37,7 +37,7 @@ class Ladder:
             else:
                 msg = ("cant handle source of type %s class %s" %
                        (type(source), source.__class__))
-                raise RuntimeError, msg
+                raise RuntimeError(msg)
                        
     #def __getattr__(self, key):
     #    return self.__dict__.get(key, None)
@@ -59,7 +59,7 @@ class Ladder:
 
     def __setattr__(self, name, value):
         # yes, they could go into __dict__ themselves...
-        raise RuntimeError, "Immutable Object"
+        raise RuntimeError("Immutable Object")
 
     def has(self, key):
         return key in self.__dict__

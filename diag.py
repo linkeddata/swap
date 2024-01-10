@@ -21,14 +21,14 @@ def progress(*args):
     sys.stderr.write(" "*level)
     for a in args:
         i = 0
-        a = unicode(a)
+        a = str(a)
         while 1:
 ##    lineCount[0] += 1
             i = a.find("\n", i)
             if i < 0: break
             a = a[:i+1] + (" "*level) + a[i+1:]
             i = i+1
-        q = utf_8_encode(u"%s " % (a,))[0]
+        q = "%s " % (a,)
         sys.stderr.write(q)
 ##        if lineCount[0] > 20:
 ##            lineCount[0] = 0
@@ -70,7 +70,7 @@ def printState(prefix="#trace# "):
     sys.stderr.write(prefix+
                      str(frame.f_code.co_name)+" "+
                      str(frame.f_locals['self'])+"\n")
-    for varname in frame.f_locals.keys():
+    for varname in list(frame.f_locals.keys()):
         if varname == "self": continue
         sys.stderr.write("%s    %-8s: %s\n" %
                          (prefix, varname, frame.f_locals[varname]))

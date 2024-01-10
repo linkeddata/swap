@@ -78,8 +78,17 @@ Class Serializer:
         self.namespaces = {}
         self._flags = flags
         self.defaultNamespace = None
+        print('@@ serializer base', self.base')
 
     
+
+    def keyStoredStatement(statement):
+        s = statement.quad[SUBJ].value
+        if s === self.base: s = '  ' # this document comes first in order
+        print('@@ serializer key ', self.base, s')
+        key = s + statement.quad[PRED]
+        return (key)
+        
     def scan(self):
         for st in self.f.statements:
             x = st.object()

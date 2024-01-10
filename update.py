@@ -8,12 +8,12 @@ query module.
 """
 
 
-from set_importer import Set, sorted
+from .set_importer import Set, sorted
 
-import diag
-from diag import chatty_flag, tracking, progress
-from formula import Formula
-from query import Query, Rule, seqToString, _substitute
+from . import diag
+from .diag import chatty_flag, tracking, progress
+from .formula import Formula
+from .query import Query, Rule, seqToString, _substitute
 
     
 def patch(workingContext, patchFormula):
@@ -65,11 +65,11 @@ def patch(workingContext, patchFormula):
                         templateExistentials.add(x)
                 if diag.chatty_flag >20:
                     progress("New Patch  =========== applied to %s" %(workingContext) )
-                    for s in lhs.statements: progress("    ", `s`)
+                    for s in lhs.statements: progress("    ", repr(s))
                     progress("+=>")
-                    for s in conclusion.statements: progress("    ", `s`)
+                    for s in conclusion.statements: progress("    ", repr(s))
                     progress("-=>")
-                    for s in retraction.statements: progress("    ", `s`)
+                    for s in retraction.statements: progress("    ", repr(s))
                     progress("Universals declared in outer " + seqToString(patchFormula.universals()))
                     progress(" mentioned in template       " + seqToString(variablesMentioned))
                     progress(" also used in conclusion     " + seqToString(variablesUsed))
@@ -135,7 +135,7 @@ class UpdateQuery(Query):
                 raise RuntimeError(
                     """Error: %i matches removing statement {%s %s %s} 
                     bound as {%s %s %s} from %s""" %
-                        (len(ss),s,p,o, `subj`, pred.uriref(), `obj`, self.workingContext))
+                        (len(ss),s,p,o, repr(subj), pred.uriref(), repr(obj), self.workingContext))
             if diag.chatty_flag > 25: progress("Deleting %s" % ss[0])
             self.workingContext.removeStatement(ss[0])
         self.justOne = 1  # drop out of here when done

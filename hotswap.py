@@ -73,7 +73,7 @@ multiple simultaneous hotswap configurations.
 import sys
 import inspect
 import re
-from cStringIO import StringIO
+from io import StringIO
 from types import ClassType
 
 class Error(RuntimeError):
@@ -111,7 +111,7 @@ def Collection(location):
     """
     if re.match(r"^[-a-zA-Z0-9_.]+$", location):
         return Module(location)
-    raise Error, "unknown location syntax"
+    raise Error("unknown location syntax")
 
 class A: pass
 class B: pass
@@ -142,8 +142,8 @@ class Module:
     def open(self):
         try:
             mod = __import__(self.location)
-        except ImportError, e:
-            raise Error, ("Python can't import %s.\nsys.path is currently: %s\nImportError was: %s" %
+        except ImportError as e:
+            raise Error("Python can't import %s.\nsys.path is currently: %s\nImportError was: %s" %
                           ( self.location, sys.path, str(e)))
         components = self.location.split('.')
         for comp in components[1:]:
@@ -274,14 +274,14 @@ class PluginManager:
         
         # construct a new instance, copied from any existing one
         if current is None:
-            new = apply(matchingClass, initargs, initkwargs)
+            new = matchingClass(*initargs, **initkwargs)
         else:
             try:
                kw = initkwargs
                kw["copyFrom"] = current
-               new = apply(matchingClass, initargs, kw)
+               new = matchingClass(*initargs, **kw)
             except TypeError:
-                raise CantTransfer, "Can't switch service '%s' to class %s\nperhaps it lacks a copyFrom constructor parameter" % (service, str(matchingClass))
+                raise CantTransfer("Can't switch service '%s' to class %s\nperhaps it lacks a copyFrom constructor parameter" % (service, str(matchingClass)))
 
         # save and return it
         self.services[service] = new
@@ -340,7 +340,7 @@ def get(*arg1, **arg2):
     the current version is too clever about using kwargs.
     
     """
-    return apply(defaultPluginManager.get, arg1, arg2)
+    return defaultPluginManager.get(*arg1, **arg2)
 
    
 ################################################################

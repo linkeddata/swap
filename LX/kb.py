@@ -14,8 +14,8 @@ import re
 
 import LX
 import LX.rdf
-import sniff
-import urllib
+from . import sniff
+import urllib.request, urllib.parse, urllib.error
 import LX.language
 import pluggable
 import LX.nodepath
@@ -120,7 +120,7 @@ class KB(list, pluggable.Store):
         if isinstance(kb, KB): return kb
         if isinstance(kb, list): return KB(kb)
         # nothing else for now
-        raise RuntimeError, "Not convertable to a KB"
+        raise RuntimeError("Not convertable to a KB")
     prep = staticmethod(prep)
 
     def addSupportingTheory(self, term):
@@ -172,7 +172,7 @@ class KB(list, pluggable.Store):
             assert(val != 0)   # would have been handled in LX.logic
             assert(val > 0)
             if val > 50:
-                raise UnsupportedDatatype, "Int %s too big" % val
+                raise UnsupportedDatatype("Int %s too big" % val)
             for n in range(1, val+1):
                 # print "Describing",n,"via:", n-1, "succ", n
                 lesser = LX.logic.ConstantForDatatypeValue(str(n-1), dturi)
@@ -190,9 +190,9 @@ class KB(list, pluggable.Store):
             if val == 0:
                 raise RuntimeError("Int 0 not caught in LX.logic? "+repr(lexrep)+", "+repr(dturi))
             if val > 50:
-                raise UnsupportedDatatype, "Int %s too big" % val
+                raise UnsupportedDatatype("Int %s too big" % val)
             if val < 0:
-                raise UnsupportedDatatype, "Int %s too small" % val
+                raise UnsupportedDatatype("Int %s too small" % val)
             for n in range(1, val+1):
                 # print "Describing",n,"via:", n-1, "succ", n
                 lesser = LX.logic.ConstantForDatatypeValue(str(n-1), dturi)
@@ -208,14 +208,14 @@ class KB(list, pluggable.Store):
             if m is None:
                 return  # it's not real...   Report this somehow?
             if m.group(3) is not None and int(m.group(3)) != 0:
-                raise UnsupportedDatatype, "Decimal really a decimal!" % val
+                raise UnsupportedDatatype("Decimal really a decimal!" % val)
             val = int(m.group(1))
             if val == 0:
                 raise RuntimeError("Int 0 not caught in LX.logic? "+repr(lexrep)+", "+repr(dturi))
             if val > 50:
-                raise UnsupportedDatatype, "Int %s too big" % val
+                raise UnsupportedDatatype("Int %s too big" % val)
             if val < 0:
-                raise UnsupportedDatatype, "Int %s too small" % val
+                raise UnsupportedDatatype("Int %s too small" % val)
             for n in range(1, val+1):
                 # print "Describing",n,"via:", n-1, "succ", n
                 lesser = LX.logic.ConstantForDatatypeValue(str(n-1), dturi)
@@ -239,7 +239,7 @@ class KB(list, pluggable.Store):
             self.__datatypeValuesChecked[pair] = 1
             return
 
-        raise UnsupportedDatatype, ("unsupported datatype: "+str(lexrep)+ ", type "+str(dturi))
+        raise UnsupportedDatatype("unsupported datatype: "+str(lexrep)+ ", type "+str(dturi))
         
         
     def add(self, formula, p=None, o=None):
@@ -346,9 +346,9 @@ class KB(list, pluggable.Store):
             LX.logic.gatherURIs(formula, uris)
             #print "Did Formula", "Got", uris
         loadable = { }
-        for uri in uris.keys():
+        for uri in list(uris.keys()):
             #print "Do with: ", uri
-            for (key, value) in prefixMap.iteritems():
+            for (key, value) in prefixMap.items():
                 if uri.startswith(key):
                     if value is None:
                         uri = None
@@ -365,7 +365,7 @@ class KB(list, pluggable.Store):
                 pass
             loadable[uri] = 1
             #print "  ... done, as ", uri
-        for uri in loadable.keys():
+        for uri in list(loadable.keys()):
             self.load(uri)
             
     def load(self, uri):
@@ -384,12 +384,12 @@ class KB(list, pluggable.Store):
         try:
             (pre, post) = name.split("_", 2)
         except ValueError:
-            raise AttributeError, ("KB has no %s attribute" % name)
+            raise AttributeError("KB has no %s attribute" % name)
         ns = getattr(self.ns, pre)
         term = getattr(ns, post)
         # if this is always true, we could just maintain an inverse map...
         if name != self.nickname(term):
-            raise RuntimeError, "NAME: %s, TERM: %s , NICK: %s" % (name, term, self.nickname(term))
+            raise RuntimeError("NAME: %s, TERM: %s , NICK: %s" % (name, term, self.nickname(term)))
         return self.getNode(term)
 
     def getNode(self, term):
@@ -458,7 +458,7 @@ class KB(list, pluggable.Store):
             pass
         try:
             nick = "_".join(self.ns.inverseLookup(term))
-        except KeyError, e:
+        except KeyError as e:
             raise KeyError(term)
         self.nicknames[term] = nick
         return nick

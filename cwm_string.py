@@ -12,12 +12,12 @@ See cwm.py
 import string
 import re
 
-from diag import verbosity, progress
+from .diag import verbosity, progress
 
-import urllib # for hasContent
+import urllib.request, urllib.parse, urllib.error # for hasContent
 
-from term import LightBuiltIn, ReverseFunction, Function, UnknownType
-from local_decimal import Decimal
+from .term import LightBuiltIn, ReverseFunction, Function, UnknownType
+from .local_decimal import Decimal
 
 LITERAL_URI_prefix = "data:text/n3;"
 
@@ -100,11 +100,11 @@ def normalizeWhitespace(s):
     return res
 
 #  String Constructors - more light built-ins
-make_string = unicode
+make_string = str
 
 class BI_concat(LightBuiltIn, ReverseFunction):
     def evaluateSubject(self, obj_py):
-        if verbosity() > 80: progress("Concat input:"+`obj_py`)
+        if verbosity() > 80: progress("Concat input:"+repr(obj_py))
         str = ""
         for x in obj_py:
             if not isString(x): return None # Can't
@@ -113,15 +113,15 @@ class BI_concat(LightBuiltIn, ReverseFunction):
 
 class BI_concatenation(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
-        if verbosity() > 80: progress("Concatenation input:"+`subj_py`)
+        if verbosity() > 80: progress("Concatenation input:"+repr(subj_py))
         str = ""
         for x in subj_py:
             if not isString(x):
-                if type(x) == type(long()) or isinstance(x, Decimal):
+                if type(x) == type(int()) or isinstance(x, Decimal):
                     x = make_string(x)
                 else:
-                    x = `x`
-                if verbosity() > 34: progress("Warning: Coercing to string for concat:"+`x`)
+                    x = repr(x)
+                if verbosity() > 34: progress("Warning: Coercing to string for concat:"+repr(x))
 #               return None # Can't
             str = str + x 
         return str
@@ -129,20 +129,20 @@ class BI_concatenation(LightBuiltIn, Function):
     def evalObj45(self,  subj, queue, bindings, proof, query):
 #        raise RuntimeError('I got here!')
         subj_py = list(subj)
-        if verbosity() > 80: progress("Concatenation input:"+`subj_py`)
+        if verbosity() > 80: progress("Concatenation input:"+repr(subj_py))
         retVal = []
         for x in subj_py:
             try:
                 val = x.value()
                 if not isString(val):
-                    if type(val) == type(long()) or isinstance(val, Decimal):
+                    if type(val) == type(int()) or isinstance(val, Decimal):
                         val = make_string(val)
                     else:
-                        val = `val`
-                    if verbosity() > 34: progress("Warning: Coercing to string for concat:"+`val`)
+                        val = repr(val)
+                    if verbosity() > 34: progress("Warning: Coercing to string for concat:"+repr(val))
                 retVal.append(val)
             except UnknownType:
-                progress("Warning: Coercing to string for concat:"+`x`)
+                progress("Warning: Coercing to string for concat:"+repr(x))
                 retVal.append(x.string)
         return subj.store.newLiteral(''.join(retVal))
 
@@ -157,7 +157,7 @@ class BI_scrape(LightBuiltIn, Function):
     """
     
     def evaluateObject(self, subj_py):
-        if verbosity() > 80: progress("scrape input:"+`subj_py`)
+        if verbosity() > 80: progress("scrape input:"+repr(subj_py))
 
         str, pat = subj_py
         patc = re.compile(pat)
@@ -192,7 +192,7 @@ class BI_search(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
 #        raise Error
         store = self.store
-        if verbosity() > 80: progress("search input:"+`subj_py`)
+        if verbosity() > 80: progress("search input:"+repr(subj_py))
 
         str, pat = subj_py
         patc = re.compile(pat)
@@ -247,7 +247,7 @@ class BI_stringToList(LightBuiltIn, Function, ReverseFunction):
 
     """
     def evaluateObject(self, subj_py):
-        print "hello, I'm at it"
+        print("hello, I'm at it")
         try:
             return [a for a in subj_py]
         except TypeError:
@@ -318,20 +318,20 @@ class BI_encodeForURI(LightBuiltIn, Function):
     http://www.w3.org/TR/2005/CR-xpath-functions-20051103/#func-encode-for-uri"""
     
     def evaluateObject(self, subj_py):
-        return urllib.quote(subj_py, "#!~*'()")
+        return urllib.parse.quote(subj_py, "#!~*'()")
 
 class BI_encodeForFragID(LightBuiltIn, Function):
     """Take a unicode string and return it encoded so as to pass in
     a URI grament identifier."""
     
     def evaluateObject(self, subj_py):
-        return urllib.quote(subj_py)
+        return urllib.parse.quote(subj_py)
 
 class BI_resolve_uri(LightBuiltIn, Function):
     """see http://www.w3.org/2006/xpath-functions#resolve-uri"""
     
     def evaluateObject(self, subj_py):
-        import uripath
+        from . import uripath
         there, base = subj_py
         return uripath.join(base, there)
 
@@ -340,7 +340,7 @@ class BI_resolve_uri(LightBuiltIn, Function):
 
 def isString(x):
     # in 2.2, evidently we can test for isinstance(types.StringTypes)
-    return type(x) is type('') or type(x) is type(u'')
+    return type(x) is type('') or type(x) is type('')
 
 def register(store):
     str = store.symbol(STRING_NS_URI[:-1])

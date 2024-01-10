@@ -19,7 +19,7 @@ References
 
 from string import *
 import re
-from yappsrt import *
+from .yappsrt import *
 
 class KIFParserScanner(Scanner):
     def __init__(self, str):
@@ -300,5 +300,5 @@ if __name__=='__main__':
             f = open(argv[2],'r')
         else:
             f = stdin
-        print parse(argv[1], f.read())
-    else: print 'Args:  <rule> [<filename>]'
+        print(parse(argv[1], f.read()))
+    else: print('Args:  <rule> [<filename>]')

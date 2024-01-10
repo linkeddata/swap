@@ -28,7 +28,7 @@ def strip(path):
     input = open(path, "r")
     buf = input.read()  # Read the file
     if not ascii:
-	buf = buf.decode('utf8')
+        buf = buf.decode('utf8')
     input.close()
     if buf.find("\r") >=0 or buf.find("\0") >=0:
         if not nochange:
@@ -40,7 +40,7 @@ def strip(path):
         if c == "\r" :
             crs = crs + 1
             if lineNumbers:
-                print "CR at ", lines
+                print("CR at ", lines)
             if i < n-1 and buf[i+1] != "\n":
                 newlines += 1
                 if not nochange: output.write("\n")
@@ -61,10 +61,10 @@ def strip(path):
     if crs > 0 or nulls > 0 or verbose:
         if nochange:
             sys.stderr.write("de-cr: %i CRs found, %i needed LFs, %i nulls, %i non-cr non-null characters in %s.\n"%(
-			crs, newlines, nulls, total, path))
+                        crs, newlines, nulls, total, path))
         else:
             sys.stderr.write("de-cr: %i CRs removed, %i LFs inserted, %i nulls, %i non-CR non-null characters left in %s.\n"%(
-			crs, newlines, nulls, total, path))
+                        crs, newlines, nulls, total, path))
 
 
 def do(path):
@@ -103,18 +103,18 @@ for arg in sys.argv[1:]:
 
         elif arg == "-v": verbose = 1   # Tell me even about files which were ok
         else:
-            print """Bad option argument.
+            print("""Bad option argument.
             -r  recursive
             -a  do all files, not just .n3 .py and .rdf
             -f  fix files instead of just looking
-	    -ascii use ascii not UTF8
-	    -0  allow null characters
+            -ascii use ascii not UTF8
+            -0  allow null characters
 
 This program restores a file to standard unix LF conventions
 for line end.  It removes CR characters, inserting a new LF to
 replace them if they are not followed by a LF in the original file.
 It will not change any files unless -f is given.
-"""
+""")
             sys.exit(-1)
     else:
         files.append(arg)
