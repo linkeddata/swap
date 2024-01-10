@@ -212,7 +212,7 @@ class SinkParser:
         So if there is more data to feed to the
         parser, it should be straightforward to recover."""
 
-        str = octets.decode('utf-8')
+        str = octets #  .decode('utf-8')
         i = 0
         while i >= 0:
             j = self.skipSpace(str, i)

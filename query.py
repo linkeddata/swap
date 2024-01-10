@@ -157,6 +157,8 @@ class InferenceTask:
         def addRule():
             if not formula.contains(subj=subj, pred=formula.store.implies, obj=obj):
                 return 0  # The triple is no longer there
+            assert issubclass(type(subj),Formula) , "A rule links two formulae - subj type is " + str(type(subj))
+            assert issubclass(type(obj),Formula) , "A rule links two formulae - obj type is " + str(type(obj))
             return Rule(task, subj, obj, statement, variables).once()
         task.schedule(addRule)
 
@@ -164,8 +166,12 @@ class InferenceTask:
         formula = statement.context()
         variables = variables | formula.universals()
         def addRule():
+            assert type(formula) is Formula
             if not formula.contains(subj=statement.subject(), pred=statement.predicate(), obj=statement.object()):
                 return 0  # The triple is no longer there
+            assert type(subj) is Formula # A rule links two formulae
+            assert type(obj) is Formula
+
             r = Rule(task, subj, obj, statement, variables).once()
             if (diag.chatty_flag >30):
                 progress( "Found rule %r for statement %s " % (r, statement))
@@ -1925,7 +1931,8 @@ class Scheduler(object):
                 retVal = func(retVal, next(self))
         return retVal
 
-# This should probably be properties and methods of IndexedFormula
+# This should probably be properties and methods of IndexedFormula? - No
+    
 class RuleInstaller(object):
     def __init__(self, task, ruleSource, variables):
         self.task = task
